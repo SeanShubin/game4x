@@ -1,0 +1,27 @@
+# --- Rust / Cargo ---
+/target/
+**/*.rs.bk
+*.pdb
+
+# Cargo.lock is committed for binaries/workspaces with binaries.
+# If this ever becomes a library-only repo, uncomment the next line.
+# Cargo.lock
+
+# --- JetBrains (RustRover / IntelliJ) ---
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# --- Visual Studio Code ---
+.vscode/
+!.vscode/extensions.json
+
+# --- Operating system ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Editors / misc ---
+*.swp
+*~
