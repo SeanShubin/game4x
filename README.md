@@ -2,18 +2,30 @@
 
 A 4X game written in Rust. 4X is the genre known as **e**xplore, **e**xpand, **e**xploit, **e**xterminate.
 
-This repository currently holds **design documentation only**. Code lands as the
-prototypes below get built.
+The game itself is not built yet. What exists is the design documentation and the first
+prototype.
+
+```
+scripts/planet-view.ps1        # or: bash scripts/planet-view.sh
+```
+
+A sphere divided into regions, fanned out flat so you can see all of it at once. Drag
+to turn the world, wheel to zoom, `P` to fold it back into a globe, `Esc` to quit. See
+[the planet view prototype](docs/prototypes/planet-view.md).
 
 ## Start here
 
-| Document | What it covers |
-| --- | --- |
-| [Vision](docs/vision.md) | What the game is, the design constraints, and the non-negotiables |
-| [Architecture](docs/architecture.md) | Module boundaries, the composition root, dependency rules |
-| [Prototypes](docs/prototypes/README.md) | Standalone programs demonstrating one aspect of the game each |
-| [Theory](docs/theory/README.md) | Background research the design leans on |
-| [Documentation map](docs/README.md) | Every document in the repo, and the rules for adding one |
+| Document                                | What it covers                                                                           |
+| --------------------------------------- | ---------------------------------------------------------------------------------------- |
+| [Specification](spec/README.md)         | What the game **is**, stated normatively. If it is not there, it is not decided          |
+| [Vision](docs/vision.md)                | What the game is, the design constraints, and the non-negotiables                        |
+| [Architecture](docs/architecture.md)    | Module boundaries, the composition root, dependency rules                                |
+| [Layers](docs/layers.md)                | `(old world, events) -> new world`: what must be reproducible, and how it stays parallel |
+| [Prototypes](docs/prototypes/README.md) | Standalone programs demonstrating one aspect of the game each                            |
+| [Theory](docs/theory/README.md)         | Background research the design leans on                                                  |
+| [Documentation map](docs/README.md)     | Every document in the repo, and the rules for adding one                                 |
+| [Scripts](scripts/README.md)            | How to run each prototype                                                                |
+| [Notes](docs/notes/README.md)           | Derived records of analysis. Not binding                                                 |
 
 ## The short version
 
@@ -39,18 +51,33 @@ The two pieces of background research the planet view depends on:
 
 ## Prototypes
 
-- [Planet view](docs/prototypes/planet-view.md) — 3D and 2D views of a sphere divided
-  into regions, plus a simplified view showing only what the game mechanics see.
+- [Planet view](docs/prototypes/planet-view.md) — a sphere divided into regions, fanned
+  out flat so the whole world is visible at once, colored so no two neighbours match.
+  **Built.**
 
 ## Repository layout
 
 ```
-README.md            you are here — the entry point to everything
-Cargo.toml           workspace root; crates get added as members
+README.md              you are here — the entry point to everything
+Cargo.toml             workspace root
 docs/
-  README.md          documentation map and documentation rules
-  vision.md          what the game is
-  architecture.md    how the code is organized
-  prototypes/        one document per prototype
-  theory/            background research, independent of implementation
+  README.md            documentation map and documentation rules
+  vision.md            what the game is
+  architecture.md      how the code is organized
+  prototypes/          one document per prototype
+  theory/              background research, independent of implementation
+scripts/
+  README.md            how to run each prototype
+crates/
+  sphere-tessellation/ dividing the sphere, and the adjacency graph
+  graph-coloring/      few-color assignment, no geometry
+  planet-model/        the model: old world + intents -> new world, integers only
+  planet-ecs/          regions as ECS entities; systems that gather and apply
+  planet-render/       camera and software rasterizer; no graphics engine
+  planet-bevy/         the Bevy adapter: window, input, vsync
+prototypes/
+  planet-view/         composition root; wiring only
 ```
+
+Documents under `docs/` say *why*. Each crate's own `README.md` says *how*, and is
+linked from [architecture.md](docs/architecture.md).

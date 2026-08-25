@@ -1,0 +1,7 @@
+[package]
+name = "sphere-tessellation"
+version.workspace = true
+edition.workspace = true
+description = "Divides the surface of a sphere into hex-dominant regions and produces their adjacency graph."
+
+[dependencies]

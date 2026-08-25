@@ -1,0 +1,10 @@
+[package]
+name = "planet-render"
+version.workspace = true
+edition.workspace = true
+description = "Software rendering of a tessellated sphere. Knows about pixels; knows nothing about any graphics engine."
+
+[dependencies]
+sphere-tessellation.workspace = true
+graph-coloring.workspace = true
+planet-model.workspace = true

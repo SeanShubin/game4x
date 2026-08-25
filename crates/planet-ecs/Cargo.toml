@@ -1,0 +1,9 @@
+[package]
+name = "planet-ecs"
+version.workspace = true
+edition.workspace = true
+description = "Game entities as ECS entities, and the systems that gather and apply. Contains no rules."
+
+[dependencies]
+planet-model.workspace = true
+bevy = { version = "0.19", default-features = false, features = ["2d"] }

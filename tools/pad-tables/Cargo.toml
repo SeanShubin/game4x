@@ -1,0 +1,9 @@
+# Not a workspace member. This is a documentation tool, not part of the game, so it stays
+# out of `cargo build --workspace` and out of `cargo tree`. See the exclude in the
+# workspace root manifest.
+[package]
+name = "pad-tables"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]

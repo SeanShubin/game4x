@@ -123,13 +123,13 @@ guaranteed to be attainable.
 Given how tidy the four-color guarantee is, the algorithmic picture is surprisingly
 uneven:
 
-| Question | Difficulty |
-| --- | --- |
-| Is this planar graph 2-colorable? | Linear time. Just check bipartiteness. |
-| Is this planar graph 3-colorable? | **NP-complete.** Even for planar graphs of maximum degree 4. |
-| Is this planar graph 4-colorable? | Trivially yes — the theorem answers it without looking at the graph. |
-| *Find* a 4-coloring | Quadratic time is possible, but the algorithm is a direct implementation of the discharging proof and is notoriously unpleasant to write. |
-| *Find* a 5-coloring | Linear time, and the algorithm is short and easy to get right. |
+| Question                          | Difficulty                                                                                                                                |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Is this planar graph 2-colorable? | Linear time. Just check bipartiteness.                                                                                                    |
+| Is this planar graph 3-colorable? | **NP-complete.** Even for planar graphs of maximum degree 4.                                                                              |
+| Is this planar graph 4-colorable? | Trivially yes — the theorem answers it without looking at the graph.                                                                      |
+| *Find* a 4-coloring               | Quadratic time is possible, but the algorithm is a direct implementation of the discharging proof and is notoriously unpleasant to write. |
+| *Find* a 5-coloring               | Linear time, and the algorithm is short and easy to get right.                                                                            |
 
 So the awkward part is not proving four suffice, it is *producing* a four-coloring
 cheaply. The Robertson-Sanders-Seymour-Thomas quadratic algorithm exists, but nobody

@@ -1,0 +1,10 @@
+[package]
+name = "graph-coloring"
+version.workspace = true
+edition.workspace = true
+description = "Assigns few colors to a graph so that no two adjacent vertices match."
+
+[dependencies]
+
+[dev-dependencies]
+sphere-tessellation.workspace = true

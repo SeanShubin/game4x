@@ -4,8 +4,31 @@
 
 [workspace]
 resolver = "3"
-members = []
+members = [
+    "crates/sphere-tessellation",
+    "crates/graph-coloring",
+    "crates/planet-model",
+    "crates/planet-ecs",
+    "crates/planet-render",
+    "crates/planet-bevy",
+    "prototypes/planet-view",
+]
+# Documentation tooling, deliberately outside the workspace so it never appears in
+# `cargo tree` or `cargo build --workspace`.
+exclude = ["tools/pad-tables"]
 
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
+
+[workspace.dependencies]
+sphere-tessellation = { path = "crates/sphere-tessellation" }
+graph-coloring = { path = "crates/graph-coloring" }
+planet-model = { path = "crates/planet-model" }
+planet-ecs = { path = "crates/planet-ecs" }
+planet-render = { path = "crates/planet-render" }
+planet-bevy = { path = "crates/planet-bevy" }
+
+[profile.dev]
+# The planet view rasterizes per pixel; an unoptimized build is unusably slow.
+opt-level = 2

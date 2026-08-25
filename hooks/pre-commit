@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Pads the markdown tables in staged files, then re-stages them, so a table can never be
+# committed misaligned. Only touches files already staged; unstaged work is left alone.
+#
+# Activate once per clone:   git config core.hooksPath hooks
+
+set -euo pipefail
+root="$(git rev-parse --show-toplevel)"
+cd "$root"
+
+staged="$(git diff --cached --name-only --diff-filter=ACM -- '*.md')"
+[ -z "$staged" ] && exit 0
+
+printf '%s
+' "$staged"   | xargs -d '
+' cargo run --quiet --manifest-path tools/pad-tables/Cargo.toml --
+printf '%s
+' "$staged" | xargs -d '
+' git add --

@@ -1,0 +1,7 @@
+[package]
+name = "planet-model"
+version.workspace = true
+edition.workspace = true
+description = "The model: (old world, intent array) -> new world. Integers only, pure, engine-free."
+
+[dependencies]
