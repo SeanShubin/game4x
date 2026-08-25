@@ -17,8 +17,24 @@ pub fn pad_tables(content: &str) -> String {
     let lines: Vec<&str> = content.split('\n').collect();
     let mut result: Vec<String> = Vec::with_capacity(lines.len());
     let mut i = 0;
+    let mut fenced = false;
 
     while i < lines.len() {
+        // Diagrams inside fences routinely start and end with a pipe. Without this they
+        // read as table rows, and a pair of adjacent ones would be reformatted into a
+        // table. Nothing was damaged before this existed, but only because no diagram
+        // happened to have two such lines in a row.
+        if is_fence(lines[i]) {
+            fenced = !fenced;
+            result.push(lines[i].to_string());
+            i += 1;
+            continue;
+        }
+        if fenced {
+            result.push(lines[i].to_string());
+            i += 1;
+            continue;
+        }
         if parse_row(lines[i]).is_some() {
             let mut table_lines = Vec::new();
             while i < lines.len() && parse_row(lines[i]).is_some() {
@@ -40,14 +56,27 @@ pub fn pad_tables(content: &str) -> String {
     result.join("\n")
 }
 
+/// A fence opening or closing a code block.
+fn is_fence(line: &str) -> bool {
+    let start = line.trim_start();
+    start.starts_with("```") || start.starts_with("~~~")
+}
+
 /// Parse a markdown table row into trimmed cell contents.
 /// Returns `None` if the line isn't a table row.
+///
+/// The trailing pipe is optional, because markdown renderers accept a row without one and
+/// so a row missing it looks perfectly fine on screen while being invisible to this tool -
+/// which silently splits the table in two and leaves it unaligned. Normalising it here
+/// means the padder fixes the typo instead of quietly ignoring it. The *leading* pipe is
+/// still required: it is what keeps prose containing a pipe from reading as a table.
 fn parse_row(line: &str) -> Option<Vec<String>> {
     let trimmed = line.trim();
-    if !trimmed.starts_with('|') || !trimmed.ends_with('|') || trimmed.len() < 2 {
+    if !trimmed.starts_with('|') || trimmed.len() < 2 {
         return None;
     }
-    let inner = &trimmed[1..trimmed.len() - 1];
+    let inner = &trimmed[1..];
+    let inner = inner.strip_suffix('|').unwrap_or(inner);
     let cells: Vec<String> = inner.split('|').map(|c| c.trim().to_string()).collect();
     Some(cells)
 }
@@ -245,6 +274,41 @@ mod tests {
     fn short_cells_reach_the_minimum_separator_width() {
         let out = pad_tables("| a |\n| - |\n| b |\n");
         assert_eq!(out.lines().nth(1).unwrap(), "| --- |");
+    }
+
+    #[test]
+    fn fenced_blocks_are_left_alone() {
+        let text = concat!(
+            "text
+",
+            "```
+",
+            "composition root
+",
+            "        |            |
+",
+            "        |         |
+",
+            "```
+",
+            "more text
+"
+        );
+        assert_eq!(pad_tables(text), text, "a diagram inside a fence must not be touched");
+    }
+
+    #[test]
+    fn a_row_may_omit_its_trailing_pipe() {
+        let out = pad_tables("| a | bbbb
+| --- | ---
+| cccccc | d
+");
+        for line in out.lines() {
+            assert!(line.ends_with('|'), "trailing pipe not normalised: {line}");
+        }
+        let widths: Vec<usize> = out.lines().map(|l| l.chars().count()).collect();
+        assert!(widths.windows(2).all(|w| w[0] == w[1]), "not aligned:
+{out}");
     }
 
     #[test]
