@@ -1,5 +1,7 @@
 # --- Rust / Cargo ---
-/target/
+# Not /target/ - packages outside the workspace (tools/pad-tables) have their own target
+# directory, and a root-anchored rule silently misses them.
+target/
 **/*.rs.bk
 *.pdb
 

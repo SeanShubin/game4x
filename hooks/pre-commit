@@ -1,19 +1,20 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Pads the markdown tables in staged files, then re-stages them, so a table can never be
-# committed misaligned. Only touches files already staged; unstaged work is left alone.
+# committed misaligned.
 #
-# Activate once per clone:   git config core.hooksPath hooks
+# Commits stay manual: this only touches *.md files you have already staged, formats them
+# in place, and re-stages the result. It does not commit for you.
+#
+# Caveat, worth knowing before it bites: a partially staged file - some hunks staged, some
+# not - gets fully re-staged after padding, pulling its unstaged hunks in with it. If you
+# stage whole files, this never happens.
+#
+# Enable once per clone: git config core.hooksPath hooks
+set -e
 
-set -euo pipefail
-root="$(git rev-parse --show-toplevel)"
-cd "$root"
+files=$(git diff --cached --name-only --diff-filter=ACMR -- '*.md')
+[ -z "$files" ] && exit 0
 
-staged="$(git diff --cached --name-only --diff-filter=ACM -- '*.md')"
-[ -z "$staged" ] && exit 0
-
-printf '%s
-' "$staged"   | xargs -d '
-' cargo run --quiet --manifest-path tools/pad-tables/Cargo.toml --
-printf '%s
-' "$staged" | xargs -d '
-' git add --
+echo "pre-commit: padding markdown tables in staged files"
+echo "$files" | xargs cargo run --quiet --manifest-path tools/pad-tables/Cargo.toml --
+echo "$files" | xargs git add --

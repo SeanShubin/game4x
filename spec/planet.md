@@ -1,33 +1,26 @@
 # The Planet
 
-**Authored.** Every line written and reviewed by Sean.
+**Authored.** Every line here is reviewed by Sean before it lands. Claude may reorganize and
+rephrase, reporting every change; new content arrives only by Sean accepting a numbered
+proposal from [proposals](../docs/notes/proposals.md).
 
 [Specification](README.md) · [Root README](../README.md)
 
 ## Shape
 
-*Scaffolding prompt - delete this line when the section is written.* What the world's surface is, and what tessellates it.
+- Planets are spheres divided into regions according to Goldberg polyhedrons
+- The minimum planet size is therefore 12, a dodecahedron, the smallest Goldberg polyhedron
+- There are 5 planet sizes, corresponding to the 5 smallest Goldberg polyhedrons
+  - tiny: 12
+  - small: 32
+  - medium: 42
+  - large: 72
+  - huge: 92
 
-## Sizes
+## What a territory carries
 
-*Scaffolding prompt - delete this line when the section is written.* Which region counts exist, what a player calls them, and what size means mechanically.
-
-## Adjacency
-
-*Scaffolding prompt - delete this line when the section is written.* When two regions count as neighbours, and what that guarantees.
-
-## Distance
-
-*Scaffolding prompt - delete this line when the section is written.* How far apart two regions are, how it is computed, and what the rules may assume.
-
-## Orientation
-
-*Scaffolding prompt - delete this line when the section is written.* How the planet is presented, and what the camera may and may not do.
-
-## Regions
-
-*Scaffolding prompt - delete this line when the section is written.* What a region carries: identity, ownership, terrain, anything else.
+- Each territory on a planet has a **threat** level, which requires a greater **security**
+  level in order to claim
+- Territories have natural resource levels
 
 ## Open questions
-
-*Scaffolding prompt - delete this line when the section is written.*

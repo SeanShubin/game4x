@@ -29,7 +29,16 @@ the naming convention below. Its package lives in `tools/pad-tables` and is deli
 scripts/pad-tables.ps1              # every .md file in the repository
 bash scripts/pad-tables.sh
 scripts/pad-tables.sh spec docs     # only those directories
+scripts/pad-tables.sh --check       # write nothing; exit 1 if anything is unpadded
 scripts/pad-tables.sh --help
+```
+
+The padding rule itself is a tested library, `pad_tables(&str) -> String`, with idempotence
+asserted. Because the package sits outside the workspace, **`cargo test --workspace` does
+not run those tests**; run them directly:
+
+```
+cargo test --manifest-path tools/pad-tables/Cargo.toml
 ```
 
 A pre-commit hook in [`hooks/`](../hooks/) does the same thing for staged files only.

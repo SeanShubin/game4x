@@ -11,7 +11,8 @@ by following links from there, it does not exist as far as the project is concer
 README.md ......................... entry point, links to everything below
 spec/
   README.md ....................... the specification index and its rules
-  planet.md ....................... the sphere, its regions, adjacency, distance
+  planet.md ....................... the sphere, its regions, what a territory carries
+  economy.md ...................... resources, structures, labor, citizens
   combat.md ....................... ranges, weapons, resolution
   orbit.md ........................ the orbital layer
 docs/

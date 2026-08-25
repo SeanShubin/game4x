@@ -1,7 +1,8 @@
 # Specification
 
-**Authored.** Every line written and reviewed by Sean. Claude may fix typos, formatting and
-broken links, and must report every such change; anything else is proposed in chat first.
+**Authored.** Every line here is reviewed by Sean before it lands. Claude may reorganize and
+rephrase, reporting every change; new content arrives only by Sean accepting a numbered
+proposal from [proposals](../docs/notes/proposals.md).
 
 [Root README](../README.md) · [Documentation map](../docs/README.md) · [Notes](../docs/notes/README.md)
 
@@ -10,11 +11,12 @@ no matter how thoroughly it was discussed.
 
 ## The documents
 
-| Document                | What it specifies                                             |
-| ----------------------- | ------------------------------------------------------------- |
-| [The planet](planet.md) | The sphere, its regions, adjacency, distance, and orientation |
-| [Combat](combat.md)     | Ranges, weapons, resolution                                   |
-| [Orbit](orbit.md)       | The orbital layer and what sits in it                         |
+| Document                | What it specifies                                     |
+| ----------------------- | ----------------------------------------------------- |
+| [The planet](planet.md) | The sphere, its regions, and what a territory carries |
+| [Economy](economy.md)   | Resources, structures, labor, and citizens            |
+| [Combat](combat.md)     | Ranges, weapons, resolution                           |
+| [Orbit](orbit.md)       | The orbital layer and what sits in it                 |
 
 Add a file when a topic firms up. Add its row here first.
 

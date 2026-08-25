@@ -6,4 +6,12 @@ name = "pad-tables"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "pad_tables"
+path = "src/lib.rs"
+
+[[bin]]
+name = "pad-tables"
+path = "src/main.rs"
+
 [dependencies]

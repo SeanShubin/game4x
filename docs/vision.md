@@ -4,8 +4,17 @@
 
 ## What this is
 
-A 4X game — explore, expand, exploit, exterminate — played on the surface of a sphere
-divided into discrete regions.
+A 4X space strategy game — explore, expand, exploit, exterminate — played on the surface of
+spheres divided into discrete regions.
+
+### Inspirations
+
+Master of Orion, Stars!, Factorio, Distant Worlds, and Sins of a Solar Empire.
+
+### Theme
+
+Each player represents a sentient AI with highly advanced technology. The player can 3D
+print life, and endeavors to create life suitable for the environment.
 
 ## Constraints
 

@@ -14,7 +14,7 @@ Three tiers, and the boundary is the directory it lives in.
 
 ## The rule that matters
 
-**A decision is only real when it appears in `spec/`, in Sean's words.**
+**A decision is only real when it appears in `spec/`, reviewed by Sean.**
 
 Anything in `docs/notes/` is a proposal, however confident it sounds and however much
 measurement backs it. Analysis does not become policy by accumulation.
@@ -26,22 +26,36 @@ measurement backs it. Analysis does not become policy by accumulation.
 
 ## Editing `spec/`
 
+The guarantee is **review**, not authorship. Nothing reaches this directory that Sean has
+not read and agreed to. Within that, there are three tiers.
+
 Allowed without asking:
 
 - typos and spelling
 - whitespace, table alignment, heading levels
 - links that broke because a file moved
 
-Not allowed without asking:
+Allowed, but **report every line touched**:
 
-- adding, removing, or reordering sentences
-- rewriting an argument, however much clearer it would be
-- tidying prose
+- reorganizing: moving a line to a better file or section, adding headings
+- rephrasing: saying the same thing more clearly
 
-Phrasing improvements are welcome, but either propose them in chat first or apply them and
-**report every line touched**. Never silently rewrite his prose. "I changed lines 40 and 57"
-costs him a three-line diff; an unannounced rewrite costs him a re-read of the whole file,
-and after that he cannot trust the file.
+Never without an explicit accept:
+
+- **adding a line that says something new**
+
+New content reaches the spec by one route only: file it in
+[`docs/notes/proposals.md`](docs/notes/proposals.md) with a number and its inference kind,
+Sean accepts it in chat, and only then does it land. Record every rejection with his reason,
+or the same proposal will be filed again in a later session.
+
+Never silently rewrite his prose. "I changed lines 40 and 57" costs him a three-line diff;
+an unannounced rewrite costs him a re-read of the whole file, and after that he cannot trust
+the file.
+
+Keep the open-proposal queue under fifteen. Past that, reviewing costs as much as writing
+and the mechanism has failed. If a lot of proposals would be guesses at design, ask one
+question instead.
 
 ## Writing notes
 
