@@ -13,11 +13,13 @@ spec/
   README.md ....................... the specification index and its rules
   planet.md ....................... the sphere, its regions, what a territory carries
   economy.md ...................... resources, structures, labor, citizens
+  units.md ........................ the unit types and what each one does
   console.md ...................... the command language and what it must cover
   combat.md ....................... ranges, weapons, resolution
   orbit.md ........................ the orbital layer
 releases/
   README.md ....................... what each delivery includes; files are deleted once vetted
+  first-release.md ................ one tiny planet, colonize through to launching a colonizer
 docs/
   README.md ....................... this file: the map and the rules
   vision.md ....................... what the game is and what it must not become

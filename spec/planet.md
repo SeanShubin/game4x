@@ -8,7 +8,10 @@ proposal from [proposals](../docs/notes/proposals.md).
 
 ## Shape
 
-- Planets are spheres divided into regions according to Goldberg polyhedrons
+- Planets are spheres divided into territories according to Goldberg polyhedrons
+- A consequence of that choice is that only certain territory counts exist: `10T + 2` where
+  `T = m^2 + mn + n^2` for whole numbers `m` and `n`, giving 12, 32, 42, 72, 92, 122 and
+  upward with nothing in between
 - The minimum planet size is therefore 12, a dodecahedron, the smallest Goldberg polyhedron
 - There are 5 planet sizes, corresponding to the 5 smallest Goldberg polyhedrons
   - tiny: 12

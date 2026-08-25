@@ -13,6 +13,58 @@ When an item lands in the spec, delete the row. Nothing here is decided.
 **`spec/overview.md` is dropped.** Genre, inspirations and theme moved to
 [vision](../vision.md); the spec holds mechanical detail only.
 
+## Settled 2026-08-25, but not yet written
+
+**Incentive structures are a mechanic, and they can fail.** Run out of food and the
+population cannot be bothered to work for you; it goes and gets its own food instead.
+
+**Evolutionary adaptation is flavour**, explaining why a sentient AI finds biologicals more
+efficient than a robot army in the default case. Not simulated. But Sean intends situations
+that *require* robot armies later - a planet rich in energy and resources but hostile to life
+- so **the model must not hardwire population as biological.** Labor is the abstraction;
+citizens are one source of it, and food is their upkeep rather than the only upkeep there
+will ever be.
+
+### Resolved: they depart
+
+Decided 2026-08-25. The line already in `spec/economy.md` stands unchanged - an unfed citizen
+departs, and self-provisioning is not modelled at all.
+
+Two things follow, and the second is why the word matters:
+
+- **The incentive structure is the food supply.** There is no separate loyalty or unrest
+  measure. Failing to feed the population *is* the incentive failing, and the consequence is
+  losing it. `spec/economy.md` therefore already specifies this mechanic in full.
+- **"Depart" is deliberately unspecified.** It covers a biological population starving and a
+  machine population shutting down, which is exactly what keeps one rule over both and serves
+  the not-hardwired-as-biological constraint above. Filed as P-17 so a later session cannot
+  helpfully narrow it to starvation.
+
+## What the first release needs and the spec does not have
+
+[The first release](../../releases/first-release.md) is one tiny planet and an eight-step
+loop. Walking the loop against the spec, in order:
+
+| Loop step                              | Missing from the spec                                                                                                                                                  |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. No presence on the planet           | How a game begins. What "presence" is. Where the first colonizer comes from, given there is none on the planet                                                         |
+| 2. Colonize a territory                | The colonizer itself - `spec/units.md` is empty. Whether "colonize" is the same act as "claim", which `spec/planet.md` already says needs security greater than threat |
+| 3. Infrastructure to grow food         | How a structure is built at all: what it costs, who builds it, how long it takes. The farm's *effect* is specified; its construction is not                            |
+| 4. Expand population across the planet | Movement. Whether citizens move, or a new territory is colonized from an adjacent one. Sean mentioned "a vehicle that can expand from one territory to another"        |
+| 5. Mine metal and fuel                 | **Metal and fuel do not exist in the spec.** Only food does. And by Sean's own logistics rule, a resource must be moved to where it is used - no transport exists      |
+| 6. Build a new colonizer               | A structure that produces units, and its inputs                                                                                                                        |
+| 7. Infrastructure to launch            | A launch structure, and what it costs                                                                                                                                  |
+| 8. Launch into space                   | Orbit - `spec/orbit.md` is empty - and whatever the strategic layer is                                                                                                 |
+
+Two consequences of choosing **tiny** worth knowing before building:
+
+- Tiny is 12 territories and by [P-7](proposals.md) **every one is a pentagon**. The first
+  release therefore never exercises the five-versus-six neighbour distinction that makes the
+  tessellation interesting. Fine if the release is about the loop; a gap if it is meant to
+  prove the geometry.
+- Tiny has a greatest distance of 3, so "expand population across the planet" is at most
+  three steps from anywhere.
+
 ## Resolved: the large planet is buildable after all
 
 `spec/planet.md` names five sizes: 12, 32, 42, 72, 92 - the five smallest Goldberg counts.
