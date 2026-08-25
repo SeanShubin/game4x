@@ -30,11 +30,11 @@ spread within a kind: borders 3.8e-15  seed angles 2.2e-16
 
 ### Which region counts are supported
 
-| Count                                                                                 | What you get                                                                                                                                         |
-| ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A Goldberg count of class I or II — 12, 32, 42, 92, 122, 162, 252, 272, 362, 482, 492 | The canonical solid. Twelve pentagons, none touching, no cell with four or seven neighbours.                                                         |
-| A Goldberg count of class III — 72, 132, 192, 212, 282, 312, 372, 392, 432            | **Falls back to relaxation.** Class III solids are chiral and are not built yet; see [`goldberg`](../../crates/sphere-tessellation/src/goldberg.rs). |
-| Anything else — 100, 137, 200, …                                                      | Falls back to relaxation. Never fails, but the guarantees go.                                                                                        |
+| Count                                                                                 | What you get                                                                                                                                                                   |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A Goldberg count of class I or II — 12, 32, 42, 92, 122, 162, 252, 272, 362, 482, 492 | The canonical solid. Twelve pentagons, none touching, no cell with four or seven neighbours.                                                                                   |
+| A Goldberg count of class III — 72, 132, 192, 212, 282, 312, 372, 392, 432            | The canonical solid. These are chiral, and building them needed every icosahedral face wound the same way; see [`goldberg`](../../crates/sphere-tessellation/src/goldberg.rs). |
+| Anything else — 100, 137, 200, …                                                      | Falls back to relaxation. Never fails, but the guarantees go.                                                                                                                  |
 
 The fallback degrades gracefully at first and then not so gracefully. Measured with the
 default settings:

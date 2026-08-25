@@ -109,20 +109,6 @@ choice defensible - see [region schemes](region-schemes.md).
 (hairy ball theorem), so the two undefined points are placed on an antipodal pair of
 five-neighbour regions.
 
-### P-12 · Recovered · new file, `spec/console.md`
-
-> Every change to game state is representable and executable as a console command.
-
-**Basis:** stated in conversation on 2026-08-25 as a governing invariant, and reworded here
-to Sean's own phrasing - *state change* is tighter than "anything that can happen", because
-it names exactly what the command set must cover. This is a total-coverage requirement on
-the command set: no game action may exist that the language cannot express.
-
-Filed against a new file because the invariant governs every other spec document rather than
-belonging to any one of them. If [layers](../layers.md) is right that an intent is "a value,
-not a state, integers, serialisable", then a command and an intent are the same object and
-this invariant says the command set is complete over intents.
-
 ### P-13 · Measured · `spec/planet.md` → Shape
 
 > The greatest distance between two territories is 3 on a tiny planet, 5 on a small one, 6
@@ -132,14 +118,14 @@ this invariant says the command set is complete over intents.
 against - it is how many distinct range bands a planet has, so a tiny planet supports three
 and a huge one nine.
 
-**Gap:** the large planet, 72 regions, is not measured. It is `GP(2,1)`, the only chiral one
-of the five, and `sphere-tessellation` does not build class III - see the flag in
-[the backlog](spec-backlog.md).
+**Gap:** the large planet, 72 regions, is not yet measured. It builds correctly - see
+[the backlog](spec-backlog.md) - but its diameter has not been computed.
 
 ## Accepted
 
-Nothing yet. When a proposal is accepted, its number and destination are recorded here and
-the line appears in the spec.
+| Proposal                                                                                | Landed in                                | Date       |
+| --------------------------------------------------------------------------------------- | ---------------------------------------- | ---------- |
+| P-12, "every change to game state is representable and executable as a console command" | `spec/console.md` → Coverage, a new file | 2026-08-25 |
 
 ## Rejected
 

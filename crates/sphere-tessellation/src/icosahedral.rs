@@ -502,12 +502,78 @@ mod tests {
         assert!(canonical_seeds(92).is_some(), "GP(3,0)");
         assert!(canonical_seeds(162).is_some(), "GP(4,0)");
         assert!(canonical_seeds(492).is_some(), "GP(7,0)");
+        assert!(canonical_seeds(72).is_some(), "GP(2,1), class III and chiral");
+        assert!(canonical_seeds(132).is_some(), "GP(3,1), class III");
 
         for count in [20, 33, 50, 100, 150, 300] {
             assert!(
                 canonical_seeds(count).is_none(),
                 "{count} is not a Goldberg count and should have no canonical shape"
             );
+        }
+    }
+
+    /// The chiral class III solids, checked through `canonical_seeds` rather than through
+    /// `goldberg::seeds` — that is the path the game takes, and it is the one the planet
+    /// sizes depend on. `large` is 72 regions, which is `GP(2,1)`, the only chiral solid
+    /// among the five sizes.
+    #[test]
+    fn the_chiral_solids_are_built_through_the_same_path_as_the_rest() {
+        for (count, m, n) in [(72, 2, 1), (132, 3, 1), (192, 3, 2), (212, 4, 1)] {
+            assert!(crate::goldberg::is_chiral(m, n), "GP({m},{n}) should be chiral");
+
+            let seeds = canonical_seeds(count)
+                .unwrap_or_else(|| panic!("GP({m},{n}) has no canonical shape at {count}"));
+            assert_eq!(seeds.len(), count, "GP({m},{n}) seed count");
+
+            let neighbours = adjacency(&seeds);
+            let histogram = degree_histogram(&neighbours);
+            assert_eq!(
+                histogram.get(5).copied().unwrap_or(0),
+                12,
+                "GP({m},{n}) must have twelve pentagons"
+            );
+            assert_eq!(
+                histogram.get(6).copied().unwrap_or(0),
+                count - 12,
+                "GP({m},{n}) everything else must be a hexagon"
+            );
+            assert_eq!(edge_count(&neighbours), 3 * count - 6, "GP({m},{n}) Euler");
+        }
+    }
+
+    /// The greatest distance between two regions, at each of the five planet sizes.
+    ///
+    /// This is the number the weapon ranges are designed against: it is how many distinct
+    /// range bands a planet has, so a tiny planet supports three and a huge one nine. It is
+    /// pinned here because changing the tessellation would change the whole combat ladder
+    /// silently otherwise. See `spec/planet.md`.
+    #[test]
+    fn each_planet_size_has_a_known_greatest_distance() {
+        for (name, count, expected) in [
+            ("tiny", 12, 3),
+            ("small", 32, 5),
+            ("medium", 42, 6),
+            ("large", 72, 7),
+            ("huge", 92, 9),
+        ] {
+            let neighbours = adjacency(&canonical_seeds(count).expect(name));
+            let mut greatest = 0usize;
+            for start in 0..count {
+                let mut distance = vec![usize::MAX; count];
+                distance[start] = 0;
+                let mut queue = std::collections::VecDeque::from([start]);
+                while let Some(here) = queue.pop_front() {
+                    for &next in &neighbours[here] {
+                        if distance[next as usize] == usize::MAX {
+                            distance[next as usize] = distance[here] + 1;
+                            queue.push_back(next as usize);
+                        }
+                    }
+                }
+                greatest = greatest.max(*distance.iter().max().expect("non-empty"));
+            }
+            assert_eq!(greatest, expected, "{name} ({count} regions)");
         }
     }
 

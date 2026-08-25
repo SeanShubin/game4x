@@ -13,16 +13,18 @@ When an item lands in the spec, delete the row. Nothing here is decided.
 **`spec/overview.md` is dropped.** Genre, inspirations and theme moved to
 [vision](../vision.md); the spec holds mechanical detail only.
 
-## Flagged: the large planet is not buildable
+## Resolved: the large planet is buildable after all
 
-`spec/planet.md` names five sizes: 12, 32, 42, 72, 92. Those are exactly the five smallest
-Goldberg counts, so the choice is sound - but **72 is `GP(2,1)`, the only chiral one**, and
-[planet-view](../prototypes/planet-view.md) records that `sphere-tessellation` does not build
-class III and falls back to relaxation. Today "large" would not be a true Goldberg solid.
+`spec/planet.md` names five sizes: 12, 32, 42, 72, 92 - the five smallest Goldberg counts.
+**72 is `GP(2,1)`, the only chiral one**, and
+[planet-view](../prototypes/planet-view.md) claimed class III fell back to relaxation.
 
-Two ways out, and it is Sean's choice: build class III in `sphere-tessellation`, or move
-"large" to 122 (`GP(2,2)`, class II, the sixth smallest) and accept a wider gap between
-medium and large.
+That documentation was stale. `sphere-tessellation` builds all three classes; the code
+comment on `canonical_seeds` records that class III needed every icosahedral face wound the
+same way, because a mirrored face lays down a mirrored lattice patch. What was missing was
+**test coverage of that path and correct documentation**, not the capability. Both fixed
+2026-08-25: `the_chiral_solids_are_built_through_the_same_path_as_the_rest` now asserts 72,
+132, 192 and 212 through `canonical_seeds`.
 
 ## For `spec/planet.md`
 

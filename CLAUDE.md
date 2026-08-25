@@ -57,6 +57,16 @@ Keep the open-proposal queue under fifteen. Past that, reviewing costs as much a
 and the mechanism has failed. If a lot of proposals would be guesses at design, ask one
 question instead.
 
+## Releases
+
+`spec/` says what the game is; `releases/` says what is being built now. **The spec is the
+destination and always wins**; a release spec only says what is true today, so the two never
+disagree about the goal, only about the schedule.
+
+A release spec never invents a rule. If a release needs one the spec lacks, propose it into
+the spec first, then have the release refer to it. Never resolve a scheduling question by
+writing a new rule into `releases/`.
+
 ## Writing notes
 
 - Date the note in its header line.

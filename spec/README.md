@@ -15,6 +15,7 @@ no matter how thoroughly it was discussed.
 | ----------------------- | ----------------------------------------------------- |
 | [The planet](planet.md) | The sphere, its regions, and what a territory carries |
 | [Economy](economy.md)   | Resources, structures, labor, and citizens            |
+| [Console](console.md)   | The command language, and what it must cover
 | [Combat](combat.md)     | Ranges, weapons, resolution                           |
 | [Orbit](orbit.md)       | The orbital layer and what sits in it                 |
 
