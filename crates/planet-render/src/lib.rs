@@ -20,12 +20,14 @@
 pub mod app;
 pub mod camera;
 pub mod font;
+pub mod mesh;
 pub mod palette;
 pub mod raster;
 pub mod world;
 
 pub use app::{Command, PlanetView, Settings};
 pub use camera::{GlobeView, Projection};
+pub use mesh::{PlanetMesh, RegionSpan};
 pub use world::{World, WorldSpec};
 
 /// The integer adjacency graph for a world, which is all the model ever sees.

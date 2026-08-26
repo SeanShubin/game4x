@@ -17,6 +17,7 @@
 //! [`PresentMode::AutoVsync`], so frames are swapped during the vertical blank and
 //! there is no seam.
 
+pub mod globe;
 pub mod gpu;
 
 use bevy::asset::RenderAssetUsages;
@@ -162,6 +163,9 @@ fn spawn_screen(mut commands: Commands) {
 }
 
 /// Keeps the view, the buffers and the texture the same size as the window.
+// A system's parameters are its dependency list, which Bevy reads to schedule it.
+// Shortening it would mean hiding a dependency, not removing one.
+#[allow(clippy::too_many_arguments)]
 fn follow_window_size(
     mut commands: Commands,
     mut planet: ResMut<Planet>,
@@ -242,6 +246,7 @@ fn blank_image(width: u32, height: u32) -> Image {
     image
 }
 
+#[allow(clippy::too_many_arguments)]
 fn read_input(
     mut planet: ResMut<Planet>,
     windows: Query<&Window, With<PrimaryWindow>>,
@@ -293,20 +298,20 @@ fn read_input(
     // C claims whatever is under the cursor. This is the only place in the project
     // that turns a keypress into an intent, and it does nothing else: the rules decide
     // whether the claim is legal, one layer down and a whole crate away.
-    if keys.just_pressed(KeyCode::KeyC) {
-        if let Some(region) = hovered {
-            pending.push(Intent::Claim {
-                region: RegionId(region as u32),
-                player: PlayerId(local_player.0),
-            });
-        }
+    if keys.just_pressed(KeyCode::KeyC)
+        && let Some(region) = hovered
+    {
+        pending.push(Intent::Claim {
+            region: RegionId(region as u32),
+            player: PlayerId(local_player.0),
+        });
     }
-    if keys.just_pressed(KeyCode::KeyX) {
-        if let Some(region) = hovered {
-            pending.push(Intent::Abandon {
-                region: RegionId(region as u32),
-            });
-        }
+    if keys.just_pressed(KeyCode::KeyX)
+        && let Some(region) = hovered
+    {
+        pending.push(Intent::Abandon {
+            region: RegionId(region as u32),
+        });
     }
     if keys.just_pressed(KeyCode::Tab) {
         local_player.0 = local_player.0.wrapping_add(1) % 6;
@@ -463,10 +468,10 @@ fn present(
         };
     }
 
-    if let Some(data) = image.data.as_mut() {
-        if data.len() == bytes.len() {
-            data.copy_from_slice(bytes);
-        }
+    if let Some(data) = image.data.as_mut()
+        && data.len() == bytes.len()
+    {
+        data.copy_from_slice(bytes);
     }
 }
 

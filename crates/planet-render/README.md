@@ -35,18 +35,24 @@ planet.draw(&mut pixels, cursor);    // 0x00RRGGBB per pixel
 
 ## Modules
 
-| Module    | Responsibility                                                                 |
-| --------- | ------------------------------------------------------------------------------ |
-| `app`     | The view as a plain object: state, commands, the readout. The engine boundary. |
-| `world`   | A tessellation plus its colouring and verification                             |
-| `camera`  | Orientation of the sphere, and the two projections                             |
-| `raster`  | Resolving pixels to regions, then shading, borders, labels, cursors            |
-| `palette` | Region colours, chosen for grayscale and colour-vision-deficient readability   |
-| `font`    | A 5x7 bitmap font, so labels need no text dependency                           |
+| Module    | Responsibility                                                                          |
+| --------- | --------------------------------------------------------------------------------------- |
+| `app`     | The view as a plain object: state, commands, the readout. The engine boundary.          |
+| `world`   | A tessellation plus its colouring and verification                                      |
+| `camera`  | Orientation of the sphere, and the two projections                                      |
+| `raster`  | Resolving pixels to regions, then shading, borders, labels, cursors                     |
+| `mesh`    | The world as triangles, for an engine to upload. The same layer, the opposite technique |
+| `palette` | Region colours, chosen for grayscale and colour-vision-deficient readability            |
+| `font`    | A 5x7 bitmap font, so labels need no text dependency                                    |
 
 `camera` is where the interesting geometry lives. The camera is a rotation, not a
 position, so panning composes small rotations about the *view* axes — no fixed
 up-vector to lose, no gimbal lock, and no special behaviour at the poles.
+
+`mesh` and `raster` are the same layer answering the same question two ways. `raster`
+asks, per pixel, which seed is nearest; `mesh` hands over the polygons and lets the
+hardware answer it. Neither knows which engine consumes it - there are no engine types in
+either file, only numbers.
 
 `raster` does not project polygons. Every pixel asks the sphere which region contains
 it, which is why there is no antimeridian split, no polar special case, and no trouble

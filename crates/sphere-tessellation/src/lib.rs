@@ -12,15 +12,17 @@
 //! All floating point stays on this side of that boundary.
 
 pub mod adjacency;
+pub mod cells;
 pub mod goldberg;
 pub mod icosahedral;
 pub mod lattice;
 pub mod quality;
-pub mod topology;
 pub mod rng;
+pub mod topology;
 pub mod vec3;
 
 pub use adjacency::{adjacency, degree_histogram, edge_count, is_connected, is_symmetric};
+pub use cells::{Solid, solid};
 pub use icosahedral::{Verification, truncated_icosahedron_seeds};
 pub use lattice::{fibonacci_lattice, mean_spacing, nearest_index, nearest_two};
 pub use quality::Quality;
@@ -135,7 +137,9 @@ impl Tessellation {
         }
         self.neighbours.iter().all(|list| {
             list.len() != 5
-                || list.iter().all(|&other| self.neighbours[other as usize].len() != 5)
+                || list
+                    .iter()
+                    .all(|&other| self.neighbours[other as usize].len() != 5)
         })
     }
 
@@ -178,18 +182,21 @@ impl Tessellation {
         // damage it: Lloyd moves each seed to its cell's centroid and renormalizes,
         // which throws away the plane distances that make the edges equal. So when one
         // exists and there is nothing to perturb, hand it back untouched.
-        if params.jitter <= 0.0 {
-            if let Some(seeds) = icosahedral::canonical_seeds(params.region_count) {
-                let neighbours = adjacency::adjacency(&seeds);
-                return (
-                    Self {
-                        params: Params { relaxation: 0, ..params },
-                        seeds,
-                        neighbours,
+        if params.jitter <= 0.0
+            && let Some(seeds) = icosahedral::canonical_seeds(params.region_count)
+        {
+            let neighbours = adjacency::adjacency(&seeds);
+            return (
+                Self {
+                    params: Params {
+                        relaxation: 0,
+                        ..params
                     },
-                    0,
-                );
-            }
+                    seeds,
+                    neighbours,
+                },
+                0,
+            );
         }
 
         let mut seeds = icosahedral::canonical_seeds(params.region_count)
@@ -199,7 +206,14 @@ impl Tessellation {
 
         if params.region_count < 4 {
             let neighbours = adjacency::adjacency(&seeds);
-            return (Self { params, seeds, neighbours }, 0);
+            return (
+                Self {
+                    params,
+                    seeds,
+                    neighbours,
+                },
+                0,
+            );
         }
 
         let samples =
@@ -214,7 +228,10 @@ impl Tessellation {
             if Quality::measure(&seeds, &neighbours).is_playable() || spent >= max_passes {
                 return (
                     Self {
-                        params: Params { relaxation: spent, ..params },
+                        params: Params {
+                            relaxation: spent,
+                            ..params
+                        },
                         seeds,
                         neighbours,
                     },
@@ -281,9 +298,15 @@ mod tests {
             "with jitter at zero the seed must have no effect"
         );
 
-        let jittered = Params { jitter: 0.3, ..base };
+        let jittered = Params {
+            jitter: 0.3,
+            ..base
+        };
         let first = Tessellation::generate(jittered);
-        let second = Tessellation::generate(Params { seed: 999, ..jittered });
+        let second = Tessellation::generate(Params {
+            seed: 999,
+            ..jittered
+        });
         assert_ne!(
             first.seeds, second.seeds,
             "with jitter on the seed must have an effect"

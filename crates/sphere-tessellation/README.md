@@ -25,6 +25,12 @@ assert!(solid.verify_truncated_icosahedron().is_perfect());
 
 tessellation.seeds;       // Vec<Vec3>, one per region — rendering only
 tessellation.neighbours;  // Vec<Vec<u32>>, sorted — the game logic's whole view
+
+// The polyhedron itself, for drawing it in three dimensions.
+let shape = sphere_tessellation::solid(&solid.seeds, &solid.neighbours);
+assert_eq!(shape.corners.len(), 60);   // where three regions meet
+assert_eq!(shape.cells.len(), 32);     // one polygon per region
+assert_eq!(shape.euler_characteristic(), 2);
 ```
 
 The two outputs are deliberately separated. `neighbours` is integers with no geometry
