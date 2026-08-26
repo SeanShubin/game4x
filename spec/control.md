@@ -10,10 +10,18 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 
 ## Force
 
+## Producing force
+
 ## Coordination
 
 ## Gaining and holding ground
 
 ## Wildlife
+
+- Several species may live in one territory, each with its own force
+- Species of equal force coexist. Where one has greater force than another, it preys on the
+  weaker
+- **Nature never exterminates.** Extermination requires coordination, and nature does not
+  coordinate. Only a player can drive a species to nothing
 
 ## Open questions
