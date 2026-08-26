@@ -101,7 +101,7 @@ stating where the growth rule lives rather than leaving a reader to infer it fro
 >
 > Organised force **sums**. Unorganised force is the **highest** present, not the total.
 > Nature does not coordinate, so the force of the wild in a territory is that of its apex
-> predator however much else lives there.
+> creature however much else lives there.
 >
 > **Gaining and holding ground**
 >
@@ -111,34 +111,37 @@ stating where the growth rule lives rather than leaving a reader to infer it fro
 > Force is compared against each neighbour separately and never against their total, because
 > neighbours do not coordinate with one another either.
 >
-> **Culling**
+> **Clearing wildlife**
 >
-> Holding greater force than the life in a territory drives its force down. Falling below it
-> lets that force grow again.
+> Wildlife is cleared all at once or not at all. Because the species in a territory do not
+> coordinate, clearing every one of them is no harder than clearing the strongest, so a
+> territory's force stays at its apex until nothing is left, then falls to nothing.
+>
+> Holding greater force than the wildlife wears it down. Falling below lets it recover.
+>
+> A cleared territory is reclaimed from a neighbouring territory that still has wildlife.
+> Wildlife is gone from a planet only when no territory on it has any.
 
-**Basis:** stated in conversation on 2026-08-25, over five exchanges.
+**Basis:** stated in conversation on 2026-08-25, over six exchanges.
+
+**All at once, not species by species.** Sean's own reasoning, and it is the coordination
+principle a third time: species that do not help each other are not harder to fight together
+than singly. It also settles what culling does to force - **nothing, until it is finished.**
+An earlier draft had force falling as the population fell, and Sean withdrew that: force
+would then have to depend on how many creatures there are, which is what "nature is the
+highest, not the total" exists to avoid.
+
+The shape this gives clearing is worth noting. It is expensive, pays only at the end, and is
+undone by leaving a single refuge - so the last uncleared territory on a planet is a
+strategic object rather than a leftover.
 
 **Threat and security are gone.** They named one quantity from two sides, like uphill and
-downhill, and no rule needed to know which side it was looking at - so three words were doing
-the work of one, and the pair invited a future rule that only made sense if they were
-genuinely separate. An interface may still label a hostile territory's force as threat; that
-is presentation with no rule attached.
+downhill, and no rule needed to know which side it was looking at. An interface may still
+label a hostile territory's force as threat; that is presentation with no rule attached.
 
 **The numbers moved out.** An earlier draft fixed accidental damage at 1 and a predator at 2.
-Those are tuning, not specification, so the spec now states only the ordering and the values
-go to a release - see P-36 and rule 7 in [the specification's own rules](../../spec/README.md).
-
-### P-36 · Recovered · `releases/first-release.md`
-
-> A creature whose damage is accidental has a force of 1. A predator has a force of 2.
-
-**Basis:** Sean's own values from 2026-08-25, moved out of the specification on his
-observation that they are *"an example baseline that can be tuned, not really a
-specification."*
-
-They live in a release because a release records what is actually shipped and can change
-without touching the spec. Once there is code, the numbers belong in game data and the
-release entry becomes a pointer to it rather than the source.
+Those are tuning, not specification - see P-36 and rule 7 in
+[the specification's own rules](../../spec/README.md).
 
 ### P-33 · Recovered · `spec/control.md` → a section on wildlife
 
