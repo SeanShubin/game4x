@@ -6,7 +6,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 [Specification](README.md) · [Root README](../README.md)
 
-One section per unit type. What is true of *every* unit belongs in [units](units.md) instead.
+One section per unit type. What is true of *every* unit belongs in
+[units](units.md) instead.
 
 ## Ark
 

@@ -31,13 +31,10 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## What a territory carries
 
-- Each territory on a planet has a **threat** level, which requires a greater **security**
-  level in order to claim
-- Territories have a **rating** for each resource, which determines the rate at which that
-  resource can be extracted
 - Two territories are adjacent when they share an edge; territories that meet only at a
   corner are not adjacent
 - Each territory has an id, unique within its planet, starting at 1
+- Each territory has zero or more nodes for each resource, and each node has a density
 
 ## Presentation
 

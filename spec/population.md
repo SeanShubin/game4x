@@ -9,7 +9,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 ## Citizens
 
 - Each turn the number of citizens may change depending on available food
-  - If less food than citizens, each unfed citizen departs
+  - If less food than citizens, each unfed citizen starves
   - If food equals citizens, no change
   - If food exceeds citizens, then generate 1 citizen for each citizen with extra food, so
     increases by the minimum of extra-food and total-citizens, at most doubling if there is

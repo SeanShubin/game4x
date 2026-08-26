@@ -93,6 +93,18 @@ A release spec never invents a rule. If a release needs one the spec lacks, prop
 the spec first, then have the release refer to it. Never resolve a scheduling question by
 writing a new rule into `releases/`.
 
+## A mistake worth not repeating
+
+**Never edit a markdown table by string-replacing one of its rows.** The padder rewrites
+column widths, so a pattern that matched yesterday silently stops matching, and
+`str.replace` with no match is a no-op rather than an error. Thirteen rows went missing from
+`docs/notes/proposals.md` this way before anyone noticed, and the same bug dropped three
+files from the specification index.
+
+Rebuild a table from a declared list instead, and **assert** the result: that every item is
+accounted for exactly once, and that a list of files matches what is actually on disk. A
+scripted edit that cannot fail loudly will fail quietly.
+
 ## Writing notes
 
 - Date the note in its header line.

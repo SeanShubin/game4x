@@ -16,4 +16,11 @@ specific rule.
 
 - Every change to game state is representable and executable as a console command
 
+## No penalty for building infrastructure
+
+- Infrastructure is never a liability; a structure costs nothing to keep, and nothing a
+  player builds ever has to be removed to make room for something else
+- Every setback comes from outside the player, another player or the world; none comes from
+  the player's own infrastructure
+
 ## Open questions

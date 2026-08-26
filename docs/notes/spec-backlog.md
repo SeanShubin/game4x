@@ -13,6 +13,16 @@ When an item lands in the spec, delete the row. Nothing here is decided.
 **`spec/overview.md` is dropped.** Genre, inspirations and theme moved to
 [vision](../vision.md); the spec holds mechanical detail only.
 
+## Deferred: "starves" will not cover a machine population
+
+`spec/population.md` says an unfed citizen **starves**. That was chosen deliberately over the
+more abstract "departs" on 2026-08-25 - *"for now lets just make it starves, we will get to
+robots later."*
+
+It is a debt rather than a defect. Sean intends worlds rich in energy but hostile to life,
+worked by machines rather than biologicals, and a machine has no food to be denied. When that
+arrives, either the word widens again or the machine case needs a rule of its own.
+
 ## Settled 2026-08-25, but not yet written
 
 **Resources are generic for now.** Sean intends to be far more specific later, possibly

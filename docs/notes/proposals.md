@@ -33,61 +33,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-14 · Recovered · `spec/unit-types.md`
-
-> ### Ark
->
-> An Ark claims a territory from space. It costs more than a Seeder.
->
-> An Ark also prints the founding population of a planet.
->
-> ### Seeder
->
-> A Seeder claims a territory from a territory adjacent to it.
-
-**Basis:** vocabulary settled in conversation on 2026-08-25. Both perform the same act -
-`claim` - and differ only in where they can operate from and what they cost, so one rule
-covers both and the difference lives in the unit. Rejected in the same conversation:
-*Hatchery*, which implies eggs and so commits to a reproduction mechanic that is not chosen;
-and *Printworks*, as obtuse.
-
-**Split note:** this proposal originally carried the structures and the no-manufactured-
-citizens rule as well. Those are now P-27 and P-28, so each lands in one place.
-
-### P-17 · Recovered · `spec/population.md` → Citizens
-
-> **Depart** does not say how. For a biological population it may mean starving; for a
-> machine population, shutting down. The word is left unspecified so that one rule covers
-> both.
->
-> A departed citizen does not come back. The growth rule is the only way to recover
-> population.
-
-**Basis:** decided in conversation on 2026-08-25, when the alternative - citizens who stop
-working and feed themselves - was rejected because modelling self-provisioning is not wanted.
-The abstraction is load-bearing rather than decorative: it is what lets the same rule govern
-a machine population on a world hostile to life, which Sean intends later. Without this line
-someone will eventually narrow "depart" to starvation and quietly break that case.
-
-### P-18 · Recovered · `spec/economy.md` → new section, Extraction
-
-> A planet's resources are infinite. What is finite is the **rate** at which they can be
-> extracted.
-
-**Basis:** stated in conversation on 2026-08-25, and named earlier as one of the two things
-being taken from Distant Worlds. A territory never depletes; it meters. That is what makes
-territory a permanent asset rather than a consumable one.
-
-### P-20 · Recovered · `spec/economy.md` → Extraction
-
-> Extracting one resource has no effect on extracting any other. There is no shared limit and
-> no trade-off between resources on a territory.
-
-**Basis:** stated in conversation on 2026-08-25. Worth stating explicitly because the
-opposite is the common assumption - most games make a tile's output a single budget to divide
-up. Here each resource has its own independent rate, so a rich territory is rich in every
-resource it is rich in, simultaneously.
-
 ### P-22 · Recovered · `spec/invariants.md` → Everything is modelled
 
 > Nothing in the game appears or disappears without a cause inside the model. Every quantity
@@ -180,12 +125,54 @@ It is [the modelling invariant](../../spec/invariants.md) applied to a specific 
 Without it, a territory's threat is a value someone assigned; with it, threat is the
 aggregate of what is actually there, and clearing the Ferals is what lowers it.
 
+### P-32 · Recovered · `spec/control.md`
+
+> **Threat**
+>
+> Every unit has a threat value. A creature whose damage is accidental has a threat of 1; a
+> predator has a threat of 2.
+>
+> A territory's threat from nature is the **highest** threat present, not the total - it is
+> the apex predator of the region. A territory's threat from an organised opponent is the
+> **sum** of what they have there.
+>
+> **Security**
+>
+> Security is law and order within a territory, and is a single number.
+>
+> **Gaining and holding ground**
+>
+> Equal security holds ground. Taking ground requires **greater** security than the
+> opposition, whether the opposition is nature or another player.
+
+**Basis:** stated in conversation on 2026-08-25.
+
+The nature-is-maximum, organisation-sums split is the substantive part. It says a hundred
+raccoons are no worse than one because raccoons do not coordinate, while a hundred soldiers
+are a hundred times the problem because they do. That is a modelled difference rather than a
+convenience, which is what [the invariant](../../spec/invariants.md) asks for.
+
+It also means clearing a territory of nature is **tiered**: remove the predators and the
+threat falls to 1, the level of whatever accidental damage remains.
+
 ## Accepted
 
-| Proposal                                                                                | Landed in                                        | Date       |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------ | ---------- |
-| P-12, "every change to game state is representable and executable as a console command" | `spec/invariants.md` → Everything is expressible | 2026-08-25 |
-| P-1, the `10T + 2` territory counts, framed as a consequence of the Goldberg choice     | `spec/planet.md` → Shape, second bullet          | 2026-08-25 |
+| Proposal                                                                     | Landed in                                                                 | Date       |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ---------- |
+| P-1, the `10T + 2` territory counts, as a consequence of the Goldberg choice | `spec/planet.md` → Shape                                                  | 2026-08-25 |
+| P-6, every territory has five or six neighbours; exactly twelve have five    | `spec/planet.md` → Shape                                                  | 2026-08-25 |
+| P-8, adjacency is a shared edge, never a shared corner                       | `spec/planet.md` → What a territory carries                               | 2026-08-25 |
+| P-10, the planet is presented as a three-dimensional sphere                  | `spec/planet.md` → Presentation                                           | 2026-08-25 |
+| P-11, the roll for any point on the planet is fixed                          | `spec/planet.md` → Presentation                                           | 2026-08-25 |
+| P-12, every change to game state is a console command                        | `spec/invariants.md` → Everything is expressible                          | 2026-08-25 |
+| P-14, the Ark and the Seeder                                                 | `spec/unit-types.md`                                                      | 2026-08-25 |
+| P-19, territories have a rating per resource                                 | `spec/planet.md` → What a territory carries                               | 2026-08-25 |
+| P-21, resources exist in a place; a cost is paid where it is spent           | `spec/logistics.md`                                                       | 2026-08-25 |
+| P-23, territories have an id, unique per planet, starting at 1               | `spec/planet.md` → What a territory carries, Presentation                 | 2026-08-25 |
+| P-18, a planet's resources are infinite; the rate is finite                  | `spec/economy.md` → Structures and labor                                  | 2026-08-25 |
+| P-31, territories have nodes for each resource, and nodes have density       | `spec/planet.md` → What a territory carries; example in `spec/economy.md` | 2026-08-25 |
+| P-30, infrastructure is never a liability; setbacks come from outside        | `spec/invariants.md` → No penalty for building infrastructure             | 2026-08-25 |
+| P-24, distance is fixed; roads change traversal, not distance                | `spec/planet.md` → Distance                                               | 2026-08-25 |
 
 ## Rejected
 
@@ -194,10 +181,14 @@ again in a later session.
 
 ## Withdrawn
 
-| Proposal                                                                | Why                                                                                                                                                                                                                                                                                       |
-| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| P-2, "twenty planet sizes are available below 500"                      | Superseded by Sean's edit of 2026-08-25, which fixes the game at five named sizes. The twenty counts remain *available* from the tessellation, but the game does not use them, so the line would have been misleading.                                                                    |
-| P-3, "no two regions are more than `3m` apart"                          | Superseded by P-13, which states the same thing per named planet size instead of as a formula. P-3 was also incomplete: `3m` holds for class I only, and the large planet is class III, where the measured distance is 7 rather than the 6 the formula suggests.                          |
-| P-5, "a pentagon's farthest region is its antipodal twin"               | Merged into P-4. It was the same fact split across two bare statements, neither of which said what it was for.                                                                                                                                                                            |
-| P-4, "the twelve five-neighbour territories sit in six antipodal pairs" | Derivable from the Goldberg choice, and **no rule in the spec leans on it**. It would become worth stating if P-11 is accepted, since locking the camera axis to an antipodal pentagon pair depends on the pairs existing - at which point it belongs inside P-11 rather than on its own. |
-| P-7, "the smallest planet has no six-neighbour territories"             | Derivable from P-6 together with a line Sean has already written - "the minimum planet size is therefore 12, **a dodecahedron**". Naming the solid already says it is all pentagons.                                                                                                      |
+| Proposal                                                                | Why                                                                                                                                                                                 |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P-2, "twenty planet sizes are available below 500"                      | Superseded by Sean's edit fixing the game at five named sizes.                                                                                                                      |
+| P-3, "no two territories are more than `3m` apart"                      | Superseded by the per-size statement, and incomplete: `3m` holds for class I only, while the large planet is class III where the measured distance is 7.                            |
+| P-4, "the twelve five-neighbour territories sit in six antipodal pairs" | Derivable from the Goldberg choice and no rule leans on it. Belongs inside a camera-orientation rule if one is ever written.                                                        |
+| P-5, "a pentagon's farthest territory is its antipodal twin"            | Merged into P-4, then withdrawn with it.                                                                                                                                            |
+| P-7, "the smallest planet has no six-neighbour territories"             | Derivable from P-6 plus a line Sean had already written - the minimum is 12, **a dodecahedron**. Naming the solid already says it is all pentagons.                                 |
+| P-9, "the distance between every pair is computed once and stored"      | An implementation directive, not a rule of the game. How distance is computed belongs in a crate README.                                                                            |
+| P-13, "the greatest distance is 3 / 5 / 6 / 7 / 9 by planet size"       | Determined by the Goldberg choice and the size, nothing leans on it, and the numbers are **already asserted by a test** - a prose copy could drift from it.                         |
+| P-15, "Native life is a planet's own, Feral is printed life gone wild"  | **Feral is a behavioural description, not an origin one**, and origin is not substantively relevant, so the distinction had no mechanical consequence.                              |
+| P-16, "every unit carries a name that persists when control changes"    | **A unit has a type, and the type has a name.** Individual units of the same type are not distinguished, so provenance is not tracked at all - consistent with the P-15 withdrawal. |
