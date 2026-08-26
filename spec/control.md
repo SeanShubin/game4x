@@ -8,10 +8,12 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 How a territory is claimed and held. Weapons and their ranges are in [combat](combat.md).
 
-## Threat
+## Force
 
-## Security
+## Coordination
 
 ## Gaining and holding ground
+
+## Wildlife
 
 ## Open questions

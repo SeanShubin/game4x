@@ -20,8 +20,8 @@ One section per unit type. What is true of *every* unit belongs in
 
 ## Feral
 
-- The uncontrolled predators on a planet, which have a threat level that must be secured
-  against to claim a territory
+- The uncontrolled creatures on a planet, whose force must be exceeded in order to claim a
+  territory
 
 ## Open questions
 

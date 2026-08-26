@@ -12,6 +12,14 @@ specific rule.
 
 ## Everything is modelled
 
+- Nothing in the game appears or disappears without a cause inside the model
+- Every quantity has an owner, and every change to it has something that did it and a rule
+  that says when
+- Conservation is not required; for example, fiat money is created and destroyed by a government, and
+  that is a model - there is an owner and there are rules
+- What is forbidden is a quantity that changes because the game says so, with nothing in the
+  world doing it
+
 ## Everything is expressible
 
 - Every change to game state is representable and executable as a console command
