@@ -11,6 +11,7 @@ members = [
     "crates/planet-ecs",
     "crates/planet-render",
     "crates/planet-bevy",
+    "crates/game4x",
     "prototypes/planet-view",
 ]
 # Documentation tooling, deliberately outside the workspace so it never appears in
@@ -28,6 +29,7 @@ planet-model = { path = "crates/planet-model" }
 planet-ecs = { path = "crates/planet-ecs" }
 planet-render = { path = "crates/planet-render" }
 planet-bevy = { path = "crates/planet-bevy" }
+game4x = { path = "crates/game4x" }
 
 [profile.dev]
 # The planet view rasterizes per pixel; an unoptimized build is unusably slow.

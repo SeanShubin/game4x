@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>game4x</title>
+
+    <!--
+      Build provenance. CI rewrites these placeholders in the built dist/index.html
+      (see the "build provenance" step in pipeline.yml); a local `trunk build` leaves
+      them alone, which the diagnostics below report as "(local dev)". A matching
+      /game4x/build-info.json is written next to this file.
+    -->
+    <meta name="build-commit" content="__BUILD_COMMIT__" />
+    <meta name="build-time" content="__BUILD_TIME__" />
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #0c0e12;
+        overflow: hidden;
+        /* Stop iOS pull-to-refresh and rubber-band scroll from eating drags meant
+           for the globe. */
+        overscroll-behavior: none;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        outline: none;
+        /* Deliver raw touch drags to the app instead of letting the browser pan and
+           zoom the page - without this, turning the world by touch never reaches
+           Bevy. `user-select` likewise stops a drag becoming a text selection. */
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      /* Hidden until a startup error surfaces, then it paints the message over the
+         otherwise black canvas. */
+      #diag-overlay {
+        position: fixed;
+        inset: 0;
+        margin: 0;
+        padding: 1rem;
+        z-index: 9999;
+        background: #0c0e12;
+        color: #f77;
+        font: 12px/1.5 ui-monospace, monospace;
+        white-space: pre-wrap;
+        overflow: auto;
+      }
+    </style>
+
+    <!--
+      Diagnostics, registered before the wasm module so that a failed boot is not a
+      silent black screen. Rust panics cross the JS boundary as errors or rejected
+      promises, so both are caught and painted onto the page, tagged with the build
+      commit and with which GPU backends this browser actually exposes - the fact that
+      separates "this browser cannot run it" from "the build is broken".
+    -->
+    <script>
+      (function () {
+        function meta(name) {
+          var el = document.querySelector('meta[name="' + name + '"]');
+          return el ? el.content : "(unknown)";
+        }
+        function real(value) {
+          return value.indexOf("__BUILD") === 0 ? "(local dev)" : value;
+        }
+        var build = { commit: real(meta("build-commit")), time: real(meta("build-time")) };
+        window.__BUILD__ = build;
+        console.info("game4x build:", build.commit, "-", build.time);
+
+        var gpu = {
+          webgl2: !!document.createElement("canvas").getContext("webgl2"),
+          webgpu: !!navigator.gpu,
+        };
+        window.__GPU__ = gpu;
+        console.info("gpu backends:", gpu);
+
+        function show(title, detail) {
+          var pre = document.getElementById("diag-overlay");
+          if (!pre) {
+            pre = document.createElement("pre");
+            pre.id = "diag-overlay";
+            (document.body || document.documentElement).appendChild(pre);
+          }
+          pre.textContent =
+            "game4x " + build.commit + " - built " + build.time + "\n" +
+            "gpu: webgl2=" + gpu.webgl2 + " webgpu=" + gpu.webgpu + "\n\n" +
+            title + "\n" + (detail || "");
+        }
+
+        window.addEventListener("error", function (e) {
+          show("Error:", (e.message || "") + "\n" + ((e.error && e.error.stack) || ""));
+        });
+        window.addEventListener("unhandledrejection", function (e) {
+          var reason = e.reason;
+          show("Unhandled promise rejection:", (reason && (reason.stack || reason.message)) || String(reason));
+        });
+      })();
+    </script>
+
+    <!--
+      Trunk entry point. It sits next to this crate's Cargo.toml so Trunk resolves
+      `game4x` as the target package - the workspace root is a virtual manifest with no
+      root package of its own. CI passes `--public-url /game4x/` so that asset URLs
+      resolve under the GitHub Pages project subpath.
+    -->
+    <link data-trunk rel="rust" data-bin="game4x" data-wasm-opt="z" />
+  </head>
+  <body></body>
+</html>

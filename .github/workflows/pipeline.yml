@@ -1,0 +1,186 @@
+name: CI & Deploy
+
+# One pipeline. A minimal gate protects the published page; we deploy as soon as it
+# passes; the fuller verification runs afterward as NOTIFY-ONLY - a failure there reds
+# the run but never undoes an already-published deploy.
+#
+#   gate --> deploy --> verify: full test suite
+#                   \-> verify: native build (3-OS)
+#
+# On pull requests the deploy job is skipped, but the gate and both verify jobs still
+# run, so a PR gets full coverage without publishing anything.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+# Required by actions/deploy-pages: write Pages, and id-token for its OIDC.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# A newer push to the same ref wins. Keyed per ref so pull requests and master never
+# cancel each other; the Pages singleton is handled separately on the deploy job.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  TRUNK_VERSION: v0.21.7
+
+jobs:
+  # -- Gate -------------------------------------------------------------------
+  # The minimum that must hold for the published page: everything is formatted, the
+  # shipped crates lint, the geometry is correct, and the WASM bundle actually builds.
+  # The bundle built here IS the artifact that gets deployed - it is never rebuilt.
+  gate:
+    name: Gate (lint - geometry tests - WASM build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Clippy compiles the Bevy-facing crates natively, so this job needs Bevy's Linux
+      # system libraries. The wasm32 Trunk build links none of them; installing here is
+      # harmless either way.
+      - name: Install Bevy Linux dependencies
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
+
+      - name: Install Rust toolchain (wasm32 + lint components)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: rustfmt, clippy
+
+      - name: Cache cargo + target
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: gate
+
+      - name: Install Trunk
+        run: |
+          curl -fsSL "https://github.com/trunk-rs/trunk/releases/download/${TRUNK_VERSION}/trunk-x86_64-unknown-linux-gnu.tar.gz" \
+            | tar -xzf - -C /usr/local/bin
+          trunk --version
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Clippy (the shipped path)
+        run: cargo clippy -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render -p planet-ecs -p planet-bevy -p game4x -- -D warnings
+
+      # The geometry is where correctness lives: the solid must close up, every polygon
+      # must have one side per neighbour, and every Goldberg count must come out with
+      # twelve pentagons. Release mode because the relaxation tests are slow otherwise.
+      - name: Test (model and view model)
+        run: cargo test --release -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render
+
+      # Run from the crate directory: Trunk resolves the cargo manifest from its working
+      # directory, and the workspace root is a virtual manifest with no root package.
+      # --public-url makes asset URLs resolve under the project subpath at
+      # https://seanshubin.github.io/game4x/.
+      - name: Build (WASM, release)
+        working-directory: crates/game4x
+        run: trunk build --release --public-url /game4x/
+
+      # Emit a wasm-independent build-info.json and fill the placeholder <meta> tags
+      # Trunk copied into dist/index.html, so the served page always reveals which commit
+      # is live even when the wasm fails to boot.
+      - name: Write build provenance
+        working-directory: crates/game4x
+        run: |
+          NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          SHORT="${GITHUB_SHA:0:7}"
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          cat > dist/build-info.json <<JSON
+          {
+            "commit": "${GITHUB_SHA}",
+            "shortCommit": "${SHORT}",
+            "ref": "${GITHUB_REF_NAME}",
+            "builtAt": "${NOW}",
+            "runUrl": "${RUN_URL}"
+          }
+          JSON
+          sed -i "s|__BUILD_COMMIT__|${SHORT}|g; s|__BUILD_TIME__|${NOW}|g" dist/index.html
+          echo "Wrote provenance for ${SHORT} @ ${NOW}"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: crates/game4x/dist
+
+  # -- Deploy -----------------------------------------------------------------
+  # Publishes the gate's artifact. Skipped on pull requests. Its own concurrency group
+  # makes Pages deploys a repo-wide singleton - never two at once.
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: gate
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # -- Verify (notify-only) ---------------------------------------------------
+  # The remaining work, run AFTER deploy so the page ships as fast as the gate allows.
+  # `always() && gate succeeded` lets these run even when `deploy` is skipped (pull
+  # requests); a failure here does not undo the deploy, it only reds the run.
+  full-tests:
+    name: Verify - full test suite
+    needs: [gate, deploy]
+    if: always() && needs.gate.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Bevy Linux dependencies
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo + target
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: full-tests
+
+      - name: Test (whole workspace)
+        run: cargo test --release --workspace
+
+  native-build:
+    name: Verify - native build (${{ matrix.os }})
+    needs: [gate, deploy]
+    if: always() && needs.gate.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Bevy Linux dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo + target
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: native
+
+      - name: Build the application and the prototype
+        run: cargo build --release -p game4x -p planet-view

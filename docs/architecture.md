@@ -109,13 +109,14 @@ boundary.
 
 | Crate                                                                   | Kind       | Dependencies                        | Notes                                                            |
 | ----------------------------------------------------------------------- | ---------- | ----------------------------------- | ---------------------------------------------------------------- |
-| [`crates/sphere-tessellation`](../crates/sphere-tessellation/README.md) | algorithm  | **none**                            | Seeds, relaxation, adjacency graph, the reference solid          |
+| [`crates/sphere-tessellation`](../crates/sphere-tessellation/README.md) | algorithm  | **none**                            | Seeds, relaxation, the adjacency graph, and the solid's corners  |
 | [`crates/graph-coloring`](../crates/graph-coloring/README.md)           | algorithm  | **none**                            | Few-color assignment; no geometry                                |
 | [`crates/planet-model`](../crates/planet-model/README.md)               | model      | **none**                            | `(old world, intents) -> new world`; integers enforced by test   |
 | [`crates/planet-ecs`](../crates/planet-ecs/README.md)                   | entities   | `planet-model`, Bevy                | Regions as entities; systems gather and apply, and hold no rules |
-| [`crates/planet-render`](../crates/planet-render/README.md)             | view model | the algorithms, `planet-model`      | Camera, projections, software rasterizer                         |
-| [`crates/planet-bevy`](../crates/planet-bevy/README.md)                 | view       | `planet-render`, `planet-ecs`, Bevy | Window, input, vsync presentation                                |
-| [`prototypes/planet-view`](../prototypes/planet-view/README.md)         | binary     | all of the above                    | Composition root                                                 |
+| [`crates/planet-render`](../crates/planet-render/README.md)             | view model | the algorithms, `planet-model`      | Camera, projections, software rasterizer, and the mesh           |
+| [`crates/planet-bevy`](../crates/planet-bevy/README.md)                 | view       | `planet-render`, `planet-ecs`, Bevy | Window, input, vsync presentation, and the solid in 3D           |
+| [`crates/game4x`](../crates/game4x/README.md)                           | binary     | all of the above                    | Composition root; the binary that is built, run and published    |
+| [`prototypes/planet-view`](../prototypes/planet-view/README.md)         | binary     | all of the above                    | Composition root for the flat projection                         |
 
 The integers-only rule is now exercised: `planet-model` has a test that scans its own
 source and fails if `f32` or `f64` appears in code. The algorithm and view-model crates

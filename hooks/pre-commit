@@ -1,20 +1,34 @@
 #!/bin/sh
-# Pads the markdown tables in staged files, then re-stages them, so a table can never be
-# committed misaligned.
+# Formats what you have staged, then re-stages it: markdown tables get padded, Rust gets
+# rustfmt. So a table can never be committed misaligned, and a formatting slip can never
+# cost a whole CI run - `cargo fmt --all -- --check` is the first thing the pipeline does.
 #
-# Commits stay manual: this only touches *.md files you have already staged, formats them
-# in place, and re-stages the result. It does not commit for you.
+# Commits stay manual: this only touches files you have already staged, formats them in
+# place, and re-stages the result. It does not commit for you.
 #
 # Caveat, worth knowing before it bites: a partially staged file - some hunks staged, some
-# not - gets fully re-staged after padding, pulling its unstaged hunks in with it. If you
-# stage whole files, this never happens.
+# not - gets fully re-staged after formatting, pulling its unstaged hunks in with it. If
+# you stage whole files, this never happens.
 #
 # Enable once per clone: git config core.hooksPath hooks
 set -e
 
-files=$(git diff --cached --name-only --diff-filter=ACMR -- '*.md')
-[ -z "$files" ] && exit 0
+staged() {
+    git diff --cached --name-only --diff-filter=ACMR -- "$1"
+}
 
-echo "pre-commit: padding markdown tables in staged files"
-echo "$files" | xargs cargo run --quiet --manifest-path tools/pad-tables/Cargo.toml --
-echo "$files" | xargs git add --
+files=$(staged '*.md')
+if [ -n "$files" ]; then
+    echo "pre-commit: padding markdown tables in staged files"
+    echo "$files" | xargs cargo run --quiet --manifest-path tools/pad-tables/Cargo.toml --
+    echo "$files" | xargs git add --
+fi
+
+# The edition is passed explicitly because rustfmt is invoked directly rather than through
+# `cargo fmt`, which would reformat the whole workspace rather than only what is staged.
+rust=$(staged '*.rs')
+if [ -n "$rust" ]; then
+    echo "pre-commit: rustfmt on staged Rust files"
+    echo "$rust" | xargs rustfmt --edition 2024
+    echo "$rust" | xargs git add --
+fi

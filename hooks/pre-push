@@ -1,0 +1,24 @@
+#!/bin/sh
+# The cheap half of CI, run before anything leaves the machine.
+#
+# It mirrors the gate job in .github/workflows/pipeline.yml minus the WASM build, which
+# needs Trunk and a wasm32 toolchain and takes long enough to belong in CI. The point is
+# that the two failures worth catching locally - a formatting slip and broken geometry -
+# are found in seconds rather than after a round trip through GitHub Actions.
+#
+# Release mode is deliberate: the tessellation tests relax hundreds of seeds and are
+# unusably slow unoptimized.
+#
+# Enable once per clone: git config core.hooksPath hooks
+# Skip a single push:    git push --no-verify
+set -e
+
+echo "pre-push: cargo fmt --all -- --check"
+cargo fmt --all -- --check
+
+echo "pre-push: cargo clippy (the shipped path)"
+cargo clippy -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render \
+  -p planet-ecs -p planet-bevy -p game4x -- -D warnings
+
+echo "pre-push: cargo test --release (model and view model)"
+cargo test --release -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render

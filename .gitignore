@@ -5,6 +5,10 @@ target/
 **/*.rs.bk
 *.pdb
 
+# --- Trunk (the WASM bundle) ---
+# Built by CI and published from there; a local copy is never the one that ships.
+dist/
+
 # Cargo.lock is committed for binaries/workspaces with binaries.
 # If this ever becomes a library-only repo, uncomment the next line.
 # Cargo.lock

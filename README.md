@@ -2,8 +2,26 @@
 
 A 4X game written in Rust. 4X is the genre known as **e**xplore, **e**xpand, **e**xploit, **e**xterminate.
 
-The game itself is not built yet. What exists is the design documentation and the first
-prototype.
+The game itself is not built yet. What exists is the design documentation, the world
+generator, and something to look at.
+
+## Look at it
+
+**[seanshubin.github.io/game4x](https://seanshubin.github.io/game4x/)** - the current
+world, in a browser. Every push to `master` republishes it; the page reports which commit
+it is running.
+
+The same thing, natively:
+
+```
+scripts/game4x.ps1             # or: bash scripts/game4x.sh
+```
+
+A Goldberg polyhedron: twelve pentagons at the icosahedron's vertices and hexagons
+everywhere else, coloured so no two neighbours match. Drag to turn the world, wheel to
+zoom, arrow keys to turn.
+
+There is also an earlier prototype that flattens the sphere instead of turning it:
 
 ```
 scripts/planet-view.ps1        # or: bash scripts/planet-view.sh
@@ -69,14 +87,17 @@ docs/
 scripts/
   README.md            how to run each prototype
 crates/
-  sphere-tessellation/ dividing the sphere, and the adjacency graph
+  sphere-tessellation/ dividing the sphere, the adjacency graph, and the solid
   graph-coloring/      few-color assignment, no geometry
   planet-model/        the model: old world + intents -> new world, integers only
   planet-ecs/          regions as ECS entities; systems that gather and apply
-  planet-render/       camera and software rasterizer; no graphics engine
-  planet-bevy/         the Bevy adapter: window, input, vsync
+  planet-render/       camera, software rasterizer and mesh; no graphics engine
+  planet-bevy/         the Bevy adapter: window, input, vsync, the solid in 3D
+  game4x/              the application: composition root, and the page that is published
 prototypes/
   planet-view/         composition root; wiring only
+.github/workflows/     one pipeline: gate, deploy to Pages, then verify
+hooks/                 opt-in git hooks; see scripts/README.md
 ```
 
 Documents under `docs/` say *why*. Each crate's own `README.md` says *how*, and is

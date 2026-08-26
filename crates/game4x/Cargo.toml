@@ -1,0 +1,18 @@
+[package]
+name = "game4x"
+version.workspace = true
+edition.workspace = true
+description = "The shipped application. Composition root only: it wires the layers together and holds no logic of its own."
+
+[[bin]]
+name = "game4x"
+path = "src/main.rs"
+
+[dependencies]
+# Bevy's default feature set includes audio, which nothing here uses and whose wasm
+# backend is a known source of startup panics on a static host. See the sibling
+# boardgame repository, where dropping it fixed exactly that.
+bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui"] }
+planet-bevy.workspace = true
+planet-ecs.workspace = true
+planet-render.workspace = true

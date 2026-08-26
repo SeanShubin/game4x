@@ -45,9 +45,14 @@ docs/
     region-coloring.md ............ minimum-color assignment and perceptual palettes
 
 scripts/
-  README.md ...................... one script per prototype, and the conventions
+  README.md ...................... one script per thing you can run, and the conventions
+crates/
+  game4x/ ........................ the application: composition root, and the published page
 tools/
   pad-tables/ .................... markdown table aligner; outside the workspace
+.github/
+  workflows/pipeline.yml ......... gate, deploy to GitHub Pages, then verify
+hooks/ ........................... opt-in git hooks: format on commit, check on push
 hooks/
   pre-commit ..................... pads staged markdown; opt in with core.hooksPath
 crates/
