@@ -457,7 +457,10 @@ fn present(
     } else {
         view.draw(pixels, cursor);
     }
-    for (target, &pixel) in bytes.chunks_exact_mut(4).zip(pixels.iter()) {
+    // `as_chunks_mut` rather than `chunks_exact_mut(4)`: the width is a constant, so this
+    // states it in the type and hands back `[u8; 4]` instead of a slice that merely happens
+    // to be four long.
+    for (target, &pixel) in bytes.as_chunks_mut::<4>().0.iter_mut().zip(pixels.iter()) {
         target[0] = (pixel >> 16) as u8;
         target[1] = (pixel >> 8) as u8;
         target[2] = pixel as u8;
