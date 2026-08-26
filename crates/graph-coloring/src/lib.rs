@@ -168,10 +168,13 @@ fn most_saturated(neighbours: &[Vec<u32>], colors: &[u8], blocked: &[u32]) -> Op
         if colors[vertex] != u8::MAX {
             continue;
         }
-        let key = (blocked[vertex].count_ones(), neighbours[vertex].len(), vertex);
+        let key = (
+            blocked[vertex].count_ones(),
+            neighbours[vertex].len(),
+            vertex,
+        );
         match best {
-            Some((saturation, degree, _))
-                if (key.0, key.1) <= (saturation, degree) => {}
+            Some((saturation, degree, _)) if (key.0, key.1) <= (saturation, degree) => {}
             _ => best = Some(key),
         }
     }
@@ -297,10 +300,7 @@ mod tests {
 
     #[test]
     fn a_complete_graph_of_four_needs_four_colors() {
-        let graph = undirected(
-            4,
-            &[(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)],
-        );
+        let graph = undirected(4, &[(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]);
         let coloring = color_graph(&graph);
         assert_eq!(coloring.color_count, 4);
         assert!(find_conflict(&graph, &coloring.colors).is_none());
@@ -311,12 +311,11 @@ mod tests {
     #[test]
     fn a_sphere_tessellation_needs_at_most_four_colors() {
         for region_count in [4, 7, 20, 60, 137] {
-            let tessellation = sphere_tessellation::Tessellation::generate(
-                sphere_tessellation::Params {
+            let tessellation =
+                sphere_tessellation::Tessellation::generate(sphere_tessellation::Params {
                     region_count,
                     ..Default::default()
-                },
-            );
+                });
             let coloring = color_graph(&tessellation.neighbours);
             assert!(
                 find_conflict(&tessellation.neighbours, &coloring.colors).is_none(),

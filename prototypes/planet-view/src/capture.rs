@@ -4,8 +4,8 @@
 //! and it only works because `planet-render` has no engine in it.
 
 use crate::options::Options;
-use planet_render::camera::Projection;
 use planet_render::PlanetView;
+use planet_render::camera::Projection;
 use std::error::Error;
 
 pub fn write_frame(options: &Options, path: &str) -> Result<(), Box<dyn Error>> {
@@ -47,7 +47,12 @@ fn aim(planet: &mut PlanetView, right: f64, up: f64) {
     }
 }
 
-fn write_png(path: &str, pixels: &[u32], width: usize, height: usize) -> Result<(), Box<dyn Error>> {
+fn write_png(
+    path: &str,
+    pixels: &[u32],
+    width: usize,
+    height: usize,
+) -> Result<(), Box<dyn Error>> {
     let mut data = Vec::with_capacity(width * height * 3);
     for &pixel in pixels {
         data.push((pixel >> 16) as u8);

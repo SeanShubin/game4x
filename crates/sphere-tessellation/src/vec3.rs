@@ -32,10 +32,17 @@ impl Vec3 {
         )
     }
 
+    // `add` and `sub` are inherent rather than `std::ops` implementations on purpose.
+    // Everything in this crate reads as a chain - `a.sub(b).cross(a.sub(c)).normalized()` -
+    // and operators would break that chain in the middle of expressions where the order of
+    // operations is the thing being checked. Naming them after the trait methods is what
+    // clippy objects to; the alternative names would be worse.
+    #[allow(clippy::should_implement_trait)]
     pub fn add(self, other: Self) -> Self {
         Self::new(self.x + other.x, self.y + other.y, self.z + other.z)
     }
 
+    #[allow(clippy::should_implement_trait)]
     pub fn sub(self, other: Self) -> Self {
         Self::new(self.x - other.x, self.y - other.y, self.z - other.z)
     }

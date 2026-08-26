@@ -97,12 +97,8 @@ pub fn fill_uniform(view: &PlanetView, hovered: Option<usize>) -> PlanetUniform 
         let owner = owners.get(index).copied().flatten();
         // The shader unpacks this as colour + 8 * (owner + 1).
         let packed = colour + 8 * owner.map(|player| player as u32 + 1).unwrap_or(0);
-        uniform.seeds[index] = Vec4::new(
-            seed.x as f32,
-            seed.y as f32,
-            seed.z as f32,
-            packed as f32,
-        );
+        uniform.seeds[index] =
+            Vec4::new(seed.x as f32, seed.y as f32, seed.z as f32, packed as f32);
     }
 
     let mut flags = 0u32;
@@ -120,7 +116,11 @@ pub fn fill_uniform(view: &PlanetView, hovered: Option<usize>) -> PlanetUniform 
         count as f32,
     );
     uniform.params = Vec4::new(
-        if camera.projection == Projection::Globe { 1.0 } else { 0.0 },
+        if camera.projection == Projection::Globe {
+            1.0
+        } else {
+            0.0
+        },
         hovered.map(|region| region as f32).unwrap_or(-1.0),
         flags as f32,
         BORDER_PIXELS,
@@ -185,7 +185,10 @@ mod tests {
             );
             lengths.push(length);
             // No owner yet, so the packed value is just the colour index.
-            assert!(seed.w < 8.0, "seed {index} packed an owner it should not have");
+            assert!(
+                seed.w < 8.0,
+                "seed {index} packed an owner it should not have"
+            );
         }
         // The twelve pentagons and twenty hexagons should differ, and that difference is
         // the whole point.

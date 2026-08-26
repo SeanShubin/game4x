@@ -115,9 +115,21 @@ impl Mat3 {
         let (x, y, z) = (axis.x, axis.y, axis.z);
         Mat3 {
             rows: [
-                Vec3::new(cos + x * x * rest, x * y * rest - z * sin, x * z * rest + y * sin),
-                Vec3::new(y * x * rest + z * sin, cos + y * y * rest, y * z * rest - x * sin),
-                Vec3::new(z * x * rest - y * sin, z * y * rest + x * sin, cos + z * z * rest),
+                Vec3::new(
+                    cos + x * x * rest,
+                    x * y * rest - z * sin,
+                    x * z * rest + y * sin,
+                ),
+                Vec3::new(
+                    y * x * rest + z * sin,
+                    cos + y * y * rest,
+                    y * z * rest - x * sin,
+                ),
+                Vec3::new(
+                    z * x * rest - y * sin,
+                    z * y * rest + x * sin,
+                    cos + z * z * rest,
+                ),
             ],
         }
     }
@@ -267,11 +279,7 @@ impl GlobeView {
                     Vec3::new(0.0, 0.0, 1.0)
                 } else {
                     let sign = if flipped { -1.0 } else { 1.0 };
-                    Vec3::new(
-                        sin * sign * across / pixels,
-                        sin * sign * up / pixels,
-                        cos,
-                    )
+                    Vec3::new(sin * sign * across / pixels, sin * sign * up / pixels, cos)
                 }
             }
         };
@@ -348,13 +356,13 @@ impl GlobeView {
             (view.x / planar, view.y / planar)
         };
 
-        let reach = ((self.width as f64).hypot(self.height as f64) / 2.0 + 32.0)
-            / self.pixels_per_radian();
+        let reach =
+            ((self.width as f64).hypot(self.height as f64) / 2.0 + 32.0) / self.pixels_per_radian();
         let mut ring = 0u32;
         loop {
             // Ring k sits at angle + k*PI going out, alternating which side it
             // arrives from.
-            let (raw, sign) = if ring % 2 == 0 {
+            let (raw, sign) = if ring.is_multiple_of(2) {
                 (angle + ring as f64 * PI, 1.0)
             } else {
                 ((ring + 1) as f64 * PI - angle, -1.0)
@@ -439,7 +447,10 @@ mod tests {
         let start = Vec3::new(0.0, 0.0, 1.0);
         let turned = rotation.apply(start);
         assert!((start.angle_to(turned) - 0.7).abs() < 1e-9);
-        assert!(turned.y.abs() < 1e-12, "rotating about y must leave y alone");
+        assert!(
+            turned.y.abs() < 1e-12,
+            "rotating about y must leave y alone"
+        );
     }
 
     #[test]
@@ -481,8 +492,7 @@ mod tests {
             view.drag(37.0, -19.0);
             for &(x, y) in &[(200.0, 150.0), (230.0, 170.0), (160.0, 120.0)] {
                 let sample = view.screen_to_sample(x, y).expect("on the sphere");
-                let (back_x, back_y) =
-                    view.direction_to_screen(sample.direction).expect("visible");
+                let (back_x, back_y) = view.direction_to_screen(sample.direction).expect("visible");
                 assert!(
                     (back_x - x).abs() < 1e-6 && (back_y - y).abs() < 1e-6,
                     "{projection:?} failed to round trip ({x}, {y})"
@@ -549,8 +559,12 @@ mod tests {
         let view = GlobeView::new(600, 600);
         // Half way out is 90 degrees away; its first repeat sits at 270 degrees of
         // arc measured the other way round, which is the same point.
-        let first = view.screen_to_sample(300.0 + view.radius * 0.5, 300.0).unwrap();
-        let second = view.screen_to_sample(300.0 - view.radius * 1.5, 300.0).unwrap();
+        let first = view
+            .screen_to_sample(300.0 + view.radius * 0.5, 300.0)
+            .unwrap();
+        let second = view
+            .screen_to_sample(300.0 - view.radius * 1.5, 300.0)
+            .unwrap();
         assert_eq!(first.copy, 0);
         assert_eq!(second.copy, 1);
         assert!(
@@ -565,7 +579,10 @@ mod tests {
         view.radius = 120.0;
         let direction = Direction::from_lon_lat(1.1, 0.4);
         let copies = view.copies_on_screen(direction);
-        assert!(copies.len() > 1, "zoomed out this far there must be repeats");
+        assert!(
+            copies.len() > 1,
+            "zoomed out this far there must be repeats"
+        );
         for ((x, y), ring) in copies {
             let sample = view.screen_to_sample(x, y).expect("on screen");
             assert_eq!(sample.copy, ring, "ring number disagreed at ({x}, {y})");
@@ -584,7 +601,10 @@ mod tests {
         for step in 0..4_000 {
             view.drag(7.0, if step % 3 == 0 { 11.0 } else { -5.0 });
             let centre = view.centre_direction();
-            assert!((centre.vector().length() - 1.0).abs() < 1e-6, "left the sphere at {step}");
+            assert!(
+                (centre.vector().length() - 1.0).abs() < 1e-6,
+                "left the sphere at {step}"
+            );
             assert!(view.screen_to_sample(200.0, 150.0).is_some());
         }
     }
@@ -718,6 +738,9 @@ mod tests {
         view.projection = Projection::Globe;
         let behind = view.centre_direction().opposite();
         assert!(view.direction_to_screen(behind).is_none());
-        assert!(view.screen_to_sample(0.0, 0.0).is_none(), "corners are space");
+        assert!(
+            view.screen_to_sample(0.0, 0.0).is_none(),
+            "corners are space"
+        );
     }
 }

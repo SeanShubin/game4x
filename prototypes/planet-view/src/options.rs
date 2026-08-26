@@ -160,7 +160,10 @@ mod tests {
     /// because the exact solid is the default and its size is fixed.
     #[test]
     fn asking_for_a_region_count_switches_away_from_the_fixed_solid() {
-        assert!(Options::default().wants_soccer(), "the solid is the default");
+        assert!(
+            Options::default().wants_soccer(),
+            "the solid is the default"
+        );
 
         let asked_for_regions = Options {
             generation_requested: true,

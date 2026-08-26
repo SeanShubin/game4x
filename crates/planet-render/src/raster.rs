@@ -11,8 +11,8 @@
 //! the resolved buffer rather than from distances means they come out an even width
 //! everywhere, at any zoom, under either projection, with no per-projection maths.
 
-use crate::font;
 use crate::camera::GlobeView;
+use crate::font;
 use crate::palette;
 use sphere_tessellation::{Direction, Vec3, nearest_index};
 
@@ -113,9 +113,7 @@ fn resolve(cells: &mut [Cell], view: &GlobeView, scene: &Scene) {
                 for (offset, cell) in chunk.iter_mut().enumerate() {
                     let row = first_row + offset / width;
                     let column = offset % width;
-                    *cell = match view
-                        .screen_to_sample(column as f64 + 0.5, row as f64 + 0.5)
-                    {
+                    *cell = match view.screen_to_sample(column as f64 + 0.5, row as f64 + 0.5) {
                         None => Cell::NOTHING,
                         Some(sample) => Cell {
                             region: nearest_index(scene.seeds, sample.direction.vector()) as u32,
@@ -153,7 +151,11 @@ fn shade(buffer: &mut [u32], cells: &[Cell], view: &GlobeView, scene: &Scene) {
 
                     let mut color = palette::region_color(scene.colors[cell.region as usize]);
                     if let Some(Some(player)) = scene.owners.get(cell.region as usize) {
-                        color = palette::mix(color, palette::player_color(*player), palette::OWNER_TINT);
+                        color = palette::mix(
+                            color,
+                            palette::player_color(*player),
+                            palette::OWNER_TINT,
+                        );
                     }
                     if scene.hovered == Some(cell.region as usize) {
                         color = palette::highlighted(color);
@@ -257,7 +259,15 @@ fn draw_crosshair(buffer: &mut [u32], width: usize, height: usize, x: f64, y: f6
         }
     }
     if solid {
-        blend_pixel(buffer, width, height, centre_x, centre_y, palette::CURSOR, 1.0);
+        blend_pixel(
+            buffer,
+            width,
+            height,
+            centre_x,
+            centre_y,
+            palette::CURSOR,
+            1.0,
+        );
     }
 }
 
@@ -449,8 +459,9 @@ mod tests {
                     if !full.contains(&buffer[y * 400 + x]) {
                         continue;
                     }
-                    let distance =
-                        ((x as f64 + 0.5 - 200.0).powi(2) + (y as f64 + 0.5 - 200.0).powi(2)).sqrt();
+                    let distance = ((x as f64 + 0.5 - 200.0).powi(2)
+                        + (y as f64 + 0.5 - 200.0).powi(2))
+                    .sqrt();
                     assert!(
                         distance <= radius + 2.0,
                         "radius {radius}: full-strength pixel at ({x}, {y}) is \
@@ -538,7 +549,11 @@ mod tests {
         let mut with = vec![0u32; 400 * 400];
         render(&mut with, &view, &scene(&fixture), Some((250.0, 200.0)));
 
-        let changed = without.iter().zip(with.iter()).filter(|(a, b)| a != b).count();
+        let changed = without
+            .iter()
+            .zip(with.iter())
+            .filter(|(a, b)| a != b)
+            .count();
         assert!(changed > 32 * 2, "only {changed} pixels changed");
     }
 

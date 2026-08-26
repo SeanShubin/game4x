@@ -361,9 +361,8 @@ pub fn verify(seeds: &[Vec3], neighbours: &[Vec<u32>]) -> Verification {
         }
     }
 
-    let hexagons_touch_three_pentagons = (0..neighbours.len())
-        .filter(|&r| !is_pentagon(r))
-        .all(|r| {
+    let hexagons_touch_three_pentagons =
+        (0..neighbours.len()).filter(|&r| !is_pentagon(r)).all(|r| {
             neighbours[r]
                 .iter()
                 .filter(|&&n| is_pentagon(n as usize))
@@ -421,7 +420,9 @@ mod tests {
             .iter()
             .enumerate()
             .flat_map(|(index, first)| {
-                vertices[index + 1..].iter().map(move |second| first.angle_to(*second))
+                vertices[index + 1..]
+                    .iter()
+                    .map(move |second| first.angle_to(*second))
             })
             .fold(f64::INFINITY, f64::min);
         assert!(edge >= shortest - 1e-9);
@@ -456,8 +457,10 @@ mod tests {
     #[test]
     fn class_one_goldberg_polyhedra_are_all_well_formed() {
         use crate::adjacency::{adjacency, degree_histogram, edge_count};
-        println!("
-  GP(m,0) | regions | pentagons | hexagons | touching pentagons");
+        println!(
+            "
+  GP(m,0) | regions | pentagons | hexagons | touching pentagons"
+        );
         for frequency in 1..=7 {
             let seeds = geodesic_seeds(frequency);
             let expected = class_one_region_count(frequency);
@@ -476,7 +479,10 @@ mod tests {
                 "  GP({frequency},0) | {expected:>7} | {pentagons:>9} | {hexagons:>8} | {touching:>18}"
             );
 
-            assert_eq!(pentagons, 12, "GP({frequency},0) must have twelve pentagons");
+            assert_eq!(
+                pentagons, 12,
+                "GP({frequency},0) must have twelve pentagons"
+            );
             assert_eq!(
                 hexagons,
                 expected - 12,
@@ -497,12 +503,18 @@ mod tests {
     #[test]
     fn canonical_seeds_exist_exactly_at_the_goldberg_counts() {
         assert!(canonical_seeds(12).is_some(), "GP(1,0), the dodecahedron");
-        assert!(canonical_seeds(32).is_some(), "GP(1,1), the truncated icosahedron");
+        assert!(
+            canonical_seeds(32).is_some(),
+            "GP(1,1), the truncated icosahedron"
+        );
         assert!(canonical_seeds(42).is_some(), "GP(2,0)");
         assert!(canonical_seeds(92).is_some(), "GP(3,0)");
         assert!(canonical_seeds(162).is_some(), "GP(4,0)");
         assert!(canonical_seeds(492).is_some(), "GP(7,0)");
-        assert!(canonical_seeds(72).is_some(), "GP(2,1), class III and chiral");
+        assert!(
+            canonical_seeds(72).is_some(),
+            "GP(2,1), class III and chiral"
+        );
         assert!(canonical_seeds(132).is_some(), "GP(3,1), class III");
 
         for count in [20, 33, 50, 100, 150, 300] {
@@ -520,7 +532,10 @@ mod tests {
     #[test]
     fn the_chiral_solids_are_built_through_the_same_path_as_the_rest() {
         for (count, m, n) in [(72, 2, 1), (132, 3, 1), (192, 3, 2), (212, 4, 1)] {
-            assert!(crate::goldberg::is_chiral(m, n), "GP({m},{n}) should be chiral");
+            assert!(
+                crate::goldberg::is_chiral(m, n),
+                "GP({m},{n}) should be chiral"
+            );
 
             let seeds = canonical_seeds(count)
                 .unwrap_or_else(|| panic!("GP({m},{n}) has no canonical shape at {count}"));
@@ -724,13 +739,21 @@ mod tests {
     #[test]
     fn how_long_does_generation_take() {
         use crate::{Params, Tessellation};
-        println!("
-  world generation at the current defaults (jitter 0, relax 0):");
+        println!(
+            "
+  world generation at the current defaults (jitter 0, relax 0):"
+        );
         for region_count in [32, 100, 250, 500, 1000] {
             let started = std::time::Instant::now();
-            let t = Tessellation::generate(Params { region_count, ..Default::default() });
-            println!("    {region_count:>5} regions: {:>8.1} ms   edges {}",
-                started.elapsed().as_secs_f64() * 1000.0, t.edge_count());
+            let t = Tessellation::generate(Params {
+                region_count,
+                ..Default::default()
+            });
+            println!(
+                "    {region_count:>5} regions: {:>8.1} ms   edges {}",
+                started.elapsed().as_secs_f64() * 1000.0,
+                t.edge_count()
+            );
         }
         println!();
     }
@@ -758,8 +781,8 @@ mod tests {
                     continue;
                 }
                 let length = shared_border_length(&seeds, first, second);
-                let pentagons = (first < PENTAGON_COUNT) as usize
-                    + (second < PENTAGON_COUNT) as usize;
+                let pentagons =
+                    (first < PENTAGON_COUNT) as usize + (second < PENTAGON_COUNT) as usize;
                 match pentagons {
                     1 => pentagon_hexagon.push(length),
                     0 => hexagon_hexagon.push(length),
@@ -780,8 +803,10 @@ mod tests {
             );
             (smallest, largest)
         };
-        println!("
-  soccer ball (Voronoi of 32 directions):");
+        println!(
+            "
+  soccer ball (Voronoi of 32 directions):"
+        );
         let (pentagon_min, _) = report("pentagon-hexagon", &pentagon_hexagon);
         let (hexagon_min, _) = report("hexagon-hexagon", &hexagon_hexagon);
         println!(
@@ -823,8 +848,10 @@ mod tests {
     fn how_long_are_a_generated_worlds_borders() {
         use crate::adjacency::shared_border_length;
         use crate::{Params, Tessellation};
-        println!("
-  generated worlds, spread of side lengths within one region:");
+        println!(
+            "
+  generated worlds, spread of side lengths within one region:"
+        );
         for relaxation in [0, 3, 8, 16, 40] {
             let tessellation = Tessellation::generate(Params {
                 region_count: 32,
@@ -837,9 +864,7 @@ mod tests {
             for region in 0..tessellation.region_count() {
                 let lengths: Vec<f64> = tessellation.neighbours[region]
                     .iter()
-                    .map(|&other| {
-                        shared_border_length(&tessellation.seeds, region, other as usize)
-                    })
+                    .map(|&other| shared_border_length(&tessellation.seeds, region, other as usize))
                     .collect();
                 let smallest = lengths.iter().cloned().fold(f64::INFINITY, f64::min);
                 let largest = lengths.iter().cloned().fold(0.0, f64::max);
@@ -896,7 +921,11 @@ mod tests {
         assert_eq!(deficit, 12);
 
         // Perfection comes from construction, not from generation.
-        assert!(Tessellation::soccer_ball().verify_truncated_icosahedron().is_perfect());
+        assert!(
+            Tessellation::soccer_ball()
+                .verify_truncated_icosahedron()
+                .is_perfect()
+        );
     }
 
     /// The confirmation itself: every measurable property of a truncated icosahedron,

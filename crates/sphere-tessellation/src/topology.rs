@@ -94,17 +94,9 @@ pub enum Site {
     Corner(usize),
     /// On the edge between two icosahedron vertices, at a position measured from the
     /// lower-numbered one. Shared by two faces.
-    Edge {
-        from: usize,
-        to: usize,
-        along: i64,
-    },
+    Edge { from: usize, to: usize, along: i64 },
     /// Strictly inside one face.
-    Inside {
-        face: usize,
-        a: i64,
-        b: i64,
-    },
+    Inside { face: usize, a: i64, b: i64 },
 }
 
 /// Barycentric coordinates as integers over `T`.
@@ -201,12 +193,7 @@ pub fn build(m: usize, n: usize, faces: &[[usize; 3]]) -> Topology {
 }
 
 /// Every lattice point inside one patch, with its barycentric coordinates.
-fn patch_points(
-    m: usize,
-    n: usize,
-    conjugate: Lattice,
-    scale: i64,
-) -> Vec<(Lattice, Barycentric)> {
+fn patch_points(m: usize, n: usize, conjugate: Lattice, scale: i64) -> Vec<(Lattice, Barycentric)> {
     // The patch spans at most `m + n` steps in any direction.
     let reach = (m + n) as i64 + 1;
     let mut found = Vec::new();
@@ -319,7 +306,10 @@ mod tests {
         let around = point.neighbours();
         assert_eq!(around.len(), 6);
         for step in around {
-            assert!(step.neighbours().contains(&point), "neighbours must be mutual");
+            assert!(
+                step.neighbours().contains(&point),
+                "neighbours must be mutual"
+            );
         }
     }
 

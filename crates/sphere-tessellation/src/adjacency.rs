@@ -302,7 +302,8 @@ mod tests {
                         .map(|list| 6 - list.len() as i64)
                         .sum();
                     assert_eq!(
-                        deficit, 12,
+                        deficit,
+                        12,
                         "count {region_count}, seed {seed}, jitter {jitter}: {:?}",
                         tessellation.degree_histogram()
                     );

@@ -285,7 +285,11 @@ mod tests {
                 "spawn order {index} produced a different world"
             );
         }
-        assert_ne!(results[0], vec![None; 4], "the turn should have done something");
+        assert_ne!(
+            results[0],
+            vec![None; 4],
+            "the turn should have done something"
+        );
     }
 
     /// Entity ids are a runtime detail; identity is the `RegionId` the entity carries.

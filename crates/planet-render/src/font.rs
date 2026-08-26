@@ -105,6 +105,10 @@ pub fn text_height(scale: usize) -> usize {
 }
 
 /// Draws text with its top-left corner at (x, y). Off-screen pixels are clipped.
+// A blitter's arguments are a destination, its bounds, a position, the text, and its
+// colours - every one of them a thing the caller must state. Bundling them into a struct
+// would only move the list somewhere the call site cannot see it.
+#[allow(clippy::too_many_arguments)]
 pub fn draw_text(
     buffer: &mut [u32],
     buffer_width: usize,
@@ -141,6 +145,7 @@ pub fn draw_text(
 }
 
 /// Draws text with a one-pixel drop shadow, so labels stay legible over any fill.
+#[allow(clippy::too_many_arguments)]
 pub fn draw_label(
     buffer: &mut [u32],
     buffer_width: usize,
@@ -164,7 +169,16 @@ pub fn draw_label(
             scale,
         );
     }
-    draw_text(buffer, buffer_width, buffer_height, x, y, text, color, scale);
+    draw_text(
+        buffer,
+        buffer_width,
+        buffer_height,
+        x,
+        y,
+        text,
+        color,
+        scale,
+    );
 }
 
 fn fill(

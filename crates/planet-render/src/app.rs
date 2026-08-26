@@ -158,9 +158,7 @@ impl PlanetView {
         match command {
             Command::ToggleLabels => self.settings.labels = !self.settings.labels,
             Command::ToggleBorders => self.settings.borders = !self.settings.borders,
-            Command::ToggleDimming => {
-                self.settings.dim_duplicates = !self.settings.dim_duplicates
-            }
+            Command::ToggleDimming => self.settings.dim_duplicates = !self.settings.dim_duplicates,
             Command::ToggleProjection => self.view.projection = self.view.projection.other(),
             Command::ResetView => self.view.reset(),
             Command::ToggleSource => {
@@ -357,7 +355,10 @@ mod tests {
         let planet = view();
         assert!(planet.world().verification.is_perfect());
         assert!(
-            planet.readout(None).iter().any(|line| line.contains("PERFECT")),
+            planet
+                .readout(None)
+                .iter()
+                .any(|line| line.contains("PERFECT")),
             "the readout should state the verification"
         );
     }
@@ -406,7 +407,10 @@ mod tests {
         let mut planet = view();
         assert!(planet.resize(320, 240));
         assert_eq!(planet.size(), (320, 240));
-        assert!(!planet.resize(320, 240), "an unchanged size is not a change");
+        assert!(
+            !planet.resize(320, 240),
+            "an unchanged size is not a change"
+        );
         assert!(planet.resize(0, 0), "a zero size is clamped, not accepted");
         assert_eq!(planet.size(), (1, 1));
     }

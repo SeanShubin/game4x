@@ -171,14 +171,7 @@ fn lattice_barycentrics(
 ///
 /// The construction is applied once per corner and averaged, so that no corner is
 /// privileged and the result has the same symmetry as the triangle.
-fn spherical_barycentric(
-    a: Vec3,
-    b: Vec3,
-    c: Vec3,
-    first: f64,
-    second: f64,
-    third: f64,
-) -> Vec3 {
+fn spherical_barycentric(a: Vec3, b: Vec3, c: Vec3, first: f64, second: f64, third: f64) -> Vec3 {
     let mut total = Vec3::ZERO;
     // The apex's own weight is implied: the three sum to one.
     for (apex, left, right, left_weight, right_weight) in [
@@ -224,8 +217,8 @@ fn deduplicate(points: Vec<Vec3>) -> Vec<Vec3> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::adjacency::{adjacency, degree_histogram, edge_count};
     use crate::Quality;
+    use crate::adjacency::{adjacency, degree_histogram, edge_count};
 
     #[test]
     fn the_counting_formula_matches_the_known_solids() {
@@ -274,8 +267,16 @@ mod tests {
             );
 
             assert_eq!(pentagons, 12, "GP({m},{n}) must have twelve pentagons");
-            assert_eq!(hexagons, expected - 12, "GP({m},{n}) the rest must be hexagons");
-            assert_eq!(edge_count(&neighbours), 3 * expected - 6, "GP({m},{n}) Euler");
+            assert_eq!(
+                hexagons,
+                expected - 12,
+                "GP({m},{n}) the rest must be hexagons"
+            );
+            assert_eq!(
+                edge_count(&neighbours),
+                3 * expected - 6,
+                "GP({m},{n}) Euler"
+            );
             if expected > 12 {
                 assert_eq!(
                     quality.adjacent_pentagon_pairs, 0,

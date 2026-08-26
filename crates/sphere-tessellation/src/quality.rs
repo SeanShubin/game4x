@@ -142,7 +142,11 @@ impl Quality {
 
         Self {
             region_count,
-            area_ratio: if smallest > 0.0 { largest / smallest } else { f64::INFINITY },
+            area_ratio: if smallest > 0.0 {
+                largest / smallest
+            } else {
+                f64::INFINITY
+            },
             largest_area: largest / mean_area,
             smallest_area: smallest / mean_area,
             hex_fraction: hexagons as f64 / region_count as f64,
@@ -170,7 +174,11 @@ impl Quality {
             border_ratio: {
                 let longest = borders.iter().cloned().fold(0.0, f64::max);
                 let shortest = borders.iter().cloned().fold(f64::INFINITY, f64::min);
-                if shortest > 0.0 { longest / shortest } else { f64::INFINITY }
+                if shortest > 0.0 {
+                    longest / shortest
+                } else {
+                    f64::INFINITY
+                }
             },
         }
     }
@@ -255,7 +263,10 @@ mod tests {
         let quality = Quality::measure(&solid.seeds, &solid.neighbours);
         println!("\n  soccer ball: {}", quality.summary());
 
-        assert_eq!(quality.odd_degrees, 0, "every cell is a pentagon or hexagon");
+        assert_eq!(
+            quality.odd_degrees, 0,
+            "every cell is a pentagon or hexagon"
+        );
         assert_eq!(quality.hex_fraction, 20.0 / 32.0);
         assert_eq!(quality.degrees[5], 12);
         assert_eq!(quality.degrees[6], 20);
@@ -280,7 +291,12 @@ mod tests {
     fn canonical_worlds_are_not_relaxed() {
         use crate::Params;
         let (world, passes) = Tessellation::generate_balanced(
-            Params { region_count: 32, jitter: 0.0, relaxation: 0, seed: 1 },
+            Params {
+                region_count: 32,
+                jitter: 0.0,
+                relaxation: 0,
+                seed: 1,
+            },
             24,
         );
         assert_eq!(passes, 0, "a canonical world needs no relaxation");
@@ -387,7 +403,10 @@ mod tests {
             seed: 1,
         });
         let quality = Quality::measure(&world.seeds, &world.neighbours);
-        assert!(quality.odd_degrees > 0, "raw lattice has squares and heptagons");
+        assert!(
+            quality.odd_degrees > 0,
+            "raw lattice has squares and heptagons"
+        );
         assert!(!quality.is_playable());
     }
 
@@ -395,11 +414,18 @@ mod tests {
     /// geometric process, so this is what it can promise.
     #[test]
     fn balanced_generation_reaches_good_geometry_at_every_size() {
-        println!("
-  regions | passes | quality");
+        println!(
+            "
+  regions | passes | quality"
+        );
         for region_count in [32usize, 60, 150, 300] {
             let (world, passes) = Tessellation::generate_balanced(
-                Params { region_count, jitter: 0.25, relaxation: 0, seed: 1 },
+                Params {
+                    region_count,
+                    jitter: 0.25,
+                    relaxation: 0,
+                    seed: 1,
+                },
                 80,
             );
             let quality = world.quality();
@@ -448,7 +474,12 @@ mod tests {
     #[test]
     fn relaxation_does_not_fix_topology_at_larger_sizes() {
         let small = Tessellation::generate_balanced(
-            Params { region_count: 60, jitter: 0.25, relaxation: 0, seed: 1 },
+            Params {
+                region_count: 60,
+                jitter: 0.25,
+                relaxation: 0,
+                seed: 1,
+            },
             80,
         )
         .0
@@ -456,7 +487,12 @@ mod tests {
         assert_eq!(small.odd_degrees, 0, "small worlds do settle completely");
 
         let large = Tessellation::generate_balanced(
-            Params { region_count: 300, jitter: 0.25, relaxation: 0, seed: 1 },
+            Params {
+                region_count: 300,
+                jitter: 0.25,
+                relaxation: 0,
+                seed: 1,
+            },
             80,
         )
         .0
@@ -483,7 +519,12 @@ mod tests {
     fn thirty_two_regions_look_like_a_soccer_ball() {
         for seed in 1..=8u64 {
             let (world, _) = Tessellation::generate_balanced(
-                Params { region_count: 32, jitter: 0.25, relaxation: 0, seed },
+                Params {
+                    region_count: 32,
+                    jitter: 0.25,
+                    relaxation: 0,
+                    seed,
+                },
                 40,
             );
             let quality = world.quality();
@@ -532,14 +573,21 @@ mod tests {
     #[test]
     fn how_many_distinct_shapes_are_there_at_each_size() {
         use std::collections::HashSet;
-        println!("
-  regions | distinct shapes from 6 starts");
+        println!(
+            "
+  regions | distinct shapes from 6 starts"
+        );
         let mut results = Vec::new();
         for region_count in [32usize, 42, 60, 92, 150] {
             let mut shapes = HashSet::new();
             for seed in 1..=6u64 {
                 let (world, _) = Tessellation::generate_balanced(
-                    Params { region_count, jitter: 0.35, relaxation: 0, seed },
+                    Params {
+                        region_count,
+                        jitter: 0.35,
+                        relaxation: 0,
+                        seed,
+                    },
                     40,
                 );
                 shapes.insert(shape_signature(&world.neighbours));
@@ -553,7 +601,10 @@ mod tests {
         // truncated icosahedron at that count, so of course every start agrees. What it
         // does show is that jitter of 0.35 perturbs the geometry without changing the
         // topology.
-        assert_eq!(results[0].1, 1, "32 regions, seeded from the solid, stays one shape");
+        assert_eq!(
+            results[0].1, 1,
+            "32 regions, seeded from the solid, stays one shape"
+        );
         assert!(
             results.last().unwrap().1 > 1,
             "large worlds should admit genuinely different arrangements"
@@ -579,9 +630,8 @@ mod tests {
             let mut seeds = crate::lattice::fibonacci_lattice(32);
             let mut rng = crate::Rng::new(seed);
             crate::lattice::jitter(&mut seeds, 0.35, &mut rng);
-            let samples = crate::lattice::fibonacci_lattice(
-                crate::lattice::recommended_sample_count(32),
-            );
+            let samples =
+                crate::lattice::fibonacci_lattice(crate::lattice::recommended_sample_count(32));
             crate::lattice::relax(&mut seeds, 40, &samples);
             let neighbours = crate::adjacency::adjacency(&seeds);
             shapes.insert(shape_signature(&neighbours));

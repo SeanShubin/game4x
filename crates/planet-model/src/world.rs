@@ -56,7 +56,7 @@ impl World {
     }
 
     pub fn holds_anything(&self, player: PlayerId) -> bool {
-        self.owners.iter().any(|owner| *owner == Some(player))
+        self.owners.contains(&Some(player))
     }
 
     /// **The function.** `(old world, intent array) -> new world`.
@@ -199,7 +199,11 @@ mod tests {
         assert_eq!(reachable.owner(RegionId(1)), Some(PlayerId(1)));
 
         let unreachable = world.advance(&[claim(3, 1)]);
-        assert_eq!(unreachable.owner(RegionId(3)), None, "region 3 is two hops away");
+        assert_eq!(
+            unreachable.owner(RegionId(3)),
+            None,
+            "region 3 is two hops away"
+        );
     }
 
     #[test]
@@ -266,7 +270,10 @@ mod tests {
 
         assert_eq!(first.owner(RegionId(1)), Some(PlayerId(1)));
         assert_eq!(second.owner(RegionId(1)), Some(PlayerId(2)));
-        assert_ne!(first, second, "a real collision is decided by the array order");
+        assert_ne!(
+            first, second,
+            "a real collision is decided by the array order"
+        );
     }
 
     /// ...but intents that do *not* collide must be order-insensitive. This is the
@@ -312,9 +319,21 @@ mod tests {
     #[test]
     fn the_resolve_phase_does_not_care_what_order_it_reduces_in() {
         let proposals = vec![
-            Proposal { region: RegionId(1), owner: Some(PlayerId(3)), order: 7 },
-            Proposal { region: RegionId(1), owner: Some(PlayerId(1)), order: 2 },
-            Proposal { region: RegionId(1), owner: Some(PlayerId(2)), order: 5 },
+            Proposal {
+                region: RegionId(1),
+                owner: Some(PlayerId(3)),
+                order: 7,
+            },
+            Proposal {
+                region: RegionId(1),
+                owner: Some(PlayerId(1)),
+                order: 2,
+            },
+            Proposal {
+                region: RegionId(1),
+                owner: Some(PlayerId(2)),
+                order: 5,
+            },
         ];
         let forwards = resolve(proposals.clone(), 4);
         let mut reversed = proposals.clone();
@@ -325,17 +344,17 @@ mod tests {
 
         assert_eq!(forwards, backwards);
         assert_eq!(forwards, third);
-        assert_eq!(forwards[1].unwrap().owner, Some(PlayerId(1)), "lowest order wins");
+        assert_eq!(
+            forwards[1].unwrap().owner,
+            Some(PlayerId(1)),
+            "lowest order wins"
+        );
     }
 
     #[test]
     fn a_whole_turn_of_many_players_is_stable_under_repetition() {
-        let topology = Topology::from_neighbour_lists(&[
-            vec![1, 2],
-            vec![0, 2, 3],
-            vec![0, 1, 3],
-            vec![1, 2],
-        ]);
+        let topology =
+            Topology::from_neighbour_lists(&[vec![1, 2], vec![0, 2, 3], vec![0, 1, 3], vec![1, 2]]);
         let opening = World::new(topology).advance(&[claim(0, 1), claim(3, 2)]);
         let contested = [claim(1, 1), claim(1, 2), claim(2, 2), claim(2, 1)];
         let once = opening.advance(&contested);
