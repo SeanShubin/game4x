@@ -33,41 +33,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-9 · Recovered · `spec/planet.md` → Shape
-
-> The distance between every pair of territories is computed once when the world is created
-> and stored. The rules read it; they never search for it.
-
-**Basis:** stated in conversation. One byte per pair at the sizes in P-2.
-
-### P-10 · Recovered · `spec/planet.md` → new section, Presentation
-
-> The planet is presented as a three-dimensional sphere and is never projected onto a plane.
-
-**Basis:** decided in conversation on 2026-08-24, and it is what makes the tessellation
-choice defensible - see [region schemes](region-schemes.md).
-
-### P-11 · Recovered · `spec/planet.md` → new section, Presentation
-
-> The camera's roll is derived from its direction, never accumulated. The planet cannot come
-> to rest upside down.
-
-**Basis:** stated in conversation. A canonical roll is impossible at every point of a sphere
-(hairy ball theorem), so the two undefined points are placed on an antipodal pair of
-five-neighbour territories.
-
-### P-13 · Measured · `spec/planet.md` → Shape
-
-> The greatest distance between two territories is 3 on a tiny planet, 5 on a small one, 6
-> on a medium one, 7 on a large one, and 9 on a huge one.
-
-**Basis:** measured on the built graphs. This is the number weapon ranges are designed
-against - it is how many distinct range bands a planet has, so a tiny planet supports three
-and a huge one nine.
-
-All five are pinned by `each_planet_size_has_a_known_greatest_distance` in
-`sphere-tessellation`, so changing the tessellation cannot move the combat ladder silently.
-
 ### P-14 · Recovered · `spec/units.md`
 
 > An **Ark** claims a territory from space. A **Seeder** claims a territory from an adjacent
@@ -137,16 +102,6 @@ someone will eventually narrow "depart" to starvation and quietly break that cas
 **Basis:** stated in conversation on 2026-08-25, and named earlier as one of the two things
 being taken from Distant Worlds. A territory never depletes; it meters. That is what makes
 territory a permanent asset rather than a consumable one.
-
-### P-19 · Recovered · `spec/planet.md` → What a territory carries, replacing "Territories have natural resource levels"
-
-> A territory has a separate **rating** for each resource, and they are unrelated to one
-> another. One territory might yield 8 food, 4 metal and 6 fuel for each unit of labor
-> spent there.
-
-**Basis:** stated in conversation on 2026-08-25. This replaces rather than joins the existing
-line - "Territories have natural resource levels" says the same thing less precisely, and two
-statements of one rule can drift apart.
 
 ### P-20 · Recovered · `spec/economy.md` → Extraction
 

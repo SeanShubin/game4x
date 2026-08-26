@@ -23,12 +23,31 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   - large: 72
   - huge: 92
 
+## Distance
+
+- The distance between any two territories is fixed, and can be computed by adjacency
+- There can be roads, portals and such that affect traversal, but they do so without
+  changing distance
+
 ## What a territory carries
 
 - Each territory on a planet has a **threat** level, which requires a greater **security**
   level in order to claim
-- Territories have natural resource levels
+- Territories have a **rating** for each resource, which determines the rate at which that
+  resource can be extracted
 - Two territories are adjacent when they share an edge; territories that meet only at a
   corner are not adjacent
+- Each territory has an id, unique within its planet, starting at 1
+
+## Presentation
+
+- The planet is presented as a three-dimensional sphere
+- The user can rotate the planet such that they can be above any point
+- Rotation is bound to the arrow keys
+- Dragging with the mouse rotates the planet
+- The roll for any point on the planet is fixed
+- The user can zoom in and out of the planet
+- The user can reset the view to a default
+- A territory's id is displayed on the sphere
 
 ## Open questions

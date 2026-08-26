@@ -75,6 +75,14 @@ instead.
 A consequence of something already written belongs in the spec only when **another rule leans
 on it**. Everything is derivable from something; derivability is not the test.
 
+Two failure modes Claude has actually shown, both worth checking before filing:
+
+- **Measuring something is not a reason to specify it.** A number that took work to obtain
+  feels valuable, and that feeling is not evidence the spec needs it. Three proposals were
+  withdrawn for this.
+- **A fact already asserted by a test does not belong in prose too.** The test is the
+  stronger statement, and a prose copy can drift from it. Point at the test instead.
+
 ## Releases
 
 `spec/` says what the game is; `releases/` says what is being built now. **The spec is the
