@@ -14,10 +14,12 @@ no matter how thoroughly it was discussed.
 | Document                    | What it specifies                                                |
 | --------------------------- | ---------------------------------------------------------------- |
 | [Invariants](invariants.md) | Statements that are always true; every other document obeys them |
+| [Narrative](narrative.md)   | The fiction the rules implement                                  |
 | [The planet](planet.md)     | The sphere, its territories, and what a territory carries        |
 | [Resources](resources.md)   | The list of resources                                            |
 | [Structures](structures.md) | The list of structures and what each one does                    |
-| [Units](units.md)           | The unit types and what each one does                            |
+| [Units](units.md)           | What is true of every unit                                       |
+| [Unit types](unit-types.md) | Each particular unit, one section apiece                         |
 | [Economy](economy.md)       | Extraction, structures and labor                                 |
 | [Logistics](logistics.md)   | Where materials are, and moving them to where they are needed    |
 | [Population](population.md) | Citizens, how they grow, and the labor they provide              |

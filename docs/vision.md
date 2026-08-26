@@ -11,10 +11,8 @@ spheres divided into discrete regions.
 
 Master of Orion, Stars!, Factorio, Distant Worlds, and Sins of a Solar Empire.
 
-### Theme
-
-Each player represents a sentient AI with highly advanced technology. The player can 3D
-print life, and endeavors to create life suitable for the environment.
+The fiction those inspirations are dressed in lives in
+[the narrative specification](../spec/narrative.md).
 
 ## Constraints
 

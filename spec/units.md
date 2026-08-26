@@ -6,4 +6,11 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 [Specification](README.md) · [Root README](../README.md)
 
+What is true of every unit. Particular units are in [unit types](unit-types.md).
+
+## What a unit is
+
+- Each unit is of a certain type, which remains even if control of the unit changes
+- Each type of unit has a unique name
+
 ## Open questions

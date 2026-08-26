@@ -12,13 +12,15 @@ README.md ......................... entry point, links to everything below
 spec/
   README.md ....................... the specification index and its rules
   invariants.md ................... statements always true; every other document obeys them
+  narrative.md .................... the fiction the rules implement
   planet.md ....................... the sphere, its regions, what a territory carries
   economy.md ...................... how extraction, labor and population work
   resources.md .................... the list of resources
   logistics.md .................... where materials are, and moving them
   population.md ................... citizens, growth, and labor
   structures.md ................... the list of structures and what each one does
-  units.md ........................ the unit types and what each one does
+  units.md ........................ what is true of every unit
+  unit-types.md ................... each particular unit, one section apiece
   console.md ...................... the command language and what it must cover
   combat.md ....................... ranges, weapons, resolution
   orbit.md ........................ the orbital layer

@@ -33,51 +33,26 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-14 · Recovered · `spec/units.md`
+### P-14 · Recovered · `spec/unit-types.md`
 
-> An **Ark** claims a territory from space. A **Seeder** claims a territory from an adjacent
-> territory. An Ark costs more than a Seeder.
+> ### Ark
 >
-> An Ark also prints the founding population of a planet, with enough genetic variability to
-> be viable.
+> An Ark claims a territory from space. It costs more than a Seeder.
 >
-> Everything a player builds is a machine or a building, and citizens operate it. A
-> **Foundry** produces machines. A **Yard** produces Arks.
+> An Ark also prints the founding population of a planet.
 >
-> **No structure produces citizens.** Population comes only from the growth rule in
-> [population](../../spec/population.md).
+> ### Seeder
+>
+> A Seeder claims a territory from a territory adjacent to it.
 
-**Basis:** settled in conversation on 2026-08-25. The player is a sentient AI that designs
-machines and buildings; the population is printed once by an Ark and thereafter reproduces
-biologically, because the AI has neither the information nor the compute to anticipate what
-will be advantageous on a given planet and delegates that to reproduction.
+**Basis:** vocabulary settled in conversation on 2026-08-25. Both perform the same act -
+`claim` - and differ only in where they can operate from and what they cost, so one rule
+covers both and the difference lives in the unit. Rejected in the same conversation:
+*Hatchery*, which implies eggs and so commits to a reproduction mechanic that is not chosen;
+and *Printworks*, as obtuse.
 
-That removes the need for a unit-producing building on the living side. **Vat is cut** - it
-was proposed when citizens were assumed to be manufactured, and they are not. Also rejected
-earlier: *Hatchery*, which implies eggs and commits to a reproduction mechanic that is not
-chosen; and *Printworks*, as obtuse.
-
-The citizen growth rule already in `spec/population.md` therefore carries more weight than it
-looks: **it is the only source of population in the game.**
-
-### P-15 · Recovered · `spec/units.md`
-
-> A planet's dangers are its **Native** life. Life that was printed by a player and has since
-> gone wild is **Feral**.
-
-**Basis:** stated in conversation. Native is the general case; Feral is possible but not the
-default. This is what a territory's **threat** level measures.
-
-### P-16 · Recovered · `spec/units.md`
-
-> Every unit a player creates carries a name of its own. The name persists when control of
-> the unit changes.
-
-**Basis:** stated in conversation, replacing an earlier idea of a *Rival* category of life.
-Provenance becomes a property of the individual unit rather than a classification, so
-captured units, inherited units and Feral life are all legible by one mechanism. Consistent
-with [layers](../layers.md), which already requires canonical identity to be a stable integer
-the entity system cannot reuse - a name is that identity made visible.
+**Split note:** this proposal originally carried the structures and the no-manufactured-
+citizens rule as well. Those are now P-27 and P-28, so each lands in one place.
 
 ### P-17 · Recovered · `spec/population.md` → Citizens
 
@@ -137,6 +112,73 @@ place. Each of those would need an owner and a mechanism, or would have to go.
 reproduction and consume food to do it; departure has a stated cause even though the
 destination is deliberately unspecified; a territory's resources are infinite by an explicit
 stated rule rather than by omission.
+
+### P-25 · Recovered · `spec/narrative.md` → Life
+
+> An Ark prints a planet's founding population, with enough genetic variability for it to be
+> viable.
+>
+> The AI does not try to design life suited to a particular planet. It has neither the
+> information nor the compute to know what would be advantageous there, so it leaves that to
+> biological reproduction.
+
+**Basis:** stated in conversation on 2026-08-25. This is flavour rather than a simulated
+mechanic - no adaptation is modelled - and its job is to explain why an AI with advanced
+technology works through biologicals at all instead of building machines that need no food.
+Sean intends worlds where that calculation reverses, rich in energy but hostile to life; that
+is recorded in [the backlog](spec-backlog.md) and is not part of this.
+
+### P-26 · Recovered · `spec/narrative.md` → The population
+
+> The population acts on its own. It operates the machines and works for the AI because of
+> incentive structures, not because it is commanded.
+>
+> The AI designs machines and buildings. The population operates them.
+
+**Basis:** stated in conversation on 2026-08-25. The second line is the division of labour
+the whole game rests on, and it is why nothing manufactures citizens - see P-14.
+
+The incentive structure is concrete rather than decorative: it is **the food supply**. There
+is no separate loyalty or unrest measure. Failing to feed the population is the incentive
+failing, and the departure rule in [population](../../spec/population.md) is what that costs.
+
+### P-27 · Recovered · `spec/structures.md`
+
+> ### Foundry
+>
+> A Foundry produces machines.
+>
+> ### Yard
+>
+> A Yard produces Arks.
+
+**Basis:** vocabulary settled in conversation on 2026-08-25, split out of P-14 because a
+Foundry and a Yard are structures rather than units. *Vat* was cut in the same conversation:
+it was proposed when citizens were assumed to be manufactured, and they are not - see P-28.
+
+### P-28 · Recovered · `spec/population.md` → Citizens
+
+> No structure produces citizens. Population comes only from the growth rule below.
+
+**Basis:** settled in conversation on 2026-08-25 and split out of P-14. The population is
+printed once by an Ark and thereafter reproduces biologically, so there is no
+unit-producing building on the living side and no build order for population.
+
+This makes the growth rule the **only** source of population in the game, which is worth
+stating where the growth rule lives rather than leaving a reader to infer it from an absence.
+
+### P-29 · Recovered · `spec/planet.md` → What a territory carries
+
+> A territory's threat level comes from what is on it. Ferals are one source of threat; there
+> can be others.
+
+**Basis:** stated in conversation on 2026-08-25. The existing line - a territory has a threat
+level requiring greater security to claim - is a high-level view and stays true; this says
+where the number comes from.
+
+It is [the modelling invariant](../../spec/invariants.md) applied to a specific number.
+Without it, a territory's threat is a value someone assigned; with it, threat is the
+aggregate of what is actually there, and clearing the Ferals is what lowers it.
 
 ## Accepted
 
