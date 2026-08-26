@@ -15,6 +15,12 @@ When an item lands in the spec, delete the row. Nothing here is decided.
 
 ## Settled 2026-08-25, but not yet written
 
+**Resources are generic for now.** Sean intends to be far more specific later, possibly
+including invented resources. That is scope, not a rule, so it belongs in an **Open
+questions** entry rather than as a statement - the spec should not imply that food, metal and
+fuel are the final list.
+
+
 **Incentive structures are a mechanic, and they can fail.** Run out of food and the
 population cannot be bothered to work for you; it goes and gets its own food instead.
 

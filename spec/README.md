@@ -1,8 +1,8 @@
 # Specification
 
-**Authored.** Every line here is reviewed by Sean before it lands. Claude may reorganize and
-rephrase, reporting every change; new content arrives only by Sean accepting a numbered
-proposal from [proposals](../docs/notes/proposals.md).
+**Authored.** Sean owns every idea here. Claude may rephrase and reorganize what is already
+present, reporting every change; a new idea is entered by Sean himself, whether he types it
+or pastes it from a [proposal](../docs/notes/proposals.md).
 
 [Root README](../README.md) · [Documentation map](../docs/README.md) · [Notes](../docs/notes/README.md)
 
@@ -11,14 +11,19 @@ no matter how thoroughly it was discussed.
 
 ## The documents
 
-| Document                | What it specifies                                     |
-| ----------------------- | ----------------------------------------------------- |
-| [The planet](planet.md) | The sphere, its regions, and what a territory carries |
-| [Economy](economy.md)   | Resources, structures, labor, and citizens            |
-| [Units](units.md)       | The unit types and what each one does                 |
-| [Console](console.md)   | The command language, and what it must cover          |
-| [Combat](combat.md)     | Ranges, weapons, resolution                           |
-| [Orbit](orbit.md)       | The orbital layer and what sits in it                 |
+| Document                    | What it specifies                                                |
+| --------------------------- | ---------------------------------------------------------------- |
+| [Invariants](invariants.md) | Statements that are always true; every other document obeys them |
+| [The planet](planet.md)     | The sphere, its territories, and what a territory carries        |
+| [Resources](resources.md)   | The list of resources                                            |
+| [Structures](structures.md) | The list of structures and what each one does                    |
+| [Units](units.md)           | The unit types and what each one does                            |
+| [Economy](economy.md)       | Extraction, structures and labor                                 |
+| [Logistics](logistics.md)   | Where materials are, and moving them to where they are needed    |
+| [Population](population.md) | Citizens, how they grow, and the labor they provide              |
+| [Console](console.md)       | The command language                                             |
+| [Combat](combat.md)         | Ranges, weapons, resolution                                      |
+| [Orbit](orbit.md)           | The orbital layer and what sits in it                            |
 
 Add a file when a topic firms up. Add its row here first.
 

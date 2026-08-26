@@ -24,38 +24,56 @@ measurement backs it. Analysis does not become policy by accumulation.
 - The spec links down to a note for reasoning; the note links up to the spec for the
   decision. Never the reverse. A note must never read as though it settled something.
 
-## Editing `spec/`
+## Editing `spec/` and `releases/`
 
-The guarantee is **review**, not authorship. Nothing reaches this directory that Sean has
-not read and agreed to. Within that, there are three tiers.
+**The boundary is the idea, not the words.** Sean owns every idea in these directories.
+Claude owns how clearly they are expressed and where they sit.
 
-Allowed without asking:
+| What                                                            | Who                                      |
+| --------------------------------------------------------------- | ---------------------------------------- |
+| Typos, whitespace, table alignment, links broken by a file move | Claude, no report needed                 |
+| Restating an idea already present, in clearer words             | Claude, **reporting every line touched** |
+| Moving an idea to a better file, section or order               | Claude, **reporting every line touched** |
+| **Introducing an idea that is not already there**               | **Sean, and only Sean**                  |
 
-- typos and spelling
-- whitespace, table alignment, heading levels
-- links that broke because a file moved
+None of these need asking first. The reporting split is deliberate: typos and whitespace
+cannot change meaning, so a diff is enough. Rephrasing and reorganizing can, so they are
+reported.
 
-Allowed, but **report every line touched**:
+**Reorganizing is not automatically substance-neutral.** It is the operation most likely to
+change meaning while looking like tidying:
 
-- reorganizing: moving a line to a better file or section, adding headings
-- rephrasing: saying the same thing more clearly
+- Moving a bullet under a different heading changes what it is scoped to
+- Merging two bullets asserts a relationship neither one stated
+- Reordering a list can imply a sequence or priority that was not there
+- Splitting a sentence can drop a qualifier that was doing work
 
-Never without an explicit accept:
+Where a move would change what a line claims, do not make it - raise it instead. The report
+is what lets Sean catch the cases where Claude thought it was tidying and was in fact
+deciding.
 
-- **adding a line that says something new**
+A new idea reaches the spec one way: Sean enters it, whether he types it himself or pastes it
+from a proposal. This is true however the idea arose - Claude's proposal, Sean's own thought,
+or something that fell out of a conversation.
 
-New content reaches the spec by one route only: file it in
-[`docs/notes/proposals.md`](docs/notes/proposals.md) with a number and its inference kind,
-Sean accepts it in chat, and only then does it land. Record every rejection with his reason,
-or the same proposal will be filed again in a later session.
+**Accepting a proposal is not permission to write it.** Claude's job ends at proposing. If
+Sean explicitly asks Claude to enter an accepted line, that is a separate instruction and
+Claude may - but it is never the default, and never inferred from the word "accepted".
 
-Never silently rewrite his prose. "I changed lines 40 and 57" costs him a three-line diff;
-an unannounced rewrite costs him a re-read of the whole file, and after that he cannot trust
-the file.
+Proposals go in [`docs/notes/proposals.md`](docs/notes/proposals.md), numbered, each labelled
+with what kind of inference produced it. Record every rejection with Sean's reason, or the
+same proposal will be filed again in a later session.
 
-Keep the open-proposal queue under fifteen. Past that, reviewing costs as much as writing
-and the mechanism has failed. If a lot of proposals would be guesses at design, ask one
-question instead.
+Never silently rewrite his prose. "I changed lines 40 and 57" costs him a three-line diff; an
+unannounced rewrite costs him a re-read of the whole file, and after that he cannot trust the
+file.
+
+Keep the open-proposal queue under fifteen. Past that, reviewing costs as much as writing and
+the mechanism has failed. If a lot of proposals would be guesses at design, ask one question
+instead.
+
+A consequence of something already written belongs in the spec only when **another rule leans
+on it**. Everything is derivable from something; derivability is not the test.
 
 ## Releases
 
