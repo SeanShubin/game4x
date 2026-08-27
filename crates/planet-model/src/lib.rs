@@ -27,10 +27,12 @@
 //! apply the result.
 
 pub mod intent;
+pub mod size;
 pub mod topology;
 pub mod world;
 
 pub use intent::Intent;
+pub use size::PlanetSize;
 pub use topology::Topology;
 pub use world::World;
 
@@ -46,11 +48,41 @@ impl RegionId {
     pub fn index(self) -> usize {
         self.0 as usize
     }
+
+    /// The territory's id as a player sees it: unique within its planet, **starting at
+    /// one**.
+    ///
+    /// A `RegionId` counts from zero because that is what indexes an array, and every
+    /// lookup in this crate is an array lookup. The id a player reads counts from one.
+    /// Those are two different numbers for the same territory, and the only way to stop
+    /// one being shown where the other was meant is to make each of them say which it is.
+    pub fn number(self) -> u32 {
+        self.0 + 1
+    }
 }
 
 /// Which player.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct PlayerId(pub u16);
+
+#[cfg(test)]
+mod id_tests {
+    use super::*;
+
+    /// The first territory is number one, not number zero.
+    #[test]
+    fn ids_shown_to_a_player_start_at_one() {
+        assert_eq!(RegionId(0).number(), 1);
+        assert_eq!(RegionId(0).index(), 0);
+        assert_eq!(RegionId(91).number(), 92, "the last of ninety-two");
+        // Distinct territories keep distinct numbers, which is the whole point of an id.
+        let numbers: std::collections::BTreeSet<u32> =
+            (0..92u32).map(|raw| RegionId(raw).number()).collect();
+        assert_eq!(numbers.len(), 92);
+        assert_eq!(numbers.iter().next(), Some(&1));
+        assert_eq!(numbers.iter().next_back(), Some(&92));
+    }
+}
 
 #[cfg(test)]
 mod tests {

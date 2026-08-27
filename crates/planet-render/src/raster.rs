@@ -196,7 +196,9 @@ fn draw_labels(buffer: &mut [u32], view: &GlobeView, scene: &Scene) {
         if copies.len() > LABEL_COPY_LIMIT {
             continue;
         }
-        let text = region.to_string();
+        // What a player reads is the territory's id, which starts at one; `region` is
+        // an array index, which starts at zero. See `RegionId::number`.
+        let text = planet_model::RegionId(region as u32).number().to_string();
         let half_width = font::text_width(&text, scale) as f64 / 2.0;
         let half_height = font::text_height(scale) as f64 / 2.0;
         for ((x, y), copy) in copies {

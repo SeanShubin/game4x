@@ -96,6 +96,68 @@ impl World {
 mod tests {
     use super::*;
 
+    /// The five planet sizes have to be territory counts that actually exist. The list
+    /// lives in `planet-model`, which has no geometry and cannot check itself; the
+    /// geometry lives in `sphere-tessellation`, which has never heard of a planet size.
+    /// This is the lowest crate that can see both, so the two are tied together here.
+    #[test]
+    fn every_planet_size_is_a_goldberg_polyhedron() {
+        use planet_model::PlanetSize;
+        use sphere_tessellation::goldberg;
+
+        for size in PlanetSize::ALL {
+            let count = size.territory_count();
+            let arrangement = goldberg::arrangements_up_to(count)
+                .into_iter()
+                .find(|&(m, n)| goldberg::region_count(m, n) == count);
+            let (m, n) = arrangement
+                .unwrap_or_else(|| panic!("{} ({count}) is not a Goldberg count", size.name()));
+
+            // And the world actually built for it has to be that solid, not a relaxed
+            // approximation of it.
+            let world = World::build(WorldSpec {
+                params: Params {
+                    region_count: count,
+                    ..Default::default()
+                },
+                soccer: false,
+            });
+            assert_eq!(world.tessellation.region_count(), count, "{}", size.name());
+            assert_eq!(
+                world.quality.degrees[5],
+                12,
+                "{} is GP({m},{n}) and must have twelve pentagons: {}",
+                size.name(),
+                world.quality.summary()
+            );
+            if count > 12 {
+                assert_eq!(
+                    world.quality.adjacent_pentagon_pairs,
+                    0,
+                    "{}: pentagons must be isolated",
+                    size.name()
+                );
+            }
+        }
+    }
+
+    /// Twelve is the dodecahedron, where every territory is a pentagon and so every
+    /// pentagon touches another. It is the one size where isolation is impossible, which
+    /// is why the test above excludes it rather than the exclusion being an oversight.
+    #[test]
+    fn the_smallest_planet_is_all_pentagons() {
+        use planet_model::PlanetSize;
+        let world = World::build(WorldSpec {
+            params: Params {
+                region_count: PlanetSize::Tiny.territory_count(),
+                ..Default::default()
+            },
+            soccer: false,
+        });
+        assert_eq!(world.quality.degrees[5], 12);
+        assert_eq!(world.tessellation.region_count(), 12);
+    }
+
     #[test]
     fn the_default_world_is_the_exact_solid() {
         let world = World::build(WorldSpec::default());
