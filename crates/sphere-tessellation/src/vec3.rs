@@ -131,6 +131,25 @@ impl Vec3 {
 pub struct Direction(Vec3);
 
 impl Direction {
+    /// The planet's north pole: the direction its axis of rotation points.
+    ///
+    /// `+z` is not a choice being made here. It is the one [`Vec3::latitude`] already
+    /// assumes, since latitude is `asin(z)` and so reaches `PI/2` exactly at `+z`. Naming
+    /// it means the renderer does not have to keep its own copy of that decision, which
+    /// could then drift from this one.
+    ///
+    /// Note that the poles are not at any icosahedron vertex, so a pole falls wherever
+    /// the tessellation happens to put it rather than at the centre of a pentagon.
+    pub const NORTH_POLE: Self = Self(Vec3::new(0.0, 0.0, 1.0));
+
+    /// The south pole, directly opposite [`Direction::NORTH_POLE`].
+    pub const SOUTH_POLE: Self = Self(Vec3::new(0.0, 0.0, -1.0));
+
+    /// Both poles, north first.
+    pub fn poles() -> [Self; 2] {
+        [Self::NORTH_POLE, Self::SOUTH_POLE]
+    }
+
     /// Normalizes, so the result is a unit vector whatever came in.
     pub fn of(vector: Vec3) -> Self {
         Self(vector.normalized())
@@ -185,6 +204,28 @@ impl Direction {
 #[cfg(test)]
 mod direction_tests {
     use super::*;
+
+    /// The poles have to agree with the latitude function, because they are the same
+    /// decision written twice. If these ever disagreed, north would mean one thing to the
+    /// model and another to the renderer.
+    #[test]
+    fn the_poles_are_where_latitude_says_they_are() {
+        use std::f64::consts::FRAC_PI_2;
+        assert!((Direction::NORTH_POLE.latitude() - FRAC_PI_2).abs() < 1e-12);
+        assert!((Direction::SOUTH_POLE.latitude() + FRAC_PI_2).abs() < 1e-12);
+        for pole in Direction::poles() {
+            assert!(
+                (pole.vector().length() - 1.0).abs() < 1e-12,
+                "poles are directions"
+            );
+        }
+        assert_eq!(Direction::NORTH_POLE.opposite(), Direction::SOUTH_POLE);
+        let apart = Direction::NORTH_POLE.angle_to(Direction::SOUTH_POLE);
+        assert!(
+            (apart - std::f64::consts::PI).abs() < 1e-12,
+            "half a turn apart"
+        );
+    }
 
     #[test]
     fn constructing_one_always_gives_unit_length() {

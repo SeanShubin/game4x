@@ -17,6 +17,7 @@ use bevy::prelude::*;
 use bevy::window::CursorMoved;
 
 use planet_render::{World, WorldSpec, mesh};
+use sphere_tessellation::Direction;
 
 /// How far back the camera sits at rest, in sphere radii.
 const RESTING_DISTANCE: f32 = 3.1;
@@ -36,6 +37,15 @@ const PITCH_LIMIT: f32 = std::f32::consts::FRAC_PI_2 - 0.01;
 
 /// The radius of the dark ball the panels float on, filling the seams between them.
 const UNDERSIDE: f32 = 0.965;
+
+/// The spike marking each end of the planet's axis.
+///
+/// Small enough not to cover the territories around it, long enough to be unmistakable
+/// at a glance and still recognisable edge-on at the silhouette. The base is set below
+/// the surface so no gap can open between the spike and the panels beneath it.
+const POLE_MARKER_RADIUS: f32 = 0.045;
+const POLE_MARKER_HEIGHT: f32 = 0.19;
+const POLE_MARKER_BASE: f32 = 0.94;
 
 pub struct GlobePlugin {
     pub spec: WorldSpec,
@@ -135,6 +145,32 @@ fn setup(
                 Mesh3d(meshes.add(Sphere::new(UNDERSIDE).mesh().ico(4).unwrap())),
                 MeshMaterial3d(underside),
             ));
+
+            // The poles, marked at both ends of the axis. These are children like the
+            // panels are, and positioned in the same model space, so whatever turns the
+            // world turns them with it and they stay pinned where they belong.
+            let spike = meshes.add(Cone {
+                radius: POLE_MARKER_RADIUS,
+                height: POLE_MARKER_HEIGHT,
+            });
+            let marker = materials.add(StandardMaterial {
+                base_color: Color::srgb(0.94, 0.95, 0.98),
+                perceptual_roughness: 0.35,
+                ..default()
+            });
+            for pole in Direction::poles() {
+                let outward = to_view(pole);
+                globe.spawn((
+                    Mesh3d(spike.clone()),
+                    MeshMaterial3d(marker.clone()),
+                    Transform {
+                        translation: outward * (POLE_MARKER_BASE + POLE_MARKER_HEIGHT / 2.0),
+                        // A cone is built standing on +y, so point that at the pole.
+                        rotation: Quat::from_rotation_arc(Vec3::Y, outward),
+                        ..default()
+                    },
+                ));
+            }
         });
 
     // Ambient light rides on the camera in Bevy 0.19 rather than being a global
@@ -175,6 +211,22 @@ fn setup(
             ..default()
         },
     ));
+}
+
+/// A model direction in the engine's coordinates.
+fn to_view(direction: Direction) -> Vec3 {
+    let vector = direction.vector();
+    Vec3::new(vector.x as f32, vector.y as f32, vector.z as f32)
+}
+
+/// Stands the planet up, so its axis runs down the screen rather than out of it.
+///
+/// The model's axis is `+z` - see [`Direction::NORTH_POLE`] - while the engine's up is
+/// `+y`, so without this the north pole would point at the viewer and the world would not
+/// read as a globe at all. Derived from the constant rather than written out as a quarter
+/// turn, so that it cannot disagree with the model about which way is north.
+fn upright() -> Quat {
+    Quat::from_rotation_arc(to_view(Direction::NORTH_POLE), Vec3::Y)
 }
 
 fn summary(world: &World, panels: &mesh::PlanetMesh) -> String {
@@ -272,7 +324,13 @@ fn apply_orbit(
         return;
     }
     for mut transform in &mut globes {
-        transform.rotation = Quat::from_euler(EulerRot::YXZ, orbit.yaw, orbit.pitch, 0.0);
+        // Spin first, then tilt: `XYZ` composes as `pitch * yaw`, so yaw is applied to the
+        // upright planet and therefore turns it about its own axis. Tilting first - which
+        // is what the previous `YXZ` did - would have swung the axis away from vertical
+        // and left the poles wandering in circles as you turned, instead of staying put at
+        // the top and bottom where they belong.
+        transform.rotation =
+            Quat::from_euler(EulerRot::XYZ, orbit.pitch, orbit.yaw, 0.0) * upright();
     }
     for mut transform in &mut cameras {
         *transform = Transform::from_xyz(0.0, 0.0, orbit.distance).looking_at(Vec3::ZERO, Vec3::Y);
