@@ -263,10 +263,10 @@ impl Game {
                 where_from: "in orbit",
             })?;
 
-        self.take(territory, kind.force())?;
-        self.units[at].location = Location::On(territory);
-        self.units[at].spent = true;
-        Ok(())
+        // Landing founds the territory. `spec/unit-types.md`: a founding unit takes a
+        // territory *and transforms into* what it needs - one action, not two - and
+        // `spec/invariants.md` forbids an intermediate step that is always taken.
+        self.found(territory, at)
     }
 
     fn launch(&mut self, kind: UnitKind) -> Result<(), Rejection> {
@@ -274,7 +274,7 @@ impl Game {
             .pick(kind, |unit| !unit.in_orbit())
             .ok_or(Rejection::NotOnThePlanet(kind))?;
         self.units[at].location = Location::Orbit;
-        self.units[at].spent = true;
+        self.units[at].exhausted = true;
         Ok(())
     }
 
@@ -307,12 +307,39 @@ impl Game {
                 },
             })?;
 
-        if !self.territory(territory)?.founded {
-            self.take(territory, kind.force())?;
-        }
-        self.units[at].location = Location::On(territory);
         self.units[at].cells -= cost::MOVE_CELLS;
-        self.units[at].spent = true;
+        if self.territory(territory)?.founded {
+            self.units[at].location = Location::On(territory);
+            self.units[at].exhausted = true;
+            return Ok(());
+        }
+        // Unclaimed ground is taken and founded by arriving on it, which consumes the
+        // unit. So a founding unit never stands on ground it has taken but not founded,
+        // and never has to be fed there.
+        self.found(territory, at)
+    }
+
+    /// Takes a territory and founds it with a unit, which the founding consumes.
+    ///
+    /// `releases/first-release.md`, Founding: produces garrison, citizen, food extractor.
+    /// All of it happens here, at the moment of arriving, because the specification
+    /// describes taking and transforming as one act.
+    fn found(&mut self, territory: TerritoryId, unit_at: usize) -> Result<(), Rejection> {
+        let force = self.units[unit_at].kind.force();
+        self.take(territory, force)?;
+        self.units.remove(unit_at);
+
+        let place = &mut self.territories[territory.index()];
+        // `spec/unit-types.md`: the structure a founding unit becomes has one less force
+        // than the unit. `spec/control.md`: founding is a garrison's only source.
+        place.garrison = Some(Garrison::from_founding_unit(force));
+        place.citizens += 1;
+        if let Some(node) = place.best_free_node(Resource::Food) {
+            place.extractors.push(Extractor {
+                node,
+                exhausted: false,
+            });
+        }
         Ok(())
     }
 
@@ -360,9 +387,10 @@ impl Game {
                     },
                 )?;
                 self.spend_labor(territory, cost::EXTRACTOR_LABOR)?;
-                self.territory_mut(territory)?
-                    .extractors
-                    .push(Extractor { node, spent: false });
+                self.territory_mut(territory)?.extractors.push(Extractor {
+                    node,
+                    exhausted: false,
+                });
                 Ok(())
             }
         }
@@ -435,7 +463,7 @@ impl Game {
                     .territory(territory)?
                     .extractors_for(resource)
                     .into_iter()
-                    .filter(|at| !self.territories[territory.index()].extractors[*at].spent)
+                    .filter(|at| !self.territories[territory.index()].extractors[*at].exhausted)
                     .collect();
                 if ready.is_empty() {
                     return Err(Rejection::NothingToWorkAt {
@@ -465,7 +493,7 @@ impl Game {
 
                 let mut produced = 0;
                 for (density, at) in by_density.into_iter().take(count as usize) {
-                    self.territories[territory.index()].extractors[at].spent = true;
+                    self.territories[territory.index()].extractors[at].exhausted = true;
                     produced += density;
                 }
                 self.territory_mut(territory)?.add(resource, produced);
@@ -546,7 +574,7 @@ impl Game {
         }
 
         for unit in &mut self.units {
-            unit.spent = false;
+            unit.exhausted = false;
         }
         self.turn += 1;
     }
@@ -555,19 +583,12 @@ impl Game {
     fn settle(&mut self, id: TerritoryId) {
         // Everything that eats, eats. A unit that is not paid is lost.
         //
-        // Except a unit that is about to be consumed. A founding unit arriving on ground
-        // it has just taken transforms into what that territory needs - and a territory
-        // taken this turn has no extractor yet, so charging it a meal first would starve
-        // every pioneer on arrival and make founding by land impossible. `spec/console.md`
-        // has ending a turn *consume, transform*; what the transform consumes cannot also
-        // be asked to eat.
-        let transforming = self.about_to_transform(id);
         let mut starved: Vec<UnitId> = Vec::new();
         let mut owed = 0;
         for unit in self
             .units
             .iter()
-            .filter(|unit| unit.is_on(id) && unit.usable && !transforming.contains(&unit.id))
+            .filter(|unit| unit.is_on(id) && unit.usable)
         {
             owed += unit.kind.upkeep();
         }
@@ -583,12 +604,7 @@ impl Game {
                     .units
                     .iter()
                     .enumerate()
-                    .filter(|(_, unit)| {
-                        unit.is_on(id)
-                            && unit.usable
-                            && unit.kind.upkeep() > 0
-                            && !transforming.contains(&unit.id)
-                    })
+                    .filter(|(_, unit)| unit.is_on(id) && unit.usable && unit.kind.upkeep() > 0)
                     .map(|(at, unit)| (unit.id, at))
                     .collect();
                 by_id.sort_by_key(|(unit_id, _)| std::cmp::Reverse(*unit_id));
@@ -609,70 +625,11 @@ impl Game {
         let citizens = self.territories[id.index()].citizens;
         self.territories[id.index()].citizens = population_after(citizens, food);
 
-        // Then whatever can transform, transforms. After the population step rather than
-        // before it, so the citizen a founding unit produces is not immediately asked to
-        // feed itself from a territory that has not extracted anything yet.
-        self.transform_founding_units(id);
-
-        // Unused resources are discarded, and everything becomes unspent again.
+        // Unused resources are discarded, and everything becomes ready again. Nothing
+        // transforms here: founding happens when a unit arrives, so by the time a turn
+        // ends there is never a unit waiting to become something.
         self.territories[id.index()].stores = [0; 3];
-        self.territories[id.index()].unspend();
-    }
-
-    /// Which unit on this territory a transform is about to consume, if any.
-    ///
-    /// At most one: a territory takes at most one garrison, and the transform stops as
-    /// soon as there is one.
-    fn about_to_transform(&self, id: TerritoryId) -> Vec<UnitId> {
-        let Ok(place) = self.territory(id) else {
-            return Vec::new();
-        };
-        if !place.founded || place.garrison.is_some() {
-            return Vec::new();
-        }
-        self.units
-            .iter()
-            .filter(|unit| unit.is_on(id) && unit.usable)
-            .min_by_key(|unit| unit.id)
-            .map(|unit| vec![unit.id])
-            .unwrap_or_default()
-    }
-
-    /// `releases/first-release.md`: an Ark or Pioneer transform consumes the unit and
-    /// produces a garrison, a citizen and a food extractor.
-    ///
-    /// Only where the territory has no garrison yet. A founding unit becomes what a
-    /// territory needs to sustain itself, and a territory that already has a garrison does
-    /// not need another - `spec/control.md` allows it only one.
-    fn transform_founding_units(&mut self, id: TerritoryId) {
-        if !self.territories[id.index()].founded {
-            return;
-        }
-        loop {
-            if self.territories[id.index()].garrison.is_some() {
-                return;
-            }
-            let Some(at) = self
-                .units
-                .iter()
-                .enumerate()
-                .filter(|(_, unit)| unit.is_on(id) && unit.usable)
-                .min_by_key(|(_, unit)| unit.id)
-                .map(|(at, _)| at)
-            else {
-                return;
-            };
-
-            let force = self.units[at].kind.force();
-            self.units.remove(at);
-
-            let place = &mut self.territories[id.index()];
-            place.garrison = Some(Garrison::from_founding_unit(force));
-            place.citizens += 1;
-            if let Some(node) = place.best_free_node(Resource::Food) {
-                place.extractors.push(Extractor { node, spent: false });
-            }
-        }
+        self.territories[id.index()].make_ready();
     }
 }
 
@@ -739,15 +696,14 @@ mod tests {
         designed().after(&Transition::Start).unwrap()
     }
 
-    /// A landed and transformed ark: one garrison, one citizen, one food extractor.
+    /// A landed ark, which is a founded territory: one garrison, one citizen, one food
+    /// extractor. Landing is the whole of it - there is no second step.
     fn founded() -> Game {
         started()
             .after(&Transition::Land {
                 kind: UnitKind::Ark,
                 territory: TerritoryId(1),
             })
-            .unwrap()
-            .after(&Transition::EndTurn)
             .unwrap()
     }
 
@@ -836,7 +792,7 @@ mod tests {
             })
             .unwrap();
         assert!(game.territory(TerritoryId(1)).unwrap().founded);
-        assert!(game.units[0].is_on(TerritoryId(1)));
+        assert!(game.units.is_empty(), "the ark is consumed by founding");
     }
 
     /// Taking a territory takes force *greater* than what holds it. An ark is force 2,
@@ -876,8 +832,9 @@ mod tests {
         );
     }
 
-    /// The transform: consume the unit, produce a garrison, a citizen and a food
-    /// extractor.
+    /// Founding: one action that takes the ground and produces a garrison, a citizen and
+    /// a food extractor. There is no moment in between, which is what
+    /// `spec/invariants.md` means by no step that is always taken.
     #[test]
     fn a_founding_unit_becomes_a_garrison_a_citizen_and_a_food_extractor() {
         let game = founded();
@@ -894,6 +851,7 @@ mod tests {
             "working a food node"
         );
         assert!(game.units.is_empty(), "the ark was consumed");
+        assert_eq!(game.turn, 1, "and none of it waited for the turn to end");
     }
 
     /// Force of nature 1, garrison force 1: equal is enough to hold.
@@ -1022,7 +980,7 @@ mod tests {
             backwards.settle(id);
         }
         for unit in &mut backwards.units {
-            unit.spent = false;
+            unit.exhausted = false;
         }
         backwards.turn += 1;
 
@@ -1108,12 +1066,14 @@ mod tests {
     }
 
     #[test]
-    fn a_move_spends_a_cell_and_a_unit_out_of_cells_cannot_move() {
+    fn a_move_within_your_own_ground_spends_a_cell_and_keeps_the_unit() {
         let mut game = founded();
+        // Found territory 2 as well, so moving there is a move rather than a founding.
+        game.territories[1].founded = true;
+        game.territories[1].garrison = Some(Garrison::from_founding_unit(2));
         let id = UnitId(game.units.len() as u32 + 1);
         let mut pioneer = Unit::new(id, UnitKind::Pioneer);
         pioneer.location = Location::On(TerritoryId(1));
-        pioneer.cells = 1;
         game.units.push(pioneer);
 
         let moved = game
@@ -1126,27 +1086,36 @@ mod tests {
             .units
             .iter()
             .find(|u| u.kind == UnitKind::Pioneer)
-            .unwrap();
-        assert_eq!(pioneer.cells, 0);
-        assert!(
-            moved.territory(TerritoryId(2)).unwrap().founded,
-            "and founds it"
-        );
+            .expect("it is still a unit");
+        assert_eq!(pioneer.cells, 1, "one cell spent");
+        assert!(pioneer.is_on(TerritoryId(2)));
+    }
 
-        // Next turn it has no cells left.
-        let stuck = moved.after(&Transition::EndTurn).unwrap();
-        let rejected = stuck
+    /// Moving onto ground you do not hold takes it and founds it, in one action - so the
+    /// unit is consumed and there is never a pioneer standing on ground it has taken but
+    /// not founded.
+    #[test]
+    fn a_move_onto_unclaimed_ground_founds_it_and_consumes_the_unit() {
+        let mut game = founded();
+        let id = UnitId(game.units.len() as u32 + 1);
+        let mut pioneer = Unit::new(id, UnitKind::Pioneer);
+        pioneer.location = Location::On(TerritoryId(1));
+        game.units.push(pioneer);
+
+        let moved = game
             .after(&Transition::Move {
                 kind: UnitKind::Pioneer,
-                territory: TerritoryId(3),
+                territory: TerritoryId(2),
             })
-            .unwrap_err();
+            .unwrap();
+        let two = moved.territory(TerritoryId(2)).unwrap();
+        assert!(two.founded);
+        assert!(two.garrison.is_some());
+        assert_eq!(two.citizens, 1);
+        assert_eq!(two.extractors.len(), 1);
         assert!(
-            matches!(
-                rejected,
-                Rejection::NoCells(_) | Rejection::NoUnitAvailable { .. }
-            ),
-            "{rejected}"
+            !moved.units.iter().any(|u| u.kind == UnitKind::Pioneer),
+            "the pioneer became the territory"
         );
     }
 
@@ -1166,9 +1135,10 @@ mod tests {
         let mut game = founded();
         let id = UnitId(game.units.len() as u32 + 1);
         let mut pioneer = Unit::new(id, UnitKind::Pioneer);
-        pioneer.location = Location::On(TerritoryId(2));
+        pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
-        game.territories[1].founded = true;
+        // Nothing was gathered, so there is no food to pay it with.
+        game.territories[0].stores = [0; 3];
 
         let after = game.after(&Transition::EndTurn).unwrap();
         let pioneer = after.units.iter().find(|u| u.kind == UnitKind::Pioneer);

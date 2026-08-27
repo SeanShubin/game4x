@@ -18,8 +18,10 @@ pub struct Unit {
     /// `spec/units.md`: a mobile unit carries energy cells; moving spends them, and a
     /// unit with none cannot move.
     pub cells: u32,
-    /// Whether this unit has already been used this turn.
-    pub spent: bool,
+    /// Whether this unit has already been used this turn. `spec/turn.md` calls this
+    /// ready or exhausted; a thing that is merely used up for the turn is exhausted,
+    /// where labor and energy cells are genuinely spent because they are consumed.
+    pub exhausted: bool,
     /// `spec/control.md`: when nature takes a territory back, any ark on it becomes
     /// unusable. It is still there; it can no longer do anything.
     pub usable: bool,
@@ -32,7 +34,7 @@ impl Unit {
             kind,
             location: Location::Orbit,
             cells: kind.cells(),
-            spent: false,
+            exhausted: false,
             usable: true,
         }
     }
@@ -51,7 +53,7 @@ impl Unit {
 
     /// Whether this unit could act at all: it has not been used and is not a wreck.
     pub fn ready(&self) -> bool {
-        self.usable && !self.spent
+        self.usable && !self.exhausted
     }
 }
 
@@ -81,7 +83,7 @@ mod tests {
     #[test]
     fn a_spent_unit_is_not_ready_but_still_holds_its_force() {
         let mut unit = Unit::new(UnitId(1), UnitKind::Pioneer);
-        unit.spent = true;
+        unit.exhausted = true;
         assert!(!unit.ready());
         assert_eq!(unit.force(), 2, "it is still standing there");
     }

@@ -1,34 +1,33 @@
-# Playing the first release, from orbit to a working territory.
+# Playing the first release, from orbit to a second territory.
 #
-# `releases/first-release.md` gives the loop. This file walks the first four steps of it:
-# no presence on the planet, land the ark and found a territory, build structures manned
-# by the population, and build infrastructure to mine metal and energy.
+# `releases/first-release.md` gives the loop in eight steps. This file walks the first
+# five: no presence on the planet, land the ark and found a territory, work the food
+# extractor to grow the population, build extractors for metal and energy, then produce a
+# pioneer and spread across the planet by land.
 #
 # Every line is a command. There is no other way for the state to move, so this file is a
 # complete account of the game it produces.
 
-# 1 and 2: the ark comes down and founds the landing site.
+# 1 and 2. The ark comes down, and landing *is* the founding: it takes the ground and
+# becomes a garrison to hold it, a citizen, and an extractor on the best food node. One
+# action, so the farm can be worked the same turn.
 land ark 1
 
-# Ending the turn is what transforms it: the ark is consumed and becomes a garrison to
-# hold the ground, one citizen, and an extractor working a food node.
-end turn
-
-# Turn 2. One citizen, so one unit of labor. It works the food node.
+# 3. Work the food extractor to grow the population.
 work 1 extractor 1 food
 end turn
 
-# Turn 3. Two citizens. One builds a second farm, the other works the first.
+# Turn 2. Two citizens: one opens a second food node, one works the first.
 build extractor 1 food
 work 1 extractor 1 food
 end turn
 
-# Turn 4. Four citizens, and the third food node is taken. Every farm is worked.
+# Turn 3. Four citizens. The third food node is taken and every farm is worked.
 build extractor 1 food
 work 3 extractor 1 food
 end turn
 
-# Turn 5. Eight citizens. Food first, then the metal nodes are opened.
+# Turn 4. Eight citizens. Food first, then step 4: extractors on the metal nodes.
 work 3 extractor 1 food
 build extractor 1 metal
 build extractor 1 metal
@@ -36,8 +35,8 @@ build extractor 1 metal
 work 2 extractor 1 metal
 end turn
 
-# Turn 6. Twelve citizens, which is every hand the food here can feed. All three
-# resources are worked, and the territory is at its ceiling: twelve of each per turn.
+# Turn 5. Twelve citizens, which is every hand the food here can feed, and twelve units of
+# labor. All three resources are worked to the territory's ceiling: twelve of each.
 work 3 extractor 1 food
 work 3 extractor 1 metal
 build extractor 1 energy
@@ -45,22 +44,25 @@ build extractor 1 energy
 build extractor 1 energy
 work 3 extractor 1 energy
 
-# Still turn 6. Twelve metal and twelve energy are on the ground, and a
-# Pioneer costs eight and six - so the landing site can now send one out. This is step 5
-# of the loop: spread across the planet by land.
+# 5. Twelve metal and twelve energy are on the ground and a pioneer costs eight and six,
+# so the landing site can send one out.
 produce pioneer 1
 end turn
 
-# Turn 7. The farms are worked first: a population that gathers nothing this turn starves
-# at the end of it, whatever else is going on elsewhere.
+# Turn 6. The farms are worked first - a population that gathers nothing this turn starves
+# at the end of it, whatever else is going on.
 work 3 extractor 1 food
 work 3 extractor 1 metal
 work 3 extractor 1 energy
 
-# Then the pioneer crosses into a neighbouring territory. It is not controlled, so
-# moving there takes it: force 2 against a force of nature of 1.
+# The pioneer crosses into a neighbouring territory. It is not held, so arriving there
+# takes it and founds it: force 2 against a force of nature of 1, and the pioneer becomes
+# the garrison, citizen and food extractor the new ground needs.
 move pioneer 2
 
-# Ending the turn transforms it, exactly as the ark was transformed - a garrison to hold
-# the new ground, a citizen, and an extractor on its best food node.
+# The new territory arrives with a citizen and a farm, both ready, so it can feed itself
+# on the very turn it is founded. A citizen that gathers nothing starves at the end of the
+# turn like any other, so founding late in a turn and leaving the farm idle costs the
+# citizen the founding just produced.
+work 1 extractor 2 food
 end turn

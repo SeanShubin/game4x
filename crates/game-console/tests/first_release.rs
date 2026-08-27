@@ -256,9 +256,9 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
     for resource in Resource::ALL {
         assert_eq!(one.store(resource), 0, "{resource} was discarded");
     }
-    // And everything is unspent again.
+    // And everything is ready again.
     assert_eq!(one.labor_available(), one.citizens);
-    assert_eq!(session.game.turn, 8, "turn one, then seven endings");
+    assert_eq!(session.game.turn, 7, "turn one, then six endings");
 
     // The pioneer took a second territory by land and became what it needed there.
     let two = session.game.territory(TerritoryId(2)).unwrap();
@@ -317,7 +317,10 @@ fn the_landing_site_can_send_a_pioneer_out() {
     let two = session.game.territory(TerritoryId(2)).unwrap();
     assert!(two.founded, "the pioneer took the ground");
     assert!(two.garrison.is_some(), "and became a garrison holding it");
-    assert_eq!(two.citizens, 1, "and a citizen");
+    // Founding produced one citizen, and because the new farm was worked on the turn it
+    // arrived that citizen fed itself and grew. A territory can pay its own way from the
+    // moment it is founded.
+    assert_eq!(two.citizens, 2, "a citizen, fed and grown");
     assert_eq!(two.extractors.len(), 1, "and an extractor");
     assert_eq!(
         two.nodes[two.extractors[0].node].resource,
@@ -328,6 +331,61 @@ fn the_landing_site_can_send_a_pioneer_out() {
 
     // Two territories held, which is more than the release started with.
     assert_eq!(session.game.controlled(), [TerritoryId(1), TerritoryId(2)]);
+}
+
+/// Which territory id sits where.
+///
+/// `spec/planet.md` says ids are unique and start at one, and that two territories are
+/// adjacent when they share an edge. It does not say which id goes on which face, and it
+/// should not have to - but a command file naming `move pioneer 2` means nothing unless
+/// the answer is fixed, so this records what `create planet tiny` actually produces.
+///
+/// It is fixed. `canonical_seeds(12)` builds `GP(1,0)` from an icosahedron whose vertices
+/// are written down in the source: no randomness, no relaxation, no seed. Territory *n*
+/// is the same face on every run and every machine that agrees about arithmetic. This
+/// test is what stops that quietly ceasing to be true, because if the numbering ever
+/// shifted, every command file naming a territory would silently mean somewhere else.
+#[test]
+fn the_numbering_of_a_tiny_planet_is_fixed() {
+    let mut session = Session::new();
+    run(&mut session, "run setup");
+
+    let neighbours = |id: u32| -> Vec<u32> {
+        let mut near: Vec<u32> = session.game.adjacency[TerritoryId(id).index()]
+            .iter()
+            .map(|other| other.0)
+            .collect();
+        near.sort_unstable();
+        near
+    };
+
+    // A dodecahedron, numbered as the tessellation numbers it.
+    assert_eq!(neighbours(1), [2, 3, 4, 5, 6]);
+    assert_eq!(neighbours(2), [1, 3, 4, 7, 8]);
+    assert_eq!(neighbours(3), [1, 2, 5, 7, 9]);
+    assert_eq!(neighbours(4), [1, 2, 6, 8, 10]);
+    assert_eq!(neighbours(5), [1, 3, 6, 9, 12]);
+    assert_eq!(neighbours(6), [1, 4, 5, 10, 12]);
+    assert_eq!(neighbours(7), [2, 3, 8, 9, 11]);
+    assert_eq!(neighbours(8), [2, 4, 7, 10, 11]);
+    assert_eq!(neighbours(9), [3, 5, 7, 11, 12]);
+    assert_eq!(neighbours(10), [4, 6, 8, 11, 12]);
+    assert_eq!(neighbours(11), [7, 8, 9, 10, 12]);
+    assert_eq!(neighbours(12), [5, 6, 9, 10, 11]);
+
+    // What the play script depends on: the landing site and the territory it expands into
+    // really do share an edge.
+    assert!(session.game.are_adjacent(TerritoryId(1), TerritoryId(2)));
+
+    // And territory 11, which the release calls the prize, is the far side of the planet
+    // from the landing site: they share no neighbour, so it is three moves away.
+    let from_one = neighbours(1);
+    let from_eleven = neighbours(11);
+    assert!(
+        !from_one.iter().any(|id| from_eleven.contains(id)),
+        "1 and 11 should have nothing between them"
+    );
+    assert!(!session.game.are_adjacent(TerritoryId(1), TerritoryId(11)));
 }
 
 /// The invariant the whole crate is arranged around, checked end to end: a game is
@@ -494,17 +552,13 @@ fn taking_and_holding_a_territory_follow_the_force_rules() {
     run(&mut session, "run setup");
     run(&mut session, "start");
 
-    // An ark is force 2 against a force of nature of 1: greater, so it takes the ground.
+    // An ark is force 2 against a force of nature of 1: greater, so it takes the ground -
+    // and taking it *is* founding it, so what stands there afterwards is the garrison the
+    // ark became rather than the ark itself.
     run(&mut session, "land ark 1");
     assert!(session.game.territory(TerritoryId(1)).unwrap().founded);
-    assert_eq!(
-        session.game.force_in(TerritoryId(1)),
-        2,
-        "the ark standing on it"
-    );
+    assert!(session.game.units.is_empty(), "founding consumes the ark");
 
-    // After it transforms, the garrison holds with force equal to the force of nature.
-    run(&mut session, "end turn");
     let one = session.game.territory(TerritoryId(1)).unwrap();
     assert_eq!(one.garrison.unwrap().force, 1, "one less than the unit");
     assert_eq!(session.game.force_in(TerritoryId(1)), 1);

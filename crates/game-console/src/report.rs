@@ -266,7 +266,7 @@ pub fn entities(game: &Game) -> Vec<Entry> {
                 ),
                 ("cells".to_string(), unit.cells.to_string()),
                 ("force".to_string(), unit.force().to_string()),
-                ("spent".to_string(), unit.spent.to_string()),
+                ("exhausted".to_string(), unit.exhausted.to_string()),
                 ("usable".to_string(), unit.usable.to_string()),
             ],
         });

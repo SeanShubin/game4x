@@ -20,12 +20,13 @@ pub struct Node {
 /// A structure working one node.
 ///
 /// `spec/structures.md`: once per turn it may take a unit of labor from a citizen and
-/// produce that node's density in its resource. `spent` is that "once per turn".
+/// produce that node's density in its resource. `exhausted` is that "once per turn" - the
+/// extractor is not consumed by working, only used up until the turn ends.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Extractor {
     /// Which of the territory's nodes this works, by position in [`Territory::nodes`].
     pub node: usize,
-    pub spent: bool,
+    pub exhausted: bool,
 }
 
 /// `spec/control.md`: the structure through which the citizens of a territory apply force.
@@ -162,11 +163,11 @@ impl Territory {
         }
     }
 
-    /// Clears everything that is spent for the turn.
-    pub fn unspend(&mut self) {
+    /// Makes everything ready again, which is what ending a turn does.
+    pub fn make_ready(&mut self) {
         self.labor_spent = 0;
         for extractor in &mut self.extractors {
-            extractor.spent = false;
+            extractor.exhausted = false;
         }
         if let Some(garrison) = &mut self.garrison {
             garrison.manned = 0;
@@ -272,7 +273,7 @@ mod tests {
         );
         territory.extractors.push(Extractor {
             node: 1,
-            spent: false,
+            exhausted: false,
         });
         assert_eq!(
             territory.best_free_node(Resource::Food),
@@ -281,7 +282,7 @@ mod tests {
         );
         territory.extractors.push(Extractor {
             node: 2,
-            spent: false,
+            exhausted: false,
         });
         assert_eq!(
             territory.best_free_node(Resource::Food),
@@ -290,7 +291,7 @@ mod tests {
         );
         territory.extractors.push(Extractor {
             node: 0,
-            spent: false,
+            exhausted: false,
         });
         assert_eq!(territory.best_free_node(Resource::Food), None, "all worked");
     }
@@ -328,13 +329,13 @@ mod tests {
     }
 
     #[test]
-    fn ending_a_turn_makes_everything_unspent_again() {
+    fn ending_a_turn_makes_everything_ready_again() {
         let mut territory = with_nodes(&[(Resource::Food, 4)]);
         territory.citizens = 2;
         territory.labor_spent = 2;
         territory.extractors.push(Extractor {
             node: 0,
-            spent: true,
+            exhausted: true,
         });
         territory.garrison = Some(Garrison {
             force: 1,
@@ -342,9 +343,9 @@ mod tests {
             manned: 2,
         });
 
-        territory.unspend();
+        territory.make_ready();
         assert_eq!(territory.labor_available(), 2);
-        assert!(!territory.extractors[0].spent);
+        assert!(!territory.extractors[0].exhausted);
         assert_eq!(territory.garrison.unwrap().manned, 0);
     }
 
@@ -356,7 +357,7 @@ mod tests {
         territory.garrison = Some(Garrison::from_founding_unit(2));
         territory.extractors.push(Extractor {
             node: 0,
-            spent: false,
+            exhausted: false,
         });
         territory.add(Resource::Metal, 10);
 
