@@ -85,7 +85,7 @@ jobs:
       # https://seanshubin.github.io/game4x/.
       - name: Build (WASM, release)
         working-directory: crates/game4x
-        run: trunk build --release --public-url /game4x/
+        run: trunk build --release --cargo-profile web-release --public-url /game4x/
 
       # Emit a wasm-independent build-info.json and fill the placeholder <meta> tags
       # Trunk copied into dist/index.html, so the served page always reveals which commit

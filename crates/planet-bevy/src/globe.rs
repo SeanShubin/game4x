@@ -222,18 +222,26 @@ fn drag_to_turn(
         // started. Turning on it would jerk the world by however far the pointer happened
         // to be from wherever it was last seen.
         if let Some(previous) = drag.0 {
+            // Both signs are positive because the surface follows the pointer: drag right
+            // and the face you are looking at goes right with it. That is the convention
+            // the flat view already uses - `GlobeView::drag` turns by `+dx` about the up
+            // axis and `+dy` about the across axis - and the two views have to agree, or
+            // the same gesture means opposite things depending on which one is up.
             let step = event.position - previous;
-            orbit.yaw -= step.x * DRAG_SENSITIVITY;
+            orbit.yaw += step.x * DRAG_SENSITIVITY;
             orbit.pitch =
-                (orbit.pitch - step.y * DRAG_SENSITIVITY).clamp(-PITCH_LIMIT, PITCH_LIMIT);
+                (orbit.pitch + step.y * DRAG_SENSITIVITY).clamp(-PITCH_LIMIT, PITCH_LIMIT);
         }
         drag.0 = Some(event.position);
     }
 }
 
 fn keys_to_turn(keys: Res<ButtonInput<KeyCode>>, time: Res<Time>, mut orbit: ResMut<Orbit>) {
+    // An arrow key is a drag in that direction, which is how the flat view defines them
+    // too: right is `+dx`, down is `+dy`. So the signs here have to match `drag_to_turn`
+    // exactly, or holding an arrow would turn the world the other way from dragging it.
     let held = |key| keys.pressed(key) as i32 as f32;
-    let turn = held(KeyCode::ArrowLeft) - held(KeyCode::ArrowRight);
+    let turn = held(KeyCode::ArrowRight) - held(KeyCode::ArrowLeft);
     let tilt = held(KeyCode::ArrowDown) - held(KeyCode::ArrowUp);
     // Touching a `ResMut` at all marks it changed, so leave it alone when no key is down.
     // Otherwise the orbit reads as changed on every frame and the guard in `apply_orbit`

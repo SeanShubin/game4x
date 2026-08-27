@@ -34,3 +34,28 @@ game4x = { path = "crates/game4x" }
 [profile.dev]
 # The planet view rasterizes per pixel; an unoptimized build is unusably slow.
 opt-level = 2
+
+# What the published bundle is built with, and nothing else. Size is a user-visible cost
+# on the web in a way it never is natively - it is time spent staring at a loading bar -
+# so this trades compile time and a little speed for a smaller download.
+#
+# Kept separate from `release` on purpose: `cargo run --release` is the inner loop for the
+# native views, and link-time optimization would make that noticeably slower to no benefit.
+#
+# `panic = "abort"` is free here rather than a decision. Unwinding does not exist on
+# wasm32-unknown-unknown, so all it removes is the landing-pad tables that go with it.
+# Thin LTO rather than fat: a GitHub runner has limited memory, and fat LTO over Bevy is
+# where that runs out.
+[profile.web-release]
+inherits = "release"
+opt-level = "s"
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+
+# Deliberately no `strip`. It removes custom sections, and one of those is
+# `target_features`, which is how wasm-opt learns the module is allowed to use bulk
+# memory - without it, wasm-opt validates against the MVP feature set and rejects its own
+# input with "Bulk memory operations require bulk memory". Nothing is lost by leaving it
+# off either way: wasm-opt already drops the debug and name sections, so the built module
+# carries only `producers` and `target_features`, a couple of hundred bytes between them.

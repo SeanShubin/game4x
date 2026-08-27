@@ -37,6 +37,60 @@
         user-select: none;
         -webkit-user-select: none;
       }
+
+      /* The wasm bundle is tens of megabytes, and until it has arrived and compiled
+         there is nothing on the page at all. Without this the tab is simply black for
+         however long that takes, which is indistinguishable from a broken site. */
+      #loading {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.9rem;
+        background: #0c0e12;
+        color: #e6e9ef;
+        font: 14px/1.6 ui-monospace, monospace;
+        z-index: 50;
+        transition: opacity 0.35s ease;
+      }
+      #loading.done {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #loading .title {
+        font-size: 20px;
+        letter-spacing: 0.14em;
+        color: #9fb4d8;
+      }
+      #loading .bar {
+        width: min(320px, 60vw);
+        height: 3px;
+        background: #1c2028;
+        overflow: hidden;
+      }
+      #loading .bar > i {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: #6f9be0;
+        transition: width 0.2s linear;
+      }
+      /* Used when the download size cannot be trusted - see the progress code below. */
+      #loading .bar.unknown > i {
+        width: 35%;
+        animation: sweep 1.1s ease-in-out infinite;
+      }
+      @keyframes sweep {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(320%); }
+      }
+      #loading .detail {
+        color: #7b8698;
+        font-size: 12px;
+      }
+
       /* Hidden until a startup error surfaces, then it paints the message over the
          otherwise black canvas. */
       #diag-overlay {
@@ -92,6 +146,7 @@
             "gpu: webgl2=" + gpu.webgl2 + " webgpu=" + gpu.webgpu + "\n\n" +
             title + "\n" + (detail || "");
         }
+        window.__DIAG__ = show;
 
         window.addEventListener("error", function (e) {
           show("Error:", (e.message || "") + "\n" + ((e.error && e.error.stack) || ""));
@@ -104,6 +159,114 @@
     </script>
 
     <!--
+      Download progress.
+
+      wasm-bindgen fetches the module itself, so the only way to observe it is to wrap
+      `fetch` before that happens: the response body is re-emitted through a stream that
+      counts bytes on the way past, and a fresh Response carrying the original headers is
+      handed back so `instantiateStreaming` still sees `application/wasm`.
+
+      Every step is guarded. If anything at all goes wrong the original response is
+      returned untouched, because a missing progress bar is a far smaller problem than a
+      page that will not start.
+    -->
+    <script>
+      (function () {
+        var el = {};
+        function ui() {
+          if (!el.root) {
+            el.root = document.getElementById("loading");
+            if (el.root) {
+              el.bar = el.root.querySelector(".bar");
+              el.fill = el.root.querySelector(".bar > i");
+              el.detail = el.root.querySelector(".detail");
+            }
+          }
+          return el.root;
+        }
+        function mb(bytes) {
+          return (bytes / 1048576).toFixed(1) + " MB";
+        }
+        function report(seen, total) {
+          if (!ui()) return;
+          // `content-length` is the *compressed* length when the server encodes the
+          // response, while the stream yields decompressed bytes - so the two disagree
+          // and the percentage would sail past 100. Only trust it while it holds up.
+          if (total > 0 && seen <= total) {
+            el.bar.classList.remove("unknown");
+            el.fill.style.width = ((seen / total) * 100).toFixed(1) + "%";
+            el.detail.textContent = "downloading " + mb(seen) + " of " + mb(total);
+          } else {
+            el.bar.classList.add("unknown");
+            el.detail.textContent = "downloading " + mb(seen);
+          }
+        }
+        function starting() {
+          if (!ui()) return;
+          el.bar.classList.add("unknown");
+          el.detail.textContent = "compiling and starting";
+        }
+
+        var nativeFetch = window.fetch && window.fetch.bind(window);
+        if (nativeFetch && window.ReadableStream) {
+          window.fetch = function (input, init) {
+            var url = typeof input === "string" ? input : (input && input.url) || "";
+            var pending = nativeFetch(input, init);
+            if (!/\.wasm(\?|#|$)/.test(url)) return pending;
+            return pending.then(function (response) {
+              try {
+                if (!response.ok || !response.body) return response;
+                var total = Number(response.headers.get("content-length")) || 0;
+                var seen = 0;
+                var reader = response.body.getReader();
+                var counted = new ReadableStream({
+                  pull: function (controller) {
+                    return reader.read().then(function (chunk) {
+                      if (chunk.done) {
+                        starting();
+                        controller.close();
+                        return;
+                      }
+                      seen += chunk.value.byteLength;
+                      report(seen, total);
+                      controller.enqueue(chunk.value);
+                    });
+                  },
+                  cancel: function (reason) {
+                    return reader.cancel(reason);
+                  },
+                });
+                return new Response(counted, {
+                  headers: response.headers,
+                  status: response.status,
+                  statusText: response.statusText,
+                });
+              } catch (whatever) {
+                return response;
+              }
+            });
+          };
+        }
+
+        // Bevy creates its canvas once the module is running, which is the first moment
+        // there is anything to look at. Poll for it rather than guess a duration.
+        var waiting = setInterval(function () {
+          var canvas = document.querySelector("canvas");
+          if (canvas && canvas.width > 0) {
+            clearInterval(waiting);
+            var root = ui();
+            if (root) {
+              root.classList.add("done");
+              setTimeout(function () {
+                if (root.parentNode) root.parentNode.removeChild(root);
+              }, 400);
+            }
+          }
+        }, 120);
+      })();
+    </script>
+
+    <!--
       Trunk entry point. It sits next to this crate's Cargo.toml so Trunk resolves
       `game4x` as the target package - the workspace root is a virtual manifest with no
       root package of its own. CI passes `--public-url /game4x/` so that asset URLs
@@ -111,5 +274,11 @@
     -->
     <link data-trunk rel="rust" data-bin="game4x" data-wasm-opt="z" />
   </head>
-  <body></body>
+  <body>
+    <div id="loading">
+      <div class="title">game4x</div>
+      <div class="bar unknown"><i></i></div>
+      <div class="detail">loading</div>
+    </div>
+  </body>
 </html>
