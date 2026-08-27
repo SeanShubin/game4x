@@ -1984,6 +1984,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "command-language"
+version = "0.1.0"
+
+[[package]]
 name = "concurrent-queue"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2544,6 +2548,20 @@ dependencies = [
  "pin-project-lite",
  "slab",
 ]
+
+[[package]]
+name = "game-console"
+version = "0.1.0"
+dependencies = [
+ "command-language",
+ "game-model",
+ "planet-model",
+ "sphere-tessellation",
+]
+
+[[package]]
+name = "game-model"
+version = "0.1.0"
 
 [[package]]
 name = "game4x"
@@ -3953,6 +3971,8 @@ name = "planet-bevy"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "game-console",
+ "game-model",
  "planet-ecs",
  "planet-model",
  "planet-render",

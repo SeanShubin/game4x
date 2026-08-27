@@ -1,0 +1,47 @@
+# Playing the first release, from orbit to a working territory.
+#
+# `releases/first-release.md` gives the loop. This file walks the first four steps of it:
+# no presence on the planet, land the ark and found a territory, build structures manned
+# by the population, and build infrastructure to mine metal and energy.
+#
+# Every line is a command. There is no other way for the state to move, so this file is a
+# complete account of the game it produces.
+
+# 1 and 2: the ark comes down and founds the landing site.
+land ark 1
+
+# Ending the turn is what transforms it: the ark is consumed and becomes a garrison to
+# hold the ground, one citizen, and an extractor working a food node.
+end turn
+
+# Turn 2. One citizen, so one unit of labor. It works the food node.
+work 1 extractor 1 food
+end turn
+
+# Turn 3. Two citizens. One builds a second farm, the other works the first.
+build extractor 1 food
+work 1 extractor 1 food
+end turn
+
+# Turn 4. Four citizens, and the third food node is taken. Every farm is worked.
+build extractor 1 food
+work 3 extractor 1 food
+end turn
+
+# Turn 5. Eight citizens. Food first, then the metal nodes are opened.
+work 3 extractor 1 food
+build extractor 1 metal
+build extractor 1 metal
+build extractor 1 metal
+work 2 extractor 1 metal
+end turn
+
+# Turn 6. Twelve citizens, which is every hand the food here can feed. All three
+# resources are worked, and the territory is at its ceiling: twelve of each per turn.
+work 3 extractor 1 food
+work 3 extractor 1 metal
+build extractor 1 energy
+build extractor 1 energy
+build extractor 1 energy
+work 3 extractor 1 energy
+end turn

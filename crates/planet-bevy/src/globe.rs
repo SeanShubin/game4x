@@ -75,6 +75,12 @@ const POLE_MARKER_BASE: f32 = 0.94;
 /// or so far past it that it leaves the window.
 const POLE_LABEL_HEIGHT: f32 = POLE_MARKER_BASE + POLE_MARKER_HEIGHT + 0.04;
 
+// A pole's letter has to clear the spike it belongs to, or it would be drawn inside it,
+// and it has to stay near enough that the camera can frame both. Checked when this
+// compiles rather than when it runs, since all three are constants.
+const _: () = assert!(POLE_LABEL_HEIGHT >= POLE_MARKER_BASE + POLE_MARKER_HEIGHT);
+const _: () = assert!(POLE_LABEL_HEIGHT < RESTING_DISTANCE / 2.0);
+
 /// The box each label is centred in. Nothing is drawn in it; it exists so that the text
 /// inside can be centred on a point rather than beginning at it.
 const LABEL_BOX: f32 = 40.0;
@@ -689,21 +695,6 @@ mod tests {
             * north();
         // The camera looks down -z from +z, so leaning toward it means gaining z.
         assert!(tilted.z > level.z, "{tilted} is no closer than {level}");
-    }
-
-    /// A pole's letter has to clear the spike it belongs to, or it would be drawn inside
-    /// it. It also has to stay near enough that the camera can frame both.
-    #[test]
-    fn a_poles_letter_clears_its_spike() {
-        let tip = POLE_MARKER_BASE + POLE_MARKER_HEIGHT;
-        assert!(
-            POLE_LABEL_HEIGHT >= tip,
-            "the letter would be inside the spike"
-        );
-        assert!(
-            POLE_LABEL_HEIGHT < RESTING_DISTANCE / 2.0,
-            "the letter is so far out the camera cannot frame it"
-        );
     }
 
     /// Ink has to change with the panel under it, or the ids vanish on half the palette.

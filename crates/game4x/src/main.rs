@@ -50,6 +50,10 @@ fn main() {
         .add_plugins(planet_ecs::PlanetEcsPlugin::new(topology))
         // The solid, a camera, and the pointer: the only place an engine's opinions land.
         .add_plugins(planet_bevy::globe::GlobePlugin::new(spec))
+        // The three surfaces `spec/interface.md` asks for: the game, the console, and the
+        // data browser. Added unconditionally, because nothing may be available in one
+        // build and not another.
+        .add_plugins(planet_bevy::surfaces::SurfacesPlugin)
         .run();
 }
 

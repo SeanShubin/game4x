@@ -1,0 +1,160 @@
+# The twelve territories of the first release.
+#
+# Each is taken from the table in releases/first-release.md, and each was chosen there
+# to exercise a different consequence of the rules. Nothing here is hardcoded data:
+# every node below is a command, and the world is what running them produces.
+
+# 1: the landing site; everything works
+add node 1 food 4
+add node 1 food 4
+add node 1 food 4
+add node 1 metal 4
+add node 1 metal 4
+add node 1 metal 4
+add node 1 energy 4
+add node 1 energy 4
+add node 1 energy 4
+
+# 2: few dense food nodes
+add node 2 food 6
+add node 2 food 6
+add node 2 metal 4
+add node 2 metal 4
+add node 2 energy 4
+add node 2 energy 4
+
+# 3: many thin food nodes, the same food total as 2
+add node 3 food 2
+add node 3 food 2
+add node 3 food 2
+add node 3 food 2
+add node 3 food 2
+add node 3 food 2
+add node 3 metal 4
+add node 3 metal 4
+add node 3 energy 4
+add node 3 energy 4
+
+# 4: the minimum a territory can be
+add node 4 food 2
+add node 4 metal 5
+add node 4 metal 5
+add node 4 metal 5
+add node 4 metal 5
+add node 4 energy 5
+add node 4 energy 5
+add node 4 energy 5
+add node 4 energy 5
+
+# 5: food density 1
+add node 5 food 1
+add node 5 food 1
+add node 5 food 1
+add node 5 metal 8
+add node 5 metal 8
+add node 5 metal 8
+add node 5 metal 8
+add node 5 metal 8
+add node 5 metal 8
+add node 5 metal 8
+add node 5 metal 8
+add node 5 energy 8
+add node 5 energy 8
+add node 5 energy 8
+add node 5 energy 8
+add node 5 energy 8
+add node 5 energy 8
+add node 5 energy 8
+add node 5 energy 8
+
+# 6: no metal
+add node 6 food 4
+add node 6 food 4
+add node 6 food 4
+add node 6 food 4
+# no metal
+add node 6 energy 5
+add node 6 energy 5
+add node 6 energy 5
+add node 6 energy 5
+
+# 7: no energy
+add node 7 food 4
+add node 7 food 4
+add node 7 food 4
+add node 7 food 4
+add node 7 metal 5
+add node 7 metal 5
+add node 7 metal 5
+add node 7 metal 5
+# no energy
+
+# 8: population without industry
+add node 8 food 6
+add node 8 food 6
+add node 8 food 6
+add node 8 food 6
+add node 8 food 6
+add node 8 food 6
+add node 8 metal 2
+add node 8 energy 2
+
+# 9: rich metal, too few hands to work it
+add node 9 food 3
+add node 9 food 3
+add node 9 metal 8
+add node 9 metal 8
+add node 9 metal 8
+add node 9 metal 8
+add node 9 metal 8
+add node 9 metal 8
+add node 9 energy 2
+
+# 10: a fuel depot
+add node 10 food 3
+add node 10 food 3
+add node 10 food 3
+add node 10 metal 3
+add node 10 energy 8
+add node 10 energy 8
+add node 10 energy 8
+add node 10 energy 8
+add node 10 energy 8
+add node 10 energy 8
+
+# 11: the prize
+add node 11 food 6
+add node 11 food 6
+add node 11 food 6
+add node 11 food 6
+add node 11 food 6
+add node 11 metal 6
+add node 11 metal 6
+add node 11 metal 6
+add node 11 metal 6
+add node 11 metal 6
+add node 11 energy 6
+add node 11 energy 6
+add node 11 energy 6
+add node 11 energy 6
+add node 11 energy 6
+
+# 12: rich nodes, almost no workers
+add node 12 food 2
+add node 12 food 2
+add node 12 metal 8
+add node 12 metal 8
+add node 12 metal 8
+add node 12 metal 8
+add node 12 metal 8
+add node 12 metal 8
+add node 12 metal 8
+add node 12 metal 8
+add node 12 energy 8
+add node 12 energy 8
+add node 12 energy 8
+add node 12 energy 8
+add node 12 energy 8
+add node 12 energy 8
+add node 12 energy 8
+add node 12 energy 8

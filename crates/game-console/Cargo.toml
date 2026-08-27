@@ -1,0 +1,11 @@
+[package]
+name = "game-console"
+version.workspace = true
+edition.workspace = true
+description = "The command language bound to the game: the only file that knows both a word and what it means."
+
+[dependencies]
+command-language.workspace = true
+game-model.workspace = true
+planet-model.workspace = true
+sphere-tessellation.workspace = true

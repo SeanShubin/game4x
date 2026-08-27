@@ -1,0 +1,12 @@
+# Designing the world of the first release.
+#
+# A command file is the same kind of artifact as the test that runs it, and one file may
+# call another as a subroutine. This is the top of that hierarchy: it says what the world
+# is made of, in the order it has to be made.
+
+create planet tiny
+run nodes
+run forces
+
+# One ark, waiting above the planet. Nothing is on the planet yet.
+add ark orbit

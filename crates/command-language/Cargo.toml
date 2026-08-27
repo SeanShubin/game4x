@@ -1,0 +1,7 @@
+[package]
+name = "command-language"
+version.workspace = true
+edition.workspace = true
+description = "A command language: grammar, parser and typed syntax tree. Knows no game nouns."
+
+[dependencies]
