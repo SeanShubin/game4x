@@ -44,4 +44,23 @@ build extractor 1 energy
 build extractor 1 energy
 build extractor 1 energy
 work 3 extractor 1 energy
+
+# Still turn 6. Twelve metal and twelve energy are on the ground, and a
+# Pioneer costs eight and six - so the landing site can now send one out. This is step 5
+# of the loop: spread across the planet by land.
+produce pioneer 1
+end turn
+
+# Turn 7. The farms are worked first: a population that gathers nothing this turn starves
+# at the end of it, whatever else is going on elsewhere.
+work 3 extractor 1 food
+work 3 extractor 1 metal
+work 3 extractor 1 energy
+
+# Then the pioneer crosses into a neighbouring territory. It is not controlled, so
+# moving there takes it: force 2 against a force of nature of 1.
+move pioneer 2
+
+# Ending the turn transforms it, exactly as the ark was transformed - a garrison to hold
+# the new ground, a citizen, and an extractor on its best food node.
 end turn

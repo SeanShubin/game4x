@@ -98,6 +98,49 @@ fn released_table() -> BTreeMap<u32, Vec<(Resource, u32, u32)>> {
     table
 }
 
+/// What the release says a thing costs to produce, as `(amount, what)` pairs.
+///
+/// Read from the release for the same reason the node table is: these are tuning figures
+/// that are meant to move. When P-80 halved three of them, the only thing standing between
+/// a retuned document and a model that quietly disagreed with it was a test that reads
+/// both. This is that test's other half.
+fn released_cost(heading: &str) -> Vec<(u32, String)> {
+    let text = std::fs::read_to_string(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
+    )
+    .expect("the release document");
+
+    let mut inside = false;
+    for line in text.lines() {
+        let line = line.trim();
+        if line.starts_with("###") {
+            inside = line.trim_start_matches('#').trim() == heading;
+            continue;
+        }
+        if !inside || !line.starts_with("- cost to produce:") {
+            continue;
+        }
+        return line
+            .trim_start_matches("- cost to produce:")
+            .split(',')
+            .map(|part| {
+                let mut words = part.split_whitespace();
+                let amount: u32 = words.next().expect("an amount").parse().expect("a number");
+                (amount, words.next().expect("a thing").to_string())
+            })
+            .collect();
+    }
+    panic!("no cost under `{heading}` in the release");
+}
+
+fn cost_of(heading: &str, what: &str) -> u32 {
+    released_cost(heading)
+        .into_iter()
+        .find(|(_, thing)| thing == what)
+        .unwrap_or_else(|| panic!("`{heading}` has no {what} cost"))
+        .0
+}
+
 fn run(session: &mut Session, line: &str) -> Outcome {
     session
         .run(line, &Files::commands())
@@ -214,46 +257,77 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
         assert_eq!(one.store(resource), 0, "{resource} was discarded");
     }
     // And everything is unspent again.
-    assert_eq!(one.labor_available(), 12);
-    assert_eq!(session.game.turn, 7);
+    assert_eq!(one.labor_available(), one.citizens);
+    assert_eq!(session.game.turn, 8, "turn one, then seven endings");
+
+    // The pioneer took a second territory by land and became what it needed there.
+    let two = session.game.territory(TerritoryId(2)).unwrap();
+    assert!(two.founded, "spread across the planet by land");
+    assert!(two.garrison.is_some());
+    assert_eq!(session.game.controlled(), [TerritoryId(1), TerritoryId(2)]);
 }
 
-/// Where the release's own loop stops, and why.
+/// The model's costs are the release's costs.
 ///
-/// Step 5 is *spread across the planet by land*, which needs a Pioneer: 16 metal and 12
-/// energy, paid in the territory that builds it. The landing site's ceiling is twelve of
-/// each per turn, and `spec/turn.md` discards whatever is not used before the next turn
-/// begins - so the cost can never be met there. This is recorded as a test rather than as
-/// prose because it is a fact about the rules as written, and it should start failing the
-/// moment that changes.
+/// Nothing keeps a constant in Rust and a figure in a markdown table in step except this.
 #[test]
-fn a_pioneer_cannot_be_produced_at_the_landing_site() {
+fn the_costs_in_the_model_are_the_costs_in_the_release() {
+    use game_model::game::cost;
+
+    assert_eq!(cost_of("Create Pioneer", "metal"), cost::PIONEER_METAL);
+    assert_eq!(cost_of("Create Pioneer", "energy"), cost::PIONEER_ENERGY);
+    assert_eq!(cost_of("Create Pioneer", "citizen"), cost::PIONEER_CITIZENS);
+    assert_eq!(cost_of("Create Ark", "metal"), cost::ARK_METAL);
+    assert_eq!(cost_of("Create Ark", "energy"), cost::ARK_ENERGY);
+    assert_eq!(cost_of("Yard", "metal"), cost::YARD_METAL);
+}
+
+/// The landing site can now send a Pioneer out, and that is what opens the loop.
+///
+/// It could not before P-80. A Pioneer cost 16 metal and the landing site's ceiling is
+/// twelve a turn, with `spec/turn.md` discarding whatever is left - so the cost could
+/// never be met there, and step 5 of the loop was unreachable from where the ark lands.
+/// Halving it to eight put the cost inside one turn's extraction.
+#[test]
+fn the_landing_site_can_send_a_pioneer_out() {
+    let ceiling: u32 = {
+        let mut session = Session::new();
+        run(&mut session, "run setup");
+        session
+            .game
+            .territory(TerritoryId(1))
+            .unwrap()
+            .nodes_of(Resource::Metal)
+            .into_iter()
+            .map(|(_, node)| node.density)
+            .sum()
+    };
+    assert_eq!(ceiling, 12, "three metal nodes at density four");
+    assert!(
+        cost_of("Create Pioneer", "metal") <= ceiling,
+        "a pioneer must be affordable within one turn's extraction"
+    );
+
     let mut session = Session::new();
     run(&mut session, "run setup");
     run(&mut session, "start");
     run(&mut session, "run play");
 
-    let refusal = refuse(&mut session, "produce pioneer 1");
-    match refusal {
-        Problem::Rule(game_model::Rejection::NotEnoughResource {
-            resource, needed, ..
-        }) => {
-            assert_eq!(resource, Resource::Metal);
-            assert_eq!(needed, 16);
-        }
-        other => panic!("expected to be short of metal, got {other}"),
-    }
+    // Territory 2 was taken by land, founded, and the pioneer became what it needed.
+    let two = session.game.territory(TerritoryId(2)).unwrap();
+    assert!(two.founded, "the pioneer took the ground");
+    assert!(two.garrison.is_some(), "and became a garrison holding it");
+    assert_eq!(two.citizens, 1, "and a citizen");
+    assert_eq!(two.extractors.len(), 1, "and an extractor");
+    assert_eq!(
+        two.nodes[two.extractors[0].node].resource,
+        Resource::Food,
+        "working a food node, which is what a new territory needs"
+    );
+    assert!(session.game.units.is_empty(), "the pioneer was consumed");
 
-    // The ceiling is real: three metal nodes at density four is twelve a turn, and a
-    // Pioneer needs sixteen.
-    let one = session.game.territory(TerritoryId(1)).unwrap();
-    let ceiling: u32 = one
-        .nodes_of(Resource::Metal)
-        .into_iter()
-        .map(|(_, node)| node.density)
-        .sum();
-    assert_eq!(ceiling, 12);
-    assert!(ceiling < 16, "and so the loop cannot go on from here");
+    // Two territories held, which is more than the release started with.
+    assert_eq!(session.game.controlled(), [TerritoryId(1), TerritoryId(2)]);
 }
 
 /// The invariant the whole crate is arranged around, checked end to end: a game is

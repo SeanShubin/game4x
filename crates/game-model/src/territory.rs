@@ -6,6 +6,9 @@
 
 use crate::identity::{Resource, TerritoryId};
 
+/// What one citizen is worth in violence. `releases/first-release.md`: Citizen, force 1.
+pub const CITIZEN_FORCE: u32 = 1;
+
 /// One deposit. `spec/planet.md`: a territory has zero or more nodes for each resource,
 /// and each node has a density.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -151,11 +154,10 @@ impl Territory {
     pub fn held_force(&self) -> u32 {
         match self.garrison {
             Some(garrison) => garrison.force + garrison.manned * garrison.multiplier,
-            // Citizens are capable of violence but not of coordination. The force of a
-            // single uncoordinated citizen is not stated anywhere; one is used, which is
-            // what a citizen produces at a garrison of multiplier one. See the report
-            // accompanying this release.
-            None if self.citizens > 0 => 1,
+            // Citizens are capable of violence but not of coordination, so what they
+            // present is the highest among them rather than the total - and a citizen is
+            // force 1, so however many there are the answer is one.
+            None if self.citizens > 0 => CITIZEN_FORCE,
             None => 0,
         }
     }

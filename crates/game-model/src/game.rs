@@ -12,14 +12,14 @@ use crate::unit::{Location, Unit};
 /// `spec/README.md` keeps relationships in the specification and numbers in a release, so
 /// these are the numbers and they are meant to move without any rule moving with them.
 pub mod cost {
-    /// A Yard costs 30 metal.
-    pub const YARD_METAL: u32 = 30;
-    /// An Ark costs 24 metal and 24 energy, and needs a Yard to produce it.
-    pub const ARK_METAL: u32 = 24;
-    pub const ARK_ENERGY: u32 = 24;
-    /// A Pioneer costs 16 metal, 1 citizen and 12 energy.
-    pub const PIONEER_METAL: u32 = 16;
-    pub const PIONEER_ENERGY: u32 = 12;
+    /// A Yard costs 15 metal.
+    pub const YARD_METAL: u32 = 15;
+    /// An Ark costs 12 metal and 12 energy, and needs a Yard to produce it.
+    pub const ARK_METAL: u32 = 12;
+    pub const ARK_ENERGY: u32 = 12;
+    /// A Pioneer costs 8 metal, 1 citizen and 6 energy.
+    pub const PIONEER_METAL: u32 = 8;
+    pub const PIONEER_ENERGY: u32 = 6;
     pub const PIONEER_CITIZENS: u32 = 1;
     /// An Extractor costs one labor and nothing else.
     pub const EXTRACTOR_LABOR: u32 = 1;
@@ -554,12 +554,20 @@ impl Game {
     /// One territory's end of turn.
     fn settle(&mut self, id: TerritoryId) {
         // Everything that eats, eats. A unit that is not paid is lost.
+        //
+        // Except a unit that is about to be consumed. A founding unit arriving on ground
+        // it has just taken transforms into what that territory needs - and a territory
+        // taken this turn has no extractor yet, so charging it a meal first would starve
+        // every pioneer on arrival and make founding by land impossible. `spec/console.md`
+        // has ending a turn *consume, transform*; what the transform consumes cannot also
+        // be asked to eat.
+        let transforming = self.about_to_transform(id);
         let mut starved: Vec<UnitId> = Vec::new();
         let mut owed = 0;
         for unit in self
             .units
             .iter()
-            .filter(|unit| unit.is_on(id) && unit.usable)
+            .filter(|unit| unit.is_on(id) && unit.usable && !transforming.contains(&unit.id))
         {
             owed += unit.kind.upkeep();
         }
@@ -575,7 +583,12 @@ impl Game {
                     .units
                     .iter()
                     .enumerate()
-                    .filter(|(_, unit)| unit.is_on(id) && unit.usable && unit.kind.upkeep() > 0)
+                    .filter(|(_, unit)| {
+                        unit.is_on(id)
+                            && unit.usable
+                            && unit.kind.upkeep() > 0
+                            && !transforming.contains(&unit.id)
+                    })
                     .map(|(at, unit)| (unit.id, at))
                     .collect();
                 by_id.sort_by_key(|(unit_id, _)| std::cmp::Reverse(*unit_id));
@@ -604,6 +617,25 @@ impl Game {
         // Unused resources are discarded, and everything becomes unspent again.
         self.territories[id.index()].stores = [0; 3];
         self.territories[id.index()].unspend();
+    }
+
+    /// Which unit on this territory a transform is about to consume, if any.
+    ///
+    /// At most one: a territory takes at most one garrison, and the transform stops as
+    /// soon as there is one.
+    fn about_to_transform(&self, id: TerritoryId) -> Vec<UnitId> {
+        let Ok(place) = self.territory(id) else {
+            return Vec::new();
+        };
+        if !place.founded || place.garrison.is_some() {
+            return Vec::new();
+        }
+        self.units
+            .iter()
+            .filter(|unit| unit.is_on(id) && unit.usable)
+            .min_by_key(|unit| unit.id)
+            .map(|unit| vec![unit.id])
+            .unwrap_or_default()
     }
 
     /// `releases/first-release.md`: an Ark or Pioneer transform consumes the unit and
