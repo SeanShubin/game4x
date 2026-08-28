@@ -38,6 +38,15 @@ docs/
     planet-view.md ................ sphere divided into regions; 3D, 2D, simplified views
   notes/
     README.md ..................... index of derived records; Claude's, not normative
+    planet-appearance.md .......... making a Goldberg-divided sphere read as a world
+    intermediate-steps.md ......... when a prerequisite step earns its place
+    first-release-balance.md ...... what the first release's numbers actually produce
+    first-release-readiness.md .... what was missing before coding could start; superseded
+    proposals.md .................. lines offered for Sean's review, and their outcomes
+    in-between-counts.md .......... why non-Goldberg counts clump pentagons
+    game-4x-predecessor.md ........ what the superseded Kotlin project contained
+    parser-architecture.md ........ how the predecessor's parser was split
+    spec-backlog.md ............... intent Sean has stated but not yet written
     region-schemes.md ............. every scheme for dividing a sphere, measured
   theory/
     README.md ..................... index of background research

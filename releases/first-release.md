@@ -109,7 +109,30 @@ Every territory has at least one food node.
 
 ## Capabilities
 
-*Not yet filled in. Each step above needs its **In / Reduced / Out** entries against the
-spec, and a **vetted when** line. See the shape in [releases](README.md).*
+### Two drawings
+
+- **In** - `spec/planet.md`, *the planet is drawn either practically or realistically, and the
+  user can change which*
+- **Vetted when** - switching between them moves nothing: the planet is at the same rotation and
+  zoom afterwards, and every territory covers the same pixels
+
+### Terrain that crosses boundaries
+
+- **In** - `spec/planet.md`, *the terrain of the realistic drawing is continuous*
+- **Vetted when** - no line visible in the realistic drawing coincides with a territory boundary,
+  and terrain visibly varies within a single territory
+
+### A division that cannot be seen
+
+- **In** - `spec/planet.md`, *nothing in the terrain reveals how the sphere was divided*
+- **Vetted when** - a person who has not seen the tessellation is shown the realistic drawing and
+  cannot mark where a five-neighbour territory is, beyond the two at the poles
+
+### A biome per territory
+
+- **In** - `spec/planet.md`, *each territory has a biome*, and *a territory's biome is what the
+  terrain gives it*
+- **Vetted when** - `show territory 5` names a biome, and it is the biome the realistic drawing
+  shows over that ground
 
 ## Open questions

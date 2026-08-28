@@ -35,6 +35,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   corner are not adjacent
 - Each territory has an id, unique within its planet, starting at 1
 - Each territory has zero or more nodes for each resource, and each node has a density
+- Each territory has a biome.
+- A territory's biome is what the terrain gives it. It is not chosen independently of the
+  surface the territory covers.
 
 ## Native life
 
@@ -47,9 +50,21 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - The roll for any point on the planet is fixed, and nothing the user does changes it
 - The user can zoom in and out of the planet
 - The user can reset the view to a default
-- A territory's id is displayed on the sphere
-- The poles are visible on the planet
+- A territory's id is displayed on the sphere **in the practical drawing**
+- The poles are visible **in the practical drawing**
 - The north and south poles are at the centres of two pentagons, never on a boundary between
   territories
+- The planet is drawn either practically or realistically, and the user can change which
+- The practical drawing makes adjacency legible. Its colours are flat and make no attempt to
+  look like terrain
+- The realistic drawing shows the world: terrain, and borders that look geographic
+- The two drawings share the camera and nothing else. Rotating, zooming and resetting behave the
+  same in both
+- The terrain of the realistic drawing is continuous. It varies within a single territory and it
+  runs across boundaries, because it is a property of the place and not of the division.
+- Nothing in the terrain reveals how the sphere was divided. Apart from the two territories at
+  the poles, which are placed already, the terrain has no axis of symmetry, no seam and no
+  repeating feature that would let a player find a five-neighbour territory from the terrain
+  alone.
 
 ## Open questions
