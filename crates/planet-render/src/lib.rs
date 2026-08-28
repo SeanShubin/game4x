@@ -23,6 +23,7 @@ pub mod font;
 pub mod mesh;
 pub mod palette;
 pub mod raster;
+pub mod realistic;
 pub mod world;
 
 pub use app::{Command, PlanetView, Settings};

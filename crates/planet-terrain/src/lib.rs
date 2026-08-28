@@ -195,6 +195,29 @@ fn on_land(sample: &Sample) -> Biome {
     Biome::Grassland
 }
 
+/// Which world every planet is.
+///
+/// One world per size, the same one every time: `spec/planet.md` offers no way to ask for
+/// a different one, and there is no seed in the command language.
+///
+/// It lives here rather than in either reader because **both** must use it. The model
+/// takes a biome per territory from this field and the realistic drawing paints the same
+/// field; if they were seeded separately, a territory could be ice in the model while the
+/// picture drew jungle over it - which is the one thing `spec/planet.md` forbids when it
+/// says a territory's biome *is what the terrain gives it*, and which the release checks
+/// by eye in its fourth capability.
+pub const WORLD_SEED: u64 = 20260828;
+
+/// Where the water stops, as an elevation.
+///
+/// Exposed because a drawing needs it for two things the model never asks about: how deep
+/// water is, and where to stop raising the ground. Both are questions about this constant
+/// rather than about a biome, and a second copy of it in the renderer would be a number
+/// that could drift.
+pub fn sea_level() -> f64 {
+    SEA_LEVEL
+}
+
 /// The biome at one point, which is the whole of what the model reads.
 pub fn biome_at(direction: Vec3, seed: u64) -> Biome {
     biome_of(&sample(direction, seed))

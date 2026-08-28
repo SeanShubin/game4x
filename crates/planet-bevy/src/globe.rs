@@ -116,11 +116,15 @@ impl Plugin for GlobePlugin {
             .insert_resource(Fingers::default())
             .insert_resource(Followed::default())
             .insert_resource(ResetsSeen::default())
+            .insert_resource(Drawing::default())
+            .insert_resource(DrawingAsksSeen::default())
+            .insert_resource(Drawn::default())
             .add_systems(Startup, setup)
             .add_systems(
                 Update,
                 (
                     keys_to_choose_size,
+                    keys_to_change_drawing,
                     follow_the_game,
                     build_globe,
                     drag_to_turn,
@@ -168,10 +172,10 @@ impl Planet {
 /// than the camera, so that the light stays put and the terminator does not swing about
 /// while you are trying to look at something.
 #[derive(Resource, Clone, Copy)]
-struct Orbit {
-    yaw: f32,
-    pitch: f32,
-    distance: f32,
+pub struct Orbit {
+    pub yaw: f32,
+    pub pitch: f32,
+    pub distance: f32,
 }
 
 impl Default for Orbit {
@@ -371,11 +375,13 @@ fn build_globe(
     mut materials: ResMut<Assets<StandardMaterial>>,
     planet: Res<Planet>,
     orbit: Res<Orbit>,
+    drawing: Res<Drawing>,
     mut built: Local<bool>,
+    mut drawn: ResMut<Drawn>,
     previous: Query<Entity, BuiltForThisPlanet>,
     mut hud: Query<&mut Text, With<Hud>>,
 ) {
-    if *built && !planet.is_changed() {
+    if *built && !planet.is_changed() && !drawing.is_changed() {
         return;
     }
     *built = true;
@@ -386,14 +392,24 @@ fn build_globe(
     let world = World::build(planet.spec());
     let solid =
         sphere_tessellation::solid(&world.tessellation.seeds, &world.tessellation.neighbours);
-    let panels = mesh::build(&solid, &world.coloring);
+    let realistic = *drawing == Drawing::Realistic;
+    // The two drawings are two meshes, and the only thing they have in common is the solid
+    // they were built from. `spec/planet.md` says they share the camera and nothing else,
+    // and this is what that looks like in code: no flag threaded through one builder, two
+    // builders that happen to produce the same type.
+    let panels = if realistic {
+        planet_render::realistic::build(&solid, planet_terrain::WORLD_SEED)
+    } else {
+        mesh::build(&solid, &world.coloring)
+    };
 
     // Vertex colours carry the region colouring, so one material serves the whole world
     // however many regions it has.
     let panel_material = materials.add(StandardMaterial {
         base_color: Color::WHITE,
-        perceptual_roughness: 0.75,
-        reflectance: 0.15,
+        // Ground is rougher than a painted panel, and a shinier planet reads as plastic.
+        perceptual_roughness: if realistic { 0.92 } else { 0.75 },
+        reflectance: if realistic { 0.06 } else { 0.15 },
         ..default()
     });
     // The ball underneath. The panels are inset, so without this the seams would be
@@ -415,23 +431,34 @@ fn build_globe(
                 Mesh3d(meshes.add(to_bevy_mesh(&panels))),
                 MeshMaterial3d(panel_material),
             ));
-            globe.spawn((
-                Mesh3d(
-                    meshes.add(
-                        Sphere::new(panels.deepest() * UNDERSIDE_BELOW)
-                            .mesh()
-                            .ico(4)
-                            .unwrap(),
+            // The ball underneath fills the grooves between inset panels. The realistic
+            // drawing has no grooves - its ground meets exactly - so there is nothing to
+            // fill, and a sphere sitting just under displaced terrain would poke through
+            // every valley.
+            if !realistic {
+                globe.spawn((
+                    Mesh3d(
+                        meshes.add(
+                            Sphere::new(panels.deepest() * UNDERSIDE_BELOW)
+                                .mesh()
+                                .ico(4)
+                                .unwrap(),
+                        ),
                     ),
-                ),
-                MeshMaterial3d(underside),
-            ));
+                    MeshMaterial3d(underside),
+                ));
+            }
 
             // The poles, marked at both ends of the axis. North and south get different
             // colours as well as different letters, so a glance at the spike alone says
             // which end you are looking at - a marker that only says "this is a pole"
             // leaves the more useful question unanswered.
-            for (pole, colour) in poles() {
+            //
+            // `spec/planet.md` puts the poles *in the practical drawing*. A spike through
+            // the ice cap is exactly the kind of thing that stops a realistic view looking
+            // realistic, which is why the specification moved that line under the drawing
+            // it belongs to.
+            for (pole, colour) in poles().into_iter().filter(|_| !realistic) {
                 let outward = to_view(pole);
                 globe.spawn((
                     Mesh3d(spike.clone()),
@@ -453,7 +480,11 @@ fn build_globe(
     // A territory's id, written at the centre of its panel. The hub vertex of the panel's
     // triangle fan is exactly that centre, so the label lands where the panel is drawn
     // rather than where its seed happens to sit.
-    for (region, span) in panels.regions.iter().enumerate() {
+    //
+    // `spec/planet.md`: *a territory's id is displayed on the sphere in the practical
+    // drawing.* An id floating over terrain is the single thing that most stops a
+    // realistic view looking realistic, which is why that line names a drawing now.
+    for (region, span) in panels.regions.iter().enumerate().filter(|_| !realistic) {
         let hub = panels.positions[span.first_vertex as usize];
         spawn_label(
             &mut commands,
@@ -463,7 +494,7 @@ fn build_globe(
             11.0,
         );
     }
-    for (pole, colour) in poles() {
+    for (pole, colour) in poles().into_iter().filter(|_| !realistic) {
         let letter = if pole == Direction::NORTH_POLE {
             "N"
         } else {
@@ -479,8 +510,21 @@ fn build_globe(
     }
 
     if let Ok(mut text) = hud.single_mut() {
-        *text = Text::new(summary(planet.size, &world, &panels));
+        *text = Text::new(summary(planet.size, &world, &panels, *drawing));
     }
+
+    *drawn = Drawn {
+        drawing: *drawing,
+        regions: panels.regions.len(),
+        vertices: panels.vertex_count(),
+        triangles: panels.triangle_count(),
+        // Territory ids, plus the two pole letters, and neither is drawn realistically.
+        labels: if realistic {
+            0
+        } else {
+            panels.regions.len() + 2
+        },
+    };
 }
 
 /// Ink that can be read against a panel of the given colour.
@@ -536,7 +580,7 @@ fn spawn_label(commands: &mut Commands, anchor: Vec3, text: &str, colour: Color,
         });
 }
 
-fn summary(size: PlanetSize, world: &World, panels: &mesh::PlanetMesh) -> String {
+fn summary(size: PlanetSize, world: &World, panels: &mesh::PlanetMesh, drawing: Drawing) -> String {
     let regions = world.tessellation.region_count();
     let shape = match sphere_tessellation::goldberg::arrangements_up_to(regions)
         .into_iter()
@@ -548,10 +592,11 @@ fn summary(size: PlanetSize, world: &World, panels: &mesh::PlanetMesh) -> String
     format!(
         "{} - {regions} territories - {shape}\n{} - {} triangles\n\
          drag, a finger or the arrows to turn - wheel or pinch to zoom - R to reset\n\
-         1-5 start a new game on a planet of that size",
+         1-5 start a new game on a planet of that size - T for the {} drawing",
         size.name(),
         world.degree_summary(),
-        panels.triangle_count()
+        panels.triangle_count(),
+        drawing.other().name()
     )
 }
 
@@ -741,6 +786,81 @@ const SIZE_KEYS: [KeyCode; 5] = [
 /// thing arriving by a different route.
 fn chooses(size: PlanetSize) -> String {
     format!("/new {}", size.name())
+}
+
+/// Which of the two drawings is on screen.
+///
+/// `spec/planet.md`: *the planet is drawn either practically or realistically, and the user
+/// can change which … the two drawings share the camera and nothing else.* [`Orbit`] is that
+/// camera, and it is deliberately untouched by this - switching moves nothing, because
+/// there is nothing to move.
+#[derive(Resource, Clone, Copy, PartialEq, Eq, Debug, Default)]
+pub enum Drawing {
+    /// Flat colours and a groove at every boundary, so adjacency is legible.
+    #[default]
+    Practical,
+    /// The ground itself, with no boundary drawn anywhere.
+    Realistic,
+}
+
+impl Drawing {
+    fn other(self) -> Self {
+        match self {
+            Drawing::Practical => Drawing::Realistic,
+            Drawing::Realistic => Drawing::Practical,
+        }
+    }
+
+    pub fn name(self) -> &'static str {
+        match self {
+            Drawing::Practical => "practical",
+            Drawing::Realistic => "realistic",
+        }
+    }
+}
+
+/// Changes which drawing is on screen.
+///
+/// `T` for terrain. The release names no binding for this - it names one for rotation,
+/// zoom, reset, reaching a surface and choosing a planet size, and this is the capability
+/// it has not caught up with - so the key is invented here and the page carries a control
+/// beside it, because `spec/interface.md` does not allow a capability to need a key the
+/// platform may lack.
+fn keys_to_change_drawing(
+    keys: Res<ButtonInput<KeyCode>>,
+    mut asked: ResMut<DrawingAsksSeen>,
+    mut drawing: ResMut<Drawing>,
+) {
+    // A control asks through a counter, the same shape as the reset one beside it and for
+    // the same reason: a button on a page is not on the engine's call stack.
+    let requested = game_front::shell::drawing_changes();
+    let by_control = requested != asked.0;
+    if by_control {
+        asked.0 = requested;
+    }
+    if by_control || keys.just_pressed(KeyCode::KeyT) {
+        *drawing = drawing.other();
+    }
+}
+
+/// How many changes of drawing had been asked for when the last one was obeyed.
+#[derive(Resource, Default)]
+struct DrawingAsksSeen(u64);
+
+/// What the engine was last handed, for anything outside that needs to check.
+///
+/// Published rather than measured: once a mesh is uploaded it belongs to the render world
+/// and its vertices cannot be read back from `Assets<Mesh>` at all. So the builder says
+/// what it built, at the moment it built it, and that is the only account there is.
+#[derive(Resource, Clone, Copy, Debug, Default)]
+pub struct Drawn {
+    pub drawing: Drawing,
+    pub regions: usize,
+    pub vertices: usize,
+    pub triangles: usize,
+    /// How many labels are on the sphere. `spec/planet.md` puts a territory's id in the
+    /// practical drawing, so in the realistic one this is zero and that is checkable.
+    pub labels: usize,
 }
 
 /// The last generation the globe was built for.

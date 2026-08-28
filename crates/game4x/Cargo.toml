@@ -12,7 +12,10 @@ path = "src/main.rs"
 # Bevy's default feature set includes audio, which nothing here uses and whose wasm
 # backend is a known source of startup panics on a static host. See the sibling
 # boardgame repository, where dropping it fixed exactly that.
-bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui"] }
+# `png` is here for the screenshot path in `inspect.rs`: `save_to_disk` encodes by
+# extension, and without it a `--shot` would fail at run time rather than at build time.
+bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui", "png"] }
+game-console.workspace = true
 game-front.workspace = true
 planet-bevy.workspace = true
 planet-ecs.workspace = true

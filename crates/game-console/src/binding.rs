@@ -222,15 +222,14 @@ fn size_named(word: &str) -> Option<PlanetSize> {
 /// a shape and becomes a set of integers. Everything below this line is whole numbers.
 /// Which world `create planet` builds.
 ///
-/// One planet per size, the same one every time. `spec/planet.md` does not offer a way to
-/// ask for a different world - there is no seed in the command language - so a constant is
-/// the honest expression of that rather than a placeholder for a parameter. It becomes a
-/// tuning figure in a release the moment a release wants to name one.
+/// Taken from `planet-terrain` rather than declared here, because the realistic drawing
+/// paints the same field and the two must not be seeded separately - a territory could
+/// otherwise be ice in the model while the picture drew jungle over it.
 ///
-/// It is also what keeps `history` a save file: the biomes are not written into the
-/// history, they are recomputed from `create planet <size>`, so the same commands rebuild
-/// the same world on somebody else's machine.
-const WORLD_SEED: u64 = 20260828;
+/// It is what keeps `history` a save file: the biomes are not written into the history,
+/// they are recomputed from `create planet <size>`, so the same commands rebuild the same
+/// world on somebody else's machine.
+const WORLD_SEED: u64 = planet_terrain::WORLD_SEED;
 
 /// Where each territory sits on the sphere, in id order.
 fn seeds_for(size: PlanetSize) -> Vec<sphere_tessellation::vec3::Vec3> {

@@ -126,6 +126,12 @@ pub struct Console {
     /// on a terminal there is no such thing to know. It is only what the last line asked
     /// for, which is what a shell reached through a narrow doorway needs to read back.
     reached: Option<Surface>,
+    /// How many times the drawing has been asked to change.
+    ///
+    /// `spec/planet.md` says the user can change which drawing is on screen, and
+    /// `spec/interface.md` that no capability may need a key the platform may lack - so a
+    /// control has to be able to ask, and this is what it moves.
+    changes_of_drawing: u64,
     /// How many times the view has been asked to go back to its default.
     ///
     /// Front-end state, like [`Console::reached`] beside it, and nothing to do with the
@@ -161,6 +167,7 @@ impl Console {
             generation: 0,
             reached: None,
             resets: 0,
+            changes_of_drawing: 0,
         };
         for line in ["run setup", "start"] {
             console.submit(line);
@@ -299,6 +306,16 @@ impl Console {
     /// How many times the view has been asked to go back to its default.
     pub fn resets(&self) -> u64 {
         self.resets
+    }
+
+    /// Asks for the other drawing.
+    pub fn change_drawing(&mut self) {
+        self.changes_of_drawing += 1;
+    }
+
+    /// How many times the drawing has been asked to change.
+    pub fn changes_of_drawing(&self) -> u64 {
+        self.changes_of_drawing
     }
 
     /// How many territories the planet has, or none if there is no planet yet.
@@ -631,6 +648,20 @@ mod tests {
         let before = console.resets();
         console.request_reset();
         assert_eq!(console.resets(), before + 1);
+    }
+
+    /// Changing which drawing is on screen is not about the game either.
+    #[test]
+    fn changing_the_drawing_touches_no_game_state() {
+        let mut console = Console::new();
+        let game = console.session.game.clone();
+        let generation = console.generation();
+
+        console.change_drawing();
+
+        assert_eq!(console.changes_of_drawing(), 1);
+        assert_eq!(console.session.game, game);
+        assert_eq!(console.generation(), generation);
     }
 
     /// Resetting the view is not about the game, so nothing about the game may move.

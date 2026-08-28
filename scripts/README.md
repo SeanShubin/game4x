@@ -12,6 +12,7 @@ remembering a cargo incantation.
 | `planet-view.ps1` / `.sh` | [the planet view prototype](../docs/prototypes/planet-view.md) | Drag to turn the world, `P` to fold it into a globe, `Esc` to quit                                                                                           |
 | `pad-tables.ps1` / `.sh`  | `tools/pad-tables`                                             | Aligns every markdown table in the repo. Not a prototype; see below                                                                                          |
 
+| `shot.ps1` / `.sh` | [the application](../crates/game4x/), by remote control | One frame to a PNG, plus a text dump of what is behind it. `--help` lists the options |
 ```
 scripts/planet-view.ps1                       # PowerShell
 bash scripts/planet-view.sh                   # POSIX shell

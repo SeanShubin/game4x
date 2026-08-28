@@ -95,14 +95,16 @@ fn flattened(text: &str) -> String {
         .to_lowercase()
 }
 
-/// Flattened, and with backticks dropped.
+/// Flattened, and with markup dropped.
 ///
-/// Whether a word is written as code is the quoting medium's formatting rather than the
-/// specification's wording: a doc comment marking up `/browser` where the spec did not is
-/// not a misquotation. Backticks survive [`flattened`] because that is what the quotations
-/// are *found* by, and are dropped here because that is not what they are *judged* by.
+/// Whether a word is written as code, or bolded, is the quoting medium's formatting rather
+/// than the specification's wording: a doc comment marking up `/browser` where the spec did
+/// not, or declining to repeat the spec's own **emphasis**, is not a misquotation.
+///
+/// Backticks and asterisks survive [`flattened`] because that is what the quotations are
+/// *found* by, and are dropped here because that is not what they are *judged* by.
 fn bare(text: &str) -> String {
-    flattened(&text.replace('`', " "))
+    flattened(&text.replace(['`', '*'], " "))
 }
 
 /// The quotations in one file: the spec file named, and the words attributed to it.

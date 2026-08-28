@@ -2578,6 +2578,7 @@ name = "game4x"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "game-console",
  "game-front",
  "planet-bevy",
  "planet-ecs",
@@ -3986,6 +3987,7 @@ dependencies = [
  "planet-ecs",
  "planet-model",
  "planet-render",
+ "planet-terrain",
  "sphere-tessellation",
 ]
 
@@ -4005,8 +4007,10 @@ version = "0.1.0"
 name = "planet-render"
 version = "0.1.0"
 dependencies = [
+ "game-model",
  "graph-coloring",
  "planet-model",
+ "planet-terrain",
  "sphere-tessellation",
 ]
 

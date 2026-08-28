@@ -432,6 +432,7 @@
       wearing a button rather than a second way to change anything.
     -->
     <nav id="sizes" data-showing="true" aria-label="view and new game">
+      <button type="button" id="drawing">drawing</button>
       <button type="button" id="reset">reset view</button>
       <span aria-hidden="true">new game</span>
       <button type="button" data-size="tiny">tiny</button>
@@ -531,6 +532,13 @@
         // that doing so never needs a key the platform may lack. R is such a key.
         el("reset").addEventListener("click", function () {
           if (bindings) bindings.request_view_reset();
+        });
+
+        // spec/planet.md: the planet is drawn either practically or realistically, and
+        // the user can change which. A key alone would leave that unreachable on a
+        // tablet, which spec/interface.md does not allow.
+        el("drawing").addEventListener("click", function () {
+          if (bindings) bindings.change_drawing();
         });
 
         var sizes = document.querySelectorAll("#sizes button[data-size]");

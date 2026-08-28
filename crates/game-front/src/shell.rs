@@ -96,6 +96,16 @@ pub fn resets() -> u64 {
     with(|console| console.resets())
 }
 
+/// Asks for the other drawing, from a control rather than a key.
+pub fn change_drawing() {
+    with(|console| console.change_drawing());
+}
+
+/// How many times the drawing has been asked to change. Watched by the engine.
+pub fn drawing_changes() -> u64 {
+    with(|console| console.changes_of_drawing())
+}
+
 /// The data browser's text, without running anything.
 pub fn browser() -> String {
     with(|console| crate::browse(&console.session))

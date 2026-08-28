@@ -62,6 +62,16 @@ pub fn request_view_reset() {
     crate::shell::request_reset();
 }
 
+/// Asks for the other drawing.
+///
+/// `spec/planet.md` says the user can change which drawing is on screen. A key alone would
+/// leave that unreachable on a tablet, which `spec/interface.md` does not allow, so the
+/// page carries a control and this is what it calls.
+#[wasm_bindgen]
+pub fn change_drawing() {
+    crate::shell::change_drawing();
+}
+
 /// Every entity in the game and its components.
 #[wasm_bindgen]
 pub fn browser_text() -> String {
