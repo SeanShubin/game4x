@@ -27,7 +27,7 @@ console is a terminal on the desktop and part of the page on the web; turning th
 drag with a mouse and a finger on a touch screen. What the user can do is the same either way.
 
 Actions that are not a manipulation of the planet - resetting the view, reaching a surface,
-choosing a planet size - are offered as on-screen controls, so that every one of them is
-reachable by pointing alone.
+choosing a planet size - never require a gesture or a key the platform may lack. Where there is
+a pointer they are controls; where there is not they are typed.
 
 ## Open questions

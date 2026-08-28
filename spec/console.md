@@ -64,6 +64,9 @@ Available only before `start`:
 - `add <unit> orbit` - place a unit in orbit before play begins
 - `start` - end the design phase and begin play
 
+A line beginning with `/` is not a command. It names a surface to go to - `/game`, `/console`,
+`/browser`. It changes no game state, history does not record it, and help does not list it.
+
 ## Errors
 
 A command that cannot be run says why, and says it in terms of the game rather than the parser.
