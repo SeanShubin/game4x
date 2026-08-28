@@ -64,8 +64,10 @@ Available only before `start`:
 - `add <unit> orbit` - place a unit in orbit before play begins
 - `start` - end the design phase and begin play
 
-A line beginning with `/` is not a command. It names a surface to go to - `/game`, `/console`,
-`/browser`. It changes no game state, history does not record it, and help does not list it.
+A line beginning with `/` directs the front end rather than the game. `/game`, `/console` and
+`/browser` choose a surface; `/new <size>` abandons the current game and starts one on a planet
+of that size. It is not a command: it changes no game state, history does not record it, and help
+does not list it.
 
 ## Errors
 

@@ -104,6 +104,8 @@ Every territory has at least one food node.
 - Reset is bound to `R`
 - The three surfaces are reached by `F1`, `F2` and `F3`, by buttons on the page, and by `/game`,
   `/console` and `/browser` typed at the console
+- Choosing a planet size abandons the current game and starts one on a planet of that size. It
+  is bound to a control for each size, and to `/new <size>`
 
 ## Capabilities
 
