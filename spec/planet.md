@@ -44,13 +44,11 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 - The planet is presented as a three-dimensional sphere
 - The user can rotate the planet such that they can be above any point
-- Rotation is bound to the arrow keys
-- Dragging with the mouse rotates the planet
-- The roll for any point on the planet is fixed
+- The roll for any point on the planet is fixed, and nothing the user does changes it
 - The user can zoom in and out of the planet
 - The user can reset the view to a default
 - A territory's id is displayed on the sphere
-- The poles are visible on the planet.
+- The poles are visible on the planet
 - The north and south poles are at the centres of two pentagons, never on a boundary between
   territories
 

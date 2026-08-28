@@ -97,6 +97,11 @@ Every territory has at least one food node.
 
 - cost to produce: 1 labor, and nothing else
 
+## Controls
+
+- Rotation is bound to the arrow keys
+- Dragging with the mouse rotates the planet
+
 ## Capabilities
 
 *Not yet filled in. Each step above needs its **In / Reduced / Out** entries against the

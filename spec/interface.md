@@ -18,6 +18,12 @@ The game presents three surfaces, all reachable from the front end, in every bui
   errors that say what was wrong and what was expected
 - **The data browser** - every entity in the game and its components, read directly
 
+## Availability and presentation
+
 Nothing is available in one build and not another.
+
+How a thing is presented, and how the user acts on it, may follow the platform it runs on. A
+console is a terminal on the desktop and part of the page on the web; turning the planet is a
+drag with a mouse and a finger on a touch screen. What the user can do is the same either way.
 
 ## Open questions

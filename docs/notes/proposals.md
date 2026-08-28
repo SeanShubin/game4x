@@ -117,6 +117,8 @@ Two limits Claude holds itself to:
 | P-86, a Pioneer must found on leaving friendly territory or perish                                 | `releases/first-release.md` -> Scope                                                                                   | 2026-08-27 |
 | P-87, a cost is paid in the territory, not at a building site                                      | `spec/logistics.md` -> Paying a cost                                                                                   | 2026-08-27 |
 | P-88, the poles sit at the centres of two pentagons, never on a boundary                           | `spec/planet.md` -> Presentation                                                                                       | 2026-08-27 |
+| P-89, availability is fixed in every build; presentation and input follow the platform             | `spec/interface.md` -> Availability and presentation                                                                   | 2026-08-28 |
+| P-90, input bindings move to the release; roll is explicitly not user-controlled                   | `spec/planet.md` -> Presentation, and `releases/first-release.md` -> Controls                                          | 2026-08-28 |
 
 ## Rejected
 
