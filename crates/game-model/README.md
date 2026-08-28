@@ -29,7 +29,11 @@ so a command that cannot be run changes nothing.
 
 It has never heard of a parser, a renderer or an engine. It does not know where a
 territory sits on a sphere: adjacency arrives as a graph of integer ids, computed above
-and handed in with the transition that creates the planet. Its dependency list is empty.
+and handed in with the transition that creates the planet. **Biomes arrive the same way and
+for the same reason** - `spec/planet.md` says a territory's biome is what the terrain gives
+it, and terrain is a continuous field of floating point over a sphere, so it is read in
+[`planet-terrain`](../planet-terrain/README.md) and handed in. Its dependency list is
+empty.
 
 ## Public surface
 
@@ -39,7 +43,8 @@ and handed in with the transition that creates the planet. Its dependency list i
 | `Phase`                                                          | `Design` or `Play`. Part of the state, which is why one function serves |
 | `Transition`                                                     | Every way a game state may change, one variant apiece                   |
 | `Rejection`                                                      | Why a transition was refused, in the terms of the game                  |
-| `Territory`                                                      | A territory and what it carries: nodes, extractors, citizens, stores    |
+| `Territory`                                                      | A territory and what it carries: a biome, nodes, extractors, citizens   |
+| `Biome`                                                          | What the terrain gives a territory. No rule reads one yet               |
 | `Node`                                                           | One resource node and its density                                       |
 | `Extractor`                                                      | A structure worked to draw a resource out of a node                     |
 | `cost`                                                           | The release's tuning figures, gathered in one module                    |

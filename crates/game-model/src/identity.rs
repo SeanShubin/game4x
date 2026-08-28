@@ -74,6 +74,68 @@ impl fmt::Display for Resource {
     }
 }
 
+/// `spec/planet.md`: *each territory has a biome*, and *a territory's biome is what the
+/// terrain gives it*.
+///
+/// The list is short on purpose. `docs/notes/planet-appearance.md` is emphatic that biomes
+/// should not be enumerated and placed but should **fall out of where fields cross** - so
+/// this is the set that a temperature, an elevation, a moisture and a drainage actually
+/// produce when they are crossed, and not a catalogue somebody wanted.
+///
+/// No rule reads a biome yet. It is a fact of the model rather than of the picture so that
+/// the two cannot drift: without it a territory could be tundra in the model while the
+/// realistic drawing paints rainforest across it, and nothing would be violated.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum Biome {
+    Ocean,
+    Ice,
+    Tundra,
+    Desert,
+    Grassland,
+    Forest,
+    Swamp,
+    Rainforest,
+    Mountain,
+}
+
+impl Biome {
+    pub const ALL: [Self; 9] = [
+        Self::Ocean,
+        Self::Ice,
+        Self::Tundra,
+        Self::Desert,
+        Self::Grassland,
+        Self::Forest,
+        Self::Swamp,
+        Self::Rainforest,
+        Self::Mountain,
+    ];
+
+    pub fn name(self) -> &'static str {
+        match self {
+            Biome::Ocean => "ocean",
+            Biome::Ice => "ice",
+            Biome::Tundra => "tundra",
+            Biome::Desert => "desert",
+            Biome::Grassland => "grassland",
+            Biome::Forest => "forest",
+            Biome::Swamp => "swamp",
+            Biome::Rainforest => "rainforest",
+            Biome::Mountain => "mountain",
+        }
+    }
+
+    pub fn named(word: &str) -> Option<Self> {
+        Self::ALL.into_iter().find(|biome| biome.name() == word)
+    }
+}
+
+impl fmt::Display for Biome {
+    fn fmt(&self, out: &mut fmt::Formatter<'_>) -> fmt::Result {
+        out.write_str(self.name())
+    }
+}
+
 /// `releases/first-release.md` gives the Ark and the Pioneer. Both are founding units:
 /// `spec/unit-types.md` says an Ark arrives from orbit and a Pioneer from an adjacent
 /// territory, and each transforms into what a territory needs to sustain itself.

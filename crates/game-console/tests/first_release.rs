@@ -583,6 +583,7 @@ fn every_way_the_state_can_change_is_a_command() {
         Transition::CreatePlanet {
             territories: 0,
             adjacency: Vec::new(),
+            biomes: Vec::new(),
         },
         Transition::AddNode {
             territory: TerritoryId(1),

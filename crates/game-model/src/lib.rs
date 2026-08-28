@@ -31,7 +31,7 @@ pub mod transition;
 pub mod unit;
 
 pub use game::{Game, Phase};
-pub use identity::{Resource, StructureKind, TerritoryId, UnitId, UnitKind};
+pub use identity::{Biome, Resource, StructureKind, TerritoryId, UnitId, UnitKind};
 pub use rejection::Rejection;
 pub use territory::{Extractor, Node, Territory};
 pub use transition::Transition;

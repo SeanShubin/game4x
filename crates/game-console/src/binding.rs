@@ -106,9 +106,11 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
                 what: "planet size",
                 word: word.to_string(),
             })?;
+            let seeds = seeds_for(size);
             Meaning::Change(Transition::CreatePlanet {
                 territories: size.territory_count(),
-                adjacency: adjacency_for(size),
+                adjacency: adjacency_for(&seeds),
+                biomes: planet_terrain::biomes_of(&seeds, WORLD_SEED),
             })
         }
         form::ADD_NODE => Meaning::Change(Transition::AddNode {
@@ -210,10 +212,26 @@ fn size_named(word: &str) -> Option<PlanetSize> {
 ///
 /// The model has no geometry and no floating point, so this is where a planet stops being
 /// a shape and becomes a set of integers. Everything below this line is whole numbers.
-fn adjacency_for(size: PlanetSize) -> Vec<Vec<TerritoryId>> {
-    let seeds = sphere_tessellation::icosahedral::canonical_seeds(size.territory_count())
-        .expect("every planet size is a Goldberg count; planet-render asserts it");
-    sphere_tessellation::adjacency(&seeds)
+/// Which world `create planet` builds.
+///
+/// One planet per size, the same one every time. `spec/planet.md` does not offer a way to
+/// ask for a different world - there is no seed in the command language - so a constant is
+/// the honest expression of that rather than a placeholder for a parameter. It becomes a
+/// tuning figure in a release the moment a release wants to name one.
+///
+/// It is also what keeps `history` a save file: the biomes are not written into the
+/// history, they are recomputed from `create planet <size>`, so the same commands rebuild
+/// the same world on somebody else's machine.
+const WORLD_SEED: u64 = 20260828;
+
+/// Where each territory sits on the sphere, in id order.
+fn seeds_for(size: PlanetSize) -> Vec<sphere_tessellation::vec3::Vec3> {
+    sphere_tessellation::icosahedral::canonical_seeds(size.territory_count())
+        .expect("every planet size is a Goldberg count; planet-render asserts it")
+}
+
+fn adjacency_for(seeds: &[sphere_tessellation::vec3::Vec3]) -> Vec<Vec<TerritoryId>> {
+    sphere_tessellation::adjacency(seeds)
         .into_iter()
         .map(|near| {
             near.into_iter()
@@ -289,18 +307,50 @@ mod tests {
         assert_eq!(misread.to_string(), "there is no resource called metel");
     }
 
+    /// The world is the same one every time, or a history would stop being a save file:
+    /// the biomes are recomputed from `create planet <size>` rather than recorded.
+    #[test]
+    fn creating_a_planet_twice_describes_the_same_world() {
+        assert_eq!(
+            meaning("create planet small"),
+            meaning("create planet small")
+        );
+    }
+
+    /// A planet is not one biome painted over twelve faces. `spec/planet.md` asks that
+    /// nothing in the terrain reveal how the sphere was divided, and a world with a single
+    /// biome would reveal nothing because it would say nothing.
+    #[test]
+    fn a_planet_has_more_than_one_kind_of_ground() {
+        let Meaning::Change(Transition::CreatePlanet { biomes, .. }) =
+            meaning("create planet huge")
+        else {
+            panic!("not a create planet");
+        };
+        let kinds: std::collections::BTreeSet<_> = biomes.iter().collect();
+        assert!(kinds.len() > 2, "ninety-two territories and only {kinds:?}");
+    }
+
     /// The planet the release calls for: tiny, which is twelve territories.
     #[test]
     fn creating_a_tiny_planet_makes_twelve_territories_that_all_touch_something() {
         let Meaning::Change(Transition::CreatePlanet {
             territories,
             adjacency,
+            biomes,
         }) = meaning("create planet tiny")
         else {
             panic!("not a create planet");
         };
         assert_eq!(territories, 12);
         assert_eq!(adjacency.len(), 12);
+        // `spec/planet.md`: each territory has a biome, and it is what the terrain gives
+        // it - so there is one per territory and it came from the ground, not from here.
+        assert_eq!(biomes.len(), 12);
+        let seeds = seeds_for(PlanetSize::Tiny);
+        for (at, biome) in biomes.iter().enumerate() {
+            assert_eq!(*biome, planet_terrain::biome_at(seeds[at], WORLD_SEED));
+        }
         // A dodecahedron: every face touches exactly five others.
         for (at, near) in adjacency.iter().enumerate() {
             assert_eq!(

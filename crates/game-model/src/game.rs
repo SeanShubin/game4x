@@ -87,12 +87,21 @@ impl Game {
             Transition::CreatePlanet {
                 territories,
                 adjacency,
+                biomes,
             } => {
                 if !next.territories.is_empty() {
                     return Err(Rejection::PlanetAlreadyCreated);
                 }
-                next.territories = (0..*territories)
-                    .map(|at| Territory::empty(TerritoryId::from_index(at)))
+                if biomes.len() != *territories {
+                    return Err(Rejection::BiomesDoNotCoverThePlanet {
+                        territories: *territories,
+                        biomes: biomes.len(),
+                    });
+                }
+                next.territories = biomes
+                    .iter()
+                    .enumerate()
+                    .map(|(at, biome)| Territory::empty(TerritoryId::from_index(at), *biome))
                     .collect();
                 next.adjacency = adjacency.clone();
             }
@@ -636,6 +645,7 @@ impl Game {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::identity::Biome;
 
     /// A ring of three territories, enough to test adjacency without a sphere.
     fn ring(count: usize) -> Vec<Vec<TerritoryId>> {
@@ -660,6 +670,7 @@ mod tests {
             .after(&Transition::CreatePlanet {
                 territories: 3,
                 adjacency: ring(3),
+                biomes: vec![Biome::Grassland; 3],
             })
             .unwrap();
         for at in 1..=3u32 {
@@ -737,6 +748,7 @@ mod tests {
             Transition::CreatePlanet {
                 territories: 3,
                 adjacency: ring(3),
+                biomes: vec![Biome::Grassland; 3],
             },
             Transition::AddNode {
                 territory: TerritoryId(1),
@@ -803,6 +815,7 @@ mod tests {
             .after(&Transition::CreatePlanet {
                 territories: 1,
                 adjacency: vec![vec![]],
+                biomes: vec![Biome::Grassland],
             })
             .unwrap()
             .after(&Transition::SetForceOfNature {

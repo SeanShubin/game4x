@@ -2556,6 +2556,7 @@ dependencies = [
  "command-language",
  "game-model",
  "planet-model",
+ "planet-terrain",
  "sphere-tessellation",
 ]
 
@@ -4006,6 +4007,14 @@ version = "0.1.0"
 dependencies = [
  "graph-coloring",
  "planet-model",
+ "sphere-tessellation",
+]
+
+[[package]]
+name = "planet-terrain"
+version = "0.1.0"
+dependencies = [
+ "game-model",
  "sphere-tessellation",
 ]
 

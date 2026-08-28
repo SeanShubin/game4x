@@ -8,4 +8,5 @@ description = "The command language bound to the game: the only file that knows 
 command-language.workspace = true
 game-model.workspace = true
 planet-model.workspace = true
+planet-terrain.workspace = true
 sphere-tessellation.workspace = true

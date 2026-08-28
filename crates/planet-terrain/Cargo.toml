@@ -1,0 +1,9 @@
+[package]
+name = "planet-terrain"
+version.workspace = true
+edition.workspace = true
+description = "One continuous field over the sphere, read per point by the picture and per territory by the model. Knows nothing about the tessellation."
+
+[dependencies]
+game-model.workspace = true
+sphere-tessellation.workspace = true

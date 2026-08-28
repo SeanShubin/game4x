@@ -4,7 +4,7 @@
 //! boundary, which is why ending a turn can resolve every territory independently and in
 //! any order - see [`crate::game::Game::after`].
 
-use crate::identity::{Resource, TerritoryId};
+use crate::identity::{Biome, Resource, TerritoryId};
 
 /// What one citizen is worth in violence. `releases/first-release.md`: Citizen, force 1.
 pub const CITIZEN_FORCE: u32 = 1;
@@ -55,6 +55,10 @@ impl Garrison {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Territory {
     pub id: TerritoryId,
+    /// What the terrain gives this ground. `spec/planet.md` puts it under what a territory
+    /// carries, beside the id and the nodes, rather than under presentation - the realistic
+    /// drawing illustrates this fact rather than inventing one.
+    pub biome: Biome,
     pub nodes: Vec<Node>,
     /// `spec/control.md`: force inherent to the territory, which nature holds it with.
     pub force_of_nature: u32,
@@ -73,9 +77,14 @@ pub struct Territory {
 }
 
 impl Territory {
-    pub fn empty(id: TerritoryId) -> Self {
+    /// Ground with a biome and nothing on it yet.
+    ///
+    /// The biome is asked for rather than defaulted, because there is no such thing as a
+    /// territory without one and a default would be a fact nothing in the world put there.
+    pub fn empty(id: TerritoryId, biome: Biome) -> Self {
         Self {
             id,
+            biome,
             nodes: Vec::new(),
             force_of_nature: 0,
             founded: false,
@@ -208,7 +217,7 @@ mod tests {
     use super::*;
 
     fn with_nodes(densities: &[(Resource, u32)]) -> Territory {
-        let mut territory = Territory::empty(TerritoryId(1));
+        let mut territory = Territory::empty(TerritoryId(1), Biome::Grassland);
         territory.nodes = densities
             .iter()
             .map(|(resource, density)| Node {

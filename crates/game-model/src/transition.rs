@@ -8,7 +8,7 @@
 //! Designing the world is not exempt. `create planet` is a transition like `land` is,
 //! because which phase a game is in is part of its state.
 
-use crate::identity::{Resource, StructureKind, TerritoryId, UnitKind};
+use crate::identity::{Biome, Resource, StructureKind, TerritoryId, UnitKind};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Transition {
@@ -17,9 +17,15 @@ pub enum Transition {
     /// Adjacency arrives ready-made rather than being worked out here. Which territories
     /// touch is a fact about a sphere, and this crate has no geometry and no floating
     /// point; the layer that does the tessellating hands the graph in.
+    ///
+    /// Biomes arrive the same way and for the same reason. `spec/planet.md` says a
+    /// territory's biome is *what the terrain gives it*, and the terrain is a continuous
+    /// field of floating point over a sphere - so it is read above and handed in, one
+    /// answer per territory, in id order.
     CreatePlanet {
         territories: usize,
         adjacency: Vec<Vec<TerritoryId>>,
+        biomes: Vec<Biome>,
     },
     AddNode {
         territory: TerritoryId,
@@ -97,6 +103,7 @@ mod tests {
             Transition::CreatePlanet {
                 territories: 12,
                 adjacency: Vec::new(),
+                biomes: Vec::new(),
             },
             Transition::AddNode {
                 territory: TerritoryId(1),

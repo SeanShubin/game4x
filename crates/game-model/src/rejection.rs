@@ -20,6 +20,15 @@ pub enum Rejection {
         wanted: &'static str,
     },
     NoPlanet,
+    /// A planet was described with a different number of biomes than territories.
+    ///
+    /// A malformed transition rather than a move the rules forbid, but it arrives by the
+    /// same door as everything else and so it is refused by the same one. Silently padding
+    /// would put a biome in the world that nothing chose.
+    BiomesDoNotCoverThePlanet {
+        territories: usize,
+        biomes: usize,
+    },
     NoSuchTerritory(TerritoryId),
     NoSuchResource(String),
     NoSuchUnitKind(String),
@@ -97,6 +106,13 @@ impl fmt::Display for Rejection {
                 write!(out, "that can only be done {wanted}")
             }
             Rejection::NoPlanet => write!(out, "there is no planet yet"),
+            Rejection::BiomesDoNotCoverThePlanet {
+                territories,
+                biomes,
+            } => write!(
+                out,
+                "a planet of {territories} territories was given {biomes} biomes"
+            ),
             Rejection::NoSuchTerritory(id) => write!(out, "there is no territory {id}"),
             Rejection::NoSuchResource(word) => write!(out, "there is no resource called {word}"),
             Rejection::NoSuchUnitKind(word) => write!(out, "there is no unit called {word}"),

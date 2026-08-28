@@ -89,8 +89,9 @@ fn territory(game: &Game, id: TerritoryId) -> String {
         return format!("there is no territory {id}");
     };
     let mut lines = vec![format!(
-        "territory {id}, {}",
-        if place.founded { "yours" } else { "unclaimed" }
+        "territory {id}, {}, {}",
+        if place.founded { "yours" } else { "unclaimed" },
+        place.biome
     )];
     lines.push(format!(
         "  citizens {}  labor left {}  force {} against nature {}",
