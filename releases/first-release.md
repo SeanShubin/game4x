@@ -97,6 +97,21 @@ Every territory has at least one food node.
 
 - cost to produce: 1 labor, and nothing else
 
+## Biomes
+
+What each biome gives a territory. Ocean is not claimable and carries nothing.
+
+| Biome     | Food  | Metal | Energy | Force of nature |
+| --------- | ----- | ----- | ------ | --------------- |
+| Ocean     | -     | -     | -      | -               |
+| Ice       | 1 x 2 | 2 x 3 | 1 x 2  | 1               |
+| Desert    | 2 x 4 | 3 x 4 | 5 x 6  | 1               |
+| Grassland | 5 x 6 | 1 x 3 | 1 x 3  | 1               |
+| Jungle    | 4 x 6 | 1 x 2 | 1 x 2  | 1               |
+| Mountain  | 1 x 3 | 5 x 7 | 2 x 3  | 1               |
+
+Every biome except ocean has at least one food node of density two or more.
+
 ## Controls
 
 - Rotation is bound to the arrow keys, and to dragging

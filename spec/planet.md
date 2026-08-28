@@ -38,6 +38,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - Each territory has a biome.
 - A territory's biome is what the terrain gives it. It is not chosen independently of the
   surface the territory covers.
+- The biomes are ocean, ice, desert, grassland, jungle and mountain.
+- No territory can be claimed whose biome is ocean.
+- No two ocean territories are adjacent.
 
 ## Native life
 

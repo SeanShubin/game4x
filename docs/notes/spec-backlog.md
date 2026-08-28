@@ -254,6 +254,56 @@ which this must be written.
 or needs a structure. The last would give a reason to build depots at the frontier and would pair
 with the storage entry below.
 
+### Biomes want revisiting every time a rule learns to read a territory
+
+Sean, 2026-08-28: *"we will need to re-address biomes as we add new mechanics that enable more
+substantive diversity of biomes."*
+
+**Biomes are as distinct as the rules can see, and no more.** The rules read exactly two things
+about a territory - its nodes and its force of nature - so six biomes chosen by role collapse into
+**four**, because two of the six were distinguished by things nothing reads. The failure is not in
+the biome list; it is that the list has more resolution than the rules do.
+
+**So the trigger is not a date, it is a capability.** Every time the rules gain something new to
+read about a territory, the biome table gets one more axis to differ along, and should be re-read.
+The candidates are set out in [the biome note](biomes.md):
+
+| When the rules can read                 | Biomes could then differ in                    |
+| --------------------------------------- | ---------------------------------------------- |
+| A per-territory movement cost           | how expensive ground is to cross               |
+| The territory, from the population rule | where people grow well                         |
+| A structure's requirements              | what can be built where                        |
+| Which native species lives where        | danger with a stated cause rather than by fiat |
+
+**The first one to fix is the one already broken.** P-103 records that every force of nature must be
+1, because taking needs *greater* force and both founding units are 2 - so the contested role, the
+only biome that was good and dangerous at once, does not exist. It is recoverable by rescaling the
+force numbers alone, without a rule changing.
+
+**And the note to re-read is [biomes](biomes.md)**, which sets out the six roles and the test they
+were chosen against: does knowing the biome change what a player *does* with a territory, or only
+how pleased they are to have it.
+
+### Terrains beyond land, and the units that cross them
+
+Sean, 2026-08-28: *"we are going to eventually add land, sea, air, submersible, subterranean, space,
+and units that can traverse multiple terrains, but I want a playable game before we get into all
+that detail."*
+
+Six terrains, then. Today the game has one - a unit moves between adjacent territories on the ground
+- plus orbit, which `spec/orbit.md` treats as a single place rather than as a terrain.
+
+**The near-term consequence is a restriction that expires.** P-102 forbids two ocean territories
+being adjacent, so that land is never cut in two. **That restriction lifts the moment a unit can
+operate in an ocean territory**, and when it does, oceans can become seas: coastlines, island chains,
+a landmass split by water. Until then a planet's water is limited to isolated cells, and no planet
+can be mostly ocean.
+
+**Worth deciding when the time comes**, and not before: whether a terrain is a property of a
+territory (so a territory is one of six) or a property of the boundary between two (so crossing is
+what is permitted or not). A biome already makes the first reading natural, and orbit already makes
+the second one exist - launching crosses between layers rather than moving within one.
+
 ### Storage, spoilage and decay
 
 Stated by Sean on 2026-08-26, all as later work:

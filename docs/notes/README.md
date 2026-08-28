@@ -15,6 +15,7 @@ disagree, the spec is right and the note needs a superseded marker.
 | [When an intermediate step earns its place](intermediate-steps.md) | A test for prerequisites versus building directly, and how to keep depth addable later      | 2026-08-26 |
 | [First release balance, traced](first-release-balance.md)          | What the current node figures and costs actually produce, turn by turn                      | 2026-08-26 |
 | [Is the first release buildable?](first-release-readiness.md)      | What was missing before the coding instance could build it - **superseded**                 | 2026-08-26 |
+| [What a biome could mean](biomes.md)                               | What the rules can see about a territory, and a candidate set of biomes                     | 2026-08-28 |
 | [Spec proposals](proposals.md)                                     | Lines offered for Sean's review, labelled by what kind of inference produced them           | open       |
 | [Clumping at in-between counts](in-between-counts.md)              | Why non-Goldberg region counts get extra pentagons, and what does not fix it                | 2026-08-26 |
 | [The game-4x predecessor](game-4x-predecessor.md)                  | What the superseded Kotlin project contained, and the mechanics worth keeping               | 2026-08-25 |
