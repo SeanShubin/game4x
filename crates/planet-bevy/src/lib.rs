@@ -19,7 +19,6 @@
 
 pub mod globe;
 pub mod gpu;
-pub mod surfaces;
 
 use bevy::asset::RenderAssetUsages;
 use bevy::image::ImageSampler;

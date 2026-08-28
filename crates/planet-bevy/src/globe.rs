@@ -114,11 +114,12 @@ impl Plugin for GlobePlugin {
             .insert_resource(Orbit::default())
             .insert_resource(Drag::default())
             .insert_resource(Fingers::default())
+            .insert_resource(Followed::default())
             .add_systems(Startup, setup)
             .add_systems(
                 Update,
                 (
-                    choose_size,
+                    follow_the_game,
                     build_globe,
                     drag_to_turn,
                     touch_to_turn,
@@ -544,7 +545,7 @@ fn summary(size: PlanetSize, world: &World, panels: &mesh::PlanetMesh) -> String
     };
     format!(
         "{} - {regions} territories - {shape}\n{} - {} triangles\n\
-         drag or arrows to turn, wheel to zoom, R to reset\n1-5 to change planet size",
+         drag, a finger or the arrows to turn - wheel or pinch to zoom - R to reset",
         size.name(),
         world.degree_summary(),
         panels.triangle_count()
@@ -683,21 +684,38 @@ fn reset_view(keys: Res<ButtonInput<KeyCode>>, mut orbit: ResMut<Orbit>) {
     }
 }
 
-/// Number keys pick a planet size, smallest to largest.
-fn choose_size(keys: Res<ButtonInput<KeyCode>>, mut planet: ResMut<Planet>) {
-    const DIGITS: [KeyCode; 5] = [
-        KeyCode::Digit1,
-        KeyCode::Digit2,
-        KeyCode::Digit3,
-        KeyCode::Digit4,
-        KeyCode::Digit5,
-    ];
-    for (digit, size) in DIGITS.into_iter().zip(PlanetSize::ALL) {
-        // Only write when it would actually change, so the world is not rebuilt in answer
-        // to a keypress asking for the size it already is.
-        if keys.just_pressed(digit) && planet.size != size {
-            planet.size = size;
-        }
+/// The last generation the globe was built for.
+#[derive(Resource, Default)]
+struct Followed(u64);
+
+/// The globe follows the game.
+///
+/// The one `Session` is outside the engine - on the web it is not even on the same call
+/// stack, because the page calls into it - so it cannot hand the new state over when it
+/// changes. This watches a counter instead and rebuilds when the number it last saw is
+/// not the number it sees now.
+///
+/// The size of a planet is game state. It arrives by `create planet <size>`, through the
+/// one function, like everything else. Number keys used to set it here, which let the
+/// view hold a world the model did not have; the view is a projection of the model, so
+/// that had to go rather than be kept as a convenience.
+fn follow_the_game(mut followed: ResMut<Followed>, mut planet: ResMut<Planet>) {
+    let generation = game_front::shell::generation();
+    if generation == followed.0 {
+        return;
+    }
+    followed.0 = generation;
+    // No planet yet is not an error. A game begins with nothing in it and is designed
+    // into existence, so this is what the first few commands of any game look like.
+    let Some(size) =
+        game_front::shell::territory_count().and_then(PlanetSize::with_territory_count)
+    else {
+        return;
+    };
+    // Only write when it would change something. Touching a `ResMut` marks it changed,
+    // and `build_globe` rebuilds the whole world when it sees that.
+    if planet.size != size {
+        planet.size = size;
     }
 }
 

@@ -38,6 +38,105 @@
         -webkit-user-select: none;
       }
 
+      /* --------------------------------------------------------------------
+         The console and the data browser.
+
+         These are elements on the page rather than glyphs drawn by the engine,
+         and that is the whole point: a text field, a scroll region and a button
+         already do the clipboard, the iOS soft keyboard, text selection and
+         touch, all of which a canvas cannot be made to do. See
+         crates/game-front/README.md.
+         -------------------------------------------------------------------- */
+      :root {
+        --ink: #e6e9ef;
+        --dim: #7b8698;
+        --panel: #0b0d11;
+        --edge: #1c2230;
+        --accent: #6f9be0;
+      }
+
+      /* Always on top of every surface, so no surface can trap the player. */
+      #surfaces {
+        position: fixed;
+        top: 0;
+        right: 0;
+        display: flex;
+        padding: max(8px, env(safe-area-inset-top)) 10px 8px 0;
+        z-index: 20;
+        /* The bar is not a target; only the buttons in it are, so a drag that
+           misses a button still reaches the globe underneath. */
+        pointer-events: none;
+      }
+      #surfaces button {
+        pointer-events: auto;
+        font: 13px/1 ui-monospace, monospace;
+        color: var(--dim);
+        background: rgba(12, 14, 18, 0.72);
+        border: 1px solid var(--edge);
+        border-radius: 6px;
+        /* Sized for a fingertip rather than for the words in it. As Text nodes
+           on the canvas these were 13px tall and had no picking backend behind
+           them, so a tap reached nothing at all. */
+        padding: 11px 14px;
+        margin-left: 8px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        /* Without this iOS waits 300ms for a possible double tap. */
+        touch-action: manipulation;
+      }
+      #surfaces button[aria-current="true"] {
+        color: var(--ink);
+        border-color: var(--accent);
+      }
+
+      .surface {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        display: none;
+        flex-direction: column;
+        background: var(--panel);
+        color: var(--ink);
+        font: 13px/1.5 ui-monospace, monospace;
+        padding: calc(max(8px, env(safe-area-inset-top)) + 46px) 14px
+          max(14px, env(safe-area-inset-bottom));
+      }
+      .surface[data-showing="true"] {
+        display: flex;
+      }
+      .surface pre {
+        flex: 1 1 auto;
+        margin: 0;
+        overflow: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+        -webkit-overflow-scrolling: touch;
+        /* The canvas rule above turns selection off. Here it is the point. */
+        user-select: text;
+        -webkit-user-select: text;
+      }
+      #prompt-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid var(--edge);
+      }
+      #prompt-row span {
+        color: var(--accent);
+      }
+      #prompt {
+        flex: 1 1 auto;
+        min-width: 0;
+        font: inherit;
+        color: var(--ink);
+        background: transparent;
+        border: 0;
+        outline: none;
+        padding: 8px 0;
+      }
+
       /* The wasm bundle is tens of megabytes, and until it has arrived and compiled
          there is nothing on the page at all. Without this the tab is simply black for
          however long that takes, which is indistinguishable from a broken site. */
@@ -280,5 +379,142 @@
       <div class="bar unknown"><i></i></div>
       <div class="detail">loading</div>
     </div>
+
+    <!--
+      The three surfaces spec/interface.md asks for. Which one is in front is a
+      fact about the front end rather than about the game, so nothing here goes
+      near the model: every one of these reads or runs through the one Session,
+      by way of the wasm exports in game-front's web shell.
+    -->
+    <nav id="surfaces" aria-label="surfaces">
+      <button type="button" data-surface="game" aria-current="true">F1 game</button>
+      <button type="button" data-surface="console">F2 console</button>
+      <button type="button" data-surface="browser">F3 browser</button>
+    </nav>
+
+    <section class="surface" id="surface-console" data-showing="false" aria-label="console">
+      <pre id="transcript" tabindex="0">starting</pre>
+      <!--
+        A real form and a real text field. `autocapitalize` and `autocorrect` are
+        off because iOS would otherwise send `Show Territory 5`, and the command
+        language is case sensitive; `enterkeyhint` puts "go" on the soft keyboard
+        rather than a newline it has nowhere to put.
+      -->
+      <form id="prompt-row" autocomplete="off">
+        <span aria-hidden="true">&gt;</span>
+        <input
+          id="prompt"
+          type="text"
+          name="command"
+          autocapitalize="off"
+          autocorrect="off"
+          autocomplete="off"
+          spellcheck="false"
+          enterkeyhint="go"
+          inputmode="text"
+          aria-label="type a command"
+        />
+      </form>
+    </section>
+
+    <section class="surface" id="surface-browser" data-showing="false" aria-label="data browser">
+      <pre id="entities" tabindex="0">starting</pre>
+    </section>
+
+    <script>
+      (function () {
+        var showing = "game";
+        var bindings = null;
+
+        function el(id) {
+          return document.getElementById(id);
+        }
+        function toBottom(node) {
+          node.scrollTop = node.scrollHeight;
+        }
+
+        // Every read goes through the wasm exports, which go through the one
+        // Session. The page holds no copy of anything.
+        function paint() {
+          if (!bindings) return;
+          if (showing === "console") el("transcript").textContent = bindings.console_transcript();
+          if (showing === "browser") el("entities").textContent = bindings.browser_text();
+        }
+
+        function show(name) {
+          showing = name;
+          var buttons = document.querySelectorAll("#surfaces button");
+          for (var i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute("aria-current", String(buttons[i].dataset.surface === name));
+          }
+          el("surface-console").dataset.showing = String(name === "console");
+          el("surface-browser").dataset.showing = String(name === "browser");
+          paint();
+          if (name === "console") {
+            toBottom(el("transcript"));
+            // Focused inside the tap that asked for the console, because that is
+            // the only moment iOS will raise the soft keyboard. Done a tick later
+            // it is refused, and the field cannot be typed at on a tablet.
+            el("prompt").focus();
+          } else {
+            el("prompt").blur();
+          }
+        }
+
+        var buttons = document.querySelectorAll("#surfaces button");
+        for (var i = 0; i < buttons.length; i++) {
+          (function (button) {
+            button.addEventListener("click", function () {
+              show(button.dataset.surface);
+            });
+          })(buttons[i]);
+        }
+
+        el("prompt-row").addEventListener("submit", function (event) {
+          event.preventDefault();
+          var line = el("prompt").value;
+          el("prompt").value = "";
+          if (!bindings) return;
+          // What comes back is the whole transcript. The page never decides how a
+          // line was rendered, or how many lines one command said.
+          el("transcript").textContent = bindings.console_submit(line);
+          toBottom(el("transcript"));
+        });
+
+        // winit listens for keys on the canvas, so a focused text field already
+        // keeps them to itself. Said out loud anyway: without it, typing `run
+        // setup` at the console would also be pressing the globe's own keys.
+        ["keydown", "keyup", "keypress"].forEach(function (kind) {
+          el("prompt").addEventListener(kind, function (event) {
+            event.stopPropagation();
+          });
+        });
+
+        // The same three surfaces from a keyboard. Neither spec/ nor releases/
+        // names a binding for reaching one, so these match the buttons and the
+        // terminal's /game, /console, /browser rather than inventing a fourth way.
+        document.addEventListener("keydown", function (event) {
+          var at = ["F1", "F2", "F3"].indexOf(event.key);
+          if (at < 0) return;
+          event.preventDefault();
+          show(["game", "console", "browser"][at]);
+        });
+
+        function started() {
+          bindings = window.wasmBindings;
+          if (!bindings || !bindings.console_transcript) {
+            el("transcript").textContent =
+              "the console did not load. See the page's diagnostics above.";
+            return;
+          }
+          paint();
+        }
+        // This script is parsed before the module Trunk defers into the head, so
+        // the listener is always in place first. The check is for the case where
+        // that ever stops being true.
+        addEventListener("TrunkApplicationStarted", started);
+        if (window.wasmBindings) started();
+      })();
+    </script>
   </body>
 </html>

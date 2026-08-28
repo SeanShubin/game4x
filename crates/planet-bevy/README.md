@@ -26,6 +26,10 @@ the crate does three things:
    methods — drag, zoom, and a `Command` per key.
 3. Uploads geometry, or a pixel buffer, depending on which view is up.
 
+It draws **the game and nothing else**. The console and the data browser used to be Bevy
+`Text` nodes in this crate, and are now elements on a page or lines on a terminal — see
+[game-front](../game-front/README.md) for the four things that fixed at once.
+
 If a second adapter is ever written, nothing below this crate should need to change.
 That is the test of whether the boundary is real.
 
@@ -49,6 +53,36 @@ The ball turns rather than the camera, so that the key light stays put — a ter
 swung about while you were trying to look at something would be much harder to read. Each
 region is drawn as a fan of triangles slightly inset toward its own centre, so the gaps
 between panels read as grooves; a darker sphere sits just underneath to fill them.
+
+## Turning it, whatever you are holding
+
+A mouse drag, a held arrow key and a finger all arrive at the same `Orbit::drag`, so they
+cannot mean different things. That matters more than it sounds: winit routes a touch to
+`TouchInput` and never to `MouseInput` or `CursorMoved` — its web backend tests
+`pointer_type != "touch"` before raising a pointer event — so without a path of its own a
+tablet reaches none of the mouse or keyboard systems, and the planet cannot be turned at
+all. `spec/interface.md` does not allow that: nothing is available in one build and not
+another, and only *how* the user acts on it follows the platform.
+
+Two fingers pinch to zoom. The angle between them is computed nowhere, deliberately:
+`spec/planet.md` fixes the roll for any point on the planet and says nothing the user does
+changes it, and a twist is the gesture that would reach roll. A test twists a pair through
+a full turn and asserts the view does not move.
+
+Touch is read from the `TouchInput` messages rather than from Bevy's `Touches` resource,
+which only refreshes `previous_position` on frames that carried an event — with a finger
+held still, `Touch::delta` keeps reporting the last movement and the world would drift on.
+
+## Following the game
+
+The one `Session` lives outside the engine, in [`game-front`](../game-front/README.md). On
+the web it is not even on the same call stack, because the page calls into it, so it cannot
+hand over the new state when it changes. `globe` watches a generation counter instead and
+rebuilds when the number it last saw is not the number it sees now.
+
+Number keys used to set the planet's size here. They are gone: the size of a planet is game
+state, arriving by `create planet <size>` through the one function like everything else, and
+a view that could hold a world the model did not have is not a projection of it.
 
 ## The flat projection's presentation path
 

@@ -4,56 +4,77 @@
 //! the pieces together:
 //!
 //! ```text
-//!   sphere-tessellation  +  graph-coloring     the model, pure
+//!   command-language  +  game-model                the game, pure
+//!            \              /
+//!             game-console                         the only door into it
+//!                   |
+//!              game-front                          the console and browser, no engine
+//!                   |
+//!   sphere-tessellation  +  graph-coloring         the geometry, pure
 //!            \                  /
-//!             planet-render                    a view model, no engine
+//!             planet-render                        a view model, no engine
 //!                   |
-//!              planet-bevy                     window, input, presentation
+//!              planet-bevy                         window, input, presentation
 //!                   |
-//!              this module                     wiring, and nothing else
+//!              this module                         wiring, and nothing else
 //! ```
 //!
-//! It is the only place that knows both that Bevy exists and that the planet exists at
-//! the same time. See `docs/architecture.md`.
+//! It is the only place that knows both that Bevy exists and that the game exists at the
+//! same time. See `docs/architecture.md`.
 //!
-//! The same binary runs natively and in a browser. Nothing below the engine layer knows
-//! which, because nothing below the engine layer knows there is an engine.
+//! The same binary runs natively and in a browser, and the *game* is identical in both
+//! because nothing below the engine layer knows there is an engine. What differs is how
+//! the console and the data browser are reached, which `spec/interface.md` allows: how a
+//! thing is presented, and how the user acts on it, may follow the platform, while what
+//! the user can do stays the same.
+//!
+//! | Surface      | Desktop            | Web                                     |
+//! | ------------ | ------------------ | --------------------------------------- |
+//! | The game     | a window           | a canvas                                |
+//! | The console  | stdin and stdout   | a text field and a transcript, on the page |
+//! | The browser  | `/browser`         | a panel, reached by its own button      |
 
 use bevy::prelude::*;
 use bevy::window::PresentMode;
 use planet_render::{Params, WorldSpec};
 
-/// The world the application opens on.
+/// The planet to fall back on if the game has not made one yet.
 ///
-/// Ninety-two regions is `GP(3,0)` - twelve pentagons at the icosahedron's vertices and
-/// eighty hexagons between them, constructed rather than searched for. Region counts
-/// that are not Goldberg numbers still work; they just have no perfect answer to be
-/// built, so they fall back to relaxation. See `docs/theory/region-splitting.md`.
-const REGIONS: usize = 92;
+/// It normally has: the console builds the release's world as it opens, so by the time
+/// there is a frame to draw there are twelve territories to draw. This is what the view
+/// would show for a game designed no further than `create planet`, and 92 rather than 12
+/// so that a blank one is obviously a blank one.
+const UNDESIGNED: usize = 92;
 
 fn main() {
+    // What world to draw is a question for the game, not a constant here. The console is
+    // already open on the release's planet, having built it out of `commands/setup.4x`
+    // the only way a world can be built - by running commands.
+    let territories = game_front::shell::territory_count().unwrap_or(UNDESIGNED);
     let spec = WorldSpec {
         params: Params {
-            region_count: REGIONS,
+            region_count: territories,
             ..Params::default()
         },
-        // Ask for the world to be built from the region count, so that changing the
-        // count above is all it takes. At a Goldberg count this constructs the exact
-        // solid and relaxes nothing.
+        // Ask for the world to be built from the region count. At a Goldberg count this
+        // constructs the exact solid and relaxes nothing.
         soccer: false,
     };
     let topology = planet_render::topology_of(spec);
+
+    // The console, on whatever this platform offers. On the desktop it reads stdin, which
+    // needs a thread of its own because the engine's event loop never returns. On the web
+    // the page calls in through `#[wasm_bindgen]` and there is nothing to start.
+    #[cfg(not(target_arch = "wasm32"))]
+    std::thread::spawn(game_front::shell::terminal::serve);
 
     App::new()
         .add_plugins(DefaultPlugins.set(window()))
         // Game entities and the turn: ECS, no rendering, no rules.
         .add_plugins(planet_ecs::PlanetEcsPlugin::new(topology))
         // The solid, a camera, and the pointer: the only place an engine's opinions land.
+        // It follows the one Session by watching a counter; it never reaches into it.
         .add_plugins(planet_bevy::globe::GlobePlugin::new(spec))
-        // The three surfaces `spec/interface.md` asks for: the game, the console, and the
-        // data browser. Added unconditionally, because nothing may be available in one
-        // build and not another.
-        .add_plugins(planet_bevy::surfaces::SurfacesPlugin)
         .run();
 }
 

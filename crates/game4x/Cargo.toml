@@ -13,6 +13,7 @@ path = "src/main.rs"
 # backend is a known source of startup panics on a static host. See the sibling
 # boardgame repository, where dropping it fixed exactly that.
 bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui"] }
+game-front.workspace = true
 planet-bevy.workspace = true
 planet-ecs.workspace = true
 planet-render.workspace = true

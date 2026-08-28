@@ -2577,6 +2577,7 @@ name = "game4x"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "game-front",
  "planet-bevy",
  "planet-ecs",
  "planet-render",
@@ -3980,8 +3981,7 @@ name = "planet-bevy"
 version = "0.1.0"
 dependencies = [
  "bevy",
- "game-console",
- "game-model",
+ "game-front",
  "planet-ecs",
  "planet-model",
  "planet-render",

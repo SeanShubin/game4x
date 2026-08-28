@@ -1,9 +1,14 @@
 #!/usr/bin/env pwsh
 # Runs the application: the world as a solid you can turn in your hands.
 #
-# Drag to turn the world, wheel to zoom, arrow keys to turn. This is the same binary
-# that is published to GitHub Pages; the only difference is that there it is compiled
-# to WASM. See scripts/web.ps1 to run that build locally.
+# Turning the world is a drag, a finger, or the arrow keys; zooming is the wheel or a
+# pinch. The console is this terminal: type a command and press enter, /browser lists
+# every entity, /game says where the game is.
+#
+# This is the same binary that is published to GitHub Pages. The only differences are
+# that there it is compiled to WASM, and that the console and the data browser are
+# elements on the page rather than this terminal - which is what spec/interface.md means
+# by presentation following the platform. See scripts/web.ps1 to run that build locally.
 #
 # Arguments are passed straight through.
 

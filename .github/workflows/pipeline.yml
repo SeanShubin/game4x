@@ -71,7 +71,7 @@ jobs:
         run: cargo fmt --all -- --check
 
       - name: Clippy (the shipped path)
-        run: cargo clippy -p command-language -p game-model -p game-console -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render -p planet-ecs -p planet-bevy -p game4x -- -D warnings
+        run: cargo clippy -p command-language -p game-model -p game-console -p game-front -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render -p planet-ecs -p planet-bevy -p game4x -- -D warnings
 
       # The rules and the geometry are where correctness lives: the whole first-release
       # command script runs here, and the geometry tests run with it.
@@ -79,7 +79,7 @@ jobs:
       # must have one side per neighbour, and every Goldberg count must come out with
       # twelve pentagons. Release mode because the relaxation tests are slow otherwise.
       - name: Test (model and view model)
-        run: cargo test --release -p command-language -p game-model -p game-console -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render
+        run: cargo test --release -p command-language -p game-model -p game-console -p game-front -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render
 
       # Run from the crate directory: Trunk resolves the cargo manifest from its working
       # directory, and the workspace root is a virtual manifest with no root package.
