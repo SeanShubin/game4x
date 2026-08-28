@@ -115,4 +115,3 @@ drawing, not a ceiling for both.
 Which of the two render paths the realistic drawing uses - the CPU rasterizer or the Bevy 3D path -
 is the code lane's, and the spec deliberately constrains neither. `spec/planet.md` asks only for
 *a three-dimensional sphere*; a textured sphere, a polyhedron and a raymarched field all satisfy it.
-"""
