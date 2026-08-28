@@ -15,17 +15,23 @@
 //! | Requirement | Here |
 //! | --- | --- |
 //! | Presented as a three-dimensional sphere | [`build_globe`] |
-//! | Rotate to be above any point | [`drag_to_turn`], [`keys_to_turn`] |
-//! | Rotation bound to the arrow keys | [`keys_to_turn`] |
-//! | Dragging rotates the planet | [`drag_to_turn`] |
-//! | The roll for any point is fixed | [`globe_transform`] |
-//! | Zoom in and out | [`wheel_to_zoom`] |
+//! | Rotate to be above any point | [`drag_to_turn`], [`keys_to_turn`], [`touch_to_turn`] |
+//! | The roll for any point is fixed, and nothing the user does changes it | [`globe_transform`], and [`Fingers::moved`] discarding a twist |
+//! | Zoom in and out | [`wheel_to_zoom`], [`touch_to_turn`] |
 //! | Reset the view to a default | [`reset_view`] |
 //! | A territory's id displayed on the sphere | [`place_labels`] |
 //! | The poles are visible | [`build_globe`] |
+//!
+//! Which device does which is not in `spec/planet.md` any more - it is a binding, and
+//! `releases/first-release.md` -> Controls holds the ones this release names. What
+//! `spec/interface.md` fixes instead is that *how a thing is presented, and how the user
+//! acts on it, may follow the platform it runs on*, while what the user can do stays the
+//! same. So a drag, an arrow key and a finger all arrive at [`Orbit::drag`], and none of
+//! them is a different feature from the others.
 
 use bevy::asset::RenderAssetUsages;
 use bevy::input::mouse::MouseWheel;
+use bevy::input::touch::{TouchInput, TouchPhase};
 use bevy::mesh::{Indices, PrimitiveTopology};
 use bevy::prelude::*;
 use bevy::window::CursorMoved;
@@ -107,6 +113,7 @@ impl Plugin for GlobePlugin {
         app.insert_resource(Planet::opening_on(self.spec))
             .insert_resource(Orbit::default())
             .insert_resource(Drag::default())
+            .insert_resource(Fingers::default())
             .add_systems(Startup, setup)
             .add_systems(
                 Update,
@@ -114,6 +121,7 @@ impl Plugin for GlobePlugin {
                     choose_size,
                     build_globe,
                     drag_to_turn,
+                    touch_to_turn,
                     keys_to_turn,
                     wheel_to_zoom,
                     reset_view,
@@ -173,6 +181,34 @@ impl Default for Orbit {
     }
 }
 
+impl Orbit {
+    /// Turn by an angle. The pitch is clamped short of the pole, where the axis
+    /// degenerates and yaw and roll stop being separable.
+    ///
+    /// There is no argument for roll, and that is the point: `spec/planet.md` says the
+    /// roll for any point on the planet is fixed and nothing the user does changes it, so
+    /// there is nothing for a gesture to reach even if one offered it.
+    fn turn(&mut self, yaw: f32, pitch: f32) {
+        self.yaw += yaw;
+        self.pitch = (self.pitch + pitch).clamp(-PITCH_LIMIT, PITCH_LIMIT);
+    }
+
+    /// Turn by a step across the glass, in pixels.
+    ///
+    /// A mouse drag, a held arrow key and a finger are three ways of producing this step
+    /// and are not three features. `spec/interface.md`: what the user can do is the same
+    /// whichever platform it is, and only how they act on it follows the device.
+    fn drag(&mut self, step: Vec2) {
+        self.turn(step.x * DRAG_SENSITIVITY, step.y * DRAG_SENSITIVITY);
+    }
+
+    /// Move the viewer nearer or further by a factor of the distance remaining, so the
+    /// same gesture covers the same proportion whether you are close in or far out.
+    fn scale_distance(&mut self, factor: f32) {
+        self.distance = (self.distance * factor).clamp(CLOSEST, FURTHEST);
+    }
+}
+
 /// Where the pointer was on the previous frame, while a drag is in progress.
 ///
 /// Deltas are measured from the cursor's reported position rather than taken from
@@ -182,6 +218,82 @@ impl Default for Orbit {
 /// position is reported the same way everywhere.
 #[derive(Resource, Default)]
 struct Drag(Option<Vec2>);
+
+/// The smallest separation, in pixels, that a pinch is measured against.
+///
+/// Two fingers that land almost on top of each other give a ratio with a very small
+/// number underneath it, and one further pixel of separation would then read as an
+/// enormous zoom. Below this the pair is held but not acted on.
+const PINCH_FLOOR: f32 = 24.0;
+
+/// What a change in the fingers on the glass asks the view to do.
+#[derive(Clone, Copy, Debug, PartialEq)]
+enum Gesture {
+    /// Turn the world by a step in pixels - the same step a mouse drag produces, and
+    /// handed to the same method.
+    Turn(Vec2),
+    /// Zoom, by the factor the fingers' separation changed by. Greater than one is
+    /// fingers spreading apart.
+    Pinch(f32),
+}
+
+/// The fingers on the glass, and where each of them was last seen.
+///
+/// Touch is tracked here rather than read from Bevy's `Touches` resource because
+/// `Touches` only refreshes `previous_position` on frames that carried an event: with a
+/// finger held still, `Touch::delta` keeps reporting the last movement and the world
+/// would drift on. Reading the messages and keeping the previous position here is the
+/// same shape as [`Drag`], which reads `CursorMoved` for the same reason.
+///
+/// At most two are tracked. A third finger is ignored rather than queued, because there
+/// is nothing for it to mean.
+#[derive(Resource, Default)]
+struct Fingers {
+    down: Vec<(u64, Vec2)>,
+}
+
+impl Fingers {
+    /// The separation between the pair, or `None` unless there are exactly two.
+    fn gap(&self) -> Option<f32> {
+        match self.down.as_slice() {
+            [(_, first), (_, second)] => Some(first.distance(*second)),
+            _ => None,
+        }
+    }
+
+    fn began(&mut self, id: u64, at: Vec2) {
+        if self.down.iter().any(|(known, _)| *known == id) {
+            return;
+        }
+        if self.down.len() < 2 {
+            self.down.push((id, at));
+        }
+    }
+
+    fn ended(&mut self, id: u64) {
+        self.down.retain(|(known, _)| *known != id);
+    }
+
+    /// Moves one finger and says what the hand as a whole is now asking for.
+    ///
+    /// One finger turns the world. Two zoom it, and **only** zoom it: the angle between
+    /// them is computed nowhere, so a two-finger twist - which every gesture library
+    /// offers for free - cannot reach anything. `spec/planet.md` fixes the roll for any
+    /// point on the planet and says nothing the user does changes it, so a twist has to
+    /// be discarded on purpose rather than left to be wired up by accident.
+    fn moved(&mut self, id: u64, to: Vec2) -> Option<Gesture> {
+        let index = self.down.iter().position(|(known, _)| *known == id)?;
+        let separated = self.gap();
+        let from = std::mem::replace(&mut self.down[index].1, to);
+        match (separated, self.gap()) {
+            (Some(before), Some(after)) if before >= PINCH_FLOOR => {
+                Some(Gesture::Pinch(after / before))
+            }
+            (None, None) => Some(Gesture::Turn(to - from)),
+            _ => None,
+        }
+    }
+}
 
 #[derive(Component)]
 struct Globe;
@@ -504,12 +616,37 @@ fn drag_to_turn(
             // the flat view already uses - `GlobeView::drag` turns by `+dx` about the up
             // axis and `+dy` about the across axis - and the two views have to agree, or
             // the same gesture means opposite things depending on which one is up.
-            let step = event.position - previous;
-            orbit.yaw += step.x * DRAG_SENSITIVITY;
-            orbit.pitch =
-                (orbit.pitch + step.y * DRAG_SENSITIVITY).clamp(-PITCH_LIMIT, PITCH_LIMIT);
+            orbit.drag(event.position - previous);
         }
         drag.0 = Some(event.position);
+    }
+}
+
+/// Turning and zooming by touch.
+///
+/// winit routes a touch to `TouchInput` and never to `MouseInput` or `CursorMoved` - its
+/// web backend tests `pointer_type != "touch"` before raising a pointer event - so a
+/// tablet reaches none of [`drag_to_turn`], [`keys_to_turn`] or [`wheel_to_zoom`], and
+/// without this the planet cannot be turned or zoomed at all there. `spec/interface.md`
+/// does not allow that: nothing is available in one build and not another, and only the
+/// way the user acts on it follows the platform.
+fn touch_to_turn(
+    mut touches: MessageReader<TouchInput>,
+    mut fingers: ResMut<Fingers>,
+    mut orbit: ResMut<Orbit>,
+) {
+    for touch in touches.read() {
+        match touch.phase {
+            TouchPhase::Started => fingers.began(touch.id, touch.position),
+            TouchPhase::Moved => match fingers.moved(touch.id, touch.position) {
+                // Fingers spreading apart is a larger ratio and a shorter distance:
+                // the world comes toward you.
+                Some(Gesture::Pinch(ratio)) => orbit.scale_distance(1.0 / ratio),
+                Some(Gesture::Turn(step)) => orbit.drag(step),
+                None => {}
+            },
+            TouchPhase::Ended | TouchPhase::Canceled => fingers.ended(touch.id),
+        }
     }
 }
 
@@ -525,8 +662,7 @@ fn keys_to_turn(keys: Res<ButtonInput<KeyCode>>, time: Res<Time>, mut orbit: Res
         return;
     }
     let step = KEY_SPEED * time.delta_secs();
-    orbit.yaw += turn * step;
-    orbit.pitch = (orbit.pitch + tilt * step).clamp(-PITCH_LIMIT, PITCH_LIMIT);
+    orbit.turn(turn * step, tilt * step);
 }
 
 fn wheel_to_zoom(mut wheel: MessageReader<MouseWheel>, mut orbit: ResMut<Orbit>) {
@@ -534,7 +670,7 @@ fn wheel_to_zoom(mut wheel: MessageReader<MouseWheel>, mut orbit: ResMut<Orbit>)
         // Scale rather than subtract, so a notch covers the same proportion of the
         // remaining distance whether you are close in or far out.
         let factor = (1.0 - ZOOM_PER_NOTCH).powf(notch.y.clamp(-3.0, 3.0));
-        orbit.distance = (orbit.distance * factor).clamp(CLOSEST, FURTHEST);
+        orbit.scale_distance(factor);
     }
 }
 
@@ -742,6 +878,215 @@ mod tests {
             }
         };
         [channel(16), channel(8), channel(0), 1.0]
+    }
+
+    fn resting() -> Orbit {
+        Orbit::default()
+    }
+
+    /// A finger is a drag. Not a similar thing that happens to look like one - the same
+    /// step, through the same method, to the same result.
+    #[test]
+    fn a_finger_turns_the_world_exactly_as_a_mouse_drag_does() {
+        let step = Vec2::new(37.0, -14.0);
+
+        let mut dragged = resting();
+        dragged.drag(step);
+
+        let mut touched = resting();
+        let mut fingers = Fingers::default();
+        fingers.began(1, Vec2::new(100.0, 100.0));
+        let gesture = fingers.moved(1, Vec2::new(100.0, 100.0) + step);
+        assert_eq!(gesture, Some(Gesture::Turn(step)));
+        touched.drag(step);
+
+        assert_eq!(touched.yaw, dragged.yaw);
+        assert_eq!(touched.pitch, dragged.pitch);
+    }
+
+    /// The first position after a finger lands only says where it landed. Turning on it
+    /// would jerk the world by wherever the finger happened to be, which is the same bug
+    /// [`Drag`] avoids for the pointer.
+    #[test]
+    fn a_finger_landing_turns_nothing() {
+        let mut fingers = Fingers::default();
+        fingers.began(1, Vec2::new(400.0, 300.0));
+        assert_eq!(
+            fingers.moved(1, Vec2::new(400.0, 300.0)),
+            Some(Gesture::Turn(Vec2::ZERO))
+        );
+        let mut orbit = resting();
+        orbit.drag(Vec2::ZERO);
+        assert_eq!(orbit.yaw, resting().yaw);
+    }
+
+    /// Fingers spreading apart bring the world closer, and pinching together push it away.
+    #[test]
+    fn spreading_two_fingers_zooms_in_and_pinching_zooms_out() {
+        let mut fingers = Fingers::default();
+        fingers.began(1, Vec2::new(300.0, 400.0));
+        fingers.began(2, Vec2::new(500.0, 400.0));
+
+        let Some(Gesture::Pinch(ratio)) = fingers.moved(2, Vec2::new(700.0, 400.0)) else {
+            panic!("moving one of a pair is a pinch");
+        };
+        assert!(
+            ratio > 1.0,
+            "spreading apart is a ratio above one, got {ratio}"
+        );
+        let mut orbit = resting();
+        orbit.scale_distance(1.0 / ratio);
+        assert!(
+            orbit.distance < RESTING_DISTANCE,
+            "spreading did not come closer"
+        );
+
+        let Some(Gesture::Pinch(ratio)) = fingers.moved(2, Vec2::new(400.0, 400.0)) else {
+            panic!("moving one of a pair is a pinch");
+        };
+        assert!(
+            ratio < 1.0,
+            "closing together is a ratio below one, got {ratio}"
+        );
+        let mut orbit = resting();
+        orbit.scale_distance(1.0 / ratio);
+        assert!(
+            orbit.distance > RESTING_DISTANCE,
+            "pinching did not go further out"
+        );
+    }
+
+    /// `spec/planet.md`: the roll for any point on the planet is fixed, and nothing the
+    /// user does changes it.
+    ///
+    /// A two-finger twist is the gesture that would reach roll, and it comes free with
+    /// any pinch. Rotating the pair about its own centre must therefore leave the view
+    /// exactly where it was - not approximately, and not only for the yaw.
+    #[test]
+    fn twisting_two_fingers_changes_nothing() {
+        let centre = Vec2::new(400.0, 400.0);
+        let arm = 150.0;
+        let mut fingers = Fingers::default();
+        fingers.began(1, centre + Vec2::new(arm, 0.0));
+        fingers.began(2, centre - Vec2::new(arm, 0.0));
+
+        let mut orbit = resting();
+        let before = (orbit.yaw, orbit.pitch, orbit.distance);
+        for step in 1..=32 {
+            let angle = step as f32 * std::f32::consts::TAU / 32.0;
+            let offset = Vec2::new(arm * angle.cos(), arm * angle.sin());
+            for (id, at) in [(1, centre + offset), (2, centre - offset)] {
+                match fingers.moved(id, at) {
+                    Some(Gesture::Pinch(ratio)) => orbit.scale_distance(1.0 / ratio),
+                    Some(Gesture::Turn(step)) => orbit.drag(step),
+                    None => {}
+                }
+            }
+        }
+        // The separation never changed, so every ratio was one and nothing moved.
+        assert!(
+            (orbit.yaw - before.0).abs() < 1e-4,
+            "a twist turned the world"
+        );
+        assert!(
+            (orbit.pitch - before.1).abs() < 1e-4,
+            "a twist tilted the world"
+        );
+        assert!(
+            (orbit.distance - before.2).abs() < 1e-3,
+            "a twist zoomed the world"
+        );
+    }
+
+    /// A second finger landing mid-drag must not be read as an enormous jump.
+    #[test]
+    fn a_second_finger_landing_does_not_lurch_the_world() {
+        let mut fingers = Fingers::default();
+        fingers.began(1, Vec2::new(100.0, 100.0));
+        assert!(matches!(
+            fingers.moved(1, Vec2::new(140.0, 100.0)),
+            Some(Gesture::Turn(_))
+        ));
+        fingers.began(2, Vec2::new(600.0, 100.0));
+        // Now a pair. Moving either one measures separation, never the distance from
+        // wherever the other finger happens to be.
+        assert!(matches!(
+            fingers.moved(1, Vec2::new(150.0, 100.0)),
+            Some(Gesture::Pinch(_))
+        ));
+    }
+
+    /// Two fingers landing on the same spot would divide by something near zero.
+    #[test]
+    fn a_pinch_that_starts_too_close_together_is_not_acted_on() {
+        let mut fingers = Fingers::default();
+        fingers.began(1, Vec2::new(400.0, 400.0));
+        fingers.began(2, Vec2::new(401.0, 400.0));
+        assert_eq!(fingers.moved(2, Vec2::new(460.0, 400.0)), None);
+        // Once they are far enough apart it measures normally again.
+        assert!(matches!(
+            fingers.moved(2, Vec2::new(500.0, 400.0)),
+            Some(Gesture::Pinch(_))
+        ));
+    }
+
+    /// Lifting one of a pair leaves the other turning the world, rather than leaving a
+    /// stale finger behind that makes every later move read as a pinch.
+    #[test]
+    fn lifting_one_of_two_fingers_goes_back_to_turning() {
+        let mut fingers = Fingers::default();
+        fingers.began(1, Vec2::new(300.0, 400.0));
+        fingers.began(2, Vec2::new(500.0, 400.0));
+        fingers.ended(2);
+        assert_eq!(
+            fingers.moved(1, Vec2::new(320.0, 400.0)),
+            Some(Gesture::Turn(Vec2::new(20.0, 0.0)))
+        );
+    }
+
+    /// A third finger is ignored, and ignoring it must not disturb the two that are
+    /// already doing something.
+    #[test]
+    fn a_third_finger_is_ignored() {
+        let mut fingers = Fingers::default();
+        fingers.began(1, Vec2::new(300.0, 400.0));
+        fingers.began(2, Vec2::new(500.0, 400.0));
+        fingers.began(3, Vec2::new(700.0, 400.0));
+        assert_eq!(fingers.down.len(), 2);
+        assert_eq!(fingers.moved(3, Vec2::new(900.0, 400.0)), None);
+        assert!(matches!(
+            fingers.moved(2, Vec2::new(600.0, 400.0)),
+            Some(Gesture::Pinch(_))
+        ));
+    }
+
+    /// The pitch is clamped whichever device asks for it, or the world inverts at the
+    /// pole where yaw and roll stop being separable.
+    #[test]
+    fn no_device_can_tilt_the_world_past_the_pole() {
+        let mut orbit = resting();
+        for _ in 0..500 {
+            orbit.drag(Vec2::new(0.0, 100.0));
+        }
+        assert!(orbit.pitch <= PITCH_LIMIT);
+        for _ in 0..1000 {
+            orbit.drag(Vec2::new(0.0, -100.0));
+        }
+        assert!(orbit.pitch >= -PITCH_LIMIT);
+    }
+
+    /// Zoom is clamped the same way whether it came from a wheel or from a pinch.
+    #[test]
+    fn no_device_can_zoom_past_the_limits() {
+        let mut orbit = resting();
+        for _ in 0..200 {
+            orbit.scale_distance(0.5);
+        }
+        assert_eq!(orbit.distance, CLOSEST);
+        for _ in 0..200 {
+            orbit.scale_distance(2.0);
+        }
+        assert_eq!(orbit.distance, FURTHEST);
     }
 
     /// The size a planet opens on comes from the territory count asked for.
