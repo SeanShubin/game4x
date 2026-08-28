@@ -68,7 +68,12 @@ scripts/web.ps1           # as WASM on localhost:8080; or bash scripts/web.sh
 ```
 
 Turning the world is a drag with a mouse, a finger on a touch screen, or the arrow keys.
-Zooming is the wheel or a pinch. `R` puts the view back.
+Zooming is the wheel or a pinch. `R` puts the view back. `1`–`5` choose a planet size,
+smallest to largest, by typing `create planet <size>` at the console — so they are refused
+once a game has started, which is when that command stops being available.
+
+On the web, the keyboard belongs to the canvas. Leaving the console gives it back, because
+winit listens for keys there and focus otherwise stays on the text field.
 
 ## The three surfaces
 

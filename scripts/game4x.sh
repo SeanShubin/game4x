@@ -2,8 +2,9 @@
 # Runs the application: the world as a solid you can turn in your hands.
 #
 # Turning the world is a drag, a finger, or the arrow keys; zooming is the wheel or a
-# pinch. The console is this terminal: type a command and press enter, /browser lists
-# every entity, /game says where the game is.
+# pinch; R puts the view back; 1-5 choose a planet size, before the game starts. The
+# console is this terminal: type a command and press enter, /browser lists every entity,
+# /game says where the game is.
 #
 # This is the same binary that is published to GitHub Pages. The only differences are
 # that there it is compiled to WASM, and that the console and the data browser are

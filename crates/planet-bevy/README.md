@@ -57,7 +57,7 @@ between panels read as grooves; a darker sphere sits just underneath to fill the
 ## Turning it, whatever you are holding
 
 A mouse drag, a held arrow key and a finger all arrive at the same `Orbit::drag`, so they
-cannot mean different things. That matters more than it sounds: winit routes a touch to
+cannot mean different things. `R` puts the view back. That matters more than it sounds: winit routes a touch to
 `TouchInput` and never to `MouseInput` or `CursorMoved` — its web backend tests
 `pointer_type != "touch"` before raising a pointer event — so without a path of its own a
 tablet reaches none of the mouse or keyboard systems, and the planet cannot be turned at
@@ -80,9 +80,17 @@ the web it is not even on the same call stack, because the page calls into it, s
 hand over the new state when it changes. `globe` watches a generation counter instead and
 rebuilds when the number it last saw is not the number it sees now.
 
-Number keys used to set the planet's size here. They are gone: the size of a planet is game
-state, arriving by `create planet <size>` through the one function like everything else, and
-a view that could hold a world the model did not have is not a projection of it.
+The number keys choose a planet size, and they do it **by issuing the command** — they type
+`create planet <size>` at the console, exactly as a person would. They used to write
+`Planet::size` directly, which let the view hold a world the model did not have; a view that
+can do that is not a projection of the model, and it was a second way for the world to
+change where `spec/invariants.md` allows one. Going through the command means a key and a
+typed line take the same path and the globe learns about the result the same way, through
+the counter.
+
+`create planet` is available only before `start`, so in a game already under way a size key
+is refused and the console says *that can only be done before the game starts*. That is the
+rule answering, not the key failing.
 
 ## The flat projection's presentation path
 

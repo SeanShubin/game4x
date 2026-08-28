@@ -119,6 +119,7 @@ impl Plugin for GlobePlugin {
             .add_systems(
                 Update,
                 (
+                    keys_to_choose_size,
                     follow_the_game,
                     build_globe,
                     drag_to_turn,
@@ -545,7 +546,8 @@ fn summary(size: PlanetSize, world: &World, panels: &mesh::PlanetMesh) -> String
     };
     format!(
         "{} - {regions} territories - {shape}\n{} - {} triangles\n\
-         drag, a finger or the arrows to turn - wheel or pinch to zoom - R to reset",
+         drag, a finger or the arrows to turn - wheel or pinch to zoom - R to reset\n\
+         1-5 to choose a planet size, before the game starts",
         size.name(),
         world.degree_summary(),
         panels.triangle_count()
@@ -682,6 +684,44 @@ fn reset_view(keys: Res<ButtonInput<KeyCode>>, mut orbit: ResMut<Orbit>) {
     if keys.just_pressed(KeyCode::KeyR) {
         *orbit = Orbit::default();
     }
+}
+
+/// Number keys choose a planet size, smallest to largest.
+///
+/// **By issuing the command, not by writing the size.** `create planet <size>` is how a
+/// planet's size is chosen, and a key that set [`Planet::size`] directly would be a second
+/// way for the world to change - `spec/invariants.md` allows exactly one. It would also
+/// let the view hold a planet the model does not have, which is what these keys used to do
+/// before the globe followed the game.
+///
+/// So a key and a typed line take the same path, and the globe learns about the result the
+/// same way either way: through [`follow_the_game`], watching the counter. That is what
+/// `releases/first-release.md` means by a control being a command wearing a button - it is
+/// not a parallel interface, because it has no way to be one.
+///
+/// `create planet` is available only before `start`, so in a game already under way this
+/// is refused and the console says why. That is the rule answering, not the key failing.
+fn keys_to_choose_size(keys: Res<ButtonInput<KeyCode>>) {
+    for (digit, size) in SIZE_KEYS.into_iter().zip(PlanetSize::ALL) {
+        if keys.just_pressed(digit) {
+            game_front::shell::with(|console| console.submit(&chooses(size)));
+        }
+    }
+}
+
+/// The digits that choose a size, smallest to largest.
+const SIZE_KEYS: [KeyCode; 5] = [
+    KeyCode::Digit1,
+    KeyCode::Digit2,
+    KeyCode::Digit3,
+    KeyCode::Digit4,
+    KeyCode::Digit5,
+];
+
+/// The line a size key types. Exactly what a person would type, because it is the same
+/// thing arriving by a different route.
+fn chooses(size: PlanetSize) -> String {
+    format!("create planet {}", size.name())
 }
 
 /// The last generation the globe was built for.
@@ -1105,6 +1145,34 @@ mod tests {
             orbit.scale_distance(2.0);
         }
         assert_eq!(orbit.distance, FURTHEST);
+    }
+
+    /// One key per size, in the order the sizes are listed, and each types the command a
+    /// person would type. `game-console`'s `every_planet_size_can_be_created` is the other
+    /// half: that each of those lines is one the console accepts.
+    #[test]
+    fn the_size_keys_are_one_per_size_smallest_to_largest() {
+        assert_eq!(SIZE_KEYS.len(), PlanetSize::ALL.len());
+        let typed: Vec<String> = PlanetSize::ALL.into_iter().map(chooses).collect();
+        assert_eq!(
+            typed,
+            [
+                "create planet tiny",
+                "create planet small",
+                "create planet medium",
+                "create planet large",
+                "create planet huge",
+            ]
+        );
+        // Ascending, so the digits read the way they look on the keyboard.
+        let counts: Vec<usize> = PlanetSize::ALL
+            .into_iter()
+            .map(PlanetSize::territory_count)
+            .collect();
+        assert!(
+            counts.windows(2).all(|pair| pair[0] < pair[1]),
+            "{counts:?}"
+        );
     }
 
     /// The size a planet opens on comes from the territory count asked for.

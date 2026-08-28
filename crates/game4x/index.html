@@ -458,6 +458,12 @@
             el("prompt").focus();
           } else {
             el("prompt").blur();
+            // And the game gets the keyboard back. winit listens for keys on the
+            // canvas and gives it tabindex="0", so once the prompt has taken focus
+            // the arrows, R and the size keys are dead until something hands it
+            // back - blurring alone leaves focus on <body>, which reaches nothing.
+            var canvas = document.querySelector("canvas");
+            if (name === "game" && canvas) canvas.focus();
           }
         }
 

@@ -333,6 +333,29 @@ mod tests {
         }
     }
 
+    /// Every planet size can actually be created, not only the one the release uses.
+    ///
+    /// `create planet tiny` was the only size any test had ever typed - the release is
+    /// tiny, so nothing reached the other four. Five keys now depend on them, and a size
+    /// that parses but fails to build would be a key that appears to do nothing while
+    /// saying something about the wrong thing entirely.
+    #[test]
+    fn every_planet_size_can_be_created() {
+        for size in planet_model::PlanetSize::ALL {
+            let line = format!("create planet {}", size.name());
+            let mut session = Session::new();
+            let outcome = session
+                .run(&line, &NoLibrary)
+                .unwrap_or_else(|problem| panic!("`{line}` was refused: {problem}"));
+            assert_eq!(outcome, Outcome::Changed, "`{line}`");
+            assert_eq!(
+                session.game.territories.len(),
+                size.territory_count(),
+                "`{line}` built the wrong number of territories"
+            );
+        }
+    }
+
     #[test]
     fn a_blank_line_does_nothing_and_is_not_an_error() {
         let mut session = Session::new();

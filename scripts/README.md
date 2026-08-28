@@ -5,12 +5,12 @@
 One script per thing you might want to run, so that running it never requires
 remembering a cargo incantation.
 
-| Script                    | Runs                                                           | Notes                                                                                                     |
-| ------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `game4x.ps1` / `.sh`      | [the application](../crates/game4x/)                           | Drag, a finger or the arrows to turn; wheel or pinch to zoom. The console is the terminal you ran it from |
-| `web.ps1` / `.sh`         | the same application as WASM, on `localhost:8080`              | What GitHub Pages publishes, running locally. There the console is part of the page                       |
-| `planet-view.ps1` / `.sh` | [the planet view prototype](../docs/prototypes/planet-view.md) | Drag to turn the world, `P` to fold it into a globe, `Esc` to quit                                        |
-| `pad-tables.ps1` / `.sh`  | `tools/pad-tables`                                             | Aligns every markdown table in the repo. Not a prototype; see below                                       |
+| Script                    | Runs                                                           | Notes                                                                                                                                          |
+| ------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `game4x.ps1` / `.sh`      | [the application](../crates/game4x/)                           | Drag, a finger or the arrows to turn; wheel or pinch to zoom; `R` resets; `1`-`5` size the planet. The console is the terminal you ran it from |
+| `web.ps1` / `.sh`         | the same application as WASM, on `localhost:8080`              | What GitHub Pages publishes, running locally. There the console is part of the page                                                            |
+| `planet-view.ps1` / `.sh` | [the planet view prototype](../docs/prototypes/planet-view.md) | Drag to turn the world, `P` to fold it into a globe, `Esc` to quit                                                                             |
+| `pad-tables.ps1` / `.sh`  | `tools/pad-tables`                                             | Aligns every markdown table in the repo. Not a prototype; see below                                                                            |
 
 ```
 scripts/planet-view.ps1                       # PowerShell
