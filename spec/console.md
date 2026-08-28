@@ -66,8 +66,8 @@ Available only before `start`:
 
 A line beginning with `/` directs the front end rather than the game. `/game`, `/console` and
 `/browser` choose a surface; `/new <size>` abandons the current game and starts one on a planet
-of that size. It is not a command: it changes no game state, history does not record it, and help
-does not list it.
+of that size. None of these is a command and none is a transition: history does not record them,
+and help does not list them. A game's history begins when the game does.
 
 ## Errors
 

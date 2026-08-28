@@ -101,11 +101,11 @@ Every territory has at least one food node.
 
 - Rotation is bound to the arrow keys, and to dragging
 - Zoom is bound to the wheel, and to pinching
-- Reset is bound to `R`
+- Reset is bound to `R`, and to a control
 - The three surfaces are reached by `F1`, `F2` and `F3`, by buttons on the page, and by `/game`,
   `/console` and `/browser` typed at the console
 - Choosing a planet size abandons the current game and starts one on a planet of that size. It
-  is bound to a control for each size, and to `/new <size>`
+  is bound to `1` through `5`, to a control for each size, and to `/new <size>`
 
 ## Capabilities
 
