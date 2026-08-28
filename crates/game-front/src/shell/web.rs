@@ -52,6 +52,16 @@ pub fn console_reached() -> String {
         .unwrap_or_default()
 }
 
+/// Asks the view to go back to its default.
+///
+/// `spec/planet.md` says the user can reset the view, and `spec/interface.md` says none of
+/// these actions may require a key the platform may lack. `R` is exactly such a key, so
+/// the page carries a control and this is what it calls.
+#[wasm_bindgen]
+pub fn request_view_reset() {
+    crate::shell::request_reset();
+}
+
 /// Every entity in the game and its components.
 #[wasm_bindgen]
 pub fn browser_text() -> String {

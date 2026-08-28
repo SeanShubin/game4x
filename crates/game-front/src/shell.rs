@@ -83,6 +83,19 @@ pub fn reached() -> Option<crate::Surface> {
     with(|console| console.reached())
 }
 
+/// Asks the view to go back to its default, from a control rather than a key.
+pub fn request_reset() {
+    with(|console| console.request_reset());
+}
+
+/// How many times the view has been asked to go back to its default.
+///
+/// Watched by the engine, the way [`generation`] is, and for the same reason: a button on
+/// a page is not on the engine's call stack and has nothing safe to call into.
+pub fn resets() -> u64 {
+    with(|console| console.resets())
+}
+
 /// The data browser's text, without running anything.
 pub fn browser() -> String {
     with(|console| crate::browse(&console.session))

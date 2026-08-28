@@ -431,7 +431,8 @@
       typed line are the same act arriving by different routes - the control is a line
       wearing a button rather than a second way to change anything.
     -->
-    <nav id="sizes" data-showing="true" aria-label="start a new game">
+    <nav id="sizes" data-showing="true" aria-label="view and new game">
+      <button type="button" id="reset">reset view</button>
       <span aria-hidden="true">new game</span>
       <button type="button" data-size="tiny">tiny</button>
       <button type="button" data-size="small">small</button>
@@ -526,7 +527,13 @@
           })(buttons[i]);
         }
 
-        var sizes = document.querySelectorAll("#sizes button");
+        // spec/planet.md asks that the view can be put back, and spec/interface.md
+        // that doing so never needs a key the platform may lack. R is such a key.
+        el("reset").addEventListener("click", function () {
+          if (bindings) bindings.request_view_reset();
+        });
+
+        var sizes = document.querySelectorAll("#sizes button[data-size]");
         for (var n = 0; n < sizes.length; n++) {
           (function (button) {
             button.addEventListener("click", function () {
@@ -565,9 +572,10 @@
           });
         });
 
-        // The same three surfaces from a keyboard. Neither spec/ nor releases/
-        // names a binding for reaching one, so these match the buttons and the
-        // terminal's /game, /console, /browser rather than inventing a fourth way.
+        // The same three surfaces from a keyboard. releases/first-release.md ->
+        // Controls names all three routes: the three surfaces are reached by F1,
+        // F2 and F3, by buttons on the page, and by /game, /console and /browser
+        // typed at the console. These are the first of those three.
         document.addEventListener("keydown", function (event) {
           var at = ["F1", "F2", "F3"].indexOf(event.key);
           if (at < 0) return;

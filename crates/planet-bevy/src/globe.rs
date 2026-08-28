@@ -115,6 +115,7 @@ impl Plugin for GlobePlugin {
             .insert_resource(Drag::default())
             .insert_resource(Fingers::default())
             .insert_resource(Followed::default())
+            .insert_resource(ResetsSeen::default())
             .add_systems(Startup, setup)
             .add_systems(
                 Update,
@@ -680,11 +681,30 @@ fn wheel_to_zoom(mut wheel: MessageReader<MouseWheel>, mut orbit: ResMut<Orbit>)
 /// Puts the view back where it started. A sphere is easy to get lost on - there is no
 /// edge to bump into and nothing to say which way up you have ended up - so there has to
 /// be a way back that is not dragging until it looks about right.
-fn reset_view(keys: Res<ButtonInput<KeyCode>>, mut orbit: ResMut<Orbit>) {
-    if keys.just_pressed(KeyCode::KeyR) {
+///
+/// Asked for by the `R` key, or by a control, which is watched the same way the game is:
+/// a count that only ever goes up. `spec/interface.md` says an action like this *never
+/// requires a gesture or a key the platform may lack*, and a tablet lacks every key - so
+/// the key alone would leave the view unresettable on the platform the touch code was
+/// written for.
+fn reset_view(
+    keys: Res<ButtonInput<KeyCode>>,
+    mut asked: ResMut<ResetsSeen>,
+    mut orbit: ResMut<Orbit>,
+) {
+    let requested = game_front::shell::resets();
+    let by_control = requested != asked.0;
+    if by_control {
+        asked.0 = requested;
+    }
+    if by_control || keys.just_pressed(KeyCode::KeyR) {
         *orbit = Orbit::default();
     }
 }
+
+/// How many resets the view had been asked for when it last obeyed.
+#[derive(Resource, Default)]
+struct ResetsSeen(u64);
 
 /// Number keys choose a planet size, smallest to largest.
 ///
@@ -734,10 +754,12 @@ struct Followed(u64);
 /// changes. This watches a counter instead and rebuilds when the number it last saw is
 /// not the number it sees now.
 ///
-/// The size of a planet is game state. It arrives by `create planet <size>`, through the
-/// one function, like everything else. Number keys used to set it here, which let the
-/// view hold a world the model did not have; the view is a projection of the model, so
-/// that had to go rather than be kept as a convenience.
+/// What the globe draws is whichever game the front end is holding, and that changes in
+/// two ways: a transition, and `/new <size>` putting a different game there entirely. The
+/// counter moves for both, because both leave the same amount to redraw. Number keys used
+/// to set the size here directly, which let the view hold a world the model did not have;
+/// the view is a projection of the model, so that had to go rather than be kept as a
+/// convenience.
 fn follow_the_game(mut followed: ResMut<Followed>, mut planet: ResMut<Planet>) {
     let generation = game_front::shell::generation();
     if generation == followed.0 {

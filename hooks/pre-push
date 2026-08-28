@@ -17,7 +17,8 @@ echo "pre-push: cargo fmt --all -- --check"
 cargo fmt --all -- --check
 
 echo "pre-push: cargo clippy (the shipped path)"
-cargo clippy -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render \
+cargo clippy -p command-language -p game-model -p game-console -p game-front \
+  -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render \
   -p planet-ecs -p planet-bevy -p game4x -- -D warnings
 
 echo "pre-push: cargo test --release (model and view model)"

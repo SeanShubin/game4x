@@ -126,6 +126,16 @@ pub struct Console {
     /// on a terminal there is no such thing to know. It is only what the last line asked
     /// for, which is what a shell reached through a narrow doorway needs to read back.
     reached: Option<Surface>,
+    /// How many times the view has been asked to go back to its default.
+    ///
+    /// Front-end state, like [`Console::reached`] beside it, and nothing to do with the
+    /// game - the engine watches it the way it watches [`Console::generation`], because a
+    /// control on a page cannot reach into a running engine any more directly than that.
+    ///
+    /// `spec/planet.md` says the user can reset the view, and `spec/interface.md` says
+    /// that must *never require a gesture or a key the platform may lack*. `R` is a key a
+    /// tablet lacks, so a control has to be able to ask for it too.
+    resets: u64,
 }
 
 impl Default for Console {
@@ -150,6 +160,7 @@ impl Console {
             ],
             generation: 0,
             reached: None,
+            resets: 0,
         };
         for line in ["run setup", "start"] {
             console.submit(line);
@@ -275,6 +286,19 @@ impl Console {
     /// The surface the most recent line named, if it named one.
     pub fn reached(&self) -> Option<Surface> {
         self.reached
+    }
+
+    /// Asks the view to go back to its default.
+    ///
+    /// Says nothing and records nothing: the view is not the game, so there is no
+    /// transcript line to write and no history to record it in.
+    pub fn request_reset(&mut self) {
+        self.resets += 1;
+    }
+
+    /// How many times the view has been asked to go back to its default.
+    pub fn resets(&self) -> u64 {
+        self.resets
     }
 
     /// How many territories the planet has, or none if there is no planet yet.
@@ -590,6 +614,39 @@ mod tests {
         assert_eq!(console.reached(), Some(Surface::Browser));
         console.submit("show turn");
         assert_eq!(console.reached(), None);
+    }
+
+    /// `spec/interface.md`: resetting the view must never require a key the platform may
+    /// lack, so a control has to be able to ask for it. The engine watches the count.
+    #[test]
+    fn the_view_can_be_asked_to_reset_without_a_keyboard() {
+        let mut console = Console::new();
+        let before = console.resets();
+        console.request_reset();
+        assert_eq!(console.resets(), before + 1);
+    }
+
+    /// Resetting the view is not about the game, so nothing about the game may move.
+    #[test]
+    fn resetting_the_view_touches_no_game_state() {
+        let mut console = Console::new();
+        let game = console.session.game.clone();
+        let generation = console.generation();
+        let transcript = console.transcript();
+
+        console.request_reset();
+
+        assert_eq!(console.session.game, game);
+        assert_eq!(
+            console.generation(),
+            generation,
+            "the globe need not rebuild"
+        );
+        assert_eq!(
+            console.transcript(),
+            transcript,
+            "the view is not the console"
+        );
     }
 
     #[test]
