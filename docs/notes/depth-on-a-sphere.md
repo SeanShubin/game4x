@@ -110,6 +110,86 @@ speed can switch. **Nothing has to be fast enough to be the only mode**, which i
 than it first appears - the rasterizer's ~16 ms a frame at 500 regions is a budget for the practical
 drawing, not a ceiling for both.
 
+## What makes detail read as high quality
+
+Sean asked for planets that look like they carry a lot of high-resolution, realistic detail. That is
+a different problem from depth, and **more octaves is not the answer to it.**
+
+### Procedural detail is unlimited in resolution and poor in variety
+
+Fractal noise can be zoomed into for ever, which sounds like infinite detail and is the exact reason
+it reads as fake. **fBm looks the same at every scale** - that self-similarity is what the eye picks
+up as *computer-generated*, and adding octaves adds more of the same tell.
+
+Real terrain has **different structure at different scales**: plates, then ranges along their edges,
+then valleys cut into the ranges, then scree at the foot of the valleys. Each of those is a
+*different process*, not the same process at a smaller frequency. **The quality comes from using a
+different generator per scale**, which is the argument [planet appearance](planet-appearance.md)
+already makes for a coarse plate layer, extended downward.
+
+### Erosion is the single largest quality jump, and nobody we read mentioned it
+
+Neither published source, neither sibling repository, and nothing in this repository names it.
+**Hydraulic erosion is what separates terrain that looks generated from terrain that looks real.**
+
+Noise produces hills that have no reason to be where they are. Erosion produces **drainage
+networks** - water runs downhill, collects, carves, and deposits - and the eye reads the result as
+landscape because every feature is a consequence of every other. Valleys are V-shaped near ridges and
+U-shaped where they fill. Ridgelines become continuous rather than lumpy. Sediment fans out where
+slope drops. **None of that can be added by another octave**; it is a relationship between places,
+and noise has no relationships.
+
+### And erosion is where the *function of position* model breaks
+
+This matters more than the technique. [Planet appearance](planet-appearance.md) records a strong
+argument: **a material is a function of position, so continuity is automatic** - adjacent pixels have
+adjacent inputs and there is nothing to make seamless. That is why 3D noise on the sphere has no
+seam and no pole.
+
+**Erosion is not a function of position.** It is a simulation with state, iterated: water has to
+arrive from uphill before it can carve downhill, so a pixel's value depends on a whole catchment
+rather than on its own coordinates. It cannot be evaluated per pixel and it cannot be evaluated
+independently.
+
+So it has to be **baked** - computed once over a grid or a mesh at generation time and stored. The
+trade is exact:
+
+|                         | Pure function of position | Baked simulation      |
+| ----------------------- | ------------------------- | --------------------- |
+| Zoom                    | unlimited                 | fixed resolution      |
+| Storage                 | none                      | a field per planet    |
+| Seams                   | none by construction      | whatever the grid has |
+| Erosion, flow, sediment | impossible                | natural               |
+
+**The answer is both, and the crossover is the design decision.** Bake erosion coarsely - enough for
+ranges, valleys and river courses - and add pure procedural detail on top of it for everything finer
+than the baked resolution. That is what planet renderers generally do, and it is the same shape as
+the baking argument for shadows above: **compute what has memory, evaluate what does not.**
+
+### Coherence beats density
+
+A planet whose rivers run downhill into seas looks more real than one with twice the noise. **The eye
+reads quality from features that relate to each other correctly**, not from feature count. That is
+why erosion buys more than octaves, why plate-driven ranges buy more than louder fBm, and why the
+biome lookup should be driven by the *same* elevation field that drives the shading - a desert on a
+mountaintop is a coherence failure that no amount of resolution hides.
+
+### Detail that is smaller than a pixel must be removed, not drawn
+
+**A procedural planet that shimmers looks cheap however detailed it is.** At the zoom where a whole
+planet is on screen, most of the terrain detail is below one pixel, and sampling a high-frequency
+field at those points produces noise that crawls as the camera turns.
+
+The fix is the procedural equivalent of a mipmap: **drop octaves as the pixel footprint grows**, so
+the highest frequency drawn is always near the sampling limit. It costs nothing - it is fewer noise
+evaluations, not more - and skipping it is the most common reason procedural work looks worse in
+motion than in screenshots.
+
+**And it interacts with the zoom split above.** Far out, the high octaves are dropped and the limb,
+terminator and colour carry the image. Close in, they come back and the limb is gone. The two
+regimes hand off to each other, which is a reason to build the octave-dropping early rather than
+bolting it on when the shimmer is noticed.
+
 ## What this does not settle
 
 Which of the two render paths the realistic drawing uses - the CPU rasterizer or the Bevy 3D path -
