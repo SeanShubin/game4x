@@ -21,4 +21,5 @@ cargo clippy -p sphere-tessellation -p graph-coloring -p planet-model -p planet-
   -p planet-ecs -p planet-bevy -p game4x -- -D warnings
 
 echo "pre-push: cargo test --release (model and view model)"
-cargo test --release -p command-language -p game-model -p game-console \n  -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render
+cargo test --release -p command-language -p game-model -p game-console \
+  -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render
