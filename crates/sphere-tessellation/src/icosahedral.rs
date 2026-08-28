@@ -43,7 +43,27 @@ pub fn icosahedron_vertices() -> Vec<Vec3> {
             points.push(Vec3::new(second * GOLDEN, 0.0, first));
         }
     }
-    points.into_iter().map(|point| point.normalized()).collect()
+    let points: Vec<Vec3> = points.into_iter().map(|point| point.normalized()).collect();
+
+    // Stand it up on a vertex.
+    //
+    // `spec/planet.md`: the north and south poles are at the centres of two pentagons,
+    // never on a boundary between territories. A Goldberg polyhedron's twelve pentagons
+    // sit at these vertices, so putting a vertex on the axis puts a pentagon's centre
+    // there - and since the twelve form six antipodal pairs, the far pole lands on the
+    // opposite pentagon for free.
+    //
+    // Which pair is not fixed by the specification, deliberately. This takes the first
+    // vertex the construction produces, `(0, 1, phi)` normalized, and its antipode.
+    //
+    // The rotation is rigid and applied to every vertex, so no distance and no adjacency
+    // changes: territory 5 is the same face and the same neighbours it was before. Only
+    // where the whole solid sits relative to the axis is different.
+    let north = points[0];
+    points
+        .into_iter()
+        .map(|point| point.rotated_by(north, Vec3::new(0.0, 0.0, 1.0)))
+        .collect()
 }
 
 /// The centres of the icosahedron's twenty triangular faces, as unit vectors.

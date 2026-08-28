@@ -32,7 +32,7 @@ use crate::palette::REGION_COLORS;
 ///
 /// Enough to read as a seam at a glance, small enough that a region still looks its own
 /// size. Pentagons and hexagons take the same fraction, so the seams stay even.
-pub const INSET: f32 = 0.055;
+pub const INSET: f32 = 0.028;
 
 /// Which block of vertices belongs to a region.
 ///
@@ -65,6 +65,34 @@ impl PlanetMesh {
 
     pub fn vertex_count(&self) -> usize {
         self.positions.len()
+    }
+
+    /// How far below the sphere the surface actually reaches, as a radius.
+    ///
+    /// A panel is flat, so it dips inside the sphere its corners sit on: a triangle with
+    /// every vertex at radius one passes closest to the centre at its own plane. How far
+    /// depends entirely on how wide the territory is, which is to say on how many there
+    /// are - a twelve-territory planet sags to about 0.93 and a ninety-two-territory one
+    /// barely at all.
+    ///
+    /// Anything drawn beneath the panels has to sit below this or it comes through them.
+    /// Returning it means the caller can place that thing from the geometry rather than
+    /// from a guess that happens to hold at one size.
+    pub fn deepest(&self) -> f32 {
+        let mut deepest = 1.0f32;
+        for triangle in self.indices.chunks(3) {
+            let point = |at: u32| {
+                let p = self.positions[at as usize];
+                Vec3::new(p[0] as f64, p[1] as f64, p[2] as f64)
+            };
+            let (a, b, c) = (point(triangle[0]), point(triangle[1]), point(triangle[2]));
+            let normal = b.sub(a).cross(c.sub(a));
+            if normal.length() < 1e-12 {
+                continue;
+            }
+            deepest = deepest.min(normal.normalized().dot(a).abs() as f32);
+        }
+        deepest
     }
 
     /// Overwrites one region's colour in place. Used for selection and, later, ownership.
@@ -249,6 +277,49 @@ mod tests {
                     "panels stay on the sphere"
                 );
             }
+        }
+    }
+
+    /// The defect this fixes: a flat panel dips inside the sphere its corners sit on, and
+    /// how far depends on how wide the territory is. A fixed radius for whatever is drawn
+    /// underneath held at ninety-two territories and failed at twelve, where the ball came
+    /// through the middle of every panel.
+    #[test]
+    fn the_surface_sags_further_on_a_planet_of_fewer_territories() {
+        use sphere_tessellation::{Params, Tessellation};
+
+        let deepest_at = |count: usize| {
+            let world = Tessellation::generate_balanced(
+                Params {
+                    region_count: count,
+                    ..Default::default()
+                },
+                24,
+            )
+            .0;
+            let solid = sphere_tessellation::solid(&world.seeds, &world.neighbours);
+            build(&solid, &graph_coloring::color_graph(&world.neighbours)).deepest()
+        };
+
+        let tiny = deepest_at(12);
+        let huge = deepest_at(92);
+        assert!(
+            tiny < huge,
+            "wider territories sag further: {tiny} vs {huge}"
+        );
+        assert!(
+            tiny < 0.965,
+            "twelve territories sag past the old fixed radius: {tiny}"
+        );
+        assert!(
+            huge > 0.965,
+            "ninety-two do not, which is why it went unnoticed: {huge}"
+        );
+        // Whatever is drawn underneath has to clear the deepest point at every size.
+        for count in [12, 32, 42, 72, 92] {
+            let deepest = deepest_at(count);
+            assert!(deepest * 0.985 < deepest, "{count}");
+            assert!(deepest > 0.5, "{count}: sanity, a panel is not a spike");
         }
     }
 

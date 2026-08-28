@@ -107,6 +107,33 @@ impl Vec3 {
         self.cross(reference).normalized()
     }
 
+    /// This point, carried by the rotation that takes `from` onto `to`.
+    ///
+    /// Rodrigues' formula. Used to stand a solid up on a chosen axis: applying the same
+    /// rotation to every point is a rigid motion, so it moves the whole thing without
+    /// changing any distance, any angle, or which points are neighbours.
+    pub fn rotated_by(self, from: Self, to: Self) -> Self {
+        let (from, to) = (from.normalized(), to.normalized());
+        let axis = from.cross(to);
+        let sine = axis.length();
+        let cosine = from.dot(to).clamp(-1.0, 1.0);
+        if sine < 1e-15 {
+            // Already aligned, or exactly opposed. Opposed needs a half turn about any
+            // perpendicular axis; which one does not matter, since every choice takes
+            // `from` to `to`.
+            return if cosine > 0.0 {
+                self
+            } else {
+                let axis = from.any_perpendicular();
+                axis.scaled(2.0 * axis.dot(self)).sub(self)
+            };
+        }
+        let axis = axis.normalized();
+        self.scaled(cosine)
+            .add(axis.cross(self).scaled(sine))
+            .add(axis.scaled(axis.dot(self) * (1.0 - cosine)))
+    }
+
     /// Moves `distance` radians along the great circle heading in direction
     /// `tangent`, which must be a unit vector perpendicular to `self`.
     pub fn moved_along(self, tangent: Self, distance: f64) -> Self {

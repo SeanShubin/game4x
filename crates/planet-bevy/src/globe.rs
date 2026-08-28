@@ -63,8 +63,15 @@ const ZOOM_PER_NOTCH: f32 = 0.09;
 /// there. You can still get near enough to be looking straight down at a pole.
 const PITCH_LIMIT: f32 = std::f32::consts::FRAC_PI_2 - 0.01;
 
-/// The radius of the dark ball the panels float on, filling the seams between them.
-const UNDERSIDE: f32 = 0.965;
+/// How far below the surface the dark ball sits, as a fraction of how far the panels
+/// themselves reach.
+///
+/// It used to be a fixed 0.965, which held for the larger planets and failed for the
+/// small ones: a twelve-territory planet has territories wide enough that each flat panel
+/// dips to about 0.93, so the ball came through the middle of every one and left only a
+/// star-shaped rim showing. The radius now follows the geometry, so it is correct at
+/// every size instead of at most of them.
+const UNDERSIDE_BELOW: f32 = 0.985;
 
 /// The spike marking each end of the planet's axis.
 const POLE_MARKER_RADIUS: f32 = 0.045;
@@ -294,7 +301,14 @@ fn build_globe(
                 MeshMaterial3d(panel_material),
             ));
             globe.spawn((
-                Mesh3d(meshes.add(Sphere::new(UNDERSIDE).mesh().ico(4).unwrap())),
+                Mesh3d(
+                    meshes.add(
+                        Sphere::new(panels.deepest() * UNDERSIDE_BELOW)
+                            .mesh()
+                            .ico(4)
+                            .unwrap(),
+                    ),
+                ),
                 MeshMaterial3d(underside),
             ));
 
