@@ -275,10 +275,25 @@ The candidates are set out in [the biome note](biomes.md):
 | A structure's requirements              | what can be built where                        |
 | Which native species lives where        | danger with a stated cause rather than by fiat |
 
-**The first one to fix is the one already broken.** P-103 records that every force of nature must be
-1, because taking needs *greater* force and both founding units are 2 - so the contested role, the
-only biome that was good and dangerous at once, does not exist. It is recoverable by rescaling the
-force numbers alone, without a rule changing.
+**Jungle is the one waiting, and it is deferred rather than broken.** Sean, 2026-08-28: *"yes we
+are going to need that, but it is correct that for the first playable game I want force of nature to
+always be one. I need a baseline to tune from."*
+
+**Two independent reasons put force at 1, and they agree**, which is why nothing needs fixing:
+
+- **Chosen.** A single value everywhere is a baseline. Every later number is tuned against a game
+  that is known to be playable, and a variable that never varies cannot be the cause of anything.
+- **Forced.** P-63 says taking a territory needs force **greater** than what is there, and both
+  founding units have force 2 - so a territory at force 2 or more could never be taken by anything
+  that exists. Even a decision to vary it now would have had nowhere to go.
+
+**What Jungle costs while it waits.** It was picked to be the one biome that is good and dangerous at
+once - the only one producing a real decision rather than a preference. With danger capped it is
+grassland with less food, so the first release has **six biomes and four distinct roles**.
+
+**Recovering it changes no rule.** Rescale the force numbers together - founding units at 4,
+dangerous ground at 3 - and P-48's *the structure a founding unit becomes has one less force* still
+lands exactly. It is release tuning, not a spec change, which is what makes it safe to defer.
 
 **And the note to re-read is [biomes](biomes.md)**, which sets out the six roles and the test they
 were chosen against: does knowing the biome change what a player *does* with a territory, or only
