@@ -26,30 +26,45 @@ Four tiers, and the boundary is the directory it lives in.
 | `docs/`       | shared     | The "why" layer. Reviewed. Follow the rules in [docs/README.md](docs/README.md).    |
 | `docs/notes/` | **Claude** | Derived records of conversation. Not binding. Sean is not expected to read them.    |
 
-## Two instances
+## Three instances
 
-Two Claude instances work in this repository at once. **The boundary is the kind of work, not
-the directory.**
+Three Claude instances work in this repository at once. **The boundary is the kind of work, not
+the directory**, and each writes in exactly one place.
 
-| Lane                                | Owns                                                                        |
-| ----------------------------------- | --------------------------------------------------------------------------- |
-| **Documentation and specification** | `spec/`, `releases/`, `docs/`, `README.md`, this file                       |
-| **Code and deployment**             | `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, CI, cargo |
+| Lane                                | Writes                                                                      | Reads      |
+| ----------------------------------- | --------------------------------------------------------------------------- | ---------- |
+| **Documentation and specification** | `spec/`, `releases/`, `docs/`, `README.md`, this file                       | everything |
+| **Code and deployment**             | `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, CI, cargo | everything |
+| **Quality**                         | `quality/`, and nothing else                                                | everything |
 
-Neither crosses. The documentation instance does not edit code, **even to fix an obvious
-break** - it reports the break and leaves it. The code instance does not write specification.
+**Every lane reads everything; no lane writes outside its column.** That is what makes them
+composable rather than merely separated - a lane that cannot read the others has to guess, and a
+lane that can write to another has to be trusted.
 
-Three consequences, all of which have teeth:
+None of them crosses. The documentation instance does not edit code, **even to fix an obvious
+break** - it reports the break and leaves it. The code instance does not write specification. The
+quality instance **never edits what it reviews**: it produces a report and the code instance acts on
+it, which is the same shape as specification never editing code.
 
-- **Stage by name, never `git add -A`.** The other instance's work is often uncommitted in the
-  same tree. `-A` sweeps it into your commit, and the two lanes then share a history entry that
-  describes only half of it.
+**Quality runs nothing that writes.** Reading the tree, running `cargo clippy`, `cargo test` and
+`cargo tree` are all fine. `cargo fmt`, `cargo fix` and `clippy --fix` are not, because they modify
+the very files being judged - and a review that alters its subject is no longer a review. See
+[quality](quality/README.md).
+
+Four consequences, all of which have teeth:
+
+- **Stage by name, never `git add -A`.** Another lane's work is often uncommitted in the same tree.
+  `-A` sweeps it into your commit, and two lanes then share a history entry that describes half of
+  it.
 - **`hooks/pre-push` runs the full gate** - `cargo fmt`, clippy and the test suite across every
-  crate. A documentation-only push is therefore gated on code this lane did not write and must
-  not repair. If it fails for that reason, **say so and stop**; whether to `--no-verify` is
-  Sean's call, not Claude's.
+  crate. A documentation-only or report-only push is therefore gated on code that lane did not
+  write and must not repair. If it fails for that reason, **say so and stop**; whether to
+  `--no-verify` is Sean's call, not Claude's.
 - **Re-read before asserting.** A file read earlier in the session may have been rewritten by
-  the other instance since. Anything claimed about code needs a fresh look, not a memory.
+  another instance since. Anything claimed about code needs a fresh look, not a memory.
+- **A finding is not a fix, and neither is a fix a finding.** When a lane sees a problem outside its
+  column, it writes it down where Sean will see it - a proposal, a report - and stops. Noting it in
+  a reply is the failure mode: it reads like diligence and behaves like forgetting.
 
 Historical exception, so the boundary is not mistaken for a description of the past:
 `tools/pad-tables/` and the tests in `crates/sphere-tessellation/` were written from the
