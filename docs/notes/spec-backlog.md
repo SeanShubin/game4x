@@ -140,7 +140,161 @@ Nothing written yet.
 
 ## Not yet in any spec file
 
+### Supply lines cut a unit off
+
+Stated by Sean on 2026-08-26: *"mobile units are vulnerable to having their supply lines cut off,
+and are lost if so."* P-50 carries the rule that a unit is lost when its upkeep is unpaid; what is
+not written anywhere is **what a supply line is** - whether it is a path of controlled territories,
+a distance from a structure, or something else. It cannot be written until logistics returns, since
+nothing crosses a territory boundary today.
+
+Sean drew the boundary the same day: the *no penalty for building infrastructure* invariant covers
+**infrastructure, not the military**. Structures cost nothing to keep; units do.
+
+### Supply shocks, and routes that get cheaper when you clear them
+
+Stated by Sean on 2026-08-26, as design intent rather than a rule:
+
+> Supply lines matter, and you are actually vulnerable to supply shocks. The idea that clearing
+> an area of pirates opens up a cheaper route for resource flow was fantastic, and supply lines
+> are going to be a big part of this game.
+
+He added that he does not know whether any of it fits in the first release. It does not, and
+nothing is lost by that - **the substrate is already in the specification**, so this arrives later
+as content rather than as a redesign. What is already there:
+
+| Piece                                                | Where                                                                 |
+| ---------------------------------------------------- | --------------------------------------------------------------------- |
+| A unit dies when its upkeep goes unpaid              | `spec/units.md` - this is what makes a supply shock hurt              |
+| Moving things costs energy                           | P-65, once promoted - this is what makes a route have a price         |
+| A cost is paid where it is spent                     | `spec/logistics.md` - this is what stops a player pooling one economy |
+| Taking ground needs more force than is already there | `spec/control.md` - this is what makes clearing a route an actual act |
+| Force of nature is a property of each territory      | `spec/control.md` - this is what makes some ground expensive to cross |
+
+**The Distant Worlds effect may need no new rule at all.** If moving costs energy per territory
+crossed, and a route is a path of territories, then a shorter or safer path is *literally* cheaper -
+not by a rule that says so, but by arithmetic. Clearing a territory that sits between two of yours
+shortens every route through it at once. That is the feeling Sean is describing, and it falls out
+of pieces that already exist rather than needing a supply-route mechanic bolted on.
+
+**What is genuinely undecided** is how a hostile or uncontrolled territory affects a route:
+whether it blocks passage outright, whether it costs more energy, or whether goods crossing it are
+lost at some rate. Blocking is the simplest and gives the sharpest supply shock - an enemy taking
+one territory severs everything beyond it. Rates are more Distant Worlds and more forgiving.
+
+**Nothing in the first release forecloses any of it.** Movement already has a cost, resources
+already have locations, territories already have adjacency and force. The risk to watch for is the
+opposite one: **do not let the first release give the player a pooled inventory or free movement**,
+because taking those away later is a redesign, whereas adding routes to a world that already
+counts locations and distances is content.
+
+### Perlin noise hotspots, when nodes go random
+
+Sean, 2026-08-26: *"when we do go random, I am thinking I want to use perlin noise to create
+hotspots that can be discovered by following increasing values."* **Explicitly not the first
+release and not a proposal.** The first release uses a designed twelve-territory fixture instead -
+see P-68 - because at that size chosen numbers exercise the mechanics more reliably than a roll.
+
+**What the idea buys.** Independent rolls per territory make node counts noise in the statistical
+sense: knowing one territory tells you nothing about its neighbours, so there is nothing to
+prospect for. A smooth field makes richness *correlated across adjacency*, which turns exploration
+into a gradient you can climb. That is a different activity from revealing a map, and it is the
+reason to prefer noise over rolling.
+
+**One constraint worth recording before anyone implements it.** The planet is a sphere - a Goldberg
+polyhedron - so the field has to be sampled in **three dimensions at each territory's centre**, not
+on a two-dimensional projection. [Region schemes](region-schemes.md) and
+[the planet-view prototype](../prototypes/planet-view.md) both record that any flat map of a sphere
+folds, and the folds land on the poles. A 2D noise field inherited from a projection would put a
+visible seam of discontinuity there, and the gradient a player is following would break exactly at
+the two places [the spec already marks as visible](../../spec/planet.md). Sampling 3D noise on the
+unit sphere has no seam anywhere.
+
+**And the gradient must be legible through adjacency**, since that is the only thing a player can
+walk. The useful property is that neighbouring territories differ little and distant ones differ
+more - which is what a noise frequency low relative to territory size gives. Too high a frequency
+and neighbours are uncorrelated again, which is the rolled planet with extra steps.
+
+### A single document to hand the coding instance
+
+Sean, 2026-08-26: *"perhaps we will eventually need to create a document I can point the coding
+instance to for the full implementation."*
+
+Not yet written. What it would have to gather, none of which lives in one place today:
+
+- `spec/` for the rules, `releases/first-release.md` for the figures - already the two canonical
+  sources and already linked from [the spec index](../../spec/README.md)
+- [Parser and assembler architecture](parser-architecture.md) for what a proper command interpreter
+  must do, now framed as requirements rather than as a port
+- [`docs/architecture.md`](../architecture.md) for the crate layout and the ECS rules, including
+  that model ids rather than Bevy entity ids are canonical identity
+- The **setup command** vocabulary, which does not exist yet and which nothing can be built without
+  - see P-73
+
+**The obstacle is not writing it, it is that it goes stale.** A hand-assembled digest disagrees with
+its sources the first time a proposal lands. If it is written it should be a **map** - one page
+saying which file answers which question - rather than a copy of what those files say.
+
+### Refuelling a unit after it is built
+
+Sean, 2026-08-26: *"in general I think we are going to need the ability to refuel after something
+is built, but perhaps not in this case since we have no need of standing armies yet."*
+
+**Nothing in the specification currently lets a built unit take on energy.** P-66 fills a unit's
+cells when it is built and says nothing further. `spec/logistics.md`'s *whatever pays a cost must
+be in the territory where it is spent* does **not** cover this - that rule is about the cost of
+producing something, and refuelling produces nothing.
+
+**The trigger is standing units.** Every unit in the first release is a founding unit, and P-61
+makes founding consume it, so no unit lives long enough to run dry. The first unit expected to
+**persist** - a defender, a transport, anything that is not spent on arrival - is the point at
+which this must be written.
+
+**Worth deciding when it is:** whether refuelling is free where energy is present, costs a turn,
+or needs a structure. The last would give a reason to build depots at the frontier and would pair
+with the storage entry below.
+
+### Storage, spoilage and decay
+
+Stated by Sean on 2026-08-26, all as later work:
+
+- **Storage facilities for energy and metal**, while food spoils initially
+- **Later technology lets food last longer**
+- **Decay as a general mechanic** - food spoils, but radioactive materials also lose potency over
+  time
+
+**This is the structural fix for a mismatch that already exists.**
+[`spec/turn.md`](../../spec/turn.md) discards unused resources every turn, and
+[the balance trace](first-release-balance.md) shows why that bites: food demand is **continuous**
+and metal and energy demand is **lumpy**, so the two lumpy resources arrive every turn with nothing
+to buy and are thrown away. Storage is what lets lumpy demand meet steady supply.
+
+Which makes *food spoils, metal and energy store* the right asymmetry rather than an arbitrary one:
+**the resource that spoils is the one whose demand never pauses, so buffering it would buy nothing
+anyway.** Flavour and mechanism agree, which is worth preserving if the rule is ever written
+differently.
+
+### A transport unit for energy
+
+Sean, 2026-08-26: *"I might just need a fuel transport unit to bring energy across the map."*
+Raised alongside energy cells (P-66) as the alternative to giving every unit its own range. Cells
+are the leaner of the two and are what he is considering first; a transport is what becomes
+necessary if energy has to reach a territory that cannot extract it.
+
+### A structure with a logistics value - considered and cut
+
+Sean, 2026-08-26: a structure carrying a number where *0 means any material can be instantly
+transported within the same territory, 1 meaning it can be transported 1 territory away in 1
+turn*. **Cut for simplicity**, in favour of energy cells on the unit. Recorded so it is not
+re-proposed: it needs a structure, a range rule and a projection radius to reach where one stat on
+a unit already reaches.
+
 ### Logistics - the core loan from Factorio and Distant Worlds
+
+> **Deferred for the first release, 2026-08-26.** Sean cut logistics *for now* so that each
+> territory is self-contained and only a mobile unit crosses a boundary - see P-59. The intent
+> below is unchanged and still the destination; it is the schedule that moved. Two proposals were
+> withdrawn with it, P-46 and P-56.
 
 Stated as the central idea and entirely unwritten:
 

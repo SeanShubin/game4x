@@ -6,8 +6,14 @@ predecessor's design, kept so the Rust rewrite can take the good parts deliberat
 [Notes index](README.md) · [Documentation map](../README.md) · [Root README](../../README.md)
 
 Reviews the parser in [`../game-4x`](game-4x-predecessor.md), whose `prototype4` module is
-the most evolved version. Sean wants the same shape in Rust, with a clean seam between the
-generic parser and the game-specific parts.
+the most evolved version.
+
+> **This is not a porting guide, 2026-08-26.** Sean: *"I don't want you to replicate the old
+> game-4x version, I want you to create a proper version of that."* An earlier line here said he
+> wanted *the same shape in Rust*, and that was wrong. **What survives is the seam** - a generic
+> parser that knows no game nouns, and a small table binding grammar rules to meaning. Everything
+> under *what is weak* below is a **requirement for the new one**, not a defect to reproduce, and
+> `spec/console.md` states the ones a player can observe.
 
 ## The pipeline
 

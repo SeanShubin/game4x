@@ -36,6 +36,10 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - Each territory has an id, unique within its planet, starting at 1
 - Each territory has zero or more nodes for each resource, and each node has a density
 
+## Native life
+
+- Each planet has its own native species.
+
 ## Presentation
 
 - The planet is presented as a three-dimensional sphere
@@ -46,5 +50,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - The user can zoom in and out of the planet
 - The user can reset the view to a default
 - A territory's id is displayed on the sphere
+- The poles are visible on the planet.
+- The north and south poles are at the centres of two pentagons, never on a boundary between
+  territories
 
 ## Open questions

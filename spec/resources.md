@@ -8,4 +8,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## The list
 
+- Food, for population
+- Metal, for building things
+- Energy, for moving things
+
 ## Open questions

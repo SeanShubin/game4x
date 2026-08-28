@@ -31,8 +31,8 @@ the food does not cover **leaves** - it does not die. It runs twice in priority 
 citizens who worked this turn eat before idle ones, and the idle are what starve out.
 
 Sean has since written this rule into
-[`spec/planet.md`](../../spec/planet.md) in his own words, so the spec is now canonical for
-it and this section is only provenance.
+[`spec/population.md`](../../spec/population.md) in his own words, so the spec is now canonical
+for it and this section is only provenance.
 
 ## The turn, from `GenericLandStrategy`
 
@@ -55,14 +55,65 @@ only be spent on growth in step 6. That is what makes the `min()` a real constra
 than bookkeeping.
 
 Whether food carries over is unspecified in the new spec. See
-[the backlog](spec-backlog.md).
+[the backlog](spec-backlog.md) and P-41 in [proposals](proposals.md).
+
+## How the predecessor composed a turn, and why it cannot be copied
+
+Read 2026-08-26, to settle the question P-54 raises: does a turn run **phase at a time** across
+the whole planet, or **territory at a time**?
+
+**The predecessor ran territory at a time.** The only place a full turn is assembled is
+`UniverseCommandRunnerTest`:
+
+```kotlin
+val command = EveryLandUniverseCommand(GenericLandStrategy)
+```
+
+`EveryLandUniverseCommand` takes **one** land command and applies it to every land in turn;
+`GenericLandStrategy` is the whole eight-step sequence. So each land gathered, ate, grew,
+discarded and reset **before the next land began**. Ordering was `planet.lands` index order, not
+claim order.
+
+**But it never faced the question, because nothing crossed a border.** `Land` has no adjacency -
+no neighbour field, and no command that reads one. Every land was a closed system, so the order
+of the two loops could not possibly matter. Its answer is not evidence.
+
+**And its structure shows why that answer would now be wrong.** `DiscardSupply` is step 7 of
+`GenericLandStrategy`, *inside* the per-land sequence. Territory at a time therefore means the
+first territory destroys its surplus before the second is reached. Under P-46 and P-56 - food
+moving to adjacent territories, neighbours taking the remainder - **cross-border supply would be
+impossible**, not merely awkward. The first territory's leftovers are gone before anyone can ask
+for them.
+
+**The inspiration worth taking is that the nesting is data, not control flow.** The same pieces
+compose either way, and it is one line:
+
+```kotlin
+EveryLandUniverseCommand(GenericLandStrategy)                    // territory at a time
+CompositeUniverseCommand(EveryLand(produce), EveryLand(consume)) // phase at a time
+```
+
+A turn is a list of commands and a rule for iterating lands, so choosing between the two readings
+in P-54 does not require a different engine - only a different composition. That is the design
+property to keep.
+
+Three smaller things worth carrying over:
+
+- **`CompositeUniverseCommand` threads state sequentially** - each command sees the previous
+  one's universe - and **short-circuits on the first failure**, abandoning the rest of the turn.
+- **`ZeroOrMoreCommand` repeats a step until it fails**, which is how *build as many farms as you
+  can* worked. Failure is the loop's terminator rather than an error, so a command's failure is
+  ordinary control flow.
+- **Every command is `toObject()`-serializable**, which is what let a turn be written out as
+  data. That is the same property Sean now wants for
+  [the console](../../spec/console.md) - a turn that can be replayed as a test.
 
 ## Naming, then and now
 
-| game-4x           | spec/planet.md           |
+| game-4x           | the spec                 |
 | ----------------- | ------------------------ |
 | node              | territory                |
-| density           | fertility                |
+| density           | density (of a node)      |
 | gatherer          | farm                     |
 | activated citizen | citizen expending labour |
 | supply            | (unnamed so far)         |

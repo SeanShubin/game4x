@@ -21,4 +21,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## Structures and labor
 
+- A citizen works at one structure and cannot be in two places at once.
+- Structures that produce force and structures that extract resources are alike in this: a
+  citizen at one is not at the other.
+
 ## Open questions

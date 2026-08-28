@@ -14,7 +14,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## Paying a cost
 
-- A cost is paid where it is spent: building something that costs 8 metal and 5 fuel
-  requires 8 metal and 5 fuel to be at the building site
+- A cost may be made of anything the player controls: resources, citizens, units or structures
+- Whatever pays a cost must be in the territory where the thing being paid for is built
+- Building something that costs 8 metal and 5 energy requires 8 metal and 5 energy to be in
+  that territory
 
 ## Open questions

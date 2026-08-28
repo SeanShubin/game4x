@@ -1,0 +1,32 @@
+# Sample Turn
+
+- Planet native life has force 1
+- Planet has 12 territories
+- Each territory on planet has the following nodes
+  - 3 food nodes at density 4
+  - 6 metal nodes at density 2
+  - 2 fuel nodes at density 8
+- We have an ark with force 2 orbiting a territory
+- Ark invades the territory
+- Ark force of 2 is greater than territory force 1, so invasion succeeds
+- Ark transforms into Barracks (territory infrastructure, makes no sense to have 2 of them), 1 Citizen, and 1 food extractor
+- Barracks has force 1, keeping nature at bay
+- 1 citizen expends 1 labor on a turn on the food extractor to generate food, at density 4, 4 food is generated, citizen labor is spent and won't be regenerated until end of turn
+- population grows to 2
+- 1 citizen expends 1 labor to generate 4 food, the other citizen expends 1 labor to build another farm
+- eventually we are going to max out farms by nodes and citizens by food
+- we are going to build metal and fuel extractors to fully exploit the territory
+- we are going to spend metal and a citizen to create a pioneer
+- pioneer will have force 2, and will be able to move 1 territory per turn
+- pioneer will invade a neighboring territory
+- pioneer will transform into a barracks with force 1 and a citizen
+- citizens in new territories will get food from adjacent territories
+- each territory will satisfy its own consumption first, only remainder is available to adjacent territories
+- territores are resolved in the order they were claimed
+- multiple units will be active at a time, conquering and exploiting until full planet exploitation is achieved
+- unused resources at end of turn are discarded, storage/spoilage mechanics are planned for the future
+- this whole sequence will be written as game command that can be run by the game engine as a test
+- the game engine will also have an interactive mode where I can run one command at a time
+- I will be able to organize commands in a file hierarchy, invoking separate files as if they were subroutines
+- commands to query the game state will be available
+

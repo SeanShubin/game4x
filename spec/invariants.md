@@ -26,9 +26,22 @@ specific rule.
 
 ## No penalty for building infrastructure
 
-- Infrastructure is never a liability; a structure costs nothing to keep, and nothing a
+- Infrastructure is never a liability; a structure costs nothing to keep, and no structure a
   player builds ever has to be removed to make room for something else
 - Every setback comes from outside the player, another player or the world; none comes from
   the player's own infrastructure
+
+## No step that is always taken
+
+- No action has an intermediate step that is always taken. Where one would, the action is
+  defined to reach the outcome directly
+
+## The game is one function
+
+- A game state and a transition yield a new game state. There is no other way for state to
+  change
+- This holds for designing the world as much as for playing it. Which phase a game is in is part
+  of its state
+- A game state is exactly the result of applying every transition in order to the starting state
 
 ## Open questions

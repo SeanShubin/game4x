@@ -23,7 +23,9 @@ no matter how thoroughly it was discussed.
 | [Economy](economy.md)       | Extraction, structures and labor                                 |
 | [Logistics](logistics.md)   | Where materials are, and moving them to where they are needed    |
 | [Population](population.md) | Citizens, how they grow, and the labor they provide              |
-| [Control](control.md)       | Threat, security, and how territory is claimed and held          |
+| [The turn](turn.md)         | The order in which a turn resolves                               |
+| [Control](control.md)       | Force, coordination, and how territory is claimed and held       |
+| [Interface](interface.md)   | What the player sees and can reach                               |
 | [Console](console.md)       | The command language                                             |
 | [Combat](combat.md)         | Ranges, weapons, resolution                                      |
 | [Orbit](orbit.md)           | The orbital layer and what sits in it                            |

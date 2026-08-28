@@ -26,6 +26,35 @@ Four tiers, and the boundary is the directory it lives in.
 | `docs/`       | shared     | The "why" layer. Reviewed. Follow the rules in [docs/README.md](docs/README.md).    |
 | `docs/notes/` | **Claude** | Derived records of conversation. Not binding. Sean is not expected to read them.    |
 
+## Two instances
+
+Two Claude instances work in this repository at once. **The boundary is the kind of work, not
+the directory.**
+
+| Lane                                | Owns                                                                        |
+| ----------------------------------- | --------------------------------------------------------------------------- |
+| **Documentation and specification** | `spec/`, `releases/`, `docs/`, `README.md`, this file                       |
+| **Code and deployment**             | `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, CI, cargo |
+
+Neither crosses. The documentation instance does not edit code, **even to fix an obvious
+break** - it reports the break and leaves it. The code instance does not write specification.
+
+Three consequences, all of which have teeth:
+
+- **Stage by name, never `git add -A`.** The other instance's work is often uncommitted in the
+  same tree. `-A` sweeps it into your commit, and the two lanes then share a history entry that
+  describes only half of it.
+- **`hooks/pre-push` runs the full gate** - `cargo fmt`, clippy and the test suite across every
+  crate. A documentation-only push is therefore gated on code this lane did not write and must
+  not repair. If it fails for that reason, **say so and stop**; whether to `--no-verify` is
+  Sean's call, not Claude's.
+- **Re-read before asserting.** A file read earlier in the session may have been rewritten by
+  the other instance since. Anything claimed about code needs a fresh look, not a memory.
+
+Historical exception, so the boundary is not mistaken for a description of the past:
+`tools/pad-tables/` and the tests in `crates/sphere-tessellation/` were written from the
+documentation lane before the split existed.
+
 ## The rule that matters
 
 **A decision is only real when it appears in `spec/`, reviewed by Sean.**
@@ -37,6 +66,21 @@ measurement backs it. Analysis does not become policy by accumulation.
 - The notes **justify**. Long, dated, measured.
 - The spec links down to a note for reasoning; the note links up to the spec for the
   decision. Never the reverse. A note must never read as though it settled something.
+
+## An empty queue means no contradictions
+
+**If [the queue](docs/notes/proposals.md) is empty, Sean can take it that nothing known is
+inconsistent.** That is a promise about the queue, not about the specification: it does not say the
+spec is complete or correct, only that **everything Claude knows to be wrong is sitting where he
+will see it.**
+
+So a contradiction has exactly one resting place. When Claude finds one - between two spec files,
+between the spec and a release, between a note and either - it becomes a proposal **the moment it is
+found**, whatever else is happening. Never a paragraph in a discussion, never a sentence in a reply,
+never a line in a note.
+
+This is what makes an empty queue mean something. If contradictions can sit in prose, an empty queue
+means only that nobody has written anything down lately.
 
 ## Editing `spec/` and `releases/`
 
@@ -89,6 +133,18 @@ If Claude wants a word changed, it changes the **proposal** and says so, before 
 approves. Fixing phrasing during promotion would mean the text Sean reviewed and the text in
 the spec are not the same text, and he would have no reason to re-read the spec to find out.
 The guarantee this buys is that **approved text is byte-identical to shipped text.**
+
+**A promotion that makes something else stale is not finished.** When landing a proposal
+invalidates a line elsewhere - in `spec/`, in a release, or in another proposal - Claude does one of
+two things and never a third:
+
+- **Refuse the promotion**, saying what has to be decided first, or
+- **File a cleanup proposal immediately after**, so the staleness sits in the queue.
+
+Noting it in a discussion paragraph and moving on is the failure. It reads like diligence and
+behaves like forgetting. **The queue is what gets read; prose is not.** P-85 found six
+contradictions in one release file, and two of them had been flagged at the time and left there -
+long enough for the coding instance to implement a rule the specification does not have.
 
 **Every promotion asserts.** Copy, then verify the text is present in the target file, and
 fail loudly if it is not. Claude has three times reported that something landed when it had
@@ -145,6 +201,15 @@ files from the specification index.
 from `### P-28` up to `### P-32` also deletes anything filed between them, silently. Two
 proposals were destroyed that way. Count what the range contains and assert it is what you
 expect before removing it.
+
+**The reason it keeps happening is worth stating plainly.** The padder runs *after* an edit, so
+the file on disk is always in padded form, while a match string drafted while writing the edit is
+not. Identical content, different bytes. Two habits remove the whole class:
+
+- **Never put a table row in a match string.** Locate the row by its prefix - `| P-42,` - and
+  rebuild it. A match string containing `|` is a bug waiting for the next pad.
+- **Pad before reading, not only after writing**, so every match is made against the bytes that
+  are actually there.
 
 Rebuild a table from a declared list instead, and **assert** the result: that every item is
 accounted for exactly once, and that a list of files matches what is actually on disk. A

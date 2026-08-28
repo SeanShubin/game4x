@@ -10,18 +10,46 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 
 ## Force
 
+- Force is the capacity for violence.
+- Every territory has a force of nature, inherent to it. Nature has no quantity and no
+  population that grows.
+- Nature consumes nothing. A node is intentional exploitation, and nature does not exploit.
+
 ## Producing force
+
+- A territory has at most one garrison, because it represents the organisation of the whole
+  territory rather than a presence in one part of it.
+- A citizen has a force of its own, coordinated or not
+- A garrison does two things. It lets the citizens of that territory sum their force instead of
+  presenting only the highest among them. And it has a multiplier, so that a citizen working
+  there produces that much force.
+- A garrison is not built. A territory gains one by being founded, and gains one no other way
 
 ## Coordination
 
+- Organised force **sums**. Unorganised force is the **highest** present, not the total.
+- Citizens are capable of violence but not of coordination. Without something to coordinate
+  them, the force they present is the highest among them rather than the total.
+- Coordination is imposed on citizens by a structure, such as a garrison, or by a military unit,
+  which carries coordination with it rather than needing a place.
+
 ## Gaining and holding ground
 
-## Wildlife
+- Taking a territory takes force greater than the existing force, be that nature, a player, or
+  anything else not already controlled by you
+- Holding a territory takes force equal to its force of nature
+- Should the force in a territory fall below its force of nature, nature takes it back. Its
+  entire population perishes and any ark on it becomes unusable.
 
-- Several species may live in one territory, each with its own force
-- Species of equal force coexist. Where one has greater force than another, it preys on the
-  weaker
-- **Nature never exterminates.** Extermination requires coordination, and nature does not
-  coordinate. Only a player can drive a species to nothing
+## Winning
+
+- A planet is fully exploited when every territory that can be taken has been taken, every
+  structure that can be built has been built, and every storage structure on it is full.
+- A player wins by launching an Ark from a fully exploited planet.
+
+## Losing
+
+- A player has lost when they have no citizens and nothing that converts into a citizen, such as
+  an Ark or a Pioneer
 
 ## Open questions

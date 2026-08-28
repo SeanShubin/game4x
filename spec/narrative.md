@@ -36,4 +36,6 @@ The AI designs machines and buildings. The population operates them.
 
 ## Violence and order
 
+- Violence is inherent. Coordination is imposed.
+
 ## Open questions

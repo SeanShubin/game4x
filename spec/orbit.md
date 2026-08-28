@@ -8,7 +8,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## The orbital layer
 
-*Scaffolding prompt - delete this line when the section is written.* What orbit is, in terms of the region graph.
+- Orbit is a single place above a planet. It is not a territory, it has no nodes, and nothing is
+  extracted there.
 
 ## What sits in orbit
 
@@ -16,7 +17,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## Crossing between layers
 
-*Scaffolding prompt - delete this line when the section is written.* How things move, shoot, and see between orbit and surface.
+- A unit in a territory may launch to orbit. A unit in orbit may land on any territory of the
+  planet below it.
+- Launching and landing cost what any other move costs.
 
 ## Open questions
 

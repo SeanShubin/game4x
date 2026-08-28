@@ -9,19 +9,20 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 One section per unit type. What is true of *every* unit belongs in
 [units](units.md) instead.
 
+## Founding units
+
+- A founding unit takes a territory and transforms into what that territory needs to sustain
+  itself: a structure that holds the ground, a citizen, and an extractor working a food node.
+- An Ark is a founding unit that arrives from orbit. A Pioneer is a founding unit that arrives
+  from an adjacent territory.
+- The structure a founding unit becomes has one less force than the unit, and is operated by
+  citizens.
+
 ## Ark
 
-- An Ark claims a territory from space; it costs more than a Seeder
-- An Ark also prints the founding population of a planet
+- An Ark costs more than a Pioneer
 
-## Seeder
-
-- A Seeder claims a territory from a territory adjacent to it
-
-## Feral
-
-- The uncontrolled creatures on a planet, whose force must be exceeded in order to claim a
-  territory
+## Pioneer
 
 ## Open questions
 

@@ -177,6 +177,25 @@ test with no window open, and `--capture` renders a PNG without starting Bevy at
 
 ## Constraints
 
+> **Two rows below are superseded, 2026-08-26.**
+>
+> **"No icosahedral subdivision" was reversed.** The planet is now specified as a Goldberg
+> polyhedron, which is exactly an icosahedral subdivision - see
+> [`spec/planet.md`](../../spec/planet.md) -> Shape. The concern the row records is real and was
+> not dismissed; it was outweighed when the two-dimensional map was dropped in favour of
+> rendering a sphere directly, which is what made the twelve symmetry points acceptable. This
+> note's own Status section already describes the built prototype as *an exact truncated
+> icosahedron*, so the table disagreed with the rest of the file as well as with the spec.
+>
+> **"Nowhere on the sphere is a special place" now needs its sense stated.** It was an argument
+> about **geometry** - against schemes like latitude-longitude whose rows make the poles
+> genuinely different ground - and in that sense it still holds. It does not govern the
+> **view**: `spec/planet.md` -> Presentation says the poles are visible on the planet, because a
+> fixed camera roll must be singular somewhere and those two points are where navigation behaves
+> oddly.
+>
+> Everything else in this table stands.
+
 | Constraint                                        | Source                                                                                           |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | No icosahedral subdivision                        | [vision](../vision.md#the-planet); the twelve symmetry points and grid seams are visible in play |
