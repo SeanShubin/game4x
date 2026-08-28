@@ -57,3 +57,13 @@ itself is wrong or unclear, it says so and stops** - that becomes a proposal in
 One file per report, dated: `2026-08-28-crate-boundaries.md`. Reports are records of a moment and go
 stale like any note - a superseded one says so at the top rather than being deleted, so a later
 reader can tell whether a finding was fixed or merely forgotten.
+
+## Reports
+
+Newest first.
+
+- [What the response to the first report left behind](2026-08-28-response-to-the-first-report.md)
+  - 2026-08-28. Five findings closed and verified; three quotations the P-95 sweep missed.
+- [Crate boundaries, duplication, and where Bevy has spread](2026-08-28-crate-boundaries-and-duplication.md)
+  - 2026-08-28. Whether Bevy is confined to the adapter, what is duplicated, and four places the
+    code and the specification disagree. Findings 1, 2, 3, 4 and 13 are closed; the rest stand.
