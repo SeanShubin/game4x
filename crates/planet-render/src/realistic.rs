@@ -47,11 +47,11 @@ use crate::mesh::{PlanetMesh, RegionSpan};
 /// So the count is chosen per planet from how many territories there are, to keep the
 /// angular step and the total cost roughly fixed across every size. `spec/planet.md`:
 /// *nothing in the terrain reveals how the sphere was divided.*
-const SUB_TRIANGLES: f64 = 28_000.0;
+const SUB_TRIANGLES: f64 = 400_000.0;
 
 /// Segments per fan-triangle edge, never fewer than this or more than that.
 const FEWEST: usize = 8;
-const MOST: usize = 40;
+const MOST: usize = 128;
 
 /// How finely to cut each fan triangle, for a planet of this many territories.
 ///
@@ -88,19 +88,74 @@ const SLOPE_STEP: f64 = 0.004;
 /// two-percent slope read at all.
 const SLOPE_TO_NORMAL: f64 = 2.6;
 
-/// The colour of ground with these properties, in linear RGB.
+/// How many jittered opinions are averaged at each point.
+///
+/// `docs/notes/planet-appearance.md`, the finding that note was missing: **biome blending
+/// happens in parameter space, not screen space.** Jitter the inputs, ask again, and
+/// average the answers - an edge then dissolves into patches the way a real one does,
+/// rather than into a smudge the way a blur does.
+///
+/// Five is where the patches stop reading as dither. It costs nothing measurable, because
+/// jittering re-runs the comparisons in `biome_of` and not the noise underneath them.
+const TASTES: usize = 5;
+
+/// How far the parameters are jittered, in field units.
+///
+/// Wide enough that a boundary breaks up over a visible band, narrow enough that ground
+/// well inside a biome never changes its mind.
+const JITTER: f64 = 0.055;
+
+/// How much the fine grain lightens and darkens the ground.
+///
+/// Without it every biome is a flat wash at any zoom, because the fields that vary within
+/// one are all low-frequency by construction. This is the texture that stops a planet
+/// looking like a painted map.
+const GRAIN: f32 = 0.14;
+
+/// The colour of ground at a point, in linear RGB.
 ///
 /// Biome first, because that is the fact the model holds and `spec/planet.md` says the
-/// drawing must show *the biome the model has*. Within a biome the colour still moves with
-/// the field, which is what makes terrain visibly vary inside one territory rather than
-/// filling it with a single flat wash - the thing that would make this the practical
-/// drawing with different colours.
-fn ground(sample: &planet_terrain::Sample) -> [f32; 4] {
+/// drawing must show *the biome the model has*. Two things then stop it being a flat wash:
+/// the tone within a biome moves with the field, and the choice *between* biomes is taken
+/// several times over jittered parameters and averaged.
+fn ground(sample: &planet_terrain::Sample, at: Vec3, seed: u64) -> [f32; 4] {
+    let mut total = [0.0f32; 3];
+    for taste in 0..TASTES {
+        // A jitter that is a function of position, so two regions sharing a point still
+        // agree about it exactly - the property the whole drawing rests on.
+        let nudge =
+            |strand: u32| planet_terrain::grain(at, seed, strand + taste as u32 * 4) * JITTER;
+        let jittered = planet_terrain::Sample {
+            elevation: sample.elevation + nudge(0),
+            moisture: sample.moisture + nudge(1),
+            drainage: sample.drainage + nudge(2),
+            temperature: sample.temperature + nudge(3),
+        };
+        let tone = tone_of(&jittered);
+        for channel in 0..3 {
+            total[channel] += tone[channel];
+        }
+    }
+
+    // The grain is applied after the average, so it textures the ground rather than
+    // deciding which ground it is.
+    let grain = 1.0 + planet_terrain::grain(at, seed, 97) as f32 * GRAIN;
+    [
+        (total[0] / TASTES as f32 * grain).clamp(0.0, 1.0),
+        (total[1] / TASTES as f32 * grain).clamp(0.0, 1.0),
+        (total[2] / TASTES as f32 * grain).clamp(0.0, 1.0),
+        1.0,
+    ]
+}
+
+/// The colour one biome wears, given the ground under it.
+///
+/// Two tones per biome, mixed by something that varies within it. The mixer is chosen per
+/// biome to be a quantity that means something there: depth for water, height for rock,
+/// moisture for anything growing.
+fn tone_of(sample: &planet_terrain::Sample) -> [f32; 3] {
     use game_model::Biome;
 
-    // Two tones per biome, mixed by something that varies within it. The mixer is chosen
-    // per biome to be a quantity that means something there: depth for water, height for
-    // rock, moisture for anything growing.
     let (dark, light, mix) = match planet_terrain::biome_of(sample) {
         Biome::Ocean => (
             [0.012, 0.055, 0.150],
@@ -133,8 +188,8 @@ fn ground(sample: &planet_terrain::Sample) -> [f32; 4] {
             ((sample.elevation - 1.0) * 2.0).clamp(0.0, 1.0),
         ),
     };
-    let blend = |at: usize| (dark[at] + (light[at] - dark[at]) * mix) as f32;
-    [blend(0), blend(1), blend(2), 1.0]
+    let blend = |at: usize| (dark[at] + (light[at] - dark[at]) * mix.clamp(0.0, 1.0)) as f32;
+    [blend(0), blend(1), blend(2)]
 }
 
 /// How far off the sphere the ground sits at this point.
@@ -244,7 +299,8 @@ fn fan_triangle(mesh: &mut PlanetMesh, hub: Vec3, from: Vec3, to: Vec3, seed: u6
 
             mesh.positions.push(surface(at, seed));
             mesh.normals.push(slope_normal(at, seed));
-            mesh.colors.push(ground(&planet_terrain::sample(at, seed)));
+            mesh.colors
+                .push(ground(&planet_terrain::sample(at, seed), at, seed));
         }
     }
 
@@ -387,12 +443,22 @@ mod tests {
             counts.windows(2).all(|pair| pair[0] >= pair[1]),
             "fewer territories should mean more segments each: {counts:?}"
         );
-        // And the totals stay in the same order of magnitude, so no size is ruinous.
+        // And every size lands in the same budget, which is set by what a screen can
+        // show rather than by what looks tidy. A planet fills something like 640,000
+        // pixels at the default camera, and the colour and the normal are per vertex - so
+        // at 24,000 triangles the terrain was being sampled once per 27 pixels and
+        // interpolated across the gap. It looked blurred and faceted, and no test caught
+        // it, because every test here was about structure rather than about resolution.
         for count in [12usize, 32, 42, 72, 92] {
             let triangles = count * 6 * segments_for(count).pow(2);
+            let pixels_each = 640_000.0 / triangles as f64;
             assert!(
-                (8_000..90_000).contains(&triangles),
-                "{count} territories would be {triangles} triangles"
+                pixels_each < 4.0,
+                "{count} territories would be {triangles} triangles, {pixels_each:.1} pixels each"
+            );
+            assert!(
+                triangles < 900_000,
+                "{count} territories would be {triangles} triangles, which is past paying for"
             );
         }
     }

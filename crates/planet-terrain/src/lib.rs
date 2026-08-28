@@ -218,6 +218,22 @@ pub fn sea_level() -> f64 {
     SEA_LEVEL
 }
 
+/// Fine-grained noise, for a drawing that needs detail below the scale of a biome.
+///
+/// One octave rather than six, at a high frequency: this is not another axis of the world,
+/// it is the texture of ground. `docs/notes/planet-appearance.md` calls micro-variation *a
+/// second, cheaper layer*, and cheap is the point - it is called several times per vertex.
+///
+/// `strand` picks an independent one, so a caller wanting four uncorrelated grains asks for
+/// four strands rather than four offsets it had to invent.
+///
+/// Returns roughly `-1.0..=1.0`.
+pub fn grain(at: Vec3, seed: u64, strand: u32) -> f64 {
+    const GRAIN_FREQUENCY: f64 = 42.0;
+    let twist = seed ^ (0xA076_1D64_78BD_642F_u64.wrapping_mul(strand as u64 + 1));
+    value_noise(at.normalized().scaled(GRAIN_FREQUENCY), twist) * 2.0 - 1.0
+}
+
 /// The biome at one point, which is the whole of what the model reads.
 pub fn biome_at(direction: Vec3, seed: u64) -> Biome {
     biome_of(&sample(direction, seed))
