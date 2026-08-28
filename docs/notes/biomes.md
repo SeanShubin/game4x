@@ -80,9 +80,20 @@ mechanical distinctness want different counts: twelve biomes for the eye, six fo
 stops a planet drawing tundra, savanna, marsh and steppe - they simply resolve to one of the roles
 above until a rule exists that can tell them apart.
 
-**Jungle is the one that earns its place twice.** It is the only candidate that is *good* and
-*dangerous* at once, which makes it the only one that produces a real decision rather than a
-preference. Everything else is take-it-when-you-reach-it.
+**Jungle was picked to earn its place twice** - the only candidate that is *good* and *dangerous*
+at once, and so the only one producing a real decision rather than a preference. **It does not,
+yet.** Force of nature is 1 everywhere for the first playable game, deliberately, so jungle is
+grassland with slightly less of everything: a multiplier, which is what this test rejects.
+
+**It stays anyway, decided 2026-08-28, and the reason is about the picture rather than the rules.**
+A hot, wet corner of parameter space exists on any planet with an equator, and the terrain generator
+has to resolve it to *something*. Cut jungle and hot-wet resolves to grassland - so the realistic
+drawing paints grassland along the equator, which is the one place a player would notice it is
+wrong.
+
+**Recorded so it is not re-cut.** A later session reading the table will see two biomes with nearly
+the same numbers and reach for the obvious tidy-up. The mechanical redundancy is real, temporary,
+and not the reason jungle is in the list.
 
 ## The decision this forces first: water
 
