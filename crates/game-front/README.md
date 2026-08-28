@@ -71,12 +71,13 @@ the crate.
 
 `spec/console.md`: *a line beginning with `/` directs the front end rather than the game.
 `/game`, `/console` and `/browser` choose a surface; `/new <size>` abandons the current game
-and starts one on a planet of that size. It is not a command: it changes no game state,
-`history` does not record it, and `help` does not list it.*
+and starts one on a planet of that size. None of these is a command and none is a
+transition: `history` does not record them, and `help` does not list them. A game's history
+begins when the game does.*
 
 That rule is **required, not a convenience.** `spec/interface.md` asks for all three
-surfaces reachable in every build, and adds that where there is a pointer these are
-controls and *where there is not they are typed*. A terminal has no buttons and no F-keys,
+surfaces reachable in every build, and that reaching one *never requires a gesture or a key
+the platform may lack*. A terminal has neither a button to point at nor an F-key to press,
 so on the desktop typing is the only way two of the three surfaces can be reached at all.
 
 The rule lives in `console`, not in a shell. It is a fact about a line typed at the
@@ -105,10 +106,15 @@ not: abandoning produces no new state from an old one. It begins a **second fold
 history starts empty. Nothing has to bend to allow it, and the same idea covers saving,
 loading and restarting — all of them are choosing which fold you are in.
 
+Note what is *not* claimed. `/new` plainly changes game state — it replaces every
+observable of it. The claim that holds, and the one that connects to the invariant, is that
+it is not a **transition**.
+
 Two things follow, and both are tested:
 
-- **The old history does not survive into the new one.** The new fold's history is exactly
-  what built it, and replays on its own to the same game.
+- **A game's history begins when the game does.** The new fold's history is exactly what
+  built it, and replays on its own to the same game. One spanning two folds could not be
+  replayed into either.
 - **The new fold is built to completion before the old one is let go.** `/new enormous`
   leaves the game in progress exactly where it was, which matters because there is nothing
   to undo with — an abandoned fold is simply gone.

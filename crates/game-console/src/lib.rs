@@ -282,8 +282,8 @@ mod tests {
         }
     }
 
-    /// `spec/console.md`: *a line beginning with `/` is not a command. It names a surface
-    /// to go to.*
+    /// `spec/console.md`: *a line beginning with `/` directs the front end rather than the
+    /// game ... none of these is a command.*
     ///
     /// That rule is only true if no command can begin with a slash, and the whole
     /// separation between the game's language and the front end rests on it. Nothing

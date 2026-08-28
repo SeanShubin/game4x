@@ -50,8 +50,8 @@ enum Directed {
 
 /// `spec/console.md`: *a line beginning with `/` directs the front end rather than the
 /// game. `/game`, `/console` and `/browser` choose a surface; `/new <size>` abandons the
-/// current game and starts one on a planet of that size. It is not a command: it changes
-/// no game state, history does not record it, and help does not list it.*
+/// current game and starts one on a planet of that size. None of these is a command and
+/// none is a transition: history does not record them, and help does not list them.*
 ///
 /// `None` means the line is a command and belongs to the parser.
 ///
@@ -369,7 +369,8 @@ mod tests {
         );
     }
 
-    /// `spec/console.md`: a line beginning with `/` is not a command. It names a surface.
+    /// `spec/console.md`: a line beginning with `/` directs the front end rather than the
+    /// game, and `/game`, `/console` and `/browser` choose a surface.
     ///
     /// On the web this is asserted for the first time here. The rule lived in the
     /// terminal shell until now, which made `/browser` work on the desktop and fail as an
@@ -387,9 +388,10 @@ mod tests {
         }
     }
 
-    /// Reaching a surface is not a change to the game, so nothing about the game moves.
+    /// Choosing a surface is not a transition, and unlike `/new` it moves nothing at all -
+    /// so the game, the counter and the history are all exactly where they were.
     #[test]
-    fn reaching_a_surface_changes_no_game_state() {
+    fn choosing_a_surface_moves_nothing() {
         let mut console = Console::new();
         let before = console.session.game.clone();
         let generation = console.generation();
@@ -461,10 +463,14 @@ mod tests {
         assert_eq!(console.territory_count(), Some(12), "back to tiny");
     }
 
-    /// Abandoning is not a transition. It produces no new state from an old one - it
-    /// begins a second fold, whose history starts empty.
+    /// `spec/console.md`: *none of these is a transition* and *a game's history begins
+    /// when the game does.*
+    ///
+    /// The second sentence is what makes a history replayable at all: one spanning two
+    /// folds could not be replayed into one game, because the commands before the
+    /// abandonment describe a world that no longer exists.
     #[test]
-    fn starting_over_begins_a_history_that_is_empty_of_the_old_game() {
+    fn a_games_history_begins_when_the_game_does() {
         let mut console = Console::new();
         console.submit("end turn");
         let before = console.session.history().len();

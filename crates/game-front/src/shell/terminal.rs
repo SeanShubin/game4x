@@ -6,10 +6,10 @@
 //! history, selection, copy and paste, scrollback, and whatever their shell adds.
 //!
 //! It is also why `/browser` is not a convenience. `spec/interface.md` requires all three
-//! surfaces reachable in every build; a terminal has no buttons and no F-keys, so typing
-//! is the only way any of them can be reached here. That is the whole reason the slash
-//! rule exists, and `spec/interface.md` says as much: *where there is a pointer they are
-//! controls; where there is not they are typed.*
+//! surfaces reachable in every build, and that reaching one *never requires a gesture or a
+//! key the platform may lack*. A terminal has neither a button to point at nor an F-key to
+//! press, so typing is the only way any surface can be reached here. That is the whole
+//! reason the slash rule exists.
 //!
 //! The engine owns the main thread from the moment its event loop starts, so this reads
 //! on a thread of its own and shares the one [`Console`](crate::Console) through

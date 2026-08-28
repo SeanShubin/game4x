@@ -151,8 +151,9 @@ pub fn help(grammar: &Grammar, command: Option<String>) -> String {
             for form in grammar.forms() {
                 lines.push(format!("  {:<44} {}", form.syntax(), form.summary));
             }
-            // `spec/console.md`: a line beginning with `/` is not a command, and *help
-            // does not list it*. Saying the mechanism exists is not listing them, and it
+            // `spec/console.md`: a line beginning with `/` directs the front end, and
+            // *help does not list them*. Saying the mechanism exists is not listing them,
+            // and it
             // has to be said somewhere - on a build whose console is a terminal, typing
             // is the only way two of the three surfaces can be reached at all, and the
             // greeting that used to be the only announcement scrolls away. The names
