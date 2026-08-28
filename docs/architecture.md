@@ -107,16 +107,20 @@ boundary.
 
 ## What exists today
 
-| Crate                                                                   | Kind       | Dependencies                        | Notes                                                            |
-| ----------------------------------------------------------------------- | ---------- | ----------------------------------- | ---------------------------------------------------------------- |
-| [`crates/sphere-tessellation`](../crates/sphere-tessellation/README.md) | algorithm  | **none**                            | Seeds, relaxation, the adjacency graph, and the solid's corners  |
-| [`crates/graph-coloring`](../crates/graph-coloring/README.md)           | algorithm  | **none**                            | Few-color assignment; no geometry                                |
-| [`crates/planet-model`](../crates/planet-model/README.md)               | model      | **none**                            | `(old world, intents) -> new world`; integers enforced by test   |
-| [`crates/planet-ecs`](../crates/planet-ecs/README.md)                   | entities   | `planet-model`, Bevy                | Regions as entities; systems gather and apply, and hold no rules |
-| [`crates/planet-render`](../crates/planet-render/README.md)             | view model | the algorithms, `planet-model`      | Camera, projections, software rasterizer, and the mesh           |
-| [`crates/planet-bevy`](../crates/planet-bevy/README.md)                 | view       | `planet-render`, `planet-ecs`, Bevy | Window, input, vsync presentation, and the solid in 3D           |
-| [`crates/game4x`](../crates/game4x/README.md)                           | binary     | all of the above                    | Composition root; the binary that is built, run and published    |
-| [`prototypes/planet-view`](../prototypes/planet-view/README.md)         | binary     | all of the above                    | Composition root for the flat projection                         |
+| Crate                                                                   | Kind       | Dependencies                                                            | Notes                                                                           |
+| ----------------------------------------------------------------------- | ---------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| [`crates/sphere-tessellation`](../crates/sphere-tessellation/README.md) | algorithm  | **none**                                                                | Seeds, relaxation, the adjacency graph, and the solid's corners                 |
+| [`crates/graph-coloring`](../crates/graph-coloring/README.md)           | algorithm  | **none**                                                                | Few-color assignment; no geometry                                               |
+| [`crates/planet-model`](../crates/planet-model/README.md)               | model      | **none**                                                                | `(old world, intents) -> new world`; integers enforced by test                  |
+| [`crates/planet-ecs`](../crates/planet-ecs/README.md)                   | entities   | `planet-model`, Bevy                                                    | Regions as entities; systems gather and apply, and hold no rules                |
+| [`crates/planet-render`](../crates/planet-render/README.md)             | view model | the algorithms, `planet-model`                                          | Camera, projections, software rasterizer, and the mesh                          |
+| [`crates/planet-bevy`](../crates/planet-bevy/README.md)                 | view       | `planet-render`, `planet-ecs`, Bevy                                     | Window, input, vsync presentation, and the solid in 3D                          |
+| [`crates/command-language`](../crates/command-language/README.md)       | algorithm  | **none**                                                                | Grammar, positions and typed syntax trees; a test scans it for game nouns       |
+| [`crates/game-model`](../crates/game-model/README.md)                   | model      | **none**                                                                | The game state and the one function over it; no words, engine or floating point |
+| [`crates/game-console`](../crates/game-console/README.md)               | binding    | `command-language`, `game-model`, `planet-model`, `sphere-tessellation` | The only place a word meets a rule                                              |
+| [`crates/game-front`](../crates/game-front/README.md)                   | front end  | `game-console`, `game-model`, `wasm-bindgen` on web                     | The three surfaces, and the shell that hosts them                               |
+| [`crates/game4x`](../crates/game4x/README.md)                           | binary     | all of the above                                                        | Composition root; the binary that is built, run and published                   |
+| [`prototypes/planet-view`](../prototypes/planet-view/README.md)         | binary     | all of the above                                                        | Composition root for the flat projection                                        |
 
 The integers-only rule is now exercised: `planet-model` has a test that scans its own
 source and fails if `f32` or `f64` appears in code. The algorithm and view-model crates

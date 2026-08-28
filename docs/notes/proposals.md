@@ -119,6 +119,8 @@ Two limits Claude holds itself to:
 | P-88, the poles sit at the centres of two pentagons, never on a boundary                           | `spec/planet.md` -> Presentation                                                                                       | 2026-08-27 |
 | P-89, availability is fixed in every build; presentation and input follow the platform             | `spec/interface.md` -> Availability and presentation                                                                   | 2026-08-28 |
 | P-90, input bindings move to the release; roll is explicitly not user-controlled                   | `spec/planet.md` -> Presentation, and `releases/first-release.md` -> Controls                                          | 2026-08-28 |
+| P-91, Controls names a binding for every capability the spec requires                              | `releases/first-release.md` -> Controls                                                                                | 2026-08-28 |
+| P-92, actions that are not manipulations of the planet get on-screen controls                      | `spec/interface.md` -> Availability and presentation                                                                   | 2026-08-28 |
 
 ## Rejected
 

@@ -99,8 +99,11 @@ Every territory has at least one food node.
 
 ## Controls
 
-- Rotation is bound to the arrow keys
-- Dragging with the mouse rotates the planet
+- Rotation is bound to the arrow keys, and to dragging
+- Zoom is bound to the wheel, and to pinching
+- Reset is bound to `R`
+- The three surfaces are reached by `F1`, `F2` and `F3`, by buttons on the page, and by `/game`,
+  `/console` and `/browser` typed at the console
 
 ## Capabilities
 
