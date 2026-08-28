@@ -2560,6 +2560,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "game-front"
+version = "0.1.0"
+dependencies = [
+ "game-console",
+ "game-model",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "game-model"
 version = "0.1.0"
 

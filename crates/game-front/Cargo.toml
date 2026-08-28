@@ -1,0 +1,14 @@
+[package]
+name = "game-front"
+version.workspace = true
+edition.workspace = true
+description = "The front end, with no engine in it: the one Session, the transcript, the data browser, and a shell for each platform."
+
+[dependencies]
+game-console.workspace = true
+game-model.workspace = true
+
+# The web shell talks to the page it is on. Confined to this target so a native build
+# never sees it, and so nothing below the front end acquires a browser dependency.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"

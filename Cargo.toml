@@ -8,6 +8,7 @@ members = [
     "crates/command-language",
     "crates/game-model",
     "crates/game-console",
+    "crates/game-front",
     "crates/sphere-tessellation",
     "crates/graph-coloring",
     "crates/planet-model",
@@ -29,6 +30,7 @@ edition = "2024"
 command-language = { path = "crates/command-language" }
 game-model = { path = "crates/game-model" }
 game-console = { path = "crates/game-console" }
+game-front = { path = "crates/game-front" }
 sphere-tessellation = { path = "crates/sphere-tessellation" }
 graph-coloring = { path = "crates/graph-coloring" }
 planet-model = { path = "crates/planet-model" }
