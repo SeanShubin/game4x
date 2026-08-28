@@ -479,6 +479,12 @@
           // line was rendered, or how many lines one command said.
           el("transcript").textContent = bindings.console_submit(line);
           toBottom(el("transcript"));
+          // spec/console.md: a line beginning with `/` is not a command, it names a
+          // surface to go to. That rule is about a line typed at the console, not about
+          // a terminal, so typing `/browser` here has to work exactly as tapping the
+          // button does. Empty means the line named no surface.
+          var reached = bindings.console_reached();
+          if (reached) show(reached);
         });
 
         // winit listens for keys on the canvas, so a focused text field already

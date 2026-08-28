@@ -138,6 +138,12 @@ fn territory(game: &Game, id: TerritoryId) -> String {
 }
 
 /// `spec/console.md`: list every command, or give one command's syntax.
+/// What `help` says instead of listing the surfaces.
+///
+/// Kept as a constant so the test that `help` does not list them can name the one line
+/// that is allowed to mention a slash at all.
+pub const SURFACES_ARE_ELSEWHERE: &str = "a line beginning with `/` names a surface rather than a command; type `/` on its own to see which";
+
 pub fn help(grammar: &Grammar, command: Option<String>) -> String {
     match command {
         None => {
@@ -145,6 +151,15 @@ pub fn help(grammar: &Grammar, command: Option<String>) -> String {
             for form in grammar.forms() {
                 lines.push(format!("  {:<44} {}", form.syntax(), form.summary));
             }
+            // `spec/console.md`: a line beginning with `/` is not a command, and *help
+            // does not list it*. Saying the mechanism exists is not listing them, and it
+            // has to be said somewhere - on a build whose console is a terminal, typing
+            // is the only way two of the three surfaces can be reached at all, and the
+            // greeting that used to be the only announcement scrolls away. The names
+            // themselves are left to a bare `/`, which is what keeps this from being a
+            // list of them.
+            lines.push(String::new());
+            lines.push(SURFACES_ARE_ELSEWHERE.to_string());
             lines.join("\n")
         }
         Some(word) => {

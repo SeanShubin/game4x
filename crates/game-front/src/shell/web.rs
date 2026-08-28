@@ -36,6 +36,22 @@ pub fn console_transcript() -> String {
     crate::shell::transcript()
 }
 
+/// The surface the most recent line named, or an empty string if it named none.
+///
+/// `spec/console.md` says a line beginning with `/` names a surface to go to, and that
+/// rule is about a line typed at *the* console rather than at a terminal - so the page
+/// has to honour it too. It cannot come back inside the transcript, which is text the
+/// user wrote and read; so the page calls this straight after [`console_submit`].
+///
+/// Empty rather than `null`, because every other value crossing here is a string and one
+/// exception is not worth the reader's attention.
+#[wasm_bindgen]
+pub fn console_reached() -> String {
+    crate::shell::reached()
+        .map(|surface| surface.name().to_string())
+        .unwrap_or_default()
+}
+
 /// Every entity in the game and its components.
 #[wasm_bindgen]
 pub fn browser_text() -> String {

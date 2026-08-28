@@ -282,6 +282,57 @@ mod tests {
         }
     }
 
+    /// `spec/console.md`: *a line beginning with `/` is not a command. It names a surface
+    /// to go to.*
+    ///
+    /// That rule is only true if no command can begin with a slash, and the whole
+    /// separation between the game's language and the front end rests on it. Nothing
+    /// enforces it except this: `Term::Keyword` takes any string, so a future verb could
+    /// be spelled `/anything` and the front end would swallow it before the parser ever
+    /// saw it - in a program that compiled and whose other tests passed.
+    ///
+    /// Two things are asserted, because the rule needs both. Every form opens with a
+    /// fixed word, so what a line means is decided by its first token; and no such word
+    /// begins with a slash, so a line that does begins no command. Together they make
+    /// "a slash line is not a command" true by construction rather than by inspection.
+    #[test]
+    fn no_command_can_begin_with_a_slash() {
+        for form in grammar::grammar().forms() {
+            match form.terms.first() {
+                Some(command_language::Term::Keyword(word)) => assert!(
+                    !word.starts_with('/'),
+                    "the form `{}` opens with `{word}`, which the front end would take \
+                     for a surface before the parser saw it",
+                    form.name
+                ),
+                other => panic!(
+                    "the form `{}` opens with {other:?} rather than a fixed word, so a \
+                     line beginning with `/` could match it",
+                    form.name
+                ),
+            }
+        }
+    }
+
+    /// The other half of the same rule, from the language's side: a slash line matches no
+    /// form, so handing one to the parser is always a mistake rather than sometimes one.
+    #[test]
+    fn a_slash_line_matches_no_command() {
+        let grammar = grammar::grammar();
+        for line in [
+            "/game",
+            "/console",
+            "/browser",
+            "/",
+            "/end turn",
+            "/show turn",
+        ] {
+            let failure = parse_line(&grammar, line, 1)
+                .expect_err("a slash line must not parse as a command");
+            assert_eq!(failure.position.column, 1, "on `{line}`");
+        }
+    }
+
     #[test]
     fn a_blank_line_does_nothing_and_is_not_an_error() {
         let mut session = Session::new();

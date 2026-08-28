@@ -74,6 +74,15 @@ pub fn transcript() -> String {
     with(|console| console.transcript())
 }
 
+/// The surface the most recent line named, if it named one.
+///
+/// Read straight after [`submit`] by a shell that has to act on it. The web shell reaches
+/// this through a doorway that carries nothing but strings, so it cannot be given back as
+/// part of the transcript.
+pub fn reached() -> Option<crate::Surface> {
+    with(|console| console.reached())
+}
+
 /// The data browser's text, without running anything.
 pub fn browser() -> String {
     with(|console| crate::browse(&console.session))
@@ -93,6 +102,28 @@ pub fn territory_count() -> Option<usize> {
     with(|console| console.territory_count())
 }
 
+/// Serialises the tests that touch the one console.
+///
+/// The console is a process-wide static and the test runner runs tests in parallel
+/// threads of one process, so two tests asserting about it race over the very thing being
+/// asserted - one appending to the transcript while another compares it, or resetting
+/// what the last line reached while another reads it back.
+///
+/// A guard rather than one enormous test, so each thing being asserted keeps its own name
+/// and its own reason for existing. Nothing outside a test takes it.
+#[cfg(test)]
+pub(crate) fn exclusively<R>(act: impl FnOnce() -> R) -> R {
+    use std::sync::{Mutex, OnceLock};
+    static ONE_AT_A_TIME: OnceLock<Mutex<()>> = OnceLock::new();
+    let held = ONE_AT_A_TIME
+        .get_or_init(|| Mutex::new(()))
+        .lock()
+        .unwrap_or_else(|poisoned| poisoned.into_inner());
+    let outcome = act();
+    drop(held);
+    outcome
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -104,22 +135,30 @@ mod tests {
     /// would be four tests racing each other over the very thing being asserted about.
     #[test]
     fn the_shell_holds_exactly_one_console() {
-        assert_eq!(
-            territory_count(),
-            Some(12),
-            "it opens on the release's world"
-        );
+        exclusively(|| {
+            assert_eq!(
+                territory_count(),
+                Some(12),
+                "it opens on the release's world"
+            );
 
-        // Asking is not doing. The browser reads through the same handle and moves nothing.
-        let before = generation();
-        let read = browser();
-        assert!(read.contains("territory 1"), "{read}");
-        assert_eq!(generation(), before, "reading the browser moved the game");
+            // Asking is not doing. The browser reads through the same handle and moves nothing.
+            let before = generation();
+            let read = browser();
+            assert!(read.contains("territory 1"), "{read}");
+            assert_eq!(generation(), before, "reading the browser moved the game");
 
-        // Running does move it, and both views of the transcript are of the one console.
-        let shown = submit("end turn");
-        assert!(shown.contains("> end turn"), "{shown}");
-        assert!(generation() > before, "the state moved and nobody noticed");
-        assert_eq!(transcript(), shown, "two views of one transcript disagreed");
+            // Running does move it, and both views of the transcript are of the one console.
+            let shown = submit("end turn");
+            assert!(shown.contains("> end turn"), "{shown}");
+            assert!(generation() > before, "the state moved and nobody noticed");
+            assert_eq!(transcript(), shown, "two views of one transcript disagreed");
+            assert_eq!(reached(), None, "a command is not a surface");
+
+            // And a slash line is readable back through the same handle, which is the only
+            // way the web shell can learn about it.
+            submit("/browser");
+            assert_eq!(reached(), Some(crate::Surface::Browser));
+        });
     }
 }

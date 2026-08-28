@@ -69,14 +69,47 @@ the crate.
 
 ## Reaching a surface
 
-Neither `spec/` nor `releases/` names a binding for getting from one surface to another, so
-this is the one thing here that is invented rather than followed. It is at least invented
-once: the page's buttons and the terminal's `/game`, `/console`, `/browser` are the same
-three names, from `Surface::called`.
+`spec/console.md`: *a line beginning with `/` is not a command. It names a surface to go
+to — `/game`, `/console`, `/browser`. It changes no game state, `history` does not record
+it, and `help` does not list it.*
 
-The leading `/` is what keeps those names clear of the command language. `spec/console.md`
-says a command is a verb followed by arguments, and no verb can begin with a slash, so
-`/browser` can never be mistaken for one — now or after the language grows.
+That rule is **required, not a convenience.** `spec/interface.md` asks for all three
+surfaces reachable in every build, and adds that where there is a pointer these are
+controls and *where there is not they are typed*. A terminal has no buttons and no F-keys,
+so on the desktop typing is the only way two of the three surfaces can be reached at all.
+
+The rule lives in `console`, not in a shell. It is a fact about a line typed at the
+console, and the console is one thing however a platform presents it. It sat in the
+terminal shell for one commit, which quietly made `/browser` a parse error on the page —
+exactly the divergence this crate exists to prevent.
+
+What *going there* means is the shell's business, and the two differ legitimately: a
+terminal prints the surface, because it has no panels to switch between and nothing to
+switch back from; the page shows a panel. `Console::submit` returns `Said::Reach(surface)`
+and decides neither.
+
+### Why a slash can never collide
+
+`spec/console.md` says a command is a verb followed by arguments, and no verb begins with a
+slash — so `/browser` matches no form, now or after the language grows. That was true by
+inspection and is now true by construction:
+`game-console`'s `no_command_can_begin_with_a_slash` asserts every form opens with a fixed
+word and that no such word starts with `/`. The whole separation rests on it.
+
+### Finding out it exists
+
+`help` must not list the surfaces, and the greeting scrolls away, so discovery is a chain
+rather than one announcement:
+
+| Type      | And you learn                                          |
+| --------- | ------------------------------------------------------ |
+| `help`    | that a line beginning with `/` names a surface         |
+| `/`       | which surfaces there are                               |
+| `browser` | that you wanted `/browser` — the near miss suggests it |
+
+The third is the error requirement in `spec/console.md` doing its job: the parser can only
+ever expect commands, because it has never heard of a surface, so the word most likely to
+have been meant is added by the layer that has.
 
 ## Tests
 
@@ -86,8 +119,12 @@ says a command is a verb followed by arguments, and no verb can begin with a sla
   [`commands/`](../../commands), byte for byte. That is what makes
   [`first_release.rs`](../game-console/tests/first_release.rs), which reads them off disk,
   a test of what actually ships.
-- `the_shell_holds_exactly_one_console` — one test rather than four, because the console is
-  a process-wide static and the runner runs tests in parallel threads of one process.
+- `a_slash_line_names_a_surface_on_every_platform` — the rule is asserted once, against the
+  shared `Console`, so the desktop and the page cannot answer it differently.
+- `the_shell_holds_exactly_one_console` — every way in reaches the same console. It and the
+  terminal's tests take `shell::exclusively`, because the console is a process-wide static
+  and the runner runs tests in parallel threads of one process; without it they race over
+  the transcript and over what the last line reached.
 - `every_territory_is_listed_and_not_just_the_first_few` — `spec/interface.md` asks for
   *every* entity. The Bevy panel truncated to forty lines because glyphs on a canvas do not
   scroll; a page element and a terminal both do.

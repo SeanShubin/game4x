@@ -48,6 +48,21 @@ how both get said:
 `NoSuchFile` and `TooDeep` belong to `run`, and say which files there are and that files
 are calling each other without end.
 
+## A slash is not a command
+
+`spec/console.md`: *a line beginning with `/` is not a command. It names a surface to go
+to.* That rule holds only if no command can begin with a slash, and
+`no_command_can_begin_with_a_slash` is what makes it hold — it asserts every form opens
+with a fixed word, and that no such word begins with `/`. `Term::Keyword` takes any string,
+so without it a future verb could be spelled `/anything` and the front end would swallow it
+before the parser ever saw it, in a program that compiled and whose other tests passed.
+
+`help` says the mechanism exists without listing the surfaces, which is what the rule
+allows: on a build whose console is a terminal, typing is the only way to reach two of the
+three, and a person who missed the greeting needs some way to find out. The names
+themselves are left to a bare `/`, answered a layer up in
+[`game-front`](../game-front/README.md).
+
 ## Binding is a table
 
 Adding a command is a row in `binding` and a form in `grammar`, and nothing makes the two

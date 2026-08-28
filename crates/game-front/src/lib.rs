@@ -64,15 +64,25 @@ impl Surface {
         }
     }
 
-    /// The name a shell answers to, as the user types or taps it.
+    /// The surface this word names, exactly.
     ///
-    /// Neither `spec/` nor `releases/` names a binding for reaching a surface, so this is
-    /// the one thing here that is invented rather than followed. It is at least invented
-    /// once: the page's buttons and the terminal's `/game` are the same three names.
-    pub fn called(word: &str) -> Option<Self> {
+    /// The word, not the line: stripping a leading `/` is the caller's job. Being strict
+    /// here is what lets the same function serve two opposite questions - *is this line a
+    /// surface* and *did somebody mean a surface and leave the slash off* - which a
+    /// lenient version could not tell apart.
+    pub fn named(word: &str) -> Option<Self> {
         Self::ALL
             .into_iter()
-            .find(|surface| surface.name() == word.trim().trim_start_matches('/'))
+            .find(|surface| surface.name() == word.trim())
+    }
+
+    /// Every surface's name, for saying which ones there are.
+    pub fn names() -> String {
+        Self::ALL
+            .into_iter()
+            .map(Self::name)
+            .collect::<Vec<_>>()
+            .join(", ")
     }
 }
 
@@ -87,17 +97,24 @@ mod tests {
         assert_eq!(names, ["game", "console", "browser"]);
     }
 
-    /// A shell's way of naming a surface is the same on every platform, with or without
-    /// the slash a terminal wants to keep it clear of the command language.
+    /// A surface is named by its own name and by nothing else. The slash belongs to the
+    /// line, not to the name, so this must not accept one.
     #[test]
-    fn a_surface_is_reached_by_its_own_name() {
+    fn a_surface_is_named_by_its_own_name() {
         for surface in Surface::ALL {
-            assert_eq!(Surface::called(surface.name()), Some(surface));
+            assert_eq!(Surface::named(surface.name()), Some(surface));
             assert_eq!(
-                Surface::called(&format!("/{}", surface.name())),
-                Some(surface)
+                Surface::named(&format!("/{}", surface.name())),
+                None,
+                "the slash is the line's, not the name's"
             );
         }
-        assert_eq!(Surface::called("elsewhere"), None);
+        assert_eq!(Surface::named("elsewhere"), None);
+    }
+
+    /// What `/` answers with, and what `help` points at.
+    #[test]
+    fn the_surfaces_can_say_which_ones_there_are() {
+        assert_eq!(Surface::names(), "game, console, browser");
     }
 }
