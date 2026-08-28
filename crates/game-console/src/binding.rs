@@ -107,10 +107,18 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
                 word: word.to_string(),
             })?;
             let seeds = seeds_for(size);
+            let touching = sphere_tessellation::adjacency(&seeds);
+            let near: Vec<Vec<usize>> = touching
+                .iter()
+                .map(|list| list.iter().map(|at| *at as usize).collect())
+                .collect();
             Meaning::Change(Transition::CreatePlanet {
                 territories: size.territory_count(),
-                adjacency: adjacency_for(&seeds),
-                biomes: planet_terrain::biomes_of(&seeds, WORLD_SEED),
+                adjacency: named(&touching),
+                // The terrain proposes and `biomes_of` disposes: `spec/planet.md` forbids
+                // two ocean territories from being adjacent, which no field can promise on
+                // its own, so the arrangement is settled where the adjacency is known.
+                biomes: planet_terrain::biomes_of(&seeds, &near, WORLD_SEED),
             })
         }
         form::ADD_NODE => Meaning::Change(Transition::AddNode {
@@ -230,12 +238,13 @@ fn seeds_for(size: PlanetSize) -> Vec<sphere_tessellation::vec3::Vec3> {
         .expect("every planet size is a Goldberg count; planet-render asserts it")
 }
 
-fn adjacency_for(seeds: &[sphere_tessellation::vec3::Vec3]) -> Vec<Vec<TerritoryId>> {
-    sphere_tessellation::adjacency(seeds)
-        .into_iter()
+/// The same adjacency, in the model's own names rather than in indices.
+fn named(touching: &[Vec<u32>]) -> Vec<Vec<TerritoryId>> {
+    touching
+        .iter()
         .map(|near| {
-            near.into_iter()
-                .map(|at| TerritoryId::from_index(at as usize))
+            near.iter()
+                .map(|at| TerritoryId::from_index(*at as usize))
                 .collect()
         })
         .collect()
@@ -345,11 +354,34 @@ mod tests {
         assert_eq!(territories, 12);
         assert_eq!(adjacency.len(), 12);
         // `spec/planet.md`: each territory has a biome, and it is what the terrain gives
-        // it - so there is one per territory and it came from the ground, not from here.
+        // it - so there is one per territory, and this is not where it was decided.
+        //
+        // Not compared against `biome_at`, which is the raw field: a territory whose ground
+        // is under water may still have to be land, because no two ocean territories may be
+        // adjacent. That resolution is `planet-terrain`'s and is tested there. What this
+        // asserts is that the binding asks for it rather than sampling on its own.
         assert_eq!(biomes.len(), 12);
         let seeds = seeds_for(PlanetSize::Tiny);
-        for (at, biome) in biomes.iter().enumerate() {
-            assert_eq!(*biome, planet_terrain::biome_at(seeds[at], WORLD_SEED));
+        let near: Vec<Vec<usize>> = sphere_tessellation::adjacency(&seeds)
+            .into_iter()
+            .map(|list| list.into_iter().map(|at| at as usize).collect())
+            .collect();
+        assert_eq!(biomes, planet_terrain::biomes_of(&seeds, &near, WORLD_SEED));
+
+        // `spec/planet.md`: no two ocean territories are adjacent. Asserted here as well as
+        // in `planet-terrain`, because this is the only place that says which world the
+        // command builds, and the rule is about the world rather than about the function.
+        for (at, neighbours) in near.iter().enumerate() {
+            if biomes[at] != game_model::Biome::Ocean {
+                continue;
+            }
+            for beside in neighbours {
+                assert_ne!(
+                    biomes[*beside],
+                    game_model::Biome::Ocean,
+                    "{at} touches {beside}"
+                );
+            }
         }
         // A dodecahedron: every face touches exactly five others.
         for (at, near) in adjacency.iter().enumerate() {

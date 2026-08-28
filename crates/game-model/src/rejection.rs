@@ -20,6 +20,11 @@ pub enum Rejection {
         wanted: &'static str,
     },
     NoPlanet,
+    /// `spec/planet.md`: no territory can be claimed whose biome is ocean.
+    ///
+    /// Refused at the moment of founding rather than at the moment of moving, because
+    /// founding is where a territory is taken and the rule is about taking one.
+    CannotClaimOcean(TerritoryId),
     /// A planet was described with a different number of biomes than territories.
     ///
     /// A malformed transition rather than a move the rules forbid, but it arrives by the
@@ -106,6 +111,9 @@ impl fmt::Display for Rejection {
                 write!(out, "that can only be done {wanted}")
             }
             Rejection::NoPlanet => write!(out, "there is no planet yet"),
+            Rejection::CannotClaimOcean(id) => {
+                write!(out, "territory {id} is ocean, and ocean cannot be claimed")
+            }
             Rejection::BiomesDoNotCoverThePlanet {
                 territories,
                 biomes,

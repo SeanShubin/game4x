@@ -50,8 +50,8 @@ are calling each other without end.
 
 ## A slash is not a command
 
-`spec/console.md`: *a line beginning with `/` is not a command. It names a surface to go
-to.* That rule holds only if no command can begin with a slash, and
+`spec/console.md`: *a line beginning with `/` directs the front end rather than the game.*
+That rule holds only if no command can begin with a slash, and
 `no_command_can_begin_with_a_slash` is what makes it hold — it asserts every form opens
 with a fixed word, and that no such word begins with `/`. `Term::Keyword` takes any string,
 so without it a future verb could be spelled `/anything` and the front end would swallow it

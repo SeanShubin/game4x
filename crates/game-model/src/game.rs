@@ -334,6 +334,12 @@ impl Game {
     /// All of it happens here, at the moment of arriving, because the specification
     /// describes taking and transforming as one act.
     fn found(&mut self, territory: TerritoryId, unit_at: usize) -> Result<(), Rejection> {
+        // `spec/planet.md`: no territory can be claimed whose biome is ocean. Asked before
+        // the force is compared, so the answer says what is actually wrong - being at sea
+        // is not a matter of not having brought enough.
+        if !self.territory(territory)?.biome.is_claimable() {
+            return Err(Rejection::CannotClaimOcean(territory));
+        }
         let force = self.units[unit_at].kind.force();
         self.take(territory, force)?;
         self.units.remove(unit_at);

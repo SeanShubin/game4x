@@ -45,8 +45,34 @@ strongest cue that a picture of a ball is a picture of a *planet*.
 
 Biomes are not enumerated and placed. `biome_of` is the crossing of those four fields
 written down, read as the questions a place answers about itself, most decisive first: is it
-underwater, is it frozen, is it above the trees, is it dry, and only then how the wet drains
-away.
+underwater, is it frozen, is it above the trees, is it dry.
+
+`spec/planet.md` names six — ocean, ice, desert, grassland, jungle and mountain — chosen by
+role rather than by appearance. A planet may still *draw* tundra or savanna; they resolve to
+one of these until a rule can tell them apart. That is why drainage separates nothing yet:
+with six biomes the wet-and-badly-drained half of the world is jungle too.
+
+## The terrain proposes; `biomes_of` disposes
+
+Two of `spec/planet.md`'s statements are about **territories**, and no field can satisfy them
+on its own:
+
+- *no territory can be claimed whose biome is ocean*
+- *no two ocean territories are adjacent*
+
+Together they keep the land in one piece: on a polyhedron the faces around any face form a
+ring, so if no two oceans touch then every ocean's ring is entirely land and any route can go
+round it. Sampling each seed independently would break that constantly — most of the sphere
+is water, so most territories would come back ocean and nearly all would touch another.
+
+So `biomes_of` takes the adjacency, which `sample` never does. Every territory whose ground
+is under water is a candidate, **deepest first**; it becomes ocean if no neighbour already
+has, and otherwise becomes the land it would have been. Deepest first is what makes the
+surviving oceans the ones most deserving of being water, and ties break by id, because two
+seeds can sample identically and iteration order must never decide a world.
+
+A territory refused water is not given a filler value — it becomes what its own ground says,
+through the same crossing. That is tested.
 
 ## Two things the measurements decided
 

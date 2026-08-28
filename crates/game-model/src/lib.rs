@@ -2,8 +2,8 @@
 //!
 //! # One function
 //!
-//! `spec/invariants.md`: *a game state and a transition yield a new game state, and there
-//! is no other way for state to change.* That is not a description of this crate, it is
+//! `spec/invariants.md`: *a game state and a transition yield a new game state. There is no
+//! other way for state to change.* That is not a description of this crate, it is
 //! its entire shape. [`Game::after`] is the function; everything else is the state it
 //! reads or the transition it is given.
 //!

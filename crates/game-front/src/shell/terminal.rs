@@ -46,8 +46,8 @@ pub fn answer(line: &str) -> String {
 ///
 /// Once is the problem, which is why it is not the only place the slash forms are
 /// announced: scrollback carries it away, and a person who never saw it would otherwise
-/// have no route to two of the three surfaces. `help` says a slash names a surface, and a
-/// bare `/` says which ones there are.
+/// have no route to two of the three surfaces. `help` says a slash directs the front end,
+/// and a bare `/` says what it can direct.
 pub fn greeting() -> String {
     [
         "game4x. The planet is in the window; this is the console.",

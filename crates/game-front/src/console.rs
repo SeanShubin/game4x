@@ -463,7 +463,8 @@ mod tests {
         assert_eq!(console.territory_count(), Some(12), "back to tiny");
     }
 
-    /// `spec/console.md`: *none of these is a transition* and *a game's history begins
+    /// `spec/console.md`: *none of these is a command and none is a transition* and
+    /// *a game's history begins
     /// when the game does.*
     ///
     /// The second sentence is what makes a history replayable at all: one spanning two

@@ -13,7 +13,7 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use game_console::{Library, Outcome, Problem, Session};
-use game_model::{Phase, Resource, StructureKind, TerritoryId, Transition, UnitKind};
+use game_model::{Biome, Phase, Resource, StructureKind, TerritoryId, Transition, UnitKind};
 
 /// Command files, read off disk. A browser has no disk and carries them in the binary
 /// instead; the console is told which by being handed one of these.
@@ -570,6 +570,27 @@ fn taking_and_holding_a_territory_follow_the_force_rules() {
         run(&mut session, "end turn");
     }
     assert!(session.game.territory(TerritoryId(1)).unwrap().founded);
+}
+
+/// The ground the release actually plays on is ground it can be played on.
+///
+/// `spec/planet.md` says no territory can be claimed whose biome is ocean, and a
+/// territory's biome is what the terrain gives it - so which territories are claimable is
+/// decided by a noise field rather than by this document. `commands/play.4x` lands on 1 and
+/// moves to 2. If the terrain ever puts water on either, the release stops being playable,
+/// and it should say so here rather than fail somewhere in the middle of the loop.
+#[test]
+fn the_territories_the_release_plays_on_are_not_ocean() {
+    let mut session = Session::new();
+    run(&mut session, "run setup");
+    for id in [1u32, 2] {
+        let place = session.game.territory(TerritoryId(id)).unwrap();
+        assert_ne!(
+            place.biome,
+            Biome::Ocean,
+            "territory {id} came out as ocean, so `commands/play.4x` cannot claim it"
+        );
+    }
 }
 
 /// `spec/invariants.md`: every change to game state is representable and executable as a

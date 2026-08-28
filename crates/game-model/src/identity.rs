@@ -77,37 +77,33 @@ impl fmt::Display for Resource {
 /// `spec/planet.md`: *each territory has a biome*, and *a territory's biome is what the
 /// terrain gives it*.
 ///
-/// The list is short on purpose. `docs/notes/planet-appearance.md` is emphatic that biomes
-/// should not be enumerated and placed but should **fall out of where fields cross** - so
-/// this is the set that a temperature, an elevation, a moisture and a drainage actually
-/// produce when they are crossed, and not a catalogue somebody wanted.
+/// `spec/planet.md`: *the biomes are ocean, ice, desert, grassland, jungle and mountain.*
 ///
-/// No rule reads a biome yet. It is a fact of the model rather than of the picture so that
-/// the two cannot drift: without it a territory could be tundra in the model while the
-/// realistic drawing paints rainforest across it, and nothing would be violated.
+/// Six, and chosen by **role rather than by appearance**: the test was whether knowing the
+/// biome changes what a player does with a territory, or only how pleased they are to have
+/// it. A planet may still draw tundra and savanna; they resolve to one of these until a
+/// rule can tell them apart.
+///
+/// It is a fact of the model rather than of the picture so that the two cannot drift:
+/// without that, a territory could be ice in the model while the realistic drawing paints
+/// jungle across it, and nothing would be violated.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Biome {
     Ocean,
     Ice,
-    Tundra,
     Desert,
     Grassland,
-    Forest,
-    Swamp,
-    Rainforest,
+    Jungle,
     Mountain,
 }
 
 impl Biome {
-    pub const ALL: [Self; 9] = [
+    pub const ALL: [Self; 6] = [
         Self::Ocean,
         Self::Ice,
-        Self::Tundra,
         Self::Desert,
         Self::Grassland,
-        Self::Forest,
-        Self::Swamp,
-        Self::Rainforest,
+        Self::Jungle,
         Self::Mountain,
     ];
 
@@ -115,18 +111,20 @@ impl Biome {
         match self {
             Biome::Ocean => "ocean",
             Biome::Ice => "ice",
-            Biome::Tundra => "tundra",
             Biome::Desert => "desert",
             Biome::Grassland => "grassland",
-            Biome::Forest => "forest",
-            Biome::Swamp => "swamp",
-            Biome::Rainforest => "rainforest",
+            Biome::Jungle => "jungle",
             Biome::Mountain => "mountain",
         }
     }
 
     pub fn named(word: &str) -> Option<Self> {
         Self::ALL.into_iter().find(|biome| biome.name() == word)
+    }
+
+    /// `spec/planet.md`: *no territory can be claimed whose biome is ocean.*
+    pub fn is_claimable(self) -> bool {
+        self != Biome::Ocean
     }
 }
 
