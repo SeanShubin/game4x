@@ -80,17 +80,16 @@ the web it is not even on the same call stack, because the page calls into it, s
 hand over the new state when it changes. `globe` watches a generation counter instead and
 rebuilds when the number it last saw is not the number it sees now.
 
-The number keys choose a planet size, and they do it **by issuing the command** — they type
-`create planet <size>` at the console, exactly as a person would. They used to write
-`Planet::size` directly, which let the view hold a world the model did not have; a view that
-can do that is not a projection of the model, and it was a second way for the world to
-change where `spec/invariants.md` allows one. Going through the command means a key and a
-typed line take the same path and the globe learns about the result the same way, through
-the counter.
+The number keys choose a planet size, and they do it **by typing the line** — `/new <size>`
+at the one console, exactly as a person would, and exactly what the buttons on the page
+type. They used to write `Planet::size` directly, which let the view hold a world the model
+did not have; a view that can do that is not a projection of the model. Going through the
+console means a key, a button and a typed line take the same path, and the globe learns
+about the result the same way in all three cases: by watching the counter.
 
-`create planet` is available only before `start`, so in a game already under way a size key
-is refused and the console says *that can only be done before the game starts*. That is the
-rule answering, not the key failing.
+`/new <size>` rather than `create planet <size>`, because the second is available only
+before `start` and the shipped build opens on a game already under way — so every size key
+would have been refused, correctly and uselessly.
 
 ## The flat projection's presentation path
 

@@ -69,9 +69,10 @@ the crate.
 
 ## Reaching a surface
 
-`spec/console.md`: *a line beginning with `/` is not a command. It names a surface to go
-to — `/game`, `/console`, `/browser`. It changes no game state, `history` does not record
-it, and `help` does not list it.*
+`spec/console.md`: *a line beginning with `/` directs the front end rather than the game.
+`/game`, `/console` and `/browser` choose a surface; `/new <size>` abandons the current game
+and starts one on a planet of that size. It is not a command: it changes no game state,
+`history` does not record it, and `help` does not list it.*
 
 That rule is **required, not a convenience.** `spec/interface.md` asks for all three
 surfaces reachable in every build, and adds that where there is a pointer these are
@@ -96,16 +97,38 @@ inspection and is now true by construction:
 `game-console`'s `no_command_can_begin_with_a_slash` asserts every form opens with a fixed
 word and that no such word starts with `/`. The whole separation rests on it.
 
+### Starting over is not a transition
+
+`/new <size>` throws the game away and begins another. That sounds like it should trouble
+`spec/invariants.md`'s *a game state and a transition yield a new game state*, and it does
+not: abandoning produces no new state from an old one. It begins a **second fold**, whose
+history starts empty. Nothing has to bend to allow it, and the same idea covers saving,
+loading and restarting — all of them are choosing which fold you are in.
+
+Two things follow, and both are tested:
+
+- **The old history does not survive into the new one.** The new fold's history is exactly
+  what built it, and replays on its own to the same game.
+- **The new fold is built to completion before the old one is let go.** `/new enormous`
+  leaves the game in progress exactly where it was, which matters because there is nothing
+  to undo with — an abandoned fold is simply gone.
+
+It is built by running commands, like any game, and it runs the same
+[`world.4x`](../../commands/world.4x) the release opens with. That file is `setup.4x`
+without the line that decides which planet, so `/new tiny` and the world this console opened
+on are the same world rather than two descriptions of it.
+
 ### Finding out it exists
 
-`help` must not list the surfaces, and the greeting scrolls away, so discovery is a chain
-rather than one announcement:
+`help` must not list what a slash directs, and the greeting scrolls away, so discovery is a
+chain rather than one announcement:
 
-| Type      | And you learn                                          |
-| --------- | ------------------------------------------------------ |
-| `help`    | that a line beginning with `/` names a surface         |
-| `/`       | which surfaces there are                               |
-| `browser` | that you wanted `/browser` — the near miss suggests it |
+| Type       | And you learn                                          |
+| ---------- | ------------------------------------------------------ |
+| `help`     | that a line beginning with `/` directs the front end   |
+| `/`        | what it can direct — the surfaces, and `new <size>`    |
+| `browser`  | that you wanted `/browser` — the near miss suggests it |
+| `new tiny` | that you wanted `/new tiny`, for the same reason       |
 
 The third is the error requirement in `spec/console.md` doing its job: the parser can only
 ever expect commands, because it has never heard of a surface, so the word most likely to

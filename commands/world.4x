@@ -1,0 +1,15 @@
+# The world of the first release, on whatever planet has already been created.
+#
+# Everything setup.4x does except decide which planet it is on. Split out so that
+# `/new <size>`, which abandons a game and starts another on a planet of that size, builds
+# the same world the release opens with rather than a second description of it.
+#
+# The twelve territories below exist on every planet size - the smallest Goldberg solid
+# has twelve - so this runs on any of them. A larger planet gets the release's twelve and
+# bare ground beyond.
+
+run nodes
+run forces
+
+# One ark, waiting above the planet. Nothing is on the planet yet.
+add ark orbit

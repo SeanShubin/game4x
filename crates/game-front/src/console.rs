@@ -20,15 +20,38 @@ const KEPT: usize = 400;
 pub enum Said {
     /// The console spoke. Every line is in the transcript too.
     Spoke(Vec<String>),
-    /// The line named a surface to go to. Nothing was said and nothing changed.
+    /// The line chose a surface. Nothing was said and no state changed.
     ///
     /// What *going there* looks like is the shell's business: a terminal prints the
     /// surface, and a page shows a panel. Both are correct, and neither belongs here.
     Reach(Surface),
 }
 
-/// `spec/console.md`: *a line beginning with `/` is not a command. It names a surface to
-/// go to.*
+/// What a slash can direct, other than a surface.
+const NEW: &str = "new";
+
+/// Everything a slash can direct, for saying so when one directs nothing.
+///
+/// This is the whole discovery path: `help` says a slash directs the front end without
+/// saying what, and a bare `/` answers with this.
+fn what_a_slash_directs() -> String {
+    format!("{}, or `{NEW} <size>`", Surface::names())
+}
+
+/// What a slash line asked the front end to do.
+enum Directed {
+    /// Choose a surface.
+    Reach(Surface),
+    /// Abandon the game in progress and start one on a planet of the named size.
+    Begin(String),
+    /// The slash directed nothing. Says what it could have.
+    Refused(String),
+}
+
+/// `spec/console.md`: *a line beginning with `/` directs the front end rather than the
+/// game. `/game`, `/console` and `/browser` choose a surface; `/new <size>` abandons the
+/// current game and starts one on a planet of that size. It is not a command: it changes
+/// no game state, history does not record it, and help does not list it.*
 ///
 /// `None` means the line is a command and belongs to the parser.
 ///
@@ -36,49 +59,66 @@ pub enum Said {
 /// console, and the console is one thing however a platform presents it. It lived in the
 /// terminal for one commit, which quietly made `/browser` a parse error on the web -
 /// exactly the divergence this crate exists to prevent.
-fn names_a_surface(line: &str) -> Option<Result<Surface, String>> {
-    let word = line.trim().strip_prefix('/')?;
-    if let Some(surface) = Surface::named(word) {
-        return Some(Ok(surface));
+fn directs_the_front_end(line: &str) -> Option<Directed> {
+    let rest = line.trim().strip_prefix('/')?;
+    let mut words = rest.split_whitespace();
+    // A bare `/` is not a mistake to be scolded for. It is where somebody who read that a
+    // slash directs the front end finds out what it can direct.
+    let Some(head) = words.next() else {
+        return Some(Directed::Refused(format!(
+            "a `/` directs the front end; try {}",
+            what_a_slash_directs()
+        )));
+    };
+    if let Some(surface) = Surface::named(head) {
+        return Some(Directed::Reach(surface));
     }
-    // A bare `/` is not a mistake to be scolded for. `help` deliberately does not list
-    // the surfaces, so this is where somebody who read that a slash names one finds out
-    // which ones there are.
-    Some(Err(if word.is_empty() {
-        format!("a `/` names a surface; there is {}", Surface::names())
-    } else {
-        format!(
-            "there is no surface called {word}; there is {}",
-            Surface::names()
-        )
-    }))
+    if head == NEW {
+        return Some(match words.next() {
+            Some(size) => Directed::Begin(size.to_string()),
+            None => Directed::Refused(format!("`/{NEW}` needs a planet size, as in `/{NEW} tiny`")),
+        });
+    }
+    Some(Directed::Refused(format!(
+        "there is nothing called {head} to direct; try {}",
+        what_a_slash_directs()
+    )))
 }
 
-/// The nudge for somebody who typed a surface's name and left the slash off.
+/// The nudge for somebody who typed a slash line and left the slash off.
 ///
 /// `spec/console.md` asks that a rejection name what was wrong, where, and what was
 /// expected instead. The parser can only ever expect commands - it has never heard of a
-/// surface - so `browser` gets a list of fifteen verbs that does not contain the one
-/// thing it was nearly. The word most likely to have been meant is added here, by the
-/// layer that knows there is such a thing as a surface.
-fn meant_a_surface(line: &str) -> Option<String> {
-    let surface = line.split_whitespace().next().and_then(Surface::named)?;
-    Some(format!(
-        "`{name}` is a surface rather than a command; type `/{name}` to go there",
-        name = surface.name()
-    ))
+/// surface, and `new` is not a verb - so `browser` gets a list of fifteen words that does
+/// not contain the one thing it was nearly. The word most likely to have been meant is
+/// added here, by the layer that knows what a slash directs.
+fn meant_the_front_end(line: &str) -> Option<String> {
+    let head = line.split_whitespace().next()?;
+    if let Some(surface) = Surface::named(head) {
+        return Some(format!(
+            "`{name}` is a surface rather than a command; type `/{name}` to go there",
+            name = surface.name()
+        ));
+    }
+    (head == NEW).then(|| {
+        format!("`{NEW}` directs the front end rather than the game; type `/{NEW} <size>`")
+    })
 }
 
 pub struct Console {
     pub session: Session,
     /// What has been said, oldest first.
     transcript: Vec<String>,
-    /// How many times the game state has moved.
+    /// How many times what the engine is drawing has become something else.
     ///
     /// The engine is on the other side of a wall from all of this - on the web it is not
     /// even on the same call stack, because the page calls in - so it cannot be handed
     /// the new state when it changes. It watches this instead, and rebuilds when the
     /// number it last saw is not the number it sees now.
+    ///
+    /// Mostly that is a transition. Starting a new game is the exception: it is not a
+    /// transition at all - it produces no new state from an old one, it begins a second
+    /// fold - but the engine has just as much to redraw, so it counts here too.
     generation: u64,
     /// The surface the most recent line named, if it named one.
     ///
@@ -134,13 +174,20 @@ impl Console {
         // The slash is settled before the parser is reached, because a line beginning
         // with one is not a command and handing it to a command parser would produce an
         // error about the wrong thing entirely.
-        if let Some(named) = names_a_surface(line) {
-            return match named {
-                Ok(surface) => {
+        if let Some(directed) = directs_the_front_end(line) {
+            return match directed {
+                Directed::Reach(surface) => {
                     self.reached = Some(surface);
                     Said::Reach(surface)
                 }
-                Err(problem) => {
+                Directed::Begin(size) => {
+                    let said = self.begin(&size);
+                    for line in &said {
+                        self.say(line.clone());
+                    }
+                    Said::Spoke(said)
+                }
+                Directed::Refused(problem) => {
                     self.say(problem.clone());
                     Said::Spoke(vec![problem])
                 }
@@ -158,7 +205,7 @@ impl Console {
             // failure says where and what was expected; a rejection talks about the game.
             Err(problem) => {
                 let mut said = vec![problem.to_string()];
-                said.extend(meant_a_surface(line));
+                said.extend(meant_the_front_end(line));
                 said
             }
         };
@@ -166,6 +213,41 @@ impl Console {
             self.say(line.clone());
         }
         Said::Spoke(said)
+    }
+
+    /// Abandons the game in progress and starts one on a planet of the given size.
+    ///
+    /// **Not a transition.** `spec/invariants.md` says a game state and a transition yield
+    /// a new game state, and this produces no new state from an old one - it begins a
+    /// second fold, whose history starts empty. The invariant is untouched, which is why
+    /// nothing here has to bend to allow it.
+    ///
+    /// The new game is built the only way a game can be built, by running commands, and it
+    /// runs the same `world` file the release opens with - so `/new tiny` and the world
+    /// this console opened on are the same world rather than two descriptions of it.
+    ///
+    /// The new fold is built to completion before the old one is let go. A size that names
+    /// no planet leaves the game in progress exactly where it was, which matters because
+    /// there is nothing to undo with: the abandoned fold is gone.
+    fn begin(&mut self, size: &str) -> Vec<String> {
+        let mut fresh = Session::new();
+        for line in [
+            format!("create planet {size}"),
+            "run world".to_string(),
+            "start".to_string(),
+        ] {
+            if let Err(problem) = fresh.run(&line, &library()) {
+                return vec![
+                    problem.to_string(),
+                    "the game in progress is untouched".to_string(),
+                ];
+            }
+        }
+        self.session = fresh;
+        self.generation += 1;
+        vec![format!(
+            "a new game, on a {size} planet. the one before it is gone"
+        )]
     }
 
     fn say(&mut self, line: String) {
@@ -313,10 +395,10 @@ mod tests {
         );
     }
 
-    /// A slash that names nothing says which surfaces there are - and so does a bare
+    /// A slash that directs nothing says what a slash can direct - and so does a bare
     /// slash, which is the whole discovery path for somebody who missed the greeting.
     #[test]
-    fn a_slash_that_names_no_surface_says_which_ones_there_are() {
+    fn a_slash_that_directs_nothing_says_what_a_slash_directs() {
         let mut console = Console::new();
         for line in ["/nowhere", "/"] {
             let said = spoke(&mut console, line);
@@ -328,14 +410,111 @@ mod tests {
                 );
             }
             assert!(
+                said.contains("new <size>"),
+                "`{line}` did not mention new: {said}"
+            );
+            assert!(
                 !said.contains("expected create"),
                 "`{line}` was answered as though it were a command: {said}"
             );
         }
     }
 
+    /// `spec/console.md`: `/new <size>` abandons the current game and starts one on a
+    /// planet of that size.
+    #[test]
+    fn starting_over_gives_a_planet_of_the_size_asked_for() {
+        let mut console = Console::new();
+        for size in ["small", "medium", "large", "huge", "tiny"] {
+            let said = spoke(&mut console, &format!("/new {size}"));
+            assert!(said.contains(size), "{said}");
+            assert_eq!(
+                console.session.game.phase,
+                game_model::Phase::Play,
+                "`/new {size}` should leave a game you can play"
+            );
+        }
+        assert_eq!(console.territory_count(), Some(12), "back to tiny");
+    }
+
+    /// Abandoning is not a transition. It produces no new state from an old one - it
+    /// begins a second fold, whose history starts empty.
+    #[test]
+    fn starting_over_begins_a_history_that_is_empty_of_the_old_game() {
+        let mut console = Console::new();
+        console.submit("end turn");
+        let before = console.session.history().len();
+        assert!(before > 0);
+
+        console.submit("/new small");
+
+        let after = console.session.history();
+        assert!(
+            !after.contains(&"end turn".to_string()),
+            "the old fold survived into the new one: {after:?}"
+        );
+        // The new fold's history is exactly what built it, and replays to the same game.
+        assert!(
+            after.contains(&"create planet small".to_string()),
+            "{after:?}"
+        );
+        let mut replayed = game_console::Session::new();
+        replayed
+            .run_script(&after.join("\n"), &library())
+            .expect("a history replays on its own");
+        assert_eq!(replayed.game, console.session.game);
+    }
+
+    /// `/new tiny` and the world the console opened on are the same world, not two
+    /// descriptions of it. That is what splitting `world.4x` out of `setup.4x` buys.
+    #[test]
+    fn starting_over_on_tiny_is_the_world_the_release_opens_with() {
+        let opened = Console::new();
+        let mut restarted = Console::new();
+        restarted.submit("end turn");
+        restarted.submit("/new tiny");
+        assert_eq!(restarted.session.game, opened.session.game);
+    }
+
+    /// The engine has to notice: a different planet is as much to redraw as a turn.
+    #[test]
+    fn starting_over_moves_the_counter_the_engine_watches() {
+        let mut console = Console::new();
+        let before = console.generation();
+        console.submit("/new huge");
+        assert!(console.generation() > before);
+        assert_eq!(console.territory_count(), Some(92));
+    }
+
+    /// A size that names no planet must not cost anybody their game. There is nothing to
+    /// undo with - the abandoned fold would simply be gone.
+    #[test]
+    fn a_size_that_names_no_planet_leaves_the_game_alone() {
+        let mut console = Console::new();
+        console.submit("end turn");
+        let before = console.session.game.clone();
+        let history = console.session.history().to_vec();
+
+        let said = spoke(&mut console, "/new enormous");
+        assert!(said.contains("enormous"), "{said}");
+        assert!(said.contains("untouched"), "{said}");
+        assert_eq!(console.session.game, before);
+        assert_eq!(console.session.history(), history.as_slice());
+    }
+
+    /// `/new` with nothing after it says what it needs rather than starting something.
+    #[test]
+    fn starting_over_without_a_size_asks_for_one() {
+        let mut console = Console::new();
+        let before = console.session.game.clone();
+        let said = spoke(&mut console, "/new");
+        assert!(said.contains("size"), "{said}");
+        assert_eq!(console.session.game, before);
+    }
+
     /// The near miss. `spec/console.md` asks a rejection to say what was expected
-    /// instead, and the parser can only expect commands - it has never heard of a surface.
+    /// instead, and the parser can only expect commands - it has never heard of a surface,
+    /// and `new` is not a verb.
     #[test]
     fn a_surface_name_without_its_slash_is_told_about_the_slash() {
         let mut console = Console::new();
@@ -348,6 +527,11 @@ mod tests {
                 surface.name()
             );
         }
+        let said = spoke(&mut console, "new tiny");
+        assert!(
+            said.contains("/new"),
+            "typing `new tiny` never mentioned `/new`: {said}"
+        );
         // And it is still a rejection: the bare word is not a command and does not become
         // one by being close to something.
         let said = spoke(&mut console, "browser");

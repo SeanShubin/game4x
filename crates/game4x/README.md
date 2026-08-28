@@ -68,9 +68,11 @@ scripts/web.ps1           # as WASM on localhost:8080; or bash scripts/web.sh
 ```
 
 Turning the world is a drag with a mouse, a finger on a touch screen, or the arrow keys.
-Zooming is the wheel or a pinch. `R` puts the view back. `1`–`5` choose a planet size,
-smallest to largest, by typing `create planet <size>` at the console — so they are refused
-once a game has started, which is when that command stops being available.
+Zooming is the wheel or a pinch. `R` puts the view back.
+
+`1`–`5` start a new game on a planet of that size, smallest to largest, and so do the
+buttons along the bottom of the game surface and `/new <size>` typed at the console. All
+three type the same line, so none of them is a second way to change anything.
 
 On the web, the keyboard belongs to the canvas. Leaving the console gives it back, because
 winit listens for keys there and focus otherwise stays on the text field.
@@ -106,9 +108,9 @@ Three things in that file are worth knowing about:
   with which GPU backends the browser exposes. That last fact is what separates "this
   browser cannot run it" from "the build is broken", and without it a failed startup is a
   silent black screen.
-- **The console and the data browser**, as ordinary elements: a `<pre>` that scrolls and
-  selects, an `<input>` that iOS will raise a soft keyboard for, and `<button>`s big
-  enough to tap. They call into the wasm through `game-front`'s web shell, which is the
+- **The console, the data browser and the size controls**, as ordinary elements: a `<pre>`
+  that scrolls and selects, an `<input>` that iOS will raise a soft keyboard for, and
+  `<button>`s big enough to tap. They call into the wasm through `game-front`'s web shell, which is the
   only thing crossing that boundary and passes nothing but strings.
 
 Bevy is pulled in with `default-features = false`, dropping audio - nothing here uses it,

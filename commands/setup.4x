@@ -5,8 +5,4 @@
 # is made of, in the order it has to be made.
 
 create planet tiny
-run nodes
-run forces
-
-# One ark, waiting above the planet. Nothing is on the planet yet.
-add ark orbit
+run world

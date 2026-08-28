@@ -547,7 +547,7 @@ fn summary(size: PlanetSize, world: &World, panels: &mesh::PlanetMesh) -> String
     format!(
         "{} - {regions} territories - {shape}\n{} - {} triangles\n\
          drag, a finger or the arrows to turn - wheel or pinch to zoom - R to reset\n\
-         1-5 to choose a planet size, before the game starts",
+         1-5 start a new game on a planet of that size",
         size.name(),
         world.degree_summary(),
         panels.triangle_count()
@@ -688,19 +688,18 @@ fn reset_view(keys: Res<ButtonInput<KeyCode>>, mut orbit: ResMut<Orbit>) {
 
 /// Number keys choose a planet size, smallest to largest.
 ///
-/// **By issuing the command, not by writing the size.** `create planet <size>` is how a
-/// planet's size is chosen, and a key that set [`Planet::size`] directly would be a second
-/// way for the world to change - `spec/invariants.md` allows exactly one. It would also
+/// **By typing the line, not by writing the size.** `releases/first-release.md`: *choosing
+/// a planet size abandons the current game and starts one on a planet of that size*, and
+/// the way to say that is `/new <size>`. A key that set [`Planet::size`] directly would
 /// let the view hold a planet the model does not have, which is what these keys used to do
 /// before the globe followed the game.
 ///
 /// So a key and a typed line take the same path, and the globe learns about the result the
-/// same way either way: through [`follow_the_game`], watching the counter. That is what
-/// `releases/first-release.md` means by a control being a command wearing a button - it is
-/// not a parallel interface, because it has no way to be one.
+/// same way either way: through [`follow_the_game`], watching the counter.
 ///
-/// `create planet` is available only before `start`, so in a game already under way this
-/// is refused and the console says why. That is the rule answering, not the key failing.
+/// It is `/new <size>` rather than `create planet <size>` because the second is available
+/// only before `start`, and the shipped build opens on a game already under way - so every
+/// size key would have been refused, correctly and uselessly.
 fn keys_to_choose_size(keys: Res<ButtonInput<KeyCode>>) {
     for (digit, size) in SIZE_KEYS.into_iter().zip(PlanetSize::ALL) {
         if keys.just_pressed(digit) {
@@ -721,7 +720,7 @@ const SIZE_KEYS: [KeyCode; 5] = [
 /// The line a size key types. Exactly what a person would type, because it is the same
 /// thing arriving by a different route.
 fn chooses(size: PlanetSize) -> String {
-    format!("create planet {}", size.name())
+    format!("/new {}", size.name())
 }
 
 /// The last generation the globe was built for.
@@ -1147,9 +1146,9 @@ mod tests {
         assert_eq!(orbit.distance, FURTHEST);
     }
 
-    /// One key per size, in the order the sizes are listed, and each types the command a
-    /// person would type. `game-console`'s `every_planet_size_can_be_created` is the other
-    /// half: that each of those lines is one the console accepts.
+    /// One key per size, in the order the sizes are listed, and each types the line a
+    /// person would type. `game-front`'s `starting_over_gives_a_planet_of_the_size_asked_for`
+    /// is the other half: that each of those lines does what it says.
     #[test]
     fn the_size_keys_are_one_per_size_smallest_to_largest() {
         assert_eq!(SIZE_KEYS.len(), PlanetSize::ALL.len());
@@ -1157,11 +1156,11 @@ mod tests {
         assert_eq!(
             typed,
             [
-                "create planet tiny",
-                "create planet small",
-                "create planet medium",
-                "create planet large",
-                "create planet huge",
+                "/new tiny",
+                "/new small",
+                "/new medium",
+                "/new large",
+                "/new huge",
             ]
         );
         // Ascending, so the digits read the way they look on the keyboard.

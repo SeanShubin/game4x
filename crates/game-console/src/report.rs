@@ -142,7 +142,7 @@ fn territory(game: &Game, id: TerritoryId) -> String {
 ///
 /// Kept as a constant so the test that `help` does not list them can name the one line
 /// that is allowed to mention a slash at all.
-pub const SURFACES_ARE_ELSEWHERE: &str = "a line beginning with `/` names a surface rather than a command; type `/` on its own to see which";
+pub const SURFACES_ARE_ELSEWHERE: &str = "a line beginning with `/` directs the front end rather than the game; type `/` on its own to see what it can direct";
 
 pub fn help(grammar: &Grammar, command: Option<String>) -> String {
     match command {

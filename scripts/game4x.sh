@@ -2,7 +2,7 @@
 # Runs the application: the world as a solid you can turn in your hands.
 #
 # Turning the world is a drag, a finger, or the arrow keys; zooming is the wheel or a
-# pinch; R puts the view back; 1-5 choose a planet size, before the game starts. The
+# pinch; R puts the view back; 1-5 start a new game on a planet of that size. The
 # console is this terminal: type a command and press enter, /browser lists every entity,
 # /game says where the game is.
 #

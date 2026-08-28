@@ -11,6 +11,7 @@ use game_console::Embedded;
 pub fn library() -> Embedded {
     Embedded::of(&[
         ("setup", include_str!("../../../commands/setup.4x")),
+        ("world", include_str!("../../../commands/world.4x")),
         ("nodes", include_str!("../../../commands/nodes.4x")),
         ("forces", include_str!("../../../commands/forces.4x")),
         ("play", include_str!("../../../commands/play.4x")),
@@ -27,12 +28,22 @@ mod tests {
     #[test]
     fn the_release_command_files_travel_with_the_binary() {
         let library = library();
-        for name in ["setup", "nodes", "forces", "play"] {
+        for name in ["setup", "nodes", "forces", "world", "play"] {
             assert!(library.fetch(name).is_some(), "`{name}` is not embedded");
         }
+        // The hierarchy, one level at a time: setup says which planet and defers the
+        // rest, and `world` is the part `/new <size>` reuses on a planet of any size.
         assert!(
-            library.fetch("setup").unwrap().contains("run nodes"),
+            library.fetch("setup").unwrap().contains("run world"),
             "setup should call its subroutines"
+        );
+        assert!(
+            library.fetch("world").unwrap().contains("run nodes"),
+            "world should call its subroutines"
+        );
+        assert!(
+            !library.fetch("world").unwrap().contains("create planet"),
+            "world must not decide which planet it is on, or /new could not reuse it"
         );
     }
 
@@ -43,7 +54,7 @@ mod tests {
     #[test]
     fn what_is_carried_is_what_is_on_disk() {
         let library = library();
-        for name in ["setup", "nodes", "forces", "play"] {
+        for name in ["setup", "nodes", "forces", "world", "play"] {
             let path = format!(
                 "{}/../../commands/{name}.4x",
                 env!("CARGO_MANIFEST_DIR").replace('\\', "/")

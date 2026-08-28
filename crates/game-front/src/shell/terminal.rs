@@ -51,7 +51,7 @@ pub fn answer(line: &str) -> String {
 pub fn greeting() -> String {
     [
         "game4x. The planet is in the window; this is the console.",
-        "`help` lists every command. A line beginning with `/` names a surface: try `/`.",
+        "`help` lists every command. A line beginning with `/` directs the front end: try `/`.",
     ]
     .join("\n")
 }
@@ -136,9 +136,21 @@ mod tests {
     /// The greeting scrolls away, so it must not be the only thing that mentions the
     /// slash - but while it is on screen it should still say so.
     #[test]
-    fn the_greeting_says_a_slash_names_a_surface() {
+    fn the_greeting_says_a_slash_directs_the_front_end() {
         exclusively(|| {
             assert!(greeting().contains('/'), "{}", greeting());
+        });
+    }
+
+    /// Starting a new game is reachable by typing, which on a terminal is the only way
+    /// anything is reachable at all.
+    #[test]
+    fn a_new_game_can_be_started_from_the_terminal() {
+        exclusively(|| {
+            let said = answer("/new small");
+            assert!(said.contains("small"), "{said}");
+            // And back, so the rest of the suite finds the world it expects.
+            answer("/new tiny");
         });
     }
 

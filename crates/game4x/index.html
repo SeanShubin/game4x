@@ -89,6 +89,40 @@
         border-color: var(--accent);
       }
 
+      /* The controls for starting a new game, on the game surface only.
+         releases/first-release.md binds choosing a planet size to a control for each
+         size; spec/interface.md is why there has to be one at all, since a key is a
+         thing a tablet does not have. */
+      #sizes {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        display: none;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+        z-index: 20;
+        font: 12px/1 ui-monospace, monospace;
+        color: var(--dim);
+      }
+      #sizes[data-showing="true"] {
+        display: flex;
+      }
+      #sizes button {
+        font: inherit;
+        color: var(--ink);
+        background: rgba(12, 14, 18, 0.72);
+        border: 1px solid var(--edge);
+        border-radius: 6px;
+        padding: 10px 11px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      #sizes button:hover {
+        border-color: var(--accent);
+      }
+
       .surface {
         position: fixed;
         inset: 0;
@@ -392,6 +426,20 @@
       <button type="button" data-surface="browser">F3 browser</button>
     </nav>
 
+    <!--
+      Starting over. Each button types `/new <size>` at the one console, so a tap and a
+      typed line are the same act arriving by different routes - the control is a line
+      wearing a button rather than a second way to change anything.
+    -->
+    <nav id="sizes" data-showing="true" aria-label="start a new game">
+      <span aria-hidden="true">new game</span>
+      <button type="button" data-size="tiny">tiny</button>
+      <button type="button" data-size="small">small</button>
+      <button type="button" data-size="medium">medium</button>
+      <button type="button" data-size="large">large</button>
+      <button type="button" data-size="huge">huge</button>
+    </nav>
+
     <section class="surface" id="surface-console" data-showing="false" aria-label="console">
       <pre id="transcript" tabindex="0">starting</pre>
       <!--
@@ -449,6 +497,8 @@
           }
           el("surface-console").dataset.showing = String(name === "console");
           el("surface-browser").dataset.showing = String(name === "browser");
+          // Only over the game: there is nothing to look at behind the other two.
+          el("sizes").dataset.showing = String(name === "game");
           paint();
           if (name === "console") {
             toBottom(el("transcript"));
@@ -474,6 +524,19 @@
               show(button.dataset.surface);
             });
           })(buttons[i]);
+        }
+
+        var sizes = document.querySelectorAll("#sizes button");
+        for (var n = 0; n < sizes.length; n++) {
+          (function (button) {
+            button.addEventListener("click", function () {
+              if (!bindings) return;
+              // The same line a person would type, and the same line the number keys
+              // type. The globe notices on its own, by watching the counter.
+              bindings.console_submit("/new " + button.dataset.size);
+              paint();
+            });
+          })(sizes[n]);
         }
 
         el("prompt-row").addEventListener("submit", function (event) {
