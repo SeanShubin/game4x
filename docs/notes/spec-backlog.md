@@ -254,6 +254,37 @@ which this must be written.
 or needs a structure. The last would give a reason to build depots at the frontier and would pair
 with the storage entry below.
 
+### A planet can be generated to a requested biome distribution
+
+Sean, 2026-08-28: *"I want some distribution of biomes in territories but I don't actually care where
+they are."*
+
+**The outcome, which is what has to be written down somewhere:** a generator is asked for a mix -
+mostly forest and ocean, some desert and grassland - and produces a planet whose territories match
+it, without being told where anything goes.
+
+**It is checkable, which is what makes it a requirement rather than a wish.** Generate a planet, count
+the territories of each biome, compare to what was asked. That is a **vetted when** line waiting for
+the release that delivers generation, and it names no technique:
+
+> **Vetted when** - a planet generated from a requested mix has, for each biome, a territory count
+> within a stated tolerance of the request
+
+**How it would be done is recorded and is not the requirement.**
+[Generating versus designing](generating-versus-designing.md) argues for moving the cut points in
+parameter space rather than placing biomes, because that keeps coherence: nothing is moved, only the
+lines are redrawn, and lines are not visible in the world. **That belongs to whoever implements it.**
+
+**Why it is here rather than in the queue.** The first release generates nothing - its twelve
+territories are hand-designed - so a capability entry would promise something that release does not
+do. This entry exists so the requirement is not lost between now and the release that can carry it.
+
+**And the reason it needed writing at all**, on 2026-08-28: Claude said the cut-point idea should not
+be a proposal because it is a technique, and Sean asked how we then make sure it happens. **The
+answer is that the technique is not the thing to ensure - the outcome is** - and Claude had discarded
+the outcome along with the mechanism. Anything worth making happen can be stated as something
+someone can check; if it cannot, what is wanted is not yet known.
+
 ### Biomes want revisiting every time a rule learns to read a territory
 
 Sean, 2026-08-28: *"we will need to re-address biomes as we add new mechanics that enable more
