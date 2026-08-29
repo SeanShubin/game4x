@@ -374,6 +374,99 @@ conditions wrapped around it, and the two would share a parser. **The question t
 whether a condition vocabulary belongs in the same language as the commands** - which is the open
 question above, arriving from a second direction.
 
+## Why the predecessor's two halting checks were the wrong tool
+
+Sean built both, and diagnosed both correctly: **halt on the same state twice in a row** misses any
+cycle longer than one, and **halt on any state seen before** is bounded only by the size of the state
+space, which is astronomical. Two further reasons matter more than either, and they are worth
+recording because they apply to the whole family of approaches rather than to those two attempts.
+
+**Neither would ever fire in this game.** A 4X accumulates - population grows, resources accrue,
+territories are taken and not given back - and `spec/invariants.md` makes a game state exactly the
+fold of every transition, so a state that has already occurred is not something the game returns to.
+**Exact repetition is not the failure mode here.** The failure mode is a rule that makes small,
+meaningless, genuinely-different changes for ever, and cycle detection is blind to that by
+construction. It is a correct answer to a question this game does not ask.
+
+**And a detector is not a bound.** This matters more for a game than for an interpreter: a check that
+fires when it happens to fire is something the player cannot reason about, plan around, or be taught.
+**A number they chose in advance is predictable**, which is the property a player actually needs.
+Cycle detection also spends memory proportional to the run, which is the wrong direction for the
+thing Sean wants this for - simulating two hundred turns on a large planet.
+
+So the turn budget is not merely the cheapest answer. **It is the only one of the three that is a
+bound rather than a diagnosis**, and it is filed as P-120.
+
+## Fragments: the constraint and the mechanic are the same object
+
+Sean's idea is to make the budget a thing the player has more or less of - *AI fragments*, stronger or
+weaker along several dimensions - rather than a constant the engine imposes.
+
+**The move is right, and the reason is that it inverts how the limit reads.** A budget imposed by the
+engine is a limitation and is felt as one. A budget you acquired is power, and the same number stops
+feeling arbitrary the moment it has a source.
+
+**It also fixes a balance problem that automation otherwise creates.** If automation is free and
+total from the first turn, the player becomes a spectator to their own game. **Tedium arrives late** -
+the twentieth territory is tedious in a way the first is not - so automation should arrive late too,
+and a resource that accrues over a game matches those two curves without anyone having to tune them
+against each other.
+
+### The dimensions are not invented; they are the measurements the structure already has
+
+Sean's three: how many turns it can run, how many levels deep, how many elements in a single portion.
+
+**Depth and breadth are exactly the two measurements of the acyclic reference graph** that P-117's
+third construction already requires - depth is the longest path through it, elements-per-portion is
+its branching factor, and the size of what a rule can express is bounded by roughly one raised
+against the other. So the strength dimensions are not knobs invented for the mechanic. **They are the
+graph's own axes, given a price.**
+
+**The three split into two kinds that behave differently, and the difference shows up in the
+interface.**
+
+| Kind        | Dimension       | Checked                | What running out looks like   |
+| ----------- | --------------- | ---------------------- | ----------------------------- |
+| **Static**  | depth, elements | when the rule is built | the editor will not build it  |
+| **Dynamic** | turns           | while the rule runs    | the rule stops and hands back |
+
+**That is P-117 made concrete from both sides at once.** *Nothing that can be built runs forever* is
+enforced statically by the editor refusing the shape, and dynamically by the turn budget running out.
+The safety constraint and the game mechanic turn out to be one object seen from two directions, which
+is the strongest argument for the idea: it is not a mechanic bolted onto a limitation.
+
+### The one decision that determines whether this encourages modular design
+
+Sean's stated purpose is *to encourage modular design*. **Nothing in the scheme does that by itself,
+and one choice decides it entirely: whether a rule used by three parents costs one element or three.**
+
+**Charge per use and the system punishes reuse and rewards copy-paste** - which is precisely backwards,
+and would be discovered by players within a day. **Charge per distinct rule and factoring out shared
+structure is literally how a player affords more**, so the budget teaches the lesson Sean wants
+taught, without a tutorial and without a penalty.
+
+It is the same economics that makes a shared subroutine cheaper than a duplicated one, turned into a
+price the player can see.
+
+### Fragments are a level requirement, which is the half of the precedent not yet taken
+
+**This closes a gap in P-114 that had no answer before.** A rule is text, is not part of any one game,
+and can be given to anyone. A fragment is capacity, and would be earned inside a game. So **a
+downloaded build can be one you cannot yet afford to run** - which is exactly a Path of Exile build
+with a level requirement, and Sean chose that precedent himself.
+
+**It does not weaken P-114's sharing guarantee.** *A rule does the same thing for whoever holds it*
+is about the rule's meaning, and affordability is not meaning. Two players running the same build get
+the same behaviour; one of them may only be able to run less of it, for fewer turns.
+
+### What has to be settled before any of this can be filed
+
+**Does the budget belong to the rule or to the player?** If to the player, a build carries a
+prerequisite and part of the game is growing into the builds you have collected. If to the rule, a
+rule declares its own cost and anyone can run anything. Everything else here - how fragments are
+acquired, whether they are spent or held, what happens when a build overruns - follows from that one
+answer, and none of it can be guessed at usefully before it.
+
 ## What this opens that is not settled
 
 **Settled while this note was being written.** The rule editor is **its own screen**, and its

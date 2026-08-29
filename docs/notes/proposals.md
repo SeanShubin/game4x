@@ -100,6 +100,35 @@ is not yet decided**, and naming a format here would decide it by accident.
 game state is executable as a command; this says every rule is writable as text. Neither says what
 the text looks like.
 
+### P-120 · Recovered · `spec/invariants.md` -> Control without tedium
+
+**Sean's, stated 2026-08-28**, after weighing two halting checks he built into the predecessor:
+*"the turn budget does seem to solve all of this."*
+
+> - A rule runs for at most a stated number of turns, and stops when they are spent
+
+**Basis:** P-117 requires that rules always finish and supplies no stop, and a rule that goes from one
+Ark to the next has to span turns - so `end turn`, which is the action that makes everything ready
+again, undoes the construction that bounded a single turn. **Something has to supply the outer bound
+and this is it.**
+
+**Sean rejected the two alternatives from his own experience and his diagnosis was right.** Halting on
+the same state twice in a row misses any cycle longer than one; halting on any state seen before is
+bounded only by the size of the state space. **Two further reasons kill the whole family**, and they
+are in [the note](control-without-tedium.md): neither check would ever fire in a game that
+accumulates, since exact repetition is not the failure mode - a rule making small meaningless progress
+for ever is - and **a detector is not a bound**, because a player cannot plan around a check that
+fires when it happens to fire.
+
+**The word doing the work is *stated*.** The player knows the number before the rule runs, which is
+what makes the stop something they can reason about rather than something that happens to them. That
+is the property cycle detection cannot have at any price.
+
+**It deliberately does not say where the number comes from.** Sean is considering making it a game
+resource - *AI fragments*, with strength along several dimensions - and the line holds either way. If
+fragments land, this is the dimension they are strong in; if they do not, it is a number the player
+types. **Naming the source here would decide a mechanic that is still being thought about.**
+
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
