@@ -47,8 +47,27 @@ Two limits Claude holds itself to:
 **The code lane's, reported 2026-08-28**, with measurements. Forwarded by Sean; the wording is
 theirs.
 
-> - Nothing of how a drawing is made is visible in it. The finest detail a viewer can make out is
->   terrain, not the mesh, the sampling or the subdivision.
+> - A drawing never betrays how it was made. A viewer sees the planet, never the process.
+
+**Reworded on 2026-08-28.** The code lane's line read *nothing of how a drawing is made is visible in
+it; the finest detail a viewer can make out is terrain, not the mesh, the sampling or the
+subdivision.* Sean found it did not read clearly, and it has three problems:
+
+**It names mechanisms**, which is the fourth time a line has been corrected for that - P-93, P-95 and
+P-109 are the others. *Mesh*, *sampling* and *subdivision* are implementation words: if the realistic
+drawing were raymarched there would be no mesh and no subdivision, and the line would forbid nothing.
+**The defect it exists to prevent has nothing to do with triangles** - banding from a colour threshold
+is the same failure with no mesh involved.
+
+**The finest detail a viewer can make out is terrain** reads as a claim about detail *level* - how
+small a thing can be seen - when what is meant is that the small things seen are the right *kind* of
+thing. Two different sentences share those words.
+
+**And the first half is oddly self-referential.** A drawing is entirely made of how it was made; what
+is meant is that no artifact of the making shows.
+
+**The requirement and the measurements are the code lane's; only the words are Claude's.** Sean
+should read the new line as a substitute rather than as an improvement he asked for.
 
 **Basis:** the realistic drawing was built, every test passed, **all four vetted-when lines were
 satisfied**, and it looked blurry and blocky. Both causes measured: colour and normal sampled once
@@ -229,6 +248,43 @@ generated rather than designed.
 [biomes](biomes.md) still states the old restriction and its proof, and
 [generating versus designing](generating-versus-designing.md) closes on *predominantly ocean is not a
 planet this game can generate*, which this makes false.
+
+### P-110 · Entailed · `spec/console.md` -> Commands
+
+> Available only before `start`:
+>
+> - `set biome <territory> <biome>` - give a territory its biome
+
+**Basis:** found on 2026-08-28 checking whether the *move the cut points* idea belonged in the queue.
+It does not - it is implementation - but the check turned up a gap.
+
+**`spec/planet.md` says every territory has a biome and nothing can give it one.** The design phase
+has four commands: `create planet`, `add node`, `set force` and `add <unit> orbit`. A designed
+scenario can set a territory's nodes and its force of nature, and **cannot set the one property the
+spec says every territory has.**
+
+**The first release needs it immediately.** Its twelve territories are hand-designed and name no
+biome, which was already recorded as owed. There is no way to pay that debt today.
+
+**It reads against P-100, and P-74 is why it is allowed.** `spec/planet.md` says *a territory's biome
+is what the terrain gives it. It is not chosen independently of the surface the territory covers* -
+and a command that sets a biome does exactly that. The resolution is already in the spec:
+`spec/console.md` says **in the design phase, the designer is the cause of what appears.** P-100
+describes how a biome arises when a planet is generated; it does not bind a designer, any more than
+*nothing appears without a cause inside the model* forbids `add node`.
+
+**That reading is worth stating because it is load-bearing for the whole design phase.** Every one of
+the four existing commands does something the play-phase rules would forbid - nodes do not appear,
+forces do not change, units do not materialise in orbit. `set biome` is the fifth of a kind, not the
+first of a new one.
+
+**Open - a scenario can now contradict itself, and nothing catches it.** Setting a biome and setting
+nodes are separate commands, so a territory can be `grassland` with eight metal nodes at density 8.
+The [biome table](../../releases/first-release.md) says what each biome gives; nothing checks that a
+hand-built territory agrees with it. **That is the same drift P-100 prevents between the model and
+the picture, one level down** - and it is arguably fine, since
+[a designed scenario is not a world](generating-versus-designing.md) and territory 5 exists precisely
+to be implausible.
 
 ## Accepted
 

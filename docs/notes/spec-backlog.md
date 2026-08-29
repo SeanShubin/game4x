@@ -308,11 +308,14 @@ that detail."*
 Six terrains, then. Today the game has one - a unit moves between adjacent territories on the ground
 - plus orbit, which `spec/orbit.md` treats as a single place rather than as a terrain.
 
-**The near-term consequence is a restriction that expires.** P-102 forbids two ocean territories
-being adjacent, so that land is never cut in two. **That restriction lifts the moment a unit can
-operate in an ocean territory**, and when it does, oceans can become seas: coastlines, island chains,
-a landmass split by water. Until then a planet's water is limited to isolated cells, and no planet
-can be mostly ocean.
+**The near-term consequence is a restriction that expires.** `spec/planet.md` requires that oceans
+never isolate land from land, so that every land territory is reachable on foot. **That lifts the
+moment a unit can operate in an ocean territory.**
+
+It was tighter until 2026-08-28: *no two ocean territories are adjacent*, which made water a
+scattering of isolated cells with no coastline and no sea. Sean relaxed it to the requirement the
+adjacency rule had merely been sufficient for. **What remains forbidden is an island** - a land
+territory unreachable from the rest - and that is precisely what a ship would fix.
 
 **Worth deciding when the time comes**, and not before: whether a terrain is a property of a
 territory (so a territory is one of six) or a property of the boundary between two (so crossing is
