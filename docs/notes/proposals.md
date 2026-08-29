@@ -42,54 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-104 · Measured · `spec/planet.md` -> Presentation
-
-**The code lane's, reported 2026-08-28**, with measurements. Forwarded by Sean; the wording is
-theirs.
-
-> - A drawing never betrays how it was made. A viewer sees the planet, never the process.
-
-**Reworded on 2026-08-28.** The code lane's line read *nothing of how a drawing is made is visible in
-it; the finest detail a viewer can make out is terrain, not the mesh, the sampling or the
-subdivision.* Sean found it did not read clearly, and it has three problems:
-
-**It names mechanisms**, which is the fourth time a line has been corrected for that - P-93, P-95 and
-P-109 are the others. *Mesh*, *sampling* and *subdivision* are implementation words: if the realistic
-drawing were raymarched there would be no mesh and no subdivision, and the line would forbid nothing.
-**The defect it exists to prevent has nothing to do with triangles** - banding from a colour threshold
-is the same failure with no mesh involved.
-
-**The finest detail a viewer can make out is terrain** reads as a claim about detail *level* - how
-small a thing can be seen - when what is meant is that the small things seen are the right *kind* of
-thing. Two different sentences share those words.
-
-**And the first half is oddly self-referential.** A drawing is entirely made of how it was made; what
-is meant is that no artifact of the making shows.
-
-**The requirement and the measurements are the code lane's; only the words are Claude's.** Sean
-should read the new line as a substitute rather than as an improvement he asked for.
-
-**Basis:** the realistic drawing was built, every test passed, **all four vetted-when lines were
-satisfied**, and it looked blurry and blocky. Both causes measured: colour and normal sampled once
-per vertex, so a planet covering ~640,000 pixels at 24,000 triangles was sampled **once per 27
-pixels** and interpolated across the gap; and biome colour switched at a threshold.
-
-**The specification described the drawing's structure and never its resolution.** No seam, no
-groove, varies within a territory, nothing revealing the division - every one of those is about
-*what shape* the picture has, and none is about *how finely* it is resolved. **A drawing can satisfy
-all four and still be visibly made of triangles.**
-
-**This is the vetted-when mechanism working, not failing.** P-101 wrote four observable checks and
-they all passed on a picture that was wrong - which is the honest outcome when the checks name the
-things that were thought of. The remedy is a fifth check (P-106), not distrust of the four.
-
-**Not merged with the division line, and that restraint is correct.** The code lane declined to fold
-this into *nothing in the terrain reveals how the sphere was divided*, on the grounds that merging
-would assert a relationship neither line states. **Claude agrees and recommends keeping both.** They
-hide different things: one hides a fact about the **model** - which territories exist - and this one
-hides a fact about the **renderer**. A drawing could reveal either without revealing the other, and
-a single line would make it unclear which failure had occurred.
-
 ### P-105 · Invented · `spec/planet.md` -> Presentation
 
 **The code lane's**, reported 2026-08-28 and forwarded by Sean.
@@ -355,6 +307,7 @@ to be implausible.
 | P-102, the six biomes; ocean is unclaimable and never adjacent to ocean                                         | `spec/planet.md` -> What a territory carries                                                                           | 2026-08-28 |
 | P-103, what each biome gives a territory, and why every force of nature is 1                                    | `releases/first-release.md` -> Biomes                                                                                  | 2026-08-28 |
 | P-107, the realistic drawing shows terrain and no borders                                                       | `spec/planet.md` -> Presentation                                                                                       | 2026-08-28 |
+| P-104, a drawing never betrays how it was made                                                                  | `spec/planet.md` -> Presentation                                                                                       | 2026-08-28 |
 
 ## Rejected
 
