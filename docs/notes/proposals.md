@@ -42,39 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-111 · Recovered · `spec/invariants.md` -> new section, after *Everything is expressible*
-
-**Sean's, stated 2026-08-28.** His words, cut to the two claims that are always true.
-
-> ## Control without tedium
->
-> - A player has complete control over every detail, and is never required to exercise it by hand
->   more than once. Anything they can do by hand, they can instead specify a rule that does it
-> - Rules are specified through the interface. Playing the game never requires writing a program
-
-**Basis:** Sean named a principle he wants the specification never to work against - *complete
-control over every little detail, while at the same time having zero tedium* - and named the
-resolution himself: *allow me to specify the rules for what I previously did manually*.
-
-**The two goals are the same axis only while control means acting.** Every detail controlled by hand
-is a detail attended to every turn, so the usual escape is to take control away - an advisor, an
-auto-manage toggle. They come apart once control means **specifying**: a rule expressed once covers
-every turn it applies to, which is the whole of what tedium is. See
-[control without tedium](control-without-tedium.md).
-
-**It is invariant-shaped rather than a feature.** Sean's framing was that the specification must
-never *work against* it, which is exactly what `spec/invariants.md` is for: a rule elsewhere that
-made some detail hand-only would be a defect in that rule. Filed as **Recovered** because both halves
-are his, from this conversation.
-
-**The second line is the part that constrains.** Without it, *specify a rule* is satisfied by a
-scripting language, which Sean ruled out: *I don't want one to need to be a software engineer to play
-this game.* It does not forbid `run <file>` - a console already exists and files of commands already
-work - it forbids the game **requiring** that route.
-
-**Where the interface for this lives is settled, and it is not here.** Sean's answer, the same day: the rule editor is its own screen, two-dimensional. Filed as P-116 against
-`spec/interface.md`, which is where a surface belongs.
-
 ### P-112 · Recovered · `spec/invariants.md` -> the same new section
 
 **Sean's, stated 2026-08-28.** The mechanism half of P-111, and the part that makes it checkable.
@@ -384,6 +351,7 @@ every firing takes an action. The corrected paragraph is in P-112 above.
 | P-110, `set biome` gives a territory its biome during design                                                    | `spec/console.md` -> Commands                                                                                          | 2026-08-28 |
 | P-108, the biome check states plurality, not majority                                                           | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-28 |
 | P-106, a fifth capability: terrain resolved as finely as it is shown                                            | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-28 |
+| P-111, control without tedium: rules instead of repetition                                                      | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 
 ## Rejected
 

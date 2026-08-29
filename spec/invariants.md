@@ -24,6 +24,12 @@ specific rule.
 
 - Every change to game state is representable and executable as a console command
 
+## Control without tedium
+
+- A player has complete control over every detail, and is never required to exercise it by hand
+  more than once. Anything they can do by hand, they can instead specify a rule that does it
+- Rules are specified through the interface. Playing the game never requires writing a program
+
 ## No penalty for building infrastructure
 
 - Infrastructure is never a liability; a structure costs nothing to keep, and no structure a
