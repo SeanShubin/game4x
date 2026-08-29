@@ -42,40 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-122 · Entailed · `releases/first-release.md` -> Capabilities
-
-**Claude's.** A gap found on 2026-08-29, when *first release played by hand* made it load-bearing.
-
-> ### The loop can be played through
->
-> - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
-> - **Vetted when** - starting from a single Ark in orbit over the twelve designed territories, a
->   person playing entirely by hand reaches a fully exploited planet and launches an Ark
-
-**Basis:** the release describes an eight-step loop, a twelve-territory fixture, and the cost of every
-unit and structure - and **all five of its capabilities are about rendering**. Two drawings, terrain
-crossing boundaries, a division that cannot be seen, a biome per territory. **Nothing in the release
-says the game can be played, and nothing would be checked to find out.**
-
-**It was survivable while the release was about the picture and is not now.** Sean has just decided
-the first release is played by hand, which makes the loop the thing being delivered rather than
-context for a planet. A release whose vetting is silent about its own subject would be vetted, deleted
-and leave no record that anyone completed a game.
-
-**It is one coarse check rather than eight, deliberately.** A per-step check would pass on a game that
-cannot be finished - each step working in isolation is exactly the failure the balance trace already
-found once, when every step was individually fine and only territory 11 could afford a Pioneer.
-**End-to-end is the only check that catches an economy that does not close.**
-
-**And it needs no new rule**, which is what keeps it a release entry rather than a proposal into the
-spec. `spec/control.md` already defines *fully exploited* and the win, `spec/console.md` already has
-every verb the loop needs, and the fixture is already in this release.
-
-**Open, and not decided here: whether `end turn` needs an on-screen control.** Sean's description was
-*hitting end turn when done*. Playing through the console satisfies this capability as written, since
-`end turn` is a command. Whether it also wants a button belongs with P-93's on-screen control set and
-is a separate question.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -184,6 +150,7 @@ is a separate question.
 | P-119, every rule has a text form, and the text is the rule                                                     | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-29 |
 | P-121, `/save <file>` writes the history to a file                                                              | `spec/console.md` -> Commands                                                                                          | 2026-08-29 |
 | P-118, the rule editor is out of the first release, and the surfaces line says so                               | `releases/first-release.md` -> Scope, Controls                                                                         | 2026-08-29 |
+| P-122, a capability for playing the loop through by hand                                                        | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-29 |
 
 ## Rejected
 

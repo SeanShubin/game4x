@@ -157,4 +157,10 @@ Every biome except ocean has at least one food node of density two or more.
 - **Vetted when** - at the default camera, no facet, band or flat wash betrays how the surface was
   built, and the finest visible detail is terrain
 
+### The loop can be played through
+
+- **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
+- **Vetted when** - starting from a single Ark in orbit over the twelve designed territories, a
+  person playing entirely by hand reaches a fully exploited planet and launches an Ark
+
 ## Open questions
