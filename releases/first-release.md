@@ -147,7 +147,7 @@ Every biome except ocean has at least one food node of density two or more.
 
 - **In** - `spec/planet.md`, *each territory has a biome*, and *a territory's biome is what the
   terrain gives it*
-- **Vetted when** - `show territory 5` names a biome, and it is the biome the realistic drawing
-  shows over that ground
+- **Vetted when** - `show territory 5` names a biome, and no other biome covers more of that
+  ground in the realistic drawing
 
 ## Open questions

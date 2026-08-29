@@ -61,34 +61,6 @@ still ends in a person looking at a picture** - which [releases](../../releases/
 accepts, and which P-101 argued is the only honest test for *looks like a world*. What changed is
 that the person can be the code lane, before the work ships.
 
-### P-108 · Entailed · `releases/first-release.md` -> Capabilities
-
-Plurality makes one vetted-when loose.
-
-> In **A biome per territory**, change *it is the biome the realistic drawing shows over that ground*
-> to *no other biome covers more of that ground in the realistic drawing*.
-
-**Basis:** Sean, 2026-08-28 - *"if a territory is jungle, it just has to be mostly jungle by
-plurality, not even majority."*
-
-**The line was written before plurality was chosen.** P-100 says a territory's biome is what the
-terrain gives it and leaves *how* to implementation; the check was phrased as though the drawing
-showed one biome over a territory. Under plurality it shows several, one of which is commonest.
-
-**A territory that is 40% jungle, 35% grassland and 25% desert is jungle**, and its picture correctly
-shows all three. As written the check reads as failing the case the rule was chosen to allow.
-
-**An earlier draft said *over most of that ground*, and Sean caught it.** In ordinary English *most
-of that ground* means **more than half** - *most of the cake* is not 40% of the cake. That is
-majority, which is the reading plurality was chosen against, so the fix would have replaced one wrong
-check with another.
-
-**Stated as a negative because the negative is the plurality.** *No other biome covers more* is true
-at 40% against 35% and 25%, and it is what a person counting pixels would actually test. It also
-**allows a tie** - two biomes at 40% each, either of which the model may name - where *covers more
-than any other* would fail both. A tie is a real possibility with continuous terrain and no reason to
-call it a defect.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -184,6 +156,7 @@ call it a defect.
 | P-105, a biome has a margin, not a border                                                                       | `spec/planet.md` -> Presentation                                                                                       | 2026-08-28 |
 | P-109, oceans never isolate land from land                                                                      | `spec/planet.md` -> What a territory carries                                                                           | 2026-08-28 |
 | P-110, `set biome` gives a territory its biome during design                                                    | `spec/console.md` -> Commands                                                                                          | 2026-08-28 |
+| P-108, the biome check states plurality, not majority                                                           | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-28 |
 
 ## Rejected
 
