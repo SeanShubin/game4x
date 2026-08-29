@@ -2734,6 +2734,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "goldberg-view"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "planet-bevy",
+ "planet-render",
+ "sphere-tessellation",
+]
+
+[[package]]
 name = "gpu-allocator"
 version = "0.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

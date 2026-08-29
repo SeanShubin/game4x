@@ -100,11 +100,38 @@ const LABEL_BOX: f32 = 40.0;
 
 pub struct GlobePlugin {
     pub spec: WorldSpec,
+    /// Whether the globe draws whichever game the front end is holding.
+    ///
+    /// The application says yes: the planet on screen is the planet being played, and it
+    /// follows by watching a counter. A prototype says no - there is no game behind it, and
+    /// it drives [`Planet`] itself. Everything else is the same either way, which is why
+    /// this is a flag rather than a second plugin.
+    follows_the_game: bool,
 }
 
 impl GlobePlugin {
+    /// The globe as the application uses it, drawing the one game.
     pub fn new(spec: WorldSpec) -> Self {
-        Self { spec }
+        Self {
+            spec,
+            follows_the_game: true,
+        }
+    }
+
+    /// The globe on its own, for a composition root with no game behind it.
+    ///
+    /// Nothing added here reaches `game-front`: no counter is watched, no line is typed,
+    /// and the keys that start a new game or change the drawing are absent.
+    ///
+    /// A prototype does not have to touch the game, but the fact that it *could* is what
+    /// keeps these boundaries honest. A prototype about polyhedra that had to link the
+    /// command language in order to draw a sphere would mean the layering was a diagram
+    /// rather than a fact.
+    pub fn detached(spec: WorldSpec) -> Self {
+        Self {
+            spec,
+            follows_the_game: false,
+        }
     }
 }
 
@@ -123,9 +150,6 @@ impl Plugin for GlobePlugin {
             .add_systems(
                 Update,
                 (
-                    keys_to_choose_size,
-                    keys_to_change_drawing,
-                    follow_the_game,
                     build_globe,
                     drag_to_turn,
                     touch_to_turn,
@@ -137,30 +161,58 @@ impl Plugin for GlobePlugin {
                 )
                     .chain(),
             );
+
+        // The only three systems that know a game exists. A detached globe has none of
+        // them, and so reaches none of the front end either.
+        if self.follows_the_game {
+            app.add_systems(
+                Update,
+                (keys_to_choose_size, keys_to_change_drawing, follow_the_game)
+                    .chain()
+                    .before(build_globe),
+            );
+        }
     }
 }
 
 /// Which planet is being looked at. Changing the size rebuilds the world.
 #[derive(Resource, Clone, Copy)]
-struct Planet {
-    size: PlanetSize,
+pub struct Planet {
+    regions: usize,
     base: WorldSpec,
 }
 
 impl Planet {
-    /// Takes the size from the requested territory count, so the application states what
-    /// it wants in one place. A count that is not one of the five sizes falls back to the
-    /// largest rather than failing - the viewer is still useful at any Goldberg count.
+    /// A count of regions, rather than one of the game's five named sizes.
+    ///
+    /// The renderer never cared what a planet was called: it draws a solid with that many
+    /// faces. Holding the name here meant the globe could draw only the counts the *game*
+    /// has - a fact about the game leaking into the thing that draws it, and the reason a
+    /// prototype comparing Goldberg solids had nowhere to ask for the other five.
     fn opening_on(base: WorldSpec) -> Self {
-        let size =
-            PlanetSize::with_territory_count(base.params.region_count).unwrap_or(PlanetSize::Huge);
-        Self { size, base }
+        Self {
+            regions: base.params.region_count,
+            base,
+        }
+    }
+
+    /// Draws a planet of this many regions.
+    ///
+    /// Public so a composition root with no game behind it can drive the globe directly -
+    /// see [`GlobePlugin::detached`].
+    pub fn show(&mut self, regions: usize) {
+        self.regions = regions;
+    }
+
+    /// How many regions are being drawn.
+    pub fn regions(&self) -> usize {
+        self.regions
     }
 
     fn spec(&self) -> WorldSpec {
         WorldSpec {
             params: Params {
-                region_count: self.size.territory_count(),
+                region_count: self.regions,
                 ..self.base.params
             },
             ..self.base
@@ -510,7 +562,7 @@ fn build_globe(
     }
 
     if let Ok(mut text) = hud.single_mut() {
-        *text = Text::new(summary(planet.size, &world, &panels, *drawing));
+        *text = Text::new(summary(&world, &panels, *drawing));
     }
 
     *drawn = Drawn {
@@ -580,7 +632,7 @@ fn spawn_label(commands: &mut Commands, anchor: Vec3, text: &str, colour: Color,
         });
 }
 
-fn summary(size: PlanetSize, world: &World, panels: &mesh::PlanetMesh, drawing: Drawing) -> String {
+fn summary(world: &World, panels: &mesh::PlanetMesh, drawing: Drawing) -> String {
     let regions = world.tessellation.region_count();
     let shape = match sphere_tessellation::goldberg::arrangements_up_to(regions)
         .into_iter()
@@ -593,7 +645,9 @@ fn summary(size: PlanetSize, world: &World, panels: &mesh::PlanetMesh, drawing: 
         "{} - {regions} territories - {shape}\n{} - {} triangles\n\
          drag, a finger or the arrows to turn - wheel or pinch to zoom - R to reset\n\
          1-5 start a new game on a planet of that size - T for the {} drawing",
-        size.name(),
+        // A count that is one of the game's five sizes is called by its name; any other
+        // is a solid the game has no word for, which a prototype is entitled to draw.
+        PlanetSize::with_territory_count(regions).map_or("planet", PlanetSize::name),
         world.degree_summary(),
         panels.triangle_count(),
         drawing.other().name()
@@ -888,15 +942,13 @@ fn follow_the_game(mut followed: ResMut<Followed>, mut planet: ResMut<Planet>) {
     followed.0 = generation;
     // No planet yet is not an error. A game begins with nothing in it and is designed
     // into existence, so this is what the first few commands of any game look like.
-    let Some(size) =
-        game_front::shell::territory_count().and_then(PlanetSize::with_territory_count)
-    else {
+    let Some(count) = game_front::shell::territory_count() else {
         return;
     };
     // Only write when it would change something. Touching a `ResMut` marks it changed,
     // and `build_globe` rebuilds the whole world when it sees that.
-    if planet.size != size {
-        planet.size = size;
+    if planet.regions() != count {
+        planet.show(count);
     }
 }
 
@@ -1316,35 +1368,48 @@ mod tests {
         );
     }
 
-    /// The size a planet opens on comes from the territory count asked for.
+    /// The planet drawn is the count that was asked for.
     #[test]
-    fn the_opening_size_follows_the_requested_count() {
+    fn the_globe_draws_the_count_it_was_asked_for() {
         for size in PlanetSize::ALL {
-            let spec = WorldSpec {
-                params: Params {
-                    region_count: size.territory_count(),
-                    ..Params::default()
-                },
-                soccer: false,
-            };
-            let planet = Planet::opening_on(spec);
-            assert_eq!(planet.size, size);
+            let planet = Planet::opening_on(spec_of(size.territory_count()));
+            assert_eq!(planet.regions(), size.territory_count());
             assert_eq!(planet.spec().params.region_count, size.territory_count());
         }
     }
 
-    /// A count that is not one of the five sizes still has to produce a usable planet.
+    /// A count that is not one of the game's five sizes is drawn as asked.
+    ///
+    /// It used to be rounded down to the largest named size, so asking for 122 drew 92 and
+    /// said nothing. That was the game's vocabulary deciding what the renderer could draw,
+    /// and it is why `goldberg-view` could not exist: half the solids it compares are
+    /// counts the game has no word for.
     #[test]
-    fn an_unlisted_count_falls_back_rather_than_failing() {
-        let spec = WorldSpec {
+    fn a_count_the_game_has_no_name_for_is_drawn_anyway() {
+        for count in [122, 132, 162, 192, 212] {
+            let planet = Planet::opening_on(spec_of(count));
+            assert_eq!(planet.regions(), count);
+            assert_eq!(planet.spec().params.region_count, count);
+        }
+    }
+
+    /// The globe can be told to draw a different planet, which is how a composition root
+    /// with no game behind it drives it.
+    #[test]
+    fn a_globe_can_be_told_which_planet_to_draw() {
+        let mut planet = Planet::opening_on(spec_of(12));
+        planet.show(212);
+        assert_eq!(planet.regions(), 212);
+        assert_eq!(planet.spec().params.region_count, 212);
+    }
+
+    fn spec_of(regions: usize) -> WorldSpec {
+        WorldSpec {
             params: Params {
-                region_count: 122,
+                region_count: regions,
                 ..Params::default()
             },
             soccer: false,
-        };
-        let planet = Planet::opening_on(spec);
-        assert_eq!(planet.size, PlanetSize::Huge);
-        assert_eq!(planet.spec().params.region_count, 92);
+        }
     }
 }

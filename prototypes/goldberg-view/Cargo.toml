@@ -1,0 +1,11 @@
+[package]
+name = "goldberg-view"
+version.workspace = true
+edition.workspace = true
+description = "Prototype: the ten smallest Goldberg solids, side by side in the abstract drawing. Composition root only."
+
+[dependencies]
+planet-render.workspace = true
+planet-bevy.workspace = true
+sphere-tessellation.workspace = true
+bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui"] }

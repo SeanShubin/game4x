@@ -18,6 +18,7 @@ members = [
     "crates/planet-bevy",
     "crates/game4x",
     "prototypes/planet-view",
+    "prototypes/goldberg-view",
 ]
 # Documentation tooling, deliberately outside the workspace so it never appears in
 # `cargo tree` or `cargo build --workspace`.
