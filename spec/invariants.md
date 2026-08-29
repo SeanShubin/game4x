@@ -32,6 +32,9 @@ specific rule.
 - Every rule a player can use is composed of rules they can also use, down to single actions.
   Nothing is provided only as a whole
 - A small change in what a rule does is a small change in how it is written
+- Nothing plays itself. Every behaviour that acts on a player's behalf is a rule some person
+  wrote, including any the game ships with
+- Any rule can be read and changed by the player using it, whatever its origin
 
 ## No penalty for building infrastructure
 

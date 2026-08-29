@@ -42,39 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-113 · Recovered · `spec/invariants.md` -> the same new section as P-111
-
-**Sean's, stated 2026-08-28.** The auto-scouting complaint, cut to what is always true.
-
-> - Nothing plays itself. Every behaviour that acts on a player's behalf is a rule some person
->   wrote, including any the game ships with
-> - Any rule can be read and changed by the player using it, whatever its origin
-
-**Basis:** Sean on automatic scouting - *"I never was made to specify precisely how the scouting
-works. The game always did that for me... I was denied the ability to ever understand exactly how
-scouting worked."*
-
-**The harm named is epistemic, not the automation**, and that changes what the fix is. Sean is
-explicit that he does not want to scout by hand and that respecifying it every game would be worse,
-so a toggle is not the remedy. **The remedy is that the behaviour has to be a rule, because rules can
-be read.** He states the two things he wants preserved himself: *(1) originally it was a human
-decision and (2) that decision is transparent, I can look at the rules themselves.*
-
-**It is P-112's framework complaint with a different victim.** Auto-scouting is a high-level behaviour
-supplied only as a whole - it cannot be opened, so it cannot be understood, and so it cannot be
-adjusted. A player who wants scouts to avoid a neighbour's border has no move except to stop using
-it.
-
-**Filed separately from P-112 because composition does not imply inspection.** P-112 says a rule is
-*made of* smaller rules; this says a rule can be *read*, including one the player did not write. A
-behaviour could satisfy the first and still arrive as an opaque bundle from someone else.
-
-**The sharp edge is what it says about defaults**, and it is the reason to prefer this wording to a
-ban on automation. A game that ships with a scouting behaviour is not in breach - it is in breach if
-that behaviour is engine code rather than a rule the player can open. **A shipped default becomes a
-rule like any other**, which converts every auto-manage toggle from opaque to inspectable without
-removing one of them.
-
 ### P-114 · Recovered · `spec/invariants.md` -> the same new section
 
 **Sean's, stated 2026-08-28.** The meta-layer.
@@ -306,6 +273,7 @@ every firing takes an action. The corrected paragraph is in P-112 above.
 | P-106, a fifth capability: terrain resolved as finely as it is shown                                            | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-28 |
 | P-111, control without tedium: rules instead of repetition                                                      | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 | P-112, the middle layer: rules compose, and edits stay proportional                                             | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
+| P-113, nothing plays itself, and every rule can be read                                                         | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 
 ## Rejected
 
