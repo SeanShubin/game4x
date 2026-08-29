@@ -537,6 +537,76 @@ anything. **The machinery for a transactional rule already exists as a side effe
 invariant**, which is worth knowing before the question is answered on the assumption that it would be
 expensive.
 
+## Play it by hand first, and keep the history
+
+Sean, 2026-08-29, weighing two schedules: let the player move units and end turns, **or** skip that
+and write a planet-conquest rule in text and run it.
+
+**The second is not the smaller step, and the first produces the second's raw material for free.**
+
+### Both options build the same thing; only the driver differs
+
+Every command the conquest rule would emit is a command a player types. `spec/invariants.md` requires
+that every change to game state be executable as a console command, so **the model, the seven verbs
+and the turn have to exist either way**. Writing the rule first does not skip the game - it skips only
+who drives it, and adds the rule layer on top. **Option two is option one plus more.**
+
+### The blocker on rules is discovered by playing
+
+The one genuine gap is that **nothing names a condition**: `show <subject>` exists and no subject is
+named anywhere in the specification. A rule needs to ask whether an extractor is unworked, which
+neighbour is richest, whether a pioneer can be afforded.
+
+**Playing by hand is how that list gets written.** The conditions a rule needs are exactly the things
+a player keeps checking, and after twenty turns of doing it manually the list writes itself. Guessing
+it beforehand produces a vocabulary shaped like what someone imagined the game to be.
+
+### Writing the rule first would conflate two unknowns
+
+**If an automated run fails to conquer the planet, nothing says whether the rule is wrong or the
+balance is.** That is not hypothetical here - P-80 already had to halve every cost after
+[the balance trace](first-release-balance.md) found that only territory 11 could build a Pioneer, and
+a rule written against the old numbers would have encoded a strategy for a game that did not exist.
+
+**Playing by hand removes one unknown before the other is introduced**, which is the whole argument in
+one line.
+
+### The recorded history *is* the first rule, and P-115 is why
+
+`spec/console.md` already has `history`, which lists every command executed in order, and `run <file>`,
+which executes a file of commands as though typed. **So a hand-played conquest is already a runnable
+artifact.**
+
+**P-115 is what makes this more than a convenience.** It says the history records what a rule did
+exactly as if the player had done it by hand - and the converse therefore holds: **what a player did
+by hand is indistinguishable from what a rule did.** A recorded conquest is a rule with every
+condition already resolved and every choice already made. It is a StarCraft build order: the
+degenerate case of a policy, with no conditions and no selection.
+
+**And generalising it is the proportionality test run on real material.** Replace `move pioneer 7`
+with *move the pioneer to the best adjacent territory* - one line, one behaviour. Then the next.
+P-112 stops being an argument and becomes something that either holds or visibly does not, on a
+build that is known to win.
+
+### The one small thing missing for that path
+
+**`history` lists and `run` consumes a file, and nothing writes one.** Saving a game's commands is a
+front-end action that changes no game state, so by the rule already in `spec/console.md` it is a slash
+form rather than a command. Filed as P-121. It is small, and if Sean would rather copy the console
+output by hand it can be withdrawn without anything else moving.
+
+### What this means for the schedule
+
+**The first release stands as it is** - one tiny planet, the eight-step loop, played by hand. P-118's
+narrowing holds and needs no change. **A second release carries rules as text**, and it has an
+unusually good first check available:
+
+> **Vetted when** - the recorded history of a hand-played conquest is run from a file and wins
+
+That tests three things at once: that `run <file>` works, that the fold is deterministic - which is
+`spec/invariants.md`'s one-function rule made observable - and that a build can be replayed by someone
+who did not write it, which is what P-114 promises.
+
 ## What this opens that is not settled
 
 **Settled while this note was being written.** The rule editor is **its own screen**, and its

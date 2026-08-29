@@ -143,6 +143,32 @@ same exhaustion would be an ordinary stop. **Both are compatible with the line a
 committing to either would go stale the moment the other arrived. The provisional half is in
 [the backlog](spec-backlog.md).
 
+### P-121 · Entailed · `spec/console.md` -> Commands, the slash paragraph
+
+**Claude's, and small.** A gap found while weighing the two schedules on 2026-08-29.
+
+> `/save <file>` writes the history of the current game to a file, which `run` can then execute.
+
+**Basis:** `history` lists every command executed in order and `run <file>` executes a file of
+commands, **and nothing writes one.** The two halves of a loop that obviously wants closing are both
+present and not joined.
+
+**It is a slash form rather than a command, and that follows from a rule already written.**
+`spec/console.md` says a line beginning with `/` directs the front end rather than the game, changes
+no game state, and is not recorded in history. Writing a file changes no game state, so making it a
+command would put something in the command set that is not a transition - which the sentence *one
+command for each way the game state can change* forbids.
+
+**Why it is worth having at all.** P-115 makes a recorded history and a rule the same kind of object:
+the history records what a rule did exactly as if the player had done it by hand, so **a hand-played
+conquest is a rule with every condition already resolved**. That makes the first automation artifact
+something Sean plays rather than writes - but only if the commands can be got out of the game and into
+a file.
+
+**Withdraw it freely if the answer is copy and paste.** For a twelve-territory game the history is
+perhaps forty lines, and selecting them from the console is not a hardship. This is filed because the
+gap is real, not because the workaround is bad.
+
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
