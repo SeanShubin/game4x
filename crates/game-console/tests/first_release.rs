@@ -615,6 +615,10 @@ fn every_way_the_state_can_change_is_a_command() {
             territory: TerritoryId(1),
             force: 1,
         },
+        Transition::SetBiome {
+            territory: TerritoryId(1),
+            biome: Biome::Grassland,
+        },
         Transition::AddUnitToOrbit {
             kind: UnitKind::Ark,
         },
@@ -647,8 +651,8 @@ fn every_way_the_state_can_change_is_a_command() {
         },
         Transition::EndTurn,
     ];
-    // Twelve ways to change the state, and twelve forms that produce one.
-    assert_eq!(changing.len(), 12);
+    // Thirteen ways to change the state, and thirteen forms that produce one.
+    assert_eq!(changing.len(), 13);
     let commands_that_change = grammar
         .forms()
         .iter()

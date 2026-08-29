@@ -1,0 +1,43 @@
+# The biome of each of the twelve territories of the first release.
+#
+# `spec/planet.md` requires every territory to have a biome, and says a territory's biome is
+# what the terrain gives it. On a generated world that is exactly what happens: `create
+# planet` reads the terrain and hands one in per territory.
+#
+# A designed scenario is not a generated world. These twelve were chosen in
+# `releases/first-release.md` to exercise different consequences of the rules - territory 5
+# has food at density 1 so that a territory which can never build anything is demonstrated
+# deliberately rather than produced by accident - and the terrain knows nothing about that.
+# So the designer says, which is what `set biome` is for and why it is design-phase only.
+#
+# Each is the biome whose character in `releases/first-release.md` -> Biomes best matches
+# what that territory was built to exercise. The nodes are hand-placed and the biome table
+# is a generator's, so the two are allowed to disagree; nothing reads a biome yet.
+#
+# None of them is ocean. Ocean cannot be claimed, and the release's loop spreads a pioneer
+# across the whole planet.
+
+# 1: the landing site; everything works
+set biome 1 grassland
+# 2: few dense food nodes - the first territory a pioneer reaches
+set biome 2 grassland
+# 3: many thin food nodes
+set biome 3 grassland
+# 4: the minimum a territory can be
+set biome 4 mountain
+# 5: food density 1, so it can never build
+set biome 5 mountain
+# 6: no metal
+set biome 6 jungle
+# 7: no energy
+set biome 7 jungle
+# 8: population without industry
+set biome 8 grassland
+# 9: rich metal, too few hands to work it
+set biome 9 mountain
+# 10: an energy depot
+set biome 10 desert
+# 11: the prize
+set biome 11 grassland
+# 12: rich nodes, almost no workers
+set biome 12 ice

@@ -36,6 +36,15 @@ pub enum Transition {
         territory: TerritoryId,
         force: u32,
     },
+    /// Give a territory its biome.
+    ///
+    /// `spec/planet.md` has required every territory to have one since biomes existed, and
+    /// until this there was no way for a designed world to give it one - so the twelve
+    /// territories of the first release carried a debt the language could not pay.
+    SetBiome {
+        territory: TerritoryId,
+        biome: Biome,
+    },
     /// Place a unit in orbit before play begins.
     AddUnitToOrbit {
         kind: UnitKind,
@@ -87,6 +96,7 @@ impl Transition {
             Transition::CreatePlanet { .. }
                 | Transition::AddNode { .. }
                 | Transition::SetForceOfNature { .. }
+                | Transition::SetBiome { .. }
                 | Transition::AddUnitToOrbit { .. }
                 | Transition::Start
         )
@@ -113,6 +123,10 @@ mod tests {
             Transition::SetForceOfNature {
                 territory: TerritoryId(1),
                 force: 1,
+            },
+            Transition::SetBiome {
+                territory: TerritoryId(1),
+                biome: Biome::Grassland,
             },
             Transition::AddUnitToOrbit {
                 kind: UnitKind::Ark,

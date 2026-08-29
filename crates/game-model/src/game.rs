@@ -118,6 +118,9 @@ impl Game {
             Transition::SetForceOfNature { territory, force } => {
                 next.territory_mut(*territory)?.force_of_nature = *force;
             }
+            Transition::SetBiome { territory, biome } => {
+                next.territory_mut(*territory)?.biome = *biome;
+            }
             Transition::AddUnitToOrbit { kind } => {
                 let id = UnitId(next.units.len() as u32 + 1);
                 next.units.push(Unit::new(id, *kind));

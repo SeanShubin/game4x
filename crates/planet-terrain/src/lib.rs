@@ -49,6 +49,7 @@
 //! in order* needs in order to survive a replay on somebody else's computer.
 
 use game_model::Biome;
+use sphere_tessellation::Solid;
 use sphere_tessellation::vec3::Vec3;
 
 /// What the field says about one point on the sphere.
@@ -239,63 +240,190 @@ pub fn biome_at(direction: Vec3, seed: u64) -> Biome {
     biome_of(&sample(direction, seed))
 }
 
+/// How many points across each fan triangle a territory's ground is sampled at.
+///
+/// `releases/first-release.md` vets a biome by *no other biome covers more of that ground
+/// in the realistic drawing* - a plurality over an area, not the answer at one point. A
+/// territory is wide enough to hold several biomes, so asking only at its seed would give a
+/// point's answer to a question about a region, and be wrong whenever the seed sits in a
+/// minority patch.
+const GROUND_SAMPLES: usize = 7;
+
 /// The biome of each territory, in id order.
 ///
-/// One discrete answer per territory, which is what claiming and working one needs.
+/// One discrete answer per territory, which is what claiming and working one needs, and it
+/// is the answer that covers most of that territory's ground.
 ///
-/// # Why this needs the adjacency and [`sample`] does not
+/// # Why this needs the solid and the adjacency, and [`sample`] does not
 ///
 /// The field knows nothing about the tessellation, and that is the whole point of it. But
-/// `spec/planet.md` states two things about *territories* that no field can satisfy on its
-/// own:
+/// `spec/planet.md` states things about *territories* that no field can answer:
 ///
+/// - a biome is what covers the territory's ground, so the ground has to be walked
 /// - *no territory can be claimed whose biome is ocean*
-/// - *no two ocean territories are adjacent*
+/// - *oceans never isolate land from land; every territory that is not ocean can be
+///   reached from every other without crossing one*
 ///
-/// Together those keep the land in one piece: on a polyhedron the faces around any face
-/// form a ring, so if no two oceans touch then every ocean's ring is entirely land, and any
-/// route can go round it. Sampling each seed independently would break that constantly -
-/// most of the sphere is water, so most territories would come back ocean and nearly all of
-/// them would be adjacent to another.
+/// That last one is a property of the whole arrangement rather than of any pair, so it
+/// cannot be enforced while walking. **A candidate is produced and then tested**: every
+/// territory takes the biome covering most of it, and if that leaves land in more than one
+/// piece, the fewest oceans are given back to land until it is joined again.
 ///
-/// So the terrain proposes and this disposes. Every territory whose ground is under water
-/// is a candidate, deepest first; a candidate becomes ocean if none of its neighbours
-/// already has, and otherwise becomes the land it would have been. Deepest first is what
-/// makes it deterministic and what makes the surviving oceans the ones most deserving of
-/// being water - and ties are broken by id, because two seeds can sample identically and
-/// iteration order must never decide a world.
-pub fn biomes_of(seeds: &[Vec3], adjacency: &[Vec<usize>], seed: u64) -> Vec<Biome> {
-    let samples: Vec<Sample> = seeds.iter().map(|at| sample(*at, seed)).collect();
-
-    // Everything starts as the land it would be, and water is granted from there. Starting
-    // from the land answer rather than patching the water one means a demoted ocean is
-    // never a special case - it is simply a territory that was not granted water.
-    let mut biomes: Vec<Biome> = samples.iter().map(on_land).collect();
-
-    let mut candidates: Vec<usize> = (0..seeds.len())
-        .filter(|at| samples[*at].elevation < SEA_LEVEL)
+/// It used to forbid two oceans touching, which is a *sufficient* condition for the same
+/// thing and a much stronger one - it costs every coastline, every sea and every island
+/// chain, because water could never pool. Adjacent oceans are legal now.
+pub fn biomes_of(solid: &Solid, adjacency: &[Vec<usize>], seed: u64) -> Vec<Biome> {
+    let ground: Vec<Vec<Sample>> = (0..solid.cells.len())
+        .map(|at| ground_of(solid, at, seed))
         .collect();
-    candidates.sort_by(|a, b| {
-        samples[*a]
-            .elevation
-            .partial_cmp(&samples[*b].elevation)
-            .unwrap_or(std::cmp::Ordering::Equal)
-            .then(a.cmp(b))
-    });
 
-    let mut is_ocean = vec![false; seeds.len()];
-    for at in candidates {
-        let touches_water = adjacency
-            .get(at)
-            .into_iter()
-            .flatten()
-            .any(|near| is_ocean[*near]);
-        if !touches_water {
-            is_ocean[at] = true;
-            biomes[at] = Biome::Ocean;
+    let mut biomes: Vec<Biome> = ground.iter().map(|samples| covering(samples)).collect();
+    join_the_land(&mut biomes, &ground, adjacency);
+    biomes
+}
+
+/// Samples spread over one territory's ground.
+///
+/// The same barycentric walk the realistic drawing uses, at a far lower density: this is
+/// counting what covers the ground, not drawing it.
+fn ground_of(solid: &Solid, cell: usize, seed: u64) -> Vec<Sample> {
+    let corners: Vec<Vec3> = solid.cells[cell]
+        .iter()
+        .map(|&corner| solid.corners[corner as usize].vector())
+        .collect();
+    let centre = corners
+        .iter()
+        .fold(Vec3::ZERO, |total, &corner| total.add(corner))
+        .normalized();
+
+    let n = GROUND_SAMPLES;
+    let mut samples = Vec::new();
+    for step in 0..corners.len() {
+        let from = corners[step];
+        let to = corners[(step + 1) % corners.len()];
+        for row in 0..=n {
+            for column in 0..=row {
+                let at = centre
+                    .scaled((n - row) as f64)
+                    .add(from.scaled((row - column) as f64))
+                    .add(to.scaled(column as f64))
+                    .normalized();
+                samples.push(sample(at, seed));
+            }
         }
     }
-    biomes
+    samples
+}
+
+/// The biome covering most of a patch of ground.
+///
+/// Ties break by the order [`Biome::ALL`] lists them, because two biomes can genuinely
+/// cover the same number of samples and iteration order must never decide a world.
+fn covering(samples: &[Sample]) -> Biome {
+    most_common(samples.iter().map(biome_of))
+}
+
+/// The land biome covering most of a patch, for ground that has to stop being water.
+fn covering_land(samples: &[Sample]) -> Biome {
+    most_common(samples.iter().map(on_land))
+}
+
+fn most_common(biomes: impl Iterator<Item = Biome>) -> Biome {
+    let mut tally = [0usize; Biome::ALL.len()];
+    for biome in biomes {
+        tally[Biome::ALL.iter().position(|kind| *kind == biome).unwrap()] += 1;
+    }
+    let mut best = 0;
+    for at in 1..tally.len() {
+        if tally[at] > tally[best] {
+            best = at;
+        }
+    }
+    Biome::ALL[best]
+}
+
+/// Gives back the fewest oceans that leave the land in one piece.
+///
+/// `spec/planet.md`: *oceans never isolate land from land.* An island is what is forbidden,
+/// not a sea - so this looks at the whole arrangement, and only where it is actually broken.
+///
+/// Each round drains the one ocean that touches the most separate pieces of land, because
+/// that is the one join that does the most work. Ties break by how shallow it is and then by
+/// id. It always terminates: draining every ocean joins everything trivially, and each round
+/// drains one.
+fn join_the_land(biomes: &mut [Biome], ground: &[Vec<Sample>], adjacency: &[Vec<usize>]) {
+    loop {
+        let pieces = pieces_of_land(biomes, adjacency);
+        if pieces.len() <= 1 {
+            return;
+        }
+        let mut best: Option<(usize, usize)> = None;
+        for at in 0..biomes.len() {
+            if biomes[at] != Biome::Ocean {
+                continue;
+            }
+            let mut touched: Vec<usize> = adjacency[at]
+                .iter()
+                .filter_map(|near| pieces.iter().position(|piece| piece.contains(near)))
+                .collect();
+            touched.sort_unstable();
+            touched.dedup();
+            let joins = touched.len();
+            if best.is_none_or(|(most, _)| joins > most) {
+                best = Some((joins, at));
+            }
+        }
+        // No ocean touches two pieces, so drain the shallowest one and try again. This
+        // happens when pieces are separated by more than one ocean wide.
+        let drain = match best {
+            Some((joins, at)) if joins > 1 => at,
+            _ => match (0..biomes.len())
+                .filter(|at| biomes[*at] == Biome::Ocean)
+                .min_by(|a, b| {
+                    deepest(&ground[*b])
+                        .total_cmp(&deepest(&ground[*a]))
+                        .then(a.cmp(b))
+                }) {
+                Some(at) => at,
+                None => return,
+            },
+        };
+        biomes[drain] = covering_land(&ground[drain]);
+    }
+}
+
+/// How low a territory's ground goes, for choosing which water to keep.
+fn deepest(samples: &[Sample]) -> f64 {
+    samples
+        .iter()
+        .map(|at| at.elevation)
+        .fold(f64::INFINITY, f64::min)
+}
+
+/// The connected pieces of land, as sets of territory indices.
+fn pieces_of_land(biomes: &[Biome], adjacency: &[Vec<usize>]) -> Vec<Vec<usize>> {
+    let mut seen = vec![false; biomes.len()];
+    let mut pieces = Vec::new();
+    for start in 0..biomes.len() {
+        if seen[start] || biomes[start] == Biome::Ocean {
+            continue;
+        }
+        let mut piece = Vec::new();
+        let mut queue = vec![start];
+        seen[start] = true;
+        while let Some(at) = queue.pop() {
+            piece.push(at);
+            for near in &adjacency[at] {
+                if !seen[*near] && biomes[*near] != Biome::Ocean {
+                    seen[*near] = true;
+                    queue.push(*near);
+                }
+            }
+        }
+        piece.sort_unstable();
+        pieces.push(piece);
+    }
+    pieces
 }
 
 // ---------------------------------------------------------------------------
@@ -549,109 +677,129 @@ mod tests {
         );
     }
 
-    /// The adjacency of a planet of this size, as indices.
-    fn touching(count: usize) -> (Vec<Vec3>, Vec<Vec<usize>>) {
+    /// A planet of this size: its solid, and its adjacency as indices.
+    fn planet(count: usize) -> (Solid, Vec<Vec<usize>>) {
         let seeds = canonical_seeds(count).unwrap();
-        let near = sphere_tessellation::adjacency(&seeds)
-            .into_iter()
-            .map(|list| list.into_iter().map(|at| at as usize).collect())
+        let neighbours = sphere_tessellation::adjacency(&seeds);
+        let near = neighbours
+            .iter()
+            .map(|list| list.iter().map(|at| *at as usize).collect())
             .collect();
-        (seeds, near)
+        (sphere_tessellation::solid(&seeds, &neighbours), near)
     }
 
     /// One biome per territory, in id order, and every one of them a biome.
     #[test]
     fn every_territory_gets_a_biome() {
         for count in [12, 32, 42, 72, 92] {
-            let (seeds, near) = touching(count);
-            let biomes = biomes_of(&seeds, &near, SEED);
-            assert_eq!(biomes.len(), count);
+            let (solid, near) = planet(count);
+            assert_eq!(biomes_of(&solid, &near, SEED).len(), count);
         }
     }
 
-    /// `spec/planet.md`: *no two ocean territories are adjacent.*
+    /// `spec/planet.md`: *oceans never isolate land from land. Every territory that is not
+    /// ocean can be reached from every other without crossing one.*
     ///
-    /// Checked on every planet size and on several worlds, because it is a property of the
-    /// arrangement rather than of one lucky seed.
+    /// An island is what is forbidden, not a sea. Checked on every planet size and on
+    /// several worlds, because it is a property of the whole arrangement rather than of one
+    /// lucky seed.
     #[test]
-    fn no_two_ocean_territories_are_adjacent() {
+    fn land_is_never_cut_in_two_by_water() {
         for count in [12, 32, 42, 72, 92] {
-            let (seeds, near) = touching(count);
+            let (solid, near) = planet(count);
             for world in 0..8u64 {
-                let biomes = biomes_of(&seeds, &near, SEED + world);
+                let biomes = biomes_of(&solid, &near, SEED + world);
+                let pieces = pieces_of_land(&biomes, &near);
+                assert!(
+                    pieces.len() <= 1,
+                    "on a {count}-territory world {world}, land is in {} pieces: {pieces:?}",
+                    pieces.len()
+                );
+            }
+        }
+    }
+
+    /// The rule that replaced *no two oceans are adjacent* has to actually allow what that
+    /// one forbade, or nothing was gained and the old rule is still in force by accident.
+    ///
+    /// Adjacent oceans are what make a sea rather than a scattering of lakes, and they are
+    /// the geography the stricter rule cost.
+    #[test]
+    fn two_oceans_may_touch() {
+        let mut touching = 0;
+        for count in [42, 72, 92] {
+            let (solid, near) = planet(count);
+            for world in 0..8u64 {
+                let biomes = biomes_of(&solid, &near, SEED + world);
                 for (at, neighbours) in near.iter().enumerate() {
                     if biomes[at] != Biome::Ocean {
                         continue;
                     }
-                    for beside in neighbours {
-                        assert_ne!(
-                            biomes[*beside],
-                            Biome::Ocean,
-                            "on a {count}-territory world {world}, {at} and {beside} are both ocean"
-                        );
-                    }
+                    touching += neighbours
+                        .iter()
+                        .filter(|beside| biomes[**beside] == Biome::Ocean)
+                        .count();
                 }
             }
         }
+        assert!(
+            touching > 0,
+            "no two oceans touch anywhere; water still cannot pool"
+        );
     }
 
-    /// The land is in one piece, which is what the rule above is for. On a polyhedron the
-    /// faces around any face form a ring, so no two oceans touching means every ocean is
-    /// surrounded by land - and a route can always go round it.
-    #[test]
-    fn every_claimable_territory_can_be_reached_from_every_other() {
-        for count in [12, 32, 92] {
-            let (seeds, near) = touching(count);
-            let biomes = biomes_of(&seeds, &near, SEED);
-            let land: Vec<usize> = (0..count).filter(|at| biomes[*at].is_claimable()).collect();
-            assert!(!land.is_empty());
-
-            let mut reached = vec![false; count];
-            let mut queue = vec![land[0]];
-            reached[land[0]] = true;
-            while let Some(at) = queue.pop() {
-                for beside in &near[at] {
-                    if !reached[*beside] && biomes[*beside].is_claimable() {
-                        reached[*beside] = true;
-                        queue.push(*beside);
-                    }
-                }
-            }
-            let stranded: Vec<usize> = land.into_iter().filter(|at| !reached[*at]).collect();
-            assert!(
-                stranded.is_empty(),
-                "on {count} territories, {stranded:?} are cut off"
-            );
-        }
-    }
-
-    /// Water still happens. A rule that quietly produced no ocean at all would satisfy
-    /// every constraint above and describe a world with no sea in it.
+    /// Water still happens. A rule that quietly produced no ocean would satisfy every
+    /// constraint above and describe a world with no sea in it.
     #[test]
     fn a_planet_still_has_some_ocean() {
-        let (seeds, near) = touching(92);
-        let biomes = biomes_of(&seeds, &near, SEED);
+        let (solid, near) = planet(92);
+        let biomes = biomes_of(&solid, &near, SEED);
         let ocean = biomes.iter().filter(|b| **b == Biome::Ocean).count();
         assert!(ocean > 4, "only {ocean} of 92 territories are ocean");
     }
 
-    /// A territory refused water is the land its own ground would have been, not a filler
-    /// value - so what it becomes still comes from the terrain under it.
+    /// `releases/first-release.md`: a territory's biome is the one where *no other biome
+    /// covers more of that ground*.
+    ///
+    /// A plurality over an area, not the answer at one point - so it is checked by counting
+    /// the ground, which is the same question the release asks of the picture.
     #[test]
-    fn a_territory_refused_water_becomes_its_own_ground() {
-        let (seeds, near) = touching(92);
-        let biomes = biomes_of(&seeds, &near, SEED);
-        let mut demoted = 0;
+    fn a_territory_takes_the_biome_that_covers_most_of_it() {
+        let (solid, near) = planet(92);
+        let biomes = biomes_of(&solid, &near, SEED);
         for (at, biome) in biomes.iter().enumerate() {
-            let raw = sample(seeds[at], SEED);
-            if raw.elevation < SEA_LEVEL && *biome != Biome::Ocean {
-                assert_eq!(*biome, on_land(&raw));
-                demoted += 1;
+            // Ocean is the one that may be overruled, because land has to stay joined.
+            if *biome == Biome::Ocean {
+                continue;
+            }
+            let ground = ground_of(&solid, at, SEED);
+            let mine = ground.iter().filter(|s| biome_of(s) == *biome).count();
+            for other in Biome::ALL {
+                if other == Biome::Ocean {
+                    continue;
+                }
+                let theirs = ground.iter().filter(|s| biome_of(s) == other).count();
+                assert!(
+                    theirs <= mine,
+                    "territory {at} is {} but {} covers more of it",
+                    biome.name(),
+                    other.name()
+                );
             }
         }
-        assert!(
-            demoted > 0,
-            "no territory was refused water; the test proved nothing"
-        );
+    }
+
+    /// A territory that had to stop being water becomes the land its own ground would have
+    /// been, not a filler value - so what it becomes still comes from the terrain under it.
+    #[test]
+    fn a_territory_drained_to_join_the_land_becomes_its_own_ground() {
+        let (solid, near) = planet(92);
+        let biomes = biomes_of(&solid, &near, SEED);
+        for (at, biome) in biomes.iter().enumerate() {
+            let ground = ground_of(&solid, at, SEED);
+            if covering(&ground) == Biome::Ocean && *biome != Biome::Ocean {
+                assert_eq!(*biome, covering_land(&ground));
+            }
+        }
     }
 }

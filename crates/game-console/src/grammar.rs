@@ -14,6 +14,7 @@ pub mod form {
     pub const CREATE_PLANET: &str = "create-planet";
     pub const ADD_NODE: &str = "add-node";
     pub const SET_FORCE: &str = "set-force";
+    pub const SET_BIOME: &str = "set-biome";
     pub const ADD_UNIT: &str = "add-unit";
     pub const START: &str = "start";
 
@@ -75,6 +76,16 @@ pub fn grammar() -> Grammar {
                 Term::required("force", Kind::Number),
             ],
             "set a territory's force of nature",
+        ),
+        Form::new(
+            form::SET_BIOME,
+            vec![
+                Term::Keyword("set"),
+                Term::Keyword("biome"),
+                Term::required("territory", Kind::Number),
+                Term::required("biome", Kind::Name),
+            ],
+            "give a territory its biome",
         ),
         Form::new(
             form::ADD_UNIT,
@@ -232,6 +243,7 @@ mod tests {
             ("create planet tiny", form::CREATE_PLANET),
             ("add node 1 food 4", form::ADD_NODE),
             ("set force 1 1", form::SET_FORCE),
+            ("set biome 1 grassland", form::SET_BIOME),
             ("add ark orbit", form::ADD_UNIT),
             ("start", form::START),
         ];

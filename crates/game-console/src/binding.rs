@@ -6,7 +6,7 @@
 //! [`crate::grammar`], and a test asserts the two tables cover the same set.
 
 use command_language::{Failure, Utterance};
-use game_model::{Resource, StructureKind, TerritoryId, Transition, UnitKind};
+use game_model::{Biome, Resource, StructureKind, TerritoryId, Transition, UnitKind};
 use planet_model::PlanetSize;
 
 use crate::grammar::form;
@@ -64,6 +64,13 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
     let territory = |hole: &str| -> Result<TerritoryId, Misreading> {
         Ok(TerritoryId(utterance.number(hole)? as u32))
     };
+    let biome = |hole: &str| -> Result<Biome, Misreading> {
+        let word = utterance.name(hole)?;
+        Biome::named(word).ok_or_else(|| Misreading::Unknown {
+            what: "biome",
+            word: word.to_string(),
+        })
+    };
     let resource = |hole: &str| -> Result<Resource, Misreading> {
         let word = utterance.name(hole)?;
         Resource::named(word).ok_or_else(|| Misreading::Unknown {
@@ -112,13 +119,16 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
                 .iter()
                 .map(|list| list.iter().map(|at| *at as usize).collect())
                 .collect();
+            // The terrain proposes and `biomes_of` disposes. Two of `spec/planet.md`'s
+            // statements are about the arrangement rather than about any one point - a
+            // biome is what covers most of a territory's ground, and oceans never isolate
+            // land from land - so the solid and the adjacency are both in scope here, and
+            // neither is anything the field itself knows about.
+            let solid = sphere_tessellation::solid(&seeds, &touching);
             Meaning::Change(Transition::CreatePlanet {
                 territories: size.territory_count(),
                 adjacency: named(&touching),
-                // The terrain proposes and `biomes_of` disposes: `spec/planet.md` forbids
-                // two ocean territories from being adjacent, which no field can promise on
-                // its own, so the arrangement is settled where the adjacency is known.
-                biomes: planet_terrain::biomes_of(&seeds, &near, WORLD_SEED),
+                biomes: planet_terrain::biomes_of(&solid, &near, WORLD_SEED),
             })
         }
         form::ADD_NODE => Meaning::Change(Transition::AddNode {
@@ -129,6 +139,10 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
         form::SET_FORCE => Meaning::Change(Transition::SetForceOfNature {
             territory: territory("territory")?,
             force: utterance.number("force")? as u32,
+        }),
+        form::SET_BIOME => Meaning::Change(Transition::SetBiome {
+            territory: territory("territory")?,
+            biome: biome("biome")?,
         }),
         form::ADD_UNIT => Meaning::Change(Transition::AddUnitToOrbit {
             kind: unit("unit")?,
@@ -191,6 +205,7 @@ pub fn handled() -> Vec<&'static str> {
         form::CREATE_PLANET,
         form::ADD_NODE,
         form::SET_FORCE,
+        form::SET_BIOME,
         form::ADD_UNIT,
         form::START,
         form::LAND,
@@ -361,27 +376,36 @@ mod tests {
         // asserts is that the binding asks for it rather than sampling on its own.
         assert_eq!(biomes.len(), 12);
         let seeds = seeds_for(PlanetSize::Tiny);
-        let near: Vec<Vec<usize>> = sphere_tessellation::adjacency(&seeds)
-            .into_iter()
-            .map(|list| list.into_iter().map(|at| at as usize).collect())
+        let touching = sphere_tessellation::adjacency(&seeds);
+        let near: Vec<Vec<usize>> = touching
+            .iter()
+            .map(|list| list.iter().map(|at| *at as usize).collect())
             .collect();
-        assert_eq!(biomes, planet_terrain::biomes_of(&seeds, &near, WORLD_SEED));
+        let solid = sphere_tessellation::solid(&seeds, &touching);
+        assert_eq!(biomes, planet_terrain::biomes_of(&solid, &near, WORLD_SEED));
 
-        // `spec/planet.md`: no two ocean territories are adjacent. Asserted here as well as
-        // in `planet-terrain`, because this is the only place that says which world the
+        // `spec/planet.md`: *oceans never isolate land from land.* Asserted here as well
+        // as in `planet-terrain`, because this is the only place that says which world the
         // command builds, and the rule is about the world rather than about the function.
-        for (at, neighbours) in near.iter().enumerate() {
-            if biomes[at] != game_model::Biome::Ocean {
-                continue;
-            }
-            for beside in neighbours {
-                assert_ne!(
-                    biomes[*beside],
-                    game_model::Biome::Ocean,
-                    "{at} touches {beside}"
-                );
+        //
+        // It used to assert that no two oceans touched. That is a stronger condition the
+        // specification has since dropped: adjacent oceans are legal, an island is what is
+        // forbidden, and water that cannot pool costs every coastline and every sea.
+        let land: Vec<usize> = (0..12).filter(|at| biomes[*at].is_claimable()).collect();
+        assert!(!land.is_empty(), "a planet with no land on it");
+        let mut reached = vec![false; 12];
+        let mut queue = vec![land[0]];
+        reached[land[0]] = true;
+        while let Some(at) = queue.pop() {
+            for beside in &near[at] {
+                if !reached[*beside] && biomes[*beside].is_claimable() {
+                    reached[*beside] = true;
+                    queue.push(*beside);
+                }
             }
         }
+        let stranded: Vec<usize> = land.into_iter().filter(|at| !reached[*at]).collect();
+        assert!(stranded.is_empty(), "water cut off {stranded:?}");
         // A dodecahedron: every face touches exactly five others.
         for (at, near) in adjacency.iter().enumerate() {
             assert_eq!(

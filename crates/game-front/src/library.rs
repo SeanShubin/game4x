@@ -14,6 +14,7 @@ pub fn library() -> Embedded {
         ("world", include_str!("../../../commands/world.4x")),
         ("nodes", include_str!("../../../commands/nodes.4x")),
         ("forces", include_str!("../../../commands/forces.4x")),
+        ("biomes", include_str!("../../../commands/biomes.4x")),
         ("play", include_str!("../../../commands/play.4x")),
     ])
 }
@@ -28,7 +29,7 @@ mod tests {
     #[test]
     fn the_release_command_files_travel_with_the_binary() {
         let library = library();
-        for name in ["setup", "nodes", "forces", "world", "play"] {
+        for name in ["setup", "nodes", "forces", "biomes", "world", "play"] {
             assert!(library.fetch(name).is_some(), "`{name}` is not embedded");
         }
         // The hierarchy, one level at a time: setup says which planet and defers the
@@ -54,7 +55,7 @@ mod tests {
     #[test]
     fn what_is_carried_is_what_is_on_disk() {
         let library = library();
-        for name in ["setup", "nodes", "forces", "world", "play"] {
+        for name in ["setup", "nodes", "forces", "biomes", "world", "play"] {
             let path = format!(
                 "{}/../../commands/{name}.4x",
                 env!("CARGO_MANIFEST_DIR").replace('\\', "/")
