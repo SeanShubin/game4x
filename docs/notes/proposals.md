@@ -109,12 +109,18 @@ later. So `spec/invariants.md`'s *there is no other way for state to change* sti
 a **source** of transitions, not a second kind - and a game played entirely by rules still rebuilds
 from its own history.
 
-**One consequence Claude did not expect and Sean should know about.** He wrote that the rule language
-*does not need to be Turing complete (it can be by accident, but I find that unlikely)*. **It cannot
-be, and the spec already guarantees it**: every action exhausts something and `spec/turn.md` says
-nothing becomes ready again until the turn ends, so each firing strictly shrinks the set of things
-that can still act. Termination is a property of the game rather than of the language, which means
-the interface can be as expressive as it likes without risking a hang.
+**A claim about this in an earlier draft was too strong, and the corrected version is the one to
+review.** Sean wrote that the rule language *does not need to be Turing complete (it can be by
+accident, but I find that unlikely)*, and Claude replied that the spec already guarantees it, since
+every action exhausts something and `spec/turn.md` says nothing becomes ready again until the turn
+ends. **That argument covers the outer loop only, and holds only while every firing takes a game
+action.** Sean then raised assignment, which is exactly the construct that breaks it: a rule that
+writes a value and does nothing else exhausts nothing, so the loop stops shrinking.
+
+**The guarantee is real but it is a property of three constructions rather than of the game alone** -
+every firing takes an action, conditions are finite queries, and rule references are acyclic. Those
+are mechanism and belong in [the note](control-without-tedium.md), not here. What belongs in the spec
+is the requirement they exist to satisfy, filed as P-117.
 
 ### P-113 · Recovered · `spec/invariants.md` -> the same new section as P-111
 
@@ -245,6 +251,41 @@ other, never both at once.**
 one build and not another* already applies, so a terminal build must offer the rule editor - and *how
 a thing is presented may follow the platform it runs on* already licenses whatever that turns out to
 mean there.
+
+### P-117 · Recovered · `spec/invariants.md` -> the same new section as P-111
+
+**Sean's, stated 2026-08-28**, turning a suspicion into a requirement. He should judge whether he
+wants it held that firmly.
+
+> - A player's rules always finish. Nothing that can be built in the rule editor runs forever
+
+**Basis:** Sean, raising goto, assignment and looping - *"I suspect preventing infinite loops is
+something we can guarantee by construction."*
+
+**It is worth stating because everything else leans on it.** The argument for letting the rule editor
+be as expressive as it can be is that nothing built there can hang; without this line that argument
+has no support, and the natural drift is toward a while loop the moment something is awkward to
+express.
+
+**The wording is deliberate: what can be *built*, not what is *accepted*.** The difference between
+those two is the difference between a programming language and a user interface - **a programming
+language's defining property, from a player's side, is that you can write something wrong and find
+out later.** A line saying invalid rules are rejected would permit exactly the experience Sean is
+trying to avoid.
+
+**It states the requirement and not the constructions that satisfy it**, which is the pattern four
+earlier proposals were corrected for missing. Three constructions are known and they are in
+[the note](control-without-tedium.md) - every firing takes a game action, conditions are finite
+queries over game state, rule references form an acyclic graph. **They give a bound rather than mere
+termination**: at most one firing per thing that can act, a number the planet fixes in advance.
+Naming them here would foreclose a fourth.
+
+**Not merged into P-112, though both concern the same editor.** P-112 is about how small a change can
+be; this is about what cannot be built at all. A rule set could satisfy either and fail the other.
+
+**It corrects the record on P-112's basis.** That proposal claimed the guarantee falls out of the
+exhaustion rule alone. It does not: the exhaustion argument covers the outer loop and holds only while
+every firing takes an action. The corrected paragraph is in P-112 above.
 
 ## Accepted
 

@@ -190,6 +190,89 @@ build that used it**. That is not an argument against sharing; it is an argument
 vocabulary deliberately rather than letting it accrete, and for deciding early what happens to a
 build that names something the game no longer has.
 
+## Conditional logic that does not look like an if
+
+Sean: *"A scout can prioritize exploring the next unexplored adjacent jungle, then grasslands, then
+forest, then mountain... It is conditional logic dressed as a priority list."*
+
+**It is not merely dressed as one.** An ordered list where the first applicable rule fires **is** an
+if/else chain, with the else supplied by the ordering rather than by a keyword. There is no syntax
+for *otherwise*, because the otherwise is the next line.
+
+**And it is the presentation the proportionality test demands, not just the friendlier one.**
+Reordering two lines changes which biome a scout prefers; deleting one drops a preference; inserting
+one adds it. Each is a one-gesture edit for a one-item change in behaviour, which is P-112 passing.
+**A textual if/else has identical semantics and fails that test** - swapping two branches means moving
+braces, and adding a case means finding where the chain ends.
+
+So the answer to *can we have something close to an if/else* is that **the priority list already is
+one**, and the question worth asking instead is what it cannot say. One thing: nesting. *If adjacent
+to a rival, prefer defensible ground; otherwise prefer food* is a list inside a list - which costs
+nothing beyond letting a list entry be a list.
+
+## And, or, and three-of-five are one construct
+
+**A threshold over a group subsumes all three.** *At least N of the following*: N equal to the group
+size is **and**, N equal to one is **or**, and everything between is what boolean operators express
+badly. Three of five written in and/or is a ten-term disjunction, which is unreadable and unmaintainable
+- so the sophisticated case Sean asked about is the one that most needs its own construct rather than
+the one that least does.
+
+**Nesting thresholds gives every boolean function.** *A and (B or C)* is *all of [A, any of [B, C]]*.
+So groups that can contain groups need no additional operators at all, and the resulting shape is a
+tree - which draws as nested boxes and needs no parentheses, since the nesting is visible.
+
+## What actually threatens termination
+
+**Sean's caution about assignment and looping is warranted, and an earlier claim in this note was too
+strong.** The exhaustion argument shows that the **outer loop** terminates - it says nothing about a
+condition that evaluates forever, and it holds only while **every firing takes a game action**. A
+rule that writes a value and does nothing else exhausts nothing, so the loop stops shrinking and can
+spin. Assignment is precisely the construct that breaks the guarantee.
+
+Three constructions restore it, and together they are what Sean suspected was available:
+
+1. **Every firing takes a game action.** Each action exhausts something and `spec/turn.md` says
+   nothing becomes ready again until the turn ends, so the set of things that can still act strictly
+   shrinks. **This gives a bound rather than mere termination:** at most one firing per thing that
+   can act, which is a number the planet fixes in advance.
+2. **Conditions are finite queries over game state.** The state is finite - so many territories, so
+   many units - so any quantifier over it finishes. *Finite is not the same as fast*, and a condition
+   that searches over move sequences could be slow while remaining perfectly terminating.
+3. **Rule references form a directed acyclic graph.** This is the one that matters most, and it is
+   the answer to Sean's worry about goto: a jump whose targets can only be rules defined earlier
+   cannot come back.
+
+**None of the three is a runtime check**, which is what *by construction* has to mean here. The
+editor does not offer the move that would break them - a rule cannot be dragged above one it uses,
+and there is no widget that writes a value.
+
+## The tension Sean named, and where it actually bites
+
+Sean: *"Things we do to make it easy to avoid duplication also make us more expressive which also
+allows us to express things we shouldn't."*
+
+**He is right, and subroutines are the exact case.** He gets there himself - *I don't think we can get
+around the need for something similar to a subroutine, as that is essentially what composition is* -
+and it is sharper than that, because **P-112 does not merely permit composition, it requires it.** So
+the one construct that cannot be declined is also the one that reintroduces recursion.
+
+**Here the tension resolves rather than trading off**, and the resolution is construction 3: a named
+rule is a subroutine, and an acyclic reference graph is a subroutine that cannot recurse. **Reuse
+kept, unboundedness dropped**, and the player never sees the constraint because the editor never
+offers the cycle.
+
+**The same move handles the case that would otherwise want assignment.** What a variable is usually
+for here is naming an intermediate - *the territory with the most unworked food nodes* - and that is a
+query, not a stored value. **Name the condition, not the value.** A named query is a rule with no
+action, it sits in the same acyclic graph, and it gives reuse without mutation - which is the
+duplication problem solved without the construct that breaks termination.
+
+**Where Sean's tension does bite is elsewhere, and tuning is the right expectation.** Nothing above
+prevents a rule that is legal, terminating and *bad* - a policy that starves its own population, or
+one so intricate nobody can read it. That is not a safety property and no construction gives it; it
+is balance, and it is discovered by playing.
+
 ## What this opens that is not settled
 
 **Settled while this note was being written.** The rule editor is **its own screen**, and its
