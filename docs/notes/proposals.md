@@ -167,7 +167,7 @@ having, or the research may simply be waiting for a use. It is not lost either w
 Plurality makes one vetted-when loose.
 
 > In **A biome per territory**, change *it is the biome the realistic drawing shows over that ground*
-> to *it is the biome the realistic drawing shows over most of that ground*.
+> to *no other biome covers more of that ground in the realistic drawing*.
 
 **Basis:** Sean, 2026-08-28 - *"if a territory is jungle, it just has to be mostly jungle by
 plurality, not even majority."*
@@ -177,8 +177,18 @@ terrain gives it and leaves *how* to implementation; the check was phrased as th
 showed one biome over a territory. Under plurality it shows several, one of which is commonest.
 
 **A territory that is 40% jungle, 35% grassland and 25% desert is jungle**, and its picture correctly
-shows all three. As written the check reads as failing that case, which is the case the rule was
-chosen to allow. **One word fixes it and nothing else changes.**
+shows all three. As written the check reads as failing the case the rule was chosen to allow.
+
+**An earlier draft said *over most of that ground*, and Sean caught it.** In ordinary English *most
+of that ground* means **more than half** - *most of the cake* is not 40% of the cake. That is
+majority, which is the reading plurality was chosen against, so the fix would have replaced one wrong
+check with another.
+
+**Stated as a negative because the negative is the plurality.** *No other biome covers more* is true
+at 40% against 35% and 25%, and it is what a person counting pixels would actually test. It also
+**allows a tie** - two biomes at 40% each, either of which the model may name - where *covers more
+than any other* would fail both. A tie is a real possibility with continuous terrain and no reason to
+call it a defect.
 
 ### P-109 · Recovered · `spec/planet.md` -> What a territory carries
 
