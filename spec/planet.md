@@ -40,7 +40,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   surface the territory covers.
 - The biomes are ocean, ice, desert, grassland, jungle and mountain.
 - No territory can be claimed whose biome is ocean.
-- No two ocean territories are adjacent.
+- Oceans never isolate land from land. Every territory that is not ocean can be reached from
+  every other without crossing one.
 
 ## Native life
 
