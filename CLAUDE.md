@@ -132,13 +132,22 @@ thought, or something that fell out of a conversation. That way is promotion.
 
 New content reaches `spec/` by promotion, and by nothing else.
 
-| Step                                                                        | Who    |
-| --------------------------------------------------------------------------- | ------ |
-| File the proposal, naming the destination file and section                  | Claude |
-| Edit the proposal text in place until satisfied                             | Sean   |
-| Fix typos, grammar and wrapping **in the proposal**, reporting every change | Claude |
-| Say "promote P-n"                                                           | Sean   |
-| Copy the text **verbatim** into the destination, then assert it is there    | Claude |
+| Step                                                                     | Who    |
+| ------------------------------------------------------------------------ | ------ |
+| File the proposal, naming the destination file and section               | Claude |
+| Say what should change about it                                          | Sean   |
+| Make that change in the proposal, and show the result                    | Claude |
+| Read the result, then say "promote P-n"                                  | Sean   |
+| Copy the text **verbatim** into the destination, then assert it is there | Claude |
+
+Sean may edit a proposal in place instead, and that is still the shortest path when he already
+knows the words. **Saying what he wants is the common case**, because it is why the queue exists -
+so that he never has to open a file or hunt for a section.
+
+**That shift moves a responsibility, and it is worth naming.** When Sean edited the text himself he
+had obviously read it. When Claude edits on his instruction, **the last version may be one he has
+not seen** - so *promote* means "I have read this", and Claude shows the changed text rather than
+merely reporting that it changed.
 
 **Promotion is a pure move.** The only things Claude may change while promoting are line
 wrapping, bullet-versus-paragraph, and heading level - because those depend on the

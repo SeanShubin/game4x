@@ -161,6 +161,75 @@ showed one biome over a territory. Under plurality it shows several, one of whic
 shows all three. As written the check reads as failing that case, which is the case the rule was
 chosen to allow. **One word fixes it and nothing else changes.**
 
+### P-109 · Recovered · `spec/planet.md` -> What a territory carries
+
+Replaces *No two ocean territories are adjacent.*
+
+> - Oceans never isolate land from land. Every territory that is not ocean can be reached from
+>   every other without crossing one.
+
+**Basis:** stated by Sean on 2026-08-28 - *"lets relax the rule for oceans so that it is only that
+they don't isolate land masses from each other."*
+
+**The old rule was a mechanism for this requirement, and P-102 said so without noticing.** That
+proposal proved no-adjacency **implies** connectivity - every ocean's ring is land, so any route can
+go round it. A proof that A implies B is a signal that **B was what was wanted**, and A was one way
+to get it. This is the third time the same correction has been made: P-95 deleted a sentence for
+prescribing a mechanism, P-93 replaced *on-screen controls* with the requirement they served, and
+here a sufficient condition is replaced by the thing it was sufficient for.
+
+**What it buys is the geography water is for.** Under the old rule oceans were isolated dots - no
+coastline, no strait, no sea, and nothing that reads as a body of water. Now a hemisphere can be
+ocean provided the land around it stays joined. **The tension recorded three notes ago is gone**:
+*predominantly ocean* was not a planet this game could generate, and now it is.
+
+**What it still forbids, and this is the whole content:** an island. A land territory unreachable
+from the rest is exactly what the rule excludes, because nothing can cross water yet. **A planet may
+be mostly sea, but it may not be an archipelago.**
+
+**The check changes shape rather than difficulty.** No-adjacency was local - inspect each pair.
+Connectivity is global - remove the oceans, flood-fill the rest, count. Both are cheap, but the
+second cannot be satisfied greedily during generation, so a generator produces a candidate and
+**tests it**. That is the same shape as
+[fitting the biome histogram](generating-versus-designing.md): generate, measure, adjust, repeat.
+
+## It is temporary, and there is a wording that would not be
+
+Sean, 2026-08-28: *"again, a temporary rule until we have water units."* Recorded, and
+[the backlog](spec-backlog.md) carries the expiry.
+
+**A temporary rule in `spec/` is a small violation of the split**, and worth naming rather than
+letting pass. [CLAUDE.md](../../CLAUDE.md) says `spec/` is the destination and `releases/` is what is
+true today, so a line that will be deleted belongs in a release. It is here because **the first
+release does not generate planets at all** - the twelve territories are designed by hand - so a
+release entry would constrain something that release does not do. Spec is the least-wrong home, not
+the right one.
+
+**There is a form that expires on its own, and Claude offers it rather than pressing it:**
+
+> - Every territory that can be claimed can be reached by some unit.
+
+**That is permanent.** With only land units it means exactly what the proposed line means, because
+nothing crosses water. Add a ship and archipelagos become legal **with no rule changing** - the
+sentence starts permitting them because the roster changed, not because anyone edited the spec.
+
+**What it costs** is that generation now depends on what units exist, which is a coupling the
+narrower line does not have. A generator would have to know the roster to know whether a candidate
+planet is legal. That may be right - a planet nobody can traverse is not a planet worth generating -
+or it may be a dependency worth refusing.
+
+**Both are defensible. The proposed line is Sean's words and stands unless he prefers the other.**
+
+**Open - a one-territory world satisfies it.** A single land territory in a global ocean is trivially
+connected, and P-77 would call it won as soon as an Ark launched from it, since no other territory
+*can* be taken. Degenerate rather than broken, and worth a minimum-land figure whenever planets are
+generated rather than designed.
+
+**On promotion, two notes go stale** and are the promoter's to fix:
+[biomes](biomes.md) still states the old restriction and its proof, and
+[generating versus designing](generating-versus-designing.md) closes on *predominantly ocean is not a
+planet this game can generate*, which this makes false.
+
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
