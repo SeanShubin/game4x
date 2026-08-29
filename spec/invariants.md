@@ -59,5 +59,7 @@ specific rule.
 - This holds for designing the world as much as for playing it. Which phase a game is in is part
   of its state
 - A game state is exactly the result of applying every transition in order to the starting state
+- A rule is a source of transitions, not a kind of one. The history records what a rule did,
+  exactly as if the player had done it by hand
 
 ## Open questions

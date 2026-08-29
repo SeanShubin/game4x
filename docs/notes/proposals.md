@@ -42,31 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-115 · Entailed · `spec/invariants.md` -> The game is one function
-
-Follows from P-114 and the section it joins. **Claude's, and it settles a question P-114 would
-otherwise leave open.**
-
-> - A rule is a source of transitions, not a kind of one. The history records what a rule did,
->   exactly as if the player had done it by hand
-
-**Basis:** a rule is stored outside the game and can arrive from another player, so when one spends a
-player's output for them, **the history must record either the commands or the fact that a build did
-it.** The existing lines leave no freedom: *there is no other way for state to change*, and *a game
-state is exactly the result of applying every transition in order*. If the history recorded the
-attachment rather than the actions, replaying it would require a file that is not part of the game.
-
-**Filed rather than left as a note because P-114 makes it live.** Rules that outlive a game are
-exactly the rules that can go missing, change under you, or arrive from a stranger. Landing P-114
-without this would put a dependency on an external file inside the fold, which is the one thing this
-invariant forbids.
-
-**What it buys is larger than tidiness.** A saved game replays without the build that produced it, so
-a game can be shared or re-examined a year later with no dependency on a file that may have vanished.
-**The rule is readable and so is everything it did** - which is Sean's transparency requirement
-satisfied in both directions at once, since reading the rule tells you the intent and reading the
-history tells you what actually happened.
-
 ### P-116 · Recovered · `spec/interface.md` -> Surfaces
 
 **Sean's, stated 2026-08-28**, answering the question P-111 left open.
@@ -204,6 +179,7 @@ mean there.
 | P-113, nothing plays itself, and every rule can be read                                                         | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 | P-114, rules outlive a game and can be given away                                                               | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 | P-117, a player's rules always finish                                                                           | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
+| P-115, a rule is a source of transitions, not a kind of one                                                     | `spec/invariants.md` -> The game is one function                                                                       | 2026-08-28 |
 
 ## Rejected
 
