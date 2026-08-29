@@ -74,31 +74,6 @@ requirement; leaving the release quietly one surface short is what is forbidden.
 and needs no change now, but it goes stale the moment the rule editor is built. It belongs to the
 code lane's subject matter; noting it here is what stops it being forgotten.
 
-### P-119 · Recovered · `spec/invariants.md` -> Control without tedium
-
-**Sean's, stated 2026-08-28**: *"I am also going to want a text format for these rules."*
-
-> - Every rule has a text form, and the text is the rule. Anything the rule editor can build can be
->   written as text, and anything written as text can be opened in the editor
-
-**Basis:** the request is his; the wording states it as a **round trip** rather than as a file format,
-which is what makes it an invariant rather than a feature.
-
-**It earns its place three times over.** P-114 says a rule can be given to another player, and *given*
-needs a thing to give - a build posted, pasted or committed is text or it is nothing. P-113 says any
-rule can be read, and text satisfies that more completely than any inspector, because **text can be
-diffed and two published builds compared line by line**. And the round trip is what stops the editor
-and the file drifting apart, which is the failure that makes sharing quietly unreliable.
-
-**It says nothing about syntax, deliberately.** There is a strong candidate - a rule's actions *are*
-commands, `spec/console.md` already has a grammar and a file form, so a rule file could be a command
-file with conditions around it and share the parser. **Whether conditions belong in that same language
-is not yet decided**, and naming a format here would decide it by accident.
-
-**It is the same shape as *everything is expressible*, one layer out.** That line says every change to
-game state is executable as a command; this says every rule is writable as text. Neither says what
-the text looks like.
-
 ### P-121 · Entailed · `spec/console.md` -> Commands, the slash paragraph
 
 **Claude's, and small.** A gap found while weighing the two schedules on 2026-08-29.
@@ -264,6 +239,7 @@ is a separate question.
 | P-115, a rule is a source of transitions, not a kind of one                                                     | `spec/invariants.md` -> The game is one function                                                                       | 2026-08-28 |
 | P-116, the rule editor is a fourth surface, and it is two-dimensional                                           | `spec/interface.md` -> Surfaces                                                                                        | 2026-08-28 |
 | P-120, a rule carries the number of turns it may run                                                            | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-29 |
+| P-119, every rule has a text form, and the text is the rule                                                     | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-29 |
 
 ## Rejected
 
