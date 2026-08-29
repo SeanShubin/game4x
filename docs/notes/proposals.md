@@ -42,53 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-112 · Recovered · `spec/invariants.md` -> the same new section
-
-**Sean's, stated 2026-08-28.** The mechanism half of P-111, and the part that makes it checkable.
-
-> - Every rule a player can use is composed of rules they can also use, down to single actions.
->   Nothing is provided only as a whole
-> - A small change in what a rule does is a small change in how it is written
-
-**Basis:** Sean's observation about libraries and frameworks, applied to the game.
-
-> Frameworks take away control by specifying too much, and some libraries do this by giving you an
-> advanced function without the intermediate functions to compose the advanced function. It is the
-> middle layer everyone misses, in games and programming.
-
-**Without this, P-111 is satisfiable and useless.** *Develop this territory* is a rule, and it
-technically removes tedium - but a player who wants it minus energy extractors has to abandon it and
-rebuild from single actions. **The rebuild is the tedium, and it arrives exactly when the player has
-an opinion**, which is the worst moment for a game about control.
-
-**The second line is a test, not an aspiration**, and it is Sean's own: *the size of the change in
-how I specify my desire proportional to the size of the change of the effect desired.* One deleted
-line for one dropped behaviour means the middle layer is present; a rewrite means it is not.
-
-**What it forbids is worth stating plainly: any high-level action that is not literally made of
-smaller ones.** If *develop this territory* is a function in the engine rather than a list the player
-can open, the proportionality fails by construction, however well the function is written.
-
-**It costs the engine nothing, which is the argument for landing it now.** `spec/console.md` already
-makes the design phase commands, and a generator is *something that emits those commands*
-([generating versus designing](generating-versus-designing.md)); a rule is the same shape one phase
-later. So `spec/invariants.md`'s *there is no other way for state to change* still holds - a rule is
-a **source** of transitions, not a second kind - and a game played entirely by rules still rebuilds
-from its own history.
-
-**A claim about this in an earlier draft was too strong, and the corrected version is the one to
-review.** Sean wrote that the rule language *does not need to be Turing complete (it can be by
-accident, but I find that unlikely)*, and Claude replied that the spec already guarantees it, since
-every action exhausts something and `spec/turn.md` says nothing becomes ready again until the turn
-ends. **That argument covers the outer loop only, and holds only while every firing takes a game
-action.** Sean then raised assignment, which is exactly the construct that breaks it: a rule that
-writes a value and does nothing else exhausts nothing, so the loop stops shrinking.
-
-**The guarantee is real but it is a property of three constructions rather than of the game alone** -
-every firing takes an action, conditions are finite queries, and rule references are acyclic. Those
-are mechanism and belong in [the note](control-without-tedium.md), not here. What belongs in the spec
-is the requirement they exist to satisfy, filed as P-117.
-
 ### P-113 · Recovered · `spec/invariants.md` -> the same new section as P-111
 
 **Sean's, stated 2026-08-28.** The auto-scouting complaint, cut to what is always true.
@@ -352,6 +305,7 @@ every firing takes an action. The corrected paragraph is in P-112 above.
 | P-108, the biome check states plurality, not majority                                                           | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-28 |
 | P-106, a fifth capability: terrain resolved as finely as it is shown                                            | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-28 |
 | P-111, control without tedium: rules instead of repetition                                                      | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
+| P-112, the middle layer: rules compose, and edits stay proportional                                             | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 
 ## Rejected
 
