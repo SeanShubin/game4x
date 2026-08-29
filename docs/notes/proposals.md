@@ -72,10 +72,8 @@ scripting language, which Sean ruled out: *I don't want one to need to be a soft
 this game.* It does not forbid `run <file>` - a console already exists and files of commands already
 work - it forbids the game **requiring** that route.
 
-**Open - it says nothing about where the interface for this lives.** `spec/interface.md` names three
-surfaces and says all three are reachable in every build. A list of rules the player edits is none of
-them, and whether it is part of the game surface or a fourth decides whether a terminal build must
-offer it. Left out deliberately; it is a separate decision and not one Claude should guess.
+**Where the interface for this lives is settled, and it is not here.** Sean's answer, the same day: the rule editor is its own screen, two-dimensional. Filed as P-116 against
+`spec/interface.md`, which is where a surface belongs.
 
 ### P-112 · Recovered · `spec/invariants.md` -> the same new section
 
@@ -117,6 +115,136 @@ be, and the spec already guarantees it**: every action exhausts something and `s
 nothing becomes ready again until the turn ends, so each firing strictly shrinks the set of things
 that can still act. Termination is a property of the game rather than of the language, which means
 the interface can be as expressive as it likes without risking a hang.
+
+### P-113 · Recovered · `spec/invariants.md` -> the same new section as P-111
+
+**Sean's, stated 2026-08-28.** The auto-scouting complaint, cut to what is always true.
+
+> - Nothing plays itself. Every behaviour that acts on a player's behalf is a rule some person
+>   wrote, including any the game ships with
+> - Any rule can be read and changed by the player using it, whatever its origin
+
+**Basis:** Sean on automatic scouting - *"I never was made to specify precisely how the scouting
+works. The game always did that for me... I was denied the ability to ever understand exactly how
+scouting worked."*
+
+**The harm named is epistemic, not the automation**, and that changes what the fix is. Sean is
+explicit that he does not want to scout by hand and that respecifying it every game would be worse,
+so a toggle is not the remedy. **The remedy is that the behaviour has to be a rule, because rules can
+be read.** He states the two things he wants preserved himself: *(1) originally it was a human
+decision and (2) that decision is transparent, I can look at the rules themselves.*
+
+**It is P-112's framework complaint with a different victim.** Auto-scouting is a high-level behaviour
+supplied only as a whole - it cannot be opened, so it cannot be understood, and so it cannot be
+adjusted. A player who wants scouts to avoid a neighbour's border has no move except to stop using
+it.
+
+**Filed separately from P-112 because composition does not imply inspection.** P-112 says a rule is
+*made of* smaller rules; this says a rule can be *read*, including one the player did not write. A
+behaviour could satisfy the first and still arrive as an opaque bundle from someone else.
+
+**The sharp edge is what it says about defaults**, and it is the reason to prefer this wording to a
+ban on automation. A game that ships with a scouting behaviour is not in breach - it is in breach if
+that behaviour is engine code rather than a rule the player can open. **A shipped default becomes a
+rule like any other**, which converts every auto-manage toggle from opaque to inspectable without
+removing one of them.
+
+### P-114 · Recovered · `spec/invariants.md` -> the same new section
+
+**Sean's, stated 2026-08-28.** The meta-layer.
+
+> - A rule is not part of any one game. It can be named, kept, used in a later game, and given to
+>   another player
+> - A rule does the same thing for whoever holds it
+
+**Basis:** Sean grants the reason games hide this - *"it would be a pain in the ass to respecify
+scouting every game, which is why there is going to need to be a meta-layer of the game where players
+can store"* - and wants community builds baked in rather than left to a wiki: *"I would like to be
+able to take someone else's build from online, plug that into my game."*
+
+**This is a second kind of tedium and P-111 does not touch it.** A rule that dies with its game means
+paying the specification cost every new game, which is worse than the automation it replaced. **Rules
+have to be objects with a life outside any one game** - and once they are objects, giving one away is
+the same act as keeping one.
+
+**The second line is the sharing guarantee, and it constrains.** *Does the same thing for whoever
+holds it* forbids a rule whose behaviour depends on anything but the game it is applied to - no hidden
+local state, no dependence on who wrote it. Without it, *shareable* means the file copies, not that it
+works.
+
+**Sean's builds are a stronger thing than the precedents he cites, and it is worth him knowing why.**
+A StarCraft build order is a **sequence** and a Path of Exile passive build is a **fixed allocation**;
+both work because the game is the same every time. **A planet is generated**, so a food-generation
+build cannot be a recording of what someone did - it has to be a policy that responds to what the
+planet gives it. Two consequences: it degrades rather than breaks, since a build applied to a planet
+with no jungle simply never fires its jungle rules; and **a published build is also a benchmark** -
+two builds on one seed is a controlled experiment, which is the same machinery as the large-planet
+testing that was Sean's reason for doing this now.
+
+**Open, and it does not block this line.** Once builds are shared, the names a rule uses become a
+compatibility surface: Path of Exile builds break every league because a published artifact
+referenced a vocabulary that moved. What a stale build does - fail, warn, or skip the rule it cannot
+resolve - wants deciding, and the wrong answer is the silent one.
+
+### P-115 · Entailed · `spec/invariants.md` -> The game is one function
+
+Follows from P-114 and the section it joins. **Claude's, and it settles a question P-114 would
+otherwise leave open.**
+
+> - A rule is a source of transitions, not a kind of one. The history records what a rule did,
+>   exactly as if the player had done it by hand
+
+**Basis:** a rule is stored outside the game and can arrive from another player, so when one spends a
+player's output for them, **the history must record either the commands or the fact that a build did
+it.** The existing lines leave no freedom: *there is no other way for state to change*, and *a game
+state is exactly the result of applying every transition in order*. If the history recorded the
+attachment rather than the actions, replaying it would require a file that is not part of the game.
+
+**Filed rather than left as a note because P-114 makes it live.** Rules that outlive a game are
+exactly the rules that can go missing, change under you, or arrive from a stranger. Landing P-114
+without this would put a dependency on an external file inside the fold, which is the one thing this
+invariant forbids.
+
+**What it buys is larger than tidiness.** A saved game replays without the build that produced it, so
+a game can be shared or re-examined a year later with no dependency on a file that may have vanished.
+**The rule is readable and so is everything it did** - which is Sean's transparency requirement
+satisfied in both directions at once, since reading the rule tells you the intent and reading the
+history tells you what actually happened.
+
+### P-116 · Recovered · `spec/interface.md` -> Surfaces
+
+**Sean's, stated 2026-08-28**, answering the question P-111 left open.
+
+> The game presents four surfaces, all reachable from the front end, in every build:
+>
+> - **The rule editor** - the rules the player has, read and changed
+
+> The rule editor is two-dimensional. It may carry three-dimensional decoration, and nothing the
+> player has to read or act on is in that decoration.
+
+**Basis:** *"Regarding the rules editor itself, this definitely needs to be its own screen, and the
+interface needs to be 2d, although I am not opposed to decorative 3d elements mixed in."*
+
+**Two mechanical consequences of promoting this**, stated so the move stays pure: the sentence above
+the list changes **three** to **four**, and the new bullet joins the existing three rather than
+replacing any.
+
+**The second paragraph is Claude's sharpening of *decorative*, and Sean should judge it.** He said he
+is not opposed to decorative 3D; the added clause is what makes *decorative* checkable rather than a
+matter of taste. **It forbids exactly one thing** - a 3D element the player must read in order to use
+the editor - which is what would otherwise creep in and make the screen 3D by degrees. If it says more
+than he meant, cut the second paragraph and the first still stands.
+
+**It also settles the HUD question without needing a HUD.** A heads-up layer over the 3D scene and a
+2D screen of its own are different answers, and this is the second - so the editor is never drawn over
+a planet, and the two need share no camera, scale or input model. That is the same separation
+`spec/planet.md` already draws between the practical and realistic drawings: **either one or the
+other, never both at once.**
+
+**Availability follows from the section it joins and needs no extra line.** *Nothing is available in
+one build and not another* already applies, so a terminal build must offer the rule editor - and *how
+a thing is presented may follow the platform it runs on* already licenses whatever that turns out to
+mean there.
 
 ## Accepted
 

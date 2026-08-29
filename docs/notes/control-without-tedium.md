@@ -109,19 +109,106 @@ onto whatever the interface grew, and the usual result is a second way to change
 `spec/invariants.md` forbids. Designed now, it is a command emitter, which is a shape the engine
 already has two of.
 
+## The complaint about automatic scouting
+
+Sean: *"I never was made to specify precisely how the scouting works. The game always did that for
+me... I was denied the ability to ever understand exactly how scouting worked."*
+
+**The harm is not that it was automatic. It is that it was unreadable**, and the difference decides
+what the fix is. If the objection were to automation, the fix would be a toggle - and Sean is
+explicit that he does not want to scout by hand. **The fix is that the behaviour has to be a rule,
+because rules can be read.**
+
+**It is the framework complaint from the previous section with a different victim.** Auto-scouting is
+a high-level behaviour supplied only as a whole: it cannot be opened, so it cannot be understood, and
+because it cannot be understood it cannot be adjusted. The player who wants scouts to avoid a
+neighbour's border has no move except to stop using it.
+
+**The sharp edge is what this says about defaults.** A game that ships with a scouting behaviour is
+not thereby in breach - it is in breach if that behaviour is *engine code* rather than a rule the
+player can open. **A shipped default is a rule like any other, written by a person, readable and
+editable.** That single line converts the whole class of auto-manage toggles from opaque to
+inspectable without removing one of them.
+
+## Respecifying every game is its own tedium
+
+Sean grants the reason games do it this way: *"it would be a pain in the ass to respecify scouting
+every game, which is why there is going to need to be a meta-layer of the game where players can
+store."*
+
+**That is a second kind of tedium and the first two proposals do not address it.** A rule that dies
+with its game means paying the specification cost every time, which is worse than the automation it
+replaced. So rules have to be objects with a life outside any one game: named, kept, reused - and,
+since they are objects, given away.
+
+## What a published build actually is here
+
+Sean's precedents are Path of Exile passive trees and StarCraft build orders: the community finds
+something strong, publishes it, and anyone can adopt it. He wants that **baked in** rather than
+happening on a wiki.
+
+**His are a different and better thing than either precedent, and the reason is that his world
+varies.** A build order is a *sequence* and a passive-tree build is a *fixed allocation*; both work
+because the game is the same every time. **A planet is generated**, so a food-generation build cannot
+be a recording of what someone did. It has to be a policy that responds to what the planet gives it -
+conditions over territories, not a list of moves.
+
+Two things follow, and the second is the useful one:
+
+- **It degrades rather than breaks.** A build order fails when the map is not the map it assumed. A
+  policy applied to a planet with no jungle simply never fires its jungle rules.
+- **A published build is also a benchmark.** Two builds run on the same seed is a controlled
+  experiment, and the difference is attributable to the builds because everything else was identical.
+  That closes the loop with Sean's reason for doing this now: **testing large planets without playing
+  through the turns** is the same machinery as comparing two published builds.
+
+## The question this forces: what does the history record?
+
+**This is where the meta-layer meets `spec/invariants.md`, and it has to be settled before rules
+land.** A rule is stored outside the game and can arrive from another player. A game state is
+**exactly** the result of applying every transition in order. So when a build spends a player's
+output for them, what goes into the history - the commands, or the fact that a build did it?
+
+**The invariant already forces the answer and leaves no freedom.** There is no other way for state to
+change, so what a rule produces must be transitions, and the history records **what was done**, not
+that a rule did it. Filed as P-115.
+
+**What that buys is worth naming, because it is more than tidiness.** A saved game replays without
+the build that produced it - so a game can be shared, or re-examined a year later, with no dependency
+on a file that may have changed or vanished. **The rule is readable and so is everything it did**,
+which is the transparency Sean asked for in both directions at once.
+
+## What it costs: the vocabulary becomes a public interface
+
+**Once builds are shared, the names a rule uses are a compatibility surface.** Path of Exile builds
+break every league, and the reason is not that the game got worse - it is that a published artifact
+referenced a vocabulary that moved.
+
+This is the same worry as *where the rule vocabulary comes from*, one consequence further along. If
+rules name conditions the way `show` names state, then **changing a query changes every published
+build that used it**. That is not an argument against sharing; it is an argument for choosing the
+vocabulary deliberately rather than letting it accrete, and for deciding early what happens to a
+build that names something the game no longer has.
+
 ## What this opens that is not settled
 
-**Is a policy editor a fourth surface?** `spec/interface.md` names three - the game, the console, the
-data browser - and says all three are reachable in every build. A list of rules the player edits is
-none of them. It may be part of the game surface, or a fourth, and the answer decides whether a
-terminal build must offer it.
-
-**HUD against world.** Sean noted that a heads-up layer and the 3D scene are different things with
-different engine support. That is implementation, and `spec/interface.md` deliberately says nothing
-about it - but a policy editor is the first thing in this project that clearly wants to be a HUD
-rather than a thing drawn on a planet.
+**Settled while this note was being written.** The rule editor is **its own screen**, and its
+interface is **two-dimensional**; three-dimensional elements in it are decoration. That answers both
+questions this section originally opened - it is a fourth surface rather than part of the game
+surface, and the heads-up-against-world tension does not arise, because the editor is not drawn over
+a planet at all. Filed as P-116.
 
 **Where the vocabulary comes from.** A rule names conditions - *unworked*, *unspent*, *adjacent to a
 territory I control*. Those are facts about game state, and the console can already ask for state
 with `show`. **Whether the rule vocabulary and the query vocabulary are the same vocabulary** is
 worth deciding early, because they will diverge quietly if nobody does.
+
+**What happens to a build that names something the game no longer has.** The previous section argues
+the rule vocabulary becomes a compatibility surface the moment builds are shared. **Whether a stale
+build fails, warns, or silently skips the rule it cannot resolve** is a decision, and the wrong answer
+is the silent one - a build that quietly does nine tenths of what it says is worse than one that
+refuses.
+
+**How a build gets from one player to another.** Sean wants sharing *baked in* rather than left to a
+wiki. That could be a file, a paste, or something the game fetches. It is a product decision rather
+than an entailment, and nothing else waits on it.
