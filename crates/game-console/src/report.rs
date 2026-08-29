@@ -25,7 +25,26 @@ pub fn show(game: &Game, subject: &Subject) -> String {
     match subject {
         Subject::Turn => match game.phase {
             Phase::Design => "designing the world; the game has not started".to_string(),
-            Phase::Play => format!("turn {}", game.turn),
+            // Winning and losing are said here because this is where a player asks how the
+            // game is going, and neither is visible in any other report: an Ark in orbit
+            // looks the same whether it was launched off a finished planet or a bare one.
+            Phase::Play if game.has_won() => format!(
+                "turn {} - won: an Ark left a fully exploited planet",
+                game.turn
+            ),
+            Phase::Play if game.has_lost() => format!(
+                "turn {} - lost: no citizens, and nothing left that becomes one",
+                game.turn
+            ),
+            Phase::Play => format!(
+                "turn {}{}",
+                game.turn,
+                if game.is_fully_exploited() {
+                    " - the planet is fully exploited; launch an Ark to win"
+                } else {
+                    ""
+                }
+            ),
         },
         Subject::Territory(id) => match game.territory(*id) {
             Ok(_) => territory(game, *id),

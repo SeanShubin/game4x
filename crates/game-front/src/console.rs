@@ -29,13 +29,14 @@ pub enum Said {
 
 /// What a slash can direct, other than a surface.
 const NEW: &str = "new";
+const SAVE: &str = "save";
 
 /// Everything a slash can direct, for saying so when one directs nothing.
 ///
 /// This is the whole discovery path: `help` says a slash directs the front end without
 /// saying what, and a bare `/` answers with this.
 fn what_a_slash_directs() -> String {
-    format!("{}, or `{NEW} <size>`", Surface::names())
+    format!("{}, `{NEW} <size>`, or `{SAVE} <file>`", Surface::names())
 }
 
 /// What a slash line asked the front end to do.
@@ -44,14 +45,17 @@ enum Directed {
     Reach(Surface),
     /// Abandon the game in progress and start one on a planet of the named size.
     Begin(String),
+    /// Write the history of the game so far to a file of this name.
+    Save(String),
     /// The slash directed nothing. Says what it could have.
     Refused(String),
 }
 
 /// `spec/console.md`: *a line beginning with `/` directs the front end rather than the
 /// game. `/game`, `/console` and `/browser` choose a surface; `/new <size>` abandons the
-/// current game and starts one on a planet of that size. None of these is a command and
-/// none is a transition: history does not record them, and help does not list them.*
+/// current game and starts one on a planet of that size. `/save <file>` writes the history
+/// of the current game to a file, which `run` can then execute. None of these is a command
+/// and none is a transition: history does not record them, and help does not list them.*
 ///
 /// `None` means the line is a command and belongs to the parser.
 ///
@@ -77,6 +81,12 @@ fn directs_the_front_end(line: &str) -> Option<Directed> {
         return Some(match words.next() {
             Some(size) => Directed::Begin(size.to_string()),
             None => Directed::Refused(format!("`/{NEW}` needs a planet size, as in `/{NEW} tiny`")),
+        });
+    }
+    if head == SAVE {
+        return Some(match words.next() {
+            Some(file) => Directed::Save(file.to_string()),
+            None => Directed::Refused(format!("`/{SAVE}` needs a name, as in `/{SAVE} mygame`")),
         });
     }
     Some(Directed::Refused(format!(
@@ -126,6 +136,8 @@ pub struct Console {
     /// on a terminal there is no such thing to know. It is only what the last line asked
     /// for, which is what a shell reached through a narrow doorway needs to read back.
     reached: Option<Surface>,
+    /// The name the most recent `/save` asked for, read back the same way.
+    saved_as: Option<String>,
     /// How many times the drawing has been asked to change.
     ///
     /// `spec/planet.md` says the user can change which drawing is on screen, and
@@ -166,6 +178,7 @@ impl Console {
             ],
             generation: 0,
             reached: None,
+            saved_as: None,
             resets: 0,
             changes_of_drawing: 0,
         };
@@ -184,6 +197,7 @@ impl Console {
     /// four hundredth command and not before.
     pub fn submit(&mut self, line: &str) -> Said {
         self.reached = None;
+        self.saved_as = None;
         if line.trim().is_empty() {
             return Said::Spoke(Vec::new());
         }
@@ -200,6 +214,13 @@ impl Console {
                 }
                 Directed::Begin(size) => {
                     let said = self.begin(&size);
+                    for line in &said {
+                        self.say(line.clone());
+                    }
+                    Said::Spoke(said)
+                }
+                Directed::Save(file) => {
+                    let said = self.saved(&file);
                     for line in &said {
                         self.say(line.clone());
                     }
@@ -266,6 +287,44 @@ impl Console {
         vec![format!(
             "a new game, on a {size} planet. the one before it is gone"
         )]
+    }
+
+    /// The history of this game, as a command file that `run` can execute.
+    ///
+    /// `spec/console.md`: *`/save <file>` writes the history of the current game to a
+    /// file, which `run` can then execute.* It is not a command, and it could not be one:
+    /// `spec/invariants.md` allows one command for each way the game state can change, and
+    /// saving changes none - so a command that saved would be a command that answers to no
+    /// way of changing anything.
+    ///
+    /// What is written is exactly `history`, which is exactly the transitions that were
+    /// accepted, in order. That is what makes a save a *replay* rather than a snapshot:
+    /// running it rebuilds the game by doing again what was done, so a file cannot record
+    /// a state the rules would not have produced.
+    pub fn save(&self) -> String {
+        let mut text = self.session.history().join("\n");
+        text.push('\n');
+        text
+    }
+
+    /// Records a save and says so. What is done with the text is the shell's business:
+    /// a desktop writes a file, and a page has no filesystem to write one to.
+    fn saved(&mut self, file: &str) -> Vec<String> {
+        self.saved_as = Some(file.to_string());
+        vec![format!(
+            "saved {} command{} as {file}",
+            self.session.history().len(),
+            if self.session.history().len() == 1 {
+                ""
+            } else {
+                "s"
+            }
+        )]
+    }
+
+    /// The name the most recent `/save` asked for, if the last line was one.
+    pub fn saved_as(&self) -> Option<&str> {
+        self.saved_as.as_deref()
     }
 
     fn say(&mut self, line: String) {
@@ -548,6 +607,64 @@ mod tests {
         assert!(said.contains("untouched"), "{said}");
         assert_eq!(console.session.game, before);
         assert_eq!(console.session.history(), history.as_slice());
+    }
+
+    /// `spec/console.md`: *`/save <file>` writes the history of the current game to a file,
+    /// which `run` can then execute.*
+    ///
+    /// So what it writes has to be runnable, and running it has to rebuild the same game.
+    /// That is the whole claim, and it is checkable without a filesystem: the text is the
+    /// history, and a history replays.
+    #[test]
+    fn what_is_saved_replays_into_the_same_game() {
+        let mut console = Console::new();
+        console.submit("land ark 1");
+        console.submit("end turn");
+
+        let said = spoke(&mut console, "/save mygame");
+        assert!(said.contains("mygame"), "{said}");
+        assert_eq!(console.saved_as(), Some("mygame"));
+
+        let mut replayed = game_console::Session::new();
+        replayed
+            .run_script(&console.save(), &library())
+            .expect("a save is a command file that runs");
+        assert_eq!(replayed.game, console.session.game);
+    }
+
+    /// Saving is not a command, and could not be: `spec/invariants.md` allows one command
+    /// for each way the game state can change, and this changes none.
+    #[test]
+    fn saving_changes_nothing_and_is_not_recorded() {
+        let mut console = Console::new();
+        let game = console.session.game.clone();
+        let history = console.session.history().to_vec();
+        let generation = console.generation();
+
+        console.submit("/save mygame");
+
+        assert_eq!(console.session.game, game);
+        assert_eq!(console.session.history(), history.as_slice());
+        assert_eq!(console.generation(), generation);
+    }
+
+    /// What the last line asked to save as does not outlive the next line, the same way
+    /// what it reached does not.
+    #[test]
+    fn what_a_line_saved_does_not_outlive_the_next_line() {
+        let mut console = Console::new();
+        console.submit("/save mygame");
+        assert_eq!(console.saved_as(), Some("mygame"));
+        console.submit("show turn");
+        assert_eq!(console.saved_as(), None);
+    }
+
+    #[test]
+    fn saving_without_a_name_asks_for_one() {
+        let mut console = Console::new();
+        let said = spoke(&mut console, "/save");
+        assert!(said.contains("name"), "{said}");
+        assert_eq!(console.saved_as(), None);
     }
 
     /// `/new` with nothing after it says what it needs rather than starting something.

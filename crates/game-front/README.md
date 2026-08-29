@@ -71,7 +71,8 @@ the crate.
 
 `spec/console.md`: *a line beginning with `/` directs the front end rather than the game.
 `/game`, `/console` and `/browser` choose a surface; `/new <size>` abandons the current game
-and starts one on a planet of that size. None of these is a command and none is a
+and starts one on a planet of that size. `/save <file>` writes the history of the current
+game to a file, which `run` can then execute. None of these is a command and none is a
 transition: `history` does not record them, and `help` does not list them. A game's history
 begins when the game does.*
 

@@ -38,7 +38,36 @@ pub fn answer(line: &str) -> String {
             "the game is in the window; this terminal is the console.".to_string()
         }
         Said::Reach(Surface::Console) => "this is the console.".to_string(),
-        Said::Spoke(said) => said.join("\n"),
+        Said::Spoke(said) => {
+            // A desktop has a filesystem, so `/save` writes the file here. The page has
+            // none and offers a download instead - the same capability, reached the way
+            // each platform can reach it.
+            //
+            // Asked of the `console` already in hand, never through `shell::saved_as()`.
+            // That would re-enter `shell::with` while this closure is still inside it, and
+            // the handle is not reentrant: a `Mutex` on the desktop, which deadlocks, and a
+            // `RefCell` on the page, which panics. Two tests found it by hanging.
+            match console.saved_as().map(str::to_string) {
+                Some(file) => {
+                    let path = format!("{file}.4x");
+                    match std::fs::write(&path, console.save()) {
+                        Ok(()) => format!(
+                            "{}
+written to {path}",
+                            said.join(
+                                "
+"
+                            )
+                        ),
+                        Err(why) => format!("cannot write {path}: {why}"),
+                    }
+                }
+                None => said.join(
+                    "
+",
+                ),
+            }
+        }
     })
 }
 

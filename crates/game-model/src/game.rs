@@ -45,6 +45,14 @@ pub struct Game {
     /// Which territories touch, by id. Symmetric.
     pub adjacency: Vec<Vec<TerritoryId>>,
     pub units: Vec<Unit>,
+    /// Whether this game has been won.
+    ///
+    /// State rather than a question asked later, because winning happens at a *moment*:
+    /// `spec/control.md` says a player wins by launching an Ark from a fully exploited
+    /// planet, and once the Ark is in orbit the launch is over. Recomputing it afterwards
+    /// would ask whether the planet is fully exploited *now*, which is a different
+    /// question and would keep answering yes long after nobody launched anything.
+    pub won: bool,
 }
 
 impl Default for Game {
@@ -62,6 +70,7 @@ impl Game {
             territories: Vec::new(),
             adjacency: Vec::new(),
             units: Vec::new(),
+            won: false,
         }
     }
 
@@ -237,6 +246,11 @@ impl Game {
 
     /// `spec/control.md`: a player has lost when they have no citizens and nothing that
     /// converts into a citizen.
+    /// Whether this game has been won. `spec/control.md` gives exactly one way.
+    pub fn has_won(&self) -> bool {
+        self.won
+    }
+
     pub fn has_lost(&self) -> bool {
         self.phase == Phase::Play
             && self.territories.iter().all(|t| t.citizens == 0)
@@ -285,9 +299,40 @@ impl Game {
         let at = self
             .pick(kind, |unit| !unit.in_orbit())
             .ok_or(Rejection::NotOnThePlanet(kind))?;
+        // `spec/control.md`: *a player wins by launching an Ark from a fully exploited
+        // planet.* Asked before the Ark leaves, because it is the planet it left that has
+        // to have been finished.
+        if kind == UnitKind::Ark && self.is_fully_exploited() {
+            self.won = true;
+        }
         self.units[at].location = Location::Orbit;
         self.units[at].exhausted = true;
         Ok(())
+    }
+
+    /// `spec/control.md`: *a planet is fully exploited when every territory that can be
+    /// taken has been taken, every structure that can be built has been built, and every
+    /// storage structure on it is full.*
+    ///
+    /// Two of those three need a reading, and both readings are reported rather than
+    /// buried:
+    ///
+    /// - **"every structure that can be built"** cannot mean *while another would be
+    ///   accepted*, because a territory may hold any number of Yards and a second one
+    ///   changes nothing - so a planet would never be finished. It is read as *while
+    ///   building one more would change what the planet can do*: an Extractor for every
+    ///   node, since nodes run out, and a Yard where there is none, since the first is
+    ///   what lets a territory produce an Ark and the second does nothing.
+    /// - **"every storage structure is full"** holds because there are none. No structure
+    ///   in `spec/structures.md` stores anything. If one is ever added, this stops being
+    ///   vacuous and this function will not notice on its own.
+    pub fn is_fully_exploited(&self) -> bool {
+        self.territories
+            .iter()
+            .filter(|place| place.biome.is_claimable())
+            .all(|place| {
+                place.founded && place.yards > 0 && place.extractors.len() == place.nodes.len()
+            })
     }
 
     fn move_unit(&mut self, kind: UnitKind, territory: TerritoryId) -> Result<(), Rejection> {
@@ -671,6 +716,139 @@ mod tests {
                 near
             })
             .collect()
+    }
+
+    /// `spec/control.md`: *a player wins by launching an Ark from a fully exploited
+    /// planet.*
+    ///
+    /// The whole condition, built by hand: every claimable territory taken, every node
+    /// worked, a yard everywhere. Then launching wins, and it is the launch that does it.
+    #[test]
+    fn launching_an_ark_from_a_finished_planet_wins() {
+        let mut game = designed().after(&Transition::Start).unwrap();
+        game = game
+            .after(&Transition::Land {
+                kind: UnitKind::Ark,
+                territory: TerritoryId(1),
+            })
+            .unwrap();
+        assert!(
+            !game.is_fully_exploited(),
+            "one territory of three is not a planet"
+        );
+
+        // Finish the planet by hand rather than by playing it, so the test is about the
+        // condition rather than about the economy.
+        for place in &mut game.territories {
+            place.founded = true;
+            place.yards = 1;
+            place.extractors = (0..place.nodes.len())
+                .map(|node| Extractor {
+                    node,
+                    exhausted: false,
+                })
+                .collect();
+        }
+        assert!(game.is_fully_exploited());
+        assert!(!game.has_won(), "nobody has launched anything yet");
+
+        // An Ark has to be on the planet to leave it.
+        game.units.push(Unit {
+            id: UnitId(99),
+            kind: UnitKind::Ark,
+            location: Location::On(TerritoryId(1)),
+            cells: 2,
+            exhausted: false,
+            usable: true,
+        });
+        let won = game
+            .after(&Transition::Launch {
+                kind: UnitKind::Ark,
+            })
+            .unwrap();
+        assert!(won.has_won(), "the planet was finished and an Ark left it");
+    }
+
+    /// Launching off an unfinished planet is just leaving.
+    #[test]
+    fn launching_from_an_unfinished_planet_wins_nothing() {
+        let mut game = designed().after(&Transition::Start).unwrap();
+        game.units.push(Unit {
+            id: UnitId(99),
+            kind: UnitKind::Ark,
+            location: Location::On(TerritoryId(1)),
+            cells: 2,
+            exhausted: false,
+            usable: true,
+        });
+        let after = game
+            .after(&Transition::Launch {
+                kind: UnitKind::Ark,
+            })
+            .unwrap();
+        assert!(!after.has_won());
+    }
+
+    /// Winning is a moment, not a standing condition. Once it has happened it stays
+    /// happened, and it does not start being true later because the planet still looks
+    /// finished.
+    #[test]
+    fn winning_is_the_launch_rather_than_the_state_afterwards() {
+        let mut game = designed().after(&Transition::Start).unwrap();
+        for place in &mut game.territories {
+            place.founded = true;
+            place.yards = 1;
+            place.extractors = (0..place.nodes.len())
+                .map(|node| Extractor {
+                    node,
+                    exhausted: false,
+                })
+                .collect();
+        }
+        // A finished planet nobody has launched from is not a win.
+        assert!(game.is_fully_exploited());
+        assert!(!game.has_won());
+
+        // And a Pioneer leaving it is not one either.
+        game.units.push(Unit {
+            id: UnitId(98),
+            kind: UnitKind::Pioneer,
+            location: Location::On(TerritoryId(1)),
+            cells: 2,
+            exhausted: false,
+            usable: true,
+        });
+        let after = game
+            .after(&Transition::Launch {
+                kind: UnitKind::Pioneer,
+            })
+            .unwrap();
+        assert!(!after.has_won(), "only an Ark wins");
+    }
+
+    /// An ocean cannot be taken, so it cannot be what stops a planet being finished.
+    #[test]
+    fn ocean_does_not_keep_a_planet_from_being_finished() {
+        let mut game = designed().after(&Transition::Start).unwrap();
+        for place in &mut game.territories {
+            place.founded = true;
+            place.yards = 1;
+            place.extractors = (0..place.nodes.len())
+                .map(|node| Extractor {
+                    node,
+                    exhausted: false,
+                })
+                .collect();
+        }
+        // Make one of them water and take everything off it.
+        game.territories[1].biome = Biome::Ocean;
+        game.territories[1].founded = false;
+        game.territories[1].yards = 0;
+        game.territories[1].extractors.clear();
+        assert!(
+            game.is_fully_exploited(),
+            "an unclaimable territory is not an unfinished one"
+        );
     }
 
     /// A designed world: three territories with food and metal, one ark in orbit.

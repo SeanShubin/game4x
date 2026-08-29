@@ -72,6 +72,23 @@ pub fn change_drawing() {
     crate::shell::change_drawing();
 }
 
+/// The name the most recent line asked to save as, or empty if it asked for none.
+///
+/// A page has no filesystem, so `/save` cannot write one. `spec/interface.md` allows the
+/// presentation to follow the platform: the page reads this after every line and, when it
+/// is not empty, hands the text to the browser as a download. The same capability, reached
+/// the way this platform can reach it.
+#[wasm_bindgen]
+pub fn console_saved_as() -> String {
+    crate::shell::saved_as().unwrap_or_default()
+}
+
+/// This game's history, as a command file that `run` can execute.
+#[wasm_bindgen]
+pub fn console_save_text() -> String {
+    crate::shell::save_text()
+}
+
 /// Every entity in the game and its components.
 #[wasm_bindgen]
 pub fn browser_text() -> String {

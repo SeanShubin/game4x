@@ -569,6 +569,21 @@
           // button does. Empty means the line chose no surface.
           var reached = bindings.console_reached();
           if (reached) show(reached);
+
+          // spec/console.md: `/save <file>` writes the history to a file that `run` can
+          // execute. A page has no filesystem, so the same capability arrives as a
+          // download - spec/interface.md lets the presentation follow the platform.
+          var saving = bindings.console_saved_as();
+          if (saving) {
+            var blob = new Blob([bindings.console_save_text()], { type: "text/plain" });
+            var link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = saving + ".4x";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+          }
         });
 
         // winit listens for keys on the canvas, so a focused text field already

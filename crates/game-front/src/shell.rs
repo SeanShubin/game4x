@@ -106,6 +106,16 @@ pub fn drawing_changes() -> u64 {
     with(|console| console.changes_of_drawing())
 }
 
+/// The name the most recent line asked to save as, if it asked.
+pub fn saved_as() -> Option<String> {
+    with(|console| console.saved_as().map(str::to_string))
+}
+
+/// This game's history, as a command file that `run` can execute.
+pub fn save_text() -> String {
+    with(|console| console.save())
+}
+
 /// The data browser's text, without running anything.
 pub fn browser() -> String {
     with(|console| crate::browse(&console.session))
