@@ -42,27 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-105 · Invented · `spec/planet.md` -> Presentation
-
-**The code lane's**, reported 2026-08-28 and forwarded by Sean.
-
-> - Where two biomes meet, the ground between them is mixed rather than switched. A biome has a
->   margin, not a border.
-
-**Basis:** biome colour switching at a threshold drew a hard line through ground that has no line in
-it.
-
-**Stated as a fact about the world rather than a technique**, deliberately - the code lane cites
-P-95, which deleted a sentence for prescribing a mechanism. That restraint matters more here than
-usual, because **two different mechanisms already exist** in the research and this line permits both:
-`asset-creator` jitters the biome lookup in parameter space and averages; Sagristà makes the lookup a
-filtered image. See [planet appearance](planet-appearance.md) and
-[procedural planets elsewhere](procedural-planets-elsewhere.md).
-
-**It does not conflict with one territory, one biome.** `spec/planet.md` says a territory has exactly
-one, and this says the **ground** between two biomes is mixed. The picture blends; the model does
-not - which is the same split P-100 already draws, and the reason that line had to exist.
-
 ### P-106 · Entailed · `releases/first-release.md` -> Capabilities
 
 **The code lane's**, reported 2026-08-28. Follows from P-104.
@@ -308,6 +287,7 @@ to be implausible.
 | P-103, what each biome gives a territory, and why every force of nature is 1                                    | `releases/first-release.md` -> Biomes                                                                                  | 2026-08-28 |
 | P-107, the realistic drawing shows terrain and no borders                                                       | `spec/planet.md` -> Presentation                                                                                       | 2026-08-28 |
 | P-104, a drawing never betrays how it was made                                                                  | `spec/planet.md` -> Presentation                                                                                       | 2026-08-28 |
+| P-105, a biome has a margin, not a border                                                                       | `spec/planet.md` -> Presentation                                                                                       | 2026-08-28 |
 
 ## Rejected
 

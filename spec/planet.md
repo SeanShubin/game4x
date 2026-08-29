@@ -62,6 +62,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   look like terrain
 - The realistic drawing shows the world: terrain
 - A drawing never betrays how it was made. A viewer sees the planet, never the process.
+- Where two biomes meet, the ground between them is mixed rather than switched. A biome has a
+  margin, not a border.
 - The two drawings share the camera and nothing else. Rotating, zooming and resetting behave the
   same in both
 - The terrain of the realistic drawing is continuous. It varies within a single territory and it
