@@ -158,14 +158,15 @@ approves. Fixing phrasing during promotion would mean the text Sean reviewed and
 the spec are not the same text, and he would have no reason to re-read the spec to find out.
 The guarantee this buys is that **approved text is byte-identical to shipped text.**
 
-**Commit after every promotion.** A promotion changes `spec/` or `releases/` and moves a row in the
-queue; those two edits belong in one commit and nothing else does. Batching several promotions into
-one commit loses which change answered which decision, and leaving them uncommitted is worse - the
-other lanes read the working tree, so an unpushed promotion is a rule they are already building
-against with no way to see when it arrived or why.
+**Never leave a promotion uncommitted.** A promotion changes `spec/` or `releases/` and moves a row
+in the queue, and **the other lanes read the working tree** - so an uncommitted promotion is a rule
+they may already be building against, with no way to see when it arrived or why. That is the
+requirement: not how the commits are grouped, but that none of them is still pending when the turn
+ends.
 
-**One promotion, one commit, and the message says what changed and what it cost.** The history then
-records decisions rather than sessions.
+**One commit per promotion is a good default and not a rule.** It makes the history record decisions
+rather than sessions, and it makes a single change easy to read back. Several promotions in one
+commit is fine when they answer one decision, and the message should then say so.
 
 **A promotion that makes something else stale is not finished.** When landing a proposal
 invalidates a line elsewhere - in `spec/`, in a release, or in another proposal - Claude does one of
