@@ -42,41 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-116 · Recovered · `spec/interface.md` -> Surfaces
-
-**Sean's, stated 2026-08-28**, answering the question P-111 left open.
-
-> The game presents four surfaces, all reachable from the front end, in every build:
->
-> - **The rule editor** - the rules the player has, read and changed
-
-> The rule editor is two-dimensional. It may carry three-dimensional decoration, and nothing the
-> player has to read or act on is in that decoration.
-
-**Basis:** *"Regarding the rules editor itself, this definitely needs to be its own screen, and the
-interface needs to be 2d, although I am not opposed to decorative 3d elements mixed in."*
-
-**Two mechanical consequences of promoting this**, stated so the move stays pure: the sentence above
-the list changes **three** to **four**, and the new bullet joins the existing three rather than
-replacing any.
-
-**The second paragraph is Claude's sharpening of *decorative*, and Sean should judge it.** He said he
-is not opposed to decorative 3D; the added clause is what makes *decorative* checkable rather than a
-matter of taste. **It forbids exactly one thing** - a 3D element the player must read in order to use
-the editor - which is what would otherwise creep in and make the screen 3D by degrees. If it says more
-than he meant, cut the second paragraph and the first still stands.
-
-**It also settles the HUD question without needing a HUD.** A heads-up layer over the 3D scene and a
-2D screen of its own are different answers, and this is the second - so the editor is never drawn over
-a planet, and the two need share no camera, scale or input model. That is the same separation
-`spec/planet.md` already draws between the practical and realistic drawings: **either one or the
-other, never both at once.**
-
-**Availability follows from the section it joins and needs no extra line.** *Nothing is available in
-one build and not another* already applies, so a terminal build must offer the rule editor - and *how
-a thing is presented may follow the platform it runs on* already licenses whatever that turns out to
-mean there.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -180,6 +145,7 @@ mean there.
 | P-114, rules outlive a game and can be given away                                                               | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 | P-117, a player's rules always finish                                                                           | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 | P-115, a rule is a source of transitions, not a kind of one                                                     | `spec/invariants.md` -> The game is one function                                                                       | 2026-08-28 |
+| P-116, the rule editor is a fourth surface, and it is two-dimensional                                           | `spec/interface.md` -> Surfaces                                                                                        | 2026-08-28 |
 
 ## Rejected
 
