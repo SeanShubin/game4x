@@ -42,25 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-106 · Entailed · `releases/first-release.md` -> Capabilities
-
-**The code lane's**, reported 2026-08-28. Follows from P-104.
-
-> ### Terrain resolved as finely as it is shown
->
-> - **In** - `spec/planet.md`, *nothing of how a drawing is made is visible in it*
-> - **Vetted when** - at the default camera, no facet, band or flat wash betrays how the surface was
->   built, and the finest visible detail is terrain
-
-**Basis:** the fifth check, filling the gap the first four left.
-
-**What changed is that this is now checkable without Sean.** The code lane reports that
-`crates/game4x` gained `--shot` to write one frame to a PNG, `--dump` to write the game and mesh as
-text, and a camera placeable by number so two drawings can be photographed identically. **The check
-still ends in a person looking at a picture** - which [releases](../../releases/README.md) already
-accepts, and which P-101 argued is the only honest test for *looks like a world*. What changed is
-that the person can be the code lane, before the work ships.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -157,6 +138,7 @@ that the person can be the code lane, before the work ships.
 | P-109, oceans never isolate land from land                                                                      | `spec/planet.md` -> What a territory carries                                                                           | 2026-08-28 |
 | P-110, `set biome` gives a territory its biome during design                                                    | `spec/console.md` -> Commands                                                                                          | 2026-08-28 |
 | P-108, the biome check states plurality, not majority                                                           | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-28 |
+| P-106, a fifth capability: terrain resolved as finely as it is shown                                            | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-28 |
 
 ## Rejected
 

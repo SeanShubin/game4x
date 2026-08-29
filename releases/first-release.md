@@ -112,6 +112,12 @@ What each biome gives a territory. Ocean is not claimable and carries nothing.
 
 Every biome except ocean has at least one food node of density two or more.
 
+### Terrain resolved as finely as it is shown
+
+- **In** - `spec/planet.md`, *nothing of how a drawing is made is visible in it*
+- **Vetted when** - at the default camera, no facet, band or flat wash betrays how the surface was
+  built, and the finest visible detail is terrain
+
 ## Controls
 
 - Rotation is bound to the arrow keys, and to dragging
