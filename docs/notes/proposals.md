@@ -42,6 +42,82 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-111 · Recovered · `spec/invariants.md` -> new section, after *Everything is expressible*
+
+**Sean's, stated 2026-08-28.** His words, cut to the two claims that are always true.
+
+> ## Control without tedium
+>
+> - A player has complete control over every detail, and is never required to exercise it by hand
+>   more than once. Anything they can do by hand, they can instead specify a rule that does it
+> - Rules are specified through the interface. Playing the game never requires writing a program
+
+**Basis:** Sean named a principle he wants the specification never to work against - *complete
+control over every little detail, while at the same time having zero tedium* - and named the
+resolution himself: *allow me to specify the rules for what I previously did manually*.
+
+**The two goals are the same axis only while control means acting.** Every detail controlled by hand
+is a detail attended to every turn, so the usual escape is to take control away - an advisor, an
+auto-manage toggle. They come apart once control means **specifying**: a rule expressed once covers
+every turn it applies to, which is the whole of what tedium is. See
+[control without tedium](control-without-tedium.md).
+
+**It is invariant-shaped rather than a feature.** Sean's framing was that the specification must
+never *work against* it, which is exactly what `spec/invariants.md` is for: a rule elsewhere that
+made some detail hand-only would be a defect in that rule. Filed as **Recovered** because both halves
+are his, from this conversation.
+
+**The second line is the part that constrains.** Without it, *specify a rule* is satisfied by a
+scripting language, which Sean ruled out: *I don't want one to need to be a software engineer to play
+this game.* It does not forbid `run <file>` - a console already exists and files of commands already
+work - it forbids the game **requiring** that route.
+
+**Open - it says nothing about where the interface for this lives.** `spec/interface.md` names three
+surfaces and says all three are reachable in every build. A list of rules the player edits is none of
+them, and whether it is part of the game surface or a fourth decides whether a terminal build must
+offer it. Left out deliberately; it is a separate decision and not one Claude should guess.
+
+### P-112 · Recovered · `spec/invariants.md` -> the same new section
+
+**Sean's, stated 2026-08-28.** The mechanism half of P-111, and the part that makes it checkable.
+
+> - Every rule a player can use is composed of rules they can also use, down to single actions.
+>   Nothing is provided only as a whole
+> - A small change in what a rule does is a small change in how it is written
+
+**Basis:** Sean's observation about libraries and frameworks, applied to the game.
+
+> Frameworks take away control by specifying too much, and some libraries do this by giving you an
+> advanced function without the intermediate functions to compose the advanced function. It is the
+> middle layer everyone misses, in games and programming.
+
+**Without this, P-111 is satisfiable and useless.** *Develop this territory* is a rule, and it
+technically removes tedium - but a player who wants it minus energy extractors has to abandon it and
+rebuild from single actions. **The rebuild is the tedium, and it arrives exactly when the player has
+an opinion**, which is the worst moment for a game about control.
+
+**The second line is a test, not an aspiration**, and it is Sean's own: *the size of the change in
+how I specify my desire proportional to the size of the change of the effect desired.* One deleted
+line for one dropped behaviour means the middle layer is present; a rewrite means it is not.
+
+**What it forbids is worth stating plainly: any high-level action that is not literally made of
+smaller ones.** If *develop this territory* is a function in the engine rather than a list the player
+can open, the proportionality fails by construction, however well the function is written.
+
+**It costs the engine nothing, which is the argument for landing it now.** `spec/console.md` already
+makes the design phase commands, and a generator is *something that emits those commands*
+([generating versus designing](generating-versus-designing.md)); a rule is the same shape one phase
+later. So `spec/invariants.md`'s *there is no other way for state to change* still holds - a rule is
+a **source** of transitions, not a second kind - and a game played entirely by rules still rebuilds
+from its own history.
+
+**One consequence Claude did not expect and Sean should know about.** He wrote that the rule language
+*does not need to be Turing complete (it can be by accident, but I find that unlikely)*. **It cannot
+be, and the spec already guarantees it**: every action exhausts something and `spec/turn.md` says
+nothing becomes ready again until the turn ends, so each firing strictly shrinks the set of things
+that can still act. Termination is a property of the game rather than of the language, which means
+the interface can be as expressive as it likes without risking a hang.
+
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
