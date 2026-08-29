@@ -362,6 +362,25 @@ lets make them concepts I can collect data on."*
 **This is a schedule, not a rule, which is why none of it is in the queue.** Three things were
 decided and only the third needs anyone to do anything.
 
+**The budget belongs to the rule, and the number is overkill.** Sean, 2026-08-29: *"analogous to
+pre-allocated stack space for a function. We will just set an overkill number that will tell us
+something has gone horribly wrong if we ever actually hit it."* So a rule carries its own allowance -
+that half is in P-120 - and **the provisional half is what exhausting it means**. For now, hitting the
+number is a defect report: the rule was expected to stop because it reached its goal or ran out of
+things to do, and the budget only ever fires when neither happened.
+
+**That is why it is here rather than in the spec.** Under fragments the same exhaustion would be an
+ordinary stop rather than a fault, so a spec line committing to either reading would go stale the
+moment the other arrived. P-120 says the rule carries the number and stays silent on what running out
+means, which is true under both.
+
+**What the backstop actually catches is not what it looks like.** Runaway recursion - the usual cause
+of a stack overflow - is already impossible, since rule references are acyclic and the editor never
+offers the cycle. What is left is a rule that keeps finding something legitimate to do for ever
+without reaching its goal, which no static check can see. See
+[control without tedium](control-without-tedium.md) for why that is a different failure from the one
+cycle detection was aimed at.
+
 **Fragments are deferred.** Whether the budget becomes an in-game artifact - *AI fragments*, acquired
 and spent - waits until a few builds exist. See
 [control without tedium](control-without-tedium.md) for what the idea buys and the one choice that

@@ -467,12 +467,75 @@ rule declares its own cost and anyone can run anything. Everything else here - h
 acquired, whether they are spent or held, what happens when a build overruns - follows from that one
 answer, and none of it can be guessed at usefully before it.
 
-**Deferred by Sean on 2026-08-29, and the ordering is right rather than merely convenient.** He
-wants to design a few builds first, with the budget finite but effectively unbounded, and collect
-data on the three dimensions meanwhile. **The question above cannot be answered well without exactly
-that data**: whether a budget belongs to the rule or to the player turns on how large real builds
-actually turn out to be, and nobody knows that yet. See
-[the backlog entry](spec-backlog.md) for what has to be measured in the meantime.
+**Answered provisionally by Sean on 2026-08-29: the budget belongs to the rule**, analogous to
+pre-allocated stack space, with an overkill number. What stays deferred is whether it ever *moves* to
+the player - and that is the right ordering rather than merely the convenient one, since how large
+real builds turn out to be is exactly what decides it, and nobody knows that yet. See
+[the backlog entry](spec-backlog.md) for what has to be measured meanwhile, and the section above for
+what the stack analogy settles.
+
+## What the stack analogy gives, and the one place it does not transfer
+
+Sean, 2026-08-29: *"lets make the budget belong to the rule for now, analogous to pre-allocated stack
+space for a function. We will just set an overkill number that will tell us something has gone
+horribly wrong if we ever actually hit it."*
+
+**The analogy carries three things and breaks on the fourth**, and the break is worth naming because
+following it too far would produce the wrong design.
+
+**It carries: the bound travels with the thing.** A frame belongs to its function, not to whoever
+called it - and that is exactly what makes P-114's *a rule does the same thing for whoever holds it*
+true rather than approximately true. See the amended P-120.
+
+**It carries: pre-allocated, not grown on demand.** The number is fixed before the rule runs, which is
+what lets it be checked rather than watched. A budget that could be extended mid-run would be a
+request, and a request can be refused at the worst moment.
+
+**It carries: exhaustion is a defect report.** Nobody sizes a function's stack to be exactly consumed;
+they allocate plenty, and an overflow means a bug rather than a busy day. **That framing changes what
+the budget is for** - it is a backstop, not a schedule. The rule is expected to stop because it
+reached its goal or ran out of things to do, and the budget only ever fires when neither happened.
+
+**It does not carry: turns are not stack-like.** Stack is *per frame* and nests - a callee's frame
+sits inside its caller's. **A turn is global**: it belongs to the game, not to the rule that is
+running, so a sub-rule does not consume turns *within* its parent's allowance in the way a callee
+consumes stack within its caller's. Turns are a fuel tank, not a stack.
+
+**So the three dimensions are not three of a kind, and the analogy tells us which is which.**
+
+| Dimension | Stack-like?                       | Belongs to       | Checked                |
+| --------- | --------------------------------- | ---------------- | ---------------------- |
+| Depth     | **exactly** - it *is* stack depth | the rule's shape | when the rule is built |
+| Elements  | roughly - a frame's size          | the rule's shape | when the rule is built |
+| Turns     | **not at all** - a global clock   | the game         | while the rule runs    |
+
+### What the budget actually catches, which is not what it looks like
+
+**Stack overflow in practice usually means runaway recursion** - and that failure is already
+impossible here, because P-117's third construction makes rule references acyclic and the editor
+never offers the cycle. **So the turn budget is not the recursion guard**; that job is already done,
+statically, by something else.
+
+What it catches is the failure this note identified when Sean's two halting checks were rejected: **a
+rule that keeps finding something legitimate to do, forever, without ever reaching its goal.** Small
+real progress, indefinitely. That is invisible to cycle detection because no state repeats, and
+invisible to a static check because the rule is perfectly well formed.
+
+**Two failures, two mechanisms, neither redundant.** Acyclic references catch the structural loop
+before it can be built; the turn budget catches the semantic one while it runs. It is worth knowing
+they are not two guards on the same thing, because someone will eventually propose dropping one.
+
+### One consequence that is open and has a cheap answer available
+
+**When the budget runs out, the rule has already acted.** Its commands are in the history by P-115,
+and the game is in whatever state the partial run left it - so the fault is a **report**, not an undo,
+unless somebody decides otherwise.
+
+**And deciding otherwise is unusually cheap here.** A game state is exactly the fold of its
+transitions, so rewinding to before the rule ran is re-folding a prefix rather than reversing
+anything. **The machinery for a transactional rule already exists as a side effect of the one-function
+invariant**, which is worth knowing before the question is answered on the assumption that it would be
+expensive.
 
 ## What this opens that is not settled
 

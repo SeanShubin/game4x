@@ -105,7 +105,7 @@ the text looks like.
 **Sean's, stated 2026-08-28**, after weighing two halting checks he built into the predecessor:
 *"the turn budget does seem to solve all of this."*
 
-> - A rule runs for at most a stated number of turns, and stops when they are spent
+> - A rule carries the number of turns it may run, and stops when they are spent
 
 **Basis:** P-117 requires that rules always finish and supplies no stop, and a rule that goes from one
 Ark to the next has to span turns - so `end turn`, which is the action that makes everything ready
@@ -124,10 +124,24 @@ fires when it happens to fire.
 what makes the stop something they can reason about rather than something that happens to them. That
 is the property cycle detection cannot have at any price.
 
-**It deliberately does not say where the number comes from.** Sean is considering making it a game
-resource - *AI fragments*, with strength along several dimensions - and the line holds either way. If
-fragments land, this is the dimension they are strong in; if they do not, it is a number the player
-types. **Naming the source here would decide a mechanic that is still being thought about.**
+**Where the number comes from is now decided, and the line says so.** Sean, 2026-08-29: *"lets make
+the budget belong to the rule for now, analogous to pre-allocated stack space for a function."* So the
+rule **carries** its bound rather than drawing on the player's - which is why the wording moved from
+*a stated number* to *the number it carries*.
+
+**That choice is worth more than a default, because it is what makes P-114 true.** *A rule does the
+same thing for whoever holds it* only holds if the budget travels with the rule. Were the budget the
+player's, two players running one build would get different behaviour from it - the poorer one a
+truncated version - and the sharing guarantee would be a guarantee about the file rather than about
+what it does. **Budget-on-the-rule removes that strain entirely**, and Sean should know that moving it
+to the player later, as *AI fragments* would, brings the strain back. That is a real cost of the
+mechanic, and it was not visible before he made this call.
+
+**What the line still does not say is what running out means**, and that is deliberate. For now Sean
+wants an overkill number whose exhaustion means something has gone badly wrong; under fragments the
+same exhaustion would be an ordinary stop. **Both are compatible with the line as written**, and
+committing to either would go stale the moment the other arrived. The provisional half is in
+[the backlog](spec-backlog.md).
 
 ## Accepted
 
