@@ -89,43 +89,6 @@ at 40% against 35% and 25%, and it is what a person counting pixels would actual
 than any other* would fail both. A tie is a real possibility with continuous terrain and no reason to
 call it a defect.
 
-### P-110 · Entailed · `spec/console.md` -> Commands
-
-> Available only before `start`:
->
-> - `set biome <territory> <biome>` - give a territory its biome
-
-**Basis:** found on 2026-08-28 checking whether the *move the cut points* idea belonged in the queue.
-It does not - it is implementation - but the check turned up a gap.
-
-**`spec/planet.md` says every territory has a biome and nothing can give it one.** The design phase
-has four commands: `create planet`, `add node`, `set force` and `add <unit> orbit`. A designed
-scenario can set a territory's nodes and its force of nature, and **cannot set the one property the
-spec says every territory has.**
-
-**The first release needs it immediately.** Its twelve territories are hand-designed and name no
-biome, which was already recorded as owed. There is no way to pay that debt today.
-
-**It reads against P-100, and P-74 is why it is allowed.** `spec/planet.md` says *a territory's biome
-is what the terrain gives it. It is not chosen independently of the surface the territory covers* -
-and a command that sets a biome does exactly that. The resolution is already in the spec:
-`spec/console.md` says **in the design phase, the designer is the cause of what appears.** P-100
-describes how a biome arises when a planet is generated; it does not bind a designer, any more than
-*nothing appears without a cause inside the model* forbids `add node`.
-
-**That reading is worth stating because it is load-bearing for the whole design phase.** Every one of
-the four existing commands does something the play-phase rules would forbid - nodes do not appear,
-forces do not change, units do not materialise in orbit. `set biome` is the fifth of a kind, not the
-first of a new one.
-
-**Open - a scenario can now contradict itself, and nothing catches it.** Setting a biome and setting
-nodes are separate commands, so a territory can be `grassland` with eight metal nodes at density 8.
-The [biome table](../../releases/first-release.md) says what each biome gives; nothing checks that a
-hand-built territory agrees with it. **That is the same drift P-100 prevents between the model and
-the picture, one level down** - and it is arguably fine, since
-[a designed scenario is not a world](generating-versus-designing.md) and territory 5 exists precisely
-to be implausible.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -220,6 +183,7 @@ to be implausible.
 | P-104, a drawing never betrays how it was made                                                                  | `spec/planet.md` -> Presentation                                                                                       | 2026-08-28 |
 | P-105, a biome has a margin, not a border                                                                       | `spec/planet.md` -> Presentation                                                                                       | 2026-08-28 |
 | P-109, oceans never isolate land from land                                                                      | `spec/planet.md` -> What a territory carries                                                                           | 2026-08-28 |
+| P-110, `set biome` gives a territory its biome during design                                                    | `spec/console.md` -> Commands                                                                                          | 2026-08-28 |
 
 ## Rejected
 

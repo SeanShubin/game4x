@@ -61,6 +61,7 @@ Available only before `start`:
 - `create planet <size>` - make a planet and its territories
 - `add node <territory> <resource> <density>` - give a territory one node
 - `set force <territory> <force>` - set a territory's force of nature
+- `set biome <territory> <biome>` - give a territory its biome
 - `add <unit> orbit` - place a unit in orbit before play begins
 - `start` - end the design phase and begin play
 
