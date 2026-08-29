@@ -38,6 +38,7 @@ specific rule.
 - A rule is not part of any one game. It can be named, kept, used in a later game, and given to
   another player
 - A rule does the same thing for whoever holds it
+- A player's rules always finish. Nothing that can be built in the rule editor runs forever
 
 ## No penalty for building infrastructure
 

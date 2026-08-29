@@ -102,41 +102,6 @@ one build and not another* already applies, so a terminal build must offer the r
 a thing is presented may follow the platform it runs on* already licenses whatever that turns out to
 mean there.
 
-### P-117 · Recovered · `spec/invariants.md` -> the same new section as P-111
-
-**Sean's, stated 2026-08-28**, turning a suspicion into a requirement. He should judge whether he
-wants it held that firmly.
-
-> - A player's rules always finish. Nothing that can be built in the rule editor runs forever
-
-**Basis:** Sean, raising goto, assignment and looping - *"I suspect preventing infinite loops is
-something we can guarantee by construction."*
-
-**It is worth stating because everything else leans on it.** The argument for letting the rule editor
-be as expressive as it can be is that nothing built there can hang; without this line that argument
-has no support, and the natural drift is toward a while loop the moment something is awkward to
-express.
-
-**The wording is deliberate: what can be *built*, not what is *accepted*.** The difference between
-those two is the difference between a programming language and a user interface - **a programming
-language's defining property, from a player's side, is that you can write something wrong and find
-out later.** A line saying invalid rules are rejected would permit exactly the experience Sean is
-trying to avoid.
-
-**It states the requirement and not the constructions that satisfy it**, which is the pattern four
-earlier proposals were corrected for missing. Three constructions are known and they are in
-[the note](control-without-tedium.md) - every firing takes a game action, conditions are finite
-queries over game state, rule references form an acyclic graph. **They give a bound rather than mere
-termination**: at most one firing per thing that can act, a number the planet fixes in advance.
-Naming them here would foreclose a fourth.
-
-**Not merged into P-112, though both concern the same editor.** P-112 is about how small a change can
-be; this is about what cannot be built at all. A rule set could satisfy either and fail the other.
-
-**It corrects the record on P-112's basis.** That proposal claimed the guarantee falls out of the
-exhaustion rule alone. It does not: the exhaustion argument covers the outer loop and holds only while
-every firing takes an action. The corrected paragraph is in P-112 above.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -238,6 +203,7 @@ every firing takes an action. The corrected paragraph is in P-112 above.
 | P-112, the middle layer: rules compose, and edits stay proportional                                             | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 | P-113, nothing plays itself, and every rule can be read                                                         | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 | P-114, rules outlive a game and can be given away                                                               | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
+| P-117, a player's rules always finish                                                                           | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 
 ## Rejected
 
