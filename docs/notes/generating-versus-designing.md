@@ -112,4 +112,3 @@ planet is asked for, the harder the restriction is to satisfy. Above about a thi
 is impossible, since that is the largest set of territories no two of which touch.
 [The backlog](spec-backlog.md) records that the restriction lifts when units can cross water; until
 then, *predominantly ocean* is not a planet this game can generate.
-"""
