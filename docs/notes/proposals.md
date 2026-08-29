@@ -42,38 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-118 · Entailed · `releases/first-release.md` -> Scope and Controls
-
-**Cleanup, required by P-116.** Promoting the fourth surface made a release line stale, and this is
-where that staleness sits rather than in a discussion paragraph.
-
-> In **Scope**, after the force-of-nature line:
->
-> - The rule editor is not in this release
->
-> In **Controls**, the surfaces line becomes:
->
-> - The three surfaces in this release are reached by `F1`, `F2` and `F3`, by buttons on the page,
->   and by `/game`, `/console` and `/browser` typed at the console
-
-**Basis:** `spec/interface.md` now says the game presents **four** surfaces, all reachable in every
-build. `releases/first-release.md` says *the three surfaces are reached by* three keys. Read together
-they contradict; read apart, the release line silently claims the spec still says three.
-
-**Sean confirmed the narrowing on 2026-08-29**: *"Agreed, first release played by hand."* So the
-first release does not ship a rule editor, and the alternative - a fourth key, a fourth button and a
-fourth slash form - is not being taken. The reasons stand as they were: the release's whole subject is
-the planet and the loop, and **a rule editor with no condition vocabulary cannot be built yet**.
-
-**It is a narrowing and not a conflict**, which [releases](../../releases/README.md) already provides
-for: the spec is the destination and a release says what is true today. Saying so explicitly is the
-requirement; leaving the release quietly one surface short is what is forbidden.
-
-**One further line is recorded here so it is not missed.** `docs/architecture.md` describes
-`crates/game-front` as *the three surfaces, and the shell that hosts them*. That is **accurate today**
-and needs no change now, but it goes stale the moment the rule editor is built. It belongs to the
-code lane's subject matter; noting it here is what stops it being forgotten.
-
 ### P-122 · Entailed · `releases/first-release.md` -> Capabilities
 
 **Claude's.** A gap found on 2026-08-29, when *first release played by hand* made it load-bearing.
@@ -215,6 +183,7 @@ is a separate question.
 | P-120, a rule carries the number of turns it may run                                                            | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-29 |
 | P-119, every rule has a text form, and the text is the rule                                                     | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-29 |
 | P-121, `/save <file>` writes the history to a file                                                              | `spec/console.md` -> Commands                                                                                          | 2026-08-29 |
+| P-118, the rule editor is out of the first release, and the surfaces line says so                               | `releases/first-release.md` -> Scope, Controls                                                                         | 2026-08-29 |
 
 ## Rejected
 
