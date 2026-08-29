@@ -42,6 +42,64 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-118 · Entailed · `releases/first-release.md` -> Scope and Controls
+
+**Cleanup, required by P-116.** Promoting the fourth surface made a release line stale, and this is
+where that staleness sits rather than in a discussion paragraph.
+
+> In **Scope**, after the force-of-nature line:
+>
+> - The rule editor is not in this release
+>
+> In **Controls**, the surfaces line becomes:
+>
+> - The three surfaces in this release are reached by `F1`, `F2` and `F3`, by buttons on the page,
+>   and by `/game`, `/console` and `/browser` typed at the console
+
+**Basis:** `spec/interface.md` now says the game presents **four** surfaces, all reachable in every
+build. `releases/first-release.md` says *the three surfaces are reached by* three keys. Read together
+they contradict; read apart, the release line silently claims the spec still says three.
+
+**Sean chooses which way this resolves, and the proposal assumes the narrower one.** Either the first
+release ships a rule editor - and then it needs a fourth key, a fourth button and a fourth slash form
+- or it does not, and the narrowing is stated. **The narrowing is assumed here** because the release's
+whole subject is the planet and the loop, and because a rule editor with no condition vocabulary
+cannot be built yet. If Sean wants it in, say so and the proposal is rewritten the other way.
+
+**It is a narrowing and not a conflict**, which [releases](../../releases/README.md) already provides
+for: the spec is the destination and a release says what is true today. Saying so explicitly is the
+requirement; leaving the release quietly one surface short is what is forbidden.
+
+**One further line is recorded here so it is not missed.** `docs/architecture.md` describes
+`crates/game-front` as *the three surfaces, and the shell that hosts them*. That is **accurate today**
+and needs no change now, but it goes stale the moment the rule editor is built. It belongs to the
+code lane's subject matter; noting it here is what stops it being forgotten.
+
+### P-119 · Recovered · `spec/invariants.md` -> Control without tedium
+
+**Sean's, stated 2026-08-28**: *"I am also going to want a text format for these rules."*
+
+> - Every rule has a text form, and the text is the rule. Anything the rule editor can build can be
+>   written as text, and anything written as text can be opened in the editor
+
+**Basis:** the request is his; the wording states it as a **round trip** rather than as a file format,
+which is what makes it an invariant rather than a feature.
+
+**It earns its place three times over.** P-114 says a rule can be given to another player, and *given*
+needs a thing to give - a build posted, pasted or committed is text or it is nothing. P-113 says any
+rule can be read, and text satisfies that more completely than any inspector, because **text can be
+diffed and two published builds compared line by line**. And the round trip is what stops the editor
+and the file drifting apart, which is the failure that makes sharing quietly unreliable.
+
+**It says nothing about syntax, deliberately.** There is a strong candidate - a rule's actions *are*
+commands, `spec/console.md` already has a grammar and a file form, so a rule file could be a command
+file with conditions around it and share the parser. **Whether conditions belong in that same language
+is not yet decided**, and naming a format here would decide it by accident.
+
+**It is the same shape as *everything is expressible*, one layer out.** That line says every change to
+game state is executable as a command; this says every rule is writable as text. Neither says what
+the text looks like.
+
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |

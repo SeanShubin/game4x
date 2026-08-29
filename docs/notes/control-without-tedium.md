@@ -273,6 +273,107 @@ prevents a rule that is legal, terminating and *bad* - a policy that starves its
 one so intricate nobody can read it. That is not a safety property and no construction gives it; it
 is balance, and it is discovered by playing.
 
+## Can a rule play the whole game?
+
+Sean asked whether enough is settled to write a rule that takes a single Ark in orbit to a fully
+exploited planet and a launched Ark. **The actions are complete; three things are missing, and none
+of them is a verb.**
+
+### The action side is finished, and by construction rather than luck
+
+`spec/invariants.md` says every change to game state is representable and executable as a console
+command, and P-115 says a rule is a source of transitions. **So a rule that emits commands can do
+anything a player can do, and the action half of P-111 needs no further work.** Walking the release's
+loop against the command set finds no gap:
+
+| Step in the loop                 | Command                                                 |
+| -------------------------------- | ------------------------------------------------------- |
+| Land the ark, founding           | `land <unit> <territory>`                               |
+| Work the food extractor          | `work <count> <structure> <territory> [<resource>]`     |
+| Build extractors on other nodes  | `build <structure> <territory> [<resource>]`            |
+| Produce pioneers, spread by land | `produce <unit> <territory>`, `move <unit> <territory>` |
+| Build a Yard, produce an Ark     | `build`, `produce`                                      |
+| Launch                           | `launch <unit>`                                         |
+
+**And the goal is already a checkable predicate.** `spec/control.md` defines *fully exploited* - every
+territory that can be taken taken, every structure that can be built built, every storage structure
+full - so the rule has something to stop at rather than a vibe.
+
+### What is missing, one: nothing names a condition
+
+`spec/console.md` says *commands to query the game state are available* and `show <subject>` exists,
+**but no subject is named anywhere in the specification.** A rule needs to ask whether an extractor is
+unworked, how much metal a territory holds, whether a citizen is ready, which neighbours are
+uncontrolled. Every one of those is a fact the model must already have, and none of them has a name.
+
+**This is the open question this note has carried from the start, now promoted from tidy-up to
+blocker.** It is the only one of the three that cannot be worked around.
+
+### What is missing, two: nothing names a thing
+
+`move <unit> <territory>` takes a particular territory. A rule cannot name one in advance - it has to
+say *which*, and *which* is a choice made against the state at the moment it fires.
+
+**Sean's scout example already contains the answer.** *The next unexplored adjacent jungle, then
+grassland, then forest, then mountain* is an ordered list of preferences that yields a thing rather
+than a truth. So **a priority list is not only how a rule expresses a conditional - it is also how a
+rule names a thing**, and the two jobs need one construct rather than two.
+
+`work <count> ...` wants the same treatment in numeric form, since the common case is *as many as
+can* rather than a constant.
+
+### What is missing, three: `end turn` undoes the bound
+
+**This is the sharp one, and it falls straight out of P-117.**
+
+The termination argument was that every action exhausts something and nothing becomes ready again
+until the turn ends. **`end turn` is precisely the action that makes everything ready again** - so a
+rule that can end the turn breaks the very construction that bounded it, and could run for ever.
+P-117 forbids that.
+
+**But a rule that goes from one Ark to the next has to span turns.** So P-117 does not merely forbid
+something here; it forces an explicit stop, and the design has to supply one.
+
+**A turn budget is the cheapest stop that is guaranteed rather than hoped for.** *Run this for at most
+N turns* terminates by construction, is a single number in a user interface, and is exactly the shape
+of what Sean wants it for - **simulate two hundred turns on a ninety-two territory planet and tell me
+what happened**. Paired with the *fully exploited* predicate it gives the natural form: run until
+won, or until the budget runs out, whichever comes first.
+
+**The elegant-looking alternative is unsound and worth naming so nobody reaches for it.** *Stop when a
+turn passes in which nothing was done* fails, because `spec/turn.md` grows population at the end of a
+turn - so a turn in which the player does nothing still changes the state, and the next turn may well
+have something to do.
+
+### So the answer is: not yet, and the gap is narrow
+
+**No new verb is needed and no new engine concept is needed.** What is needed is a vocabulary for
+conditions, one construct that both chooses and decides, and a stop. The first is the only one that
+is genuinely undecided.
+
+## A text form for rules
+
+Sean wants one, and it earns its place three times over rather than being a convenience.
+
+**It is how P-114 actually works.** *Given to another player* needs a thing to give. A build posted on
+a forum, pasted into a message, or committed to a repository is text or it is nothing.
+
+**It is the strongest form of P-113.** *Any rule can be read* is satisfied more completely by text
+than by any inspector, because text can be diffed. **Two published builds can be compared line by
+line**, which is how a community actually improves one.
+
+**And it stops the two views drifting.** The failure mode is an editor that can express something the
+file cannot, or a file that can express something the editor cannot open - and once either appears,
+sharing quietly stops being reliable. **The property to hold is the round trip**, not the syntax:
+anything the editor builds can be written, and anything written can be opened. Filed as P-119.
+
+**There is an obvious candidate for the format and it should be examined rather than assumed.** A
+rule's actions *are* commands, and `spec/console.md` already has a command language with a grammar,
+error positions and a file form in `run <file>`. So a rule file could be a command file with
+conditions wrapped around it, and the two would share a parser. **The question that decides it is
+whether a condition vocabulary belongs in the same language as the commands** - which is the open
+question above, arriving from a second direction.
+
 ## What this opens that is not settled
 
 **Settled while this note was being written.** The rule editor is **its own screen**, and its
