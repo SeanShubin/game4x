@@ -130,38 +130,6 @@ still ends in a person looking at a picture** - which [releases](../../releases/
 accepts, and which P-101 argued is the only honest test for *looks like a world*. What changed is
 that the person can be the code lane, before the work ships.
 
-### P-107 · Entailed · `spec/planet.md` -> Presentation
-
-Fixes the contradiction the code lane reported. **It is Claude's, and it is inside a single
-proposal.**
-
-> Delete *and borders that look geographic*, so the line reads:
->
-> - The realistic drawing shows the world: terrain
-
-**Basis:** reported by the code lane 2026-08-28 - `spec/planet.md` says the realistic drawing shows
-*borders that look geographic*, while `releases/first-release.md` vets the same drawing on **no line
-coinciding with a territory boundary**. If borders are drawn the release fails; if they are not, the
-spec line has nothing implementing it. They implemented terrain without borders and reported rather
-than choosing, which was right.
-
-**P-96 contained both halves of the contradiction.** That proposal scoped **ids** to the practical
-drawing and **the poles** to the practical drawing, said *the two drawings share the camera and
-nothing else* - and left **borders** in the realistic one. Three overlay elements, two scoped. The
-phrase was lifted from `docs/architecture.md`'s *controlled randomness that makes borders look
-geographic rather than computed*, which predates the no-overlap decision by months.
-
-**Borders go the way ids and poles went.** A territory boundary is a fact about the model, exactly as
-an id is. Sean's rule was *it is either realistic or functional, we don't even try to be both* - so
-the realistic drawing carries none of the three.
-
-**Open - border noise now has no home, and that is worth knowing.**
-[`docs/theory/region-splitting.md`](../theory/region-splitting.md) step 6 specifies border
-displacement seeded from the region pair, and `docs/architecture.md` names it as something the
-renderer owns. With borders gone from the realistic drawing, it can only serve the **practical** one -
-where wiggly boundaries would read as a political map rather than as a hex grid. That may be worth
-having, or the research may simply be waiting for a use. It is not lost either way.
-
 ### P-108 · Entailed · `releases/first-release.md` -> Capabilities
 
 Plurality makes one vetted-when loose.
@@ -386,6 +354,7 @@ to be implausible.
 | P-101, four capabilities for the visual work, each with a vetted-when                                           | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-28 |
 | P-102, the six biomes; ocean is unclaimable and never adjacent to ocean                                         | `spec/planet.md` -> What a territory carries                                                                           | 2026-08-28 |
 | P-103, what each biome gives a territory, and why every force of nature is 1                                    | `releases/first-release.md` -> Biomes                                                                                  | 2026-08-28 |
+| P-107, the realistic drawing shows terrain and no borders                                                       | `spec/planet.md` -> Presentation                                                                                       | 2026-08-28 |
 
 ## Rejected
 

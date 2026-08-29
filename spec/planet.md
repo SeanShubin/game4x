@@ -60,7 +60,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - The planet is drawn either practically or realistically, and the user can change which
 - The practical drawing makes adjacency legible. Its colours are flat and make no attempt to
   look like terrain
-- The realistic drawing shows the world: terrain, and borders that look geographic
+- The realistic drawing shows the world: terrain
 - The two drawings share the camera and nothing else. Rotating, zooming and resetting behave the
   same in both
 - The terrain of the realistic drawing is continuous. It varies within a single territory and it
