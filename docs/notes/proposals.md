@@ -99,49 +99,6 @@ is not yet decided**, and naming a format here would decide it by accident.
 game state is executable as a command; this says every rule is writable as text. Neither says what
 the text looks like.
 
-### P-120 · Recovered · `spec/invariants.md` -> Control without tedium
-
-**Sean's, stated 2026-08-28**, after weighing two halting checks he built into the predecessor:
-*"the turn budget does seem to solve all of this."*
-
-> - A rule carries the number of turns it may run, and stops when they are spent
-
-**Basis:** P-117 requires that rules always finish and supplies no stop, and a rule that goes from one
-Ark to the next has to span turns - so `end turn`, which is the action that makes everything ready
-again, undoes the construction that bounded a single turn. **Something has to supply the outer bound
-and this is it.**
-
-**Sean rejected the two alternatives from his own experience and his diagnosis was right.** Halting on
-the same state twice in a row misses any cycle longer than one; halting on any state seen before is
-bounded only by the size of the state space. **Two further reasons kill the whole family**, and they
-are in [the note](control-without-tedium.md): neither check would ever fire in a game that
-accumulates, since exact repetition is not the failure mode - a rule making small meaningless progress
-for ever is - and **a detector is not a bound**, because a player cannot plan around a check that
-fires when it happens to fire.
-
-**The word doing the work is *stated*.** The player knows the number before the rule runs, which is
-what makes the stop something they can reason about rather than something that happens to them. That
-is the property cycle detection cannot have at any price.
-
-**Where the number comes from is now decided, and the line says so.** Sean, 2026-08-29: *"lets make
-the budget belong to the rule for now, analogous to pre-allocated stack space for a function."* So the
-rule **carries** its bound rather than drawing on the player's - which is why the wording moved from
-*a stated number* to *the number it carries*.
-
-**That choice is worth more than a default, because it is what makes P-114 true.** *A rule does the
-same thing for whoever holds it* only holds if the budget travels with the rule. Were the budget the
-player's, two players running one build would get different behaviour from it - the poorer one a
-truncated version - and the sharing guarantee would be a guarantee about the file rather than about
-what it does. **Budget-on-the-rule removes that strain entirely**, and Sean should know that moving it
-to the player later, as *AI fragments* would, brings the strain back. That is a real cost of the
-mechanic, and it was not visible before he made this call.
-
-**What the line still does not say is what running out means**, and that is deliberate. For now Sean
-wants an overkill number whose exhaustion means something has gone badly wrong; under fragments the
-same exhaustion would be an ordinary stop. **Both are compatible with the line as written**, and
-committing to either would go stale the moment the other arrived. The provisional half is in
-[the backlog](spec-backlog.md).
-
 ### P-121 · Entailed · `spec/console.md` -> Commands, the slash paragraph
 
 **Claude's, and small.** A gap found while weighing the two schedules on 2026-08-29.
@@ -306,6 +263,7 @@ is a separate question.
 | P-117, a player's rules always finish                                                                           | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 | P-115, a rule is a source of transitions, not a kind of one                                                     | `spec/invariants.md` -> The game is one function                                                                       | 2026-08-28 |
 | P-116, the rule editor is a fourth surface, and it is two-dimensional                                           | `spec/interface.md` -> Surfaces                                                                                        | 2026-08-28 |
+| P-120, a rule carries the number of turns it may run                                                            | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-29 |
 
 ## Rejected
 

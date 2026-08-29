@@ -39,6 +39,7 @@ specific rule.
   another player
 - A rule does the same thing for whoever holds it
 - A player's rules always finish. Nothing that can be built in the rule editor runs forever
+- A rule carries the number of turns it may run, and stops when they are spent
 
 ## No penalty for building infrastructure
 
