@@ -42,6 +42,125 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-104 · Measured · `spec/planet.md` -> Presentation
+
+**The code lane's, reported 2026-08-28**, with measurements. Forwarded by Sean; the wording is
+theirs.
+
+> - Nothing of how a drawing is made is visible in it. The finest detail a viewer can make out is
+>   terrain, not the mesh, the sampling or the subdivision.
+
+**Basis:** the realistic drawing was built, every test passed, **all four vetted-when lines were
+satisfied**, and it looked blurry and blocky. Both causes measured: colour and normal sampled once
+per vertex, so a planet covering ~640,000 pixels at 24,000 triangles was sampled **once per 27
+pixels** and interpolated across the gap; and biome colour switched at a threshold.
+
+**The specification described the drawing's structure and never its resolution.** No seam, no
+groove, varies within a territory, nothing revealing the division - every one of those is about
+*what shape* the picture has, and none is about *how finely* it is resolved. **A drawing can satisfy
+all four and still be visibly made of triangles.**
+
+**This is the vetted-when mechanism working, not failing.** P-101 wrote four observable checks and
+they all passed on a picture that was wrong - which is the honest outcome when the checks name the
+things that were thought of. The remedy is a fifth check (P-106), not distrust of the four.
+
+**Not merged with the division line, and that restraint is correct.** The code lane declined to fold
+this into *nothing in the terrain reveals how the sphere was divided*, on the grounds that merging
+would assert a relationship neither line states. **Claude agrees and recommends keeping both.** They
+hide different things: one hides a fact about the **model** - which territories exist - and this one
+hides a fact about the **renderer**. A drawing could reveal either without revealing the other, and
+a single line would make it unclear which failure had occurred.
+
+### P-105 · Invented · `spec/planet.md` -> Presentation
+
+**The code lane's**, reported 2026-08-28 and forwarded by Sean.
+
+> - Where two biomes meet, the ground between them is mixed rather than switched. A biome has a
+>   margin, not a border.
+
+**Basis:** biome colour switching at a threshold drew a hard line through ground that has no line in
+it.
+
+**Stated as a fact about the world rather than a technique**, deliberately - the code lane cites
+P-95, which deleted a sentence for prescribing a mechanism. That restraint matters more here than
+usual, because **two different mechanisms already exist** in the research and this line permits both:
+`asset-creator` jitters the biome lookup in parameter space and averages; Sagristà makes the lookup a
+filtered image. See [planet appearance](planet-appearance.md) and
+[procedural planets elsewhere](procedural-planets-elsewhere.md).
+
+**It does not conflict with one territory, one biome.** `spec/planet.md` says a territory has exactly
+one, and this says the **ground** between two biomes is mixed. The picture blends; the model does
+not - which is the same split P-100 already draws, and the reason that line had to exist.
+
+### P-106 · Entailed · `releases/first-release.md` -> Capabilities
+
+**The code lane's**, reported 2026-08-28. Follows from P-104.
+
+> ### Terrain resolved as finely as it is shown
+>
+> - **In** - `spec/planet.md`, *nothing of how a drawing is made is visible in it*
+> - **Vetted when** - at the default camera, no facet, band or flat wash betrays how the surface was
+>   built, and the finest visible detail is terrain
+
+**Basis:** the fifth check, filling the gap the first four left.
+
+**What changed is that this is now checkable without Sean.** The code lane reports that
+`crates/game4x` gained `--shot` to write one frame to a PNG, `--dump` to write the game and mesh as
+text, and a camera placeable by number so two drawings can be photographed identically. **The check
+still ends in a person looking at a picture** - which [releases](../../releases/README.md) already
+accepts, and which P-101 argued is the only honest test for *looks like a world*. What changed is
+that the person can be the code lane, before the work ships.
+
+### P-107 · Entailed · `spec/planet.md` -> Presentation
+
+Fixes the contradiction the code lane reported. **It is Claude's, and it is inside a single
+proposal.**
+
+> Delete *and borders that look geographic*, so the line reads:
+>
+> - The realistic drawing shows the world: terrain
+
+**Basis:** reported by the code lane 2026-08-28 - `spec/planet.md` says the realistic drawing shows
+*borders that look geographic*, while `releases/first-release.md` vets the same drawing on **no line
+coinciding with a territory boundary**. If borders are drawn the release fails; if they are not, the
+spec line has nothing implementing it. They implemented terrain without borders and reported rather
+than choosing, which was right.
+
+**P-96 contained both halves of the contradiction.** That proposal scoped **ids** to the practical
+drawing and **the poles** to the practical drawing, said *the two drawings share the camera and
+nothing else* - and left **borders** in the realistic one. Three overlay elements, two scoped. The
+phrase was lifted from `docs/architecture.md`'s *controlled randomness that makes borders look
+geographic rather than computed*, which predates the no-overlap decision by months.
+
+**Borders go the way ids and poles went.** A territory boundary is a fact about the model, exactly as
+an id is. Sean's rule was *it is either realistic or functional, we don't even try to be both* - so
+the realistic drawing carries none of the three.
+
+**Open - border noise now has no home, and that is worth knowing.**
+[`docs/theory/region-splitting.md`](../theory/region-splitting.md) step 6 specifies border
+displacement seeded from the region pair, and `docs/architecture.md` names it as something the
+renderer owns. With borders gone from the realistic drawing, it can only serve the **practical** one -
+where wiggly boundaries would read as a political map rather than as a hex grid. That may be worth
+having, or the research may simply be waiting for a use. It is not lost either way.
+
+### P-108 · Entailed · `releases/first-release.md` -> Capabilities
+
+Plurality makes one vetted-when loose.
+
+> In **A biome per territory**, change *it is the biome the realistic drawing shows over that ground*
+> to *it is the biome the realistic drawing shows over most of that ground*.
+
+**Basis:** Sean, 2026-08-28 - *"if a territory is jungle, it just has to be mostly jungle by
+plurality, not even majority."*
+
+**The line was written before plurality was chosen.** P-100 says a territory's biome is what the
+terrain gives it and leaves *how* to implementation; the check was phrased as though the drawing
+showed one biome over a territory. Under plurality it shows several, one of which is commonest.
+
+**A territory that is 40% jungle, 35% grassland and 25% desert is jungle**, and its picture correctly
+shows all three. As written the check reads as failing that case, which is the case the rule was
+chosen to allow. **One word fixes it and nothing else changes.**
+
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
