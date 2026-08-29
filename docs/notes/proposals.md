@@ -60,11 +60,10 @@ where that staleness sits rather than in a discussion paragraph.
 build. `releases/first-release.md` says *the three surfaces are reached by* three keys. Read together
 they contradict; read apart, the release line silently claims the spec still says three.
 
-**Sean chooses which way this resolves, and the proposal assumes the narrower one.** Either the first
-release ships a rule editor - and then it needs a fourth key, a fourth button and a fourth slash form
-- or it does not, and the narrowing is stated. **The narrowing is assumed here** because the release's
-whole subject is the planet and the loop, and because a rule editor with no condition vocabulary
-cannot be built yet. If Sean wants it in, say so and the proposal is rewritten the other way.
+**Sean confirmed the narrowing on 2026-08-29**: *"Agreed, first release played by hand."* So the
+first release does not ship a rule editor, and the alternative - a fourth key, a fourth button and a
+fourth slash form - is not being taken. The reasons stand as they were: the release's whole subject is
+the planet and the loop, and **a rule editor with no condition vocabulary cannot be built yet**.
 
 **It is a narrowing and not a conflict**, which [releases](../../releases/README.md) already provides
 for: the spec is the destination and a release says what is true today. Saying so explicitly is the
@@ -168,6 +167,40 @@ a file.
 **Withdraw it freely if the answer is copy and paste.** For a twelve-territory game the history is
 perhaps forty lines, and selecting them from the console is not a hardship. This is filed because the
 gap is real, not because the workaround is bad.
+
+### P-122 · Entailed · `releases/first-release.md` -> Capabilities
+
+**Claude's.** A gap found on 2026-08-29, when *first release played by hand* made it load-bearing.
+
+> ### The loop can be played through
+>
+> - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
+> - **Vetted when** - starting from a single Ark in orbit over the twelve designed territories, a
+>   person playing entirely by hand reaches a fully exploited planet and launches an Ark
+
+**Basis:** the release describes an eight-step loop, a twelve-territory fixture, and the cost of every
+unit and structure - and **all five of its capabilities are about rendering**. Two drawings, terrain
+crossing boundaries, a division that cannot be seen, a biome per territory. **Nothing in the release
+says the game can be played, and nothing would be checked to find out.**
+
+**It was survivable while the release was about the picture and is not now.** Sean has just decided
+the first release is played by hand, which makes the loop the thing being delivered rather than
+context for a planet. A release whose vetting is silent about its own subject would be vetted, deleted
+and leave no record that anyone completed a game.
+
+**It is one coarse check rather than eight, deliberately.** A per-step check would pass on a game that
+cannot be finished - each step working in isolation is exactly the failure the balance trace already
+found once, when every step was individually fine and only territory 11 could afford a Pioneer.
+**End-to-end is the only check that catches an economy that does not close.**
+
+**And it needs no new rule**, which is what keeps it a release entry rather than a proposal into the
+spec. `spec/control.md` already defines *fully exploited* and the win, `spec/console.md` already has
+every verb the loop needs, and the fixture is already in this release.
+
+**Open, and not decided here: whether `end turn` needs an on-screen control.** Sean's description was
+*hitting end turn when done*. Playing through the console satisfies this capability as written, since
+`end turn` is a command. Whether it also wants a button belongs with P-93's on-screen control set and
+is a separate question.
 
 ## Accepted
 
