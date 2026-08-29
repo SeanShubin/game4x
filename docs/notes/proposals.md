@@ -42,43 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-114 · Recovered · `spec/invariants.md` -> the same new section
-
-**Sean's, stated 2026-08-28.** The meta-layer.
-
-> - A rule is not part of any one game. It can be named, kept, used in a later game, and given to
->   another player
-> - A rule does the same thing for whoever holds it
-
-**Basis:** Sean grants the reason games hide this - *"it would be a pain in the ass to respecify
-scouting every game, which is why there is going to need to be a meta-layer of the game where players
-can store"* - and wants community builds baked in rather than left to a wiki: *"I would like to be
-able to take someone else's build from online, plug that into my game."*
-
-**This is a second kind of tedium and P-111 does not touch it.** A rule that dies with its game means
-paying the specification cost every new game, which is worse than the automation it replaced. **Rules
-have to be objects with a life outside any one game** - and once they are objects, giving one away is
-the same act as keeping one.
-
-**The second line is the sharing guarantee, and it constrains.** *Does the same thing for whoever
-holds it* forbids a rule whose behaviour depends on anything but the game it is applied to - no hidden
-local state, no dependence on who wrote it. Without it, *shareable* means the file copies, not that it
-works.
-
-**Sean's builds are a stronger thing than the precedents he cites, and it is worth him knowing why.**
-A StarCraft build order is a **sequence** and a Path of Exile passive build is a **fixed allocation**;
-both work because the game is the same every time. **A planet is generated**, so a food-generation
-build cannot be a recording of what someone did - it has to be a policy that responds to what the
-planet gives it. Two consequences: it degrades rather than breaks, since a build applied to a planet
-with no jungle simply never fires its jungle rules; and **a published build is also a benchmark** -
-two builds on one seed is a controlled experiment, which is the same machinery as the large-planet
-testing that was Sean's reason for doing this now.
-
-**Open, and it does not block this line.** Once builds are shared, the names a rule uses become a
-compatibility surface: Path of Exile builds break every league because a published artifact
-referenced a vocabulary that moved. What a stale build does - fail, warn, or skip the rule it cannot
-resolve - wants deciding, and the wrong answer is the silent one.
-
 ### P-115 · Entailed · `spec/invariants.md` -> The game is one function
 
 Follows from P-114 and the section it joins. **Claude's, and it settles a question P-114 would
@@ -274,6 +237,7 @@ every firing takes an action. The corrected paragraph is in P-112 above.
 | P-111, control without tedium: rules instead of repetition                                                      | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 | P-112, the middle layer: rules compose, and edits stay proportional                                             | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 | P-113, nothing plays itself, and every rule can be read                                                         | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
+| P-114, rules outlive a game and can be given away                                                               | `spec/invariants.md` -> Control without tedium                                                                         | 2026-08-28 |
 
 ## Rejected
 
