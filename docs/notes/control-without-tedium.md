@@ -467,6 +467,13 @@ rule declares its own cost and anyone can run anything. Everything else here - h
 acquired, whether they are spent or held, what happens when a build overruns - follows from that one
 answer, and none of it can be guessed at usefully before it.
 
+**Deferred by Sean on 2026-08-29, and the ordering is right rather than merely convenient.** He
+wants to design a few builds first, with the budget finite but effectively unbounded, and collect
+data on the three dimensions meanwhile. **The question above cannot be answered well without exactly
+that data**: whether a budget belongs to the rule or to the player turns on how large real builds
+actually turn out to be, and nobody knows that yet. See
+[the backlog entry](spec-backlog.md) for what has to be measured in the meantime.
+
 ## What this opens that is not settled
 
 **Settled while this note was being written.** The rule editor is **its own screen**, and its

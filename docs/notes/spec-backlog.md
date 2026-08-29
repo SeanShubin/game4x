@@ -353,6 +353,55 @@ territory (so a territory is one of six) or a property of the boundary between t
 what is permitted or not). A biome already makes the first reading natural, and orbit already makes
 the second one exist - launching crosses between layers rather than moving within one.
 
+### Automation budgets: unbounded now, measured now, priced later
+
+Sean, 2026-08-29: *"I need to experiment with more freedom than makes sense for a regular player to
+have so I can tune it later. For now lets make the budget finite but effectively infinite... For now,
+lets make them concepts I can collect data on."*
+
+**This is a schedule, not a rule, which is why none of it is in the queue.** Three things were
+decided and only the third needs anyone to do anything.
+
+**Fragments are deferred.** Whether the budget becomes an in-game artifact - *AI fragments*, acquired
+and spent - waits until a few builds exist. See
+[control without tedium](control-without-tedium.md) for what the idea buys and the one choice that
+decides whether it encourages modular design at all: **a rule used by three parents must cost one
+element, not three**, or the system rewards copy-paste.
+
+**The budget does not bind during design, and that is not a conflict with P-120.** That line says a
+rule runs for *at most a stated number of turns*. A very large number is stated and finite, so the
+invariant holds untouched while the number is out of the way. **Nothing has to be relaxed or
+excepted** - which is worth noticing, because a rule that needed suspending during design would be a
+badly drawn rule.
+
+**The dimensions are measured while they are unbounded, and this is the part that gets lost if nobody
+writes it down.** Limits have to be set from data. If the first builds are written without recording
+how many turns they ran, how deep they nested and how many elements sat in one rule, **the numbers to
+set the limits from do not exist**, and they cannot be recovered afterwards without rewriting the
+builds. Measuring is nearly free while the builds are being made and expensive to reconstruct later.
+
+So the checkable form, which is what makes it happen rather than remain an intention:
+
+> **Vetted when** - running a build reports the turns it used, the greatest depth it reached, and the
+> largest number of elements in a single rule
+
+**The designer's licence here is a shape the specification already has.** `spec/console.md` carries
+design-phase-only commands - `add node`, `set force`, `set biome` - that no play-phase rule would
+permit, on the grounds that the designer is the cause of what appears there. **A budget that does not
+bind while Sean is designing builds is the same exception rather than a new kind**, so nothing needs
+inventing to allow it.
+
+**Where the experiments can run without any new surface.** P-118 keeps the rule editor out of the
+first release, and this strengthens that rather than straining it: Sean wants *more freedom than makes
+sense for a regular player*, and **a user interface is precisely the thing that would confine him to
+what it offers**. So the text form is the experimental surface and the editor is the player surface -
+P-119 plus `run <file>` is close to enough to begin.
+
+**What is still undecided is scheduling and not design.** No release file covers automation at all;
+`releases/first-release.md` is one tiny planet and the eight-step loop, and P-118 states the editor is
+out. **Whether rules-as-text join that release or get one of their own is Sean's call**, and nothing
+here can be built until one of those happens.
+
 ### Storage, spoilage and decay
 
 Stated by Sean on 2026-08-26, all as later work:
