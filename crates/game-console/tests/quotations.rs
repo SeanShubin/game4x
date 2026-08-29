@@ -33,10 +33,25 @@ fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
-/// Every `.rs`, `.md` and `.html` file under `crates/`, which is where this lane writes.
+/// Every directory the code lane writes in.
+///
+/// It used to be `crates/` alone, and the very first document written outside it -
+/// `prototypes/goldberg-view/README.md` - quoted the specification in the checked form and
+/// went unchecked. A guard whose coverage is one directory name will keep having that
+/// problem.
+///
+/// It stops at this lane's own column deliberately. `spec/`, `releases/` and `docs/` belong
+/// to the documentation lane, and a stale quotation there is real but is not this lane's to
+/// repair - putting them in would red this lane's pre-push gate on a file it must not
+/// touch, which is the trap `CLAUDE.md` warns about. Quotations found there get reported
+/// instead.
+const OURS: [&str; 5] = ["crates", "prototypes", "scripts", "tools", "hooks"];
+
 fn sources() -> Vec<PathBuf> {
     let mut found = Vec::new();
-    collect(&root().join("crates"), &mut found);
+    for directory in OURS {
+        collect(&root().join(directory), &mut found);
+    }
     found.sort();
     found
 }
@@ -60,7 +75,7 @@ fn collect(directory: &Path, into: &mut Vec<PathBuf>) {
             }
         } else if matches!(
             path.extension().and_then(|e| e.to_str()),
-            Some("rs") | Some("md") | Some("html")
+            Some("rs") | Some("md") | Some("html") | Some("sh") | Some("ps1")
         ) {
             into.push(path);
         }

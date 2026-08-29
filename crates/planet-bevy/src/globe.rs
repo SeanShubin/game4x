@@ -146,6 +146,7 @@ impl Plugin for GlobePlugin {
             .insert_resource(Drawing::default())
             .insert_resource(DrawingAsksSeen::default())
             .insert_resource(Drawn::default())
+            .insert_resource(FollowsTheGame(self.follows_the_game))
             .add_systems(Startup, setup)
             .add_systems(
                 Update,
@@ -430,6 +431,7 @@ fn build_globe(
     drawing: Res<Drawing>,
     mut built: Local<bool>,
     mut drawn: ResMut<Drawn>,
+    follows: Res<FollowsTheGame>,
     previous: Query<Entity, BuiltForThisPlanet>,
     mut hud: Query<&mut Text, With<Hud>>,
 ) {
@@ -562,7 +564,7 @@ fn build_globe(
     }
 
     if let Ok(mut text) = hud.single_mut() {
-        *text = Text::new(summary(&world, &panels, *drawing));
+        *text = Text::new(summary(&world, &panels, *drawing, follows.0));
     }
 
     *drawn = Drawn {
@@ -632,7 +634,12 @@ fn spawn_label(commands: &mut Commands, anchor: Vec3, text: &str, colour: Color,
         });
 }
 
-fn summary(world: &World, panels: &mesh::PlanetMesh, drawing: Drawing) -> String {
+fn summary(
+    world: &World,
+    panels: &mesh::PlanetMesh,
+    drawing: Drawing,
+    follows_the_game: bool,
+) -> String {
     let regions = world.tessellation.region_count();
     let shape = match sphere_tessellation::goldberg::arrangements_up_to(regions)
         .into_iter()
@@ -641,16 +648,25 @@ fn summary(world: &World, panels: &mesh::PlanetMesh, drawing: Drawing) -> String
         Some((m, n)) => format!("GP({m},{n})"),
         None => "no Goldberg solid at this count".to_string(),
     };
+    // The bindings are listed from the same flag that installs them, so the two cannot
+    // disagree. A detached globe used to advertise five keys that started no game and a `T`
+    // that changed no drawing - on the first screen of the newest prototype.
+    let bindings = if follows_the_game {
+        format!(
+            "\n1-5 start a new game on a planet of that size - T for the {} drawing",
+            drawing.other().name()
+        )
+    } else {
+        String::new()
+    };
+    // No name for the planet. What a count is *called* is the game's vocabulary, and this
+    // draws solids the game has no word for; the count and the arrangement say more than a
+    // name could, and saying neither keeps `PlanetSize` out of the drawing layer entirely.
     format!(
-        "{} - {regions} territories - {shape}\n{} - {} triangles\n\
-         drag, a finger or the arrows to turn - wheel or pinch to zoom - R to reset\n\
-         1-5 start a new game on a planet of that size - T for the {} drawing",
-        // A count that is one of the game's five sizes is called by its name; any other
-        // is a solid the game has no word for, which a prototype is entitled to draw.
-        PlanetSize::with_territory_count(regions).map_or("planet", PlanetSize::name),
+        "{regions} territories - {shape}\n{} - {} triangles\n\
+         drag, a finger or the arrows to turn - wheel or pinch to zoom - R to reset{bindings}",
         world.degree_summary(),
         panels.triangle_count(),
-        drawing.other().name()
     )
 }
 
@@ -896,6 +912,10 @@ fn keys_to_change_drawing(
         *drawing = drawing.other();
     }
 }
+
+/// Whether this globe follows a game, so the readout can list the bindings that exist.
+#[derive(Resource, Clone, Copy)]
+struct FollowsTheGame(bool);
 
 /// How many changes of drawing had been asked for when the last one was obeyed.
 #[derive(Resource, Default)]
