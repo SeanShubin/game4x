@@ -86,15 +86,6 @@ A decision, not a defect. `planet-terrain` and `planet-render` each depend on th
 line, so `cargo tree -p goldberg-view` still contains the command language. Splitting the crate is
 the same work as report 1's finding 11, which is why the three are one item.
 
-### Q-4 - `planet-ecs` is wired into the shipped app and does nothing there
-
-**to** code · **status** open · **raised** 2026-08-28 · **source**
-[report 1, finding 7](2026-08-28-crate-boundaries-and-duplication.md#7)
-
-A decision, not a defect. Nothing pushes an intent, nothing reads a `Region`, and `WorldTopology`
-goes stale after `/new`. Meanwhile `docs/architecture.md` rule 6 states the losing side as fact.
-Blocks `Q-8`.
-
 ### Q-5 - Engine-free policy lives in `planet-bevy`, where the gate cannot test it
 
 **to** code · **status** open · **raised** 2026-08-28 · **source**
@@ -111,22 +102,22 @@ once.
 
 Called by nothing. The confluence test covers the inlined copy, not the two others.
 
-### Q-7 - Two independent computations of which territories touch
-
-**to** code · **status** open · **raised** 2026-08-28 · **source**
-[report 1, finding 10](2026-08-28-crate-boundaries-and-duplication.md#10)
-
-`binding.rs` and `topology_of` agree only because `Params::default()` sets `jitter: 0.0`. A test
-asserting the two graphs are the same would fail on the day jitter is turned on, which is the day it
-needs to.
-
 ### Q-8 - Two identities for one territory, with opposite conventions
 
-**to** code · **status** open · **raised** 2026-08-28 · **source**
+**to** code · **status** open · **raised** 2026-08-28 · **unblocked** 2026-08-30 · **source**
 [report 1, finding 12](2026-08-28-crate-boundaries-and-duplication.md#12)
 
-`TerritoryId` counts from one, `RegionId` from zero. Correctly waiting on `Q-4`; merging them before
-that is decided would be guessing.
+`TerritoryId` counts from one, `RegionId` from zero. **Unblocked by `Q-4` closing, and the framing
+has changed with it.** It is no longer *two ways of holding state* - `planet-ecs` is out of the
+shipped application and the state lives in `game-model` alone.
+
+What survives is narrower and still real: `globe.rs:553` labels a panel with
+`planet_model::RegionId(region).number()`, and the player then types that number at a console that
+names territories by `TerritoryId`. Two id types, opposite conventions, meeting at the one place a
+player reads a number and types it back. They agree today because both derive from the same seed
+order, and nothing asserts that they do.
+
+Smaller than it was, and no longer waiting on a decision.
 
 ### Q-9 - Small duplication and dead code, six items
 
@@ -223,6 +214,32 @@ trigger is read without being asked for. The hook is unconditional rather than f
 outbox is staged, which is right for a reason worth keeping: **an outbox changes in commits that do
 not touch one**, because a finding is closed by the commit that acts on it and that commit is about
 code. It raised `C-1` against itself, which is the better half of the delivery
+
+### Q-4 - `planet-ecs` was wired into the shipped app and did nothing there
+
+**to** code · **status** **acted** 2026-08-30 · `8346d62`. Verified: `game4x` no longer names
+`planet_ecs` or `topology_of`, and its manifest is `bevy`, `game-console`, `game-front`,
+`planet-bevy`. The crate stays for `prototypes/planet-view`, which is what it was built for.
+
+**One claim to correct, because it matters for `Q-3`:** the code lane reported that `cargo tree` for
+the shipped binary is now bevy, game-console, game-front, planet-bevy and planet-render. That is the
+*manifest*. The tree still contains `planet-ecs`, because `planet-bevy` depends on it and
+`planet-bevy/src/lib.rs:29` uses it for `PlanetViewPlugin`. **The plugin is no longer run; the crate
+is still linked.** Cutting the link is `Q-3`, and this is exactly the cost of `planet-bevy` being
+two adapters in one crate.
+
+The residue is `C-2` in `crates/outbox.md`, which is the specification lane's and correctly not
+theirs: architecture rule 6 says every game entity is an ECS entity, and the crate that made that
+true is no longer in the application
+
+### Q-7 - Two independent computations of which territories touch
+
+**to** code · **status** **acted** 2026-08-30 · `8346d62`. Verified: `topology_of` is called only
+by `prototypes/planet-view` now, so the shipped path computes adjacency once, in the binding, where
+`create planet` is. 174 tests pass across the gate crates.
+
+Resolved by deletion rather than by a test, which is better - the test this lens suggested would
+have asserted that two computations agree, and the fix was that the second had no reader
 
 ### Q-16 - The picture never sees the biome the model has
 
