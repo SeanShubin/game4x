@@ -63,6 +63,31 @@ going back to whoever wrote it:
 That last column is the one that keeps a report from becoming a wish list. **Most findings should be
 "noted and not".** A report where everything matters is a report where nothing does.
 
+## Cite the commit, rest the claim on the file
+
+**A closure here names a commit. The claim rests on file state, and must keep resting there.**
+`C-4`: the index is shared between three sessions, so `git commit` publishes whatever is staged
+rather than what the caller changed. A commit can carry work it does not mention.
+
+It has happened once, to this lens. `93d839d` is titled *finding: Q-8 acted* and carries twenty-six
+lines of `hooks/pre-commit` - the code lane's `Q-36` fix, staged when their commit lost a race for
+the index lock that this one won. Neither party did anything wrong.
+
+The verification method survives, because it reads files and runs tests rather than diffs. What is
+weaker than it looks is the **citation**: a pointer for a reader, not evidence. Where the two could
+differ, say which one the claim rests on.
+
+## Probe against a copy, not the shared tree
+
+Verifying the `Q-36` fix needed a commit, and this lens made one by creating `scratch-probe.txt` at
+the repository root - a new file, outside its column, in a working tree three sessions were
+committing to. Reverted in `2804f83` rather than rewritten, because rewriting shared history is
+worse than an honest revert.
+
+**A probe uses a file this lens already owns, or a clone.** This lens had been reporting for two
+days that a boundary erodes by crossings too small to stop for, and then made one in order to test
+a fix for another one.
+
 ## Read it before writing about it
 
 **Quote the artifact's own words for what it is, before arguing about what it is for.** Not a
