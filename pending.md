@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `lenses/quality/outbox
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-124** - A file nobody can write needs no owner · `docs/notes/proposals.md`
 
 ## What is outstanding
 
