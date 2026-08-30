@@ -2581,7 +2581,6 @@ dependencies = [
  "game-console",
  "game-front",
  "planet-bevy",
- "planet-ecs",
  "planet-render",
 ]
 

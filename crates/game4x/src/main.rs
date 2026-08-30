@@ -75,7 +75,6 @@ fn main() {
         // constructs the exact solid and relaxes nothing.
         soccer: false,
     };
-    let topology = planet_render::topology_of(spec);
 
     // The console, on whatever this platform offers. On the desktop it reads stdin, which
     // needs a thread of its own because the engine's event loop never returns. On the web
@@ -91,8 +90,18 @@ fn main() {
 
     App::new()
         .add_plugins(DefaultPlugins.set(window(&asked)))
-        // Game entities and the turn: ECS, no rendering, no rules.
-        .add_plugins(planet_ecs::PlanetEcsPlugin::new(topology))
+        // No `planet-ecs`. It was added here and nothing ever read it: the game's state
+        // lives in `game-model`, reached through the one console, and the globe follows it
+        // by watching a counter. The regions it spawned were a second, unread copy.
+        //
+        // It also cost a second, independent computation of which territories touch -
+        // `topology_of` existed only to feed it, and it and the console's adjacency agreed
+        // only because `Params::default()` sets no jitter. The day jitter was turned on,
+        // the model and the picture would have disagreed about which territories are
+        // neighbours, silently. One computation now, in the binding, where `create planet`
+        // is.
+        //
+        // The crate stays: `prototypes/planet-view` uses it for what it was built for.
         // The solid, a camera, and the pointer: the only place an engine's opinions land.
         // It follows the one Session by watching a counter; it never reaches into it.
         .add_plugins(planet_bevy::globe::GlobePlugin::new(spec))

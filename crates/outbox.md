@@ -33,6 +33,33 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-2 - Architecture rule 6 states the losing side of a decision as fact
+
+**to** spec · **status** open · **raised** 2026-08-30 · **source** `Q-4`
+
+`docs/architecture.md` rule 6: *every game entity is an ECS entity - there is no second way of
+holding game state.* That is not what the code does and has not been for some time. The game's
+state is `game_model::Game`, reached through the one console, and `Session::run` is the only way
+it moves. `spec/invariants.md` describes the same arrangement - a state and a transition yield a
+new state - and says nothing about entities.
+
+`planet-ecs` was the crate that made rule 6 true, and this lane has just removed it from the
+shipped application, because nothing read it: the regions it spawned were a second, unread copy of
+what `game-model` already holds. The crate stays for `prototypes/planet-view`, which uses it for
+what it was built for.
+
+So the rule now describes a design the application does not have, and a reader following it would
+build the second way of holding state that `spec/invariants.md` forbids. Two ways to settle it, and
+this lane has no standing to pick:
+
+- **The rule is stale** and should describe the arrangement that exists - one model, one door,
+  entities where an engine needs them.
+- **The rule is the destination** and the code has drifted from it, in which case the drift is
+  large and worth stating as such rather than left to be discovered.
+
+Reported rather than fixed because `docs/` is not this lane's column, and because which of those is
+true is a design question rather than a defect.
+
 ### C-1 - Whose file is a generated one at the repository root?
 
 **to** spec · **status** open · **raised** 2026-08-30 · **source** `Q-33`
