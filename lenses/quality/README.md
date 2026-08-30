@@ -87,6 +87,11 @@ It closes the window in the one direction this lens controls - it does not stop 
 committing while this one's files are staged. `C-4` is the general problem and it is the
 specification lane's.
 
+**It has a residue: unstage it.** `hooks/pre-commit` stages `pending.md`, and a pathspec commit does
+not take the staged copy, so a stale one is left behind in the shared index for the next
+perspective's commit to publish. `git reset pending.md` afterwards, having checked it matches what
+was committed. Using the workaround without this feeds the problem it works around.
+
 Live instance, 2026-08-30: an empty `docs/process.md` sat staged in the index while this lens was
 closing four findings. It belongs to the specification lane, was not committed here, and was left
 alone rather than unstaged - another perspective may be mid-operation on it.
