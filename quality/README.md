@@ -19,6 +19,30 @@ The consequence worth stating plainly: **a report is only useful if someone acts
 that is true, well-argued and never acted on is indistinguishable from one that was never written.
 So a report names what to do, not merely what is wrong.
 
+## The outbox
+
+**[`outbox.md`](outbox.md) is the only file another perspective has to read.** A report carries the
+argument; the outbox carries the claim, its reader and its state. Each item has four things:
+
+| Field      | What it is                                                                          |
+| ---------- | ----------------------------------------------------------------------------------- |
+| **id**     | `Q-n`, stable, so a commit can cite it and a later report can say what became of it |
+| **to**     | `sean`, `spec`, `code` - or absent, meaning *not ready, no reader*                  |
+| **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered`                                |
+| one line   | what it is, so a reader can triage without opening the report                       |
+
+**Research that is not ready is addressed to nobody.** It lives in a dated report, costs no one any
+attention, and becomes visible the moment this file gives it a reader. Nothing is held back by
+discipline; it is held back by not yet having one.
+
+**If nothing in the outbox is `open`, this lens knows of nothing outstanding.** That is a promise
+about the file, not about the tree.
+
+**A producer may decline a finding, and often should.** It says so in the commit that declines it,
+citing the id, and the outbox records it. `Q-16` was wrong and was withdrawn after the code lane
+refused it - and the refutation produced better output than the finding had. **Check a rejection
+before defending it.**
+
 ## What a report says
 
 Every finding carries four things, because a finding missing any of them cannot be acted on without
@@ -62,6 +86,9 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [The workflow, ready to paste](2026-08-30-workflow-to-adopt.md)
+  - 2026-08-30. The `CLAUDE.md` section and the index tool, written out verbatim for the
+    two lanes that own the files they go in.
 - [A recommended workflow](2026-08-29-workflow.md)
   - 2026-08-29. **Input to a decision, not a finding.** Seven things move between the
     perspectives, six have a channel, and a blocked question from code has none.
