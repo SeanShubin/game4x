@@ -297,6 +297,22 @@ behaves like forgetting. **The queue is what gets read; prose is not.** P-85 fou
 contradictions in one release file, and two of them had been flagged at the time and left there -
 long enough for the coding instance to implement a rule the specification does not have.
 
+**A section that takes a second proposal gets re-read whole.** The staleness rule above is
+directional and per item - *does landing this invalidate something else?* A contradiction is
+neither: it is symmetric, and it is between items. P-100 and P-109 both passed the staleness check
+correctly and still could not both hold, because nothing asked whether the section they landed in
+agreed with itself.
+
+So when a proposal lands in a section another proposal has already landed in, re-read that section
+whole and ask whether all of it can hold at once. **A trigger, not a duty** - a duty rots and a
+trigger fires. It is not scoped to a session: a contradiction does not depend on the two rules
+arriving together, and in a specification written over weeks the second one usually arrives later.
+
+Measured against the 106 proposals landed so far it fires on sixteen sections, and would have caught
+both known collisions - P-100 against P-109, and P-96 leaving borders in the realistic drawing while
+scoping ids and poles out of it. **Firing too often is the correct error here**: a false fire costs
+re-reading ten bullets, and the miss cost two days.
+
 **Every promotion asserts.** Copy, then verify the text is present in the target file, and
 fail loudly if it is not. Claude has three times reported that something landed when it had
 not - thirteen missing rows in the proposals file, three files missing from the spec index -
