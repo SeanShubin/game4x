@@ -24,16 +24,21 @@ So a report names what to do, not merely what is wrong.
 **[`outbox.md`](outbox.md) is the only file another perspective has to read.** A report carries the
 argument; the outbox carries the claim, its reader and its state. Each item has four things:
 
-| Field      | What it is                                                                          |
-| ---------- | ----------------------------------------------------------------------------------- |
-| **id**     | `Q-n`, stable, so a commit can cite it and a later report can say what became of it |
-| **to**     | `sean`, `spec`, `code` - or absent, meaning *not ready, no reader*                  |
-| **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered`                                |
-| one line   | what it is, so a reader can triage without opening the report                       |
+| Field      | What it is                                                                                                                                                |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **id**     | `Q-n`, stable, so a commit can cite it and a later report can say what became of it                                                                       |
+| **to**     | `sean`, `spec`, `code` - or absent, meaning *not ready, no reader*                                                                                        |
+| **status** | `open`, `noted`, `acted`, `rejected`, `withdrawn`, `answered`. Only `open` is outstanding; `noted` is *recorded so it is not re-found*, which is terminal |
+| one line   | what it is, so a reader can triage without opening the report                                                                                             |
 
 **Research that is not ready is addressed to nobody.** It lives in a dated report, costs no one any
 attention, and becomes visible the moment this file gives it a reader. Nothing is held back by
 discipline; it is held back by not yet having one.
+
+**A producer's backlog is not Sean's queue.** Items here are addressed to a producer and cost that
+producer, not Sean. `CLAUDE.md`'s limit of fifteen is on the *proposal* queue, justified by his
+reading time; counting a lens's findings against it was this lens's error and is
+[corrected](2026-08-30-two-budgets.md). **This file's length is not a number to report to Sean.**
 
 **If nothing in the outbox is `open`, this lens knows of nothing outstanding.** That is a promise
 about the file, not about the tree.
@@ -86,6 +91,9 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [Two budgets, counted as one — a correction](2026-08-30-two-budgets.md)
+  - 2026-08-30. Why the queue is empty and the counter said fifteen. This lens's error,
+    and the one generated document that should replace a remembered command.
 - [Who checks the specification is buildable, and where Sean looks](2026-08-30-readiness-and-one-surface.md)
   - 2026-08-30. Two recommendations, both against adding machinery: no readiness lens, and
     no `to sean` address.

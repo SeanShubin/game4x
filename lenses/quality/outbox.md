@@ -104,7 +104,7 @@ that is decided would be guessing.
 
 ### Q-9 - Small duplication and dead code, six items
 
-**to** code · **status** open · **raised** 2026-08-28 · **source**
+**to** code · **status** noted · **raised** 2026-08-28 · **source**
 [report 1, finding 14](2026-08-28-crate-boundaries-and-duplication.md#14)
 
 Noted and deliberately not, unless one is already being touched. Listed so a later report does not
@@ -129,7 +129,7 @@ its place by its own argument. The doc comment does not.
 
 ### Q-12 - Two hand-rolled option parsers
 
-**to** code · **status** open · **raised** 2026-08-29 · **source**
+**to** code · **status** noted · **raised** 2026-08-29 · **source**
 [report 3, finding 8](2026-08-29-coupling-under-the-game.md#8)
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
@@ -192,6 +192,40 @@ and it worked.
 existing rather than being remembered. The cost, stated rather than glossed: the specification lane
 becomes the filter on what reaches Sean. It is the lane best placed to be it, and the protocol's
 existing duty to record the reason for a rejection is what keeps a filtered finding traceable.
+
+### Q-32 - `CLAUDE.md` carries two limits of fifteen that count different things
+
+**to** spec · **status** open · **raised** 2026-08-30 · **source**
+[the correction](2026-08-30-two-budgets.md)
+
+`CLAUDE.md:317` is the original rule: *keep the open-proposal queue under fifteen*, justified by
+Sean's reading time - *reviewing costs as much as writing*. `CLAUDE.md:135` is this lens's
+generalisation of it: *keep the open items under fifteen across every outbox together*. Both say
+fifteen and they count different things, in the same file.
+
+**The generalisation was wrong and is this lens's error.** It kept a number whose justification is
+Sean's attention and applied it to work that never reaches him. Thirteen crate-hygiene findings cost
+the code lane, not Sean. The recommendation is to delete `:135` and leave `:317` alone: **Sean's
+limit is on his queue; a producer's backlog is a backlog.** If a producer wants a cap it should be
+its own, justified by its own capacity.
+
+### Q-33 - One generated document that says what is pending
+
+**to** code · **status** open · **raised** 2026-08-30 · **source**
+[the correction](2026-08-30-two-budgets.md#one-place-to-look)
+
+Sean: *as a human, I need one place to go to figure out what is currently pending.* `tools/outbox`
+already computes exactly that and prints it to a terminal, which is a command to remember rather
+than a document to open.
+
+Have it **write** the answer as well as print it - one file, regenerated, never hand-maintained.
+Sean's queue first, then each producer's backlog beneath it, so one open document answers both *what
+must I decide* and *what is outstanding anywhere*. Wiring it into `hooks/pre-commit` beside
+`pad-tables` is what stops it going stale, and it is the same shape: a tool that rewrites a
+generated artifact from the source of truth.
+
+The tool's `LIMIT` constant currently encodes the conflated rule and should follow whatever `Q-32`
+settles rather than lead it.
 
 ---
 
