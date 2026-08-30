@@ -26,58 +26,175 @@ Four tiers, and the boundary is the directory it lives in.
 | `docs/`       | shared     | The "why" layer. Reviewed. Follow the rules in [docs/README.md](docs/README.md).    |
 | `docs/notes/` | **Claude** | Derived records of conversation. Not binding. Sean is not expected to read them.    |
 
-## Three instances
+## Perspectives
 
-Three Claude instances work in this repository at once. **The boundary is the kind of work, not
-the directory**, and each writes in exactly one place.
+Several Claude instances work in this repository at once. **Two of them produce; the rest look.**
 
-| Lane                                | Writes                                                                      | Reads      |
-| ----------------------------------- | --------------------------------------------------------------------------- | ---------- |
-| **Documentation and specification** | `spec/`, `releases/`, `docs/`, `README.md`, this file                       | everything |
-| **Code and deployment**             | `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, CI, cargo | everything |
-| **Quality**                         | `quality/`, and nothing else                                                | everything |
+**The producers** own what ships. `spec/` is the destination and `crates/` is the artifact, and each
+is authored by exactly one instance.
 
-**Every lane reads everything; no lane writes outside its column.** That is what makes them
-composable rather than merely separated - a lane that cannot read the others has to guess, and a
-lane that can write to another has to be trusted.
+**The lenses** are research perspectives. Each takes the same problem with a different focus, reads
+everything, produces claims about the producers' work, and ships nothing. Quality is one. A lens is
+not a lane beside the others; it is a way of looking at all of them.
 
-None of them crosses. The documentation instance does not edit code, **even to fix an obvious
-break** - it reports the break and leaves it. The code instance does not write specification. The
-quality instance **never edits what it reviews**: it produces a report and the other lanes act on
-it, which is the same shape as specification never editing code.
+| Perspective                     | Writes                                                                      | Reads      |
+| ------------------------------- | --------------------------------------------------------------------------- | ---------- |
+| **Specification**               | `spec/`, `releases/`, `docs/`, `README.md`, this file                       | everything |
+| **Code**                        | `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, CI, cargo | everything |
+| **Quality**, and any other lens | its own directory under `lenses/`, and nothing else                         | everything |
 
-**A quality report is addressed to both other lanes, not just to code.** Each acts on the findings
-in its own column and leaves the rest. This has to be written down because the quality brief asks
-for **contradictions with the specification** as its highest-value finding, and the code lane
-cannot act on one - `spec/` is not its column. A report whose only named reader is forbidden to
-fix what it is asked to look for would route its best findings nowhere.
+**Everyone reads everything; nobody writes outside their own column.** That asymmetry is what makes
+them composable rather than merely separated - a perspective that cannot read the others has to
+guess, and one that can write to another has to be trusted. **It binds each producer against the
+other producer too**: the specification lane does not edit code, *even to fix an obvious break* - it
+reports the break and leaves it - and the code lane does not write specification.
 
-**Quality runs nothing that writes.** Reading the tree, running `cargo clippy`, `cargo test` and
+Three rules follow from the asymmetry, and they are not symmetric:
+
+- **A producer never writes into a lens's directory.** A lens whose findings a producer can edit has
+  stopped being independent evidence.
+- **A lens never writes into a producer's directory.** A lens that can edit `crates/` is a second
+  author of the code with none of the responsibility.
+- **A lens is refutable, and a producer is the thing that refutes it.** A producer that declines a
+  finding says so in the commit that declines it, citing the id. Being refuted is the lens working,
+  not failing.
+
+**Quality is still at `quality/` rather than `lenses/quality/`.** The move is outstanding: it would
+orphan links this file and the proposal queue carry, and it changes a directory the lens itself is
+writing to, so it needs sequencing between the three of us rather than doing unilaterally. Until it
+lands, `lenses/<name>/` names the rule and `quality/` names the one lens there is.
+
+**Quality runs nothing that writes.** Reading the tree and running `cargo clippy`, `cargo test` and
 `cargo tree` are all fine. `cargo fmt`, `cargo fix` and `clippy --fix` are not, because they modify
-the very files being judged - and a review that alters its subject is no longer a review. See
-[quality](quality/README.md).
+the very files being judged - and a review that alters its subject is no longer a review.
 
-Five consequences, all of which have teeth:
+Four things the perspectives make necessary, all of which have teeth:
 
-- **Stage by name, never `git add -A`.** Another lane's work is often uncommitted in the same tree.
-  `-A` sweeps it into your commit, and two lanes then share a history entry that describes half of
-  it.
+- **Stage by name, never `git add -A`.** Another perspective's work is often uncommitted in the same
+  tree. `-A` sweeps it into your commit, and two of them then share a history entry that describes
+  half of it.
 - **`hooks/pre-push` runs the full gate** - `cargo fmt`, clippy and the test suite across every
-  crate. A documentation-only or report-only push is therefore gated on code that lane did not
-  write and must not repair. If it fails for that reason, **say so and stop**; whether to
+  crate. A documentation-only or report-only push is therefore gated on code that perspective did
+  not write and must not repair. If it fails for that reason, **say so and stop**; whether to
   `--no-verify` is Sean's call, not Claude's.
-- **Re-read before asserting.** A file read earlier in the session may have been rewritten by
-  another instance since. Anything claimed about code needs a fresh look, not a memory.
-- **A finding is not a fix, and neither is a fix a finding.** When a lane sees a problem outside its
-  column, it writes it down where Sean will see it - a proposal, a report - and stops. Noting it in
-  a reply is the failure mode: it reads like diligence and behaves like forgetting.
-- **Read the quality reports before claiming the queue is clean.** A contradiction found by a lane
-  that cannot file it sits in `quality/` until the lane that can goes looking. One did, for a day,
-  and the queue was empty the whole time - which is exactly what the queue promises cannot happen.
+- **Re-read before asserting.** A file read earlier in the session may have been rewritten by another
+  instance since. Anything claimed about code needs a fresh look, not a memory.
+- **Check your own outbox is not stale before adding to it.** An item marked `open` that another
+  perspective has already acted on costs a reader exactly as much as a real one.
 
 Historical exception, so the boundary is not mistaken for a description of the past:
 `tools/pad-tables/` and the tests in `crates/sphere-tessellation/` were written from the
-documentation lane before the split existed.
+specification perspective before the split existed.
+
+## Outboxes
+
+Every perspective keeps **one outbox** in its own directory. It is the only thing another
+perspective has to read.
+
+- The specification lane's outbox is [`docs/notes/proposals.md`](docs/notes/proposals.md).
+- A lens's outbox is `lenses/<name>/outbox.md`.
+- The code lane's outbox is `crates/outbox.md`, and holds the questions that block it.
+
+Every item in an outbox carries four things:
+
+| Field      | What it is                                                                              |
+| ---------- | --------------------------------------------------------------------------------------- |
+| **id**     | Stable and unique, so a commit can cite it and a later report can say what became of it |
+| **to**     | `sean`, `spec`, `code`, or a named lens - or **absent**, meaning *not ready, no reader* |
+| **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered`                                    |
+| one line   | What it is, so a reader can triage it without opening the source                        |
+
+**`to` is the field that does the work.** It turns every instance's reading list from a directory
+sweep into a query, which is what keeps an instance focused on its own purpose.
+
+**Unaddressed research is addressed to nobody, and that is a feature.** Work that is not ready costs
+no one any attention. It sits in a dated note in its own directory and becomes visible the moment
+its author gives it a reader - held back by not having one, rather than by discipline.
+
+### What each perspective reads
+
+| Perspective | Inbox                                                                   | Never has to read       |
+| ----------- | ----------------------------------------------------------------------- | ----------------------- |
+| **Sean**    | everything `to sean` - proposals awaiting review, and blocked questions | any lens's raw research |
+| **Spec**    | `to spec`, plus `docs/notes/spec-backlog.md`                            | code reviews            |
+| **Code**    | `to code`, plus `releases/`                                             | the proposal queue      |
+| **A lens**  | everything - that is what a lens is for                                 | -                       |
+
+## Nothing open means nothing outstanding
+
+**If nothing in any outbox is `open` and addressed, nothing known is outstanding.**
+
+That is a promise about the outboxes, not about the product: it does not say the specification is
+complete or the code correct, only that **everything any perspective knows to be wrong is sitting
+where its reader will find it.**
+
+So a contradiction has exactly one resting place, and it is an outbox. When any perspective finds
+one, it files it **the moment it is found**, whatever else is happening. Never a paragraph in a
+discussion, never a sentence in a reply, never a line in a note.
+
+This has already failed once, in the way this rule exists to prevent. `P-123`'s contradiction sat in
+a quality report for a day while the proposal queue was empty - and for that whole day the queue
+said, truthfully by its own old wording and falsely in fact, that nothing known was inconsistent.
+The promise now spans every outbox for exactly that reason.
+
+**Keep the open items under fifteen across every outbox together, not fifteen each.** Past that,
+reviewing costs as much as doing and the mechanism has failed. A lens producing many true findings
+crowds out another lens's fewer, better ones, so a lens competes on the value of a finding rather
+than the count.
+
+## The cycle
+
+1. **Sean says something.** The specification lane records it in `docs/notes/spec-backlog.md`. Only
+   the writing counts.
+2. **A lens explores**, in its own directory, addressed to nobody. Research sits here as long as it
+   needs to.
+3. **A lens is ready**, and addresses a finding: `to spec` if it needs a decision, `to code` if it
+   is a defect in the build.
+4. **The specification lane turns `to spec` items into numbered proposals**, naming the destination
+   file and section. It does not decide anything.
+5. **Sean reviews the queue.** He says what should change; the specification lane makes that change
+   and **shows the result**; he reads it and says *promote P-n*. He may edit the text in place
+   instead, and often does when he already knows the words - see **Promotion** below for the full
+   split and why *promote* has to mean *I have read this*. This is the one step that cannot be
+   delegated, which is why everything else exists to keep the queue short enough to read.
+6. **The specification lane promotes verbatim and asserts it landed.** A promotion that makes
+   something else stale files the cleanup immediately.
+7. **The specification lane updates `releases/`** to say what is being built now. A release never
+   invents a rule.
+8. **The code lane builds** from `releases/` and `spec/`.
+9. **The code lane hits a gap and does not stop.** It does everything that does not depend on the
+   answer, files a question `to sean` **stating the assumption it proceeded under**, and carries on.
+   A blocked question is filed and worked around, never waited on - otherwise a session stalls until
+   Sean is free, and the assumption that was made is discovered later rather than recorded now.
+10. **A lens reviews the result**, and it returns to step 3.
+
+## Starting a new lens
+
+A lens costs attention, which is the scarce resource. Before starting one, it has to answer: **what
+class of finding will this produce that neither producer would?** If the honest answer is *the same
+things, sooner*, that is a case for better instructions to the code lane, not a new directory.
+
+To start one, create `lenses/<name>/README.md` and `lenses/<name>/outbox.md`, and tell it:
+
+> You are the `<name>` lens. Read `CLAUDE.md` → Perspectives, then `lenses/<name>/README.md`.
+>
+> You write `lenses/<name>/` and nothing else. You read everything. You never edit what you review,
+> and you never run `cargo fmt`, `cargo fix` or `clippy --fix` - they modify the files you are
+> judging.
+>
+> Your focus is `<one sentence: what this lens looks for that neither producer would>`.
+>
+> Findings go in `lenses/<name>/outbox.md`, each with an id, a `to`, a `status` and one line, and
+> each pointing at a dated report that carries the argument. Research that is not ready is addressed
+> to nobody and costs no one anything.
+>
+> Every finding says four things, and one missing any of them cannot be acted on without coming back
+> to you: **where** - file and line; **what** - the defect in one sentence; **why** - what it costs;
+> **whether** - worth doing now, eventually, or noted and deliberately not. Most findings should be
+> noted and not. A report where everything matters is a report where nothing does.
+>
+> When a producer declines a finding, check it before defending it. It will often be right, and the
+> check is worth more than the finding was.
 
 ## The rule that matters
 
@@ -90,21 +207,6 @@ measurement backs it. Analysis does not become policy by accumulation.
 - The notes **justify**. Long, dated, measured.
 - The spec links down to a note for reasoning; the note links up to the spec for the
   decision. Never the reverse. A note must never read as though it settled something.
-
-## An empty queue means no contradictions
-
-**If [the queue](docs/notes/proposals.md) is empty, Sean can take it that nothing known is
-inconsistent.** That is a promise about the queue, not about the specification: it does not say the
-spec is complete or correct, only that **everything Claude knows to be wrong is sitting where he
-will see it.**
-
-So a contradiction has exactly one resting place. When Claude finds one - between two spec files,
-between the spec and a release, between a note and either - it becomes a proposal **the moment it is
-found**, whatever else is happening. Never a paragraph in a discussion, never a sentence in a reply,
-never a line in a note.
-
-This is what makes an empty queue mean something. If contradictions can sit in prose, an empty queue
-means only that nobody has written anything down lately.
 
 ## Editing `spec/` and `releases/`
 
