@@ -62,6 +62,9 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [Notes on lenses, from the one that exists](2026-08-29-lenses.md)
+  - 2026-08-29. **Input to a decision, not a finding.** What three reports suggest about
+    several research lenses, and what has to change before there is a second one.
 - [Who reads a report](2026-08-29-who-reads-a-report.md)
   - 2026-08-29. Both lanes must read a report, nothing says so, and a known spec
     contradiction is sitting outside the queue that promises to hold it.
