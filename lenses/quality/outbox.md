@@ -32,6 +32,20 @@ was wrong, and being refuted is the lens working.
 
 ## Open
 
+> **A correction to how this lens estimates cost, 2026-08-30.** `Q-34` told the code lane that
+> `tools/outbox` *"already parses `docs/notes/proposals.md` including each proposal's destination and
+> date, so the flag costs almost nothing."* **It did not.** The tool read that file and parsed nothing
+> from it, because the queue is a table and the tool was deliberately built not to parse tables. The
+> work was table parsing plus grouping, not grouping alone.
+>
+> This is the third time this lens has asserted something without checking it - a specification
+> requirement taken from a code comment (`Q-16`), a missing channel that existed the whole time, and
+> now a capability that did not. The pattern is specific and worth naming: **claims about state get
+> verified here; claims about capability and cost do not.** An estimate handed to a producer is a
+> claim about code and earns the same check as any other. Verified before filing from now on, or
+> filed without a number.
+
+
 ### Q-1 - The palette exists in three places and nothing checks the copies agree
 
 **to** code · **status** open · **raised** 2026-08-28 · **source**
@@ -134,27 +148,6 @@ its place by its own argument. The doc comment does not.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-30 - `crates/outbox.md` does not exist, so a blocked question has nowhere to go
-
-**to** code · **status** open · **raised** 2026-08-30 · **source** this file
-
-`CLAUDE.md` → Outboxes now says the code lane's outbox is `crates/outbox.md`, and `tools/outbox`
-reports `not present: crates/outbox.md`. Until it exists, **step 9 of the cycle has nowhere to
-land**: the code lane cannot file a question that blocks it, so it either stops or asks in a reply -
-which is the failure `CLAUDE.md` names by name.
-
-It is also a hole in the guarantee directly above it. *Nothing open means nothing outstanding* reads
-over the outboxes that exist, and a perspective with no outbox is silently excluded rather than
-visibly empty. An empty `crates/outbox.md` with a header is worth more than no file, because empty
-is a claim and absent is not.
-
-Found by the specification lane while adopting the workflow, and filed here because `crates/` is not
-its column either.
-
-While in that file: the tool still probes the pre-move `quality/outbox.md` and prints it under *not
-present*, so a completed move now reads as a missing file. Not worth an item of its own; worth the
-one-line deletion whenever `crates/outbox.md` brings someone here.
-
 ### Q-15 - Who checks the specification is buildable
 
 **to** spec · **status** open · **raised** 2026-08-29 · **decided** 2026-08-30 by Sean · **source**
@@ -225,31 +218,6 @@ The rule is therefore: **when a proposal lands in a section another proposal has
 re-read that section whole and ask whether all of them can hold at once.** They asked whether that
 is still this lens's item. It is the same rule with a bug removed, and their version is better than
 the one filed.
-
-### Q-34 - Emit the same-section flag the trigger depends on
-
-**to** code · **status** open · **raised** 2026-08-30 · **source** `Q-15`
-
-`Q-15` is decided: more than one proposal landing in the same file and section prompts a whole-
-section re-read. **That is only a trigger if something emits it.** If the rule lands in `CLAUDE.md`
-and nothing flags the condition, it becomes exactly the hand-held duty the decision rejected.
-
-`tools/outbox` already parses `docs/notes/proposals.md` including each proposal's destination and
-date, so the flag costs almost nothing: group the accepted proposals by destination and date, and
-report any group larger than one.
-
-Tested against history it fires where it should - on 2026-08-28, six into `spec/planet.md` →
-Presentation, five into `spec/invariants.md` → Control without tedium, and four into
-`spec/planet.md` → What a territory carries, which is the section where `P-100` and `P-109`
-collided.
-
-Worth pointing at `Q-33` as well: the flag belongs in the generated pending document, where it is
-read without being asked for, rather than only on a terminal.
-
-**Use three, not two** - see the calibration under `Q-15`. At two it fires 13 times across 4 of 6
-days; at three it fires 4 times on 1 day and still catches the contradiction it exists for. Worth
-making the threshold a named constant rather than a literal, since it is the one number here that
-was tuned rather than reasoned.
 
 ### Q-31 - Remove the `to sean` address; the queue is the one surface
 
@@ -333,27 +301,6 @@ generated artifact from the source of truth.
 The tool's `LIMIT` constant currently encodes the conflated rule and should follow whatever `Q-32`
 settles rather than lead it.
 
-### Q-35 - Two spellings of the same section split one group into two
-
-**to** code · **status** open · **raised** 2026-08-30 · **source** this file
-
-`docs/notes/proposals.md` writes a destination two ways: 80 rows use ASCII `->` and 17 use the
-Unicode arrow. `tools/outbox`'s same-section flag groups on the raw string, so **one section written
-both ways is counted as two sections** and each group is smaller than it really is.
-
-It hits the two sections that matter most:
-
-- `spec/planet.md` → *What a territory carries* - where `P-100` and `P-109` collided
-- `spec/planet.md` → *Presentation* - where `P-96` left borders in the realistic drawing while ids
-  and poles were scoped out of it
-
-Nothing is hidden today, because the 2026-08-28 groups happen to be spelled consistently. That is
-luck rather than design: the split is silent, and a group that should read four could read two and
-two. Normalising the arrow before grouping is a one-line fix.
-
-Worth doing together with the specification lane's improvement to `Q-15` - dropping the date scope -
-since both change how the flag groups, and both make it fire on cases it currently misses.
-
 ---
 
 ## Resolved
@@ -369,6 +316,25 @@ in - see [the record](2026-08-30-workflow-to-adopt.md#what-changed-on-the-way-in
 
 **to** code · **status** **acted** 2026-08-30 · `e233186`. Verified: it reads both outboxes, names
 the ones missing, and reports by addressee
+
+### Q-30 - `crates/outbox.md` did not exist, so a blocked question had nowhere to go
+
+**to** code · **status** **acted** 2026-08-30 · `67c8b40`. Verified: the file exists, is empty and
+says so, and carries a guarantee in the same shape as this one. `tools/outbox` reads three outboxes
+
+### Q-34 - Emit the same-section flag the trigger depends on
+
+**to** code · **status** **acted** 2026-08-30 · `67c8b40`, corrected in `d6908c9`. Verified: the
+date scope is gone, the flag reports 16 sections rather than 13 - the number the specification lane
+predicted - and `two_proposals_a_week_apart_in_one_section_still_flag` builds the case the dated
+version could not see. Threshold left at more than one. Twelve tests pass
+
+### Q-35 - Two spellings of the same section split one group into two
+
+**to** code · **status** **acted** 2026-08-30 · fixed on both sides independently: `073d5e2`
+normalised the arrows in `docs/notes/proposals.md`, and `67c8b40` normalises before grouping with
+`one_arrow`, guarded by `the_arrow_style_does_not_split_a_section`. The code lane hit the same thing
+while building `Q-34` and had it fixed before the item was filed
 
 ### Q-16 - The picture never sees the biome the model has
 
