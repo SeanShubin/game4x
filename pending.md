@@ -13,15 +13,13 @@ files rather than from anybody's memory of them.
 
 ## What is outstanding
 
-### To code (8)
+### To code (6)
 
 - **S-1** - `tools/outbox` should read `releases/*.md` · `docs/notes/proposals.md`
 - **Q-1** - The palette exists in three places and nothing checks the copies agree · `lenses/quality/outbox.md`
 - **Q-2** - `Biome` lives in the game, so terrain and rendering depend on the game · `lenses/quality/outbox.md`
 - **Q-3** - `planet-bevy` depends on `game-front`, so a prototype links the whole game · `lenses/quality/outbox.md`
-- **Q-5** - Engine-free policy lives in `planet-bevy`, where the gate cannot test it · `lenses/quality/outbox.md`
 - **Q-6** - `planet_ecs::gather` is dead, and its body exists twice more · `lenses/quality/outbox.md`
-- **Q-10** - The quotation guard's convention has an unchecked near-miss form · `lenses/quality/outbox.md`
 - **Q-11** - The composition root has grown logic and tests · `lenses/quality/outbox.md`
 
 ### To spec (5)

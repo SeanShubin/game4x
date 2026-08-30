@@ -101,15 +101,6 @@ A decision, not a defect. `planet-terrain` and `planet-render` each depend on th
 line, so `cargo tree -p goldberg-view` still contains the command language. Splitting the crate is
 the same work as report 1's finding 11, which is why the three are one item.
 
-### Q-5 - Engine-free policy lives in `planet-bevy`, where the gate cannot test it
-
-**to** code · **status** open · **raised** 2026-08-28 · **source**
-[report 1, finding 8](2026-08-28-crate-boundaries-and-duplication.md#8)
-
-`Orbit`, `Fingers`, `readable_on` and `summary` need no engine, and every test in `globe.rs` and
-`gpu.rs` is pure. None runs before deploy, including the regression test for a bug that shipped
-once.
-
 ### Q-6 - `planet_ecs::gather` is dead, and its body exists twice more
 
 **to** code · **status** open · **raised** 2026-08-28 · **source**
@@ -124,15 +115,6 @@ Called by nothing. The confluence test covers the inlined copy, not the two othe
 
 Noted and deliberately not, unless one is already being touched. Listed so a later report does not
 present them as new.
-
-### Q-10 - The quotation guard's convention has an unchecked near-miss form
-
-**to** code · **status** open · **raised** 2026-08-29 · **source**
-[report 3, finding 6](2026-08-29-coupling-under-the-game.md#6)
-
-The walk was fixed in `b43d9b4`. The form was not: `quotations.rs:138` recognises
-`` `spec/x.md`: *italic* ``, and `realistic.rs:117` writes `` `spec/x.md` says … **bold** `` - which
-is a claim about the specification's wording, and is false.
 
 ### Q-11 - The composition root has grown logic and tests
 
@@ -259,6 +241,37 @@ unstaged item in this outbox, committed something unrelated, and the hook refuse
 `lenses/quality/outbox.md` as the file that stopped it, and said how to proceed. The planted item
 never reached `pending.md`. Refusing is the safe direction - a stale `pending.md` that says so is
 recoverable at the next commit; a published draft is not
+
+### Q-5 - Engine-free policy lived in `planet-bevy`, where the gate could not test it
+
+**to** code · **status** **acted** 2026-08-30 · `49c4c46`. Moved rather than gated, which is the
+better answer. `planet-presentation` holds `Orbit`, `Fingers`, `readable_on` and `summary`; twelve
+tests, all passing, and `cargo tree` shows no Bevy anywhere beneath it - the only two mentions in
+its source are comments saying where it came from. Both gate lists carry it.
+
+They also did the half this item did not ask for: `cargo test -p planet-bevy` now runs in the gate
+and in `pre-push`, in debug, reusing the build clippy already paid for. The rotations correctly did
+*not* move - composing quaternions is engine arithmetic - but
+`turning_the_world_never_moves_the_poles_sideways` is a regression test for a bug that shipped, so
+leaving it after deploy would have half-answered the finding. *"None runs before deploy"* is now
+false in both halves rather than one
+
+### Q-10 - The quotation guard's convention had an unchecked near-miss form
+
+**to** code · **status** **acted** 2026-08-30 · `e40629c`. Verified: the guard passes and its floor
+is 40 checked quotations, up from 8. **The measurement inverted this lens's assumption** - the
+colon form it was built for was the rare one, and the *unchecked* form was most of them.
+
+Four quotations were wrong. The one that matters is `game4x/src/inspect.rs`, which said *the terrain
+is continuous* where `spec/planet.md:73` says *the terrain **of the realistic drawing** is
+continuous* - and the practical drawing's terrain is not continuous at all, so the dropped qualifier
+was the whole claim.
+
+Worth keeping: they measured before building, because the obvious rule - any emphasis near a
+mention - reports 35 failures of which 7 are the author's own emphasis and 13 are asterisks in Rust
+read as markdown. And their third poison caught an off-by-one they had just written, where the
+scanner consumed up to the closing marker rather than past it, so a closer was read as the next
+opener and a whole README came back attributed to `spec/planet.md`
 
 ### Q-16 - The picture never sees the biome the model has
 
