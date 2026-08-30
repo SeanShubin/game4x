@@ -75,7 +75,9 @@ advance.
 
 **A generated file has no owner and may sit in the repository root.** Nobody edits it: all of its
 content comes from files that do have owners, and a hand edit is overwritten at the next commit.
-This covers only a file that is generated in full - one with any hand-written part has an author,
+The content comes from those sources as they sit on disk, not as their owners have committed
+them, so a generated file can publish work in progress - a defect in whatever writes it rather
+than something this rule allows. This covers only a file that is generated in full - one with any hand-written part has an author,
 and belongs in that author's directory.
 
 **Quality runs nothing that writes.** Reading the tree and running `cargo clippy`, `cargo test` and
