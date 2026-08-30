@@ -114,10 +114,21 @@ const GRAIN: f32 = 0.14;
 
 /// The colour of ground at a point, in linear RGB.
 ///
-/// Biome first, because that is the fact the model holds and `spec/planet.md` says the
-/// drawing must show *the biome the model has*. Two things then stop it being a flat wash:
-/// the tone within a biome moves with the field, and the choice *between* biomes is taken
-/// several times over jittered parameters and averaged.
+/// The biome comes from the field, sampled here rather than taken from the model.
+///
+/// This used to claim `spec/planet.md` required the drawing to show the biome the model
+/// holds. It says no such thing, and the sentence was attributed to it - a quotation in
+/// disguise, in a form the quotation guard did not recognise until it was taught this one.
+///
+/// What is true is narrower and worth stating, because the two can differ: the model's
+/// biome is resolved once per territory and may be overruled to keep land connected, while
+/// this reads the field per point. A territory drained to join the land is painted as the
+/// water its ground actually is. Whether that is a defect depends on a contradiction
+/// between three specification lines that is not this file's to settle.
+///
+/// Two things stop the colour being a flat wash: the tone within a biome moves with the
+/// field, and the choice *between* biomes is taken several times over jittered parameters
+/// and averaged.
 fn ground(sample: &planet_terrain::Sample, at: Vec3, seed: u64) -> [f32; 4] {
     let mut total = [0.0f32; 3];
     for taste in 0..TASTES {

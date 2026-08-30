@@ -1,0 +1,17 @@
+# Not a workspace member. This is a workflow tool, not part of the game, so it stays out of
+# `cargo build --workspace` and out of `cargo tree`. Sibling of `tools/pad-tables`, and
+# excluded in the workspace root manifest for the same reason.
+[package]
+name = "outbox"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "outbox"
+path = "src/lib.rs"
+
+[[bin]]
+name = "outbox"
+path = "src/main.rs"
+
+[dependencies]

@@ -6,6 +6,7 @@ One script per thing you might want to run, so that running it never requires
 remembering a cargo incantation.
 
 | `goldberg-view.ps1` / `.sh` | [the goldberg view prototype](../prototypes/goldberg-view/README.md) | The ten smallest Goldberg solids in the abstract drawing. `[` and `]` step through them |
+| `outbox.ps1` / `.sh` | `tools/outbox` | What is open and addressed to whom, across every outbox. Not a prototype; see below |
 | Script                    | Runs                                                           | Notes                                                                                                                                                        |
 | ------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `game4x.ps1` / `.sh`      | [the application](../crates/game4x/)                           | Drag, a finger or the arrows to turn; wheel or pinch to zoom; `R` resets; `1`-`5` start a new game at that size. The console is the terminal you ran it from |
