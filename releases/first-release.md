@@ -125,39 +125,59 @@ Every biome except ocean has at least one food node of density two or more.
 
 ## Capabilities
 
-### Two drawings
+Each capability is an item addressed to the code lane, in the same shape every outbox uses, so
+`tools/outbox --to code` lists what is still to build beside what a lens has found. **Status is
+`open` until the *vetted when* line is observed, then `vetted`.**
+
+**The code lane does not mark its own.** It reports the evidence `to spec` and this file records
+it - the same shape as a lens never editing what it reviews, and what keeps the record of what has
+been delivered separate from the account of whoever built it.
+
+### R-1 - Two drawings
+
+**to** code · **status** open
 
 - **In** - `spec/planet.md`, *the planet is drawn either practically or realistically, and the
   user can change which*
 - **Vetted when** - switching between them moves nothing: the planet is at the same rotation and
   zoom afterwards, and every territory covers the same pixels
 
-### Terrain that crosses boundaries
+### R-2 - Terrain that crosses boundaries
+
+**to** code · **status** open
 
 - **In** - `spec/planet.md`, *the terrain of the realistic drawing is continuous*
 - **Vetted when** - no line visible in the realistic drawing coincides with a territory boundary,
   and terrain visibly varies within a single territory
 
-### A division that cannot be seen
+### R-3 - A division that cannot be seen
+
+**to** code · **status** open
 
 - **In** - `spec/planet.md`, *nothing in the terrain reveals how the sphere was divided*
 - **Vetted when** - a person who has not seen the tessellation is shown the realistic drawing and
   cannot mark where a five-neighbour territory is, beyond the two at the poles
 
-### A biome per territory
+### R-4 - A biome per territory
+
+**to** code · **status** open
 
 - **In** - `spec/planet.md`, *each territory has a biome*, and *a territory's biome is what the
   terrain gives it*
 - **Vetted when** - `show territory 5` names a biome, and no other biome covers more of that
   ground in the realistic drawing
 
-### Terrain resolved as finely as it is shown
+### R-5 - Terrain resolved as finely as it is shown
+
+**to** code · **status** open
 
 - **In** - `spec/planet.md`, *nothing of how a drawing is made is visible in it*
 - **Vetted when** - at the default camera, no facet, band or flat wash betrays how the surface was
   built, and the finest visible detail is terrain
 
-### The loop can be played through
+### R-6 - The loop can be played through
+
+**to** code · **status** open
 
 - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
 - **Vetted when** - starting from a single Ark in orbit over the twelve designed territories, a
