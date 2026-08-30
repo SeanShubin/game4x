@@ -43,15 +43,21 @@ lane that can write to another has to be trusted.
 
 None of them crosses. The documentation instance does not edit code, **even to fix an obvious
 break** - it reports the break and leaves it. The code instance does not write specification. The
-quality instance **never edits what it reviews**: it produces a report and the code instance acts on
+quality instance **never edits what it reviews**: it produces a report and the other lanes act on
 it, which is the same shape as specification never editing code.
+
+**A quality report is addressed to both other lanes, not just to code.** Each acts on the findings
+in its own column and leaves the rest. This has to be written down because the quality brief asks
+for **contradictions with the specification** as its highest-value finding, and the code lane
+cannot act on one - `spec/` is not its column. A report whose only named reader is forbidden to
+fix what it is asked to look for would route its best findings nowhere.
 
 **Quality runs nothing that writes.** Reading the tree, running `cargo clippy`, `cargo test` and
 `cargo tree` are all fine. `cargo fmt`, `cargo fix` and `clippy --fix` are not, because they modify
 the very files being judged - and a review that alters its subject is no longer a review. See
 [quality](quality/README.md).
 
-Four consequences, all of which have teeth:
+Five consequences, all of which have teeth:
 
 - **Stage by name, never `git add -A`.** Another lane's work is often uncommitted in the same tree.
   `-A` sweeps it into your commit, and two lanes then share a history entry that describes half of
@@ -65,6 +71,9 @@ Four consequences, all of which have teeth:
 - **A finding is not a fix, and neither is a fix a finding.** When a lane sees a problem outside its
   column, it writes it down where Sean will see it - a proposal, a report - and stops. Noting it in
   a reply is the failure mode: it reads like diligence and behaves like forgetting.
+- **Read the quality reports before claiming the queue is clean.** A contradiction found by a lane
+  that cannot file it sits in `quality/` until the lane that can goes looking. One did, for a day,
+  and the queue was empty the whole time - which is exactly what the queue promises cannot happen.
 
 Historical exception, so the boundary is not mistaken for a description of the past:
 `tools/pad-tables/` and the tests in `crates/sphere-tessellation/` were written from the
