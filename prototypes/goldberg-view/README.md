@@ -25,7 +25,7 @@ game to start.
 ## Abstract, deliberately
 
 This shows the **practical drawing** only: flat colours, a groove at every boundary, an id
-on every face. `spec/planet.md` says that drawing exists to *make adjacency legible*, and
+on every face. `spec/planet.md` says *the practical drawing makes adjacency legible*, and
 adjacency is the entire subject. The realistic drawing would bury the thing being compared
 under terrain.
 

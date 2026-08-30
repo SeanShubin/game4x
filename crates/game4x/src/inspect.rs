@@ -1,9 +1,10 @@
 //! Operating the application by remote control: drive it, photograph it, dump it.
 //!
 //! Everything below the engine can be tested with no window open, which is what the
-//! layering is for. The picture cannot, and half of `spec/planet.md` is about the picture -
-//! *the terrain is continuous*, *nothing in the terrain reveals how the sphere was divided*,
-//! *the two drawings share the camera and nothing else*. Those are claims about pixels.
+//! layering is for. The picture cannot, and half of `spec/planet.md` describes it: *the
+//! terrain of the realistic drawing is continuous*, *nothing in the terrain reveals how the
+//! sphere was divided*, *the two drawings share the camera and nothing else*. Those are
+//! claims about pixels.
 //!
 //! So this plugin turns the application into something that can be asked a question and
 //! made to answer with a file. Put the camera at a known place, choose a drawing, run some

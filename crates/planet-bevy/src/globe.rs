@@ -808,8 +808,8 @@ fn wheel_to_zoom(mut wheel: MessageReader<MouseWheel>, mut orbit: ResMut<Orbit>)
 /// be a way back that is not dragging until it looks about right.
 ///
 /// Asked for by the `R` key, or by a control, which is watched the same way the game is:
-/// a count that only ever goes up. `spec/interface.md` says an action like this *never
-/// requires a gesture or a key the platform may lack*, and a tablet lacks every key - so
+/// a count that only ever goes up. `spec/interface.md` says actions like this *never
+/// require a gesture or a key the platform may lack*, and a tablet lacks every key - so
 /// the key alone would leave the view unresettable on the platform the touch code was
 /// written for.
 fn reset_view(

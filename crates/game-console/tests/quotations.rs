@@ -21,9 +21,23 @@
 //! /// `spec/console.md`: *a line beginning with `/` directs the front end.*
 //! ```
 //!
-//! A backticked spec path, a colon, and an italic run. Anything written that way is
-//! checked. Prose *about* the spec is not a quotation and is not checked - only text the
-//! author marked as the specification's own words, which is exactly the text a reader
+//! A backticked spec path, a colon, and an italic run.
+//!
+//! **And the same claim written as a sentence**, which is how it is usually written:
+//!
+//! ```text
+//! /// `spec/planet.md` says *the terrain of the realistic drawing is continuous.*
+//! ```
+//!
+//! A colon is not what makes it a quotation - marking words as the specification's own is.
+//! `realistic.rs` attributed a sentence to `spec/planet.md` that the specification did not
+//! contain, in a file written *after* this guard landed; the guard read that file and said
+//! nothing, because it was watching for a colon. A reader trusts *the specification says
+//! this* at least as much as a colon, so both forms are checked.
+//!
+//! Prose *about* the spec is still not a quotation. `spec/x.md` asks for three surfaces is
+//! a claim about meaning, which no comparison of text can settle. Only text the author
+//! marked as the specification's own words is checked - which is exactly the text a reader
 //! would otherwise trust without looking.
 
 use std::collections::BTreeSet;
@@ -122,30 +136,156 @@ fn bare(text: &str) -> String {
     flattened(&text.replace(['`', '*'], " "))
 }
 
-/// The quotations in one file: the spec file named, and the words attributed to it.
-fn quotations(text: &str) -> Vec<(String, String)> {
-    let flat = flattened(text);
-    let mut found = Vec::new();
-    let mut rest = flat.as_str();
-    while let Some(at) = rest.find("`spec/") {
-        let after = &rest[at + 1..];
-        let Some(close) = after.find('`') else { break };
-        let document = after[..close].to_string();
-        let tail = &after[close + 1..];
-        rest = tail;
-        // The quotation follows immediately, as `: *words*`. Anything else is prose that
-        // merely mentions the file, and prose is not a claim about its wording.
-        let Some(opened) = tail.strip_prefix(": *") else {
-            continue;
-        };
-        let Some(shut) = opened.find('*') else {
-            continue;
-        };
-        let quoted = opened[..shut].trim().to_string();
-        if !quoted.is_empty() {
-            found.push((document, quoted));
+/// The prose in a file, as runs, with code left out.
+///
+/// Only Rust needs separating: in markdown the whole file is prose. In `.rs` an asterisk is
+/// a dereference or a multiplication far more often than it is emphasis, so flattening a
+/// whole source file and hunting for `*…*` finds spans of code - thirteen of them here, and
+/// every one nonsense. Reading only the comments removes that entire class rather than
+/// filtering it out afterwards.
+///
+/// Runs rather than one string, so a mention at the end of one comment cannot attribute
+/// words that appear at the start of the next.
+fn prose(path: &Path, text: &str) -> Vec<String> {
+    if path.extension().and_then(|e| e.to_str()) != Some("rs") {
+        return vec![flattened(text)];
+    }
+    let mut runs = Vec::new();
+    let mut current = String::new();
+    for line in text.lines() {
+        if line.trim_start().starts_with("//") {
+            current.push('\n');
+            current.push_str(line);
+        } else if !current.is_empty() {
+            runs.push(flattened(&current));
+            current.clear();
         }
-        rest = &opened[shut..];
+    }
+    if !current.is_empty() {
+        runs.push(flattened(&current));
+    }
+    runs
+}
+
+/// Words that mark what follows as the specification's own, rather than as a claim about it.
+///
+/// Deliberately a list rather than a rule. An unrecognised verb leaves a quotation
+/// unchecked, which is where this guard already was, and is a smaller failure than the
+/// alternative: a rule loose enough to catch every verb also catches the author's own
+/// emphasis in a sentence that merely mentions a file. Both were measured against this
+/// repository. The loose version reported seven such spans - `**required, not a
+/// convenience.**` among them - and every one was correct prose being called a
+/// misquotation.
+const ATTRIBUTING: [&str; 14] = [
+    "says",
+    "said",
+    "asks",
+    "requires",
+    "states",
+    "puts",
+    "fixes",
+    "allows",
+    "calls",
+    "describes",
+    "forbids",
+    "names",
+    "lists",
+    "means",
+];
+
+/// What follows the lead, if this mention attributes words rather than discussing the file.
+///
+/// Three leads count: a colon, a possessive, and an attributing verb.
+fn attributed(tail: &str) -> Option<&str> {
+    if let Some(rest) = tail.strip_prefix(':') {
+        return Some(rest);
+    }
+    if let Some(rest) = tail.strip_prefix("'s").or_else(|| {
+        tail.strip_prefix('\u{2019}')
+            .and_then(|r| r.strip_prefix('s'))
+    }) {
+        return Some(rest);
+    }
+    let word = tail.split_whitespace().next()?;
+    ATTRIBUTING
+        .contains(&word.trim_end_matches([',', ':']))
+        .then_some(tail)
+}
+
+/// The emphasised run at the start of this text, and how far it reached.
+///
+/// It has to be close and unpunctuated. A sentence that has reached a full stop or a
+/// semicolon has stopped being about the file it named, and emphasis after that belongs to
+/// whatever came next.
+fn emphasised(lead: &str) -> Option<(String, usize)> {
+    let mut offset = None;
+    for (index, character) in lead.char_indices() {
+        if index > 60 || matches!(character, '.' | ';') {
+            break;
+        }
+        if character == '*' {
+            offset = Some(index);
+            break;
+        }
+    }
+    let opened = &lead[offset?..];
+    let (opened, closer) = match opened.strip_prefix("**") {
+        Some(rest) => (rest, "**"),
+        None => (opened.strip_prefix('*')?, "*"),
+    };
+    let shut = opened.find(closer)?;
+    let quoted = opened[..shut].trim().to_string();
+    if quoted.is_empty() {
+        return None;
+    }
+    // Past the closing marker, not up to it. Reading it as an opener made the next
+    // asterisk anywhere in the file look like the end of a second quotation, and a whole
+    // README came back attributed to `spec/planet.md`.
+    Some((quoted, offset? + closer.len() * 2 + shut))
+}
+
+/// The next quotation in a list, attributed to the same document as the one before it.
+///
+/// One mention often carries several: `inspect.rs` names `spec/planet.md` and then quotes
+/// three of its lines in a row. Without this only the first is checked, and it was the
+/// second and third that a reader would be trusting just as much.
+///
+/// Only a comma, a space and the word `and` may separate them. Anything else is a sentence
+/// that has moved on to its own words.
+fn continued(rest: &str) -> Option<(String, usize)> {
+    let trimmed = rest.trim_start_matches([',', ' ']);
+    let trimmed = trimmed.strip_prefix("and ").unwrap_or(trimmed).trim_start();
+    if !trimmed.starts_with('*') {
+        return None;
+    }
+    let skipped = rest.len() - trimmed.len();
+    emphasised(trimmed).map(|(quoted, used)| (quoted, skipped + used))
+}
+
+/// The quotations in one file: the spec file named, and the words attributed to it.
+fn quotations(path: &Path, text: &str) -> Vec<(String, String)> {
+    let mut found = Vec::new();
+    for run in prose(path, text) {
+        let mut rest = run.as_str();
+        while let Some(at) = rest.find("`spec/") {
+            let after = &rest[at + 1..];
+            let Some(close) = after.find('`') else { break };
+            let document = after[..close].to_string();
+            let tail = &after[close + 1..];
+            rest = tail;
+            let Some(lead) = attributed(tail) else {
+                continue;
+            };
+            let Some((quoted, consumed)) = emphasised(lead) else {
+                continue;
+            };
+            found.push((document.clone(), quoted));
+            rest = &lead[consumed..];
+            while let Some((quoted, used)) = continued(rest) {
+                found.push((document.clone(), quoted));
+                rest = &rest[used..];
+            }
+        }
     }
     found
 }
@@ -177,7 +317,7 @@ fn every_quotation_of_the_specification_says_what_it_says_now() {
         let Ok(text) = std::fs::read_to_string(&path) else {
             continue;
         };
-        for (document, quoted) in quotations(&text) {
+        for (document, quoted) in quotations(&path, &text) {
             let spec = root().join(&document);
             let Ok(source) = std::fs::read_to_string(&spec) else {
                 wrong.push(format!(
@@ -210,7 +350,7 @@ fn every_quotation_of_the_specification_says_what_it_says_now() {
     // The test has to be able to fail. If the convention were ever renamed, this would
     // quietly check nothing and pass forever, which is the failure mode of every scanner.
     assert!(
-        checked >= 8,
+        checked >= 40,
         "only {checked} quotations found; the convention has probably changed \
          and this test has stopped watching anything"
     );

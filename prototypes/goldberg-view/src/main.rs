@@ -8,8 +8,8 @@
 //! anything in between.
 //!
 //! **Abstract, deliberately.** This shows the practical drawing only: flat colours, a
-//! groove at every boundary, an id on every face. `spec/planet.md` says that drawing exists
-//! to *make adjacency legible*, and adjacency is the whole subject here. The realistic
+//! groove at every boundary, an id on every face. `spec/planet.md` says *the practical
+//! drawing makes adjacency legible*, and adjacency is the whole subject here. The realistic
 //! drawing would hide the very thing being compared under terrain.
 //!
 //! # What it borrows and what it does not
