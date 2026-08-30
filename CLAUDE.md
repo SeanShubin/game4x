@@ -59,11 +59,6 @@ Three rules follow from the asymmetry, and they are not symmetric:
   finding says so in the commit that declines it, citing the id. Being refuted is the lens working,
   not failing.
 
-**Quality is still at `quality/` rather than `lenses/quality/`.** The move is outstanding: it would
-orphan links this file and the proposal queue carry, and it changes a directory the lens itself is
-writing to, so it needs sequencing between the three of us rather than doing unilaterally. Until it
-lands, `lenses/<name>/` names the rule and `quality/` names the one lens there is.
-
 **Quality runs nothing that writes.** Reading the tree and running `cargo clippy`, `cargo test` and
 `cargo tree` are all fine. `cargo fmt`, `cargo fix` and `clippy --fix` are not, because they modify
 the very files being judged - and a review that alters its subject is no longer a review.

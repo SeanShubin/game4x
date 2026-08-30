@@ -3,7 +3,7 @@
 **Derived.** The quality lens's one outbox. Every finding it has addressed to somebody, and what
 became of it. Not binding - a finding is a claim about the tree, not a decision about it.
 
-[Quality](README.md) · [Reports](README.md#reports) · [The proposal queue](../docs/notes/proposals.md)
+[Quality](README.md) · [Reports](README.md#reports) · [The proposal queue](../../docs/notes/proposals.md)
 
 ## How to read this
 

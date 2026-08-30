@@ -147,5 +147,5 @@ measuring.
 The one thing to carry forward is R-1: `8c395d8`'s message reads as a completed sweep, and it was a
 partial one. A commit that says *"quote the rule that is there now"* and leaves three quotations of
 the rule that was there before is the failure mode
-[CLAUDE.md](../CLAUDE.md#three-instances) names - *it reads like diligence and behaves like
+[CLAUDE.md](../../CLAUDE.md#perspectives) names - *it reads like diligence and behaves like
 forgetting.*

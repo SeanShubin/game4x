@@ -86,13 +86,13 @@ that is not what the terrain under it shows.
 
 **What it costs the code lane, stated plainly because it is a real cost.** `join_the_land` would go,
 and generation would gain a loop it does not have. The quality lane's
-[finding 1](../../quality/2026-08-29-coupling-under-the-game.md#1) - that the picture and the model
+[finding 1](../../lenses/quality/2026-08-29-coupling-under-the-game.md#1) - that the picture and the model
 must agree about a territory's biome - is fixed at the root by this rather than patched.
 
 **And the reason it sat outside the queue for a day is worth recording.** Quality found it and
-writes only `quality/`. The code lane found it and `spec/` is not its column. The documentation lane
+writes only `lenses/quality/`. The code lane found it and `spec/` is not its column. The documentation lane
 can file it and had not read the report. **Three lanes, three resting places, and it reached none** -
-which is the gap [the quality lane's second finding](../../quality/2026-08-29-who-reads-a-report.md#2)
+which is the gap [the quality lane's second finding](../../lenses/quality/2026-08-29-who-reads-a-report.md#2)
 names, and which is Sean's to close.
 
 ## Accepted

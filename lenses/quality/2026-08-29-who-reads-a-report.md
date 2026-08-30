@@ -3,7 +3,7 @@
 **Derived.** Written by the quality instance on 2026-08-29. Not binding - an observation about the
 process, not a decision about it.
 
-[Quality](README.md) · [CLAUDE.md](../CLAUDE.md) · [The proposal queue](../docs/notes/proposals.md)
+[Quality](README.md) · [CLAUDE.md](../../CLAUDE.md) · [The proposal queue](../../docs/notes/proposals.md)
 
 Read at `011d284`. One finding and one question, both about routing rather than about code.
 
@@ -17,7 +17,7 @@ currently sitting outside the queue that exists to hold it.
 
 ## 1. A report reaches the code lane by instruction and the specification lane by luck
 
-**Where.** [`CLAUDE.md`](../CLAUDE.md) → Three instances; [`quality/README.md`](README.md) line 4.
+**Where.** [`CLAUDE.md`](../../CLAUDE.md) → Three instances; [`quality/README.md`](README.md) line 4.
 
 **What.** `quality/README.md` says who acts:
 
@@ -72,8 +72,8 @@ its own work.
 
 ## 2. A contradiction can sit outside the queue, which the queue promises cannot happen
 
-**Where.** [`CLAUDE.md`](../CLAUDE.md) → An empty queue means no contradictions;
-[`docs/notes/proposals.md`](../docs/notes/proposals.md).
+**Where.** [`CLAUDE.md`](../../CLAUDE.md) → An empty queue means no contradictions;
+[`docs/notes/proposals.md`](../../docs/notes/proposals.md).
 
 **What.** `CLAUDE.md` makes a promise:
 

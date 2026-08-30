@@ -3,7 +3,7 @@
 **Derived.** Written by the quality instance on 2026-08-28. Not binding - an observation about the
 code, not a decision about it.
 
-[Quality](README.md) · [Architecture](../docs/architecture.md) · [Specification](../spec/README.md)
+[Quality](README.md) · [Architecture](../../docs/architecture.md) · [Specification](../../spec/README.md)
 
 Read at commit `835cb33`, *A slash directs the front end, and `/new` abandons the fold*. Reading
 began while that work was still uncommitted and every line number was re-checked against the commit
@@ -12,7 +12,7 @@ before this was filed.
 The question asked was: is Bevy confined to where it is needed, and is engine-independent code
 staying out of it. The short answer is that **the crate graph holds and the crate contents do
 not**. `cargo tree` shows no Bevy below the adapter, exactly as
-[architecture rule 7](../docs/architecture.md#rules) requires. But `planet-bevy` has accumulated
+[architecture rule 7](../../docs/architecture.md#rules) requires. But `planet-bevy` has accumulated
 policy that has nothing to do with an engine, and has grown an edge to `game-front` that makes it
 a second front end.
 
@@ -108,7 +108,7 @@ in the same sentence of the same rule.
 
 `releases/first-release.md:104` says *Reset is bound to `R`* and stops there, so the release
 schedules a binding the spec does not permit on its own. Per
-[CLAUDE.md](../CLAUDE.md#releases), the spec wins.
+[CLAUDE.md](../../CLAUDE.md#releases), the spec wins.
 
 **Whether.** **Fix now.** It is a user-visible hole on the platform the touch code was written
 for, and the cheapest honest fix is a control on the page beside `#sizes`, which is what

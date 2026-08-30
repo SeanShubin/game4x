@@ -3,7 +3,7 @@
 **Derived.** Written by the quality instance on 2026-08-29. Not binding - an observation about the
 code, not a decision about it.
 
-[Quality](README.md) · [Architecture](../docs/architecture.md) · [Specification](../spec/README.md)
+[Quality](README.md) · [Architecture](../../docs/architecture.md) · [Specification](../../spec/README.md)
 
 Read at `9357258`, with the code lane's work on `goldberg-view` uncommitted in the tree
 (`Cargo.toml`, `Cargo.lock`, `crates/planet-bevy/src/globe.rs`, `scripts/`, and the untracked

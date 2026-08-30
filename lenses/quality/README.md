@@ -3,10 +3,10 @@
 **Derived.** Written by the quality instance. Not binding - a report is an observation about the
 code, not a decision about it. Sean decides what is acted on, and the code instance acts.
 
-[Root README](../README.md) · [Architecture](../docs/architecture.md) · [Specification](../spec/README.md)
+[Root README](../../README.md) · [Architecture](../../docs/architecture.md) · [Specification](../../spec/README.md)
 
 Code quality reports. This directory is the quality lane's only writable place, and no other lane
-writes here - see [the lane table](../CLAUDE.md#three-instances).
+writes here - see [the lane table](../../CLAUDE.md#perspectives).
 
 ## The rule that makes a report worth reading
 
@@ -61,7 +61,7 @@ That last column is the one that keeps a report from becoming a wish list. **Mos
 ## What is in scope
 
 The tree, its structure, and whether the code says what the specification says. Concretely: whether
-[architecture's rules](../docs/architecture.md#rules) hold, whether crate boundaries are real,
+[architecture's rules](../../docs/architecture.md#rules) hold, whether crate boundaries are real,
 whether tests assert what they claim, whether names mean one thing, and whether anything in
 `crates/` contradicts anything in `spec/`.
 
@@ -74,7 +74,7 @@ instance does not read the code.
 Style the formatter already settles, preferences with no argument behind them, and anything that
 would be a design decision rather than an observation. **When a report finds that the specification
 itself is wrong or unclear, it says so and stops** - that becomes a proposal in
-[the documentation lane](../docs/notes/proposals.md), not a change here.
+[the documentation lane](../../docs/notes/proposals.md), not a change here.
 
 ## Naming
 
