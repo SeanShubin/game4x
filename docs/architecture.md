@@ -146,8 +146,11 @@ hand-written so that results are identical on every platform, which is what make
    compute with engine types.
 5. **Each crate has a `README.md`** describing its purpose and its public surface,
    linked from this document.
-6. **Entities and algorithms are different kinds of thing.** Every game entity is an ECS
-   entity — there is no second way of holding game state. Every algorithm is a pure
+6. **Entities and algorithms are different kinds of thing.** Game state lives in the model
+   and changes only by a transition — `spec/invariants.md` allows no second way, so an
+   entity is never where a fact about the game is kept. Entities exist where the engine
+   needs something to draw or to receive input, and carry nothing the model does not
+   already own. Every algorithm is a pure
    function over plain data that never names `Entity`, `Query`, `Commands` or `Res`.
    Systems are glue between the two and contain no rules of their own. See
    [layers](layers.md#6-entities-and-algorithms-are-different-kinds-of-thing).
