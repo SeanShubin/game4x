@@ -2572,6 +2572,9 @@ dependencies = [
 [[package]]
 name = "game-model"
 version = "0.1.0"
+dependencies = [
+ "planet-model",
+]
 
 [[package]]
 name = "game4x"
@@ -4025,7 +4028,6 @@ dependencies = [
 name = "planet-render"
 version = "0.1.0"
 dependencies = [
- "game-model",
  "graph-coloring",
  "planet-model",
  "planet-terrain",
@@ -4036,7 +4038,7 @@ dependencies = [
 name = "planet-terrain"
 version = "0.1.0"
 dependencies = [
- "game-model",
+ "planet-model",
  "sphere-tessellation",
 ]
 
