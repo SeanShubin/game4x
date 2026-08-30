@@ -20,17 +20,17 @@ The pressure worked. It also stopped one layer short.
 
 ## Findings
 
-| #       | What                                                                   | Whether                    |
-| ------- | ---------------------------------------------------------------------- | -------------------------- |
-| [1](#1) | The picture never sees the biome the model has                         | **Fix now**                |
-| [2](#2) | `Biome` lives in the game, so terrain and rendering depend on the game | **Decide now**             |
-| [3](#3) | `detached` is a runtime flag over a compile-time coupling              | Fix eventually             |
-| [4](#4) | The detached globe's readout advertises keys it does not have          | **Fix now** (small)        |
-| [5](#5) | `planet-terrain` is in neither gate list                               | **Fix now** (two words)    |
-| [6](#6) | The quotation guard stops at `crates/`                                 | **Fix now** (one line)     |
-| [7](#7) | The composition root has grown logic and tests                         | Fix eventually             |
-| [8](#8) | Two hand-rolled option parsers                                         | Noted and not              |
-| [9](#9) | `docs/architecture.md`'s crate table no longer describes the tree      | Noted - documentation lane |
+| #       | What                                                                   | Whether                                       |
+| ------- | ---------------------------------------------------------------------- | --------------------------------------------- |
+| [1](#1) | The picture never sees the biome the model has                         | **Withdrawn** - see the correction            |
+| [2](#2) | `Biome` lives in the game, so terrain and rendering depend on the game | **Decide now**                                |
+| [3](#3) | `detached` is a runtime flag over a compile-time coupling              | Fix eventually                                |
+| [4](#4) | The detached globe's readout advertises keys it does not have          | **Closed** - `b43d9b4`                        |
+| [5](#5) | `planet-terrain` is in neither gate list                               | **Closed** - `b43d9b4`                        |
+| [6](#6) | The quotation guard stops at `crates/`                                 | Coverage closed - `b43d9b4`; the form is open |
+| [7](#7) | The composition root has grown logic and tests                         | Fix eventually                                |
+| [8](#8) | Two hand-rolled option parsers                                         | Noted and not                                 |
+| [9](#9) | `docs/architecture.md`'s crate table no longer describes the tree      | Noted - documentation lane                    |
 
 One question for the documentation lane is in [Q3](#q3). Findings from the first report that are
 still open are summarised in [Carried forward](#carried-forward), with what moved and what did not.
@@ -40,6 +40,12 @@ still open are summarised in [Carried forward](#carried-forward), with what move
 <a id="1"></a>
 
 ## 1. The picture never sees the biome the model has
+
+> **Corrected 2026-08-29, after the code lane's reply. The remedy below is withdrawn and the
+> severity is wrong.** The code lane rejected this finding's fix, and checking it, they are right on
+> every count. What survives is smaller than what was filed, and is set out in
+> [Correction](#correction-1) at the end of this section. The original text is kept rather than
+> rewritten, so the mistake is visible.
 
 **Where.** `crates/planet-render/src/realistic.rs:245` (`build`), `:117` (the claim), `:159`
 (`biome_of` on the raw field); `crates/planet-terrain/src/lib.rs:354` (`join_the_land`);
@@ -83,14 +89,102 @@ that is true of `sample`. It stopped being true when a resolution step was added
 only. The field is still one field; there are now two answers derived from it, and the picture
 reads the earlier one.
 
-**Whether.** **Fix now.** `build` should take the resolved biomes - one `&[Biome]` alongside the
-solid it already has - and `tone_of` should use the territory's biome for the *choice* while
-keeping the field for the *variation within* it, which is what `realistic.rs:118-120` already
-describes wanting. That also makes the comment at `:117` true instead of aspirational.
+**Whether.** ~~**Fix now.**~~ Withdrawn - see below.
 
-Worth measuring first, and it is one line for whoever fixes it: how often `join_the_land` actually
-fires at 12 territories, which is what the first release ships. The tests prove the path exists and
-run it at 92; they do not report whether the shipped world has a drained territory in it.
+<a id="correction-1"></a>
+
+### Correction
+
+The code lane declined this finding and gave three reasons. All three hold. I checked each rather
+than taking them, and the checks are reproducible.
+
+**The remedy was wrong.** I proposed that `build` take the resolved biomes and that `tone_of` use
+the territory's biome for the choice of colour. That makes the choice uniform per territory, so the
+transition between two biomes falls exactly on a territory edge - which is a drawn boundary, and is
+what `spec/planet.md`'s *nothing in the terrain reveals how the sphere was divided* forbids. It
+would also fail an existing test, `two_regions_meeting_at_a_point_agree_about_it`
+(`crates/planet-render/src/realistic.rs:369`), which asserts that two vertices at the same position
+in different regions carry *exactly* the same colour and normal. Under my remedy they would carry
+their own territory's. That test is a better statement of the rule than my finding was, and I did
+not read it before proposing something that breaks it.
+
+**The measurement is correct.** They report draining firing zero times at 12 territories and once
+each at 32 and 92. Verified independently, by replicating `planet-terrain`'s private `ground_of`
+and `covering` outside the repository and comparing the natural biome with the resolved one:
+
+| Territories | Natural oceans | Drained | Which                      |
+| ----------- | -------------- | ------- | -------------------------- |
+| 12          | 8              | **0**   | -                          |
+| 32          | 22             | 1       | territory 4, to desert     |
+| 42          | 19             | 0       | -                          |
+| 72          | 36             | 0       | -                          |
+| 92          | 48             | 1       | territory 10, to grassland |
+
+**So there is no defect in what ships.** The first release is twelve territories, and at twelve the
+natural ocean set already leaves land connected. The divergence is reachable - `/new small` and
+`/new huge` each carry one drained territory - but it is one territory on two of five sizes, not a
+live fault. "Fix now" was wrong on frequency as well as on remedy.
+
+**And the requirement I leaned on does not exist.** `realistic.rs:117` says *"`spec/planet.md` says
+the drawing must show **the biome the model has**"*. It does not. Lines 62-74 of `spec/planet.md`
+are the drawing rules and none of them says that; the nearest is *the realistic drawing shows the
+world: terrain*. The comment invents a requirement and attributes it to the specification, and my
+finding took it at face value instead of opening the file - which is the exact failure the
+misattribution causes in a reader, committed by the report complaining about misattribution.
+
+That is the finding worth keeping here, and it is
+[finding 3 of the first report](2026-08-28-crate-boundaries-and-duplication.md#3) for a third time.
+Note how it escaped the new guard: `quotations.rs` checks the form `` `spec/x.md`: *italic* ``, and
+this is `` `spec/x.md` says ... **bold** `` - a near miss, in a file written after the guard landed.
+That widens [finding 6](#6): the guard's convention has an unchecked neighbour in active use, so
+covering `prototypes/` is necessary and not sufficient.
+
+### What remains, and the data for it
+
+The real problem is the three-way tension the code lane names, and it is better framed than mine
+was. It lives in the model and exists whether or not anything is drawn:
+
+- *Oceans never isolate land from land* forces draining.
+- *A territory's biome is what the terrain gives it* is then false for a drained territory.
+- *Nothing in the terrain reveals how the sphere was divided* forbids painting the drained answer.
+
+No implementation satisfies all three for a drained territory. That is [Q3](#q3), and it is the
+documentation lane's to settle.
+
+Their alternative - **retry rather than repair**: search for a world whose natural ocean set already
+leaves land in one piece - keeps all three, because nothing is overwritten and the two readers read
+the same field. Their reason for not starting it is that "which world" becomes a value both readers
+share rather than one constant, at the end of a session. That is a fair call, and worth noting that
+it is the same plumbing as [findings 2 and 3](#2) - except that it moves one `u64` rather than a
+`&[Biome]`, and it cannot break the per-vertex continuity test, because the picture still derives
+everything from the field.
+
+The one number that decision needs is what the search costs. Measured the same way, over 120
+consecutive seeds from `WORLD_SEED`:
+
+| Territories | Worlds needing no draining | First clean seed | Worst natural split |
+| ----------- | -------------------------- | ---------------- | ------------------- |
+| 12          | 54/120 (45%)               | `WORLD_SEED`     | 2 pieces            |
+| 32          | 77/120 (64%)               | `WORLD_SEED + 1` | 5 pieces            |
+| 42          | 91/120 (76%)               | `WORLD_SEED`     | 4 pieces            |
+| 72          | 78/120 (65%)               | `WORLD_SEED`     | 4 pieces            |
+| 92          | 85/120 (71%)               | `WORLD_SEED + 1` | 5 pieces            |
+
+So retry costs between one and three attempts on average, and at every size a clean world is within
+one step of the constant already in use. It also stays a save file: the search is deterministic from
+a base seed, so `create planet <size>` still rebuilds the same world on another machine, which is
+what `binding.rs` says the biomes not being written into the history depends on.
+
+One caveat for whoever takes it: rejection-sampling the seed on a property of the tessellation does
+condition the terrain on the arrangement. The conditioning is global - land is in one piece - rather
+than local, so nothing about a *particular* cell is readable from it, and it is far weaker than a
+drawn boundary. It belongs in whatever note records the decision, not as an objection to it.
+
+**How the measurements were produced**, so they can be re-run rather than trusted: a throwaway crate
+outside the repository, depending on `planet-terrain`, `sphere-tessellation` and `game-model` by
+path, replicating the private `ground_of`, `covering` and `pieces_of_land` (`GROUND_SAMPLES = 7`,
+ties broken by `Biome::ALL` order) and calling the public `biomes_of` beside them. Nothing in the
+repository was written to.
 
 ---
 
@@ -201,6 +295,8 @@ here, and the crate graph has not caught up.
 
 ## 4. The detached globe's readout advertises keys it does not have
 
+> **Closed** by `b43d9b4`: the readout builds its list of bindings from the same flag that installs them, and the planet's name is gone from `summary`. `PlanetSize` still enters `globe.rs` at `:839`, for `keys_to_choose_size` - which is one of the three game-side systems, so it leaves with them under [3](#3) rather than here.
+
 **Where.** `crates/planet-bevy/src/globe.rs:635` (`summary`), reached from `build_globe:565`
 regardless of `follows_the_game`.
 
@@ -239,6 +335,8 @@ the systems would make the two impossible to disagree, and would take the `Plane
 <a id="5"></a>
 
 ## 5. `planet-terrain` is in neither of the gate's lists
+
+> **Closed** by `b43d9b4`: `planet-terrain` is now in the clippy list and the test list of both `pipeline.yml` and `hooks/pre-push` - four additions, verified.
 
 **Where.** `.github/workflows/pipeline.yml:74` (clippy) and `:82` (tests);
 `hooks/pre-push:20` and `:25`.
@@ -280,10 +378,29 @@ quotation in the checked form:
 
 That quotation is accurate today. Nothing would tell anyone when it stopped being.
 
-**Whether.** **Fix now** - one more `collect(&root().join("prototypes"), ...)`, and `scripts/` and
-the root `README.md` while the file is open. A guard whose coverage is a directory name will keep
-having this problem; a guard that walks the repository and skips `target`, `.git` and `docs/notes`
-will not.
+**Addendum, after `b43d9b4`.** The walk is fixed, and more thoroughly than this asked for: the
+guard now covers `crates/`, `prototypes/`, `scripts/`, `tools/` and `hooks/`, shell scripts
+included, and stops at `spec/`, `releases/` and `docs/` for the stated reason that a stale quotation
+there is another lane's to repair and would red this lane's gate on files it must not touch. That
+reasoning is right.
+
+**What remains is the convention, not the coverage.** `quotations.rs:138` recognises a quotation by
+`tail.strip_prefix(": *")` - the form `` `spec/x.md`: *italic* `` exactly - and the comment above it
+at `:137` explains the skip: *"Anything else is prose that merely mentions the file, and prose is
+not a claim about its wording."*
+
+There is a counterexample in the tree. `crates/planet-render/src/realistic.rs:117` reads
+`` `spec/planet.md` says the drawing must show **the biome the model has** ``. That is a claim about
+the specification's wording, it is false - the specification says no such thing - and the guard
+skips it, because `says` is not `: ` and `**bold**` is not `*italic*`. See
+[the correction to finding 1](#correction-1), which took that sentence at face value.
+
+**Whether.** **Fix eventually**, and the coverage half is already done. What is left is to decide
+whether the near-miss form is a quotation. Two ways: widen the pattern to accept `says` and bold, or
+keep one permitted form and fail any line that names a spec file within a sentence of emphasis
+without matching it. The second is stricter and can say so in its failure message, which is what
+makes a convention learnable rather than guessable - and the first would have caught this one and
+not the next variant somebody writes.
 
 ---
 

@@ -65,6 +65,7 @@ Newest first.
 - [What the new prototype exposed, and what it did not](2026-08-29-coupling-under-the-game.md)
   - 2026-08-29. `Biome` in the game pulls terrain and rendering up into it, the picture and the
     model disagree about a territory's biome, and a detached globe still links the whole game.
+    Finding 1 is withdrawn after the code lane's reply; the correction is in the report.
 - [What the response to the first report left behind](2026-08-28-response-to-the-first-report.md)
   - 2026-08-28. Five findings closed and verified; three quotations the P-95 sweep missed.
 - [Crate boundaries, duplication, and where Bevy has spread](2026-08-28-crate-boundaries-and-duplication.md)
