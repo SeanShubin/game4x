@@ -67,6 +67,17 @@ was wrong, and being refuted is the lens working.
 transfer function again in a `globe.rs` test. Change a hex value and the CPU and GPU paths draw
 different worlds. Better deleted than tested: the uniform already carries a 512-entry array.
 
+**One third done, `8a06978`, and correctly left open rather than closed with an asterisk.** The
+transfer-function copy is gone - `planet_render::mesh::linear_rgba` is public and `globe.rs` no
+longer reimplements it. Verified.
+
+**The `planet.wgsl` copy is blocked on something real**, and the code lane's reason is a finding
+rather than an excuse: `prototypes/planet-view/src/capture.rs:22` draws through
+`PlanetView::draw`, the CPU rasterizer. So `--capture` photographs the path the palette is *not*
+duplicated for, and the GPU path - the one those decimals exist to feed - cannot be photographed at
+all. Deleting them is a change nobody can verify, and a renderer that quietly stops matching itself
+is the failure this item is about. That is `C-3`.
+
 ### Q-2 - `Biome` lives in the game, so terrain and rendering depend on the game
 
 **to** code · **status** open · **raised** 2026-08-29 · **source**
@@ -117,7 +128,27 @@ names territories by `TerritoryId`. Two id types, opposite conventions, meeting 
 player reads a number and types it back. They agree today because both derive from the same seed
 order, and nothing asserts that they do.
 
-Smaller than it was, and no longer waiting on a decision.
+**Sharper than "smaller", on checking: `Q-8` and `Q-7` are the same root cause, and this is the
+half a player can see.** Verified rather than reasoned:
+
+- `globe.rs:448` builds its own world - `World::build(planet.spec())` - and labels each panel by its
+  position in *that* tessellation's seed order.
+- `binding.rs:250` builds the model's territories from `canonical_seeds` directly.
+- `sphere-tessellation/src/lib.rs:185` short-circuits `generate_balanced` to `canonical_seeds`
+  **only when `params.jitter <= 0.0`**, and `Params::default()` sets `jitter: 0.0`.
+
+So the number a player reads off the globe and the number the console answers to are two independent
+derivations that coincide because jitter is zero. That is exactly what `Q-7` was, and `Q-7` was
+closed by deleting the copy that had no reader. **This copy has a reader: the player.**
+
+The failure is silent and every test passes, which by the code lane's sorting key - *the only one
+that can go wrong while everything is green* - puts it above `Q-10`. They proposed taking it next
+and they are right.
+
+It also changes the fix. Not *assert the two ids agree*, which preserves both derivations the way a
+palette test preserves both lists. Either the picture derives its geometry from the model's, or both
+derive from one place. `P-123` pushes the same way: the world seed is now a value both readers
+share, so there is already a reason for the geometry to have one source.
 
 ### Q-9 - Small duplication and dead code, six items
 
