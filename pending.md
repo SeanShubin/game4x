@@ -13,10 +13,9 @@ files rather than from anybody's memory of them.
 
 ## What is outstanding
 
-### To code (3)
+### To code (2)
 
 - **S-1** - `tools/outbox` should read `releases/*.md` · `docs/notes/proposals.md`
-- **Q-1** - The palette exists in three places and nothing checks the copies agree · `lenses/quality/outbox.md`
 - **Q-3** - `planet-bevy` is two adapters in one crate, and so is `planet-render` · `lenses/quality/outbox.md`
 
 ### To spec (6)

@@ -58,30 +58,6 @@ was wrong, and being refuted is the lens working.
 > `docs/notes/proposals.md` and is 16. A number repeated is not a number checked.
 
 
-### Q-1 - The palette exists in three places and nothing checks the copies agree
-
-**to** code · **status** open · **raised** 2026-08-28 · **source**
-[report 1, finding 5](2026-08-28-crate-boundaries-and-duplication.md#5)
-
-`planet-render/src/palette.rs`, hand-transcribed decimals in `planet-bevy/src/planet.wgsl`, and the
-transfer function again in a `globe.rs` test. Change a hex value and the CPU and GPU paths draw
-different worlds. Better deleted than tested: the uniform already carries a 512-entry array.
-
-**One third done, `8a06978`, and correctly left open rather than closed with an asterisk.** The
-transfer-function copy is gone - `planet_render::mesh::linear_rgba` is public and `globe.rs` no
-longer reimplements it. Verified.
-
-**The `planet.wgsl` copy is blocked on something real** - and since `C-3` landed in `e3ddfdc`, on
-the harness not existing rather than on permission to build one. `docs/prototypes/README.md` now
-permits it and deliberately does not schedule it; what the code lane builds and when is its call.
-The item stays open until the GPU path can actually be photographed, because the reason for leaving
-it open has not changed, and the code lane's reason is a finding
-rather than an excuse: `prototypes/planet-view/src/capture.rs:22` draws through
-`PlanetView::draw`, the CPU rasterizer. So `--capture` photographs the path the palette is *not*
-duplicated for, and the GPU path - the one those decimals exist to feed - cannot be photographed at
-all. Deleting them is a change nobody can verify, and a renderer that quietly stops matching itself
-is the failure this item is about. That is `C-3`.
-
 ### Q-3 - `planet-bevy` is two adapters in one crate, and so is `planet-render`
 
 **to** code · **status** open · **raised** 2026-08-28 · **half done** 2026-08-30, `465437a`
@@ -298,6 +274,28 @@ missing.
 It raised `C-6` against itself, which is the better half: fixing the false claim left a new one -
 `main.rs` now says a rule owned by `docs/architecture.md` is broken there deliberately, and carving
 an exception into another perspective's rule is not the code lane's to do
+
+### Q-1 - The palette existed in three places and nothing checked the copies agreed
+
+**to** code · **status** **acted** 2026-08-30 · `8a06978` and `a4e3bd1`. Verified: no palette
+literals remain in `planet.wgsl`, the uniform carries both palettes plus background, border,
+duplicate strength and owner tint, and `linear_rgba` is public so the transfer curve is defined
+once. The harness that made the second half checkable is `--shot`, `--settle` and
+`--renderer gpu|cpu` on `planet-view`.
+
+**Their evidence argues this item better than the item did, and it checks out.** The transcription
+had already drifted: `0x1B3A5C` is `0.10588…` and the shader said `0.106`. Recomputed here through
+sRGB to linear and back to eight bits, on four channels - `1B`, `8B`, `4F`, `E8` - the exact value
+and the transcribed one produce the **same byte** every time.
+
+So the two copies disagreed in source and agreed in output. **A test comparing them would have
+passed while they diverged**, and the disagreement would have surfaced only when someone changed a
+hex value, with nothing to attribute it to. This lens argued *better deleted than tested* because a
+test keeps both lists; the stronger reason is that the test would not have worked.
+
+Also worth keeping: the harness caught a surviving `BACKGROUND` reference within ten minutes, in a
+branch they had not read. Without it, that ships as a shader that fails to compile on the one path
+nothing photographs
 
 ### Q-16 - The picture never sees the biome the model has
 
