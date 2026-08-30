@@ -71,7 +71,11 @@ different worlds. Better deleted than tested: the uniform already carries a 512-
 transfer-function copy is gone - `planet_render::mesh::linear_rgba` is public and `globe.rs` no
 longer reimplements it. Verified.
 
-**The `planet.wgsl` copy is blocked on something real**, and the code lane's reason is a finding
+**The `planet.wgsl` copy is blocked on something real** - and since `C-3` landed in `e3ddfdc`, on
+the harness not existing rather than on permission to build one. `docs/prototypes/README.md` now
+permits it and deliberately does not schedule it; what the code lane builds and when is its call.
+The item stays open until the GPU path can actually be photographed, because the reason for leaving
+it open has not changed, and the code lane's reason is a finding
 rather than an excuse: `prototypes/planet-view/src/capture.rs:22` draws through
 `PlanetView::draw`, the CPU rasterizer. So `--capture` photographs the path the palette is *not*
 duplicated for, and the GPU path - the one those decimals exist to feed - cannot be photographed at
