@@ -42,7 +42,10 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-123 · Entailed · `spec/planet.md` -> What a territory carries
+### P-123 - The biome rule and the connectivity rule cannot both hold
+
+**to** sean · **status** open · **raised** 2026-08-29 · **kind** entailed · **into**
+`spec/planet.md` -> What a territory carries
 
 **A contradiction between two lines of `spec/planet.md`, both promoted 2026-08-28.** Found by the
 code lane and by the quality lane independently; filed here on 2026-08-29, which is later than it

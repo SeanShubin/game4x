@@ -296,6 +296,16 @@ loudly will fail quietly.
 Sean explicitly asks Claude to enter an accepted line, that is a separate instruction and
 Claude may - but it is never the default, and never inferred from the word "accepted".
 
+**An open proposal is an outbox item, and carries the four fields** so that `tools/outbox` can see
+it. Without the `**to**` line the item is invisible to the index, and *nothing open means nothing
+outstanding* silently stops covering the queue - which is the one place it most has to.
+
+```
+### P-n - a one-line title
+
+**to** sean · **status** open · **raised** <date> · **kind** <kind> · **into** `file` -> section
+```
+
 Proposals go in [`docs/notes/proposals.md`](docs/notes/proposals.md), numbered, each labelled
 with what kind of inference produced it. Record every rejection with Sean's reason, or the
 same proposal will be filed again in a later session.
