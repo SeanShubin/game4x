@@ -63,6 +63,26 @@ going back to whoever wrote it:
 That last column is the one that keeps a report from becoming a wish list. **Most findings should be
 "noted and not".** A report where everything matters is a report where nothing does.
 
+## Read it before writing about it
+
+**Quote the artifact's own words for what it is, before arguing about what it is for.** Not a
+resolution to read first - a step that cannot be completed without the reading.
+
+This lens argued that a prototype needs the instrument its question requires, and sent it as a
+distinction. `prototypes/goldberg-view/README.md` had said it already, and so had the first
+paragraph of its `main.rs`, which this lens had read and quoted from earlier the same day. The code
+lane had the reasoning and was asking permission.
+
+The specification lane did the same thing on the same file and was caught only by an unrelated rule
+against inventing text: it needed the prototype's question in its own words for an index row. **The
+check that worked was mechanical, and the one that would have relied on judgment did not exist.**
+
+The general shape, of which this is one instance: *asserting without checking* and *arguing without
+reading* are the same error at different stages - one skips verification after the claim, the other
+before it. Both are cheaper than the alternative and both produce confident prose. What beats them
+is not care. It is a step that cannot be completed without the reading, which is why the quotation
+guard in `game-console` works.
+
 ## Say it and stop
 
 **State the question, the facts, and what to do. Then stop.** Sean read a sixty-line proposal that

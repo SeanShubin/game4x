@@ -31,9 +31,29 @@ fi
 # Unconditional rather than only when an outbox is staged, because an outbox can change in a
 # commit that does not touch one - a finding is closed by the commit that acts on it, and
 # that commit is about code.
-echo "pre-commit: rewriting pending.md from the outboxes"
-cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --write >/dev/null
-git add pending.md
+#
+# Only when every outbox is committed or staged. The generator reads the working tree, so
+# regenerating over somebody's half-written finding would render it into pending.md and
+# stage it into this commit - publishing another perspective's draft, under a commit that
+# touches nothing of theirs, to the one document Sean opens. That is `git add -A` wearing a
+# different name, and it is forbidden a few lines further up this file for exactly the
+# reason it would bite here: three perspectives share this working tree, and another's work
+# is usually uncommitted in it.
+#
+# Refusing is the safe direction. A stale pending.md that says so is recoverable by the next
+# commit; a published draft is not recoverable at all, because the lane that wrote it does
+# not know it went out.
+outboxes="docs/notes/proposals.md crates/outbox.md lenses"
+unstaged=$(git diff --name-only -- $outboxes)
+if [ -n "$unstaged" ]; then
+    echo "pre-commit: NOT rewriting pending.md - an outbox has unstaged changes:"
+    echo "$unstaged" | sed 's/^/  /'
+    echo "pre-commit: stage or stash them and commit again to bring pending.md up to date"
+else
+    echo "pre-commit: rewriting pending.md from the outboxes"
+    cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --write >/dev/null
+    git add pending.md
+fi
 
 # The edition is passed explicitly because rustfmt is invoked directly rather than through
 # `cargo fmt`, which would reformat the whole workspace rather than only what is staged.

@@ -117,43 +117,6 @@ once.
 
 Called by nothing. The confluence test covers the inlined copy, not the two others.
 
-### Q-8 - Two identities for one territory, with opposite conventions
-
-**to** code · **status** open · **raised** 2026-08-28 · **unblocked** 2026-08-30 · **source**
-[report 1, finding 12](2026-08-28-crate-boundaries-and-duplication.md#12)
-
-`TerritoryId` counts from one, `RegionId` from zero. **Unblocked by `Q-4` closing, and the framing
-has changed with it.** It is no longer *two ways of holding state* - `planet-ecs` is out of the
-shipped application and the state lives in `game-model` alone.
-
-What survives is narrower and still real: `globe.rs:553` labels a panel with
-`planet_model::RegionId(region).number()`, and the player then types that number at a console that
-names territories by `TerritoryId`. Two id types, opposite conventions, meeting at the one place a
-player reads a number and types it back. They agree today because both derive from the same seed
-order, and nothing asserts that they do.
-
-**Sharper than "smaller", on checking: `Q-8` and `Q-7` are the same root cause, and this is the
-half a player can see.** Verified rather than reasoned:
-
-- `globe.rs:448` builds its own world - `World::build(planet.spec())` - and labels each panel by its
-  position in *that* tessellation's seed order.
-- `binding.rs:250` builds the model's territories from `canonical_seeds` directly.
-- `sphere-tessellation/src/lib.rs:185` short-circuits `generate_balanced` to `canonical_seeds`
-  **only when `params.jitter <= 0.0`**, and `Params::default()` sets `jitter: 0.0`.
-
-So the number a player reads off the globe and the number the console answers to are two independent
-derivations that coincide because jitter is zero. That is exactly what `Q-7` was, and `Q-7` was
-closed by deleting the copy that had no reader. **This copy has a reader: the player.**
-
-The failure is silent and every test passes, which by the code lane's sorting key - *the only one
-that can go wrong while everything is green* - puts it above `Q-10`. They proposed taking it next
-and they are right.
-
-It also changes the fix. Not *assert the two ids agree*, which preserves both derivations the way a
-palette test preserves both lists. Either the picture derives its geometry from the model's, or both
-derive from one place. `P-123` pushes the same way: the world seed is now a value both readers
-share, so there is already a reason for the geometry to have one source.
-
 ### Q-9 - Small duplication and dead code, six items
 
 **to** code · **status** noted · **raised** 2026-08-28 · **source**
@@ -305,6 +268,19 @@ by `prototypes/planet-view` now, so the shipped path computes adjacency once, in
 
 Resolved by deletion rather than by a test, which is better - the test this lens suggested would
 have asserted that two computations agree, and the fix was that the second had no reader
+
+### Q-8 - Two identities for one territory, with opposite conventions
+
+**to** code · **status** **acted** 2026-08-30 · `f0c8609`. Verified: `World::canonical` builds the
+picture's seeds from `canonical_seeds` - the call the model already makes - instead of reaching them
+through `generate_balanced` and depending on jitter being zero. One derivation, which is the fix
+this lens argued for over an assertion.
+
+They then added the assertion as well, and it is the better half:
+`the_picture_uses_the_seeds_the_model_uses` compares the two at every planet size, and a second test
+demonstrates that the old path diverges under jitter *"while every test in the repository went on
+passing"*. 81 tests pass. The fallback to `World::build` fires only where no canonical arrangement
+exists, which is the prototype's case and has no model to disagree with
 
 ### Q-16 - The picture never sees the biome the model has
 
