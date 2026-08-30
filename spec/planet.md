@@ -42,6 +42,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - No territory can be claimed whose biome is ocean.
 - Oceans never isolate land from land. Every territory that is not ocean can be reached from
   every other without crossing one.
+- Neither rule yields to the other. A planet whose terrain would isolate land is not a planet
+  this game presents: the terrain is changed until it does not, and the biome is still what the
+  terrain gives.
 
 ## Native life
 

@@ -42,62 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-123 - The biome rule and the connectivity rule cannot both hold
-
-**to** sean · **status** open · **raised** 2026-08-29 · **kind** entailed · **into**
-`spec/planet.md` -> What a territory carries
-
-**A contradiction between two lines of `spec/planet.md`, both promoted 2026-08-28.** Found by the
-code lane and by the quality lane independently; filed here on 2026-08-29, which is later than it
-should have been - see the note on routing below.
-
-`spec/planet.md` says both of these, six lines apart:
-
-- *A territory's biome is what the terrain gives it. It is not chosen independently of the surface
-  the territory covers.* (P-100)
-- *Oceans never isolate land from land. Every territory that is not ocean can be reached from every
-  other without crossing one.* (P-109)
-
-**Nothing can honour both as written.** Connectivity is a property of the arrangement; the terrain
-does not know the arrangement exists. When a field would put ocean where it would cut the land in
-two, one of the rules has to give, and the specification does not say which.
-
-The proposal is that **neither gives**, and that the third option is the one already argued for in
-[generating versus designing](generating-versus-designing.md):
-
-> - Neither rule yields to the other. A planet whose terrain would isolate land is not a planet
->   this game presents: the terrain is changed until it does not, and the biome is still what the
->   terrain gives.
-
-**Basis:** today the code resolves it by relabelling - `join_the_land` takes a territory whose
-surface is water and calls it grassland, choosing the commonest *land* biome underneath. **That is a
-reasonable trade and it has a visible cost**: the drawing shows water and the model says grassland,
-which is exactly what `releases/first-release.md` vets against - *no other biome covers more of that
-ground in the realistic drawing*. So the release check and the implementation disagree, and neither
-is at fault, because the spec never chose.
-
-**Why changing the terrain beats choosing a winner.** This is the same shape as a problem this
-project has already solved once. The cut-point argument says: **when a distribution is wrong, move
-where the lines are drawn, not the things they separate** - because nothing was moved, coherence
-survives, and lines are not visible in the world. Raising the sea until the land joins is that move,
-one step further. It is monotonic, so it terminates: at the limit there is no ocean at all.
-
-**It says nothing about mechanism, deliberately.** Generate and reject, adjust the thresholds and
-regenerate, or deform the field locally - all satisfy the line, and this is the fifth line corrected
-for the temptation to prescribe. **What it does forbid is the one thing being done now**: a biome
-that is not what the terrain under it shows.
-
-**What it costs the code lane, stated plainly because it is a real cost.** `join_the_land` would go,
-and generation would gain a loop it does not have. The quality lane's
-[finding 1](../../lenses/quality/2026-08-29-coupling-under-the-game.md#1) - that the picture and the model
-must agree about a territory's biome - is fixed at the root by this rather than patched.
-
-**And the reason it sat outside the queue for a day is worth recording.** Quality found it and
-writes only `lenses/quality/`. The code lane found it and `spec/` is not its column. The documentation lane
-can file it and had not read the report. **Three lanes, three resting places, and it reached none** -
-which is the gap [the quality lane's second finding](../../lenses/quality/2026-08-29-who-reads-a-report.md#2)
-names, and which is Sean's to close.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -207,6 +151,7 @@ names, and which is Sean's to close.
 | P-121, `/save <file>` writes the history to a file                                                              | `spec/console.md` -> Commands                                                                                          | 2026-08-29 |
 | P-118, the rule editor is out of the first release, and the surfaces line says so                               | `releases/first-release.md` -> Scope, Controls                                                                         | 2026-08-29 |
 | P-122, a capability for playing the loop through by hand                                                        | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-29 |
+| P-123, neither the biome rule nor the connectivity rule yields                                                  | `spec/planet.md` -> What a territory carries                                                                           | 2026-08-30 |
 
 ## Rejected
 
