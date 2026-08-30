@@ -1,7 +1,6 @@
-//! The composition root for game4x.
+//! The composition root for game4x, and the harness that operates it.
 //!
-//! This module contains no logic. Its whole job is to decide what to build and to wire
-//! the pieces together:
+//! Deciding what to build and wiring the pieces together:
 //!
 //! ```text
 //!   command-language  +  game-model                the game, pure
@@ -14,13 +13,35 @@
 //!            \                  /
 //!             planet-render                        a view model, no engine
 //!                   |
+//!           planet-presentation                    camera and gestures, no engine
+//!                   |
 //!              planet-bevy                         window, input, presentation
 //!                   |
-//!              this module                         wiring, and nothing else
+//!               this crate                         wiring, and the remote control
 //! ```
 //!
 //! It is the only place that knows both that Bevy exists and that the game exists at the
 //! same time. See `docs/architecture.md`.
+//!
+//! # Two things live here, and only one of them is wiring
+//!
+//! `docs/architecture.md` says a composition root holds no logic, and that if it is large
+//! enough to be worth testing then something has leaked into it. [`main`] meets that. The
+//! crate as a whole does not, and the exception is deliberate rather than drift:
+//!
+//! - [`options`] reads the command line. A root has to be told what to build, and reading
+//!   the words that say so has to happen before anything is built. `prototypes/planet-view`
+//!   parses its options in its root for the same reason.
+//! - [`inspect`] is the remote control: put the camera at stated angles, choose a drawing,
+//!   run some commands, wait for the world to settle, write a PNG and a dump, quit. It is
+//!   a Bevy plugin, and it is tested, and it cannot live anywhere else - **it has to drive
+//!   the shipped binary.** A harness that ran a special path would be evidence about the
+//!   harness.
+//!
+//! So the rule holds where it matters - nothing here decides anything about the game - and
+//! is broken in the one place where obeying it would make the picture untestable. Half of
+//! `spec/planet.md` is about the picture, and the picture is the part no layer below the
+//! engine can check.
 //!
 //! The same binary runs natively and in a browser, and the *game* is identical in both
 //! because nothing below the engine layer knows there is an engine. What differs is how
