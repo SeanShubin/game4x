@@ -157,25 +157,54 @@ one-line deletion whenever `crates/outbox.md` brings someone here.
 
 ### Q-15 - Who checks the specification is buildable
 
-**to** spec · **status** open · **raised** 2026-08-29 · **source**
+**to** spec · **status** open · **raised** 2026-08-29 · **decided** 2026-08-30 by Sean · **source**
 [the recommendation](2026-08-30-readiness-and-one-surface.md#1-q-15-expand-the-specification-lane-do-not-add-a-lens)
 
-**Re-addressed from `sean` to `spec` on 2026-08-30**, per `Q-31`: it is a process question whose
-answer belongs in `CLAUDE.md`, which is this lane's column, so it should reach Sean through the
-queue rather than by his querying for it.
+**Decided: expand the specification lane, do not add a lens.** Sean approved the recommendation on
+2026-08-30.
 
-**This lens proposed a readiness lens and now recommends against one.** Half the job is already a
-test - `first_release.rs` runs the whole release script and reads the release's own tables, which is
-the 2026-08-26 readiness note's method mechanised. The other half is a check the promotion protocol
-structurally cannot make: it asks *does this invalidate something*, which is directional and per
-item, and a contradiction is symmetric and between items. `P-100` and `P-109` landed in the same
-file, the same section and the same day, and neither invalidates the other.
+What was decided, so it does not have to be re-derived:
 
-The recommendation is a trigger rather than a duty, because every hand-held duty here has rotted and
-every mechanical one has held: **when more than one proposal lands in the same file and section,
-re-read that section whole and ask whether all of them can hold at once.** `tools/outbox` already
-parses the destination and the date, so the flag is nearly free. Tested against history it fires on
-the right section on the right day.
+- **No readiness lens.** Half the job is already `first_release.rs`, which runs the whole release
+  script and reads the release's own tables. That is the 2026-08-26 readiness note's method
+  mechanised, and it runs in the gate.
+- **The gap is a check of the wrong shape, not a missing perspective.** The promotion protocol asks
+  *does this invalidate something* - directional, per item. A contradiction is symmetric and between
+  items, so `P-100` and `P-109` passed it correctly.
+- **The rule is a trigger, not a duty**, because every hand-held duty here has rotted and every
+  mechanical one has held: *when more than one proposal lands in the same file and section, re-read
+  that section whole and ask whether all of them can hold at once.*
+
+**Still `open`, deliberately.** A decision is not its implementation. The rule does not exist until
+it is in `CLAUDE.md`, and marking this answered would drop it out of the pending list before that -
+which is the failure the pending list exists to prevent. It closes when the text lands.
+
+The wording is this lane's to write, not this lens's. The last time this lens wrote a section for
+`CLAUDE.md` verbatim, the lane improved it in three places on the way in and the copy here was stale
+within a commit.
+
+`Q-34` is the other half: without it the rule is a duty somebody has to remember, which is the one
+thing the recommendation rejects.
+
+### Q-34 - Emit the same-section flag the trigger depends on
+
+**to** code · **status** open · **raised** 2026-08-30 · **source** `Q-15`
+
+`Q-15` is decided: more than one proposal landing in the same file and section prompts a whole-
+section re-read. **That is only a trigger if something emits it.** If the rule lands in `CLAUDE.md`
+and nothing flags the condition, it becomes exactly the hand-held duty the decision rejected.
+
+`tools/outbox` already parses `docs/notes/proposals.md` including each proposal's destination and
+date, so the flag costs almost nothing: group the accepted proposals by destination and date, and
+report any group larger than one.
+
+Tested against history it fires where it should - on 2026-08-28, six into `spec/planet.md` →
+Presentation, five into `spec/invariants.md` → Control without tedium, and four into
+`spec/planet.md` → What a territory carries, which is the section where `P-100` and `P-109`
+collided.
+
+Worth pointing at `Q-33` as well: the flag belongs in the generated pending document, where it is
+read without being asked for, rather than only on a terminal.
 
 ### Q-31 - Remove the `to sean` address; the queue is the one surface
 
