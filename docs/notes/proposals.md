@@ -42,65 +42,29 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-124 - A file nobody can write needs no owner
+### P-124 - Where a generated file lives
 
 **to** sean · **status** open · **raised** 2026-08-30 · **kind** entailed · **into** `CLAUDE.md` ->
 Perspectives
 
-**From `C-1`, the code lane's**, with evidence added by the quality lens. `pending.md` is generated
-into the repository root, and the root is in no perspective's column - `CLAUDE.md` names
-`README.md` for this lane and stops. The code lane filed the question rather than letting it pass.
+The code lane put `pending.md` in the repository root and asked whose file it is, because the root
+belongs to no perspective. Proposed answer:
 
-> **A file nobody can write needs no owner.** `pending.md` is generated from every outbox, sits in
-> the root, and `hooks/pre-commit` puts it into whichever commit comes next - so a lens's commit can
-> carry a root file. That is not a crossing. **Nothing can write it**: every byte is a function of
-> sources that each have an owner, and the only way to change what it says is to change your own
-> outbox.
->
-> **The test is that every byte is derived, not that a hook maintains it.** A hook could equally
-> maintain a file with hand-written parts, and that file has an author and needs a column. The
-> observable form is the one `pending.md` states about itself: an edit made by hand loses at the
-> next commit.
->
-> A boundary erodes not by anyone deciding to cross it, but by each crossing being individually too
-> small to stop for. Which is why this was asked rather than assumed.
+> **A generated file has no owner and may sit in the repository root.** Nobody edits it: all of its
+> content comes from files that do have owners, and a hand edit is overwritten at the next commit.
+> This covers only a file that is generated in full. One with any hand-written part has an author,
+> and belongs in that author's directory.
 
-**Basis:** C-1 offered two answers - the root is right and a generated artifact has no author, or it
-belongs somewhere owned and the path gets named. **Both were checked and neither is quite right.**
+**Basis:**
 
-**The second is dead, and the quality lens killed it with a fact rather than an argument.**
-`hooks/pre-commit` regenerates and stages `pending.md` on **every** commit, deliberately, because an
-outbox can change in a commit that does not touch one. Verified: the hook runs
-`cargo run ... -- --write` then `git add pending.md` unconditionally, and both commits that have
-touched `pending.md` so far are the lens's. So if the file belonged to a column, **the other two
-perspectives would write into that column on every commit.** Naming an owned path does not localise
-the crossing, it multiplies it.
+- `hooks/pre-commit` rewrites `pending.md` on every commit, not only when an outbox changes.
+- So whoever commits next carries it. Both commits that have touched it so far are the quality
+  lens's.
+- Putting it inside a column would therefore have the other two perspectives writing into that
+  column constantly. The root is the smaller problem, not a compromise.
 
-**The first is true and its stated reason is not.** *A generated artifact has no author* invites the
-next generated file to land anywhere, which is the erosion the code lane was right to stop for.
-
-**The lens offered *the hook is the author*, citing `pad-tables` and `rustfmt` as precedent. The
-precedent is not exact and the conclusion is still right.** Those two rewrite files **already in the
-commit** - they reformat the committer's own content. This hook **adds** a file the committer never
-touched. That is a stronger thing and worth saying rather than glossing.
-
-**What makes it harmless is not who authored it but that nobody can.** The content is a function of
-three owned files. There is no edit anyone can make to `pending.md` that survives, so the rule
-*nobody writes outside their own column* is not strained here - **it is satisfied by construction**,
-because the only way to affect the file is to write in your own column. Authorship is the wrong
-category for a file with no content of its own.
-
-**And that gives a sharper generalisation than a hook maintaining it.** *Every byte is derived* is
-checkable and *a hook maintains it* is not: a hook can maintain a file that is half hand-written,
-and that file needs an owner. The next generated artifact gets the same test rather than the same
-permission.
-
-**One thing this makes visible, noted rather than proposed.** `CLAUDE.md` -> Promotion says new
-content reaches **`spec/`** by promotion, and this proposal's destination is `CLAUDE.md`. That is
-the first, and it follows from `Q-31` - a `to spec` item becomes a numbered proposal whatever file
-it lands in - and from the standing policy that approvals for `CLAUDE.md` come from Sean directly.
-The two rules agree; the Promotion wording just predates both. It wants widening if a second one
-arrives.
+The second half of the rule is the part worth having. Without it, *generated files go in the root*
+invites the next half-generated file to land there too.
 
 ## Accepted
 

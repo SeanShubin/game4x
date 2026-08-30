@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `lenses/quality/outbox
 
 ## What must be decided
 
-- **P-124** - A file nobody can write needs no owner · `docs/notes/proposals.md`
+- **P-124** - Where a generated file lives · `docs/notes/proposals.md`
 
 ## What is outstanding
 
