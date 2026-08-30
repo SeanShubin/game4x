@@ -62,6 +62,9 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [Who reads a report](2026-08-29-who-reads-a-report.md)
+  - 2026-08-29. Both lanes must read a report, nothing says so, and a known spec
+    contradiction is sitting outside the queue that promises to hold it.
 - [What the new prototype exposed, and what it did not](2026-08-29-coupling-under-the-game.md)
   - 2026-08-29. `Biome` in the game pulls terrain and rendering up into it, the picture and the
     model disagree about a territory's biome, and a detached globe still links the whole game.
