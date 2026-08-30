@@ -48,6 +48,8 @@ impl Item {
 #[derive(Clone, Debug, Default)]
 pub struct Outboxes {
     pub items: Vec<Item>,
+    /// Proposals that have landed, from the queue's Accepted table.
+    pub landed: Vec<Landed>,
     /// Every file that was found and read, in order.
     pub files: Vec<String>,
     /// Every place looked at that held no outbox. Reported rather than skipped in silence,
@@ -59,15 +61,10 @@ pub struct Outboxes {
 pub const LIMIT: usize = 15;
 
 /// Where outboxes live.
-///
-/// `quality/outbox.md` is where the first lens still is; `lenses/*/outbox.md` is where the
-/// workflow puts one. Both are looked for, so this works before and after that move rather
-/// than needing to land in the same commit as it.
 pub fn places(root: &Path) -> Vec<PathBuf> {
     let mut found = vec![
         root.join("docs/notes/proposals.md"),
         root.join("crates/outbox.md"),
-        root.join("quality/outbox.md"),
     ];
     if let Ok(entries) = std::fs::read_dir(root.join("lenses")) {
         let mut lenses: Vec<PathBuf> = entries
@@ -88,6 +85,9 @@ pub fn read(root: &Path) -> Outboxes {
         match std::fs::read_to_string(&path) {
             Ok(text) => {
                 all.items.extend(parse(&text, &shown));
+                if shown.ends_with("proposals.md") {
+                    all.landed.extend(accepted(&text));
+                }
                 all.files.push(shown);
             }
             Err(_) => all.missing.push(shown),
@@ -151,6 +151,116 @@ fn field(line: &str, name: &str) -> Option<String> {
     let word = after.split_whitespace().next()?;
     let word = word.trim_matches(|c: char| !c.is_alphanumeric() && c != '-' && c != '_');
     (!word.is_empty()).then(|| word.to_string())
+}
+
+/// A proposal that has landed: where it went, and when.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Landed {
+    pub id: String,
+    pub destination: String,
+    pub date: String,
+}
+
+/// Several proposals that landed in the same place on the same day.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SameSection {
+    pub destination: String,
+    pub date: String,
+    pub proposals: Vec<String>,
+}
+
+/// The accepted proposals, from the queue's own table.
+///
+/// # Parsing a table after saying not to
+///
+/// The item format is two lines precisely so that `tools/pad-tables` cannot break it. This
+/// reads a table anyway, and the distinction is worth stating rather than glossing: padding
+/// changes the **whitespace between cells**, never the cells. Splitting on `|` and trimming
+/// is therefore pad-proof, where matching the bytes of a row is not. What is forbidden is a
+/// parser keyed to a row's exact width, and thirteen rows once went missing that way.
+///
+/// The queue is not this lane's file to reshape, so it is read as it is.
+pub fn accepted(text: &str) -> Vec<Landed> {
+    let mut landed = Vec::new();
+    let mut inside = false;
+    for line in text.lines() {
+        if let Some(heading) = line.strip_prefix("## ") {
+            inside = heading.trim() == "Accepted";
+            continue;
+        }
+        if !inside || !line.trim_start().starts_with('|') {
+            continue;
+        }
+        let cells: Vec<String> = line
+            .trim()
+            .trim_matches('|')
+            .split('|')
+            .map(|cell| cell.trim().to_string())
+            .collect();
+        if cells.len() < 3 {
+            continue;
+        }
+        // The header and its rule are rows too, and neither names a proposal.
+        let Some(id) = cells[0].split(',').next().map(str::trim) else {
+            continue;
+        };
+        if !id.starts_with("P-") {
+            continue;
+        }
+        landed.push(Landed {
+            id: id.to_string(),
+            destination: one_arrow(&cells[1]),
+            date: cells[2].clone(),
+        });
+    }
+    landed
+}
+
+/// The same destination however the arrow was typed.
+///
+/// The queue writes `->` on some days and the arrow character on others - the style
+/// changed partway - so without this, one section written two ways is two sections, and a
+/// group that should fire is split into two that do not.
+fn one_arrow(destination: &str) -> String {
+    destination.replace('→', "->")
+}
+
+/// Where more than one proposal landed in the same section on the same day.
+///
+/// The trigger behind the rule Sean decided: *when more than one proposal lands in the same
+/// file and section, re-read that section whole and ask whether all of them can hold at
+/// once.* A rule with nothing emitting its condition is a duty somebody has to remember,
+/// and every hand-held duty in this repository has rotted.
+///
+/// It is a **prompt to re-read, not a defect**. Six proposals landing in one section on one
+/// day is ordinary; that is what a day of work on one topic looks like. What it cannot tell
+/// you is whether they all still hold together, and that is the question it exists to ask.
+pub fn same_section(landed: &[Landed]) -> Vec<SameSection> {
+    let mut grouped: BTreeMap<(String, String), Vec<String>> = BTreeMap::new();
+    for one in landed {
+        grouped
+            .entry((one.destination.clone(), one.date.clone()))
+            .or_default()
+            .push(one.id.clone());
+    }
+    let mut flags: Vec<SameSection> = grouped
+        .into_iter()
+        .filter(|(_, proposals)| proposals.len() > 1)
+        .map(|((destination, date), proposals)| SameSection {
+            destination,
+            date,
+            proposals,
+        })
+        .collect();
+    // Busiest first: the section most worth re-reading is the one most was said about.
+    flags.sort_by(|a, b| {
+        b.proposals
+            .len()
+            .cmp(&a.proposals.len())
+            .then(a.date.cmp(&b.date))
+            .then(a.destination.cmp(&b.destination))
+    });
+    flags
 }
 
 /// Open items, grouped by who has to act, addressees in alphabetical order.
@@ -255,6 +365,81 @@ One line of what it is.
         assert_eq!(parse(text, "x.md").len(), 1);
     }
 
+    /// The flag fires where the lens said it would, against the queue's real history.
+    ///
+    /// Three groups on 2026-08-28, and the third is the one that matters: `P-100` and
+    /// `P-109` landed in the same section on the same day and contradict each other. That
+    /// is the collision the whole trigger exists to have caught, and this is the evidence
+    /// that it would have.
+    #[test]
+    fn the_flag_fires_on_the_collision_that_happened() {
+        let queue = std::fs::read_to_string(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/notes/proposals.md"),
+        )
+        .expect("the proposal queue is where the workflow says it is");
+        let flags = same_section(&accepted(&queue));
+
+        let group = |destination: &str, date: &str| {
+            flags
+                .iter()
+                .find(|flag| flag.destination == destination && flag.date == date)
+                .unwrap_or_else(|| panic!("no group for {destination} on {date}"))
+        };
+
+        assert_eq!(
+            group("`spec/planet.md` -> Presentation", "2026-08-28")
+                .proposals
+                .len(),
+            6
+        );
+        assert_eq!(
+            group(
+                "`spec/invariants.md` -> Control without tedium",
+                "2026-08-28"
+            )
+            .proposals
+            .len(),
+            5
+        );
+        let carries = group("`spec/planet.md` -> What a territory carries", "2026-08-28");
+        assert_eq!(carries.proposals.len(), 4);
+        assert!(carries.proposals.contains(&"P-100".to_string()));
+        assert!(carries.proposals.contains(&"P-109".to_string()));
+    }
+
+    /// One section written two ways is one section. The queue uses both arrows, because the
+    /// style changed partway through.
+    #[test]
+    fn the_arrow_style_does_not_split_a_section() {
+        let landed = vec![
+            Landed {
+                id: "P-1".to_string(),
+                destination: one_arrow("`spec/planet.md` → Shape"),
+                date: "2026-08-25".to_string(),
+            },
+            Landed {
+                id: "P-6".to_string(),
+                destination: one_arrow("`spec/planet.md` -> Shape"),
+                date: "2026-08-25".to_string(),
+            },
+        ];
+        let flags = same_section(&landed);
+        assert_eq!(flags.len(), 1, "two arrows made two sections");
+        assert_eq!(flags[0].proposals, ["P-1", "P-6"]);
+    }
+
+    /// A single proposal in a section is not a flag. The trigger is a collision between
+    /// proposals, not activity in a file.
+    #[test]
+    fn one_proposal_in_a_section_is_not_flagged() {
+        let landed = vec![Landed {
+            id: "P-1".to_string(),
+            destination: "`spec/planet.md` -> Shape".to_string(),
+            date: "2026-08-25".to_string(),
+        }];
+        assert!(same_section(&landed).is_empty());
+    }
+
     #[test]
     fn a_duplicated_id_is_reported_with_both_homes() {
         let mut items = parse(SAMPLE, "quality/outbox.md");
@@ -271,21 +456,21 @@ One line of what it is.
     fn distinct_ids_are_not_duplicates() {
         assert!(duplicate_ids(&parse(SAMPLE, "x.md")).is_empty());
     }
-
-    /// Both homes for a lens's outbox are looked for, so this works before and after the
-    /// move the workflow describes.
+    /// Every producer's outbox is looked for by name, and every lens's by walking.
     #[test]
-    fn it_looks_where_a_lens_is_and_where_one_is_going() {
+    fn it_looks_where_every_outbox_lives() {
         let looked: Vec<String> = places(Path::new("/root"))
             .iter()
             .map(|path| path.to_string_lossy().replace('\\', "/"))
             .collect();
-        assert!(looked.iter().any(|at| at.ends_with("quality/outbox.md")));
         assert!(
             looked
                 .iter()
                 .any(|at| at.ends_with("docs/notes/proposals.md"))
         );
         assert!(looked.iter().any(|at| at.ends_with("crates/outbox.md")));
+        // The lens has moved under `lenses/`, so the pre-move path is gone rather than
+        // probed - a completed move was reading as a missing file.
+        assert!(!looked.iter().any(|at| at.ends_with("/quality/outbox.md")));
     }
 }

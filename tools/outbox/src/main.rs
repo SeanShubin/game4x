@@ -12,7 +12,7 @@
 
 use std::path::{Path, PathBuf};
 
-use outbox::{Item, LIMIT, Outboxes, duplicate_ids, open_by_addressee, read};
+use outbox::{Item, LIMIT, Outboxes, duplicate_ids, open_by_addressee, read, same_section};
 
 fn main() {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -33,6 +33,7 @@ fn main() {
     let code = match arguments.first().map(String::as_str) {
         None => {
             show(&all.items, None);
+            show_same_section(&all);
             0
         }
         Some("--to") => {
@@ -63,6 +64,10 @@ fn main() {
                 1
             }
         }
+        Some("--sections") => {
+            show_same_section(&all);
+            0
+        }
         Some("--help" | "-h") => {
             println!("{}", usage());
             0
@@ -86,6 +91,7 @@ outbox - what is open, and addressed to whom
     outbox --to WHO         one addressee's inbox
     outbox --check          exit 1 if anything is open and addressed
     outbox --count          the aggregate, against the limit
+    outbox --sections       sections that took more than one proposal in a day
     outbox --help           this"
 }
 
@@ -124,6 +130,32 @@ fn complain(all: &Outboxes) -> Vec<String> {
         ));
     }
     complaints
+}
+
+/// Sections that took more than one proposal on one day.
+///
+/// The trigger behind the rule Sean decided. Not a defect list: several proposals landing
+/// in one section on one day is what a day of work on one topic looks like. What it says is
+/// that nobody has asked whether they all still hold together.
+fn show_same_section(all: &Outboxes) {
+    let flags = same_section(&all.landed);
+    if flags.is_empty() {
+        println!("no section took more than one proposal in a day");
+        return;
+    }
+    println!(
+        "{} section(s) took more than one proposal in a day - re-read each whole, and ask",
+        flags.len()
+    );
+    println!("whether all of them can hold at once:");
+    for flag in &flags {
+        println!(
+            "  {} on {} - {}",
+            flag.destination,
+            flag.date,
+            flag.proposals.join(", ")
+        );
+    }
 }
 
 fn show(items: &[Item], only: Option<&str>) {
