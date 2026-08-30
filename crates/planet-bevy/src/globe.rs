@@ -37,7 +37,6 @@ use bevy::mesh::{Indices, PrimitiveTopology};
 use bevy::prelude::*;
 use bevy::window::CursorMoved;
 
-use planet_model::PlanetSize;
 use planet_presentation::{Gesture, RESTING_DISTANCE, Step};
 use planet_render::{Params, World, WorldSpec, mesh};
 use sphere_tessellation::Direction;
@@ -79,40 +78,33 @@ const LABEL_BOX: f32 = 40.0;
 
 pub struct GlobePlugin {
     pub spec: WorldSpec,
-    /// Whether the globe draws whichever game the front end is holding.
-    ///
-    /// The application says yes: the planet on screen is the planet being played, and it
-    /// follows by watching a counter. A prototype says no - there is no game behind it, and
-    /// it drives [`Planet`] itself. Everything else is the same either way, which is why
-    /// this is a flag rather than a second plugin.
-    follows_the_game: bool,
 }
 
 impl GlobePlugin {
-    /// The globe as the application uses it, drawing the one game.
+    /// A globe, and nothing behind it.
+    ///
+    /// **There is no second constructor any more, and no flag.** There used to be
+    /// `detached`, which added no system that reached the front end - and could not remove
+    /// the *dependency*, because the code those systems were made of was still in this
+    /// crate. `cargo tree -p goldberg-view` still contained the command language, so a
+    /// prototype about polyhedra linked the whole game in order to draw a sphere.
+    ///
+    /// The systems that follow a game are `game-globe` now, which names both this crate and
+    /// `game-front` and joins them. A prototype does not have to touch the game code - but
+    /// the fact that it *could* is what keeps these boundaries honest, and a dependency edge
+    /// is the only part of that a compiler can check.
     pub fn new(spec: WorldSpec) -> Self {
-        Self {
-            spec,
-            follows_the_game: true,
-        }
-    }
-
-    /// The globe on its own, for a composition root with no game behind it.
-    ///
-    /// Nothing added here reaches `game-front`: no counter is watched, no line is typed,
-    /// and the keys that start a new game or change the drawing are absent.
-    ///
-    /// A prototype does not have to touch the game, but the fact that it *could* is what
-    /// keeps these boundaries honest. A prototype about polyhedra that had to link the
-    /// command language in order to draw a sphere would mean the layering was a diagram
-    /// rather than a fact.
-    pub fn detached(spec: WorldSpec) -> Self {
-        Self {
-            spec,
-            follows_the_game: false,
-        }
+        Self { spec }
     }
 }
+
+/// Everything that decides *what* to draw, which runs before the drawing of it.
+///
+/// Empty here. It is a public set so that `game-globe` can put the game's own systems in
+/// it without this crate knowing they exist - a name to schedule against, in place of a
+/// dependency.
+#[derive(SystemSet, Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct DecidesWhatToDraw;
 
 impl Plugin for GlobePlugin {
     fn build(&self, app: &mut App) {
@@ -120,17 +112,16 @@ impl Plugin for GlobePlugin {
             .insert_resource(Orbit::default())
             .insert_resource(Drag::default())
             .insert_resource(Fingers::default())
-            .insert_resource(Followed::default())
-            .insert_resource(ResetsSeen::default())
             .insert_resource(Drawing::default())
-            .insert_resource(DrawingAsksSeen::default())
             .insert_resource(Drawn::default())
-            .insert_resource(FollowsTheGame(self.follows_the_game))
+            .insert_resource(FollowsTheGame::default())
             .insert_resource(ShowIds::default())
             .add_systems(Startup, setup)
             .add_systems(
                 Update,
                 (
+                    // Ahead of the build, because it decides which mesh gets built.
+                    keys_to_change_drawing,
                     build_globe,
                     drag_to_turn,
                     touch_to_turn,
@@ -140,19 +131,9 @@ impl Plugin for GlobePlugin {
                     apply_orbit,
                     place_labels,
                 )
-                    .chain(),
-            );
-
-        // The only three systems that know a game exists. A detached globe has none of
-        // them, and so reaches none of the front end either.
-        if self.follows_the_game {
-            app.add_systems(
-                Update,
-                (keys_to_choose_size, keys_to_change_drawing, follow_the_game)
                     .chain()
-                    .before(build_globe),
+                    .after(DecidesWhatToDraw),
             );
-        }
     }
 }
 
@@ -658,65 +639,15 @@ fn wheel_to_zoom(mut wheel: MessageReader<MouseWheel>, mut orbit: ResMut<Orbit>)
 /// edge to bump into and nothing to say which way up you have ended up - so there has to
 /// be a way back that is not dragging until it looks about right.
 ///
-/// Asked for by the `R` key, or by a control, which is watched the same way the game is:
-/// a count that only ever goes up. `spec/interface.md` says actions like this *never
-/// require a gesture or a key the platform may lack*, and a tablet lacks every key - so
-/// the key alone would leave the view unresettable on the platform the touch code was
-/// written for.
-fn reset_view(
-    keys: Res<ButtonInput<KeyCode>>,
-    mut asked: ResMut<ResetsSeen>,
-    mut orbit: ResMut<Orbit>,
-) {
-    let requested = game_front::shell::resets();
-    let by_control = requested != asked.0;
-    if by_control {
-        asked.0 = requested;
-    }
-    if by_control || keys.just_pressed(KeyCode::KeyR) {
+/// Asked for by the `R` key here. `spec/interface.md` says actions like this *never require
+/// a gesture or a key the platform may lack*, and a tablet lacks every key - so a control
+/// on the page has to reach the same place, and `game-globe` is what carries that ask.
+/// This half needs no game and belongs to any globe, because a sphere with no edge to bump
+/// into needs a way back whether or not anything is being played on it.
+fn reset_view(keys: Res<ButtonInput<KeyCode>>, mut orbit: ResMut<Orbit>) {
+    if keys.just_pressed(KeyCode::KeyR) {
         *orbit = Orbit::default();
     }
-}
-
-/// How many resets the view had been asked for when it last obeyed.
-#[derive(Resource, Default)]
-struct ResetsSeen(u64);
-
-/// Number keys choose a planet size, smallest to largest.
-///
-/// **By typing the line, not by writing the size.** `releases/first-release.md`: *choosing
-/// a planet size abandons the current game and starts one on a planet of that size*, and
-/// the way to say that is `/new <size>`. A key that set [`Planet::size`] directly would
-/// let the view hold a planet the model does not have, which is what these keys used to do
-/// before the globe followed the game.
-///
-/// So a key and a typed line take the same path, and the globe learns about the result the
-/// same way either way: through [`follow_the_game`], watching the counter.
-///
-/// It is `/new <size>` rather than `create planet <size>` because the second is available
-/// only before `start`, and the shipped build opens on a game already under way - so every
-/// size key would have been refused, correctly and uselessly.
-fn keys_to_choose_size(keys: Res<ButtonInput<KeyCode>>) {
-    for (digit, size) in SIZE_KEYS.into_iter().zip(PlanetSize::ALL) {
-        if keys.just_pressed(digit) {
-            game_front::shell::with(|console| console.submit(&chooses(size)));
-        }
-    }
-}
-
-/// The digits that choose a size, smallest to largest.
-const SIZE_KEYS: [KeyCode; 5] = [
-    KeyCode::Digit1,
-    KeyCode::Digit2,
-    KeyCode::Digit3,
-    KeyCode::Digit4,
-    KeyCode::Digit5,
-];
-
-/// The line a size key types. Exactly what a person would type, because it is the same
-/// thing arriving by a different route.
-fn chooses(size: PlanetSize) -> String {
-    format!("/new {}", size.name())
 }
 
 /// Which of the two drawings is on screen.
@@ -735,7 +666,7 @@ pub enum Drawing {
 }
 
 impl Drawing {
-    fn other(self) -> Self {
+    pub fn other(self) -> Self {
         match self {
             Drawing::Practical => Drawing::Realistic,
             Drawing::Realistic => Drawing::Practical,
@@ -757,26 +688,20 @@ impl Drawing {
 /// it has not caught up with - so the key is invented here and the page carries a control
 /// beside it, because `spec/interface.md` does not allow a capability to need a key the
 /// platform may lack.
-fn keys_to_change_drawing(
-    keys: Res<ButtonInput<KeyCode>>,
-    mut asked: ResMut<DrawingAsksSeen>,
-    mut drawing: ResMut<Drawing>,
-) {
-    // A control asks through a counter, the same shape as the reset one beside it and for
-    // the same reason: a button on a page is not on the engine's call stack.
-    let requested = game_front::shell::drawing_changes();
-    let by_control = requested != asked.0;
-    if by_control {
-        asked.0 = requested;
-    }
-    if by_control || keys.just_pressed(KeyCode::KeyT) {
+fn keys_to_change_drawing(keys: Res<ButtonInput<KeyCode>>, mut drawing: ResMut<Drawing>) {
+    if keys.just_pressed(KeyCode::KeyT) {
         *drawing = drawing.other();
     }
 }
 
-/// Whether this globe follows a game, so the readout can list the bindings that exist.
-#[derive(Resource, Clone, Copy)]
-struct FollowsTheGame(bool);
+/// Whether this globe follows a game, so the readout lists the bindings that exist.
+///
+/// False unless something says otherwise, and the only thing that says otherwise is
+/// `game-globe`'s plugin - which sets this in the same breath as adding the systems it is
+/// about. A globe advertised five keys that started no game for one release, because the
+/// systems and the advertisement of them were two things to remember.
+#[derive(Resource, Clone, Copy, Default)]
+pub struct FollowsTheGame(pub bool);
 
 /// Whether a territory's id is written on the sphere.
 ///
@@ -798,10 +723,6 @@ impl Default for ShowIds {
     }
 }
 
-/// How many changes of drawing had been asked for when the last one was obeyed.
-#[derive(Resource, Default)]
-struct DrawingAsksSeen(u64);
-
 /// What the engine was last handed, for anything outside that needs to check.
 ///
 /// Published rather than measured: once a mesh is uploaded it belongs to the render world
@@ -816,41 +737,6 @@ pub struct Drawn {
     /// How many labels are on the sphere. `spec/planet.md` puts a territory's id in the
     /// practical drawing, so in the realistic one this is zero and that is checkable.
     pub labels: usize,
-}
-
-/// The last generation the globe was built for.
-#[derive(Resource, Default)]
-struct Followed(u64);
-
-/// The globe follows the game.
-///
-/// The one `Session` is outside the engine - on the web it is not even on the same call
-/// stack, because the page calls into it - so it cannot hand the new state over when it
-/// changes. This watches a counter instead and rebuilds when the number it last saw is
-/// not the number it sees now.
-///
-/// What the globe draws is whichever game the front end is holding, and that changes in
-/// two ways: a transition, and `/new <size>` putting a different game there entirely. The
-/// counter moves for both, because both leave the same amount to redraw. Number keys used
-/// to set the size here directly, which let the view hold a world the model did not have;
-/// the view is a projection of the model, so that had to go rather than be kept as a
-/// convenience.
-fn follow_the_game(mut followed: ResMut<Followed>, mut planet: ResMut<Planet>) {
-    let generation = game_front::shell::generation();
-    if generation == followed.0 {
-        return;
-    }
-    followed.0 = generation;
-    // No planet yet is not an error. A game begins with nothing in it and is designed
-    // into existence, so this is what the first few commands of any game look like.
-    let Some(count) = game_front::shell::territory_count() else {
-        return;
-    };
-    // Only write when it would change something. Touching a `ResMut` marks it changed,
-    // and `build_globe` rebuilds the whole world when it sees that.
-    if planet.regions() != count {
-        planet.show(count);
-    }
 }
 
 fn apply_orbit(
@@ -917,6 +803,7 @@ fn place_labels(
 mod tests {
     use super::*;
 
+    use planet_model::PlanetSize;
     use planet_presentation::RESTING_PITCH;
 
     /// A viewer at these angles, at the resting distance. The geometry tests care about
@@ -988,34 +875,6 @@ mod tests {
         let tilted = globe_transform(&at(0.0, RESTING_PITCH)).rotation * north();
         // The camera looks down -z from +z, so leaning toward it means gaining z.
         assert!(tilted.z > level.z, "{tilted} is no closer than {level}");
-    }
-
-    /// One key per size, in the order the sizes are listed, and each types the line a
-    /// person would type. `game-front`'s `starting_over_gives_a_planet_of_the_size_asked_for`
-    /// is the other half: that each of those lines does what it says.
-    #[test]
-    fn the_size_keys_are_one_per_size_smallest_to_largest() {
-        assert_eq!(SIZE_KEYS.len(), PlanetSize::ALL.len());
-        let typed: Vec<String> = PlanetSize::ALL.into_iter().map(chooses).collect();
-        assert_eq!(
-            typed,
-            [
-                "/new tiny",
-                "/new small",
-                "/new medium",
-                "/new large",
-                "/new huge",
-            ]
-        );
-        // Ascending, so the digits read the way they look on the keyboard.
-        let counts: Vec<usize> = PlanetSize::ALL
-            .into_iter()
-            .map(PlanetSize::territory_count)
-            .collect();
-        assert!(
-            counts.windows(2).all(|pair| pair[0] < pair[1]),
-            "{counts:?}"
-        );
     }
 
     /// The planet drawn is the count that was asked for.

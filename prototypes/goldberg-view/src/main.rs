@@ -17,7 +17,8 @@
 //! It is a composition root, like the application, and it borrows the parts that draw:
 //! `planet-render` builds the mesh, and `planet-bevy` gives the sphere, the camera and the
 //! turning. It borrows nothing that plays: there is no game here, no console, no biome and
-//! no terrain, which is why it asks for [`GlobePlugin::detached`].
+//! no terrain. It links no game at all: `planet-bevy` names no game crate any more, so
+//! `cargo tree` for this prototype contains no console and no command language.
 //!
 //! That is the whole test of whether the boundary is real. If a prototype about polyhedra
 //! had to link the command language to draw a sphere, the layering would be a diagram
@@ -57,7 +58,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(window()))
         // Detached: the globe draws what this program tells it to, and never asks a game.
-        .add_plugins(GlobePlugin::detached(spec))
+        .add_plugins(GlobePlugin::new(spec))
         .insert_resource(Showing {
             counts,
             at: OPENS_ON,

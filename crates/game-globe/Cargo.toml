@@ -1,0 +1,11 @@
+[package]
+name = "game-globe"
+version.workspace = true
+edition.workspace = true
+description = "Binds the globe to the one game: the counter it watches and the keys that type a line."
+
+[dependencies]
+bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui"] }
+game-front.workspace = true
+planet-bevy.workspace = true
+planet-model.workspace = true

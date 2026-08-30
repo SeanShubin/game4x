@@ -9,6 +9,7 @@ members = [
     "crates/game-model",
     "crates/game-console",
     "crates/game-front",
+    "crates/game-globe",
     "crates/sphere-tessellation",
     "crates/graph-coloring",
     "crates/planet-model",
@@ -34,6 +35,7 @@ command-language = { path = "crates/command-language" }
 game-model = { path = "crates/game-model" }
 game-console = { path = "crates/game-console" }
 game-front = { path = "crates/game-front" }
+game-globe = { path = "crates/game-globe" }
 sphere-tessellation = { path = "crates/sphere-tessellation" }
 graph-coloring = { path = "crates/graph-coloring" }
 planet-model = { path = "crates/planet-model" }

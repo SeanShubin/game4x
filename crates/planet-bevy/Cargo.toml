@@ -10,6 +10,5 @@ planet-presentation.workspace = true
 planet-ecs.workspace = true
 planet-model.workspace = true
 planet-terrain.workspace = true
-game-front.workspace = true
 sphere-tessellation.workspace = true
 bevy = { version = "0.19", default-features = false, features = ["2d", "3d", "ui"] }

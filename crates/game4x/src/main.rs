@@ -126,6 +126,9 @@ fn main() {
         // The solid, a camera, and the pointer: the only place an engine's opinions land.
         // It follows the one Session by watching a counter; it never reaches into it.
         .add_plugins(planet_bevy::globe::GlobePlugin::new(spec))
+        // What makes that globe show *this* game. Separate because planet-bevy no longer
+        // knows a game exists, which is what stopped a polyhedron prototype linking one.
+        .add_plugins(game_globe::FollowsTheGamePlugin)
         // The remote control: places the camera, types what it was told to, then writes a
         // picture and a dump and quits. Added always, because it does nothing at all
         // unless it was asked for something, and a harness compiled only sometimes is a
