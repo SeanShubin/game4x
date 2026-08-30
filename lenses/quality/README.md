@@ -63,6 +63,24 @@ going back to whoever wrote it:
 That last column is the one that keeps a report from becoming a wish list. **Most findings should be
 "noted and not".** A report where everything matters is a report where nothing does.
 
+## Say it and stop
+
+**State the question, the facts, and what to do. Then stop.** Sean read a sixty-line proposal that
+said a generated file may live in the repository root and called it esoteric and vacuous. He was
+right, and the specification lane has written a rule against itself about it.
+
+This lens shares the failure mode and should say so. A report is long when the argument is long, not
+when the finding is small dressed up. Two tests before filing:
+
+- **Would the finding survive being cut to its Where, What, Why and Whether?** If the rest is
+  reasoning nobody has to follow to act, it belongs in a dated report or nowhere.
+- **Is a sentence carrying its weight, or is it a phrase that sounds settled?** An aphorism that
+  compresses a real finding earns its place. One that decorates a small one costs a reader's trust
+  in every other line.
+
+It is the same idea as competing on the value of a finding rather than the count, one step out: a
+lens spends a reader's attention by the word as well as by the item.
+
 ## What is in scope
 
 The tree, its structure, and whether the code says what the specification says. Concretely: whether

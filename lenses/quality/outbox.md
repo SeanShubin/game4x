@@ -182,6 +182,36 @@ its place by its own argument. The doc comment does not.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
+### Q-36 - The hook publishes another perspective's uncommitted work
+
+**to** code · **status** open · **raised** 2026-08-30 · **source** observed by the specification
+lane, verified here
+
+`hooks/pre-commit` runs `tools/outbox --write` and stages `pending.md`. The generator reads each
+outbox **from the working tree**, not from the index. So an outbox edited but not committed is
+rendered into `pending.md` and staged into whoever happens to commit next - a commit that may touch
+nothing of theirs.
+
+Verified by planting `Q-99` in this outbox, leaving it unstaged, running `--write`, and finding it
+in `pending.md`. Reverted after.
+
+**This is `git add -A` reintroduced by a hook.** `CLAUDE.md` forbids that staging for exactly this
+reason - another perspective's work is often uncommitted in the same tree - and the hook does it
+automatically, on every commit, without either party seeing it. It nearly bit an hour ago: this lens
+had 32 uncommitted lines in its outbox while the specification lane was committing `CLAUDE.md`.
+
+What makes it worse than a stray file is where it lands. `pending.md` is the document Sean opens, so
+a half-written finding can reach him published under another lane's commit, and the lane that wrote
+it does not know it has been published.
+
+The property that has to hold: **`pending.md` reflects what is committed, not what is on disk.**
+Reading the outboxes from the index, or refusing to regenerate while any outbox has unstaged changes
+and saying so, would both give that. **This lens has not measured the cost of either** and is not
+proposing one - a cost estimate from here was wrong once today already.
+
+Observed by the specification lane, who chose not to file into `crates/` over something they had
+only seen nearly happen. It happens.
+
 ---
 
 ## Resolved
