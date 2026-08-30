@@ -33,6 +33,32 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-3 - A prototype cannot photograph itself, and two items now need it to
+
+**to** spec · **status** open · **raised** 2026-08-30 · **source** `Q-1`
+
+`crates/game4x` can be driven from outside - `--shot` writes one frame, `--dump` writes the state -
+and that harness is what let this lane find a planet whose coastlines were pentagonal when every
+test passed. It lives in the composition root, so only the application has it.
+
+Two things now need it and cannot have it:
+
+- **`prototypes/goldberg-view`** compares the ten smallest Goldberg solids, and the question it
+  exists to answer is what 492 faces *look* like. This lane can measure that it builds in 164 ms
+  and cannot see it.
+- **`Q-1`**, the palette in three places. The copy in `planet.wgsl` is read only by the GPU path in
+  `planet-bevy`, which runs in `prototypes/planet-view`. `planet-view --capture` exists but writes
+  from the **CPU rasterizer**, so it cannot photograph the path the duplicated palette is for.
+  Deleting that copy is a change this lane cannot verify.
+
+The fix is to extract the harness so any composition root can add it, which is code and this lane's.
+What is filed here is the prior question: **whether a prototype is worth that.**
+`docs/prototypes/README.md` says a prototype is finished when its question is answered and may take
+shortcuts the game may not - which reads as *do not invest in prototypes*, and a screenshot harness
+is an investment. If the answer is that a prototype's whole value is the picture, then it is not a
+shortcut and the harness belongs everywhere; if a prototype is meant to stay cheap, `Q-1`'s
+remaining half needs a different plan.
+
 ### C-2 - Architecture rule 6 states the losing side of a decision as fact
 
 **to** spec · **status** open · **raised** 2026-08-30 · **source** `Q-4`

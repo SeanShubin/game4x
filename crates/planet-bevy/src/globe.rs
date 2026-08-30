@@ -1153,7 +1153,7 @@ mod tests {
         assert_ne!(dark, light, "one ink cannot serve both");
         // Every colour in the real palette must get an ink that contrasts with it.
         for packed in planet_render::palette::REGION_COLORS {
-            let panel = linear_of(packed);
+            let panel = mesh::linear_rgba(packed);
             let luminance = 0.2126 * panel[0] + 0.7152 * panel[1] + 0.0722 * panel[2];
             let ink = readable_on(panel);
             let inked_light = ink == Color::srgb(0.93, 0.95, 0.98);
@@ -1163,19 +1163,6 @@ mod tests {
                 "colour {packed:#08x} at luminance {luminance} got the wrong ink"
             );
         }
-    }
-
-    /// Mirrors the conversion in `planet_render::mesh`, for the palette check above.
-    fn linear_of(packed: u32) -> [f32; 4] {
-        let channel = |shift: u32| {
-            let encoded = ((packed >> shift) & 0xFF) as f32 / 255.0;
-            if encoded <= 0.04045 {
-                encoded / 12.92
-            } else {
-                ((encoded + 0.055) / 1.055).powf(2.4)
-            }
-        };
-        [channel(16), channel(8), channel(0), 1.0]
     }
 
     fn resting() -> Orbit {

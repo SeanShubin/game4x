@@ -23,8 +23,9 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `lenses/quality/outbox
 - **Q-10** - The quotation guard's convention has an unchecked near-miss form · `lenses/quality/outbox.md`
 - **Q-11** - The composition root has grown logic and tests · `lenses/quality/outbox.md`
 
-### To spec (2)
+### To spec (3)
 
+- **C-3** - A prototype cannot photograph itself, and two items now need it to · `crates/outbox.md`
 - **C-2** - Architecture rule 6 states the losing side of a decision as fact · `crates/outbox.md`
 - **C-1** - Whose file is a generated one at the repository root? · `crates/outbox.md`
 

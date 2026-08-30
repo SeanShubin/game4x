@@ -174,7 +174,12 @@ fn as_f32(vector: Vec3) -> [f32; 3] {
 ///
 /// The palette is written the way a colour picker shows it, which is sRGB, and the
 /// transfer curve has to come off before the numbers mean anything to a renderer.
-fn linear_rgba(packed: u32) -> [f32; 4] {
+///
+/// Public because it was being copied. `planet-bevy` reimplemented it to check that the
+/// ink over a panel contrasts with the panel, and a second transfer curve is a second thing
+/// to get wrong - the copy could drift and the test would keep passing, having checked its
+/// own arithmetic rather than the renderer's.
+pub fn linear_rgba(packed: u32) -> [f32; 4] {
     let channel = |shift: u32| {
         let encoded = ((packed >> shift) & 0xFF) as f32 / 255.0;
         if encoded <= 0.04045 {
