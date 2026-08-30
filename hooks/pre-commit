@@ -24,6 +24,17 @@ if [ -n "$files" ]; then
     echo "$files" | xargs git add --
 fi
 
+# The one document that says what is pending, rewritten from the outboxes it is derived from.
+# Generated rather than maintained: a hand-edited copy could disagree with its sources, and
+# every hand-held habit in this repository has rotted while every generated artifact has held.
+#
+# Unconditional rather than only when an outbox is staged, because an outbox can change in a
+# commit that does not touch one - a finding is closed by the commit that acts on it, and
+# that commit is about code.
+echo "pre-commit: rewriting pending.md from the outboxes"
+cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --write >/dev/null
+git add pending.md
+
 # The edition is passed explicitly because rustfmt is invoked directly rather than through
 # `cargo fmt`, which would reformat the whole workspace rather than only what is staged.
 rust=$(staged '*.rs')

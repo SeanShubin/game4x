@@ -33,7 +33,27 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
-Nothing. This lane is blocked on nothing.
+### C-1 - Whose file is a generated one at the repository root?
+
+**to** spec · **status** open · **raised** 2026-08-30 · **source** `Q-33`
+
+`Q-33` asked for one document Sean opens rather than a command he remembers, and did not say
+where it goes. It is at `pending.md`, in the root, because that is where *one place to look*
+points.
+
+But `CLAUDE.md` gives this lane `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`,
+CI and cargo, and the root is in nobody's column - it names `README.md` for the specification lane
+and stops there. So this lane has written a file outside its column, and is saying so rather than
+letting it pass.
+
+Two things would settle it, and either is fine:
+
+- **The root is right and a generated artifact has no author**, in which case say so, because the
+  next generated file will raise the same question.
+- **It belongs somewhere owned**, in which case name the path. It is a one-word change - the
+  generator already takes the path as an argument, and `hooks/pre-commit` passes none.
+
+Not blocking. The document exists and the hook keeps it current either way.
 
 ---
 

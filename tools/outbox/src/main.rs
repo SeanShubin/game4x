@@ -12,7 +12,9 @@
 
 use std::path::{Path, PathBuf};
 
-use outbox::{Item, LIMIT, Outboxes, duplicate_ids, open_by_addressee, read, same_section};
+use outbox::{
+    Item, LIMIT, Outboxes, duplicate_ids, open_by_addressee, pending, read, same_section,
+};
 
 fn main() {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -74,6 +76,23 @@ fn main() {
                 1
             }
         }
+        Some("--write") => {
+            let path = arguments
+                .get(1)
+                .cloned()
+                .unwrap_or_else(|| "pending.md".to_string());
+            let at = root.join(&path);
+            match std::fs::write(&at, pending(&all)) {
+                Ok(()) => {
+                    println!("wrote {path}");
+                    0
+                }
+                Err(why) => {
+                    eprintln!("cannot write {path}: {why}");
+                    2
+                }
+            }
+        }
         Some("--sections") => {
             show_same_section(&all);
             0
@@ -102,6 +121,7 @@ outbox - what is open, and addressed to whom
     outbox --check          exit 1 if anything is open and addressed
     outbox --count          the aggregate, against the limit
     outbox --sections       sections that have taken more than one proposal
+    outbox --write [PATH]   write the pending document, default pending.md
     outbox --help           this"
 }
 
