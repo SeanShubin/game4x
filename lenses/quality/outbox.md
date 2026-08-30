@@ -82,31 +82,34 @@ duplicated for, and the GPU path - the one those decimals exist to feed - cannot
 all. Deleting them is a change nobody can verify, and a renderer that quietly stops matching itself
 is the failure this item is about. That is `C-3`.
 
-### Q-2 - `Biome` lives in the game, so terrain and rendering depend on the game
+### Q-3 - `planet-bevy` is two adapters in one crate, and so is `planet-render`
 
-**to** code · **status** open · **raised** 2026-08-29 · **source**
-[report 3, finding 2](2026-08-29-coupling-under-the-game.md#2)
+**to** code · **status** open · **raised** 2026-08-28 · **half done** 2026-08-30, `465437a`
 
-A decision, not a defect. `planet-terrain` and `planet-render` each depend on the whole of
-`game-model` for one `use` line. Architecture rule 1 says the shared part belongs beneath both;
-`PlanetSize` in `planet-model` is the precedent. Blocks `Q-3` from being finished.
+**The stated harm is gone.** `planet-bevy` no longer names `game-front`, and `cargo tree` for both
+prototypes contains zero game crates where `game4x` contains seven. Verified.
 
-### Q-3 - `planet-bevy` depends on `game-front`, so a prototype links the whole game
+**What remains is the half this item folded in from report 1's finding 11**: `planet-bevy` is still
+two unrelated adapters in one crate, and `planet-render` is still *world and mesh* plus *rasterizer,
+camera and app*, with each binary paying for the other's half. Untouched, correctly, and the code
+lane said so rather than closing on the part it had done.
 
-**to** code · **status** open · **raised** 2026-08-28 · **source**
-[report 3, finding 3](2026-08-29-coupling-under-the-game.md#3), folding
-[report 1, findings 6 and 11](2026-08-28-crate-boundaries-and-duplication.md#6)
+Three things from the first half worth keeping, all of which they asked to be checked rather than
+taken, and all of which check out:
 
-`GlobePlugin::detached` removed the three systems that touch the front end and not the manifest
-line, so `cargo tree -p goldberg-view` still contains the command language. Splitting the crate is
-the same work as report 1's finding 11, which is why the three are one item.
-
-### Q-6 - `planet_ecs::gather` is dead, and its body exists twice more
-
-**to** code · **status** open · **raised** 2026-08-28 · **source**
-[report 1, finding 9](2026-08-28-crate-boundaries-and-duplication.md#9)
-
-Called by nothing. The confluence test covers the inlined copy, not the two others.
+- **`GlobePlugin::detached` could not have worked**, and the reason generalises: *a dependency is a
+  fact about a manifest, not about which systems get scheduled.* This lens filed `detached` as a
+  runtime flag over a compile-time coupling and was right about that, and still under-read it - the
+  code was in the crate whether or not it ran.
+- **It also ran.** Before `465437a`, `reset_view` sat in the unconditional system list at
+  `globe.rs:139` and called `game_front::shell::resets()` at `:671`, while `detached`'s own doc at
+  `:102` said *"Nothing added here reaches `game-front`: no counter is watched."* Verified in the
+  prior revision. A detached globe watched a counter every frame. That is `Q-10`'s shape - a comment
+  asserting a property the code does not have - in a comment written after this lens had filed
+  `Q-10`.
+- **Nothing tests that a system is scheduled.** Deleting the conditional block unregistered
+  `keys_to_change_drawing`, so `T` would have silently stopped working; the compiler caught it as an
+  unused function, and no test would have.
 
 ### Q-9 - Small duplication and dead code, six items
 
@@ -115,14 +118,6 @@ Called by nothing. The confluence test covers the inlined copy, not the two othe
 
 Noted and deliberately not, unless one is already being touched. Listed so a later report does not
 present them as new.
-
-### Q-11 - The composition root has grown logic and tests
-
-**to** code · **status** open · **raised** 2026-08-29 · **source**
-[report 3, finding 7](2026-08-29-coupling-under-the-game.md#7)
-
-`main.rs` says the crate holds no logic; the crate is 517 lines with eight tests. `inspect.rs` earns
-its place by its own argument. The doc comment does not.
 
 ### Q-12 - Two hand-rolled option parsers
 
@@ -272,6 +267,37 @@ mention - reports 35 failures of which 7 are the author's own emphasis and 13 ar
 read as markdown. And their third poison caught an off-by-one they had just written, where the
 scanner consumed up to the closing marker rather than past it, so a closer was read as the next
 opener and a whole README came back attributed to `spec/planet.md`
+
+### Q-2 - `Biome` lived in the game, so terrain and rendering depended on the game
+
+**to** code · **status** **acted** 2026-08-30 · `7283650`. Decided as `planet-model`, beside
+`PlanetSize`. Verified: `Biome` is `planet-model/src/biome.rs`, and neither `planet-terrain` nor
+`planet-render` names `game-model` any more. `game-model` re-exports it, so the game still reads as
+owning its vocabulary without owning the definition.
+
+Their second argument is the one that settles it and this lens did not have it: **every rule about a
+biome is written in `spec/planet.md`.** It is the planet's vocabulary, and it sat in the game only
+because that is where the first rule reading one happened to be
+
+### Q-6 - `planet_ecs::gather` was dead, and its body existed twice more
+
+**to** code · **status** **acted** 2026-08-30 · `9cade4c`. Neither option this item offered was
+available as written - `gather` collects owners and `advance_turn` needs entities too, from a
+different query - so the shared thing became `by_region(count, rows)`, a function over *what is
+being placed* rather than over what an owner is. Verified: three call sites, two in `planet-ecs` and
+one in `planet-bevy`. Tested directly as well as through the turn, and poisoned by making it push in
+arrival order, which failed three tests
+
+### Q-11 - The composition root had grown logic and tests
+
+**to** code · **status** **acted** 2026-08-30 · `69ab140`. One sentence, as the item said. The
+header now calls the crate a composition root *and the remote control that operates it*, names both
+exceptions and why each is there, and picked up `planet-presentation`, which the diagram was
+missing.
+
+It raised `C-6` against itself, which is the better half: fixing the false claim left a new one -
+`main.rs` now says a rule owned by `docs/architecture.md` is broken there deliberately, and carving
+an exception into another perspective's rule is not the code lane's to do
 
 ### Q-16 - The picture never sees the biome the model has
 

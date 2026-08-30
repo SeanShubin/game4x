@@ -77,6 +77,20 @@ The verification method survives, because it reads files and runs tests rather t
 weaker than it looks is the **citation**: a pointer for a reader, not evidence. Where the two could
 differ, say which one the claim rests on.
 
+## Commit by pathspec, not by staging
+
+**`git commit -- <paths>` rather than `git add` then `git commit`.** The index is shared between
+three sessions, so staging is a publish to a shared buffer and a commit takes whatever is in it.
+Committing by pathspec takes only the named files and leaves the rest of the index alone.
+
+It closes the window in the one direction this lens controls - it does not stop another session
+committing while this one's files are staged. `C-4` is the general problem and it is the
+specification lane's.
+
+Live instance, 2026-08-30: an empty `docs/process.md` sat staged in the index while this lens was
+closing four findings. It belongs to the specification lane, was not committed here, and was left
+alone rather than unstaged - another perspective may be mid-operation on it.
+
 ## Probe against a copy, not the shared tree
 
 Verifying the `Q-36` fix needed a commit, and this lens made one by creating `scratch-probe.txt` at

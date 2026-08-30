@@ -13,14 +13,11 @@ files rather than from anybody's memory of them.
 
 ## What is outstanding
 
-### To code (6)
+### To code (3)
 
 - **S-1** - `tools/outbox` should read `releases/*.md` · `docs/notes/proposals.md`
 - **Q-1** - The palette exists in three places and nothing checks the copies agree · `lenses/quality/outbox.md`
-- **Q-2** - `Biome` lives in the game, so terrain and rendering depend on the game · `lenses/quality/outbox.md`
-- **Q-3** - `planet-bevy` depends on `game-front`, so a prototype links the whole game · `lenses/quality/outbox.md`
-- **Q-6** - `planet_ecs::gather` is dead, and its body exists twice more · `lenses/quality/outbox.md`
-- **Q-11** - The composition root has grown logic and tests · `lenses/quality/outbox.md`
+- **Q-3** - `planet-bevy` is two adapters in one crate, and so is `planet-render` · `lenses/quality/outbox.md`
 
 ### To spec (6)
 
