@@ -13,7 +13,7 @@ files rather than from anybody's memory of them.
 
 ## What is outstanding
 
-### To code (11)
+### To code (10)
 
 - **Q-1** - The palette exists in three places and nothing checks the copies agree · `lenses/quality/outbox.md`
 - **Q-2** - `Biome` lives in the game, so terrain and rendering depend on the game · `lenses/quality/outbox.md`
@@ -25,7 +25,6 @@ files rather than from anybody's memory of them.
 - **Q-8** - Two identities for one territory, with opposite conventions · `lenses/quality/outbox.md`
 - **Q-10** - The quotation guard's convention has an unchecked near-miss form · `lenses/quality/outbox.md`
 - **Q-11** - The composition root has grown logic and tests · `lenses/quality/outbox.md`
-- **Q-33** - One generated document that says what is pending · `lenses/quality/outbox.md`
 
 ### To spec (1)
 

@@ -160,24 +160,6 @@ its place by its own argument. The doc comment does not.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-33 - One generated document that says what is pending
-
-**to** code · **status** open · **raised** 2026-08-30 · **source**
-[the correction](2026-08-30-two-budgets.md#one-place-to-look)
-
-Sean: *as a human, I need one place to go to figure out what is currently pending.* `tools/outbox`
-already computes exactly that and prints it to a terminal, which is a command to remember rather
-than a document to open.
-
-Have it **write** the answer as well as print it - one file, regenerated, never hand-maintained.
-Sean's queue first, then each producer's backlog beneath it, so one open document answers both *what
-must I decide* and *what is outstanding anywhere*. Wiring it into `hooks/pre-commit` beside
-`pad-tables` is what stops it going stale, and it is the same shape: a tool that rewrites a
-generated artifact from the source of truth.
-
-The tool's `LIMIT` constant currently encodes the conflated rule and should follow whatever `Q-32`
-settles rather than lead it.
-
 ---
 
 ## Resolved
@@ -232,6 +214,15 @@ wrong - see the body above
 in the file, on the proposal queue where it belongs. The crowding concern survives with no number
 and is better stated than in the item - it now says a lens crowds out *"the queue that actually
 waits on Sean"*, which is the harm this lens described only as competition between lenses
+
+### Q-33 - One generated document that says what is pending
+
+**to** code · **status** **acted** 2026-08-30 · `358edfb`. Verified: `pending.md` exists at the
+root, says what must be decided, then each producer's backlog, then the sections flag - so the
+trigger is read without being asked for. The hook is unconditional rather than firing only when an
+outbox is staged, which is right for a reason worth keeping: **an outbox changes in commits that do
+not touch one**, because a finding is closed by the commit that acts on it and that commit is about
+code. It raised `C-1` against itself, which is the better half of the delivery
 
 ### Q-16 - The picture never sees the biome the model has
 
