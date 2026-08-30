@@ -16,6 +16,7 @@
 
 const PI: f32 = 3.14159265358979323846;
 const MAX_REGIONS: u32 = 512u;
+const PALETTE_SIZE: u32 = 6u;
 
 // Matches PlanetUniform on the Rust side.
 struct Planet {
@@ -27,6 +28,13 @@ struct Planet {
     view: vec4<f32>,
     // x projection (0 fanned, 1 globe), y hovered region (-1 none), z flags, w border px
     params: vec4<f32>,
+    // The palettes, as sRGB in xyz. Sent from planet-render rather than written here.
+    palette: array<vec4<f32>, PALETTE_SIZE>,
+    players: array<vec4<f32>, PALETTE_SIZE>,
+    // xyz background sRGB, w how strongly a repeated ring is dimmed toward it
+    ground: vec4<f32>,
+    // xyz border sRGB, w how strongly an owner's colour tints a region
+    edge: vec4<f32>,
     // xyz unit direction of the seed, w packed as colour + 8 * (owner + 1)
     seeds: array<vec4<f32>, MAX_REGIONS>,
 };
@@ -36,42 +44,31 @@ struct Planet {
 const FLAG_BORDERS: u32 = 1u;
 const FLAG_DIM_REPEATS: u32 = 2u;
 
-// Palette, matching planet-render/src/palette.rs. Values are sRGB, converted below.
+// The palettes used to be written out here, as decimals transcribed by hand from
+// planet-render/src/palette.rs. Two copies of six colours, and nothing compared them:
+// changing a hex value drew a different world on the GPU than on the CPU, silently. They
+// had already drifted, by rounding - 0x1B3A5C is 0.10588… and this file said 0.106.
+//
+// They arrive in the uniform now, so there is one copy and the question cannot be asked.
 fn region_colour(index: u32) -> vec3<f32> {
-    switch index {
-        case 0u: { return vec3<f32>(0.106, 0.227, 0.361); } // dark blue
-        case 1u: { return vec3<f32>(0.545, 0.290, 0.612); } // purple
-        case 2u: { return vec3<f32>(0.310, 0.659, 0.561); } // teal green
-        case 3u: { return vec3<f32>(0.910, 0.851, 0.541); } // pale gold
-        case 4u: { return vec3<f32>(0.769, 0.341, 0.235); } // burnt orange
-        default: { return vec3<f32>(0.949, 0.949, 0.925); } // off white
-    }
+    return planet.palette[min(index, PALETTE_SIZE - 1u)].rgb;
 }
 
 fn player_colour(index: u32) -> vec3<f32> {
-    switch index {
-        case 0u: { return vec3<f32>(0.898, 0.282, 0.302); } // red
-        case 1u: { return vec3<f32>(0.243, 0.608, 1.000); } // blue
-        case 2u: { return vec3<f32>(0.188, 0.643, 0.424); } // green
-        case 3u: { return vec3<f32>(0.961, 0.851, 0.039); } // yellow
-        case 4u: { return vec3<f32>(0.898, 0.549, 0.173); } // orange
-        default: { return vec3<f32>(0.690, 0.490, 0.910); } // violet
-    }
+    return planet.players[min(index, PALETTE_SIZE - 1u)].rgb;
 }
 
-// The palettes above are written as sRGB, because that is how they are written in
-// planet-render and how a human reads a hex colour. The pipeline wants linear, so the
-// conversion happens once at the end rather than in every constant.
+// The palettes arrive as sRGB, because that is how they are written in planet-render and
+// how a human reads a hex colour - and because the mixing below is done in sRGB, which is
+// what the CPU rasterizer does. The pipeline wants linear, so the conversion happens once
+// at the end rather than per constant.
 fn srgb_to_linear(colour: vec3<f32>) -> vec3<f32> {
     let higher = pow((colour + vec3<f32>(0.055)) / vec3<f32>(1.055), vec3<f32>(2.4));
     let lower = colour / vec3<f32>(12.92);
     return select(higher, lower, colour <= vec3<f32>(0.04045));
 }
 
-const BACKGROUND: vec3<f32> = vec3<f32>(0.047, 0.055, 0.071);
-const BORDER: vec3<f32> = vec3<f32>(0.020, 0.027, 0.039);
-const DUPLICATE_STRENGTH: f32 = 0.34;
-const OWNER_TINT: f32 = 0.55;
+
 
 // Where a pixel lands on the sphere. Returns xyz = world direction, w = ring number,
 // or w < 0 for a pixel that shows nothing (only possible when holding the ball
@@ -145,7 +142,7 @@ fn fragment(mesh: VertexOutput) -> @location(0) vec4<f32> {
 
     let sample = screen_to_sample(across, up);
     if sample.w < 0.0 {
-        return vec4<f32>(srgb_to_linear(BACKGROUND), 1.0);
+        return vec4<f32>(srgb_to_linear(planet.ground.rgb), 1.0);
     }
     let direction = sample.xyz;
 
@@ -169,7 +166,7 @@ fn fragment(mesh: VertexOutput) -> @location(0) vec4<f32> {
     let owner_plus_one = packed / 8u;
     var colour = region_colour(packed % 8u);
     if owner_plus_one > 0u {
-        colour = mix(colour, player_colour(owner_plus_one - 1u), OWNER_TINT);
+        colour = mix(colour, player_colour(owner_plus_one - 1u), planet.edge.w);
     }
 
     // The region under the cursor.
@@ -197,13 +194,13 @@ fn fragment(mesh: VertexOutput) -> @location(0) vec4<f32> {
         let gap = best - second;
         let in_pixels = gap / max(fwidth(gap), 1e-8);
         if in_pixels < planet.params.w {
-            colour = BORDER;
+            colour = planet.edge.rgb;
         }
     }
 
     // Every ring past the first is a repeat of the world, and is dimmed.
     if (flags & FLAG_DIM_REPEATS) != 0u && sample.w > 0.5 {
-        colour = mix(BACKGROUND, colour, DUPLICATE_STRENGTH);
+        colour = mix(planet.ground.rgb, colour, planet.ground.w);
     }
 
     return vec4<f32>(srgb_to_linear(colour), 1.0);

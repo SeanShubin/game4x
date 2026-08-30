@@ -15,6 +15,7 @@ use bevy::shader::ShaderRef;
 use bevy::sprite_render::{Material2d, Material2dPlugin};
 use planet_render::PlanetView;
 use planet_render::camera::Projection;
+use planet_render::palette;
 
 /// Must match `MAX_REGIONS` in the shader.
 pub const MAX_REGIONS: usize = 512;
@@ -34,6 +35,24 @@ pub struct PlanetUniform {
     pub view: Vec4,
     /// x projection, y hovered, z flags, w border pixels
     pub params: Vec4,
+    /// The region palette, as sRGB in xyz.
+    ///
+    /// **Sent rather than written down.** These six colours used to exist twice - as hex
+    /// in `planet-render/src/palette.rs` and as hand-transcribed decimals in
+    /// `planet.wgsl` - so changing one drew a different world on the GPU than on the CPU
+    /// and nothing said so. The transcription had already rounded: `0x1B3A5C` is
+    /// `0.10588…` and the shader said `0.106`.
+    ///
+    /// sRGB rather than linear because the shader mixes borders and tints in sRGB, which
+    /// is what the CPU rasterizer does, and converts once at the end. Sending linear here
+    /// would silently change the arithmetic rather than only its source.
+    pub palette: [Vec4; palette::REGION_COLORS.len()],
+    /// The player palette, as sRGB in xyz, and for the same reason.
+    pub players: [Vec4; palette::PLAYER_COLORS.len()],
+    /// xyz background as sRGB, w how strongly a repeated ring is dimmed toward it
+    pub ground: Vec4,
+    /// xyz border as sRGB, w how strongly an owner's colour tints a region
+    pub edge: Vec4,
     /// xyz seed direction, w packed as colour + 8 * (owner + 1)
     pub seeds: [Vec4; MAX_REGIONS],
 }
@@ -46,6 +65,10 @@ impl Default for PlanetUniform {
             row2: Vec4::Z,
             view: Vec4::new(1.0, 1.0, 1.0, 0.0),
             params: Vec4::ZERO,
+            palette: palette::REGION_COLORS.map(srgb),
+            players: palette::PLAYER_COLORS.map(srgb),
+            ground: srgb(palette::BACKGROUND).with_w(palette::DUPLICATE_STRENGTH as f32),
+            edge: srgb(palette::BORDER).with_w(palette::OWNER_TINT as f32),
             seeds: [Vec4::ZERO; MAX_REGIONS],
         }
     }
@@ -126,6 +149,17 @@ pub fn fill_uniform(view: &PlanetView, hovered: Option<usize>) -> PlanetUniform 
         BORDER_PIXELS,
     );
     uniform
+}
+
+/// One packed colour, as sRGB components in `xyz`.
+fn srgb(colour: u32) -> Vec4 {
+    let (red, green, blue) = palette::split(colour);
+    Vec4::new(
+        red as f32 / 255.0,
+        green as f32 / 255.0,
+        blue as f32 / 255.0,
+        0.0,
+    )
 }
 
 fn as_vec4(row: planet_render::Vec3) -> Vec4 {

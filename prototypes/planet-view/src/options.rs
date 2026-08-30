@@ -1,5 +1,6 @@
 //! Command line parsing. Nothing here knows how the view works or how it is drawn.
 
+use planet_bevy::Renderer;
 use planet_render::{Params, WorldSpec};
 use std::error::Error;
 
@@ -12,6 +13,12 @@ pub struct Options {
     pub params: Params,
     /// Render one frame to this path and exit, instead of opening a window.
     pub capture: Option<String>,
+    /// Where to write a photograph of what the *engine* drew, if asked for.
+    pub shot: Option<String>,
+    /// Frames to let pass before the shutter.
+    pub settle: u32,
+    /// Which path draws the sphere, when the window opens.
+    pub renderer: Renderer,
     pub turn_right: f64,
     pub turn_up: f64,
     pub zoom: f64,
@@ -29,6 +36,10 @@ impl Default for Options {
             height: DEFAULT_HEIGHT,
             params: Params::default(),
             capture: None,
+            shot: None,
+            // Enough frames for the world to be built and the first draw to land.
+            settle: 30,
+            renderer: Renderer::default(),
             turn_right: 0.0,
             turn_up: 0.0,
             zoom: 1.0,
@@ -92,6 +103,16 @@ pub fn parse() -> Result<Options, Box<dyn Error>> {
                 options.generation_requested = true;
             }
             "--capture" => options.capture = Some(value()?),
+            "--shot" => options.shot = Some(value()?),
+            "--settle" => options.settle = value()?.parse()?,
+            "--renderer" => {
+                let word = value()?;
+                options.renderer = match word.as_str() {
+                    "gpu" => Renderer::Gpu,
+                    "cpu" => Renderer::Cpu,
+                    other => return Err(format!("unknown renderer {other}").into()),
+                };
+            }
             "--turn-right" => options.turn_right = value()?.parse::<f64>()?.to_radians(),
             "--turn-up" => options.turn_up = value()?.parse::<f64>()?.to_radians(),
             "--zoom" => options.zoom = value()?.parse()?,
