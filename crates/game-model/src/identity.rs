@@ -74,66 +74,6 @@ impl fmt::Display for Resource {
     }
 }
 
-/// `spec/planet.md`: *each territory has a biome*, and *a territory's biome is what the
-/// terrain gives it*.
-///
-/// `spec/planet.md`: *the biomes are ocean, ice, desert, grassland, jungle and mountain.*
-///
-/// Six, and chosen by **role rather than by appearance**: the test was whether knowing the
-/// biome changes what a player does with a territory, or only how pleased they are to have
-/// it. A planet may still draw tundra and savanna; they resolve to one of these until a
-/// rule can tell them apart.
-///
-/// It is a fact of the model rather than of the picture so that the two cannot drift:
-/// without that, a territory could be ice in the model while the realistic drawing paints
-/// jungle across it, and nothing would be violated.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum Biome {
-    Ocean,
-    Ice,
-    Desert,
-    Grassland,
-    Jungle,
-    Mountain,
-}
-
-impl Biome {
-    pub const ALL: [Self; 6] = [
-        Self::Ocean,
-        Self::Ice,
-        Self::Desert,
-        Self::Grassland,
-        Self::Jungle,
-        Self::Mountain,
-    ];
-
-    pub fn name(self) -> &'static str {
-        match self {
-            Biome::Ocean => "ocean",
-            Biome::Ice => "ice",
-            Biome::Desert => "desert",
-            Biome::Grassland => "grassland",
-            Biome::Jungle => "jungle",
-            Biome::Mountain => "mountain",
-        }
-    }
-
-    pub fn named(word: &str) -> Option<Self> {
-        Self::ALL.into_iter().find(|biome| biome.name() == word)
-    }
-
-    /// `spec/planet.md`: *no territory can be claimed whose biome is ocean.*
-    pub fn is_claimable(self) -> bool {
-        self != Biome::Ocean
-    }
-}
-
-impl fmt::Display for Biome {
-    fn fmt(&self, out: &mut fmt::Formatter<'_>) -> fmt::Result {
-        out.write_str(self.name())
-    }
-}
-
 /// `releases/first-release.md` gives the Ark and the Pioneer. Both are founding units:
 /// `spec/unit-types.md` says an Ark arrives from orbit and a Pioneer from an adjacent
 /// territory, and each transforms into what a territory needs to sustain itself.

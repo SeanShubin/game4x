@@ -26,11 +26,13 @@
 //! should survive is the *shape*: gather into plain data, resolve with a pure function,
 //! apply the result.
 
+pub mod biome;
 pub mod intent;
 pub mod size;
 pub mod topology;
 pub mod world;
 
+pub use biome::Biome;
 pub use intent::Intent;
 pub use size::PlanetSize;
 pub use topology::Topology;

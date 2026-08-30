@@ -8,7 +8,8 @@
 //! Designing the world is not exempt. `create planet` is a transition like `land` is,
 //! because which phase a game is in is part of its state.
 
-use crate::identity::{Biome, Resource, StructureKind, TerritoryId, UnitKind};
+use crate::Biome;
+use crate::identity::{Resource, StructureKind, TerritoryId, UnitKind};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Transition {

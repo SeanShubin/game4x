@@ -4,7 +4,8 @@
 //! boundary, which is why ending a turn can resolve every territory independently and in
 //! any order - see [`crate::game::Game::after`].
 
-use crate::identity::{Biome, Resource, TerritoryId};
+use crate::Biome;
+use crate::identity::{Resource, TerritoryId};
 
 /// What one citizen is worth in violence. `releases/first-release.md`: Citizen, force 1.
 pub const CITIZEN_FORCE: u32 = 1;

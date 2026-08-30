@@ -5,3 +5,4 @@ edition.workspace = true
 description = "The game: a state, a transition, and the one function between them. Integers only, engine-free."
 
 [dependencies]
+planet-model.workspace = true

@@ -699,7 +699,7 @@ impl Game {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::identity::Biome;
+    use crate::Biome;
 
     /// A ring of three territories, enough to test adjacency without a sphere.
     fn ring(count: usize) -> Vec<Vec<TerritoryId>> {

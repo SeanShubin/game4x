@@ -9,8 +9,10 @@ colours; knows nothing about windows, input devices, or any graphics engine.
 
 The engine is the part most likely to be replaced. This project already replaced minifb
 with Bevy once, and nothing in here changed — because nothing in here can name an
-engine type. The compiler enforces that: the only dependencies are the two model
-crates.
+engine type. The compiler enforces that: every dependency is a crate beneath it -
+the geometry, the colouring, the planet model and the terrain. **Not the game.** It
+depended on `game-model` for one `use` line until `Biome` moved to `planet-model`,
+which is where every rule about a biome is written down anyway.
 
 The other half of the payoff is testing. Because [`PlanetView`](src/app.rs) is a plain
 object, a whole session — drag, zoom, resize, regenerate, draw — runs in a unit test

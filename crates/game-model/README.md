@@ -37,20 +37,20 @@ empty.
 
 ## Public surface
 
-| Type                                                             | What it is                                                              |
-| ---------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `Game`                                                           | The whole state: phase, turn, territories, adjacency, units             |
-| `Phase`                                                          | `Design` or `Play`. Part of the state, which is why one function serves |
-| `Transition`                                                     | Every way a game state may change, one variant apiece                   |
-| `Rejection`                                                      | Why a transition was refused, in the terms of the game                  |
-| `Territory`                                                      | A territory and what it carries: a biome, nodes, extractors, citizens   |
-| `Biome`                                                          | What the terrain gives a territory. No rule reads one yet               |
-| `Node`                                                           | One resource node and its density                                       |
-| `Extractor`                                                      | A structure worked to draw a resource out of a node                     |
-| `cost`                                                           | The release's tuning figures, gathered in one module                    |
-| `Unit`                                                           | A unit and where it is                                                  |
-| `Location`                                                       | In orbit, or on a territory                                             |
-| `TerritoryId`, `UnitId`, `UnitKind`, `StructureKind`, `Resource` | Canonical identity and the closed lists                                 |
+| Type                                                             | What it is                                                                                                     |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `Game`                                                           | The whole state: phase, turn, territories, adjacency, units                                                    |
+| `Phase`                                                          | `Design` or `Play`. Part of the state, which is why one function serves                                        |
+| `Transition`                                                     | Every way a game state may change, one variant apiece                                                          |
+| `Rejection`                                                      | Why a transition was refused, in the terms of the game                                                         |
+| `Territory`                                                      | A territory and what it carries: a biome, nodes, extractors, citizens                                          |
+| `Biome`                                                          | What the terrain gives a territory. Defined in `planet-model`, because the terrain and the drawing need it too |
+| `Node`                                                           | One resource node and its density                                                                              |
+| `Extractor`                                                      | A structure worked to draw a resource out of a node                                                            |
+| `cost`                                                           | The release's tuning figures, gathered in one module                                                           |
+| `Unit`                                                           | A unit and where it is                                                                                         |
+| `Location`                                                       | In orbit, or on a territory                                                                                    |
+| `TerritoryId`, `UnitId`, `UnitKind`, `StructureKind`, `Resource` | Canonical identity and the closed lists                                                                        |
 
 The design transitions are the five `spec/console.md` says are available only before
 `start`; `Transition::is_design` is what tells them apart, and a test asserts the set is

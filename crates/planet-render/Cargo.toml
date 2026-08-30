@@ -9,4 +9,3 @@ sphere-tessellation.workspace = true
 graph-coloring.workspace = true
 planet-model.workspace = true
 planet-terrain.workspace = true
-game-model.workspace = true

@@ -165,7 +165,7 @@ fn ground(sample: &planet_terrain::Sample, at: Vec3, seed: u64) -> [f32; 4] {
 /// biome to be a quantity that means something there: depth for water, height for rock,
 /// moisture for anything growing.
 fn tone_of(sample: &planet_terrain::Sample) -> [f32; 3] {
-    use game_model::Biome;
+    use planet_model::Biome;
 
     let (dark, light, mix) = match planet_terrain::biome_of(sample) {
         Biome::Ocean => (

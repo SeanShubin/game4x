@@ -31,7 +31,14 @@ pub mod transition;
 pub mod unit;
 
 pub use game::{Game, Phase};
-pub use identity::{Biome, Resource, StructureKind, TerritoryId, UnitId, UnitKind};
+pub use identity::{Resource, StructureKind, TerritoryId, UnitId, UnitKind};
+
+/// What kind of ground a territory is, from [`planet_model`].
+///
+/// Re-exported rather than moved out of sight: a biome is part of this model's vocabulary
+/// and every rule that reads one is here. What is *not* here is the definition, because
+/// `planet-terrain` and `planet-render` need it too and neither of them is the game.
+pub use planet_model::Biome;
 pub use rejection::Rejection;
 pub use territory::{Extractor, Node, Territory};
 pub use transition::Transition;

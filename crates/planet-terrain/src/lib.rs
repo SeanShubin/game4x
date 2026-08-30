@@ -48,7 +48,7 @@
 //! `spec/invariants.md`'s *a game state is exactly the result of applying every transition
 //! in order* needs in order to survive a replay on somebody else's computer.
 
-use game_model::Biome;
+use planet_model::Biome;
 use sphere_tessellation::Solid;
 use sphere_tessellation::vec3::Vec3;
 
