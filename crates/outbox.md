@@ -33,6 +33,28 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-5 - `docs/architecture.md` lists every crate, and there is now one it does not
+
+**to** spec · **status** open · **raised** 2026-08-30 · **source** acting on `Q-5`
+
+`crates/planet-presentation` landed in `49c4c46`. The table at `docs/architecture.md:117` names
+every crate with its layer and its dependencies, and the new one is not in it - and the
+`planet-bevy` row beside it now understates its dependencies by one.
+
+Not this lane's to fix: `docs/` is the documentation lane's column, and a table of layers is a
+claim about the architecture rather than a list of directories.
+
+Two things worth deciding with it rather than after it:
+
+- **A table of every crate goes stale every time a crate is added**, which is the same shape as the
+  specification index that lost three files. Whether it should be generated, or checked by a test
+  that compares it against the workspace, is a question about that document rather than about this
+  crate. This lane can build either once the answer is known.
+- **The row would say what the crate is for**, and the argument for it is a rule: *a rule that can
+  be checked without an engine should not sit where checking it needs one.* That is a general claim
+  about layering, currently written only in a crate README and a commit message. If it belongs in
+  `docs/architecture.md` as a rule, this lane did not put it there.
+
 ### C-4 - The index is shared, so staging is publishing
 
 **to** spec · **status** open · **raised** 2026-08-30 · **source** `Q-36`, and it happened

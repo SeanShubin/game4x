@@ -24,8 +24,9 @@ files rather than from anybody's memory of them.
 - **Q-10** - The quotation guard's convention has an unchecked near-miss form · `lenses/quality/outbox.md`
 - **Q-11** - The composition root has grown logic and tests · `lenses/quality/outbox.md`
 
-### To spec (4)
+### To spec (5)
 
+- **C-5** - `docs/architecture.md` lists every crate, and there is now one it does not · `crates/outbox.md`
 - **C-4** - The index is shared, so staging is publishing · `crates/outbox.md`
 - **C-3** - A prototype cannot photograph itself, and two items now need it to · `crates/outbox.md`
 - **C-2** - Architecture rule 6 states the losing side of a decision as fact · `crates/outbox.md`
