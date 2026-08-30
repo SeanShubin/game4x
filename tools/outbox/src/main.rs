@@ -91,7 +91,7 @@ outbox - what is open, and addressed to whom
     outbox --to WHO         one addressee's inbox
     outbox --check          exit 1 if anything is open and addressed
     outbox --count          the aggregate, against the limit
-    outbox --sections       sections that took more than one proposal in a day
+    outbox --sections       sections that have taken more than one proposal
     outbox --help           this"
 }
 
@@ -132,11 +132,11 @@ fn complain(all: &Outboxes) -> Vec<String> {
     complaints
 }
 
-/// Sections that took more than one proposal on one day.
+/// Sections that have taken more than one proposal.
 ///
-/// The trigger behind the rule Sean decided. Not a defect list: several proposals landing
-/// in one section on one day is what a day of work on one topic looks like. What it says is
-/// that nobody has asked whether they all still hold together.
+/// The trigger behind the rule Sean decided. Not a defect list: several proposals in one
+/// section is what working on one topic looks like. What it says is that nobody has asked
+/// whether they all still hold together.
 fn show_same_section(all: &Outboxes) {
     let flags = same_section(&all.landed);
     if flags.is_empty() {
@@ -144,17 +144,12 @@ fn show_same_section(all: &Outboxes) {
         return;
     }
     println!(
-        "{} section(s) took more than one proposal in a day - re-read each whole, and ask",
+        "{} section(s) have taken more than one proposal - re-read each whole, and ask",
         flags.len()
     );
     println!("whether all of them can hold at once:");
     for flag in &flags {
-        println!(
-            "  {} on {} - {}",
-            flag.destination,
-            flag.date,
-            flag.proposals.join(", ")
-        );
+        println!("  {} - {}", flag.destination, flag.proposals.join(", "));
     }
 }
 

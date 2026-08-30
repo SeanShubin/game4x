@@ -120,6 +120,13 @@ pub fn parse(text: &str, outbox: &str) -> Vec<Item> {
         };
         // The field line is the next non-blank line, because a blank line between a heading
         // and its fields is how markdown is normally written.
+        //
+        // **An item without an address is not an item.** That is load-bearing rather than
+        // tidy: anything whose field line does not carry `**to**` is skipped entirely, so a
+        // format change that dropped the address would delete a whole outbox from this
+        // index rather than report it empty - silently, because a file that parses to
+        // nothing and a file with nothing in it look identical from here. The next person
+        // to change an outbox's format needs to know that before they do it.
         let Some(fields) = lines[at + 1..]
             .iter()
             .find(|line| !line.trim().is_empty())
@@ -161,11 +168,11 @@ pub struct Landed {
     pub date: String,
 }
 
-/// Several proposals that landed in the same place on the same day.
+/// Several proposals that landed in the same section.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SameSection {
     pub destination: String,
-    pub date: String,
+    /// Every proposal that landed there, oldest first.
     pub proposals: Vec<String>,
 }
 
@@ -227,28 +234,36 @@ fn one_arrow(destination: &str) -> String {
 
 /// Where more than one proposal landed in the same section on the same day.
 ///
-/// The trigger behind the rule Sean decided: *when more than one proposal lands in the same
-/// file and section, re-read that section whole and ask whether all of them can hold at
-/// once.* A rule with nothing emitting its condition is a duty somebody has to remember,
-/// and every hand-held duty in this repository has rotted.
+/// The trigger behind the rule Sean decided: *when a proposal lands in a section another
+/// proposal has already landed in, re-read that section whole and ask whether all of them
+/// can hold at once.* A rule with nothing emitting its condition is a duty somebody has to
+/// remember, and every hand-held duty in this repository has rotted.
 ///
-/// It is a **prompt to re-read, not a defect**. Six proposals landing in one section on one
-/// day is ordinary; that is what a day of work on one topic looks like. What it cannot tell
-/// you is whether they all still hold together, and that is the question it exists to ask.
+/// **Not scoped to a day, deliberately.** It was, and that was wrong: a contradiction is
+/// not scoped to a day either. `P-100` and `P-109` happened to land together so it fired,
+/// but had `P-109` come a week later the collision would be identical and the flag silent.
+/// Nothing about two proposals contradicting each other depends on their arriving together.
+///
+/// It is a **prompt to re-read, not a defect**. Six proposals in one section is ordinary -
+/// that is what working on one topic looks like. What it cannot tell you is whether they
+/// all still hold together, and that is the question it exists to ask.
+///
+/// The threshold is more than one, not more than two. Fitting it to the two collisions
+/// actually seen would be overfitting, and the costs are wildly asymmetric: a false fire
+/// costs re-reading ten bullets, and the contradiction that was missed cost two days.
 pub fn same_section(landed: &[Landed]) -> Vec<SameSection> {
-    let mut grouped: BTreeMap<(String, String), Vec<String>> = BTreeMap::new();
+    let mut grouped: BTreeMap<String, Vec<String>> = BTreeMap::new();
     for one in landed {
         grouped
-            .entry((one.destination.clone(), one.date.clone()))
+            .entry(one.destination.clone())
             .or_default()
             .push(one.id.clone());
     }
     let mut flags: Vec<SameSection> = grouped
         .into_iter()
         .filter(|(_, proposals)| proposals.len() > 1)
-        .map(|((destination, date), proposals)| SameSection {
+        .map(|(destination, proposals)| SameSection {
             destination,
-            date,
             proposals,
         })
         .collect();
@@ -257,7 +272,6 @@ pub fn same_section(landed: &[Landed]) -> Vec<SameSection> {
         b.proposals
             .len()
             .cmp(&a.proposals.len())
-            .then(a.date.cmp(&b.date))
             .then(a.destination.cmp(&b.destination))
     });
     flags
@@ -379,32 +393,51 @@ One line of what it is.
         .expect("the proposal queue is where the workflow says it is");
         let flags = same_section(&accepted(&queue));
 
-        let group = |destination: &str, date: &str| {
+        let group = |destination: &str| {
             flags
                 .iter()
-                .find(|flag| flag.destination == destination && flag.date == date)
-                .unwrap_or_else(|| panic!("no group for {destination} on {date}"))
+                .find(|flag| flag.destination == destination)
+                .unwrap_or_else(|| panic!("no group for {destination}"))
         };
 
-        assert_eq!(
-            group("`spec/planet.md` -> Presentation", "2026-08-28")
-                .proposals
-                .len(),
-            6
-        );
-        assert_eq!(
-            group(
-                "`spec/invariants.md` -> Control without tedium",
-                "2026-08-28"
-            )
-            .proposals
-            .len(),
-            5
-        );
-        let carries = group("`spec/planet.md` -> What a territory carries", "2026-08-28");
-        assert_eq!(carries.proposals.len(), 4);
+        // The collision the trigger exists for: two proposals that contradict each other,
+        // in one section. They landed on one day, but the flag must not need them to.
+        let carries = group("`spec/planet.md` -> What a territory carries");
         assert!(carries.proposals.contains(&"P-100".to_string()));
         assert!(carries.proposals.contains(&"P-109".to_string()));
+
+        // And the other two sections the lens named, the busiest in the queue.
+        assert!(group("`spec/planet.md` -> Presentation").proposals.len() >= 6);
+        assert!(
+            group("`spec/invariants.md` -> Control without tedium")
+                .proposals
+                .len()
+                >= 5
+        );
+    }
+
+    /// A contradiction is not scoped to a day, so neither is the flag.
+    ///
+    /// This is the case the date-scoped version missed completely: two proposals in one
+    /// section, a week apart. Had `P-109` arrived a week after `P-100`, the collision would
+    /// have been identical and nothing would have said so.
+    #[test]
+    fn two_proposals_a_week_apart_in_one_section_still_flag() {
+        let landed = vec![
+            Landed {
+                id: "P-100".to_string(),
+                destination: "`spec/planet.md` -> What a territory carries".to_string(),
+                date: "2026-08-28".to_string(),
+            },
+            Landed {
+                id: "P-109".to_string(),
+                destination: "`spec/planet.md` -> What a territory carries".to_string(),
+                date: "2026-09-04".to_string(),
+            },
+        ];
+        let flags = same_section(&landed);
+        assert_eq!(flags.len(), 1, "a week apart is still the same section");
+        assert_eq!(flags[0].proposals, ["P-100", "P-109"]);
     }
 
     /// One section written two ways is one section. The queue uses both arrows, because the
