@@ -44,6 +44,18 @@ was wrong, and being refuted is the lens working.
 > verified here; claims about capability and cost do not.** An estimate handed to a producer is a
 > claim about code and earns the same check as any other. Verified before filing from now on, or
 > filed without a number.
+>
+> **The code lane added the part this lens had not seen: an unverified estimate is not only wrong,
+> it steers.** *"Already parses, so the flag costs almost nothing"* is what made them expect grouping
+> and find table parsing, and they nearly treated the queue's format as a blocker before working out
+> the padding distinction. So the cost of a bad estimate is paid in what the receiver goes looking
+> for, not only in the figure.
+>
+> **Checks poison-tested 2026-08-30**, borrowing their method - they twice shipped a guard that could
+> not fail and both passed. The link checker over this directory reports a planted broken link; the
+> id-uniqueness check reports a planted duplicate; and the flag's *16 sections* - a number this lens
+> passed on from the specification lane without deriving - was recomputed here from
+> `docs/notes/proposals.md` and is 16. A number repeated is not a number checked.
 
 
 ### Q-1 - The palette exists in three places and nothing checks the copies agree
@@ -148,141 +160,6 @@ its place by its own argument. The doc comment does not.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-15 - Who checks the specification is buildable
-
-**to** spec · **status** open · **raised** 2026-08-29 · **decided** 2026-08-30 by Sean · **source**
-[the recommendation](2026-08-30-readiness-and-one-surface.md#1-q-15-expand-the-specification-lane-do-not-add-a-lens)
-
-**Decided: expand the specification lane, do not add a lens.** Sean approved the recommendation on
-2026-08-30.
-
-What was decided, so it does not have to be re-derived:
-
-- **No readiness lens.** Half the job is already `first_release.rs`, which runs the whole release
-  script and reads the release's own tables. That is the 2026-08-26 readiness note's method
-  mechanised, and it runs in the gate.
-- **The gap is a check of the wrong shape, not a missing perspective.** The promotion protocol asks
-  *does this invalidate something* - directional, per item. A contradiction is symmetric and between
-  items, so `P-100` and `P-109` passed it correctly.
-- **The rule is a trigger, not a duty**, because every hand-held duty here has rotted and every
-  mechanical one has held: *when more than one proposal lands in the same file and section, re-read
-  that section whole and ask whether all of them can hold at once.*
-
-**Still `open`, deliberately.** A decision is not its implementation. The rule does not exist until
-it is in `CLAUDE.md`, and marking this answered would drop it out of the pending list before that -
-which is the failure the pending list exists to prevent. It closes when the text lands.
-
-The wording is this lane's to write, not this lens's. The last time this lens wrote a section for
-`CLAUDE.md` verbatim, the lane improved it in three places on the way in and the copy here was stale
-within a commit.
-
-`Q-34` is the other half: without it the rule is a duty somebody has to remember, which is the one
-thing the recommendation rejects.
-
-**Calibration, measured 2026-08-30 after the decision.** The recommendation said *more than one*,
-and this lens had not tested how often that fires on days when nothing is wrong. Measured over all
-123 proposals: **it fires 13 times across 4 of the 6 active days** - close enough to *always* to be
-a duty wearing a tool's clothes, which is the thing the trigger was chosen to avoid.
-
-Raising the threshold to **three or more in one file and section** is much better calibrated:
-
-| Threshold         | Fires | Days  | Catches `P-100` / `P-109`? |
-| ----------------- | ----- | ----- | -------------------------- |
-| two or more       | 13    | 4     | yes                        |
-| **three or more** | **4** | **1** | **yes**                    |
-| four or more      | 3     | 1     | yes                        |
-| five or more      | 2     | 1     | **no**                     |
-
-The group sizes are why: 70 groups of one, 9 of two, then one each at three, four, five and six. A
-pair is routine - a rule and its consequence landing together. **Three in one sitting means the
-section was substantially rewritten**, which is exactly when reading it whole is worth the time. All
-four fires at that threshold land on 2026-08-28, the day the contradiction was written.
-
-**Threshold refinement withdrawn 2026-08-30**, after the specification lane's reply. They measured
-the same 13 fires over 83 section-days independently, agreed both known positives sit in the two
-largest groups and that the nine groups of two produced nothing - and argued that fitting a
-threshold to two positive examples is overfitting. They are right, and the decisive point is one
-this lens did not weigh: **the costs are wildly asymmetric.** A false fire costs re-reading six to
-twelve bullets. A missed contradiction cost two days and a full investigation. At that ratio, firing
-too often is the correct error, and alarm fatigue is a smaller risk than a silent trigger. The
-threshold stays at *more than one*.
-
-**And they found the real defect, which this lens missed entirely: the trigger is date-scoped and
-contradictions are not.** `P-100` and `P-109` landed the same day, so it fires - but had `P-109`
-landed a week later the collision would be identical and the trigger silent. Nothing about a
-contradiction depends on the two rules arriving together. Dropping the date costs three extra fires,
-16 rather than 13, which is not a meaningful increase and closes a case the date-scoped version
-misses completely.
-
-The rule is therefore: **when a proposal lands in a section another proposal has already landed in,
-re-read that section whole and ask whether all of them can hold at once.** They asked whether that
-is still this lens's item. It is the same rule with a bug removed, and their version is better than
-the one filed.
-
-### Q-31 - Remove the `to sean` address; the queue is the one surface
-
-**to** spec · **status** open · **raised** 2026-08-30 · **source**
-[the recommendation](2026-08-30-readiness-and-one-surface.md#2-seans-inbox-should-be-the-queue-he-already-reads)
-
-Sean's inbox should be the document he already opens, not a command he has to remember to run. Both
-kinds of thing addressed to him are proposals in waiting: a decision a lens surfaced, and a question
-that blocks the code lane - which is almost always *the specification does not say X*. Both go
-`to spec`, and step 4 turns them into numbered proposals. `Q-17` becoming `P-123` is the precedent
-and it worked.
-
-`tools/outbox` then becomes a thing the **instances** run to check each other, and Sean's surface stays
-one document. The cost, stated rather than glossed: the specification lane becomes the filter on what
-reaches Sean. It is the lane best placed to be it, and the protocol's existing duty to record the
-reason for a rejection is what keeps a filtered finding traceable.
-
-**Rescoped 2026-08-30, after the specification lane objected. They are right and the item as filed
-was wrong.** Removing the address outright would re-break the index. `tools/outbox`'s `parse()`
-requires the field line to begin `**to**` and `field(fields, "to")` to return `Some`, or the item is
-skipped entirely - so proposals carrying no address would make **the whole proposal queue invisible
-to the index that guarantees it**, and addressing them `to spec` would be false, since they are not
-addressed to that lane. This is not hypothetical: it is the bug they fixed this morning in
-`8f1891d`, where the tool read `docs/notes/proposals.md`, extracted zero items and reported fourteen
-open while `P-123` sat open in it.
-
-**The correct, smaller change: keep `to sean` as the address the proposal queue uses, and stop a
-lens using it.** Sean's objection was never to the address - it was to having to run a command to
-see his own inbox, which `Q-33` fixes. What has to go is the lens's direct line, so that a finding
-needing him becomes a numbered proposal rather than arriving by a second route. Everything still
-emanates from the spec, and `Q-17` becoming `P-123` works unchanged as the precedent.
-
-One honesty note they added about that precedent, worth keeping: `P-123` also sat unaddressed for a
-day. It is a precedent for the route working *and* for the route being slow, which is a cost for
-Sean to weigh rather than a blocker - and is why step 9 exists, so a blocked code session does not
-stall waiting on it.
-
-### Q-32 - `CLAUDE.md` carries two limits of fifteen that count different things
-
-**to** spec · **status** open · **raised** 2026-08-30 · **source**
-[the correction](2026-08-30-two-budgets.md)
-
-`CLAUDE.md:317` is the original rule: *keep the open-proposal queue under fifteen*, justified by
-Sean's reading time - *reviewing costs as much as writing*. `CLAUDE.md:135` is this lens's
-generalisation of it: *keep the open items under fifteen across every outbox together*. Both say
-fifteen and they count different things, in the same file.
-
-**The generalisation was wrong and is this lens's error.** It kept a number whose justification is
-Sean's attention and applied it to work that never reaches him. Thirteen crate-hygiene findings cost
-the code lane, not Sean. The recommendation is to delete `:135` and leave `:317` alone: **Sean's
-limit is on his queue; a producer's backlog is a backlog.** If a producer wants a cap it should be
-its own, justified by its own capacity.
-
-**Refined by the specification lane, and their version is better:** deleting the sentence outright
-throws away a real kernel, since nothing else in `CLAUDE.md` says that a lens producing many true
-findings crowds out another lens's fewer, better ones. **Keep the concern, drop the borrowed
-number**, so `:317`'s fifteen stays the only figure in the file and keeps meaning what it always
-meant.
-
-**The measured cost of the error, recorded because it landed on the person the limit protects.** The
-conflated number misled that lane into telling Sean the count was "15 against a limit of 15" and
-that a second lens would put him over on day one. His queue was empty at the time. Wrong advice,
-given to Sean, traceable to a figure this lens borrowed from a rule about his reading time and
-applied to work that never reaches him.
-
 ### Q-33 - One generated document that says what is pending
 
 **to** code · **status** open · **raised** 2026-08-30 · **source**
@@ -335,6 +212,26 @@ version could not see. Threshold left at more than one. Twelve tests pass
 normalised the arrows in `docs/notes/proposals.md`, and `67c8b40` normalises before grouping with
 `one_arrow`, guarded by `the_arrow_style_does_not_split_a_section`. The code lane hit the same thing
 while building `Q-34` and had it fixed before the item was filed
+
+### Q-15 - Who checks the specification is buildable
+
+**to** spec · **status** **acted** 2026-08-30 · `a2525bf`. Verified: `CLAUDE.md` carries the rule,
+date-independent, with the directional-versus-symmetric distinction spelled out and *a trigger, not
+a duty* stated. No readiness lens. The wording is better than the item it came from
+
+### Q-31 - Stop a lens addressing Sean directly
+
+**to** spec · **status** **acted** 2026-08-30 · `108ca79`. Verified: the `to` field is now `spec`,
+`code` or a named lens, *"only the proposal queue addresses `sean`"*, and the mechanical reason is
+recorded beside it. Sean's inbox is the open proposals. Rescoped from the item as filed, which was
+wrong - see the body above
+
+### Q-32 - `CLAUDE.md` carried two limits of fifteen that counted different things
+
+**to** spec · **status** **acted** 2026-08-30 · `5262a3c`. Verified: exactly one *fifteen* remains
+in the file, on the proposal queue where it belongs. The crowding concern survives with no number
+and is better stated than in the item - it now says a lens crowds out *"the queue that actually
+waits on Sean"*, which is the harm this lens described only as competition between lenses
 
 ### Q-16 - The picture never sees the biome the model has
 
