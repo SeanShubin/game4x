@@ -42,30 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-124 - Where a generated file lives
-
-**to** sean · **status** open · **raised** 2026-08-30 · **kind** entailed · **into** `CLAUDE.md` ->
-Perspectives
-
-The code lane put `pending.md` in the repository root and asked whose file it is, because the root
-belongs to no perspective. Proposed answer:
-
-> **A generated file has no owner and may sit in the repository root.** Nobody edits it: all of its
-> content comes from files that do have owners, and a hand edit is overwritten at the next commit.
-> This covers only a file that is generated in full. One with any hand-written part has an author,
-> and belongs in that author's directory.
-
-**Basis:**
-
-- `hooks/pre-commit` rewrites `pending.md` on every commit, not only when an outbox changes.
-- So whoever commits next carries it. Both commits that have touched it so far are the quality
-  lens's.
-- Putting it inside a column would therefore have the other two perspectives writing into that
-  column constantly. The root is the smaller problem, not a compromise.
-
-The second half of the rule is the part worth having. Without it, *generated files go in the root*
-invites the next half-generated file to land there too.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -203,3 +179,4 @@ again in a later session.
 | P-43, "nothing is exterminated; coordination buys suppression"                        | Superseded on 2026-08-26. It described populations held at zero, and nature no longer has a population to hold anywhere.                                                                         |
 | P-46, "citizens and food move between adjacent territories"                           | Cut on 2026-08-26. Sean removed logistics for now so that **each territory is self-contained**; the only thing crossing a boundary is a mobile unit. Recorded in [the backlog](spec-backlog.md). |
 | P-56, "a territory satisfies its own consumption first"                               | Cut with P-46 on 2026-08-26 - it only had work to do while a remainder could reach a neighbour.                                                                                                  |
+| P-124, "where a generated file lives"                                                 | Housekeeping rather than a decision, under the split Sean approved 2026-08-30. Settled by the specification lane and landed in `CLAUDE.md` -> Perspectives in the same commit.                   |

@@ -73,6 +73,11 @@ control over the specification, the specification keeps everything else in line,
 perspectives operate day to day is something he corrects when he notices it rather than approves in
 advance.
 
+**A generated file has no owner and may sit in the repository root.** Nobody edits it: all of its
+content comes from files that do have owners, and a hand edit is overwritten at the next commit.
+This covers only a file that is generated in full - one with any hand-written part has an author,
+and belongs in that author's directory.
+
 **Quality runs nothing that writes.** Reading the tree and running `cargo clippy`, `cargo test` and
 `cargo tree` are all fine. `cargo fmt`, `cargo fix` and `clippy --fix` are not, because they modify
 the very files being judged - and a review that alters its subject is no longer a review.
@@ -354,6 +359,12 @@ same proposal will be filed again in a later session.
 Never silently rewrite his prose. "I changed lines 40 and 57" costs him a three-line diff; an
 unannounced rewrite costs him a re-read of the whole file, and after that he cannot trust the
 file.
+
+**A proposal is read once, by one person, who decides from it.** State the question, give the
+proposed text, give the facts that make it right, and stop. Reasoning that does not change the
+decision belongs in a note. P-124 was filed at sixty lines to say a generated file may sit in the
+repository root, under the heading *a file nobody can write needs no owner* - which Sean read as
+esoteric and vacuous, and it was both. A queue that is tiring to read stops being a review surface.
 
 Keep the open-proposal queue under fifteen. Past that, reviewing costs as much as writing and
 the mechanism has failed. If a lot of proposals would be guesses at design, ask one question
