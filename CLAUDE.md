@@ -132,10 +132,11 @@ a quality report for a day while the proposal queue was empty - and for that who
 said, truthfully by its own old wording and falsely in fact, that nothing known was inconsistent.
 The promise now spans every outbox for exactly that reason.
 
-**Keep the open items under fifteen across every outbox together, not fifteen each.** Past that,
-reviewing costs as much as doing and the mechanism has failed. A lens producing many true findings
-crowds out another lens's fewer, better ones, so a lens competes on the value of a finding rather
-than the count.
+**A lens competes on the value of a finding, not the count.** One producing many true findings
+crowds out another's fewer, better ones, and crowds out the queue that actually waits on Sean - so
+filing everything it notices costs the whole system attention even when every item is correct. The
+one number in this file is the limit on the open-proposal queue, below, and it counts that queue
+and nothing else.
 
 ## The cycle
 
