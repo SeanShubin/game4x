@@ -62,6 +62,9 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [A recommended workflow](2026-08-29-workflow.md)
+  - 2026-08-29. **Input to a decision, not a finding.** Seven things move between the
+    perspectives, six have a channel, and a blocked question from code has none.
 - [Notes on lenses, from the one that exists](2026-08-29-lenses.md)
   - 2026-08-29. **Input to a decision, not a finding.** What three reports suggest about
     several research lenses, and what has to change before there is a second one.
