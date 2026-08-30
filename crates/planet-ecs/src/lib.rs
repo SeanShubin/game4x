@@ -90,22 +90,39 @@ impl Plugin for PlanetEcsPlugin {
 /// One entity per region, in ascending id order.
 ///
 /// The spawn order is ascending only for tidiness; nothing may depend on it, and
-/// [`gather`] is written so that nothing can.
+/// [`by_region`] is written so that nothing can.
 pub fn spawn_regions(mut commands: Commands, topology: Res<WorldTopology>) {
     for region in topology.0.regions() {
         commands.spawn(Region(region));
     }
 }
 
-/// Reads the ECS into a plain [`World`], keyed by identity rather than by iteration.
-pub fn gather(topology: &Topology, regions: &Query<(&Region, Option<&Owner>)>) -> World {
-    let mut owners = vec![None; topology.region_count()];
-    for (region, owner) in regions.iter() {
-        if let Some(slot) = owners.get_mut(region.0.index()) {
-            *slot = owner.map(|owner| owner.0);
+/// Places one value per region, by identity rather than by the order they arrived in.
+///
+/// **The rule this crate exists for, in one function.** A query hands back its rows in
+/// whatever order the storage happens to hold them, and that order is an accident of how
+/// entities were spawned - so a gather that pushes as it iterates produces a different
+/// array on a different day and a different result from the same game. Indexing by
+/// [`RegionId`] makes the arrival order unable to show through.
+///
+/// It was written three times: here, inside [`advance_turn`], and again in `planet-bevy`.
+/// The confluence test proved the copy in `advance_turn` and left the other two unproven,
+/// one of them in another crate. Now there is one, and proving it proves all of them.
+///
+/// A region outside the count is dropped rather than growing the array, because the
+/// topology decides how many regions there are and a stray entity does not.
+pub fn by_region<T>(
+    count: usize,
+    found: impl IntoIterator<Item = (RegionId, T)>,
+) -> Vec<Option<T>> {
+    let mut slots = Vec::new();
+    slots.resize_with(count, || None);
+    for (region, value) in found {
+        if let Some(slot) = slots.get_mut(region.index()) {
+            *slot = Some(value);
         }
     }
-    World::with_owners(topology.clone(), &owners)
+    slots
 }
 
 /// Folds the pending intents into the world: gather, resolve, apply.
@@ -121,15 +138,17 @@ pub fn advance_turn(
     }
 
     // GATHER: ECS to plain data, indexed by RegionId so query order cannot show.
-    let mut owners = vec![None; topology.0.region_count()];
-    let mut entities = vec![None; topology.0.region_count()];
-    for (entity, region, owner) in regions.iter() {
-        let index = region.0.index();
-        if index < owners.len() {
-            owners[index] = owner.map(|owner| owner.0);
-            entities[index] = Some(entity);
-        }
-    }
+    let count = topology.0.region_count();
+    let owners = by_region(
+        count,
+        regions
+            .iter()
+            .filter_map(|(_, region, owner)| Some((region.0, owner?.0))),
+    );
+    let entities = by_region(
+        count,
+        regions.iter().map(|(entity, region, _)| (region.0, entity)),
+    );
     let before = World::with_owners(topology.0.clone(), &owners);
 
     // RESOLVE: a pure function, with no idea any of this exists.
@@ -248,6 +267,33 @@ mod tests {
             .filter(|(_, owner)| owner.is_some())
             .count();
         assert_eq!(owned, 0, "unowned means the component is absent");
+    }
+
+    /// The rule itself, without an app around it: what arrives in what order cannot show.
+    ///
+    /// The confluence test below is the same property through a whole turn, and is the
+    /// stronger statement - but it took three copies of this loop to notice that it was
+    /// proving one of them. This proves the one they now share, so a fourth copy would
+    /// have to be written on purpose.
+    #[test]
+    fn what_order_the_rows_arrive_in_cannot_show() {
+        let forwards = [(RegionId(0), 'a'), (RegionId(1), 'b'), (RegionId(2), 'c')];
+        let mut backwards = forwards;
+        backwards.reverse();
+        let expected = vec![Some('a'), Some('b'), Some('c')];
+        assert_eq!(by_region(3, forwards), expected);
+        assert_eq!(by_region(3, backwards), expected);
+        // A gap is a gap, not a shorter array.
+        assert_eq!(
+            by_region(3, [(RegionId(2), 'c')]),
+            vec![None, None, Some('c')]
+        );
+        // The topology says how many regions there are; a stray entity does not.
+        assert_eq!(by_region(2, [(RegionId(7), 'x')]), vec![None, None]);
+        assert_eq!(
+            by_region(0, [(RegionId(0), 'x')]),
+            Vec::<Option<char>>::new()
+        );
     }
 
     /// The confluence property, at the ECS boundary. Entities are spawned in different

@@ -390,12 +390,14 @@ fn read_ownership(
     let Some(topology) = topology else {
         return;
     };
-    let mut owners = vec![None; topology.0.region_count()];
-    for (region, owner) in regions.iter() {
-        if let Some(slot) = owners.get_mut(region.0.index()) {
-            *slot = owner.map(|owner| owner.0.0);
-        }
-    }
+    // The third copy of this used to be written out here. `planet-ecs` owns the rule that
+    // gathering is keyed by identity, and now owns the only expression of it.
+    let owners = planet_ecs::by_region(
+        topology.0.region_count(),
+        regions
+            .iter()
+            .filter_map(|(region, owner)| Some((region.0, owner?.0.0))),
+    );
     if planet.view.owners() != owners.as_slice() {
         planet.view.set_owners(owners);
     }
