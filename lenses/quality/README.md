@@ -86,7 +86,10 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
-- [The workflow, ready to paste](2026-08-30-workflow-to-adopt.md)
+- [Who checks the specification is buildable, and where Sean looks](2026-08-30-readiness-and-one-surface.md)
+  - 2026-08-30. Two recommendations, both against adding machinery: no readiness lens, and
+    no `to sean` address.
+- [The workflow, ready to paste](2026-08-30-workflow-to-adopt.md) — **spent**
   - 2026-08-30. The `CLAUDE.md` section and the index tool, written out verbatim for the
     two lanes that own the files they go in.
 - [A recommended workflow](2026-08-29-workflow.md)

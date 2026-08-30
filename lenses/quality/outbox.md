@@ -155,14 +155,43 @@ While in that file: the tool still probes the pre-move `quality/outbox.md` and p
 present*, so a completed move now reads as a missing file. Not worth an item of its own; worth the
 one-line deletion whenever `crates/outbox.md` brings someone here.
 
-### Q-15 - Consider a spec-readiness lens before any other
+### Q-15 - Who checks the specification is buildable
 
-**to** sean · **status** open · **raised** 2026-08-29 · **source**
-[the workflow](2026-08-29-workflow.md)
+**to** spec · **status** open · **raised** 2026-08-29 · **source**
+[the recommendation](2026-08-30-readiness-and-one-surface.md#1-q-15-expand-the-specification-lane-do-not-add-a-lens)
 
-*The specification must give code enough to execute* is the one constraint with no owner: the spec
-lane does not read code, and the code lane reads the spec as instructions, so a gap looks like
-something to invent. Done once by hand in `first-release-readiness.md`.
+**Re-addressed from `sean` to `spec` on 2026-08-30**, per `Q-31`: it is a process question whose
+answer belongs in `CLAUDE.md`, which is this lane's column, so it should reach Sean through the
+queue rather than by his querying for it.
+
+**This lens proposed a readiness lens and now recommends against one.** Half the job is already a
+test - `first_release.rs` runs the whole release script and reads the release's own tables, which is
+the 2026-08-26 readiness note's method mechanised. The other half is a check the promotion protocol
+structurally cannot make: it asks *does this invalidate something*, which is directional and per
+item, and a contradiction is symmetric and between items. `P-100` and `P-109` landed in the same
+file, the same section and the same day, and neither invalidates the other.
+
+The recommendation is a trigger rather than a duty, because every hand-held duty here has rotted and
+every mechanical one has held: **when more than one proposal lands in the same file and section,
+re-read that section whole and ask whether all of them can hold at once.** `tools/outbox` already
+parses the destination and the date, so the flag is nearly free. Tested against history it fires on
+the right section on the right day.
+
+### Q-31 - Remove the `to sean` address; the queue is the one surface
+
+**to** spec · **status** open · **raised** 2026-08-30 · **source**
+[the recommendation](2026-08-30-readiness-and-one-surface.md#2-seans-inbox-should-be-the-queue-he-already-reads)
+
+Sean's inbox should be the document he already opens, not a command he has to remember to run. Both
+kinds of thing addressed to him are proposals in waiting: a decision a lens surfaced, and a question
+that blocks the code lane - which is almost always *the specification does not say X*. Both go
+`to spec`, and step 4 turns them into numbered proposals. `Q-17` becoming `P-123` is the precedent
+and it worked.
+
+`tools/outbox` then becomes a thing the instances run to check each other, and `--to sean` stops
+existing rather than being remembered. The cost, stated rather than glossed: the specification lane
+becomes the filter on what reaches Sean. It is the lane best placed to be it, and the protocol's
+existing duty to record the reason for a rejection is what keeps a filtered finding traceable.
 
 ---
 
