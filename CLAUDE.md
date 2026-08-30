@@ -110,15 +110,17 @@ perspective has to read.
 - The specification lane's outbox is [`docs/notes/proposals.md`](docs/notes/proposals.md).
 - A lens's outbox is `lenses/<name>/outbox.md`.
 - The code lane's outbox is `crates/outbox.md`, and holds the questions that block it.
+- A file in `releases/` is an outbox too: each capability is an item addressed to the code
+  lane, `open` until its *vetted when* line is observed.
 
 Every item in an outbox carries four things:
 
-| Field      | What it is                                                                                                                |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **id**     | Stable and unique, so a commit can cite it and a later report can say what became of it                                   |
-| **to**     | `spec`, `code`, or a named lens - or **absent**, meaning *not ready, no reader*. Only the proposal queue addresses `sean` |
-| **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered`                                                                      |
-| one line   | What it is, so a reader can triage it without opening the source                                                          |
+| Field      | What it is                                                                                                                  |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **id**     | Stable and unique, so a commit can cite it and a later report can say what became of it                                     |
+| **to**     | `spec`, `code`, or a named lens - or **absent**, meaning *not ready, no reader*. Only the proposal queue addresses `sean`   |
+| **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered` - and `vetted`, for a release capability whose check has been observed |
+| one line   | What it is, so a reader can triage it without opening the source                                                            |
 
 **Nothing but a proposal is addressed to Sean.** A lens addresses `to spec` and so does the code
 lane; the specification lane turns either into a numbered proposal, which is the one shape Sean
@@ -187,8 +189,14 @@ and nothing else.
 6. **The specification lane promotes verbatim and asserts it landed.** A promotion that makes
    something else stale files the cleanup immediately.
 7. **The specification lane updates `releases/`** to say what is being built now. A release never
-   invents a rule.
-8. **The code lane builds** from `releases/` and `spec/`.
+   invents a rule. **This is the work order, and a promotion into `spec/` is not one** - the spec is
+   the destination and most of it is not buildable when it lands. Of the thirteen proposals promoted
+   on 2026-08-29 and 30, four changed what the code should build and nine described a rule system
+   nothing can name a condition for yet.
+8. **The code lane builds** what is `open` and addressed to it - the lens's findings and the
+   release's capabilities, in one list. **It does not mark a capability vetted**: it reports the
+   evidence `to spec`, and the specification lane records it, so the account of what has been
+   delivered is not kept by whoever built it.
 9. **The code lane hits a gap and does not stop.** It does everything that does not depend on the
    answer, files a question `to spec` **stating the assumption it proceeded under**, and carries on.
    A blocked question is filed and worked around, never waited on - otherwise a session stalls until

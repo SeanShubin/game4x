@@ -42,6 +42,20 @@ Two limits Claude holds itself to:
 
 ## Open
 
+## Addressed to other perspectives
+
+Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
+only thing that does.
+
+### S-1 - `tools/outbox` should read `releases/*.md`
+
+**to** code · **status** open · **raised** 2026-08-30
+
+Each capability in `releases/first-release.md` now carries an id, `R-1` to `R-6`, and the `**to**
+code` field line every outbox item carries. The tool does not look in `releases/`, so all six are
+invisible to `outbox --to code` - which is the one place they need to appear, since they are the
+work the release exists to order.
+
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
