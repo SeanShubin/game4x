@@ -25,11 +25,20 @@
 
 use bevy::prelude::*;
 use bevy::window::PresentMode;
-use planet_bevy::globe::{GlobePlugin, Planet};
+use planet_bevy::globe::{GlobePlugin, Planet, ShowIds};
 use planet_render::{Params, WorldSpec};
 
 /// How many Goldberg counts to offer.
-const HOW_MANY: usize = 10;
+///
+/// Twenty reaches 492 faces. Not unbounded, and the ceiling is measured rather than
+/// guessed: building a planet costs about 8 ms at 212 faces, 164 ms at 492, and a second at
+/// 792 - the triangles are trivial either way, and the time goes into the adjacency and the
+/// graph colouring. Past about five hundred the wait between one solid and the next stops
+/// being a comparison and starts being a pause.
+///
+/// The list is easy to extend; `smallest_goldberg_counts` will produce as many as asked
+/// for. What is not free is waiting for them.
+const HOW_MANY: usize = 20;
 
 /// Which one it opens on. `GP(1,0)` is the dodecahedron - the smallest planet the game
 /// allows, and the one whose faces are large enough to see what a territory *is*.
@@ -53,7 +62,7 @@ fn main() {
             counts,
             at: OPENS_ON,
         })
-        .add_systems(Update, step_through_the_solids)
+        .add_systems(Update, (step_through_the_solids, toggle_the_ids))
         .run();
 }
 
@@ -89,6 +98,19 @@ fn step_through_the_solids(
     }
 }
 
+/// `I` writes the territory ids on and off.
+///
+/// A shortcut the game does not take: `spec/planet.md` shows an id on every face of the
+/// practical drawing, and the application always does. Here they can go, because every id
+/// is a text node projected every frame, and because at four hundred faces they are
+/// unreadable anyway - and the question this prototype asks is about the *shape* of a
+/// solid, which the ids sit on top of.
+fn toggle_the_ids(keys: Res<ButtonInput<KeyCode>>, mut ids: ResMut<ShowIds>) {
+    if keys.just_pressed(KeyCode::KeyI) {
+        ids.0 = !ids.0;
+    }
+}
+
 /// The smallest region counts a Goldberg polyhedron can have, in order.
 ///
 /// Not a table. `sphere-tessellation` already knows which `(m, n)` arrangements exist and
@@ -113,7 +135,7 @@ fn smallest_goldberg_counts(how_many: usize) -> Vec<usize> {
 fn window() -> WindowPlugin {
     WindowPlugin {
         primary_window: Some(Window {
-            title: "goldberg view - [ and ] to change solid".to_string(),
+            title: "goldberg view - [ and ] to change solid, I for ids".to_string(),
             resolution: (1280, 800).into(),
             present_mode: PresentMode::AutoVsync,
             ..default()
@@ -132,7 +154,10 @@ mod tests {
     fn the_ten_smallest_are_the_counts_the_specification_names() {
         let counts = smallest_goldberg_counts(HOW_MANY);
         assert_eq!(counts.len(), HOW_MANY);
-        assert_eq!(&counts[..5], &[12, 32, 42, 72, 92]);
+        assert_eq!(
+            &counts[..10],
+            &[12, 32, 42, 72, 92, 122, 132, 162, 192, 212]
+        );
         // Every one is `10T + 2` for a whole `T`, and they are strictly increasing.
         for count in &counts {
             assert_eq!((count - 2) % 10, 0, "{count} is not 10T + 2");

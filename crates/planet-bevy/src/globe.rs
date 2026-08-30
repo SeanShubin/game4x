@@ -147,6 +147,7 @@ impl Plugin for GlobePlugin {
             .insert_resource(DrawingAsksSeen::default())
             .insert_resource(Drawn::default())
             .insert_resource(FollowsTheGame(self.follows_the_game))
+            .insert_resource(ShowIds::default())
             .add_systems(Startup, setup)
             .add_systems(
                 Update,
@@ -432,10 +433,11 @@ fn build_globe(
     mut built: Local<bool>,
     mut drawn: ResMut<Drawn>,
     follows: Res<FollowsTheGame>,
+    ids: Res<ShowIds>,
     previous: Query<Entity, BuiltForThisPlanet>,
     mut hud: Query<&mut Text, With<Hud>>,
 ) {
-    if *built && !planet.is_changed() && !drawing.is_changed() {
+    if *built && !planet.is_changed() && !drawing.is_changed() && !ids.is_changed() {
         return;
     }
     *built = true;
@@ -538,7 +540,12 @@ fn build_globe(
     // `spec/planet.md`: *a territory's id is displayed on the sphere in the practical
     // drawing.* An id floating over terrain is the single thing that most stops a
     // realistic view looking realistic, which is why that line names a drawing now.
-    for (region, span) in panels.regions.iter().enumerate().filter(|_| !realistic) {
+    for (region, span) in panels
+        .regions
+        .iter()
+        .enumerate()
+        .filter(|_| !realistic && ids.0)
+    {
         let hub = panels.positions[span.first_vertex as usize];
         spawn_label(
             &mut commands,
@@ -573,7 +580,7 @@ fn build_globe(
         vertices: panels.vertex_count(),
         triangles: panels.triangle_count(),
         // Territory ids, plus the two pole letters, and neither is drawn realistically.
-        labels: if realistic {
+        labels: if realistic || !ids.0 {
             0
         } else {
             panels.regions.len() + 2
@@ -916,6 +923,26 @@ fn keys_to_change_drawing(
 /// Whether this globe follows a game, so the readout can list the bindings that exist.
 #[derive(Resource, Clone, Copy)]
 struct FollowsTheGame(bool);
+
+/// Whether a territory's id is written on the sphere.
+///
+/// `spec/planet.md` puts the id in the practical drawing, and the application always shows
+/// it. It is a resource so that a prototype can turn it off, and a prototype is allowed to:
+/// `docs/prototypes/README.md` lets one take a shortcut the game may not, provided the
+/// document says which and why.
+///
+/// The why is measurable. Every id is a `Text` node projected through the camera every
+/// frame by [`place_labels`], so the cost is one node per region per frame - fine at
+/// ninety-two, and five hundred nodes of unreadable four-point type at five hundred. A
+/// prototype comparing the *shapes* of solids does not need any of them.
+#[derive(Resource, Clone, Copy)]
+pub struct ShowIds(pub bool);
+
+impl Default for ShowIds {
+    fn default() -> Self {
+        Self(true)
+    }
+}
 
 /// How many changes of drawing had been asked for when the last one was obeyed.
 #[derive(Resource, Default)]

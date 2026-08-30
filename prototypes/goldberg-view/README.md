@@ -17,7 +17,8 @@ way to reach it is to look at all ten in turn without rebuilding anything in bet
 scripts/goldberg-view.ps1        # or: bash scripts/goldberg-view.sh
 ```
 
-`[` and `]` step through the ten solids. Drag, a finger or the arrows turn the world; the
+`[` and `]` step through the solids, wrapping at both ends. `I` writes the territory ids on
+and off. Drag, a finger or the arrows turn the world; the
 wheel or a pinch zooms; `R` puts the view back. The digits do nothing here — there is no
 game to start.
 
@@ -49,6 +50,34 @@ Building this one found two places where it was not yet a fact:
   called.
 - Three systems in `globe` reached into `game-front`. They are added only when the globe is
   asked to follow a game, so a detached one links none of the front end.
+
+## How far up it goes, and why not further
+
+Twenty solids, reaching 492 faces. The ceiling is measured rather than guessed - building
+one planet, from seeds through adjacency and graph colouring to the mesh:
+
+| Faces | Build   |
+| ----- | ------- |
+| 92    | 1 ms    |
+| 212   | 8 ms    |
+| 492   | 164 ms  |
+| 792   | 993 ms  |
+| 1212  | 2610 ms |
+
+The triangles are trivial at every size - six per region, so 492 faces is under 3000
+triangles. The time goes into the adjacency and the colouring, and it is paid once per
+switch rather than per frame. Past about five hundred the wait between one solid and the
+next stops being a comparison and becomes a pause, which defeats the point.
+
+`smallest_goldberg_counts` will produce as many as asked for, so raising `HOW_MANY` is a
+one-word change. What is not free is waiting for them.
+
+**Ids are the other limit, and they are per frame.** Every id is a text node projected
+through the camera every frame, so the cost is one node per region per frame - unnoticed at
+92 and five hundred nodes of unreadable type at 492. `I` turns them off. That is a shortcut
+the game does not take: `spec/planet.md` shows an id on every face of the practical drawing,
+and the application always does. A prototype is allowed one, and this document is where it
+is declared.
 
 ## The list is derived, not written down
 

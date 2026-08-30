@@ -2,7 +2,7 @@
 # Runs the goldberg-view prototype: the ten smallest Goldberg solids, one at a time, in the
 # abstract drawing.
 #
-# `[` and `]` step through them; drag, a finger or the arrows turn; wheel or pinch zooms;
+# `[` and `]` step through them; `I` writes the ids on and off; drag, a finger or the arrows turn; wheel or pinch zooms;
 # R resets. There is no game behind it, so the digits do nothing.
 #
 # Arguments pass straight through.
