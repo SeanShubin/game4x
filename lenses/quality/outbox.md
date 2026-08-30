@@ -186,6 +186,46 @@ within a commit.
 `Q-34` is the other half: without it the rule is a duty somebody has to remember, which is the one
 thing the recommendation rejects.
 
+**Calibration, measured 2026-08-30 after the decision.** The recommendation said *more than one*,
+and this lens had not tested how often that fires on days when nothing is wrong. Measured over all
+123 proposals: **it fires 13 times across 4 of the 6 active days** - close enough to *always* to be
+a duty wearing a tool's clothes, which is the thing the trigger was chosen to avoid.
+
+Raising the threshold to **three or more in one file and section** is much better calibrated:
+
+| Threshold         | Fires | Days  | Catches `P-100` / `P-109`? |
+| ----------------- | ----- | ----- | -------------------------- |
+| two or more       | 13    | 4     | yes                        |
+| **three or more** | **4** | **1** | **yes**                    |
+| four or more      | 3     | 1     | yes                        |
+| five or more      | 2     | 1     | **no**                     |
+
+The group sizes are why: 70 groups of one, 9 of two, then one each at three, four, five and six. A
+pair is routine - a rule and its consequence landing together. **Three in one sitting means the
+section was substantially rewritten**, which is exactly when reading it whole is worth the time. All
+four fires at that threshold land on 2026-08-28, the day the contradiction was written.
+
+**Threshold refinement withdrawn 2026-08-30**, after the specification lane's reply. They measured
+the same 13 fires over 83 section-days independently, agreed both known positives sit in the two
+largest groups and that the nine groups of two produced nothing - and argued that fitting a
+threshold to two positive examples is overfitting. They are right, and the decisive point is one
+this lens did not weigh: **the costs are wildly asymmetric.** A false fire costs re-reading six to
+twelve bullets. A missed contradiction cost two days and a full investigation. At that ratio, firing
+too often is the correct error, and alarm fatigue is a smaller risk than a silent trigger. The
+threshold stays at *more than one*.
+
+**And they found the real defect, which this lens missed entirely: the trigger is date-scoped and
+contradictions are not.** `P-100` and `P-109` landed the same day, so it fires - but had `P-109`
+landed a week later the collision would be identical and the trigger silent. Nothing about a
+contradiction depends on the two rules arriving together. Dropping the date costs three extra fires,
+16 rather than 13, which is not a meaningful increase and closes a case the date-scoped version
+misses completely.
+
+The rule is therefore: **when a proposal lands in a section another proposal has already landed in,
+re-read that section whole and ask whether all of them can hold at once.** They asked whether that
+is still this lens's item. It is the same rule with a bug removed, and their version is better than
+the one filed.
+
 ### Q-34 - Emit the same-section flag the trigger depends on
 
 **to** code · **status** open · **raised** 2026-08-30 · **source** `Q-15`
@@ -206,6 +246,11 @@ collided.
 Worth pointing at `Q-33` as well: the flag belongs in the generated pending document, where it is
 read without being asked for, rather than only on a terminal.
 
+**Use three, not two** - see the calibration under `Q-15`. At two it fires 13 times across 4 of 6
+days; at three it fires 4 times on 1 day and still catches the contradiction it exists for. Worth
+making the threshold a named constant rather than a literal, since it is the one number here that
+was tuned rather than reasoned.
+
 ### Q-31 - Remove the `to sean` address; the queue is the one surface
 
 **to** spec · **status** open · **raised** 2026-08-30 · **source**
@@ -217,10 +262,30 @@ that blocks the code lane - which is almost always *the specification does not s
 `to spec`, and step 4 turns them into numbered proposals. `Q-17` becoming `P-123` is the precedent
 and it worked.
 
-`tools/outbox` then becomes a thing the instances run to check each other, and `--to sean` stops
-existing rather than being remembered. The cost, stated rather than glossed: the specification lane
-becomes the filter on what reaches Sean. It is the lane best placed to be it, and the protocol's
-existing duty to record the reason for a rejection is what keeps a filtered finding traceable.
+`tools/outbox` then becomes a thing the **instances** run to check each other, and Sean's surface stays
+one document. The cost, stated rather than glossed: the specification lane becomes the filter on what
+reaches Sean. It is the lane best placed to be it, and the protocol's existing duty to record the
+reason for a rejection is what keeps a filtered finding traceable.
+
+**Rescoped 2026-08-30, after the specification lane objected. They are right and the item as filed
+was wrong.** Removing the address outright would re-break the index. `tools/outbox`'s `parse()`
+requires the field line to begin `**to**` and `field(fields, "to")` to return `Some`, or the item is
+skipped entirely - so proposals carrying no address would make **the whole proposal queue invisible
+to the index that guarantees it**, and addressing them `to spec` would be false, since they are not
+addressed to that lane. This is not hypothetical: it is the bug they fixed this morning in
+`8f1891d`, where the tool read `docs/notes/proposals.md`, extracted zero items and reported fourteen
+open while `P-123` sat open in it.
+
+**The correct, smaller change: keep `to sean` as the address the proposal queue uses, and stop a
+lens using it.** Sean's objection was never to the address - it was to having to run a command to
+see his own inbox, which `Q-33` fixes. What has to go is the lens's direct line, so that a finding
+needing him becomes a numbered proposal rather than arriving by a second route. Everything still
+emanates from the spec, and `Q-17` becoming `P-123` works unchanged as the precedent.
+
+One honesty note they added about that precedent, worth keeping: `P-123` also sat unaddressed for a
+day. It is a precedent for the route working *and* for the route being slow, which is a cost for
+Sean to weigh rather than a blocker - and is why step 9 exists, so a blocked code session does not
+stall waiting on it.
 
 ### Q-32 - `CLAUDE.md` carries two limits of fifteen that count different things
 
@@ -237,6 +302,18 @@ Sean's attention and applied it to work that never reaches him. Thirteen crate-h
 the code lane, not Sean. The recommendation is to delete `:135` and leave `:317` alone: **Sean's
 limit is on his queue; a producer's backlog is a backlog.** If a producer wants a cap it should be
 its own, justified by its own capacity.
+
+**Refined by the specification lane, and their version is better:** deleting the sentence outright
+throws away a real kernel, since nothing else in `CLAUDE.md` says that a lens producing many true
+findings crowds out another lens's fewer, better ones. **Keep the concern, drop the borrowed
+number**, so `:317`'s fifteen stays the only figure in the file and keeps meaning what it always
+meant.
+
+**The measured cost of the error, recorded because it landed on the person the limit protects.** The
+conflated number misled that lane into telling Sean the count was "15 against a limit of 15" and
+that a second lens would put him over on day one. His queue was empty at the time. Wrong advice,
+given to Sean, traceable to a figure this lens borrowed from a rule about his reading time and
+applied to work that never reaches him.
 
 ### Q-33 - One generated document that says what is pending
 
@@ -255,6 +332,27 @@ generated artifact from the source of truth.
 
 The tool's `LIMIT` constant currently encodes the conflated rule and should follow whatever `Q-32`
 settles rather than lead it.
+
+### Q-35 - Two spellings of the same section split one group into two
+
+**to** code · **status** open · **raised** 2026-08-30 · **source** this file
+
+`docs/notes/proposals.md` writes a destination two ways: 80 rows use ASCII `->` and 17 use the
+Unicode arrow. `tools/outbox`'s same-section flag groups on the raw string, so **one section written
+both ways is counted as two sections** and each group is smaller than it really is.
+
+It hits the two sections that matter most:
+
+- `spec/planet.md` → *What a territory carries* - where `P-100` and `P-109` collided
+- `spec/planet.md` → *Presentation* - where `P-96` left borders in the realistic drawing while ids
+  and poles were scoped out of it
+
+Nothing is hidden today, because the 2026-08-28 groups happen to be spelled consistently. That is
+luck rather than design: the split is silent, and a group that should read four could read two and
+two. Normalising the arrow before grouping is a one-line fix.
+
+Worth doing together with the specification lane's improvement to `Q-15` - dropping the date scope -
+since both change how the flag groups, and both make it fire on cases it currently misses.
 
 ---
 
