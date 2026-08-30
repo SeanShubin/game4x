@@ -22,8 +22,9 @@ files rather than from anybody's memory of them.
 - **Q-6** - `planet_ecs::gather` is dead, and its body exists twice more · `lenses/quality/outbox.md`
 - **Q-11** - The composition root has grown logic and tests · `lenses/quality/outbox.md`
 
-### To spec (5)
+### To spec (6)
 
+- **C-6** - The composition root holds a harness, and the rule says it holds nothing · `crates/outbox.md`
 - **C-5** - `docs/architecture.md` lists every crate, and there is now one it does not · `crates/outbox.md`
 - **C-4** - The index is shared, so staging is publishing · `crates/outbox.md`
 - **C-3** - A prototype cannot photograph itself, and two items now need it to · `crates/outbox.md`

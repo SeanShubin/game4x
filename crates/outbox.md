@@ -33,6 +33,27 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-6 - The composition root holds a harness, and the rule says it holds nothing
+
+**to** spec · **status** open · **raised** 2026-08-30 · **source** acting on `Q-11`
+
+`docs/architecture.md:55` - *because it holds no logic, it needs no tests of its own; if it is
+large enough to be worth testing, something has leaked into it that belongs elsewhere.*
+
+`crates/game4x` is 517 lines with eight tests. Most of that is `inspect.rs`, the remote control that
+puts the camera at stated angles, runs commands, waits for the world to settle and writes a PNG and
+a dump. **It cannot move**, and the reason is the whole point of it: it has to drive the *shipped*
+binary, because a harness that ran a special path would be evidence about the harness.
+
+`69ab140` fixed the false half - `main.rs` claimed the crate held no logic. But it now says the
+rule *is broken here on purpose*, and **a rule owned by `docs/` is not this lane's to carve an
+exception into**, even a true one. Either the document says a root may hold the harness that
+operates it, and why, or the harness needs a home that does not exist yet.
+
+Worth deciding rather than leaving as a comment, because the rule is load-bearing elsewhere: it is
+what stops game logic drifting into the root, and a rule with an undocumented exception is harder
+to apply than one with a documented one.
+
 ### C-5 - `docs/architecture.md` lists every crate, and there is now one it does not
 
 **to** spec · **status** open · **raised** 2026-08-30 · **source** acting on `Q-5`
