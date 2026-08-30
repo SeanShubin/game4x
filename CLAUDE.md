@@ -92,12 +92,22 @@ perspective has to read.
 
 Every item in an outbox carries four things:
 
-| Field      | What it is                                                                              |
-| ---------- | --------------------------------------------------------------------------------------- |
-| **id**     | Stable and unique, so a commit can cite it and a later report can say what became of it |
-| **to**     | `sean`, `spec`, `code`, or a named lens - or **absent**, meaning *not ready, no reader* |
-| **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered`                                    |
-| one line   | What it is, so a reader can triage it without opening the source                        |
+| Field      | What it is                                                                                                                |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **id**     | Stable and unique, so a commit can cite it and a later report can say what became of it                                   |
+| **to**     | `spec`, `code`, or a named lens - or **absent**, meaning *not ready, no reader*. Only the proposal queue addresses `sean` |
+| **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered`                                                                      |
+| one line   | What it is, so a reader can triage it without opening the source                                                          |
+
+**Nothing but a proposal is addressed to Sean.** A lens addresses `to spec` and so does the code
+lane; the specification lane turns either into a numbered proposal, which is the one shape Sean
+reads. A blocked question is almost always *the specification does not say X*, so it was already a
+proposal wearing a different hat - `Q-17` became `P-123`.
+
+The cost is a hop: a question routed through the queue waits for this lane to run before it reaches
+him. Accepted deliberately, in exchange for one place to look. **What is not negotiable is that the
+proposal queue keeps its `to sean` address**, because `tools/outbox` cannot see an item that has no
+`to` field, and the queue is the one outbox that must never be invisible.
 
 **`to` is the field that does the work.** It turns every instance's reading list from a directory
 sweep into a query, which is what keeps an instance focused on its own purpose.
@@ -108,12 +118,12 @@ its author gives it a reader - held back by not having one, rather than by disci
 
 ### What each perspective reads
 
-| Perspective | Inbox                                                                   | Never has to read       |
-| ----------- | ----------------------------------------------------------------------- | ----------------------- |
-| **Sean**    | everything `to sean` - proposals awaiting review, and blocked questions | any lens's raw research |
-| **Spec**    | `to spec`, plus `docs/notes/spec-backlog.md`                            | code reviews            |
-| **Code**    | `to code`, plus `releases/`                                             | the proposal queue      |
-| **A lens**  | everything - that is what a lens is for                                 | -                       |
+| Perspective | Inbox                                                            | Never has to read       |
+| ----------- | ---------------------------------------------------------------- | ----------------------- |
+| **Sean**    | the open proposals, which are the only thing addressed `to sean` | any lens's raw research |
+| **Spec**    | `to spec`, plus `docs/notes/spec-backlog.md`                     | code reviews            |
+| **Code**    | `to code`, plus `releases/`                                      | the proposal queue      |
+| **A lens**  | everything - that is what a lens is for                          | -                       |
 
 ## Nothing open means nothing outstanding
 
@@ -159,7 +169,7 @@ and nothing else.
    invents a rule.
 8. **The code lane builds** from `releases/` and `spec/`.
 9. **The code lane hits a gap and does not stop.** It does everything that does not depend on the
-   answer, files a question `to sean` **stating the assumption it proceeded under**, and carries on.
+   answer, files a question `to spec` **stating the assumption it proceeded under**, and carries on.
    A blocked question is filed and worked around, never waited on - otherwise a session stalls until
    Sean is free, and the assumption that was made is discovered later rather than recorded now.
 10. **A lens reviews the result**, and it returns to step 3.
