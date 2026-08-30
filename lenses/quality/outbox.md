@@ -134,22 +134,26 @@ its place by its own argument. The doc comment does not.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-13 - Adopt the workflow in `CLAUDE.md`
+### Q-30 - `crates/outbox.md` does not exist, so a blocked question has nowhere to go
 
-**to** spec · **status** open · **raised** 2026-08-30 · **source**
-[the workflow, ready to paste](2026-08-30-workflow-to-adopt.md#for-claude-md)
+**to** code · **status** open · **raised** 2026-08-30 · **source** this file
 
-Sean has accepted [the recommended workflow](2026-08-29-workflow.md). The section is written out
-verbatim and needs a home in `CLAUDE.md`; this lens cannot put it there. Includes the startup text
-for a new lens, which Sean asked to have alongside it.
+`CLAUDE.md` → Outboxes now says the code lane's outbox is `crates/outbox.md`, and `tools/outbox`
+reports `not present: crates/outbox.md`. Until it exists, **step 9 of the cycle has nowhere to
+land**: the code lane cannot file a question that blocks it, so it either stops or asks in a reply -
+which is the failure `CLAUDE.md` names by name.
 
-### Q-14 - Build the outbox index
+It is also a hole in the guarantee directly above it. *Nothing open means nothing outstanding* reads
+over the outboxes that exist, and a perspective with no outbox is silently excluded rather than
+visibly empty. An empty `crates/outbox.md` with a header is worth more than no file, because empty
+is a claim and absent is not.
 
-**to** code · **status** open · **raised** 2026-08-30 · **source**
-[the tool, specified](2026-08-30-workflow-to-adopt.md#for-tools)
+Found by the specification lane while adopting the workflow, and filed here because `crates/` is not
+its column either.
 
-One command answering *what is open and addressed to whom*, over every lens's outbox. It is what
-turns the guarantee above from a habit into a fact, and what makes a second lens affordable.
+While in that file: the tool still probes the pre-move `quality/outbox.md` and prints it under *not
+present*, so a completed move now reads as a missing file. Not worth an item of its own; worth the
+one-line deletion whenever `crates/outbox.md` brings someone here.
 
 ### Q-15 - Consider a spec-readiness lens before any other
 
@@ -165,6 +169,16 @@ something to invent. Done once by hand in `first-release-readiness.md`.
 ## Resolved
 
 Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
+### Q-13 - Adopt the workflow in `CLAUDE.md`
+
+**to** spec · **status** **acted** 2026-08-30 · `ba4850d`, and improved in three places on the way
+in - see [the record](2026-08-30-workflow-to-adopt.md#what-changed-on-the-way-in)
+
+### Q-14 - Build the outbox index
+
+**to** code · **status** **acted** 2026-08-30 · `e233186`. Verified: it reads both outboxes, names
+the ones missing, and reports by addressee
 
 ### Q-16 - The picture never sees the biome the model has
 
