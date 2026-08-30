@@ -13,6 +13,19 @@
 //! missing from a hand-edited table in this repository and nothing noticed. So an item is a
 //! heading and a field line, and everything else in it is prose for a person.
 //!
+//! # What is actually forbidden, since this file parses a table anyway
+//!
+//! `CLAUDE.md` states the rule as a prohibition - never put a table row in a match string -
+//! and says neither why nor what to do instead. Both are worth having, because people keep
+//! hitting the wall it describes:
+//!
+//! **Padding changes the whitespace between cells. It never changes the cells.** So
+//! splitting a row on `|` and trimming each piece is pad-proof, while matching a row's
+//! bytes is not. What is forbidden is depending on a row's *width*, not on a row.
+//!
+//! [`accepted`] reads the proposal queue that way, because the queue is not this lane's
+//! file to reshape and reading it as it is beats asking somebody to change it.
+//!
 //! ```markdown
 //! ### Q-3 - `planet-bevy` depends on `game-front`
 //!

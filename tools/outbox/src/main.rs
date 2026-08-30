@@ -48,10 +48,20 @@ fn main() {
         }
         Some("--count") => {
             let open = all.items.iter().filter(|item| item.is_open()).count();
-            println!("{open} open, against a limit of {LIMIT}");
-            if open > LIMIT {
-                println!("past the limit: reviewing now costs as much as writing");
-            }
+            // The count and nothing more, until `Q-32` settles what the limit counts.
+            //
+            // This used to add "past the limit: reviewing now costs as much as writing".
+            // The count is true and that verdict is not: the limit's justification is
+            // Sean's reading time, and most of what is open costs a producer rather than
+            // him. Printed anyway it did real harm - it is what led one lane to tell him he
+            // was at fifteen against a limit of fifteen while his queue was empty.
+            //
+            // Saying nothing would hide that a fix is pending; saying the verdict repeats
+            // the error on whoever reads it next. So: the number, which is a fact, and no
+            // judgement, which is not this tool's to make yet.
+            println!("{open} open across every outbox");
+            println!("a limit is pending: {LIMIT} was written for Sean's queue,");
+            println!("and most of these are a producer's backlog");
             0
         }
         Some("--check") => {
