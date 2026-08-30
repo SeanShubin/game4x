@@ -66,6 +66,13 @@ invented one**, and the file being relayed about is the one that says who may wr
 policy, set 2026-08-30, after a lens relayed three approvals for this file and this lane declined
 all three until Sean said so himself. Two of the three changed on the way in.
 
+**What needs his approval is what this file says about who may write what** - the columns, the
+addresses, and the promotion protocol. Wording, paths, broken links and consistency inside those
+rules are the specification lane's to settle and report. Sean, 2026-08-30: he keeps executive
+control over the specification, the specification keeps everything else in line, and how the
+perspectives operate day to day is something he corrects when he notices it rather than approves in
+advance.
+
 **Quality runs nothing that writes.** Reading the tree and running `cargo clippy`, `cargo test` and
 `cargo tree` are all fine. `cargo fmt`, `cargo fix` and `clippy --fix` are not, because they modify
 the very files being judged - and a review that alters its subject is no longer a review.
