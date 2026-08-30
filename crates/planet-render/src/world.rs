@@ -45,6 +45,44 @@ pub struct World {
 }
 
 impl World {
+    /// The world of a planet with this many territories, from the canonical arrangement.
+    ///
+    /// **The one derivation of where territories are.** `game-console`'s binding builds the
+    /// model's territories from `canonical_seeds`; this builds the picture's from the same
+    /// call. So panel *n* and territory *n* are the same ground because they came from one
+    /// place, rather than because two places happen to agree.
+    ///
+    /// They did happen to agree, which is exactly the danger. [`World::build`] reaches
+    /// `canonical_seeds` only while `Params::jitter` is zero - the day it is not, the
+    /// picture relaxes its seeds into a different order and every id written on the sphere
+    /// names the wrong territory. Nothing fails. A player reads a number off a panel, types
+    /// it at the console, and takes somewhere else.
+    ///
+    /// `None` when the count is not a Goldberg number, because then there is no canonical
+    /// arrangement to share - and `spec/planet.md` allows no planet of such a count.
+    /// [`World::build`] stays for the prototype, which explores jittered and relaxed worlds
+    /// deliberately and has no model to disagree with.
+    pub fn canonical(regions: usize) -> Option<Self> {
+        let seeds = sphere_tessellation::icosahedral::canonical_seeds(regions)?;
+        let neighbours = sphere_tessellation::adjacency(&seeds);
+        let params = Params {
+            region_count: regions,
+            relaxation: 0,
+            ..Params::default()
+        };
+        Some(Self::finish(
+            WorldSpec {
+                params,
+                soccer: false,
+            },
+            Tessellation {
+                params,
+                seeds,
+                neighbours,
+            },
+        ))
+    }
+
     pub fn build(spec: WorldSpec) -> Self {
         let tessellation = if spec.soccer {
             Tessellation::soccer_ball()
@@ -53,6 +91,11 @@ impl World {
             // is needed depends heavily on the region count. See `sphere_tessellation::quality`.
             Tessellation::generate_balanced(spec.params, MAX_RELAXATION_PASSES).0
         };
+        Self::finish(spec, tessellation)
+    }
+
+    /// Everything a world carries beyond its tessellation, however that was arrived at.
+    fn finish(spec: WorldSpec, tessellation: Tessellation) -> Self {
         let coloring = graph_coloring::color_graph(&tessellation.neighbours);
         debug_assert!(
             graph_coloring::find_conflict(&tessellation.neighbours, &coloring.colors).is_none()
@@ -89,6 +132,53 @@ impl World {
             .map(|(degree, count)| format!("{degree}:{count}"))
             .collect::<Vec<_>>()
             .join(" ")
+    }
+}
+
+#[cfg(test)]
+mod one_derivation {
+    use super::*;
+
+    /// The picture's seeds are the model's seeds, from the same call.
+    ///
+    /// `game-console`'s binding builds territories from `canonical_seeds`. If these ever
+    /// differ, panel `n` stops being territory `n` and every id on the sphere names the
+    /// wrong ground - silently, because nothing else in the program compares them.
+    #[test]
+    fn the_picture_uses_the_seeds_the_model_uses() {
+        for regions in [12, 32, 42, 72, 92] {
+            let world = World::canonical(regions).expect("every planet size is a Goldberg count");
+            let model = sphere_tessellation::icosahedral::canonical_seeds(regions).unwrap();
+            assert_eq!(world.tessellation.seeds, model, "at {regions} territories");
+        }
+    }
+
+    /// Why that matters, demonstrated rather than asserted.
+    ///
+    /// The old path reached the canonical seeds only while jitter was zero. With jitter it
+    /// produces a different arrangement, and had the picture kept using it, the ids would
+    /// have moved while every test in the repository went on passing.
+    #[test]
+    fn a_jittered_world_is_a_different_arrangement() {
+        let jittered = World::build(WorldSpec {
+            params: Params {
+                region_count: 42,
+                jitter: 0.25,
+                ..Params::default()
+            },
+            soccer: false,
+        });
+        let canonical = World::canonical(42).unwrap();
+        assert_ne!(
+            jittered.tessellation.seeds, canonical.tessellation.seeds,
+            "jitter has to move the seeds, or this test proves nothing"
+        );
+    }
+
+    /// A count the game cannot have has no canonical arrangement to share.
+    #[test]
+    fn a_count_that_is_not_goldberg_has_no_canonical_world() {
+        assert!(World::canonical(50).is_none());
     }
 }
 

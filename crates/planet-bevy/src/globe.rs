@@ -445,7 +445,10 @@ fn build_globe(
         commands.entity(entity).despawn();
     }
 
-    let world = World::build(planet.spec());
+    // The same seeds the model's territories were built from, so panel `n` and territory
+    // `n` are the same ground by construction. `spec/planet.md` allows only Goldberg
+    // counts, so the fallback is for a viewer asking for something the game cannot have.
+    let world = World::canonical(planet.regions()).unwrap_or_else(|| World::build(planet.spec()));
     let solid =
         sphere_tessellation::solid(&world.tessellation.seeds, &world.tessellation.neighbours);
     let realistic = *drawing == Drawing::Realistic;
