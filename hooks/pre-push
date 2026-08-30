@@ -23,4 +23,12 @@ cargo clippy -p command-language -p game-model -p game-console -p game-front -p 
 
 echo "pre-push: cargo test --release (model and view model)"
 cargo test --release -p command-language -p game-model -p game-console -p game-front -p planet-terrain \
-  -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render
+  -p sphere-tessellation -p graph-coloring -p planet-model -p planet-render -p planet-presentation
+
+# Debug, not release: these are a handful of cheap assertions about rotations, and the
+# crate has just been compiled unoptimized by clippy above, so this reuses that build
+# instead of paying for a release build of the whole engine. They used to run only in the
+# job that reports after the page is already published, which is a strange place to keep
+# a regression test for a bug that shipped once.
+echo "pre-push: cargo test (the engine side)"
+cargo test -p planet-bevy

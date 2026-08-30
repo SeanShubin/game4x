@@ -1,0 +1,8 @@
+[package]
+name = "planet-presentation"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+planet-render.workspace = true
+sphere-tessellation.workspace = true

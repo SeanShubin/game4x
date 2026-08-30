@@ -16,7 +16,7 @@
 //! | --- | --- |
 //! | Presented as a three-dimensional sphere | [`build_globe`] |
 //! | Rotate to be above any point | [`drag_to_turn`], [`keys_to_turn`], [`touch_to_turn`] |
-//! | The roll for any point is fixed, and nothing the user does changes it | [`globe_transform`], and [`Fingers::moved`] discarding a twist |
+//! | The roll for any point is fixed, and nothing the user does changes it | [`globe_transform`], and [`planet_presentation::Fingers::moved`] discarding a twist |
 //! | Zoom in and out | [`wheel_to_zoom`], [`touch_to_turn`] |
 //! | Reset the view to a default | [`reset_view`] |
 //! | A territory's id displayed on the sphere | [`place_labels`] |
@@ -26,7 +26,8 @@
 //! `releases/first-release.md` -> Controls holds the ones this release names. What
 //! `spec/interface.md` fixes instead is that *how a thing is presented, and how the user
 //! acts on it, may follow the platform it runs on*, while what the user can do stays the
-//! same. So a drag, an arrow key and a finger all arrive at [`Orbit::drag`], and none of
+//! same. So a drag, an arrow key and a finger all arrive at
+//! [`planet_presentation::Orbit::drag`], and none of
 //! them is a different feature from the others.
 
 use bevy::asset::RenderAssetUsages;
@@ -37,37 +38,15 @@ use bevy::prelude::*;
 use bevy::window::CursorMoved;
 
 use planet_model::PlanetSize;
+use planet_presentation::{Gesture, RESTING_DISTANCE, Step};
 use planet_render::{Params, World, WorldSpec, mesh};
 use sphere_tessellation::Direction;
 
-/// How far back the camera sits at rest, in sphere radii.
-///
-/// Far enough that there is sky above the north pole. At 3.1 the planet very nearly
-/// filled the window, and the pole's letter - which floats above the spike, further out
-/// than any part of the planet - projected past the top edge and was simply not on the
-/// screen. Anything drawn beyond the surface needs room beyond the surface to be drawn in.
-const RESTING_DISTANCE: f32 = 3.45;
-const CLOSEST: f32 = 1.35;
-const FURTHEST: f32 = 9.0;
-
-/// The tilt the view opens on, and returns to when reset. Enough to show that the world
-/// is a ball rather than a disc, and to bring the north pole into view without hiding it.
-const RESTING_PITCH: f32 = 0.35;
-
-/// Radians of turn per pixel of drag. Slow enough to place a region deliberately.
-const DRAG_SENSITIVITY: f32 = 0.006;
 /// Radians per second while an arrow key is held.
 const KEY_SPEED: f32 = 1.1;
 /// Fraction of the distance a wheel notch closes. Gentle on purpose - the first
 /// prototype's zoom was reported as far too sensitive.
 const ZOOM_PER_NOTCH: f32 = 0.09;
-
-/// How far the pitch may travel before it would tip past the pole and invert the world.
-///
-/// The margin is a hundredth of a radian, a little over half a degree, and it exists
-/// because the axis degenerates exactly at the pole: yaw and roll stop being separable
-/// there. You can still get near enough to be looking straight down at a pole.
-const PITCH_LIMIT: f32 = std::f32::consts::FRAC_PI_2 - 0.01;
 
 /// How far below the surface the dark ball sits, as a fraction of how far the panels
 /// themselves reach.
@@ -225,50 +204,14 @@ impl Planet {
 /// Where the viewer is, in the only three numbers that matter. The ball turns rather
 /// than the camera, so that the light stays put and the terminator does not swing about
 /// while you are trying to look at something.
-#[derive(Resource, Clone, Copy)]
-pub struct Orbit {
-    pub yaw: f32,
-    pub pitch: f32,
-    pub distance: f32,
-}
-
-impl Default for Orbit {
-    fn default() -> Self {
-        Self {
-            yaw: 0.0,
-            pitch: RESTING_PITCH,
-            distance: RESTING_DISTANCE,
-        }
-    }
-}
-
-impl Orbit {
-    /// Turn by an angle. The pitch is clamped short of the pole, where the axis
-    /// degenerates and yaw and roll stop being separable.
-    ///
-    /// There is no argument for roll, and that is the point: `spec/planet.md` says the
-    /// roll for any point on the planet is fixed and nothing the user does changes it, so
-    /// there is nothing for a gesture to reach even if one offered it.
-    fn turn(&mut self, yaw: f32, pitch: f32) {
-        self.yaw += yaw;
-        self.pitch = (self.pitch + pitch).clamp(-PITCH_LIMIT, PITCH_LIMIT);
-    }
-
-    /// Turn by a step across the glass, in pixels.
-    ///
-    /// A mouse drag, a held arrow key and a finger are three ways of producing this step
-    /// and are not three features. `spec/interface.md`: what the user can do is the same
-    /// whichever platform it is, and only how they act on it follows the device.
-    fn drag(&mut self, step: Vec2) {
-        self.turn(step.x * DRAG_SENSITIVITY, step.y * DRAG_SENSITIVITY);
-    }
-
-    /// Move the viewer nearer or further by a factor of the distance remaining, so the
-    /// same gesture covers the same proportion whether you are close in or far out.
-    fn scale_distance(&mut self, factor: f32) {
-        self.distance = (self.distance * factor).clamp(CLOSEST, FURTHEST);
-    }
-}
+/// Where the viewer is, in a form Bevy can hold as a resource.
+///
+/// The angles, the limits and the arithmetic are [`planet_presentation::Orbit`]; this adds
+/// only the ability to be stored in a world and read by a system. Everything reachable
+/// through it is reachable through the deref, so a caller writes `orbit.yaw` and
+/// `orbit.drag(step)` exactly as before.
+#[derive(Resource, Clone, Copy, Default, Deref, DerefMut)]
+pub struct Orbit(pub planet_presentation::Orbit);
 
 /// Where the pointer was on the previous frame, while a drag is in progress.
 ///
@@ -280,80 +223,17 @@ impl Orbit {
 #[derive(Resource, Default)]
 struct Drag(Option<Vec2>);
 
-/// The smallest separation, in pixels, that a pinch is measured against.
+/// The fingers on the glass, in a form Bevy can hold as a resource.
 ///
-/// Two fingers that land almost on top of each other give a ratio with a very small
-/// number underneath it, and one further pixel of separation would then read as an
-/// enormous zoom. Below this the pair is held but not acted on.
-const PINCH_FLOOR: f32 = 24.0;
+/// What a hand is asking for is [`planet_presentation::Fingers`]. This adds storage.
+#[derive(Resource, Default, Deref, DerefMut)]
+struct Fingers(planet_presentation::Fingers);
 
-/// What a change in the fingers on the glass asks the view to do.
-#[derive(Clone, Copy, Debug, PartialEq)]
-enum Gesture {
-    /// Turn the world by a step in pixels - the same step a mouse drag produces, and
-    /// handed to the same method.
-    Turn(Vec2),
-    /// Zoom, by the factor the fingers' separation changed by. Greater than one is
-    /// fingers spreading apart.
-    Pinch(f32),
-}
-
-/// The fingers on the glass, and where each of them was last seen.
+/// A point on the glass, in the policy's own units rather than the engine's.
 ///
-/// Touch is tracked here rather than read from Bevy's `Touches` resource because
-/// `Touches` only refreshes `previous_position` on frames that carried an event: with a
-/// finger held still, `Touch::delta` keeps reporting the last movement and the world
-/// would drift on. Reading the messages and keeping the previous position here is the
-/// same shape as [`Drag`], which reads `CursorMoved` for the same reason.
-///
-/// At most two are tracked. A third finger is ignored rather than queued, because there
-/// is nothing for it to mean.
-#[derive(Resource, Default)]
-struct Fingers {
-    down: Vec<(u64, Vec2)>,
-}
-
-impl Fingers {
-    /// The separation between the pair, or `None` unless there are exactly two.
-    fn gap(&self) -> Option<f32> {
-        match self.down.as_slice() {
-            [(_, first), (_, second)] => Some(first.distance(*second)),
-            _ => None,
-        }
-    }
-
-    fn began(&mut self, id: u64, at: Vec2) {
-        if self.down.iter().any(|(known, _)| *known == id) {
-            return;
-        }
-        if self.down.len() < 2 {
-            self.down.push((id, at));
-        }
-    }
-
-    fn ended(&mut self, id: u64) {
-        self.down.retain(|(known, _)| *known != id);
-    }
-
-    /// Moves one finger and says what the hand as a whole is now asking for.
-    ///
-    /// One finger turns the world. Two zoom it, and **only** zoom it: the angle between
-    /// them is computed nowhere, so a two-finger twist - which every gesture library
-    /// offers for free - cannot reach anything. `spec/planet.md` fixes the roll for any
-    /// point on the planet and says nothing the user does changes it, so a twist has to
-    /// be discarded on purpose rather than left to be wired up by accident.
-    fn moved(&mut self, id: u64, to: Vec2) -> Option<Gesture> {
-        let index = self.down.iter().position(|(known, _)| *known == id)?;
-        let separated = self.gap();
-        let from = std::mem::replace(&mut self.down[index].1, to);
-        match (separated, self.gap()) {
-            (Some(before), Some(after)) if before >= PINCH_FLOOR => {
-                Some(Gesture::Pinch(after / before))
-            }
-            (None, None) => Some(Gesture::Turn(to - from)),
-            _ => None,
-        }
-    }
+/// The one place the two vocabularies meet. Past this line there is no `Vec2`.
+fn step(at: Vec2) -> Step {
+    Step::new(at.x, at.y)
 }
 
 #[derive(Component)]
@@ -598,12 +478,8 @@ fn build_globe(
 /// on the darker panels. Relative luminance decides between the two. The panel colours
 /// are already linear, which is the space those coefficients are defined in.
 fn readable_on(panel: [f32; 4]) -> Color {
-    let luminance = 0.2126 * panel[0] + 0.7152 * panel[1] + 0.0722 * panel[2];
-    if luminance > 0.18 {
-        Color::srgb(0.05, 0.06, 0.08)
-    } else {
-        Color::srgb(0.93, 0.95, 0.98)
-    }
+    let ink = planet_presentation::readable_on(panel);
+    Color::srgb(ink[0], ink[1], ink[2])
 }
 
 /// The two poles, and the colour each is marked in.
@@ -644,40 +520,15 @@ fn spawn_label(commands: &mut Commands, anchor: Vec3, text: &str, colour: Color,
         });
 }
 
+/// The heads-up line, with the drawing named only when a key would change it.
 fn summary(
     world: &World,
     panels: &mesh::PlanetMesh,
     drawing: Drawing,
     follows_the_game: bool,
 ) -> String {
-    let regions = world.tessellation.region_count();
-    let shape = match sphere_tessellation::goldberg::arrangements_up_to(regions)
-        .into_iter()
-        .find(|&(m, n)| sphere_tessellation::goldberg::region_count(m, n) == regions)
-    {
-        Some((m, n)) => format!("GP({m},{n})"),
-        None => "no Goldberg solid at this count".to_string(),
-    };
-    // The bindings are listed from the same flag that installs them, so the two cannot
-    // disagree. A detached globe used to advertise five keys that started no game and a `T`
-    // that changed no drawing - on the first screen of the newest prototype.
-    let bindings = if follows_the_game {
-        format!(
-            "\n1-5 start a new game on a planet of that size - T for the {} drawing",
-            drawing.other().name()
-        )
-    } else {
-        String::new()
-    };
-    // No name for the planet. What a count is *called* is the game's vocabulary, and this
-    // draws solids the game has no word for; the count and the arrangement say more than a
-    // name could, and saying neither keeps `PlanetSize` out of the drawing layer entirely.
-    format!(
-        "{regions} territories - {shape}\n{} - {} triangles\n\
-         drag, a finger or the arrows to turn - wheel or pinch to zoom - R to reset{bindings}",
-        world.degree_summary(),
-        panels.triangle_count(),
-    )
+    let other = follows_the_game.then(|| drawing.other().name());
+    planet_presentation::summary(world, panels, other)
 }
 
 /// A model direction in the engine's coordinates.
@@ -745,7 +596,7 @@ fn drag_to_turn(
             // the flat view already uses - `GlobeView::drag` turns by `+dx` about the up
             // axis and `+dy` about the across axis - and the two views have to agree, or
             // the same gesture means opposite things depending on which one is up.
-            orbit.drag(event.position - previous);
+            orbit.drag(step(event.position) - step(previous));
         }
         drag.0 = Some(event.position);
     }
@@ -766,8 +617,8 @@ fn touch_to_turn(
 ) {
     for touch in touches.read() {
         match touch.phase {
-            TouchPhase::Started => fingers.began(touch.id, touch.position),
-            TouchPhase::Moved => match fingers.moved(touch.id, touch.position) {
+            TouchPhase::Started => fingers.began(touch.id, step(touch.position)),
+            TouchPhase::Moved => match fingers.moved(touch.id, step(touch.position)) {
                 // Fingers spreading apart is a larger ratio and a shorter distance:
                 // the world comes toward you.
                 Some(Gesture::Pinch(ratio)) => orbit.scale_distance(1.0 / ratio),
@@ -1066,6 +917,18 @@ fn place_labels(
 mod tests {
     use super::*;
 
+    use planet_presentation::RESTING_PITCH;
+
+    /// A viewer at these angles, at the resting distance. The geometry tests care about
+    /// where the poles land and never about how far away they are.
+    fn at(yaw: f32, pitch: f32) -> Orbit {
+        Orbit(planet_presentation::Orbit {
+            yaw,
+            pitch,
+            distance: RESTING_DISTANCE,
+        })
+    }
+
     fn north() -> Vec3 {
         to_view(Direction::NORTH_POLE)
     }
@@ -1095,12 +958,7 @@ mod tests {
         for pitch in [-1.2, -0.4, 0.0, RESTING_PITCH, 1.2] {
             for step in 0..24 {
                 let yaw = step as f32 * std::f32::consts::TAU / 24.0;
-                let orbit = Orbit {
-                    yaw,
-                    pitch,
-                    distance: RESTING_DISTANCE,
-                };
-                let pole = globe_transform(&orbit).rotation * north();
+                let pole = globe_transform(&at(yaw, pitch)).rotation * north();
                 assert!(
                     pole.x.abs() < 1e-5,
                     "at yaw {yaw} pitch {pitch} the pole slid to x = {}",
@@ -1117,12 +975,8 @@ mod tests {
     #[test]
     fn with_no_tilt_the_poles_are_completely_still() {
         for step in 0..16 {
-            let orbit = Orbit {
-                yaw: step as f32 * std::f32::consts::TAU / 16.0,
-                pitch: 0.0,
-                distance: RESTING_DISTANCE,
-            };
-            let pole = globe_transform(&orbit).rotation * north();
+            let yaw = step as f32 * std::f32::consts::TAU / 16.0;
+            let pole = globe_transform(&at(yaw, 0.0)).rotation * north();
             assert!(pole.abs_diff_eq(Vec3::Y, 1e-5), "pole moved to {pole}");
         }
     }
@@ -1130,251 +984,10 @@ mod tests {
     /// Tilting is what brings a pole into view, so it had better do that.
     #[test]
     fn tilting_leans_the_north_pole_toward_the_viewer() {
-        let level = globe_transform(&Orbit {
-            yaw: 0.0,
-            pitch: 0.0,
-            distance: RESTING_DISTANCE,
-        })
-        .rotation
-            * north();
-        let tilted = globe_transform(&Orbit {
-            yaw: 0.0,
-            pitch: RESTING_PITCH,
-            distance: RESTING_DISTANCE,
-        })
-        .rotation
-            * north();
+        let level = globe_transform(&at(0.0, 0.0)).rotation * north();
+        let tilted = globe_transform(&at(0.0, RESTING_PITCH)).rotation * north();
         // The camera looks down -z from +z, so leaning toward it means gaining z.
         assert!(tilted.z > level.z, "{tilted} is no closer than {level}");
-    }
-
-    /// Ink has to change with the panel under it, or the ids vanish on half the palette.
-    #[test]
-    fn ids_are_inked_against_the_panel_they_sit_on() {
-        let dark = readable_on([0.01, 0.02, 0.06, 1.0]);
-        let light = readable_on([0.75, 0.72, 0.5, 1.0]);
-        assert_ne!(dark, light, "one ink cannot serve both");
-        // Every colour in the real palette must get an ink that contrasts with it.
-        for packed in planet_render::palette::REGION_COLORS {
-            let panel = mesh::linear_rgba(packed);
-            let luminance = 0.2126 * panel[0] + 0.7152 * panel[1] + 0.0722 * panel[2];
-            let ink = readable_on(panel);
-            let inked_light = ink == Color::srgb(0.93, 0.95, 0.98);
-            assert_eq!(
-                inked_light,
-                luminance <= 0.18,
-                "colour {packed:#08x} at luminance {luminance} got the wrong ink"
-            );
-        }
-    }
-
-    fn resting() -> Orbit {
-        Orbit::default()
-    }
-
-    /// A finger is a drag. Not a similar thing that happens to look like one - the same
-    /// step, through the same method, to the same result.
-    #[test]
-    fn a_finger_turns_the_world_exactly_as_a_mouse_drag_does() {
-        let step = Vec2::new(37.0, -14.0);
-
-        let mut dragged = resting();
-        dragged.drag(step);
-
-        let mut touched = resting();
-        let mut fingers = Fingers::default();
-        fingers.began(1, Vec2::new(100.0, 100.0));
-        let gesture = fingers.moved(1, Vec2::new(100.0, 100.0) + step);
-        assert_eq!(gesture, Some(Gesture::Turn(step)));
-        touched.drag(step);
-
-        assert_eq!(touched.yaw, dragged.yaw);
-        assert_eq!(touched.pitch, dragged.pitch);
-    }
-
-    /// The first position after a finger lands only says where it landed. Turning on it
-    /// would jerk the world by wherever the finger happened to be, which is the same bug
-    /// [`Drag`] avoids for the pointer.
-    #[test]
-    fn a_finger_landing_turns_nothing() {
-        let mut fingers = Fingers::default();
-        fingers.began(1, Vec2::new(400.0, 300.0));
-        assert_eq!(
-            fingers.moved(1, Vec2::new(400.0, 300.0)),
-            Some(Gesture::Turn(Vec2::ZERO))
-        );
-        let mut orbit = resting();
-        orbit.drag(Vec2::ZERO);
-        assert_eq!(orbit.yaw, resting().yaw);
-    }
-
-    /// Fingers spreading apart bring the world closer, and pinching together push it away.
-    #[test]
-    fn spreading_two_fingers_zooms_in_and_pinching_zooms_out() {
-        let mut fingers = Fingers::default();
-        fingers.began(1, Vec2::new(300.0, 400.0));
-        fingers.began(2, Vec2::new(500.0, 400.0));
-
-        let Some(Gesture::Pinch(ratio)) = fingers.moved(2, Vec2::new(700.0, 400.0)) else {
-            panic!("moving one of a pair is a pinch");
-        };
-        assert!(
-            ratio > 1.0,
-            "spreading apart is a ratio above one, got {ratio}"
-        );
-        let mut orbit = resting();
-        orbit.scale_distance(1.0 / ratio);
-        assert!(
-            orbit.distance < RESTING_DISTANCE,
-            "spreading did not come closer"
-        );
-
-        let Some(Gesture::Pinch(ratio)) = fingers.moved(2, Vec2::new(400.0, 400.0)) else {
-            panic!("moving one of a pair is a pinch");
-        };
-        assert!(
-            ratio < 1.0,
-            "closing together is a ratio below one, got {ratio}"
-        );
-        let mut orbit = resting();
-        orbit.scale_distance(1.0 / ratio);
-        assert!(
-            orbit.distance > RESTING_DISTANCE,
-            "pinching did not go further out"
-        );
-    }
-
-    /// `spec/planet.md`: the roll for any point on the planet is fixed, and nothing the
-    /// user does changes it.
-    ///
-    /// A two-finger twist is the gesture that would reach roll, and it comes free with
-    /// any pinch. Rotating the pair about its own centre must therefore leave the view
-    /// exactly where it was - not approximately, and not only for the yaw.
-    #[test]
-    fn twisting_two_fingers_changes_nothing() {
-        let centre = Vec2::new(400.0, 400.0);
-        let arm = 150.0;
-        let mut fingers = Fingers::default();
-        fingers.began(1, centre + Vec2::new(arm, 0.0));
-        fingers.began(2, centre - Vec2::new(arm, 0.0));
-
-        let mut orbit = resting();
-        let before = (orbit.yaw, orbit.pitch, orbit.distance);
-        for step in 1..=32 {
-            let angle = step as f32 * std::f32::consts::TAU / 32.0;
-            let offset = Vec2::new(arm * angle.cos(), arm * angle.sin());
-            for (id, at) in [(1, centre + offset), (2, centre - offset)] {
-                match fingers.moved(id, at) {
-                    Some(Gesture::Pinch(ratio)) => orbit.scale_distance(1.0 / ratio),
-                    Some(Gesture::Turn(step)) => orbit.drag(step),
-                    None => {}
-                }
-            }
-        }
-        // The separation never changed, so every ratio was one and nothing moved.
-        assert!(
-            (orbit.yaw - before.0).abs() < 1e-4,
-            "a twist turned the world"
-        );
-        assert!(
-            (orbit.pitch - before.1).abs() < 1e-4,
-            "a twist tilted the world"
-        );
-        assert!(
-            (orbit.distance - before.2).abs() < 1e-3,
-            "a twist zoomed the world"
-        );
-    }
-
-    /// A second finger landing mid-drag must not be read as an enormous jump.
-    #[test]
-    fn a_second_finger_landing_does_not_lurch_the_world() {
-        let mut fingers = Fingers::default();
-        fingers.began(1, Vec2::new(100.0, 100.0));
-        assert!(matches!(
-            fingers.moved(1, Vec2::new(140.0, 100.0)),
-            Some(Gesture::Turn(_))
-        ));
-        fingers.began(2, Vec2::new(600.0, 100.0));
-        // Now a pair. Moving either one measures separation, never the distance from
-        // wherever the other finger happens to be.
-        assert!(matches!(
-            fingers.moved(1, Vec2::new(150.0, 100.0)),
-            Some(Gesture::Pinch(_))
-        ));
-    }
-
-    /// Two fingers landing on the same spot would divide by something near zero.
-    #[test]
-    fn a_pinch_that_starts_too_close_together_is_not_acted_on() {
-        let mut fingers = Fingers::default();
-        fingers.began(1, Vec2::new(400.0, 400.0));
-        fingers.began(2, Vec2::new(401.0, 400.0));
-        assert_eq!(fingers.moved(2, Vec2::new(460.0, 400.0)), None);
-        // Once they are far enough apart it measures normally again.
-        assert!(matches!(
-            fingers.moved(2, Vec2::new(500.0, 400.0)),
-            Some(Gesture::Pinch(_))
-        ));
-    }
-
-    /// Lifting one of a pair leaves the other turning the world, rather than leaving a
-    /// stale finger behind that makes every later move read as a pinch.
-    #[test]
-    fn lifting_one_of_two_fingers_goes_back_to_turning() {
-        let mut fingers = Fingers::default();
-        fingers.began(1, Vec2::new(300.0, 400.0));
-        fingers.began(2, Vec2::new(500.0, 400.0));
-        fingers.ended(2);
-        assert_eq!(
-            fingers.moved(1, Vec2::new(320.0, 400.0)),
-            Some(Gesture::Turn(Vec2::new(20.0, 0.0)))
-        );
-    }
-
-    /// A third finger is ignored, and ignoring it must not disturb the two that are
-    /// already doing something.
-    #[test]
-    fn a_third_finger_is_ignored() {
-        let mut fingers = Fingers::default();
-        fingers.began(1, Vec2::new(300.0, 400.0));
-        fingers.began(2, Vec2::new(500.0, 400.0));
-        fingers.began(3, Vec2::new(700.0, 400.0));
-        assert_eq!(fingers.down.len(), 2);
-        assert_eq!(fingers.moved(3, Vec2::new(900.0, 400.0)), None);
-        assert!(matches!(
-            fingers.moved(2, Vec2::new(600.0, 400.0)),
-            Some(Gesture::Pinch(_))
-        ));
-    }
-
-    /// The pitch is clamped whichever device asks for it, or the world inverts at the
-    /// pole where yaw and roll stop being separable.
-    #[test]
-    fn no_device_can_tilt_the_world_past_the_pole() {
-        let mut orbit = resting();
-        for _ in 0..500 {
-            orbit.drag(Vec2::new(0.0, 100.0));
-        }
-        assert!(orbit.pitch <= PITCH_LIMIT);
-        for _ in 0..1000 {
-            orbit.drag(Vec2::new(0.0, -100.0));
-        }
-        assert!(orbit.pitch >= -PITCH_LIMIT);
-    }
-
-    /// Zoom is clamped the same way whether it came from a wheel or from a pinch.
-    #[test]
-    fn no_device_can_zoom_past_the_limits() {
-        let mut orbit = resting();
-        for _ in 0..200 {
-            orbit.scale_distance(0.5);
-        }
-        assert_eq!(orbit.distance, CLOSEST);
-        for _ in 0..200 {
-            orbit.scale_distance(2.0);
-        }
-        assert_eq!(orbit.distance, FURTHEST);
     }
 
     /// One key per size, in the order the sizes are listed, and each types the line a

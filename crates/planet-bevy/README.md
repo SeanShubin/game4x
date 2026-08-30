@@ -56,7 +56,8 @@ between panels read as grooves; a darker sphere sits just underneath to fill the
 
 ## Turning it, whatever you are holding
 
-A mouse drag, a held arrow key and a finger all arrive at the same `Orbit::drag`, so they
+A mouse drag, a held arrow key and a finger all arrive at the same
+[`Orbit::drag`](../planet-presentation/README.md), so they
 cannot mean different things. `R` puts the view back. That matters more than it sounds: winit routes a touch to
 `TouchInput` and never to `MouseInput` or `CursorMoved` — its web backend tests
 `pointer_type != "touch"` before raising a pointer event — so without a path of its own a

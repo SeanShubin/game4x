@@ -15,6 +15,7 @@ members = [
     "crates/planet-terrain",
     "crates/planet-ecs",
     "crates/planet-render",
+    "crates/planet-presentation",
     "crates/planet-bevy",
     "crates/game4x",
     "prototypes/planet-view",
@@ -39,6 +40,7 @@ planet-model = { path = "crates/planet-model" }
 planet-terrain = { path = "crates/planet-terrain" }
 planet-ecs = { path = "crates/planet-ecs" }
 planet-render = { path = "crates/planet-render" }
+planet-presentation = { path = "crates/planet-presentation" }
 planet-bevy = { path = "crates/planet-bevy" }
 game4x = { path = "crates/game4x" }
 

@@ -3995,6 +3995,7 @@ dependencies = [
  "game-front",
  "planet-ecs",
  "planet-model",
+ "planet-presentation",
  "planet-render",
  "planet-terrain",
  "sphere-tessellation",
@@ -4011,6 +4012,14 @@ dependencies = [
 [[package]]
 name = "planet-model"
 version = "0.1.0"
+
+[[package]]
+name = "planet-presentation"
+version = "0.1.0"
+dependencies = [
+ "planet-render",
+ "sphere-tessellation",
+]
 
 [[package]]
 name = "planet-render"
