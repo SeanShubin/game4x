@@ -24,8 +24,9 @@ files rather than from anybody's memory of them.
 - **Q-11** - The composition root has grown logic and tests · `lenses/quality/outbox.md`
 - **Q-36** - The hook publishes another perspective's uncommitted work · `lenses/quality/outbox.md`
 
-### To spec (3)
+### To spec (4)
 
+- **C-4** - The index is shared, so staging is publishing · `crates/outbox.md`
 - **C-3** - A prototype cannot photograph itself, and two items now need it to · `crates/outbox.md`
 - **C-2** - Architecture rule 6 states the losing side of a decision as fact · `crates/outbox.md`
 - **C-1** - Whose file is a generated one at the repository root? · `crates/outbox.md`

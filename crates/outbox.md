@@ -33,6 +33,36 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-4 - The index is shared, so staging is publishing
+
+**to** spec · **status** open · **raised** 2026-08-30 · **source** `Q-36`, and it happened
+
+`Q-36` was that `hooks/pre-commit` regenerated `pending.md` from the working tree and staged it, so
+one perspective's uncommitted outbox could be published under another's commit. Fixed: the hook
+refuses while any outbox has unstaged changes.
+
+**The fix is too narrow, and the wider case occurred while it was being made.** This lane staged
+`hooks/pre-commit`, its commit lost a race for `.git/index.lock`, and the file sat staged until the
+quality lens committed - which swept twenty-six lines of this lane's work into `93d839d`, a commit
+whose message describes something else, touching a file outside that lens's column.
+
+Nobody did anything wrong. `git add` writes to an index all three perspectives share, and `git
+commit` commits the index rather than the caller's changes. **Staging is a publish to a shared
+buffer**, and `CLAUDE.md` treats it as private - *stage by name, never `git add -A`* reads as
+advice about one perspective's own carefulness, when the hazard is that another perspective commits
+between one's `add` and one's `commit`.
+
+Two consequences worth stating:
+
+- **Attribution stops meaning anything.** A commit citing a finding is how a lens verifies work, and
+  this one cites `Q-8` while carrying `Q-36`.
+- **A lane can write outside its column without doing anything.** The lens did not touch `hooks/`;
+  it committed an index that contained it.
+
+Not this lane's to settle, because the fix is a rule about how three perspectives share one
+checkout - stage and commit as one step, or work in separate worktrees, or something better.
+Reported with an instance rather than as a worry.
+
 ### C-3 - A prototype cannot photograph itself, and two items now need it to
 
 **to** spec · **status** open · **raised** 2026-08-30 · **source** `Q-1`
