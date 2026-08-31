@@ -55,6 +55,13 @@ It is the only place in the codebase allowed to know about every other module at
 Because it holds no logic, it needs no tests of its own — if it is large enough to be
 worth testing, something has leaked into it that belongs elsewhere.
 
+**One thing may live here that looks like a violation and is not: the harness that drives
+the shipped binary from outside.** A remote control that places the camera, runs commands,
+waits for the world to settle and writes a picture has to operate the *real* program — a
+harness running a special path would be evidence about the harness. So it cannot move, and
+its tests are tests of the harness rather than of the root. Anything else large enough to
+be worth testing has still leaked.
+
 Concretely, the planet view's root is three small files: option parsing, a headless
 capture path, and a `main` whose entire windowed branch is four lines of plugin
 assembly.
@@ -163,6 +170,14 @@ hand-written so that results are identical on every platform, which is what make
    query iteration order, not on hash iteration. Where a sequence is genuinely needed,
    canonicalise the *result* by sorting on a data-derived key rather than ordering the
    work.
+10. **A dependency either provides operations or provides a home.** Operations are
+   functions over data you already had — a math library, a PNG writer. A home decides
+   where your data lives and when your code runs — Bevy, an ECS. **The test is whether it
+   appears in your own types**: an operation never does, and a home cannot avoid it. A
+   dependency with opinions gets exactly one crate to have them in, and rules 6 and 7 are
+   what keep it there. Before taking one, ask which kind it is: a home needs a boundary
+   crate before it needs a version number, because the question is not whether it is good
+   but how much of your design it will make.
 
 ## Open questions
 
