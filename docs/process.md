@@ -82,7 +82,8 @@
 - The specification instance's outbox is the proposal queue
 - Every item carries an id, who it is addressed to, a status, and one line saying what it is
 - `pending.md` is the one place I go to see what is outstanding. I open the file rather than run a
-  command - a command I have to remember is weaker than a document I open
+  command: running the command still leaves me reading the result, so it is two things where
+  opening the file is one
 - It is generated from every outbox at every commit, so it is never something somebody remembered
   to update, and it says what must be decided before it says anything else
 - `scripts/outbox.ps1` answers the same question from a terminal, and filters by who an item is
