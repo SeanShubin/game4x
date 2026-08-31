@@ -49,6 +49,9 @@ not a lane beside the others; it is a way of looking at all of them.
 | **Code**                        | `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, CI, cargo | everything |
 | **Quality**, and any other lens | its own directory under `lenses/`, and nothing else                         | everything |
 
+**`notes/` is Sean's and no instance writes there**, except to create a file he has asked for by
+name. It is not `docs/notes/`, which is Claude's and has a confusingly similar name.
+
 **Everyone reads everything; nobody writes outside their own column.** That asymmetry is what makes
 them composable rather than merely separated - a perspective that cannot read the others has to
 guess, and one that can write to another has to be trusted. **It binds each producer against the
