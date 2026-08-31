@@ -49,7 +49,7 @@ only thing that does.
 
 ### S-4 - A compilable specification of the kinds and the transformations
 
-**to** code · **status** open · **raised** 2026-08-31 · **source** Sean, and `P-130`
+**to** code · **status** **acted** 2026-08-31 · **raised** 2026-08-31 · **source** Sean, and `P-130` · **cited** `3ca8675`, `7ced668`
 
 Sean wants the kinds and transformations **in a form he can compile and read** - his words: *something
 like a sql specification with enums and foreign keys, or a set of rust data types with hardcoded

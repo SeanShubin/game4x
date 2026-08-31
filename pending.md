@@ -11,19 +11,10 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 Nothing. Every perspective has said so in its own outbox, and this is read from those
 files rather than from anybody's memory of them.
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **S-4** - `3ca8675` S-4: the kinds and transformations, in a form that compiles · still open in `docs/notes/proposals.md`
-
 ## What is outstanding
 
-### To code (4)
+### To code (3)
 
-- **S-4** - A compilable specification of the kinds and the transformations · `docs/notes/proposals.md`
 - **S-3** - Which cells make the twelve reachable, measured rather than guessed · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
