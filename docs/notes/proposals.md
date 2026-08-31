@@ -42,6 +42,47 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-125 - Every structure built everywhere it can be built
+
+**to** sean · **status** open · **raised** 2026-08-30 · **kind** entailed · **into**
+`spec/control.md` -> Winning
+
+The first release cannot be won. Raised by the code lane as `C-7` on starting `R-6`, and checked
+here rather than taken: **the spec already says what would fix it, in a clause the implementation
+drops.**
+
+> - A planet is fully exploited when every territory that can be taken has been taken, every
+>   structure has been built everywhere it can be built, and every storage structure on it is full.
+
+**Basis:** `game-model` reads *every structure that can be built has been built* as requiring a yard
+in **every** claimable territory. A yard costs 15 metal from that territory's own store, and stores
+are discarded at the end of every turn, so a territory must make 15 metal in one turn or never hold
+one. Eight of the twelve designed territories cannot. Two verified directly against the release's
+own table: **territory 6 has no metal nodes at all**, and **territory 1, the landing site, has three
+nodes at density 4** - twelve against a cost of fifteen. The code lane's figures for the other six
+are in `C-7`.
+
+**The clause is already there and doing nothing.** Under the reading that requires a yard
+everywhere, *that can be built* is vacuous - every structure in the game can be built somewhere, so
+the qualifier excludes nothing. A qualifier that is always true is not a qualifier. The parallel
+clause in the same sentence settles it: *every territory that **can be taken** has been taken*
+excludes ocean, so the pattern is a qualifier that excludes the impossible case.
+
+**So this is a wording change and not a new rule**, which is why it is one line and why no number
+Sean chose has to move. The release's table was built so that each territory demonstrates a
+different consequence - *no metal*, *food density 1*, *the minimum a territory can be* - and those
+demonstrations are the point. They cannot coexist with a win that requires a yard in a territory
+with no metal.
+
+**It is filed rather than reworded silently**, though restating an idea already present is normally
+this lane's to do. A competent reader read the line the other way and built the game to match, so
+the line is ambiguous in practice whatever it says in principle - and the consequence of the
+ambiguity is whether the first release can be finished.
+
+**The code lane is already proceeding under this reading** and says its evidence will report
+stopping short of `has_won` rather than reporting a pass, which is the right way to work while it is
+undecided.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
