@@ -163,60 +163,6 @@ Flavour and mechanism agree.
 persist. Buildings that hold more, and a ceiling on what a territory can keep, stay in
 [the backlog](spec-backlog.md) where the rest of that idea is.
 
-### P-130 - The kinds and the transformations are data
-
-**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into**
-`spec/invariants.md` -> new section, after *The game is one function*
-
-**Sean's, stated 2026-08-30 and 31.** *I am leaning towards a more data driven game where the units
-and transformations are simply data inputs to rust, and rust is providing a statically typed engine
-to run and validate the data.*
-
-> ## The game is data
->
-> - Every kind of thing, and every transformation that turns some things into others, is data rather
->   than code
-> - A transformation is a set of inputs and a set of outputs. Each input says how many, whether it
->   is consumed, and whether its quantity is a least or a most
-> - A transformation applies either where it is invoked or everywhere it matches
-> - The definitions are part of the game state. Defining one is a transition like any other, so a
->   game's history is a complete account of it, including what its rules were
-
-**Basis:** the second line is not a guess. Every transformation the first release has was written out
-in [the game as tables](the-game-as-tables.md) and **four columns were enough for all of them** -
-thing, quantity, consumed, and least-or-most. Non-consumed inputs turn every requirement into an
-input, which is Sean's; the least-or-most column is what absences need, since *the territory is not
-already held* is *at most zero garrisons* and cannot be a quantity of anything.
-
-**The third line costs one concept and buys the turn.** `end turn` is not a phase but five
-transformations - eat, grow, depart, spoil, ready - each local, each applied everywhere it matches.
-Without *everywhere* the turn is a hand-written rule at the centre of the game; with it, nothing is
-special.
-
-**The fourth line is what keeps `The game is one function` true.** If the definitions sat outside the
-state, the function would take a state, a transition **and** the rules - three arguments, not two,
-and a saved game would be meaningless without the file that defined its verbs. Putting them in the
-state keeps one function over one state, and makes the history say what the game *was* as well as
-what happened. It is also what would make the thing moddable.
-
-**What it is worth beyond tidiness, in Sean's words**: *I can specify ALL units with precision, in a
-way that I can keep in my head as a human, while at the same time gives you an unambiguous
-specification.* `P-125` is the evidence - a clause read one way by this lane and another by the code
-lane decided whether the release was winnable, and went unnoticed for two days. A row of a table
-cannot be read two ways.
-
-**It does not say what the data looks like**, deliberately. Tabular is what Sean wants and the
-predecessor's `{node resource=food density=6}` is the same information in another notation; which
-one, and where the files sit, belongs to whoever builds it.
-
-**Two things it will expose, neither blocking.** The tables need *node, unworked* and *food, surplus*,
-which are comparisons rather than kinds - so either the language gains comparisons or the state gains
-derived kinds computed from stored ones. Each appears in exactly one row, which is the honest measure
-of what that decision costs. And a genuinely new **verb** - stripping a unit for parts, say - would
-need a console command, since `spec/console.md` names one for each way the state can change. New
-transformations of an existing shape need none: `build yard` and `build extractor` are already one
-command.
-
 ### P-131 - Units and structures as one table
 
 **to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
@@ -510,6 +456,7 @@ work the release exists to order.
 | P-127, `show` says what can be done, not only what is true                                                      | `spec/console.md` -> Commands                                                                                          | 2026-08-30 |
 | P-128, a surface is never more capable than the console                                                         | `spec/invariants.md` -> Everything is expressible                                                                      | 2026-08-30 |
 | P-129, a territory holds only so much of each kind of thing                                                     | `spec/logistics.md` -> Capacity                                                                                        | 2026-08-31 |
+| P-130, the kinds and the transformations are data                                                               | `spec/invariants.md` -> The game is data                                                                               | 2026-08-31 |
 
 ## Rejected
 

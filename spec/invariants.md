@@ -67,4 +67,14 @@ specific rule.
 - A rule is a source of transitions, not a kind of one. The history records what a rule did,
   exactly as if the player had done it by hand
 
+## The game is data
+
+- Every kind of thing, and every transformation that turns some things into others, is data rather
+  than code
+- A transformation is a set of inputs and a set of outputs. Each input says how many, whether it
+  is consumed, and whether its quantity is a least or a most
+- A transformation applies either where it is invoked or everywhere it matches
+- The definitions are part of the game state. Defining one is a transition like any other, so a
+  game's history is a complete account of it, including what its rules were
+
 ## Open questions
