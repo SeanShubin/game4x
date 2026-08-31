@@ -311,21 +311,27 @@ impl Game {
     }
 
     /// `spec/control.md`: *a planet is fully exploited when every territory that can be
-    /// taken has been taken, every structure that can be built has been built, and every
-    /// storage structure on it is full.*
+    /// taken has been taken, every structure has been built everywhere it can be built, and
+    /// every storage structure on it is full.*
     ///
-    /// Two of those three need a reading, and both readings are reported rather than
-    /// buried:
+    /// **This does not implement that sentence yet, and the difference matters.** It asks
+    /// for a Yard in every claimable territory; the specification asks for one everywhere a
+    /// Yard *can* be built, which `spec/control.md` defines as *where the territory's own
+    /// permanent facts allow it: its nodes, their densities, its biome. Not whether the
+    /// player can afford it this turn, and not whether any particular game happened to
+    /// reach it.*
     ///
-    /// - **"every structure that can be built"** cannot mean *while another would be
-    ///   accepted*, because a territory may hold any number of Yards and a second one
-    ///   changes nothing - so a planet would never be finished. It is read as *while
-    ///   building one more would change what the planet can do*: an Extractor for every
-    ///   node, since nodes run out, and a Yard where there is none, since the first is
-    ///   what lets a territory produce an Ark and the second does nothing.
-    /// - **"every storage structure is full"** holds because there are none. No structure
-    ///   in `spec/structures.md` stores anything. If one is ever added, this stops being
-    ///   vacuous and this function will not notice on its own.
+    /// Eight of the release's twelve territories can never hold a Yard - one of them has no
+    /// metal at all - so as written this can never be true. That is `C-7`, and the
+    /// specification moved to settle it; this function has not caught up. `C-9`.
+    ///
+    /// Nothing in play depends on the difference, for a worse reason: `C-8`. An Ark can
+    /// only be produced in territory 11, which can never be claimed, so no Ark ever reaches
+    /// the planet to be launched from it.
+    ///
+    /// *Every storage structure is full* holds because there are none. No structure in
+    /// `spec/structures.md` stores anything. If one is ever added, this stops being vacuous
+    /// and this function will not notice on its own.
     pub fn is_fully_exploited(&self) -> bool {
         self.territories
             .iter()

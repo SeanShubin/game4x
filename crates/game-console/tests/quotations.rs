@@ -148,14 +148,25 @@ fn bare(text: &str) -> String {
 /// words that appear at the start of the next.
 fn prose(path: &Path, text: &str) -> Vec<String> {
     if path.extension().and_then(|e| e.to_str()) != Some("rs") {
-        return vec![flattened(text)];
+        // The same paragraph rule, for a document whose every line is prose.
+        let kept: Vec<String> = text
+            .lines()
+            .map(|line| {
+                if line.trim().is_empty() {
+                    " . ".to_string()
+                } else {
+                    line.to_string()
+                }
+            })
+            .collect();
+        return vec![flattened(&kept.join("\n"))];
     }
     let mut runs = Vec::new();
     let mut current = String::new();
     for line in text.lines() {
         if line.trim_start().starts_with("//") {
             current.push('\n');
-            current.push_str(line);
+            current.push_str(&marked(line));
         } else if !current.is_empty() {
             runs.push(flattened(&current));
             current.clear();
@@ -165,6 +176,29 @@ fn prose(path: &Path, text: &str) -> Vec<String> {
         runs.push(flattened(&current));
     }
     runs
+}
+
+/// A blank line inside a comment, kept as a full stop.
+///
+/// Flattening erases paragraph breaks, and without them a quotation followed by a new
+/// paragraph that opens in bold reads as a second quotation in a list. **This guard found
+/// that in itself**: it reported a doc comment as attributing the author's own sentence to
+/// `spec/control.md`, one paragraph below a real quotation of it.
+///
+/// A full stop is the marker because both readers already refuse to cross one - the
+/// emphasis scan stops there, and a list continuation allows only a comma, a space and the
+/// word `and`.
+fn marked(line: &str) -> String {
+    let bare = line
+        .trim_start()
+        .trim_start_matches('/')
+        .trim_start_matches('!')
+        .trim();
+    if bare.is_empty() {
+        " . ".to_string()
+    } else {
+        line.to_string()
+    }
 }
 
 /// Words that mark what follows as the specification's own, rather than as a claim about it.

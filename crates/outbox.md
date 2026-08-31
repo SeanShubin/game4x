@@ -33,6 +33,34 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-9 - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does
+
+**to** code · **status** open · **raised** 2026-08-30 · **source** `P-125` landing
+
+This lane's own, recorded so it is not forgotten rather than because anybody else must act.
+
+`spec/control.md` now reads *every structure has been built everywhere it can be built*, and defines
+the qualifier: *a structure can be built where the territory's own permanent facts allow it: its
+nodes, their densities, its biome. Not whether the player can afford it this turn, and not whether
+any particular game happened to reach it.* `Game::is_fully_exploited` still asks for a Yard and a
+full set of extractors in **every** claimable territory, which is the reading `C-7` showed cannot
+hold.
+
+The definition is decidable from a territory alone, which is what makes it implementable:
+
+- **An extractor** can be built on any node once the territory has ever had a spare hand. Population
+  settles at the food it produces, so working only the densest food node gives `d - 1` spare hands -
+  a territory can build iff its best food node has density two or more. Territory 5's three nodes of
+  density one are why it holds one extractor of nineteen forever.
+- **A Yard** can be built where the most metal the territory can hold in one turn reaches fifteen -
+  the densest metal nodes its spare hands can work, once every extractor it can build is built.
+
+Both are the arithmetic already written out in `C-7`'s table, done in the model rather than by hand.
+
+Not done in the same commit as the specification's change, deliberately. It is a rule about what the
+game rewards, the tests that pin it are the ones that would have to change with it, and `C-8` says
+nothing in play reaches it either way - so it is worth doing carefully rather than quickly.
+
 ### C-8 - No Ark can ever be produced, so the loop cannot reach its last two steps
 
 **to** spec · **status** open · **raised** 2026-08-30 · **source** building the `R-6` play-through

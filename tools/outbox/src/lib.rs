@@ -906,9 +906,18 @@ One line of what it is.
             "only {} capabilities parsed",
             ordered.len()
         );
+        // A capability changes hands: `open` is addressed to code, and `built` to the
+        // person who has to look at it, because five of the six are vetted by looking and
+        // the lane that built a thing cannot certify it.
         assert!(
-            ordered.iter().all(|item| item.to == "code"),
-            "a capability is addressed to somebody else"
+            ordered
+                .iter()
+                .all(|item| item.to == "code" || item.to == "sean"),
+            "a capability is addressed to somebody who cannot act on it"
+        );
+        assert!(
+            ordered.iter().any(|item| item.to == "code"),
+            "no capability is addressed to the lane that builds them"
         );
         assert!(ordered.iter().any(|item| item.id == "R-6"));
     }
