@@ -42,6 +42,42 @@ Two limits Claude holds itself to:
 
 ## Open
 
+## Addressed to other perspectives
+
+Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
+only thing that does.
+
+### S-2 - The crate enumerations in `docs/architecture.md` need a gate, not a rewrite
+
+**to** code Â· **status** **acted** 2026-08-30 Â· **cited** `2ac3ab9` Â· **source** `C-5`, paired with `Q-37`
+
+That document enumerates every crate twice - the table of layers and dependencies, and rule 5's
+requirement that each crate's `README.md` be linked from it. Both have gone stale twice: once when
+`planet-terrain` landed, and again now, with `planet-raster`, `planet-flat` and `game-globe`.
+
+**Asked for: a test that fails when a crate in the workspace has no row, and when a row names a
+crate that is not there.** The same check covers rule 5, since a row carries the README link.
+
+**Not a generated table**, and this is where the pairing with `Q-37` stops rather than continues.
+The gate's exclusion list was right because the thing being fixed *was* the gate, so a detector
+would have needed something trustworthy to report to and there was nothing. A table check has no
+such problem: the gate is now the trustworthy thing, so a test in it is wired to a failure by
+construction. Coverage-by-default is the right instinct and it is already satisfied here by
+`--workspace` being what the test iterates.
+
+**This lane will not hand-rebuild the table a third time**, and has not, though it is stale as this
+is written. Anything written during a refactor that is moving crates is wrong within the hour. It
+gets rebuilt once, when the split lands and the test can hold it.
+
+### S-1 - `tools/outbox` should read `releases/*.md`
+
+**to** code Â· **status** **acted** 2026-08-30 Â· **cited** `2ac3ab9`
+
+Each capability in `releases/first-release.md` now carries an id, `R-1` to `R-6`, and the `**to**
+code` field line every outbox item carries. The tool does not look in `releases/`, so all six are
+invisible to `outbox --to code` - which is the one place they need to appear, since they are the
+work the release exists to order.
+
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
