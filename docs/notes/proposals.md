@@ -217,6 +217,128 @@ need a console command, since `spec/console.md` names one for each way the state
 transformations of an existing shape need none: `build yard` and `build extractor` are already one
 command.
 
+### P-131 - Units and structures as one table
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
+`releases/first-release.md` -> Units and structures
+
+**Nothing new, rearranged.** Nine headings of bullets become one table, so the things can be compared
+down a column instead of held in the head across a page.
+
+> ## Units and structures
+>
+> | Thing         | Force | Cells | A move | Upkeep         | Costs to produce            | Requires    |
+> | ------------- | ----- | ----- | ------ | -------------- | --------------------------- | ----------- |
+> | **citizen**   | 1     |       |        |                |                             |             |
+> | **garrison**  | 1     |       |        |                | not produced; founding gives one |        |
+> | **extractor** |       |       |        |                | 1 labor, and nothing else   |             |
+> | **yard**      |       |       |        |                | 15 metal                    |             |
+> | **ark**       | 2     | 2     | 1 cell |                | 12 metal, 12 energy         | a Yard      |
+> | **pioneer**   | 2     | 2     | 1 cell | 1 food per turn | 8 metal, 6 energy, 1 citizen | a garrison |
+>
+> A garrison's multiplier is 1. An Ark can invade land from orbit. Founding produces a garrison, a
+> citizen and a food extractor.
+
+**Every line touched, since restating is reported.** Six things, nine facts, one re-expression:
+
+| Was                                         | Now                                           |
+| ------------------------------------------- | --------------------------------------------- |
+| nine `###` headings with bullets under each | six rows and one paragraph                    |
+| Garrison: *allows create pioneer*           | Pioneer: **requires** a garrison              |
+| Create Ark / Create Pioneer as own headings | the *costs to produce* and *requires* columns |
+| Founding as its own heading                 | the paragraph below the table                 |
+
+**The one re-expression is the second row of that table**, and it is the same fact from the other
+side: *a garrison allows a Pioneer to be created* and *a Pioneer requires a garrison* say the same
+thing, and the second is the one that fits a column. **Nothing else changed** - every figure, every
+force, every cost is the same character it was.
+
+**Founding stays as prose deliberately.** It is a transformation rather than a thing, and it belongs
+in the table `P-132` proposes. It is kept here so that promoting this alone loses nothing.
+
+**Why it is worth doing at all.** The tabular form is what Sean asked for and the reason is not
+neatness: *I can specify ALL units with precision, in a way that I can keep in my head as a human,
+while at the same time gives you an unambiguous specification.* The blanks are the part prose cannot
+do - reading down the *Force* column shows at a glance that structures have none except the garrison,
+which is a fact nobody had written anywhere.
+
+### P-132 - The first release's transformations as one table
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
+`releases/first-release.md` -> new section after Units and structures
+
+**Depends on `P-130`** and cannot land before it, because a release never invents a rule and the
+four-column shape is that proposal's. Filed separately from `P-131` for exactly that reason:
+`P-131` is available today and this waits.
+
+> ## Transformations
+>
+> | Transformation      | Scope | Role | Thing              | Qty     | Consumed | Bound       |
+> | ------------------- | ----- | ---- | ------------------ | ------- | -------- | ----------- |
+> | **land**            | here  | in   | ark, in orbit      | 1       | yes      | at least    |
+> |                     |       | in   | garrison           | 0       | no       | at most     |
+> |                     |       | out  | garrison           | 1       |          |             |
+> |                     |       | out  | citizen            | 1       |          |             |
+> |                     |       | out  | extractor, food    | 1       |          |             |
+> | **move**            | here  | in   | unit, here         | 1       | yes      | at least    |
+> |                     |       | in   | cell, on that unit | 1       | yes      | at least    |
+> |                     |       | out  | unit, there        | 1       |          |             |
+> | **found by land**   | here  | in   | pioneer, arriving  | 1       | yes      | at least    |
+> |                     |       | in   | garrison           | 0       | no       | at most     |
+> |                     |       | out  | garrison           | 1       |          |             |
+> |                     |       | out  | citizen            | 1       |          |             |
+> |                     |       | out  | extractor, food    | 1       |          |             |
+> | **build extractor** | here  | in   | labor              | 1       | yes      | at least    |
+> |                     |       | in   | node, unworked     | 1       | no       | at least    |
+> |                     |       | out  | extractor          | 1       |          |             |
+> | **build yard**      | here  | in   | metal              | 15      | yes      | at least    |
+> |                     |       | out  | yard               | 1       |          |             |
+> | **produce pioneer** | here  | in   | metal              | 8       | yes      | at least    |
+> |                     |       | in   | energy             | 6       | yes      | at least    |
+> |                     |       | in   | citizen            | 1       | yes      | at least    |
+> |                     |       | in   | garrison           | 1       | no       | at least    |
+> |                     |       | out  | pioneer            | 1       |          |             |
+> | **produce ark**     | here  | in   | metal              | 12      | yes      | at least    |
+> |                     |       | in   | energy             | 12      | yes      | at least    |
+> |                     |       | in   | yard               | 1       | no       | at least    |
+> |                     |       | out  | ark                | 1       |          |             |
+> | **launch**          | here  | in   | ark, here          | 1       | yes      | at least    |
+> |                     |       | in   | cell, on that unit | 1       | yes      | at least    |
+> |                     |       | out  | ark, in orbit      | 1       |          |             |
+> | **spend readiness** | here  | in   | citizen, ready     | 1       | yes      | at least    |
+> |                     |       | out  | citizen, exhausted | 1       |          |             |
+> |                     |       | out  | labor              | 1       |          |             |
+> | **work**            | here  | in   | labor              | 1       | yes      | at least    |
+> |                     |       | in   | extractor          | 1       | no       | at least    |
+> |                     |       | out  | resource           | density |          |             |
+> | **eat**             | every | in   | citizen            | 1       | no       | at least    |
+> |                     |       | in   | food               | 1       | yes      | at least    |
+> | **grow**            | every | in   | food, surplus      | 1       | yes      | at least    |
+> |                     |       | out  | citizen            | 1       |          |             |
+> | **depart**          | every | in   | citizen, unfed     | 1       | yes      | at least    |
+> | **spoil**           | every | in   | food               | any     | yes      | at least    |
+> | **ready**           | every | in   | thing, exhausted   | any     | yes      | at least    |
+> |                     |       | out  | thing, ready       | any     |          |             |
+
+**Basis:** every figure is the release's own, and the arrangement is `P-130`'s. Writing it out is
+what tested that proposal - four columns covered all fourteen, which is why `P-130` states four and
+not five.
+
+**Three things the table says that the eight-step loop does not.** `move` and `launch` are ordinary -
+a unit here in, a unit there out - so location is a trait and orbit is a place. `land` and *found by
+land* are one transformation reached two ways, which is why founding is one action rather than two.
+And `end turn` is five rows with scope *every* rather than a phase, so what is global is the scope
+column and not the rules.
+
+**Two rows name things that do not exist**, and this is the honest cost. *node, unworked* is the
+difference between nodes and extractors, and *food, surplus* between food and citizens; neither is a
+kind. They need either derived kinds computed from stored ones, or comparisons in the language.
+**Each appears exactly once**, which is the measure of what that decision is worth.
+
+**`spend readiness` is new as a row and not as a rule.** `spec/turn.md` already says anything usable
+is ready or exhausted and using it exhausts it; splitting that from `work` is what lets `work` take
+labor and know nothing about turns.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
