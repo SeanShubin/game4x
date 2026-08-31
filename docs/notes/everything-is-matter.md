@@ -226,7 +226,13 @@ the second - the qualifier that decides whether the release is winnable was doin
 noticed for two days. Written as a transformation with its conditions named, the ambiguity has
 nowhere to hide, because *can be built* would have had to be a clause with a definition.
 
-**It does not remove the second kind of failure and should not be sold as though it did.** `C-8` was
+**And removing ambiguity is the larger half, not a consolation.** Sean's correction, and he is
+right: the two costliest defects this project has had were both a sentence read two ways -
+`P-125`, and `P-96` leaving borders in a drawing it had just scoped ids and poles out of. Neither
+was a hard problem. Both survived review by two careful readers because prose lets a reader supply
+the meaning it did not carry, and neither reader knows they did it.
+
+**It does not remove the second kind of failure, which is worth saying only so nothing is oversold.** `C-8` was
 not an ambiguity - every number was clear and their consequence was not, and it took an afternoon of
 arithmetic to find that only one territory could produce an Ark. A formal specification does not
 compute that for you. **What it does is make it computable**, which is why the same result took a
