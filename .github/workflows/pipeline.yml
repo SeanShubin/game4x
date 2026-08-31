@@ -70,24 +70,31 @@ jobs:
       - name: Check formatting
         run: cargo fmt --all -- --check
 
-      - name: Clippy (the shipped path)
-        run: cargo clippy -p command-language -p game-model -p game-console -p game-front -p sphere-tessellation -p planet-terrain -p graph-coloring -p planet-model -p planet-presentation -p planet-render -p planet-raster -p planet-ecs -p planet-flat -p planet-bevy -p game-globe -p game4x -- -D warnings
+      - name: Clippy (everything)
+        run: cargo clippy --workspace -- -D warnings
 
       # The rules and the geometry are where correctness lives: the whole first-release
       # command script runs here, and the geometry tests run with it.
       # The geometry part: the solid must close up, every polygon
       # must have one side per neighbour, and every Goldberg count must come out with
       # twelve pentagons. Release mode because the relaxation tests are slow otherwise.
-      - name: Test (model and view model)
-        run: cargo test --release -p command-language -p game-model -p game-console -p game-front -p sphere-tessellation -p planet-terrain -p graph-coloring -p planet-model -p planet-presentation -p planet-render -p planet-raster
+      # Selected by exclusion, deliberately. A list of crates to *include* goes stale
+      # silently every time a crate is added or split: planet-terrain was missing from it
+      # when it landed, and splitting planet-bevy moved seven tests into planet-flat, which
+      # nothing named - so they ran only in the verify job, after the page was already
+      # published, and nothing failed to say so.
+      #
+      # Excluding makes coverage the default. The list is wrong only when somebody
+      # deliberately removes a name, and it names one fact: does the crate link an engine.
+      - name: Test (everything that does not link an engine, release)
+        run: cargo test --release --workspace --exclude planet-ecs --exclude planet-bevy --exclude planet-flat --exclude game-globe --exclude game4x --exclude planet-view --exclude goldberg-view
 
-      # Debug, not release. These are cheap assertions about rotations and the crate was
-      # just compiled unoptimized by clippy above, so this reuses that build rather than
-      # paying for a release build of the engine. They used to run only in the verify job,
-      # which reports after the page is already published - a strange place to keep a
-      # regression test for a bug that shipped once.
-      - name: Test (the engine side)
-        run: cargo test -p planet-bevy
+      # Debug for the engine-facing ones: clippy above has just compiled them unoptimized,
+      # so this reuses that build rather than paying for a release build of Bevy. They used
+      # to run only in the verify job, which reports after the page is already published -
+      # a strange place to keep a regression test for a bug that shipped once.
+      - name: Test (the engine-facing crates)
+        run: cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x -p planet-view -p goldberg-view
 
       # Run from the crate directory: Trunk resolves the cargo manifest from its working
       # directory, and the workspace root is a virtual manifest with no root package.
