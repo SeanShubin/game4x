@@ -53,6 +53,9 @@ drops.**
 
 > - A planet is fully exploited when every territory that can be taken has been taken, every
 >   structure has been built everywhere it can be built, and every storage structure on it is full.
+> - A structure can be built where the territory's own permanent facts allow it: its nodes, their
+>   densities, its biome. Not whether the player can afford it this turn, and not whether any
+>   particular game happened to reach it.
 
 **Basis:** `game-model` reads *every structure that can be built has been built* as requiring a yard
 in **every** claimable territory. A yard costs 15 metal from that territory's own store, and stores
@@ -61,6 +64,36 @@ one. Eight of the twelve designed territories cannot. Two verified directly agai
 own table: **territory 6 has no metal nodes at all**, and **territory 1, the landing site, has three
 nodes at density 4** - twelve against a cost of fifteen. The code lane's figures for the other six
 are in `C-7`.
+
+**The code lane checked this against the code and found the qualifier is dropped twice, not once.**
+`is_fully_exploited` also requires an extractor on *every* node. **Territory 5 tops out at one
+extractor of nineteen** - three food nodes at density 1 give no spare labour, so it holds one citizen
+for ever, whose single labour goes on food or the citizen dies, against 3 + 8 + 8 = 19 nodes.
+Verified against the release's table. So narrowing only the yard clause leaves territory 5 blocking
+the win and answers `C-7` by half. **The spec's sentence already covers both, since an extractor is
+a structure**; it is the implementation that dropped the qualifier in two places, and the fix has to
+be made in two.
+
+**The second line is the part that is a decision rather than a correction**, and the code lane was
+right to refuse to pick it. *Can be built* reads three ways and they are not the same game:
+
+| Reading                         | What it means                           | Verdict                                   |
+| ------------------------------- | --------------------------------------- | ----------------------------------------- |
+| **Now**                         | affordable this turn                    | wrong - a planet would flicker in and out |
+| **Ever**                        | some play from the start makes it exist | right, and this is what the line says     |
+| **Nothing further is possible** | no play *from here* adds anything       | wrong - it rewards foreclosing            |
+
+**The third is worth naming because it is the tempting one.** It is closest to what *fully exploited*
+means in English, and it is **path-dependent**: a player who wastes a territory's capacity gets a
+cheaper win than one who does not, because running out of moves counts as finishing. That rewards
+getting stuck.
+
+**The proposed line is the second reading, phrased as a property of the ground rather than a
+quantifier over plays.** *Some play makes it exist* invites a search; *the territory's own permanent
+facts allow it* is decided by looking at the nodes. The two coincide in this game, and the second is
+the one an implementation can check and a player can predict. It is also why the release's table
+works at all: territory 6 has no metal ever, and territory 5 has one citizen ever, whatever anybody
+does.
 
 **The clause is already there and doing nothing.** Under the reading that requires a yard
 everywhere, *that can be built* is vacuous - every structure in the game can be built somewhere, so
