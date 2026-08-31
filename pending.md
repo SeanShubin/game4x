@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-126** - Metal and energy carry between turns; food does not · `docs/notes/proposals.md`
 - **P-131** - Units and structures as one table · `docs/notes/proposals.md`
 - **P-132** - The first release's transformations as one table · `docs/notes/proposals.md`
 

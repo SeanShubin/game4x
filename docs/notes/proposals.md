@@ -42,127 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-126 - Metal and energy carry between turns; food does not
-
-**to** sean · **status** open · **raised** 2026-08-30 · **rewritten** 2026-08-31 · **kind** recovered
-· **into** `spec/resources.md` -> The list, **and** `spec/turn.md` -> Order of operations
-
-**Rewritten after measurement changed the answer.** It was filed as *the twelve territories cannot
-produce an Ark*, recommending a change to the node table. Sean then said he expected to bring
-storage forward to make the scenario winnable, and **storage turns out to make it winnable with the
-table untouched**, so the fixture change is no longer recommended and the destination has moved from
-the release to the spec.
-
-> - Ending a turn: everything that eats, eats; then a population grows on surplus food or starves
->   for want of it; **food that is not eaten is lost, while metal and energy remain where they
->   are**; and everything becomes ready again.
-> - What a territory can keep is bounded. Anything above the bound is lost when the turn ends.
-
-And into `spec/resources.md` -> The list, after the three resources:
-
-> Every resource has two properties, and they are independent of each other:
->
-> | Resource | Conserved | Expires |
-> | -------- | --------- | ------- |
-> | Food     | no        | yes     |
-> | Metal    | yes       | no      |
-> | Energy   | no        | no      |
->
-> - A **conserved** resource is not destroyed by being used. It changes form, and what it was made
->   into can be taken apart to get it back
-> - A resource that **expires** is lost when the turn ends, whether it was used or not
-
-
-**Open, and it decides whether this proposal fixes the release at all.** Sean, 2026-08-30: *there
-needs to be some limit on resource storage to make sure the game is finite.* The second line records
-that and deliberately does not say what sets the bound, because there are two answers and they are
-not the same release:
-
-- **A territory can keep some by default, and storage structures raise it.** Then this proposal
-  works on its own, and the numbers say a default of about twenty is enough - the largest single
-  thing the loop must hold at once is a Yard's 15 metal.
-- **Capacity comes only from a structure.** Then a territory with no storage keeps nothing, this
-  proposal changes nothing, and the release needs a storage structure before it can be won.
-
-The backlog says *storage facilities for energy and metal*, which reads as the second, and the
-measurements above assume the first.
-
-**Sean's answer of 2026-08-30 implies the first, though he gave it about capacity rather than about
-this proposal.** He chose *capacity per category* - so much for structures, so much for stores, so
-much for units - and a per-category bound on stores must exist before any container does, or nothing
-could be stored and a container would have nowhere to stand. So a territory has a base and containers
-raise it, and the measurements hold. **Worth confirming when this is reviewed**, since it was
-inferred from an answer to a different question.
-
-**Food needs no separate limit.** Sean also asked for one to keep population in check, and the first
-line is already it: food that is not eaten is lost, so a population cannot bank surplus and grow on
-it. Its ceiling stays what the ground can feed each turn.
-
-
-**The two properties are independent, which is what makes the table worth having.** Sean gave three
-resources and three behaviours; they are three cells of a two-by-two, and the fourth is empty:
-
-|                   | Conserved | Not conserved |
-| ----------------- | --------- | ------------- |
-| **Expires**       | *empty*   | food          |
-| **Never expires** | metal     | energy        |
-
-**The empty cell already has a tenant named.** [The backlog](spec-backlog.md) records *radioactive
-materials also lose potency over time* - conserved as matter, expiring as usefulness. That the gap is
-both empty and already spoken for is the strongest evidence these are the right two axes rather than
-three behaviours chosen one at a time.
-
-**Conserved commits to something and it should be said plainly.** *Not destroyed by being used*
-means a Pioneer taken apart returns all 8 metal, not some of it - partial recovery is not
-conservation, it is a refund with a fudge factor. **What stops that draining the weight of a decision
-is that matter is conserved and time is not**: the turns and the labour spent building it do not come
-back, so an undo costs exactly what it should.
-
-**It is closer to the specification than it looks.** `spec/logistics.md` already says *a cost may be
-made of anything the player controls: resources, citizens, units or structures* - so paying for one
-thing with another is permitted today. What conservation adds is that the metal inside the thing you
-spent is what you are spending.
-
-
-**Basis:** `C-8` showed the loop cannot reach steps 7 and 8. An Ark needs a Yard and 12 metal and 12
-energy; a Yard needs 15 metal; every cost is paid from one territory's store in one turn because
-stores are discarded when the turn ends. Only territory 11 could afford both, and it can never be
-claimed.
-
-**With stores carrying, every one of those obstacles is a wait rather than a wall.** Recomputed from
-the release's own table:
-
-| Can accumulate       | Territories                  |
-| -------------------- | ---------------------------- |
-| Enough for a Yard    | all but 5 and 6              |
-| Enough for an Ark    | all but 5, 6 and 7           |
-| Enough for a Pioneer | 1, 2, 3, 4, 8, 9, 10, 11, 12 |
-
-**The landing site can now do the whole loop by itself.** Territory 1 raises 12 metal a turn against
-a Yard's 15, so two turns buys one, and 12 of each buys an Ark. **And the planet opens up**: nine
-territories can afford a Pioneer where five could before, including 4 and 8, which the code lane
-found are `10`'s only reachable neighbours - so `10` is reached, and `11` and `12` are reached from
-`10`.
-
-**Every demonstration in the table survives, which is the part that makes this the right fix.**
-Territory 5 still has no spare labour ever, 6 still has no metal ever, 7 still has no energy ever.
-They still cannot hold a Yard, and under `P-125` that is now correct rather than fatal - *a
-structure can be built where the territory's own permanent facts allow it*. **Storage and `P-125`
-together make the release winnable without moving one number Sean chose.**
-
-**It is his intent already**, recorded on 2026-08-26 as later work: *storage facilities for energy
-and metal, while food spoils initially*. What is new is only the schedule, and his reason for moving
-it: *I am anticipating having to add storage a bit earlier than originally planned to make the
-scenario winnable.*
-
-**The asymmetry is not arbitrary.** Food's demand is continuous and metal's and energy's is lumpy, so
-the resource that spoils is the one whose demand never pauses, where buffering would buy nothing.
-Flavour and mechanism agree.
-
-**What this does not do.** It adds no storage *structure* and no capacity limit - stores simply
-persist. Buildings that hold more, and a ceiling on what a territory can keep, stay in
-[the backlog](spec-backlog.md) where the rest of that idea is.
-
 ### P-131 - Units and structures as one table
 
 **to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
@@ -457,6 +336,7 @@ work the release exists to order.
 | P-128, a surface is never more capable than the console                                                         | `spec/invariants.md` -> Everything is expressible                                                                      | 2026-08-30 |
 | P-129, a territory holds only so much of each kind of thing                                                     | `spec/logistics.md` -> Capacity                                                                                        | 2026-08-31 |
 | P-130, the kinds and the transformations are data                                                               | `spec/invariants.md` -> The game is data                                                                               | 2026-08-31 |
+| P-126, metal and energy carry between turns, food does not, and each resource is conserved or not               | `spec/resources.md` -> The list, `spec/turn.md` -> Order of operations                                                 | 2026-08-31 |
 
 ## Rejected
 

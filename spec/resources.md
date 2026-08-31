@@ -12,4 +12,16 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - Metal, for building things
 - Energy, for moving things
 
+Every resource has two properties, and they are independent of each other:
+
+| Resource | Conserved | Expires |
+| -------- | --------- | ------- |
+| Food     | no        | yes     |
+| Metal    | yes       | no      |
+| Energy   | no        | no      |
+
+- A **conserved** resource is not destroyed by being used. It changes form, and what it was made
+  into can be taken apart to get it back
+- A resource that **expires** is lost when the turn ends, whether it was used or not
+
 ## Open questions
