@@ -86,6 +86,19 @@ pub fn places(root: &Path) -> Vec<PathBuf> {
         root.join("docs/notes/proposals.md"),
         root.join("crates/outbox.md"),
     ];
+    // A release is an outbox too. Each capability carries an id, a `**to** code` line and
+    // one observable sentence, which is the same shape as any other item - and it is the
+    // work the release exists to order, so being invisible to `--to code` made the one
+    // list that says what to build next the one list that did not say it.
+    if let Ok(entries) = std::fs::read_dir(root.join("releases")) {
+        let mut releases: Vec<PathBuf> = entries
+            .flatten()
+            .map(|entry| entry.path())
+            .filter(|path| path.extension().and_then(|end| end.to_str()) == Some("md"))
+            .collect();
+        releases.sort();
+        found.extend(releases);
+    }
     if let Ok(entries) = std::fs::read_dir(root.join("lenses")) {
         let mut lenses: Vec<PathBuf> = entries
             .flatten()
@@ -863,6 +876,41 @@ One line of what it is.
         );
         // And says nothing when there is nothing to say.
         assert!(!pending(&all, &[]).contains("says otherwise"));
+    }
+
+    /// A release is an outbox too, read against the real repository.
+    ///
+    /// Its capabilities carry an id, a `**to** code` line and one observable sentence -
+    /// the same shape as any other item - and they are the work the release exists to
+    /// order. Until `S-1` the tool did not look in `releases/`, so the one list that says
+    /// what to build next was the one list that did not say it.
+    ///
+    /// Against the real tree rather than a fixture, because the defect was that a
+    /// directory was not walked, and a fixture root has no directories to walk.
+    #[test]
+    fn the_release_is_read_and_its_capabilities_are_addressed_to_code() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let all = read(&root);
+        assert!(
+            all.files.iter().any(|at| at.contains("releases/")),
+            "no release was read: {:?}",
+            all.files
+        );
+        let ordered: Vec<&Item> = all
+            .items
+            .iter()
+            .filter(|item| item.outbox.contains("releases/"))
+            .collect();
+        assert!(
+            ordered.len() >= 6,
+            "only {} capabilities parsed",
+            ordered.len()
+        );
+        assert!(
+            ordered.iter().all(|item| item.to == "code"),
+            "a capability is addressed to somebody else"
+        );
+        assert!(ordered.iter().any(|item| item.id == "R-6"));
     }
 
     #[test]
