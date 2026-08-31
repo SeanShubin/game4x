@@ -49,7 +49,7 @@ only thing that does.
 
 ### S-2 - The crate enumerations in `docs/architecture.md` need a gate, not a rewrite
 
-**to** code · **status** open · **raised** 2026-08-30 · **source** `C-5`, paired with `Q-37`
+**to** code · **status** **acted** 2026-08-30 · **cited** `2ac3ab9` · **source** `C-5`, paired with `Q-37`
 
 That document enumerates every crate twice - the table of layers and dependencies, and rule 5's
 requirement that each crate's `README.md` be linked from it. Both have gone stale twice: once when
@@ -71,7 +71,7 @@ gets rebuilt once, when the split lands and the test can hold it.
 
 ### S-1 - `tools/outbox` should read `releases/*.md`
 
-**to** code · **status** open · **raised** 2026-08-30
+**to** code · **status** **acted** 2026-08-30 · **cited** `2ac3ab9`
 
 Each capability in `releases/first-release.md` now carries an id, `R-1` to `R-6`, and the `**to**
 code` field line every outbox item carries. The tool does not look in `releases/`, so all six are

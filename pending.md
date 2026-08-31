@@ -11,21 +11,10 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 Nothing. Every perspective has said so in its own outbox, and this is read from those
 files rather than from anybody's memory of them.
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **S-2** - `2ac3ab9` S-1: a release is an outbox, and S-2: the crate table gets a test · still open in `docs/notes/proposals.md`
-- **S-1** - `2ac3ab9` S-1: a release is an outbox, and S-2: the crate table gets a test · still open in `docs/notes/proposals.md`
-
 ## What is outstanding
 
-### To code (8)
+### To code (6)
 
-- **S-2** - The crate enumerations in `docs/architecture.md` need a gate, not a rewrite · `docs/notes/proposals.md`
-- **S-1** - `tools/outbox` should read `releases/*.md` · `docs/notes/proposals.md`
 - **R-1** - Two drawings · `releases/first-release.md`
 - **R-2** - Terrain that crosses boundaries · `releases/first-release.md`
 - **R-3** - A division that cannot be seen · `releases/first-release.md`
