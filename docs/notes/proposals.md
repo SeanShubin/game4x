@@ -94,6 +94,61 @@ Sean's table. `S-3` asks the code lane for the graph and for the smallest change
 territory reachable and an Ark producible, so the choice is between measured options rather than
 guesses.
 
+### P-127 - `show` says what can be done, not only what is true
+
+**to** sean · **status** open · **raised** 2026-08-30 · **kind** recovered · **into**
+`spec/console.md` -> Commands
+
+Playing the first release means typing, and the friction is not the typing. It is that nothing tells
+you what is affordable, so every turn is arithmetic done by hand against the node table.
+
+> - `show <subject>` reports what is true of it and what can be done with it. For each action the
+>   rules permit on that subject, it says whether it is possible now, and when it is not, what is
+>   missing.
+
+**Basis:** Sean, on wanting to reach the solvability wall by playing rather than by reasoning. The
+subject is his; the wording is this lane's.
+
+**The second half is the valuable one.** *You cannot build a Yard here* is worth little; *you cannot
+build a Yard here: 15 metal, you can raise 12* is the whole answer, and it is what `C-8` took a
+lane's afternoon to discover by hand for twelve territories.
+
+**It is more than a convenience, and this is the reason to take it seriously.** The blocker on
+player-written rules is that **nothing in the specification names a condition** - `spec/console.md`
+says queries exist and names no subject. *What is missing here* is exactly the vocabulary a rule
+needs to ask about, so this is the first naming of it, arrived at from the direction of a player
+wanting to see rather than a language wanting terms. That is the better direction.
+
+**It says nothing about format**, deliberately - which actions are listed, in what order, and how a
+shortfall is phrased are the implementation's. What is required is that the answer be there.
+
+### P-128 - A surface is never more capable than the console
+
+**to** sean · **status** open · **raised** 2026-08-30 · **kind** recovered · **into**
+`spec/invariants.md` -> Everything is expressible
+
+**Sean's, stated 2026-08-30**, as the constraint on the interface work about to start: *we must never
+add something that can be done from the user interface that can't be done from a console command.*
+
+> - Anything the player can do through a surface can be done by typing. A surface may be quicker or
+>   clearer; it is never more capable.
+
+**Basis:** the invariant beside it already says every **change to game state** is executable as a
+command. Sean's rule is wider: it covers looking, and it covers directing the front end. Those are
+the two things a new interface adds first, and neither is a state change, so neither is covered
+today.
+
+**It already holds, which is the argument for writing it down now rather than later.** On-screen
+controls map to slash forms, the size keys to `/new <size>`, the surface buttons to `/game`,
+`/console` and `/browser` - `P-93` and `P-94` established that pattern deliberately. **The rule is
+free while it is true and expensive once it is not**, and the interface work is precisely when a
+button gets added with nothing behind it.
+
+**What it buys is larger than symmetry.** A game whose every act is typeable is a game whose every
+act is recordable, replayable and scriptable - `/save` writes a history that `run` executes, and
+`P-115` says a rule's actions are recorded exactly as if typed. **A button with no command behind it
+breaks all three at once**, and it breaks them quietly, because the button still works.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the

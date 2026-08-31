@@ -9,6 +9,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-126** - The twelve territories cannot produce an Ark · `docs/notes/proposals.md`
+- **P-127** - `show` says what can be done, not only what is true · `docs/notes/proposals.md`
+- **P-128** - A surface is never more capable than the console · `docs/notes/proposals.md`
 
 ## What is outstanding
 
