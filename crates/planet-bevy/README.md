@@ -7,19 +7,20 @@ knows a graphics engine exists.**
 
 ## What it does
 
-Two views of the same model, and no logic of its own.
+The globe, and no logic of its own.
 
 [`globe`](src/globe.rs) draws the world as a solid you can turn in your hands. It takes
 the mesh that [`planet-render`](../planet-render/README.md) built out of plain numbers,
 hands it to Bevy, points a camera at it, and turns the ball when the pointer moves. This
 is what the application shows.
 
-[`gpu`](src/gpu.rs) draws the flat projection, and does the opposite: rather than upload
-polygons, it answers "what colour is this pixel" for every pixel, in a fragment shader.
-This is what the planet-view prototype shows.
+The flat projection used to be here too, and is
+[`planet-flat`](../planet-flat/README.md) now. It was a second, unrelated adapter that
+**the game never used a line of**, and every binary was paying for both halves - so
+`game4x` reached a rasterizer, a camera, a font and a shader through code it never calls.
+A dependency tree is worth having when it describes what a binary actually contains.
 
-Both draw the same model, and the model cannot tell which one is running. Between them,
-the crate does three things:
+What is left does three things:
 
 1. Configures a window with `PresentMode::AutoVsync`.
 2. Maps Bevy's input events onto [`planet-render`](../planet-render/README.md)'s plain
@@ -91,17 +92,6 @@ about the result the same way in all three cases: by watching the counter.
 `/new <size>` rather than `create planet <size>`, because the second is available only
 before `start` and the shipped build opens on a game already under way — so every size key
 would have been refused, correctly and uselessly.
-
-## The flat projection's presentation path
-
-The rasterizer writes `0x00RRGGBB` per pixel, because that is what the palette and font
-code has always used and what its tests assert on. Turning that into a texture is one
-pass converting to RGBA bytes. The image uses nearest sampling — it is a pixel buffer
-at 1:1, so filtering would only blur it.
-
-Buffers are sized from the window's *logical* resolution rather than its physical one.
-On a HiDPI display that means the texture is upscaled by the GPU, which is both correct
-and considerably cheaper than rasterizing at 4K.
 
 ## Usage
 

@@ -4006,7 +4006,6 @@ name = "planet-bevy"
 version = "0.1.0"
 dependencies = [
  "bevy",
- "planet-ecs",
  "planet-model",
  "planet-presentation",
  "planet-render",
@@ -4023,6 +4022,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "planet-flat"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "planet-bevy",
+ "planet-ecs",
+ "planet-model",
+ "planet-raster",
+ "planet-render",
+]
+
+[[package]]
 name = "planet-model"
 version = "0.1.0"
 
@@ -4030,6 +4041,16 @@ version = "0.1.0"
 name = "planet-presentation"
 version = "0.1.0"
 dependencies = [
+ "planet-render",
+ "sphere-tessellation",
+]
+
+[[package]]
+name = "planet-raster"
+version = "0.1.0"
+dependencies = [
+ "graph-coloring",
+ "planet-model",
  "planet-render",
  "sphere-tessellation",
 ]
@@ -4059,6 +4080,8 @@ dependencies = [
  "bevy",
  "planet-bevy",
  "planet-ecs",
+ "planet-flat",
+ "planet-raster",
  "planet-render",
  "png",
 ]

@@ -5,8 +5,10 @@ edition.workspace = true
 description = "Prototype: a sphere fanned out flat. Composition root only."
 
 [dependencies]
+planet-raster.workspace = true
 planet-render.workspace = true
 planet-bevy.workspace = true
+planet-flat.workspace = true
 planet-ecs.workspace = true
 bevy = { version = "0.19", default-features = false, features = ["2d"] }
 png = "0.18"

@@ -13,8 +13,8 @@ use bevy::prelude::*;
 use bevy::render::render_resource::{AsBindGroup, ShaderType};
 use bevy::shader::ShaderRef;
 use bevy::sprite_render::{Material2d, Material2dPlugin};
-use planet_render::PlanetView;
-use planet_render::camera::Projection;
+use planet_raster::PlanetView;
+use planet_raster::camera::Projection;
 use planet_render::palette;
 
 /// Must match `MAX_REGIONS` in the shader.
@@ -82,7 +82,7 @@ pub struct PlanetMaterial {
 
 impl Material2d for PlanetMaterial {
     fn fragment_shader() -> ShaderRef {
-        "embedded://planet_bevy/planet.wgsl".into()
+        "embedded://planet_flat/planet.wgsl".into()
     }
 }
 

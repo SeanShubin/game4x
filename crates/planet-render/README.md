@@ -14,55 +14,26 @@ the geometry, the colouring, the planet model and the terrain. **Not the game.**
 depended on `game-model` for one `use` line until `Biome` moved to `planet-model`,
 which is where every rule about a biome is written down anyway.
 
-The other half of the payoff is testing. Because [`PlanetView`](src/app.rs) is a plain
-object, a whole session — drag, zoom, resize, regenerate, draw — runs in a unit test
-with no window open, and the assertions are made on actual pixels.
+The other half of the payoff is testing: nothing in here needs a window to be checked.
 
-## Public surface
+## What is here, and what left
 
-```rust
-let mut planet = PlanetView::new(WorldSpec::default(), 1000, 820);
+| Module      | Responsibility                                                                |
+| ----------- | ----------------------------------------------------------------------------- |
+| `world`     | A tessellation plus its colouring and verification                            |
+| `mesh`      | The world as triangles, for an engine to upload                               |
+| `realistic` | The other drawing: terrain shaded from the field, at a much finer subdivision |
+| `palette`   | Region colours, chosen for grayscale and colour-vision-deficient readability  |
 
-planet.drag(dx, dy);                 // turn the sphere
-planet.zoom(x, y, notches);          // zoom about a point
-planet.apply(Command::ToggleProjection);
-planet.resize(width, height);        // returns true when it changed
+`app`, `camera`, `raster` and `font` are [`planet-raster`](../planet-raster/README.md)
+now. **The game never called any of them** - this crate was two crates wearing one name,
+world building and the mesh on one side and a software rasterizer on the other, and every
+binary paid for both. `game4x` reached about 2,200 lines through code it never calls.
 
-let mut pixels = vec![0u32; planet.pixel_count()];
-planet.draw(&mut pixels, cursor);    // 0x00RRGGBB per pixel
-```
-
-[`Command`](src/app.rs) is named for intent — `ToggleLabels`, `NextSeed`,
-`MoreRegions(n)` — never for a key. Which key means what is the adapter's business.
-
-## Modules
-
-| Module    | Responsibility                                                                          |
-| --------- | --------------------------------------------------------------------------------------- |
-| `app`     | The view as a plain object: state, commands, the readout. The engine boundary.          |
-| `world`   | A tessellation plus its colouring and verification                                      |
-| `camera`  | Orientation of the sphere, and the two projections                                      |
-| `raster`  | Resolving pixels to regions, then shading, borders, labels, cursors                     |
-| `mesh`    | The world as triangles, for an engine to upload. The same layer, the opposite technique |
-| `palette` | Region colours, chosen for grayscale and colour-vision-deficient readability            |
-| `font`    | A 5x7 bitmap font, so labels need no text dependency                                    |
-
-`camera` is where the interesting geometry lives. The camera is a rotation, not a
-position, so panning composes small rotations about the *view* axes — no fixed
-up-vector to lose, no gimbal lock, and no special behaviour at the poles.
-
-`mesh` and `raster` are the same layer answering the same question two ways. `raster`
-asks, per pixel, which seed is nearest; `mesh` hands over the polygons and lets the
-hardware answer it. Neither knows which engine consumes it - there are no engine types in
-either file, only numbers.
-
-`raster` does not project polygons. Every pixel asks the sphere which region contains
-it, which is why there is no antimeridian split, no polar special case, and no trouble
-with one or two regions. Two passes: resolve each pixel to a region and a copy number,
-then shade. Borders are found as changes in the resolved buffer rather than from
-distances, so they come out an even width at any zoom under either projection. Both
-passes are parallel via `std::thread::scope`, no dependency required.
-
+`mesh` and `raster` remain the same layer answering the same question two ways, one crate
+apart. `raster` asks, per pixel, which seed is nearest; `mesh` hands over the polygons and
+lets the hardware answer it. Neither knows which engine consumes it - there are no engine
+types in either file, only numbers.
 ## Tests
 
 - `a_session_can_be_driven_with_no_engine_at_all` — the boundary, demonstrated.

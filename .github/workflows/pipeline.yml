@@ -71,7 +71,7 @@ jobs:
         run: cargo fmt --all -- --check
 
       - name: Clippy (the shipped path)
-        run: cargo clippy -p command-language -p game-model -p game-console -p game-front -p sphere-tessellation -p planet-terrain -p graph-coloring -p planet-model -p planet-presentation -p planet-render -p planet-ecs -p planet-bevy -p game4x -- -D warnings
+        run: cargo clippy -p command-language -p game-model -p game-console -p game-front -p sphere-tessellation -p planet-terrain -p graph-coloring -p planet-model -p planet-presentation -p planet-render -p planet-raster -p planet-ecs -p planet-flat -p planet-bevy -p game-globe -p game4x -- -D warnings
 
       # The rules and the geometry are where correctness lives: the whole first-release
       # command script runs here, and the geometry tests run with it.
@@ -79,7 +79,7 @@ jobs:
       # must have one side per neighbour, and every Goldberg count must come out with
       # twelve pentagons. Release mode because the relaxation tests are slow otherwise.
       - name: Test (model and view model)
-        run: cargo test --release -p command-language -p game-model -p game-console -p game-front -p sphere-tessellation -p planet-terrain -p graph-coloring -p planet-model -p planet-presentation -p planet-render
+        run: cargo test --release -p command-language -p game-model -p game-console -p game-front -p sphere-tessellation -p planet-terrain -p graph-coloring -p planet-model -p planet-presentation -p planet-render -p planet-raster
 
       # Debug, not release. These are cheap assertions about rotations and the crate was
       # just compiled unoptimized by clippy above, so this reuses that build rather than

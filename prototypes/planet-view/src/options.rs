@@ -1,6 +1,6 @@
 //! Command line parsing. Nothing here knows how the view works or how it is drawn.
 
-use planet_bevy::Renderer;
+use planet_flat::Renderer;
 use planet_render::{Params, WorldSpec};
 use std::error::Error;
 

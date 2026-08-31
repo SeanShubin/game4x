@@ -13,7 +13,7 @@
 
 use crate::camera::GlobeView;
 use crate::font;
-use crate::palette;
+use planet_render::palette;
 use sphere_tessellation::{Direction, Vec3, nearest_index};
 
 /// Marks a pixel that shows no part of the sphere. Only possible when the ball is held

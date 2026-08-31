@@ -1,0 +1,14 @@
+[package]
+name = "planet-raster"
+version.workspace = true
+edition.workspace = true
+description = "A software rasterizer for a tessellated sphere: a camera, projections, a font, and one frame at a time."
+
+[dependencies]
+planet-render.workspace = true
+planet-model.workspace = true
+sphere-tessellation.workspace = true
+
+[dev-dependencies]
+# Only the tests build a colouring by hand; nothing here draws without a world.
+graph-coloring.workspace = true

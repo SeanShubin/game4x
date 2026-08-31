@@ -50,7 +50,7 @@ fn run(options: &options::Options) {
     // Game entities and the turn: ECS, no rendering, no rules.
     .add_plugins(planet_ecs::PlanetEcsPlugin::new(topology))
     // Window, input, and presentation: the only place an engine's opinions land.
-    .add_plugins(planet_bevy::PlanetViewPlugin::new(spec))
+    .add_plugins(planet_flat::PlanetViewPlugin::new(spec))
     .insert_resource(options.renderer);
     if let Some(errand) = shutter(options) {
         app.add_plugins(errand);

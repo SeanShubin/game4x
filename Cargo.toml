@@ -16,8 +16,10 @@ members = [
     "crates/planet-terrain",
     "crates/planet-ecs",
     "crates/planet-render",
+    "crates/planet-raster",
     "crates/planet-presentation",
     "crates/planet-bevy",
+    "crates/planet-flat",
     "crates/game4x",
     "prototypes/planet-view",
     "prototypes/goldberg-view",
@@ -42,8 +44,10 @@ planet-model = { path = "crates/planet-model" }
 planet-terrain = { path = "crates/planet-terrain" }
 planet-ecs = { path = "crates/planet-ecs" }
 planet-render = { path = "crates/planet-render" }
+planet-raster = { path = "crates/planet-raster" }
 planet-presentation = { path = "crates/planet-presentation" }
 planet-bevy = { path = "crates/planet-bevy" }
+planet-flat = { path = "crates/planet-flat" }
 game4x = { path = "crates/game4x" }
 
 [profile.dev]

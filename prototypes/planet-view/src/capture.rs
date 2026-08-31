@@ -4,8 +4,8 @@
 //! and it only works because `planet-render` has no engine in it.
 
 use crate::options::Options;
-use planet_render::PlanetView;
-use planet_render::camera::Projection;
+use planet_raster::PlanetView;
+use planet_raster::camera::Projection;
 use std::error::Error;
 
 pub fn write_frame(options: &Options, path: &str) -> Result<(), Box<dyn Error>> {
@@ -14,7 +14,7 @@ pub fn write_frame(options: &Options, path: &str) -> Result<(), Box<dyn Error>> 
         planet.view_mut().projection = Projection::Globe;
     }
     planet.view_mut().radius =
-        planet_render::camera::default_radius(options.width, options.height) * options.zoom;
+        planet_raster::camera::default_radius(options.width, options.height) * options.zoom;
     aim(&mut planet, options.turn_right, options.turn_up);
 
     let mut pixels = vec![0u32; planet.pixel_count()];

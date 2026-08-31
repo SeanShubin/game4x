@@ -12,7 +12,7 @@
 
 use crate::camera::{GlobeView, Projection};
 use crate::raster;
-use crate::world::{World, WorldSpec};
+use planet_render::world::{World, WorldSpec};
 
 /// Zoom per wheel notch. Gentle on purpose: at 1.18 a single flick overshot badly.
 pub const ZOOM_PER_NOTCH: f64 = 1.07;
