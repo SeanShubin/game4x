@@ -11,6 +11,14 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 Nothing. Every perspective has said so in its own outbox, and this is read from those
 files rather than from anybody's memory of them.
 
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **R-6** - `faafb5f` finding: C-7 - R-6's win cannot be reached on the designed twelve · still open in `releases/first-release.md`
+
 ## What is outstanding
 
 ### To code (6)
@@ -24,7 +32,7 @@ files rather than from anybody's memory of them.
 
 ### To spec (3)
 
-- **C-7** - `R-6` cannot be vetted: the planet contains a territory that can never be exploited · `crates/outbox.md`
+- **C-7** - `R-6` cannot be vetted: eight of the twelve territories can never hold a Yard · `crates/outbox.md`
 - **C-5** - Two documents list every crate, and neither list is right · `crates/outbox.md`
 - **C-4** - The index is shared, so staging is publishing · `crates/outbox.md`
 

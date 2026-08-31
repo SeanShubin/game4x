@@ -33,52 +33,69 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
-### C-7 - `R-6` cannot be vetted: the planet contains a territory that can never be exploited
+### C-7 - `R-6` cannot be vetted: eight of the twelve territories can never hold a Yard
 
 **to** spec · **status** open · **raised** 2026-08-30 · **source** starting `R-6`
 
-`R-6` is vetted when a person reaches *a fully exploited planet* and launches an Ark. `game-model`
-asks `is_fully_exploited`: every claimable territory founded, holding at least one yard, with an
-extractor on every one of its nodes. **Territory 5 can never satisfy that, and it was designed not
-to.**
+`R-6` is vetted when a person reaches *a fully exploited planet* and launches an Ark.
+`is_fully_exploited` asks that **every claimable territory** be founded, hold at least one yard, and
+have an extractor on every node. A yard costs 15 metal, spent from that territory's own store, and
+`settle` discards every store at the end of every turn - so a territory must produce 15 metal **in a
+single turn** or never hold one.
 
-Its nodes are food `3 x 1`, metal `8 x 8`, energy `8 x 8` - nineteen nodes, and a yard costs 15
-metal. Founding gives it one citizen and one food extractor, and one citizen is one labor a turn:
+Most cannot. Metal per turn is bounded by the density of the metal nodes a territory's own
+population has hands to work, and its population is bounded by its food:
 
-- **Work the food extractor.** One food, one citizen. `population_after(1, 1)` is `1`. Stable
-  forever, and the labor is spent.
-- **Build anything instead.** No food that turn. `population_after(1, 0)` is `0`. The citizen dies
-  and the territory is empty.
+| Territory | Metal nodes | Most metal in one turn | Yard |
+| --------- | ----------- | ---------------------- | ---- |
+| 1         | `3 x 4`     | 12                     | no   |
+| 2         | `2 x 4`     | 8                      | no   |
+| 3         | `2 x 4`     | 8                      | no   |
+| 4         | `4 x 5`     | 5, on two citizens     | no   |
+| 5         | `8 x 8`     | 0, on one citizen      | no   |
+| 6         | none        | 0                      | no   |
+| 7         | `4 x 5`     | 20                     | yes  |
+| 8         | `1 x 2`     | 2                      | no   |
+| 9         | `6 x 8`     | 32                     | yes  |
+| 10        | `1 x 3`     | 3                      | no   |
+| 11        | `5 x 6`     | 30                     | yes  |
+| 12        | `8 x 8`     | 16                     | yes  |
 
-Nothing else reaches it. Stores are discarded at the end of every turn, so no other territory can
-save up for it. There is no transition that moves a resource or a citizen between territories. A
-pioneer entering a territory you control perishes, and `found` refuses an `AlreadyControlled` one,
-so it cannot be reinforced. It is stuck at one of nineteen nodes and no yard, permanently.
+**Territory 6 has no metal at all**, so no arrangement of anything reaches a yard there. Territory 1,
+the landing site, tops out at 12 against a cost of 15.
 
-And `is_fully_exploited` requires *every claimable* territory, so not founding it does not help: an
-unfounded territory fails the same test. `commands/biomes.4x` gives it mountain, and none of the
-twelve is ocean.
+Two territories fail a second way as well. **5 is stuck at one citizen forever**: founding gives it
+one citizen and one food extractor on a density-1 node, so working that extractor yields one food
+for one citizen - `population_after(1, 1)` is `1`, and the labor is spent - while building anything
+instead yields no food and `population_after(1, 0)` is `0`. It reaches 1 of its 19 nodes. **4** is
+held at two citizens the same way.
 
-**This is the release disagreeing with itself, not a defect in the code.** The territory table says
-5 exercises *food density 1*, and `commands/biomes.4x` says it exists so that *a territory which can
-never build anything is demonstrated deliberately rather than produced by accident*. That is a good
-thing to demonstrate. It cannot coexist with a win condition that requires every claimable territory
-to be fully exploited.
+Nothing crosses a border to help. Stores are discarded each turn, no transition moves a resource or
+a citizen between territories, a pioneer entering a held territory perishes, and `found` refuses an
+`AlreadyControlled` one. Not founding a territory does not help either: an unfounded one fails the
+same test, and none of the twelve is ocean.
+
+**This is the release disagreeing with itself, not a defect in the code.** The territory table was
+built so that each one exercises a different consequence - *no metal*, *food density 1*, *the
+minimum a territory can be* - and `commands/biomes.4x` says 5 exists so that *a territory which can
+never build anything is demonstrated deliberately rather than produced by accident*. Those are good
+things to demonstrate. They cannot coexist with a win that requires **every** claimable territory to
+hold a yard.
 
 Four ways out, and choosing is not this lane's:
 
 - **Narrow what fully exploited means** - every territory that *can* be, rather than every one.
-  Then 5 demonstrates its lesson and the planet can still be finished.
-- **Give 5 one food node of density 2**, keeping the lesson that it cannot build much while letting
-  it build at all.
-- **Let something cross a border** - a resource, or a citizen - which is a new rule and a bigger
-  change than it looks.
-- **Change `R-6`'s vetted-when** to a loop that ends somewhere reachable.
+  Changes no number Sean chose, and keeps every lesson the table was built to teach.
+- **Require the yard once**, on the planet rather than per territory. One shipyard builds the Ark.
+- **Let something cross a border** - a resource, or a citizen. A new rule, and a bigger change than
+  it looks.
+- **Change the numbers** so every territory can reach 15 metal, which costs most of what the table
+  exercises.
 
-**Proceeding under the first reading** - that the demonstration is deliberate and the win condition
-is what should give - because it is the only one that changes no number Sean chose. The play-through
-is being built to exploit every territory that can be, which is the same work under any of the four,
-and it stops one territory short of the win until this is settled.
+**Proceeding under the first**, because it is the only one that changes nothing already chosen. The
+play-through is being built to exploit every territory that can be and to launch an Ark from one
+that can hold a yard, which is the same work under any of the four. It will stop short of `has_won`
+until this is settled, and the evidence for `R-6` will say so rather than reporting a pass.
 
 ### C-5 - Two documents list every crate, and neither list is right
 
