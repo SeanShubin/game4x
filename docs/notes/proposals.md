@@ -56,6 +56,27 @@ the release to the spec.
 > - Ending a turn: everything that eats, eats; then a population grows on surplus food or starves
 >   for want of it; **food that is not eaten is lost, while metal and energy remain where they
 >   are**; and everything becomes ready again.
+> - What a territory can keep is bounded. Anything above the bound is lost when the turn ends.
+
+
+**Open, and it decides whether this proposal fixes the release at all.** Sean, 2026-08-30: *there
+needs to be some limit on resource storage to make sure the game is finite.* The second line records
+that and deliberately does not say what sets the bound, because there are two answers and they are
+not the same release:
+
+- **A territory can keep some by default, and storage structures raise it.** Then this proposal
+  works on its own, and the numbers say a default of about twenty is enough - the largest single
+  thing the loop must hold at once is a Yard's 15 metal.
+- **Capacity comes only from a structure.** Then a territory with no storage keeps nothing, this
+  proposal changes nothing, and the release needs a storage structure before it can be won.
+
+The backlog says *storage facilities for energy and metal*, which reads as the second. **The
+measurements above assume the first.** If it is the second, this proposal is half of the fix rather
+than the whole of it.
+
+**Food needs no separate limit.** Sean also asked for one to keep population in check, and the first
+line is already it: food that is not eaten is lost, so a population cannot bank surplus and grow on
+it. Its ceiling stays what the ground can feed each turn.
 
 **Basis:** `C-8` showed the loop cannot reach steps 7 and 8. An Ark needs a Yard and 12 metal and 12
 energy; a Yard needs 15 metal; every cost is paid from one territory's store in one turn because
