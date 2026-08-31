@@ -65,6 +65,55 @@ Every territory has at least one food node.
 A garrison's multiplier is 1. An Ark can invade land from orbit. Founding produces a garrison, a
 citizen and a food extractor.
 
+## Transformations
+
+| Transformation      | Scope | Role | Thing              | Qty     | Consumed | Bound    |
+| ------------------- | ----- | ---- | ------------------ | ------- | -------- | -------- |
+| **land**            | here  | in   | ark, in orbit      | 1       | yes      | at least |
+|                     |       | in   | garrison           | 0       | no       | at most  |
+|                     |       | out  | garrison           | 1       |          |          |
+|                     |       | out  | citizen            | 1       |          |          |
+|                     |       | out  | extractor, food    | 1       |          |          |
+| **move**            | here  | in   | unit, here         | 1       | yes      | at least |
+|                     |       | in   | cell, on that unit | 1       | yes      | at least |
+|                     |       | out  | unit, there        | 1       |          |          |
+| **found by land**   | here  | in   | pioneer, arriving  | 1       | yes      | at least |
+|                     |       | in   | garrison           | 0       | no       | at most  |
+|                     |       | out  | garrison           | 1       |          |          |
+|                     |       | out  | citizen            | 1       |          |          |
+|                     |       | out  | extractor, food    | 1       |          |          |
+| **build extractor** | here  | in   | labor              | 1       | yes      | at least |
+|                     |       | in   | node, unworked     | 1       | no       | at least |
+|                     |       | out  | extractor          | 1       |          |          |
+| **build yard**      | here  | in   | metal              | 15      | yes      | at least |
+|                     |       | out  | yard               | 1       |          |          |
+| **produce pioneer** | here  | in   | metal              | 8       | yes      | at least |
+|                     |       | in   | energy             | 6       | yes      | at least |
+|                     |       | in   | citizen            | 1       | yes      | at least |
+|                     |       | in   | garrison           | 1       | no       | at least |
+|                     |       | out  | pioneer            | 1       |          |          |
+| **produce ark**     | here  | in   | metal              | 12      | yes      | at least |
+|                     |       | in   | energy             | 12      | yes      | at least |
+|                     |       | in   | yard               | 1       | no       | at least |
+|                     |       | out  | ark                | 1       |          |          |
+| **launch**          | here  | in   | ark, here          | 1       | yes      | at least |
+|                     |       | in   | cell, on that unit | 1       | yes      | at least |
+|                     |       | out  | ark, in orbit      | 1       |          |          |
+| **spend readiness** | here  | in   | citizen, ready     | 1       | yes      | at least |
+|                     |       | out  | citizen, exhausted | 1       |          |          |
+|                     |       | out  | labor              | 1       |          |          |
+| **work**            | here  | in   | labor              | 1       | yes      | at least |
+|                     |       | in   | extractor          | 1       | no       | at least |
+|                     |       | out  | resource           | density |          |          |
+| **eat**             | every | in   | citizen            | 1       | no       | at least |
+|                     |       | in   | food               | 1       | yes      | at least |
+| **grow**            | every | in   | food, surplus      | 1       | yes      | at least |
+|                     |       | out  | citizen            | 1       |          |          |
+| **depart**          | every | in   | citizen, unfed     | 1       | yes      | at least |
+| **spoil**           | every | in   | food               | any     | yes      | at least |
+| **ready**           | every | in   | thing, exhausted   | any     | yes      | at least |
+|                     |       | out  | thing, ready       | any     |          |          |
+
 ## Biomes
 
 What each biome gives a territory. Ocean is not claimable and carries nothing.

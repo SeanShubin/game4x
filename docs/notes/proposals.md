@@ -42,83 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-132 - The first release's transformations as one table
-
-**to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
-`releases/first-release.md` -> new section after Units and structures
-
-**Depends on `P-130`** and cannot land before it, because a release never invents a rule and the
-four-column shape is that proposal's. Filed separately from `P-131` for exactly that reason:
-`P-131` is available today and this waits.
-
-> ## Transformations
->
-> | Transformation      | Scope | Role | Thing              | Qty     | Consumed | Bound       |
-> | ------------------- | ----- | ---- | ------------------ | ------- | -------- | ----------- |
-> | **land**            | here  | in   | ark, in orbit      | 1       | yes      | at least    |
-> |                     |       | in   | garrison           | 0       | no       | at most     |
-> |                     |       | out  | garrison           | 1       |          |             |
-> |                     |       | out  | citizen            | 1       |          |             |
-> |                     |       | out  | extractor, food    | 1       |          |             |
-> | **move**            | here  | in   | unit, here         | 1       | yes      | at least    |
-> |                     |       | in   | cell, on that unit | 1       | yes      | at least    |
-> |                     |       | out  | unit, there        | 1       |          |             |
-> | **found by land**   | here  | in   | pioneer, arriving  | 1       | yes      | at least    |
-> |                     |       | in   | garrison           | 0       | no       | at most     |
-> |                     |       | out  | garrison           | 1       |          |             |
-> |                     |       | out  | citizen            | 1       |          |             |
-> |                     |       | out  | extractor, food    | 1       |          |             |
-> | **build extractor** | here  | in   | labor              | 1       | yes      | at least    |
-> |                     |       | in   | node, unworked     | 1       | no       | at least    |
-> |                     |       | out  | extractor          | 1       |          |             |
-> | **build yard**      | here  | in   | metal              | 15      | yes      | at least    |
-> |                     |       | out  | yard               | 1       |          |             |
-> | **produce pioneer** | here  | in   | metal              | 8       | yes      | at least    |
-> |                     |       | in   | energy             | 6       | yes      | at least    |
-> |                     |       | in   | citizen            | 1       | yes      | at least    |
-> |                     |       | in   | garrison           | 1       | no       | at least    |
-> |                     |       | out  | pioneer            | 1       |          |             |
-> | **produce ark**     | here  | in   | metal              | 12      | yes      | at least    |
-> |                     |       | in   | energy             | 12      | yes      | at least    |
-> |                     |       | in   | yard               | 1       | no       | at least    |
-> |                     |       | out  | ark                | 1       |          |             |
-> | **launch**          | here  | in   | ark, here          | 1       | yes      | at least    |
-> |                     |       | in   | cell, on that unit | 1       | yes      | at least    |
-> |                     |       | out  | ark, in orbit      | 1       |          |             |
-> | **spend readiness** | here  | in   | citizen, ready     | 1       | yes      | at least    |
-> |                     |       | out  | citizen, exhausted | 1       |          |             |
-> |                     |       | out  | labor              | 1       |          |             |
-> | **work**            | here  | in   | labor              | 1       | yes      | at least    |
-> |                     |       | in   | extractor          | 1       | no       | at least    |
-> |                     |       | out  | resource           | density |          |             |
-> | **eat**             | every | in   | citizen            | 1       | no       | at least    |
-> |                     |       | in   | food               | 1       | yes      | at least    |
-> | **grow**            | every | in   | food, surplus      | 1       | yes      | at least    |
-> |                     |       | out  | citizen            | 1       |          |             |
-> | **depart**          | every | in   | citizen, unfed     | 1       | yes      | at least    |
-> | **spoil**           | every | in   | food               | any     | yes      | at least    |
-> | **ready**           | every | in   | thing, exhausted   | any     | yes      | at least    |
-> |                     |       | out  | thing, ready       | any     |          |             |
-
-**Basis:** every figure is the release's own, and the arrangement is `P-130`'s. Writing it out is
-what tested that proposal - four columns covered all fourteen, which is why `P-130` states four and
-not five.
-
-**Three things the table says that the eight-step loop does not.** `move` and `launch` are ordinary -
-a unit here in, a unit there out - so location is a trait and orbit is a place. `land` and *found by
-land* are one transformation reached two ways, which is why founding is one action rather than two.
-And `end turn` is five rows with scope *every* rather than a phase, so what is global is the scope
-column and not the rules.
-
-**Two rows name things that do not exist**, and this is the honest cost. *node, unworked* is the
-difference between nodes and extractors, and *food, surplus* between food and citizens; neither is a
-kind. They need either derived kinds computed from stored ones, or comparisons in the language.
-**Each appears exactly once**, which is the measure of what that decision is worth.
-
-**`spend readiness` is new as a row and not as a rule.** `spec/turn.md` already says anything usable
-is ready or exhausted and using it exhausts it; splitting that from `work` is what lets `work` take
-labor and know nothing about turns.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -293,6 +216,7 @@ work the release exists to order.
 | P-130, the kinds and the transformations are data                                                               | `spec/invariants.md` -> The game is data                                                                               | 2026-08-31 |
 | P-126, metal and energy carry between turns, food does not, and each resource is conserved or not               | `spec/resources.md` -> The list, `spec/turn.md` -> Order of operations                                                 | 2026-08-31 |
 | P-131, units and structures as one table                                                                        | `releases/first-release.md` -> Units and structures                                                                    | 2026-08-31 |
+| P-132, the first release's transformations as one table                                                         | `releases/first-release.md` -> Transformations                                                                         | 2026-08-31 |
 
 ## Rejected
 
