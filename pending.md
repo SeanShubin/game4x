@@ -13,8 +13,9 @@ files rather than from anybody's memory of them.
 
 ## What is outstanding
 
-### To code (2)
+### To code (3)
 
+- **S-2** - The crate enumerations in `docs/architecture.md` need a gate, not a rewrite · `docs/notes/proposals.md`
 - **S-1** - `tools/outbox` should read `releases/*.md` · `docs/notes/proposals.md`
 - **Q-38** - An outbox goes stale because its filer cannot see it being answered · `lenses/quality/outbox.md`
 
