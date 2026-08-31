@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-126** - The twelve territories cannot produce an Ark · `docs/notes/proposals.md`
-- **P-128** - A surface is never more capable than the console · `docs/notes/proposals.md`
 
 ## What is outstanding
 
@@ -43,6 +42,7 @@ it exists to ask.
 - `spec/console.md` - P-69, P-82
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/interface.md` -> Surfaces - P-73, P-116
+- `spec/invariants.md` -> Everything is expressible - P-12, P-128
 - `spec/invariants.md` -> The game is one function - P-75, P-115
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28

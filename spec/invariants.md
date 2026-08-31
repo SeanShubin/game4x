@@ -23,6 +23,8 @@ specific rule.
 ## Everything is expressible
 
 - Every change to game state is representable and executable as a console command
+- Anything the player can do through a surface can be done by typing. A surface may be quicker or
+  clearer; it is never more capable.
 
 ## Control without tedium
 
