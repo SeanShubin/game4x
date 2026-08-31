@@ -125,13 +125,17 @@ Every biome except ocean has at least one food node of density two or more.
 
 ## Capabilities
 
-Each capability is an item addressed to the code lane, in the same shape every outbox uses, so
-`tools/outbox --to code` lists what is still to build beside what a lens has found. **Status is
-`open` until the *vetted when* line is observed, then `vetted`.**
+Each capability is an item in the same shape every outbox uses, so it appears in `pending.md` and in
+`tools/outbox` beside what a lens has found. It moves through three states and changes hands once:
 
-**The code lane does not mark its own.** It reports the evidence `to spec` and this file records
-it - the same shape as a lens never editing what it reviews, and what keeps the record of what has
-been delivered separate from the account of whoever built it.
+- **`open`, addressed `to code`** - not built yet
+- **`built`, addressed `to sean`** - the code lane says it is done, and nobody has looked
+- **`vetted`** - a person has observed the *vetted when* line and it held
+
+**The code lane does not mark its own vetted**, which is the same shape as a lens never editing what
+it reviews. It sets `built` and hands over. **Five of the six below are vetted by a person looking**,
+at a drawing or at a whole game played through, so `built` is where they will wait and Sean is the
+only one who can move them.
 
 ### R-1 - Two drawings
 

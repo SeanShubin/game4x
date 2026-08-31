@@ -90,6 +90,11 @@
   addressed to. That is mostly for the instances rather than for me
 - If nothing anywhere is open and addressed, then nothing any instance knows to be wrong is
   unattended. That is a promise about the outboxes, not about the code
+- Every decision that needs me is an item in a file. Claude does not put one to me in a reply, where
+  it is invisible to `pending.md` and gone when the session ends
+- It should not be possible to have work outstanding that needs nobody's decision and is not being
+  worked on. I cannot enforce that - an instance only runs when I start it, so I am the scheduler -
+  but I must be able to see it, which means an item that is waiting on a person says so
 - A contradiction goes into an outbox the moment it is found - never a paragraph in a reply, and
   never a line in a note nobody reads
 

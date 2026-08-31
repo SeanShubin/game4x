@@ -129,12 +129,12 @@ perspective has to read.
 
 Every item in an outbox carries four things:
 
-| Field      | What it is                                                                                                                  |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------- |
-| **id**     | Stable and unique, so a commit can cite it and a later report can say what became of it                                     |
-| **to**     | `spec`, `code`, or a named lens - or **absent**, meaning *not ready, no reader*. Only the proposal queue addresses `sean`   |
-| **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered` - and `vetted`, for a release capability whose check has been observed |
-| one line   | What it is, so a reader can triage it without opening the source                                                            |
+| Field      | What it is                                                                                                                                                                                |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **id**     | Stable and unique, so a commit can cite it and a later report can say what became of it                                                                                                   |
+| **to**     | `spec`, `code`, or a named lens - or **absent**, meaning *not ready, no reader*. Only the proposal queue addresses `sean`                                                                 |
+| **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered` - and for a release capability, `open`, then `built` when the code lane says it is done, then `vetted` when a person has observed it |
+| one line   | What it is, so a reader can triage it without opening the source                                                                                                                          |
 
 **Nothing but a proposal is addressed to Sean.** A lens addresses `to spec` and so does the code
 lane; the specification lane turns either into a numbered proposal, which is the one shape Sean
@@ -151,6 +151,23 @@ proposal queue keeps its `to sean` address**, because `tools/outbox` cannot see 
 arrives if the other instance is running, so it can make a handoff prompt and can never be the thing
 a decision rests on. **Write it in an outbox first, then say so in a message if the other one is
 awake.** An approval for `CLAUDE.md` is the one thing a message may not carry at all - see above.
+
+**An item whose completion needs a person is addressed to a person.** This is the rule that was
+missing, and its absence produced exactly the state Sean said should be impossible: five of the six
+capabilities in `releases/first-release.md` are vetted by somebody *looking* - at a drawing, or at a
+whole game played through - and all six sat addressed `to code`, which may build them and may not
+mark them done. So five items could never move, while `pending.md` reported that nothing needed
+deciding.
+
+**A capability therefore has two addressees in turn.** `open` and `to code` while it is being built;
+`built` and `to sean` once the code lane says it is done and a person has not yet looked. The code
+lane sets `built`; only Sean sets `vetted`.
+
+**And this lane files a question rather than asking one.** A decision put to Sean in a reply is not
+in any file, so it is lost if the session ends and invisible to `pending.md` while it lives. On
+2026-08-30 this lane asked him three things in prose - how to bound the research loop, where a
+capability's status should live, whether `pending.md` belonged in his own document - and none of the
+three was ever an item. **If it is worth his attention it is worth an id.**
 
 **`to` is the field that does the work.** It turns every instance's reading list from a directory
 sweep into a query, which is what keeps an instance focused on its own purpose.
