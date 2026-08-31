@@ -42,57 +42,59 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-126 - The twelve territories cannot produce an Ark
+### P-126 - Metal and energy carry between turns; food does not
 
-**to** sean · **status** open · **raised** 2026-08-30 · **kind** invented · **into**
-`releases/first-release.md` -> Territory nodes
+**to** sean · **status** open · **raised** 2026-08-30 · **rewritten** 2026-08-30 · **kind** recovered
+· **into** `spec/turn.md` -> Order of operations
 
-**The first release still cannot be won after `P-125`, and this one is in the numbers rather than
-the words.** Found by the code lane as `C-8` while building the `R-6` play-through.
+**Rewritten after measurement changed the answer.** It was filed as *the twelve territories cannot
+produce an Ark*, recommending a change to the node table. Sean then said he expected to bring
+storage forward to make the scenario winnable, and **storage turns out to make it winnable with the
+table untouched**, so the fixture change is no longer recommended and the destination has moved from
+the release to the spec.
 
-An Ark needs a Yard and costs 12 metal and 12 energy; a Yard costs 15 metal; every cost is paid from
-one territory's store in one turn, because stores are discarded when the turn ends. **Only territory
-11 can afford both, and territory 11 can never be claimed** - a Pioneer costs 8 metal and 6 energy
-in one turn, only 1, 2, 3, 11 and 12 can afford one, and spreading from the landing site stops at
-nine territories.
+> - Ending a turn: everything that eats, eats; then a population grows on surplus food or starves
+>   for want of it; **food that is not eaten is lost, while metal and energy remain where they
+>   are**; and everything becomes ready again.
 
-**Verified here rather than taken**, by recomputing every territory's best single turn from the
-release's own table - spare labour is `food nodes x (density - 1)`, and the remaining hands work the
-densest nodes:
+**Basis:** `C-8` showed the loop cannot reach steps 7 and 8. An Ark needs a Yard and 12 metal and 12
+energy; a Yard needs 15 metal; every cost is paid from one territory's store in one turn because
+stores are discarded when the turn ends. Only territory 11 could afford both, and it can never be
+claimed.
 
-| Territory | Yard, 15 metal | Ark, 12 + 12          | Can send a Pioneer |
-| --------- | -------------- | --------------------- | ------------------ |
-| 1         | no, tops at 12 | yes                   | yes                |
-| 7         | yes            | no - no energy at all | no                 |
-| 9         | yes            | no - energy tops at 2 | no                 |
-| 11        | yes            | yes                   | yes                |
-| 12        | yes            | no - two spare hands  | yes                |
+**With stores carrying, every one of those obstacles is a wait rather than a wall.** Recomputed from
+the release's own table:
 
-`game4x --dump` confirms the model's nodes are the table's. **The reachability half is the code
-lane's and is not independently re-run here** - it needs the adjacency of `canonical_seeds(12)`,
-which this lane has no way to print. The two facts it rests on need no computation and are in the
-table: **territory 6 has no metal node, territory 7 has no energy node.**
+| Can accumulate       | Territories                  |
+| -------------------- | ---------------------------- |
+| Enough for a Yard    | all but 5 and 6              |
+| Enough for an Ark    | all but 5, 6 and 7           |
+| Enough for a Pioneer | 1, 2, 3, 4, 8, 9, 10, 11, 12 |
 
-**The decision.** The table was built so that each territory demonstrates a consequence - *the
-minimum a territory can be*, *no metal*, *population without industry*. Those demonstrations are
-territories that cannot participate, and the win requires every territory to participate. **The two
-goals are incompatible as they stand**, and only Sean can say which gives.
+**The landing site can now do the whole loop by itself.** Territory 1 raises 12 metal a turn against
+a Yard's 15, so two turns buys one, and 12 of each buys an Ark. **And the planet opens up**: nine
+territories can afford a Pioneer where five could before, including 4 and 8, which the code lane
+found are `10`'s only reachable neighbours - so `10` is reached, and `11` and `12` are reached from
+`10`.
 
-**Recommended: change the fixture, not the win.** Two reasons. `spec/planet.md` already promises that
-*oceans never isolate land from land*, so the planet is guaranteed walkable - what `C-8` found is
-that the *numbers* isolate it, which is the same defect with a different cause, and it belongs where
-the other one is: in how a planet is built. And it generalises - generated planets will hit this
-constantly, so a rule about the win would have to be checked on every planet anyway.
+**Every demonstration in the table survives, which is the part that makes this the right fix.**
+Territory 5 still has no spare labour ever, 6 still has no metal ever, 7 still has no energy ever.
+They still cannot hold a Yard, and under `P-125` that is now correct rather than fatal - *a
+structure can be built where the territory's own permanent facts allow it*. **Storage and `P-125`
+together make the release winnable without moving one number Sean chose.**
 
-**The alternative is one line and preserves every number**: define *can be taken* the way `P-125`
-defined *can be built*, so a territory nothing can reach is excluded from the win. It is cheaper
-today and it makes *fully exploited* quietly mean *fully exploited except the parts we could not
-get to*, which is a worse sentence to have to explain.
+**It is his intent already**, recorded on 2026-08-26 as later work: *storage facilities for energy
+and metal, while food spoils initially*. What is new is only the schedule, and his reason for moving
+it: *I am anticipating having to add storage a bit earlier than originally planned to make the
+scenario winnable.*
 
-**What is not proposed here is which cells change.** That needs the adjacency graph, and it is
-Sean's table. `S-3` asks the code lane for the graph and for the smallest change that makes every
-territory reachable and an Ark producible, so the choice is between measured options rather than
-guesses.
+**The asymmetry is not arbitrary.** Food's demand is continuous and metal's and energy's is lumpy, so
+the resource that spoils is the one whose demand never pauses, where buffering would buy nothing.
+Flavour and mechanism agree.
+
+**What this does not do.** It adds no storage *structure* and no capacity limit - stores simply
+persist. Buildings that hold more, and a ceiling on what a territory can keep, stay in
+[the backlog](spec-backlog.md) where the rest of that idea is.
 
 ## Addressed to other perspectives
 
