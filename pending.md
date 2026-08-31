@@ -16,7 +16,7 @@ files rather than from anybody's memory of them.
 ### To code (2)
 
 - **S-1** - `tools/outbox` should read `releases/*.md` · `docs/notes/proposals.md`
-- **Q-37** - The gate lists crates by name, so a split silently drops tests · `lenses/quality/outbox.md`
+- **Q-38** - An outbox goes stale because its filer cannot see it being answered · `lenses/quality/outbox.md`
 
 ### To spec (3)
 

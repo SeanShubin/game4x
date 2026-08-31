@@ -66,6 +66,15 @@ was wrong, and being refuted is the lens working.
 Noted and deliberately not, unless one is already being touched. Listed so a later report does not
 present them as new.
 
+**Re-checked 2026-08-30**, after two days of splitting and moving crates. Five of the six stand;
+`render_asset_usages` is still uncalled and now lives in `planet-flat`. One has **grown**: the item
+recorded `game4x` writing its own `WindowPlugin` while `planet_bevy::window_plugin` existed, and
+`goldberg-view` now writes a third, so the shared helper is used by `planet-view` alone.
+
+Recorded because this lens nearly logged it as resolved on a grep for `fn window()` that could not
+match `fn window(asked: &options::Options)` - a pattern written against a signature that had since
+gained an argument.
+
 ### Q-12 - Two hand-rolled option parsers
 
 **to** code · **status** noted · **raised** 2026-08-29 · **source**
@@ -73,40 +82,33 @@ present them as new.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-37 - The gate lists crates by name, so a split silently drops tests
+### Q-38 - An outbox goes stale because its filer cannot see it being answered
 
-**to** code · **status** open · **raised** 2026-08-30 · **source** the hazard the code lane named
-in `253418d`, verified here and already realised
+**to** code · **status** open · **raised** 2026-08-30 · **source** found by the code lane in its own
+outbox, verified here
 
-`.github/workflows/pipeline.yml:82` and `hooks/pre-push:25` enumerate crates. **When a crate splits,
-its tests can land in a crate that is not on the list, and nothing fails.**
+An item is closed by whoever **filed** it and answered by somebody **else**, and the filer gets no
+signal. `C-1`, `C-2` and `C-3` were settled by the specification lane days before the code lane
+noticed, and sat `open` in `crates/outbox.md` the whole time - so `pending.md` told Sean three
+settled questions were waiting on him. Found only by the code lane checking whether its own file was
+stale, and fixed in `f2eeb83`.
 
-Not hypothetical - it happened in the commit that named the hazard. `planet-flat` has **7 tests**,
-and `git show 253418d~1:crates/planet-bevy/src/gpu.rs` had the same 7. They were gated inside
-`planet-bevy`, which has its own step at `:90`; after the split they are in `planet-flat`, which no
-pre-deploy step names. They now run only in the post-deploy `--workspace` job. The code lane added
-`planet-raster` and watched for exactly this, and the crate that slipped was the other one.
+**The signal exists and nothing reads it.** `CLAUDE.md` has producers cite the item id in the commit
+that acts on it, and they do. So `git log` already carries the answer; the outbox and the log simply
+never meet.
 
-Second time in two days: `planet-terrain` was missing from both lists when it landed (`Q-24`).
-**Twice is the mechanism, not the person.**
+**The remedy was specified and not built.** The `Q-14` tool description proposed exactly this and
+marked it optional: parse the log for cited ids and reconcile against what the outboxes claim.
+`tools/outbox` has no `git log` in it. An optional reconciliation is a detector nobody wired to a
+failure, which is the same shape as `Q-37` - and `Q-37` was fixed by making the safe state the
+default rather than by detecting the unsafe one.
 
-**On the shape, since they asked this lens to judge.** Of the three - a generated list, a test
-comparing the gate to the workspace, or `--workspace` with exclusions - **the exclusion form**, for
-one reason the other two do not have: it makes coverage the default and omission an explicit act. A
-generated list and a conformance test both still need something to notice a new crate; an exclusion
-list is wrong only when somebody removes a name on purpose.
+This lens has the same exposure and no better defence: it closes its own items only because
+producers message it. Nothing would tell it otherwise.
 
-Measured rather than assumed. Against the workspace today, the release-test list omits `game-globe`,
-`game4x`, `goldberg-view`, `planet-bevy`, `planet-ecs`, `planet-flat` and `planet-view`; of those,
-only `planet-flat` (7) and `game4x` (8) have tests, and `game4x` was never gated so it is not a
-regression. The clippy list omits both prototypes.
-
-**What this lens cannot judge**, and would not guess after being wrong about a cost once already:
-whether any of those needs a GPU, or is slow enough that `--workspace` would cost the gate its
-speed. That is the code lane's, and it decides between the exclusion form and the other two.
-
-Same root as `C-5`, which is with the specification lane: a hand-maintained list of crates goes
-stale silently whenever the set of crates changes. There it costs accuracy; here it costs coverage.
+**Not urgent, and worth saying why it is not:** the cost is Sean's attention on a settled question,
+which is recoverable the moment anyone looks. It is worth doing before a fourth perspective exists,
+because the number of pairs that can go stale grows faster than the number of perspectives.
 
 ---
 
@@ -319,6 +321,19 @@ so moving `planet.wgsl` left `embedded://planet_bevy/planet.wgsl` pointing at no
 projection rendered an empty window **with no error at all** - noticed because the PNG was a quarter
 of the expected size, on the path that had no instrument until `Q-1`'s harness that morning. And a
 crate split dropped tests out of the gate, which is `Q-37`
+
+### Q-37 - The gate listed crates by name, so a split silently dropped tests
+
+**to** code · **status** **acted** 2026-08-30 · `7739826`. Verified: clippy is `--workspace` with no
+list at all, the release step is `--workspace` minus seven, and a debug step names those seven. The
+exclusion states one checkable fact - *does this crate link an engine* - rather than a set to
+remember.
+
+408 tests in the release step where eleven named crates were, and both prototypes are gated for the
+first time. On the question this lens declined to guess at: none of the seven needs a GPU, because
+no test in the workspace constructs `DefaultPlugins`. `game4x`'s 8 tests are now gated too, since
+the exclusion form has no way to leave a crate out without saying so - which is the property that
+makes it the right shape
 
 ### Q-16 - The picture never sees the biome the model has
 
