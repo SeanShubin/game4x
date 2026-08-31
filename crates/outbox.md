@@ -33,30 +33,14 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
-### C-6 - The composition root holds a harness, and the rule says it holds nothing
-
-**to** spec · **status** open · **raised** 2026-08-30 · **source** acting on `Q-11`
-
-`docs/architecture.md:55` - *because it holds no logic, it needs no tests of its own; if it is
-large enough to be worth testing, something has leaked into it that belongs elsewhere.*
-
-`crates/game4x` is 517 lines with eight tests. Most of that is `inspect.rs`, the remote control that
-puts the camera at stated angles, runs commands, waits for the world to settle and writes a PNG and
-a dump. **It cannot move**, and the reason is the whole point of it: it has to drive the *shipped*
-binary, because a harness that ran a special path would be evidence about the harness.
-
-`69ab140` fixed the false half - `main.rs` claimed the crate held no logic. But it now says the
-rule *is broken here on purpose*, and **a rule owned by `docs/` is not this lane's to carve an
-exception into**, even a true one. Either the document says a root may hold the harness that
-operates it, and why, or the harness needs a home that does not exist yet.
-
-Worth deciding rather than leaving as a comment, because the rule is load-bearing elsewhere: it is
-what stops game logic drifting into the root, and a rule with an undocumented exception is harder
-to apply than one with a documented one.
-
 ### C-5 - Two documents list every crate, and neither list is right
 
-**to** spec · **status** open · **raised** 2026-08-30 · **source** acting on `Q-5`
+**to** spec · **status** open · **raised** 2026-08-30 · **cited** `1d8c46f`
+
+Raised acting on `Q-5`. `1d8c46f` cites this and answers the second half - `docs/architecture.md` rule 10 now says what a
+dependency costs and where a home for one belongs. **The first half is untouched**: both lists
+still name a set of crates that has changed four times, and neither has changed with it. Left
+open and the citation recorded, so the reconciliation reports it once rather than forever.
 
 Four crates landed on 2026-08-30 - `planet-presentation`, `game-globe`, `planet-raster`,
 `planet-flat` - and two documents that enumerate every crate know about none of them.
@@ -125,6 +109,20 @@ Reported with an instance rather than as a worry.
 
 Kept rather than deleted, so a later reader can tell whether a question was settled or forgotten.
 Each says what this lane verified, because an answer this lane has not read is not an answer.
+
+### C-6 - The composition root holds a harness, and the rule says it holds nothing
+
+**to** spec · **status** **answered** 2026-08-30 · `1d8c46f`
+
+`docs/architecture.md` now carries the exception rather than leaving this lane to assert one in a
+doc comment: *one thing may live here that looks like a violation and is not - the harness that
+drives the shipped binary from outside*, because a harness running a special path would be evidence
+about the harness. It adds the part this lane did not think to ask for and should have - **its
+tests are tests of the harness rather than of the root** - and closes the door behind it: anything
+else large enough to be worth testing has still leaked.
+
+Verified against the file. The rule is stronger than the item asked for, because it says what the
+exception does *not* license.
 
 ### C-3 - A prototype cannot photograph itself, and two items now need it to
 

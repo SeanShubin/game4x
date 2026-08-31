@@ -53,6 +53,24 @@ else
     echo "pre-commit: rewriting pending.md from the outboxes"
     cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --write >/dev/null
     git add pending.md
+
+    # An item is closed by whoever filed it and answered by somebody else, so the filer
+    # gets no signal and pending.md goes on naming settled questions. C-1, C-2 and C-3 sat
+    # open for a day that way. The signal already existed - the workflow has a producer
+    # cite the id in the commit that acts on the item - and nothing read it.
+    #
+    # Printed rather than refused. Every lane commits in this tree, and failing one lane's
+    # commit because another lane has not closed an item would be the wrong perspective
+    # paying. It is in pending.md as well, which is the copy that lasts.
+    settled=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --settled 2>/dev/null | grep -v "outboxes read" | grep -v "^$" || true)
+    case "$settled" in
+        ""|"nothing open"*) ;;
+        *)
+            echo "pre-commit: an open item is cited by a commit that did not touch its outbox:"
+            echo "$settled" | sed 's/^/  /'
+            echo "pre-commit: close it, or record the hash with **cited** so this stops asking"
+            ;;
+    esac
 fi
 
 # The edition is passed explicitly because rustfmt is invoked directly rather than through

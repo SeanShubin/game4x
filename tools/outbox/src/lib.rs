@@ -49,6 +49,13 @@ pub struct Item {
     pub status: String,
     /// Which outbox it came from, relative to the repository root.
     pub outbox: String,
+    /// Commits that cite this id and were read without closing it.
+    ///
+    /// A citation usually means the item was settled, and sometimes it means the commit
+    /// answered part of it, or cited it while doing something else. Recording the hash is
+    /// how an author says *I looked* - without it the reconciliation below would report the
+    /// same item forever, and a signal that always fires is one nobody reads.
+    pub cited: Vec<String>,
 }
 
 impl Item {
@@ -156,6 +163,7 @@ pub fn parse(text: &str, outbox: &str) -> Vec<Item> {
             to,
             status: field(fields, "status").unwrap_or_else(|| "open".to_string()),
             outbox: outbox.to_string(),
+            cited: considered(fields),
         });
     }
     items
@@ -165,6 +173,20 @@ pub fn parse(text: &str, outbox: &str) -> Vec<Item> {
 ///
 /// Stops at whitespace, so the separator between fields never matters - `·`, `|` and two
 /// spaces all work, and changing it later breaks nothing.
+/// Short hashes an item says it has already considered.
+fn considered(line: &str) -> Vec<String> {
+    field(line, "cited")
+        .into_iter()
+        .flat_map(|value| {
+            value
+                .split([',', ' '])
+                .map(|word| word.trim_matches(['`', '.']).to_string())
+                .filter(|word| word.len() >= 7 && word.chars().all(|c| c.is_ascii_hexdigit()))
+                .collect::<Vec<_>>()
+        })
+        .collect()
+}
+
 fn field(line: &str, name: &str) -> Option<String> {
     let marker = format!("**{name}**");
     let after = line.split_once(&marker)?.1;
@@ -303,7 +325,7 @@ pub fn same_section(landed: &[Landed]) -> Vec<SameSection> {
 /// What must be decided comes first, because that is the only part addressed to him. Each
 /// producer's backlog is underneath, because *what is outstanding anywhere* is the other
 /// question one open document should answer.
-pub fn pending(all: &Outboxes) -> String {
+pub fn pending(all: &Outboxes, settled: &[Unclosed]) -> String {
     let mut out = String::new();
     out.push_str("# Pending\n\n");
     out.push_str(
@@ -335,6 +357,22 @@ those\nfiles rather than from anybody's memory of them.\n\n",
             out.push_str(&format!(
                 "- **{}** - {} · `{}`\n",
                 item.id, item.title, item.outbox
+            ));
+        }
+        out.push('\n');
+    }
+
+    if !settled.is_empty() {
+        out.push_str("## Open, and a commit says otherwise\n\n");
+        out.push_str(
+            "An item is closed by whoever filed it and answered by somebody else, so the \
+filer gets\nno signal. These are still marked `open`, and a commit that touched no part of \
+their own\noutbox cites them - which usually means they were settled and nobody went back.\n\n",
+        );
+        for item in settled {
+            out.push_str(&format!(
+                "- **{}** - `{}` {} · still open in `{}`\n",
+                item.id, item.hash, item.subject, item.outbox
             ));
         }
         out.push('\n');
@@ -379,6 +417,126 @@ question\nit exists to ask.\n\n",
         }
     }
     out
+}
+
+/// One commit, as much of it as reconciliation needs.
+#[derive(Clone, Debug)]
+pub struct Commit {
+    pub hash: String,
+    pub subject: String,
+    /// Every path the commit touched, relative to the repository root.
+    pub touched: Vec<String>,
+}
+
+/// An item still `open` that a commit says was dealt with.
+#[derive(Clone, Debug)]
+pub struct Unclosed {
+    pub id: String,
+    pub outbox: String,
+    pub hash: String,
+    pub subject: String,
+}
+
+/// Items whose id a commit cites, and which nobody has closed.
+///
+/// **An item is closed by whoever filed it and answered by somebody else, and the filer
+/// gets no signal.** `C-1`, `C-2` and `C-3` were settled by the specification lane and sat
+/// here marked `open` for a day, so `pending.md` - the one document that says what is
+/// waiting on Sean - named three questions that were not.
+///
+/// The signal already existed and nothing read it: the workflow has a producer cite the id
+/// in the commit that acts on the item, and they do. This reads it.
+///
+/// A commit that touches the item's *own outbox* is skipped, because that is the shape of
+/// filing it, mentioning it, or closing it - the citations that mean something are the ones
+/// in commits about code or documents somewhere else.
+pub fn unclosed(items: &[Item], commits: &[Commit]) -> Vec<Unclosed> {
+    let mut found = Vec::new();
+    for item in items.iter().filter(|item| item.is_open()) {
+        for commit in commits {
+            if commit.touched.iter().any(|path| path == &item.outbox) {
+                continue;
+            }
+            if !cites(&commit.subject, &item.id) {
+                continue;
+            }
+            if item.cited.iter().any(|seen| commit.hash.starts_with(seen)) {
+                continue;
+            }
+            found.push(Unclosed {
+                id: item.id.clone(),
+                outbox: item.outbox.clone(),
+                hash: commit.hash.clone(),
+                subject: commit.subject.clone(),
+            });
+            break;
+        }
+    }
+    found
+}
+
+/// Whether a line names this id, and not one that merely starts the same way.
+///
+/// `C-1` must not match `C-12`, or every early item would look settled by every later one.
+fn cites(text: &str, id: &str) -> bool {
+    let mut from = 0;
+    while let Some(at) = text[from..].find(id) {
+        let start = from + at;
+        let end = start + id.len();
+        let before = text[..start].chars().next_back();
+        let after = text[end..].chars().next();
+        let boundary = |character: Option<char>| {
+            character.is_none_or(|character| !character.is_ascii_alphanumeric() && character != '-')
+        };
+        if boundary(before) && boundary(after) {
+            return true;
+        }
+        from = end;
+    }
+    false
+}
+
+/// The last few hundred commits, for reconciliation.
+///
+/// Shelling out to `git` rather than reading `.git` directly: the format is stable, the
+/// tool is present wherever this runs, and a wrong answer here is a report rather than a
+/// change.
+pub fn history(root: &Path, depth: usize) -> Vec<Commit> {
+    let output = std::process::Command::new("git")
+        .current_dir(root)
+        .args([
+            "log",
+            &format!("--max-count={depth}"),
+            "--name-only",
+            "--format=%x01%H%x02%s",
+        ])
+        .output();
+    let Ok(output) = output else {
+        return Vec::new();
+    };
+    if !output.status.success() {
+        return Vec::new();
+    }
+    let text = String::from_utf8_lossy(&output.stdout).to_string();
+    let mut commits = Vec::new();
+    for block in text.split('\u{1}').skip(1) {
+        let Some((head, rest)) = block.split_once('\u{2}') else {
+            continue;
+        };
+        let mut lines = rest.lines();
+        let subject = lines.next().unwrap_or_default().to_string();
+        let touched = lines
+            .map(str::trim)
+            .filter(|line| !line.is_empty())
+            .map(str::to_string)
+            .collect();
+        commits.push(Commit {
+            hash: head.chars().take(7).collect(),
+            subject,
+            touched,
+        });
+    }
+    commits
 }
 
 /// Open items, grouped by who has to act, addressees in alphabetical order.
@@ -575,6 +733,136 @@ One line of what it is.
             date: "2026-08-25".to_string(),
         }];
         assert!(same_section(&landed).is_empty());
+    }
+
+    fn item(id: &str, cited: &[&str]) -> Item {
+        Item {
+            id: id.to_string(),
+            title: "whatever".to_string(),
+            to: "spec".to_string(),
+            status: "open".to_string(),
+            outbox: "crates/outbox.md".to_string(),
+            cited: cited.iter().map(|hash| hash.to_string()).collect(),
+        }
+    }
+
+    fn commit(hash: &str, subject: &str, touched: &[&str]) -> Commit {
+        Commit {
+            hash: hash.to_string(),
+            subject: subject.to_string(),
+            touched: touched.iter().map(|path| path.to_string()).collect(),
+        }
+    }
+
+    /// The failure this exists for, with the real commits that caused it.
+    ///
+    /// `C-1`, `C-2` and `C-3` were settled by the specification lane and stayed `open` in
+    /// the code lane's outbox for a day, so `pending.md` named three questions to Sean
+    /// that were not waiting on him. Nobody was at fault: an item is closed by whoever
+    /// filed it and answered by somebody else, and the filer gets no signal.
+    #[test]
+    fn an_item_a_commit_settled_is_reported_while_it_says_open() {
+        let items = vec![item("C-1", &[]), item("C-2", &[]), item("C-4", &[])];
+        let commits = vec![
+            commit("6e3cd6c", "Settle C-1 as housekeeping", &["CLAUDE.md"]),
+            commit(
+                "2ca59d3",
+                "C-2: rule 6 described the losing side",
+                &["docs/architecture.md"],
+            ),
+        ];
+        let found = unclosed(&items, &commits);
+        let ids: Vec<&str> = found.iter().map(|item| item.id.as_str()).collect();
+        assert_eq!(ids, ["C-1", "C-2"], "C-4 was never cited");
+        assert_eq!(found[0].hash, "6e3cd6c");
+    }
+
+    /// Filing an item cites its own id, and so does closing it. Neither is an answer, and
+    /// both touch the outbox the item lives in - which is what tells them apart.
+    #[test]
+    fn a_commit_that_edits_the_outbox_is_not_an_answer() {
+        let items = vec![item("C-5", &[])];
+        let commits = vec![commit(
+            "aaaaaaa",
+            "finding: C-5 filed - a new crate makes the table stale",
+            &["crates/outbox.md", "pending.md"],
+        )];
+        assert!(unclosed(&items, &commits).is_empty());
+    }
+
+    /// A citation an author has read and left open is not reported again.
+    ///
+    /// Without this the reconciliation reports the same item on every run - `C-5` was cited
+    /// by a commit that answered half of it - and a signal that always fires is one nobody
+    /// reads, which is the failure it was built to prevent.
+    #[test]
+    fn a_citation_already_considered_is_not_reported_again() {
+        let commits = vec![commit(
+            "1d8c46f",
+            "C-5 and C-6: what a dependency costs",
+            &["docs/architecture.md"],
+        )];
+        assert_eq!(unclosed(&[item("C-5", &[])], &commits).len(), 1);
+        assert!(unclosed(&[item("C-5", &["1d8c46f"])], &commits).is_empty());
+    }
+
+    /// `C-1` must not be settled by a commit about `C-12`.
+    #[test]
+    fn an_id_is_not_a_prefix_of_another_id() {
+        let commits = vec![commit(
+            "bbbbbbb",
+            "C-12 acted",
+            &["crates/game4x/src/main.rs"],
+        )];
+        assert!(unclosed(&[item("C-1", &[])], &commits).is_empty());
+        assert_eq!(unclosed(&[item("C-12", &[])], &commits).len(), 1);
+        // And a bare mention inside a word is not a citation either.
+        let odd = vec![commit("ccccccc", "renamed ABC-1X", &["src/lib.rs"])];
+        assert!(unclosed(&[item("C-1", &[])], &odd).is_empty());
+    }
+
+    /// Only open items. A closed one is cited by the commit that closed it, always.
+    #[test]
+    fn a_closed_item_is_never_reported() {
+        let mut done = item("C-3", &[]);
+        done.status = "answered".to_string();
+        let commits = vec![commit(
+            "ddddddd",
+            "C-3: a prototype gets its instrument",
+            &["docs/prototypes/README.md"],
+        )];
+        assert!(unclosed(&[done], &commits).is_empty());
+    }
+
+    /// The report reaches the document, not only the exit code.
+    ///
+    /// `pending.md` is the one place Sean is asked to look, and it is regenerated at every
+    /// commit - so putting the reconciliation in it is what makes this something nobody has
+    /// to remember to run.
+    #[test]
+    fn the_generated_document_carries_the_reconciliation() {
+        let all = Outboxes {
+            items: vec![item("C-1", &[])],
+            ..Default::default()
+        };
+        let settled = vec![Unclosed {
+            id: "C-1".to_string(),
+            outbox: "crates/outbox.md".to_string(),
+            hash: "6e3cd6c".to_string(),
+            subject: "Settle C-1 as housekeeping".to_string(),
+        }];
+        let document = pending(&all, &settled);
+        assert!(
+            document.contains("## Open, and a commit says otherwise"),
+            "{document}"
+        );
+        assert!(document.contains("6e3cd6c"), "{document}");
+        assert!(
+            document.contains("Settle C-1 as housekeeping"),
+            "{document}"
+        );
+        // And says nothing when there is nothing to say.
+        assert!(!pending(&all, &[]).contains("says otherwise"));
     }
 
     #[test]

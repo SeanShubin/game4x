@@ -12,8 +12,13 @@
 
 use std::path::{Path, PathBuf};
 
+/// How far back to look for a commit that settled something. Long enough to span the
+/// whole workflow so far, short enough that the walk costs nothing.
+const DEPTH: usize = 400;
+
 use outbox::{
-    Item, LIMIT, Outboxes, duplicate_ids, open_by_addressee, pending, read, same_section,
+    Item, LIMIT, Outboxes, duplicate_ids, history, open_by_addressee, pending, read, same_section,
+    unclosed,
 };
 
 fn main() {
@@ -76,13 +81,31 @@ fn main() {
                 1
             }
         }
+        // Only the items a commit says were dealt with, so a hook can act on them without
+        // failing on every ordinary open item.
+        Some("--settled") => {
+            let settled = unclosed(&all.items, &history(&root, DEPTH));
+            if settled.is_empty() {
+                println!("nothing open that a commit says was settled");
+                0
+            } else {
+                for item in &settled {
+                    println!(
+                        "{} - still open in {}, but {} says: {}",
+                        item.id, item.outbox, item.hash, item.subject
+                    );
+                }
+                1
+            }
+        }
         Some("--write") => {
             let path = arguments
                 .get(1)
                 .cloned()
                 .unwrap_or_else(|| "pending.md".to_string());
             let at = root.join(&path);
-            match std::fs::write(&at, pending(&all)) {
+            let settled = unclosed(&all.items, &history(&root, DEPTH));
+            match std::fs::write(&at, pending(&all, &settled)) {
                 Ok(()) => {
                     println!("wrote {path}");
                     0
