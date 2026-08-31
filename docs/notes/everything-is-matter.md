@@ -333,3 +333,96 @@ arrives there are two shapes, worth choosing rather than falling into: an explic
 an output that is a **partially built thing** which becomes the next step's input. The second needs
 no new column and makes the work in progress visible and interruptible - which is probably what a
 player wants to see anyway.
+
+## Pushing it: what is left when everything is a thing
+
+Sean: *it seems every thing can be done with state in a unified manner, let's push on that a bit.*
+So: take every field the model stores and ask whether it is a thing somewhere, or something computed
+from things.
+
+### `founded` was already gone, and the table is what showed it
+
+Sean had been wondering whether the concept is needed at all - *if all citizens leave, the place has
+been abandoned; if a single citizen remains it is occupied.* **The transformation table settled it a
+step earlier without either of us noticing.** The `found` row needed *garrison, at most 0* as its
+input. It did not need, and could not use, `founded = false`.
+
+**So `founded` is a stored boolean that duplicates something already visible in the territory's
+contents**, and the formal shape exposed it the moment it was written out. That is the value Sean
+predicted from formalising, arriving on the first real attempt.
+
+**One correction to his version, from `spec/control.md`.** Occupied is not *a citizen remains* -
+holding a territory takes force equal to its force of nature, and a garrison has force 1 against a
+nature of 1. So a territory whose population has departed but whose garrison stands is **still
+held**, and nature takes it back only when the force there falls below nature's. The derivation is
+*force present is at least force of nature*, not *citizens above zero*.
+
+### Two more stored fields go the same way
+
+| Stored today  | Actually                                                           |
+| ------------- | ------------------------------------------------------------------ |
+| `founded`     | force present is at least the force of nature                      |
+| `labor_spent` | not needed if a citizen is **ready** or **exhausted**              |
+| `won`         | an Ark was launched from a fully exploited planet - already a rule |
+
+**Three of the model's fields are derived, and all three were found by asking the same question.**
+None of them can go out of step with what they describe once they are computed, which is a whole
+class of bug that stops existing rather than being tested for - tier 1 in
+[prevent, detect, bound](prevent-detect-bound.md).
+
+### Ready and exhausted, and why Sean's two-step version is the better one
+
+He offered both shapes:
+
+```
+(ready worker, extractor, node food 4)  ->  (exhausted worker, extractor, node food 4, 4 food)
+
+(ready worker, turn)                    ->  (exhausted worker, labor)
+(labor, extractor, node food 4)         ->  (extractor, node food 4, 4 food)
+```
+
+**The second is better, and the reason is that it makes labor a thing.** Once labor is a thing it is
+an ordinary consumed input, and `work` no longer has to know anything about readiness or turns - it
+takes labor and an extractor and yields a resource. The turn touches only the first line.
+
+**And it needs the multiset to work.** Citizens are a count, not individuals, so *ready* and
+*exhausted* cannot be flags on objects - they are two rows, `(citizen ready) x 5` and
+`(citizen exhausted) x 3`. That is exactly the predecessor's `Land`: `List<Pair<Thing, Int>>`, a
+thing and how many. **The multiset is not an optimisation, it is what lets a trait vary across a
+population that has no individuals.**
+
+### `end turn` fits after all, as a sweep of ordinary transformations
+
+Earlier this note said `end turn` was the one command that would not fit, being global where inputs
+and outputs are local. With ready and exhausted it decomposes into four transformations, each local,
+each applied everywhere it matches:
+
+- everything that eats, eats - `(citizen, food) -> (citizen)`
+- a population grows on surplus or departs for want - `(citizen, surplus food) -> (citizen x 2)`
+- food expires - `(food) -> ()`
+- everything readies - `(exhausted X) -> (ready X)`
+
+**What is global is not the rules but the mode**: *apply this everywhere it matches* rather than
+*apply this here*. The predecessor had exactly that as a first-class idea - `EveryLandUniverseCommand`
+and the `...WherePossible` commands. So the unification holds, and what it costs is one concept:
+**a transformation is applied either at a place or everywhere.**
+
+### The residue, and it turns out to be smaller than it looks
+
+Four things are not things in a territory. Three of them are functions of the history, which
+`spec/invariants.md` already says is the whole of the state:
+
+| Not a thing | What it actually is                                            |
+| ----------- | -------------------------------------------------------------- |
+| turn number | how many times `end turn` appears in the history               |
+| phase       | whether `start` appears in the history                         |
+| `won`       | a rule over the state, as above                                |
+| adjacency   | **genuinely not a thing** - a fact about the planet's geometry |
+
+**Only adjacency survives**, and it survives because it is not about contents at all. Even it is
+tabular if wanted - a row per pair - but nothing transforms it, so it is a fixed table rather than
+state.
+
+**So the answer to Sean's push is yes, with one concept added and one exception.** Everything is a
+thing in a place or a function of the history; transformations are applied at a place or everywhere;
+and the planet's shape sits outside, unchanging, as the board does in any game.
