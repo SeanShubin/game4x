@@ -15,6 +15,7 @@ remembering a cargo incantation.
 | `pad-tables.ps1` / `.sh`  | `tools/pad-tables`                                             | Aligns every markdown table in the repo. Not a prototype; see below                                                                                          |
 
 | `shot.ps1` / `.sh` | [the application](../crates/game4x/), by remote control | One frame to a PNG, plus a text dump of what is behind it. `--help` lists the options |
+| `push.ps1` / `.sh` | the gate, then `git push`, then the pipeline | Returns when the published page is serving this commit. See below |
 ```
 scripts/planet-view.ps1                       # PowerShell
 bash scripts/planet-view.sh                   # POSIX shell
@@ -22,6 +23,45 @@ scripts/planet-view.sh --regions 60 --seed 7  # arguments pass straight through
 scripts/planet-view.sh --soccer               # the truncated icosahedron, as a reference
 scripts/planet-view.ps1 --help                # every option the prototype takes
 ```
+
+## Pushing, and knowing you have a deployment
+
+```
+scripts/push.sh                 # gate, push, wait for the page to be live, then the checks
+scripts/push.sh --deploy-only   # return as soon as the page is live
+scripts/push.sh --no-gate       # the gate has already been run
+```
+
+**It returns when the published page is serving this commit**, which is not the same as the
+deploy job going green: Pages can accept an artifact and still hand back the previous bundle
+for a while. `.github/workflows/pipeline.yml` stamps the commit into `dist/build-info.json`,
+so the live site can be asked which build it is, and that is the only answer to *do I have a
+deployment*.
+
+Three exit codes, because this pipeline has three outcomes:
+
+| Code | Means                                                           |
+| ---- | --------------------------------------------------------------- |
+| 0    | Deployed, and everything that ran afterwards passed             |
+| 1    | No deployment - the gate failed, the push failed, or deploy did |
+| 2    | Deployed, and a check that runs *after* the deploy failed       |
+
+Two is not a failed deployment. The pipeline deploys as soon as the gate passes and runs the
+fuller verification afterwards as notify-only, so a red verify job never unpublishes a page
+that is already up. One exit code for both would report a live, working page as a failure.
+
+Three other things it does that a plain `git push` does not:
+
+- **Lists what is about to go, by author.** Several Claude instances commit to this branch,
+  and a push carries whatever they have committed locally too. That is the stated reason
+  pushing is done by hand, so the script shows it rather than assuming the person pushing
+  knows.
+- **Names the commit that cancelled a run.** The pipeline cancels a run when a newer push
+  arrives on the same branch, so a cancelled run is usually not a failure - it is a run that
+  was overtaken, and reporting it as red would be wrong.
+- **Runs `hooks/pre-push` rather than its own copy of the gate**, so there is one list of
+  what the gate is, in the file that owns it. It pushes with `--no-verify` afterwards only
+  because the gate has just run and takes minutes.
 
 ## The one script that is not a prototype
 
