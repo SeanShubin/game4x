@@ -54,23 +54,36 @@ Worth deciding rather than leaving as a comment, because the rule is load-bearin
 what stops game logic drifting into the root, and a rule with an undocumented exception is harder
 to apply than one with a documented one.
 
-### C-5 - `docs/architecture.md` lists every crate, and there is now one it does not
+### C-5 - Two documents list every crate, and neither list is right
 
 **to** spec · **status** open · **raised** 2026-08-30 · **source** acting on `Q-5`
 
-`crates/planet-presentation` landed in `49c4c46`. The table at `docs/architecture.md:117` names
-every crate with its layer and its dependencies, and the new one is not in it - and the
-`planet-bevy` row beside it now understates its dependencies by one.
+Four crates landed on 2026-08-30 - `planet-presentation`, `game-globe`, `planet-raster`,
+`planet-flat` - and two documents that enumerate every crate know about none of them.
 
-Not this lane's to fix: `docs/` is the documentation lane's column, and a table of layers is a
+- **`docs/architecture.md:117`** tables every crate with its layer and its dependencies. The four
+  are absent, and three rows beside them are now wrong: `planet-bevy` and `planet-render` both lost
+  dependencies to the split, and `planet-render` is no longer the crate the row describes.
+- **`README.md:89`** draws the tree of directories. It was already stale before any of this -
+  `command-language`, `game-model`, `game-console`, `game-front` and `planet-terrain` are missing
+  and were before today - and it still says `planet-render` is *camera, software rasterizer and
+  mesh*, which is now two crates apart.
+
+Not this lane's to fix: both files are the documentation lane's column, and a table of layers is a
 claim about the architecture rather than a list of directories.
 
 Two things worth deciding with it rather than after it:
 
-- **A table of every crate goes stale every time a crate is added**, which is the same shape as the
-  specification index that lost three files. Whether it should be generated, or checked by a test
-  that compares it against the workspace, is a question about that document rather than about this
-  crate. This lane can build either once the answer is known.
+- **A hand-maintained list of crates goes stale silently, and this is now the third instance.** The
+  specification index lost three files; these two documents have lost nine between them; and the
+  same shape cost *coverage* rather than accuracy in the pre-push gate, where a crate split moved
+  seven tests out of every list that named them and they ran only after deploy - the quality lens's
+  `Q-37`, fixed in `7739826` by selecting with `--exclude` so that coverage is the default.
+  **That fix is available here too.** Whether these documents should be generated, checked by a
+  test against the workspace, or written so that no enumeration is needed, is a question about the
+  documents rather than about any crate. This lane can build any of the three once the answer is
+  known - and would say, from having just done it, that the exclusion form worked because it made
+  the right thing the default rather than adding something to notice when it was wrong.
 - **The row would say what the crate is for**, and the argument for it is a rule: *a rule that can
   be checked without an engine should not sit where checking it needs one.* That is a general claim
   about layering, currently written only in a crate README and a commit message. If it belongs in

@@ -21,7 +21,7 @@ files rather than from anybody's memory of them.
 ### To spec (3)
 
 - **C-6** - The composition root holds a harness, and the rule says it holds nothing · `crates/outbox.md`
-- **C-5** - `docs/architecture.md` lists every crate, and there is now one it does not · `crates/outbox.md`
+- **C-5** - Two documents list every crate, and neither list is right · `crates/outbox.md`
 - **C-4** - The index is shared, so staging is publishing · `crates/outbox.md`
 
 ## Sections that have taken more than one proposal
