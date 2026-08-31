@@ -8,8 +8,30 @@ planet you could play on? Twelve is five neighbours everywhere and looks like a 
 hundred and twelve is a great many small cells. That is a judgement about a picture, so the
 way to reach it is to look at all ten in turn without rebuilding anything in between.
 
-**The answer.** Not yet recorded. When it is, it belongs here and in the
-[prototype index](../../docs/prototypes/README.md).
+**The answer.** Recorded, and it is not the answer the question expected. Sean, 2026-08-30:
+
+> I think the first 5 goldberg polyhedrons are fine as planets. The first one doesn't look like a
+> planet in polyhedron form, but that doesn't matter because it represents a sphere and if needed
+> later we can draw polyhedron lines on a sphere. The others after the first 5 all look like planets
+> but the issue isn't really appearance, it is the diminishing returns on strategic depth regarding
+> large planet sizes. Two units with ranges of 5 or 6 vs 50 or 51 have different gameplay feels. I
+> was more interested in knowing the technical capability so I think I have my answer there.
+
+**The question was aimed at appearance, and appearance was never the constraint.** Every quantity
+counted in territories is a whole number, so one step of range is a fifth of the span on a
+twelve-territory planet and a fiftieth on a large one: resolution per step falls as the planet
+grows. That is why the size list stops at five, and it is a fact about the rules rather than about
+the picture - which is exactly what a prototype is for finding out, and not what this one was built
+to look for.
+
+The full write-up is in the [prototype index](../../docs/prototypes/README.md), and the reason the
+list stops where it does is in `docs/notes/spec-backlog.md`, so that a later session does not
+helpfully propose the sixth.
+
+**Finished, by the definition in `CLAUDE.md`:** the question is stated, the answer is recorded, and
+the document is reachable from the root README. What it still does - twenty solids, up to 492 faces
+- stays because the technical ceiling was half of what was being asked, and it is the half this
+lane can re-measure.
 
 ## Running it
 
