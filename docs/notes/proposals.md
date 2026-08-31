@@ -42,10 +42,83 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-126 - The twelve territories cannot produce an Ark
+
+**to** sean · **status** open · **raised** 2026-08-30 · **kind** invented · **into**
+`releases/first-release.md` -> Territory nodes
+
+**The first release still cannot be won after `P-125`, and this one is in the numbers rather than
+the words.** Found by the code lane as `C-8` while building the `R-6` play-through.
+
+An Ark needs a Yard and costs 12 metal and 12 energy; a Yard costs 15 metal; every cost is paid from
+one territory's store in one turn, because stores are discarded when the turn ends. **Only territory
+11 can afford both, and territory 11 can never be claimed** - a Pioneer costs 8 metal and 6 energy
+in one turn, only 1, 2, 3, 11 and 12 can afford one, and spreading from the landing site stops at
+nine territories.
+
+**Verified here rather than taken**, by recomputing every territory's best single turn from the
+release's own table - spare labour is `food nodes x (density - 1)`, and the remaining hands work the
+densest nodes:
+
+| Territory | Yard, 15 metal | Ark, 12 + 12          | Can send a Pioneer |
+| --------- | -------------- | --------------------- | ------------------ |
+| 1         | no, tops at 12 | yes                   | yes                |
+| 7         | yes            | no - no energy at all | no                 |
+| 9         | yes            | no - energy tops at 2 | no                 |
+| 11        | yes            | yes                   | yes                |
+| 12        | yes            | no - two spare hands  | yes                |
+
+`game4x --dump` confirms the model's nodes are the table's. **The reachability half is the code
+lane's and is not independently re-run here** - it needs the adjacency of `canonical_seeds(12)`,
+which this lane has no way to print. The two facts it rests on need no computation and are in the
+table: **territory 6 has no metal node, territory 7 has no energy node.**
+
+**The decision.** The table was built so that each territory demonstrates a consequence - *the
+minimum a territory can be*, *no metal*, *population without industry*. Those demonstrations are
+territories that cannot participate, and the win requires every territory to participate. **The two
+goals are incompatible as they stand**, and only Sean can say which gives.
+
+**Recommended: change the fixture, not the win.** Two reasons. `spec/planet.md` already promises that
+*oceans never isolate land from land*, so the planet is guaranteed walkable - what `C-8` found is
+that the *numbers* isolate it, which is the same defect with a different cause, and it belongs where
+the other one is: in how a planet is built. And it generalises - generated planets will hit this
+constantly, so a rule about the win would have to be checked on every planet anyway.
+
+**The alternative is one line and preserves every number**: define *can be taken* the way `P-125`
+defined *can be built*, so a territory nothing can reach is excluded from the win. It is cheaper
+today and it makes *fully exploited* quietly mean *fully exploited except the parts we could not
+get to*, which is a worse sentence to have to explain.
+
+**What is not proposed here is which cells change.** That needs the adjacency graph, and it is
+Sean's table. `S-3` asks the code lane for the graph and for the smallest change that makes every
+territory reachable and an Ark producible, so the choice is between measured options rather than
+guesses.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
+
+### S-3 - Which cells make the twelve reachable, measured rather than guessed
+
+**to** code · **status** open · **raised** 2026-08-30 · **source** `C-8`, for `P-126`
+
+`C-8` establishes that the loop cannot reach steps 7 and 8. Deciding what to change needs two things
+this lane cannot produce.
+
+**The adjacency of `canonical_seeds(12)`, printed.** `game4x --dump` reports every territory's nodes
+and not its neighbours, so the reachability argument in `C-8` cannot be re-run outside your lane.
+It is the load-bearing half of the finding and it should be checkable by anyone.
+
+**The smallest change that makes every territory reachable and an Ark producible somewhere
+reachable.** You already have the capacity arithmetic. What Sean needs is two or three measured
+candidates rather than one guess - ideally ones that keep each territory's stated demonstration
+intact, since that is what the table is for.
+
+One worked example, to show the shape rather than to propose it: territory 1's role is *the landing
+site, everything works*, and it cannot build a Yard - twelve metal against fifteen. Raising its metal
+density from 4 to 5 gives exactly fifteen and makes its stated role true. Whether anything then
+reaches 10, 11 and 12 is the part that needs the graph.
 
 ### S-2 - The crate enumerations in `docs/architecture.md` need a gate, not a rewrite
 

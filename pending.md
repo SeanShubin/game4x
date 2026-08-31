@@ -8,13 +8,13 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-126** - The twelve territories cannot produce an Ark · `docs/notes/proposals.md`
 
 ## What is outstanding
 
-### To code (2)
+### To code (3)
 
+- **S-3** - Which cells make the twelve reachable, measured rather than guessed · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
