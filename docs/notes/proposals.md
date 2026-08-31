@@ -123,6 +123,53 @@ Flavour and mechanism agree.
 persist. Buildings that hold more, and a ceiling on what a territory can keep, stay in
 [the backlog](spec-backlog.md) where the rest of that idea is.
 
+### P-129 - A territory holds only so much of each kind of thing
+
+**to** sean · **status** open · **raised** 2026-08-30 · **kind** recovered · **into**
+`spec/logistics.md` -> new section, *Capacity*
+
+**Sean's, decided 2026-08-30.** What makes the game finite, and why organising matters.
+
+> ## Capacity
+>
+> - Everything in a territory occupies capacity there: its stores, its structures and the units
+>   standing on it
+> - Capacity is counted per kind of thing, and a territory has some of each before anything is
+>   built. Nothing a player builds ever crowds out something of another kind
+> - A container occupies capacity of its own kind and provides capacity of another. Capacity is
+>   therefore not conserved
+> - No kind of thing may be nested inside itself, at any depth. Since no kind appears twice on a
+>   containment path, the deepest nesting is the number of kinds that contain
+
+**Basis:** three decisions of Sean's, each with its reason.
+
+**Capacity is organisation, not room.** *If you have a bunch of metal lying around it gets lost, but
+if you have storage containers to keep it organized you have more usable metal in the same area.*
+Loose metal is not lost for want of space - it is lost for want of arrangement. **That makes a
+container do work rather than grant permission**, which is what makes the third line worth having: a
+building that merely *allowed* more metal would be a permission slip.
+
+**Per kind, because otherwise it breaks an invariant.** `spec/invariants.md` says *no structure a
+player builds ever has to be removed to make room for something else.* A single pool would mean
+exactly that - fill a territory with Yards and the next container needs one torn down. Counting
+separately keeps the invariant untouched. Two other answers were considered and rejected: exempting
+structures, which leaves a Yard occupying no room in a world where a crate does; and narrowing the
+invariant, which was cheapest and would have given up the thing that makes this game unfussy.
+
+**Nested inside itself, and no depth number.** A container that may hold a container makes capacity
+infinite - one crate holds ten crates, each holding ten more. **The rule as written bounds it without
+anyone choosing a number**: no kind twice on a path means the deepest nesting is the count of kinds
+that contain, which is derived rather than picked. It has to be transitive, or a crate holding
+barrels holding crates alternates for ever.
+
+**No figures here, deliberately.** How much capacity a territory has and how much a container gives
+are release tuning, and neither is needed to state the rule.
+
+**It settles `P-126`'s open fork.** That proposal asks whether a territory has a bound of its own or
+gets one only from a structure. The second line answers it: **a territory has some of each before
+anything is built**, so the winnability measurement in `P-126` holds and the two can be promoted in
+either order.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
