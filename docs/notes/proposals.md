@@ -42,116 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-125 - Every structure built everywhere it can be built
-
-**to** sean · **status** open · **raised** 2026-08-30 · **kind** entailed · **into**
-`spec/control.md` -> Winning
-
-The first release cannot be won. Raised by the code lane as `C-7` on starting `R-6`, and checked
-here rather than taken: **the spec already says what would fix it, in a clause the implementation
-drops.**
-
-> - A planet is fully exploited when every territory that can be taken has been taken, every
->   structure has been built everywhere it can be built, and every storage structure on it is full.
-> - A structure can be built where the territory's own permanent facts allow it: its nodes, their
->   densities, its biome. Not whether the player can afford it this turn, and not whether any
->   particular game happened to reach it.
-
-**Basis:** `game-model` reads *every structure that can be built has been built* as requiring a yard
-in **every** claimable territory. A yard costs 15 metal from that territory's own store, and stores
-are discarded at the end of every turn, so a territory must make 15 metal in one turn or never hold
-one. Eight of the twelve designed territories cannot. Two verified directly against the release's
-own table: **territory 6 has no metal nodes at all**, and **territory 1, the landing site, has three
-nodes at density 4** - twelve against a cost of fifteen. The code lane's figures for the other six
-are in `C-7`.
-
-**The code lane checked this against the code and found the qualifier is dropped twice, not once.**
-`is_fully_exploited` also requires an extractor on *every* node. **Territory 5 tops out at one
-extractor of nineteen** - three food nodes at density 1 give no spare labour, so it holds one citizen
-for ever, whose single labour goes on food or the citizen dies, against 3 + 8 + 8 = 19 nodes.
-Verified against the release's table. So narrowing only the yard clause leaves territory 5 blocking
-the win and answers `C-7` by half. **The spec's sentence already covers both, since an extractor is
-a structure**; it is the implementation that dropped the qualifier in two places, and the fix has to
-be made in two.
-
-**The second line is the part that is a decision rather than a correction**, and the code lane was
-right to refuse to pick it. *Can be built* reads three ways and they are not the same game:
-
-| Reading                         | What it means                           | Verdict                                   |
-| ------------------------------- | --------------------------------------- | ----------------------------------------- |
-| **Now**                         | affordable this turn                    | wrong - a planet would flicker in and out |
-| **Ever**                        | some play from the start makes it exist | right, and this is what the line says     |
-| **Nothing further is possible** | no play *from here* adds anything       | wrong - it rewards foreclosing            |
-
-**The third is worth naming because it is the tempting one.** It is closest to what *fully exploited*
-means in English, and it is **path-dependent**: a player who wastes a territory's capacity gets a
-cheaper win than one who does not, because running out of moves counts as finishing. That rewards
-getting stuck.
-
-**The proposed line is the second reading, phrased as a property of the ground rather than a
-quantifier over plays.** *Some play makes it exist* invites a search; *the territory's own permanent
-facts allow it* is decided by looking at the nodes. The two coincide in this game, and the second is
-the one an implementation can check and a player can predict. It is also why the release's table
-works at all: territory 6 has no metal ever, and territory 5 has one citizen ever, whatever anybody
-does.
-
-**The clause is already there and doing nothing.** Under the reading that requires a yard
-everywhere, *that can be built* is vacuous - every structure in the game can be built somewhere, so
-the qualifier excludes nothing. A qualifier that is always true is not a qualifier. The parallel
-clause in the same sentence settles it: *every territory that **can be taken** has been taken*
-excludes ocean, so the pattern is a qualifier that excludes the impossible case.
-
-**So this is a wording change and not a new rule**, which is why it is one line and why no number
-Sean chose has to move. The release's table was built so that each territory demonstrates a
-different consequence - *no metal*, *food density 1*, *the minimum a territory can be* - and those
-demonstrations are the point. They cannot coexist with a win that requires a yard in a territory
-with no metal.
-
-**It is filed rather than reworded silently**, though restating an idea already present is normally
-this lane's to do. A competent reader read the line the other way and built the game to match, so
-the line is ambiguous in practice whatever it says in principle - and the consequence of the
-ambiguity is whether the first release can be finished.
-
-**The code lane is already proceeding under this reading** and says its evidence will report
-stopping short of `has_won` rather than reporting a pass, which is the right way to work while it is
-undecided.
-
-## Addressed to other perspectives
-
-Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
-only thing that does.
-
-### S-2 - The crate enumerations in `docs/architecture.md` need a gate, not a rewrite
-
-**to** code · **status** **acted** 2026-08-30 · **cited** `2ac3ab9` · **source** `C-5`, paired with `Q-37`
-
-That document enumerates every crate twice - the table of layers and dependencies, and rule 5's
-requirement that each crate's `README.md` be linked from it. Both have gone stale twice: once when
-`planet-terrain` landed, and again now, with `planet-raster`, `planet-flat` and `game-globe`.
-
-**Asked for: a test that fails when a crate in the workspace has no row, and when a row names a
-crate that is not there.** The same check covers rule 5, since a row carries the README link.
-
-**Not a generated table**, and this is where the pairing with `Q-37` stops rather than continues.
-The gate's exclusion list was right because the thing being fixed *was* the gate, so a detector
-would have needed something trustworthy to report to and there was nothing. A table check has no
-such problem: the gate is now the trustworthy thing, so a test in it is wired to a failure by
-construction. Coverage-by-default is the right instinct and it is already satisfied here by
-`--workspace` being what the test iterates.
-
-**This lane will not hand-rebuild the table a third time**, and has not, though it is stale as this
-is written. Anything written during a refactor that is moving crates is wrong within the hour. It
-gets rebuilt once, when the split lands and the test can hold it.
-
-### S-1 - `tools/outbox` should read `releases/*.md`
-
-**to** code · **status** **acted** 2026-08-30 · **cited** `2ac3ab9`
-
-Each capability in `releases/first-release.md` now carries an id, `R-1` to `R-6`, and the `**to**
-code` field line every outbox item carries. The tool does not look in `releases/`, so all six are
-invisible to `outbox --to code` - which is the one place they need to appear, since they are the
-work the release exists to order.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -262,6 +152,7 @@ work the release exists to order.
 | P-118, the rule editor is out of the first release, and the surfaces line says so                               | `releases/first-release.md` -> Scope, Controls                                                                         | 2026-08-29 |
 | P-122, a capability for playing the loop through by hand                                                        | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-29 |
 | P-123, neither the biome rule nor the connectivity rule yields                                                  | `spec/planet.md` -> What a territory carries                                                                           | 2026-08-30 |
+| P-125, every structure built everywhere it can be built, and what that means                                    | `spec/control.md` -> Winning                                                                                           | 2026-08-30 |
 
 ## Rejected
 

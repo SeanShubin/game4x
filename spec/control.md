@@ -44,7 +44,10 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 ## Winning
 
 - A planet is fully exploited when every territory that can be taken has been taken, every
-  structure that can be built has been built, and every storage structure on it is full.
+  structure has been built everywhere it can be built, and every storage structure on it is full.
+- A structure can be built where the territory's own permanent facts allow it: its nodes, their
+  densities, its biome. Not whether the player can afford it this turn, and not whether any
+  particular game happened to reach it.
 - A player wins by launching an Ark from a fully exploited planet.
 
 ## Losing

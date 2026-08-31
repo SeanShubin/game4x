@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-125** - Every structure built everywhere it can be built · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## What is outstanding
 
@@ -34,9 +35,9 @@ it exists to ask.
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86
 - `spec/console.md` -> Commands - P-76, P-110, P-121
+- `spec/control.md` -> Winning - P-77, P-81, P-125
 - `releases/first-release.md` -> Units and structures - P-70, P-80
 - `spec/console.md` - P-69, P-82
-- `spec/control.md` -> Winning - P-77, P-81
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/interface.md` -> Surfaces - P-73, P-116
 - `spec/invariants.md` -> The game is one function - P-75, P-115
