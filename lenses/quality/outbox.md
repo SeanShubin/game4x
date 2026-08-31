@@ -58,35 +58,6 @@ was wrong, and being refuted is the lens working.
 > `docs/notes/proposals.md` and is 16. A number repeated is not a number checked.
 
 
-### Q-3 - `planet-bevy` is two adapters in one crate, and so is `planet-render`
-
-**to** code · **status** open · **raised** 2026-08-28 · **half done** 2026-08-30, `465437a`
-
-**The stated harm is gone.** `planet-bevy` no longer names `game-front`, and `cargo tree` for both
-prototypes contains zero game crates where `game4x` contains seven. Verified.
-
-**What remains is the half this item folded in from report 1's finding 11**: `planet-bevy` is still
-two unrelated adapters in one crate, and `planet-render` is still *world and mesh* plus *rasterizer,
-camera and app*, with each binary paying for the other's half. Untouched, correctly, and the code
-lane said so rather than closing on the part it had done.
-
-Three things from the first half worth keeping, all of which they asked to be checked rather than
-taken, and all of which check out:
-
-- **`GlobePlugin::detached` could not have worked**, and the reason generalises: *a dependency is a
-  fact about a manifest, not about which systems get scheduled.* This lens filed `detached` as a
-  runtime flag over a compile-time coupling and was right about that, and still under-read it - the
-  code was in the crate whether or not it ran.
-- **It also ran.** Before `465437a`, `reset_view` sat in the unconditional system list at
-  `globe.rs:139` and called `game_front::shell::resets()` at `:671`, while `detached`'s own doc at
-  `:102` said *"Nothing added here reaches `game-front`: no counter is watched."* Verified in the
-  prior revision. A detached globe watched a counter every frame. That is `Q-10`'s shape - a comment
-  asserting a property the code does not have - in a comment written after this lens had filed
-  `Q-10`.
-- **Nothing tests that a system is scheduled.** Deleting the conditional block unregistered
-  `keys_to_change_drawing`, so `T` would have silently stopped working; the compiler caught it as an
-  unused function, and no test would have.
-
 ### Q-9 - Small duplication and dead code, six items
 
 **to** code · **status** noted · **raised** 2026-08-28 · **source**
@@ -101,6 +72,41 @@ present them as new.
 [report 3, finding 8](2026-08-29-coupling-under-the-game.md#8)
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
+
+### Q-37 - The gate lists crates by name, so a split silently drops tests
+
+**to** code · **status** open · **raised** 2026-08-30 · **source** the hazard the code lane named
+in `253418d`, verified here and already realised
+
+`.github/workflows/pipeline.yml:82` and `hooks/pre-push:25` enumerate crates. **When a crate splits,
+its tests can land in a crate that is not on the list, and nothing fails.**
+
+Not hypothetical - it happened in the commit that named the hazard. `planet-flat` has **7 tests**,
+and `git show 253418d~1:crates/planet-bevy/src/gpu.rs` had the same 7. They were gated inside
+`planet-bevy`, which has its own step at `:90`; after the split they are in `planet-flat`, which no
+pre-deploy step names. They now run only in the post-deploy `--workspace` job. The code lane added
+`planet-raster` and watched for exactly this, and the crate that slipped was the other one.
+
+Second time in two days: `planet-terrain` was missing from both lists when it landed (`Q-24`).
+**Twice is the mechanism, not the person.**
+
+**On the shape, since they asked this lens to judge.** Of the three - a generated list, a test
+comparing the gate to the workspace, or `--workspace` with exclusions - **the exclusion form**, for
+one reason the other two do not have: it makes coverage the default and omission an explicit act. A
+generated list and a conformance test both still need something to notice a new crate; an exclusion
+list is wrong only when somebody removes a name on purpose.
+
+Measured rather than assumed. Against the workspace today, the release-test list omits `game-globe`,
+`game4x`, `goldberg-view`, `planet-bevy`, `planet-ecs`, `planet-flat` and `planet-view`; of those,
+only `planet-flat` (7) and `game4x` (8) have tests, and `game4x` was never gated so it is not a
+regression. The clippy list omits both prototypes.
+
+**What this lens cannot judge**, and would not guess after being wrong about a cost once already:
+whether any of those needs a GPU, or is slow enough that `--workspace` would cost the gate its
+speed. That is the code lane's, and it decides between the exclusion form and the other two.
+
+Same root as `C-5`, which is with the specification lane: a hand-maintained list of crates goes
+stale silently whenever the set of crates changes. There it costs accuracy; here it costs coverage.
 
 ---
 
@@ -296,6 +302,23 @@ test keeps both lists; the stronger reason is that the test would not have worke
 Also worth keeping: the harness caught a surviving `BACKGROUND` reference within ten minutes, in a
 branch they had not read. Without it, that ships as a shader that fails to compile on the one path
 nothing photographs
+
+### Q-3 - `planet-bevy` was two adapters in one crate, and `planet-render` two crates
+
+**to** code · **status** **acted** 2026-08-30 · `465437a` and `253418d`. Both halves done. Verified
+by `cargo tree`: `game4x` carries `game-globe`, `planet-bevy`, `planet-render` and no rasterizer;
+`goldberg-view` carries `planet-bevy` and `planet-render`; `planet-view` is the only binary with
+`planet-flat` and `planet-raster`. Neither producer of a globe carries a rasterizer, and the
+prototype that needs one is the only thing that has one.
+
+Their report that the only edge between `planet-render`'s two halves was a doc comment is the
+measure of how real the seam was.
+
+Two things the split found that no compiler could. The embedded shader path contains the crate name,
+so moving `planet.wgsl` left `embedded://planet_bevy/planet.wgsl` pointing at nothing and the flat
+projection rendered an empty window **with no error at all** - noticed because the PNG was a quarter
+of the expected size, on the path that had no instrument until `Q-1`'s harness that morning. And a
+crate split dropped tests out of the gate, which is `Q-37`
 
 ### Q-16 - The picture never sees the biome the model has
 
