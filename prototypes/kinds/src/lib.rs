@@ -72,10 +72,54 @@ impl Kind {
     }
 
     /// Whether this stands for a family of kinds rather than for one kind.
+    ///
+    /// Read from [`FAMILIES`] rather than listed again here, so there is one list of what
+    /// a family is.
     pub fn is_family(self) -> bool {
-        matches!(self, Kind::Unit | Kind::Thing | Kind::Resource)
+        FAMILIES.iter().any(|(family, _)| *family == self)
+    }
+
+    /// The concrete kinds this family covers, or nothing for a leaf.
+    pub fn members(self) -> &'static [Kind] {
+        FAMILIES
+            .iter()
+            .find(|(family, _)| *family == self)
+            .map(|(_, members)| *members)
+            .unwrap_or(&[])
+    }
+
+    /// Whether a transformation naming this kind matches a thing of that kind.
+    ///
+    /// A leaf matches only itself. A family matches anything carrying it - which is all a
+    /// family needs to be. **No hierarchy anywhere**: membership is data, so `unit` is a
+    /// trait an Ark and a Pioneer both carry rather than a class they inherit from. That
+    /// matters because `spec/invariants.md` has every kind of thing be data, and a parent
+    /// class would be the one shape that is not.
+    pub fn covers(self, other: Kind) -> bool {
+        self == other || self.members().contains(&other)
     }
 }
+
+/// Which concrete kinds each family covers.
+///
+/// Two of the three can be read off `releases/first-release.md`: only the Ark and the
+/// Pioneer have cells and a move, and the resources are the three the biome table has
+/// columns for.
+///
+/// **The third cannot, and that is the finding.** The release names `thing, exhausted` and
+/// `thing, ready` in `ready`, and never says anywhere what can be exhausted. The only kind
+/// it shows being exhausted is a citizen, in `spend readiness`. So `ready` - the
+/// transformation that puts the whole planet back on its feet each turn - names a family
+/// with no stated membership, and every reader supplies one without noticing.
+///
+/// Left empty rather than guessed. `crates/game-model` readies extractors, garrisons and
+/// labor as well, but that is the model's answer and not the release's, and the point of
+/// this crate is to show what the release does and does not say.
+pub const FAMILIES: &[(Kind, &[Kind])] = &[
+    (Kind::Unit, &[Kind::Ark, Kind::Pioneer]),
+    (Kind::Resource, &[Kind::Food, Kind::Metal, Kind::Energy]),
+    (Kind::Thing, &[]),
+];
 
 /// What distinguishes two things of the same kind.
 ///

@@ -165,3 +165,79 @@ fn the_figures_the_answers_rest_on() {
         .count();
     assert_eq!(derived, 2, "two rows out of fifty-odd is what it costs");
 }
+
+/// A family matches what carries it, with no hierarchy anywhere.
+///
+/// The two rows that settle the fifth finding: one transformation naming `unit` matches an
+/// Ark and matches a Pioneer, and membership is a list rather than a parent class.
+#[test]
+fn a_transformation_naming_a_family_matches_every_kind_in_it() {
+    use kinds::Kind;
+
+    assert!(Kind::Unit.covers(Kind::Ark));
+    assert!(Kind::Unit.covers(Kind::Pioneer));
+    assert!(!Kind::Unit.covers(Kind::Yard), "a yard does not move");
+    assert!(!Kind::Unit.covers(Kind::Citizen), "nor does a citizen");
+
+    for resource in [Kind::Food, Kind::Metal, Kind::Energy] {
+        assert!(Kind::Resource.covers(resource));
+    }
+    assert!(!Kind::Resource.covers(Kind::Labor), "labor is not stored");
+
+    // A leaf covers itself and nothing else, so `covers` is safe to ask of any kind.
+    assert!(Kind::Ark.covers(Kind::Ark));
+    assert!(!Kind::Ark.covers(Kind::Pioneer));
+    assert!(Kind::Ark.members().is_empty());
+}
+
+/// `thing` is named by the release and never defined by it.
+///
+/// This asserts a **gap**, deliberately. `ready` is the transformation that puts the whole
+/// planet back on its feet every turn, and it names `thing, exhausted` without the release
+/// ever saying what can be exhausted - the only kind it shows exhausted anywhere is a
+/// citizen, in `spend readiness`.
+///
+/// So this fails the day the release answers, which is the point: the crate should not go
+/// on reporting a gap that has been filled, and nobody would think to come back and check.
+#[test]
+fn the_release_never_says_what_a_thing_is() {
+    use kinds::Kind;
+
+    assert!(Kind::Thing.is_family(), "`ready` names it as one");
+    assert!(
+        Kind::Thing.members().is_empty(),
+        "the release now says what a thing is; put the members in FAMILIES and delete this"
+    );
+
+    // Which makes `ready` the one transformation that cannot be matched against anything.
+    let ready = kinds::TRANSFORMATIONS
+        .iter()
+        .find(|transformation| transformation.name == "ready")
+        .expect("the release has a `ready`");
+    let unmatched = ready
+        .ports
+        .iter()
+        .filter(|port| {
+            let subject = match port {
+                kinds::Port::In { subject, .. } | kinds::Port::Out { subject, .. } => subject,
+            };
+            subject.kind.is_family() && subject.kind.members().is_empty()
+        })
+        .count();
+    assert_eq!(unmatched, 2, "both of `ready`'s ports name it");
+
+    // And it is the only one. Every other family the tables use has stated membership,
+    // which is what makes this a gap in one noun rather than in the idea of families.
+    let elsewhere = kinds::TRANSFORMATIONS
+        .iter()
+        .filter(|transformation| transformation.name != "ready")
+        .flat_map(|transformation| transformation.ports.iter())
+        .filter(|port| {
+            let subject = match port {
+                kinds::Port::In { subject, .. } | kinds::Port::Out { subject, .. } => subject,
+            };
+            subject.kind.is_family() && subject.kind.members().is_empty()
+        })
+        .count();
+    assert_eq!(elsewhere, 0, "only `thing` is unstated");
+}

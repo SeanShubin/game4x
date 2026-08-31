@@ -50,8 +50,28 @@ but in whatever runs it: `here` needs to be told where, and `every` does not.
 **Three of the nouns are not things but families.** `work` outputs a `resource` without
 saying which; `ready` readies a `thing` whatever kind it is; `move` moves a `unit`. The table
 quantifies over kinds, so `Kind` is either a leaf or a family and an implementation has to
-know which — `Kind::is_family` says so. Writing the enum out is what made it obvious; reading
-the table it is invisible, because a reader supplies the generality without noticing.
+know which. Writing the enum out is what made it obvious; reading the table it is invisible,
+because a reader supplies the generality without noticing.
+
+**It costs nothing to accommodate, which is the good news.** A family is not a parent class:
+membership is a list, so `unit` is a trait an Ark and a Pioneer both carry, and a
+transformation naming it matches anything carrying it. `FAMILIES` is that list and
+`Kind::covers` is the whole mechanism. That matters because `spec/invariants.md` has every
+kind of thing be data, and a parent class would be the one shape that is not.
+
+**And then the gap turns out to be one noun rather than three.** Two families can be read
+straight off the release — only the Ark and the Pioneer have cells and a move, and the
+resources are the three the biome table has columns for. The third cannot:
+
+> **The release names `thing` and never says what one is.** `ready` — the transformation
+> that puts the whole planet back on its feet every turn — takes `thing, exhausted` and
+> yields `thing, ready`, and nothing anywhere says which kinds can be exhausted. The only
+> kind the release shows exhausted is a citizen, in `spend readiness`.
+
+`FAMILIES` leaves it empty rather than guessing. `crates/game-model` readies extractors,
+garrisons and labor as well — but that is the model's answer, not the release's, and showing
+the difference is what this crate is for. The test asserts the gap and says to delete itself
+when the release fills it, because otherwise nobody would think to come back and look.
 
 ## Why there is a test
 
