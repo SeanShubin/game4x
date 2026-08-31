@@ -239,3 +239,97 @@ compute that for you. **What it does is make it computable**, which is why the s
 ten-line script once the numbers were in a table. Ambiguity it removes; arithmetic it makes
 checkable.
 
+## A transformation is inputs and outputs, and it survives the test
+
+Sean, 2026-08-30: *at the end of the day, a transformation is a set of inputs and a set of outputs...
+perhaps there is also a set of conditions, but even that could be listed as a non-consumed input -
+for example, something that could only be built in a jungle could take jungle as an input without
+consuming the jungle.*
+
+**Non-consumed inputs are the right idea and they get most of the way.** Every requirement in the
+game is a thing that must be present and is not used up: a Pioneer needs a garrison, an Ark needs a
+Yard, a jungle structure needs jungle. All three become inputs with a *consumed* flag set to no, and
+the separate notion of a condition disappears.
+
+**It needs one more column, and only one.** Some conditions are absences: founding requires the
+territory **not** be held, and the predecessor wrote that as `equal-to 0 {citizen}`. An absence
+cannot be an input at any quantity - until an input carries whether its quantity is a **floor or a
+ceiling**. Then *at most 0 garrisons* is an ordinary input row, and the language still has no
+conditions in it.
+
+### Every transformation the game has, in four columns
+
+Written out to see whether it holds rather than to argue that it does:
+
+| Transformation  | Role | Thing           | Qty     | Consumed | Bound       |
+| --------------- | ---- | --------------- | ------- | -------- | ----------- |
+| build yard      | in   | metal           | 15      | yes      | at least    |
+|                 | out  | yard            | 1       |          |             |
+| build extractor | in   | labor           | 1       | yes      | at least    |
+|                 | in   | unworked node   | 1       | no       | at least    |
+|                 | out  | extractor       | 1       |          |             |
+| produce pioneer | in   | metal           | 8       | yes      | at least    |
+|                 | in   | energy          | 6       | yes      | at least    |
+|                 | in   | citizen         | 1       | yes      | at least    |
+|                 | in   | garrison        | 1       | **no**   | at least    |
+|                 | out  | pioneer         | 1       |          |             |
+| produce ark     | in   | metal           | 12      | yes      | at least    |
+|                 | in   | energy          | 12      | yes      | at least    |
+|                 | in   | yard            | 1       | **no**   | at least    |
+|                 | out  | ark             | 1       |          |             |
+| found           | in   | founding unit   | 1       | yes      | at least    |
+|                 | in   | garrison        | 0       | no       | **at most** |
+|                 | out  | garrison        | 1       |          |             |
+|                 | out  | citizen         | 1       |          |             |
+|                 | out  | extractor, food | 1       |          |             |
+| move            | in   | unit, here      | 1       | yes      | at least    |
+|                 | in   | energy cell     | 1       | yes      | at least    |
+|                 | out  | unit, there     | 1       |          |             |
+| work            | in   | labor           | 1       | yes      | at least    |
+|                 | in   | extractor       | 1       | no       | at least    |
+|                 | out  | resource        | density |          |             |
+
+**Seven of the eight commands fit, and the four columns are enough.** *Move* is the one worth
+noticing: it is not special at all - the input is a unit here and the output is a unit there, so
+location is just a trait that differs between the two sides.
+
+### The one that does not fit, and it is honest to say so
+
+**`end turn` is not a transformation of things in a place.** Everything eats, a population grows or
+starves, food expires, and everything becomes ready again - across every territory at once. Inputs
+and outputs describe a *local* exchange, and this is a global sweep.
+
+Two ways to take that. Either **the turn is a different kind of thing** and the language does not
+have to cover it, which is honest and leaves one hand-written rule at the centre of the game. Or
+**the sweep is itself a set of transformations applied everywhere they match**, which would make it
+uniform - and that is exactly what the predecessor's `EveryLandUniverseCommand` and
+`...WherePossible` commands were doing.
+
+### The tension the table exposes: richer state or richer language
+
+`build extractor` above takes an **unworked node** as a non-consumed input. There is no such thing in
+the model - there are nodes, and there are extractors, and *unworked* is the difference between two
+counts. The predecessor needed a comparison for exactly this: `less-than {gatherer resource:food}
+{node resource:food}`.
+
+**So either the language gains comparisons, or the state gains derived kinds.** They are the same
+expressiveness bought in different places:
+
+- **Comparisons in the language** keep the state small and make every transformation potentially
+  arithmetic. The predecessor chose this.
+- **Derived kinds in the state** keep the language to inputs and outputs, which is what makes it
+  tabular - but somebody has to define *unworked node* as a function of nodes and extractors.
+
+**Derived kinds look better here, and the reason is the tabular goal.** A comparison has two operands
+and no natural column; a derived kind is just another row in the thing table. And nothing has to
+maintain it if derived kinds are **computed rather than stored** - they are views, so no
+transformation can leave one inconsistent.
+
+### Turns as an input, when the time comes
+
+Sean: *you could even argue a turn is an input, though we may be able to get away without specifying
+it explicitly until we have something that takes multiple turns to make.* Agreed, and when it
+arrives there are two shapes, worth choosing rather than falling into: an explicit **turn** input, or
+an output that is a **partially built thing** which becomes the next step's input. The second needs
+no new column and makes the work in progress visible and interruptible - which is probably what a
+player wants to see anyway.
