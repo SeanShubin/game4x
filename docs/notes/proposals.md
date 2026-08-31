@@ -94,34 +94,6 @@ Sean's table. `S-3` asks the code lane for the graph and for the smallest change
 territory reachable and an Ark producible, so the choice is between measured options rather than
 guesses.
 
-### P-127 - `show` says what can be done, not only what is true
-
-**to** sean · **status** open · **raised** 2026-08-30 · **kind** recovered · **into**
-`spec/console.md` -> Commands
-
-Playing the first release means typing, and the friction is not the typing. It is that nothing tells
-you what is affordable, so every turn is arithmetic done by hand against the node table.
-
-> - `show <subject>` reports what is true of it and what can be done with it. For each action the
->   rules permit on that subject, it says whether it is possible now, and when it is not, what is
->   missing.
-
-**Basis:** Sean, on wanting to reach the solvability wall by playing rather than by reasoning. The
-subject is his; the wording is this lane's.
-
-**The second half is the valuable one.** *You cannot build a Yard here* is worth little; *you cannot
-build a Yard here: 15 metal, you can raise 12* is the whole answer, and it is what `C-8` took a
-lane's afternoon to discover by hand for twelve territories.
-
-**It is more than a convenience, and this is the reason to take it seriously.** The blocker on
-player-written rules is that **nothing in the specification names a condition** - `spec/console.md`
-says queries exist and names no subject. *What is missing here* is exactly the vocabulary a rule
-needs to ask about, so this is the first naming of it, arrived at from the direction of a player
-wanting to see rather than a language wanting terms. That is the better direction.
-
-**It says nothing about format**, deliberately - which actions are listed, in what order, and how a
-shortfall is phrased are the implementation's. What is required is that the answer be there.
-
 ### P-128 - A surface is never more capable than the console
 
 **to** sean · **status** open · **raised** 2026-08-30 · **kind** recovered · **into**
@@ -317,6 +289,7 @@ work the release exists to order.
 | P-122, a capability for playing the loop through by hand                                                        | `releases/first-release.md` -> Capabilities                                                                            | 2026-08-29 |
 | P-123, neither the biome rule nor the connectivity rule yields                                                  | `spec/planet.md` -> What a territory carries                                                                           | 2026-08-30 |
 | P-125, every structure built everywhere it can be built, and what that means                                    | `spec/control.md` -> Winning                                                                                           | 2026-08-30 |
+| P-127, `show` says what can be done, not only what is true                                                      | `spec/console.md` -> Commands                                                                                          | 2026-08-30 |
 
 ## Rejected
 

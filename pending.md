@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-126** - The twelve territories cannot produce an Ark · `docs/notes/proposals.md`
-- **P-127** - `show` says what can be done, not only what is true · `docs/notes/proposals.md`
 - **P-128** - A surface is never more capable than the console · `docs/notes/proposals.md`
 
 ## What is outstanding
@@ -37,8 +36,8 @@ it exists to ask.
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
+- `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86
-- `spec/console.md` -> Commands - P-76, P-110, P-121
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `releases/first-release.md` -> Units and structures - P-70, P-80
 - `spec/console.md` - P-69, P-82

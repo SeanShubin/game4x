@@ -52,7 +52,9 @@ One command for each way the game state can change:
 
 And three that change nothing:
 
-- `show <subject>` - report game state
+- `show <subject>` reports what is true of it and what can be done with it. For each action the
+  rules permit on that subject, it says whether it is possible now, and when it is not, what is
+  missing.
 - `help [<command>]` - list every command, or give one command's syntax
 - `history` - list every command executed so far, in order
 
