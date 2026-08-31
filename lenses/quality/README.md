@@ -63,6 +63,23 @@ going back to whoever wrote it:
 That last column is the one that keeps a report from becoming a wish list. **Most findings should be
 "noted and not".** A report where everything matters is a report where nothing does.
 
+## A pattern is a claim about the bytes as they are now
+
+Two failures that look alike and are not, both of which cost this lens a wrong conclusion this
+session.
+
+**A match string is a claim about the current bytes.** A table row written before the padder ran, a
+grep for `fn window()` against a signature that had since gained an argument. The remedy is to
+locate by prefix and rebuild rather than match, and to read the file at the moment of matching
+rather than earlier.
+
+**A command answers the question it was given, not the one in mind.** `cargo tree --depth 1` read as
+the tree; `git diff` read as HEAD against the working tree when it compares the index. The remedy is
+different: check what the command scopes or compares *before* drawing anything from it.
+
+The code lane grouped all four as trusting a tool's output. That is right about the cause and blurs
+the remedy - the first family is fixed by when you read, the second by knowing what you ran.
+
 ## Cite the commit, rest the claim on the file
 
 **A closure here names a commit. The claim rests on file state, and must keep resting there.**

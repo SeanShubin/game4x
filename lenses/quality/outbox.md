@@ -82,34 +82,6 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-38 - An outbox goes stale because its filer cannot see it being answered
-
-**to** code · **status** open · **raised** 2026-08-30 · **source** found by the code lane in its own
-outbox, verified here
-
-An item is closed by whoever **filed** it and answered by somebody **else**, and the filer gets no
-signal. `C-1`, `C-2` and `C-3` were settled by the specification lane days before the code lane
-noticed, and sat `open` in `crates/outbox.md` the whole time - so `pending.md` told Sean three
-settled questions were waiting on him. Found only by the code lane checking whether its own file was
-stale, and fixed in `f2eeb83`.
-
-**The signal exists and nothing reads it.** `CLAUDE.md` has producers cite the item id in the commit
-that acts on it, and they do. So `git log` already carries the answer; the outbox and the log simply
-never meet.
-
-**The remedy was specified and not built.** The `Q-14` tool description proposed exactly this and
-marked it optional: parse the log for cited ids and reconcile against what the outboxes claim.
-`tools/outbox` has no `git log` in it. An optional reconciliation is a detector nobody wired to a
-failure, which is the same shape as `Q-37` - and `Q-37` was fixed by making the safe state the
-default rather than by detecting the unsafe one.
-
-This lens has the same exposure and no better defence: it closes its own items only because
-producers message it. Nothing would tell it otherwise.
-
-**Not urgent, and worth saying why it is not:** the cost is Sean's attention on a settled question,
-which is recoverable the moment anyone looks. It is worth doing before a fourth perspective exists,
-because the number of pairs that can go stale grows faster than the number of perspectives.
-
 ---
 
 ## Resolved
@@ -334,6 +306,25 @@ first time. On the question this lens declined to guess at: none of the seven ne
 no test in the workspace constructs `DefaultPlugins`. `game4x`'s 8 tests are now gated too, since
 the exclusion form has no way to leave a crate out without saying so - which is the property that
 makes it the right shape
+
+### Q-38 - An outbox went stale because its filer could not see it being answered
+
+**to** code · **status** **acted** 2026-08-30 · `954c224`. Verified: `tools/outbox` reads the log
+for commits citing an open item, skipping commits that touch the item's own outbox - filing and
+closing being exactly that shape. 18 tests.
+
+**It found a live one before it was finished**: `C-5` and `C-6`, cited by `1d8c46f`, settled while
+the tool to notice was being built.
+
+The design question this lens did not anticipate is the good part. `C-5` was cited, read, and
+correctly stayed open, because the citation answered half of it. Without somewhere to record that,
+the report would name `C-5` on every run forever - **and a signal that always fires is one nobody
+reads, which is the failure it exists to prevent.** So an item may carry `**cited** <hash>`, an
+author saying *I looked, and it stays open*. Poisoned by deleting `C-5`'s.
+
+And it prints rather than refuses, scoped the way `Q-36`'s refusal was: every perspective commits in
+this tree, and failing one lane's commit because another has not closed an item would be the wrong
+perspective paying
 
 ### Q-16 - The picture never sees the biome the model has
 
