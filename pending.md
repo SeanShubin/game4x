@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-134** - The state is things · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## What is outstanding
 
@@ -43,6 +44,7 @@ it exists to ask.
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/interface.md` -> Surfaces - P-73, P-116
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
+- `spec/invariants.md` -> The game is data - P-130, P-134
 - `spec/invariants.md` -> The game is one function - P-75, P-115
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28

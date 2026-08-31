@@ -76,5 +76,11 @@ specific rule.
 - A transformation applies either where it is invoked or everywhere it matches
 - The definitions are part of the game state. Defining one is a transition like any other, so a
   game's history is a complete account of it, including what its rules were
+- A game's state is things, in places, and how many of each. A thing is a set of traits, and one of
+  them names its kind
+- Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
+  reads the state reads it the same way whatever kind it holds
+- A trait may be derived rather than stored, computed from what is there. Nothing can leave a
+  derived trait wrong, because nothing writes one
 
 ## Open questions

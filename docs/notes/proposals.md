@@ -42,53 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-134 - The state is things
-
-**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into**
-`spec/invariants.md` -> The game is data
-
-**Sean's, decided 2026-08-31**, knowing the cost: *yes, we are nuking a working model so I don't have
-to create a new data structure in rust every time I add a new unit.*
-
-> - A game's state is things, in places, and how many of each. A thing is a set of traits, and one of
->   them names its kind
-> - Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
->   reads the state reads it the same way whatever kind it holds
-> - A trait may be derived rather than stored, computed from what is there. Nothing can leave a
->   derived trait wrong, because nothing writes one
-
-**Basis:** `P-130` made the **rules** data and left the **state** as structs, and that combination
-gets neither benefit cleanly. A transformation says *input, metal, 15, consumed* - a kind and a
-quantity - while the state keeps metal in `stores: [u32; 3]`, citizens in `citizens: u32`, yards in
-`yards: u32`, extractors in a `Vec` and a garrison in an `Option`. **Five shapes for what the rules
-call five kinds**, so something has to translate between them, and that something is a match arm per
-kind: `game.rs:444` has one for each `StructureKind`, and `territory.rs:102` converts a resource enum
-into an array index by hand. **Every new kind adds an arm.** That is precisely the per-kind code the
-data-driven decision exists to remove.
-
-**Sean's reason is the one worth recording, because it is about the work that comes next.** *This is
-going to give us consistency that is going to make our user interface way easier to write.* It does,
-and specifically:
-
-- **What is here** is one list of rows rather than five lookups of five shapes.
-- **`P-127`'s `show`** - what can be done here, and what is missing - becomes matching transformations
-  against the rows. One operation, not one per kind.
-- **A rule's condition** under `P-112` is a partial thing, which is the same shape as the state it
-  tests. `Thing.isPartOf` in the predecessor is that, and it shipped.
-
-**So the interface stops needing a rendering path per kind**, which is the thing that makes a 4X
-interface expensive to build and worse to change.
-
-**The third line is what carries `founded`, `unworked` and `surplus`.** Each is a comparison between
-counts that nothing stores - and the reason to say *derived* in the specification rather than leave it
-to an implementation is that a stored copy can disagree with what it describes, and a computed one
-cannot. That is [prevent rather than detect](prevent-detect-bound.md).
-
-**The honest cost, and Sean has accepted it.** *How much metal is here* is a field access today and a
-scan tomorrow; an index beside the multiset is the ordinary answer, and it is a representation
-problem rather than a design one. And this is a rewrite of a model that works, on a release that is
-nearly playable - the timing is his and the item does not argue it.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -309,6 +262,7 @@ work the release exists to order.
 | P-131, units and structures as one table                                                                        | `releases/first-release.md` -> Units and structures                                                                    | 2026-08-31 |
 | P-132, the first release's transformations as one table                                                         | `releases/first-release.md` -> Transformations                                                                         | 2026-08-31 |
 | P-133, which things ready                                                                                       | `releases/first-release.md` -> Units and structures                                                                    | 2026-08-31 |
+| P-134, the state is things                                                                                      | `spec/invariants.md` -> The game is data                                                                               | 2026-08-31 |
 
 ## Rejected
 
