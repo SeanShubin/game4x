@@ -353,6 +353,28 @@ territory (so a territory is one of six) or a property of the boundary between t
 what is permitted or not). A biome already makes the first reading natural, and orbit already makes
 the second one exist - launching crosses between layers rather than moving within one.
 
+### Why the size list stops at five
+
+Sean, 2026-08-30, answering `prototypes/goldberg-view`: *the first 5 goldberg polyhedrons are fine
+as planets... the others after the first 5 all look like planets but the issue isn't really
+appearance, it is the diminishing returns on strategic depth regarding large planet sizes. Two units
+with ranges of 5 or 6 vs 50 or 51 have different gameplay feels.*
+
+**`spec/planet.md` already fixes five sizes and does not say why.** The reason is recorded here so a
+later session does not helpfully propose the sixth: twenty Goldberg counts exist below 500, all of
+them build, and the constraint on stopping is not the geometry or the drawing.
+
+**The argument generalises past range.** Every quantity the game counts in territories - range,
+distance, movement, the reach of a weapon, how far a supply line stretches - is a whole number, and
+one step of it is a fifth of the span on a twelve-territory planet and a fiftieth on a large one.
+**Resolution per step falls as the planet grows**, so the same rule set makes fewer distinguishable
+decisions on a bigger world.
+
+**What would change the answer** is a mechanic whose interest does not scale with the count: several
+players, or terrain that makes some ground expensive to cross, or logistics, where distance buys
+something rather than merely costing. Until then a larger planet is more of the same board rather
+than a deeper one.
+
 ### Automation budgets: unbounded now, measured now, priced later
 
 Sean, 2026-08-29: *"I need to experiment with more freedom than makes sense for a regular player to
