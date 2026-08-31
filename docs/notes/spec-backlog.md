@@ -443,9 +443,44 @@ P-119 plus `run <file>` is close to enough to begin.
 out. **Whether rules-as-text join that release or get one of their own is Sean's call**, and nothing
 here can be built until one of those happens.
 
+### Does every structure cost metal, or can a territory bootstrap?
+
+Sean, 2026-08-30, on his own glossary saying *metal is required to build all structures and units*
+while an Extractor costs one labour and nothing else: *this reveals a design tension I am working
+out, I have to choose between a certain kind of consistency or make sure I can bring extra
+resources.*
+
+**Recorded rather than resolved.** Both sides are real and the choice is his.
+
+**What consistency buys.** One rule - everything built costs metal - is easier to state, easier to
+price, and makes metal genuinely the building resource rather than the resource for the two
+expensive things. A player learns one economy instead of two.
+
+**What it costs, and this is the sharp end.** An Extractor is how a territory turns ground into
+anything at all. If it costs metal, then **a territory with no metal node can never build one** -
+territory 6 would be permanently stuck with the single food extractor founding gives it, unable to
+work its own energy at density 5. The free Extractor is what lets a territory bootstrap from
+nothing, and it is the reason founding hands over an extractor rather than bare ground.
+
+**So the tension is between one economy and self-starting ground**, and *bringing extra resources*
+is the third way out: if metal can arrive from elsewhere, a metal-poor territory can still build,
+and the consistency costs nothing. **That is logistics**, which is cut from this release, so the
+choice is only forced while nothing crosses a boundary.
+
+**Worth deciding with `P-126` rather than after it.** Storage changes what a territory can afford
+over time but not what it can ever obtain: with stores carrying, territory 6 accumulates energy for
+ever and still has no metal. So storage answers the *lumpy demand* half and leaves this one exactly
+where it was.
+
 ### Storage, spoilage and decay
 
 Stated by Sean on 2026-08-26, all as later work:
+> **The schedule moved, 2026-08-30.** Sean: *I am anticipating having to add storage a bit earlier
+> than originally planned to make the scenario winnable.* Measuring it confirms the reason - with
+> metal and energy carrying, the first release becomes winnable with its node table untouched, which
+> is `P-126`. What that proposal takes is only the carrying; storage **structures** and a capacity
+> ceiling stay here.
+
 
 - **Storage facilities for energy and metal**, while food spoils initially
 - **Later technology lets food last longer**
