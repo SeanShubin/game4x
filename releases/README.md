@@ -37,6 +37,12 @@ Every capability carries a **vetted when** line: the observable thing that has t
 "The planet renders" is not vetting. "A tiny planet renders, every region is clickable, and
 the greatest distance between two regions reads 3" is.
 
+This is the **feature** case of a general rule - work is verified by the thing that would be
+false if it had not been done - and it is the case whose observer is a person. The other two are
+in [CLAUDE.md](../CLAUDE.md), under *What done means*: a quality improvement is verified by a
+test that would have failed before it, and research by a recorded answer to a stated question.
+Only this one reaches Sean, which is why a capability changes hands at `built`.
+
 When every capability in a release is vetted:
 
 1. Check that anything learned along the way has reached the spec or

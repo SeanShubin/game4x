@@ -208,6 +208,41 @@ filing everything it notices costs the whole system attention even when every it
 one number in this file is the limit on the open-proposal queue, below, and it counts that queue
 and nothing else.
 
+## What done means
+
+**Everything is verified by the thing that would be false if the work had not been done.** What
+differs is who can observe that thing, and only one of the three is a person - which is why only one
+of the three ever reaches Sean.
+
+| Kind of work          | Verified by                             | Observed by  |
+| --------------------- | --------------------------------------- | ------------ |
+| A feature             | an observation of the running game      | **a person** |
+| A quality improvement | a test that would have failed before it | the gate     |
+| Research              | a recorded answer to a stated question  | the index    |
+
+**A feature's evidence is a *vetted when* line** in a release: the observable thing that has to be
+true. It moves `open` to `built` to `vetted`, and changes hands at `built`, because the code lane
+may build a thing and may not certify it.
+
+**A quality improvement's evidence is a check that did not exist before.** Passing tests prove
+nothing here - they passed beforehand too. `Q-8` is the pattern: one test comparing the two
+derivations at every planet size, and a second demonstrating that the old path diverged under jitter
+while every other test in the repository went on passing. **The second test is the verification.**
+So a refactor with no new check is not done, it is *unverified*, and says so rather than closing
+quietly. `Q-1` is correctly still open for exactly this reason - the copy that could not be checked
+was not deleted, because deleting blind proves nothing either way.
+
+**Research's evidence is the answer, written where it will be found.**
+[`docs/prototypes/README.md`](docs/prototypes/README.md) already says it for prototypes - *that
+answer is the deliverable; the code is a byproduct* - and it generalises: the question is stated, the
+answer is recorded, and the document is reachable by links from the root README, which
+[`docs/README.md`](docs/README.md) makes the test of existing at all. **Research with no recorded
+answer is unfinished**, however much was built. `prototypes/goldberg-view` currently reads *the
+answer: not yet recorded*, which makes it an unfinished task wearing a finished one's clothes.
+
+**Research never reaches Sean as research.** If its answer implies a decision it becomes a proposal;
+otherwise it is recorded and findable, and that is the whole of done.
+
 ## The cycle
 
 1. **Sean says something.** The specification lane records it in `docs/notes/spec-backlog.md`. Only
