@@ -72,6 +72,11 @@ invented one**, and the file being relayed about is the one that says who may wr
 policy, set 2026-08-30, after a lens relayed three approvals for this file and this lane declined
 all three until Sean said so himself. Two of the three changed on the way in.
 
+**The line is checkability, not trust.** A relayed fact - *this document exists, these two ids are
+open to you* - can be verified by whoever receives it, in seconds. A relayed approval cannot be
+verified at all, which is why one travels freely and the other does not. **Facts relay; authority
+does not.**
+
 **What needs his approval is what this file says about who may write what** - the columns, the
 addresses, and the promotion protocol. Wording, paths, broken links and consistency inside those
 rules are the specification lane's to settle and report. Sean, 2026-08-30: he keeps executive
