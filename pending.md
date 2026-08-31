@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-126** - Metal and energy carry between turns; food does not · `docs/notes/proposals.md`
-- **P-129** - A territory holds only so much of each kind of thing · `docs/notes/proposals.md`
 
 ## What is outstanding
 
