@@ -90,15 +90,22 @@ unusable metal into usable metal is doing work.
 
 A container takes some top-level capacity and provides more inside. **If a container may hold a
 container, capacity is infinite** - one crate provides room for ten crates, each providing room for
-ten more. The precise rules Sean wants are exactly the ones that stop that, and there are three:
+ten more.
 
-- **Containers hold resources, never containers.** Depth one, and it terminates by construction.
-- **Bounded nesting depth.** More expressive, one number to tune.
-- **Diminishing capacity with depth.** Most flexible, hardest to reason about.
+**Sean's rule, 2026-08-30: a thing cannot be nested inside itself.** No depth number, which is
+right - a chosen depth is a number nobody can justify, and this one is derived.
 
-**The first is the same shape as the rule language's termination argument** - `P-117`'s third
-construction makes rule references acyclic so nothing can recurse. Containment is another graph that
-must not close on itself, and the cheapest answer is again structural rather than a check at runtime.
+**It has to mean transitively, and the difference is the whole rule.** Read as *a crate may not sit
+directly inside a crate*, it does not terminate: a crate holds barrels, a barrel holds crates, and
+alternating the two nests for ever. Read as **no type appears twice anywhere on a containment path**,
+it does terminate, and the bound falls out rather than being picked - **the deepest possible nesting
+is the number of container types there are.**
+
+**This is the third time today the same argument has settled a termination question.** `P-117`'s
+third construction makes rule references acyclic; the trigger for re-reading a section is about a
+graph closing on itself; and here the *type* containment graph must be acyclic, which bounds the
+*instance* nesting. Worth noticing as a pattern: this project's finiteness arguments keep turning out
+to be *some graph is a DAG*, checked when the thing is built rather than while it runs.
 
 ### And it collides with an invariant, head on
 
@@ -109,19 +116,22 @@ has to be removed to make room for something else.*
 territory with Yards and the next container needs one torn down. That invariant is not a preference -
 it is one of the oldest lines in the specification and other rules lean on it.
 
-Three ways out, and the choice is Sean's:
+**Sean chose capacity per category, 2026-08-30** - so much for structures, so much for stores, so
+much for units. Building never crowds out building, so the invariant stands untouched and nothing has
+to be demolished to make room.
 
-- **Structures do not consume capacity; only loose resources and units do.** Keeps the invariant
-  untouched and makes a container purely a giver. The oddity is a Yard occupying no room in a world
-  where a crate does.
-- **Capacity is per category** - so much for structures, so much for stores, so much for units - so
-  building never crowds out building. Keeps the invariant, costs the single clean rule.
-- **The invariant narrows** to say infrastructure costs nothing *to keep*, dropping the promise about
-  room. Cheapest to write and the likeliest to be regretted, since never having to demolish is a
-  large part of what makes the game unfussy.
+What it costs is the single clean rule: *a territory holds only so much matter* becomes *a territory
+holds only so much of each kind of thing*, and the categories are now something the design has to
+name and defend. The two rejected answers are recorded so they are not re-proposed: exempting
+structures entirely, which leaves a Yard occupying no room in a world where a crate does; and
+narrowing the invariant to costs-nothing-*to-keep*, which was cheapest to write and would have given
+up the thing that makes this game unfussy.
 
-**Worth settling before the mechanic is designed further**, because the first two change what a
-container is and the third changes what the game is.
+**It also answers `P-126`'s open fork**, or comes very close to it. That proposal asks whether a
+territory has a bound of its own or gets one only from a structure. If capacity is per category then
+the store category has a bound before any container exists - otherwise nothing could be stored at
+all, and a container would have nowhere to stand. So the answer is **a base the territory has, which
+containers raise**, and the winnability measurement in `P-126` holds.
 
 ## Rust as the engine, data as the game
 
@@ -198,3 +208,28 @@ whether the game is one game or a family of them.
 
 **Nothing needs deciding until transformations are written.** It is recorded here because it will be
 easier to answer before there is code than after.
+
+## Why this is worth the trouble, in Sean's words
+
+*One value of expressing everything as either a bag of traits or a transformation is that I expect I
+can specify ALL units with precision, in a way that I can keep in my head as a human, while at the
+same time gives you an unambiguous specification. It is a way we could remove a good portion of the
+typical human/AI-assistant miscommunication.*
+
+**That is the strongest argument for the whole idea and it is not about the game.** A prose rule can
+be read two ways by a careful reader, and the second reading is discovered by building it. A trait
+map cannot: `{yard metal=15}` has one meaning.
+
+**Today produced the evidence twice over.** `P-125` exists because *every structure that can be
+built* read one way to the specification lane and another to the code lane, and the game was built to
+the second - the qualifier that decides whether the release is winnable was doing nothing, and nobody
+noticed for two days. Written as a transformation with its conditions named, the ambiguity has
+nowhere to hide, because *can be built* would have had to be a clause with a definition.
+
+**It does not remove the second kind of failure and should not be sold as though it did.** `C-8` was
+not an ambiguity - every number was clear and their consequence was not, and it took an afternoon of
+arithmetic to find that only one territory could produce an Ark. A formal specification does not
+compute that for you. **What it does is make it computable**, which is why the same result took a
+ten-line script once the numbers were in a table. Ambiguity it removes; arithmetic it makes
+checkable.
+

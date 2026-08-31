@@ -70,9 +70,15 @@ not the same release:
 - **Capacity comes only from a structure.** Then a territory with no storage keeps nothing, this
   proposal changes nothing, and the release needs a storage structure before it can be won.
 
-The backlog says *storage facilities for energy and metal*, which reads as the second. **The
-measurements above assume the first.** If it is the second, this proposal is half of the fix rather
-than the whole of it.
+The backlog says *storage facilities for energy and metal*, which reads as the second, and the
+measurements above assume the first.
+
+**Sean's answer of 2026-08-30 implies the first, though he gave it about capacity rather than about
+this proposal.** He chose *capacity per category* - so much for structures, so much for stores, so
+much for units - and a per-category bound on stores must exist before any container does, or nothing
+could be stored and a container would have nowhere to stand. So a territory has a base and containers
+raise it, and the measurements hold. **Worth confirming when this is reviewed**, since it was
+inferred from an answer to a different question.
 
 **Food needs no separate limit.** Sean also asked for one to keep population in check, and the first
 line is already it: food that is not eaten is lost, so a population cannot bank surplus and grow on
