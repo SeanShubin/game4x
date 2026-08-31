@@ -33,6 +33,56 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-8 - No Ark can ever be produced, so the loop cannot reach its last two steps
+
+**to** spec · **status** open · **raised** 2026-08-30 · **source** building the `R-6` play-through
+
+Independent of `C-7` and worse. `P-125` narrows what *fully exploited* means; this says the win is
+out of reach whatever it means, because **an Ark cannot be built anywhere a Yard can be built.**
+
+An Ark costs 12 metal and 12 energy and needs a Yard. A Yard costs 15 metal. Both are paid from one
+territory's store in a single turn, because `settle` discards every store at the end of every turn.
+A territory's output in a turn is bounded by its own node densities and by how many hands its own
+food can feed:
+
+| Territory | Yard, 15 metal | Ark, 12 metal and 12 energy | Reachable |
+| --------- | -------------- | --------------------------- | --------- |
+| 1         | no, tops at 12 | yes                         | start     |
+| 7         | yes            | no - it has no energy       | yes       |
+| 9         | yes            | no - energy tops at 2       | yes       |
+| 11        | yes            | yes                         | **no**    |
+| 12        | yes            | no - two spare hands        | **no**    |
+
+**Territory 11 is the only place an Ark could be produced, and it can never be claimed.**
+
+A pioneer costs 8 metal, 6 energy and a citizen, in one turn, and must found the territory it
+enters. Only 1, 2, 3, 11 and 12 can afford one - 4 and 5 can never build the extractors they would
+need, 6 has no metal, 7 has no energy, and 8, 9 and 10 are short of one or the other. Spreading
+outward from the landing site along those five reaches **1, 2, 3, 4, 5, 6, 7, 8, 9 and stops**.
+
+`11` and `12` neighbour only each other among the territories that could send a pioneer, so each
+waits on the other and neither is ever founded. `10` neighbours 4, 6, 8, 11 and 12, none of which
+can send one. Three territories are unclaimable, and the one place an Ark could be built is among
+them.
+
+So the loop stops at step 6. Steps 7 and 8 - *produce an Ark*, *launch the Ark into orbit* - have no
+reachable state in which they are legal.
+
+**How this was produced, so it can be re-run rather than trusted.** The node densities are read from
+`commands/nodes.4x`; the adjacency is `sphere_tessellation::adjacency` over
+`icosahedral::canonical_seeds(12)`, which is what `create planet tiny` builds. For each territory,
+the most of a resource it can hold at once is the best choice of how many food extractors to work -
+population settles at the food produced, and the hands left over work the densest remaining nodes.
+Then the reachable set is the closure of the landing site under *can afford a pioneer*. Nine of
+twelve.
+
+The two facts it rests on are checkable without any of that: **territory 6 has no metal node**, and
+**territory 7 has no energy node**, both from the release's own table.
+
+Not this lane's to settle. It is the release's numbers against the release's loop, and every way out
+changes something Sean chose - the node table, the costs, whether stores carry between turns, or
+whether anything may cross a border.
+
 ### C-7 - `R-6` cannot be vetted: eight of the twelve territories can never hold a Yard
 
 **to** spec · **status** open · **raised** 2026-08-30 · **source** starting `R-6`

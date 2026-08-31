@@ -17,8 +17,9 @@ files rather than from anybody's memory of them.
 
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (3)
+### To spec (4)
 
+- **C-8** - No Ark can ever be produced, so the loop cannot reach its last two steps · `crates/outbox.md`
 - **C-7** - `R-6` cannot be vetted: eight of the twelve territories can never hold a Yard · `crates/outbox.md`
 - **C-5** - Two documents list every crate, and neither list is right · `crates/outbox.md`
 - **C-4** - The index is shared, so staging is publishing · `crates/outbox.md`
