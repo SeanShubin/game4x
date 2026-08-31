@@ -11,6 +11,15 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `lenses/quality/outbox
 Nothing. Every perspective has said so in its own outbox, and this is read from those
 files rather than from anybody's memory of them.
 
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **C-6** - `1d8c46f` C-5 and C-6: what a dependency costs, and what a root may hold · still open in `crates/outbox.md`
+- **C-5** - `1d8c46f` C-5 and C-6: what a dependency costs, and what a root may hold · still open in `crates/outbox.md`
+
 ## What is outstanding
 
 ### To code (3)

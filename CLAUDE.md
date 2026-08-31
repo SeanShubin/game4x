@@ -28,6 +28,12 @@ Four tiers, and the boundary is the directory it lives in.
 
 ## Perspectives
 
+**[`docs/process.md`](docs/process.md) is Sean's statement of what this process is for.** This file is
+the operating detail and must not contradict it. Where the two disagree, raise it rather than picking
+a winner - a difference may mean this file has drifted, or may mean it learned something that
+document has not caught up with, and which is later is Sean's to say.
+
+
 Several Claude instances work in this repository at once. **Two of them produce; the rest look.**
 
 **The producers** own what ships. `spec/` is the destination and `crates/` is the artifact, and each
@@ -86,9 +92,12 @@ the very files being judged - and a review that alters its subject is no longer 
 
 Four things the perspectives make necessary, all of which have teeth:
 
-- **Stage by name, never `git add -A`.** Another perspective's work is often uncommitted in the same
-  tree. `-A` sweeps it into your commit, and two of them then share a history entry that describes
-  half of it.
+- **Stage by name, never `git add -A`, and know that staging is publishing.** `git add` writes to an
+  index all three perspectives share, and `git commit` commits the index rather than the caller's
+  changes - so a file you stage is committed by whoever commits next, under a message about
+  something else. This is not a caution about your own carefulness; the hazard is someone else. It
+  has happened: one perspective staged a file, lost a race for `.git/index.lock`, and twenty-six
+  lines of its work landed in another's commit, touching a file outside that one's column.
 - **`hooks/pre-push` runs the full gate** - `cargo fmt`, clippy and the test suite across every
   crate. A documentation-only or report-only push is therefore gated on code that perspective did
   not write and must not repair. If it fails for that reason, **say so and stop**; whether to

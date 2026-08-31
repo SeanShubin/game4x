@@ -30,6 +30,7 @@ releases/
   first-release.md ................ one tiny planet, colonize through to launching a colonizer
 docs/
   README.md ....................... this file: the map and the rules
+  process.md ...................... how Sean runs several instances, and what he requires of them
   vision.md ....................... what the game is and what it must not become
   architecture.md ................. module boundaries and dependency rules
   layers.md ....................... old world + events -> new world, and what that demands
