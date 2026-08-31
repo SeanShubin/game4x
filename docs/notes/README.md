@@ -22,6 +22,7 @@ disagree, the spec is right and the note needs a superseded marker.
 | [Generating a planet, designing a territory](generating-versus-designing.md) | Distribution without placement, and why a scenario is not a world                                | 2026-08-28 |
 | [Spec proposals](proposals.md)                                               | Lines offered for Sean's review, labelled by what kind of inference produced them                | open       |
 | [Clumping at in-between counts](in-between-counts.md)                        | Why non-Goldberg region counts get extra pentagons, and what does not fix it                     | 2026-08-26 |
+| [Everything is matter, and Rust is the engine](everything-is-matter.md)      | Conservation collapsing three limits into one, and data-defined units                            | 2026-08-30 |
 | [The game-4x predecessor](game-4x-predecessor.md)                            | What the superseded Kotlin project contained, and the mechanics worth keeping                    | 2026-08-25 |
 | [Parser and assembler architecture](parser-architecture.md)                  | How the predecessor's parser separates generic from game-specific, and where it is weak          | 2026-08-25 |
 | [Spec backlog](spec-backlog.md)                                              | Design intent Sean has stated but not yet written into the spec                                  | 2026-08-25 |

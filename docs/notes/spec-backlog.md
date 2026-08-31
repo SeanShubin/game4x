@@ -443,6 +443,33 @@ P-119 plus `run <file>` is close to enough to begin.
 out. **Whether rules-as-text join that release or get one of their own is Sean's call**, and nothing
 here can be built until one of those happens.
 
+### Conservation, and units defined as data
+
+Sean, 2026-08-30: *perhaps a pioneer is actually just a personnel transport made of metal that stores
+fuel so it can move. However it could be stripped down for parts in order to be consumed in
+transformation formulas.* And: *I am leaning towards a more data driven game where the units and
+transformations are simply data inputs to rust, and rust is providing a statically typed engine to
+run and validate the data.*
+
+**Leaning, not decided**, so it sits here rather than in the queue. The working-out is in
+[everything is matter](everything-is-matter.md); three things from it are worth having where the
+schedule is read.
+
+**Conservation collapses three limits into one.** Sean has asked for a bound on stored resources, a
+bound on units *for the same reason*, and storage structures with capacity. If a unit **is** the
+metal it was made from and so is a structure, all three become *a territory holds only so much
+matter, and everything in it is matter* - which closes the finiteness question outright rather than
+per category.
+
+**It bears on `P-126`'s open fork.** That proposal asks what sets a territory's bound, and offers a
+default the territory has against capacity that only a structure grants. Under conservation the
+first is the natural answer, because a territory must already hold the matter of anything standing
+on it before any storage is built.
+
+**Only metal can be conserved.** Energy is spent moving and food is eaten; metal is the one resource
+that is still a thing after it is used. That happens to match `P-126`'s carry/spoil split, arrived at
+from a different direction, and the two should not be allowed to drift apart.
+
 ### Two shapes of logistics, and they are not the same game
 
 Sean, 2026-08-30: *the logistics I had planned involved being able to use resources from adjacent
