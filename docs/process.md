@@ -14,6 +14,7 @@
   was approved and where it landed. That ledger is what stops the same idea being proposed
   again a month later
 - The main documents I consume as a human are
+  - `pending.md`, which is where I start: what must be decided, then what is outstanding
   - the proposals, where I either approve them or tell claude what to change
   - the specification, especially the invariants
 - a proposal is not done until it is committed, and Claude commits it without being asked
@@ -80,8 +81,12 @@
   instance has to read
 - The specification instance's outbox is the proposal queue
 - Every item carries an id, who it is addressed to, a status, and one line saying what it is
-- `scripts/outbox.ps1 --to sean` tells me what is waiting on me. With no argument it lists everything
-  open, grouped by who owns it
+- `pending.md` is the one place I go to see what is outstanding. I open the file rather than run a
+  command - a command I have to remember is weaker than a document I open
+- It is generated from every outbox at every commit, so it is never something somebody remembered
+  to update, and it says what must be decided before it says anything else
+- `scripts/outbox.ps1` answers the same question from a terminal, and filters by who an item is
+  addressed to. That is mostly for the instances rather than for me
 - If nothing anywhere is open and addressed, then nothing any instance knows to be wrong is
   unattended. That is a promise about the outboxes, not about the code
 - A contradiction goes into an outbox the moment it is found - never a paragraph in a reply, and
