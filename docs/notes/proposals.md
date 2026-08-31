@@ -42,6 +42,47 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-135 - Nothing wins by being first
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into**
+`spec/turn.md` -> Order of operations
+
+**Sean's, decided 2026-08-31**, choosing gather-resolve-apply over sequential evaluation.
+
+> - Where several things could act and not all of them may, what each would do is gathered first and
+>   resolved together. Being considered first is no advantage
+> - A tie is settled by something the game already knows, never by the order in which things were
+>   examined
+
+**Basis:** this is a rule about the game and not about the engine, which is why it is here rather than
+in `docs/`. *First mover wins* and *resolve over the whole set* produce **different outcomes** from
+the same state, so it decides what happens rather than how it is computed.
+
+**`docs/layers.md` section 5.3 already sets it out** and names the cases: two armies claiming one
+region, several cities drawing on one stockpile, several attacks on one target. Its instruction is
+the sentence worth keeping - *stop asking what happens next and start asking what is true of the
+whole set.* What that document could not do is make it a rule of the game; that is this.
+
+**It is not only about automation.** Ending a turn already has the shape: when food is short and
+several citizens eat, which ones starve is an allocation over a set, not a race. So the rule bites on
+a release that exists rather than on one that does not.
+
+**The second line is what makes the first deterministic.** A resolve step has to choose without
+asking who went first, so the tie-break must come from the data - `docs/architecture.md` rule 9 asks
+for exactly this of the model, and this asks it of the game.
+
+**What it buys the rules Sean is about to write**, which is why he chose it now rather than later. A
+sequential world needs every creating rule to count what others have already committed; this one does
+not, because the resolve step holds the coordination. *I am beside unclaimed ground and propose a
+pioneer aimed at `X`* is the whole rule, and at most one proposal per target survives. **Deferring it
+means writing that counting into the first rules and taking it out again.**
+
+**Two things it deliberately does not say.** Which tie-break - Sean's *territories resolve in the
+order they were claimed* and *breadth-first from north, clockwise* are defaults, and by `P-113` a
+default is a rule some person wrote, visible and changeable, so it belongs in the rule data rather
+than in the specification. And nothing about parallelism: gathering may be done all at once or one at
+a time, and the rule is the same either way, which is the point of it.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
