@@ -141,6 +141,12 @@ him. Accepted deliberately, in exchange for one place to look. **What is not neg
 proposal queue keeps its `to sean` address**, because `tools/outbox` cannot see an item that has no
 `to` field, and the queue is the one outbox that must never be invisible.
 
+**Instances can message each other, and a message is never the record.** The sessions are named
+`4x spec`, `4x code` and `4x quality`, and `SendMessage` reaches one by that name. A message only
+arrives if the other instance is running, so it can make a handoff prompt and can never be the thing
+a decision rests on. **Write it in an outbox first, then say so in a message if the other one is
+awake.** An approval for `CLAUDE.md` is the one thing a message may not carry at all - see above.
+
 **`to` is the field that does the work.** It turns every instance's reading list from a directory
 sweep into a query, which is what keeps an instance focused on its own purpose.
 
