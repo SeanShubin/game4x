@@ -104,7 +104,15 @@ fn released_table() -> BTreeMap<u32, Vec<(Resource, u32, u32)>> {
 /// that are meant to move. When P-80 halved three of them, the only thing standing between
 /// a retuned document and a model that quietly disagreed with it was a test that reads
 /// both. This is that test's other half.
-fn released_cost(heading: &str) -> Vec<(u32, String)> {
+/// What the release says a thing costs to produce, read off the table at test time.
+///
+/// It used to read `- cost to produce:` under a `### Create Pioneer` heading. `P-130`
+/// replaced those headings with one **Units and structures** table, and this went looking
+/// for a heading that no longer exists - which is the failure a test that reads a document
+/// is for. The document moved and said so.
+///
+/// The thing is named as the table names it: `pioneer`, not `Create Pioneer`.
+fn released_cost(thing: &str) -> Vec<(u32, String)> {
     let text = std::fs::read_to_string(
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
     )
@@ -113,31 +121,43 @@ fn released_cost(heading: &str) -> Vec<(u32, String)> {
     let mut inside = false;
     for line in text.lines() {
         let line = line.trim();
-        if line.starts_with("###") {
-            inside = line.trim_start_matches('#').trim() == heading;
+        if line.starts_with("## ") {
+            if inside {
+                break;
+            }
+            inside = line == "## Units and structures";
             continue;
         }
-        if !inside || !line.starts_with("- cost to produce:") {
+        if !inside || !line.starts_with("| **") {
             continue;
         }
-        return line
-            .trim_start_matches("- cost to produce:")
+        let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
+        // | Thing | Force | Cells | A move | Upkeep | Costs to produce | Requires |
+        let Some(name) = cells.first().map(|cell| cell.trim_matches('*')) else {
+            continue;
+        };
+        if name != thing {
+            continue;
+        }
+        let Some(costs) = cells.get(5) else { continue };
+        return costs
             .split(',')
-            .map(|part| {
+            .filter_map(|part| {
                 let mut words = part.split_whitespace();
-                let amount: u32 = words.next().expect("an amount").parse().expect("a number");
-                (amount, words.next().expect("a thing").to_string())
+                // "and nothing else" carries no figure, and neither does "not produced".
+                let amount: u32 = words.next()?.parse().ok()?;
+                Some((amount, words.next()?.to_string()))
             })
             .collect();
     }
-    panic!("no cost under `{heading}` in the release");
+    panic!("no row for `{thing}` in the release's units table");
 }
 
-fn cost_of(heading: &str, what: &str) -> u32 {
-    released_cost(heading)
+fn cost_of(thing: &str, what: &str) -> u32 {
+    released_cost(thing)
         .into_iter()
         .find(|(_, thing)| thing == what)
-        .unwrap_or_else(|| panic!("`{heading}` has no {what} cost"))
+        .unwrap_or_else(|| panic!("`{thing}` has no {what} cost"))
         .0
 }
 
@@ -274,12 +294,12 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
 fn the_costs_in_the_model_are_the_costs_in_the_release() {
     use game_model::game::cost;
 
-    assert_eq!(cost_of("Create Pioneer", "metal"), cost::PIONEER_METAL);
-    assert_eq!(cost_of("Create Pioneer", "energy"), cost::PIONEER_ENERGY);
-    assert_eq!(cost_of("Create Pioneer", "citizen"), cost::PIONEER_CITIZENS);
-    assert_eq!(cost_of("Create Ark", "metal"), cost::ARK_METAL);
-    assert_eq!(cost_of("Create Ark", "energy"), cost::ARK_ENERGY);
-    assert_eq!(cost_of("Yard", "metal"), cost::YARD_METAL);
+    assert_eq!(cost_of("pioneer", "metal"), cost::PIONEER_METAL);
+    assert_eq!(cost_of("pioneer", "energy"), cost::PIONEER_ENERGY);
+    assert_eq!(cost_of("pioneer", "citizen"), cost::PIONEER_CITIZENS);
+    assert_eq!(cost_of("ark", "metal"), cost::ARK_METAL);
+    assert_eq!(cost_of("ark", "energy"), cost::ARK_ENERGY);
+    assert_eq!(cost_of("yard", "metal"), cost::YARD_METAL);
 }
 
 /// The landing site can now send a Pioneer out, and that is what opens the loop.
@@ -304,7 +324,7 @@ fn the_landing_site_can_send_a_pioneer_out() {
     };
     assert_eq!(ceiling, 12, "three metal nodes at density four");
     assert!(
-        cost_of("Create Pioneer", "metal") <= ceiling,
+        cost_of("pioneer", "metal") <= ceiling,
         "a pioneer must be affordable within one turn's extraction"
     );
 

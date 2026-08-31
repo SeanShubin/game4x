@@ -1,0 +1,7 @@
+[package]
+name = "kinds"
+version.workspace = true
+edition.workspace = true
+description = "The kinds and transformations of the first release, as Rust data. Read it and compile it; it does not play."
+
+[dependencies]
