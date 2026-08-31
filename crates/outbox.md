@@ -33,6 +33,53 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-7 - `R-6` cannot be vetted: the planet contains a territory that can never be exploited
+
+**to** spec · **status** open · **raised** 2026-08-30 · **source** starting `R-6`
+
+`R-6` is vetted when a person reaches *a fully exploited planet* and launches an Ark. `game-model`
+asks `is_fully_exploited`: every claimable territory founded, holding at least one yard, with an
+extractor on every one of its nodes. **Territory 5 can never satisfy that, and it was designed not
+to.**
+
+Its nodes are food `3 x 1`, metal `8 x 8`, energy `8 x 8` - nineteen nodes, and a yard costs 15
+metal. Founding gives it one citizen and one food extractor, and one citizen is one labor a turn:
+
+- **Work the food extractor.** One food, one citizen. `population_after(1, 1)` is `1`. Stable
+  forever, and the labor is spent.
+- **Build anything instead.** No food that turn. `population_after(1, 0)` is `0`. The citizen dies
+  and the territory is empty.
+
+Nothing else reaches it. Stores are discarded at the end of every turn, so no other territory can
+save up for it. There is no transition that moves a resource or a citizen between territories. A
+pioneer entering a territory you control perishes, and `found` refuses an `AlreadyControlled` one,
+so it cannot be reinforced. It is stuck at one of nineteen nodes and no yard, permanently.
+
+And `is_fully_exploited` requires *every claimable* territory, so not founding it does not help: an
+unfounded territory fails the same test. `commands/biomes.4x` gives it mountain, and none of the
+twelve is ocean.
+
+**This is the release disagreeing with itself, not a defect in the code.** The territory table says
+5 exercises *food density 1*, and `commands/biomes.4x` says it exists so that *a territory which can
+never build anything is demonstrated deliberately rather than produced by accident*. That is a good
+thing to demonstrate. It cannot coexist with a win condition that requires every claimable territory
+to be fully exploited.
+
+Four ways out, and choosing is not this lane's:
+
+- **Narrow what fully exploited means** - every territory that *can* be, rather than every one.
+  Then 5 demonstrates its lesson and the planet can still be finished.
+- **Give 5 one food node of density 2**, keeping the lesson that it cannot build much while letting
+  it build at all.
+- **Let something cross a border** - a resource, or a citizen - which is a new rule and a bigger
+  change than it looks.
+- **Change `R-6`'s vetted-when** to a loop that ends somewhere reachable.
+
+**Proceeding under the first reading** - that the demonstration is deliberate and the win condition
+is what should give - because it is the only one that changes no number Sean chose. The play-through
+is being built to exploit every territory that can be, which is the same work under any of the four,
+and it stops one territory short of the win until this is settled.
+
 ### C-5 - Two documents list every crate, and neither list is right
 
 **to** spec · **status** open · **raised** 2026-08-30 · **cited** `1d8c46f`

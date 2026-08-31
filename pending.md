@@ -22,8 +22,9 @@ files rather than from anybody's memory of them.
 - **R-5** - Terrain resolved as finely as it is shown · `releases/first-release.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (2)
+### To spec (3)
 
+- **C-7** - `R-6` cannot be vetted: the planet contains a territory that can never be exploited · `crates/outbox.md`
 - **C-5** - Two documents list every crate, and neither list is right · `crates/outbox.md`
 - **C-4** - The index is shared, so staging is publishing · `crates/outbox.md`
 
