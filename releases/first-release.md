@@ -132,14 +132,15 @@ Each capability is an item in the same shape every outbox uses, so it appears in
 - **`built`, addressed `to sean`** - the code lane says it is done, and nobody has looked
 - **`vetted`** - a person has observed the *vetted when* line and it held
 
-**The code lane does not mark its own vetted**, which is the same shape as a lens never editing what
-it reviews. It sets `built` and hands over. **Five of the six below are vetted by a person looking**,
+**The code lane does not mark its own.** It reports the evidence and this lane records it, which is
+what `docs/process.md` requires in Sean's own words - *so that the account of what has been
+delivered is not kept by whoever built it*. It touches neither `built` nor `vetted`. **Five of the six below are vetted by a person looking**,
 at a drawing or at a whole game played through, so `built` is where they will wait and Sean is the
 only one who can move them.
 
 ### R-1 - Two drawings
 
-**to** code · **status** open
+**to** sean · **status** **built** 2026-08-30 · **evidence** both drawings exist and are photographed; ids on the practical one only, poles marked, camera shared
 
 - **In** - `spec/planet.md`, *the planet is drawn either practically or realistically, and the
   user can change which*
@@ -148,7 +149,7 @@ only one who can move them.
 
 ### R-2 - Terrain that crosses boundaries
 
-**to** code · **status** open
+**to** sean · **status** **built** 2026-08-30 · **evidence** one continuous field sampled per point; coastlines cross territory boundaries in the photograph
 
 - **In** - `spec/planet.md`, *the terrain of the realistic drawing is continuous*
 - **Vetted when** - no line visible in the realistic drawing coincides with a territory boundary,
@@ -156,7 +157,7 @@ only one who can move them.
 
 ### R-3 - A division that cannot be seen
 
-**to** code · **status** open
+**to** sean · **status** **built** 2026-08-30 · **evidence** no seam and no boundary in the realistic drawing; `Drawn.labels` is zero there
 
 - **In** - `spec/planet.md`, *nothing in the terrain reveals how the sphere was divided*
 - **Vetted when** - a person who has not seen the tessellation is shown the realistic drawing and
@@ -164,7 +165,7 @@ only one who can move them.
 
 ### R-4 - A biome per territory
 
-**to** code · **status** open
+**to** sean · **status** **built** 2026-08-30 · **evidence** `biomes_of` gives every territory one, and `join_the_land` keeps land connected
 
 - **In** - `spec/planet.md`, *each territory has a biome*, and *a territory's biome is what the
   terrain gives it*
@@ -173,7 +174,7 @@ only one who can move them.
 
 ### R-5 - Terrain resolved as finely as it is shown
 
-**to** code · **status** open
+**to** sean · **status** **built** 2026-08-30 · **evidence** 400,000 sub-triangles, blended in parameter space
 
 - **In** - `spec/planet.md`, *nothing of how a drawing is made is visible in it*
 - **Vetted when** - at the default camera, no facet, band or flat wash betrays how the surface was
@@ -181,7 +182,7 @@ only one who can move them.
 
 ### R-6 - The loop can be played through
 
-**to** code · **status** open
+**to** code · **status** open · **cited** `faafb5f` · blocked by `C-7`, see `P-125`
 
 - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
 - **Vetted when** - starting from a single Ark in orbit over the twelve designed territories, a

@@ -10,23 +10,10 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-125** - Every structure built everywhere it can be built · `docs/notes/proposals.md`
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **R-6** - `faafb5f` finding: C-7 - R-6's win cannot be reached on the designed twelve · still open in `releases/first-release.md`
-
 ## What is outstanding
 
-### To code (6)
+### To code (1)
 
-- **R-1** - Two drawings · `releases/first-release.md`
-- **R-2** - Terrain that crosses boundaries · `releases/first-release.md`
-- **R-3** - A division that cannot be seen · `releases/first-release.md`
-- **R-4** - A biome per territory · `releases/first-release.md`
-- **R-5** - Terrain resolved as finely as it is shown · `releases/first-release.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
 ### To spec (3)
