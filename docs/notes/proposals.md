@@ -42,6 +42,56 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-133 - Which things ready
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
+`releases/first-release.md` -> Units and structures
+
+**One noun, found by building the data.** `ready` - the transformation that puts the planet back on
+its feet each turn - takes *thing, exhausted* and yields *thing, ready*, and **nothing anywhere says
+which kinds can be exhausted.**
+
+> The **Readies** column joins the units table:
+>
+> | Thing         | ... | Readies |
+> | ------------- | --- | ------- |
+> | **citizen**   |     | yes     |
+> | **garrison**  |     |         |
+> | **extractor** |     | yes     |
+> | **yard**      |     |         |
+> | **ark**       |     | yes     |
+> | **pioneer**   |     | yes     |
+>
+> Nothing outside this table readies.
+
+**Basis:** the code lane built the kinds prototype and wrote family membership down, and **two of the
+three families filled themselves in from the release** - only the Ark and the Pioneer have cells and
+a move, and the resources are the three the biome table already has columns for. *Thing* is the one
+that did not, and both of `ready`'s ports name it. **No other port in the fifteen names an unstated
+family**, which is what makes this a sentence rather than a table audit.
+
+**`spec/turn.md` already carries the rule** - *anything that can be used is ready or exhausted; using
+it exhausts it*. What it cannot say is which kinds those are, because that is a fact about this
+release's things. **The spec states, the release enumerates**, which is the division those two
+documents already have.
+
+**The figures are the model's, checked here rather than taken.** `Unit` and `Extractor` carry an
+`exhausted` field; a citizen's readiness is its labor, which `labor_spent` resets at the turn's end.
+**Garrison and Yard carry no exhaustion**, and correctly - they permit rather than act. A garrison has
+`force`, `multiplier` and `manned`; nothing about it is used up.
+
+**One correction to the report that produced this.** The code lane wrote that `game-model` readies
+*extractors, garrisons and labor*. It readies extractors and units, and resets a territory's spent
+labor. **A garrison has no `exhausted` field at all** - which happens not to change the conclusion,
+since the column marks it blank either way, but the reason it is blank is that it never acts rather
+than that the release and the model disagree.
+
+**The distinction the column draws, if it wants stating later.** Everything marked *yes* contributes
+to what a transformation produces - a citizen its labor, an extractor its node's density, a unit its
+own movement. Everything blank merely permits: a Yard lets an Ark be produced and gives nothing to
+it. **That is a rule and this proposal is not making it**, because one release's six things are too
+few to test it on.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
