@@ -71,6 +71,58 @@ approximate.
 currently 8 metal thrown away; under conservation it is 8 metal standing in the wrong place, which is
 a problem with a solution.
 
+## Capacity is organization, not room
+
+Sean, 2026-08-30: *if you have a bunch of metal lying around it gets lost, but if you have storage
+containers to keep it organized you have more usable metal in the same area... capacity is not
+conserved, but it has limits imposed by precise rules.*
+
+**This separates two things the word capacity was hiding.** How much fits is about space; how much is
+*usable* is about arrangement. Loose metal is not lost because the territory ran out of room - it is
+lost because nobody organised it. A container does not make the territory bigger, it makes more of
+the territory's contents count.
+
+**Which makes infrastructure productive rather than merely permissive**, and that is the part worth
+keeping. A storage building that only *allowed* more metal would be a permission slip; one that turns
+unusable metal into usable metal is doing work.
+
+### It needs a depth rule or it is unbounded
+
+A container takes some top-level capacity and provides more inside. **If a container may hold a
+container, capacity is infinite** - one crate provides room for ten crates, each providing room for
+ten more. The precise rules Sean wants are exactly the ones that stop that, and there are three:
+
+- **Containers hold resources, never containers.** Depth one, and it terminates by construction.
+- **Bounded nesting depth.** More expressive, one number to tune.
+- **Diminishing capacity with depth.** Most flexible, hardest to reason about.
+
+**The first is the same shape as the rule language's termination argument** - `P-117`'s third
+construction makes rule references acyclic so nothing can recurse. Containment is another graph that
+must not close on itself, and the cheapest answer is again structural rather than a check at runtime.
+
+### And it collides with an invariant, head on
+
+`spec/invariants.md` -> **No penalty for building infrastructure**: *no structure a player builds ever
+has to be removed to make room for something else.*
+
+**If every structure consumes capacity and capacity is finite, that is exactly what happens.** Fill a
+territory with Yards and the next container needs one torn down. That invariant is not a preference -
+it is one of the oldest lines in the specification and other rules lean on it.
+
+Three ways out, and the choice is Sean's:
+
+- **Structures do not consume capacity; only loose resources and units do.** Keeps the invariant
+  untouched and makes a container purely a giver. The oddity is a Yard occupying no room in a world
+  where a crate does.
+- **Capacity is per category** - so much for structures, so much for stores, so much for units - so
+  building never crowds out building. Keeps the invariant, costs the single clean rule.
+- **The invariant narrows** to say infrastructure costs nothing *to keep*, dropping the promise about
+  room. Cheapest to write and the likeliest to be regretted, since never having to demolish is a
+  large part of what makes the game unfussy.
+
+**Worth settling before the mechanic is designed further**, because the first two change what a
+container is and the third changes what the game is.
+
 ## Rust as the engine, data as the game
 
 Sean's leaning answers the question [the entity-model discussion](game-4x-predecessor.md) left open -
@@ -86,15 +138,57 @@ node`, `set force`, `set biome` - and the console validates each line and report
 wrong. What Sean is describing is the same machinery one level up: data that defines **kinds**
 rather than instances.
 
-### The one thing this breaks, and it needs deciding rather than discovering
+### The predecessor already had the syntax, which dissolves the objection below
+
+Sean: *the predecessor had a language that specified a trait map, with the first trait automatically
+being the name, so you would have something like `{node type:food quantity:6 density:8}`, that you
+could type into the console.*
+
+**Checked, and the grammar shipped.** `language/Expressions.kt` defines `named` as an open brace, a
+name, then an attribute list - so the first token is the name - and `call` is a name followed by
+parameters, where a parameter may be a trait map or a primitive. It also has `alias`, a `$name`
+reference, which is what a transformation needs in order to speak about the thing it just matched.
+
+**So data-defined kinds and *every change is a console command* were never in tension.** A trait map
+is a console argument. The invariant does not have to widen; the command language has to grow a
+literal, and it has grown one before.
+
+**What did not ship is the layer above it**, and it matters that it was designed rather than built.
+The sketch below sits in a comment in `UniverseCommandRunnerTest.kt`, and the test beside it uses
+Kotlin objects:
+
+```
+colonize
+required has-food-node
+required no-citizens
+required remove-colonizer
+optional add-citizen
+optional add-farm
+
+has-food-node
+greater-than 0 {node, resource:food}
+```
+
+**Three things in eight lines that this project currently lacks.** A transformation is a **named list
+of named clauses**, so it is openable and a small change is a small edit - `P-112` satisfied by
+construction rather than by intention. `greater-than 0 {node, resource:food}` is a **named, reusable
+condition**, which is the vocabulary this lane has repeatedly said does not exist. And `required`
+against `optional` is the same split as [cost against requirement](intermediate-steps.md): one must
+hold or the transformation fails, the other applies when it can.
+
+The same comment carries **test cases in the same language**, with the result written as deltas -
+`1 -> 0 {colonizer}`. A transformation and its test as one artifact.
+
+### The one thing that still needs deciding
 
 `spec/invariants.md` says **every change to game state is representable and executable as a console
 command**, and `P-115` says a rule's actions are recorded exactly as if typed. Both are about
 *state*.
 
-**A unit type is not state, it is rules.** So defining one in data introduces a second kind of thing
-that changes, which the one-function invariant does not cover - unless the answer is that **types are
-state too**, and defining a Pioneer is a transition like any other.
+**A unit type is not state, it is rules** - and that stays true even though the syntax is typeable.
+Being able to *say* a trait map at a console does not settle whether saying it changes the game's
+state or the game's rules. **The answer that keeps one function over one state is that types are
+state**, and defining a Pioneer is a transition like any other.
 
 That second answer is stranger and better. It keeps one function over one state, it makes the
 history a complete account of the game *including what the game was*, and it is what would make the
