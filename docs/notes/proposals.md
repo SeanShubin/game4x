@@ -42,51 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-131 - Units and structures as one table
-
-**to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
-`releases/first-release.md` -> Units and structures
-
-**Nothing new, rearranged.** Nine headings of bullets become one table, so the things can be compared
-down a column instead of held in the head across a page.
-
-> ## Units and structures
->
-> | Thing         | Force | Cells | A move | Upkeep         | Costs to produce            | Requires    |
-> | ------------- | ----- | ----- | ------ | -------------- | --------------------------- | ----------- |
-> | **citizen**   | 1     |       |        |                |                             |             |
-> | **garrison**  | 1     |       |        |                | not produced; founding gives one |        |
-> | **extractor** |       |       |        |                | 1 labor, and nothing else   |             |
-> | **yard**      |       |       |        |                | 15 metal                    |             |
-> | **ark**       | 2     | 2     | 1 cell |                | 12 metal, 12 energy         | a Yard      |
-> | **pioneer**   | 2     | 2     | 1 cell | 1 food per turn | 8 metal, 6 energy, 1 citizen | a garrison |
->
-> A garrison's multiplier is 1. An Ark can invade land from orbit. Founding produces a garrison, a
-> citizen and a food extractor.
-
-**Every line touched, since restating is reported.** Six things, nine facts, one re-expression:
-
-| Was                                         | Now                                           |
-| ------------------------------------------- | --------------------------------------------- |
-| nine `###` headings with bullets under each | six rows and one paragraph                    |
-| Garrison: *allows create pioneer*           | Pioneer: **requires** a garrison              |
-| Create Ark / Create Pioneer as own headings | the *costs to produce* and *requires* columns |
-| Founding as its own heading                 | the paragraph below the table                 |
-
-**The one re-expression is the second row of that table**, and it is the same fact from the other
-side: *a garrison allows a Pioneer to be created* and *a Pioneer requires a garrison* say the same
-thing, and the second is the one that fits a column. **Nothing else changed** - every figure, every
-force, every cost is the same character it was.
-
-**Founding stays as prose deliberately.** It is a transformation rather than a thing, and it belongs
-in the table `P-132` proposes. It is kept here so that promoting this alone loses nothing.
-
-**Why it is worth doing at all.** The tabular form is what Sean asked for and the reason is not
-neatness: *I can specify ALL units with precision, in a way that I can keep in my head as a human,
-while at the same time gives you an unambiguous specification.* The blanks are the part prose cannot
-do - reading down the *Force* column shows at a glance that structures have none except the garrison,
-which is a fact nobody had written anywhere.
-
 ### P-132 - The first release's transformations as one table
 
 **to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
@@ -337,6 +292,7 @@ work the release exists to order.
 | P-129, a territory holds only so much of each kind of thing                                                     | `spec/logistics.md` -> Capacity                                                                                        | 2026-08-31 |
 | P-130, the kinds and the transformations are data                                                               | `spec/invariants.md` -> The game is data                                                                               | 2026-08-31 |
 | P-126, metal and energy carry between turns, food does not, and each resource is conserved or not               | `spec/resources.md` -> The list, `spec/turn.md` -> Order of operations                                                 | 2026-08-31 |
+| P-131, units and structures as one table                                                                        | `releases/first-release.md` -> Units and structures                                                                    | 2026-08-31 |
 
 ## Rejected
 

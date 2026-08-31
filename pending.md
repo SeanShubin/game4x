@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-131** - Units and structures as one table · `docs/notes/proposals.md`
 - **P-132** - The first release's transformations as one table · `docs/notes/proposals.md`
 
 ## What is outstanding
@@ -38,8 +37,8 @@ it exists to ask.
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86
+- `releases/first-release.md` -> Units and structures - P-70, P-80, P-131
 - `spec/control.md` -> Winning - P-77, P-81, P-125
-- `releases/first-release.md` -> Units and structures - P-70, P-80
 - `spec/console.md` - P-69, P-82
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/interface.md` -> Surfaces - P-73, P-116

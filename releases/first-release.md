@@ -53,50 +53,17 @@ Every territory has at least one food node.
 
 ## Units and structures
 
-### Citizen
+| Thing         | Force | Cells | A move | Upkeep          | Costs to produce                 | Requires   |
+| ------------- | ----- | ----- | ------ | --------------- | -------------------------------- | ---------- |
+| **citizen**   | 1     |       |        |                 |                                  |            |
+| **garrison**  | 1     |       |        |                 | not produced; founding gives one |            |
+| **extractor** |       |       |        |                 | 1 labor, and nothing else        |            |
+| **yard**      |       |       |        |                 | 15 metal                         |            |
+| **ark**       | 2     | 2     | 1 cell |                 | 12 metal, 12 energy              | a Yard     |
+| **pioneer**   | 2     | 2     | 1 cell | 1 food per turn | 8 metal, 6 energy, 1 citizen     | a garrison |
 
-- force 1
-
-### Ark
-
-- force 2
-- energy cells: 2
-- a move costs 1 cell
-- can invade land from orbit
-
-### Garrison
-
-- force 1
-- multiplier 1
-- allows create pioneer
-
-### Create Ark
-
-- cost to produce: 12 metal, 12 energy
-- required to produce: a Yard
-
-### Founding
-
-- produces garrison, citizen, food extractor
-
-### Pioneer
-
-- force 2
-- energy cells: 2
-- a move costs 1 cell
-- maintenance: 1 food per turn
-
-### Create Pioneer
-
-- cost to produce: 8 metal, 1 citizen, 6 energy
-
-### Yard
-
-- cost to produce: 15 metal
-
-### Extractor
-
-- cost to produce: 1 labor, and nothing else
+A garrison's multiplier is 1. An Ark can invade land from orbit. Founding produces a garrison, a
+citizen and a food extractor.
 
 ## Biomes
 
