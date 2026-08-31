@@ -443,6 +443,35 @@ P-119 plus `run <file>` is close to enough to begin.
 out. **Whether rules-as-text join that release or get one of their own is Sean's call**, and nothing
 here can be built until one of those happens.
 
+### Two shapes of logistics, and they are not the same game
+
+Sean, 2026-08-30: *the logistics I had planned involved being able to use resources from adjacent
+territories, but I can also implement logistics more directly by creating units that can transport
+resources.*
+
+Both are recorded because the choice is not an implementation detail - it decides what a player
+spends attention on.
+
+**Reach.** A territory may spend from its neighbours. Nothing is built and nothing moves; the rule
+simply widens what *paid from that territory's store* means. Cheap to specify, cheap to play, and it
+makes adjacency the whole of geography: a territory's worth becomes the sum of what it can touch.
+**The danger is that it removes a decision rather than adding one** - if reach is automatic, the
+player never chooses to move anything.
+
+**Carriage.** A unit picks resources up, crosses, and puts them down. Every transfer is a thing
+somebody built, fuelled and routed, so distance costs, routes can be cut, and *clearing an area
+opens a cheaper route* becomes true by arithmetic rather than by a rule saying so - which is the
+Distant Worlds effect [the backlog already records](#supply-shocks-and-routes-that-get-cheaper-when-you-clear-them)
+as falling out of pieces that exist. **The danger is tedium**: a fleet of haulers is exactly the
+thing [control without tedium](control-without-tedium.md) exists to answer, and it is not answerable
+until rules can be written.
+
+**They compose, and the order matters.** Reach first makes carriage feel like a downgrade, because
+the player already had the resources. Carriage first makes reach feel like an upgrade a technology
+might grant. **Nothing needs deciding until logistics returns**, and this note exists so the second
+option is not forgotten - the original plan was reach, and carriage arrived later and is arguably the
+better one.
+
 ### Does every structure cost metal, or can a territory bootstrap?
 
 Sean, 2026-08-30, on his own glossary saying *metal is required to build all structures and units*
