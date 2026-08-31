@@ -385,6 +385,13 @@ decision belongs in a note. P-124 was filed at sixty lines to say a generated fi
 repository root, under the heading *a file nobody can write needs no owner* - which Sean read as
 esoteric and vacuous, and it was both. A queue that is tiring to read stops being a review surface.
 
+**A lens may have at most eight items open to any one producer**, and closes or withdraws before
+filing a ninth. That is a different budget from the queue limit below, which counts what waits on
+Sean; this one counts what waits on a producer, where the cost is a backlog nobody reads through
+before choosing what to do next. Eight is about two days of a producer's throughput as measured on
+2026-08-30, when the code lane closed five of thirteen in a day - loose enough that nothing urgent
+is blocked, tight enough that a lens has to close something before it can file something.
+
 Keep the open-proposal queue under fifteen. Past that, reviewing costs as much as writing and
 the mechanism has failed. If a lot of proposals would be guesses at design, ask one question
 instead.

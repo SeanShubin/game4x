@@ -35,9 +35,11 @@
 - Makes sure other instances can find its results
 - A research instance finding something, the coding instance fixing it, and the research instance
   reviewing the fix is a real cycle, and nothing forces the findings to get smaller
-- What bounds it is the budget rather than the cycle: fifteen open items across every outbox
-  together, and a research instance is expected to record most of what it notices as noted and
-  deliberately not acted on
+- What bounds it is a budget on the research instance rather than on the cycle: it may have at most
+  eight items open to any one other instance, and closes or withdraws before filing a ninth
+- That puts the limit where the judgement already is. A research instance is expected to record most
+  of what it notices as noted and deliberately not acted on, and a cap is what makes that
+  expectation cost something rather than being a good intention
 - My approval bounds what reaches the specification. The budget bounds what reaches me
 
 ## Quality instance (a type of research instance)
