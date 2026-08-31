@@ -41,10 +41,23 @@ that *require* robot armies later - a planet rich in energy and resources but ho
 citizens are one source of it, and food is their upkeep rather than the only upkeep there
 will ever be.
 
-### Resolved: they depart
+### Resolved: they starve - **this entry was wrong and is superseded**
 
-Decided 2026-08-25. The line already in `spec/economy.md` stands unchanged - an unfed citizen
-departs, and self-provisioning is not modelled at all.
+**Superseded 2026-08-31.** It said an unfed citizen *departs* and that the word was deliberately
+unspecified. **Sean chose *starves***, `P-17` was withdrawn for exactly that reason, and
+`spec/population.md` says *each unfed citizen starves* while `spec/turn.md` says *starves for want of
+it*. There is no such line in `spec/economy.md` at all.
+
+**Found by the re-read trigger** on 2026-08-31, when `P-126` landed in a section that had already
+taken two proposals. The note had disagreed with the specification since the day it was written, and
+nothing looked.
+
+What survives is the mechanic below, which is right whichever word is used. What does not is the
+claim that the word is left open: **it is not, and the debt that creates is the deferred entry above**
+- *starves* will not cover a machine population, and when robots arrive either the word widens again
+or the machine case gets a rule of its own.
+
+The original reasoning, kept because it is why the debt exists:
 
 Two things follow, and the second is why the word matters:
 
