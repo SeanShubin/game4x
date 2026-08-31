@@ -18,14 +18,11 @@ files rather than from anybody's memory of them.
 - **S-1** - `tools/outbox` should read `releases/*.md` · `docs/notes/proposals.md`
 - **Q-37** - The gate lists crates by name, so a split silently drops tests · `lenses/quality/outbox.md`
 
-### To spec (6)
+### To spec (3)
 
 - **C-6** - The composition root holds a harness, and the rule says it holds nothing · `crates/outbox.md`
 - **C-5** - `docs/architecture.md` lists every crate, and there is now one it does not · `crates/outbox.md`
 - **C-4** - The index is shared, so staging is publishing · `crates/outbox.md`
-- **C-3** - A prototype cannot photograph itself, and two items now need it to · `crates/outbox.md`
-- **C-2** - Architecture rule 6 states the losing side of a decision as fact · `crates/outbox.md`
-- **C-1** - Whose file is a generated one at the repository root? · `crates/outbox.md`
 
 ## Sections that have taken more than one proposal
 
