@@ -47,6 +47,50 @@ Two limits Claude holds itself to:
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-4 - A compilable specification of the kinds and the transformations
+
+**to** code · **status** open · **raised** 2026-08-31 · **source** Sean, and `P-130`
+
+Sean wants the kinds and transformations **in a form he can compile and read** - his words: *something
+like a sql specification with enums and foreign keys, or a set of rust data types with hardcoded
+values and enums... I don't need anything playable, I just want to see what the inputs to the
+gameplay logic would be.*
+
+**The content already exists and is not the work.** `releases/first-release.md` -> Units and
+structures and -> Transformations carry every kind and all fifteen transformations, and `P-130` fixes
+the shape: a transformation is inputs and outputs, and each input says how many, whether it is
+consumed, and whether its quantity is a least or a most.
+
+**What is asked for.** A prototype crate - not the shipped model - holding those two tables as Rust
+data: enums for the kinds, a struct per transformation, the figures hardcoded. No gameplay logic, no
+turn, no board. **Its whole job is to be read and to compile.**
+
+**And one test, which is what makes it worth building rather than writing twice.** Render the data
+back into the release's two tables and compare against the file on disk, the way
+`crates/game-console/tests/quotations.rs` reads a sentence off disk. Then the compilable
+specification and the written one cannot drift, and the check is wired to the gate rather than to
+somebody remembering.
+
+**Four things it will force into the open, which is the real value.** None of them can be answered
+from prose and all four block a real implementation:
+
+- **`work` outputs `density` of a resource** - a quantity that is not a constant but a property of
+  the node being worked. What type is a quantity?
+- **`move` takes *unit, here* and yields *unit, there*** - so location is a trait of a thing rather
+  than a container holding it. How is a trait that varies per instance typed?
+- **`node, unworked` and `food, surplus` are not kinds**, they are differences between two counts.
+  Either the data gains derived kinds computed from stored ones, or the shape gains comparisons.
+  **Each appears in exactly one row**, which is the measure of what that choice costs.
+- **Scope** - *here* against *everywhere it matches*. Is that a field on a transformation, or two
+  different types?
+
+**Where it goes is the code lane's**, and `docs/prototypes/README.md` applies: state the question up
+front and record the answer when it has one. The question here is *what do the inputs to the gameplay
+logic actually look like*, and the answer is whatever the four above turn out to be.
+
+**Not blocking anything.** The release is specified without it. This exists so Sean can review the
+shape before it is built into the model, which is cheaper than reviewing it after.
+
 ### S-3 - Which cells make the twelve reachable, measured rather than guessed
 
 **to** code · **status** open · **raised** 2026-08-30 · **source** `C-8`, for `P-126`
