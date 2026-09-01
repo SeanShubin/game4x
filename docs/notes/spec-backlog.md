@@ -771,6 +771,50 @@ produce an Ark, and the whole question assumes the metal has to be mined where t
 transport it does not, and **any territory can build an Ark given enough turns**. `R-6`'s vetting
 should not be written against the old analysis.
 
+### Said 2026-08-31: a flat move cost, two buildable things, and a limiter is needed
+
+Sean: *vehicles cost the same to move regardless of cargo, fuel transport capacity should be balanced
+accordingly*; a **storage bin that stays fixed** and a **transport vehicle that can move** are two
+different things to build; and *we also need some limiter to make sure we can't store infinite
+resources, either by bin or by vehicle.* Then, on the bin-or-vehicle question: **one kind with a
+mobility trait**.
+
+**Those two answers agree, and the vocabulary is what shows it.** Two different things to *build* is
+two **recipes**; one kind with a mobility trait is one **kind**. A recipe is a definition of how
+something is made and a kind is what the thing is, so *build a bin* and *build a transport* can
+differ in cost and still produce the same kind carrying a different value of one trait.
+
+**It has one consequence to accept or reject.** `spec/logistics.md` says capacity is counted **per
+kind**, so one kind means **bins and transports draw on the same capacity budget** in a territory.
+That is probably right - it makes a territory choose between storing and hauling - but it is a
+choice, and the alternative is keying capacity off mobility, which the promoted rule does not permit.
+
+**The limiter already exists, and it is the half of `P-144` that was right.** `spec/logistics.md`:
+*everything in a territory occupies capacity there: its stores, its structures and the units standing
+on it. Capacity is counted per kind of thing.* So bins compete with extractors and the garrison for a
+territory's **structure** capacity, and transports compete with Arks and Pioneers for its **unit**
+capacity. **Total storage in a territory is therefore bounded without any new rule**, and it is
+bounded by a trade the player can feel: another bin is one fewer extractor.
+
+That is worth noting against the withdrawal. `P-144`'s flat *resource* capacities were wrong and are
+gone; its flat *structure* and *unit* capacities are exactly the limiter now being asked for, and
+will have to come back.
+
+**One hole in it: orbit.** If orbit has no unit capacity, loaded transports can be parked there
+without limit and the bound does not hold. Either orbit is bounded too, or it is out of scope until
+something can sit in it for free.
+
+**And a fork that has to be chosen, because the data model makes them the same thing.** `P-141` says
+a unit's fuel is energy held inside it. Vehicles-as-bins says cargo is resources held inside it.
+**Energy carried as cargo is therefore already the fuel**, and there is no distinction to draw unless
+one is invented. Two ways:
+
+- **One pool.** A vehicle has a capacity, and what is in it is cargo and fuel at once. A hauler full
+  of metal cannot move; five metal and five energy moves five times. **The cargo-against-range trade
+  falls out with no new rule and one fewer number**, and the flat move cost is what makes it work
+- **Two containers on one unit**, a tank that only takes energy and a hold that takes anything. It
+  needs `P-129` to allow a container to provide more than one capacity, which it currently does not
+
 **Two things follow that are worth deciding rather than inheriting.** The release currently gives
 `land` and `found by land` identical outputs, and there is no reason they should match - an Ark
 bootstraps a planet from nothing and a Pioneer arrives in an empire that can send more. And the
