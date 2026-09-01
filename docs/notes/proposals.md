@@ -143,6 +143,60 @@ transformation called **found by land** and a units-table cell reading *not prod
 one*. Both want the same rewording, and both are release rather than specification - **a cleanup
 proposal follows this one rather than being folded into it.**
 
+### P-138 - Order is spent
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into**
+`spec/resources.md` -> The list, **and** `spec/turn.md` -> Order of operations
+
+**The conclusion of the thermodynamics conversation**, filed so it is not lost. Sean's frame: the
+planet is an open system, matter is conserved, and *metal from a destroyed vehicle must be organized
+to be useful.*
+
+> Into `spec/resources.md`, after the conserved-and-expires table:
+>
+> - Matter is conserved and its arrangement is not. Order is lost for nothing and restored only by
+>   work
+> - A thing not kept in order is lost when the turn ends. Keeping it in order costs labor, unless it
+>   is caught where it was made
+
+> And `spec/turn.md`'s ending-a-turn line becomes:
+>
+> - Ending a turn: everything that eats, eats; then a population grows on surplus food or starves
+>   for want of it; **what expires expires, and what was not kept in order is lost**; and everything
+>   becomes ready again.
+
+**Basis:** three things this settles that nothing currently says.
+
+**What stops perpetual motion, and it is not a ban on cycles.** Sean first proposed that created
+things must not form a cycle. **The game's own economy is a cycle** - labor works an extractor and
+yields food, food feeds citizens, citizens provide labor - so the ban would forbid the engine.
+**What actually stops it is the arrow**: any cycle returning matter returns it degraded, so going
+round again costs the work of re-ordering. **The cycle is allowed and simply does not pay**, which is
+a better rule than one that has to enumerate what may not be built.
+
+**Why stripping is not free**, which conservation alone could not say. `P-126` says a thing can be
+taken apart to get its metal back and does not say **in what state**. It comes back disorganised, so
+build-and-strip costs the re-ordering - **a price that is mechanical rather than a fudge factor.**
+
+**Why loose metal vanishes.** Sean, before he had the frame: *if you have a bunch of metal lying
+around it gets lost, but if you have storage containers to keep it organized you have more usable
+metal in the same area.* That is this rule, and `P-129` already carries its other half - *capacity is
+organisation, not room.* **Disorder winning where nothing was spent to hold it back** is one rule
+rather than a mechanic per case.
+
+**The second line's exception is Sean's and it is what saves the release.** *Unless it is caught where
+it was made* - storage at a node costs no labor, because the extraction already paid for it, while
+gathering scattered metal into a truck is work. **Without it, `P-126`'s winnability measurement fails**:
+territory 1 has nine hands and raises twelve metal, and charging labor to keep the twelve changes the
+sums. With it, nothing further is owed and the measurement stands.
+
+**It qualifies a line `P-126` landed, which is why that line is restated here rather than left.** That
+proposal says *metal and energy remain where they are*, unconditionally. They remain **if kept**, and
+a promotion that left both sentences standing would leave the specification saying two things.
+
+**What it does not say.** How much a node holds, how much labor a truck costs, and what *in order*
+means for anything that is not a resource - all release tuning, and none needed to state the rule.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
