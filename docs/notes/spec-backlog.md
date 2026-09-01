@@ -860,3 +860,42 @@ bootstraps a planet from nothing and a Pioneer arrives in an empire that can sen
 flexibility is bounded in one direction: **conservation fixes how much, even though it leaves what
 entirely open.** An Ark costing twelve metal should deploy into twelve metal's worth, or the game
 violates its own conservation rule on the first action anyone takes.
+
+### Said 2026-09-01: five decisions, and one of them reverses yesterday's
+
+Sean, opening with *this is making me realize I have to address these ideas now rather than later*:
+all nodes the same, with the **territory** carrying density and a capacity for extractors; the
+language becomes **capacity**, one number per kind per territory; four metal extractors at density 8
+yield 32 for 4 labor; **bins are special purpose** and a metal transport carries one for fuel and one
+for ore; and **structures are capped per kind while mobile things compete for a shared stacking
+pool**, as in Twilight Imperium.
+
+**Four of the five compose, and they remove more than they add.**
+
+- **A node stops being a thing.** The Biomes table already reads `Food 5 x 6` - five nodes, density
+  six - so it becomes *capacity 5, density 6* and **the table does not change shape at all**. Nothing
+  is lost, because densities were already uniform within a territory
+- **`build extractor` loses an ingredient.** `node, unworked` was a stand-in for *is there room* and
+  the capacity rule says that generally, so the ingredient and the derived trait `worked` both go
+- **The third idea checks out.** Four extractors, one cycle each, 8 a cycle, 4 labor, 32 metal. And
+  storage is 4 x 8, so **a territory always holds exactly one full turn of its own production**
+- **The fifth answers a question this lane raised and could not resolve.** A parked transport
+  crowding out a bin broke Sean's never-tear-down invariant. Structures capped per kind and mobiles
+  sharing a stack means **a transport can crowd out another transport and never a bin**, so the
+  invariant holds and the storage limiter is a bound rather than a price
+
+**The fourth reverses *one pool*, decided the day before.** Sean agreed a vehicle should have one
+capacity holding cargo and fuel at once, which made the range-against-cargo trade fall out for free.
+Separate bins for fuel and ore is the *two containers on one unit* option, which was set aside then
+and is chosen now. **It is a real reversal and worth naming as one**: the trade disappears, a metal
+hauler's fuel no longer competes with its ore, and `spec/logistics.md` has to allow a container to
+provide more than one capacity, which it does not today.
+
+**A shape worth considering, since it makes the fourth cost nothing.** If a **bin** is the only
+container kind and a transport *carries bins*, then a fuel tank is an energy bin, an ore hold is a
+metal bin, and a transport is a unit with room for two. **P-129 then needs no change** - each bin
+provides one capacity, and the transport provides bin capacity - and *vehicles that act as bins*
+becomes *vehicles that carry bins*, which is the same idea with the nesting made explicit.
+
+**One thing the fifth makes optional.** Upkeep was proposed to price vehicles-as-storage. A stacking
+pool bounds it instead, and a bound is what Sean asked for. **Both is a choice, not a requirement.**

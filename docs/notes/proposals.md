@@ -219,6 +219,21 @@ so an editor loading this release finds no row for `metal`.
 > | **surplus** | food | yes or no | derived: left after everything ate |
 > | **unfed** | a citizen | yes or no | derived: it did not eat |
 
+**Stale 2026-09-01, and not yet rewritten.** Five decisions taken the next day change three of the
+four tables above, and this proposal should not be promoted as it stands:
+
+- **A node stops being a kind.** Density and extractor capacity become traits of the *territory*, so
+  `node` leaves *Kinds*, `density` moves to *Places*, and the derived trait `worked` has nothing left
+  to derive from. `build extractor`'s `node, unworked` ingredient goes with it
+- **`bin` and `transport` join** *Kinds*, and both carry the `resource` trait that `extractor`
+  already has
+- **A container provides more than one capacity**, since a metal transport carries a fuel bin and an
+  ore bin. `spec/logistics.md` currently says a container provides capacity *of another* kind,
+  singular
+
+**Left open rather than rewritten**, because the five are still moving and a table rewritten twice
+costs a reading each time. The count in the title - eleven kinds - is already wrong; it is twelve.
+
 **Basis:** none of this is a new rule. Every kind, family and trait above is already referenced by a
 recipe, a column or a promoted line, and the only act is writing them where the data can be loaded.
 Two things in it are nonetheless **Claude's naming rather than Sean's**, and should be read as such:
