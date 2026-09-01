@@ -681,9 +681,10 @@ citizens are few: a build that costs labor is capped at one per citizen per turn
 costs none is capped by metal alone. **That is the real question, and it is not the one the shortfall
 asked.**
 
-**One number in it is fatal as written.** Sean wrote that building the farm *immediately generates 1
-food*. Two citizens eat two, so at one food one of them is unfed and starves on the turn it landed.
-The first use has to yield the node's density, which is the six that makes the opening survive.
+**One phrase in it was read wrongly here, and the correction matters.** *Immediately generates 1
+food* means one food **cycle** - one operation of the extractor, so density, so six. This lane read
+it as one unit of food and reported that it starves a citizen on the turn it landed. That reading
+was wrong; at six the opening survives, which is what Sean meant.
 
 **The metal deadlock is real and the storage instinct is right.** It follows from *a thing not kept
 in order is lost when the turn ends* rather than from expiry - metal does not expire. Without a bin
@@ -698,6 +699,16 @@ Sean: *the main insight here is that we control what arks and pioneers convert t
 flexibility regarding balance.* **They are the only recipes whose outputs are a free choice.**
 Everything else is pinned by a density, a node count or a conservation rule; deployment is pinned by
 nothing, which makes it the lever the opening should be tuned with rather than the recipes.
+
+**Decided 2026-08-31.** Sean: *I agree with you that we should rely on deployment output rather than
+bundling first-use into every build.* **And `spec/turn.md` already made bundling unnecessary** - *a
+thing created during a turn begins ready and may be used at once* - so a farm built on turn 1 could
+always have been manned on turn 1. The shortfall was never readiness, only labor.
+
+**The decision has one hard consequence.** Two civilians can build two things or man two things, not
+both, so **a deployment that hands over loose metal cannot survive its own first turn** - the
+buildings go up and nobody mans them, which is no force and no food. Dropping bundling means the Ark
+must deploy **structures**, not materials.
 
 **Two things follow that are worth deciding rather than inheriting.** The release currently gives
 `land` and `found by land` identical outputs, and there is no reason they should match - an Ark
