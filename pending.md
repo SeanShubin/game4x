@@ -13,9 +13,10 @@ files rather than from anybody's memory of them.
 
 ## What is outstanding
 
-### To code (2)
+### To code (3)
 
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
+- **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
 ### To spec (3)

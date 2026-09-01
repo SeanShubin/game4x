@@ -61,6 +61,44 @@ Not done in the same commit as the specification's change, deliberately. It is a
 game rewards, the tests that pin it are the ones that would have to change with it, and `C-8` says
 nothing in play reaches it either way - so it is worth doing carefully rather than quickly.
 
+### C-11 - The model implements the previous turn, so `R-6` is blocked in code
+
+**to** code · **status** open · **raised** 2026-08-31 · **source** re-running `C-8` after `P-126`
+
+This lane's own, recorded so that nobody - including this lane - tries to play `R-6` through and
+concludes something from the wrong rules.
+
+`R-6` is unblocked in the **specification**: with metal and energy carrying, ten territories can
+hold a Yard, nine can produce an Ark, and territory 1 can run the whole loop by itself. It is
+**not** unblocked in the **code**. `game.rs:705` still does
+
+```rust
+self.territories[id.index()].stores = [0; 3];
+```
+
+at the end of every turn, with a comment saying *unused resources are discarded* - which is what
+`spec/turn.md` said until `P-126` and `P-138`, and is now true of food alone. A play-through run
+today would hit `C-8`'s wall and prove nothing about the game as specified.
+
+Three divergences, and none of them should be fixed yet:
+
+- **Stores are discarded rather than carried.** The whole of the above.
+- **Nothing is bounded.** `Territory::add` grows without limit, and `spec/turn.md` says what a
+  territory can keep is bounded. The number is `C-10` and is not chosen yet, so there is nothing to
+  implement even if this were the moment.
+- **`is_fully_exploited` asks for a Yard everywhere**, which is `C-9`.
+
+**Deliberately not done now.** `P-134` rewrites this model - state becomes things, in places, and
+how many of each, and the five shapes it removes are exactly the ones these live in: `stores` as a
+fixed array, citizens and yards as bare counts, extractors in a `Vec`, a garrison in an `Option`.
+Fixing the turn inside those shapes means fixing it again inside the ones that replace them, and
+the specification lane's account is that Sean's next work is the full specification, worked out in
+`prototypes/kinds`, which the model is then built from.
+
+So this is a **note that the two have parted**, not a request to reunite them today. What it buys
+is that the next person to reach for `R-6` reads this first rather than measuring the old rules
+again - which is what this lane just did, twice.
+
 ### C-10 - What a territory can keep is bounded, and nothing says by how much
 
 **to** spec · **status** open · **raised** 2026-08-31 · **source** withdrawing `C-7` and `C-8`
