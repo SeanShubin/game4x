@@ -168,6 +168,45 @@ proposal. The accepted-proposal ledger keeps its old wording, because those rows
 approved and he approved something called a transformation. And `prototypes/kinds` follows the
 release, which is the code lane's to change once this lands.
 
+### P-140 - Two recipes the table does not have
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
+`releases/first-release.md` -> Transformations
+
+**Found by asking what *the rest* are in `P-139`.** The release's table has fifteen rows and the game
+has seventeen recipes. Two of the unoffered ones are in `spec/` and nowhere in the release:
+
+> | Recipe    | Scope | Role | Thing                      | Qty | Consumed | Bound       |
+> | --------- | ----- | ---- | -------------------------- | --- | -------- | ----------- |
+> | **upkeep** | every | in   | unit with upkeep           | 1   | no       | at least    |
+> |            |       | in   | food, its upkeep           | 1   | yes      | at least    |
+> | **perish** | every | in   | unit whose upkeep is unpaid | 1   | yes      | at least    |
+> | **revert** | every | in   | territory, force below its force of nature | 1 | no | at least |
+> |            |       | out  | territory, unclaimed       | 1   |          |             |
+
+**Basis:** `spec/units.md` says *a unit may require upkeep each turn, and is lost if it is not paid*,
+and `releases/first-release.md` gives a Pioneer *1 food per turn* in the units table. **Neither is a
+row in the recipe table**, and `eat` does not cover it - that row names a **citizen**, not a unit.
+
+`spec/control.md` says *should the force in a territory fall below its force of nature, nature takes
+it back. Its entire population perishes and any ark on it becomes unusable.* **That is not in the
+release at all**, in either table.
+
+**Why it matters more than a missing row.** `P-139` says most recipes are options and *the rest apply
+themselves wherever they match*. **A reader counting the rest finds five and there are seven** - so
+the table understates the class the sentence is about, and the two it omits are the two that can take
+things away from a player without being chosen. **Those are exactly the ones a player most needs to
+see written down.**
+
+**The names are this lane's and are the weakest part.** *Upkeep*, *perish* and *revert* describe what
+happens; the specification names none of them, because until now none of them needed naming. Rename
+freely.
+
+**One thing left undone deliberately.** *Its entire population perishes and any ark on it becomes
+unusable* has a second half about arks that no row here expresses, because *unusable* is not a state
+anything else in the release has. **It wants a decision rather than a guess**, so `revert` above stops
+at the territory.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
