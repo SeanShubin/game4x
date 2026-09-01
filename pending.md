@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
+- **P-148** - A bin is where everything is, and a capacity is a bin · `docs/notes/proposals.md`
 - **P-147** - Every cycle among recipes must spend readiness · `docs/notes/proposals.md`
 - **P-141** - A unit carries fuel, not cells · `docs/notes/proposals.md`
 - **P-142** - A quantity is a number · `docs/notes/proposals.md`

@@ -42,6 +42,60 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-148 - A bin is where everything is, and a capacity is a bin
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
+`spec/logistics.md` -> Capacity, **replacing that section whole and renaming it**
+
+**Sean's, decided 2026-09-01**, across four statements: *a vehicle can contain multiple bins, and
+each bin is tied to hold a particular thing with a particular maximum amount*; *this containment is
+generalizable, territories contain bins that contain things just like vehicles do*; a bin holds *any
+kind*, and **a bin and a capacity are the same thing**; and, on the nesting rule, *acyclicity, not
+one-of-each, is the right call*.
+
+> `## Capacity` becomes `## Containment`, and its four lines become:
+>
+> - A thing is in a bin. A bin holds one kind of thing, or one family of them, up to a maximum of
+>   its own, and nothing else in the game holds anything
+> - A bin belongs to something. An extractor has a bin for what it extracts, a vehicle has the bins
+>   its recipe gives it, and a territory has one for each kind before anything is built
+> - A capacity is a bin. Room for four extractors is a bin that holds extractors, four at most, so
+>   nothing a player builds ever crowds out something of another kind
+> - A thing that has bins takes up room in one, so capacity is not conserved
+> - Nothing contains itself, directly or through anything else
+
+**Basis: it replaces two ideas with one and loses nothing.** The old section said capacity is counted
+per kind, and separately that a container provides capacity of another kind. **Those are the same
+statement once a capacity is a bin** - a per-kind count *is* a bin that holds that kind, and a
+container *is* a thing that has bins. The second and third lines above are what the old first and
+second lines were describing.
+
+**Four things that needed four descriptions now need one.** A fuel tank is an energy bin in a
+vehicle, an ore hold is a metal bin in the same vehicle, a warehouse is a metal bin in a territory,
+and an extractor's one-cycle buffer is a bin whose maximum is the density. **The same two traits
+describe all four** - what it holds, and how much - and the only difference is where it sits.
+
+**One line is deliberately weaker than what it replaces, and that is the change to look at.** The old
+rule was *no kind of thing may be nested inside itself, at any depth*. **The new model breaks it
+immediately**: a territory holds a bin of extractors and an extractor holds a bin of metal, so the
+path runs bin, extractor, bin, and a kind appears twice.
+
+**What the old rule was protecting was a finite nesting depth**, and it bought that with a bound it
+justified in its own second sentence - *since no kind appears twice, the deepest nesting is the
+number of kinds that contain*. **Acyclicity buys the same finiteness without the false premise**: a
+containment path that never revisits anything is finite in a finite state, whatever kinds repeat
+along it. The bound is looser and still a bound, and **the rule now forbids exactly what is actually
+harmful** rather than a superset that includes the design.
+
+**Two dependencies, and both are honest to name.** *Family* is `P-143`'s word and is not yet
+promoted; if that proposal is rewritten rather than landed, this line needs the word defined
+somewhere or replaced by *group of kinds*. And `spec/invariants.md` says a state is *things, in
+places, and how many of each* - **that is refined and not contradicted**, because a bin is a place,
+so nothing there needs editing.
+
+**What it unblocks.** `P-141`, `P-142` and `P-143` are all stale in part against this model and were
+left unrewritten rather than rewritten twice. **This is the one they were waiting for.**
+
 ### P-147 - Every cycle among recipes must spend readiness
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** recovered - **into**
