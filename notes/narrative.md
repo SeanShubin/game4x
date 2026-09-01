@@ -1,0 +1,88 @@
+- Start with
+  - a planet with territories numbered 1-12, no control
+  - ark above territory 1
+- Territory 1
+  - force 1
+  - node
+      - type: food
+      - quantity: 4
+      - density: 6
+  - node
+      - type: metal
+      - quantity: 5
+      - density: 8
+  - node
+      - type: energy
+      - quantity: 6
+      - density: 4
+- Ark
+  - force 2
+
+- Ark can land on territory 1 because its force 2 exceeds territory force 1
+- Ark lands on territory 1
+- Recipe
+  - name
+    - deploy ark
+  - input
+    - ark (consumed)
+    - territory (not consumed)
+  - output
+    - 2 civilian
+    - 3 metal
+- Execute deploy ark
+- now we have 2 civilian and 2 metal on territory 1, we have no force, but that won't matter until end of turn
+- Recipe
+  - name
+    - build farm
+  - input
+    - food node (not consumed)
+    - metal
+    - labor
+  - output
+    - food extractor, attached to food node
+- Recipe
+  - name
+    - build garrison
+  - input
+    - labor
+    - metal
+    - territory (not consumed)
+  - output
+    - garrison
+- Recipe
+  - name
+    - provide security
+  - input
+    - labor
+    - garrison (not consumed)
+  - output
+    - force
+- Recipe
+  - name
+    - generate food
+  - input
+    - food extractor
+    - labor
+  - output
+    - exhausts food extractor
+    - food * density
+- Recipe
+  - name
+    - generate labor
+  - input 
+    - civilian
+  - output
+    - labor
+    - exhausted civilian
+- civilian builds garrison
+- civilian builds farm
+- civilian mans garrison, providing 1 force
+  - note that any number of civilians may provide labor at the garrison, force is summed
+- civilian mans farm, providing 6 food (civilian operates extractor to generate food times density)
+
+Note that we needed 2 civilians, one to operate the barracks for 1 force to keep equal with the force of the territory, and one to operate the farm to generate food to keep civilians from perishing at end of turn
+Note that we needed to start with 3 metal, one for the garrison, one for the food extractor, and one for the metal extractor 
+If the planet force were 0, we would not need so many resources
+This is a change to existing stats, I am simplifying
+This is only the starting setup, there are many more recipies, units, and buildings needed
+

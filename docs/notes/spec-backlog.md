@@ -638,3 +638,33 @@ predecessor's design, where it put the dynamic/static seam, and the one property
 Turn structure and resolution order. Units and movement cost. Visibility and fog of war.
 The strategic-layer graph that planet-to-planet combat happens on. Players, AI, and victory
 conditions.
+
+## Said 2026-08-31: a simplified opening, walked through turn by turn
+
+Sean wrote a complete first turn - territory 1, an Ark above it, six recipes and the order they
+fire in - and asked whether it is viable. **It is, and it settles more than it asks.** Nothing here
+is decided; it is recorded so that the walkthrough is not lost between sessions.
+
+**What it confirms rather than changes.** Landing on force greater than the territory's and holding
+on force equal to it is `spec/control.md` exactly, and the asymmetry between the two comparisons is
+already promoted. A node written *quantity 4, density 6* is the Biomes table's `4 x 6` - a count of
+nodes and a yield each - so nothing here depletes and `spec/economy.md`'s *a planet's resources never
+run out* is untouched.
+
+**What it changes, and it is one rule.** `spec/control.md` says a citizen has a force of its own and
+a garrison lets citizens sum their force instead of presenting the highest. Sean's `provide security`
+says labor spent at a garrison **produces** force. Those are different mechanisms for the same
+outcome, and the second makes force a thing in a territory rather than a property summed over what is
+standing there - which is more uniform with everything else and is why he reached for it.
+
+**What it decides without saying so.** The walkthrough needs four labor and two civilians produce
+two. It balances only if **building costs no labor** - which is the question `P-143` puts to him, and
+his own definition of labor is the argument for it: a citizen operating a machine, and a machine
+being built is not yet one to operate. Under that reading every number he wrote is exactly right,
+including the three metal.
+
+**What it leaves open.** When force expires, since a thing that accumulates makes a territory
+permanently safe and `revert` reads force at the end of the turn. Whether the growth rate is
+intended - six food, two eaten, four surplus, four new citizens, so two civilians become six in one
+turn. And three names: civilian against citizen, farm against food extractor, barracks against
+garrison.
