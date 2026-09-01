@@ -8,8 +8,8 @@ fn main() {
     for row in kinds::units_table() {
         println!("| {} |", row.join(" | "));
     }
-    println!("\n## Transformations\n");
-    for row in kinds::transformations_table() {
+    println!("\n## Recipes\n");
+    for row in kinds::recipes_table() {
         println!("| {} |", row.join(" | "));
     }
 }

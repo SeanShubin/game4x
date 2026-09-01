@@ -289,9 +289,14 @@ impl Game {
                 where_from: "in orbit",
             })?;
 
-        // Landing founds the territory. `spec/unit-types.md`: a founding unit takes a
-        // territory *and transforms into* what it needs - one action, not two - and
+        // Landing takes the territory and takes the Ark apart, in one action.
+        // `spec/unit-types.md` says *a unit may be taken apart into what a territory needs
+        // to sustain itself* and that *an Ark is taken apart on arriving from orbit*, and
         // `spec/invariants.md` forbids an intermediate step that is always taken.
+        //
+        // P-137 purged the word founding, and this quotation was of the wording it purged.
+        // The code still calls it `found`; renaming that is a change to the model rather
+        // than to a comment, and the model is being rewritten for P-134 anyway.
         self.found(territory, at)
     }
 

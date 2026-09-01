@@ -1,4 +1,4 @@
-//! The kinds and transformations of the first release, as Rust data.
+//! The kinds and recipes of the first release, as Rust data.
 //!
 //! **The question.** What do the inputs to the gameplay logic actually look like? The
 //! release says it in two markdown tables, which is the right form for deciding it and the
@@ -13,13 +13,13 @@
 //! - [`Kind`] - every noun the release names, including the three that stand for a family
 //!   rather than a thing: `unit`, `thing` and `resource`.
 //! - [`Trait`] - what distinguishes two of the same kind. *In orbit*, *unworked*, *ready*.
-//! - [`Transformation`] - fifteen of them, each a scope and a list of [`Port`]s.
+//! - [`Recipe`] - fifteen of them, each a scope and a list of [`Port`]s.
 //! - [`PRODUCIBLE`] - force, cells, upkeep and cost per kind.
 //!
 //! # It is checked against the release, not merely derived from it
 //!
 //! `tests/against_the_release.rs` renders this data back into the two tables and compares
-//! them with `releases/first-release.md` on disk. Two copies of fifteen transformations
+//! them with `releases/first-release.md` on disk. Two copies of fifteen recipes
 //! would be one copy and one guess otherwise; this way neither can move without the other.
 
 /// Every noun the release names.
@@ -42,6 +42,7 @@ pub enum Kind {
     Food,
     Node,
     Cell,
+    Territory,
     /// A family: anything that can move.
     Unit,
     /// A family: anything that can be exhausted and readied.
@@ -65,6 +66,7 @@ impl Kind {
             Kind::Food => "food",
             Kind::Node => "node",
             Kind::Cell => "cell",
+            Kind::Territory => "territory",
             Kind::Unit => "unit",
             Kind::Thing => "thing",
             Kind::Resource => "resource",
@@ -76,19 +78,19 @@ impl Kind {
     /// Read from [`FAMILIES`] rather than listed again here, so there is one list of what
     /// a family is.
     pub fn is_family(self) -> bool {
-        FAMILIES.iter().any(|(family, _)| *family == self)
+        families().iter().any(|(family, _)| *family == self)
     }
 
     /// The concrete kinds this family covers, or nothing for a leaf.
-    pub fn members(self) -> &'static [Kind] {
-        FAMILIES
-            .iter()
+    pub fn members(self) -> Vec<Kind> {
+        families()
+            .into_iter()
             .find(|(family, _)| *family == self)
-            .map(|(_, members)| *members)
-            .unwrap_or(&[])
+            .map(|(_, members)| members)
+            .unwrap_or_default()
     }
 
-    /// Whether a transformation naming this kind matches a thing of that kind.
+    /// Whether a recipe naming this kind matches a thing of that kind.
     ///
     /// A leaf matches only itself. A family matches anything carrying it - which is all a
     /// family needs to be. **No hierarchy anywhere**: membership is data, so `unit` is a
@@ -106,27 +108,42 @@ impl Kind {
 /// Pioneer have cells and a move, and the resources are the three the biome table has
 /// columns for.
 ///
-/// **The third cannot, and that is the finding.** The release names `thing, exhausted` and
-/// `thing, ready` in `ready`, and never says anywhere what can be exhausted. The only kind
-/// it shows being exhausted is a citizen, in `spend readiness`. So `ready` - the
-/// transformation that puts the whole planet back on its feet each turn - names a family
-/// with no stated membership, and every reader supplies one without noticing.
+/// **The third could not, and now can.** This crate reported that `ready` named a `thing`
+/// and that nothing anywhere said what one was - the only kind the release showed exhausted
+/// was a citizen, in `spend readiness`. The units table has a **Readies** column now, and
+/// the prose beneath it says *nothing outside this table readies*, so the membership is
+/// stated and [`thing_family`] reads it off rather than guessing.
 ///
-/// Left empty rather than guessed. `crates/game-model` readies extractors, garrisons and
-/// labor as well, but that is the model's answer and not the release's, and the point of
-/// this crate is to show what the release does and does not say.
-pub const FAMILIES: &[(Kind, &[Kind])] = &[
-    (Kind::Unit, &[Kind::Ark, Kind::Pioneer]),
-    (Kind::Resource, &[Kind::Food, Kind::Metal, Kind::Energy]),
-    (Kind::Thing, &[]),
-];
+/// That is the whole of what a family needs to be: **a list, not a parent class**. A
+/// recipe naming `unit` matches an Ark and a Pioneer because both carry it.
+/// `spec/invariants.md` has every kind of thing be data, and a hierarchy would be the one
+/// shape that is not.
+pub fn families() -> Vec<(Kind, Vec<Kind>)> {
+    vec![
+        (Kind::Unit, vec![Kind::Ark, Kind::Pioneer]),
+        (Kind::Resource, vec![Kind::Food, Kind::Metal, Kind::Energy]),
+        (Kind::Thing, thing_family()),
+    ]
+}
+
+/// Which kinds are readied, read from the units table's **Readies** column.
+///
+/// Derived rather than listed, so that the day a kind's column changes this follows it. A
+/// second list would be a second thing to remember.
+pub fn thing_family() -> Vec<Kind> {
+    PRODUCIBLE
+        .iter()
+        .filter(|thing| thing.readies)
+        .map(|thing| thing.kind)
+        .collect()
+}
 
 /// What distinguishes two things of the same kind.
 ///
 /// **The answer to *how is a trait that varies per instance typed*.** `move` takes
 /// *unit, here* and yields *unit, there*, which is the same unit and the same kind: the
 /// location is a property of the instance. So a trait is not a kind and not a container -
-/// it is a second axis, and a transformation names the trait it requires and the trait it
+/// it is a second axis, and a recipe names the trait it requires and the trait it
 /// leaves behind.
 ///
 /// Two of these are **derived** rather than stored, and [`Trait::is_derived`] says which.
@@ -147,6 +164,13 @@ pub enum Trait {
     Exhausted,
     Surplus,
     Unfed,
+    /// A unit that has an upkeep at all, as against one that does not.
+    WithUpkeep,
+    /// The food a unit's upkeep comes to.
+    ItsUpkeep,
+    UpkeepUnpaid,
+    ForceBelowNature,
+    Unclaimed,
 }
 
 impl Trait {
@@ -163,12 +187,33 @@ impl Trait {
             Trait::Exhausted => "exhausted",
             Trait::Surplus => "surplus",
             Trait::Unfed => "unfed",
+            Trait::WithUpkeep => "with upkeep",
+            Trait::ItsUpkeep => "its upkeep",
+            Trait::UpkeepUnpaid => "whose upkeep is unpaid",
+            Trait::ForceBelowNature => "force below its force of nature",
+            Trait::Unclaimed => "unclaimed",
         }
     }
 
     /// Whether this is a comparison between two counts rather than something stored.
     pub fn is_derived(self) -> bool {
-        matches!(self, Trait::Unworked | Trait::Surplus)
+        matches!(
+            self,
+            Trait::Unworked | Trait::Surplus | Trait::UpkeepUnpaid | Trait::ForceBelowNature
+        )
+    }
+
+    /// Whether the table joins this to its kind with a comma or as a phrase.
+    ///
+    /// **Two shapes for one idea, and this is where writing it down shows.** Every
+    /// qualifier but two reads `kind, qualifier` - *ark, in orbit*, *food, surplus*. The
+    /// two that `upkeep` and `perish` introduced read as English instead: *unit with
+    /// upkeep*, *unit whose upkeep is unpaid*. Nothing about them is different in kind, so
+    /// the difference is punctuation rather than meaning, and it is recorded here rather
+    /// than smoothed over because the release is the specification and this crate is not
+    /// the place to correct it.
+    pub fn joined_by_comma(self) -> bool {
+        !matches!(self, Trait::WithUpkeep | Trait::UpkeepUnpaid)
     }
 }
 
@@ -194,10 +239,13 @@ impl Subject {
         }
     }
 
-    /// As the release writes it: `ark, in orbit`.
+    /// As the release writes it: `ark, in orbit`, or `unit with upkeep`.
     pub fn written(self) -> String {
         match self.distinguished_by {
-            Some(distinction) => format!("{}, {}", self.kind.name(), distinction.name()),
+            Some(distinction) if distinction.joined_by_comma() => {
+                format!("{}, {}", self.kind.name(), distinction.name())
+            }
+            Some(distinction) => format!("{} {}", self.kind.name(), distinction.name()),
             None => self.kind.name().to_string(),
         }
     }
@@ -205,9 +253,9 @@ impl Subject {
 
 /// How many.
 ///
-/// **The answer to *what type is a quantity*.** Twelve of the fifteen transformations give
+/// **The answer to *what type is a quantity*.** Twelve of the fifteen recipes give
 /// a number everywhere. Three do not, on four rows between them, and none of the four is
-/// missing a number - each is a number known only when the transformation is applied.
+/// missing a number - each is a number known only when the recipe is applied.
 /// `work` yields the *density* of the node being worked; `spoil` and `ready` take *any*,
 /// meaning however much is there.
 ///
@@ -248,7 +296,7 @@ impl Bound {
     }
 }
 
-/// One line of a transformation: something going in, or something coming out.
+/// One line of a recipe: something going in, or something coming out.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Port {
     In {
@@ -263,7 +311,7 @@ pub enum Port {
     },
 }
 
-/// Where a transformation applies.
+/// Where a recipe applies.
 ///
 /// **The answer to *is scope a field or two types*.** A field. Ten are `Here` and five are
 /// `Every`, and nothing else about them differs - same ports, same quantities, same bounds -
@@ -288,9 +336,9 @@ impl Scope {
     }
 }
 
-/// One transformation: what it needs and what it leaves.
+/// One recipe: what it needs and what it leaves.
 #[derive(Clone, Copy, Debug)]
-pub struct Transformation {
+pub struct Recipe {
     pub name: &'static str,
     pub scope: Scope,
     pub ports: &'static [Port],
@@ -314,9 +362,9 @@ use Kind::*;
 use Quantity::{Any, Density, Exactly};
 use Scope::{Every, Here};
 
-/// The fifteen transformations of `releases/first-release.md`.
-pub const TRANSFORMATIONS: &[Transformation] = &[
-    Transformation {
+/// The fifteen recipes of `releases/first-release.md`.
+pub const RECIPES: &[Recipe] = &[
+    Recipe {
         name: "land",
         scope: Here,
         ports: &[
@@ -332,7 +380,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::that_is(Extractor, Trait::Food), Exactly(1)),
         ],
     },
-    Transformation {
+    Recipe {
         name: "move",
         scope: Here,
         ports: &[
@@ -351,7 +399,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::that_is(Unit, Trait::There), Exactly(1)),
         ],
     },
-    Transformation {
+    Recipe {
         name: "found by land",
         scope: Here,
         ports: &[
@@ -367,7 +415,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::that_is(Extractor, Trait::Food), Exactly(1)),
         ],
     },
-    Transformation {
+    Recipe {
         name: "build extractor",
         scope: Here,
         ports: &[
@@ -381,7 +429,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::plain(Extractor), Exactly(1)),
         ],
     },
-    Transformation {
+    Recipe {
         name: "build yard",
         scope: Here,
         ports: &[
@@ -389,7 +437,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::plain(Yard), Exactly(1)),
         ],
     },
-    Transformation {
+    Recipe {
         name: "produce pioneer",
         scope: Here,
         ports: &[
@@ -400,7 +448,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::plain(Pioneer), Exactly(1)),
         ],
     },
-    Transformation {
+    Recipe {
         name: "produce ark",
         scope: Here,
         ports: &[
@@ -410,7 +458,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::plain(Ark), Exactly(1)),
         ],
     },
-    Transformation {
+    Recipe {
         name: "launch",
         scope: Here,
         ports: &[
@@ -429,7 +477,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::that_is(Ark, Trait::InOrbit), Exactly(1)),
         ],
     },
-    Transformation {
+    Recipe {
         name: "spend readiness",
         scope: Here,
         ports: &[
@@ -443,7 +491,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::plain(Labor), Exactly(1)),
         ],
     },
-    Transformation {
+    Recipe {
         name: "work",
         scope: Here,
         ports: &[
@@ -452,7 +500,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::plain(Resource), Density),
         ],
     },
-    Transformation {
+    Recipe {
         name: "eat",
         scope: Every,
         ports: &[
@@ -460,7 +508,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             takes(Subject::plain(Food), Exactly(1), true, AtLeast),
         ],
     },
-    Transformation {
+    Recipe {
         name: "grow",
         scope: Every,
         ports: &[
@@ -473,7 +521,7 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             yields(Subject::plain(Citizen), Exactly(1)),
         ],
     },
-    Transformation {
+    Recipe {
         name: "depart",
         scope: Every,
         ports: &[takes(
@@ -483,12 +531,12 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
             AtLeast,
         )],
     },
-    Transformation {
+    Recipe {
         name: "spoil",
         scope: Every,
         ports: &[takes(Subject::plain(Food), Any, true, AtLeast)],
     },
-    Transformation {
+    Recipe {
         name: "ready",
         scope: Every,
         ports: &[
@@ -499,6 +547,47 @@ pub const TRANSFORMATIONS: &[Transformation] = &[
                 AtLeast,
             ),
             yields(Subject::that_is(Thing, Trait::Ready), Any),
+        ],
+    },
+    Recipe {
+        name: "upkeep",
+        scope: Every,
+        ports: &[
+            takes(
+                Subject::that_is(Unit, Trait::WithUpkeep),
+                Exactly(1),
+                false,
+                AtLeast,
+            ),
+            takes(
+                Subject::that_is(Food, Trait::ItsUpkeep),
+                Exactly(1),
+                true,
+                AtLeast,
+            ),
+        ],
+    },
+    Recipe {
+        name: "perish",
+        scope: Every,
+        ports: &[takes(
+            Subject::that_is(Unit, Trait::UpkeepUnpaid),
+            Exactly(1),
+            true,
+            AtLeast,
+        )],
+    },
+    Recipe {
+        name: "revert",
+        scope: Every,
+        ports: &[
+            takes(
+                Subject::that_is(Territory, Trait::ForceBelowNature),
+                Exactly(1),
+                false,
+                AtLeast,
+            ),
+            yields(Subject::that_is(Territory, Trait::Unclaimed), Exactly(1)),
         ],
     },
 ];
@@ -520,6 +609,13 @@ pub struct Producible {
     /// What the table says that the figures do not.
     pub aside: Option<&'static str>,
     pub requires: Option<&'static str>,
+    /// Whether this kind is readied at the end of a turn.
+    ///
+    /// **This column is the answer to a gap this crate reported.** `ready` named a `thing`
+    /// and nothing said what one was; the release now says, per kind, and adds *nothing
+    /// outside this table readies* - so the family has a membership and it is read from
+    /// here rather than guessed.
+    pub readies: bool,
 }
 
 /// Force, cells, upkeep and cost, per kind.
@@ -533,6 +629,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         costs: &[],
         aside: None,
         requires: None,
+        readies: true,
     },
     Producible {
         kind: Garrison,
@@ -543,6 +640,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         costs: &[],
         aside: Some("not produced; founding gives one"),
         requires: None,
+        readies: false,
     },
     Producible {
         kind: Extractor,
@@ -553,6 +651,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         costs: &[(1, Labor)],
         aside: Some("and nothing else"),
         requires: None,
+        readies: true,
     },
     Producible {
         kind: Yard,
@@ -563,6 +662,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         costs: &[(15, Metal)],
         aside: None,
         requires: None,
+        readies: false,
     },
     Producible {
         kind: Ark,
@@ -573,6 +673,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         costs: &[(12, Metal), (12, Energy)],
         aside: None,
         requires: Some("a Yard"),
+        readies: true,
     },
     Producible {
         kind: Pioneer,
@@ -583,6 +684,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         costs: &[(8, Metal), (6, Energy), (1, Citizen)],
         aside: None,
         requires: Some("a garrison"),
+        readies: true,
     },
 ];
 
@@ -625,6 +727,7 @@ pub fn units_table() -> Vec<Vec<String>> {
             "Upkeep",
             "Costs to produce",
             "Requires",
+            "Readies",
         ]
         .iter()
         .map(|cell| cell.to_string())
@@ -642,33 +745,28 @@ pub fn units_table() -> Vec<Vec<String>> {
             thing.upkeep_written(),
             thing.cost_written(),
             thing.requires.unwrap_or_default().to_string(),
+            if thing.readies { "yes" } else { "" }.to_string(),
         ]);
     }
     rows
 }
 
-/// The **Transformations** table, as rows of cells, header included.
+/// The **Recipes** table, as rows of cells, header included.
 ///
-/// The scope and the name appear on a transformation's first row and are blank on the rest,
-/// which is the table's own shape: a transformation is one thing with several ports, not
+/// The scope and the name appear on a recipe's first row and are blank on the rest,
+/// which is the table's own shape: a recipe is one thing with several ports, not
 /// several things that share a name.
-pub fn transformations_table() -> Vec<Vec<String>> {
+pub fn recipes_table() -> Vec<Vec<String>> {
     let mut rows = vec![
         [
-            "Transformation",
-            "Scope",
-            "Role",
-            "Thing",
-            "Qty",
-            "Consumed",
-            "Bound",
+            "Recipe", "Scope", "Role", "Thing", "Qty", "Consumed", "Bound",
         ]
         .iter()
         .map(|cell| cell.to_string())
         .collect::<Vec<_>>(),
     ];
-    for transformation in TRANSFORMATIONS {
-        for (at, port) in transformation.ports.iter().enumerate() {
+    for recipe in RECIPES {
+        for (at, port) in recipe.ports.iter().enumerate() {
             let first = at == 0;
             let (role, subject, quantity, consumed, bound) = match port {
                 Port::In {
@@ -689,12 +787,12 @@ pub fn transformations_table() -> Vec<Vec<String>> {
             };
             rows.push(vec![
                 if first {
-                    format!("**{}**", transformation.name)
+                    format!("**{}**", recipe.name)
                 } else {
                     String::new()
                 },
                 if first {
-                    transformation.scope.written().to_string()
+                    recipe.scope.written().to_string()
                 } else {
                     String::new()
                 },

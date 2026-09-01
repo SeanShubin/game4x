@@ -21,27 +21,28 @@ cargo test -p kinds       # checks they are the release's tables, cell for cell
 `S-4` named four things it expected this to force into the open. All four turned out to be
 real, and none of them could have been settled from prose.
 
-**What type is a quantity?** Not a number. Twelve of the fifteen transformations give a
-number everywhere; three do not, on four rows between them, and none of the four is missing
-a figure — each is a figure known only when the transformation is applied. `work` yields the
+**What type is a quantity?** Not a number. Fifteen of the eighteen recipes give a number
+everywhere; three do not, on four rows between them, and none of the four is missing a
+figure — each is a figure known only when the recipe is applied. `work` yields the
 *density* of the node being worked; `spoil` and `ready` take *any*, meaning however much is
 there. So `Quantity` is `Exactly(n) | Density | Any`, and everything that reads this data
 handles all three.
 
 **How is a trait that varies per instance typed?** As a second axis, not as a kind and not
 as a container. `move` takes *unit, here* and yields *unit, there* — the same unit, the same
-kind, a different location — so location is a property of the instance, and a transformation
+kind, a different location — so location is a property of the instance, and a recipe
 names the trait it requires and the trait it leaves behind. `Subject` is a `Kind` and an
 optional `Trait`.
 
 **`node, unworked` and `food, surplus`.** Kept as traits, with a flag saying they are
 *derived*: a node is unworked when the extractors are fewer than the nodes, food is surplus
 when it is more than the citizens. Neither is a fact anything stores — each is a comparison
-between two counts. **Two rows out of fifty-odd**, which is what choosing between derived
-kinds and comparisons costs, and the reason the cheaper answer wins here.
+between two counts. `P-140` added two more of the same shape, *whose upkeep is unpaid* and
+*force below its force of nature*, so it is **four rows out of sixty-odd** — still a small
+enough share that a derived trait beats teaching the shape about comparisons.
 
-**Scope: a field, or two types?** A field. Ten transformations are `here` and five are
-`every`, and nothing else about them differs — same ports, same quantities, same bounds — so
+**Scope: a field, or two types?** A field. Ten recipes are `here` and eight are `every`,
+and nothing else about them differs — same ports, same quantities, same bounds — so
 two types would duplicate the whole shape to carry one bit. What it costs is not in the data
 but in whatever runs it: `here` needs to be told where, and `every` does not.
 
@@ -55,27 +56,39 @@ because a reader supplies the generality without noticing.
 
 **It costs nothing to accommodate, which is the good news.** A family is not a parent class:
 membership is a list, so `unit` is a trait an Ark and a Pioneer both carry, and a
-transformation naming it matches anything carrying it. `FAMILIES` is that list and
+recipe naming it matches anything carrying it. `FAMILIES` is that list and
 `Kind::covers` is the whole mechanism. That matters because `spec/invariants.md` has every
 kind of thing be data, and a parent class would be the one shape that is not.
 
-**And then the gap turns out to be one noun rather than three.** Two families can be read
-straight off the release — only the Ark and the Pioneer have cells and a move, and the
-resources are the three the biome table has columns for. The third cannot:
+**And then the gap turned out to be one noun rather than three — and it is closed.** Two
+families could be read straight off the release: only the Ark and the Pioneer have cells and
+a move, and the resources are the three the biome table has columns for. The third could
+not, and this crate reported it:
 
-> **The release names `thing` and never says what one is.** `ready` — the transformation
-> that puts the whole planet back on its feet every turn — takes `thing, exhausted` and
-> yields `thing, ready`, and nothing anywhere says which kinds can be exhausted. The only
-> kind the release shows exhausted is a citizen, in `spend readiness`.
+> **The release names `thing` and never says what one is.** `ready` — the recipe that puts
+> the whole planet back on its feet every turn — takes `thing, exhausted` and yields
+> `thing, ready`, and nothing anywhere said which kinds can be exhausted.
 
-`FAMILIES` leaves it empty rather than guessing. `crates/game-model` readies extractors,
-garrisons and labor as well — but that is the model's answer, not the release's, and showing
-the difference is what this crate is for. The test asserts the gap and says to delete itself
-when the release fills it, because otherwise nobody would think to come back and look.
+`P-140` answered it. The units table has a **Readies** column and the prose beneath it says
+*nothing outside this table readies*, so `thing_family` reads the membership off that column
+rather than repeating it. The test that asserted the gap has been deleted, because it said
+to delete it the day the release filled it — **a test that knows it is temporary is worth
+more than one that does not**, and the alternative is a check that passes vacuously forever.
+
+### And a sixth: two shapes for one idea
+
+Every qualifier but two reads `kind, qualifier` — *ark, in orbit*, *food, surplus*. The two
+`P-140` introduced read as English instead: *unit with upkeep*, *unit whose upkeep is
+unpaid*. Nothing about them differs in kind, so the difference is punctuation, and
+`Trait::joined_by_comma` records it rather than smoothing it over.
+
+Recorded and not corrected: the release is the specification, and this crate holding what it
+says is the whole reason the comparison is worth anything. If the two should be normalised,
+that is a proposal.
 
 ## Why there is a test
 
-Two copies of fifteen transformations would be one copy and one guess. The test renders this
+Two copies of fifteen recipes would be one copy and one guess. The test renders this
 data back into the release's two tables and compares them with `releases/first-release.md`
 on disk, so neither can move without the other — the habit
 [`quotations.rs`](../../crates/game-console/tests/quotations.rs) already has of reading the
