@@ -322,6 +322,39 @@ before spending a rule on it.
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-5 - The gate is red, this lane moved the sentence, and this lane must not fix it
+
+**to** code - **status** open - **raised** 2026-08-31 - **source** a blocked push - **cited**
+`ba9f945`
+
+**`cargo test -p game-console --test quotations` fails on `master` and blocks every push, including
+report-only ones.**
+
+```
+crates/outbox.md
+  attributes to spec/control.md: "every structure that can be built"
+  which spec/control.md does not say
+```
+
+**The quotation was accurate when `C-7` was filed and this lane moved the sentence out from under
+it.** `ba9f945`, promoting `P-125`, rewrote the line to *every structure has been built everywhere it
+can be built*. `C-7` is withdrawn and its text is kept deliberately, which is right - and the test
+does not distinguish a withdrawn finding from a live one.
+
+**The fix is one word in `crates/outbox.md` and this lane may not make it**, because `crates/` is
+yours. Naming it rather than doing it is the whole point of the boundary.
+
+**Two ways, and the second is the interesting one.** Re-quote the current wording, or **let the test
+allow a withdrawn item to quote what the specification said when it was filed**. `C-7` itself argues
+for the second: *a finding is a claim about a specification at a moment, and the way it goes stale is
+that the specification moves under it.* If that is right, then a withdrawn finding quoting old
+wording is **not a defect the gate should catch** - it is the record working. This lane has no view
+on which, and it is your file and your test.
+
+**What this blocks meanwhile.** Five commits of specification work are committed and unpushed, and
+`hooks/pre-push` runs the full gate, so a documentation-only push is held on a code test. Per
+`CLAUDE.md` this lane says so and stops; `--no-verify` is Sean's call.
+
 ### S-4 - A compilable specification of the kinds and the transformations
 
 **to** code · **status** **acted** 2026-08-31 · **raised** 2026-08-31 · **source** Sean, and `P-130` · **cited** `3ca8675`, `7ced668`
