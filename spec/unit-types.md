@@ -9,14 +9,13 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 One section per unit type. What is true of *every* unit belongs in
 [units](units.md) instead.
 
-## Founding units
+## Units that become structures
 
-- A founding unit takes a territory and transforms into what that territory needs to sustain
-  itself: a structure that holds the ground, a citizen, and an extractor working a food node.
-- An Ark is a founding unit that arrives from orbit. A Pioneer is a founding unit that arrives
-  from an adjacent territory.
-- The structure a founding unit becomes has one less force than the unit, and is operated by
-  citizens.
+- A unit may be taken apart into what a territory needs to sustain itself: a structure that holds
+  the ground, a citizen, and an extractor working a food node
+- An Ark is taken apart on arriving from orbit. A Pioneer is taken apart on arriving from an
+  adjacent territory
+- The structure it becomes has one less force than the unit, and is operated by citizens
 
 ## Ark
 

@@ -41,8 +41,8 @@ One command for each way the game state can change:
 
 - `land <unit> <territory>` - bring a unit down from orbit. It founds the territory
 - `launch <unit>` - send a unit from the territory it is in up to orbit
-- `move <unit> <territory>` - move a unit to an adjacent territory. If the territory is not
-  already controlled, it is taken and founded
+- `move <unit> <territory>` - move a unit to an adjacent territory. If the territory is not already
+  controlled, it is taken
 - `build <structure> <territory> [<resource>]` - build a structure, paying its cost there
 - `produce <unit> <territory>` - produce a unit at a structure that allows it
 - `work <count> <structure> <territory> [<resource>]` - spend that many citizens' labor at a

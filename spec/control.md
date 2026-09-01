@@ -23,7 +23,6 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 - A garrison does two things. It lets the citizens of that territory sum their force instead of
   presenting only the highest among them. And it has a multiplier, so that a citizen working
   there produces that much force.
-- A garrison is not built. A territory gains one by being founded, and gains one no other way
 
 ## Coordination
 

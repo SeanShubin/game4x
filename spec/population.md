@@ -11,7 +11,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - A citizen is not one person. It is the smallest group that can sustain reproduction.
 - A count of one is not one citizen. A territory is a wide stretch of land, and a count is a
   density across the whole of it. One is the least that makes its presence felt.
-- A founding unit produces the citizen that starts a territory; an Ark, arriving from orbit,
+- A unit taken apart produces the citizen that starts a territory; an Ark, arriving from orbit,
   starts a planet's population.
 - Nothing else produces citizens, and after that the number changes only by the rule below.
 - Each turn the number of citizens may change depending on available food
