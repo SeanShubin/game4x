@@ -42,71 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-140 - Two recipes the table does not have
-
-**to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
-`releases/first-release.md` -> Transformations
-
-**Found by asking what *the rest* are in `P-139`.** The release's table has fifteen rows and the game
-has seventeen recipes. Two of the unoffered ones are in `spec/` and nowhere in the release:
-
-> | Recipe    | Scope | Role | Thing                      | Qty | Consumed | Bound       |
-> | --------- | ----- | ---- | -------------------------- | --- | -------- | ----------- |
-> | **upkeep** | every | in   | unit with upkeep           | 1   | no       | at least    |
-> |            |       | in   | food, its upkeep           | 1   | yes      | at least    |
-> | **perish** | every | in   | unit whose upkeep is unpaid | 1   | yes      | at least    |
-> | **revert** | every | in   | territory, force below its force of nature | 1 | no | at least |
-> |            |       | out  | territory, unclaimed       | 1   |          |             |
-
-**Basis:** `spec/units.md` says *a unit may require upkeep each turn, and is lost if it is not paid*,
-and `releases/first-release.md` gives a Pioneer *1 food per turn* in the units table. **Neither is a
-row in the recipe table**, and `eat` does not cover it - that row names a **citizen**, not a unit.
-
-`spec/control.md` says *should the force in a territory fall below its force of nature, nature takes
-it back. Its entire population perishes and any ark on it becomes unusable.* **That is not in the
-release at all**, in either table.
-
-**When they apply, which is not uniform, and a correction.** Sean read *the rest* as *automatically
-applied at end of turn*. **That is right for five and unstated for the other two.**
-
-- **Five are explicitly end-of-turn**, because `spec/turn.md`'s ending line names them: everything
-  that eats eats, a population grows or starves, what expires expires, everything becomes ready.
-- **Upkeep says *each turn*** in `spec/units.md` and is **not** in that ending line. End of turn is
-  the natural reading and the specification does not say it.
-- **`revert` says nothing about timing at all.** *Should the force in a territory fall below its force
-  of nature, nature takes it back* - no when.
-
-**This lane told Sean that one fires *whenever it becomes true*. That was a reading, not the text**,
-and the difference is a real one: checked only at the turn's end, force may dip and recover within a
-turn and nothing happens; checked continuously, it cannot.
-
-**It is not urgent, because the rule may be unreachable in this release.** Force in a territory is a
-garrison plus the citizens it organises. A garrison has force 1, force of nature is 1 everywhere, and
-holding takes force *equal* to nature - so an emptied territory still holds at exactly 1. **Nothing in
-the release removes a garrison**: structures are never demolished, and there is no combat. So the
-condition looks like it can never arise, which is worth knowing before anyone spends effort on when it
-is checked.
-
-**Two things follow and neither is proposed here.** If the rule is unreachable, the release has a rule
-it cannot exercise - which is either fine or a gap depending on whether the release is meant to
-demonstrate it. And if it is ever reachable, **when it is checked wants deciding**, because moving
-force through a territory is a thing a player will try.
-
-**Why it matters more than a missing row.** `P-139` says most recipes are options and *the rest apply
-themselves wherever they match*. **A reader counting the rest finds five and there are seven** - so
-the table understates the class the sentence is about, and the two it omits are the two that can take
-things away from a player without being chosen. **Those are exactly the ones a player most needs to
-see written down.**
-
-**The names are this lane's and are the weakest part.** *Upkeep*, *perish* and *revert* describe what
-happens; the specification names none of them, because until now none of them needed naming. Rename
-freely.
-
-**One thing left undone deliberately.** *Its entire population perishes and any ark on it becomes
-unusable* has a second half about arks that no row here expresses, because *unusable* is not a state
-anything else in the release has. **It wants a decision rather than a guess**, so `revert` above stops
-at the territory.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -333,6 +268,7 @@ work the release exists to order.
 | P-137, purge founding                                                                                           | `spec/console.md`, `spec/control.md`, `spec/population.md`, `spec/unit-types.md`                                       | 2026-08-31 |
 | P-138, order is spent: matter is conserved, arrangement is not                                                  | `spec/resources.md` -> The list, `spec/turn.md` -> Order of operations                                                 | 2026-08-31 |
 | P-139, a recipe, not a transformation, and a recipe belongs to the player or the world                          | `spec/invariants.md` -> The game is data, `releases/first-release.md` -> Recipes                                       | 2026-08-31 |
+| P-140, two recipes the table did not have: upkeep, perish and revert                                            | `releases/first-release.md` -> Recipes                                                                                 | 2026-08-31 |
 
 ## Rejected
 
