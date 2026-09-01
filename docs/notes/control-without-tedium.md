@@ -232,6 +232,11 @@ spin. Assignment is precisely the construct that breaks the guarantee.
 
 Three constructions restore it, and together they are what Sean suspected was available:
 
+**Corrected 2026-08-31.** Construction 1 below is weaker than it reads - see
+[no free surplus](no-free-surplus.md). It holds only while no action *creates* a ready thing, and a
+recipe does. What bounds a turn is that every cycle spends readiness, which only the turn boundary
+restores; the shrinking-set argument was doing work it could not do.
+
 1. **Every firing takes a game action.** Each action exhausts something and `spec/turn.md` says
    nothing becomes ready again until the turn ends, so the set of things that can still act strictly
    shrinks. **This gives a bound rather than mere termination:** at most one firing per thing that

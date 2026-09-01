@@ -22,6 +22,8 @@ disagree, the spec is right and the note needs a superseded marker.
 | [Generating a planet, designing a territory](generating-versus-designing.md) | Distribution without placement, and why a scenario is not a world                                | 2026-08-28 |
 | [Spec proposals](proposals.md)                                               | Lines offered for Sean's review, labelled by what kind of inference produced them                | open       |
 | [Clumping at in-between counts](in-between-counts.md)                        | Why non-Goldberg region counts get extra pentagons, and what does not fix it                     | 2026-08-26 |
+| [No free surplus](no-free-surplus.md)                                        | Why forbidding cycles would forbid the economy, and what stops perpetual motion instead          | 2026-08-31 |
+| [No free surplus](no-free-surplus.md)                                        | Why forbidding cycles would forbid the economy, and what stops perpetual motion instead          | 2026-08-31 |
 | [Colonising by rule](colonising-by-rule.md)                                  | Two rules for a planet, and why the contention is in the condition                               | 2026-08-31 |
 | [Complexity against the predecessor](complexity-against-the-predecessor.md)  | Fifteen types against five, and which of the ten extra are capability                            | 2026-08-31 |
 | [The game as tables](the-game-as-tables.md)                                  | Every kind and every transformation of the first release, in two tables                          | 2026-08-31 |
