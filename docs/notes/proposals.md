@@ -74,10 +74,14 @@ cycles outright would forbid the economy: labor works an extractor and yields fo
 citizens, citizens give labor. **The game's core loop is a cycle**, and what makes it safe is that
 getting labor out of a citizen exhausts the citizen and only the turn boundary makes it ready again.
 
-**What it then says about the transfer.** A transfer must spend the readiness of something, and the
-cheapest candidate is **the bin** - one transfer per bin per turn, which keeps a transfer free of
-labor and metal while making it finite. That is a design consequence rather than part of this
-proposal, and is recorded in [the backlog](spec-backlog.md).
+**What it then says about the transfer, corrected 2026-09-01.** This proposal first said the readiness
+spent should be **the bin's**. That was the wrong candidate: it makes a bin a once-a-turn valve, so
+unloading a transport into a warehouse would stop anything else being loaded from it.
+
+**The readiness spent is the moved thing's own.** A move takes `metal, ready` and yields
+`metal, exhausted`, so the metal can go one way and not come back until the turn ends. That is a
+design consequence rather than part of this proposal, and is recorded in
+[the backlog](spec-backlog.md).
 
 ### P-141 - A unit carries fuel, not cells
 

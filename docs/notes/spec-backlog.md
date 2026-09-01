@@ -973,3 +973,40 @@ consequence is that **a transfer spends the bin's readiness** - one transfer per
 keeps it free of labor and metal while making it finite. A vehicle can still load and move in the
 same turn, because moving spends the vehicle's readiness and loading spends the bin's; what it cannot
 do is arrive, unload, reload and leave.
+
+### Answered 2026-09-01: exhausted covers moved, and no second property is needed
+
+Sean: *does this prevent me from constantly applying a recipe with no cost... makes me wonder if
+there needs to be a "moved" property in addition to "exhausted", or if "exhausted" can be expanded to
+cover moved as well.*
+
+**Exhausted covers it, and the reason is a fact about the release rather than a definition.** Two
+things had to be checked and both hold:
+
+- **Readiness is asked for per recipe, not enforced by the engine.** Of eighteen recipes only
+  `spend readiness` names it, taking `citizen, ready`. `build yard` says `metal`, not `metal, ready`
+- **Every use of a resource in the release consumes it.** Metal, energy and food are consumed by
+  every recipe that takes them, without exception
+
+**So exhausting a resource can only ever stop it being moved again**, because moving is the one
+non-consuming thing that can be done to it. *Moved* and *exhausted* would restrict exactly the same
+set of actions, which is why one word does.
+
+**The loop closes like this.** A move takes `metal, ready` in one bin and yields `metal, exhausted`
+in the other. Moving it back needs `metal, ready` where there now is none. **Building with it still
+works**, because `build yard` never asked for readiness - so a delivery is usable the moment it
+arrives and simply cannot be sent back.
+
+**It costs no new machinery in the state either.** `spec/invariants.md` says a state is *things, in
+places, and how many of each*, and *a thing is a set of traits*. So `(metal, ready)` and
+`(metal, exhausted)` are two things with two counts, and a bin holding seven of one and three of the
+other is the promoted model unchanged.
+
+**And it generalises past transfers, which is the part worth keeping.** Any free reversible recipe is
+made finite by requiring `ready` on its input and producing `exhausted` on its output. `P-147` is
+what makes that mandatory rather than remembered.
+
+**Superseding this lane's earlier suggestion.** It proposed spending the *bin's* readiness. That also
+stops the loop and is worse: a bin becomes a once-a-turn valve, so unloading a transport into a
+warehouse would prevent loading anything else from it. **Readiness on the thing moved is both looser
+and more exact.**
