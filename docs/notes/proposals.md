@@ -80,6 +80,69 @@ the release could be won. **The cost of the clause is one line now.**
 five rules matching at once, or every citizen eating at the end of a turn. Effects a player *sequences*
 have one by construction, and the player chose it.
 
+### P-137 - Purge founding
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into** `spec/console.md`,
+`spec/control.md`, `spec/population.md`, `spec/unit-types.md`
+
+**Sean's, decided 2026-08-31**: *I need to purge the "founded" and "founding" concepts.* Six lines in
+four files, and every one of them is a special case that `P-130` and `P-134` already replaced.
+
+> **`spec/unit-types.md`** - the section heading becomes **Units that become structures**, and its
+> three lines become:
+>
+> - A unit may be taken apart into what a territory needs to sustain itself: a structure that holds
+>   the ground, a citizen, and an extractor working a food node
+> - An Ark is taken apart on arriving from orbit. A Pioneer is taken apart on arriving from an
+>   adjacent territory
+> - The structure it becomes has one less force than the unit, and is operated by citizens
+
+> **`spec/population.md`** - the line becomes:
+>
+> - A unit taken apart produces the citizen that starts a territory; an Ark, arriving from orbit,
+>   starts a planet's population
+
+> **`spec/console.md`** - the `move` line becomes:
+>
+> - `move <unit> <territory>` - move a unit to an adjacent territory. If the territory is not already
+>   controlled, it is taken
+
+> **`spec/control.md`** - delete the line entirely:
+>
+> - ~~A garrison is not built. A territory gains one by being founded, and gains one no other way~~
+
+**Basis:** *founding* is a name for something that is no longer special. `P-130` says every
+transformation is data; `P-134` says the state is things with traits. **Under both, taking a territory
+is a recipe like any other** - a unit goes in, a garrison, a citizen and an extractor come out - and
+naming it separately implies a category that no longer exists.
+
+**`founded` was already gone before this.** [The transformation table](the-game-as-tables.md) needed
+*garrison, at most 0* as an input to that recipe. It did not need, and could not use, `founded =
+false`. What the word described is **force present is at least the force of nature**, which
+`spec/control.md` already says in the lines beside the one being deleted.
+
+**The deletion is the part that looks risky and is not.** *A garrison is not built... and gains one no
+other way* reads as the thing preventing garrison-spam. **It is not.** Four lines above it,
+`spec/control.md` already says *a territory has at most one garrison, because it represents the
+organisation of the whole territory.* **That is the constraint**, it is unaffected, and the deleted
+clause was doing nothing it was not already doing.
+
+**What the deletion buys** is the second route Sean wants later - a garrison from a military unit and
+a transport, rather than only from a unit taken apart. *Gains one no other way* forbids it today, and
+forbids it for no reason, since the *at most one* rule is what actually matters.
+
+**Every replacement says *taken apart*, which is Sean's own frame** - *a pioneer that when
+disassembled yields one metal.* It describes the same event without implying that founding is a kind
+of act the game distinguishes.
+
+**`spec/narrative.md` keeps its *founding population***, which is fiction rather than mechanism and
+reads correctly in English.
+
+**One consequence for the release, not proposed here.** `releases/first-release.md` has a
+transformation called **found by land** and a units-table cell reading *not produced; founding gives
+one*. Both want the same rewording, and both are release rather than specification - **a cleanup
+proposal follows this one rather than being folded into it.**
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the

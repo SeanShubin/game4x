@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-136** - When effects compete, and when they merely follow · `docs/notes/proposals.md`
+- **P-137** - Purge founding · `docs/notes/proposals.md`
 
 ## What is outstanding
 
