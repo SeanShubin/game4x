@@ -88,6 +88,10 @@ written until the earlier ones are answered.**
 
 ### Three decisions, all Sean's, none of them a number
 
+**Superseded 2026-08-31: all three are answered.** Kept as written because the reasoning below is
+what the answers were chosen against; see *What is left* at the end of this note for where each one
+landed.
+
 **1. Is a `cell` a thing or a trait?** A unit carries `cells: 2` in the Units table - a trait whose
 value goes down. `move` consumes `cell, on that unit`, quantity 1, consumed yes - a thing the unit
 holds. **It cannot be both and the tables currently say both.** Everything else waits on this,
@@ -130,3 +134,40 @@ fixture and is not fine as the game's data, because *who may change the game* th
 quantity. So *pull all the costs down* is an edit to one of them, and the four groups this note
 listed as missing become cells rather than gaps.
 
+## What is left, 2026-08-31
+
+Sean: *lets work through the remaining questions that need to be answered before I get my tables with
+release data.* **All three decisions are answered, and one of the answers was neither option
+offered.**
+
+| Question                | Answer                                                | Where it went |
+| ----------------------- | ----------------------------------------------------- | ------------- |
+| Is a `cell` a thing?    | No: a unit has a fuel capacity and burns energy       | `P-141`       |
+| What is a quantity?     | A whole number, written or read from a trait          | `P-142`       |
+| Is `labor` a thing?     | Yes: *labor represents a citizen operating a machine* | `P-143`       |
+| Is a territory a thing? | No: a place that carries traits                       | `P-143`       |
+| Names or convention?    | Convention                                            | `P-143`       |
+
+**The labor answer is the interesting one**, because it was offered as a choice between a thing and a
+shorthand and came back as a definition instead. It settles the mechanical question - labor stays a
+thing, so the kinds table has eleven rows - and adds a constraint that was not there before. **That
+constraint does not hold in one of labor's two uses**: `work` takes labor and an extractor, which is
+a citizen operating a machine, and `build extractor` takes labor with nothing yet to operate. `P-143`
+puts both ways out to Sean rather than picking one.
+
+**Three of the four pieces of writing are now filed.** Declaring the kinds and siting the traits
+table are one act and are `P-143`; the capacity and metal-content columns are `P-144`. Chasing the
+metal-content column found a contradiction and that is `P-145`: `perish` consumes a unit and produces
+nothing, while `spec/resources.md` says metal is conserved, so an unpaid Pioneer deletes eight metal
+from the game.
+
+**What is still open, and none of it blocks the structure.**
+
+- **Where the data lives.** `commands/` is in no lane's column. This is the fourth piece of writing
+  and the only one not filed, because it is a governance question rather than a data one and `P-124`
+  answered the same question for generated files - so the answer should probably match it
+- **The numbers**, all of which `P-144` proposes so that there is something to pull down rather than
+  a blank. The one that is not taste is metal capacity, which must reach 15 or no Yard exists
+- **Whether `revert` can ever fire.** Nothing in first release reduces a territory's force, so it may
+  be a recipe for a situation the release cannot reach. Worth confirming before a rule is spent on
+  what it leaves behind
