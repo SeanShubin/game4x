@@ -56,13 +56,41 @@ everything else was a synonym in flight.
 >   code
 > - A recipe is a set of inputs and a set of outputs. Each input says how many, whether it is
 >   consumed, and whether its quantity is a least or a most
-> - A recipe applies either at one place, named when it is used, or at every place its inputs are
->   present. Which of the two it is belongs to the recipe rather than to the moment
+> - A recipe is available wherever its inputs are present. Some are offered, and somebody chooses
+>   which and where; the rest apply themselves wherever they match, and nobody chooses
 
 > `releases/first-release.md`, the section heading and the table's first column head:
 >
 > - `## Recipes`
 > - `| Recipe | Scope | Role | Thing | Qty | Consumed | Bound |`
+
+**Amended again, and this lane was wrong twice about the same sentence.** Sean: *recipes are options
+available to me where their inputs are present. What are the other cases you are talking about?*
+
+**He is right about the first half, and it shows the reworded version was wrong on a second axis.**
+The previous attempt contrasted *at one place* with *at every place its inputs are present* - but an
+offered recipe is available at every place its inputs are present **too**. A Yard can be built in any
+territory holding 15 metal. **What differs is not how many places, it is whether anybody chooses.**
+
+**The other cases, which is what he asked.** Six things happen without being chosen:
+
+| Not chosen                                                                                    | When                         |
+| --------------------------------------------------------------------------------------------- | ---------------------------- |
+| eat, grow, depart, spoil, ready                                                               | ending a turn                |
+| a unit lost when its upkeep is unpaid - `spec/units.md`                                       | ending a turn                |
+| nature taking a territory back when force falls below its force of nature - `spec/control.md` | **whenever it becomes true** |
+
+**The last one is why the distinction is about cause and not timing.** Move a garrison away and nature
+reclaims the ground at that moment, not at the end of the turn. **So the axis cannot be *during the
+turn* against *ending it*** - it has to be *somebody chose* against *nobody did*.
+
+**And that is the whole of it**: everything in the release's Scope column marked `every` is something
+nobody chooses, and everything marked `here` is an option. The column is named for the symptom rather
+than the cause.
+
+**One consequence for the release, not folded in.** `releases/first-release.md`'s Scope column reads
+`here` and `every`. Under this wording those become something like *offered* and *automatic*, which is
+a release change and gets its own cleanup rather than riding along in a specification proposal.
 
 **Amended 2026-08-31: the third line is reworded and not only renamed.** Sean asked what *applies
 either where it is invoked or everywhere it matches* means, **and asking is the evidence.** Three
