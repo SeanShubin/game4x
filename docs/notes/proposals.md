@@ -100,6 +100,12 @@ tank, they burn a unit of fuel every time they move.*
 > `releases/first-release.md` -> Recipes: the two `cell, on that unit` ingredients become
 > `energy, in that unit`.
 
+**Stale in part, 2026-09-01.** Two lines have been overtaken by the containment model and neither
+is wrong so much as narrow. *Up to a capacity of its own* assumes one capacity, and a metal transport
+now carries an energy bin and an ore bin. And *fuel moves freely* is a special case: **anything moves
+freely between bins in a controlled territory**, so stating it of fuel alone would put a rule in the
+specification that is true of everything and written about one thing.
+
 **Basis:** it removes a kind rather than adding one, and **the specification already said so**.
 `spec/units.md`: *a unit's cells are filled when it is built, and **the energy** is paid in the
 territory that built it.* **A cell was always energy in a wrapper** - the wrapper had a name, a
@@ -161,6 +167,11 @@ compelling reason otherwise.*
 > | ------ | ---- | ----- | --- |
 > | **work** | out | resource | the worked node's density |
 > | **upkeep** | in | food | the unit's upkeep |
+
+**One cell stale, 2026-09-01.** *The worked node's density* names a node, and Sean's decision of
+2026-09-01 removes nodes: density becomes a trait of the **territory**, per resource. The proposal's
+general line is unaffected - a quantity is still written in the recipe or read from a trait of an
+ingredient - and only the example moves.
 
 **Basis:** `any` was never a quantity. It meant *all of it*, and **the scope column already says that**
 - both recipes are the world's, applied everywhere they match, so a recipe removing one food applied
@@ -268,7 +279,14 @@ four tables above, and this proposal should not be promoted as it stands:
   ore bin. `spec/logistics.md` currently says a container provides capacity *of another* kind,
   singular
 
-**Left open rather than rewritten**, because the five are still moving and a table rewritten twice
+- **A bin and a capacity are the same thing**, so *Places* and *Traits* change again: a place holds
+  bins, a bin holds one kind or one family up to a maximum, and `spec/logistics.md`'s capacity
+  section becomes a consequence rather than a rule. *A container - any unit* is too narrow twice over
+- **The no-nesting line has to become acyclicity.** A territory holds a bin of extractors and an
+  extractor holds a bin of metal, so bins nest, and *no kind nested inside itself at any depth*
+  forbids what the model now requires
+
+**Left open rather than rewritten**, because the design is still moving and a table rewritten twice
 costs a reading each time. The count in the title - eleven kinds - is already wrong; it is twelve.
 
 **Basis:** none of this is a new rule. Every kind, family and trait above is already referenced by a
@@ -326,6 +344,13 @@ says a conserved resource *changes form, and what it was made into can be taken 
 so **the metal did not go anywhere**. A citizen is blank rather than zero because a citizen is not
 built.
 
+**Two cells disagree with the release on purpose, and it should be said rather than left to be
+found.** *Costs to produce* gives a garrison as *not produced* and an extractor as *1 labor, and
+nothing else*, so on the release as written both are **0**. The table above says **1**, which is
+Sean's opening of 2026-08-31 where a garrison and a farm each cost one metal. **The figures are ahead
+of the release and the basis sentence is behind it**, and whichever moves, the two have to be made to
+agree before this lands.
+
 **Two of these six numbers are about to move**, and that is not a reason to wait. The Ark's 12 is
 almost certainly wrong now: Sean's deployment lever means an Ark deploys into what it cost, so the
 figure is whatever its deployment is worth - three, on the opening worked through today. The column
@@ -360,8 +385,11 @@ lost**, which is the intended feel - and it is what makes salvage something a pl
 given, rather than something the engine has to know about.
 
 **It is a lookup and not a literal**, in the shape `P-142` proposes: the quantity is the unit's
-*Metal in it* trait, which `P-144` adds. **The three only work together** - without `P-144` there is
-no trait to read, and without `P-142` there is no way to read one.
+*Metal in it* trait, which **`P-146`** adds. **The three only work together** - without `P-146` there
+is no trait to read, and without `P-142` there is no way to read one.
+
+**Corrected 2026-09-01.** This cited `P-144`, which Sean withdrew on 2026-08-31; the column moved to
+`P-146` in the same commit and this reference did not follow it.
 
 **One thing this does not fix.** `revert` hands a territory back to nature with everything on it, and
 what becomes of that is stated nowhere. It is out of scope here because **`revert` may never fire in
