@@ -203,10 +203,11 @@ only one who can move them.
 
 ### R-6 - The loop can be played through
 
-**to** code · **status** open · **cited** `faafb5f` · blocked by `C-7`, see `P-125`
+**to** code · **status** open · **cited** `faafb5f` · blocked by `C-7`, see `P-125` · **blocked by** `C-11`
 
 - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
 - **Vetted when** - starting from a single Ark in orbit over the twelve designed territories, a
   person playing entirely by hand reaches a fully exploited planet and launches an Ark
+- **Unreachable today, and not for the reason it was.** `P-126` and `P-138` removed the wall `C-7` and `C-8` described, and the code has not followed: `crates/game-model/src/game.rs:705` still empties a territory's stores at the end of every turn, under a comment quoting the rule `P-126` replaced. **A play-through run now would hit the old wall and prove nothing about the game as specified.** `C-11` records the divergence and argues for not repairing it yet, since `P-134` removes the very shapes it lives in.
 
 ## Open questions
