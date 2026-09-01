@@ -61,119 +61,42 @@ Not done in the same commit as the specification's change, deliberately. It is a
 game rewards, the tests that pin it are the ones that would have to change with it, and `C-8` says
 nothing in play reaches it either way - so it is worth doing carefully rather than quickly.
 
-### C-8 - No Ark can ever be produced, so the loop cannot reach its last two steps
+### C-10 - What a territory can keep is bounded, and nothing says by how much
 
-**to** spec · **status** open · **raised** 2026-08-30 · **source** building the `R-6` play-through
+**to** spec · **status** open · **raised** 2026-08-31 · **source** withdrawing `C-7` and `C-8`
 
-Independent of `C-7` and worse. `P-125` narrows what *fully exploited* means; this says the win is
-out of reach whatever it means, because **an Ark cannot be built anywhere a Yard can be built.**
+`spec/turn.md` says *what a territory can keep is bounded. Anything above the bound is lost when
+the turn ends.* No number appears anywhere - not in `spec/`, not in `releases/first-release.md`.
 
-An Ark costs 12 metal and 12 energy and needs a Yard. A Yard costs 15 metal. Both are paid from one
-territory's store in a single turn, because `settle` discards every store at the end of every turn.
-A territory's output in a turn is bounded by its own node densities and by how many hands its own
-food can feed:
+**Everything about whether the first release can be finished now hangs on that number.** `spoil`
+takes food and nothing else, so metal and energy carry between turns, and a territory that makes
+any metal at all reaches a Yard's fifteen eventually - if the bound allows fifteen. Recomputed
+against the release's nodes and the adjacency of `canonical_seeds(12)`:
 
-| Territory | Yard, 15 metal | Ark, 12 metal and 12 energy | Reachable |
-| --------- | -------------- | --------------------------- | --------- |
-| 1         | no, tops at 12 | yes                         | start     |
-| 7         | yes            | no - it has no energy       | yes       |
-| 9         | yes            | no - energy tops at 2       | yes       |
-| 11        | yes            | yes                         | **no**    |
-| 12        | yes            | no - two spare hands        | **no**    |
+| Bound      | Yard, 15 metal | Ark, 12 and 12 | The loop        |
+| ---------- | -------------- | -------------- | --------------- |
+| 15 or more | ten of twelve  | nine of twelve | closes          |
+| 12 to 14   | nowhere        | nowhere        | stops at step 6 |
+| below 12   | nowhere        | nowhere        | stops at step 6 |
 
-**Territory 11 is the only place an Ark could be produced, and it can never be claimed.**
+At fifteen or more, every territory is reachable and territory 1 - the landing site - can build a
+Yard and produce an Ark itself. Below fifteen, no Yard exists anywhere and the loop cannot reach
+step 7, which is what `C-8` said for a different reason.
 
-A pioneer costs 8 metal, 6 energy and a citizen, in one turn, and must found the territory it
-enters. Only 1, 2, 3, 11 and 12 can afford one - 4 and 5 can never build the extractors they would
-need, 6 has no metal, 7 has no energy, and 8, 9 and 10 are short of one or the other. Spreading
-outward from the landing site along those five reaches **1, 2, 3, 4, 5, 6, 7, 8, 9 and stops**.
+Two territories fail whatever the bound, and both fail by design rather than by accident.
+**Territory 5** has three food nodes of density one, so founding leaves it with one citizen whose
+single hand must feed itself every turn - it never spares one, and never builds a second anything.
+**Territory 6** has no metal node, so no accumulation reaches a Yard. Under `P-125` - *every
+structure has been built everywhere it can be built* - neither is a problem, which is what that
+proposal was for.
 
-`11` and `12` neighbour only each other among the territories that could send a pioneer, so each
-waits on the other and neither is ever founded. `10` neighbours 4, 6, 8, 11 and 12, none of which
-can send one. Three territories are unclaimable, and the one place an Ark could be built is among
-them.
+So: one number, and the release either can or cannot be finished. Not this lane's to choose.
 
-So the loop stops at step 6. Steps 7 and 8 - *produce an Ark*, *launch the Ark into orbit* - have no
-reachable state in which they are legal.
-
-**How this was produced, so it can be re-run rather than trusted.** The node densities are read from
-`commands/nodes.4x`; the adjacency is `sphere_tessellation::adjacency` over
-`icosahedral::canonical_seeds(12)`, which is what `create planet tiny` builds. For each territory,
-the most of a resource it can hold at once is the best choice of how many food extractors to work -
-population settles at the food produced, and the hands left over work the densest remaining nodes.
-Then the reachable set is the closure of the landing site under *can afford a pioneer*. Nine of
-twelve.
-
-The two facts it rests on are checkable without any of that: **territory 6 has no metal node**, and
-**territory 7 has no energy node**, both from the release's own table.
-
-Not this lane's to settle. It is the release's numbers against the release's loop, and every way out
-changes something Sean chose - the node table, the costs, whether stores carry between turns, or
-whether anything may cross a border.
-
-### C-7 - `R-6` cannot be vetted: eight of the twelve territories can never hold a Yard
-
-**to** spec · **status** open · **raised** 2026-08-30 · **source** starting `R-6`
-
-`R-6` is vetted when a person reaches *a fully exploited planet* and launches an Ark.
-`is_fully_exploited` asks that **every claimable territory** be founded, hold at least one yard, and
-have an extractor on every node. A yard costs 15 metal, spent from that territory's own store, and
-`settle` discards every store at the end of every turn - so a territory must produce 15 metal **in a
-single turn** or never hold one.
-
-Most cannot. Metal per turn is bounded by the density of the metal nodes a territory's own
-population has hands to work, and its population is bounded by its food:
-
-| Territory | Metal nodes | Most metal in one turn | Yard |
-| --------- | ----------- | ---------------------- | ---- |
-| 1         | `3 x 4`     | 12                     | no   |
-| 2         | `2 x 4`     | 8                      | no   |
-| 3         | `2 x 4`     | 8                      | no   |
-| 4         | `4 x 5`     | 5, on two citizens     | no   |
-| 5         | `8 x 8`     | 0, on one citizen      | no   |
-| 6         | none        | 0                      | no   |
-| 7         | `4 x 5`     | 20                     | yes  |
-| 8         | `1 x 2`     | 2                      | no   |
-| 9         | `6 x 8`     | 32                     | yes  |
-| 10        | `1 x 3`     | 3                      | no   |
-| 11        | `5 x 6`     | 30                     | yes  |
-| 12        | `8 x 8`     | 16                     | yes  |
-
-**Territory 6 has no metal at all**, so no arrangement of anything reaches a yard there. Territory 1,
-the landing site, tops out at 12 against a cost of 15.
-
-Two territories fail a second way as well. **5 is stuck at one citizen forever**: founding gives it
-one citizen and one food extractor on a density-1 node, so working that extractor yields one food
-for one citizen - `population_after(1, 1)` is `1`, and the labor is spent - while building anything
-instead yields no food and `population_after(1, 0)` is `0`. It reaches 1 of its 19 nodes. **4** is
-held at two citizens the same way.
-
-Nothing crosses a border to help. Stores are discarded each turn, no transition moves a resource or
-a citizen between territories, a pioneer entering a held territory perishes, and `found` refuses an
-`AlreadyControlled` one. Not founding a territory does not help either: an unfounded one fails the
-same test, and none of the twelve is ocean.
-
-**This is the release disagreeing with itself, not a defect in the code.** The territory table was
-built so that each one exercises a different consequence - *no metal*, *food density 1*, *the
-minimum a territory can be* - and `commands/biomes.4x` says 5 exists so that *a territory which can
-never build anything is demonstrated deliberately rather than produced by accident*. Those are good
-things to demonstrate. They cannot coexist with a win that requires **every** claimable territory to
-hold a yard.
-
-Four ways out, and choosing is not this lane's:
-
-- **Narrow what fully exploited means** - every territory that *can* be, rather than every one.
-  Changes no number Sean chose, and keeps every lesson the table was built to teach.
-- **Require the yard once**, on the planet rather than per territory. One shipyard builds the Ark.
-- **Let something cross a border** - a resource, or a citizen. A new rule, and a bigger change than
-  it looks.
-- **Change the numbers** so every territory can reach 15 metal, which costs most of what the table
-  exercises.
-
-**Proceeding under the first**, because it is the only one that changes nothing already chosen. The
-play-through is being built to exploit every territory that can be and to launch an Ark from one
-that can hold a yard, which is the same work under any of the four. It will stop short of `has_won`
-until this is settled, and the evidence for `R-6` will say so rather than reporting a pass.
+**How to re-run this.** Densities from `commands/nodes.4x`; adjacency from
+`sphere_tessellation::adjacency` over `icosahedral::canonical_seeds(12)`, which `S-3` asks to be
+printed and which this lane still owes. A territory can spare a hand when its densest food node has
+density two or more, and with metal and energy carrying it need not make both in the same turn -
+which is the correction that made `C-8` wrong.
 
 ### C-5 - Two documents list every crate, and neither list is right
 
@@ -252,6 +175,38 @@ Reported with an instance rather than as a worry.
 Kept rather than deleted, so a later reader can tell whether a question was settled or forgotten.
 Each says what this lane verified, because an answer this lane has not read is not an answer.
 
+### C-8 - No Ark can ever be produced, so the loop cannot reach its last two steps
+
+**to** spec · **status** **withdrawn** 2026-08-31 · superseded by `C-10`
+
+Wrong now, and wrong in its premise rather than its arithmetic. It rested on *`settle` discards
+every store at the end of every turn*, so a territory had to make fifteen metal in **one turn** or
+never hold a Yard. `P-126` and `P-138` changed that: `spoil` takes food and nothing else, so metal
+and energy carry, and any territory making any metal reaches fifteen eventually.
+
+Recomputed: ten of twelve can hold a Yard rather than four, nine can produce an Ark, every
+territory is reachable, and territory 1 can do the whole thing by itself. The deadlock between 11
+and 12 is gone because 2, 8, 9 and 10 can all send a pioneer once they need not make both
+resources in the same turn.
+
+What survives is one number: `C-10`.
+
+Worth keeping rather than deleting, because the finding was correct when it was filed and the rule
+it depended on was changed for other reasons. **A finding is a claim about a specification at a
+moment**, and the way it goes stale is that the specification moves under it - which is an argument
+for re-running a measurement before acting on it, not for filing fewer of them.
+
+### C-7 - `R-6` cannot be vetted: eight of the twelve territories can never hold a Yard
+
+**to** spec · **status** **withdrawn** 2026-08-31 · answered in part by `P-125`, superseded by `C-10`
+
+Two halves, and both are gone. The qualifier half - `is_fully_exploited` asking for a Yard
+everywhere while `spec/control.md` said *every structure that can be built* - was answered by
+`P-125`, which also defined what *can* means; implementing that is `C-9`.
+
+The arithmetic half rested on the same discarded-stores premise as `C-8` and fails with it. Eight
+of twelve becomes two of twelve, and both of those are deliberate demonstrations rather than
+accidents.
 ### C-6 - The composition root holds a harness, and the rule says it holds nothing
 
 **to** spec · **status** **answered** 2026-08-30 · `1d8c46f`
