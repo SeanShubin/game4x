@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-135** - Nothing wins by being first · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## What is outstanding
 
@@ -39,6 +40,7 @@ it exists to ask.
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86
 - `spec/control.md` -> Winning - P-77, P-81, P-125
+- `spec/turn.md` -> Order of operations - P-41, P-54, P-135
 - `spec/console.md` - P-69, P-82
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/interface.md` -> Surfaces - P-73, P-116
@@ -48,4 +50,3 @@ it exists to ask.
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28
 - `spec/resources.md` -> The list - P-49, P-65
-- `spec/turn.md` -> Order of operations - P-41, P-54

@@ -19,5 +19,9 @@ The order in which a turn resolves. Every other document assumes this order.
   for want of it; **food that is not eaten is lost, while metal and energy remain where they
   are**; and everything becomes ready again.
 - What a territory can keep is bounded. Anything above the bound is lost when the turn ends.
+- Where two effects cannot both happen, they compete. Competing effects are gathered and resolved
+  together, so nothing gains an advantage by being considered first
+- What settles them is a deterministic mechanic of the game, and therefore something a person wrote
+  and a player can change
 
 ## Open questions

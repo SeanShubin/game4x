@@ -42,75 +42,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-135 - Nothing wins by being first
-
-**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into**
-`spec/turn.md` -> Order of operations
-
-**Sean's, decided 2026-08-31**, choosing gather-resolve-apply over sequential evaluation.
-
-> - Where two effects cannot both happen, they compete. Competing effects are gathered and resolved
->   together, so nothing gains an advantage by being considered first
-> - What settles them is a deterministic mechanic of the game, and therefore something a person wrote
->   and a player can change
-
-**Reworded 2026-08-31 from Sean's phrasing**, which is better in three places and drops one that has
-to stay. His: *competing effects are resolved by a deterministic game mechanic that is discoverable
-and alterable.*
-
-**Taken from his version.** *Competing effects* is the name the first draft lacked and kept
-circling - *where several things could act and not all of them may* is a definition pretending to be
-a phrase. *Deterministic* does in one word what *never by the order in which things were examined*
-did in nine. And putting *discoverable and alterable* in the same sentence is right, because a
-resolution nobody can see is the auto-scouting complaint in miniature.
-
-**Kept from the first version, because his phrasing permits the thing it is meant to forbid.**
-*Deterministic* is not the property wanted: **first-mover-wins is perfectly deterministic.** Take the
-candidates in id order and let the earliest win - reproducible, data-derived, and exactly what
-`docs/layers.md` says not to do: *do not let the first mover win.* So *gathered and resolved
-together* has to stay, since it is the half that rules out the thing being ruled out.
-
-**Changed from his version.** *Discoverable and alterable* is stated as a **consequence** - *and
-therefore something a person wrote and a player can change* - rather than as a new assertion. `P-113`
-already says every behaviour acting on the player's behalf is a rule some person wrote, and a
-tie-break is one. Asserting it twice would be two statements that can drift apart; pointing at it
-cannot.
-
-**His examples are left out, and this is the one place his version was not adopted.** *Resolved by the
-order in which territories were claimed* and *a default biome ordering* are exactly the defaults that
-`P-113` makes rule data rather than specification. As illustrations they read as prescriptions, and a
-later session would take them for the answer. **They belong in the rules where a player can find and
-change them**, which is the whole point of the second line.
-
-**Basis:** this is a rule about the game and not about the engine, which is why it is here rather than
-in `docs/`. *First mover wins* and *resolve over the whole set* produce **different outcomes** from
-the same state, so it decides what happens rather than how it is computed.
-
-**`docs/layers.md` section 5.3 already sets it out** and names the cases: two armies claiming one
-region, several cities drawing on one stockpile, several attacks on one target. Its instruction is
-the sentence worth keeping - *stop asking what happens next and start asking what is true of the
-whole set.* What that document could not do is make it a rule of the game; that is this.
-
-**It is not only about automation.** Ending a turn already has the shape: when food is short and
-several citizens eat, which ones starve is an allocation over a set, not a race. So the rule bites on
-a release that exists rather than on one that does not.
-
-**The second line is what makes the first deterministic.** A resolve step has to choose without
-asking who went first, so the tie-break must come from the data - `docs/architecture.md` rule 9 asks
-for exactly this of the model, and this asks it of the game.
-
-**What it buys the rules Sean is about to write**, which is why he chose it now rather than later. A
-sequential world needs every creating rule to count what others have already committed; this one does
-not, because the resolve step holds the coordination. *I am beside unclaimed ground and propose a
-pioneer aimed at `X`* is the whole rule, and at most one proposal per target survives. **Deferring it
-means writing that counting into the first rules and taking it out again.**
-
-**Two things it deliberately does not say.** Which tie-break - Sean's *territories resolve in the
-order they were claimed* and *breadth-first from north, clockwise* are defaults, and by `P-113` a
-default is a rule some person wrote, visible and changeable, so it belongs in the rule data rather
-than in the specification. And nothing about parallelism: gathering may be done all at once or one at
-a time, and the rule is the same either way, which is the point of it.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -332,6 +263,7 @@ work the release exists to order.
 | P-132, the first release's transformations as one table                                                         | `releases/first-release.md` -> Transformations                                                                         | 2026-08-31 |
 | P-133, which things ready                                                                                       | `releases/first-release.md` -> Units and structures                                                                    | 2026-08-31 |
 | P-134, the state is things                                                                                      | `spec/invariants.md` -> The game is data                                                                               | 2026-08-31 |
+| P-135, competing effects are resolved together, and nothing wins by being first                                 | `spec/turn.md` -> Order of operations                                                                                  | 2026-08-31 |
 
 ## Rejected
 
