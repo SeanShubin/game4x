@@ -899,3 +899,44 @@ becomes *vehicles that carry bins*, which is the same idea with the nesting made
 
 **One thing the fifth makes optional.** Upkeep was proposed to price vehicles-as-storage. A stacking
 pool bounds it instead, and a bound is what Sean asked for. **Both is a choice, not a requirement.**
+
+### Decided 2026-09-01: everything holds things the same way
+
+Sean, in two statements: *a vehicle can contain multiple bins, and each bin is tied to hold a
+particular thing with a particular maximum amount*; and *this containment is generalizable,
+territories contain bins that contain things just like vehicles do.*
+
+**That is the whole storage model, and it has two levels.** A **place** contains bins - a territory,
+a vehicle, an extractor. A **bin** contains things, one kind of thing, up to a maximum of its own.
+Nothing else in the game holds anything, and **a bin is the only place a quantity of stuff lives**.
+
+**Four things that were separate become one.** A fuel tank is an energy bin in a vehicle. An ore hold
+is a metal bin in the same vehicle. A warehouse is a metal bin in a territory. An extractor's
+one-cycle buffer is a bin whose maximum is the density. **The same two traits describe all four** -
+what it holds, and how much - and the difference between them is only which place they sit in.
+
+**It touches no promoted rule.** `spec/logistics.md` says a container occupies capacity of its own
+kind and provides capacity of another, and **each bin provides exactly one**, so the singular stands.
+*No kind nested inside itself at any depth* holds too: territory to bin to metal, or territory to
+vehicle to bin to metal, and no kind repeats on either path.
+
+**Two things it states precisely that were vague before.** *Freely transferable within a controlled
+territory* is now **moving things between bins in the same territory**, and unloading a vehicle is
+the same operation as any other transfer rather than a special case. And **a territory holds nothing
+innately** - only what its bins hold - which is a third independent argument that the Ark deploys
+structures rather than materials, since loose metal would have nowhere to be.
+
+**And the deadlock stays impossible for the same reason as before.** The extractor's bin comes with
+the extractor, so a colony that has built nothing else still keeps a full turn of its own production.
+It costs no number, because one cycle is the density.
+
+**Two things still open, and both change the data.**
+
+- **Does *a particular thing* mean any kind, or resources only?** A bin holding citizens is how a
+  vehicle would carry population, and it is allowed by the same reasoning that allows metal: nothing
+  crosses a boundary on its own, it rides in something that already could. It would also give
+  colonising a second shape that does not consume a Pioneer
+- **Are a vehicle's bins fixed by its recipe, or chosen when it is built?** *Metal transport* reads
+  as a named thing with a fixed pair, which is simpler and is what first release wants. Chosen at
+  build time is a loadout system, and it is worth knowing that it is being deferred rather than
+  missed
