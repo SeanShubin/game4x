@@ -710,6 +710,38 @@ both, so **a deployment that hands over loose metal cannot survive its own first
 buildings go up and nobody mans them, which is no force and no food. Dropping bundling means the Ark
 must deploy **structures**, not materials.
 
+### Said 2026-08-31: an extractor holds one cycle, and a bin holds the rest
+
+Sean: *I am thinking of giving extractors enough storage capacity to hold one cycle of their output,
+and requiring bins for further storage.*
+
+**It is `P-129` applied rather than a new rule.** *A container occupies capacity of its own kind and
+provides capacity of another* - an extractor providing room for what it extracts is exactly that, and
+a bin is the same rule with a different number. It is also what *caught where it was made* was
+reaching for, made specific.
+
+**It removes the metal deadlock structurally rather than by tuning.** An extractor is exhausted once
+a turn, so it makes exactly one cycle and can always keep it. **A territory with an extractor can
+therefore never reach zero of that resource**, whatever it spent, so no colony can strand itself. A
+bin is what lets a player bank *beyond* one turn's production, which is a choice rather than a
+rescue.
+
+**And the number is already in the data.** One cycle is the node's density, so an extractor's
+capacity is derived and needs no column - one fewer number to tune, which is the direction Sean
+asked for.
+
+**It revises `P-144`.** That proposal gives a territory flat capacities per kind, including metal 20.
+Under this rule a territory's capacity for a resource is **the sum of its extractors' cycles and its
+bins**, and the flat number is wrong. Only citizen, structure and unit stay flat. **Innate resource
+capacity should probably be zero**, which is a second and independent argument that the Ark must
+deploy structures rather than materials: with no extractor and no bin, loose metal has nowhere to be.
+
+**Two things to settle.** It is inert for food, which expires whether or not it is held, so a farm's
+storage never does anything. And `spec/resources.md` says *keeping it in order costs labor, unless it
+is caught where it was made* - if a bin is free once built, that clause never fires, since everything
+is then caught, binned or lost. Either a bin costs labor each turn, or the line means the labor is
+paid when the bin is built and should say so.
+
 **Two things follow that are worth deciding rather than inheriting.** The release currently gives
 `land` and `found by land` identical outputs, and there is no reason they should match - an Ark
 bootstraps a planet from nothing and a Pioneer arrives in an empire that can send more. And the
