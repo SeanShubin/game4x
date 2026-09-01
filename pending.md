@@ -11,7 +11,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-141** - A unit carries fuel, not cells · `docs/notes/proposals.md`
 - **P-142** - A quantity is a number · `docs/notes/proposals.md`
 - **P-143** - The release does not declare its own vocabulary · `docs/notes/proposals.md`
-- **P-144** - Capacity and metal content have rules but no numbers · `docs/notes/proposals.md`
+- **P-146** - What a thing is made of, which `P-145` needs and `P-144` was carrying · `docs/notes/proposals.md`
 - **P-145** - `perish` destroys metal, which the specification says cannot happen · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise

@@ -232,54 +232,38 @@ does - combat, or a transfer between two units - and the fix then is the predece
 aliases from `language/Expressions.kt`. **Not adopting them now is a bet that first release ships
 first**, and it is worth writing down as a bet rather than meeting it later as a surprise.
 
-### P-144 - Capacity and metal content have rules but no numbers
+### P-146 - What a thing is made of, which `P-145` needs and `P-144` was carrying
 
 **to** sean - **status** open - **raised** 2026-08-31 - **kind** gap - **into**
-`releases/first-release.md` -> Units and structures, **and** a new section after it
+`releases/first-release.md` -> Units and structures
 
-**Two promoted rules ask the release for numbers it does not have.** `spec/logistics.md` says
-everything in a territory occupies capacity there, counted per kind, and that a container provides
-capacity of another kind. `spec/resources.md` says metal is conserved, and that what it was made into
-can be taken apart to get it back. **Neither has a single figure anywhere in the release.**
+**Filed because withdrawing `P-144` would otherwise take something still needed with it.** That
+proposal carried two halves. The flat per-territory capacities are wrong and are gone. **The
+metal-content column is not**, and `P-145` reads it: without it there is no trait for a destroyed
+unit's metal to be looked up from.
 
-> *Units and structures* gains two columns, **Occupies** and **Metal in it**:
+> *Units and structures* gains one column, **Metal in it**:
 >
-> | Thing | Occupies | Metal in it |
-> | --- | --- | --- |
-> | **citizen** | 1 citizen | |
-> | **garrison** | 1 structure | |
-> | **extractor** | 1 structure | 0 |
-> | **yard** | 1 structure | 15 |
-> | **ark** | 1 unit, and provides 2 energy | 12 |
-> | **pioneer** | 1 unit, and provides 2 energy | 8 |
-
-> A new section, `## What a territory can hold`:
->
-> | Kind | Capacity |
+> | Thing | Metal in it |
 > | --- | --- |
-> | **citizen** | 8 |
-> | **structure** | 4 |
-> | **unit** | 4 |
-> | **food** | 20 |
-> | **metal** | 20 |
-> | **energy** | 20 |
->
-> Anything above the capacity of its kind is lost when the turn ends.
+> | **citizen** | |
+> | **garrison** | 1 |
+> | **extractor** | 1 |
+> | **yard** | 15 |
+> | **ark** | 12 |
+> | **pioneer** | 8 |
 
-**Basis, which is why these are not arbitrary.** **Metal in it is not a new number**: it is what the
-thing cost, which the *Costs to produce* column already gives. Conservation is what makes that the
-right answer rather than a convenient one - **the metal did not go anywhere**, it changed form. An
-extractor is 0 because it costs 1 labor and nothing else, which is `P-138`'s point that not
-everything has metal in it.
+**Basis: it is not a new number.** It is what the thing cost, which *Costs to produce* already gives,
+and conservation is what makes that the right answer rather than a convenient one - `spec/resources.md`
+says a conserved resource *changes form, and what it was made into can be taken apart to get it back*,
+so **the metal did not go anywhere**. A citizen is blank rather than zero because a citizen is not
+built.
 
-**Capacity has one measured constraint and the rest is taste.** Metal must reach **15 or the release
-cannot be finished**, because 15 is a Yard and below it no Yard exists anywhere - measured twice, by
-this lane in `P-126` and by the code lane in `S-3`. 20 leaves a margin of one build. The others are
-loose enough not to bind in first release, on the principle that **a capacity that never binds costs
-nothing and a capacity that binds by accident costs a playthrough**.
-
-**These are the numbers Sean said he would pull down**, and this proposal exists to give him
-something to pull rather than to argue that any of them is right.
+**Two of these six numbers are about to move**, and that is not a reason to wait. The Ark's 12 is
+almost certainly wrong now: Sean's deployment lever means an Ark deploys into what it cost, so the
+figure is whatever its deployment is worth - three, on the opening worked through today. The column
+should exist either way, because **what changes is the cell and not the schema**, which is the whole
+point of the tables.
 
 ### P-145 - `perish` destroys metal, which the specification says cannot happen
 
@@ -598,23 +582,24 @@ again in a later session.
 
 ## Withdrawn
 
-| Proposal                                                                              | Why                                                                                                                                                                                              |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| P-2, "twenty planet sizes are available below 500"                                    | Superseded by Sean's edit fixing the game at five named sizes.                                                                                                                                   |
-| P-3, "no two territories are more than `3m` apart"                                    | Superseded by the per-size statement, and incomplete: `3m` holds for class I only, while the large planet is class III where the measured distance is 7.                                         |
-| P-4, "the twelve five-neighbour territories sit in six antipodal pairs"               | Derivable from the Goldberg choice, and no rule leans on it.                                                                                                                                     |
-| P-5, "a pentagon's farthest territory is its antipodal twin"                          | Merged into P-4, then withdrawn with it.                                                                                                                                                         |
-| P-7, "the smallest planet has no six-neighbour territories"                           | Derivable from P-6 plus a line Sean had already written - the minimum is 12, **a dodecahedron**.                                                                                                 |
-| P-9, "the distance between every pair is computed once and stored"                    | An implementation directive, not a rule of the game.                                                                                                                                             |
-| P-13, "the greatest distance is 3 / 5 / 6 / 7 / 9 by planet size"                     | Determined by the Goldberg choice and the size, nothing leans on it, and the numbers are **already asserted by a test**.                                                                         |
-| P-15, "Native life is a planet's own, Feral is printed life gone wild"                | **Feral is behavioural, not an origin**, and origin is not substantively relevant.                                                                                                               |
-| P-16, "every unit carries a name that persists when control changes"                  | **A unit has a type, and the type has a name.** Individual units of the same type are not distinguished.                                                                                         |
-| P-17, "depart is left unspecified so one rule covers biological and machine"          | Sean chose **starves**, committing to the biological reading for now; robots come later. Recorded in [the backlog](spec-backlog.md).                                                             |
-| P-20, "extracting one resource has no effect on extracting any other"                 | Written against the rating model and contradicted by the node model: **labor is shared**, so working a food extractor does compete with working a metal one.                                     |
-| P-29, "a territory's threat level comes from what is on it"                           | Superseded by P-32. Threat is no longer a quantity a territory carries - it is one direction of **force**.                                                                                       |
-| P-36, "accidental damage is force 1, a predator is force 2"                           | Superseded on 2026-08-26: **force is inherent to the territory**, not carried by individual creatures, so there is nothing for a per-creature value to attach to.                                |
-| P-40, "the least force eats from food nodes; every species grows by the citizen rule" | Superseded on 2026-08-26. Nature has no population and **does not use nodes** - a node is intentional exploitation. The whole food chain goes with it.                                           |
-| P-43, "nothing is exterminated; coordination buys suppression"                        | Superseded on 2026-08-26. It described populations held at zero, and nature no longer has a population to hold anywhere.                                                                         |
-| P-46, "citizens and food move between adjacent territories"                           | Cut on 2026-08-26. Sean removed logistics for now so that **each territory is self-contained**; the only thing crossing a boundary is a mobile unit. Recorded in [the backlog](spec-backlog.md). |
-| P-56, "a territory satisfies its own consumption first"                               | Cut with P-46 on 2026-08-26 - it only had work to do while a remainder could reach a neighbour.                                                                                                  |
-| P-124, "where a generated file lives"                                                 | Housekeeping rather than a decision, under the split Sean approved 2026-08-30. Settled by the specification lane and landed in `CLAUDE.md` -> Perspectives in the same commit.                   |
+| Proposal                                                                              | Why                                                                                                                                                                                                                                                                                                                                         |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P-2, "twenty planet sizes are available below 500"                                    | Superseded by Sean's edit fixing the game at five named sizes.                                                                                                                                                                                                                                                                              |
+| P-3, "no two territories are more than `3m` apart"                                    | Superseded by the per-size statement, and incomplete: `3m` holds for class I only, while the large planet is class III where the measured distance is 7.                                                                                                                                                                                    |
+| P-4, "the twelve five-neighbour territories sit in six antipodal pairs"               | Derivable from the Goldberg choice, and no rule leans on it.                                                                                                                                                                                                                                                                                |
+| P-5, "a pentagon's farthest territory is its antipodal twin"                          | Merged into P-4, then withdrawn with it.                                                                                                                                                                                                                                                                                                    |
+| P-7, "the smallest planet has no six-neighbour territories"                           | Derivable from P-6 plus a line Sean had already written - the minimum is 12, **a dodecahedron**.                                                                                                                                                                                                                                            |
+| P-9, "the distance between every pair is computed once and stored"                    | An implementation directive, not a rule of the game.                                                                                                                                                                                                                                                                                        |
+| P-13, "the greatest distance is 3 / 5 / 6 / 7 / 9 by planet size"                     | Determined by the Goldberg choice and the size, nothing leans on it, and the numbers are **already asserted by a test**.                                                                                                                                                                                                                    |
+| P-15, "Native life is a planet's own, Feral is printed life gone wild"                | **Feral is behavioural, not an origin**, and origin is not substantively relevant.                                                                                                                                                                                                                                                          |
+| P-16, "every unit carries a name that persists when control changes"                  | **A unit has a type, and the type has a name.** Individual units of the same type are not distinguished.                                                                                                                                                                                                                                    |
+| P-17, "depart is left unspecified so one rule covers biological and machine"          | Sean chose **starves**, committing to the biological reading for now; robots come later. Recorded in [the backlog](spec-backlog.md).                                                                                                                                                                                                        |
+| P-20, "extracting one resource has no effect on extracting any other"                 | Written against the rating model and contradicted by the node model: **labor is shared**, so working a food extractor does compete with working a metal one.                                                                                                                                                                                |
+| P-29, "a territory's threat level comes from what is on it"                           | Superseded by P-32. Threat is no longer a quantity a territory carries - it is one direction of **force**.                                                                                                                                                                                                                                  |
+| P-36, "accidental damage is force 1, a predator is force 2"                           | Superseded on 2026-08-26: **force is inherent to the territory**, not carried by individual creatures, so there is nothing for a per-creature value to attach to.                                                                                                                                                                           |
+| P-40, "the least force eats from food nodes; every species grows by the citizen rule" | Superseded on 2026-08-26. Nature has no population and **does not use nodes** - a node is intentional exploitation. The whole food chain goes with it.                                                                                                                                                                                      |
+| P-43, "nothing is exterminated; coordination buys suppression"                        | Superseded on 2026-08-26. It described populations held at zero, and nature no longer has a population to hold anywhere.                                                                                                                                                                                                                    |
+| P-46, "citizens and food move between adjacent territories"                           | Cut on 2026-08-26. Sean removed logistics for now so that **each territory is self-contained**; the only thing crossing a boundary is a mobile unit. Recorded in [the backlog](spec-backlog.md).                                                                                                                                            |
+| P-56, "a territory satisfies its own consumption first"                               | Cut with P-46 on 2026-08-26 - it only had work to do while a remainder could reach a neighbour.                                                                                                                                                                                                                                             |
+| P-124, "where a generated file lives"                                                 | Housekeeping rather than a decision, under the split Sean approved 2026-08-30. Settled by the specification lane and landed in `CLAUDE.md` -> Perspectives in the same commit.                                                                                                                                                              |
+| P-144, "capacity and metal content have rules but no numbers"                         | Withdrawn on Sean's instruction, 2026-08-31. Its flat per-territory capacities are wrong under his storage rule: an extractor holds one cycle and a bin holds the rest, so a resource's capacity is the sum of the extractors and bins present, not a constant. **Its metal-content column survives as `P-146`**, which `P-145` depends on. |
