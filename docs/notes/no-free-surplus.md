@@ -146,8 +146,9 @@ rate is what stops it running away. Nothing else in the game is a source.
 
 ### What it would cost to adopt
 
-- **A state for matter, not only a quantity.** `{metal}` becomes `{metal, usable}` and
-  `{metal, scrap}` - a trait, which `P-134` already makes free.
+- ~~**A state for matter, not only a quantity.**~~ **Withdrawn** - see the section below. Sean's
+  second version needs no such state, because metal from a wreck is ordinary metal facing the
+  ordinary end-of-turn question.
 - **A recipe that refines.** Scrap plus labour yields usable metal, and it is an ordinary row.
 - **`P-126` would want one word.** *Taken apart to get it back* does not say **in what state**, and
   under this it comes back as scrap. It is not wrong today, because scrap does not exist; it becomes
@@ -159,3 +160,68 @@ rate is what stops it running away. Nothing else in the game is a source.
 recovering, so a battlefield is worth taking for a reason nobody had to invent. **That falls out of
 the model rather than being a mechanic bolted on**, which is the same test `docs/notes/spec-backlog.md`
 applied to supply routes getting cheaper when you clear them.
+
+## Running it down: salvage, and the state that turns out not to be needed
+
+Sean worked the model through to mechanics and changed his mind halfway, in the right direction.
+
+**First**: a destroyed vehicle renders no usable metal - it is there, disorganised, and gameplay-wise
+gone. Salvage is a deliberate operation, so salvaged metal *is* usable that turn but unusable if not
+stored.
+
+**Then**: *perhaps the metal from a destroyed vehicle should stay around for the turn, and metal does
+not expire until end turn happens and there is no one to expend the labor to put it in a bin, or no
+bin.*
+
+**The second is better and it deletes a concept.** Under the first, scrap is a second state of matter
+and every recipe has to know which it is taking. Under the second there is **only metal**, and the
+rule is uniform:
+
+> Metal is usable when it arrives, from wherever it came. At the end of the turn it is lost unless
+> somebody spent the labor to store it, and there is somewhere to put it.
+
+**So the section above was wrong to say a trait is needed.** `{metal, usable}` against `{metal, scrap}`
+was the cost of the first version. The second needs no trait at all - **disorganisation is not a state
+of the metal, it is what happens to metal nobody organised**, which is what Sean said in the first
+place about metal lying around.
+
+**And salvage becomes an ordinary ability rather than a special case.** A unit with *salvage* turns a
+wreck into metal in the usual way; the metal then faces the same end-of-turn question as any other.
+
+## What it collides with, and both need deciding rather than discovering
+
+**Storing costs labor, and `P-126` does not say so.** That proposal landed as *metal and energy remain
+where they are*, bounded by capacity - **unconditionally**. This adds a price: labor, every turn, for
+everything kept. It is a real addition and not a clarification.
+
+**It also threatens the arithmetic that made the release winnable.** `P-126` was promoted on a
+measurement: territory 1 raises 12 metal a turn against a Yard's 15, so two turns buys one. **If
+keeping 12 metal costs labor, territory 1 has nine hands and fewer of them are producing** - and how
+many fewer depends entirely on a rate nobody has chosen. **At one labor per unit stored the release is
+unwinnable again**; at one labor per bin it is barely affected. **The rate is the whole question**, and
+the measurement should be re-run against whatever it turns out to be.
+
+## The garrison, where conservation bites harder than expected
+
+Sean: *a garrison can be created from metal, either from a military unit and a metal transport truck,
+or a pioneer that when disassembled yields one metal. Either way it takes a citizen to provide labor.*
+
+**As an account of founding this is fine and rather good** - founding is already the recipe that makes
+a garrison, and *the pioneer is taken apart and a citizen does the work* is a theme for a rule that
+exists rather than a new rule.
+
+**As a second route it contradicts the specification.** `spec/control.md`: *a garrison is not built. A
+territory gains one by being founded, and **gains one no other way**.* A military unit plus a truck
+yielding a garrison is another way. The units do not exist, so nothing is wrong today - **but that
+line has to move before they do**, and it is the kind of thing that gets discovered by an
+implementer.
+
+**And the arithmetic exposes something conservation demands that nobody has provided.** A Pioneer is
+8 metal. If metal is conserved, founding must account for all 8 - and founding produces a garrison, a
+citizen and a food extractor, **none of which has ever had a metal content**, because none of them is
+built from metal. Sean's *yields one metal* implies the garrison is worth 7, but nothing says so.
+
+> **Conservation forces every kind to have a metal content, including kinds that are never built.**
+
+That is a bill the release has not been shown. It is not an argument against conservation - it is the
+work conservation entails, and it is better seen now than when a recipe fails to balance.
