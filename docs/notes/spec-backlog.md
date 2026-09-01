@@ -668,3 +668,40 @@ permanently safe and `revert` reads force at the end of the turn. Whether the gr
 intended - six food, two eaten, four surplus, four new citizens, so two civilians become six in one
 turn. And three names: civilian against citizen, farm against food extractor, barracks against
 garrison.
+
+### Refined the same day: a build includes its first use
+
+Sean's fix for the labor shortfall: a build recipe costs labor and metal and **also produces the
+first output of the thing it builds**, so a garrison built on turn 1 gives its force at once and can
+be manned normally from turn 2. Two labor then covers the opening.
+
+**It balances, and it is arithmetically the same game as building costing no labor at all.** Turn 1
+and turn 2 come out identical either way. The difference appears only where metal is plentiful and
+citizens are few: a build that costs labor is capped at one per citizen per turn, and a build that
+costs none is capped by metal alone. **That is the real question, and it is not the one the shortfall
+asked.**
+
+**One number in it is fatal as written.** Sean wrote that building the farm *immediately generates 1
+food*. Two citizens eat two, so at one food one of them is unfed and starves on the turn it landed.
+The first use has to yield the node's density, which is the six that makes the opening survive.
+
+**The metal deadlock is real and the storage instinct is right.** It follows from *a thing not kept
+in order is lost when the turn ends* rather than from expiry - metal does not expire. Without a bin
+the leftover metal is gone at the end of turn 1, turn 2 has none, and a metal extractor costs metal,
+so there is never any metal again. **What is not settled is whether extracted metal needs a bin at
+all**, since the same rule exempts what is *caught where it was made* - and if an extractor catches
+its own output, the ark's metal is the only metal in the game that ever needs storing.
+
+### And the insight underneath it
+
+Sean: *the main insight here is that we control what arks and pioneers convert to, so we have some
+flexibility regarding balance.* **They are the only recipes whose outputs are a free choice.**
+Everything else is pinned by a density, a node count or a conservation rule; deployment is pinned by
+nothing, which makes it the lever the opening should be tuned with rather than the recipes.
+
+**Two things follow that are worth deciding rather than inheriting.** The release currently gives
+`land` and `found by land` identical outputs, and there is no reason they should match - an Ark
+bootstraps a planet from nothing and a Pioneer arrives in an empire that can send more. And the
+flexibility is bounded in one direction: **conservation fixes how much, even though it leaves what
+entirely open.** An Ark costing twelve metal should deploy into twelve metal's worth, or the game
+violates its own conservation rule on the first action anyone takes.
