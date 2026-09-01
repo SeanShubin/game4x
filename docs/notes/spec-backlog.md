@@ -460,8 +460,8 @@ here can be built until one of those happens.
 
 Sean, 2026-08-30: *perhaps a pioneer is actually just a personnel transport made of metal that stores
 fuel so it can move. However it could be stripped down for parts in order to be consumed in
-transformation formulas.* And: *I am leaning towards a more data driven game where the units and
-transformations are simply data inputs to rust, and rust is providing a statically typed engine to
+recipe formulas.* And: *I am leaning towards a more data driven game where the units and
+recipes are simply data inputs to rust, and rust is providing a statically typed engine to
 run and validate the data.*
 
 **Leaning, not decided**, so it sits here rather than in the queue. The working-out is in

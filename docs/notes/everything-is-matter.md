@@ -7,8 +7,8 @@
 
 Sean, thinking about how units should be defined: *perhaps a pioneer is actually just a personnel
 transport made of metal that stores fuel so it can move. However it could be stripped down for parts
-in order to be consumed in transformation formulas.* And separately: *I am leaning towards a more
-data driven game where the units and transformations are simply data inputs to rust, and rust is
+in order to be consumed in recipe formulas.* And separately: *I am leaning towards a more
+data driven game where the units and recipes are simply data inputs to rust, and rust is
 providing a statically typed engine to run and validate the data.*
 
 Two ideas, and the first is larger than it sounds.
@@ -157,7 +157,7 @@ could type into the console.*
 **Checked, and the grammar shipped.** `language/Expressions.kt` defines `named` as an open brace, a
 name, then an attribute list - so the first token is the name - and `call` is a name followed by
 parameters, where a parameter may be a trait map or a primitive. It also has `alias`, a `$name`
-reference, which is what a transformation needs in order to speak about the thing it just matched.
+reference, which is what a recipe needs in order to speak about the thing it just matched.
 
 **So data-defined kinds and *every change is a console command* were never in tension.** A trait map
 is a console argument. The invariant does not have to widen; the command language has to grow a
@@ -179,15 +179,15 @@ has-food-node
 greater-than 0 {node, resource:food}
 ```
 
-**Three things in eight lines that this project currently lacks.** A transformation is a **named list
+**Three things in eight lines that this project currently lacks.** A recipe is a **named list
 of named clauses**, so it is openable and a small change is a small edit - `P-112` satisfied by
 construction rather than by intention. `greater-than 0 {node, resource:food}` is a **named, reusable
 condition**, which is the vocabulary this lane has repeatedly said does not exist. And `required`
 against `optional` is the same split as [cost against requirement](intermediate-steps.md): one must
-hold or the transformation fails, the other applies when it can.
+hold or the recipe fails, the other applies when it can.
 
 The same comment carries **test cases in the same language**, with the result written as deltas -
-`1 -> 0 {colonizer}`. A transformation and its test as one artifact.
+`1 -> 0 {colonizer}`. A recipe and its test as one artifact.
 
 ### The one thing that still needs deciding
 
@@ -206,12 +206,12 @@ thing moddable. What it costs is that the definitions become part of every saved
 could disagree about what a Pioneer is - which is either a bug or the whole point, depending on
 whether the game is one game or a family of them.
 
-**Nothing needs deciding until transformations are written.** It is recorded here because it will be
+**Nothing needs deciding until recipes are written.** It is recorded here because it will be
 easier to answer before there is code than after.
 
 ## Why this is worth the trouble, in Sean's words
 
-*One value of expressing everything as either a bag of traits or a transformation is that I expect I
+*One value of expressing everything as either a bag of traits or a recipe is that I expect I
 can specify ALL units with precision, in a way that I can keep in my head as a human, while at the
 same time gives you an unambiguous specification. It is a way we could remove a good portion of the
 typical human/AI-assistant miscommunication.*
@@ -223,7 +223,7 @@ map cannot: `{yard metal=15}` has one meaning.
 **Today produced the evidence twice over.** `P-125` exists because *every structure that can be
 built* read one way to the specification lane and another to the code lane, and the game was built to
 the second - the qualifier that decides whether the release is winnable was doing nothing, and nobody
-noticed for two days. Written as a transformation with its conditions named, the ambiguity has
+noticed for two days. Written as a recipe with its conditions named, the ambiguity has
 nowhere to hide, because *can be built* would have had to be a clause with a definition.
 
 **And removing ambiguity is the larger half, not a consolation.** Sean's correction, and he is
@@ -239,9 +239,9 @@ compute that for you. **What it does is make it computable**, which is why the s
 ten-line script once the numbers were in a table. Ambiguity it removes; arithmetic it makes
 checkable.
 
-## A transformation is inputs and outputs, and it survives the test
+## A recipe is inputs and outputs, and it survives the test
 
-Sean, 2026-08-30: *at the end of the day, a transformation is a set of inputs and a set of outputs...
+Sean, 2026-08-30: *at the end of the day, a recipe is a set of inputs and a set of outputs...
 perhaps there is also a set of conditions, but even that could be listed as a non-consumed input -
 for example, something that could only be built in a jungle could take jungle as an input without
 consuming the jungle.*
@@ -257,11 +257,11 @@ cannot be an input at any quantity - until an input carries whether its quantity
 ceiling**. Then *at most 0 garrisons* is an ordinary input row, and the language still has no
 conditions in it.
 
-### Every transformation the game has, in four columns
+### Every recipe the game has, in four columns
 
 Written out to see whether it holds rather than to argue that it does:
 
-| Transformation  | Role | Thing           | Qty     | Consumed | Bound       |
+| Recipe          | Role | Thing           | Qty     | Consumed | Bound       |
 | --------------- | ---- | --------------- | ------- | -------- | ----------- |
 | build yard      | in   | metal           | 15      | yes      | at least    |
 |                 | out  | yard            | 1       |          |             |
@@ -295,13 +295,13 @@ location is just a trait that differs between the two sides.
 
 ### The one that does not fit, and it is honest to say so
 
-**`end turn` is not a transformation of things in a place.** Everything eats, a population grows or
+**`end turn` is not a recipe of things in a place.** Everything eats, a population grows or
 starves, food expires, and everything becomes ready again - across every territory at once. Inputs
 and outputs describe a *local* exchange, and this is a global sweep.
 
 Two ways to take that. Either **the turn is a different kind of thing** and the language does not
 have to cover it, which is honest and leaves one hand-written rule at the centre of the game. Or
-**the sweep is itself a set of transformations applied everywhere they match**, which would make it
+**the sweep is itself a set of recipes applied everywhere they match**, which would make it
 uniform - and that is exactly what the predecessor's `EveryLandUniverseCommand` and
 `...WherePossible` commands were doing.
 
@@ -315,7 +315,7 @@ counts. The predecessor needed a comparison for exactly this: `less-than {gather
 **So either the language gains comparisons, or the state gains derived kinds.** They are the same
 expressiveness bought in different places:
 
-- **Comparisons in the language** keep the state small and make every transformation potentially
+- **Comparisons in the language** keep the state small and make every recipe potentially
   arithmetic. The predecessor chose this.
 - **Derived kinds in the state** keep the language to inputs and outputs, which is what makes it
   tabular - but somebody has to define *unworked node* as a function of nodes and extractors.
@@ -323,7 +323,7 @@ expressiveness bought in different places:
 **Derived kinds look better here, and the reason is the tabular goal.** A comparison has two operands
 and no natural column; a derived kind is just another row in the thing table. And nothing has to
 maintain it if derived kinds are **computed rather than stored** - they are views, so no
-transformation can leave one inconsistent.
+recipe can leave one inconsistent.
 
 ### Turns as an input, when the time comes
 
@@ -343,7 +343,7 @@ from things.
 ### `founded` was already gone, and the table is what showed it
 
 Sean had been wondering whether the concept is needed at all - *if all citizens leave, the place has
-been abandoned; if a single citizen remains it is occupied.* **The transformation table settled it a
+been abandoned; if a single citizen remains it is occupied.* **The recipe table settled it a
 step earlier without either of us noticing.** The `found` row needed *garrison, at most 0* as its
 input. It did not need, and could not use, `founded = false`.
 
@@ -391,10 +391,10 @@ takes labor and an extractor and yields a resource. The turn touches only the fi
 thing and how many. **The multiset is not an optimisation, it is what lets a trait vary across a
 population that has no individuals.**
 
-### `end turn` fits after all, as a sweep of ordinary transformations
+### `end turn` fits after all, as a sweep of ordinary recipes
 
 Earlier this note said `end turn` was the one command that would not fit, being global where inputs
-and outputs are local. With ready and exhausted it decomposes into four transformations, each local,
+and outputs are local. With ready and exhausted it decomposes into four recipes, each local,
 each applied everywhere it matches:
 
 - everything that eats, eats - `(citizen, food) -> (citizen)`
@@ -405,7 +405,7 @@ each applied everywhere it matches:
 **What is global is not the rules but the mode**: *apply this everywhere it matches* rather than
 *apply this here*. The predecessor had exactly that as a first-class idea - `EveryLandUniverseCommand`
 and the `...WherePossible` commands. So the unification holds, and what it costs is one concept:
-**a transformation is applied either at a place or everywhere.**
+**a recipe is applied either at a place or everywhere.**
 
 ### The residue, and it turns out to be smaller than it looks
 
@@ -424,5 +424,5 @@ tabular if wanted - a row per pair - but nothing transforms it, so it is a fixed
 state.
 
 **So the answer to Sean's push is yes, with one concept added and one exception.** Everything is a
-thing in a place or a function of the history; transformations are applied at a place or everywhere;
+thing in a place or a function of the history; recipes are applied at a place or everywhere;
 and the planet's shape sits outside, unchanging, as the board does in any game.

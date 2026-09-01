@@ -80,7 +80,7 @@ arise**, because readiness is a trait and a trait is just another attribute. The
 lost cost a field, a proposal, and an afternoon.
 
 **Units live in a separate list.** `Game.units` with a location, rather than in the territory they
-stand on. So *what is here* is two lookups and two shapes, and the transformation table papers over it
+stand on. So *what is here* is two lookups and two shapes, and the recipe table papers over it
 by writing *unit, here* as though it were an ordinary input.
 
 **Three closed enums where one open set would do.** `Resource`, `UnitKind`, `StructureKind` - a new
@@ -133,7 +133,7 @@ Against fifteen types.
   As an attribute of a territory it is fine, which means *place* has to be able to carry attributes
   and not only contents.
 
-**Nothing here is proposed.** `P-130` already decided that kinds and transformations are data, and
+**Nothing here is proposed.** `P-130` already decided that kinds and recipes are data, and
 this is the same decision applied to *state* rather than to *rules*. Whether that is worth doing to a
 model that works is Sean's, and the answer probably depends on whether the two halves being different
 shapes turns out to hurt.

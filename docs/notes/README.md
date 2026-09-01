@@ -26,7 +26,7 @@ disagree, the spec is right and the note needs a superseded marker.
 | [No free surplus](no-free-surplus.md)                                        | Why forbidding cycles would forbid the economy, and what stops perpetual motion instead          | 2026-08-31 |
 | [Colonising by rule](colonising-by-rule.md)                                  | Two rules for a planet, and why the contention is in the condition                               | 2026-08-31 |
 | [Complexity against the predecessor](complexity-against-the-predecessor.md)  | Fifteen types against five, and which of the ten extra are capability                            | 2026-08-31 |
-| [The game as tables](the-game-as-tables.md)                                  | Every kind and every transformation of the first release, in two tables                          | 2026-08-31 |
+| [The game as tables](the-game-as-tables.md)                                  | Every kind and every recipe of the first release, in two tables                                  | 2026-08-31 |
 | [Prevent, detect, bound](prevent-detect-bound.md)                            | Why every magic number marks a cycle that survived, and the three tiers                          | 2026-08-30 |
 | [Everything is matter, and Rust is the engine](everything-is-matter.md)      | Conservation collapsing three limits into one, and data-defined units                            | 2026-08-30 |
 | [The game-4x predecessor](game-4x-predecessor.md)                            | What the superseded Kotlin project contained, and the mechanics worth keeping                    | 2026-08-25 |

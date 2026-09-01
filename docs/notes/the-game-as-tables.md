@@ -35,15 +35,15 @@ carry **ready** or **exhausted** rather than the territory carrying a `labor_spe
 three resource rows assume `P-126`'s split, which is open.
 
 **`labor` is a thing here and is not one in the model today.** It is what makes `work` an ordinary
-transformation rather than a special case - see the two-step below.
+recipe rather than a special case - see the two-step below.
 
-## Transformations
+## Recipes
 
 One row per input or output. **Consumed** says whether the input is used up; **bound** says whether
 the quantity is a floor or a ceiling; **scope** says whether it applies at one place or everywhere it
 matches.
 
-| Transformation      | Scope | Role | Thing              | Qty     | Consumed | Bound       |
+| Recipe              | Scope | Role | Thing              | Qty     | Consumed | Bound       |
 | ------------------- | ----- | ---- | ------------------ | ------- | -------- | ----------- |
 | **land**            | here  | in   | ark, in orbit      | 1       | yes      | at least    |
 |                     |       | in   | garrison           | 0       | no       | **at most** |
@@ -95,7 +95,7 @@ matches.
 **`move` and `launch` are ordinary.** A unit here in, a unit there out - location is a trait like any
 other, and orbit is a place. Nothing about either needs its own rule.
 
-**`land` and `found by land` are the same transformation reached two ways**, which is why founding is
+**`land` and `found by land` are the same recipe reached two ways**, which is why founding is
 one action and not two. The inputs differ only in which unit arrives.
 
 **`end turn` is five rows with scope `every`**, not a special phase. What is global is the scope
@@ -117,6 +117,6 @@ row**, which is a useful measure of how much the derived-kinds decision actually
   *how much capacity it occupies* and *of what kind*, and containers gain *how much it provides*.
 - **Biome** appears nowhere, which is accurate rather than an omission: nothing in the rules reads
   one today.
-- **Force of nature** is a row in Kinds and no transformation touches it. Taking and holding are
-  comparisons of force, and no transformation in the release changes who holds a territory except by
+- **Force of nature** is a row in Kinds and no recipe touches it. Taking and holding are
+  comparisons of force, and no recipe in the release changes who holds a territory except by
   founding it.

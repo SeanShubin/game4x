@@ -61,7 +61,7 @@ ten build, all ten draw, and stepping between them costs nothing.
 
 **The question was whether the two tables hold together**, which markdown cannot tell you.
 `prototypes/kinds` is the same content as Rust data - enums for the kinds, a struct per
-transformation, figures hardcoded - with a test that renders it back into the release's tables and
+recipe, figures hardcoded - with a test that renders it back into the release's tables and
 compares them cell by cell. It does not play: no turn, no board, no state.
 
 **`S-4` predicted four things it would force open. All four were real.** The prototype's own README
@@ -88,13 +88,13 @@ it.**
 
 **It costs nothing to accommodate, and that is worth saying beside it.** A family need not be a
 parent class - `spec/invariants.md` says every kind is data, and under a trait bag *unit* is simply a
-trait that Ark and Pioneer both carry. A transformation naming `{unit}` matches anything carrying it,
+trait that Ark and Pioneer both carry. A recipe naming `{unit}` matches anything carrying it,
 which is the predecessor's `isPartOf` and needs no hierarchy. **So the finding is a real gap in what
 the tables say and not a gap in the shape** - which is the good kind, since Sean ruled out
 inheritance on his own grounds weeks before this came up.
 
 **Independently checked here rather than taken**: ten `here` against five `every`, four quantities
-that are not plain numbers across three transformations, fifteen transformations, and the three
+that are not plain numbers across three recipes, fifteen recipes, and the three
 generic nouns - all read off `releases/first-release.md` and all matching. The code lane also reports
 two of its own first-pass figures were wrong and its assertions caught them.
 
