@@ -42,6 +42,44 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-136 - When effects compete, and when they merely follow
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** entailed · **into**
+`spec/turn.md` -> Order of operations
+
+**Found by the re-read trigger, minutes after `P-135` landed.** That section had taken four proposals,
+so it was read whole, and two of its lines now pull against each other.
+
+> Add, after *competing effects are gathered and resolved together*:
+>
+> - Effects compete when they arise together: several rules firing, or a sweep at the end of a turn.
+>   A player acting twice in sequence is not competition - the second act sees what the first did
+
+**Basis:** the section says both of these:
+
+- *Producing happens in any order* - the player acts, one thing at a time, each act seeing the state
+  the last one left.
+- *Where two effects cannot both happen, they compete... nothing gains an advantage by being
+  considered first.*
+
+**Read together they say something nobody means.** A player with 15 metal who builds a Yard and then
+tries a Pioneer is two effects that cannot both happen, and the first won by being first - which the
+second line appears to forbid. **The intended reading is that a deliberate sequence is not
+competition**, and nothing in the words says so.
+
+**Why it matters rather than being pedantry.** The wrong reading is not absurd, it is *a design*: a
+game could gather the player's whole turn and resolve it at the end, and some games do. A reader
+building from this could implement it, and the first sign would be a player wondering why their
+commands did not take effect when typed.
+
+**This is the `P-125` shape exactly** - a clause read one way by the specification lane and another by
+whoever builds it, with nothing in the text to settle it. That one cost two days and decided whether
+the release could be won. **The cost of the clause is one line now.**
+
+**The distinction it draws is checkable.** Effects that arise *together* have no order of their own:
+five rules matching at once, or every citizen eating at the end of a turn. Effects a player *sequences*
+have one by construction, and the player chose it.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
