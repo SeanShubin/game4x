@@ -223,5 +223,78 @@ built from metal. Sean's *yields one metal* implies the garrison is worth 7, but
 
 > **Conservation forces every kind to have a metal content, including kinds that are never built.**
 
+**Too strong - corrected below.** Conservation requires the books to balance, not that every kind
+holds metal.
+
 That is a bill the release has not been shown. It is not an argument against conservation - it is the
 work conservation entails, and it is better seen now than when a recipe fails to balance.
+
+## Storage at the node, which rescues the arithmetic
+
+Sean: *storage for metal coming out of a node is thematically cheaper, so perhaps the same labor can
+pay for both extraction and storage... perhaps storage is a thing we can add to nodes to collect with
+no additional labor cost, and external storage would require labor to put the extractor output
+there.*
+
+**This answers the threat the section above raised, and answers it without a number.** The worry was
+that charging labor to keep metal would undo `P-126`'s winnability measurement - territory 1 has nine
+hands and raises twelve metal, and if keeping the twelve costs hands the sums change.
+
+**Under storage at the node it does not.** Working a node already spends the labor; the output lands
+where it was made and stays. **Territory 1's three metal nodes cost three labor and yield twelve, and
+nothing further is owed** - the measurement stands as promoted.
+
+**And labor is charged exactly where the theme says it should be**: picking scattered metal off the
+ground and loading it into a truck is work; catching what an extractor produces in a bin beside the
+extractor is not. **The free case is the one where nothing had to be gathered.**
+
+**What it costs to state.** A node gains a capacity, and there is a second, general storage that costs
+labor to fill. Two numbers rather than one, and they are release tuning rather than rules.
+
+## Purging *founded* and *founding*
+
+Sean: *this is more evidence I need to purge the "founded" and "founding" concepts.*
+
+**Measured before agreeing: seven lines in five files.** `spec/console.md` (a territory is *taken and
+founded*), `spec/control.md` (the garrison line), `spec/population.md` and `spec/unit-types.md` (three
+lines about a *founding unit*), and two in the release. `spec/narrative.md` uses *founding population*
+in the fiction, which is prose and not a mechanic.
+
+**The purge is smaller than it looks, because the pieces already have homes:**
+
+| What it was doing               | Where it goes                                          |
+| ------------------------------- | ------------------------------------------------------ |
+| `founded` as a stored flag      | derived: force present is at least the force of nature |
+| *founding* as a special act     | a recipe like any other                                |
+| *a founding unit* as a category | a unit that appears in that recipe's inputs            |
+| *gains one no other way*        | already covered - see below                            |
+
+**The line that looked load-bearing is not.** `spec/control.md` says a garrison is *not built* and a
+territory *gains one no other way*, which was the thing a second route would contradict. **But the
+constraint that matters is stated separately in the same file**: *a territory has at most one
+garrison, because it represents the organisation of the whole territory.* **That is what stops
+garrison-spam**, and it survives the purge untouched. The *no other way* clause was doing nothing the
+*at most one* clause was not already doing.
+
+**So the purge removes a special case rather than a rule**, which is the good kind, and it follows
+from `P-130` and `P-134` rather than being a new idea: if everything is a recipe, nothing is *not
+built*.
+
+## Correction: conservation does not force a metal content on everything
+
+The section above claimed **conservation forces every kind to have a metal content, including kinds
+that are never built**. Sean: *I don't think it follows that everything must have metal content.*
+**He is right and the claim was too strong.**
+
+**Conservation requires the books to balance, not that every kind holds metal.** A citizen is not made
+of metal and can hold none; what conservation demands is that the metal a recipe takes in is
+accounted for by what it puts out - and *output* includes loose metal.
+
+**His own figures balance.** A Pioneer is 8 metal, and *a pioneer that when disassembled yields one
+metal* gives: garrison 7, extractor 0, citizen 0, and **1 metal loose** - which then faces the same
+end-of-turn question as any other loose metal. **Eight in, eight out**, and the one left over is
+exactly the salvage he described.
+
+**So the bill is real but smaller.** Kinds that metal goes *into* need a content; kinds it does not
+need none. And the balance is checkable when a recipe is written, which is what `P-130` makes
+possible.
