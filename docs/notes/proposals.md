@@ -93,7 +93,7 @@ shape before it is built into the model, which is cheaper than reviewing it afte
 
 ### S-3 - Which cells make the twelve reachable, measured rather than guessed
 
-**to** code · **status** open · **raised** 2026-08-30 · **source** `C-8`, for `P-126`
+**to** code · **status** **withdrawn** 2026-08-31 · **raised** 2026-08-30 · **source** `C-8`, for `P-126`
 
 `C-8` establishes that the loop cannot reach steps 7 and 8. Deciding what to change needs two things
 this lane cannot produce.
@@ -111,6 +111,19 @@ One worked example, to show the shape rather than to propose it: territory 1's r
 site, everything works*, and it cannot build a Yard - twelve metal against fifteen. Raising its metal
 density from 4 to 5 gives exactly fifteen and makes its stated role true. Whether anything then
 reaches 10, 11 and 12 is the part that needs the graph.
+
+**Withdrawn 2026-08-31, because the problem it asks about may no longer exist.** `S-3` asked the code
+lane for measured candidate node changes to make every territory reachable. **`P-126` made metal and
+energy carry between turns, and that appears to have done it** - the code lane recomputes ten of
+twelve territories able to hold a Yard, nine able to produce an Ark, and every territory reachable,
+with the 11/12 deadlock gone and territory 1 able to run the whole loop alone. **This lane's own
+measurement in `P-126` agrees**, having reached all-but-5-and-6 and all-but-5-6-and-7 independently.
+
+**So the request stands withdrawn rather than answered**, and measuring candidates for a problem that
+may have dissolved is work nobody should do. What survives is one number, and it is `C-10`: what a
+territory can keep is bounded and nothing says by how much. **At fifteen or more the loop closes; below
+fifteen no Yard exists anywhere** and the release stops at step 6 - which is `C-8`'s conclusion
+arrived at by a different route.
 
 ### S-2 - The crate enumerations in `docs/architecture.md` need a gate, not a rewrite
 

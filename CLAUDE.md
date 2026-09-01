@@ -417,6 +417,17 @@ both known collisions - P-100 against P-109, and P-96 leaving borders in the rea
 scoping ids and poles out of it. **Firing too often is the correct error here**: a false fire costs
 re-reading ten bullets, and the miss cost two days.
 
+**A promotion can withdraw a finding as easily as it can create work, and both need saying.** After
+promoting, check the index for open items that cite the destination file - `outbox` lists them - and
+tell their owner. **A rule that moves under an open item makes it wrong without touching it**, and
+nothing else will notice: the item still reads correctly, its evidence is still quoted accurately, and
+only its conclusion has stopped being true.
+
+This was found by the code lane on 2026-08-31. Fourteen proposals landed, this lane reported that
+none of them was work for it - true of *building* - and two of its open findings had been withdrawn by
+`P-126` and `P-138` without anyone saying so. **It re-ran them itself and caught it**, which is the
+expensive way.
+
 **Every promotion asserts.** Copy, then verify the text is present in the target file, and
 fail loudly if it is not. Claude has three times reported that something landed when it had
 not - thirteen missing rows in the proposals file, three files missing from the spec index -
