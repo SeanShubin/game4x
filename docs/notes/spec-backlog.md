@@ -940,3 +940,36 @@ It costs no number, because one cycle is the density.
   as a named thing with a fixed pair, which is simpler and is what first release wants. Chosen at
   build time is a loadout system, and it is worth knowing that it is being deferred rather than
   missed
+
+### Answered 2026-09-01: any kind, fixed by recipe, and how the loop is stopped
+
+Sean answered two open questions and asked a third.
+
+**A bin holds any kind, and *a bin and a capacity are the same thing*.** That is a larger
+simplification than it looks. *A territory has capacity for four extractors* becomes *a territory has
+a bin that holds extractors, maximum four*, and `spec/logistics.md`'s whole capacity section stops
+being a separate rule: **capacity counted per kind is one bin per kind**, and *nothing a player builds
+ever crowds out something of another kind* is what having separate bins means. One idea replaces two.
+
+**It needs one extension and it breaks one promoted line.**
+
+- **A bin holds a kind or a family.** The mobile stacking pool is a bin holding the `unit` family
+  rather than a single kind, and `P-143` already has families
+- **`spec/logistics.md` says no kind of thing may be nested inside itself, at any depth - and bins
+  now nest.** A territory holds a bin of extractors, an extractor holds a bin of metal, so the path
+  runs bin, extractor, bin. **The rule is stronger than what it protects**: it exists to bound
+  nesting depth, and the honest version is that nothing may contain itself, directly or through
+  anything else. Acyclicity, not one-of-each
+
+**A vehicle's bins are fixed by its recipe, and recipes will later be upgradeable.** **That needs no
+new mechanic**, which is worth knowing now rather than designing for later: `spec/invariants.md`
+already says *the definitions are part of the game state, and defining one is a transition like any
+other*. An upgrade is a transition that redefines a recipe, and a game's history already records what
+its rules were at every point.
+
+**And the infinite transfer is `P-147`.** The rule that stops it is Sean's own, written on 2026-08-31
+and never promoted: *every cycle among recipes must spend readiness somewhere along it.* The design
+consequence is that **a transfer spends the bin's readiness** - one transfer per bin per turn, which
+keeps it free of labor and metal while making it finite. A vehicle can still load and move in the
+same turn, because moving spends the vehicle's readiness and loading spends the bin's; what it cannot
+do is arrive, unload, reload and leave.

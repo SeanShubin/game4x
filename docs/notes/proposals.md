@@ -42,6 +42,43 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-147 - Every cycle among recipes must spend readiness
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** recovered - **into**
+`spec/invariants.md` -> The game is data
+
+**Sean asked how a transfer is stopped from running for ever.** *I want to talk about how we prevent
+some material from being transferred back and forth between a vehicle bin and territory bin with no
+limit, I don't want to accidentally make an infinite loop possible.*
+
+**The rule that answers it is his own, and it is not in the specification.** It was worked out on
+2026-08-31 and written down in [no free surplus](no-free-surplus.md), where it has sat unpromoted
+ever since.
+
+> `spec/invariants.md` -> The game is data, one line added:
+>
+> - Every cycle among recipes must spend readiness somewhere along it
+
+**Basis:** `spec/turn.md` already carries the termination argument - *using it exhausts it*, and *when
+everything is exhausted there is nothing left to do*. **That argument has a hole**, and a free
+reversible recipe is exactly the shape that falls through it: a transfer that uses nothing exhausts
+nothing, so the turn never reaches the state the sentence describes.
+
+**The line closes it in general rather than for transfers.** A cycle that spends readiness runs at
+most as many times per turn as there is readiness to spend; a cycle that spends none runs for ever.
+So it is not a rule about transfers at all - **it is the condition under which *when everything is
+exhausted* is a true statement.**
+
+**It has to be stated rather than derived, because the obvious stronger rule is false.** Forbidding
+cycles outright would forbid the economy: labor works an extractor and yields food, food feeds
+citizens, citizens give labor. **The game's core loop is a cycle**, and what makes it safe is that
+getting labor out of a citizen exhausts the citizen and only the turn boundary makes it ready again.
+
+**What it then says about the transfer.** A transfer must spend the readiness of something, and the
+cheapest candidate is **the bin** - one transfer per bin per turn, which keeps a transfer free of
+labor and metal while making it finite. That is a design consequence rather than part of this
+proposal, and is recorded in [the backlog](spec-backlog.md).
+
 ### P-141 - A unit carries fuel, not cells
 
 **to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into** `spec/units.md`,

@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
+- **P-147** - Every cycle among recipes must spend readiness · `docs/notes/proposals.md`
 - **P-141** - A unit carries fuel, not cells · `docs/notes/proposals.md`
 - **P-142** - A quantity is a number · `docs/notes/proposals.md`
 - **P-143** - The release does not declare its own vocabulary · `docs/notes/proposals.md`
