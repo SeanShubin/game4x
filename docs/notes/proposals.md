@@ -56,12 +56,32 @@ everything else was a synonym in flight.
 >   code
 > - A recipe is a set of inputs and a set of outputs. Each input says how many, whether it is
 >   consumed, and whether its quantity is a least or a most
-> - A recipe applies either where it is invoked or everywhere it matches
+> - A recipe applies either at one place, named when it is used, or at every place its inputs are
+>   present. Which of the two it is belongs to the recipe rather than to the moment
 
 > `releases/first-release.md`, the section heading and the table's first column head:
 >
 > - `## Recipes`
 > - `| Recipe | Scope | Role | Thing | Qty | Consumed | Bound |`
+
+**Amended 2026-08-31: the third line is reworded and not only renamed.** Sean asked what *applies
+either where it is invoked or everywhere it matches* means, **and asking is the evidence.** Three
+faults in nine words: *invoked* does not say by whom; the two halves are not parallel, since one is
+about **who chose the place** and the other about **how many places**; and nothing says the choice
+belongs to the recipe rather than being made each time it is used.
+
+**What it means, which the release already shows.** Ten of the fifteen recipes are `here` - `build
+yard 11` is pointed at territory 11, and whoever uses it says which. Five are `every` - `eat` is
+pointed nowhere and runs wherever its inputs sit. **The five are exactly what ending a turn consists
+of**: eat, grow, depart, spoil, ready.
+
+**And that is why the line exists.** Without *every*, ending a turn is a hand-written rule at the
+centre of the game that no recipe describes. With it, ending a turn is five ordinary recipes with a
+different scope, and nothing is special.
+
+**`P-130` promoted the old wording**, so this is a correction to a landed line rather than a rename of
+it. It is folded in here because these are the same three lines and splitting it would put two
+proposals against one sentence.
 
 **Basis:** a rename usually earns nothing. **This one removes an ambiguity that was already in the
 specification and that nobody had noticed.**
