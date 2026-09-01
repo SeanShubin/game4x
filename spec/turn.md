@@ -16,8 +16,8 @@ The order in which a turn resolves. Every other document assumes this order.
   exhausts it, and a thing created during a turn begins ready and may be used at once. **When
   everything is exhausted there is nothing left to do**
 - Ending a turn: everything that eats, eats; then a population grows on surplus food or starves
-  for want of it; **food that is not eaten is lost, while metal and energy remain where they
-  are**; and everything becomes ready again.
+  for want of it; **what expires expires, and what was not kept in order is lost**; and everything
+  becomes ready again.
 - What a territory can keep is bounded. Anything above the bound is lost when the turn ends.
 - Where two effects cannot both happen, they compete. Competing effects are gathered and resolved
   together, so nothing gains an advantage by being considered first
