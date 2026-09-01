@@ -57,13 +57,39 @@ everything else was a synonym in flight.
 > - A recipe expresses inputs and outputs. Where its inputs are available, it can be used to create
 >   its outputs. Some inputs are consumed and some are not, and an input says whether its quantity
 >   is a least or a most
-> - Most recipes are options the player may take. The rest are not offered at all: they apply
->   themselves wherever they match, and nobody chooses
+> - A recipe belongs to the player or to the world. The player's are offered wherever their inputs
+>   are present, to take or to leave. The world's are not offered: a population eats, food spoils, an
+>   unpaid unit is lost
 
 > `releases/first-release.md`, the section heading and the table's first column head:
 >
 > - `## Recipes`
 > - `| Recipe | Scope | Role | Thing | Qty | Consumed | Bound |`
+
+**Fourth wording, and Sean's diagnosis of the third is the one that fixed it.** He called *the rest
+are not offered at all: they apply themselves wherever they match, and nobody chooses* catastrophically
+bad, for two reasons: **it needs context it does not supply** - *the rest* of what? - and **the purpose
+of such a rule cannot be inferred from it.**
+
+**Both are true and neither was a wording problem.** Every earlier attempt described the class by how
+it *differs* - not offered, nobody chooses, applies everywhere - which only means anything to a reader
+who already knows the class exists. **None of them said what it is for.**
+
+**What it is for is that the world acts too.** The player is not the only thing that does anything: a
+population eats whether or not anybody decided it should, food spoils, a unit nobody fed is lost. **So
+the division is ownership, not mechanism** - a recipe belongs to the player or to the world - and once
+it is put that way the rest follows without being said. Nobody has to be told the world's recipes are
+not offered.
+
+**The three examples are in the line deliberately.** They cost eleven words and they remove the need
+for context entirely: a reader who has never seen the release knows what class is meant. They are
+illustrations rather than an enumeration, so a new one does not make the line wrong.
+
+**What each attempt got wrong, since four is a lot for one sentence.** *Where it is invoked or
+everywhere it matches* said geography when it meant agency. *At one place or every place its inputs
+are present* was still geography, and false as well, since an offered recipe is available everywhere
+its inputs are. *Most recipes are options, the rest are not offered* had the right axis and described
+it only by negation. **The first three were all correct and none of them was readable.**
 
 **Reworded a third time, from Sean's own sentences.** His: *recipes represent options the player may
 take in the game. Recipes express inputs and outputs. Where inputs are available, the recipe can be
