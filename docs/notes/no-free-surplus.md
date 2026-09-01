@@ -88,3 +88,74 @@ is detected. What changes is the test applied when a recipe is added:
 
 Both are checkable when the recipe is written, which is what `P-130` makes possible: recipes are data,
 so the graph over them can be walked before anything runs.
+
+## The refinement: matter is conserved, order is not
+
+Sean: *the planet is an open system, more metal and energy exists than can be practically extracted,
+and food gets its energy from the sun. Metal can come out of the ground, be made into a vehicle, and
+that vehicle can be destroyed. The metal becomes unavailable but the reason matters. Metal in a
+storage bin is organized so it is easy to access. Metal from a destroyed vehicle must be organized to
+be useful.*
+
+**This is the first law and the second law, and it settles a question this note left open twice.**
+
+### Conservation was the wrong half on its own
+
+`P-126` says metal is conserved: *what it was made into can be taken apart to get it back.* Twice
+this lane asked whether stripping is therefore **lossless**, and answered *matter is conserved and
+time is not* - true, and philosophy rather than mechanism.
+
+**Sean's version is mechanical.** Taking a vehicle apart returns all of the metal and returns it
+**disorganised**. Nothing is destroyed and nothing is free: what was spent is the *arrangement*, and
+arrangement is what makes metal usable. **A destroyed vehicle is a pile, and a pile is not a
+stockpile.**
+
+So build-and-strip has a price, and it is not a fudge factor: **the price is re-organising the
+scrap**, which costs labour like anything else.
+
+### A second arrow, alongside ready-to-exhausted
+
+The note above found one single-directional change: **ready becomes exhausted and only the turn
+boundary reverses it.** This adds a second:
+
+> **Organised becomes disorganised for free. The reverse always costs.**
+
+**That is what forbids perpetual motion, and it is stronger than forbidding cycles.** Any cycle that
+returns matter returns it degraded, so going round again costs the work of re-refining. **The cycle is
+allowed and it simply does not pay** - which is a better rule than one that has to enumerate what may
+not be built.
+
+### And it is already half-written
+
+Sean said, before he had the frame: *if you have a bunch of metal lying around it gets lost, but if
+you have storage containers to keep it organized you have more usable metal in the same area.*
+**That is this rule, and `P-129` already carries it** - *capacity is organisation, not room*, and a
+container occupies capacity of one kind and provides it of another.
+
+So loose metal being lost is not a separate mechanic to be added. **It is disorder winning where
+nothing is spent to hold it back.**
+
+### The open system is the node
+
+*More metal and energy exists than can be practically extracted, and food gets its energy from the
+sun.* `spec/economy.md` already says it from the other side: *a planet's resources never run out;
+what is finite is the rate at which they can be extracted.*
+
+**So a node is where the system is open.** Every cycle that appears to gain is drawing on one, and the
+rate is what stops it running away. Nothing else in the game is a source.
+
+### What it would cost to adopt
+
+- **A state for matter, not only a quantity.** `{metal}` becomes `{metal, usable}` and
+  `{metal, scrap}` - a trait, which `P-134` already makes free.
+- **A recipe that refines.** Scrap plus labour yields usable metal, and it is an ordinary row.
+- **`P-126` would want one word.** *Taken apart to get it back* does not say **in what state**, and
+  under this it comes back as scrap. It is not wrong today, because scrap does not exist; it becomes
+  wrong the day it does.
+
+### And it makes destruction interesting rather than only costly
+
+**A destroyed vehicle leaves something.** Whoever holds the ground afterwards has scrap worth
+recovering, so a battlefield is worth taking for a reason nobody had to invent. **That falls out of
+the model rather than being a mechanic bolted on**, which is the same test `docs/notes/spec-backlog.md`
+applied to supply routes getting cheaper when you clear them.
