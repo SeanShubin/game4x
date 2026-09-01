@@ -49,10 +49,38 @@ Two limits Claude holds itself to:
 
 **Sean's, decided 2026-08-31**, choosing gather-resolve-apply over sequential evaluation.
 
-> - Where several things could act and not all of them may, what each would do is gathered first and
->   resolved together. Being considered first is no advantage
-> - A tie is settled by something the game already knows, never by the order in which things were
->   examined
+> - Where two effects cannot both happen, they compete. Competing effects are gathered and resolved
+>   together, so nothing gains an advantage by being considered first
+> - What settles them is a deterministic mechanic of the game, and therefore something a person wrote
+>   and a player can change
+
+**Reworded 2026-08-31 from Sean's phrasing**, which is better in three places and drops one that has
+to stay. His: *competing effects are resolved by a deterministic game mechanic that is discoverable
+and alterable.*
+
+**Taken from his version.** *Competing effects* is the name the first draft lacked and kept
+circling - *where several things could act and not all of them may* is a definition pretending to be
+a phrase. *Deterministic* does in one word what *never by the order in which things were examined*
+did in nine. And putting *discoverable and alterable* in the same sentence is right, because a
+resolution nobody can see is the auto-scouting complaint in miniature.
+
+**Kept from the first version, because his phrasing permits the thing it is meant to forbid.**
+*Deterministic* is not the property wanted: **first-mover-wins is perfectly deterministic.** Take the
+candidates in id order and let the earliest win - reproducible, data-derived, and exactly what
+`docs/layers.md` says not to do: *do not let the first mover win.* So *gathered and resolved
+together* has to stay, since it is the half that rules out the thing being ruled out.
+
+**Changed from his version.** *Discoverable and alterable* is stated as a **consequence** - *and
+therefore something a person wrote and a player can change* - rather than as a new assertion. `P-113`
+already says every behaviour acting on the player's behalf is a rule some person wrote, and a
+tie-break is one. Asserting it twice would be two statements that can drift apart; pointing at it
+cannot.
+
+**His examples are left out, and this is the one place his version was not adopted.** *Resolved by the
+order in which territories were claimed* and *a default biome ordering* are exactly the defaults that
+`P-113` makes rule data rather than specification. As illustrations they read as prescriptions, and a
+later session would take them for the answer. **They belong in the rules where a player can find and
+change them**, which is the whole point of the second line.
 
 **Basis:** this is a rule about the game and not about the engine, which is why it is here rather than
 in `docs/`. *First mover wins* and *resolve over the whole set* produce **different outcomes** from
