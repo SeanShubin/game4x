@@ -48,6 +48,12 @@ it has. **Six occupancies and one starting allowance per kind.**
 where it was made.* A node holds some amount for free; anything else costs labor to store. **Two
 numbers: what a node holds, and what a unit of storage costs elsewhere.**
 
+**And one of those two now has a floor, measured by the code lane as `C-10`.** `spec/turn.md` says
+what a territory can keep is bounded and nothing says by how much. **At fifteen or more the loop
+closes; below fifteen no Yard exists anywhere** and the release stops at step 6. So the bound is not
+free tuning - **anything under fifteen makes the release unwinnable**, which is `C-8`'s conclusion
+reached from the other side.
+
 **Whether `revert` can ever fire.** Not a number, and it belongs on this list because the data cannot
 express it. Force of nature is 1 everywhere, a garrison is force 1, holding takes force *equal* to
 nature, and nothing in the release removes a garrison. **So one of the eighteen recipes appears to be
