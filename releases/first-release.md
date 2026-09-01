@@ -65,9 +65,9 @@ Every territory has at least one food node.
 A garrison's multiplier is 1. An Ark can invade land from orbit. Founding produces a garrison, a
 citizen and a food extractor. Nothing outside this table readies.
 
-## Transformations
+## Recipes
 
-| Transformation      | Scope | Role | Thing              | Qty     | Consumed | Bound    |
+| Recipe              | Scope | Role | Thing              | Qty     | Consumed | Bound    |
 | ------------------- | ----- | ---- | ------------------ | ------- | -------- | -------- |
 | **land**            | here  | in   | ark, in orbit      | 1       | yes      | at least |
 |                     |       | in   | garrison           | 0       | no       | at most  |

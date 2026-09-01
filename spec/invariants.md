@@ -69,11 +69,14 @@ specific rule.
 
 ## The game is data
 
-- Every kind of thing, and every transformation that turns some things into others, is data rather
-  than code
-- A transformation is a set of inputs and a set of outputs. Each input says how many, whether it
-  is consumed, and whether its quantity is a least or a most
-- A transformation applies either where it is invoked or everywhere it matches
+- Every kind of thing, and every recipe that turns some things into others, is data rather than
+  code
+- A recipe expresses inputs and outputs. Where its inputs are available, it can be used to create
+  its outputs. Some inputs are consumed and some are not, and an input says whether its quantity
+  is a least or a most
+- A recipe belongs to the player or to the world. The player's are offered wherever their inputs
+  are present, to take or to leave. The world's are not offered: a population eats, food spoils, an
+  unpaid unit is lost
 - The definitions are part of the game state. Defining one is a transition like any other, so a
   game's history is a complete account of it, including what its rules were
 - A game's state is things, in places, and how many of each. A thing is a set of traits, and one of
