@@ -42,6 +42,59 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-139 - A recipe, not a transformation
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into**
+`spec/invariants.md` -> The game is data, **and** `releases/first-release.md` -> Transformations
+
+**Sean's, decided 2026-08-31**, converging the vocabulary. **Thing** and **recipe** are the words;
+everything else was a synonym in flight.
+
+> `spec/invariants.md` -> The game is data, three lines, *transformation* becoming *recipe*:
+>
+> - Every kind of thing, and every recipe that turns some things into others, is data rather than
+>   code
+> - A recipe is a set of inputs and a set of outputs. Each input says how many, whether it is
+>   consumed, and whether its quantity is a least or a most
+> - A recipe applies either where it is invoked or everywhere it matches
+
+> `releases/first-release.md`, the section heading and the table's first column head:
+>
+> - `## Recipes`
+> - `| Recipe | Scope | Role | Thing | Qty | Consumed | Bound |`
+
+**Basis:** a rename usually earns nothing. **This one removes an ambiguity that was already in the
+specification and that nobody had noticed.**
+
+`spec/turn.md` says a turn has three parts: *producing, which is the player acting, then consuming
+and **transforming**, which are what ending it does.* `spec/invariants.md` says *a **transformation**
+is a set of inputs and a set of outputs.* **Two different things, near-identical names, four
+documents apart** - one is a phase of the turn, the other is any rule that turns things into other
+things. The turn's *transforming* phase does not contain the recipes; every phase runs them.
+
+**So the rename is not tidying, it is separating two concepts that had one name.** After it,
+*transforming* is unambiguous because nothing else is called that.
+
+**Why *recipe* rather than the alternatives.** *Transition* is taken and load-bearing -
+`spec/invariants.md` says *a game state and a transition yield a new game state*, and a transition is
+**one applied step** where a recipe is **the definition**. Keeping them distinct is what lets a
+history record transitions while the rules hold recipes. *Formula* and *rule* are both already used
+for other things.
+
+**Why *thing* stays *thing***, since it is the one word that sounds like a placeholder. It is already
+in `spec/turn.md` - *a thing created during a turn begins ready* - it is the predecessor's word, and
+its vagueness is exactly right: anything narrower excludes something the model holds. **`entity` is
+the one to avoid**, because `docs/architecture.md` rule 6 spends a paragraph saying an entity is not
+where a fact about the game is kept.
+
+**Four words, each doing one job**: a **thing** has a **kind**; a **recipe** is a definition; applying
+one produces a **transition**. Three of the four are already in the specification.
+
+**What this does not cover.** `docs/` and the notes are this lane's and are being corrected without a
+proposal. The accepted-proposal ledger keeps its old wording, because those rows record what Sean
+approved and he approved something called a transformation. And `prototypes/kinds` follows the
+release, which is the code lane's to change once this lands.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
