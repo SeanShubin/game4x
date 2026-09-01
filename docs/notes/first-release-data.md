@@ -79,3 +79,54 @@ as the repository root was before `P-124`.
 That was fine while `commands/*.4x` was a test fixture. **It is not fine if it becomes the game's
 data**, because then the question *who may change the game* has no answer. It is the same question
 `P-124` answered for generated files, asked about authored ones.
+
+## What a complete set of tables needs, in order
+
+Sean: *what do we need to get to a complete set of tables with the starting sample data.* **Three
+decisions, then four pieces of writing, and the order matters because the later ones cannot be
+written until the earlier ones are answered.**
+
+### Three decisions, all Sean's, none of them a number
+
+**1. Is a `cell` a thing or a trait?** A unit carries `cells: 2` in the Units table - a trait whose
+value goes down. `move` consumes `cell, on that unit`, quantity 1, consumed yes - a thing the unit
+holds. **It cannot be both and the tables currently say both.** Everything else waits on this,
+because it decides whether the kinds table has twelve rows or thirteen.
+
+**2. Does a port name another port, or is it a convention?** Six ports reach outside themselves -
+`cell, on that unit`, `food, its upkeep`, `unit, here` against `unit, there`, `resource` at quantity
+`density`. **For these eighteen a convention suffices**: *a port refers to the other ports of the
+same recipe*, and since no recipe names two units there is never an ambiguity. **It stops working the
+moment one does** - combat, a transfer between two units - and the predecessor shipped the general
+answer as `$name` aliases. **Convention now and aliases later is a real option and should be a choice
+rather than a default.**
+
+**3. What is a quantity?** Three kinds appear where a count belongs: an integer, `density`, and `any`.
+`prototypes/kinds` resolved it as `Exactly | Density | Any` and no document says so. **`Density` is
+decision 2 in disguise**, since it is a number belonging to another port.
+
+### Four pieces of writing, once those are answered
+
+**1. Declare the missing kinds.** The Units and structures table has six rows and the recipes
+reference thirteen: **node, territory, food, metal, energy, labor** and possibly **cell** are never
+declared anywhere. Their traits mostly exist already - a node has a resource and a density, a
+territory has a biome and a force of nature, the resources have conserved-and-expires in
+`spec/resources.md` - so this is collecting rather than deciding.
+
+**2. Put the traits table somewhere owned.** It exists only in
+[the game as tables](the-game-as-tables.md), which is explicitly not binding, while the data it
+describes is in `releases/`. **An editor cannot load a note.**
+
+**3. Add the columns two promoted rules already require.** Capacity is a trait every kind carries -
+how much it occupies, and of what kind - from `P-129`. Metal content is a trait of the kinds metal
+goes into, from `P-126`. **Both are columns, not decisions**; only their values are decisions.
+
+**4. Decide where the data lives.** `commands/` is in no lane's column, which was fine as a test
+fixture and is not fine as the game's data, because *who may change the game* then has no answer.
+
+### And then the numbers, which is the part Sean is waiting for
+
+**Every number in the game lives in exactly two columns**: a kind's trait value, and a port's
+quantity. So *pull all the costs down* is an edit to one of them, and the four groups this note
+listed as missing become cells rather than gaps.
+
