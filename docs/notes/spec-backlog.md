@@ -742,6 +742,35 @@ is caught where it was made* - if a bin is free once built, that clause never fi
 is then caught, binned or lost. Either a bin costs labor each turn, or the line means the labor is
 paid when the bin is built and should say so.
 
+### Said 2026-08-31: bins anywhere, transport, and vehicles that act as bins
+
+Sean, in three statements: a metal container can be built where there is no metal node, and **must
+be, to gather materials to the site of a large construction project**; *we are going to need metal
+and energy transport*; and *I am thinking vehicles that act as bins*.
+
+**Transport needs no recipe, and that is the whole of it.** `P-143` makes a unit a place - a thing is
+always in a place, and a container is one. So metal whose place is *inside vehicle 7* stays inside
+vehicle 7 when the vehicle moves, and arrives with it. **Moving materials is `move`**, unchanged, and
+the cargo comes along because containment is where a thing is rather than something tracked beside
+it.
+
+**It is `P-129` a third time.** A fuel tank is a unit providing energy capacity; a bin is a structure
+providing resource capacity; a transport is a unit providing resource capacity that also moves. **All
+three are one rule** - *a container occupies capacity of its own kind and provides capacity of
+another* - and a bin differs from a vehicle only in whether it can move.
+
+**And it does not reverse `P-46`, which is worth checking rather than assuming.** That withdrawal
+cut citizens and food moving between adjacent territories, on the ground that *the only thing
+crossing a boundary is a mobile unit*. **That still holds exactly**: nothing crosses on its own, and
+materials cross only by riding in something that was already allowed to. The mechanism is untouched.
+What does change is the consequence - territories stop being economically self-contained, which is
+what the empty *Moving materials* section in `spec/logistics.md` has been waiting for.
+
+**One thing it dissolves.** `C-8` and `S-3` measured which territories can ever hold a Yard and
+produce an Ark, and the whole question assumes the metal has to be mined where the Ark is built. With
+transport it does not, and **any territory can build an Ark given enough turns**. `R-6`'s vetting
+should not be written against the old analysis.
+
 **Two things follow that are worth deciding rather than inheriting.** The release currently gives
 `land` and `found by land` identical outputs, and there is no reason they should match - an Ark
 bootstraps a planet from nothing and a Pioneer arrives in an empire that can send more. And the
