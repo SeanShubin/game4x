@@ -54,15 +54,40 @@ everything else was a synonym in flight.
 >
 > - Every kind of thing, and every recipe that turns some things into others, is data rather than
 >   code
-> - A recipe is a set of inputs and a set of outputs. Each input says how many, whether it is
->   consumed, and whether its quantity is a least or a most
-> - A recipe is available wherever its inputs are present. Some are offered, and somebody chooses
->   which and where; the rest apply themselves wherever they match, and nobody chooses
+> - A recipe expresses inputs and outputs. Where its inputs are available, it can be used to create
+>   its outputs. Some inputs are consumed and some are not, and an input says whether its quantity
+>   is a least or a most
+> - Most recipes are options the player may take. The rest are not offered at all: they apply
+>   themselves wherever they match, and nobody chooses
 
 > `releases/first-release.md`, the section heading and the table's first column head:
 >
 > - `## Recipes`
 > - `| Recipe | Scope | Role | Thing | Qty | Consumed | Bound |`
+
+**Reworded a third time, from Sean's own sentences.** His: *recipes represent options the player may
+take in the game. Recipes express inputs and outputs. Where inputs are available, the recipe can be
+used to create an output. Some inputs are consumed, others are not.*
+
+**That is better prose than anything this lane produced** and it is kept nearly whole. *Expresses
+inputs and outputs* and *where its inputs are available, it can be used* are his, and they say in
+plain words what three attempts said awkwardly.
+
+**Two things were added back, and the first is load-bearing.**
+
+**The bound.** *A least or a most* is missing from his version, and without it two rows of the
+release cannot be written. Counted: **twenty-seven inputs say *at least* and two say *at most***, and
+both of the two are *garrison, 0* - the way *this territory is not already held* is expressed. There
+is no other way to say an absence, because an absence is not a quantity of anything.
+
+**The unoffered case.** His first sentence defines a recipe **as** a player option, which would make
+the five that end a turn - eat, grow, depart, spoil, ready - not recipes at all, and ending a turn
+would go back to being a hand-written rule at the centre of the game. **So *most* rather than
+*represent***, which keeps his reading true of the ten it is true of and leaves the five somewhere.
+
+**What is deliberately not resolved here.** Whether the unoffered five deserve a name of their own is
+a real question and this proposal does not answer it. It says only that they are the same shape, which
+the release's table shows, and that nobody chooses them.
 
 **Amended again, and this lane was wrong twice about the same sentence.** Sean: *recipes are options
 available to me where their inputs are present. What are the other cases you are talking about?*
