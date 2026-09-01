@@ -23,5 +23,7 @@ The order in which a turn resolves. Every other document assumes this order.
   together, so nothing gains an advantage by being considered first
 - What settles them is a deterministic mechanic of the game, and therefore something a person wrote
   and a player can change
+- Effects compete when they arise together: several rules firing, or a sweep at the end of a turn.
+  A player acting twice in sequence is not competition - the second act sees what the first did
 
 ## Open questions

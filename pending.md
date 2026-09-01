@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-136** - When effects compete, and when they merely follow · `docs/notes/proposals.md`
 - **P-137** - Purge founding · `docs/notes/proposals.md`
 - **P-138** - Order is spent · `docs/notes/proposals.md`
 
@@ -39,9 +38,9 @@ it exists to ask.
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
+- `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86
 - `spec/control.md` -> Winning - P-77, P-81, P-125
-- `spec/turn.md` -> Order of operations - P-41, P-54, P-135
 - `spec/console.md` - P-69, P-82
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/interface.md` -> Surfaces - P-73, P-116
