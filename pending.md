@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-141** - A unit carries fuel, not cells · `docs/notes/proposals.md`
+- **P-142** - A quantity is a number · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

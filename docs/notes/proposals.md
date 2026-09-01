@@ -42,6 +42,75 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-141 - A unit carries fuel, not cells
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into** `spec/units.md`,
+**and** `releases/first-release.md` -> Units and structures, Recipes
+
+**Sean's, decided 2026-08-31**: *perhaps we can replace cell with fuel capacity. So units have a gas
+tank, they burn a unit of fuel every time they move.*
+
+> `spec/units.md`, the two lines about cells become:
+>
+> - A mobile unit holds fuel, up to a capacity of its own. Moving burns a unit of it, and a unit with
+>   none cannot move
+> - A unit's fuel is put in when it is built, and paid for in the territory that built it
+
+> `releases/first-release.md` -> Units and structures: the **Cells** column becomes **Fuel**, and the
+> **A move** column reads `1 fuel` for the Ark and the Pioneer.
+
+> `releases/first-release.md` -> Recipes: the two `cell, on that unit` ports become
+> `fuel, in that unit`.
+
+**Basis:** it removes a kind rather than adding one, and **the specification already said so**.
+`spec/units.md`: *a unit's cells are filled when it is built, and **the energy** is paid in the
+territory that built it.* **A cell was always energy in a wrapper** - the wrapper had a name, a
+column and two recipe ports, and no rule of its own.
+
+**So the kinds table has twelve rows and not thirteen**, which was the question blocking everything
+else in [the data inventory](first-release-data.md). `cell` was the doubtful kind, and the answer is
+that it is not one.
+
+**And it makes a unit a container, which `P-129` already describes.** *A container occupies capacity
+of its own kind and provides capacity of another.* **A fuel capacity is exactly that** - a unit takes
+up room in a territory and provides room for fuel inside itself. So *gas tank* is not a new mechanic;
+it is the capacity rule applied to something that was already carrying energy around.
+
+**One thing left as it is, deliberately.** *Fuel* rather than *energy* in the unit's column, because
+Sean said fuel and the word does work: energy in a store and energy in a tank behave differently -
+one can be spent on anything and one only on moving. **They are the same resource and the distinction
+is where it sits**, which is what a container is for.
+
+### P-142 - A quantity is a number
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into**
+`releases/first-release.md` -> Recipes
+
+**Sean's, decided 2026-08-31**: *I would like a quantity to always be an integer, unless there is a
+compelling reason otherwise.*
+
+> The three ports reading `any` become `1`:
+>
+> | Recipe | Role | Thing | Qty |
+> | ------ | ---- | ----- | --- |
+> | **spoil** | in | food | 1 |
+> | **ready** | in | thing, exhausted | 1 |
+> |           | out | thing, ready | 1 |
+
+**Basis:** `any` was never a quantity. It meant *all of it*, and **the scope column already says that**
+- both recipes are the world's, applied everywhere they match, so a recipe removing one food applied
+everywhere removes all the food. **The `any` was the scope written into the wrong column**, and
+deleting it changes no behaviour.
+
+**That leaves exactly one quantity that is not an integer**, which is the compelling reason Sean left
+room for: `work` yields **density** of a resource, and the amount is a property of the node being
+worked rather than a constant. **It cannot be an integer without a recipe per density**, which is
+eight recipes to avoid one exception.
+
+**So the rule is: a quantity is a number, except an output whose amount is a trait of one of the
+inputs.** One case in eighteen recipes, and `prototypes/kinds` already types it as `Exactly | Density`
+- **the third variant, `Any`, goes away with this.**
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
