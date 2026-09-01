@@ -11,15 +11,16 @@ it**, tested against every port the release actually has.
 
 ## Seven tables
 
-| Table               | Columns                                                    | Rows in the first release                |
-| ------------------- | ---------------------------------------------------------- | ---------------------------------------- |
-| **kind**            | name                                                       | ~13, and the release lists 6 - see below |
-| **trait**           | name, what its values are, stored or derived               | 13                                       |
-| **kind trait**      | kind, trait, value                                         | the Units table, one cell per row        |
-| **family**          | family, member kind                                        | 3 families - `unit`, `resource`, `thing` |
-| **recipe**          | name, owner: player or world                               | 18                                       |
-| **port**            | recipe, role in or out, subject, quantity, consumed, bound | ~55                                      |
-| **port constraint** | port, trait, value                                         | ~14                                      |
+| Table                | Columns                                      | Rows in the first release                |
+| -------------------- | -------------------------------------------- | ---------------------------------------- |
+| **kind**             | name                                         | ~13, and the release lists 6 - see below |
+| **trait**            | name, what its values are, stored or derived | 13                                       |
+| **kind trait**       | kind, trait, value                           | the Units table, one cell per row        |
+| **family**           | family, member kind                          | 3 families - `unit`, `resource`, `thing` |
+| **recipe**           | name, owner: player or world                 | 18                                       |
+| **ingredient**       | recipe, thing, quantity, consumed, bound     | 37                                       |
+| **result**           | recipe, thing, quantity                      | 18                                       |
+| **ingredient trait** | ingredient, trait, value                     | ~14                                      |
 
 **The wide tables in the release are these narrow ones joined.** A row of the Units table is one kind
 and its trait values; a block of the Recipes table is one recipe and its ports. **Nothing here is new
@@ -83,3 +84,25 @@ are the other**, and biome yields and territory nodes are the same shape one lev
 columns rather than decisions: capacity is a trait every kind carries, and metal content is a trait of
 the kinds metal goes into. **What remains a decision is their values**, which is where Sean said he
 wanted to be.
+
+## A correction: *port* was a word this lane invented
+
+Sean asked what a port is. **It appears in no specification, no release and nothing he wrote** - it
+was borrowed from dataflow, where a component has input and output ports, and used here as a
+collective noun for one row of a recipe's inputs and outputs.
+
+**Asking exposed that the concept is two concepts.** Counted against the release: **all eighteen
+output rows leave *consumed* and *bound* empty**, and none could sensibly fill them - an output is not
+consumed, and its quantity is exactly what it is rather than a least or a most. **A single table with
+two always-empty columns for half its rows** is the wide-table smell this whole exercise exists to
+remove.
+
+**Split, and the collective noun stops being needed.** A recipe has **ingredients** - a thing, how
+many, whether it is consumed, and whether that is a least or a most - and **results** - a thing and
+how many. Thirty-seven and eighteen. **Nothing is empty, and the recipe metaphor carries both words
+without explanation**, which is the test *port* failed.
+
+**The release's table keeps its Role column, and that is right.** One visual table with a role reads
+better than two side by side; two tables underneath store better. That is the split `docs/layers.md`
+already draws - normalise where you write, denormalise where you read - **arriving in the data rather
+than in the code.**
