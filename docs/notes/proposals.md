@@ -192,6 +192,32 @@ row in the recipe table**, and `eat` does not cover it - that row names a **citi
 it back. Its entire population perishes and any ark on it becomes unusable.* **That is not in the
 release at all**, in either table.
 
+**When they apply, which is not uniform, and a correction.** Sean read *the rest* as *automatically
+applied at end of turn*. **That is right for five and unstated for the other two.**
+
+- **Five are explicitly end-of-turn**, because `spec/turn.md`'s ending line names them: everything
+  that eats eats, a population grows or starves, what expires expires, everything becomes ready.
+- **Upkeep says *each turn*** in `spec/units.md` and is **not** in that ending line. End of turn is
+  the natural reading and the specification does not say it.
+- **`revert` says nothing about timing at all.** *Should the force in a territory fall below its force
+  of nature, nature takes it back* - no when.
+
+**This lane told Sean that one fires *whenever it becomes true*. That was a reading, not the text**,
+and the difference is a real one: checked only at the turn's end, force may dip and recover within a
+turn and nothing happens; checked continuously, it cannot.
+
+**It is not urgent, because the rule may be unreachable in this release.** Force in a territory is a
+garrison plus the citizens it organises. A garrison has force 1, force of nature is 1 everywhere, and
+holding takes force *equal* to nature - so an emptied territory still holds at exactly 1. **Nothing in
+the release removes a garrison**: structures are never demolished, and there is no combat. So the
+condition looks like it can never arise, which is worth knowing before anyone spends effort on when it
+is checked.
+
+**Two things follow and neither is proposed here.** If the rule is unreachable, the release has a rule
+it cannot exercise - which is either fine or a gap depending on whether the release is meant to
+demonstrate it. And if it is ever reachable, **when it is checked wants deciding**, because moving
+force through a territory is a thing a player will try.
+
 **Why it matters more than a missing row.** `P-139` says most recipes are options and *the rest apply
 themselves wherever they match*. **A reader counting the rest finds five and there are seven** - so
 the table understates the class the sentence is about, and the two it omits are the two that can take
