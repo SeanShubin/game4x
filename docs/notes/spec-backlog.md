@@ -1010,3 +1010,45 @@ what makes that mandatory rather than remembered.
 stops the loop and is worse: a bin becomes a once-a-turn valve, so unloading a transport into a
 warehouse would prevent loading anything else from it. **Readiness on the thing moved is both looser
 and more exact.**
+
+### Corrected 2026-09-01: two problems were wearing one name
+
+Sean: *I do like the idea of being able to load metal from one territory, transport it to another,
+unload it, use it to produce something, and use that thing produced... This is a case that is always
+moving forward, so it has no problem. I am just puzzling how I prevent infinite loops while still
+allowing this.*
+
+**His example refutes the answer this lane gave one turn earlier.** Readiness on the moved thing
+would exhaust the metal at loading, so the unloading at the far end needs `metal, ready` and there is
+none. **The sequence he wants is exactly the sequence that rule forbids.**
+
+**The mistake was conflating two problems that share a word.**
+
+|                                                | What it is                                | What answers it          |
+| ---------------------------------------------- | ----------------------------------------- | ------------------------ |
+| **A cycle that gains**                         | metal to thing to metal, ending with more | `P-147` and conservation |
+| **A cycle that gains nothing and never stops** | metal shuffled between two bins           | nothing yet              |
+
+**The forward sequence is neither**, which is why it should not have been caught. A rule aimed at the
+first was written tightly enough to catch a third thing that is not a problem at all.
+
+**And the second is not an exploit, it is a non-termination hazard.** Shuffling metal between two
+bins in the same territory gains nothing and changes nothing a player would want. **It only bites
+when something automatic is applying recipes** - which is precisely the rules-for-pioneers system
+Sean wants, where two rules could ping-pong for ever.
+
+**So it should be bounded where it arises: a rule fires at most once per turn per thing it applies
+to.** That is readiness again, on the rule rather than on the metal, and it costs nothing anywhere
+else. **Manual play needs no bound at all**, because a person who rearranges their pockets for ever
+has not found an exploit.
+
+**Which leaves the transfer free and the movement paid for, as Sean already said.** Within a
+controlled territory a transfer costs nothing. Between territories the cost is the vehicle's
+readiness, already spent by moving, and a fuel. His whole sequence then runs in one turn: transfer
+into the transport, move, transfer out, build, and use what was built, since a thing created during a
+turn begins ready.
+
+**Metal therefore needs no readiness trait**, which is one fewer trait than the last two answers
+required. **That is the third time today that the answer was to remove something**, and it is the
+cycle Sean named: *unique idea, get it in spec, realise it unifies into an existing idea, get the
+unification into spec.* Containers, transport and capacity all went that way within a day.
