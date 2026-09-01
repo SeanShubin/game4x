@@ -54,7 +54,8 @@ tank, they burn a unit of fuel every time they move.*
 >
 > - A mobile unit holds fuel, up to a capacity of its own. Moving burns a unit of it, and a unit with
 >   none cannot move
-> - A unit's fuel is put in when it is built, and paid for in the territory that built it
+> - Fuel moves freely between a controlled territory that has it and anything there that can
+>   hold it
 
 > `releases/first-release.md` -> Units and structures: the **Cells** column becomes **Fuel**, and the
 > **A move** column reads `1 fuel` for the Ark and the Pioneer.
@@ -81,6 +82,20 @@ unit` and is now `energy, in that unit`. **`fuel` as an ingredient name would pu
 which is the whole thing this proposal removes: there would again be a name in the recipes that is
 not a kind. The **Fuel** column stays, because there it names a *capacity* - how much energy the unit
 can hold - and a capacity is a trait rather than a kind.
+
+**Amended again 2026-08-31, and this one is a rule rather than a word.** Sean: *fuel should be freely
+transferable between a controlled territory that has it and a thing that can hold it.* The line that
+said a unit's fuel is put in when it is built was **too narrow, not wrong** - fuelling at build time
+is one case of the general rule, so the general rule replaces it rather than joining it.
+
+**Free means no labor and no limit but capacity**, and one move a turn is what bounds it: a unit that
+moves is exhausted, so nothing can shuttle. **It also raises the stakes on upkeep.** Loading a
+transport costs nothing, so a vehicle parked in a controlled territory is storage with no friction at
+all - and upkeep is then the only thing making that a choice rather than a free win.
+
+**And it makes a territory's containers one pool for reach and many for the bound.** Within a
+controlled territory a player never has to say which bin holds what, because it can always be moved
+for nothing; the container boundaries decide **how much** can be kept and nothing else.
 
 **One thing left as it is, deliberately.** *Fuel* rather than *energy* in the unit's column, because
 Sean said fuel and the word does work: energy in a store and energy in a tank behave differently -
