@@ -791,10 +791,16 @@ choice, and the alternative is keying capacity off mobility, which the promoted 
 
 **The limiter already exists, and it is the half of `P-144` that was right.** `spec/logistics.md`:
 *everything in a territory occupies capacity there: its stores, its structures and the units standing
-on it. Capacity is counted per kind of thing.* So bins compete with extractors and the garrison for a
-territory's **structure** capacity, and transports compete with Arks and Pioneers for its **unit**
-capacity. **Total storage in a territory is therefore bounded without any new rule**, and it is
-bounded by a trade the player can feel: another bin is one fewer extractor.
+on it. Capacity is counted per kind of thing, and a territory has some of each before anything is
+built. **Nothing a player builds ever crowds out something of another kind.*** So a territory has a
+bin capacity and a transport capacity, each its own, and **total storage is bounded without any new
+rule**.
+
+**Corrected 2026-08-31, having first been recorded wrongly here.** This lane read that as lumped
+pools - bins competing with extractors for a shared *structure* capacity - and told Sean so. It says
+**per kind**, and the sentence after it forbids exactly the crowding that reading produced. The
+mistake mattered: it made a trade-off look like a feature when the specification already ruled it
+out.
 
 That is worth noting against the withdrawal. `P-144`'s flat *resource* capacities were wrong and are
 gone; its flat *structure* and *unit* capacities are exactly the limiter now being asked for, and
@@ -814,6 +820,39 @@ one is invented. Two ways:
   falls out with no new rule and one fewer number**, and the flat move cost is what makes it work
 - **Two containers on one unit**, a tank that only takes energy and a hold that takes anything. It
   needs `P-129` to allow a container to provide more than one capacity, which it currently does not
+
+### Said 2026-08-31: one pool, and never tear down to make room
+
+Sean: *one pool is fine. I want to be able to max out the extractors without eating into another
+resource, that relates to my invariant where I should never have to tear down a building to make room
+for something.*
+
+**That invariant is already promoted**, and it is the sentence this lane misread above:
+`spec/logistics.md` says *nothing a player builds ever crowds out something of another kind*. So
+maxing the extractors already cannot cost bin capacity, and nothing needs adding.
+
+**Which locates the problem precisely: it is inside the one-kind decision, not outside it.** Capacity
+is counted per kind, so **one kind is one capacity** - and a transport parked in a territory can then
+crowd out a bin, which is the invariant broken by exactly one step. Two kinds removes it with no new
+machinery, and **Sean's first instinct was the right one**: a fixed bin and a moving transport are
+two things to build *and* two kinds.
+
+**On the vulnerability he names** - *that does open up a vulnerability of encouraging people to use
+vehicles as territory storage* - the answer is to price it rather than forbid it. **A vehicle has
+upkeep and a bin does not.** A parked transport then bleeds every turn while a warehouse does not,
+which is both obvious in the world and already machinery the game has: `upkeep` is a recipe and a
+Pioneer already eats one food a turn. Using vehicles as storage stays legal, stays sometimes correct,
+and stops being free.
+
+**It is prevent-tier in Sean's own framework** rather than a special case bolted on -
+[prevent, detect, bound](prevent-detect-bound.md) ranks making a thing unprofitable above detecting
+it. And it composes with the one-pool decision: a parked transport's upkeep can come out of the cargo
+it is sitting on.
+
+**Most of the per-kind capacities are already determined**, which is worth knowing before anyone sets
+out to invent thirteen numbers. A garrison is 1, because the specification already says a territory
+has at most one. Extractors are the number of nodes. Every resource is the sum of the containers
+holding it. **What is actually left to choose is citizen, bin, transport, and the military units.**
 
 **Two things follow that are worth deciding rather than inheriting.** The release currently gives
 `land` and `found by land` identical outputs, and there is no reason they should match - an Ark
