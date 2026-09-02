@@ -192,6 +192,78 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
+### P-149 - A territory has a density and room for extractors; nodes go
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
+`spec/planet.md`, `spec/economy.md`, `spec/structures.md`, `spec/control.md`, `spec/orbit.md`,
+`spec/console.md`, `spec/unit-types.md`, `releases/first-release.md`
+
+**Sean's, decided 2026-09-01**: *make all nodes the same, it is the territory that has a density and
+a capacity for extractors*, and *change the language to capacity: each thing that can be built in a
+territory has a number of that thing that can be built in that territory.*
+
+**A node is eight lines in seven files and carries no rule of its own.** Everything a node does is
+either a count or a density, and both are facts about the territory.
+
+> `spec/planet.md`:
+>
+> - For each resource, a territory has room for some number of extractors, and a density that each
+>   of them yields
+
+> `spec/economy.md` -> Extraction, three lines and the example:
+>
+> - How many extractors can be built for a resource is a fact of the territory
+> - The territory's density for a resource is what each extractor pulls from it each turn
+> - It costs labor to operate extractors
+> - For example, a territory with room for three food extractors at density 6 supports three farms,
+>   and a citizen spending a unit of labor at any of them produces 6 food that turn
+
+> `spec/structures.md` -> Extractor:
+>
+> - An extractor produces one resource. Once per turn it may take a unit of labor from a citizen and
+>   produce the territory's density for that resource
+
+> `spec/control.md`, two lines:
+>
+> - An extractor is intentional exploitation, and nature does not exploit
+> - A structure can be built where the territory's own permanent facts allow it: how many it has
+>   room for, their densities, its biome. Not whether the player can afford it this turn, and not
+>   whether any particular game happened to reach it
+
+> `spec/orbit.md`: *it has no nodes* becomes *it has room for no extractors*.
+
+> `spec/unit-types.md`: *an extractor working a food node* becomes *a food extractor*.
+
+> `spec/console.md`: `add node <territory> <resource> <density>` becomes
+> `set resource <territory> <resource> <extractors> <density>`, giving a territory its room and its
+> density for one resource.
+
+> `releases/first-release.md` -> Biomes: the note becomes *every biome except ocean has room for at
+> least one food extractor at density two or more*, and a legend line is added: **`5 x 6` is room for
+> five extractors, each yielding six.**
+
+> `releases/first-release.md` -> Recipes: `build extractor` loses its `node, unworked` ingredient,
+> and `work`'s output quantity becomes **the territory's density for that resource**.
+
+**Basis: the ingredient it deletes was never an ingredient.** `build extractor` takes
+`node, unworked`, which asks *is there room here* - and since `P-148`, a capacity is a bin and the
+general rule already answers that for every kind. **The recipe was carrying a special case of a rule
+that now exists**, and with the node gone the derived trait `worked` has nothing left to derive from.
+
+**One thing is genuinely lost, and this lane told Sean otherwise.** It reported that densities were
+already uniform within a territory, which is true of the release and **false of the specification**:
+`spec/economy.md`'s worked example is *a territory with three food nodes of densities 8, 6 and 3*.
+**Per-node variation is a capability the spec has and this removes.** The release never used it - the
+Biomes table gives one density per resource per biome - so nothing breaks, but it should be given up
+knowingly rather than by not noticing.
+
+**What it costs to keep instead.** Varying densities need a node to hang on, which is the kind this
+proposal removes, and the extractor then has to name which one it works. **That is the whole of what
+the node was for**, and one number per resource per territory is what replaces it.
+
+**Two of these are work for the code lane rather than reading.** The console command changes shape,
+and `releases/first-release.md` is what `prototypes/kinds` renders and compares against.
+
 ### P-143 - The release does not declare its own vocabulary
 
 **to** sean - **status** open - **raised** 2026-08-31 - **kind** gap - **into**

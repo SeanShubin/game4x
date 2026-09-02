@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
+- **P-149** - A territory has a density and room for extractors; nodes go · `docs/notes/proposals.md`
 - **P-143** - The release does not declare its own vocabulary · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
