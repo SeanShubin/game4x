@@ -11,6 +11,14 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-183** - Nothing says where a recipe acts, and only the rendering does · `docs/notes/proposals.md`
 - **P-184** - The world's recipes have an order, and it is neither stated nor the one the table shows · `docs/notes/proposals.md`
 
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **S-11** - `238359f` S-11: a proposal offers the text it proposes · still open in `docs/notes/proposals.md`
+
 ## What is outstanding
 
 ### To code (6)
