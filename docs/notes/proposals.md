@@ -45,6 +45,27 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-180 - The `upkeep` trait says *a unit*, and a citizen has one
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
+`releases/first-release.md` -> Traits
+
+**`P-176` gave a citizen an upkeep and did not widen the trait that says who can have one.**
+*Traits* reads `upkeep | a unit | food per turn | stored`, and *Families* says a **unit** is an Ark or
+a Pioneer. **A citizen is neither**, and its Upkeep column now reads *1 food per turn*.
+
+> `upkeep` reads *of a thing with upkeep*, which is what `unpaid` beside it already says.
+
+**Basis: it is the half of `P-176` that was named and not done.** That proposal said `unpaid` should
+read *of a thing with upkeep* and said nothing about `upkeep` itself, though the merge made both
+untrue in the same way. **`fuel` is correctly still *of a unit***, because nothing gave a citizen a
+tank.
+
+**Found by dumping the table column by column** rather than reading it, after an index error in this
+lane's own script wrote *a thing with upkeep* into `unpaid`'s **Values** column instead of its **Of**
+column. **The check passed because the string was present**, which is the failure this whole day has
+been about, one level below where it was being discussed.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
