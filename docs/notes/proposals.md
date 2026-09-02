@@ -45,63 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-152 - The Traits table declares thirteen and the release uses five more
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`releases/first-release.md` -> Traits
-
-**Found by the code lane, holding `P-143` against the recipes.** They noted that `revert` names a
-**territory** in the *Thing* column, and that *Where things are* says every thing is in a bin while a
-territory **is** a bin. Chasing that found the larger problem: **`revert` reads whether a territory
-is claimed, and no trait says a territory can be.**
-
-**Five traits the release uses and the table does not list.**
-
-| Trait               | Used by                                                  | Where it lives today           |
-| ------------------- | -------------------------------------------------------- | ------------------------------ |
-| **control**         | `revert`, which outputs `territory, unclaimed`           | nowhere                        |
-| **biome**           | the Biomes table, and every territory has one            | `spec/planet.md`               |
-| **force of nature** | `revert`'s condition, and holding a territory            | the Biomes table's last column |
-| **adjacency**       | `move`, and every question about reachability            | `spec/planet.md`               |
-| **unpaid**          | `perish`, which consumes a *unit whose upkeep is unpaid* | nowhere                        |
-
-> `## Traits` gains four rows:
->
-> | Trait | Of | Values | Stored or derived |
-> | --- | --- | --- | --- |
-> | **control** | a territory | claimed by a player, or unclaimed | stored |
-> | **biome** | a territory | one of the six | stored |
-> | **force of nature** | a territory | a number | stored |
-> | **adjacency** | a territory | which territories touch it | stored |
-> | **unpaid** | a unit | yes or no | derived: its upkeep was not met |
-
-**Basis: this is the gap `P-143` existed to close, missed in the same act.** That proposal's whole
-argument was that an editor loading the release finds no row for `metal`. **It now finds no row for
-whether a territory is yours**, which is the fact the entire game is about.
-
-**How it was missed is worth recording.** `P-143` was rewritten once, and the first version had a
-*Places* table whose territory row read *biome, force of nature, its nodes, which territories adjoin
-it*. `P-148` turned *Places* into *Where things are*, and **the rewrite carried the bins forward and
-dropped the territory's traits** - they were in a column that stopped existing. A rewrite is where
-things fall out, and nothing checked the two versions against each other.
-
-**A fifth row, found 2026-09-01 by a check rather than by reading.** The code lane built the
-comparison this proposal argued for - every qualifier in the recipes must name a declared trait it is
-a value of - and it found one more: **`perish` distinguishes a unit as *whose upkeep is unpaid*, and
-nothing declares that a unit can be.** The Traits table has `unfed` for a citizen and no equivalent
-for a unit, though the two are the same shape and fire at the same moment.
-
-**The two checks have different scopes and both are needed, which is worth knowing before either is
-trusted alone.** Theirs reads recipe qualifiers, so it finds `control`, `force of nature` and
-`unpaid`, and **cannot see `biome` or `adjacency`** - no recipe qualifies on either, and both are
-still traits the release depends on. This lane's reading was the other way round and missed `unpaid`.
-**Three of the five would have been caught by either; one by each alone.**
-
-**One thing this does not settle**, and the code lane was right not to file it as a defect. The
-*Thing* column in *Recipes* names kinds everywhere except `revert`, where it names a territory. That
-is either fine - a recipe may act on a place - or the column needs a narrower name. **`P-151` is the
-same question about the *Qty* column** and answers it by widening; the two should probably agree.
-
 ### P-153 - `commands/` is in no lane's column
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** governance - **into** `CLAUDE.md` ->
@@ -472,6 +415,7 @@ work the release exists to order.
 | P-150, labor need not come from a citizen                                                                       | `spec/console.md`, and one line moved from `spec/population.md` -> Labor to `spec/economy.md` -> Structures and labor  | 2026-09-01 |
 | P-143, the release declares its own vocabulary: kinds, families, bins and traits                                | `releases/first-release.md`, four new sections                                                                         | 2026-09-01 |
 | P-151, a quantity may read a trait of the place, not only of an ingredient                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-152, the Traits table declares thirteen and the release uses five more                                        | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
 
 ## Rejected
 

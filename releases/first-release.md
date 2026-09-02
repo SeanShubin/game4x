@@ -88,21 +88,26 @@ There are twelve territories and one orbit. Orbit holds units and nothing else.
 
 ## Traits
 
-| Trait           | Of                              | Values                         | Stored or derived                  |
-| --------------- | ------------------------------- | ------------------------------ | ---------------------------------- |
-| **kind**        | every thing                     | one of the ten                 | stored                             |
-| **place**       | every thing                     | the bin it is in               | stored                             |
-| **readiness**   | whatever readies                | ready, exhausted               | stored                             |
-| **force**       | citizen, garrison, ark, pioneer | a number                       | stored                             |
-| **fuel**        | a unit                          | how much energy its tank holds | stored                             |
-| **upkeep**      | a unit                          | food per turn                  | stored                             |
-| **metal in it** | whatever is built               | a number                       | stored                             |
-| **resource**    | an extractor                    | food, metal or energy          | stored                             |
-| **density**     | a territory, per resource       | a number                       | stored                             |
-| **room**        | a territory, per kind           | a number                       | stored                             |
-| **arriving**    | a pioneer                       | yes or no                      | stored, cleared at end turn        |
-| **surplus**     | food                            | yes or no                      | derived: left after everything ate |
-| **unfed**       | a citizen                       | yes or no                      | derived: it did not eat            |
+| Trait               | Of                              | Values                            | Stored or derived                  |
+| ------------------- | ------------------------------- | --------------------------------- | ---------------------------------- |
+| **kind**            | every thing                     | one of the ten                    | stored                             |
+| **place**           | every thing                     | the bin it is in                  | stored                             |
+| **readiness**       | whatever readies                | ready, exhausted                  | stored                             |
+| **force**           | citizen, garrison, ark, pioneer | a number                          | stored                             |
+| **fuel**            | a unit                          | how much energy its tank holds    | stored                             |
+| **upkeep**          | a unit                          | food per turn                     | stored                             |
+| **metal in it**     | whatever is built               | a number                          | stored                             |
+| **resource**        | an extractor                    | food, metal or energy             | stored                             |
+| **density**         | a territory, per resource       | a number                          | stored                             |
+| **room**            | a territory, per kind           | a number                          | stored                             |
+| **control**         | a territory                     | claimed by a player, or unclaimed | stored                             |
+| **biome**           | a territory                     | one of the six                    | stored                             |
+| **force of nature** | a territory                     | a number                          | stored                             |
+| **adjacency**       | a territory                     | which territories touch it        | stored                             |
+| **arriving**        | a pioneer                       | yes or no                         | stored, cleared at end turn        |
+| **surplus**         | food                            | yes or no                         | derived: left after everything ate |
+| **unfed**           | a citizen                       | yes or no                         | derived: it did not eat            |
+| **unpaid**          | a unit                          | yes or no                         | derived: its upkeep was not met    |
 
 ## Units and structures
 
