@@ -72,41 +72,6 @@ line is scoped to is not tidying**, so it is filed.
 promotion that makes something else stale either refuses or files the cleanup, and never notes it in
 a paragraph.
 
-### P-158 - The Scope column is the owner column wearing a location's name
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
-`releases/first-release.md` -> Recipes, **and** -> Traits. **Needs `P-157`**
-
-**The Scope column says `here` or `every`, and that is not where a recipe applies - it is who it
-belongs to.** `P-139` promoted *a recipe belongs to the player or to the world*, and the table has
-never said which. **The two divisions are the same division**, checked row by row: the ten `here`
-recipes are exactly the player's, and the eight `every` recipes are exactly the world's.
-
-> The **Scope** column becomes **Owner**, and its values become `player` and `world`.
-
-> Where a recipe applies is then what its ingredients say, and `grow` needs one it does not have.
-> `## Traits` gains a row:
->
-> | Trait | Of | Values | Stored or derived |
-> | --- | --- | --- | --- |
-> | **houses** | a thing that contains things | whether people live in it | stored |
->
-> and `grow` gains an ingredient: `in thing, houses 1, not consumed`.
-
-**Basis: `here` was doing two jobs and neither of them well.** As a location it named a territory,
-which `P-157` stops privileging. As an owner it said the right thing in the wrong word. **Splitting
-them costs one renamed column and gains the division `P-139` promoted and the table never carried.**
-
-**Why `grow` needs a trait and the other seven do not.** Under `P-157` a world recipe matches wherever
-its ingredients are, at any depth. **Five are simply right that way** - food spoils in a cargo hold, an
-exhausted thing readies wherever it is, an unpaid unit perishes where it stands. **`revert` is right
-because only a territory has a force of nature.** `grow` is the one that breaks: **a citizen must not
-be born in a fuel tank.**
-
-**That is the strongest thing this whole direction has found.** The old rule was right only because
-nothing else could match it, and **the specification cannot currently say where population lives** -
-which is true whichever model wins.
-
 ### P-159 - `consumed` is derived, not declared
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
@@ -581,6 +546,7 @@ about garrisons rather than about traits, which makes it Sean's.
 | P-153, `commands/` is in no lane's column                                                                       | `CLAUDE.md` -> Perspectives, the Code row                                                                              | 2026-09-01 |
 | P-157, a thing contains things, and a territory is one                                                          | `spec/logistics.md` -> Containment, replaced whole                                                                     | 2026-09-01 |
 | P-155, readiness is written in the recipe, not assumed by a rule                                                | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-158, the Scope column is the owner column wearing a location's name                                           | `releases/first-release.md` -> Recipes, Traits                                                                         | 2026-09-01 |
 
 ## Rejected
 

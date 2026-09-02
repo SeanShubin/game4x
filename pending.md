@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-160** - Adjacency is defined under *What a territory carries*, and it is not one · `docs/notes/proposals.md`
-- **P-158** - The Scope column is the owner column wearing a location's name · `docs/notes/proposals.md`
 - **P-159** - `consumed` is derived, not declared · `docs/notes/proposals.md`
 - **P-156** - What a territory has room for, which `C-10` has been asking since August · `docs/notes/proposals.md`
 - **P-154** - One recipe unclaims a territory and none claims one · `docs/notes/proposals.md`
