@@ -8,8 +8,9 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-174** - A Yard is the only thing a player builds without labor · `docs/notes/proposals.md`
 - **P-175** - Nothing clears `arriving` · `docs/notes/proposals.md`
+- **P-176** - `eat` is `upkeep`, and `depart` is `perish` · `docs/notes/proposals.md`
+- **P-177** - `revert` cannot fire, and the release should not carry it · `docs/notes/proposals.md`
 
 ## What is outstanding
 

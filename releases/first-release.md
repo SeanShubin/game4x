@@ -135,7 +135,7 @@ cycle of what it makes.
 | **citizen**   | 1     |      |        |                 |                              |             |         |            | yes     |
 | **garrison**  | 1     |      |        |                 | 1 labor, 1 metal             | 1           | 1       |            |         |
 | **extractor** |       |      |        |                 | 1 labor, 1 metal             | 1           | 1       |            | yes     |
-| **yard**      |       |      |        |                 | 15 metal                     | 15          | 15      |            |         |
+| **yard**      |       |      |        |                 | 1 labor, 15 metal            | 15          | 15      |            |         |
 | **ark**       | 2     | 2    | 1 fuel |                 | 4 metal, 12 energy           | 4           | 4       | a Yard     | yes     |
 | **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 2 metal, 6 energy, 1 citizen | 2           | 2       | a garrison | yes     |
 
@@ -190,7 +190,8 @@ two candidates.
 | **build energy extractor** | player | in   | labor                                      | 1                                    | at least |
 |                            |        | in   | metal                                      | 1                                    | at least |
 |                            |        | out  | extractor, energy                          | 1                                    |          |
-| **build yard**             | player | in   | metal                                      | 15                                   | at least |
+| **build yard**             | player | in   | labor                                      | 1                                    | at least |
+|                            |        | in   | metal                                      | 15                                   | at least |
 |                            |        | out  | yard                                       | 1                                    |          |
 | **produce pioneer**        | player | in   | metal                                      | 2                                    | at least |
 |                            |        | in   | energy                                     | 6                                    | at least |

@@ -45,29 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-174 - A Yard is the only thing a player builds without labor
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
-`releases/first-release.md` -> Recipes, Units and structures
-
-**Found by walking the recipes**, in [the before-and-after pages](../recipes/README.md).
-
-**Every other thing a player builds costs labor and metal.** The three extractor recipes each take
-`labor 1, metal 1`. **`build yard` takes `metal 15` and nothing else** - fifteen metal assembles
-itself.
-
-> `build yard` gains `in labor 1`, and *Units and structures* reads `1 labor, 15 metal`.
-
-**Basis: nothing distinguishes a Yard from an extractor here.** `spec/economy.md` says *it costs
-labor to operate extractors* and `spec/structures.md` describes what each structure does; **neither
-says a structure can be built without hands.** The Yard's row is the odd one and it is odd by
-omission rather than by decision - it was written before `P-146` gave an extractor its metal, and
-never revisited.
-
-**One labor rather than fifteen**, because labor is what it takes to build a thing rather than what
-the thing is made of. **The fifteen is already the metal**, and doubling the cost in both would be a
-balance change rather than a correction.
-
 ### P-175 - Nothing clears `arriving`
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
@@ -96,6 +73,81 @@ catch.
 
 **And `ready` is the right home rather than a recipe of its own.** It is already the world's recipe
 for putting things back the way a turn starts, and `arriving` is exactly that.
+
+### P-176 - `eat` is `upkeep`, and `depart` is `perish`
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
+`releases/first-release.md` -> Recipes, Traits, Units and structures
+
+**Sean's, 2026-09-01**: *upkeep and eating should be merged into upkeep.*
+
+**They are the same recipe with two names.** `eat` takes a citizen, echoes it, and consumes one food.
+`upkeep` takes a unit, echoes it, and consumes the unit's upkeep in food. **The only difference is
+that a citizen's upkeep is written nowhere and assumed to be one.**
+
+> `eat` is deleted. `upkeep` becomes:
+>
+> | Recipe | Owner | Role | Thing | Qty | Bound |
+> | --- | --- | --- | --- | --- | --- |
+> | **upkeep** | world | in | thing with upkeep | 1 | at least |
+> |  |  | in | food | the thing's upkeep | at least |
+> |  |  | out | thing with upkeep | 1 |  |
+>
+> and a **citizen's Upkeep becomes `1 food per turn`**, which is what `eat` already did.
+
+> `depart` is deleted and `perish` becomes:
+>
+> | **perish** | world | in | thing whose upkeep is unpaid | 1 | at least |
+> |  |  | out | metal | the thing's metal | |
+
+> `## Traits`: `unfed` is deleted, and `unpaid` reads *of a thing with upkeep*.
+
+**Basis: the merge cascades, and that is the evidence it is right.** Merging the two upkeeps forces
+`unfed` and `unpaid` into one trait, which forces `depart` and `perish` into one recipe. **Nineteen
+recipes become seventeen and nineteen traits become eighteen**, and nothing needed inventing at any
+step - each collapse was already implied by the one before it.
+
+**And it dissolves an open question rather than answering it.** The backlog asks whether upkeep is
+paid before or after eating, since both draw on food and a shortage makes the order matter. **There is
+no order between one recipe and itself.**
+
+**One thing to settle with it.** A citizen's *Metal in it* is blank, because `P-146` said a citizen is
+blank rather than zero since a citizen is not built. **`perish` would read that blank**, so either a
+blank reads as nothing produced, or a citizen's metal becomes 0. **This lane would say blank reads as
+nothing**, because that is what it means everywhere else in the table.
+
+### P-177 - `revert` cannot fire, and the release should not carry it
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`releases/first-release.md` -> Recipes
+
+**Sean's, 2026-09-01**: *do we need this? Perhaps ownership is a computed function of having a citizen
+present.*
+
+**Ownership already is computed** - `P-154` made control derived from a citizen being there - so
+`revert` is not what makes a territory yours or not. **What it does is kill your population when your
+force is short**, which is `spec/control.md`'s rule that nature takes a territory back.
+
+**It can never fire in this release, and that is provable rather than likely.**
+
+- Every territory's force of nature is **1**
+- A garrison has force **1**
+- **Nothing in nineteen recipes consumes a garrison** - it appears as a guard, as a result, and as an
+  echoed ingredient, and never as one that is spent
+
+**So a territory that has ever been claimed has a garrison, and a garrison alone meets the force of
+nature.** `revert`'s condition is *below* its force of nature, and one is not below one.
+
+> `revert` is deleted from the release. `spec/control.md` keeps its rule.
+
+**Basis: a release says what is being built now, and the specification is the destination.** The rule
+is right and stays; the recipe implements it in a release where nothing can reach it. **A recipe that
+cannot fire is a page of the before-and-after that no player will ever see**, and it carries an open
+question - what becomes of the garrison and the stores - **that costs a decision and buys nothing.**
+
+**What it takes to make it live again**, so that the deletion is not a decision to drop the mechanic:
+something that spends a garrison, or a force of nature above one. **Both are content rather than
+rules**, and either brings the recipe back unchanged.
 
 ## Addressed to other perspectives
 
@@ -492,6 +544,7 @@ work the release exists to order.
 | P-172, a player can write one rule for many things, not one rule per thing                                      | `spec/invariants.md` -> Control without tedium                                                                         | 2026-09-01 |
 | P-168, an action that would waste something says so before it is taken                                          | `spec/interface.md`, a new section                                                                                     | 2026-09-01 |
 | P-173, `P-158` deleted the Scope column and two things still depend on it                                       | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-174, a Yard is the only thing a player builds without labor                                                   | `releases/first-release.md` -> Recipes, Units and structures                                                           | 2026-09-01 |
 
 ## Rejected
 
