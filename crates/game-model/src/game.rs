@@ -12,17 +12,25 @@ use crate::unit::{Location, Unit};
 /// `spec/README.md` keeps relationships in the specification and numbers in a release, so
 /// these are the numbers and they are meant to move without any rule moving with them.
 pub mod cost {
-    /// A Yard costs 15 metal.
+    /// A Yard costs 1 labor and 15 metal.
+    pub const YARD_LABOR: u32 = 1;
     pub const YARD_METAL: u32 = 15;
-    /// An Ark costs 12 metal and 12 energy, and needs a Yard to produce it.
-    pub const ARK_METAL: u32 = 12;
+    /// An Ark costs 4 metal and 12 energy, and needs a Yard to produce it.
+    pub const ARK_METAL: u32 = 4;
     pub const ARK_ENERGY: u32 = 12;
-    /// A Pioneer costs 8 metal, 1 citizen and 6 energy.
-    pub const PIONEER_METAL: u32 = 8;
+    /// A Pioneer costs 2 metal, 6 energy and 1 citizen.
+    pub const PIONEER_METAL: u32 = 2;
     pub const PIONEER_ENERGY: u32 = 6;
     pub const PIONEER_CITIZENS: u32 = 1;
-    /// An Extractor costs one labor and nothing else.
+    /// An Extractor costs 1 labor and 1 metal.
+    ///
+    /// The metal is new: `P-152` conserves it, so a thing that can be taken apart for metal
+    /// has to have had metal put into it.
     pub const EXTRACTOR_LABOR: u32 = 1;
+    pub const EXTRACTOR_METAL: u32 = 1;
+    /// A Garrison costs 1 labor and 1 metal, for the same reason.
+    pub const GARRISON_LABOR: u32 = 1;
+    pub const GARRISON_METAL: u32 = 1;
     /// A move costs one energy cell.
     pub const MOVE_CELLS: u32 = 1;
 }
@@ -306,7 +314,7 @@ impl Game {
         // P-137 purged the word founding, and this quotation was of the wording it purged.
         // The code still calls it `found`; renaming that is a change to the model rather
         // than to a comment, and the model is being rewritten for P-134 anyway.
-        self.found(territory, at)
+        self.found(territory, at, &Resource::ALL)
     }
 
     fn launch(&mut self, kind: UnitKind) -> Result<(), Rejection> {
@@ -393,7 +401,7 @@ impl Game {
         // Unclaimed ground is taken and founded by arriving on it, which consumes the
         // unit. So a founding unit never stands on ground it has taken but not founded,
         // and never has to be fed there.
-        self.found(territory, at)
+        self.found(territory, at, &[Resource::Food])
     }
 
     /// Takes a territory and founds it with a unit, which the founding consumes.
@@ -401,7 +409,19 @@ impl Game {
     /// `releases/first-release.md`, Founding: produces garrison, citizen, food extractor.
     /// All of it happens here, at the moment of arriving, because the specification
     /// describes taking and transforming as one act.
-    fn found(&mut self, territory: TerritoryId, unit_at: usize) -> Result<(), Rejection> {
+    /// Taking a territory, and taking the unit apart into what it leaves behind.
+    ///
+    /// **The extractors differ by which unit it was, and the release says so.** `deploy ark`
+    /// leaves one for each resource; `found by land` leaves one for food. An Ark carries a
+    /// landing and a Pioneer carries a claim, and the difference is what lets a landing site
+    /// reach metal at all - an extractor costs metal now, so a territory that arrived with
+    /// only a food extractor could never build a second one.
+    fn found(
+        &mut self,
+        territory: TerritoryId,
+        unit_at: usize,
+        leaves: &[Resource],
+    ) -> Result<(), Rejection> {
         // `spec/planet.md`: no territory can be claimed whose biome is ocean. Asked before
         // the force is compared, so the answer says what is actually wrong - being at sea
         // is not a matter of not having brought enough.
@@ -417,11 +437,13 @@ impl Game {
         // than the unit. `spec/control.md`: founding is a garrison's only source.
         place.garrison = Some(Garrison::from_founding_unit(force));
         place.citizens += 1;
-        if let Some(node) = place.best_free_node(Resource::Food) {
-            place.extractors.push(Extractor {
-                node,
-                exhausted: false,
-            });
+        for resource in leaves {
+            if let Some(node) = place.best_free_node(*resource) {
+                place.extractors.push(Extractor {
+                    node,
+                    exhausted: false,
+                });
+            }
         }
         Ok(())
     }
@@ -457,6 +479,9 @@ impl Game {
         match structure {
             StructureKind::Garrison => Err(Rejection::GarrisonIsNotBuilt),
             StructureKind::Yard => {
+                // Labor first, so a territory with the metal and no hands is refused for
+                // the reason that is true rather than for the one asked about second.
+                self.spend_labor(territory, cost::YARD_LABOR)?;
                 self.spend(territory, Resource::Metal, cost::YARD_METAL)?;
                 self.territory_mut(territory)?.yards += 1;
                 Ok(())
@@ -470,6 +495,7 @@ impl Game {
                     },
                 )?;
                 self.spend_labor(territory, cost::EXTRACTOR_LABOR)?;
+                self.spend(territory, Resource::Metal, cost::EXTRACTOR_METAL)?;
                 self.territory_mut(territory)?.extractors.push(Extractor {
                     node,
                     exhausted: false,
@@ -1053,7 +1079,7 @@ mod tests {
     /// a food extractor. There is no moment in between, which is what
     /// `spec/invariants.md` means by no step that is always taken.
     #[test]
-    fn a_founding_unit_becomes_a_garrison_a_citizen_and_a_food_extractor() {
+    fn a_landing_becomes_a_garrison_a_citizen_and_an_extractor_for_each_resource() {
         let game = founded();
         let place = game.territory(TerritoryId(1)).unwrap();
         assert!(
@@ -1061,10 +1087,24 @@ mod tests {
             "a structure that holds the ground"
         );
         assert_eq!(place.citizens, 1);
-        assert_eq!(place.extractors.len(), 1);
+
+        // One per resource the ground has room for. This fixture has food and metal and no
+        // energy, so two - and the rule is *for each resource*, not *two*.
+        assert_eq!(place.extractors.len(), 2);
+        for resource in [Resource::Food, Resource::Metal] {
+            assert_eq!(
+                place.extractors_for(resource).len(),
+                1,
+                "a landing leaves one {resource} extractor"
+            );
+        }
+
+        // A Pioneer leaves a farm and nothing else, which is the difference that matters:
+        // an extractor costs metal, so what a claiming unit leaves decides whether the
+        // ground it took can ever build anything.
         assert_eq!(
-            place.nodes[place.extractors[0].node].resource,
-            Resource::Food,
+            place.extractors_for(Resource::Food).len(),
+            1,
             "working a food node"
         );
         assert!(game.units.is_empty(), "the ark was consumed");
@@ -1120,7 +1160,11 @@ mod tests {
 
     #[test]
     fn labor_runs_out_before_the_citizens_do_anything_twice() {
-        let game = founded();
+        // Metal in hand, so the refusal below is about hands rather than about metal. An
+        // extractor costs both now, and a test that stops at the first missing thing stops
+        // testing the second.
+        let mut game = founded();
+        game.territories[0].add(Resource::Metal, 5);
         let rejected = game
             .after(&Transition::Build {
                 structure: StructureKind::Extractor,
@@ -1159,7 +1203,9 @@ mod tests {
     /// `spec/turn.md`: unused resources are discarded.
     #[test]
     fn resources_left_at_the_end_of_a_turn_are_discarded() {
-        let game = founded()
+        let mut game = founded();
+        game.territories[0].add(Resource::Metal, 5);
+        let game = game
             .after(&Transition::Build {
                 structure: StructureKind::Extractor,
                 territory: TerritoryId(1),

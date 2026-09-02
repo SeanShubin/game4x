@@ -1,50 +1,42 @@
-# Spreading from the landing site to the whole planet.
+# Continuing past the landing site, as far as the rules allow.
 #
-# `play.4x` walks the first five steps of the loop and stops with territory 1 working
-# every node and territory 2 founded. This continues to steps 6, 7 and 8: reach the rest
-# of the planet, build a Yard where one can be built, produce an Ark, and launch it.
+# `play.4x` walks the first five steps of the loop and stops with territory 1 working every
+# extractor it has room for and territory 2 claimed. This carries on: hold both, grow the
+# second, and send the next pioneer out.
 #
-# The adjacency is the smallest Goldberg solid's, so territory 1 touches 2 to 6, and
-# 7 to 12 are reached through them:
-#
-#   1: 2 3 4 5 6      5: 1 3 6 9 12     9: 3 5 7 11 12
-#   2: 1 3 4 7 8      6: 1 4 5 10 12   10: 4 6 8 11 12
-#   3: 1 2 5 7 9      7: 2 3 8 9 11    11: 7 8 9 10 12
-#   4: 1 2 6 8 10     8: 2 4 7 10 11   12: 5 6 9 10 11
-#
-# Territory 1 makes twelve metal and twelve energy a turn against a pioneer's eight and
-# six, so it can send one out every turn once it is working every node.
+# It stops well short of the loop's last three steps, and not for want of a script. `C-11`:
+# the model still discards metal and energy at the end of every turn, and the specification
+# stopped saying that several proposals ago. Until the two agree, a play-through here would
+# be measuring rules the release no longer has - so this goes as far as it goes, and the
+# rest of `R-6` waits.
 
-# Turn 7. The landing site feeds itself, then sends the next pioneer to territory 3.
+# Turn 10. Territory 1 is complete and pays for itself. Territory 2 has one farm at density
+# six, so its single citizen becomes two.
 work 3 extractor 1 food
 work 3 extractor 1 metal
 work 3 extractor 1 energy
 work 1 extractor 2 food
+end turn
+
+# Turn 11. Two citizens in territory 2: one holds the food, one has nothing to spend metal
+# on yet - a second farm needs a metal that territory 2 cannot make, having no mine and no
+# way to build one until it has metal. That is the same bootstrap the landing site was
+# spared by arriving with three extractors, and a pioneer does not carry them.
+work 3 extractor 1 food
+work 3 extractor 1 metal
+work 3 extractor 1 energy
+work 1 extractor 2 food
+
+# The landing site can afford another pioneer every turn: two metal and six energy against
+# twelve of each.
 produce pioneer 1
 end turn
 
-# Turn 8. The pioneer crosses to territory 3 and founds it. The landing site is at eleven
-# citizens rather than twelve from here on: a pioneer waiting to leave eats one food a
-# turn, so the population settles one below the ceiling for as long as one is standing
-# there. Nine of the eleven hands work the nine extractors; the other two are spare.
+# Turn 12. The second pioneer crosses to territory 3.
+work 3 extractor 1 food
+work 3 extractor 1 metal
+work 3 extractor 1 energy
+work 1 extractor 2 food
 move pioneer 3
 work 1 extractor 3 food
-work 3 extractor 1 food
-work 3 extractor 1 metal
-work 3 extractor 1 energy
-work 1 extractor 2 food
-produce pioneer 1
-end turn
-
-# Turn 9. Territory 2 has grown, so it opens its second food node while territory 3 feeds
-# itself. The next pioneer goes to 4.
-move pioneer 4
-work 1 extractor 4 food
-work 1 extractor 3 food
-build extractor 2 food
-work 2 extractor 2 food
-work 3 extractor 1 food
-work 3 extractor 1 metal
-work 3 extractor 1 energy
-produce pioneer 1
 end turn

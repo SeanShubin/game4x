@@ -272,13 +272,17 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
         assert_eq!(one.extractors_for(resource).len(), 3, "{resource}");
     }
 
-    // `spec/turn.md`: unused resources are discarded. Nothing is carried into turn seven.
+    // `spec/turn.md`: unused resources are discarded. Nothing is carried into the next turn.
     for resource in Resource::ALL {
         assert_eq!(one.store(resource), 0, "{resource} was discarded");
     }
     // And everything is ready again.
     assert_eq!(one.labor_available(), one.citizens);
-    assert_eq!(session.game.turn, 7, "turn one, then six endings");
+    // Nine endings rather than six. An extractor costs a metal now, so the landing site
+    // spends three turns paying for the extractors it used to be given, and the loop that
+    // reaches a second territory is that much longer. The number is a property of
+    // `commands/play.4x` and moves whenever the economy does.
+    assert_eq!(session.game.turn, 10, "turn one, then nine endings");
 
     // The pioneer took a second territory by land and became what it needed there.
     let two = session.game.territory(TerritoryId(2)).unwrap();
@@ -299,7 +303,24 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     assert_eq!(cost_of("pioneer", "citizen"), cost::PIONEER_CITIZENS);
     assert_eq!(cost_of("ark", "metal"), cost::ARK_METAL);
     assert_eq!(cost_of("ark", "energy"), cost::ARK_ENERGY);
+    assert_eq!(cost_of("yard", "labor"), cost::YARD_LABOR);
     assert_eq!(cost_of("yard", "metal"), cost::YARD_METAL);
+    assert_eq!(cost_of("extractor", "labor"), cost::EXTRACTOR_LABOR);
+    assert_eq!(cost_of("extractor", "metal"), cost::EXTRACTOR_METAL);
+    assert_eq!(cost_of("garrison", "labor"), cost::GARRISON_LABOR);
+    assert_eq!(cost_of("garrison", "metal"), cost::GARRISON_METAL);
+
+    // Every figure in the column, not the ones this test happened to name. It checked six
+    // of eleven when the table had six; the table grew and the test did not, so a garrison
+    // and an extractor gained a metal cost that nothing compared against anything.
+    let figures: usize = ["citizen", "garrison", "extractor", "yard", "ark", "pioneer"]
+        .into_iter()
+        .map(|thing| released_cost(thing).len())
+        .sum();
+    assert_eq!(
+        figures, 11,
+        "eleven figures in the Costs to produce column; this checks each one by name"
+    );
 }
 
 /// The landing site can now send a Pioneer out, and that is what opens the loop.

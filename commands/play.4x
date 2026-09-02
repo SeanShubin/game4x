@@ -1,68 +1,91 @@
 # Playing the first release, from orbit to a second territory.
 #
-# `releases/first-release.md` gives the loop in eight steps. This file walks the first
-# five: no presence on the planet, land the ark and found a territory, work the food
-# extractor to grow the population, build extractors for metal and energy, then produce a
-# pioneer and spread across the planet by land.
+# `releases/first-release.md` gives the loop in eight steps. This file walks the first five:
+# no presence on the planet, land the ark and claim a territory, work the food extractor to
+# grow the population, build extractors for metal and energy, then produce a pioneer and
+# spread across the planet by land.
 #
 # Every line is a command. There is no other way for the state to move, so this file is a
 # complete account of the game it produces.
 
-# 1 and 2. The ark comes down, and landing *is* the founding: it takes the ground and
-# becomes a garrison to hold it, a citizen, and an extractor on the best food node. One
-# action, so the farm can be worked the same turn.
+# 1 and 2. The ark comes down, and landing *is* the claiming: it takes the ground and
+# becomes a garrison to hold it, a citizen, and one extractor for each resource.
+#
+# Three extractors rather than one, because `P-152` conserves metal and an extractor costs
+# some. A landing site that arrived with only a farm could never afford its first mine.
 land ark 1
 
-# 3. Work the food extractor to grow the population.
+# Turn 1. One citizen, one hand, and the farm is the only thing worth spending it on.
 work 1 extractor 1 food
 end turn
 
-# Turn 2. Two citizens: one opens a second food node, one works the first.
-build extractor 1 food
+# Turn 2. Two citizens. One holds the food, one opens the mine - and the metal must be spent
+# this turn, because a store does not survive the end of one.
 work 1 extractor 1 food
+work 1 extractor 1 metal
 end turn
 
-# Turn 3. Four citizens. The third food node is taken and every farm is worked.
+# Turn 3. Four citizens. Every extractor the landing left is worked, and the spare hand and the
+# spare metal become a second farm.
+work 1 extractor 1 food
+work 1 extractor 1 metal
+work 1 extractor 1 energy
 build extractor 1 food
-work 3 extractor 1 food
 end turn
 
-# Turn 4. Eight citizens. Food first, then step 4: extractors on the metal nodes.
-work 3 extractor 1 food
-build extractor 1 metal
-build extractor 1 metal
-build extractor 1 metal
-work 2 extractor 1 metal
+# Turn 4. Two farms feed eight, which is the first turn the population is limited by hands
+# rather than by food.
+work 2 extractor 1 food
+work 1 extractor 1 metal
+work 1 extractor 1 energy
 end turn
 
-# Turn 5. Twelve citizens, which is every hand the food here can feed, and twelve units of
-# labor. All three resources are worked to the territory's ceiling: twelve of each.
+# Turn 5. Eight citizens, and four spare hands with four metal to spend: the third farm, two
+# more mines, a second well.
+work 2 extractor 1 food
+work 1 extractor 1 metal
+work 1 extractor 1 energy
+build extractor 1 food
+build extractor 1 metal
+build extractor 1 metal
+build extractor 1 energy
+end turn
+
+# Turn 6. Everything is worked. Twelve food feeds twelve, and the population settles there.
 work 3 extractor 1 food
 work 3 extractor 1 metal
+work 2 extractor 1 energy
+end turn
+
+# Turn 7. The last well. From here the territory is complete: three farms, three mines, three
+# wells, and twelve of each a turn.
+work 3 extractor 1 food
+work 3 extractor 1 metal
+work 2 extractor 1 energy
 build extractor 1 energy
-build extractor 1 energy
-build extractor 1 energy
+end turn
+
+# Turn 8. Twelve metal and twelve energy against a pioneer's two and six.
+work 3 extractor 1 food
+work 3 extractor 1 metal
 work 3 extractor 1 energy
 
-# 5. Twelve metal and twelve energy are on the ground and a pioneer costs eight and six,
-# so the landing site can send one out.
+# 5. The landing site can send a pioneer out.
 produce pioneer 1
 end turn
 
-# Turn 6. The farms are worked first - a population that gathers nothing this turn starves
+# Turn 9. The farms are worked first - a population that gathers nothing this turn starves
 # at the end of it, whatever else is going on.
 work 3 extractor 1 food
 work 3 extractor 1 metal
 work 3 extractor 1 energy
 
-# The pioneer crosses into a neighbouring territory. It is not held, so arriving there
-# takes it and founds it: force 2 against a force of nature of 1, and the pioneer becomes
-# the garrison, citizen and food extractor the new ground needs.
+# The pioneer crosses into a neighbouring territory. It is not held, so arriving there takes
+# it and claims it: force 2 against a force of nature of 1, and the pioneer becomes the
+# garrison, citizen and food extractor the new ground needs.
 move pioneer 2
 
-# The new territory arrives with a citizen and a farm, both ready, so it can feed itself
-# on the very turn it is founded. A citizen that gathers nothing starves at the end of the
-# turn like any other, so founding late in a turn and leaving the farm idle costs the
-# citizen the founding just produced.
+# The new territory arrives with a citizen and a farm, both ready, so it feeds itself on the
+# very turn it is claimed.
 work 1 extractor 2 food
 end turn
