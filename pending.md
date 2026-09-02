@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-183** - Nothing says where a recipe acts, and only the rendering does · `docs/notes/proposals.md`
+- **P-184** - The world's recipes have an order, and it is neither stated nor the one the table shows · `docs/notes/proposals.md`
 
 ## What is outstanding
 

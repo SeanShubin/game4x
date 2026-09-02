@@ -45,6 +45,60 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-183 - Nothing says where a recipe acts, and only the rendering does
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** gap - **into**
+`releases/first-release.md` -> Recipes, the prose above the table
+
+**Eleven of the sixteen recipes name no territory.** `build metal extractor` takes a labor and a
+metal and yields an extractor, and nothing in the release says the three are in the same place - so
+by the text as written, labor in territory 1 and metal in territory 5 build an extractor in
+territory 9.
+
+> A recipe acts in one place. Every ingredient and every result is in that place, unless its row
+> names another with `in $name`. Where a recipe names exactly one territory, that place is that
+> territory.
+
+**Basis: the rule is already being relied on, and the only place it is written is a rendering.**
+`docs/recipes/README.md` says *the recipe acts where its ingredients are* to explain why `build
+metal extractor` needs no `$where`. **A rendering must not be where a rule lives** - it is derived
+from the release and cannot be the source of something the release lacks.
+
+**The three sentences cover every recipe, and the third is what `work` needs.** `move` names two
+territories and every one of its unit rows says `in $from` or `in $to`, so nothing is left to the
+default and the third sentence does not apply. `work` names one, so the extractor it exhausts and
+the resource it yields are in `$where` - which is the territory whose density it reads. **Without
+the third sentence a player reads territory 11's density while exhausting territory 4's
+extractor.**
+
+### P-184 - The world's recipes have an order, and it is neither stated nor the one the table shows
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** gap - **into**
+`releases/first-release.md` -> Recipes, the prose above the table, and the row order
+
+**`Owner` is `player` or `world` and the release never says what that means.** The rendering says
+the world's *fire when the turn ends*, which is another rule living only in a rendering. **And the
+table lists them grow, spoil, ready, upkeep, perish, which is an order they cannot run in.**
+
+> A player's recipes fire when the player chooses them. The world's fire once the turn is over, in
+> this order: `upkeep`, `perish`, `grow`, `spoil`, `ready`.
+>
+> The order follows from what the recipes read. `upkeep` derives both `surplus` and `unpaid`, so
+> nothing that reads either can precede it. `grow` takes surplus before `spoil` rots what is left
+> of it. `ready` is last, so that what a thing spent during the turn is restored for the next one.
+
+**Basis: three of the four positions are forced and the fourth is free.** `grow`, `spoil` and
+`perish` all read a trait `upkeep` derives, so all three follow it. `grow` before `spoil` is the
+relationship the rendering already describes - surplus either becomes population or rots - and
+reversing it means surplus always rots. **`perish` against `grow` is the free one and it does not
+matter**: there is surplus food only when every upkeep was paid, and something is unpaid only when
+food ran out, so the two can never both fire in one territory in one turn.
+
+**`ready` is the one with no derivation at all.** Nothing anywhere says whether it fires before or
+after the player's turn, and if it fired before, every extractor would work twice.
+
+**The rows move to match**, since a stated order the table contradicts is worse than no order.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the

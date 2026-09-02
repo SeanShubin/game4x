@@ -1,6 +1,6 @@
 # Recipes, before and after
 
-**Reviewed.** One section per recipe in [the first release](../../releases/first-release.md), all in
+**One section per recipe** in [the first release](../../releases/first-release.md), all in
 this file, each showing a state the recipe can fire in and the state after it fires. **The tables are the data and this is a
 rendering of them**; where the two disagree, the release is right and a line here is a defect.
 
@@ -52,6 +52,9 @@ with 4 and becomes a garrison and three extractors at 1 each.
 | pioneer, in 1, ready                 | 1      | 0     |
 | pioneer, in 2, exhausted             | 0      | 1     |
 | energy, in that pioneer              | 2      | 1     |
+
+**The recipe is over `unit`, and the Pioneer here is one** - an Ark crossing a boundary by land is
+the same recipe with a different unit in it.
 
 **Both territories are named, echoed and unconsumed**, which is what stops a move destroying where it
 came from. **Adjacency is a condition the recipe states** - `next to $from` - read from the planet,
