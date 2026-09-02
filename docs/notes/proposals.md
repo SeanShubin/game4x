@@ -45,43 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-147 - Every cycle among recipes must spend readiness
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** recovered - **into**
-`spec/invariants.md` -> The game is data
-
-**Sean asked how a transfer is stopped from running for ever.** *I want to talk about how we prevent
-some material from being transferred back and forth between a vehicle bin and territory bin with no
-limit, I don't want to accidentally make an infinite loop possible.*
-
-**The rule that answers it is his own, and it is not in the specification.** It was worked out on
-2026-08-31 and written down in [no free surplus](no-free-surplus.md), where it has sat unpromoted
-ever since.
-
-> `spec/invariants.md` -> The game is data, one line added:
->
-> - Every cycle among recipes must spend readiness somewhere along it
-
-**Basis:** `spec/turn.md` already carries the termination argument - *using it exhausts it*, and *when
-everything is exhausted there is nothing left to do*. **That argument has a hole**, and a free
-reversible recipe is exactly the shape that falls through it: a transfer that uses nothing exhausts
-nothing, so the turn never reaches the state the sentence describes.
-
-**The line closes it in general rather than for transfers.** A cycle that spends readiness runs at
-most as many times per turn as there is readiness to spend; a cycle that spends none runs for ever.
-So it is not a rule about transfers at all - **it is the condition under which *when everything is
-exhausted* is a true statement.**
-
-**It has to be stated rather than derived, because the obvious stronger rule is false.** Forbidding
-cycles outright would forbid the economy: labor works an extractor and yields food, food feeds
-citizens, citizens give labor. **The game's core loop is a cycle**, and what makes it safe is that
-getting labor out of a citizen exhausts the citizen and only the turn boundary makes it ready again.
-
-**What this proposal does not say is which readiness a transfer spends.** Two answers were drafted
-here and both were wrong - the bin's, then the moved thing's - and a third is in
-[the backlog](spec-backlog.md). **That is design and this is an invariant**, and putting the two in
-one item is what let a wrong answer ride along with a right one twice.
-
 ### P-142 - A quantity is a number
 
 **to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into**
@@ -689,6 +652,7 @@ first**, and it is worth writing down as a bet rather than meeting it later as a
 | P-139, a recipe, not a transformation, and a recipe belongs to the player or the world                          | `spec/invariants.md` -> The game is data, `releases/first-release.md` -> Recipes                                       | 2026-08-31 |
 | P-140, two recipes the table did not have: upkeep, perish and revert                                            | `releases/first-release.md` -> Recipes                                                                                 | 2026-08-31 |
 | P-148, a bin is where everything is, and a capacity is a bin                                                    | `spec/logistics.md` -> Capacity, replaced whole and renamed Containment                                                | 2026-09-01 |
+| P-147, every cycle among recipes must spend readiness                                                           | `spec/invariants.md` -> The game is data                                                                               | 2026-09-01 |
 
 ## Rejected
 

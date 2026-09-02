@@ -77,6 +77,7 @@ specific rule.
 - A recipe belongs to the player or to the world. The player's are offered wherever their inputs
   are present, to take or to leave. The world's are not offered: a population eats, food spoils, an
   unpaid unit is lost
+- Every cycle among recipes must spend readiness somewhere along it
 - The definitions are part of the game state. Defining one is a transition like any other, so a
   game's history is a complete account of it, including what its rules were
 - A game's state is things, in places, and how many of each. A thing is a set of traits, and one of
