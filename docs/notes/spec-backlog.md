@@ -1190,3 +1190,30 @@ rather than written was the first step, `$name` references are the second, and a
 would be the third. **Each is justified on its own and together they are a language** - and *a thin
 engine mapping data to visuals* becomes an interpreter somewhere along that line. **Where that line
 is has not been decided**, and it should be decided deliberately rather than one step at a time.
+
+### Said 2026-09-01: a sophisticated type system for the data
+
+Sean: *I am leaning towards a very sophisticated type system for my data, I want to be able to
+refactor duplication just as aggressively as I can with programming languages.*
+
+**This lane's caution was pointed the wrong way and should be recorded as such.** It had just warned
+that each step - quantities read rather than written, `$name` references, a parameter over kinds -
+**makes the table more of a language**, and that *a thin engine mapping data to visuals* becomes an
+interpreter somewhere along that line. **The warning was sound and the conclusion was not his**: he
+wants the language, and the line is drawn on the far side of it.
+
+**What that changes about how proposals should be judged here.** Fewest concepts in the table stops
+being the objective. **Duplication becomes a defect rather than a cost of being explicit**, and
+expressiveness that removes it is worth machinery it would not otherwise be worth.
+
+**It does not change what to do first.** Three concrete recipes are the expansion of a parameterised
+one, so writing them costs nothing that a later refactor would not undo cheaply - **and they give the
+type system a first thing to prove itself on**, which an abstraction invented before its instances
+would not.
+
+**One thing to watch, and it is the reason the caution was raised at all.** A table with references,
+lookups, parameters and a type system is a program, and `spec/invariants.md` says *every kind of
+thing, and every recipe that turns some things into others, is data rather than code.* **That line
+was written to keep kinds out of the engine, not to keep expressiveness out of the data** - but it
+will read as an objection to somebody eventually, and it is worth deciding whether it needs a
+sentence saying which it meant.

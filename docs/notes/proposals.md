@@ -334,6 +334,45 @@ at end of turn**, which *Traits* already says.
 **choice the player makes**, not a reference to another ingredient. **Names do not reach it**, and it
 is the second thing the six columns cannot say. Left open deliberately rather than folded in.
 
+### P-171 - Three build recipes, one per resource, and the blank goes
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`releases/first-release.md` -> Recipes
+
+**`P-167` shipped a blank.** `build extractor` results in `extractor, <resource>`, and the table has
+no way to say what fills it. **`P-166`'s names do not reach it**, because a name refers to an
+ingredient and a resource label is a trait of a thing that does not exist yet.
+
+> `build extractor` becomes three recipes, and nothing else changes:
+>
+> | Recipe | Owner | Role | Thing | Qty | Bound |
+> | --- | --- | --- | --- | --- | --- |
+> | **build food extractor** | player | in | labor | 1 | at least |
+> |  |  | in | metal | 1 | at least |
+> |  |  | out | extractor, food | 1 |  |
+> | **build metal extractor** | player | in | labor | 1 | at least |
+> |  |  | in | metal | 1 | at least |
+> |  |  | out | extractor, metal | 1 |  |
+> | **build energy extractor** | player | in | labor | 1 | at least |
+> |  |  | in | metal | 1 | at least |
+> |  |  | out | extractor, energy | 1 |  |
+
+**Basis: it is the cheapest thing that removes the blank and it changes no number.** An extractor is
+still one metal, so territory 1's arithmetic, `P-165`'s deployment balance and `P-156`'s room values
+all stand. Seventeen recipes become nineteen.
+
+**It keeps both of the other answers open, which is why it is right now rather than merely soonest.**
+Sean's resource-as-a-leaf would make an extractor contain a core, and a trait can become a part later.
+**Parametric polymorphism expands to exactly these three rows**, so writing them out is writing the
+expansion of the thing that would replace them.
+
+**The duplication is deliberate and is the first thing a type system should collapse.** Sean,
+2026-09-01: *I am leaning towards a very sophisticated type system for my data, I want to be able to
+refactor duplication just as aggressively as I can with programming languages.* **These three recipes
+differ in one cell of nine**, and they are the clearest instance of that duplication in the release -
+**so they are a good first test of whatever collapses it**, and a bad thing to leave uncollapsed for
+long.
+
 ### P-168 - Nothing checks room at the moment a thing is created
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
