@@ -87,7 +87,7 @@ two rules that each passed the staleness check and still cannot both hold.
 territory **is** a bin. Chasing that found the larger problem: **`revert` reads whether a territory
 is claimed, and no trait says a territory can be.**
 
-**Four traits the release uses and the table does not list.**
+**Five traits the release uses and the table does not list.**
 
 | Trait               | Used by                                        | Where it lives today           |
 | ------------------- | ---------------------------------------------- | ------------------------------ |
@@ -104,6 +104,7 @@ is claimed, and no trait says a territory can be.**
 > | **biome** | a territory | one of the six | stored |
 > | **force of nature** | a territory | a number | stored |
 > | **adjacency** | a territory | which territories touch it | stored |
+> | **unpaid** | a unit | yes or no | derived: its upkeep was not met |
 
 **Basis: this is the gap `P-143` existed to close, missed in the same act.** That proposal's whole
 argument was that an editor loading the release finds no row for `metal`. **It now finds no row for
@@ -114,6 +115,18 @@ whether a territory is yours**, which is the fact the entire game is about.
 it*. `P-148` turned *Places* into *Where things are*, and **the rewrite carried the bins forward and
 dropped the territory's traits** - they were in a column that stopped existing. A rewrite is where
 things fall out, and nothing checked the two versions against each other.
+
+**A fifth row, found 2026-09-01 by a check rather than by reading.** The code lane built the
+comparison this proposal argued for - every qualifier in the recipes must name a declared trait it is
+a value of - and it found one more: **`perish` distinguishes a unit as *whose upkeep is unpaid*, and
+nothing declares that a unit can be.** The Traits table has `unfed` for a citizen and no equivalent
+for a unit, though the two are the same shape and fire at the same moment.
+
+**The two checks have different scopes and both are needed, which is worth knowing before either is
+trusted alone.** Theirs reads recipe qualifiers, so it finds `control`, `force of nature` and
+`unpaid`, and **cannot see `biome` or `adjacency`** - no recipe qualifies on either, and both are
+still traits the release depends on. This lane's reading was the other way round and missed `unpaid`.
+**Three of the five would have been caught by either; one by each alone.**
 
 **One thing this does not settle**, and the code lane was right not to file it as a defect. The
 *Thing* column in *Recipes* names kinds everywhere except `revert`, where it names a territory. That
@@ -127,7 +140,7 @@ only thing that does.
 
 ### S-7 - `P-143` adds four sections to the release for `prototypes/kinds` to render
 
-**to** code - **status** open - **raised** 2026-09-01 - **source** a promotion
+**to** code - **status** **acted** 2026-09-01 - **raised** 2026-09-01 - **source** a promotion - **cited** `5ebcbdf`, `49011cb`
 
 **`releases/first-release.md` now declares its own vocabulary**, which is what `S-4` said the
 compilable specification would force into the open. Four new sections before *Units and structures*:
