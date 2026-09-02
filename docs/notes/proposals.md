@@ -92,78 +92,6 @@ derived from and was not carried with it.
 exactly everything with upkeep today. **Filed rather than done**, because this is `spec/` and the
 phrase is the one every other document's ending is read against.
 
-### P-186 - An Ark and a Pioneer deploy the same things, and both must bind with three metal
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
-`releases/first-release.md` -> Recipes, Units and structures
-
-**Four of your notes are one decision**, because what a unit deploys and what it costs are the same
-number seen twice. **The last paragraph is mine and you may want it otherwise** - it is the
-arithmetic your four force, not something you said.
-
-> | **deploy ark** | player | in | `$where` territory | 1 | at least |
-> | | | out | `$where` territory | 1 | |
-> | | | in | ark, in `$where` | 1 | at least |
-> | | | in | garrison | 0 | at most |
-> | | | out | garrison | 1 | |
-> | | | out | citizen | 2 | |
-> | | | out | extractor, food | 1 | |
-> | | | out | extractor, metal | 1 | |
-> | **found by land** | player | in | pioneer | 1 | at least |
-> | | | in | garrison | 0 | at most |
-> | | | out | garrison | 1 | |
-> | | | out | citizen | 2 | |
-> | | | out | extractor, food | 1 | |
-> | | | out | extractor, metal | 1 | |
-> | **produce pioneer** | player | in | metal | 3 | at least |
-> | | | in | energy | 6 | at least |
-> | | | in | citizen | 2 | at least |
-> | | | out | pioneer | 1 | |
-> | **produce ark** | player | in | metal | 3 | at least |
-> | | | in | energy | 12 | at least |
-> | | | in | citizen | 2 | at least |
-> | | | in | yard | 1 | at least |
-> | | | out | ark | 1 | |
-> | | | out | yard | 1 | |
->
-> In *Units and structures*, an Ark costs 3 metal, 12 energy and 2 citizens, and a Pioneer costs 3
-> metal, 6 energy and 2 citizens. Both have 3 metal in them and both bind with 3. A Pioneer
-> requires nothing.
-
-**Basis: two citizens because two things must be operated at once** - one at the garrison so the
-territory's force of nature does not overrun it, and one at the food extractor so it does not
-starve. The energy extractor goes because it can be built later, and one extractor of each kind is
-deployed however much capacity the territory has.
-
-**Metal is where this stops being your words and starts being arithmetic.** A garrison and two
-extractors are 1 metal each, so a deployment is 3. An Ark binds with 4 today and a Pioneer with 2 -
-**so an Ark would waste a metal on every landing, and a Pioneer would create one from nothing.**
-`spec/resources.md` says metal is conserved and matter is conserved, so neither is available.
-
-**Three is the only figure that balances both.** It makes the two units cost the same metal and
-differ in energy, 12 against 6, which is already where the Ark's price sat. **If you want them to
-differ in metal, what they deploy has to differ** - and your note says it does not.
-
-**What does not change**: no capacity means the extractor is not built and its metal is wasted,
-which `spec/interface.md` already covers - *an action that would waste part of what it costs says
-so before it is taken, and says how much.*
-
-### P-187 - `spend readiness` is named for what it costs rather than what it makes
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
-`releases/first-release.md` -> Recipes
-
-> The recipe is named `create labor`.
-
-**Basis: every other recipe is named for its result** - `produce ark`, `build yard`, `found by
-land`. `spend readiness` is the one named for its input, and it reads as an accounting entry rather
-than as the thing a player wants.
-
-**The name also survives the generalisation you have in mind.** You noted that machines need labor
-and that labor need not come from a citizen. `create labor` stays true when a second recipe makes
-labor another way; `spend readiness` would then name two unrelated things. **The recipe itself
-still takes a citizen** - widening it is a later decision, and this is only the name.
-
 ### P-188 - Capacity is three numbers and the specification has one word for them
 
 **to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
@@ -181,41 +109,6 @@ grows as a territory is developed, and the one a player watches.
 **Total is stored and the other two are derived**, so this adds one stored fact and two computed
 ones. The release's *What a territory has room for* section and its `room` trait become *total
 capacity*, and this lane files that as the cleanup if you promote it.
-
-### P-189 - Food spoils immediately, which is spoilage at its most extreme rather than absent
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
-`releases/first-release.md` -> Traits, Recipes
-
-**Leaving spoilage out did not leave it out.** Food not eaten is gone when the turn ends, which is
-a spoilage rate of zero turns - the harshest setting there is, chosen by not choosing.
-
-> A new trait, **keeps**: of food, the number of turns it will last, stored. Food is made with
-> `keeps` 1.
->
-> | **spoil** | world | in | food, keeps 0 | 1 | at least |
-> | **age** | world | in | food, keeps at least 1 | 1 | at least |
-> | | | out | food, keeps one less | 1 | |
->
-> In the world's order `age` runs after `spoil` and before `ready`, so food made this turn
-> survives one ending and is lost at the next.
-
-**Basis: a number that decrements is what you asked for**, and it is the shape that lets different
-things spoil at different rates later without a second mechanism - another kind with a different
-starting `keeps` needs no new rule.
-
-**One turn is the smallest change that is still a change**, and it has the footing you named:
-populations that learned to preserve food expanded further than those that did not. **A starting
-technology in this game is an available recipe**, so `age` being present from the start is what
-*we already know how to preserve food for one turn* means.
-
-**This adds a recipe to the order `P-184` states**, which lists `upkeep`, then `grow` and
-`perish`, then `spoil`, then `ready`. `age` goes between the last two, and the text above says
-so rather than leaving the two proposals to be reconciled after both have landed.
-
-**What to watch is `grow`.** It takes `food, surplus`, and surplus that used to rot now survives -
-so a territory that was feeding itself exactly will start to accumulate. That is a balance
-consequence rather than a rule conflict, and the loop is where it will show.
 
 ### P-190 - The recipe table says `in` and `out` where you want six columns
 
@@ -774,6 +667,9 @@ work the release exists to order.
 | P-180, the `upkeep` trait says *a unit*, and a citizen has one                                                  | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
 | P-181, `perish` reads a citizen's metal, and a citizen's metal is blank                                         | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-182, a lane owns the tools for its own work; the code lane owns the game                                      | `CLAUDE.md` -> Perspectives                                                                                            | 2026-09-02 |
+| P-186, an Ark and a Pioneer deploy the same things, and both bind with three metal                              | `releases/first-release.md` -> Recipes, Units and structures                                                           | 2026-09-02 |
+| P-187, `spend readiness` is named `create labor`                                                                | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-02 |
+| P-189, food keeps for one turn, by a number that decrements                                                     | `releases/first-release.md` -> Traits, Recipes                                                                         | 2026-09-02 |
 
 ## Rejected
 

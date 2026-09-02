@@ -10,10 +10,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-184** - The release lists the world's recipes in an order `spec/turn.md` contradicts · `docs/notes/proposals.md`
 - **P-185** - `spec/turn.md` names a recipe that `P-176` merged away · `docs/notes/proposals.md`
-- **P-186** - An Ark and a Pioneer deploy the same things, and both must bind with three metal · `docs/notes/proposals.md`
-- **P-187** - `spend readiness` is named for what it costs rather than what it makes · `docs/notes/proposals.md`
 - **P-188** - Capacity is three numbers and the specification has one word for them · `docs/notes/proposals.md`
-- **P-189** - Food spoils immediately, which is spoilage at its most extreme rather than absent · `docs/notes/proposals.md`
 - **P-190** - The recipe table says `in` and `out` where you want six columns · `docs/notes/proposals.md`
 
 ## What is outstanding
@@ -32,7 +29,7 @@ Not a defect list. Several proposals in one section is what working on one topic
 like; what this cannot tell you is whether they all still hold together, which is the question
 it exists to ask.
 
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
@@ -45,6 +42,8 @@ it exists to ask.
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
+- `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
+- `releases/first-release.md` -> Traits, Recipes - P-154, P-189
 - `spec/console.md` - P-69, P-82
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/interface.md` -> Surfaces - P-73, P-116
