@@ -268,25 +268,41 @@ pub fn asserts_about_the_tree(message: &str) -> bool {
     ASSERTING.iter().any(|phrase| lower.contains(phrase))
 }
 
-/// One countable claim. `out_of` is what a claim of **zero** is zero out of.
+/// One countable claim.
+///
+/// `out_of` is what a claim of **zero** is zero out of. `within` is the `## ` heading whose
+/// section both were counted in, and a claim of zero must give it.
+///
+/// The quality lens poisoned a version that asked only for a denominator: over a whole
+/// `proposals.md` with an empty queue, *`**into**` is zero out of `P-`* passed, because the
+/// accepted ledger holds `P-` while the population the claim was about held nothing.
+///
+/// Naming the region does not make the choice correct - **it makes it written down**. Claiming
+/// zero in `## Accepted` for a field that lives in `## Open` is a visible mistake, where picking a
+/// convenient denominator over a whole file was an invisible one. Past that the guard would have
+/// to know what the sentence means, which is not a thing to attempt.
 pub struct Claim<'a> {
     pub needle: &'a str,
     pub expected: usize,
     pub out_of: Option<&'a str>,
+    pub within: Option<&'a str>,
 }
 
 /// Check what a message says against what the text holds.
-///
-/// A claim of zero must name its denominator, and the denominator must not itself be zero. The
-/// quality lens reported that a field did not exist because a grep returned zero - the pattern was
-/// right and the population was empty, so the count was over nothing. **A zero reads as evidence in
-/// a way an empty population does not**, and naming the denominator is what tells them apart.
 pub fn check_claims(text: &str, claims: &[Claim]) -> Result<(), Problem> {
     for claim in claims {
-        let found = text.matches(claim.needle).count();
+        let region = match claim.within {
+            None => text.to_string(),
+            Some(heading) => {
+                let (start, end) = Doc::new(text).section(heading)?;
+                text.lines().collect::<Vec<_>>()[start..end].join("\n")
+            }
+        };
+        let place = claim.within.unwrap_or("the whole text");
+        let found = region.matches(claim.needle).count();
         if found != claim.expected {
             return problem(format!(
-                "the message says {:?} appears {} times; it appears {found}",
+                "the message says {:?} appears {} times in {place}; it appears {found}",
                 claim.needle, claim.expected
             ));
         }
@@ -297,9 +313,15 @@ pub fn check_claims(text: &str, claims: &[Claim]) -> Result<(), Problem> {
                     claim.needle
                 ));
             };
-            if text.matches(out_of).count() == 0 {
+            if claim.within.is_none() {
                 return problem(format!(
-                    "{:?} is zero out of {out_of:?}, which is also zero - the count is over nothing",
+                    "a claim that {:?} is zero must say which section it counted",
+                    claim.needle
+                ));
+            }
+            if region.matches(out_of).count() == 0 {
+                return problem(format!(
+                    "{:?} is zero out of {out_of:?} in {place}, which is also zero",
                     claim.needle
                 ));
             }
@@ -476,6 +498,10 @@ mod tests {
         assert_eq!(differing.len(), 1, "cells that changed: {differing:?}");
     }
 
+    /// The queue as it stood on the day the quality lens got it wrong: `## Open` empty, and
+    /// `## Accepted` holding ledger rows that a careless denominator can find.
+    const EMPTY_QUEUE: &str = "## Open\n\n## Accepted\n\n| P-182, a lane owns its tools |\n";
+
     #[test]
     fn a_claim_of_zero_must_say_what_it_is_zero_among() {
         let e = check_claims(
@@ -484,35 +510,71 @@ mod tests {
                 needle: "zzz",
                 expected: 0,
                 out_of: None,
+                within: None,
             }],
         )
         .unwrap_err();
         assert!(e.0.contains("must say what it is nowhere among"), "{e}");
     }
 
-    /// Exactly the quality lens's own error: the pattern was right and the population was empty.
+    /// Their first poison, and their original error: the pattern right, the population empty.
     #[test]
     fn a_claim_of_zero_over_an_empty_population_is_refused() {
         let e = check_claims(
-            "a file with no proposals in it",
+            EMPTY_QUEUE,
             &[Claim {
                 needle: "**into**",
                 expected: 0,
                 out_of: Some("### P-"),
+                within: Some("## Open"),
             }],
         )
         .unwrap_err();
-        assert!(e.0.contains("the count is over nothing"), "{e}");
+        assert!(e.0.contains("which is also zero"), "{e}");
+    }
+
+    /// Their second poison, which passed before the region existed: a denominator one character
+    /// shorter, found in the ledger rather than in the queue the claim was about.
+    #[test]
+    fn a_denominator_found_outside_the_region_no_longer_passes() {
+        let e = check_claims(
+            EMPTY_QUEUE,
+            &[Claim {
+                needle: "**into**",
+                expected: 0,
+                out_of: Some("P-"),
+                within: Some("## Open"),
+            }],
+        )
+        .unwrap_err();
+        assert!(e.0.contains("which is also zero"), "{e}");
+    }
+
+    /// And with no region named, which is how that poison got in at all.
+    #[test]
+    fn a_claim_of_zero_must_say_where_it_looked() {
+        let e = check_claims(
+            EMPTY_QUEUE,
+            &[Claim {
+                needle: "**into**",
+                expected: 0,
+                out_of: Some("P-"),
+                within: None,
+            }],
+        )
+        .unwrap_err();
+        assert!(e.0.contains("which section it counted"), "{e}");
     }
 
     #[test]
     fn a_claim_of_zero_over_a_real_population_passes() {
         check_claims(
-            "### P-1 a proposal\n### P-2 another\n",
+            "## Open\n\n### P-1 a proposal\n### P-2 another\n",
             &[Claim {
                 needle: "**into**",
                 expected: 0,
                 out_of: Some("### P-"),
+                within: Some("## Open"),
             }],
         )
         .unwrap();
@@ -526,6 +588,7 @@ mod tests {
                 needle: "a",
                 expected: 2,
                 out_of: None,
+                within: None,
             }],
         )
         .unwrap_err();
