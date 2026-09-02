@@ -282,40 +282,41 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-168 - A player is told what will not fit before committing to it
+### P-168 - An action that would waste something says so before it is taken
 
 **to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
-**into** `spec/turn.md` -> Order of operations
+**into** `spec/interface.md`, a new section
 
-**Sean's, 2026-09-01**: the excess is **destroyed**. And: *how would a Yard be lost to overflow?*
+**Sean's, 2026-09-01**: the excess is **destroyed**; *how would a Yard be lost to overflow?*; and
+*this is just a matter of presenting the proper information to the user - so a (3 metal wasted) note
+or something like that.*
 
-**The Yard was a bad example and this lane should not have led with it.** It needs a player to build
-a second Yard where room is 1 - **deliberately, knowing it will not fit** - and an interface that
-offers only valid choices would never present the second build. **It is a case the design already
-prevents.**
+**That moves it out of the rules, and this lane had it in the wrong file.** The previous draft put a
+line in `spec/turn.md` beside the bound. **It is not a rule of the turn** - the turn already says
+what a place can keep is bounded and anything above it is lost. **Nothing about what happens needs
+saying; only what the player sees before it happens.**
 
-**The case that cannot be prevented is one action producing more than fits.** `deploy ark` creates a
-garrison, a citizen and **an extractor for each resource**. **Territory 6 has no metal**, so its room
-for metal extractors is 0 - and landing an Ark there creates an extractor that is over the bound the
-moment it exists. **The player chose the action, not the results**, so no interface can refuse it
-without refusing the landing.
-
-> `spec/turn.md`, beside *anything above the bound is lost when the turn ends*:
+> `spec/interface.md` gains a section:
 >
-> - Before a player commits to an action, they are shown what it would create that a place cannot
->   keep
+> `## What an action shows`
+>
+> - An action that would waste part of what it costs says so before it is taken, and says how much
 
-**Basis: with the excess destroyed, no new rule is needed and only this is missing.** `spec/turn.md`
-already bounds what a place keeps and already loses the remainder at end of turn. **What it does not
-do is let a player see it coming**, and an action that silently wastes part of what it cost is the
-thing `spec/invariants.md` -> Control without tedium exists to forbid.
+**Basis: three things this lane got wrong are all fixed by moving it.** The Yard example needed a
+player to build knowingly into no room, which an interface offering only valid choices never
+presents. The tie-break `P-135` seemed to demand does not exist, because every case in the release is
+one candidate or several identical ones. **And the destination was wrong**, which is what Sean's
+reading corrected.
 
-**And there is no tie-break to write, which is the other thing that changed.** `P-135` promised that
-competing effects are resolved by a deterministic mechanic a player can change, and this looked like
-a competition. **It is not: every case in the release is either a single candidate or several
-identical ones.** An Ark deploys one extractor per resource, so at most one competes for each room.
-`grow` can make more citizens than fit, and **citizens are indistinguishable, so which one is lost
-cannot be asked.** **Nothing in nineteen recipes needs a rule for choosing.**
+**What survives is one case, and it is the opening move.** `deploy ark` creates an extractor for each
+resource; **territory 6 has no metal**, so landing there wastes one. **The player chose the action,
+not its results** - so the interface cannot refuse it, and telling them is the only thing left to do.
+
+**Why it is worded about waste rather than about room.** Room is the only way to waste something
+today, and it will not be the only one - **food that will spoil before anything eats it is the same
+information**, and a player deciding whether to work a fourth farm wants it. **A line about room
+would have to be written again**; a line about waste covers both and says the same thing about the
+case that exists.
 
 ## Accepted
 
