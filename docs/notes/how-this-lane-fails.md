@@ -7,6 +7,18 @@ re-taken. Not binding.
 **Five causes, and the fifth was found by the quality lens rather than by this lane.** Four are
 below; the fifth is at the end, and it is the one that matters.
 
+**The instances are not counted here.** Three counts in this document were wrong - twenty-eight
+promotions where the ledger had forty, an inventory short by one, and eleven instances where its own
+sections sum to twelve or thirteen depending on whether the opposite case counts. **All three were
+found by a lens and none by re-reading.** The sections say what they say and a reader may add
+them up; **a number in prose that nothing computes is the thing this note is about.**
+
+**And the guards cannot move where most of them land.** Quality's second pass: the six guards
+address two of the four causes, which is five instances. **The other seven are in the two that had
+only a stated rule** - so the next defect was more likely than not to be in the same two places, and
+that was knowable without waiting for more data. **Both now have a trigger**, which is the change
+that answers it.
+
 **And it was not the rate.** Quality measured it rather than judging it: **2026-08-26 was 47
 promotions in 1 commit with 0 self-repairs; 2026-09-01 was 40 promotions in 43 commits with 5.** The
 variable is the number of operations, not the number of decisions - and one of the four causes below,
@@ -80,15 +92,26 @@ added to `CLAUDE.md` two hours earlier - **the first promotion after the rule.**
 standard `CLAUDE.md` asks for - a check that would have failed before - applied to the tool rather
 than to the game.
 
-## What no tool fixes
+## What had no tool, and now has one
 
-**Claiming before checking is a habit.** The rule is: *if a sentence says the file contains something,
-read the file in the same breath.* Every one of the three cost a round-trip, and every one was
-avoidable by a grep.
+**These two were left as stated rules, and the quality lens pointed out why that was not enough.**
+**Nothing in this repository has ever been held by a stated rule.** What worked was always a step
+that could not be completed without the check - the quotation guard, the hook refusing while an
+outbox is unstaged, a trigger rather than a duty. **This lane made that argument itself, about
+`goldberg-view`, and then wrote two duties.**
 
-**Filing a question instead of text is a habit too.** The rule is: **a proposal always carries the
-text it would promote, even when this lane would rather ask.** Where the choice is genuinely open, the
-text goes in with the alternative named beneath it.
+**Both now run inside `commit`, so a commit cannot be made without them.**
+
+| Trigger                                                               | What it refuses                                            |
+| --------------------------------------------------------------------- | ---------------------------------------------------------- |
+| a message matching *appears nowhere*, *appears n times* and their kin | the commit, unless `claims=` is passed and the grep agrees |
+| an open proposal addressed `to sean` with no `> ` block               | the commit, naming the proposal                            |
+
+**Three cases were run: a message claiming something unchecked, a claim the tree contradicts, and a
+proposal filed without text.** All three refuse. **A fourth case is worth recording because it
+failed the other way** - a claim this lane expected to be caught was simply true, and the test was
+wrong rather than the tool. **Which is the same defect as the three counts above**, in the check
+rather than in the prose.
 
 ## The thing that has no home
 
