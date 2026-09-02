@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-151** - A quantity may read a trait of the place, not only of an ingredient · `docs/notes/proposals.md`
-- **P-152** - The Traits table declares thirteen and the release uses at least four more · `docs/notes/proposals.md`
+- **P-152** - The Traits table declares thirteen and the release uses five more · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

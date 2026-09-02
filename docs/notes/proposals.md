@@ -77,7 +77,7 @@ had already fired and was not run**: `releases/first-release.md` -> Recipes had 
 `P-142` and `P-145`, and `P-149` landed in it as the fourth. The trigger exists for exactly this -
 two rules that each passed the staleness check and still cannot both hold.
 
-### P-152 - The Traits table declares thirteen and the release uses at least four more
+### P-152 - The Traits table declares thirteen and the release uses five more
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
 `releases/first-release.md` -> Traits
@@ -89,12 +89,13 @@ is claimed, and no trait says a territory can be.**
 
 **Five traits the release uses and the table does not list.**
 
-| Trait               | Used by                                        | Where it lives today           |
-| ------------------- | ---------------------------------------------- | ------------------------------ |
-| **control**         | `revert`, which outputs `territory, unclaimed` | nowhere                        |
-| **biome**           | the Biomes table, and every territory has one  | `spec/planet.md`               |
-| **force of nature** | `revert`'s condition, and holding a territory  | the Biomes table's last column |
-| **adjacency**       | `move`, and every question about reachability  | `spec/planet.md`               |
+| Trait               | Used by                                                  | Where it lives today           |
+| ------------------- | -------------------------------------------------------- | ------------------------------ |
+| **control**         | `revert`, which outputs `territory, unclaimed`           | nowhere                        |
+| **biome**           | the Biomes table, and every territory has one            | `spec/planet.md`               |
+| **force of nature** | `revert`'s condition, and holding a territory            | the Biomes table's last column |
+| **adjacency**       | `move`, and every question about reachability            | `spec/planet.md`               |
+| **unpaid**          | `perish`, which consumes a *unit whose upkeep is unpaid* | nowhere                        |
 
 > `## Traits` gains four rows:
 >
