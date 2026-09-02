@@ -200,7 +200,7 @@ impl Held {
     }
 }
 
-/// One of the thirteen traits the release declares.
+/// One of the eighteen traits the release declares.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct TraitRow {
     pub name: &'static str,
@@ -209,7 +209,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 13] = [
+pub const TRAITS: [TraitRow; 18] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -271,6 +271,30 @@ pub const TRAITS: [TraitRow; 13] = [
         held: Held::Stored,
     },
     TraitRow {
+        name: "control",
+        of: "a territory",
+        values: "claimed by a player, or unclaimed",
+        held: Held::Stored,
+    },
+    TraitRow {
+        name: "biome",
+        of: "a territory",
+        values: "one of the six",
+        held: Held::Stored,
+    },
+    TraitRow {
+        name: "force of nature",
+        of: "a territory",
+        values: "a number",
+        held: Held::Stored,
+    },
+    TraitRow {
+        name: "adjacency",
+        of: "a territory",
+        values: "which territories touch it",
+        held: Held::Stored,
+    },
+    TraitRow {
         name: "arriving",
         of: "a pioneer",
         values: "yes or no",
@@ -287,6 +311,12 @@ pub const TRAITS: [TraitRow; 13] = [
         of: "a citizen",
         values: "yes or no",
         held: Held::Derived("it did not eat"),
+    },
+    TraitRow {
+        name: "unpaid",
+        of: "a unit",
+        values: "yes or no",
+        held: Held::Derived("its upkeep was not met"),
     },
 ];
 
@@ -390,10 +420,15 @@ impl Subject {
 /// How many.
 ///
 /// `releases/first-release.md`: *a quantity is a whole number. It is written in the recipe,
-/// or read from a trait of one of the ingredients.*
+/// read from a trait of one of the ingredients, or read from a trait of the place named by
+/// the recipe's scope.*
 ///
-/// **Two of the three that are read are ingredients and one is not**, which is why the
-/// variants are cut this way rather than by what is read. `upkeep` reads the unit's upkeep
+/// **Three ways, and the third was added because of this crate.** The sentence said two
+/// until `P-151`: written, or read from an ingredient. `work` yields the *territory's*
+/// density and a territory is not among its ingredients - those are labor and an extractor -
+/// so the sentence was false of the row three lines below it. The variants below were cut
+/// that way before the sentence was, and the fact the proposal rests on is pinned by
+/// `only_work_reads_past_its_own_ingredients`. `upkeep` reads the unit's upkeep
 /// and `perish` reads the unit's metal, and in both the unit is an ingredient of the recipe.
 /// `work` reads the *territory's* density, and the territory is not an ingredient of `work` -
 /// its ingredients are labor and an extractor. It is the only one of eighteen that reads
@@ -527,9 +562,10 @@ const EXHAUSTED: Qualifier = Qualifier::after_comma("exhausted", Some("readiness
 const SURPLUS: Qualifier = Qualifier::after_comma("surplus", Some("surplus"));
 const UNFED: Qualifier = Qualifier::after_comma("unfed", Some("unfed"));
 const WITH_UPKEEP: Qualifier = Qualifier::as_phrase("with upkeep", Some("upkeep"));
-const UPKEEP_UNPAID: Qualifier = Qualifier::as_phrase("whose upkeep is unpaid", None);
-const BELOW_NATURE: Qualifier = Qualifier::after_comma("force below its force of nature", None);
-const UNCLAIMED: Qualifier = Qualifier::after_comma("unclaimed", None);
+const UPKEEP_UNPAID: Qualifier = Qualifier::as_phrase("whose upkeep is unpaid", Some("unpaid"));
+const BELOW_NATURE: Qualifier =
+    Qualifier::after_comma("force below its force of nature", Some("force of nature"));
+const UNCLAIMED: Qualifier = Qualifier::after_comma("unclaimed", Some("control"));
 
 /// The eighteen recipes of `releases/first-release.md`.
 pub const RECIPES: &[Recipe] = &[

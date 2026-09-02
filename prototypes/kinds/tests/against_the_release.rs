@@ -284,17 +284,41 @@ fn every_qualifier_names_a_declared_trait() {
         }
     }
 
+    // **Empty, and that is the case to be careful about.** Every qualifier the recipes use
+    // now names a declared trait: `P-152` added `control`, `force of nature` and `unpaid`,
+    // the three this check found. A list that has grown means a recipe started asking
+    // something nothing can answer.
+    assert_eq!(undeclared, [] as [&str; 0]);
+
+    // A universal check over an empty set passes, so this one says how much it looked at.
+    // Without it, a rename that stopped every qualifier being found would go green - which
+    // is exactly how the ordering rule's example stopped demonstrating anything.
+    let looked_at: std::collections::BTreeSet<&str> = kinds::RECIPES
+        .iter()
+        .flat_map(|recipe| recipe.ports.iter())
+        .filter_map(|port| port.subject().qualified_by)
+        .map(|qualifier| qualifier.written)
+        .collect();
+    let uses = kinds::RECIPES
+        .iter()
+        .flat_map(|recipe| recipe.ports.iter())
+        .filter(|port| port.subject().qualified_by.is_some())
+        .count();
+    let subjects: std::collections::BTreeSet<String> = kinds::RECIPES
+        .iter()
+        .flat_map(|recipe| recipe.ports.iter())
+        .map(|port| port.subject())
+        .filter(|subject| subject.qualified_by.is_some())
+        .map(|subject| subject.written())
+        .collect();
+
+    // Three counts, because three are true and they are easy to mistake for each other:
+    // fourteen distinct qualifiers, seventeen distinct qualified subjects - the same
+    // qualifier on a different noun is a different subject - and twenty uses in all.
     assert_eq!(
-        undeclared,
-        [
-            "force below its force of nature",
-            "unclaimed",
-            "whose upkeep is unpaid",
-        ],
-        "the qualifiers no declared trait accounts for. P-152 is about the first two - a \
-         territory's control and its force of nature are traits the release uses and does \
-         not declare. If this list has shrunk, the release answered one; if it has grown, a \
-         recipe started asking something nothing can answer."
+        (looked_at.len(), subjects.len(), uses),
+        (14, 17, 20),
+        "distinct qualifiers, distinct qualified subjects, uses; this saw {looked_at:?}"
     );
 }
 
