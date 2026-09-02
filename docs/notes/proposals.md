@@ -45,31 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-161 - `grow`'s new ingredient is the fifth thing that needs echoing
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
-`releases/first-release.md` -> Recipes
-
-**`P-158` and `P-159` landed an hour apart and the first made work for the second.** `P-158` gave
-`grow` an ingredient - `thing, houses`, so that a citizen is not born in a fuel tank. `P-159` then
-said an ingredient is consumed exactly when it does not appear among the results. **`grow` does not
-echo it**, so on the tables as they now stand, **growing a citizen consumes the place they live in.**
-
-> `grow` gains one result:
->
-> | Recipe | Owner | Role | Thing | Qty | Bound |
-> | --- | --- | --- | --- | --- | --- |
-> | **grow** | world | out | thing, houses | 1 | |
-
-**Basis: `P-159` named four recipes needing an echo and there were four when it was written.** The
-fifth arrived between the writing and the promoting. **Promoting it silently would have meant
-shipping text Sean did not approve**, and leaving it would have meant shipping a rule that eats
-territories.
-
-**Checked over every ingredient rather than by eye**, which is what `CLAUDE.md` now asks for: 31
-ingredients across 18 recipes, of which six survive their recipe and derive correctly as not
-consumed. **`grow`'s is the only one that survives in fact and does not in the table.**
-
 ### P-162 - `P-156` reintroduced the word `bin`, which `P-157` had just removed
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
@@ -506,6 +481,7 @@ about garrisons rather than about traits, which makes it Sean's.
 | P-159, `consumed` is derived, not declared                                                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-156, what a territory has room for                                                                            | `releases/first-release.md`, a new section                                                                             | 2026-09-01 |
 | P-160, adjacency is defined under *What a territory carries*, and it is not one                                 | `spec/planet.md`, one line moved to Distance                                                                           | 2026-09-01 |
+| P-161, `grow`'s new ingredient is the fifth thing that needs echoing                                            | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 
 ## Rejected
 

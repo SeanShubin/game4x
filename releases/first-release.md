@@ -196,6 +196,7 @@ among the results.
 | **grow**            | world  | in   | food, surplus                              | 1                                         | at least |
 |                     |        | in   | thing, houses                              | 1                                         | at least |
 |                     |        | out  | citizen                                    | 1                                         |          |
+|                     |        | out  | thing, houses                              | 1                                         |          |
 | **depart**          | world  | in   | citizen, unfed                             | 1                                         | at least |
 | **spoil**           | world  | in   | food                                       | 1                                         | at least |
 | **ready**           | world  | in   | thing, exhausted                           | 1                                         | at least |
