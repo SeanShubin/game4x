@@ -80,11 +80,15 @@ at the end of every turn, with a comment saying *unused resources are discarded*
 `spec/turn.md` said until `P-126` and `P-138`, and is now true of food alone. A play-through run
 today would hit `C-8`'s wall and prove nothing about the game as specified.
 
-**Weigh this against `spec/turn.md` -> Order of operations, not against the release's table.** The
-specification says a turn ends by eating, then growing or starving, then *what expires expires and
-what was not kept in order is lost*, then everything becomes ready - and separately that what a
-territory can keep is bounded. The model discards all three stores instead, which is neither of
-those things. The release's row order says something different again and `P-184` moves it, so the
+**Weigh this against `spec/turn.md` -> Order of operations, not against the release's table.** A
+turn ends by eating, then growing or starving, then `spec/turn.md` says *what expires expires, and
+what was not kept in order is lost*, and then everything becomes ready. Separately, what a territory
+can keep is bounded. The model discards all three stores instead, which is neither of those things.
+
+Quoted so the file is named next to the words, because `crates/game-console/tests/quotations.rs`
+only checks a quotation attributed to the document it quotes. Attributed to *the specification* it
+read as prose, and this item could have gone on quoting wording the specification had dropped -
+which is the thing that guard exists to catch, in the outbox of the lane that built it. The release's row order says something different again and `P-184` moves it, so the
 table is the wrong thing to check a model against while it is still moving.
 
 Three divergences, and none of them should be fixed yet:

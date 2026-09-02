@@ -1064,18 +1064,35 @@ One line of what it is.
         // ` - `**, and this used to stop at the dot - so against the queue's punctuation
         // the value ran on into whatever came after it. Unnoticed because nothing
         // following a `cited` field had looked like a hash yet.
-        for line in [
-            "**cited** `a1b2c3d` · **raised** 2026-09-01",
-            "**cited** `a1b2c3d` - **raised** 2026-09-01",
-            "**cited** `a1b2c3d` - **source** `1234567abc`",
-            "**cited** `a1b2c3d`, `e4f5a6b` - **source** `1234567abc`",
+        // The whole list, not its first element and an absence.
+        //
+        // Checking `read[0]` and that the next field's hash is missing would pass a version
+        // that dropped the second hash, or kept a stray token between them. What makes the
+        // trailing separator harmless is the hex filter below, and a filter doing
+        // load-bearing work reads as tidiness unless something asserts it.
+        for (line, expected) in [
+            (
+                "**cited** `a1b2c3d` · **raised** 2026-09-01",
+                vec!["a1b2c3d"],
+            ),
+            (
+                "**cited** `a1b2c3d` - **raised** 2026-09-01",
+                vec!["a1b2c3d"],
+            ),
+            (
+                "**cited** `a1b2c3d` - **source** `1234567abc`",
+                vec!["a1b2c3d"],
+            ),
+            (
+                "**cited** `a1b2c3d`, `e4f5a6b` - **source** `1234567abc`",
+                vec!["a1b2c3d", "e4f5a6b"],
+            ),
+            (
+                "**cited** `a1b2c3d`, `e4f5a6b`, `c7d8e9f`, `0a1b2c3` - **raised** 2026-09-02",
+                vec!["a1b2c3d", "e4f5a6b", "c7d8e9f", "0a1b2c3"],
+            ),
         ] {
-            let read = considered(line);
-            assert!(
-                !read.contains(&"1234567abc".to_string()),
-                "`{line}` reached into the next field"
-            );
-            assert_eq!(read[0], "a1b2c3d", "`{line}`");
+            assert_eq!(considered(line), expected, "`{line}`");
         }
         assert!(considered("**to** spec · **status** open").is_empty());
     }
