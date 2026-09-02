@@ -8,21 +8,17 @@
 //! It does not play. No turn, no board, no rule, no state. Only what a thing is and what
 //! turns into what.
 //!
-//! # It stopped guessing
+//! # Written here, checked against there
 //!
-//! The first version of this crate inferred the kinds from the recipes, because nothing
-//! declared them - and said so: the table quantifies over kinds, and a reader supplies the
-//! generality without noticing. The release declares them now, and this crate holds all six
-//! of its tables and is checked against every one.
+//! `tests/against_the_release.rs` renders this data back into the release's tables and
+//! compares them with `releases/first-release.md` on disk, cell by cell.
 //!
-//! Two of the kinds it had inferred were not kinds at all. `node` became a trait of a
-//! territory and `cell` became fuel in a unit's tank, which is what a declaration is for.
-//!
-//! # Checked against the release, not merely derived from it
-//!
-//! `tests/against_the_release.rs` renders this data back into all six tables and compares
-//! them with `releases/first-release.md` on disk. Two copies of eighteen recipes would be
-//! one copy and one guess; this way neither can move without the other.
+//! **That comparison is the only test here that is worth anything, and it took a red gate to
+//! see it.** Seven other tests once passed against data that had stopped matching hours
+//! earlier - one asserted eighteen recipes while the release had sixteen, another that
+//! `revert` names a place while `revert` no longer existed. They read this crate and checked
+//! it against numbers written in the same crate, so they were self-consistent and empty. A
+//! test that reads one artifact can only tell you it has not changed.
 
 // ---------------------------------------------------------------------------------------
 // Kinds
@@ -59,7 +55,6 @@ impl Kind {
         }
     }
 
-    /// What the release says it is.
     pub fn what_it_is(self) -> &'static str {
         match self {
             Kind::Citizen => "a person: provides labor, eats, and grows on surplus",
@@ -74,8 +69,25 @@ impl Kind {
             Kind::Labor => "what working a machine takes; a citizen provides it each turn",
         }
     }
+
+    /// How many of this kind a territory has room for, as the release writes it.
+    pub fn room(self) -> &'static str {
+        match self {
+            Kind::Citizen => "8",
+            Kind::Garrison => "1",
+            Kind::Extractor => "what the *Territory resources* table gives, per resource",
+            Kind::Yard => "1",
+            Kind::Ark => "2",
+            Kind::Pioneer => "2",
+            Kind::Labor => "8",
+            Kind::Food => "20",
+            Kind::Metal => "20",
+            Kind::Energy => "20",
+        }
+    }
 }
 
+/// In the order the Kinds table lists them.
 pub const KINDS: [Kind; 10] = [
     Kind::Citizen,
     Kind::Garrison,
@@ -87,6 +99,20 @@ pub const KINDS: [Kind; 10] = [
     Kind::Metal,
     Kind::Energy,
     Kind::Labor,
+];
+
+/// In the order the room table lists them, which is not the same order.
+pub const ROOM_ORDER: [Kind; 10] = [
+    Kind::Citizen,
+    Kind::Garrison,
+    Kind::Extractor,
+    Kind::Yard,
+    Kind::Ark,
+    Kind::Pioneer,
+    Kind::Labor,
+    Kind::Food,
+    Kind::Metal,
+    Kind::Energy,
 ];
 
 // ---------------------------------------------------------------------------------------
@@ -122,7 +148,6 @@ impl Family {
         }
     }
 
-    /// The members column, as the release writes it.
     pub fn members_written(self) -> String {
         match self {
             Family::Thing => "every kind above".to_string(),
@@ -146,30 +171,30 @@ pub const FAMILIES: [Family; 3] = [Family::Thing, Family::Unit, Family::Resource
 // Where things are
 // ---------------------------------------------------------------------------------------
 
-/// A place a thing can be.
+/// One sort of room a thing can be in.
 ///
-/// **Every thing is in a bin**, and a bin has a capacity - which is why *is there room*
-/// never needs to be an ingredient. `build extractor` used to take `node, unworked` and no
-/// longer does, because the general rule already answers it.
+/// **Every thing is in another thing**, and each sort of room has a capacity - which is why
+/// *is there room* never needs to be an ingredient. `build extractor` used to take
+/// `node, unworked` and no longer does, because the general rule already answers it.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct Bin {
+pub struct Room {
     pub what: &'static str,
     pub holds: &'static str,
     pub up_to: &'static str,
 }
 
-pub const BINS: [Bin; 3] = [
-    Bin {
+pub const ROOMS: [Room; 3] = [
+    Room {
         what: "a territory's room for a kind",
         holds: "that kind",
         up_to: "what the territory has room for",
     },
-    Bin {
+    Room {
         what: "an extractor's catch",
         holds: "the resource it was built for",
         up_to: "the territory's density for it",
     },
-    Bin {
+    Room {
         what: "a unit's tank",
         holds: "energy",
         up_to: "the unit's fuel",
@@ -180,27 +205,24 @@ pub const BINS: [Bin; 3] = [
 // Traits
 // ---------------------------------------------------------------------------------------
 
-/// Whether a trait is held or worked out, and whether it survives the turn.
+/// Whether a trait is held or worked out.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Held {
     Stored,
     /// Worked out from other things, with the release's own account of how.
     Derived(&'static str),
-    /// Stored, and wiped when the turn ends.
-    ClearedAtEndTurn,
 }
 
 impl Held {
     pub fn written(self) -> String {
         match self {
             Held::Stored => "stored".to_string(),
-            Held::ClearedAtEndTurn => "stored, cleared at end turn".to_string(),
             Held::Derived(how) => format!("derived: {how}"),
         }
     }
 }
 
-/// One of the eighteen traits the release declares.
+/// One of the traits the release declares.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct TraitRow {
     pub name: &'static str,
@@ -209,7 +231,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 18] = [
+pub const TRAITS: [TraitRow; 17] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -219,7 +241,7 @@ pub const TRAITS: [TraitRow; 18] = [
     TraitRow {
         name: "place",
         of: "every thing",
-        values: "the bin it is in",
+        values: "the thing it is in",
         held: Held::Stored,
     },
     TraitRow {
@@ -242,7 +264,7 @@ pub const TRAITS: [TraitRow; 18] = [
     },
     TraitRow {
         name: "upkeep",
-        of: "a unit",
+        of: "a thing with upkeep",
         values: "food per turn",
         held: Held::Stored,
     },
@@ -250,7 +272,7 @@ pub const TRAITS: [TraitRow; 18] = [
         name: "metal in it",
         of: "whatever is built",
         values: "a number",
-        held: Held::Stored,
+        held: Held::Derived("its binding plus the metal in its parts"),
     },
     TraitRow {
         name: "resource",
@@ -273,8 +295,8 @@ pub const TRAITS: [TraitRow; 18] = [
     TraitRow {
         name: "control",
         of: "a territory",
-        values: "claimed by a player, or unclaimed",
-        held: Held::Stored,
+        values: "held by a player, or unclaimed",
+        held: Held::Derived("a citizen of that player is there"),
     },
     TraitRow {
         name: "biome",
@@ -295,28 +317,22 @@ pub const TRAITS: [TraitRow; 18] = [
         held: Held::Stored,
     },
     TraitRow {
-        name: "arriving",
-        of: "a pioneer",
-        values: "yes or no",
-        held: Held::ClearedAtEndTurn,
-    },
-    TraitRow {
         name: "surplus",
         of: "food",
         values: "yes or no",
-        held: Held::Derived("left after everything ate"),
-    },
-    TraitRow {
-        name: "unfed",
-        of: "a citizen",
-        values: "yes or no",
-        held: Held::Derived("it did not eat"),
+        held: Held::Derived("left after every upkeep was paid"),
     },
     TraitRow {
         name: "unpaid",
-        of: "a unit",
+        of: "a thing with upkeep",
         values: "yes or no",
         held: Held::Derived("its upkeep was not met"),
+    },
+    TraitRow {
+        name: "houses",
+        of: "a thing that contains things",
+        values: "whether people live in it",
+        held: Held::Stored,
     },
 ];
 
@@ -324,17 +340,30 @@ pub const TRAITS: [TraitRow; 18] = [
 // Recipes
 // ---------------------------------------------------------------------------------------
 
-/// What a recipe's Thing column names.
+/// Whose recipe it is.
 ///
-/// **Three sorts of noun, and only two of them are things.** A kind or a family names
-/// something that is in a bin; `revert` names a *territory*, which is where things are
-/// rather than a thing that is anywhere. The release's own *Where things are* says every
-/// thing is in a bin, and a territory is a bin.
+/// **Not where it applies.** It was `here`/`every` and said who a recipe belonged to while
+/// reading as though it said where - a player asks for the first sort and the world runs the
+/// second whether anyone asks or not.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Owner {
+    Player,
+    World,
+}
+
+impl Owner {
+    pub fn written(self) -> &'static str {
+        match self {
+            Owner::Player => "player",
+            Owner::World => "world",
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Noun {
     Of(Kind),
     Any(Family),
-    /// The place itself. `revert` is the only recipe that names one.
     Territory,
 }
 
@@ -350,103 +379,113 @@ impl Noun {
 
 /// What distinguishes one of a noun from another, as the release writes it.
 ///
-/// Most join with a comma - *ark, in orbit*. Two join as English, *unit with upkeep* and
-/// *unit whose upkeep is unpaid*, which is punctuation rather than meaning and is recorded
+/// Most join with a comma - *ark, in orbit*. Two join as English, *thing with upkeep* and
+/// *thing whose upkeep is unpaid*, which is punctuation rather than meaning and is recorded
 /// rather than smoothed over.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Qualifier {
     pub written: &'static str,
     pub comma: bool,
-    /// Which declared trait this is a value of, and `None` when the release declares none.
-    ///
-    /// **This is the join between the two halves of the specification.** The Traits table
-    /// says what a thing can be distinguished by; the recipes distinguish things. A
-    /// qualifier with no declared trait is a recipe asking a question the declaration
-    /// cannot answer, and `every_qualifier_names_a_declared_trait` reports them.
+    /// The declared trait this is a value of, and `None` when the release declares none.
     pub of_trait: Option<&'static str>,
 }
 
-impl Qualifier {
-    pub const fn after_comma(written: &'static str, of_trait: Option<&'static str>) -> Self {
-        Self {
-            written,
-            comma: true,
-            of_trait,
-        }
-    }
-
-    pub const fn as_phrase(written: &'static str, of_trait: Option<&'static str>) -> Self {
-        Self {
-            written,
-            comma: false,
-            of_trait,
-        }
+const fn comma(written: &'static str, of_trait: Option<&'static str>) -> Qualifier {
+    Qualifier {
+        written,
+        comma: true,
+        of_trait,
     }
 }
 
-/// A noun, and what distinguishes it.
+const fn phrase(written: &'static str, of_trait: Option<&'static str>) -> Qualifier {
+    Qualifier {
+        written,
+        comma: false,
+        of_trait,
+    }
+}
+
+/// A thing a recipe names: what it is, what distinguishes it, and what it is called here.
+///
+/// **A name is how a recipe says where it acts.** `$where`, `$from` and `$to` are bound by
+/// one ingredient and referred to by others, which is what lets `move` say *this territory*
+/// and *that one* without the table having a column for either.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Subject {
+    pub bound_as: Option<&'static str>,
     pub noun: Noun,
-    pub qualified_by: Option<Qualifier>,
+    pub qualifiers: &'static [Qualifier],
 }
 
 impl Subject {
-    pub const fn plain(noun: Noun) -> Self {
-        Self {
-            noun,
-            qualified_by: None,
-        }
-    }
-
-    pub const fn that_is(noun: Noun, qualified_by: Qualifier) -> Self {
-        Self {
-            noun,
-            qualified_by: Some(qualified_by),
-        }
-    }
-
     pub fn written(self) -> String {
-        match self.qualified_by {
-            Some(qualifier) if qualifier.comma => {
-                format!("{}, {}", self.noun.name(), qualifier.written)
-            }
-            Some(qualifier) => format!("{} {}", self.noun.name(), qualifier.written),
-            None => self.noun.name().to_string(),
+        let mut out = String::new();
+        if let Some(name) = self.bound_as {
+            out.push_str(&format!("`${name}` "));
         }
+        out.push_str(self.noun.name());
+        for qualifier in self.qualifiers {
+            if qualifier.comma {
+                out.push_str(", ");
+            } else {
+                out.push(' ');
+            }
+            out.push_str(qualifier.written);
+        }
+        out
+    }
+}
+
+const fn plain(noun: Noun) -> Subject {
+    Subject {
+        bound_as: None,
+        noun,
+        qualifiers: &[],
+    }
+}
+
+const fn of(kind: Kind) -> Subject {
+    plain(Noun::Of(kind))
+}
+
+const fn that_is(noun: Noun, qualifiers: &'static [Qualifier]) -> Subject {
+    Subject {
+        bound_as: None,
+        noun,
+        qualifiers,
+    }
+}
+
+const fn named(name: &'static str, noun: Noun, qualifiers: &'static [Qualifier]) -> Subject {
+    Subject {
+        bound_as: Some(name),
+        noun,
+        qualifiers,
     }
 }
 
 /// How many.
 ///
 /// `releases/first-release.md`: *a quantity is a whole number. It is written in the recipe,
-/// read from a trait of one of the ingredients, or read from a trait of the place named by
-/// the recipe's scope.*
+/// read from a trait of one of the ingredients, or read from a trait of a named ingredient.*
 ///
-/// **Three ways, and the third was added because of this crate.** The sentence said two
-/// until `P-151`: written, or read from an ingredient. `work` yields the *territory's*
-/// density and a territory is not among its ingredients - those are labor and an extractor -
-/// so the sentence was false of the row three lines below it. The variants below were cut
-/// that way before the sentence was, and the fact the proposal rests on is pinned by
-/// `only_work_reads_past_its_own_ingredients`. `upkeep` reads the unit's upkeep
-/// and `perish` reads the unit's metal, and in both the unit is an ingredient of the recipe.
-/// `work` reads the *territory's* density, and the territory is not an ingredient of `work` -
-/// its ingredients are labor and an extractor. It is the only one of eighteen that reads
-/// past its own ingredients, and it does so because density moved from a thing to a place.
+/// The third way exists because of this crate. The sentence said two until `P-151`, and
+/// `work` yields the territory's density while a territory is not among its ingredients -
+/// so the sentence was false of a row three lines below it. `work` names the territory
+/// `$where` now, which is how a recipe reaches past what it consumes.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Quantity {
     Exactly(u32),
-    /// Read from a trait of one of the recipe's own ingredients.
-    OfAnIngredient(&'static str),
-    /// Read from a trait of the place the recipe runs in.
-    OfThePlace(&'static str),
+    /// Read from a trait of something the recipe names.
+    OfATrait(&'static str),
 }
 
 impl Quantity {
     pub fn written(self) -> String {
         match self {
             Quantity::Exactly(count) => count.to_string(),
-            Quantity::OfAnIngredient(how) | Quantity::OfThePlace(how) => how.to_string(),
+            Quantity::OfATrait(how) => how.to_string(),
         }
     }
 }
@@ -466,13 +505,18 @@ impl Bound {
     }
 }
 
-/// One line of a recipe: something going in, or something coming out.
+/// One line of a recipe.
+///
+/// **There is no consumed column any more.** `releases/first-release.md`: *an ingredient is
+/// consumed exactly when the same thing, with the same traits, does not appear among the
+/// results.* So four recipes gained an echo row - `upkeep` takes a thing with upkeep and
+/// gives it back - and being consumed became a fact you can work out rather than one stated
+/// twice. [`Recipe::consumes`] works it out.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Port {
     In {
         subject: Subject,
         quantity: Quantity,
-        consumed: bool,
         bound: Bound,
     },
     Out {
@@ -499,298 +543,261 @@ impl Port {
     }
 }
 
-/// Where a recipe applies.
-///
-/// A field rather than two types: ten are `Here` and eight are `Every`, and nothing else
-/// about them differs, so two types would duplicate the whole shape to carry one bit.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Scope {
-    Here,
-    Every,
-}
-
-impl Scope {
-    pub fn written(self) -> &'static str {
-        match self {
-            Scope::Here => "here",
-            Scope::Every => "every",
-        }
-    }
-}
-
 #[derive(Clone, Copy, Debug)]
 pub struct Recipe {
     pub name: &'static str,
-    pub scope: Scope,
+    pub owner: Owner,
     pub ports: &'static [Port],
 }
 
-const fn takes(subject: Subject, quantity: Quantity, consumed: bool, bound: Bound) -> Port {
+impl Recipe {
+    /// Whether an ingredient is consumed, worked out rather than stated.
+    ///
+    /// The release's rule exactly: consumed when the same thing, with the same traits, does
+    /// not appear among the results.
+    pub fn consumes(&self, ingredient: &Port) -> bool {
+        !self
+            .ports
+            .iter()
+            .any(|port| !port.is_ingredient() && port.subject() == ingredient.subject())
+    }
+}
+
+const fn takes(subject: Subject, quantity: Quantity, bound: Bound) -> Port {
     Port::In {
         subject,
         quantity,
-        consumed,
         bound,
     }
 }
 
-const fn yields(subject: Subject, quantity: Quantity) -> Port {
+const fn gives(subject: Subject, quantity: Quantity) -> Port {
     Port::Out { subject, quantity }
-}
-
-const fn of(kind: Kind) -> Subject {
-    Subject::plain(Noun::Of(kind))
-}
-
-const fn any(family: Family) -> Subject {
-    Subject::plain(Noun::Any(family))
 }
 
 use Bound::{AtLeast, AtMost};
 use Kind::*;
-use Quantity::{Exactly, OfAnIngredient, OfThePlace};
-use Scope::{Every, Here};
+use Owner::{Player, World};
+use Quantity::{Exactly, OfATrait};
 
-const IN_ORBIT: Qualifier = Qualifier::after_comma("in orbit", Some("place"));
-const HERE_AT: Qualifier = Qualifier::after_comma("here", Some("place"));
-const THERE: Qualifier = Qualifier::after_comma("there", Some("place"));
-const ARRIVING: Qualifier = Qualifier::after_comma("arriving", Some("arriving"));
-const IN_THAT_UNIT: Qualifier = Qualifier::after_comma("in that unit", Some("place"));
-const FOR_FOOD: Qualifier = Qualifier::after_comma("food", Some("resource"));
-const READY: Qualifier = Qualifier::after_comma("ready", Some("readiness"));
-const EXHAUSTED: Qualifier = Qualifier::after_comma("exhausted", Some("readiness"));
-const SURPLUS: Qualifier = Qualifier::after_comma("surplus", Some("surplus"));
-const UNFED: Qualifier = Qualifier::after_comma("unfed", Some("unfed"));
-const WITH_UPKEEP: Qualifier = Qualifier::as_phrase("with upkeep", Some("upkeep"));
-const UPKEEP_UNPAID: Qualifier = Qualifier::as_phrase("whose upkeep is unpaid", Some("unpaid"));
-const BELOW_NATURE: Qualifier =
-    Qualifier::after_comma("force below its force of nature", Some("force of nature"));
-const UNCLAIMED: Qualifier = Qualifier::after_comma("unclaimed", Some("control"));
+const FOR_FOOD: [Qualifier; 1] = [comma("food", Some("resource"))];
+const FOR_METAL: [Qualifier; 1] = [comma("metal", Some("resource"))];
+const FOR_ENERGY: [Qualifier; 1] = [comma("energy", Some("resource"))];
+const IN_WHERE: [Qualifier; 1] = [comma("in `$where`", Some("place"))];
+const NEXT_TO_FROM: [Qualifier; 1] = [comma("next to `$from`", Some("adjacency"))];
+const IN_FROM_READY: [Qualifier; 2] = [
+    comma("in `$from`", Some("place")),
+    comma("ready", Some("readiness")),
+];
+const IN_TO_EXHAUSTED: [Qualifier; 2] = [
+    comma("in `$to`", Some("place")),
+    comma("exhausted", Some("readiness")),
+];
+const IN_THAT_UNIT: [Qualifier; 1] = [comma("in that unit", Some("place"))];
+const READY: [Qualifier; 1] = [comma("ready", Some("readiness"))];
+const EXHAUSTED: [Qualifier; 1] = [comma("exhausted", Some("readiness"))];
+const SURPLUS: [Qualifier; 1] = [comma("surplus", Some("surplus"))];
+const HOUSES: [Qualifier; 1] = [comma("houses", Some("houses"))];
+const WITH_UPKEEP: [Qualifier; 1] = [phrase("with upkeep", Some("upkeep"))];
+const UPKEEP_UNPAID: [Qualifier; 1] = [phrase("whose upkeep is unpaid", Some("unpaid"))];
 
-/// The eighteen recipes of `releases/first-release.md`.
+/// The sixteen recipes of `releases/first-release.md`.
 pub const RECIPES: &[Recipe] = &[
     Recipe {
-        name: "land",
-        scope: Here,
+        name: "deploy ark",
+        owner: Player,
         ports: &[
-            takes(
-                Subject::that_is(Noun::Of(Ark), IN_ORBIT),
-                Exactly(1),
-                true,
-                AtLeast,
-            ),
-            takes(of(Garrison), Exactly(0), false, AtMost),
-            yields(of(Garrison), Exactly(1)),
-            yields(of(Citizen), Exactly(1)),
-            yields(Subject::that_is(Noun::Of(Extractor), FOR_FOOD), Exactly(1)),
+            takes(named("where", Noun::Territory, &[]), Exactly(1), AtLeast),
+            gives(named("where", Noun::Territory, &[]), Exactly(1)),
+            takes(that_is(Noun::Of(Ark), &IN_WHERE), Exactly(1), AtLeast),
+            takes(of(Garrison), Exactly(0), AtMost),
+            gives(of(Garrison), Exactly(1)),
+            gives(of(Citizen), Exactly(1)),
+            gives(that_is(Noun::Of(Extractor), &FOR_FOOD), Exactly(1)),
+            gives(that_is(Noun::Of(Extractor), &FOR_METAL), Exactly(1)),
+            gives(that_is(Noun::Of(Extractor), &FOR_ENERGY), Exactly(1)),
         ],
     },
     Recipe {
         name: "move",
-        scope: Here,
+        owner: Player,
         ports: &[
+            takes(named("from", Noun::Territory, &[]), Exactly(1), AtLeast),
+            gives(named("from", Noun::Territory, &[]), Exactly(1)),
             takes(
-                Subject::that_is(Noun::Any(Family::Unit), HERE_AT),
+                named("to", Noun::Territory, &NEXT_TO_FROM),
                 Exactly(1),
-                true,
                 AtLeast,
             ),
+            gives(named("to", Noun::Territory, &[]), Exactly(1)),
             takes(
-                Subject::that_is(Noun::Of(Energy), IN_THAT_UNIT),
+                that_is(Noun::Any(Family::Unit), &IN_FROM_READY),
                 Exactly(1),
-                true,
                 AtLeast,
             ),
-            yields(Subject::that_is(Noun::Any(Family::Unit), THERE), Exactly(1)),
+            gives(
+                that_is(Noun::Any(Family::Unit), &IN_TO_EXHAUSTED),
+                Exactly(1),
+            ),
+            takes(
+                that_is(Noun::Of(Energy), &IN_THAT_UNIT),
+                Exactly(1),
+                AtLeast,
+            ),
         ],
     },
     Recipe {
         name: "found by land",
-        scope: Here,
+        owner: Player,
         ports: &[
-            takes(
-                Subject::that_is(Noun::Of(Pioneer), ARRIVING),
-                Exactly(1),
-                true,
-                AtLeast,
-            ),
-            takes(of(Garrison), Exactly(0), false, AtMost),
-            yields(of(Garrison), Exactly(1)),
-            yields(of(Citizen), Exactly(1)),
-            yields(Subject::that_is(Noun::Of(Extractor), FOR_FOOD), Exactly(1)),
+            takes(of(Pioneer), Exactly(1), AtLeast),
+            takes(of(Garrison), Exactly(0), AtMost),
+            gives(of(Garrison), Exactly(1)),
+            gives(of(Citizen), Exactly(1)),
+            gives(that_is(Noun::Of(Extractor), &FOR_FOOD), Exactly(1)),
         ],
     },
     Recipe {
-        name: "build extractor",
-        scope: Here,
+        name: "build food extractor",
+        owner: Player,
         ports: &[
-            takes(of(Labor), Exactly(1), true, AtLeast),
-            yields(of(Extractor), Exactly(1)),
+            takes(of(Labor), Exactly(1), AtLeast),
+            takes(of(Metal), Exactly(1), AtLeast),
+            gives(that_is(Noun::Of(Extractor), &FOR_FOOD), Exactly(1)),
+        ],
+    },
+    Recipe {
+        name: "build metal extractor",
+        owner: Player,
+        ports: &[
+            takes(of(Labor), Exactly(1), AtLeast),
+            takes(of(Metal), Exactly(1), AtLeast),
+            gives(that_is(Noun::Of(Extractor), &FOR_METAL), Exactly(1)),
+        ],
+    },
+    Recipe {
+        name: "build energy extractor",
+        owner: Player,
+        ports: &[
+            takes(of(Labor), Exactly(1), AtLeast),
+            takes(of(Metal), Exactly(1), AtLeast),
+            gives(that_is(Noun::Of(Extractor), &FOR_ENERGY), Exactly(1)),
         ],
     },
     Recipe {
         name: "build yard",
-        scope: Here,
+        owner: Player,
         ports: &[
-            takes(of(Metal), Exactly(15), true, AtLeast),
-            yields(of(Yard), Exactly(1)),
+            takes(of(Labor), Exactly(1), AtLeast),
+            takes(of(Metal), Exactly(15), AtLeast),
+            gives(of(Yard), Exactly(1)),
         ],
     },
     Recipe {
         name: "produce pioneer",
-        scope: Here,
+        owner: Player,
         ports: &[
-            takes(of(Metal), Exactly(8), true, AtLeast),
-            takes(of(Energy), Exactly(6), true, AtLeast),
-            takes(of(Citizen), Exactly(1), true, AtLeast),
-            takes(of(Garrison), Exactly(1), false, AtLeast),
-            yields(of(Pioneer), Exactly(1)),
+            takes(of(Metal), Exactly(2), AtLeast),
+            takes(of(Energy), Exactly(6), AtLeast),
+            takes(of(Citizen), Exactly(1), AtLeast),
+            takes(of(Garrison), Exactly(1), AtLeast),
+            gives(of(Pioneer), Exactly(1)),
+            gives(of(Garrison), Exactly(1)),
         ],
     },
     Recipe {
         name: "produce ark",
-        scope: Here,
+        owner: Player,
         ports: &[
-            takes(of(Metal), Exactly(12), true, AtLeast),
-            takes(of(Energy), Exactly(12), true, AtLeast),
-            takes(of(Yard), Exactly(1), false, AtLeast),
-            yields(of(Ark), Exactly(1)),
-        ],
-    },
-    Recipe {
-        name: "launch",
-        scope: Here,
-        ports: &[
-            takes(
-                Subject::that_is(Noun::Of(Ark), HERE_AT),
-                Exactly(1),
-                true,
-                AtLeast,
-            ),
-            takes(
-                Subject::that_is(Noun::Of(Energy), IN_THAT_UNIT),
-                Exactly(1),
-                true,
-                AtLeast,
-            ),
-            yields(Subject::that_is(Noun::Of(Ark), IN_ORBIT), Exactly(1)),
+            takes(of(Metal), Exactly(4), AtLeast),
+            takes(of(Energy), Exactly(12), AtLeast),
+            takes(of(Yard), Exactly(1), AtLeast),
+            gives(of(Ark), Exactly(1)),
+            gives(of(Yard), Exactly(1)),
         ],
     },
     Recipe {
         name: "spend readiness",
-        scope: Here,
+        owner: Player,
         ports: &[
-            takes(
-                Subject::that_is(Noun::Of(Citizen), READY),
-                Exactly(1),
-                true,
-                AtLeast,
-            ),
-            yields(Subject::that_is(Noun::Of(Citizen), EXHAUSTED), Exactly(1)),
-            yields(of(Labor), Exactly(1)),
+            takes(that_is(Noun::Of(Citizen), &READY), Exactly(1), AtLeast),
+            gives(that_is(Noun::Of(Citizen), &EXHAUSTED), Exactly(1)),
+            gives(of(Labor), Exactly(1)),
         ],
     },
     Recipe {
         name: "work",
-        scope: Here,
+        owner: Player,
         ports: &[
-            takes(of(Labor), Exactly(1), true, AtLeast),
-            takes(of(Extractor), Exactly(1), false, AtLeast),
-            yields(
-                any(Family::Resource),
-                OfThePlace("the territory's density for that resource"),
+            takes(named("where", Noun::Territory, &[]), Exactly(1), AtLeast),
+            gives(named("where", Noun::Territory, &[]), Exactly(1)),
+            takes(of(Labor), Exactly(1), AtLeast),
+            takes(that_is(Noun::Of(Extractor), &READY), Exactly(1), AtLeast),
+            gives(that_is(Noun::Of(Extractor), &EXHAUSTED), Exactly(1)),
+            gives(
+                plain(Noun::Any(Family::Resource)),
+                OfATrait("`$where`'s density for that resource"),
             ),
-        ],
-    },
-    Recipe {
-        name: "eat",
-        scope: Every,
-        ports: &[
-            takes(of(Citizen), Exactly(1), false, AtLeast),
-            takes(of(Food), Exactly(1), true, AtLeast),
         ],
     },
     Recipe {
         name: "grow",
-        scope: Every,
+        owner: World,
         ports: &[
+            takes(that_is(Noun::Of(Food), &SURPLUS), Exactly(1), AtLeast),
             takes(
-                Subject::that_is(Noun::Of(Food), SURPLUS),
+                that_is(Noun::Any(Family::Thing), &HOUSES),
                 Exactly(1),
-                true,
                 AtLeast,
             ),
-            yields(of(Citizen), Exactly(1)),
+            gives(of(Citizen), Exactly(1)),
+            gives(that_is(Noun::Any(Family::Thing), &HOUSES), Exactly(1)),
         ],
     },
     Recipe {
-        name: "depart",
-        scope: Every,
+        name: "spoil",
+        owner: World,
         ports: &[takes(
-            Subject::that_is(Noun::Of(Citizen), UNFED),
+            that_is(Noun::Of(Food), &SURPLUS),
             Exactly(1),
-            true,
             AtLeast,
         )],
     },
     Recipe {
-        name: "spoil",
-        scope: Every,
-        ports: &[takes(of(Food), Exactly(1), true, AtLeast)],
-    },
-    Recipe {
         name: "ready",
-        scope: Every,
+        owner: World,
         ports: &[
             takes(
-                Subject::that_is(Noun::Any(Family::Thing), EXHAUSTED),
+                that_is(Noun::Any(Family::Thing), &EXHAUSTED),
                 Exactly(1),
-                true,
                 AtLeast,
             ),
-            yields(
-                Subject::that_is(Noun::Any(Family::Thing), READY),
-                Exactly(1),
-            ),
+            gives(that_is(Noun::Any(Family::Thing), &READY), Exactly(1)),
         ],
     },
     Recipe {
         name: "upkeep",
-        scope: Every,
+        owner: World,
         ports: &[
             takes(
-                Subject::that_is(Noun::Any(Family::Unit), WITH_UPKEEP),
+                that_is(Noun::Any(Family::Thing), &WITH_UPKEEP),
                 Exactly(1),
-                false,
                 AtLeast,
             ),
-            takes(of(Food), OfAnIngredient("the unit's upkeep"), true, AtLeast),
+            takes(of(Food), OfATrait("the thing's upkeep"), AtLeast),
+            gives(that_is(Noun::Any(Family::Thing), &WITH_UPKEEP), Exactly(1)),
         ],
     },
     Recipe {
         name: "perish",
-        scope: Every,
+        owner: World,
         ports: &[
             takes(
-                Subject::that_is(Noun::Any(Family::Unit), UPKEEP_UNPAID),
+                that_is(Noun::Any(Family::Thing), &UPKEEP_UNPAID),
                 Exactly(1),
-                true,
                 AtLeast,
             ),
-            yields(of(Metal), OfAnIngredient("the unit's metal")),
-        ],
-    },
-    Recipe {
-        name: "revert",
-        scope: Every,
-        ports: &[
-            takes(
-                Subject::that_is(Noun::Territory, BELOW_NATURE),
-                Exactly(1),
-                false,
-                AtLeast,
-            ),
-            yields(Subject::that_is(Noun::Territory, UNCLAIMED), Exactly(1)),
+            gives(of(Metal), OfATrait("the thing's metal")),
         ],
     },
 ];
@@ -804,106 +811,38 @@ pub struct Producible {
     pub kind: Kind,
     pub force: Option<u32>,
     pub fuel: Option<u32>,
-    /// What one move costs, in fuel.
     pub a_move: Option<u32>,
     pub upkeep: Option<(u32, Kind)>,
     pub costs: &'static [(u32, Kind)],
-    /// What the table says that the figures do not.
-    pub aside: Option<&'static str>,
-    /// What `perish` gives back. Metal is conserved, so this is what went in.
-    pub metal_in_it: Option<u32>,
+    /// What holds it together, and what `perish` gives back before its parts are counted.
+    pub binding: Option<u32>,
     pub requires: Option<&'static str>,
     pub readies: bool,
 }
 
-pub const PRODUCIBLE: &[Producible] = &[
-    Producible {
-        kind: Citizen,
-        force: Some(1),
-        fuel: None,
-        a_move: None,
-        upkeep: None,
-        costs: &[],
-        aside: None,
-        metal_in_it: None,
-        requires: None,
-        readies: true,
-    },
-    Producible {
-        kind: Garrison,
-        force: Some(1),
-        fuel: None,
-        a_move: None,
-        upkeep: None,
-        costs: &[(1, Labor), (1, Metal)],
-        aside: None,
-        metal_in_it: Some(1),
-        requires: None,
-        readies: false,
-    },
-    Producible {
-        kind: Extractor,
-        force: None,
-        fuel: None,
-        a_move: None,
-        upkeep: None,
-        costs: &[(1, Labor), (1, Metal)],
-        aside: None,
-        metal_in_it: Some(1),
-        requires: None,
-        readies: true,
-    },
-    Producible {
-        kind: Yard,
-        force: None,
-        fuel: None,
-        a_move: None,
-        upkeep: None,
-        costs: &[(15, Metal)],
-        aside: None,
-        metal_in_it: Some(15),
-        requires: None,
-        readies: false,
-    },
-    Producible {
-        kind: Ark,
-        force: Some(2),
-        fuel: Some(2),
-        a_move: Some(1),
-        upkeep: None,
-        costs: &[(12, Metal), (12, Energy)],
-        aside: None,
-        metal_in_it: Some(12),
-        requires: Some("a Yard"),
-        readies: true,
-    },
-    Producible {
-        kind: Pioneer,
-        force: Some(2),
-        fuel: Some(2),
-        a_move: Some(1),
-        upkeep: Some((1, Food)),
-        costs: &[(8, Metal), (6, Energy), (1, Citizen)],
-        aside: None,
-        metal_in_it: Some(8),
-        requires: Some("a garrison"),
-        readies: true,
-    },
-];
-
 impl Producible {
-    pub fn cost_written(&self) -> String {
-        let figures: Vec<String> = self
+    /// The **Metal in it** column, which the Traits table calls derived: *its binding plus
+    /// the metal in its parts*.
+    ///
+    /// Derived here rather than stored, so that the two cannot disagree - which is what the
+    /// trait table says it is.
+    pub fn metal_in_it(&self) -> Option<u32> {
+        let binding = self.binding?;
+        let parts: u32 = self
             .costs
             .iter()
+            .filter(|(_, kind)| *kind == Kind::Citizen)
+            .map(|_| 0)
+            .sum();
+        Some(binding + parts)
+    }
+
+    pub fn cost_written(&self) -> String {
+        self.costs
+            .iter()
             .map(|(count, kind)| format!("{count} {}", kind.name()))
-            .collect();
-        match (figures.is_empty(), self.aside) {
-            (true, None) => String::new(),
-            (true, Some(aside)) => aside.to_string(),
-            (false, None) => figures.join(", "),
-            (false, Some(aside)) => format!("{}, {aside}", figures.join(", ")),
-        }
+            .collect::<Vec<_>>()
+            .join(", ")
     }
 
     pub fn upkeep_written(&self) -> String {
@@ -914,8 +853,77 @@ impl Producible {
     }
 }
 
+pub const PRODUCIBLE: &[Producible] = &[
+    Producible {
+        kind: Citizen,
+        force: Some(1),
+        fuel: None,
+        a_move: None,
+        upkeep: Some((1, Food)),
+        costs: &[],
+        binding: None,
+        requires: None,
+        readies: true,
+    },
+    Producible {
+        kind: Garrison,
+        force: Some(1),
+        fuel: None,
+        a_move: None,
+        upkeep: None,
+        costs: &[(1, Labor), (1, Metal)],
+        binding: Some(1),
+        requires: None,
+        readies: false,
+    },
+    Producible {
+        kind: Extractor,
+        force: None,
+        fuel: None,
+        a_move: None,
+        upkeep: None,
+        costs: &[(1, Labor), (1, Metal)],
+        binding: Some(1),
+        requires: None,
+        readies: true,
+    },
+    Producible {
+        kind: Yard,
+        force: None,
+        fuel: None,
+        a_move: None,
+        upkeep: None,
+        costs: &[(1, Labor), (15, Metal)],
+        binding: Some(15),
+        requires: None,
+        readies: false,
+    },
+    Producible {
+        kind: Ark,
+        force: Some(2),
+        fuel: Some(2),
+        a_move: Some(1),
+        upkeep: None,
+        costs: &[(4, Metal), (12, Energy)],
+        binding: Some(4),
+        requires: Some("a Yard"),
+        readies: true,
+    },
+    Producible {
+        kind: Pioneer,
+        force: Some(2),
+        fuel: Some(2),
+        a_move: Some(1),
+        upkeep: Some((1, Food)),
+        costs: &[(2, Metal), (6, Energy), (1, Citizen)],
+        binding: Some(2),
+        requires: Some("a garrison"),
+        readies: true,
+    },
+];
+
 // ---------------------------------------------------------------------------------------
-// Rendering: the six tables, as rows of cells
+// Rendering
 // ---------------------------------------------------------------------------------------
 
 fn header(cells: &[&str]) -> Vec<String> {
@@ -944,13 +952,13 @@ pub fn families_table() -> Vec<Vec<String>> {
     rows
 }
 
-pub fn bins_table() -> Vec<Vec<String>> {
-    let mut rows = vec![header(&["Bin", "Holds", "Up to"])];
-    for bin in BINS {
+pub fn rooms_table() -> Vec<Vec<String>> {
+    let mut rows = vec![header(&["Room", "Holds", "Up to"])];
+    for room in ROOMS {
         rows.push(vec![
-            bin.what.to_string(),
-            bin.holds.to_string(),
-            bin.up_to.to_string(),
+            room.what.to_string(),
+            room.holds.to_string(),
+            room.up_to.to_string(),
         ]);
     }
     rows
@@ -969,6 +977,17 @@ pub fn traits_table() -> Vec<Vec<String>> {
     rows
 }
 
+pub fn room_table() -> Vec<Vec<String>> {
+    let mut rows = vec![header(&["Kind", "Room"])];
+    for kind in ROOM_ORDER {
+        rows.push(vec![
+            format!("**{}**", kind.name()),
+            kind.room().to_string(),
+        ]);
+    }
+    rows
+}
+
 pub fn units_table() -> Vec<Vec<String>> {
     let mut rows = vec![header(&[
         "Thing",
@@ -978,6 +997,7 @@ pub fn units_table() -> Vec<Vec<String>> {
         "Upkeep",
         "Costs to produce",
         "Metal in it",
+        "Binding",
         "Requires",
         "Readies",
     ])];
@@ -992,7 +1012,11 @@ pub fn units_table() -> Vec<Vec<String>> {
                 .unwrap_or_default(),
             thing.upkeep_written(),
             thing.cost_written(),
-            thing.metal_in_it.map(|n| n.to_string()).unwrap_or_default(),
+            thing
+                .metal_in_it()
+                .map(|n| n.to_string())
+                .unwrap_or_default(),
+            thing.binding.map(|n| n.to_string()).unwrap_or_default(),
             thing.requires.unwrap_or_default().to_string(),
             if thing.readies { "yes" } else { "" }.to_string(),
         ]);
@@ -1002,20 +1026,14 @@ pub fn units_table() -> Vec<Vec<String>> {
 
 pub fn recipes_table() -> Vec<Vec<String>> {
     let mut rows = vec![header(&[
-        "Recipe", "Scope", "Role", "Thing", "Qty", "Consumed", "Bound",
+        "Recipe", "Owner", "Role", "Thing", "Qty", "Bound",
     ])];
     for recipe in RECIPES {
         for (at, port) in recipe.ports.iter().enumerate() {
             let first = at == 0;
-            let (role, consumed, bound) = match port {
-                Port::In {
-                    consumed, bound, ..
-                } => (
-                    "in",
-                    if *consumed { "yes" } else { "no" }.to_string(),
-                    bound.written().to_string(),
-                ),
-                Port::Out { .. } => ("out", String::new(), String::new()),
+            let (role, bound) = match port {
+                Port::In { bound, .. } => ("in", bound.written().to_string()),
+                Port::Out { .. } => ("out", String::new()),
             };
             rows.push(vec![
                 if first {
@@ -1024,14 +1042,13 @@ pub fn recipes_table() -> Vec<Vec<String>> {
                     String::new()
                 },
                 if first {
-                    recipe.scope.written().to_string()
+                    recipe.owner.written().to_string()
                 } else {
                     String::new()
                 },
                 role.to_string(),
                 port.subject().written(),
                 port.quantity().written(),
-                consumed,
                 bound,
             ]);
         }

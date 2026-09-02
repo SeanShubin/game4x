@@ -90,14 +90,23 @@ fn compare(what: &str, written: &[Vec<String>], compiled: &[Vec<String>]) {
 ///
 /// Six now rather than two. The release declares its kinds, its families, its bins and its
 /// traits, which is what this crate used to infer from the recipes and say so.
+/// Every table the release declares, against the data that renders it.
+///
+/// **The only test in this file that is worth anything on its own.** The others read this
+/// crate and check it against numbers written in this crate; on the day the release moved,
+/// seven of them passed against data that had stopped matching hours earlier. One asserted
+/// eighteen recipes while there were sixteen, and another that `revert` names a place while
+/// `revert` no longer existed. A test that reads one artifact can only say it has not
+/// changed.
 #[test]
 fn the_release_tables_are_the_ones_in_this_crate() {
     let document = release();
-    let tables: [(&str, usize, Vec<Vec<String>>); 6] = [
+    let tables: [(&str, usize, Vec<Vec<String>>); 7] = [
         ("## Kinds", 10, kinds::kinds_table()),
         ("## Families", 3, kinds::families_table()),
-        ("## Where things are", 3, kinds::bins_table()),
-        ("## Traits", 13, kinds::traits_table()),
+        ("## Where things are", 3, kinds::rooms_table()),
+        ("## Traits", 16, kinds::traits_table()),
+        ("## What a territory has room for", 10, kinds::room_table()),
         ("## Units and structures", 6, kinds::units_table()),
         ("## Recipes", 40, kinds::recipes_table()),
     ];
@@ -113,10 +122,12 @@ fn the_release_tables_are_the_ones_in_this_crate() {
     }
 }
 
-/// Eighteen: the fifteen `S-4` asked for, and `upkeep`, `perish` and `revert`.
+/// Sixteen. Twenty became sixteen by collapsing, not by cutting: `launch` was `move` with a
+/// different destination, `land` became `deploy ark`, `eat` was `upkeep` with a citizen's
+/// upkeep assumed rather than written, `depart` was `perish`, and `revert` could never fire.
 #[test]
-fn there_are_eighteen_recipes() {
-    assert_eq!(kinds::RECIPES.len(), 18);
+fn there_are_sixteen_recipes() {
+    assert_eq!(kinds::RECIPES.len(), 16);
 }
 
 /// A family names several kinds at once, with no hierarchy anywhere.
@@ -127,224 +138,154 @@ fn a_recipe_naming_a_family_matches_every_kind_in_it() {
     assert!(Family::Unit.covers(Kind::Ark));
     assert!(Family::Unit.covers(Kind::Pioneer));
     assert!(!Family::Unit.covers(Kind::Yard), "a yard does not move");
-
     for resource in [Kind::Food, Kind::Metal, Kind::Energy] {
         assert!(Family::Resource.covers(resource));
     }
     assert!(!Family::Resource.covers(Kind::Labor), "labor is not stored");
-
-    // `thing` is every kind, which is what the release now says and what this crate once
-    // had to report as a gap - `ready` named a family nothing defined.
     for kind in kinds::KINDS {
         assert!(Family::Thing.covers(kind), "{} is a thing", kind.name());
     }
 }
 
-/// The measurements the answers rest on, so a later change makes them stale loudly.
-#[test]
-fn the_figures_the_answers_rest_on() {
-    use kinds::{Quantity, Scope};
-
-    let here = kinds::RECIPES
-        .iter()
-        .filter(|recipe| recipe.scope == Scope::Here)
-        .count();
-    assert_eq!((here, kinds::RECIPES.len() - here), (10, 8));
-
-    // A quantity is written or read. Three are read, and one of those reads past the
-    // recipe's own ingredients - which is the distinction the variants carry.
-    let read: Vec<Quantity> = kinds::RECIPES
-        .iter()
-        .flat_map(|recipe| recipe.ports.iter())
-        .map(|port| port.quantity())
-        .filter(|quantity| !matches!(quantity, Quantity::Exactly(_)))
-        .collect();
-    assert_eq!(read.len(), 3, "upkeep, perish and work");
-    assert_eq!(
-        read.iter()
-            .filter(|quantity| matches!(quantity, Quantity::OfThePlace(_)))
-            .count(),
-        1,
-        "only `work` reads a trait of the place rather than of an ingredient"
-    );
-}
-
-/// `work` is the one recipe whose quantity is not a trait of anything it names.
+/// Consumed is worked out, not written down.
 ///
-/// `releases/first-release.md` says a quantity is *written in the recipe, or read from a
-/// trait of one of the ingredients*. `work`'s ingredients are labor and an extractor, and
-/// it yields the **territory's** density - so the sentence is false of the row three lines
-/// below it. Reported as `P-151`; this pins the fact the proposal rests on.
+/// The column is gone: *an ingredient is consumed exactly when the same thing, with the same
+/// traits, does not appear among the results*. So four recipes gained an echo row, and being
+/// consumed became a fact about the table rather than a second statement that could disagree
+/// with it.
 #[test]
-fn only_work_reads_past_its_own_ingredients() {
-    use kinds::Quantity;
-
-    let odd: Vec<&str> = kinds::RECIPES
+fn an_ingredient_is_consumed_unless_it_is_echoed() {
+    let kept: Vec<&str> = kinds::RECIPES
         .iter()
         .filter(|recipe| {
             recipe
                 .ports
                 .iter()
-                .any(|port| matches!(port.quantity(), Quantity::OfThePlace(_)))
+                .filter(|port| port.is_ingredient())
+                .any(|port| !recipe.consumes(port))
         })
         .map(|recipe| recipe.name)
         .collect();
-    assert_eq!(odd, ["work"]);
 
-    // And the two that do read an ingredient really do name it among their ingredients.
-    for recipe in kinds::RECIPES {
-        for port in recipe.ports {
-            if matches!(port.quantity(), Quantity::OfAnIngredient(_)) {
-                assert!(
-                    recipe.ports.iter().any(|other| other.is_ingredient()
-                        && other.subject().noun.name() == "unit"),
-                    "{} reads a unit's trait without taking a unit",
-                    recipe.name
-                );
-            }
-        }
+    // A territory is never consumed by acting in it, a garrison survives producing a
+    // pioneer, a yard survives producing an ark, and upkeep gives back what it fed.
+    //
+    // The two claiming recipes are here for a subtler reason, and it is the rule working
+    // rather than an accident: each takes `garrison` at most 0 and gives `garrison` 1, so
+    // the same thing with the same traits does appear among the results. Nothing was
+    // consumed because there was nothing there - which is exactly what *at most zero* asks.
+    assert_eq!(
+        kept,
+        [
+            "deploy ark",
+            "move",
+            "found by land",
+            "produce pioneer",
+            "produce ark",
+            "work",
+            "grow",
+            "upkeep"
+        ]
+    );
+
+    // And the metal a build spends is gone, which is the ordinary case.
+    let build = kinds::RECIPES
+        .iter()
+        .find(|recipe| recipe.name == "build yard")
+        .expect("the release builds yards");
+    for port in build.ports.iter().filter(|port| port.is_ingredient()) {
+        assert!(build.consumes(port));
     }
 }
 
-/// A territory is a place, not a thing, and one recipe names one.
+/// Every qualifier a recipe uses names a trait the release declares.
 ///
-/// The release's *Where things are* says every thing is in a bin, and a territory **is** a
-/// bin. `revert` names it in the Thing column anyway, which is the one place the table's
-/// noun is not a thing.
-#[test]
-fn only_revert_names_a_place_where_a_thing_goes() {
-    use kinds::Noun;
-
-    let naming_a_place: Vec<&str> = kinds::RECIPES
-        .iter()
-        .filter(|recipe| {
-            recipe
-                .ports
-                .iter()
-                .any(|port| port.subject().noun == Noun::Territory)
-        })
-        .map(|recipe| recipe.name)
-        .collect();
-    assert_eq!(naming_a_place, ["revert"]);
-}
-
-/// The two halves of the specification, held against each other.
+/// **The check that holds the two halves of the specification against each other.** The
+/// Traits table says what a thing can be distinguished by; the recipes distinguish things;
+/// nothing else compares them, so a rewrite can take a trait out from under a recipe still
+/// using it - which is how `control`, `force of nature` and `unpaid` came to be missing.
 ///
-/// **This is the check neither lane had.** The Traits table says what a thing can be
-/// distinguished by; the recipes distinguish things. Nothing compared them, so a rewrite
-/// could take a trait out from under a recipe that still uses it - which is what happened:
-/// `P-143` declared a territory's traits, `P-148` rewrote that section around bins, and the
-/// territory's own traits went with the column that stopped existing. `revert` still asks
-/// whether a territory is claimed, and no declared trait says one can be.
-///
-/// Reported rather than asserted away. The list below is the release's, and shrinking it is
-/// the specification lane's work; what this test guarantees is that it cannot grow in
-/// silence.
-///
-/// # What a green result here does not mean
-///
-/// **It reads recipe qualifiers, so it can only find a trait some recipe distinguishes on.**
-/// The release depends on traits no recipe qualifies by - `biome` and `adjacency` among them
-/// - and this is blind to every one of those. The specification lane's own reading of the
-/// document found `biome` and `adjacency` and missed `whose upkeep is unpaid`; this found
-/// `unpaid` and cannot see either of theirs. Three of the five gaps would have been caught
-/// by either, and one by each alone.
-///
-/// So neither check is a superset of the other, and *this test passing is not evidence that
-/// nothing is missing* - only that no recipe asks something the Traits table cannot answer.
-/// Written down because a check that says nothing is otherwise read as saying nothing is
-/// wrong.
+/// It reads recipe qualifiers, so it is blind to a trait no recipe qualifies by. A green
+/// result here is not evidence that nothing is missing.
 #[test]
 fn every_qualifier_names_a_declared_trait() {
     let declared: Vec<&str> = kinds::TRAITS.iter().map(|row| row.name).collect();
+    let mut undeclared: Vec<&str> = Vec::new();
+    let mut seen: std::collections::BTreeSet<&str> = std::collections::BTreeSet::new();
 
-    let mut undeclared: Vec<&str> = kinds::RECIPES
-        .iter()
-        .flat_map(|recipe| recipe.ports.iter())
-        .filter_map(|port| port.subject().qualified_by)
-        .filter(|qualifier| qualifier.of_trait.is_none())
-        .map(|qualifier| qualifier.written)
-        .collect();
-    undeclared.sort_unstable();
-    undeclared.dedup();
-
-    // Every qualifier that does name a trait names one the release declares.
     for recipe in kinds::RECIPES {
         for port in recipe.ports {
-            if let Some(qualifier) = port.subject().qualified_by
-                && let Some(named) = qualifier.of_trait
-            {
-                assert!(
-                    declared.contains(&named),
-                    "{} distinguishes by `{}`, which the Traits table does not declare",
-                    recipe.name,
-                    named
-                );
+            for qualifier in port.subject().qualifiers {
+                seen.insert(qualifier.written);
+                match qualifier.of_trait {
+                    Some(named) => assert!(
+                        declared.contains(&named),
+                        "{} distinguishes by `{}`, which the Traits table does not declare",
+                        recipe.name,
+                        named
+                    ),
+                    None => undeclared.push(qualifier.written),
+                }
+            }
+        }
+    }
+    undeclared.sort_unstable();
+    undeclared.dedup();
+    assert_eq!(undeclared, [] as [&str; 0]);
+
+    // A universal check over an empty set passes, so this says how much it looked at.
+    assert!(
+        seen.len() >= 10,
+        "only {} distinct qualifiers seen: {seen:?}",
+        seen.len()
+    );
+}
+
+/// A name is how a recipe reaches past what it consumes.
+///
+/// `$where`, `$from` and `$to` are bound by one ingredient and referred to by others, which
+/// is what lets `work` yield the territory's density without the territory being consumed
+/// and without the table having a column for where a recipe acts.
+#[test]
+fn a_named_ingredient_is_bound_before_it_is_referred_to() {
+    for recipe in kinds::RECIPES {
+        let bound: Vec<&str> = recipe
+            .ports
+            .iter()
+            .filter_map(|port| port.subject().bound_as)
+            .collect();
+        for port in recipe.ports {
+            let text = format!("{} {}", port.subject().written(), port.quantity().written());
+            for name in ["where", "from", "to"] {
+                if text.contains(&format!("`${name}`")) {
+                    assert!(
+                        bound.contains(&name),
+                        "{} refers to `${name}` and never binds it",
+                        recipe.name
+                    );
+                }
             }
         }
     }
 
-    // **Empty, and that is the case to be careful about.** Every qualifier the recipes use
-    // now names a declared trait: `P-152` added `control`, `force of nature` and `unpaid`,
-    // the three this check found. A list that has grown means a recipe started asking
-    // something nothing can answer.
-    assert_eq!(undeclared, [] as [&str; 0]);
-
-    // A universal check over an empty set passes, so this one says how much it looked at.
-    // Without it, a rename that stopped every qualifier being found would go green - which
-    // is exactly how the ordering rule's example stopped demonstrating anything.
-    let looked_at: std::collections::BTreeSet<&str> = kinds::RECIPES
+    // Three recipes name something, and they are the three that act somewhere in particular.
+    let naming: Vec<&str> = kinds::RECIPES
         .iter()
-        .flat_map(|recipe| recipe.ports.iter())
-        .filter_map(|port| port.subject().qualified_by)
-        .map(|qualifier| qualifier.written)
+        .filter(|recipe| {
+            recipe
+                .ports
+                .iter()
+                .any(|port| port.subject().bound_as.is_some())
+        })
+        .map(|recipe| recipe.name)
         .collect();
-    let uses = kinds::RECIPES
-        .iter()
-        .flat_map(|recipe| recipe.ports.iter())
-        .filter(|port| port.subject().qualified_by.is_some())
-        .count();
-    let subjects: std::collections::BTreeSet<String> = kinds::RECIPES
-        .iter()
-        .flat_map(|recipe| recipe.ports.iter())
-        .map(|port| port.subject())
-        .filter(|subject| subject.qualified_by.is_some())
-        .map(|subject| subject.written())
-        .collect();
-
-    // Three counts, because three are true and they are easy to mistake for each other:
-    // fourteen distinct qualifiers, seventeen distinct qualified subjects - the same
-    // qualifier on a different noun is a different subject - and twenty uses in all.
-    assert_eq!(
-        (looked_at.len(), subjects.len(), uses),
-        (14, 17, 20),
-        "distinct qualifiers, distinct qualified subjects, uses; this saw {looked_at:?}"
-    );
+    assert_eq!(naming, ["deploy ark", "move", "work"]);
 }
 
-/// Every noun a recipe names is a declared kind, a declared family, or the place itself.
+/// `Metal in it` is derived, and the release says so.
 #[test]
-fn every_noun_is_declared_or_is_a_place() {
-    use kinds::Noun;
-
-    for recipe in kinds::RECIPES {
-        for port in recipe.ports {
-            match port.subject().noun {
-                Noun::Of(kind) => assert!(
-                    kinds::KINDS.contains(&kind),
-                    "{} names {}, which is not one of the ten",
-                    recipe.name,
-                    kind.name()
-                ),
-                Noun::Any(family) => assert!(
-                    kinds::FAMILIES.contains(&family),
-                    "{} names the family {}, which is not declared",
-                    recipe.name,
-                    family.name()
-                ),
-                // `revert` names a territory, which is a bin rather than a thing in one.
-                Noun::Territory => assert_eq!(recipe.name, "revert"),
-            }
-        }
+fn metal_in_it_is_its_binding_plus_its_parts() {
+    for thing in kinds::PRODUCIBLE {
+        assert_eq!(thing.metal_in_it(), thing.binding, "{}", thing.kind.name());
     }
 }

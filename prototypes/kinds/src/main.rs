@@ -7,7 +7,8 @@ fn main() {
     for (heading, rows) in [
         ("## Kinds", kinds::kinds_table()),
         ("## Families", kinds::families_table()),
-        ("## Where things are", kinds::bins_table()),
+        ("## Where things are", kinds::rooms_table()),
+        ("## What a territory has room for", kinds::room_table()),
         ("## Traits", kinds::traits_table()),
         ("## Units and structures", kinds::units_table()),
         ("## Recipes", kinds::recipes_table()),

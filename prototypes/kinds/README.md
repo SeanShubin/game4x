@@ -19,59 +19,60 @@ cargo test -p kinds       # checks they are the release's tables, cell for cell
 ## The answer
 
 `S-4` named four things it expected this to force into the open, and building it produced
-three more. The release has since **declared its own vocabulary** — kinds, families, bins
-and traits, four sections that did not exist when this crate was written — so several of
-these are now answered by the document rather than inferred from it. That is the outcome
-worth having: a prototype that argues itself out of a job.
+three more. The release has since **declared its own vocabulary** — kinds, families, rooms,
+traits and what a territory has room for — so several of these are now answered by the
+document rather than inferred from it. That is the outcome worth having: a prototype that
+argues itself out of a job.
 
-**What type is a quantity?** Not a number. A quantity is *written in the recipe, or read
-from a trait of one of the ingredients* — and three of the eighteen read one. The cut that
-matters is not what is read but **whose trait it is**: `upkeep` reads the unit's upkeep and
-`perish` reads the unit's metal, and in both the unit is an ingredient. `work` reads the
-*territory's* density, and a territory is not among its ingredients — those are labor and an
-extractor. So `Quantity` is `Exactly(n) | OfAnIngredient | OfThePlace`, and **`work` is the
-only one of eighteen that reads past its own ingredients**. It does so because density moved
-from a thing to a place. Reported as `P-151`.
+**What type is a quantity?** Not a number. A quantity is *written in the recipe, read from a
+trait of one of the ingredients, or read from a trait of a named ingredient* — and the third
+way exists because of this crate. `work` yields the territory's density while a territory is
+not among its ingredients, so the sentence was false of a row three lines below it. `work`
+names the territory `$where` now, which is how a recipe reaches past what it consumes.
 
-**How is a trait that varies per instance typed?** As a second axis, not as a kind and not
-as a container. `move` takes *unit, here* and yields *unit, there* — the same unit, the same
-kind, a different place. The release's Traits table now says this outright: `place` is a
-trait of every thing, and its value is the bin it is in.
+**How is a trait that varies per instance typed?** As a second axis. `move` takes a unit in
+`$from` and yields the same unit in `$to` — same unit, same kind, a different place. The
+Traits table says it outright: `place` is a trait of every thing, and its value is the thing
+it is in.
 
-**Derived against stored.** The release marks its own now — `surplus` and `unfed` are
-derived, `arriving` is stored and cleared at end turn — so `Held` records what the document
-says instead of what this crate worked out. Modelling `arriving` as a plain stored field
-would have been wrong in a way nothing would have caught.
+**Derived against stored.** The release marks its own, and the marks moved: `metal in it`
+became derived from a thing's binding plus its parts, and `control` became derived from
+whether a citizen of that player is there. This crate derives both rather than storing them,
+so the two cannot disagree.
 
-**Scope: a field, or two types?** A field. Ten recipes are `here` and eight are `every`, and
-nothing else about them differs, so two types would duplicate the whole shape to carry one
-bit.
+**Owner, not scope.** It was `here`/`every`, which said who a recipe belonged to while
+reading as though it said where. A player asks for the first sort; the world runs the second
+whether anyone asks or not.
+
+### Consumed is worked out rather than written down
+
+The column is gone. *An ingredient is consumed exactly when the same thing, with the same
+traits, does not appear among the results* — so four recipes gained an echo row, and being
+consumed became a fact about the table rather than a second statement that could disagree
+with it. `Recipe::consumes` is that rule, and a test names the eight recipes that keep
+something.
+
+Two of those eight are subtler than the rest and the rule handles them without being told:
+`deploy ark` and `found by land` each take a garrison *at most zero* and give one back, so
+nothing was consumed because there was nothing there.
 
 ### Families were a gap, and are not
 
-This crate reported that `ready` named a `thing` the release never defined, and the test
-that reported it said to delete itself the day the release answered. It has. **Families are
-declared**, and a family is still a list rather than a parent class — `spec/invariants.md`
-has every kind of thing be data, and a hierarchy would be the one shape that is not.
+This crate reported that `ready` named a `thing` the release never defined, and the test that
+reported it said to delete itself the day the release answered. It has. Two kinds it had
+inferred turned out not to be kinds at all: `node` became a trait of a territory, and `cell`
+became fuel in a unit's tank. **Both were nouns the recipes used and nothing listed**, which
+is exactly what a declaration is for.
 
-Two kinds this crate had inferred turned out not to be kinds at all: `node` became a trait
-of a territory, and `cell` became fuel in a unit's tank. **Both were things the recipes
-named and nothing listed**, which is exactly what a declaration is for.
+### And the finding this crate produced about itself
 
-### Three sorts of noun, and only two of them are things
+On the day the release moved furthest, **seven of its eight tests passed against data that
+had stopped matching hours earlier.** One asserted eighteen recipes while there were sixteen.
+Another asserted that `revert` names a place, and `revert` no longer existed.
 
-The Thing column names a kind, or a family, or — once — a **territory**. The release's own
-*Where things are* says every thing is in a bin, and a territory *is* a bin: it is where
-things are, not a thing that is anywhere. `revert` is the only recipe that names one, and
-`Noun::Territory` records it rather than pretending it is a kind.
-
-### Two shapes for one idea
-
-Every qualifier but two reads `kind, qualifier` — *ark, in orbit*, *food, surplus*. Two read
-as English instead: *unit with upkeep*, *unit whose upkeep is unpaid*. Nothing about them
-differs in kind, so the difference is punctuation, and `Qualifier::as_phrase` records it
-rather than smoothing it over. Recorded and not corrected: the release is the specification,
-and this crate holding what it says is the whole reason the comparison is worth anything.
+They passed because they read this crate and checked it against numbers written in this
+crate. Self-consistent, and empty. **A test that reads one artifact can only tell you it has
+not changed** — and the one test that reads the release caught all of it at once.
 
 ## Why there is a test
 
