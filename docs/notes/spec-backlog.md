@@ -1052,3 +1052,54 @@ turn begins ready.
 required. **That is the third time today that the answer was to remove something**, and it is the
 cycle Sean named: *unique idea, get it in spec, realise it unifies into an existing idea, get the
 unification into spec.* Containers, transport and capacity all went that way within a day.
+
+### Said 2026-09-01: a vehicle made of parts, and one readiness instead of two
+
+Sean, on `P-155`'s second trait: *I am not sure about splitting move and exhausted, perhaps a vehicle
+can be composed of parts, the part that moves exhausts, the part that does something limited
+exhausts.*
+
+**It gets move-then-act with one readiness rather than two traits.** A vehicle with an engine and a
+crane spends the engine by moving and the crane by working, and both are ordinary things with
+ordinary readiness. **Nothing new is added to the trait vocabulary** - what is added is that a thing
+can be made of things, which `P-148` already allows: a bin holds a kind, and a vehicle can have a bin
+of parts.
+
+**It explains a thing the second trait only accommodates.** Why can a Pioneer move and then be acted
+on, while a citizen that gives labor can do nothing else? **Under parts, because one has two and the
+other has one** - and that is a fact about the unit, in its own row, rather than a rule about which
+axis got spent.
+
+**What it costs.** Every unit that can do two things needs its parts written down, which is more
+data. **That is the direction rather than against it**, and the release has no unit that both moves
+and works, so first release would declare one part each and gain nothing until a vehicle earns a
+second.
+
+**What is not yet answered.** Whether a part is a thing in a bin or a trait of the unit; whether a
+part can itself have parts, which acyclicity permits and nothing needs; and whether the *Readies*
+column becomes a list of parts.
+
+### And the question that broke this lane's own claim
+
+Sean asked what general rule makes `spend readiness`'s explicit readiness redundant. **The answer is
+that none does, and the claim was wrong.**
+
+The two recipes use different idioms and neither is the other:
+
+|                   | Input            | Consumed | What happens to it                            |
+| ----------------- | ---------------- | -------- | --------------------------------------------- |
+| `spend readiness` | `citizen, ready` | **yes**  | consumed, and an exhausted citizen is created |
+| `work`            | `extractor`      | **no**   | used and left alone                           |
+
+`spec/turn.md`'s *using it exhausts it* can only reach the second. **A consumed input is gone, so
+there is nothing left for the rule to exhaust** - `spend readiness` states its effect because it has
+to, not because it is repeating something.
+
+**So the recipes table uses one idiom in one place and relies on a rule everywhere else**, which is
+an inconsistency rather than a redundancy, and the fix is the opposite of what this lane proposed:
+either `work` and `move` gain the qualifiers, or `spend readiness` is rewritten as
+*in citizen, not consumed - out labor* and lets the rule do it.
+
+**And the symmetry argues for the explicit idiom.** `consumed` is already a column - the recipes
+express *this input is used up* as data rather than as engine behaviour. **Readiness is the same kind
+of fact**, so expressing it as data is consistent and expressing it as a rule is the odd one out.
