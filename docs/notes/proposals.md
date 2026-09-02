@@ -282,6 +282,37 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
+### P-169 - `spoil` takes surplus food, and the order falls out
+
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
+**into** `releases/first-release.md` -> Recipes
+
+**Sean asked whether population growth is a recipe or an exception. It is a recipe** - `grow`, owned
+by the world - and the exception is not growth but **when the world's recipes fire**. He chose the
+unification over an ordering rule.
+
+**Three of the eight already order themselves**, because a derived trait cannot exist until what
+derives it has happened: `grow` and `depart` wait for `eat`, and `perish` waits for `upkeep`.
+**`spoil` takes plain `food` and waits for nothing**, so it may fire first and leave nothing to eat.
+
+> `spoil`'s ingredient becomes `food, surplus`.
+
+**Basis: it needs no new trait, which is why it is worth trying first.** This lane expected to have
+to invent one - *spare*, or *unclaimed by anything* - and `surplus` already means exactly the right
+thing: **left after everything ate.** Before eating there is no surplus, so `spoil` cannot fire; after
+eating there is, so it can.
+
+**And it makes growth and spoilage compete, which is the right relationship.** Surplus food either
+becomes population or rots, and `P-135` already promoted that **competing effects are gathered and
+resolved together by a deterministic mechanic a player can change**. Room for citizens is what
+decides how much of the surplus growth can take, and the rest spoils. **Nothing new is needed for
+that either.**
+
+**What it does not fix.** `upkeep`, `perish` and `revert` are still unplaced relative to the rest -
+`perish` follows `upkeep` by its trait, but nothing says whether upkeep is paid before or after
+eating, and both draw on food. **That is a real question and a smaller one**, and it should be asked
+against the before-and-after pages rather than in the abstract.
+
 ### P-167 - `build extractor` takes no metal and names no resource
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
@@ -320,37 +351,6 @@ as written, no Pioneer can ever found a territory.**
 **The second is the more urgent and the first is the deeper.** A missing output is one row. A recipe
 that cannot say where it goes is the shape of the table, and `P-163` already leans on it: launching
 is a move to an orbit, which needs a destination the same way.
-
-### P-169 - `spoil` takes surplus food, and the order falls out
-
-**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
-**into** `releases/first-release.md` -> Recipes
-
-**Sean asked whether population growth is a recipe or an exception. It is a recipe** - `grow`, owned
-by the world - and the exception is not growth but **when the world's recipes fire**. He chose the
-unification over an ordering rule.
-
-**Three of the eight already order themselves**, because a derived trait cannot exist until what
-derives it has happened: `grow` and `depart` wait for `eat`, and `perish` waits for `upkeep`.
-**`spoil` takes plain `food` and waits for nothing**, so it may fire first and leave nothing to eat.
-
-> `spoil`'s ingredient becomes `food, surplus`.
-
-**Basis: it needs no new trait, which is why it is worth trying first.** This lane expected to have
-to invent one - *spare*, or *unclaimed by anything* - and `surplus` already means exactly the right
-thing: **left after everything ate.** Before eating there is no surplus, so `spoil` cannot fire; after
-eating there is, so it can.
-
-**And it makes growth and spoilage compete, which is the right relationship.** Surplus food either
-becomes population or rots, and `P-135` already promoted that **competing effects are gathered and
-resolved together by a deterministic mechanic a player can change**. Room for citizens is what
-decides how much of the surplus growth can take, and the rest spoils. **Nothing new is needed for
-that either.**
-
-**What it does not fix.** `upkeep`, `perish` and `revert` are still unplaced relative to the rest -
-`perish` follows `upkeep` by its trait, but nothing says whether upkeep is paid before or after
-eating, and both draw on food. **That is a real question and a smaller one**, and it should be asked
-against the before-and-after pages rather than in the abstract.
 
 ### P-168 - Nothing checks room at the moment a thing is created
 
