@@ -45,42 +45,32 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-157 - A thing contains things, and a territory is one
+### P-160 - Adjacency is defined under *What a territory carries*, and it is not one
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
-`spec/logistics.md` -> Containment, replacing it whole, **and** `spec/planet.md` for adjacency
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
+`spec/planet.md`, moving one line
 
-**Sean's, decided 2026-09-01**: *everything in the game should be composable in a giant tree...
-avoid special cases of rules by applying the same rules at different levels*, and *make territory not
-privileged.* **This is the first of four and everything else waits on it.**
+**`P-157` says which things are next to which is a fact about the container.** `spec/planet.md` still
+defines it under **What a territory carries**:
 
-> `## Containment`, five lines replacing five:
->
-> - A thing may contain things, and is itself in at most one other thing. Nothing else holds
->   anything
-> - What a thing may contain is a maximum per kind, or per family of kinds. Room for four extractors
->   is a maximum of four, so nothing a player builds ever crowds out something of another kind
-> - A thing that contains things takes up room in whatever contains it, so room is not conserved
-> - A thing says which of the things in it are next to which. That is a fact about the container
->   rather than about its contents
-> - Nothing contains itself, directly or through anything else
+> Two territories are adjacent when they share an edge; territories that meet only at a corner are
+> not adjacent
 
-**Basis: it is `P-148` with the word *bin* removed and one line added.** Every clause above is that
-proposal's, generalised from a bin to a thing. **The place-versus-thing distinction goes with it** -
-a planet, a territory, a vehicle and an extractor are all things that contain things, differing only
-in what they may contain and what traits they carry.
+**The line is still true and its heading is not.** Adjacency is no longer something a territory
+carries; it is something the planet says about its territories.
 
-**The added line is adjacency, and it is the one that stops a territory being special.**
-`spec/planet.md` says which territories adjoin which, as a fact about territories. **Saying it about
-the planet instead makes it uniform**: a vessel with two bays could say the same of its bays, and
-nothing else ever would. **Containment is still a tree and adjacency is still a graph** - what
-changes is that the graph hangs off whatever holds the things it relates, so it needs no level of
-its own.
+> The line moves verbatim from *What a territory carries* to **Distance**, whose first line already
+> reads *the distance between any two territories is fixed, and can be computed by adjacency* - so
+> the definition would sit immediately above the rule that uses it.
 
-**Measured, because Sean asked for the test rather than the argument.** Across the four proposals
-this begins, **seven concepts go and about ten rows arrive on a table of forty-nine** - and what is
-removed are rules while what is added is data. The full count, and the one place it gets worse, are
-in [one tree](one-tree.md).
+**Basis: this lane may make the move and is not making it.** `CLAUDE.md` allows reorganizing with a
+report, and warns that **moving a bullet under a different heading changes what it is scoped to** -
+which here is the entire point rather than a side effect. **A move whose purpose is to change what a
+line is scoped to is not tidying**, so it is filed.
+
+**Filed immediately after the promotion that caused it**, which is the rule `P-85` produced: a
+promotion that makes something else stale either refuses or files the cleanup, and never notes it in
+a paragraph.
 
 ### P-155 - Readiness is written in the recipe, not assumed by a rule
 
@@ -624,6 +614,7 @@ about garrisons rather than about traits, which makes it Sean's.
 | P-151, a quantity may read a trait of the place, not only of an ingredient                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-152, the Traits table declares thirteen and the release uses five more                                        | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
 | P-153, `commands/` is in no lane's column                                                                       | `CLAUDE.md` -> Perspectives, the Code row                                                                              | 2026-09-01 |
+| P-157, a thing contains things, and a territory is one                                                          | `spec/logistics.md` -> Containment, replaced whole                                                                     | 2026-09-01 |
 
 ## Rejected
 

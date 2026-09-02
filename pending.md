@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-157** - A thing contains things, and a territory is one · `docs/notes/proposals.md`
+- **P-160** - Adjacency is defined under *What a territory carries*, and it is not one · `docs/notes/proposals.md`
 - **P-155** - Readiness is written in the recipe, not assumed by a rule · `docs/notes/proposals.md`
 - **P-158** - The Scope column is the owner column wearing a location's name · `docs/notes/proposals.md`
 - **P-159** - `consumed` is derived, not declared · `docs/notes/proposals.md`

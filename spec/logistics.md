@@ -12,13 +12,13 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## Containment
 
-- A thing is in a bin. A bin holds one kind of thing, or one family of them, up to a maximum of
-  its own, and nothing else in the game holds anything
-- A bin belongs to something. An extractor has a bin for what it extracts, a vehicle has the bins
-  its recipe gives it, and a territory has one for each kind before anything is built
-- A capacity is a bin. Room for four extractors is a bin that holds extractors, four at most, so
-  nothing a player builds ever crowds out something of another kind
-- A thing that has bins takes up room in one, so capacity is not conserved
+- A thing may contain things, and is itself in at most one other thing. Nothing else holds
+  anything
+- What a thing may contain is a maximum per kind, or per family of kinds. Room for four extractors
+  is a maximum of four, so nothing a player builds ever crowds out something of another kind
+- A thing that contains things takes up room in whatever contains it, so room is not conserved
+- A thing says which of the things in it are next to which. That is a fact about the container
+  rather than about its contents
 - Nothing contains itself, directly or through anything else
 
 ## Moving materials
