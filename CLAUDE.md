@@ -43,11 +43,11 @@ is authored by exactly one instance.
 everything, produces claims about the producers' work, and ships nothing. Quality is one. A lens is
 not a lane beside the others; it is a way of looking at all of them.
 
-| Perspective                     | Writes                                                                      | Reads      |
-| ------------------------------- | --------------------------------------------------------------------------- | ---------- |
-| **Specification**               | `spec/`, `releases/`, `docs/`, `README.md`, this file                       | everything |
-| **Code**                        | `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, CI, cargo | everything |
-| **Quality**, and any other lens | its own directory under `lenses/`, and nothing else                         | everything |
+| Perspective                     | Writes                                                                                   | Reads      |
+| ------------------------------- | ---------------------------------------------------------------------------------------- | ---------- |
+| **Specification**               | `spec/`, `releases/`, `docs/`, `README.md`, this file                                    | everything |
+| **Code**                        | `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, `commands/`, CI, cargo | everything |
+| **Quality**, and any other lens | its own directory under `lenses/`, and nothing else                                      | everything |
 
 **`notes/` is Sean's and no instance writes there**, except to create a file he has asked for by
 name. It is not `docs/notes/`, which is Claude's and has a confusingly similar name.

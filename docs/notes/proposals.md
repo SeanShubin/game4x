@@ -45,37 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-153 - `commands/` is in no lane's column
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** governance - **into** `CLAUDE.md` ->
-Perspectives, the Code row
-
-**Seven files of game data sit in a directory nobody owns.** `commands/` holds `world.4x`,
-`nodes.4x`, `biomes.4x`, `forces.4x`, `setup.4x`, `spread.4x` and `play.4x` - the twelve territories,
-their densities, their biomes and the scripted play-throughs. `CLAUDE.md` gives the code lane
-`crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, CI and cargo. **`commands/` is in
-none of them**, and it is in no other lane's column either.
-
-> `CLAUDE.md` -> Perspectives, the Code row's *Writes* cell gains `commands/`:
->
-> `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, `commands/`, CI, cargo
-
-**Basis: it is the code lane's in practice and has been since the files existed.** They wrote them,
-they regenerate them when the release moves - `nodes.4x` was rewritten from the release's own table
-on 2026-09-01 - and `crates/game-console/tests/quotations.rs` reads them. **Nobody has ever been
-confused about who owns them; the document is simply wrong.**
-
-**Why not the alternative.** `P-124` says a generated file has no owner and may sit in the root, and
-these are close to generated - derived from `releases/first-release.md`. **But they are not
-generated**: they carry hand-written comments explaining themselves and quoting the specification,
-and the quotation test checks those comments. **A file with any hand-written part has an author**,
-which `P-124` says in as many words.
-
-**This is the last item from [the data inventory](first-release-data.md) that has no answer.** The
-other three - declaring the kinds, siting the traits table, adding the columns - landed as `P-143`,
-`P-146` and `P-149`. **It is also the one that needs Sean rather than this lane**, because it is a
-column, and a column is who may write what.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -416,6 +385,7 @@ work the release exists to order.
 | P-143, the release declares its own vocabulary: kinds, families, bins and traits                                | `releases/first-release.md`, four new sections                                                                         | 2026-09-01 |
 | P-151, a quantity may read a trait of the place, not only of an ingredient                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-152, the Traits table declares thirteen and the release uses five more                                        | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
+| P-153, `commands/` is in no lane's column                                                                       | `CLAUDE.md` -> Perspectives, the Code row                                                                              | 2026-09-01 |
 
 ## Rejected
 
