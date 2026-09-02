@@ -98,33 +98,6 @@ the same text. **Filing it is the third option and the only one that costs nothi
 **It is the same accident as `P-161`, an hour apart.** A proposal written before another one lands,
 promoted after. Neither was wrong when written.
 
-### P-160 - Adjacency is defined under *What a territory carries*, and it is not one
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
-`spec/planet.md`, moving one line
-
-**`P-157` says which things are next to which is a fact about the container.** `spec/planet.md` still
-defines it under **What a territory carries**:
-
-> Two territories are adjacent when they share an edge; territories that meet only at a corner are
-> not adjacent
-
-**The line is still true and its heading is not.** Adjacency is no longer something a territory
-carries; it is something the planet says about its territories.
-
-> The line moves verbatim from *What a territory carries* to **Distance**, whose first line already
-> reads *the distance between any two territories is fixed, and can be computed by adjacency* - so
-> the definition would sit immediately above the rule that uses it.
-
-**Basis: this lane may make the move and is not making it.** `CLAUDE.md` allows reorganizing with a
-report, and warns that **moving a bullet under a different heading changes what it is scoped to** -
-which here is the entire point rather than a side effect. **A move whose purpose is to change what a
-line is scoped to is not tidying**, so it is filed.
-
-**Filed immediately after the promotion that caused it**, which is the rule `P-85` produced: a
-promotion that makes something else stale either refuses or files the cleanup, and never notes it in
-a paragraph.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -532,6 +505,7 @@ about garrisons rather than about traits, which makes it Sean's.
 | P-158, the Scope column is the owner column wearing a location's name                                           | `releases/first-release.md` -> Recipes, Traits                                                                         | 2026-09-01 |
 | P-159, `consumed` is derived, not declared                                                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-156, what a territory has room for                                                                            | `releases/first-release.md`, a new section                                                                             | 2026-09-01 |
+| P-160, adjacency is defined under *What a territory carries*, and it is not one                                 | `spec/planet.md`, one line moved to Distance                                                                           | 2026-09-01 |
 
 ## Rejected
 

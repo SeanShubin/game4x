@@ -25,14 +25,14 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## Distance
 
+- Two territories are adjacent when they share an edge; territories that meet only at a
+  corner are not adjacent
 - The distance between any two territories is fixed, and can be computed by adjacency
 - There can be roads, portals and such that affect traversal, but they do so without
   changing distance
 
 ## What a territory carries
 
-- Two territories are adjacent when they share an edge; territories that meet only at a
-  corner are not adjacent
 - Each territory has an id, unique within its planet, starting at 1
 - For each resource, a territory has room for some number of extractors, and a density that
   each of them yields.

@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-161** - `grow`'s new ingredient is the fifth thing that needs echoing · `docs/notes/proposals.md`
 - **P-162** - `P-156` reintroduced the word `bin`, which `P-157` had just removed · `docs/notes/proposals.md`
-- **P-160** - Adjacency is defined under *What a territory carries*, and it is not one · `docs/notes/proposals.md`
 - **P-154** - One recipe unclaims a territory and none claims one · `docs/notes/proposals.md`
 
 ## What is outstanding
