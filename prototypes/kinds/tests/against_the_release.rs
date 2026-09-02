@@ -240,6 +240,20 @@ fn only_revert_names_a_place_where_a_thing_goes() {
 /// Reported rather than asserted away. The list below is the release's, and shrinking it is
 /// the specification lane's work; what this test guarantees is that it cannot grow in
 /// silence.
+///
+/// # What a green result here does not mean
+///
+/// **It reads recipe qualifiers, so it can only find a trait some recipe distinguishes on.**
+/// The release depends on traits no recipe qualifies by - `biome` and `adjacency` among them
+/// - and this is blind to every one of those. The specification lane's own reading of the
+/// document found `biome` and `adjacency` and missed `whose upkeep is unpaid`; this found
+/// `unpaid` and cannot see either of theirs. Three of the five gaps would have been caught
+/// by either, and one by each alone.
+///
+/// So neither check is a superset of the other, and *this test passing is not evidence that
+/// nothing is missing* - only that no recipe asks something the Traits table cannot answer.
+/// Written down because a check that says nothing is otherwise read as saying nothing is
+/// wrong.
 #[test]
 fn every_qualifier_names_a_declared_trait() {
     let declared: Vec<&str> = kinds::TRAITS.iter().map(|row| row.name).collect();
