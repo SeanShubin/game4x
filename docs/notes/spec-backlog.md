@@ -1253,3 +1253,33 @@ copied rules rot the way a copied example does.
 **Against Distant Worlds, the difference is kind rather than degree.** A percentage is a parameter on
 a behaviour somebody else wrote. **Tuning behaviour with data means the behaviour is the data**, and
 the knob disappears because there is nothing left for it to be a knob on.
+
+### Open after eleven promotions, and a process defect that nearly lost them
+
+**Promoting deletes a proposal's body, and anything it flagged as unsettled goes with it.** Eleven
+landed on 2026-09-01, several saying *one thing this does not settle*, and every one of those
+sentences now exists **only in git history**. They were recovered by searching removed lines in the
+diff, which is not a reader. **Recorded here so the next question does not have to be archaeology.**
+
+**Four things Sean has not decided, none of them in the queue.**
+
+- **What happens to everything else when nature takes a territory back.** `revert` now consumes the
+  citizens, and control follows. **The garrison, the extractors and whatever is stored are not
+  mentioned** - they stay, on the tables as written, in a territory nobody holds
+- **Two players with citizens in one territory both derive control.** `P-154` made control derived
+  from a citizen being present. `spec/control.md` decides ownership by force, and nothing says how
+  the two compose. **First release has one player**
+- **Where `upkeep`, `perish` and `revert` sit relative to eating.** `P-169` ordered `grow`, `depart`
+  and `perish` by their derived traits. **Upkeep and eating both draw on food and nothing says which
+  goes first** - a unit may be unpaid because a citizen ate, or a citizen unfed because a unit was
+  paid
+- **Whether a thing's parts are listed or counted.** `P-170` left it open. A Yard at fifteen is
+  fifteen rows if each part is named and one if they are alike. **First release has nothing that
+  needs naming**
+
+**Two he has deferred deliberately.** The whole-loop transcript, held until the per-recipe pages are
+vetted. And whether those pages are hand-written or generated - **hand-written is right today and
+rots**, which is what a note from the same morning is about.
+
+**And one that is this lane's to do rather than his to decide.** `README.md`'s directory tree is
+stale and has been since before 2026-08-30, which is the surviving half of `C-5`.
