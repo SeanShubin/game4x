@@ -120,8 +120,9 @@ only thing that does.
 
 ### S-11 - `promote` needs a proposal's approved text, and `outbox` is the only thing that parses one
 
-**to** code - **status** **acted** 2026-09-02 - **raised** 2026-09-02 - **cited** `238359f` -
-**source** `P-182`, and an ask this lane said three times and never made
+**to** code - **status** **acted** 2026-09-02 - **raised** 2026-09-02 -
+**cited** `238359f`, `20da44f`, `0302d89`, `f18880a` - **source** `P-182`, and an ask this lane
+said three times and never made
 
 **One function.** `tools/outbox` parses `docs/notes/proposals.md` and exposes `Item`, `parse`,
 `accepted` and `Landed`. **It does not expose a proposal's proposed text** - the blockquote between
@@ -150,10 +151,22 @@ days have been about, made about the thing being built to prevent it.
 which is a better reading than this item asked for: a marker that has to be found is a second thing
 to agree about, and a proposal with no `**Basis**` section still promotes.
 
-**One hash cited rather than three**, because `S-8` is open and a `cited` list of more than one
-silently keeps the first. `20da44f` put back a `[workspace]` and a comment the delivering commit had
-edited outside its column, and `0302d89` pinned the parse against `docs/notes/proposals.md` on disk.
-`f18880a` then removed the redundancy the exclude list had made, which was this lane's to remove.
+**Four hashes, and the first attempt cited one on a stale belief.** This lane wrote that `S-8` was
+open and a `cited` list of more than one keeps only the first. **`S-8` was acted on 2026-09-01**,
+and says so three items below this one - in the file being edited at the time, and absent from the
+`pending.md` this lane had read and quoted an hour earlier. A fact asserted from memory with the
+file open.
+
+`20da44f` put back a `[workspace]` and a comment the delivering commit had edited outside its
+column, `0302d89` pinned the parse against `docs/notes/proposals.md` on disk, and `f18880a`
+removed the redundancy the exclude list had made, which was this lane's to remove.
+
+**Being careful for a stale reason still found something.** Raising it made the code lane check a
+multi-hash list against this file rather than theirs, and `whole_field` stopped at a middle dot -
+**the punctuation the lenses use and not the one this queue uses**. Against ` - ` the value ran on
+into the next field, so `` **cited** `abc1234` - **source** `1234567abc` `` returned both. Unnoticed
+because nothing after a `cited` field had yet looked like a hash. `934eb1a` ends a field at the next
+`**` instead, which is separator-agnostic rather than a second guess about punctuation.
 
 **The verification was `P-184`.** The code lane wrote the parse from this item's description while
 the queue was empty, so nothing real had tested it. `P-183` and `P-184` landed an hour later and
