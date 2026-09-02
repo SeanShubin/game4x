@@ -203,6 +203,19 @@ fn marked(line: &str) -> String {
 
 /// Words that mark what follows as the specification's own, rather than as a claim about it.
 ///
+/// **All present tense, and `said` is deliberately not among them.** This checks quotations
+/// against the specification *as it stands*, so it can only judge a claim about what the
+/// document says now. `spec/x.md` **said** *…* is a claim about what it used to say, and
+/// reading the current file cannot settle that - a record of a wording that has since
+/// changed is correct precisely because the file no longer matches it.
+///
+/// It cost a red gate to notice. `C-7` is a withdrawn finding whose text says
+/// `spec/control.md` **said** *every structure that can be built*, which was true when it
+/// was filed and stopped being true when `P-125` landed. The guard read the past tense as a
+/// present claim and reported the record as a defect. The alternative - editing the
+/// quotation to the current wording - would have made the record false, which is worse than
+/// the red gate and much harder to notice.
+///
 /// Deliberately a list rather than a rule. An unrecognised verb leaves a quotation
 /// unchecked, which is where this guard already was, and is a smaller failure than the
 /// alternative: a rule loose enough to catch every verb also catches the author's own
@@ -210,9 +223,8 @@ fn marked(line: &str) -> String {
 /// repository. The loose version reported seven such spans - `**required, not a
 /// convenience.**` among them - and every one was correct prose being called a
 /// misquotation.
-const ATTRIBUTING: [&str; 14] = [
+const ATTRIBUTING: [&str; 13] = [
     "says",
-    "said",
     "asks",
     "requires",
     "states",
@@ -339,6 +351,42 @@ fn comparable(quoted: &str) -> Vec<String> {
         })
         .filter(|part| !part.is_empty())
         .collect()
+}
+
+/// A record of what the specification used to say is not a claim about what it says.
+///
+/// The distinction this guard turns on, pinned so that adding a verb cannot quietly erase
+/// it. Present tense is checkable against the file on disk; past tense is a statement about
+/// a file that no longer exists, and reading the current one cannot settle it - a correct
+/// record of a changed wording is *exactly* the case where the document will not match.
+///
+/// This came from a red gate. `C-7` is a withdrawn finding recording that
+/// `spec/control.md` **said** *every structure that can be built*, which `P-125` changed.
+/// The guard read the past tense as a present claim and reported the record as a defect.
+#[test]
+fn past_tense_is_a_record_and_present_tense_is_a_claim() {
+    let here = Path::new("outbox.md");
+
+    let claim = "`spec/control.md` says *every structure that can be built*";
+    assert_eq!(
+        quotations(here, claim).len(),
+        1,
+        "a present-tense attribution is a claim and is checked"
+    );
+
+    let record = "`spec/control.md` said *every structure that can be built*";
+    assert!(
+        quotations(here, record).is_empty(),
+        "a past-tense attribution is a record of a wording that has since changed, and \
+         the current file cannot settle it"
+    );
+
+    // The colon and the possessive stay present-tense claims, which is what they read as.
+    assert_eq!(
+        quotations(here, "`spec/turn.md`: *a turn has three parts*").len(),
+        1
+    );
+    assert_eq!(quotations(here, "`spec/turn.md`'s *three parts*").len(), 1);
 }
 
 #[test]
