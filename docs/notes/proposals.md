@@ -45,6 +45,33 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-154 - One recipe unclaims a territory and none claims one
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`releases/first-release.md` -> Recipes
+
+**`P-152` declared `control` and the recipes cannot set it.** `revert` outputs
+`territory, unclaimed`. Nothing outputs `territory, claimed`. `land` and `found by land` produce a
+garrison, a citizen and a food extractor, and **say nothing about who holds the territory** - so on
+the tables as written, every territory begins unclaimed and can only ever become more so.
+
+**Two ways out, and this lane has no view.**
+
+- **Claiming is a result, and the two landing recipes should say so.** `land` and `found by land`
+  each gain `out territory, claimed 1`, which is what a player would say they had just done
+- **Control is derived from the garrison**, and `P-152`'s row is wrong to say *stored*. A territory
+  is claimed exactly when it holds one, `revert` removes the garrison rather than the claim, and the
+  trait is computed like `unfed` and `surplus`
+
+**What decides it is whether a territory can be held without a garrison.** `spec/control.md` says
+holding takes force equal to the force of nature, and that a citizen has force of its own - so
+**force can be present with no garrison**, and under the second reading such a territory would be
+unclaimed while being successfully defended. **That points at the first**, but it turns on a rule
+about garrisons rather than about traits, which makes it Sean's.
+
+**Not urgent and not new.** The gap has been in the release since the recipes existed; declaring
+`control` is what made it visible, which is `P-143`'s argument working rather than failing.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
