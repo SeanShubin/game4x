@@ -98,17 +98,33 @@ phrase is the one every other document's ending is read against.
 `spec/logistics.md` -> Containment
 
 > What a thing may contain is a maximum per kind, or per family of kinds. That maximum is its
-> **total capacity** for that kind; what is occupied is its **used capacity**, and what is left is
-> its **available capacity**. A total capacity of four extractors is a maximum of four, so nothing
+> **total capacity** for that kind, and it is stored. **Used capacity** is how many of that kind it
+> holds, and **available capacity** is the total less the used; both are derived, so neither can
+> disagree with what is there. A total capacity of four extractors is a maximum of four, so nothing
 > a player builds ever crowds out something of another kind.
 
 **Basis: `room` is doing all three jobs.** *Room for four extractors* is a total, *no room* is
 available capacity at zero, and nothing names the middle one at all - which is the number that
 grows as a territory is developed, and the one a player watches.
 
-**Total is stored and the other two are derived**, so this adds one stored fact and two computed
-ones. The release's *What a territory has room for* section and its `room` trait become *total
-capacity*, and this lane files that as the cleanup if you promote it.
+**Yes, and the text above is written so that only one of the three can be written at all.** The
+identity is `total = used + available`, so any two give the third - which is exactly the hazard you
+are pointing at, because three stored numbers can disagree and two of them are redundant.
+
+**So one is stored and two are derived, and it is not an arbitrary choice of which.** Used capacity
+is not an independent fact even in principle: it is how many of that kind the thing holds, and the
+contents are already the state. Available capacity is then the subtraction. **Total is the only one
+that is a fact about the container rather than about what is in it**, so it is the only one worth
+storing.
+
+**The protection is already yours and this leans on it.** `spec/invariants.md` says *a trait may be
+derived rather than stored, computed from what is there. Nothing can leave a derived trait wrong,
+because nothing writes one.* Naming two of these three as derived is what puts them under that
+sentence - so the inconsistency you are guarding against is not merely unlikely, it has nowhere to
+enter from.
+
+The release's *What a territory has room for* section and its `room` trait become *total capacity*,
+and this lane files that as the cleanup if you promote it.
 
 ### P-190 - The recipe table says `in` and `out` where you want six columns
 
