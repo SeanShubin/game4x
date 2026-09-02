@@ -15,7 +15,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   territory
 - Every territory has a force of nature of 1
 - The rule editor is not in this release
-- A Pioneer that leaves a territory you control must found the one it enters, or it perishes
+- A Pioneer that enters a territory nobody holds must found it, or it perishes for want of food
 
 ### Territory resources
 
@@ -104,7 +104,7 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 | **biome**           | a territory                     | one of the six                 | stored                                           |
 | **force of nature** | a territory                     | a number                       | stored                                           |
 | **adjacency**       | a territory                     | which territories touch it     | stored                                           |
-| **surplus**         | food                            | yes or no                      | derived: left after everything ate               |
+| **surplus**         | food                            | yes or no                      | derived: left after every upkeep was paid        |
 | **unpaid**          | a unit                          | a thing with upkeep            | derived: its upkeep was not met                  |
 | **houses**          | a thing that contains things    | whether people live in it      | stored                                           |
 

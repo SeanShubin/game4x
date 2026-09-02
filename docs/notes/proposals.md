@@ -45,93 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-175 - `arriving` earns nothing and should go
-
-**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
-**into** `releases/first-release.md` -> Recipes, Traits
-
-**Sean asked why we need it at all. We do not, and the argument is short enough to check.**
-
-`found by land` requires **a Pioneer** and **a garrison, at most 0**. The question is whether
-`arriving` ever excludes a case the garrison guard admits.
-
-- **A Pioneer comes into existence only from `produce pioneer`**, which requires `garrison 1`. So
-  every Pioneer is born in a territory that has one
-- **The guard passes only where there is none.** So a Pioneer that satisfies the guard is not where
-  it was born
-- **The only way to be elsewhere is `move`**, which sets `arriving`
-
-**So whenever the garrison guard passes, the Pioneer arrived by moving, and `arriving` is already
-true.** It never excludes anything.
-
-> `arriving` is deleted from *Traits*. `move`'s result reads `unit, in $to, exhausted`, and
-> `found by land`'s ingredient reads `pioneer`.
-
-**Basis: the rule it looks like it is enforcing is already enforced, by upkeep.** `arriving` reads as
-*found the turn you get there*, and the release says that in prose: **a Pioneer that leaves a
-territory you control must found the one it enters, or it perishes.** **`upkeep` and `perish` do
-it.** A Pioneer costs one food a turn; an unclaimed territory has no extractor and therefore no food;
-so a Pioneer that moves in and does not found is unpaid at the end of that same turn, and perishes.
-**Not next turn - the turn it arrived**, which is exactly what the prose says.
-
-**This lane said the prose had no recipe, and Sean caught it.** It has two, and they are the two that
-were just merged.
-
-**And it removes the release's only backwards-looking trait.** `ready`, `unpaid` and `surplus` are all
-facts about now, checkable from the state as it stands. **`arriving` is a fact about the previous
-step**, and it is the only one - which is why it was the only trait nothing knew how to clear.
-
-### P-178 - `surplus` is derived from a recipe that no longer exists
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
-`releases/first-release.md` -> Traits
-
-**`P-176` deleted `eat`, and `surplus` still says it.** The trait reads *derived: left after
-everything ate*, and nothing eats now - **things pay upkeep**.
-
-> `surplus` reads *derived: left after every upkeep was paid*.
-
-**Basis: it is the wording and not the meaning.** The food left over is the same food; only the
-recipe that took the rest has a different name. **`grow` and `spoil` both take `food, surplus` and
-both still order themselves correctly**, because the trait still cannot exist until the recipe that
-derives it has run.
-
-**Filed rather than done in the promoting commit**, because a derived trait's definition is what a
-reader trusts about when a recipe can fire, and changing one while promoting something else is how a
-rule moves without anyone reading it.
-
-### P-179 - A Pioneer may cross its own empire, and one line says it may not
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
-`releases/first-release.md` -> Scope
-
-**Found by checking whether `upkeep` enforces the founding rule.** It does, and the check turned up
-the case where it does not.
-
-> A Pioneer that leaves a territory you control must found the one it enters, or it perishes
-
-**A Pioneer that moves into another territory you control does neither.** It cannot found - the
-garrison guard is *at most 0* and there is one - and it does not perish, because that territory has
-food and its upkeep is paid. **So it survives, having founded nothing**, and the line says it should
-not.
-
-**The mechanics are right and the line is too strong.** Moving a Pioneer two territories to reach the
-frontier is an ordinary thing to want, and it costs fuel and a turn. **What the rule is protecting is
-that a Pioneer cannot wander unfed** - and starvation already does that, everywhere a Pioneer would
-want to loiter.
-
-> The line becomes:
->
-> A Pioneer that enters a territory nobody holds must found it, or it perishes for want of food
-
-**Basis: it says what actually happens rather than what was intended.** The perishing is not a
-punishment for failing to found; **it is upkeep, in a place with nothing to eat.** Writing it that
-way makes the release's own prose derivable from its recipes, which is what every other line in it
-already is.
-
-**And it removes the last thing that made `arriving` look necessary.** With the rule stated as
-starvation, nothing anywhere depends on a Pioneer having just arrived.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -530,6 +443,9 @@ work the release exists to order.
 | P-174, a Yard is the only thing a player builds without labor                                                   | `releases/first-release.md` -> Recipes, Units and structures                                                           | 2026-09-01 |
 | P-176, `eat` is `upkeep`, and `depart` is `perish`                                                              | `releases/first-release.md` -> Recipes, Traits, Units and structures                                                   | 2026-09-01 |
 | P-177, `revert` cannot fire, and the release should not carry it                                                | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-175, `arriving` earns nothing and should go                                                                   | `releases/first-release.md` -> Recipes, Traits                                                                         | 2026-09-01 |
+| P-178, `surplus` is derived from a recipe that no longer exists                                                 | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
+| P-179, a Pioneer may cross its own empire, and one line says it may not                                         | `releases/first-release.md` -> Scope                                                                                   | 2026-09-01 |
 
 ## Rejected
 
