@@ -72,10 +72,24 @@ asserted**, which is why all eleven of `2026-09-01`'s defects were caught by a p
 missed something twice. **This is the third instance of that pattern** and the first where the thing
 being checked is a promise rather than a fact.
 
-**One argument against, and it is quality's own.** `P-182` may put `edit.py` in the repository where
-it can be reviewed, and **a reviewable tool may not need a check downstream of it.** They are
-alternatives rather than a sequence. **Worth waiting for Sean on `P-182` before building this**, and
-worth saying so rather than building both.
+**Settled 2026-09-02: build it, and build it for future promotions only.** Quality raised a real
+argument for waiting - a reviewable tool may need no check downstream - and withdrew it on one point:
+**a tool cannot enforce that it is used.** Three of `2026-09-01`'s defects were `spec/` edited by an
+ad-hoc script outside the guards, which is when it matters.
+
+**Two jobs were hiding in one item, and only the second is worth doing.**
+
+- **Over history**, 182 accepted rows whose destination survives only as prose in the ledger. A
+  one-off audit of a back catalogue that has had a week of readers
+- **Over each promotion as it happens**, where the proposal is still in the parent commit **with its
+  `**into**` field intact** - structured, and deleted only when the body is
+
+**The second is much cheaper than either lane assumed**, because it needs no prose parsing at all.
+**Quality's recommendation and this lane agrees**: make it the second.
+
+**One thing for `promote` rather than for you.** The ledger row's destination is typed by hand from
+the `**into**` field. **`promote` should write it from the field**, so that the thing `S-10` reads
+was never transcribed.
 
 **Two smaller checks are in `S-9`** and are unaffected either way.
 

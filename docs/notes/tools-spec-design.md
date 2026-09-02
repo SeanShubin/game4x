@@ -49,8 +49,20 @@ text appears once in the destination**, moves the item to the ledger, and commit
 the approval and the file is written by hand**, so there is no intent to diverge.
 
 **It does not replace `S-10`**, which checks promotions from git afterwards. **This makes the common
-path safe; that catches the path taken around it.** Quality argued they are alternatives - this note
-argues they are not, because a promotion made by hand is exactly the one worth catching.
+path safe; that catches the path taken around it**, because a tool cannot enforce that it is used -
+three of `2026-09-01`'s eleven defects were commits chained after an ad-hoc script, which is `spec/`
+being edited outside the guards precisely when something went wrong.
+
+**Corrected 2026-09-02: this note said quality argued they were alternatives, and quality did not.**
+They wrote that there was a real argument against building it yet and that the call was this lane's.
+**Strengthening a position nobody held and then beating it is not an argument**, and it is worth
+recording because it is a way of being wrong that reads as rigour.
+
+**And the destination is a hand-copy that nothing checks.** A proposal's `**into**` field is
+structured; the ledger row's destination is prose **typed by this lane from that field**, and the
+field is deleted with the body at promotion. So `promote` should write the ledger row **from the
+field** rather than take it as an argument - which closes a transcription step of the same family as
+everything else this week.
 
 ## The dependency, which Sean has called justified
 
