@@ -20,15 +20,60 @@ fn root() -> PathBuf {
 }
 
 /// Every backticked hex run of seven or more, which is how a hash is written here.
+///
+/// **Except inside a double-backtick span, which is how this repository shows markup
+/// literally.** `docs/notes/proposals.md` explains the field-parsing bug by displaying
+/// `` **cited** `abc1234` - **source** `1234567abc` `` - two hashes that were never meant to
+/// resolve, in a line whose whole purpose is to be an example. Treating them as citations
+/// reported a defect in a document that was describing one.
+///
+/// A displayed hash is not a claim about a commit, which is the thing this checks.
 fn cited(text: &str) -> Vec<String> {
     let mut found = Vec::new();
-    for piece in text.split('`').skip(1).step_by(2) {
-        let word = piece.trim();
-        if word.len() >= 7 && word.chars().all(|c| c.is_ascii_hexdigit()) {
-            found.push(word.to_string());
+    for line in text.lines() {
+        // Drop what is being shown rather than said, then read the rest.
+        let mut said = String::new();
+        let mut rest = line;
+        while let Some((before, after)) = rest.split_once("``") {
+            said.push_str(before);
+            match after.split_once("``") {
+                Some((_shown, tail)) => rest = tail,
+                None => {
+                    rest = "";
+                    break;
+                }
+            }
+        }
+        said.push_str(rest);
+
+        for piece in said.split('`').skip(1).step_by(2) {
+            let word = piece.trim();
+            if word.len() >= 7 && word.chars().all(|c| c.is_ascii_hexdigit()) {
+                found.push(word.to_string());
+            }
         }
     }
     found
+}
+
+#[cfg(test)]
+mod tests {
+    use super::cited;
+
+    /// A hash being shown is not a hash being cited.
+    #[test]
+    fn a_displayed_hash_is_not_a_citation() {
+        let shown = "into the next field, so `` **cited** `abc1234` - **source** `1234567abc` `` returned both.";
+        assert!(cited(shown).is_empty(), "{:?}", cited(shown));
+
+        // And an ordinary citation on the same shape of line still counts.
+        let said = "**to** spec · **status** **answered** 2026-09-02 · `a6b67a7`";
+        assert_eq!(cited(said), ["a6b67a7"]);
+
+        // A line with both: the shown one is dropped and the said one is kept.
+        let both = "`a6b67a7` did it, unlike `` `abc1234` ``";
+        assert_eq!(cited(both), ["a6b67a7"]);
+    }
 }
 
 fn is_a_commit(root: &Path, hash: &str) -> bool {
