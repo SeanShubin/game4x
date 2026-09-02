@@ -28,9 +28,6 @@ spec/
 releases/
   README.md ....................... what each delivery includes; files are deleted once vetted
   first-release.md ................ one tiny planet, colonize through to launching a colonizer
-notes/
-  README.md ....................... Sean's own notes; no instance writes here
-  glossary.md ..................... Claude's understanding of the game's terms
 docs/
   README.md ....................... this file: the map and the rules
   process.md ...................... how Sean runs several instances, and what he requires of them

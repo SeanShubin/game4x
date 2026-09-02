@@ -31,3 +31,8 @@ desktop.ini
 # --- Editors / misc ---
 *.swp
 *~
+
+# --- Sean's own working notes ---
+# Renamed from notes/ on 2026-09-01 and untracked at the same time: these are transient,
+# and a transient file in the history is one a later reader has to work out the status of.
+temporary-notes/

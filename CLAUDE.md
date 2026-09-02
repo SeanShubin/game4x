@@ -49,8 +49,9 @@ not a lane beside the others; it is a way of looking at all of them.
 | **Code**                        | `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, `commands/`, CI, cargo | everything |
 | **Quality**, and any other lens | its own directory under `lenses/`, and nothing else                                      | everything |
 
-**`notes/` is Sean's and no instance writes there**, except to create a file he has asked for by
-name. It is not `docs/notes/`, which is Claude's and has a confusingly similar name.
+**`temporary-notes/` is Sean's and no instance writes there**, except to create a file he has
+asked for by name. It is not tracked - the files in it are transient, which is what the name says -
+and it is not `docs/notes/`, which is Claude's and is kept.
 
 **Everyone reads everything; nobody writes outside their own column.** That asymmetry is what makes
 them composable rather than merely separated - a perspective that cannot read the others has to
