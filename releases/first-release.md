@@ -43,7 +43,7 @@ Every territory has at least one food node.
 ## The loop
 
 1. No presence on the planet
-2. Land the ark on a territory from orbit, founding it
+2. Land the ark on a territory from orbit, claiming it
 3. Work the food extractor to grow the population
 4. Build extractors to work the metal and energy nodes
 5. Produce pioneers and spread across the planet by land
@@ -62,8 +62,8 @@ Every territory has at least one food node.
 | **ark**       | 2     | 2    | 1 fuel |                 | 12 metal, 12 energy          | 12          | a Yard     | yes     |
 | **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 8 metal, 6 energy, 1 citizen | 8           | a garrison | yes     |
 
-A garrison's multiplier is 1. An Ark can invade land from orbit. Founding produces a garrison, a
-citizen and a food extractor. Nothing outside this table readies.
+A garrison's multiplier is 1. An Ark can invade land from orbit. Nothing outside this table
+readies.
 
 ## Recipes
 

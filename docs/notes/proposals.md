@@ -257,6 +257,9 @@ already uniform within a territory, which is true of the release and **false of 
 Biomes table gives one density per resource per biome - so nothing breaks, but it should be given up
 knowingly rather than by not noticing.
 
+**Accepted by Sean, 2026-09-01**: *per-node density is intentionally being cut.* Recorded here so
+that the capability was given up by decision and not by nobody noticing.
+
 **What it costs to keep instead.** Varying densities need a node to hang on, which is the kind this
 proposal removes, and the extractor then has to name which one it works. **That is the whole of what
 the node was for**, and one number per resource per territory is what replaces it.
