@@ -208,7 +208,7 @@ two candidates.
 |                            |        | out  | labor                                      | 1                                    |          |
 | **work**                   | player | in   | `$where` territory                         | 1                                    | at least |
 |                            |        | out  | `$where` territory                         | 1                                    |          |
-|                            | player | in   | labor                                      | 1                                    | at least |
+|                            |        | in   | labor                                      | 1                                    | at least |
 |                            |        | in   | extractor, ready                           | 1                                    | at least |
 |                            |        | out  | extractor, exhausted                       | 1                                    |          |
 |                            |        | out  | resource                                   | `$where`'s density for that resource |          |
