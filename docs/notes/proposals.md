@@ -45,50 +45,54 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-182 - The tool that edits the specification has nowhere to live
+### P-182 - A lane owns the tools for its own work; the code lane owns the game
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** governance - **into** `CLAUDE.md` ->
-Perspectives, the Specification row
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-02 - **kind**
+governance - **into** `CLAUDE.md` -> Perspectives
 
-**Every edit to `spec/` and `releases/` today was made by a script in a scratchpad directory.** It
-locates proposals, extracts approved text, checks it landed, and commits. **It is not in the
-repository**: not versioned, not reviewable, and gone when the session ends.
+**Sean's, 2026-09-02**: *only the production code is exclusive to the coding instance... I am fine
+with the quality instance writing tools to check for quality, and the specification instance writing
+tools that help maintain the specification.*
 
-**Two of today's defects were in it** - a cell written into the wrong column, and a paragraph
-duplicated by an insert that ran twice - and **neither could have been caught by a review**, because
-there is nothing to review. Both are now guarded, and the guards are equally invisible.
+**That dissolves the question this proposal was asking and replaces it with a better one.** It asked
+where one scratchpad script may live. **The answer is now general**, and it is worth writing as a
+principle rather than as three more cells.
 
-> `CLAUDE.md` -> Perspectives, the Specification row's *Writes* cell gains `tools/spec-edit/`:
+> `## Perspectives` gains a line above the table:
 >
-> `spec/`, `releases/`, `docs/`, `README.md`, `tools/spec-edit/`, this file
+> **The code lane owns the game. Every lane owns the tools for its own work.** Production is what
+> ships to a player; a tool that makes it, checks it or maintains it belongs to whoever it serves.
 
-**Amended 2026-09-02, and the question is narrower than this proposal first made it.** The quality
-lens pointed out the precedent: **`tools/pad-tables` is the code lane's and rewrites files in `spec/`,
-`releases/` and `docs/`** every time anything is committed. **So a tool that edits a column already
-does not have to live in it**, and the columns have no hole.
+> The table becomes:
+>
+> | Perspective | Writes | Reads |
+> | --- | --- | --- |
+> | **Specification** | `spec/`, `releases/`, `docs/`, `README.md`, `tools/spec/`, this file | everything |
+> | **Code** | `crates/`, `web/`, `commands/`, `prototypes/`, `tools/`, `scripts/`, `hooks/`, CI, cargo | everything |
+> | **Quality**, and any other lens | its own directory under `lenses/`, and `tools/<its name>/` | everything |
 
-**What is left is one question and it is smaller.** Not *where may this lane keep a tool*, but
-**whether the tool that edits the specification should be in the repository at all.** It is not, and
-two of `2026-09-01`'s defects were in it.
+**Basis: the reason a lens could not write was never that writing is dangerous.** `CLAUDE.md` says
+*a review that alters its subject is no longer a review*, and gives `cargo fmt` as the case. **A
+check is not an alteration.** A quality tool that reads the tree and reports is the same act as a
+quality report, run by a machine instead of by an instance - and **it is the only kind of finding
+that keeps working after the lens that filed it has stopped running.**
 
-**Two ways, and they differ in who may change it.**
+**What it changes for this lane is small and overdue.** `edit.py` makes every edit to `spec/` and
+`releases/` from a scratchpad, and two of `2026-09-01`'s defects were in it. **Under this it goes in
+`tools/spec/`**, versioned, and the quality lens can read the thing that has been making every
+specification edit invisibly.
 
-- **`tools/spec-edit/`, in the Specification row.** This lane owns and edits it, and the quality lens
-  can read it. **The row above is the change.**
-- **`tools/spec-edit/`, left in the code lane's column**, like `pad-tables`. Reviewable by the same
-  people who review everything else, and **this lane would have to ask** to change the thing it uses
-  on every edit - which is friction, and is also exactly the review that was missing.
+**Three consequences worth deciding with it**, because none is obvious.
 
-**One subdirectory rather than the whole of `tools/`**, so the code lane keeps everything it has and
-gains a neighbour. **`tools/outbox` and `tools/pad-tables` are theirs and stay theirs.**
-
-**What it buys is that the thing making every specification edit becomes reviewable.** The quality
-lens reads everything and could not read this; a defect in it corrupts `releases/first-release.md`
-silently, which is exactly what happened twice today.
-
-**The alternative is that it stays a scratchpad file**, which is defensible - it is a session
-convenience rather than part of the product. **Then today's two defects are the expected rate**, and
-the lane should say so rather than discover it again.
+- **Two tools already normalise the same files.** `tools/pad-tables` is the code lane's and rewrites
+  `spec/`, `releases/` and `docs/` on every commit; `edit.py` writes the same files. **They agree
+  today by luck rather than by design**, and adding a third writer is where that stops being funny
+- **What runs in the gate.** `hooks/pre-push` runs the code lane's tests, and a documentation-only
+  push is already blocked by them. **If every lane's checks join the gate, every lane blocks every
+  other** - which is `S-5` generalised, and which is also how a check gets read
+- **What counts as production.** *What ships to a player* is a clean test and `commands/*.4x` passes
+  it while `prototypes/` does not. **`tools/outbox` and `hooks/` serve every lane and belong to
+  none** - left with the code lane above, because somebody runs the gate and it is them
 
 ## Addressed to other perspectives
 

@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-182** - The tool that edits the specification has nowhere to live · `docs/notes/proposals.md`
+- **P-182** - A lane owns the tools for its own work; the code lane owns the game · `docs/notes/proposals.md`
 
 ## What is outstanding
 
