@@ -82,17 +82,33 @@ that keeps working after the lens that filed it has stopped running.**
 `tools/spec/`**, versioned, and the quality lens can read the thing that has been making every
 specification edit invisibly.
 
-**Three consequences worth deciding with it**, because none is obvious.
+**Sean settled all three on 2026-09-02**, and one of them changed the shape of this proposal.
 
-- **Two tools already normalise the same files.** `tools/pad-tables` is the code lane's and rewrites
-  `spec/`, `releases/` and `docs/` on every commit; `edit.py` writes the same files. **They agree
-  today by luck rather than by design**, and adding a third writer is where that stops being funny
-- **What runs in the gate.** `hooks/pre-push` runs the code lane's tests, and a documentation-only
-  push is already blocked by them. **If every lane's checks join the gate, every lane blocks every
-  other** - which is `S-5` generalised, and which is also how a check gets read
-- **What counts as production.** *What ships to a player* is a clean test and `commands/*.4x` passes
-  it while `prototypes/` does not. **`tools/outbox` and `hooks/` serve every lane and belong to
-  none** - left with the code lane above, because somebody runs the gate and it is them
+**The two writers do not conflict.** *`pad-tables` is very special purpose, so while there is overlap
+in which files are changed, there is no overlap in how they are changed - I expect it to work in
+either order but not concurrently.* **The constraint is concurrency, not ordering**, and it already
+binds: the index is shared, so two instances writing at once is a hazard the repository has had
+since it had three lanes.
+
+**Gates blocking every lane is what a gate is for.** *No lane should be able to violate a gate
+protecting production code, but we should be careful not to add gates that do not have a good,
+narrowly scoped reason.* So the caution is on the **reason** rather than on who is blocked.
+
+**And infrastructure is a third category.** *Devops, continuous integration, provisioning, pipeline,
+infrastructure as code and so on is not production, it is production support.* **That answers what
+`hooks/`, `scripts/` and CI are**, and it is not what this proposal assumed - it had left them with
+the code lane on the grounds that somebody runs the gate.
+
+> So the line above the table reads:
+>
+> **The code lane owns the game. Every lane owns the tools for its own work.** Production is what
+> ships to a player and is the code lane's alone. **Production support** - hooks, scripts, CI,
+> anything that builds, checks or publishes - belongs to no lane exclusively: whoever needs a check
+> wired adds it, and the bar is a narrow reason rather than a permission.
+
+**That is the substantive change and it should be read as one.** Under it **this lane may add a gate
+line** for a specification check, without asking the code lane to do it - which is `S-5` and `S-6`
+and `S-9` all being requests that need not have been.
 
 ## Addressed to other perspectives
 
