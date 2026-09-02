@@ -136,8 +136,8 @@ cycle of what it makes.
 | **garrison**  | 1     |      |        |                 | 1 labor, 1 metal             | 1           | 1       |            |         |
 | **extractor** |       |      |        |                 | 1 labor, 1 metal             | 1           | 1       |            | yes     |
 | **yard**      |       |      |        |                 | 15 metal                     | 15          | 15      |            |         |
-| **ark**       | 2     | 2    | 1 fuel |                 | 12 metal, 12 energy          | 12          | 12      | a Yard     | yes     |
-| **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 8 metal, 6 energy, 1 citizen | 8           | 8       | a garrison | yes     |
+| **ark**       | 2     | 2    | 1 fuel |                 | 4 metal, 12 energy           | 4           | 4       | a Yard     | yes     |
+| **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 2 metal, 6 energy, 1 citizen | 2           | 2       | a garrison | yes     |
 
 A garrison's multiplier is 1. An Ark can invade land from orbit. Nothing outside this table
 readies.
@@ -157,6 +157,8 @@ among the results.
 |                     |        | out  | garrison                                   | 1                                         |          |
 |                     |        | out  | citizen                                    | 1                                         |          |
 |                     |        | out  | extractor, food                            | 1                                         |          |
+|                     |        | out  | extractor, metal                           | 1                                         |          |
+|                     |        | out  | extractor, energy                          | 1                                         |          |
 | **move**            | player | in   | unit, here, ready                          | 1                                         | at least |
 |                     |        | in   | energy, in that unit                       | 1                                         | at least |
 |                     |        | out  | unit, there, exhausted                     | 1                                         |          |
@@ -169,13 +171,13 @@ among the results.
 |                     |        | out  | extractor                                  | 1                                         |          |
 | **build yard**      | player | in   | metal                                      | 15                                        | at least |
 |                     |        | out  | yard                                       | 1                                         |          |
-| **produce pioneer** | player | in   | metal                                      | 8                                         | at least |
+| **produce pioneer** | player | in   | metal                                      | 2                                         | at least |
 |                     |        | in   | energy                                     | 6                                         | at least |
 |                     |        | in   | citizen                                    | 1                                         | at least |
 |                     |        | in   | garrison                                   | 1                                         | at least |
 |                     |        | out  | pioneer                                    | 1                                         |          |
 |                     |        | out  | garrison                                   | 1                                         |          |
-| **produce ark**     | player | in   | metal                                      | 12                                        | at least |
+| **produce ark**     | player | in   | metal                                      | 4                                         | at least |
 |                     |        | in   | energy                                     | 12                                        | at least |
 |                     |        | in   | yard                                       | 1                                         | at least |
 |                     |        | out  | ark                                        | 1                                         |          |

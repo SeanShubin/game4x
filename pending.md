@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-165** - Tune the Ark so that what goes in is what comes out · `docs/notes/proposals.md`
 - **P-167** - `build extractor` takes no metal and names no resource · `docs/notes/proposals.md`
 - **P-166** - `move` has no destination, and nothing sets `arriving` · `docs/notes/proposals.md`
 - **P-169** - `spoil` takes surplus food, and the order falls out · `docs/notes/proposals.md`

@@ -282,54 +282,6 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-165 - Tune the Ark so that what goes in is what comes out
-
-**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind**
-contradiction - **into** `releases/first-release.md` -> Units and structures, Recipes
-
-**An Ark holds 12 metal and deploys into a garrison and an extractor, which hold 1 each.** A Pioneer
-holds 8 and founds the same two. **Ten and six metal leave the game**, on the two recipes that open
-every game.
-
-**Sean asked whether the numbers can be tuned so that nothing is left over. One of the three ways is
-easy and the other two are not.**
-
-|                                     | What it needs                         | Cost                                                                                              |
-| ----------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| **Lower the Ark's binding**         | 12 becomes what it deploys into       | **easy** - three cells, and energy carries the price                                              |
-| Raise what the structures are worth | a garrison and an extractor at 6 each | an extractor costs six metal *every* time one is built, and territory 1 makes twelve metal a turn |
-| Deploy into more things             | twelve one-metal things               | territory 1 has room for nine extractors and one garrison. **Ten.** It does not reach twelve      |
-
-**The first is easy because only metal is conserved.** `spec/resources.md` makes energy neither
-conserved nor expiring, **so the price can move to energy and the metal has only to match what the
-thing becomes.** An Ark costs what it costs today; it just stops paying in the resource that has to
-balance.
-
-> *Units and structures*, four cells:
->
-> | Thing | Binding | Costs to produce |
-> | --- | --- | --- |
-> | **ark** | 4 | 4 metal, 12 energy |
-> | **pioneer** | 2 | 2 metal, 6 energy, 1 citizen |
-
-> `deploy ark` deploys what an Ark is worth: a garrison, a citizen, and **an extractor for each
-> resource** - three rather than one. `found by land` is unchanged: a garrison, a citizen and a food
-> extractor.
-
-**And that fixes something else that has been true since the tables existed.** `deploy ark` and
-`found by land` have **identical outputs**, and there has never been a reason for them to. An Ark
-arrives from off-world and brings a colony; a Pioneer walks over from the territory next door.
-**Making them differ is what lets the two figures differ**, and 4 against 2 is that difference
-written down.
-
-**A citizen costs no metal, so how many arrive is a free knob.** Nothing about conservation
-constrains it - **the deployment's citizen count can be tuned for the opening's labor** without
-touching the metal at all, which is the thing that was hard about the first turn on 2026-08-31.
-
-**The alternative, if the Ark's cost should stay at twelve**, is loose metal alongside the
-structures - Sean's own walkthrough, *deploy ark... output 2 civilian, 3 metal*. It conserves at any
-price and needs no tuning, and it was set aside for a reason about labor rather than metal.
-
 ### P-167 - `build extractor` takes no metal and names no resource
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
@@ -577,6 +529,7 @@ deterministic mechanic a player can change, and this is a competition nobody has
 | P-164, *Where things are* still describes bins, and is wrong about orbit too                                    | `releases/first-release.md` -> Where things are, Traits                                                                | 2026-09-01 |
 | P-154, control is derived from a citizen being there                                                            | `releases/first-release.md` -> Traits, Recipes                                                                         | 2026-09-01 |
 | P-170, a part is one metal arranged, and a thing binds its parts with more                                      | `spec/resources.md`, `releases/first-release.md` -> Units and structures, Traits                                       | 2026-09-01 |
+| P-165, tune the Ark so that what goes in is what comes out                                                      | `releases/first-release.md` -> Units and structures, Recipes                                                           | 2026-09-01 |
 
 ## Rejected
 
