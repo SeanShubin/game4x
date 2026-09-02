@@ -50,6 +50,32 @@ decision that has not been made yet. Two at the end are waiting on something and
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-8 - A `cited` list of more than one hash silently keeps the first
+
+**to** code - **status** open - **raised** 2026-09-01 - **source** `R-6` firing on every commit
+
+**`tools/outbox` cannot read the field it is written to read.** `considered` splits the `cited`
+value on `[',', ' ']`, so it is built for a list. **`field` hands it one word**, because it takes
+`after.split_whitespace().next()`. The space arm of that split can therefore never fire, and a list
+written the natural way - `` **cited** `faafb5f`, `2f38241` `` - keeps `faafb5f` and drops the rest
+without saying so.
+
+**That is why `R-6` fired on every commit for half a day.** This lane added `2f38241` on 2026-09-01,
+saw the warning again, and assumed the hash was wrong rather than unread. **Written without the
+space it works**, and `R-6` now reads `` `faafb5f`,`2f38241` `` - correct, and not a form anyone
+would choose.
+
+**The two halves each look right alone.** `field`'s doc comment explains stopping at whitespace so
+the separator between fields never matters, which is a good reason; `considered`'s split explains
+itself as a list. **Neither is wrong and together they lose data**, which is the shape
+[the note](checks-outlive-examples.md) is about, in code rather than in a check.
+
+**A second thing, and it is the one worth more.** You said it first: a signal that fires on every
+commit is one people learn to scroll past. **This lane scrolled past it about ten times today**,
+including on the commit that was supposed to fix it. The reconciliation was right every time and got
+quieter each time it repeated - so *the tool was working* and *the tool was not being read* were both
+true, which is the failure mode worth guarding, not the parse bug.
+
 ### S-7 - `P-143` adds four sections to the release for `prototypes/kinds` to render
 
 **to** code - **status** **acted** 2026-09-01 - **raised** 2026-09-01 - **source** a promotion - **cited** `5ebcbdf`, `49011cb`

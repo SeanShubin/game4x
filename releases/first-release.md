@@ -265,7 +265,7 @@ only one who can move them.
 
 ### R-6 - The loop can be played through
 
-**to** code · **status** open · **cited** `faafb5f`, `2f38241` · blocked by `C-7`, see `P-125` · **blocked by** `C-11`
+**to** code · **status** open · **cited** `faafb5f`,`2f38241` · blocked by `C-7`, see `P-125` · **blocked by** `C-11`
 
 - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
 - **Vetted when** - starting from a single Ark in orbit over the twelve designed territories, a
