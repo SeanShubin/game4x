@@ -299,8 +299,13 @@ fn considered(line: &str) -> Vec<String> {
 fn whole_field(line: &str, name: &str) -> Option<String> {
     let marker = format!("**{name}**");
     let after = line.split_once(&marker)?.1;
-    // A middle dot separates fields on the line; the last field runs to the end.
-    let value = after.split('\u{b7}').next()?.trim();
+    // **Ends at the next field, not at a separator.** It used to stop at a middle dot,
+    // which is what the outboxes here punctuate with - and the proposal queue punctuates
+    // with ` - `, so the value ran on into whatever followed. Harmless while nothing after
+    // it looked like a hash, and `**cited** `abc1234` - **source** `1234567abc`` returned
+    // both. A field line is a run of `**name** value` pairs, so the next `**` ends this one
+    // whatever sits between them.
+    let value = after.split("**").next()?.trim();
     (!value.is_empty()).then(|| value.to_string())
 }
 
@@ -1053,11 +1058,25 @@ One line of what it is.
             considered("**status** open · **cited** `a1b2c3d`, and see the note"),
             ["a1b2c3d"]
         );
-        // And a field after it is not swallowed, because the middle dot ends the value.
-        assert_eq!(
-            considered("**cited** `a1b2c3d` · **raised** 2026-09-01"),
-            ["a1b2c3d"]
-        );
+        // And a field after it is not swallowed, whatever separates the two.
+        //
+        // **The outboxes here punctuate with a middle dot and the proposal queue with
+        // ` - `**, and this used to stop at the dot - so against the queue's punctuation
+        // the value ran on into whatever came after it. Unnoticed because nothing
+        // following a `cited` field had looked like a hash yet.
+        for line in [
+            "**cited** `a1b2c3d` · **raised** 2026-09-01",
+            "**cited** `a1b2c3d` - **raised** 2026-09-01",
+            "**cited** `a1b2c3d` - **source** `1234567abc`",
+            "**cited** `a1b2c3d`, `e4f5a6b` - **source** `1234567abc`",
+        ] {
+            let read = considered(line);
+            assert!(
+                !read.contains(&"1234567abc".to_string()),
+                "`{line}` reached into the next field"
+            );
+            assert_eq!(read[0], "a1b2c3d", "`{line}`");
+        }
         assert!(considered("**to** spec · **status** open").is_empty());
     }
 
