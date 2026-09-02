@@ -1114,6 +1114,63 @@ Only prose.
         assert_eq!(items[1].proposed_text(), Err(NoText::None));
     }
 
+    /// The same, against the real queue rather than a fixture.
+    ///
+    /// **The fixture beside this was written from a description, because when it was built
+    /// the queue was empty and `**Basis**` had no instance anywhere.** That test says so and
+    /// says the first real proposal is what confirms it. Real proposals exist now, so this
+    /// reads them off disk - which is the difference between a test that checks this crate
+    /// against itself and one that checks it against something else.
+    ///
+    /// It asserts a shape rather than any particular proposal's words, because the queue is
+    /// emptied as Sean approves things and a test naming `P-183` would fail for the best
+    /// possible reason.
+    #[test]
+    fn every_real_proposal_offers_its_text_or_says_why_not() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let Ok(queue) = std::fs::read_to_string(root.join("docs/notes/proposals.md")) else {
+            return;
+        };
+        let proposals: Vec<Item> = parse(&queue, "docs/notes/proposals.md")
+            .into_iter()
+            .filter(|item| item.id.starts_with("P-") && item.is_open())
+            .collect();
+
+        for proposal in &proposals {
+            match proposal.proposed_text() {
+                Ok(text) => {
+                    assert!(!text.is_empty(), "{} proposes nothing", proposal.id);
+                    // The prose around a proposal is not the proposal.
+                    assert!(
+                        !text.contains("**Basis"),
+                        "{} swallowed its basis",
+                        proposal.id
+                    );
+                    assert!(!text.starts_with('>'), "{} kept its quoting", proposal.id);
+                }
+                Err(why) => panic!("{} has no readable text: {why}", proposal.id),
+            }
+        }
+
+        // A blank quoted line separates paragraphs and must not end the block. It is the
+        // shape every proposal of more than one paragraph takes, and the one thing the
+        // description would not have settled - so it is asserted where it occurs rather
+        // than assumed.
+        if let Some(several) = proposals
+            .iter()
+            .find(|proposal| proposal.body.contains("\n>\n") || proposal.body.contains("\r\n>\r\n"))
+        {
+            let text = several
+                .proposed_text()
+                .expect("a paragraph break is not an ending");
+            assert!(
+                text.contains("\n\n"),
+                "{} lost the break between its paragraphs",
+                several.id
+            );
+        }
+    }
+
     /// Two blockquotes are reported rather than picked between.
     ///
     /// A best effort here would hand `tools/spec` something to promote that Sean never
