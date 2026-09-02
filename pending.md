@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-175** - Nothing clears `arriving` · `docs/notes/proposals.md`
+- **P-175** - `arriving` earns nothing and should go · `docs/notes/proposals.md`
 - **P-178** - `surplus` is derived from a recipe that no longer exists · `docs/notes/proposals.md`
 
 ## What is outstanding

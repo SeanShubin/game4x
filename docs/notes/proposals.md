@@ -45,34 +45,41 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-175 - Nothing clears `arriving`
+### P-175 - `arriving` earns nothing and should go
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
-`releases/first-release.md` -> Recipes
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
+**into** `releases/first-release.md` -> Recipes, Traits
 
-**`Traits` says `arriving` is *stored, cleared at end turn*. Nothing clears it.** `ready` takes
-`thing, exhausted` and yields `thing, ready`, and says nothing about arriving. **A Pioneer that moved
-once is arriving for ever.**
+**Sean asked why we need it at all. We do not, and the argument is short enough to check.**
 
-> `ready` gains two rows:
->
-> | Recipe | Owner | Role | Thing | Qty | Bound |
-> | --- | --- | --- | --- | --- | --- |
-> | **ready** | world | in | thing, arriving | 1 | at least |
-> |  |  | out | thing, not arriving | 1 |  |
+`found by land` requires **a Pioneer** and **a garrison, at most 0**. The question is whether
+`arriving` ever excludes a case the garrison guard admits.
 
-**Basis: it is the other half of `P-166`, an hour later.** That proposal fixed `arriving` never being
-**set** - `move` now sets it, and a Pioneer can found a territory again. **It did not notice that
-nothing unset it**, because nothing had to until something set it.
+- **A Pioneer comes into existence only from `produce pioneer`**, which requires `garrison 1`. So
+  every Pioneer is born in a territory that has one
+- **The guard passes only where there is none.** So a Pioneer that satisfies the guard is not where
+  it was born
+- **The only way to be elsewhere is `move`**, which sets `arriving`
 
-**Whether it matters today is worth saying plainly: barely.** `found by land`'s other ingredient is
-*a garrison, at most 0*, so a permanently-arriving Pioneer still cannot found a second territory.
-**What is wrong is that the table says a thing about itself which is false** - and a trait declared
-*cleared at end turn* that is never cleared is the kind of thing a reader trusts and a check would
-catch.
+**So whenever the garrison guard passes, the Pioneer arrived by moving, and `arriving` is already
+true.** It never excludes anything.
 
-**And `ready` is the right home rather than a recipe of its own.** It is already the world's recipe
-for putting things back the way a turn starts, and `arriving` is exactly that.
+> `arriving` is deleted from *Traits*. `move`'s result reads `unit, in $to, exhausted`, and
+> `found by land`'s ingredient reads `pioneer`.
+
+**Basis: the thing it looks like it is doing belongs to a rule that is not implemented.** `arriving`
+reads as *found the turn you get there* - and the release already says that in prose: **a Pioneer
+that leaves a territory you control must found the one it enters, or it perishes.** **Nothing
+implements that line.** Clearing `arriving` would half-implement it, by forbidding a late founding
+without ever losing the Pioneer that waited.
+
+**So there are two questions and this proposal answers only the first.** Whether a Pioneer may found
+later is the perish rule's to decide, and that rule is prose with no recipe. **Deleting `arriving`
+does not decide it either way** - it removes a trait that was standing where the rule should be.
+
+**And it removes the release's only backwards-looking trait.** `ready`, `unpaid` and `surplus` are all
+facts about now, checkable from the state as it stands. **`arriving` is a fact about the previous
+step**, and it is the only one - which is why it was the only trait nothing knew how to clear.
 
 ### P-178 - `surplus` is derived from a recipe that no longer exists
 
