@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-166** - An ingredient may be named, and `move` names two territories · `docs/notes/proposals.md`
 - **P-171** - Three build recipes, one per resource, and the blank goes · `docs/notes/proposals.md`
 - **P-172** - A player can write one rule for many things, not one rule per thing · `docs/notes/proposals.md`
 - **P-168** - Nothing checks room at the moment a thing is created · `docs/notes/proposals.md`
@@ -33,8 +32,8 @@ Not a defect list. Several proposals in one section is what working on one topic
 like; what this cannot tell you is whether they all still hold together, which is the question
 it exists to ask.
 
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146

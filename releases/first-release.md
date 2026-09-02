@@ -150,6 +150,14 @@ ingredients, or read from a trait of the place named by the recipe's scope.
 An ingredient is consumed exactly when the same thing, with the same traits, does not appear
 among the results.
 
+An ingredient may be given a name, written `$name`, and another ingredient may refer to it. A
+recipe that names two things of the same kind must name them, because otherwise a reference has
+two candidates.
+
+An ingredient may be given a name, written `$name`, and another ingredient may refer to it. A
+recipe that names two things of the same kind must name them, because otherwise a reference has
+two candidates.
+
 | Recipe              | Owner  | Role | Thing                                      | Qty                                       | Bound    |
 | ------------------- | ------ | ---- | ------------------------------------------ | ----------------------------------------- | -------- |
 | **deploy ark**      | player | in   | ark, here                                  | 1                                         | at least |
@@ -159,9 +167,13 @@ among the results.
 |                     |        | out  | extractor, food                            | 1                                         |          |
 |                     |        | out  | extractor, metal                           | 1                                         |          |
 |                     |        | out  | extractor, energy                          | 1                                         |          |
-| **move**            | player | in   | unit, here, ready                          | 1                                         | at least |
+| **move**            | player | in   | `$from` territory                          | 1                                         | at least |
+|                     |        | out  | `$from` territory                          | 1                                         |          |
+|                     |        | in   | `$to` territory, next to `$from`           | 1                                         | at least |
+|                     |        | out  | `$to` territory                            | 1                                         |          |
+|                     |        | in   | unit, in `$from`, ready                    | 1                                         | at least |
+|                     |        | out  | unit, in `$to`, exhausted, arriving        | 1                                         |          |
 |                     |        | in   | energy, in that unit                       | 1                                         | at least |
-|                     |        | out  | unit, there, exhausted                     | 1                                         |          |
 | **found by land**   | player | in   | pioneer, arriving                          | 1                                         | at least |
 |                     |        | in   | garrison                                   | 0                                         | at most  |
 |                     |        | out  | garrison                                   | 1                                         |          |
