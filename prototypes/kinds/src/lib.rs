@@ -327,20 +327,29 @@ impl Noun {
 pub struct Qualifier {
     pub written: &'static str,
     pub comma: bool,
+    /// Which declared trait this is a value of, and `None` when the release declares none.
+    ///
+    /// **This is the join between the two halves of the specification.** The Traits table
+    /// says what a thing can be distinguished by; the recipes distinguish things. A
+    /// qualifier with no declared trait is a recipe asking a question the declaration
+    /// cannot answer, and `every_qualifier_names_a_declared_trait` reports them.
+    pub of_trait: Option<&'static str>,
 }
 
 impl Qualifier {
-    pub const fn after_comma(written: &'static str) -> Self {
+    pub const fn after_comma(written: &'static str, of_trait: Option<&'static str>) -> Self {
         Self {
             written,
             comma: true,
+            of_trait,
         }
     }
 
-    pub const fn as_phrase(written: &'static str) -> Self {
+    pub const fn as_phrase(written: &'static str, of_trait: Option<&'static str>) -> Self {
         Self {
             written,
             comma: false,
+            of_trait,
         }
     }
 }
@@ -507,20 +516,20 @@ use Kind::*;
 use Quantity::{Exactly, OfAnIngredient, OfThePlace};
 use Scope::{Every, Here};
 
-const IN_ORBIT: Qualifier = Qualifier::after_comma("in orbit");
-const HERE_AT: Qualifier = Qualifier::after_comma("here");
-const THERE: Qualifier = Qualifier::after_comma("there");
-const ARRIVING: Qualifier = Qualifier::after_comma("arriving");
-const IN_THAT_UNIT: Qualifier = Qualifier::after_comma("in that unit");
-const FOR_FOOD: Qualifier = Qualifier::after_comma("food");
-const READY: Qualifier = Qualifier::after_comma("ready");
-const EXHAUSTED: Qualifier = Qualifier::after_comma("exhausted");
-const SURPLUS: Qualifier = Qualifier::after_comma("surplus");
-const UNFED: Qualifier = Qualifier::after_comma("unfed");
-const WITH_UPKEEP: Qualifier = Qualifier::as_phrase("with upkeep");
-const UPKEEP_UNPAID: Qualifier = Qualifier::as_phrase("whose upkeep is unpaid");
-const BELOW_NATURE: Qualifier = Qualifier::after_comma("force below its force of nature");
-const UNCLAIMED: Qualifier = Qualifier::after_comma("unclaimed");
+const IN_ORBIT: Qualifier = Qualifier::after_comma("in orbit", Some("place"));
+const HERE_AT: Qualifier = Qualifier::after_comma("here", Some("place"));
+const THERE: Qualifier = Qualifier::after_comma("there", Some("place"));
+const ARRIVING: Qualifier = Qualifier::after_comma("arriving", Some("arriving"));
+const IN_THAT_UNIT: Qualifier = Qualifier::after_comma("in that unit", Some("place"));
+const FOR_FOOD: Qualifier = Qualifier::after_comma("food", Some("resource"));
+const READY: Qualifier = Qualifier::after_comma("ready", Some("readiness"));
+const EXHAUSTED: Qualifier = Qualifier::after_comma("exhausted", Some("readiness"));
+const SURPLUS: Qualifier = Qualifier::after_comma("surplus", Some("surplus"));
+const UNFED: Qualifier = Qualifier::after_comma("unfed", Some("unfed"));
+const WITH_UPKEEP: Qualifier = Qualifier::as_phrase("with upkeep", Some("upkeep"));
+const UPKEEP_UNPAID: Qualifier = Qualifier::as_phrase("whose upkeep is unpaid", None);
+const BELOW_NATURE: Qualifier = Qualifier::after_comma("force below its force of nature", None);
+const UNCLAIMED: Qualifier = Qualifier::after_comma("unclaimed", None);
 
 /// The eighteen recipes of `releases/first-release.md`.
 pub const RECIPES: &[Recipe] = &[

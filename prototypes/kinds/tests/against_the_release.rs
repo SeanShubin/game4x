@@ -227,3 +227,86 @@ fn only_revert_names_a_place_where_a_thing_goes() {
         .collect();
     assert_eq!(naming_a_place, ["revert"]);
 }
+
+/// The two halves of the specification, held against each other.
+///
+/// **This is the check neither lane had.** The Traits table says what a thing can be
+/// distinguished by; the recipes distinguish things. Nothing compared them, so a rewrite
+/// could take a trait out from under a recipe that still uses it - which is what happened:
+/// `P-143` declared a territory's traits, `P-148` rewrote that section around bins, and the
+/// territory's own traits went with the column that stopped existing. `revert` still asks
+/// whether a territory is claimed, and no declared trait says one can be.
+///
+/// Reported rather than asserted away. The list below is the release's, and shrinking it is
+/// the specification lane's work; what this test guarantees is that it cannot grow in
+/// silence.
+#[test]
+fn every_qualifier_names_a_declared_trait() {
+    let declared: Vec<&str> = kinds::TRAITS.iter().map(|row| row.name).collect();
+
+    let mut undeclared: Vec<&str> = kinds::RECIPES
+        .iter()
+        .flat_map(|recipe| recipe.ports.iter())
+        .filter_map(|port| port.subject().qualified_by)
+        .filter(|qualifier| qualifier.of_trait.is_none())
+        .map(|qualifier| qualifier.written)
+        .collect();
+    undeclared.sort_unstable();
+    undeclared.dedup();
+
+    // Every qualifier that does name a trait names one the release declares.
+    for recipe in kinds::RECIPES {
+        for port in recipe.ports {
+            if let Some(qualifier) = port.subject().qualified_by
+                && let Some(named) = qualifier.of_trait
+            {
+                assert!(
+                    declared.contains(&named),
+                    "{} distinguishes by `{}`, which the Traits table does not declare",
+                    recipe.name,
+                    named
+                );
+            }
+        }
+    }
+
+    assert_eq!(
+        undeclared,
+        [
+            "force below its force of nature",
+            "unclaimed",
+            "whose upkeep is unpaid",
+        ],
+        "the qualifiers no declared trait accounts for. P-152 is about the first two - a \
+         territory's control and its force of nature are traits the release uses and does \
+         not declare. If this list has shrunk, the release answered one; if it has grown, a \
+         recipe started asking something nothing can answer."
+    );
+}
+
+/// Every noun a recipe names is a declared kind, a declared family, or the place itself.
+#[test]
+fn every_noun_is_declared_or_is_a_place() {
+    use kinds::Noun;
+
+    for recipe in kinds::RECIPES {
+        for port in recipe.ports {
+            match port.subject().noun {
+                Noun::Of(kind) => assert!(
+                    kinds::KINDS.contains(&kind),
+                    "{} names {}, which is not one of the ten",
+                    recipe.name,
+                    kind.name()
+                ),
+                Noun::Any(family) => assert!(
+                    kinds::FAMILIES.contains(&family),
+                    "{} names the family {}, which is not declared",
+                    recipe.name,
+                    family.name()
+                ),
+                // `revert` names a territory, which is a bin rather than a thing in one.
+                Noun::Territory => assert_eq!(recipe.name, "revert"),
+            }
+        }
+    }
+}
