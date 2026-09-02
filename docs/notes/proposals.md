@@ -388,9 +388,11 @@ against the before-and-after pages rather than in the abstract.
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
 `spec/turn.md` -> Order of operations, **or** `releases/first-release.md` -> Recipes
 
-**Six recipes create things and not one asks whether there is room.** `deploy ark`, `found by land`,
-`build extractor`, `build yard`, `produce pioneer`, `produce ark` and `grow` all add to a territory,
-and `P-156` gave every kind a maximum.
+**Twelve recipes of seventeen produce something that was not among their inputs, and not one asks
+whether there is room.** Counted rather than eyed: `build extractor`, `build yard`, `deploy ark`,
+`found by land`, `grow`, `move`, `perish`, `produce ark`, `produce pioneer`, `ready`,
+`spend readiness` and `work`. **Four of those are state changes** - a moved unit, a readied thing, an
+exhausted citizen, an exhausted extractor - **and they occupy room too**, so the count is not eight.
 
 **`spec/turn.md` already says what happens: *what a territory can keep is bounded. Anything above the
 bound is lost when the turn ends.*** So the bound is enforced **at the end of the turn and never at
@@ -399,6 +401,9 @@ the moment of creation** - which may be exactly right.
 **What is not stated is what that means when it bites.** Room for yards is 1. **A player may build a
 second Yard, and at the end of the turn one of them is lost** - and nothing says which, or whether
 the metal comes back, or whether the player is told before spending it.
+
+**Re-checked 2026-09-01 against the release as it now stands**, which is where the twelve came
+from - an earlier draft said six and named seven.
 
 **This is the one question the seventeen pages raise that none of them contains**, which is why it is
 filed separately rather than against any recipe. **It is also the first place a rule needs a
