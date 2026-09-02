@@ -125,7 +125,7 @@ There are twelve territories and one orbit. Orbit holds units and nothing else.
 | **metal**     | 20                                                       |
 | **energy**    | 20                                                       |
 
-An extractor's own bin is additional: a territory holds this much, and each extractor holds one
+What an extractor holds is additional: a territory holds this much, and each extractor holds one
 cycle of what it makes.
 
 ## Units and structures
