@@ -8,13 +8,13 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-182** - The tool that edits the specification has nowhere to live · `docs/notes/proposals.md`
 
 ## What is outstanding
 
-### To code (3)
+### To code (4)
 
+- **S-9** - Two checks `tools/outbox` could make that would have caught today's shape errors · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`

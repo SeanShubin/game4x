@@ -36,3 +36,4 @@ disagree, the spec is right and the note needs a superseded marker.
 | [Comparing region schemes](region-schemes.md)                                | Every known way to divide a sphere into hex-like regions, measured against each other            | 2026-08-24 |
 - [Checks outlive examples](checks-outlive-examples.md) - why three findings in one day all looked green
 - [One tree](one-tree.md) - what has to change for a territory to stop being privileged
+- [How this lane fails](how-this-lane-fails.md) - the defects of 2026-09-01, by cause

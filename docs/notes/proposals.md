@@ -45,10 +45,66 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-182 - The tool that edits the specification has nowhere to live
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** governance - **into** `CLAUDE.md` ->
+Perspectives, the Specification row
+
+**Every edit to `spec/` and `releases/` today was made by a script in a scratchpad directory.** It
+locates proposals, extracts approved text, checks it landed, and commits. **It is not in the
+repository**: not versioned, not reviewable, and gone when the session ends.
+
+**Two of today's defects were in it** - a cell written into the wrong column, and a paragraph
+duplicated by an insert that ran twice - and **neither could have been caught by a review**, because
+there is nothing to review. Both are now guarded, and the guards are equally invisible.
+
+> `CLAUDE.md` -> Perspectives, the Specification row's *Writes* cell gains `tools/spec-edit/`:
+>
+> `spec/`, `releases/`, `docs/`, `README.md`, `tools/spec-edit/`, this file
+
+**Basis: the columns have a hole rather than an oversight.** `tools/` is the code lane's, and this is
+a tool the specification lane uses on its own files. **Neither lane can own it under the rules as
+written** - the code lane may not have the specification's editing depend on it, and this lane may
+not write in `tools/`.
+
+**One subdirectory rather than the whole of `tools/`**, so the code lane keeps everything it has and
+gains a neighbour. **`tools/outbox` and `tools/pad-tables` are theirs and stay theirs.**
+
+**What it buys is that the thing making every specification edit becomes reviewable.** The quality
+lens reads everything and could not read this; a defect in it corrupts `releases/first-release.md`
+silently, which is exactly what happened twice today.
+
+**The alternative is that it stays a scratchpad file**, which is defensible - it is a session
+convenience rather than part of the product. **Then today's two defects are the expected rate**, and
+the lane should say so rather than discover it again.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
+
+### S-9 - Two checks `tools/outbox` could make that would have caught today's shape errors
+
+**to** code - **status** open - **raised** 2026-09-01 - **source** a day of twenty-eight promotions
+
+**Not defects in your code - two checks it is the natural home for**, and both catch a thing this
+lane did more than once today. Take them or decline them; the reasoning is in
+[how this lane fails](how-this-lane-fails.md).
+
+**An open proposal must carry proposed text.** `tools/outbox` already parses every item's fields.
+**Three times today a proposal was filed as a finding with options and no `>` block**, Sean said
+*promote*, and there was nothing to copy. The check is one line - an item addressed `to sean` with
+status `open` has at least one blockquote - and it fires before he reads rather than after.
+
+**A `cited` hash must resolve.** `S-8` was a hash the parser could not read; the reconciliation said
+`R-6` was open for half a day and this lane read it as *the hash is wrong* without checking.
+**A cited hash that names no commit should fail rather than be ignored**, which would have said which
+of the two was true.
+
+**One thing that is a defect and is this lane's**, recorded so you know why the release keeps moving
+under you: `edit.py`, which makes every specification edit, lives in a scratchpad and is not in the
+repository. `P-182` asks Sean whether it should be. **If he says yes it lands in `tools/spec-edit/`,
+which is next door to yours**, and you would be entitled to an opinion on it.
 
 ### S-8 - A `cited` list of more than one hash silently keeps the first
 
