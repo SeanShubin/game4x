@@ -72,6 +72,42 @@ about garrisons rather than about traits, which makes it Sean's.
 **Not urgent and not new.** The gap has been in the release since the recipes existed; declaring
 `control` is what made it visible, which is `P-143`'s argument working rather than failing.
 
+### P-155 - Either using a thing exhausts it, or `work` and `move` are unbounded
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
+`spec/turn.md` -> Order of operations, **or** `releases/first-release.md` -> Recipes
+
+**`spec/turn.md` says *using it exhausts it*. Four recipes act on things that ready, and only one
+says so.**
+
+| Recipe              | Acts on                      | Names readiness                               |
+| ------------------- | ---------------------------- | --------------------------------------------- |
+| **spend readiness** | a citizen                    | `citizen, ready` in, `citizen, exhausted` out |
+| **work**            | an extractor, not consumed   | **no**                                        |
+| **move**            | a unit                       | **no**                                        |
+| **produce ark**     | a yard, which does not ready | not applicable                                |
+
+**The two readings cannot both be right.**
+
+- **The rule is general**, the engine exhausts whatever a recipe used, and `spend readiness` is
+  saying something the engine already does. Then that recipe's two readiness qualifiers are
+  redundant, and **the only recipe that mentions readiness is the one that needs it least**
+- **The rule is per recipe**, and a recipe that does not name readiness does not spend it. Then
+  `work` may fire as many times as there is labor - **four labor and one extractor yields four times
+  the density** - and `move` may cross a unit as far as its fuel allows in one turn
+
+**The second contradicts `spec/structures.md`**, which says an extractor *once per turn* may take a
+unit of labor and produce the territory's density. **So the general reading is probably Sean's**, and
+this proposal does not assume it, because the fix differs: the general reading deletes two qualifiers
+from `spend readiness`, and the per-recipe reading adds four to `work` and `move`.
+
+**It blocks the per-recipe before-and-after that Sean asked for**, which is why it is filed now rather
+than noticed later. **`work`'s after-state cannot be drawn without it** - the extractor is either
+exhausted or unchanged, and the whole point of the exercise is that a reader can see which.
+
+**Found by walking one recipe by hand.** Eighteen have not been walked, and the exercise exists
+because walking them finds this.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
