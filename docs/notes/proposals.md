@@ -42,6 +42,9 @@ Two limits Claude holds itself to:
 
 ## Open
 
+**In review order.** Each depends only on what is above it, so reading top to bottom never needs a
+decision that has not been made yet. Two at the end are waiting on something and say so.
+
 ### P-147 - Every cycle among recipes must spend readiness
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** recovered - **into**
@@ -78,72 +81,6 @@ getting labor out of a citizen exhausts the citizen and only the turn boundary m
 here and both were wrong - the bin's, then the moved thing's - and a third is in
 [the backlog](spec-backlog.md). **That is design and this is an invariant**, and putting the two in
 one item is what let a wrong answer ride along with a right one twice.
-
-### P-141 - A unit carries fuel, not cells
-
-**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into** `spec/units.md`,
-**and** `releases/first-release.md` -> Units and structures, Recipes
-
-**Sean's, decided 2026-08-31**: *perhaps we can replace cell with fuel capacity. So units have a gas
-tank, they burn a unit of fuel every time they move.*
-
-> `spec/units.md`, the two lines about cells become:
->
-> - A mobile unit holds fuel, up to a capacity of its own. Moving burns a unit of it, and a unit with
->   none cannot move
-> - Fuel moves freely between a controlled territory that has it and anything there that can
->   hold it
-
-> `releases/first-release.md` -> Units and structures: the **Cells** column becomes **Fuel**, and the
-> **A move** column reads `1 fuel` for the Ark and the Pioneer.
-
-> `releases/first-release.md` -> Recipes: the two `cell, on that unit` ingredients become
-> `energy, in that unit`.
-
-**Stale in part, 2026-09-01.** Two lines have been overtaken by the containment model and neither
-is wrong so much as narrow. *Up to a capacity of its own* assumes one capacity, and a metal transport
-now carries an energy bin and an ore bin. And *fuel moves freely* is a special case: **anything moves
-freely between bins in a controlled territory**, so stating it of fuel alone would put a rule in the
-specification that is true of everything and written about one thing.
-
-**Basis:** it removes a kind rather than adding one, and **the specification already said so**.
-`spec/units.md`: *a unit's cells are filled when it is built, and **the energy** is paid in the
-territory that built it.* **A cell was always energy in a wrapper** - the wrapper had a name, a
-column and two recipe ports, and no rule of its own.
-
-**So the kinds table has twelve rows and not thirteen**, which was the question blocking everything
-else in [the data inventory](first-release-data.md). `cell` was the doubtful kind, and the answer is
-that it is not one.
-
-**And it makes a unit a container, which `P-129` already describes.** *A container occupies capacity
-of its own kind and provides capacity of another.* **A fuel capacity is exactly that** - a unit takes
-up room in a territory and provides room for fuel inside itself. So *gas tank* is not a new mechanic;
-it is the capacity rule applied to something that was already carrying energy around.
-
-**Amended 2026-08-31, one word, before Sean approves.** The ingredient was written `fuel, in that
-unit` and is now `energy, in that unit`. **`fuel` as an ingredient name would put the wrapper back**,
-which is the whole thing this proposal removes: there would again be a name in the recipes that is
-not a kind. The **Fuel** column stays, because there it names a *capacity* - how much energy the unit
-can hold - and a capacity is a trait rather than a kind.
-
-**Amended again 2026-08-31, and this one is a rule rather than a word.** Sean: *fuel should be freely
-transferable between a controlled territory that has it and a thing that can hold it.* The line that
-said a unit's fuel is put in when it is built was **too narrow, not wrong** - fuelling at build time
-is one case of the general rule, so the general rule replaces it rather than joining it.
-
-**Free means no labor and no limit but capacity**, and one move a turn is what bounds it: a unit that
-moves is exhausted, so nothing can shuttle. **It also raises the stakes on upkeep.** Loading a
-transport costs nothing, so a vehicle parked in a controlled territory is storage with no friction at
-all - and upkeep is then the only thing making that a choice rather than a free win.
-
-**And it makes a territory's containers one pool for reach and many for the bound.** Within a
-controlled territory a player never has to say which bin holds what, because it can always be moved
-for nothing; the container boundaries decide **how much** can be kept and nothing else.
-
-**One thing left as it is, deliberately.** *Fuel* rather than *energy* in the unit's column, because
-Sean said fuel and the word does work: energy in a store and energy in a tank behave differently -
-one can be spent on anything and one only on moving. **They are the same resource and the distinction
-is where it sits**, which is what a container is for.
 
 ### P-142 - A quantity is a number
 
@@ -201,121 +138,6 @@ one food. Written as a lookup it is right for every unit.
 **Which makes the lookup general rather than a special case for density.** `prototypes/kinds` types it
 as `Exactly | Density | Any`; **`Any` goes away with this proposal, `Density` becomes a trait lookup,
 and the type is two cases rather than three** - a literal, and a trait of a named ingredient.
-
-### P-143 - The release does not declare its own vocabulary
-
-**to** sean - **status** open - **raised** 2026-08-31 - **kind** gap - **into**
-`releases/first-release.md`, four new sections before *Units and structures*
-
-**Sean's, decided 2026-08-31**, answering three questions this was waiting on: **labor represents a
-citizen operating a machine**; a **territory is a place that carries traits** rather than a thing;
-and an ingredient refers to the other ingredients of the same recipe **by convention**, with no
-names.
-
-**The recipes reference eleven kinds and the release declares six.** *Units and structures* is named
-correctly and contains exactly what it says; the gap is that nothing else is written down anywhere,
-so an editor loading this release finds no row for `metal`.
-
-> `## Kinds`
->
-> | Kind | What it is |
-> | --- | --- |
-> | **citizen** | a person: provides labor, eats, and grows on surplus |
-> | **garrison** | what holds a territory; a territory has at most one |
-> | **extractor** | built on a node, so that a citizen can work it |
-> | **yard** | where an Ark is produced |
-> | **ark** | carries a landing, and can invade from orbit |
-> | **pioneer** | founds a territory |
-> | **node** | where a resource comes from; its density is what one turn's work yields |
-> | **food** | eaten by citizens; expires |
-> | **metal** | what things are built from; conserved |
-> | **energy** | what moves things; neither conserved nor expiring |
-> | **labor** | a citizen operating a machine |
-
-> `## Families`
->
-> | Family | Members |
-> | --- | --- |
-> | **thing** | every kind above |
-> | **unit** | ark, pioneer |
-> | **resource** | food, metal, energy |
-
-> `## Places`
->
-> A thing is always in a place, and a place may carry traits of its own.
->
-> | Place | How many | Traits it carries |
-> | --- | --- | --- |
-> | **a territory** | 12 | biome, force of nature, its nodes, which territories adjoin it |
-> | **orbit** | 1 | none |
-> | **a container** | any unit | what kind it holds, and how much - here, energy as fuel |
-
-> `## Traits`
->
-> | Trait | Of | Values | Stored or derived |
-> | --- | --- | --- | --- |
-> | **kind** | every thing | one of the eleven | stored |
-> | **place** | every thing | a territory, orbit, or a unit | stored |
-> | **readiness** | whatever readies | ready, exhausted | stored |
-> | **force** | citizen, garrison, ark, pioneer | a number | stored |
-> | **fuel** | a unit | a number: how much energy it holds | stored |
-> | **upkeep** | a unit | food per turn | stored |
-> | **resource** | node, extractor | food, metal or energy | stored |
-> | **density** | a node | a number | stored |
-> | **arriving** | a pioneer | yes or no | stored, cleared at end turn |
-> | **worked** | a node | yes or no | derived: an extractor is on it |
-> | **surplus** | food | yes or no | derived: left after everything ate |
-> | **unfed** | a citizen | yes or no | derived: it did not eat |
-
-**Stale 2026-09-01, and not yet rewritten.** Five decisions taken the next day change three of the
-four tables above, and this proposal should not be promoted as it stands:
-
-- **A node stops being a kind.** Density and extractor capacity become traits of the *territory*, so
-  `node` leaves *Kinds*, `density` moves to *Places*, and the derived trait `worked` has nothing left
-  to derive from. `build extractor`'s `node, unworked` ingredient goes with it
-- **`bin` and `transport` join** *Kinds*, and both carry the `resource` trait that `extractor`
-  already has
-- **A container provides more than one capacity**, since a metal transport carries a fuel bin and an
-  ore bin. `spec/logistics.md` currently says a container provides capacity *of another* kind,
-  singular
-
-- **A bin and a capacity are the same thing**, so *Places* and *Traits* change again: a place holds
-  bins, a bin holds one kind or one family up to a maximum, and `spec/logistics.md`'s capacity
-  section becomes a consequence rather than a rule. *A container - any unit* is too narrow twice over
-- **The no-nesting line has to become acyclicity.** A territory holds a bin of extractors and an
-  extractor holds a bin of metal, so bins nest, and *no kind nested inside itself at any depth*
-  forbids what the model now requires
-
-**Left open rather than rewritten**, because the design is still moving and a table rewritten twice
-costs a reading each time. The count in the title - eleven kinds - is already wrong; it is twelve.
-
-**Basis:** none of this is a new rule. Every kind, family and trait above is already referenced by a
-recipe, a column or a promoted line, and the only act is writing them where the data can be loaded.
-Two things in it are nonetheless **Claude's naming rather than Sean's**, and should be read as such:
-the *What it is* column, and the trait names `readiness`, `arriving`, `worked`, `surplus` and
-`unfed`, which the tables use as bare adjectives and never name.
-
-**Sean's definition of labor holds in one of its two uses, and the conflict should be settled before
-this lands.** `work` takes labor and an extractor, which is a citizen operating a machine exactly.
-**`build extractor` takes labor and there is no machine** - the machine is what it produces. Two ways
-out, and this lane has no view on which:
-
-- **The definition says what labor is for, and is not a precondition.** Building is a citizen's
-  effort too, so the sentence describes the usual case rather than a rule the engine checks
-- **Building an extractor should not take labor.** It would take a citizen directly, and labor would
-  be reserved for what a machine multiplies - which is also the only place `density` appears
-
-**Why `fuel` is a container and not a kind.** Sean chose places-that-carry-traits, and `P-129` says a
-container occupies capacity of its own kind and provides capacity of another. A unit holding energy
-is both, so *inside a unit* is a place and **`fuel` is the size of it** - which is why the third row
-of *Places* is there and there is no `fuel` row in *Kinds*.
-
-**The convention, written once so that it is not inferred six times.** *An ingredient refers to the
-other ingredients of the same recipe.* It resolves all six references because **no recipe in this
-release names two units or two nodes**, so there is never a second candidate. It breaks the day one
-does - combat, or a transfer between two units - and the fix then is the predecessor's `$name`
-aliases from `language/Expressions.kt`. **Not adopting them now is a bet that first release ships
-first**, and it is worth writing down as a bet rather than meeting it later as a surprise.
 
 ### P-146 - What a thing is made of, which `P-145` needs and `P-144` was carrying
 
@@ -554,6 +376,191 @@ Each capability in `releases/first-release.md` now carries an id, `R-1` to `R-6`
 code` field line every outbox item carries. The tool does not look in `releases/`, so all six are
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
+
+### P-141 - A unit carries fuel, not cells
+
+**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into** `spec/units.md`,
+**and** `releases/first-release.md` -> Units and structures, Recipes
+
+**Sean's, decided 2026-08-31**: *perhaps we can replace cell with fuel capacity. So units have a gas
+tank, they burn a unit of fuel every time they move.*
+
+> `spec/units.md`, the two lines about cells become:
+>
+> - A mobile unit has a bin for fuel. Moving burns a unit of it, and a unit with none cannot move
+> - Fuel moves freely between a controlled territory that has it and anything there that can
+>   hold it
+
+> `releases/first-release.md` -> Units and structures: the **Cells** column becomes **Fuel**, and the
+> **A move** column reads `1 fuel` for the Ark and the Pioneer.
+
+> `releases/first-release.md` -> Recipes: the two `cell, on that unit` ingredients become
+> `energy, in that unit`.
+
+**Rewritten in one line, 2026-09-01, after `P-148` was promoted.** *A mobile unit holds fuel, up to a
+capacity of its own* **contradicted a promoted rule** rather than merely reading narrowly:
+`spec/logistics.md` now says a thing is in a bin and **nothing else in the game holds anything**, so
+a unit does not hold fuel - a bin in it does. It now reads *a mobile unit has a bin for fuel*, which
+is shorter and says more.
+
+**One line is still narrower than the truth and is left alone deliberately.** *Fuel moves freely*
+is a special case of **anything moving freely between bins in a controlled territory**, and that
+general rule is not proposed anywhere yet. Promoting the narrow version is safe - it is true - and
+the general one should replace it rather than be smuggled in here.
+
+**Basis:** it removes a kind rather than adding one, and **the specification already said so**.
+`spec/units.md`: *a unit's cells are filled when it is built, and **the energy** is paid in the
+territory that built it.* **A cell was always energy in a wrapper** - the wrapper had a name, a
+column and two recipe ports, and no rule of its own.
+
+**So the kinds table has twelve rows and not thirteen**, which was the question blocking everything
+else in [the data inventory](first-release-data.md). `cell` was the doubtful kind, and the answer is
+that it is not one.
+
+**And it makes a unit a container, which `P-129` already describes.** *A container occupies capacity
+of its own kind and provides capacity of another.* **A fuel capacity is exactly that** - a unit takes
+up room in a territory and provides room for fuel inside itself. So *gas tank* is not a new mechanic;
+it is the capacity rule applied to something that was already carrying energy around.
+
+**Amended 2026-08-31, one word, before Sean approves.** The ingredient was written `fuel, in that
+unit` and is now `energy, in that unit`. **`fuel` as an ingredient name would put the wrapper back**,
+which is the whole thing this proposal removes: there would again be a name in the recipes that is
+not a kind. The **Fuel** column stays, because there it names a *capacity* - how much energy the unit
+can hold - and a capacity is a trait rather than a kind.
+
+**Amended again 2026-08-31, and this one is a rule rather than a word.** Sean: *fuel should be freely
+transferable between a controlled territory that has it and a thing that can hold it.* The line that
+said a unit's fuel is put in when it is built was **too narrow, not wrong** - fuelling at build time
+is one case of the general rule, so the general rule replaces it rather than joining it.
+
+**Free means no labor and no limit but capacity**, and one move a turn is what bounds it: a unit that
+moves is exhausted, so nothing can shuttle. **It also raises the stakes on upkeep.** Loading a
+transport costs nothing, so a vehicle parked in a controlled territory is storage with no friction at
+all - and upkeep is then the only thing making that a choice rather than a free win.
+
+**And it makes a territory's containers one pool for reach and many for the bound.** Within a
+controlled territory a player never has to say which bin holds what, because it can always be moved
+for nothing; the container boundaries decide **how much** can be kept and nothing else.
+
+**One thing left as it is, deliberately.** *Fuel* rather than *energy* in the unit's column, because
+Sean said fuel and the word does work: energy in a store and energy in a tank behave differently -
+one can be spent on anything and one only on moving. **They are the same resource and the distinction
+is where it sits**, which is what a container is for.
+
+### P-143 - The release does not declare its own vocabulary
+
+**to** sean - **status** open - **raised** 2026-08-31 - **kind** gap - **into**
+`releases/first-release.md`, four new sections before *Units and structures*
+
+**Sean's, decided 2026-08-31**, answering three questions this was waiting on: **labor represents a
+citizen operating a machine**; a **territory is a place that carries traits** rather than a thing;
+and an ingredient refers to the other ingredients of the same recipe **by convention**, with no
+names.
+
+**The recipes reference eleven kinds and the release declares six.** *Units and structures* is named
+correctly and contains exactly what it says; the gap is that nothing else is written down anywhere,
+so an editor loading this release finds no row for `metal`.
+
+> `## Kinds`
+>
+> | Kind | What it is |
+> | --- | --- |
+> | **citizen** | a person: provides labor, eats, and grows on surplus |
+> | **garrison** | what holds a territory; a territory has at most one |
+> | **extractor** | built on a node, so that a citizen can work it |
+> | **yard** | where an Ark is produced |
+> | **ark** | carries a landing, and can invade from orbit |
+> | **pioneer** | founds a territory |
+> | **node** | where a resource comes from; its density is what one turn's work yields |
+> | **food** | eaten by citizens; expires |
+> | **metal** | what things are built from; conserved |
+> | **energy** | what moves things; neither conserved nor expiring |
+> | **labor** | a citizen operating a machine |
+
+> `## Families`
+>
+> | Family | Members |
+> | --- | --- |
+> | **thing** | every kind above |
+> | **unit** | ark, pioneer |
+> | **resource** | food, metal, energy |
+
+> `## Places`
+>
+> A thing is always in a place, and a place may carry traits of its own.
+>
+> | Place | How many | Traits it carries |
+> | --- | --- | --- |
+> | **a territory** | 12 | biome, force of nature, its nodes, which territories adjoin it |
+> | **orbit** | 1 | none |
+> | **a container** | any unit | what kind it holds, and how much - here, energy as fuel |
+
+> `## Traits`
+>
+> | Trait | Of | Values | Stored or derived |
+> | --- | --- | --- | --- |
+> | **kind** | every thing | one of the eleven | stored |
+> | **place** | every thing | a territory, orbit, or a unit | stored |
+> | **readiness** | whatever readies | ready, exhausted | stored |
+> | **force** | citizen, garrison, ark, pioneer | a number | stored |
+> | **fuel** | a unit | a number: how much energy it holds | stored |
+> | **upkeep** | a unit | food per turn | stored |
+> | **resource** | node, extractor | food, metal or energy | stored |
+> | **density** | a node | a number | stored |
+> | **arriving** | a pioneer | yes or no | stored, cleared at end turn |
+> | **worked** | a node | yes or no | derived: an extractor is on it |
+> | **surplus** | food | yes or no | derived: left after everything ate |
+> | **unfed** | a citizen | yes or no | derived: it did not eat |
+
+**Stale 2026-09-01, and not yet rewritten.** Five decisions taken the next day change three of the
+four tables above, and this proposal should not be promoted as it stands:
+
+- **A node stops being a kind.** Density and extractor capacity become traits of the *territory*, so
+  `node` leaves *Kinds*, `density` moves to *Places*, and the derived trait `worked` has nothing left
+  to derive from. `build extractor`'s `node, unworked` ingredient goes with it
+- **`bin` and `transport` join** *Kinds*, and both carry the `resource` trait that `extractor`
+  already has
+- **A container provides more than one capacity**, since a metal transport carries a fuel bin and an
+  ore bin. `spec/logistics.md` currently says a container provides capacity *of another* kind,
+  singular
+
+- **A bin and a capacity are the same thing**, so *Places* and *Traits* change again: a place holds
+  bins, a bin holds one kind or one family up to a maximum, and `spec/logistics.md`'s capacity
+  section becomes a consequence rather than a rule. *A container - any unit* is too narrow twice over
+- **The no-nesting line has to become acyclicity.** A territory holds a bin of extractors and an
+  extractor holds a bin of metal, so bins nest, and *no kind nested inside itself at any depth*
+  forbids what the model now requires
+
+**Left open rather than rewritten**, because the design is still moving and a table rewritten twice
+costs a reading each time. The count in the title - eleven kinds - is already wrong; it is twelve.
+
+**Basis:** none of this is a new rule. Every kind, family and trait above is already referenced by a
+recipe, a column or a promoted line, and the only act is writing them where the data can be loaded.
+Two things in it are nonetheless **Claude's naming rather than Sean's**, and should be read as such:
+the *What it is* column, and the trait names `readiness`, `arriving`, `worked`, `surplus` and
+`unfed`, which the tables use as bare adjectives and never name.
+
+**Sean's definition of labor holds in one of its two uses, and the conflict should be settled before
+this lands.** `work` takes labor and an extractor, which is a citizen operating a machine exactly.
+**`build extractor` takes labor and there is no machine** - the machine is what it produces. Two ways
+out, and this lane has no view on which:
+
+- **The definition says what labor is for, and is not a precondition.** Building is a citizen's
+  effort too, so the sentence describes the usual case rather than a rule the engine checks
+- **Building an extractor should not take labor.** It would take a citizen directly, and labor would
+  be reserved for what a machine multiplies - which is also the only place `density` appears
+
+**Why `fuel` is a container and not a kind.** Sean chose places-that-carry-traits, and `P-129` says a
+container occupies capacity of its own kind and provides capacity of another. A unit holding energy
+is both, so *inside a unit* is a place and **`fuel` is the size of it** - which is why the third row
+of *Places* is there and there is no `fuel` row in *Kinds*.
+
+**The convention, written once so that it is not inferred six times.** *An ingredient refers to the
+other ingredients of the same recipe.* It resolves all six references because **no recipe in this
+release names two units or two nodes**, so there is never a second candidate. It breaks the day one
+does - combat, or a transfer between two units - and the fix then is the predecessor's `$name`
+aliases from `language/Expressions.kt`. **Not adopting them now is a bet that first release ships
+first**, and it is worth writing down as a bet rather than meeting it later as a surprise.
 
 ## Accepted
 
