@@ -1103,3 +1103,50 @@ either `work` and `move` gain the qualifiers, or `spend readiness` is rewritten 
 **And the symmetry argues for the explicit idiom.** `consumed` is already a column - the recipes
 express *this input is used up* as data rather than as engine behaviour. **Readiness is the same kind
 of fact**, so expressing it as data is consistent and expressing it as a rule is the odd one out.
+
+### Said 2026-09-01: one tree, and `consumed` derived rather than declared
+
+Sean: *everything in the game should be composable in a giant tree. Things can be composed of things
+that are composed of other things and so on... avoid special cases of rules by applying the same
+rules at different levels.* And: *consumed can be implied by not showing up on both sides of the
+recipe.*
+
+**The derivation was measured against all eighteen rather than argued.** Of thirty ingredients,
+**twenty-four already agree** with *consumed means it is not echoed on the output side*, and six do
+not - and the six are three different problems, not one:
+
+| Recipe            | Ingredient                                 | Why it disagrees                                                                                  |
+| ----------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| `work`            | extractor                                  | **readiness.** Written explicitly - `extractor, ready` in, `extractor, exhausted` out - it agrees |
+| `produce pioneer` | garrison                                   | genuinely unchanged and **not echoed**. Wants `out garrison 1`                                    |
+| `produce ark`     | yard                                       | the same                                                                                          |
+| `eat`             | citizen                                    | the same                                                                                          |
+| `upkeep`          | unit with upkeep                           | the same                                                                                          |
+| `revert`          | territory, force below its force of nature | **not an ingredient at all** - see below                                                          |
+
+**So the rule holds once two things are true**: identity includes traits, so `unit, here` consumed
+and `unit, there` created is a move rather than a contradiction; and every surviving input is echoed.
+**The cost is four extra rows and the gain is a column that cannot disagree with the rows it
+summarises.**
+
+**Sean's jungle case is not an ingredient, and that is the interesting part.** *Something that can
+only be built in the jungle* would, as an ingredient, put a territory on both sides - and a territory
+is not a thing. It is a **place**, which `P-143` and `P-148` settled. **The condition belongs in the
+Scope column**, which already says `here` and `every`, and could say *here, jungle*.
+
+**`P-151` took the first half of that step a day earlier**: a quantity may read a trait of the place
+named by the recipe's scope. **A condition on that place is the same move**, and it also disposes of
+`revert`'s ingredient, which is a place condition wearing an ingredient's clothes - which is what the
+code lane flagged when it needed `Noun::Territory` to record something that was not a kind.
+
+### The test the tree has to pass
+
+**Most rules are already depth-free**, which is why the idea is cheap: a bin's maximum is stated
+between a bin and its contents; conservation is over the whole state; readiness is per thing;
+acyclicity says *at any depth* in as many words.
+
+**Two are not**, and both name a territory rather than a container: *anything moves freely between
+bins in a controlled territory*, and the Scope column's `here`. **Both need to know which territory
+something is in**, which for a deeply nested thing means walking up the tree. That is the thing to
+settle before the tree pays - either a territory stays privileged and the tree is uniform everywhere
+else, or those two rules restate in terms of the nearest enclosing place a player controls.
