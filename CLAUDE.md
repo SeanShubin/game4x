@@ -235,6 +235,14 @@ So a refactor with no new check is not done, it is *unverified*, and says so rat
 quietly. `Q-1` is correctly still open for exactly this reason - the copy that could not be checked
 was not deleted, because deleting blind proves nothing either way.
 
+**Check the rule over every case, not on one case, and assert how many cases there were.** A test
+that shows a rule on one example stops showing anything the moment that example is edited away, and
+goes on passing. A test over every case does not - except where there are no cases, and then it
+passes for the wrong reason. **The count is what tells those two apart.** `Q-8` is the shape: two
+derivations compared at every planet size rather than at one. Three checks stopped meaning anything
+on 2026-09-01 and all three stayed green -
+[what happened](docs/notes/checks-outlive-examples.md).
+
 **Research's evidence is the answer, written where it will be found.**
 [`docs/prototypes/README.md`](docs/prototypes/README.md) already says it for prototypes - *that
 answer is the deliverable; the code is a byproduct* - and it generalises: the question is stated, the
