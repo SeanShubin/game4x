@@ -45,6 +45,38 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-151 - A quantity may read a trait of the place, not only of an ingredient
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
+`releases/first-release.md` -> Recipes
+
+**Two lines promoted an hour apart cannot both hold.** `P-142` landed *a quantity is a whole number.
+It is written in the recipe, or read from a trait of one of the ingredients.* `P-149` then made
+`work` yield **the territory's density for that resource**. **`work`'s ingredients are labor and an
+extractor**, and the territory is neither - so the sentence is false of the table three lines below
+it.
+
+> The line becomes:
+>
+> A quantity is a whole number. It is written in the recipe, read from a trait of one of the
+> ingredients, or read from a trait of the place named by the recipe's scope.
+
+**Basis: widening the sentence is right and adding an ingredient is not.** The alternative fix is to
+give `work` a `territory` ingredient so the original sentence stays true. **The scope column already
+names the place** - `work` is scoped `here` - so that ingredient would restate a column that is
+already there, and `P-149` deleted `build extractor`'s `node, unworked` an hour earlier for being
+exactly that kind of restatement.
+
+**It is one recipe of eighteen.** `upkeep` reads *the unit's upkeep* and `perish` reads *the unit's
+metal*; in both the unit is an ingredient, so both were already covered. **Only `work` reads past its
+own ingredients**, and it does so because `P-149` moved density from a thing to a place.
+
+**Found by the code lane, and this lane should have found it.** They asked whether
+`Quantity::Density` still means what it did, since the node it named is gone. **The re-read trigger
+had already fired and was not run**: `releases/first-release.md` -> Recipes had taken `P-140`,
+`P-142` and `P-145`, and `P-149` landed in it as the fourth. The trigger exists for exactly this -
+two rules that each passed the staleness check and still cannot both hold.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
