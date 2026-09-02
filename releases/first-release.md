@@ -168,7 +168,8 @@ among the results.
 |                     |        | out  | citizen                                    | 1                                         |          |
 |                     |        | out  | extractor, food                            | 1                                         |          |
 | **build extractor** | player | in   | labor                                      | 1                                         | at least |
-|                     |        | out  | extractor                                  | 1                                         |          |
+|                     |        | in   | metal                                      | 1                                         | at least |
+|                     |        | out  | extractor, <resource>                      | 1                                         |          |
 | **build yard**      | player | in   | metal                                      | 15                                        | at least |
 |                     |        | out  | yard                                       | 1                                         |          |
 | **produce pioneer** | player | in   | metal                                      | 2                                         | at least |
@@ -197,7 +198,7 @@ among the results.
 |                     |        | out  | citizen                                    | 1                                         |          |
 |                     |        | out  | thing, houses                              | 1                                         |          |
 | **depart**          | world  | in   | citizen, unfed                             | 1                                         | at least |
-| **spoil**           | world  | in   | food                                       | 1                                         | at least |
+| **spoil**           | world  | in   | food, surplus                              | 1                                         | at least |
 | **ready**           | world  | in   | thing, exhausted                           | 1                                         | at least |
 |                     |        | out  | thing, ready                               | 1                                         |          |
 | **upkeep**          | world  | in   | unit with upkeep                           | 1                                         | at least |

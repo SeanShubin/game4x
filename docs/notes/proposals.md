@@ -282,56 +282,6 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-169 - `spoil` takes surplus food, and the order falls out
-
-**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
-**into** `releases/first-release.md` -> Recipes
-
-**Sean asked whether population growth is a recipe or an exception. It is a recipe** - `grow`, owned
-by the world - and the exception is not growth but **when the world's recipes fire**. He chose the
-unification over an ordering rule.
-
-**Three of the eight already order themselves**, because a derived trait cannot exist until what
-derives it has happened: `grow` and `depart` wait for `eat`, and `perish` waits for `upkeep`.
-**`spoil` takes plain `food` and waits for nothing**, so it may fire first and leave nothing to eat.
-
-> `spoil`'s ingredient becomes `food, surplus`.
-
-**Basis: it needs no new trait, which is why it is worth trying first.** This lane expected to have
-to invent one - *spare*, or *unclaimed by anything* - and `surplus` already means exactly the right
-thing: **left after everything ate.** Before eating there is no surplus, so `spoil` cannot fire; after
-eating there is, so it can.
-
-**And it makes growth and spoilage compete, which is the right relationship.** Surplus food either
-becomes population or rots, and `P-135` already promoted that **competing effects are gathered and
-resolved together by a deterministic mechanic a player can change**. Room for citizens is what
-decides how much of the surplus growth can take, and the rest spoils. **Nothing new is needed for
-that either.**
-
-**What it does not fix.** `upkeep`, `perish` and `revert` are still unplaced relative to the rest -
-`perish` follows `upkeep` by its trait, but nothing says whether upkeep is paid before or after
-eating, and both draw on food. **That is a real question and a smaller one**, and it should be asked
-against the before-and-after pages rather than in the abstract.
-
-### P-167 - `build extractor` takes no metal and names no resource
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
-`releases/first-release.md` -> Recipes
-
-**Two tables in one file disagree.** *Units and structures* says an extractor costs **1 labor, 1
-metal**, which Sean set on 2026-09-01. The recipe takes **labor only**.
-
-**And the recipe does not say which resource the extractor is for**, though `work` reads that trait
-to know what it produces - *the territory's density for that resource*. **A recipe that creates a
-thing must set the traits that thing is later read by**, and this one creates an extractor with no
-resource.
-
-> `build extractor` gains `in metal 1` and its result becomes `extractor, <resource>`.
-
-**The second half is the general point.** `work`, `perish` and `upkeep` all read a trait of something
-they were handed. **Nothing checks that the recipes which create those things set them**, and an
-extractor with no resource is the first case where that gap is visible.
-
 ### P-166 - `move` has no destination, and nothing sets `arriving`
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
@@ -530,6 +480,8 @@ deterministic mechanic a player can change, and this is a competition nobody has
 | P-154, control is derived from a citizen being there                                                            | `releases/first-release.md` -> Traits, Recipes                                                                         | 2026-09-01 |
 | P-170, a part is one metal arranged, and a thing binds its parts with more                                      | `spec/resources.md`, `releases/first-release.md` -> Units and structures, Traits                                       | 2026-09-01 |
 | P-165, tune the Ark so that what goes in is what comes out                                                      | `releases/first-release.md` -> Units and structures, Recipes                                                           | 2026-09-01 |
+| P-169, `spoil` takes surplus food, and the order falls out                                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-167, `build extractor` takes no metal and names no resource                                                   | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 
 ## Rejected
 
