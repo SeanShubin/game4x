@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-170** - A part is one metal arranged, and a thing binds its parts with more · `docs/notes/proposals.md`
 - **P-165** - Deploying leaves metal behind, and no recipe says so · `docs/notes/proposals.md`
 - **P-167** - `build extractor` takes no metal and names no resource · `docs/notes/proposals.md`
 - **P-166** - `move` has no destination, and nothing sets `arriving` · `docs/notes/proposals.md`

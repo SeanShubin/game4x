@@ -88,27 +88,27 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 
 ## Traits
 
-| Trait               | Of                              | Values                         | Stored or derived                          |
-| ------------------- | ------------------------------- | ------------------------------ | ------------------------------------------ |
-| **kind**            | every thing                     | one of the ten                 | stored                                     |
-| **place**           | every thing                     | the thing it is in             | stored                                     |
-| **readiness**       | whatever readies                | ready, exhausted               | stored                                     |
-| **force**           | citizen, garrison, ark, pioneer | a number                       | stored                                     |
-| **fuel**            | a unit                          | how much energy its tank holds | stored                                     |
-| **upkeep**          | a unit                          | food per turn                  | stored                                     |
-| **metal in it**     | whatever is built               | a number                       | stored                                     |
-| **resource**        | an extractor                    | food, metal or energy          | stored                                     |
-| **density**         | a territory, per resource       | a number                       | stored                                     |
-| **room**            | a territory, per kind           | a number                       | stored                                     |
-| **control**         | a territory                     | held by a player, or unclaimed | derived: a citizen of that player is there |
-| **biome**           | a territory                     | one of the six                 | stored                                     |
-| **force of nature** | a territory                     | a number                       | stored                                     |
-| **adjacency**       | a territory                     | which territories touch it     | stored                                     |
-| **arriving**        | a pioneer                       | yes or no                      | stored, cleared at end turn                |
-| **surplus**         | food                            | yes or no                      | derived: left after everything ate         |
-| **unfed**           | a citizen                       | yes or no                      | derived: it did not eat                    |
-| **unpaid**          | a unit                          | yes or no                      | derived: its upkeep was not met            |
-| **houses**          | a thing that contains things    | whether people live in it      | stored                                     |
+| Trait               | Of                              | Values                         | Stored or derived                                |
+| ------------------- | ------------------------------- | ------------------------------ | ------------------------------------------------ |
+| **kind**            | every thing                     | one of the ten                 | stored                                           |
+| **place**           | every thing                     | the thing it is in             | stored                                           |
+| **readiness**       | whatever readies                | ready, exhausted               | stored                                           |
+| **force**           | citizen, garrison, ark, pioneer | a number                       | stored                                           |
+| **fuel**            | a unit                          | how much energy its tank holds | stored                                           |
+| **upkeep**          | a unit                          | food per turn                  | stored                                           |
+| **metal in it**     | whatever is built               | a number                       | derived: its binding plus the metal in its parts |
+| **resource**        | an extractor                    | food, metal or energy          | stored                                           |
+| **density**         | a territory, per resource       | a number                       | stored                                           |
+| **room**            | a territory, per kind           | a number                       | stored                                           |
+| **control**         | a territory                     | held by a player, or unclaimed | derived: a citizen of that player is there       |
+| **biome**           | a territory                     | one of the six                 | stored                                           |
+| **force of nature** | a territory                     | a number                       | stored                                           |
+| **adjacency**       | a territory                     | which territories touch it     | stored                                           |
+| **arriving**        | a pioneer                       | yes or no                      | stored, cleared at end turn                      |
+| **surplus**         | food                            | yes or no                      | derived: left after everything ate               |
+| **unfed**           | a citizen                       | yes or no                      | derived: it did not eat                          |
+| **unpaid**          | a unit                          | yes or no                      | derived: its upkeep was not met                  |
+| **houses**          | a thing that contains things    | whether people live in it      | stored                                           |
 
 ## What a territory has room for
 
@@ -130,14 +130,14 @@ cycle of what it makes.
 
 ## Units and structures
 
-| Thing         | Force | Fuel | A move | Upkeep          | Costs to produce             | Metal in it | Requires   | Readies |
-| ------------- | ----- | ---- | ------ | --------------- | ---------------------------- | ----------- | ---------- | ------- |
-| **citizen**   | 1     |      |        |                 |                              |             |            | yes     |
-| **garrison**  | 1     |      |        |                 | 1 labor, 1 metal             | 1           |            |         |
-| **extractor** |       |      |        |                 | 1 labor, 1 metal             | 1           |            | yes     |
-| **yard**      |       |      |        |                 | 15 metal                     | 15          |            |         |
-| **ark**       | 2     | 2    | 1 fuel |                 | 12 metal, 12 energy          | 12          | a Yard     | yes     |
-| **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 8 metal, 6 energy, 1 citizen | 8           | a garrison | yes     |
+| Thing         | Force | Fuel | A move | Upkeep          | Costs to produce             | Metal in it | Binding | Requires   | Readies |
+| ------------- | ----- | ---- | ------ | --------------- | ---------------------------- | ----------- | ------- | ---------- | ------- |
+| **citizen**   | 1     |      |        |                 |                              |             |         |            | yes     |
+| **garrison**  | 1     |      |        |                 | 1 labor, 1 metal             | 1           | 1       |            |         |
+| **extractor** |       |      |        |                 | 1 labor, 1 metal             | 1           | 1       |            | yes     |
+| **yard**      |       |      |        |                 | 15 metal                     | 15          | 15      |            |         |
+| **ark**       | 2     | 2    | 1 fuel |                 | 12 metal, 12 energy          | 12          | 12      | a Yard     | yes     |
+| **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 8 metal, 6 energy, 1 citizen | 8           | 8       | a garrison | yes     |
 
 A garrison's multiplier is 1. An Ark can invade land from orbit. Nothing outside this table
 readies.

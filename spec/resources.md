@@ -28,5 +28,8 @@ Every resource has two properties, and they are independent of each other:
   work
 - A thing not kept in order is lost when the turn ends. Keeping it in order costs labor, unless it
   is caught where it was made
+- A part is one metal, arranged. The metal in a thing is what binds it together plus the metal in
+  each of its parts
+- What binds a thing is at least one metal, so a thing made of nothing still costs something
 
 ## Open questions

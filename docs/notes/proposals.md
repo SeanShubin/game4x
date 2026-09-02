@@ -45,64 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-170 - A part is one metal arranged, and a thing binds its parts with more
-
-**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind**
-unification - **into** `spec/resources.md`, **and** `releases/first-release.md` -> Units and
-structures
-
-**Sean's, 2026-09-01**: *give every part of every vehicle or building a cost of 1 metal, then
-vehicles and buildings that contain parts just sum their parts* - and then: *a vehicle or building
-with no parts should still cost at least 1 metal, and it is also ok for it to have a cost in addition
-to the cost of its parts, representing the binding material.*
-
-> `spec/resources.md` gains two lines, beside *matter is conserved and its arrangement is not*:
->
-> - A part is one metal, arranged. The metal in a thing is what binds it together plus the metal in
->   each of its parts
-> - What binds a thing is at least one metal, so a thing made of nothing still costs something
-
-> `releases/first-release.md` -> Units and structures: **Metal in it** becomes derived - binding plus
-> parts - and a new **Binding** column holds what a thing costs beyond its parts. **Nothing in first
-> release has parts**, so every Binding equals the *Metal in it* beside it, and the two columns say
-> the same thing until a vehicle earns a second part.
-
-**Basis: it makes conservation structural rather than a rule to check.** `P-165` exists because an Ark
-holds twelve and becomes two, and somebody had to notice. **Under this there is nothing to notice**:
-taking a thing apart yields its parts, still arranged, and its binding as loose metal. **The count
-comes out however it is grouped.**
-
-**Binding is matter, and arrangement is not the same thing.** Sean asked whether they should be, and
-one promoted line decides it: *a conserved resource is not destroyed by being used. It changes form,
-and **what it was made into can be taken apart to get it back***. **All of it.** If the binding were
-arrangement it would be lost on dismantling, and that line would be false - so **the binding is metal
-and it comes back.**
-
-**The two axes are separate and the game needs both.** *Matter is conserved and its arrangement is
-not* is about **order lost by neglect**: a thing not kept in order is lost when the turn ends, and
-keeping it costs labor. **Dismantling does not lose metal; failing to store the result does.** That is
-Sean's own salvage design from 2026-08-31 - the metal from a destroyed vehicle stays around for the
-turn, and goes only if there is nobody to put it in a store and nowhere to put it.
-
-**So a thing has both and they behave differently.** Its matter is its parts and its binding, and it
-comes back. Its arrangement is what a recipe spent to assemble it, and that does not - **rebuilding
-costs the labor again, and the metal only once.**
-
-**An earlier draft of this proposal said the opposite in the same breath** - it called the binding
-*the arrangement that is lost* and then had it come out as loose metal. **Those cannot both hold**, and
-the promoted line is what settles which.
-
-**The minimum is what stops a thing being free.** Without it, a building with no parts costs nothing
-and a player builds unboundedly - which is the same hole `P-168` reports from the other end.
-
-**And it is the third job this idea does.** `P-157` made a part a thing, which gave move-then-act for
-nothing: the part that moves exhausts, the part that works exhausts. **Now the same parts carry the
-metal.** One concept for containment, for readiness granularity, and for conservation.
-
-**What it does to the numbers already promoted.** Nothing is invalidated. `P-146` and `P-156`'s
-figures become **binding** values rather than declared totals - a garrison binds with 1, a Yard with
-15 - and every one is still the number Sean set.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -343,14 +285,14 @@ work the release exists to order.
 ### P-165 - Deploying leaves metal behind, and no recipe says so
 
 **to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind**
-contradiction - **into** `releases/first-release.md` -> Recipes. **Reads better after `P-170`**
+contradiction - **into** `releases/first-release.md` -> Recipes
 
 **Found by walking the recipes one at a time**, which is what
 [the before-and-after pages](../recipes/README.md) are for. **An Ark holds 12 metal and deploys into
 a garrison and an extractor, which hold 1 each.** A Pioneer holds 8 and founds the same two. **Ten and
 six metal leave the game**, on the two recipes that open every game.
 
-**`P-170` says where it goes and this says it in the table.** Under that proposal a thing comes apart
+**`P-170` said where it goes and this says it in the table.** Under that rule, promoted 2026-09-01, a thing comes apart
 into its parts and its binding, and **the binding is loose metal in the territory.** An Ark with no
 parts is twelve metal of binding, two of which bind the garrison and the extractor it becomes.
 
@@ -612,6 +554,7 @@ deterministic mechanic a player can change, and this is a competition nobody has
 | P-162, `P-156` reintroduced the word `bin`, which `P-157` had just removed                                      | `releases/first-release.md` -> What a territory has room for                                                           | 2026-09-01 |
 | P-164, *Where things are* still describes bins, and is wrong about orbit too                                    | `releases/first-release.md` -> Where things are, Traits                                                                | 2026-09-01 |
 | P-154, control is derived from a citizen being there                                                            | `releases/first-release.md` -> Traits, Recipes                                                                         | 2026-09-01 |
+| P-170, a part is one metal arranged, and a thing binds its parts with more                                      | `spec/resources.md`, `releases/first-release.md` -> Units and structures, Traits                                       | 2026-09-01 |
 
 ## Rejected
 
