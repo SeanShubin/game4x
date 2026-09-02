@@ -61,14 +61,16 @@ principle rather than as three more cells.
 > `## Perspectives` gains a line above the table:
 >
 > **The code lane owns the game. Every lane owns the tools for its own work.** Production is what
-> ships to a player; a tool that makes it, checks it or maintains it belongs to whoever it serves.
+> ships to a player and is the code lane's alone. **Production support** - `hooks/`, `scripts/`, CI,
+> and everything in `tools/` that is not a lane's own - belongs to no lane exclusively: whoever needs
+> a check wired adds it, and the bar is a narrow reason rather than a permission.
 
 > The table becomes:
 >
 > | Perspective | Writes | Reads |
 > | --- | --- | --- |
 > | **Specification** | `spec/`, `releases/`, `docs/`, `README.md`, `tools/spec/`, this file | everything |
-> | **Code** | `crates/`, `web/`, `commands/`, `prototypes/`, `tools/`, `scripts/`, `hooks/`, CI, cargo | everything |
+> | **Code** | `crates/`, `web/`, `commands/`, `prototypes/`, cargo | everything |
 > | **Quality**, and any other lens | its own directory under `lenses/`, and `tools/<its name>/` | everything |
 
 **Basis: the reason a lens could not write was never that writing is dangerous.** `CLAUDE.md` says
@@ -99,12 +101,11 @@ infrastructure as code and so on is not production, it is production support.* *
 `hooks/`, `scripts/` and CI are**, and it is not what this proposal assumed - it had left them with
 the code lane on the grounds that somebody runs the gate.
 
-> So the line above the table reads:
->
-> **The code lane owns the game. Every lane owns the tools for its own work.** Production is what
-> ships to a player and is the code lane's alone. **Production support** - hooks, scripts, CI,
-> anything that builds, checks or publishes - belongs to no lane exclusively: whoever needs a check
-> wired adds it, and the bar is a narrow reason rather than a permission.
+**One thing this lane changed rather than Sean, and it is why the proposal is not promoted yet.**
+The amended line says production support belongs to no lane, **and the table still gave `hooks/`,
+`scripts/` and CI to the code lane.** Promoting that would have shipped a contradiction. The Code row
+now reads `crates/`, `web/`, `commands/`, `prototypes/`, cargo - **it loses production support and
+loses nothing else**, and `tools/` is divided by the line above rather than by a row.
 
 **That is the substantive change and it should be read as one.** Under it **this lane may add a gate
 line** for a specification check, without asking the code lane to do it - which is `S-5` and `S-6`
