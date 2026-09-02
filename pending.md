@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-175** - `arriving` earns nothing and should go · `docs/notes/proposals.md`
 - **P-178** - `surplus` is derived from a recipe that no longer exists · `docs/notes/proposals.md`
+- **P-179** - A Pioneer may cross its own empire, and one line says it may not · `docs/notes/proposals.md`
 
 ## What is outstanding
 
