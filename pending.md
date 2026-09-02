@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
+- **P-161** - `grow`'s new ingredient is the fifth thing that needs echoing · `docs/notes/proposals.md`
 - **P-160** - Adjacency is defined under *What a territory carries*, and it is not one · `docs/notes/proposals.md`
-- **P-159** - `consumed` is derived, not declared · `docs/notes/proposals.md`
 - **P-156** - What a territory has room for, which `C-10` has been asking since August · `docs/notes/proposals.md`
 - **P-154** - One recipe unclaims a territory and none claims one · `docs/notes/proposals.md`
 
@@ -36,7 +36,7 @@ it exists to ask.
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
