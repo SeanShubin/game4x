@@ -72,10 +72,25 @@ holds twelve and becomes two, and somebody had to notice. **Under this there is 
 taking a thing apart yields its parts, still arranged, and its binding as loose metal. **The count
 comes out however it is grouped.**
 
-**It is `spec/resources.md`'s own sentence made specific.** *Matter is conserved and its arrangement
-is not* - a part is matter with arrangement, loose metal is the same matter without it, and **the
-binding is the arrangement that is lost when a thing comes apart.** Taking apart returns the matter
-and not the ordering, which is exactly what that line has said since it was promoted.
+**Binding is matter, and arrangement is not the same thing.** Sean asked whether they should be, and
+one promoted line decides it: *a conserved resource is not destroyed by being used. It changes form,
+and **what it was made into can be taken apart to get it back***. **All of it.** If the binding were
+arrangement it would be lost on dismantling, and that line would be false - so **the binding is metal
+and it comes back.**
+
+**The two axes are separate and the game needs both.** *Matter is conserved and its arrangement is
+not* is about **order lost by neglect**: a thing not kept in order is lost when the turn ends, and
+keeping it costs labor. **Dismantling does not lose metal; failing to store the result does.** That is
+Sean's own salvage design from 2026-08-31 - the metal from a destroyed vehicle stays around for the
+turn, and goes only if there is nobody to put it in a store and nowhere to put it.
+
+**So a thing has both and they behave differently.** Its matter is its parts and its binding, and it
+comes back. Its arrangement is what a recipe spent to assemble it, and that does not - **rebuilding
+costs the labor again, and the metal only once.**
+
+**An earlier draft of this proposal said the opposite in the same breath** - it called the binding
+*the arrangement that is lost* and then had it come out as loose metal. **Those cannot both hold**, and
+the promoted line is what settles which.
 
 **The minimum is what stops a thing being free.** Without it, a building with no parts costs nothing
 and a player builds unboundedly - which is the same hole `P-168` reports from the other end.
