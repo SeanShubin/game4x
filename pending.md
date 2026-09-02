@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-151** - A quantity may read a trait of the place, not only of an ingredient · `docs/notes/proposals.md`
 - **P-152** - The Traits table declares thirteen and the release uses five more · `docs/notes/proposals.md`
+- **P-153** - `commands/` is in no lane's column · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -21,9 +22,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (4)
+### To code (3)
 
-- **S-6** - `P-149` and `P-150` change the console grammar · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`

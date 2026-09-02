@@ -34,3 +34,4 @@ disagree, the spec is right and the note needs a superseded marker.
 | [Parser and assembler architecture](parser-architecture.md)                  | How the predecessor's parser separates generic from game-specific, and where it is weak          | 2026-08-25 |
 | [Spec backlog](spec-backlog.md)                                              | Design intent Sean has stated but not yet written into the spec                                  | 2026-08-25 |
 | [Comparing region schemes](region-schemes.md)                                | Every known way to divide a sphere into hex-like regions, measured against each other            | 2026-08-24 |
+- [Checks outlive examples](checks-outlive-examples.md) - why three findings in one day all looked green

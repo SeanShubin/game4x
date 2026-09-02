@@ -134,6 +134,37 @@ still traits the release depends on. This lane's reading was the other way round
 is either fine - a recipe may act on a place - or the column needs a narrower name. **`P-151` is the
 same question about the *Qty* column** and answers it by widening; the two should probably agree.
 
+### P-153 - `commands/` is in no lane's column
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** governance - **into** `CLAUDE.md` ->
+Perspectives, the Code row
+
+**Seven files of game data sit in a directory nobody owns.** `commands/` holds `world.4x`,
+`nodes.4x`, `biomes.4x`, `forces.4x`, `setup.4x`, `spread.4x` and `play.4x` - the twelve territories,
+their densities, their biomes and the scripted play-throughs. `CLAUDE.md` gives the code lane
+`crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, CI and cargo. **`commands/` is in
+none of them**, and it is in no other lane's column either.
+
+> `CLAUDE.md` -> Perspectives, the Code row's *Writes* cell gains `commands/`:
+>
+> `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, `commands/`, CI, cargo
+
+**Basis: it is the code lane's in practice and has been since the files existed.** They wrote them,
+they regenerate them when the release moves - `nodes.4x` was rewritten from the release's own table
+on 2026-09-01 - and `crates/game-console/tests/quotations.rs` reads them. **Nobody has ever been
+confused about who owns them; the document is simply wrong.**
+
+**Why not the alternative.** `P-124` says a generated file has no owner and may sit in the root, and
+these are close to generated - derived from `releases/first-release.md`. **But they are not
+generated**: they carry hand-written comments explaining themselves and quoting the specification,
+and the quotation test checks those comments. **A file with any hand-written part has an author**,
+which `P-124` says in as many words.
+
+**This is the last item from [the data inventory](first-release-data.md) that has no answer.** The
+other three - declaring the kinds, siting the traits table, adding the columns - landed as `P-143`,
+`P-146` and `P-149`. **It is also the one that needs Sean rather than this lane**, because it is a
+column, and a column is who may write what.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -161,7 +192,7 @@ and it lands on top of `S-6`, which is the same release moving under the same co
 
 ### S-6 - `P-149` and `P-150` change the console grammar
 
-**to** code - **status** open - **raised** 2026-09-01 - **source** two promotions
+**to** code - **status** **acted** 2026-09-01 - **raised** 2026-09-01 - **source** two promotions - **cited** `e1802f1`
 
 **`add node` is gone from the specification and `set resource` replaces it.** `P-149` removed the
 node: a territory now carries, per resource, how many extractors it has room for and the density
