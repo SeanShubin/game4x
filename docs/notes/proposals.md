@@ -72,41 +72,59 @@ about garrisons rather than about traits, which makes it Sean's.
 **Not urgent and not new.** The gap has been in the release since the recipes existed; declaring
 `control` is what made it visible, which is `P-143`'s argument working rather than failing.
 
-### P-155 - Either using a thing exhausts it, or `work` and `move` are unbounded
+### P-155 - Using a thing exhausts it, and moving is a second trait of the same shape
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
-`spec/turn.md` -> Order of operations, **or** `releases/first-release.md` -> Recipes
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** recovered
+- **into** `spec/turn.md` -> Order of operations, **and** `releases/first-release.md` -> Traits,
+Recipes
 
-**`spec/turn.md` says *using it exhausts it*. Four recipes act on things that ready, and only one
-says so.**
+**Sean's, decided 2026-09-01**: *any time a civilian generates labor it becomes exhausted; any time
+labor operates an extractor the extractor becomes exhausted; move vs exhausted are an interesting
+case, because I can imagine something moving first then doing something, so perhaps these need to be
+separate traits that work in a similar way.*
 
-| Recipe              | Acts on                      | Names readiness                               |
-| ------------------- | ---------------------------- | --------------------------------------------- |
-| **spend readiness** | a citizen                    | `citizen, ready` in, `citizen, exhausted` out |
-| **work**            | an extractor, not consumed   | **no**                                        |
-| **move**            | a unit                       | **no**                                        |
-| **produce ark**     | a yard, which does not ready | not applicable                                |
+> `spec/turn.md` -> Order of operations, the second line becomes:
+>
+> - Producing happens in any order. A thing that readies is ready or exhausted, and using it
+>   exhausts it. A thing that moves has moved or not, and moving it spends that. A thing created
+>   during a turn begins ready and unmoved and may be used at once. **When nothing can be used or
+>   moved there is nothing left to do**
 
-**The two readings cannot both be right.**
+> `releases/first-release.md` -> Traits gains one row:
+>
+> | Trait | Of | Values | Stored or derived |
+> | --- | --- | --- | --- |
+> | **moved** | whatever moves | yes or no | stored, cleared at end turn |
 
-- **The rule is general**, the engine exhausts whatever a recipe used, and `spend readiness` is
-  saying something the engine already does. Then that recipe's two readiness qualifiers are
-  redundant, and **the only recipe that mentions readiness is the one that needs it least**
-- **The rule is per recipe**, and a recipe that does not name readiness does not spend it. Then
-  `work` may fire as many times as there is labor - **four labor and one extractor yields four times
-  the density** - and `move` may cross a unit as far as its fuel allows in one turn
+> `releases/first-release.md` -> Recipes: `ready` gains two rows, so that both are restored:
+>
+> | Recipe | Scope | Role | Thing | Qty | Consumed | Bound |
+> | --- | --- | --- | --- | --- | --- | --- |
+> | **ready** | every | in | thing, moved | 1 | yes | at least |
+> |  |  | out | thing, unmoved | 1 |  |  |
 
-**The second contradicts `spec/structures.md`**, which says an extractor *once per turn* may take a
-unit of labor and produce the territory's density. **So the general reading is probably Sean's**, and
-this proposal does not assume it, because the fix differs: the general reading deletes two qualifiers
-from `spend readiness`, and the per-recipe reading adds four to `work` and `move`.
+**Basis: the release already requires two axes and nobody noticed.** `found by land` takes
+`pioneer, arriving` - a Pioneer that moved into a territory this turn. **A Pioneer that moved and can
+then be acted on is move-then-act**, which is exactly the case Sean describes, and it has been in the
+table since the table existed. One axis cannot express it.
 
-**It blocks the per-recipe before-and-after that Sean asked for**, which is why it is filed now rather
-than noticed later. **`work`'s after-state cannot be drawn without it** - the extractor is either
-exhausted or unchanged, and the whole point of the exercise is that a reader can see which.
+**And the rule is general rather than per recipe, which is what the first two answers settle.** The
+Units table's **Readies** column already says which kinds have readiness - citizen, extractor, ark
+and pioneer yes; garrison and yard no. So *using it exhausts it* is a rule over a declared trait
+rather than something the engine knows privately, and no recipe has to restate it. `work` exhausts
+the extractor because an extractor readies, not because `work` says so.
 
-**Found by walking one recipe by hand.** Eighteen have not been walked, and the exercise exists
-because walking them finds this.
+**One consequence, and it is a choice.** `spend readiness` names `citizen, ready` in and
+`citizen, exhausted` out, which the general rule now makes redundant. **Leaving it is harmless and
+deleting it is tidier**, and this lane has no view - but they should not both be true silently, since
+a reader seeing readiness named in one recipe of eighteen will reasonably infer it is not automatic.
+
+**What this corrects, from earlier the same day.** This lane argued that *exhausted* could cover
+*moved* with no second trait, because the only non-consuming thing you can do to a resource is move
+it. **That was true of resources and does not extend to units**, which can move and then act - and
+Sean found the case. The two-axis version subsumes the earlier answer rather than replacing it:
+metal that moved is `moved` and can still be spent, which is the behaviour that argument was
+protecting, now with a mechanism instead of a coincidence.
 
 ### P-156 - What a territory has room for, which `C-10` has been asking since August
 

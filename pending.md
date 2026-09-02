@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-154** - One recipe unclaims a territory and none claims one · `docs/notes/proposals.md`
-- **P-155** - Either using a thing exhausts it, or `work` and `move` are unbounded · `docs/notes/proposals.md`
+- **P-155** - Using a thing exhausts it, and moving is a second trait of the same shape · `docs/notes/proposals.md`
 - **P-156** - What a territory has room for, which `C-10` has been asking since August · `docs/notes/proposals.md`
 
 ## What is outstanding
