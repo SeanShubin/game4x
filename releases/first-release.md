@@ -145,7 +145,7 @@ readies.
 ## Recipes
 
 A quantity is a whole number. It is written in the recipe, read from a trait of one of the
-ingredients, or read from a trait of the place named by the recipe's scope.
+ingredients, or read from a trait of a named ingredient.
 
 An ingredient is consumed exactly when the same thing, with the same traits, does not appear
 among the results.
@@ -158,75 +158,79 @@ An ingredient may be given a name, written `$name`, and another ingredient may r
 recipe that names two things of the same kind must name them, because otherwise a reference has
 two candidates.
 
-| Recipe                     | Owner  | Role | Thing                                      | Qty                                       | Bound    |
-| -------------------------- | ------ | ---- | ------------------------------------------ | ----------------------------------------- | -------- |
-| **deploy ark**             | player | in   | ark, here                                  | 1                                         | at least |
-|                            |        | in   | garrison                                   | 0                                         | at most  |
-|                            |        | out  | garrison                                   | 1                                         |          |
-|                            |        | out  | citizen                                    | 1                                         |          |
-|                            |        | out  | extractor, food                            | 1                                         |          |
-|                            |        | out  | extractor, metal                           | 1                                         |          |
-|                            |        | out  | extractor, energy                          | 1                                         |          |
-| **move**                   | player | in   | `$from` territory                          | 1                                         | at least |
-|                            |        | out  | `$from` territory                          | 1                                         |          |
-|                            |        | in   | `$to` territory, next to `$from`           | 1                                         | at least |
-|                            |        | out  | `$to` territory                            | 1                                         |          |
-|                            |        | in   | unit, in `$from`, ready                    | 1                                         | at least |
-|                            |        | out  | unit, in `$to`, exhausted, arriving        | 1                                         |          |
-|                            |        | in   | energy, in that unit                       | 1                                         | at least |
-| **found by land**          | player | in   | pioneer, arriving                          | 1                                         | at least |
-|                            |        | in   | garrison                                   | 0                                         | at most  |
-|                            |        | out  | garrison                                   | 1                                         |          |
-|                            |        | out  | citizen                                    | 1                                         |          |
-|                            |        | out  | extractor, food                            | 1                                         |          |
-| **build food extractor**   | player | in   | labor                                      | 1                                         | at least |
-|                            |        | in   | metal                                      | 1                                         | at least |
-|                            |        | out  | extractor, food                            | 1                                         |          |
-| **build metal extractor**  | player | in   | labor                                      | 1                                         | at least |
-|                            |        | in   | metal                                      | 1                                         | at least |
-|                            |        | out  | extractor, metal                           | 1                                         |          |
-| **build energy extractor** | player | in   | labor                                      | 1                                         | at least |
-|                            |        | in   | metal                                      | 1                                         | at least |
-|                            |        | out  | extractor, energy                          | 1                                         |          |
-| **build yard**             | player | in   | metal                                      | 15                                        | at least |
-|                            |        | out  | yard                                       | 1                                         |          |
-| **produce pioneer**        | player | in   | metal                                      | 2                                         | at least |
-|                            |        | in   | energy                                     | 6                                         | at least |
-|                            |        | in   | citizen                                    | 1                                         | at least |
-|                            |        | in   | garrison                                   | 1                                         | at least |
-|                            |        | out  | pioneer                                    | 1                                         |          |
-|                            |        | out  | garrison                                   | 1                                         |          |
-| **produce ark**            | player | in   | metal                                      | 4                                         | at least |
-|                            |        | in   | energy                                     | 12                                        | at least |
-|                            |        | in   | yard                                       | 1                                         | at least |
-|                            |        | out  | ark                                        | 1                                         |          |
-|                            |        | out  | yard                                       | 1                                         |          |
-| **spend readiness**        | player | in   | citizen, ready                             | 1                                         | at least |
-|                            |        | out  | citizen, exhausted                         | 1                                         |          |
-|                            |        | out  | labor                                      | 1                                         |          |
-| **work**                   | player | in   | labor                                      | 1                                         | at least |
-|                            |        | in   | extractor, ready                           | 1                                         | at least |
-|                            |        | out  | extractor, exhausted                       | 1                                         |          |
-|                            |        | out  | resource                                   | the territory's density for that resource |          |
-| **eat**                    | world  | in   | citizen                                    | 1                                         | at least |
-|                            |        | in   | food                                       | 1                                         | at least |
-|                            |        | out  | citizen                                    | 1                                         |          |
-| **grow**                   | world  | in   | food, surplus                              | 1                                         | at least |
-|                            |        | in   | thing, houses                              | 1                                         | at least |
-|                            |        | out  | citizen                                    | 1                                         |          |
-|                            |        | out  | thing, houses                              | 1                                         |          |
-| **depart**                 | world  | in   | citizen, unfed                             | 1                                         | at least |
-| **spoil**                  | world  | in   | food, surplus                              | 1                                         | at least |
-| **ready**                  | world  | in   | thing, exhausted                           | 1                                         | at least |
-|                            |        | out  | thing, ready                               | 1                                         |          |
-| **upkeep**                 | world  | in   | unit with upkeep                           | 1                                         | at least |
-|                            |        | in   | food                                       | the unit's upkeep                         | at least |
-|                            |        | out  | unit with upkeep                           | 1                                         |          |
-| **perish**                 | world  | in   | unit whose upkeep is unpaid                | 1                                         | at least |
-|                            |        | out  | metal                                      | the unit's metal                          |          |
-| **revert**                 | world  | in   | territory, force below its force of nature | 1                                         | at least |
-|                            |        | out  | territory, force below its force of nature | 1                                         |          |
-|                            |        | in   | citizen                                    | 1                                         | at least |
+| Recipe                     | Owner  | Role | Thing                                      | Qty                                  | Bound    |
+| -------------------------- | ------ | ---- | ------------------------------------------ | ------------------------------------ | -------- |
+| **deploy ark**             | player | in   | `$where` territory                         | 1                                    | at least |
+|                            |        | out  | `$where` territory                         | 1                                    |          |
+|                            |        | in   | ark, in `$where`                           | 1                                    | at least |
+|                            |        | in   | garrison                                   | 0                                    | at most  |
+|                            |        | out  | garrison                                   | 1                                    |          |
+|                            |        | out  | citizen                                    | 1                                    |          |
+|                            |        | out  | extractor, food                            | 1                                    |          |
+|                            |        | out  | extractor, metal                           | 1                                    |          |
+|                            |        | out  | extractor, energy                          | 1                                    |          |
+| **move**                   | player | in   | `$from` territory                          | 1                                    | at least |
+|                            |        | out  | `$from` territory                          | 1                                    |          |
+|                            |        | in   | `$to` territory, next to `$from`           | 1                                    | at least |
+|                            |        | out  | `$to` territory                            | 1                                    |          |
+|                            |        | in   | unit, in `$from`, ready                    | 1                                    | at least |
+|                            |        | out  | unit, in `$to`, exhausted, arriving        | 1                                    |          |
+|                            |        | in   | energy, in that unit                       | 1                                    | at least |
+| **found by land**          | player | in   | pioneer, arriving                          | 1                                    | at least |
+|                            |        | in   | garrison                                   | 0                                    | at most  |
+|                            |        | out  | garrison                                   | 1                                    |          |
+|                            |        | out  | citizen                                    | 1                                    |          |
+|                            |        | out  | extractor, food                            | 1                                    |          |
+| **build food extractor**   | player | in   | labor                                      | 1                                    | at least |
+|                            |        | in   | metal                                      | 1                                    | at least |
+|                            |        | out  | extractor, food                            | 1                                    |          |
+| **build metal extractor**  | player | in   | labor                                      | 1                                    | at least |
+|                            |        | in   | metal                                      | 1                                    | at least |
+|                            |        | out  | extractor, metal                           | 1                                    |          |
+| **build energy extractor** | player | in   | labor                                      | 1                                    | at least |
+|                            |        | in   | metal                                      | 1                                    | at least |
+|                            |        | out  | extractor, energy                          | 1                                    |          |
+| **build yard**             | player | in   | metal                                      | 15                                   | at least |
+|                            |        | out  | yard                                       | 1                                    |          |
+| **produce pioneer**        | player | in   | metal                                      | 2                                    | at least |
+|                            |        | in   | energy                                     | 6                                    | at least |
+|                            |        | in   | citizen                                    | 1                                    | at least |
+|                            |        | in   | garrison                                   | 1                                    | at least |
+|                            |        | out  | pioneer                                    | 1                                    |          |
+|                            |        | out  | garrison                                   | 1                                    |          |
+| **produce ark**            | player | in   | metal                                      | 4                                    | at least |
+|                            |        | in   | energy                                     | 12                                   | at least |
+|                            |        | in   | yard                                       | 1                                    | at least |
+|                            |        | out  | ark                                        | 1                                    |          |
+|                            |        | out  | yard                                       | 1                                    |          |
+| **spend readiness**        | player | in   | citizen, ready                             | 1                                    | at least |
+|                            |        | out  | citizen, exhausted                         | 1                                    |          |
+|                            |        | out  | labor                                      | 1                                    |          |
+| **work**                   | player | in   | `$where` territory                         | 1                                    | at least |
+|                            |        | out  | `$where` territory                         | 1                                    |          |
+|                            | player | in   | labor                                      | 1                                    | at least |
+|                            |        | in   | extractor, ready                           | 1                                    | at least |
+|                            |        | out  | extractor, exhausted                       | 1                                    |          |
+|                            |        | out  | resource                                   | `$where`'s density for that resource |          |
+| **eat**                    | world  | in   | citizen                                    | 1                                    | at least |
+|                            |        | in   | food                                       | 1                                    | at least |
+|                            |        | out  | citizen                                    | 1                                    |          |
+| **grow**                   | world  | in   | food, surplus                              | 1                                    | at least |
+|                            |        | in   | thing, houses                              | 1                                    | at least |
+|                            |        | out  | citizen                                    | 1                                    |          |
+|                            |        | out  | thing, houses                              | 1                                    |          |
+| **depart**                 | world  | in   | citizen, unfed                             | 1                                    | at least |
+| **spoil**                  | world  | in   | food, surplus                              | 1                                    | at least |
+| **ready**                  | world  | in   | thing, exhausted                           | 1                                    | at least |
+|                            |        | out  | thing, ready                               | 1                                    |          |
+| **upkeep**                 | world  | in   | unit with upkeep                           | 1                                    | at least |
+|                            |        | in   | food                                       | the unit's upkeep                    | at least |
+|                            |        | out  | unit with upkeep                           | 1                                    |          |
+| **perish**                 | world  | in   | unit whose upkeep is unpaid                | 1                                    | at least |
+|                            |        | out  | metal                                      | the unit's metal                     |          |
+| **revert**                 | world  | in   | territory, force below its force of nature | 1                                    | at least |
+|                            |        | out  | territory, force below its force of nature | 1                                    |          |
+|                            |        | in   | citizen                                    | 1                                    | at least |
 
 ## Biomes
 
