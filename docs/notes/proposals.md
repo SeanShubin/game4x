@@ -74,80 +74,24 @@ catch.
 **And `ready` is the right home rather than a recipe of its own.** It is already the world's recipe
 for putting things back the way a turn starts, and `arriving` is exactly that.
 
-### P-176 - `eat` is `upkeep`, and `depart` is `perish`
+### P-178 - `surplus` is derived from a recipe that no longer exists
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
-`releases/first-release.md` -> Recipes, Traits, Units and structures
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
+`releases/first-release.md` -> Traits
 
-**Sean's, 2026-09-01**: *upkeep and eating should be merged into upkeep.*
+**`P-176` deleted `eat`, and `surplus` still says it.** The trait reads *derived: left after
+everything ate*, and nothing eats now - **things pay upkeep**.
 
-**They are the same recipe with two names.** `eat` takes a citizen, echoes it, and consumes one food.
-`upkeep` takes a unit, echoes it, and consumes the unit's upkeep in food. **The only difference is
-that a citizen's upkeep is written nowhere and assumed to be one.**
+> `surplus` reads *derived: left after every upkeep was paid*.
 
-> `eat` is deleted. `upkeep` becomes:
->
-> | Recipe | Owner | Role | Thing | Qty | Bound |
-> | --- | --- | --- | --- | --- | --- |
-> | **upkeep** | world | in | thing with upkeep | 1 | at least |
-> |  |  | in | food | the thing's upkeep | at least |
-> |  |  | out | thing with upkeep | 1 |  |
->
-> and a **citizen's Upkeep becomes `1 food per turn`**, which is what `eat` already did.
+**Basis: it is the wording and not the meaning.** The food left over is the same food; only the
+recipe that took the rest has a different name. **`grow` and `spoil` both take `food, surplus` and
+both still order themselves correctly**, because the trait still cannot exist until the recipe that
+derives it has run.
 
-> `depart` is deleted and `perish` becomes:
->
-> | **perish** | world | in | thing whose upkeep is unpaid | 1 | at least |
-> |  |  | out | metal | the thing's metal | |
-
-> `## Traits`: `unfed` is deleted, and `unpaid` reads *of a thing with upkeep*.
-
-**Basis: the merge cascades, and that is the evidence it is right.** Merging the two upkeeps forces
-`unfed` and `unpaid` into one trait, which forces `depart` and `perish` into one recipe. **Nineteen
-recipes become seventeen and nineteen traits become eighteen**, and nothing needed inventing at any
-step - each collapse was already implied by the one before it.
-
-**And it dissolves an open question rather than answering it.** The backlog asks whether upkeep is
-paid before or after eating, since both draw on food and a shortage makes the order matter. **There is
-no order between one recipe and itself.**
-
-**One thing to settle with it.** A citizen's *Metal in it* is blank, because `P-146` said a citizen is
-blank rather than zero since a citizen is not built. **`perish` would read that blank**, so either a
-blank reads as nothing produced, or a citizen's metal becomes 0. **This lane would say blank reads as
-nothing**, because that is what it means everywhere else in the table.
-
-### P-177 - `revert` cannot fire, and the release should not carry it
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`releases/first-release.md` -> Recipes
-
-**Sean's, 2026-09-01**: *do we need this? Perhaps ownership is a computed function of having a citizen
-present.*
-
-**Ownership already is computed** - `P-154` made control derived from a citizen being there - so
-`revert` is not what makes a territory yours or not. **What it does is kill your population when your
-force is short**, which is `spec/control.md`'s rule that nature takes a territory back.
-
-**It can never fire in this release, and that is provable rather than likely.**
-
-- Every territory's force of nature is **1**
-- A garrison has force **1**
-- **Nothing in nineteen recipes consumes a garrison** - it appears as a guard, as a result, and as an
-  echoed ingredient, and never as one that is spent
-
-**So a territory that has ever been claimed has a garrison, and a garrison alone meets the force of
-nature.** `revert`'s condition is *below* its force of nature, and one is not below one.
-
-> `revert` is deleted from the release. `spec/control.md` keeps its rule.
-
-**Basis: a release says what is being built now, and the specification is the destination.** The rule
-is right and stays; the recipe implements it in a release where nothing can reach it. **A recipe that
-cannot fire is a page of the before-and-after that no player will ever see**, and it carries an open
-question - what becomes of the garrison and the stores - **that costs a decision and buys nothing.**
-
-**What it takes to make it live again**, so that the deletion is not a decision to drop the mechanic:
-something that spends a garrison, or a force of nature above one. **Both are content rather than
-rules**, and either brings the recipe back unchanged.
+**Filed rather than done in the promoting commit**, because a derived trait's definition is what a
+reader trusts about when a recipe can fire, and changing one while promoting something else is how a
+rule moves without anyone reading it.
 
 ## Addressed to other perspectives
 
@@ -545,6 +489,8 @@ work the release exists to order.
 | P-168, an action that would waste something says so before it is taken                                          | `spec/interface.md`, a new section                                                                                     | 2026-09-01 |
 | P-173, `P-158` deleted the Scope column and two things still depend on it                                       | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-174, a Yard is the only thing a player builds without labor                                                   | `releases/first-release.md` -> Recipes, Units and structures                                                           | 2026-09-01 |
+| P-176, `eat` is `upkeep`, and `depart` is `perish`                                                              | `releases/first-release.md` -> Recipes, Traits, Units and structures                                                   | 2026-09-01 |
+| P-177, `revert` cannot fire, and the release should not carry it                                                | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 
 ## Rejected
 
