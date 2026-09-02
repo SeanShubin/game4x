@@ -61,35 +61,6 @@ Not done in the same commit as the specification's change, deliberately. It is a
 game rewards, the tests that pin it are the ones that would have to change with it, and `C-8` says
 nothing in play reaches it either way - so it is worth doing carefully rather than quickly.
 
-### C-12 - The architecture check exists and nothing runs it
-
-**to** code · **status** open · **raised** 2026-09-01 · **source** this lane forgetting
-
-`S-2` asked for a test that fails when a crate in the workspace has no row in
-`docs/architecture.md`. It was built, in `tools/outbox/tests/architecture.rs`, and its commit said
-*the gate line follows the rebuild*. **The gate line never followed.**
-
-`tools/` is outside the workspace, so `cargo test --workspace` does not reach it and neither gate
-names it. The check has therefore never run except when somebody typed its path - and in the
-meantime the table went stale again: `prototypes/kinds` has no row, and nothing said so. It was
-found by running these tests for an unrelated reason.
-
-That is *a detector nobody wired to a failure*, which is the argument this lane made on `Q-37`
-against detectors, and then reproduced by hand.
-
-**Two lines**, one in `hooks/pre-push` and one in `.github/workflows/pipeline.yml`:
-
-```
-cargo test --manifest-path tools/outbox/Cargo.toml
-```
-
-**Not done in this commit**, and the reason is the same trap: the check is red right now against a
-document this lane may not edit, so wiring it would fail every lane's push on a row only the
-specification lane can add. Reported to them; the line goes in when the row does.
-
-**Filed rather than remembered, because remembering is what failed.** The first time it was one
-sentence at the end of a commit message, and a commit message is not a reader.
-
 ### C-11 - The model implements the previous turn, so `R-6` is blocked in code
 
 **to** code · **status** open · **raised** 2026-08-31 · **source** re-running `C-8` after `P-126`
@@ -241,6 +212,23 @@ Reported with an instance rather than as a worry.
 
 Kept rather than deleted, so a later reader can tell whether a question was settled or forgotten.
 Each says what this lane verified, because an answer this lane has not read is not an answer.
+
+### C-12 - The architecture check exists and nothing runs it
+
+**to** code · **status** **acted** 2026-09-01 · `4dbd3ac`
+
+Both gates run `cargo test --manifest-path tools/outbox/Cargo.toml` now, so the check that every
+crate has a row in `docs/architecture.md` runs on every push rather than when somebody types its
+path.
+
+It needed no synthetic poison. **It had already fired for real**, ten minutes earlier, on
+`prototypes/kinds` - a crate this lane added and a row nobody wrote - and that is what found the
+whole thing. The specification lane added the row in `97aef54` and the gate lines followed
+immediately, which is what should have happened the first time.
+
+What the delay cost is worth keeping: the check was written, correct, and silent for as long as
+nobody typed its path. **A check nobody runs has no answer, and no answer looks exactly like a
+right one.**
 
 ### C-8 - No Ark can ever be produced, so the loop cannot reach its last two steps
 

@@ -3,7 +3,7 @@
 [Prototypes](../../docs/prototypes/README.md) · [Architecture](../../docs/architecture.md) · [Root README](../../README.md)
 
 **The question.** What do the inputs to the gameplay logic actually look like? The release
-says it in two markdown tables, which is the right form for deciding it and the wrong one
+says it in six markdown tables, which is the right form for deciding it and the wrong one
 for finding out whether it holds together. This is the same content as Rust data, so the
 shape can be read and compiled before it is built into the model — which is cheaper than
 reviewing it afterwards.

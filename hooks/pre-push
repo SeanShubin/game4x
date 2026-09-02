@@ -39,6 +39,14 @@ cargo test --release --workspace $ENGINE
 # this reuses that build rather than paying for a release build of Bevy. They used to run
 # only in the job that reports after the page is already published, which is a strange
 # place to keep a regression test for a bug that shipped once.
+# tools/ is outside the workspace, so --workspace does not reach it and its tests ran only
+# when somebody typed this path. One of them checks that every crate has a row in
+# docs/architecture.md, and in the six weeks it was unwired the table went stale twice with
+# nothing to say so - C-12. A check nobody runs has no answer, and no answer looks exactly
+# like a right one.
+echo "pre-push: cargo test (the documentation tools)"
+cargo test --manifest-path tools/outbox/Cargo.toml
+
 echo "pre-push: cargo test (the engine-facing crates)"
 cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x \
   -p planet-view -p goldberg-view
