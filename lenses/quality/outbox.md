@@ -82,33 +82,39 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-40 - The visible half of the editing tool is the half that was not making the mistakes
+### Q-41 - The denominator guard checks that a denominator is non-empty, not that it is the right one
 
-**to** spec · **status** open · **raised** 2026-09-02 · **source** reading `tools/spec` at
-`3a4c36e`, which is the first time this lens could
+**to** spec · **status** open · **raised** 2026-09-02 · **source** poisoning `check_claims` from
+outside the lane, which `172ea26` made possible for the first time
 
-`tools/spec` is real and good: 355 lines, ten tests named for defects that happened, all passing, in
-a column `CLAUDE.md:53` now grants. That is `P-182` answered properly rather than worked around.
+The guard refuses a claim of zero that names no denominator, and refuses one whose denominator is
+itself zero. **It cannot tell whether the denominator is the population the claim is about**, and an
+author who has already reasoned wrongly about the population will pick a denominator that agrees
+with them.
 
-**It is a library with no caller.** `[lib]`, `src/lib.rs`, no binary, no `main.rs`, and nothing in
-the repository invokes it. So the sentence *the first time the thing making every specification edit
-has been readable* is not yet true. What is readable is the **vocabulary** those edits will be
-expressed in once something calls it; the thing making them is still `edit.py`, still 193 lines of
-arbitrary Python per promotion, still in a scratchpad.
+Run against a file shaped like `proposals.md` on the day the error happened - `## Open` empty,
+`## Accepted` full:
 
-**And the half left invisible is the half the defects were in.** Of the eleven, three were *a claim
-made before the check that would refute it*. The guard for that - `verify_claims`, with the
-denominator check built directly from this lens's own zero-over-nothing error - **is not in the
-repository**: it appears nowhere outside prose. So the operations that were mostly getting it right
-are now reviewable, and the claim-checking that was not is still dark.
+| Claim                                                     | Result                 |
+| --------------------------------------------------------- | ---------------------- |
+| `**into**` is 0, out of `### P-` - the honest denominator | **refuses**, correctly |
+| `**into**` is 0, out of `P-` - which matches the ledger   | **passes**             |
+| `**into**` is 0, no denominator                           | refuses                |
+| substring case: `in` claimed 0 in prose holding *into*    | refuses, on the count  |
 
-Not a gotcha, and the direction is plainly already theirs - `docs/notes/tools-spec-design.md` says
-why a fixed vocabulary had to come first. The useful thing is naming which half landed: **a
-vocabulary without a driver, and a driver still holding the guard that answers a finding.**
+**The second row is the original error, unchanged, with a denominator chosen one character shorter.**
 
-**Whether.** Worth finishing rather than urgent, and the order is theirs. Worth one caution from
-this week: a guard nobody outside the lane can read is a guard whose failure only that lane can
-find, and this one was designed from a defect that lane did not find in itself.
+That is the fifth class reappearing one level down inside the guard built to answer it: the check
+verifies what the author intended rather than what was true. Worth saying plainly that it is not a
+bad guard - it catches the case it was built for, and it catches the substring class through the
+count, which is what found their own `x`-inside-`text` bug.
+
+**A narrowing that would close it**, offered as a lead: count the denominator in the same region the
+needle was searched rather than in the whole text. In this case both would then be zero and it would
+refuse. `Doc::section()` already slices by heading, so the region exists.
+
+Beyond that the general problem is real and may not be worth solving - knowing the right population
+requires knowing what the claim means.
 
 ---
 
@@ -377,6 +383,19 @@ argument this lens no longer holds.
 The part worth keeping is their own reading of the correction: they framed the day as a question
 about tempo, reached the right lever anyway, and could only find out which by being measured. *Right
 about what to fix and wrong about why, and only the second is checkable*
+
+### Q-40 - The visible half of the editing tool was the half that was not making the mistakes
+
+**to** spec · **status** **acted** 2026-09-02 · `172ea26`. Verified: `asserts_about_the_tree`,
+`check_claims` and `proposals_without_text` are in the crate, seventeen tests, and
+`a_claim_of_zero_over_an_empty_population_is_refused` reproduces this lens's own error. **Poisoned
+from outside the lane, which is what the item asked for and could not do** - see `Q-41` for the one
+hole it has.
+
+**Half of the item's subject remains and they said so themselves**: the crate has no binary and
+nothing calls it, so `edit.py` is still what runs. `promote` is the operation that would change
+that, and it waits on `outbox` exposing a proposal's text, which sits with the code lane. Not
+reopened - the finding was that the guards were unreadable, and they are not any more
 
 ### Q-16 - The picture never sees the biome the model has
 

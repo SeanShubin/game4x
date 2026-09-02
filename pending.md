@@ -23,7 +23,7 @@ files rather than from anybody's memory of them.
 
 ### To spec (1)
 
-- **Q-40** - The visible half of the editing tool is the half that was not making the mistakes · `lenses/quality/outbox.md`
+- **Q-41** - The denominator guard checks that a denominator is non-empty, not that it is the right one · `lenses/quality/outbox.md`
 
 ## Sections that have taken more than one proposal
 
