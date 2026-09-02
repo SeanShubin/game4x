@@ -1,15 +1,21 @@
-//! Prints the two tables back out, so the data can be read as the release writes it.
+//! Prints the release's six tables back out, rendered from the data that holds them.
 //!
-//! `cargo run -p kinds` — the same rows `releases/first-release.md` carries, rendered from
-//! the Rust data rather than copied. `tests/against_the_release.rs` compares them.
+//! `cargo run -p kinds`, or `scripts/kinds.sh`. The rows are the ones
+//! `releases/first-release.md` carries, and `tests/against_the_release.rs` compares them.
 
 fn main() {
-    println!("## Units and structures\n");
-    for row in kinds::units_table() {
-        println!("| {} |", row.join(" | "));
-    }
-    println!("\n## Recipes\n");
-    for row in kinds::recipes_table() {
-        println!("| {} |", row.join(" | "));
+    for (heading, rows) in [
+        ("## Kinds", kinds::kinds_table()),
+        ("## Families", kinds::families_table()),
+        ("## Where things are", kinds::bins_table()),
+        ("## Traits", kinds::traits_table()),
+        ("## Units and structures", kinds::units_table()),
+        ("## Recipes", kinds::recipes_table()),
+    ] {
+        println!("{heading}\n");
+        for row in rows {
+            println!("| {} |", row.join(" | "));
+        }
+        println!();
     }
 }
