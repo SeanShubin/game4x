@@ -119,6 +119,7 @@ the ingredients.
 | **upkeep**          | every | in   | unit with upkeep                           | 1                         | no       | at least |
 |                     |       | in   | food                                       | the unit's upkeep         | yes      | at least |
 | **perish**          | every | in   | unit whose upkeep is unpaid                | 1                         | yes      | at least |
+|                     |       | out  | metal                                      | the unit's metal          |          |          |
 | **revert**          | every | in   | territory, force below its force of nature | 1                         | no       | at least |
 |                     |       | out  | territory, unclaimed                       | 1                         |          |          |
 

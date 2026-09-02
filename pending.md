@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-145** - `perish` destroys metal, which the specification says cannot happen · `docs/notes/proposals.md`
 - **P-143** - The release does not declare its own vocabulary · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
@@ -47,10 +46,10 @@ it exists to ask.
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147
-- `releases/first-release.md` -> Recipes - P-140, P-142
 - `spec/console.md` - P-69, P-82
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/interface.md` -> Surfaces - P-73, P-116

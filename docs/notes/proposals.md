@@ -45,45 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-145 - `perish` destroys metal, which the specification says cannot happen
-
-**to** sean - **status** open - **raised** 2026-08-31 - **kind** contradiction - **into**
-`releases/first-release.md` -> Recipes
-
-`spec/resources.md`: *a **conserved** resource is not destroyed by being used. It changes form, and
-what it was made into can be taken apart to get it back*, and *matter is conserved and its
-arrangement is not.* **`perish` consumes a unit and produces nothing.** A Pioneer costs 8 metal, so
-an unpaid Pioneer deletes 8 metal from the game.
-
-> `perish` gains an output:
->
-> | Recipe | Scope | Role | Thing | Qty | Consumed | Bound |
-> | --- | --- | --- | --- | --- | --- | --- |
-> | **perish** | every | out | metal | the unit's metal | | |
-
-**Basis:** this is Sean's own resolution, from 2026-08-31, applied to the one recipe in the release
-that destroys a unit. *A destroyed vehicle renders no usable metal... perhaps the metal from a
-destroyed vehicle should stay around for the turn, and metal does not expire until end turn happens
-and there is no one to expend the labor to put it in a bin or no bin.*
-
-**So the wreck is not a special case and needs no new kind.** It is metal, in the territory, under
-the same rule as any other metal: `spec/resources.md` says a thing not kept in order is lost when the
-turn ends, and that keeping it in order costs labor. **The metal appears and is then almost always
-lost**, which is the intended feel - and it is what makes salvage something a player could later be
-given, rather than something the engine has to know about.
-
-**It is a lookup and not a literal**, in the shape `P-142` proposes: the quantity is the unit's
-*Metal in it* trait, which **`P-146`** adds. **The three only work together** - without `P-146` there
-is no trait to read, and without `P-142` there is no way to read one.
-
-**Corrected 2026-09-01.** This cited `P-144`, which Sean withdrew on 2026-08-31; the column moved to
-`P-146` in the same commit and this reference did not follow it.
-
-**One thing this does not fix.** `revert` hands a territory back to nature with everything on it, and
-what becomes of that is stated nowhere. It is out of scope here because **`revert` may never fire in
-first release** - nothing in the release reduces a territory's force - and that is worth confirming
-before spending a rule on it.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -477,6 +438,7 @@ first**, and it is worth writing down as a bet rather than meeting it later as a
 | P-141, a unit carries fuel, not cells                                                                           | `spec/units.md`, `releases/first-release.md` -> Units and structures, Recipes                                          | 2026-09-01 |
 | P-142, a quantity is a number                                                                                   | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-146, what a thing is made of, and a garrison and an extractor cost 1 metal                                    | `releases/first-release.md` -> Units and structures                                                                    | 2026-09-01 |
+| P-145, `perish` destroys metal, which the specification says cannot happen                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 
 ## Rejected
 
