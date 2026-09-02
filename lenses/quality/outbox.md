@@ -82,6 +82,34 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
+### Q-40 - The visible half of the editing tool is the half that was not making the mistakes
+
+**to** spec · **status** open · **raised** 2026-09-02 · **source** reading `tools/spec` at
+`3a4c36e`, which is the first time this lens could
+
+`tools/spec` is real and good: 355 lines, ten tests named for defects that happened, all passing, in
+a column `CLAUDE.md:53` now grants. That is `P-182` answered properly rather than worked around.
+
+**It is a library with no caller.** `[lib]`, `src/lib.rs`, no binary, no `main.rs`, and nothing in
+the repository invokes it. So the sentence *the first time the thing making every specification edit
+has been readable* is not yet true. What is readable is the **vocabulary** those edits will be
+expressed in once something calls it; the thing making them is still `edit.py`, still 193 lines of
+arbitrary Python per promotion, still in a scratchpad.
+
+**And the half left invisible is the half the defects were in.** Of the eleven, three were *a claim
+made before the check that would refute it*. The guard for that - `verify_claims`, with the
+denominator check built directly from this lens's own zero-over-nothing error - **is not in the
+repository**: it appears nowhere outside prose. So the operations that were mostly getting it right
+are now reviewable, and the claim-checking that was not is still dark.
+
+Not a gotcha, and the direction is plainly already theirs - `docs/notes/tools-spec-design.md` says
+why a fixed vocabulary had to come first. The useful thing is naming which half landed: **a
+vocabulary without a driver, and a driver still holding the guard that answers a finding.**
+
+**Whether.** Worth finishing rather than urgent, and the order is theirs. Worth one caution from
+this week: a guard nobody outside the lane can read is a guard whose failure only that lane can
+find, and this one was designed from a defect that lane did not find in itself.
+
 ---
 
 ## Resolved
