@@ -120,8 +120,8 @@ readies.
 
 ## Recipes
 
-A quantity is a whole number. It is written in the recipe, or read from a trait of one of
-the ingredients.
+A quantity is a whole number. It is written in the recipe, read from a trait of one of the
+ingredients, or read from a trait of the place named by the recipe's scope.
 
 | Recipe              | Scope | Role | Thing                                      | Qty                                       | Consumed | Bound    |
 | ------------------- | ----- | ---- | ------------------------------------------ | ----------------------------------------- | -------- | -------- |

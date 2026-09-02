@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-151** - A quantity may read a trait of the place, not only of an ingredient · `docs/notes/proposals.md`
 - **P-152** - The Traits table declares thirteen and the release uses five more · `docs/notes/proposals.md`
 - **P-153** - `commands/` is in no lane's column · `docs/notes/proposals.md`
 
@@ -45,9 +44,9 @@ it exists to ask.
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147
