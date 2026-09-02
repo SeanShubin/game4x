@@ -51,6 +51,59 @@ Every territory has room for at least one food extractor.
 7. Produce an Ark
 8. Launch the Ark into orbit
 
+## Kinds
+
+| Kind          | What it is                                                    |
+| ------------- | ------------------------------------------------------------- |
+| **citizen**   | a person: provides labor, eats, and grows on surplus          |
+| **garrison**  | what holds a territory; a territory has at most one           |
+| **extractor** | built for one resource, and worked to produce it              |
+| **yard**      | where an Ark is produced                                      |
+| **ark**       | carries a landing, and can invade from orbit                  |
+| **pioneer**   | founds a territory                                            |
+| **food**      | eaten by citizens; expires                                    |
+| **metal**     | what things are built from; conserved                         |
+| **energy**    | what moves things; neither conserved nor expiring             |
+| **labor**     | what working a machine takes; a citizen provides it each turn |
+
+## Families
+
+| Family       | Members             |
+| ------------ | ------------------- |
+| **thing**    | every kind above    |
+| **unit**     | ark, pioneer        |
+| **resource** | food, metal, energy |
+
+## Where things are
+
+Every thing is in a bin, and this release has three sorts.
+
+| Bin                           | Holds                         | Up to                           |
+| ----------------------------- | ----------------------------- | ------------------------------- |
+| a territory's room for a kind | that kind                     | what the territory has room for |
+| an extractor's catch          | the resource it was built for | the territory's density for it  |
+| a unit's tank                 | energy                        | the unit's fuel                 |
+
+There are twelve territories and one orbit. Orbit holds units and nothing else.
+
+## Traits
+
+| Trait           | Of                              | Values                         | Stored or derived                  |
+| --------------- | ------------------------------- | ------------------------------ | ---------------------------------- |
+| **kind**        | every thing                     | one of the ten                 | stored                             |
+| **place**       | every thing                     | the bin it is in               | stored                             |
+| **readiness**   | whatever readies                | ready, exhausted               | stored                             |
+| **force**       | citizen, garrison, ark, pioneer | a number                       | stored                             |
+| **fuel**        | a unit                          | how much energy its tank holds | stored                             |
+| **upkeep**      | a unit                          | food per turn                  | stored                             |
+| **metal in it** | whatever is built               | a number                       | stored                             |
+| **resource**    | an extractor                    | food, metal or energy          | stored                             |
+| **density**     | a territory, per resource       | a number                       | stored                             |
+| **room**        | a territory, per kind           | a number                       | stored                             |
+| **arriving**    | a pioneer                       | yes or no                      | stored, cleared at end turn        |
+| **surplus**     | food                            | yes or no                      | derived: left after everything ate |
+| **unfed**       | a citizen                       | yes or no                      | derived: it did not eat            |
+
 ## Units and structures
 
 | Thing         | Force | Fuel | A move | Upkeep          | Costs to produce             | Metal in it | Requires   | Readies |

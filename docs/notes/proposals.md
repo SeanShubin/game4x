@@ -50,6 +50,26 @@ decision that has not been made yet. Two at the end are waiting on something and
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-7 - `P-143` adds four sections to the release for `prototypes/kinds` to render
+
+**to** code - **status** open - **raised** 2026-09-01 - **source** a promotion
+
+**`releases/first-release.md` now declares its own vocabulary**, which is what `S-4` said the
+compilable specification would force into the open. Four new sections before *Units and structures*:
+**Kinds** (ten), **Families** (three), **Where things are** (three bins), and **Traits** (thirteen).
+
+**This is the part `S-4` was missing.** That item asked for enums for the kinds and a struct per
+recipe, and `prototypes/kinds` guessed the kinds from the recipes because nothing declared them.
+**Now they are declared**, and the test that renders the data back into the release's tables can
+cover four more.
+
+**Three of the thirteen traits are derived and one is cleared**, which is worth knowing before
+modelling them as plain fields: `surplus` and `unfed` are computed, `place` is the bin a thing is in
+rather than a territory id, and `arriving` is stored but cleared at end turn.
+
+**Nothing here is urgent and nothing here is a defect.** It is new ground rather than a correction,
+and it lands on top of `S-6`, which is the same release moving under the same code.
+
 ### S-6 - `P-149` and `P-150` change the console grammar
 
 **to** code - **status** open - **raised** 2026-09-01 - **source** two promotions
@@ -220,97 +240,6 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-143 - The release does not declare its own vocabulary
-
-**to** sean - **status** open - **raised** 2026-08-31 - **rewritten** 2026-09-01 - **kind** gap -
-**into** `releases/first-release.md`, four new sections before *Units and structures*
-
-**Rewritten rather than promoted.** Sean said *promote p-143* on 2026-09-01, and this lane declined:
-the tables still listed `node`, which `P-149` had removed minutes earlier, and defined labor as *a
-citizen operating a machine*, which his own sweep had just taken out of three other places.
-**Promoting it would have undone two promotions from the same afternoon.** Everything below is
-rebuilt against `P-141`, `P-146`, `P-148`, `P-149` and `P-150` as they now stand.
-
-**The recipes reference ten kinds and the release declares six.** *Units and structures* is named
-correctly and holds exactly what it says; nothing else is written down anywhere, so an editor loading
-this release finds no row for `metal`.
-
-> `## Kinds`
->
-> | Kind | What it is |
-> | --- | --- |
-> | **citizen** | a person: provides labor, eats, and grows on surplus |
-> | **garrison** | what holds a territory; a territory has at most one |
-> | **extractor** | built for one resource, and worked to produce it |
-> | **yard** | where an Ark is produced |
-> | **ark** | carries a landing, and can invade from orbit |
-> | **pioneer** | founds a territory |
-> | **food** | eaten by citizens; expires |
-> | **metal** | what things are built from; conserved |
-> | **energy** | what moves things; neither conserved nor expiring |
-> | **labor** | what working a machine takes; a citizen provides it each turn |
-
-> `## Families`
->
-> | Family | Members |
-> | --- | --- |
-> | **thing** | every kind above |
-> | **unit** | ark, pioneer |
-> | **resource** | food, metal, energy |
-
-> `## Where things are`
->
-> Every thing is in a bin, and this release has three sorts.
->
-> | Bin | Holds | Up to |
-> | --- | --- | --- |
-> | a territory's room for a kind | that kind | what the territory has room for |
-> | an extractor's catch | the resource it was built for | the territory's density for it |
-> | a unit's tank | energy | the unit's fuel |
->
-> There are twelve territories and one orbit. Orbit holds units and nothing else.
-
-> `## Traits`
->
-> | Trait | Of | Values | Stored or derived |
-> | --- | --- | --- | --- |
-> | **kind** | every thing | one of the ten | stored |
-> | **place** | every thing | the bin it is in | stored |
-> | **readiness** | whatever readies | ready, exhausted | stored |
-> | **force** | citizen, garrison, ark, pioneer | a number | stored |
-> | **fuel** | a unit | how much energy its tank holds | stored |
-> | **upkeep** | a unit | food per turn | stored |
-> | **metal in it** | whatever is built | a number | stored |
-> | **resource** | an extractor | food, metal or energy | stored |
-> | **density** | a territory, per resource | a number | stored |
-> | **room** | a territory, per kind | a number | stored |
-> | **arriving** | a pioneer | yes or no | stored, cleared at end turn |
-> | **surplus** | food | yes or no | derived: left after everything ate |
-> | **unfed** | a citizen | yes or no | derived: it did not eat |
-
-**Basis: none of this is a new rule.** Every kind, family, bin and trait above is already referenced
-by a recipe, a column or a promoted line, and the only act is writing them where the data can be
-loaded. **Two things in it are Claude's naming rather than Sean's** and should be read as such: the
-*What it is* column, and the trait names `readiness`, `room`, `arriving`, `surplus` and `unfed`,
-which the tables use as bare adjectives and never name.
-
-**What the rewrite changed, so that the difference is visible rather than reported.**
-
-| Was                                                             | Is                                                              | Why     |
-| --------------------------------------------------------------- | --------------------------------------------------------------- | ------- |
-| eleven kinds, including `node`                                  | ten                                                             | `P-149` |
-| labor is *a citizen operating a machine*                        | *what working a machine takes; a citizen provides it each turn* | `P-150` |
-| `## Places`, with *a container - any unit*                      | `## Where things are`, three bins                               | `P-148` |
-| `density` is a node's, `resource` is a node's or an extractor's | `density` and `room` are the territory's                        | `P-149` |
-| `worked`, derived from an extractor being on a node             | gone                                                            | `P-149` |
-| no metal row                                                    | `metal in it`                                                   | `P-146` |
-| `fuel` is *how much energy it holds*                            | *how much energy its tank holds*                                | `P-148` |
-
-**One thing it still does not carry.** A `bin` is not in *Kinds*, because nothing in this release
-builds one - every bin here comes with a territory, an extractor or a unit. **When a warehouse or a
-transport is built, `bin` becomes a kind and gets a row**, and that is a later release rather than a
-gap in this one.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -445,6 +374,7 @@ gap in this one.
 | P-145, `perish` destroys metal, which the specification says cannot happen                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-149, a territory has a density and room for extractors; nodes go                                              | seven spec files and `releases/first-release.md`                                                                       | 2026-09-01 |
 | P-150, labor need not come from a citizen                                                                       | `spec/console.md`, and one line moved from `spec/population.md` -> Labor to `spec/economy.md` -> Structures and labor  | 2026-09-01 |
+| P-143, the release declares its own vocabulary: kinds, families, bins and traits                                | `releases/first-release.md`, four new sections                                                                         | 2026-09-01 |
 
 ## Rejected
 
