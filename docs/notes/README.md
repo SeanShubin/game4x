@@ -37,3 +37,4 @@ disagree, the spec is right and the note needs a superseded marker.
 - [Checks outlive examples](checks-outlive-examples.md) - why three findings in one day all looked green
 - [One tree](one-tree.md) - what has to change for a territory to stop being privileged
 - [How this lane fails](how-this-lane-fails.md) - the defects of 2026-09-01, by cause
+- [tools/spec, designed](tools-spec-design.md) - the editing tool as named operations rather than a script
