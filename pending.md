@@ -12,7 +12,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-166** - `move` has no destination, and nothing sets `arriving` · `docs/notes/proposals.md`
 - **P-167** - `build extractor` takes no metal and names no resource · `docs/notes/proposals.md`
 - **P-168** - Nothing checks room at the moment a thing is created · `docs/notes/proposals.md`
-- **P-169** - Nothing orders `spoil`, so it can eat the food supply before anybody does · `docs/notes/proposals.md`
+- **P-169** - `spoil` takes surplus food, and the order falls out · `docs/notes/proposals.md`
+- **P-170** - A part is one metal arranged, and a thing's metal is how many it has · `docs/notes/proposals.md`
 
 ## What is outstanding
 

@@ -150,43 +150,77 @@ filed separately rather than against any recipe. **It is also the first place a 
 tie-break** - `P-135` promoted that competing effects are gathered and resolved together by a
 deterministic mechanic a player can change, and this is a competition nobody has named.
 
-### P-169 - Nothing orders `spoil`, so it can eat the food supply before anybody does
+### P-169 - `spoil` takes surplus food, and the order falls out
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`releases/first-release.md` -> Recipes, **or** `spec/turn.md` -> Order of operations
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
+**into** `releases/first-release.md` -> Recipes
 
-**Sean asked whether population growth is a recipe or an exception. It is a recipe**, `grow`, owned
-by the world, and nothing about it is special-cased. **The exception is not growth - it is when the
-world's recipes fire.**
+**Sean asked whether population growth is a recipe or an exception. It is a recipe** - `grow`, owned
+by the world - and the exception is not growth but **when the world's recipes fire**. He chose the
+unification over an ordering rule.
 
-**Three of them are ordered by their own ingredients, and that is the mechanism working.** A derived
-trait cannot exist until what derives it has happened:
+**Three of the eight already order themselves**, because a derived trait cannot exist until what
+derives it has happened: `grow` and `depart` wait for `eat`, and `perish` waits for `upkeep`.
+**`spoil` takes plain `food` and waits for nothing**, so it may fire first and leave nothing to eat.
 
-| Recipe   | Waits for | Because                                  |
-| -------- | --------- | ---------------------------------------- |
-| `grow`   | `eat`     | `surplus` is *left after everything ate* |
-| `depart` | `eat`     | `unfed` is *it did not eat*              |
-| `perish` | `upkeep`  | `unpaid` is *its upkeep was not met*     |
+> `spoil`'s ingredient becomes `food, surplus`.
 
-**`spoil` takes plain `food` and waits for nothing.** Applied wherever it matches, it may fire before
-`eat` - and then **there is no food to eat, no surplus to grow on, and every citizen is unfed.** The
-first turn of every game turns on which of two recipes runs first, and nothing in the data says.
+**Basis: it needs no new trait, which is why it is worth trying first.** This lane expected to have
+to invent one - *spare*, or *unclaimed by anything* - and `surplus` already means exactly the right
+thing: **left after everything ate.** Before eating there is no surplus, so `spoil` cannot fire; after
+eating there is, so it can.
 
-**`spec/turn.md` says the order in prose** - *everything that eats, eats; then a population grows on
-surplus food or starves for want of it; what expires expires* - **and prose is not data.** It also
-does not place `upkeep`, `perish` or `revert` at all.
+**And it makes growth and spoilage compete, which is the right relationship.** Surplus food either
+becomes population or rots, and `P-135` already promoted that **competing effects are gathered and
+resolved together by a deterministic mechanic a player can change**. Room for citizens is what
+decides how much of the surplus growth can take, and the rest spoils. **Nothing new is needed for
+that either.**
 
-**Two ways out, and they are different in kind.**
+**What it does not fix.** `upkeep`, `perish` and `revert` are still unplaced relative to the rest -
+`perish` follows `upkeep` by its trait, but nothing says whether upkeep is paid before or after
+eating, and both draw on food. **That is a real question and a smaller one**, and it should be asked
+against the before-and-after pages rather than in the abstract.
 
-- **Give `spoil` a dependency**, so the order falls out the way the other three do. Food that spoils
-  is food nothing ate and nothing grew on, which is a derived trait nothing has yet
-- **Say the world's recipes run in the order `spec/turn.md` lists**, and list all eight. That is an
-  ordering rule, which is the thing the unification has been removing
+### P-170 - A part is one metal arranged, and a thing's metal is how many it has
 
-**The first is the unification and the second is the exception**, and this lane's view is that the
-first is worth trying because the other three already work that way. **What it needs is a trait, and
-naming it is the hard part** - *spare*, or *unclaimed by anything*, and it has to be derivable
-without reference to a recipe that has not run.
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
+`spec/resources.md`, **and** `releases/first-release.md` -> Units and structures
+
+**Sean's, 2026-09-01**: *give every part of every vehicle or building a cost of 1 metal, then
+vehicles and buildings that contain parts just sum their parts.*
+
+> `spec/resources.md` gains one line, beside *matter is conserved and its arrangement is not*:
+>
+> - A part is one metal, arranged. What a thing is made of is its parts, and the metal in it is how
+>   many it has
+
+> `releases/first-release.md` -> Units and structures: **Metal in it** stops being a number someone
+> writes and becomes **how many parts the thing has**, which is the same figure derived rather than
+> declared.
+
+**Basis: it makes conservation structural instead of a rule to check.** `P-165` exists because an Ark
+holds twelve metal and deploys into two metal's worth, and somebody had to notice. **Under parts
+there is nothing to notice**: an Ark has twelve parts, deploying rearranges them, and twelve parts
+come out however they are grouped. **A rule that cannot be broken needs no check.**
+
+**It is `spec/resources.md`'s own sentence made specific.** *Matter is conserved and its arrangement
+is not* - **a part is exactly matter with arrangement**, and loose metal is the same matter without
+it. Taking a thing apart turns parts into metal; building turns metal into parts. **The conserved
+quantity is the count, and the arrangement is what a recipe spends.**
+
+**And it is the third job this one idea does.** `P-157` made a part a thing, which gave move-then-act
+for free - the part that moves exhausts, the part that works exhausts. **Now the same parts carry the
+metal.** One concept for containment, readiness granularity and conservation.
+
+**It does not settle `P-165` and it explains it.** An Ark has twelve parts and deploys into a garrison
+and an extractor, which have one each. **Ten parts have to go somewhere**, and the only place is loose
+metal in the territory - which is Sean's own walkthrough, *deploy ark... output 2 civilian, 3 metal*.
+**Parts make the leftover impossible to ignore rather than impossible to have.**
+
+**One thing to decide with it.** Whether a thing's parts are listed or counted. A Yard at fifteen
+parts is fifteen rows if each is named and one row if they are alike. **Naming them is what a crane
+and an engine need**, and first release has nothing that needs it - so counted now, listed when a
+vehicle earns it.
 
 ## Addressed to other perspectives
 
