@@ -282,48 +282,6 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-154 - Control is derived from a citizen being there
-
-**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** recovered
-- **into** `releases/first-release.md` -> Traits, Recipes
-
-**Sean's, decided 2026-09-01**: *ownership/control is derived by virtue of having a citizen present.*
-
-**That answers the gap by removing it.** This proposal asked why one recipe unclaims a territory and
-none claims one. **The answer is that none needs to**: `land` and `found by land` each produce a
-citizen, and control follows. **They were claiming territories all along and nobody had to say so.**
-
-> `## Traits`: `control` reads *stored* and becomes:
->
-> | Trait | Of | Values | Stored or derived |
-> | --- | --- | --- | --- |
-> | **control** | a territory | held by a player, or unclaimed | derived: a citizen of that player is there |
-
-> `## Recipes`: `revert` can no longer output `territory, unclaimed`, because nothing writes a
-> derived trait. It takes the citizens instead:
->
-> | Recipe | Owner | Role | Thing | Qty | Bound |
-> | --- | --- | --- | --- | --- | --- |
-> | **revert** | world | in | territory, force below its force of nature | 1 | at least |
-> |  |  | out | territory, force below its force of nature | 1 |  |
-> |  |  | in | citizen | 1 | at least |
-
-**Basis: a derived trait cannot be assigned, and that is what `revert` was doing.** `P-152` declared
-`control` stored, so `revert` set it. **Derived means computed from what is there**, and
-`spec/invariants.md` says *nothing can leave a derived trait wrong, because nothing writes one* - so
-`revert` has to change what the answer is computed from. **The population is what nature takes**, and
-control follows it out the way it followed a citizen in.
-
-**The territory is echoed and the citizen is not**, which under `P-159` is exactly the difference
-between the condition and the thing consumed. `revert` is the world's, so it applies wherever it
-matches and takes citizens until none are left.
-
-**One thing this does not settle, and first release does not need it to.** Two players with citizens
-in the same territory would both derive control. `spec/control.md` already has the rule that decides
-it - **taking a territory takes force greater than the existing force** - but nothing says how that
-rule and this derivation compose. **First release has one player**, so the question is real and not
-yet urgent.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -472,6 +430,7 @@ yet urgent.
 | P-163, an orbit sits beside its territory, and launching is a move                                              | `spec/orbit.md`, `releases/first-release.md` -> Recipes                                                                | 2026-09-01 |
 | P-162, `P-156` reintroduced the word `bin`, which `P-157` had just removed                                      | `releases/first-release.md` -> What a territory has room for                                                           | 2026-09-01 |
 | P-164, *Where things are* still describes bins, and is wrong about orbit too                                    | `releases/first-release.md` -> Where things are, Traits                                                                | 2026-09-01 |
+| P-154, control is derived from a citizen being there                                                            | `releases/first-release.md` -> Traits, Recipes                                                                         | 2026-09-01 |
 
 ## Rejected
 

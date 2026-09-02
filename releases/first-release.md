@@ -88,27 +88,27 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 
 ## Traits
 
-| Trait               | Of                              | Values                            | Stored or derived                  |
-| ------------------- | ------------------------------- | --------------------------------- | ---------------------------------- |
-| **kind**            | every thing                     | one of the ten                    | stored                             |
-| **place**           | every thing                     | the thing it is in                | stored                             |
-| **readiness**       | whatever readies                | ready, exhausted                  | stored                             |
-| **force**           | citizen, garrison, ark, pioneer | a number                          | stored                             |
-| **fuel**            | a unit                          | how much energy its tank holds    | stored                             |
-| **upkeep**          | a unit                          | food per turn                     | stored                             |
-| **metal in it**     | whatever is built               | a number                          | stored                             |
-| **resource**        | an extractor                    | food, metal or energy             | stored                             |
-| **density**         | a territory, per resource       | a number                          | stored                             |
-| **room**            | a territory, per kind           | a number                          | stored                             |
-| **control**         | a territory                     | claimed by a player, or unclaimed | stored                             |
-| **biome**           | a territory                     | one of the six                    | stored                             |
-| **force of nature** | a territory                     | a number                          | stored                             |
-| **adjacency**       | a territory                     | which territories touch it        | stored                             |
-| **arriving**        | a pioneer                       | yes or no                         | stored, cleared at end turn        |
-| **surplus**         | food                            | yes or no                         | derived: left after everything ate |
-| **unfed**           | a citizen                       | yes or no                         | derived: it did not eat            |
-| **unpaid**          | a unit                          | yes or no                         | derived: its upkeep was not met    |
-| **houses**          | a thing that contains things    | whether people live in it         | stored                             |
+| Trait               | Of                              | Values                         | Stored or derived                          |
+| ------------------- | ------------------------------- | ------------------------------ | ------------------------------------------ |
+| **kind**            | every thing                     | one of the ten                 | stored                                     |
+| **place**           | every thing                     | the thing it is in             | stored                                     |
+| **readiness**       | whatever readies                | ready, exhausted               | stored                                     |
+| **force**           | citizen, garrison, ark, pioneer | a number                       | stored                                     |
+| **fuel**            | a unit                          | how much energy its tank holds | stored                                     |
+| **upkeep**          | a unit                          | food per turn                  | stored                                     |
+| **metal in it**     | whatever is built               | a number                       | stored                                     |
+| **resource**        | an extractor                    | food, metal or energy          | stored                                     |
+| **density**         | a territory, per resource       | a number                       | stored                                     |
+| **room**            | a territory, per kind           | a number                       | stored                                     |
+| **control**         | a territory                     | held by a player, or unclaimed | derived: a citizen of that player is there |
+| **biome**           | a territory                     | one of the six                 | stored                                     |
+| **force of nature** | a territory                     | a number                       | stored                                     |
+| **adjacency**       | a territory                     | which territories touch it     | stored                                     |
+| **arriving**        | a pioneer                       | yes or no                      | stored, cleared at end turn                |
+| **surplus**         | food                            | yes or no                      | derived: left after everything ate         |
+| **unfed**           | a citizen                       | yes or no                      | derived: it did not eat                    |
+| **unpaid**          | a unit                          | yes or no                      | derived: its upkeep was not met            |
+| **houses**          | a thing that contains things    | whether people live in it      | stored                                     |
 
 ## What a territory has room for
 
@@ -204,7 +204,8 @@ among the results.
 | **perish**          | world  | in   | unit whose upkeep is unpaid                | 1                                         | at least |
 |                     |        | out  | metal                                      | the unit's metal                          |          |
 | **revert**          | world  | in   | territory, force below its force of nature | 1                                         | at least |
-|                     |        | out  | territory, unclaimed                       | 1                                         |          |
+|                     |        | out  | territory, force below its force of nature | 1                                         |          |
+|                     |        | in   | citizen                                    | 1                                         | at least |
 
 ## Biomes
 
