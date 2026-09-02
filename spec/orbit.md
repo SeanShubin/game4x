@@ -8,7 +8,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## The orbital layer
 
-- Orbit is a single place above a planet. It is not a territory, it has no nodes, and nothing is
+- Orbit is a single place above a planet. It is not a territory, it has room for no extractors, and nothing is
   extracted there.
 
 ## What sits in orbit

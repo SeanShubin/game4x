@@ -10,8 +10,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ### Extractor
 
-- An extractor works one node and produces its resource. Once per turn it may take a unit of
-  labor from a citizen and produce that node's density in its resource.
+- An extractor produces one resource. Once per turn it may take a unit of labor and produce the
+  territory's density for that resource
 
 ### Garrison
 

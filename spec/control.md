@@ -13,7 +13,8 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 - Force is the capacity for violence.
 - Every territory has a force of nature, inherent to it. Nature has no quantity and no
   population that grows.
-- Nature consumes nothing. A node is intentional exploitation, and nature does not exploit.
+- Nature consumes nothing. An extractor is intentional exploitation, and nature does not
+  exploit
 
 ## Producing force
 
@@ -44,9 +45,9 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 
 - A planet is fully exploited when every territory that can be taken has been taken, every
   structure has been built everywhere it can be built, and every storage structure on it is full.
-- A structure can be built where the territory's own permanent facts allow it: its nodes, their
-  densities, its biome. Not whether the player can afford it this turn, and not whether any
-  particular game happened to reach it.
+- A structure can be built where the territory's own permanent facts allow it: how many it has
+  room for, their densities, its biome. Not whether the player can afford it this turn, and not
+  whether any particular game happened to reach it
 - A player wins by launching an Ark from a fully exploited planet.
 
 ## Losing

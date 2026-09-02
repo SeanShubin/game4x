@@ -17,35 +17,35 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - The rule editor is not in this release
 - A Pioneer that leaves a territory you control must found the one it enters, or it perishes
 
-### Territory nodes
+### Territory resources
 
-**In** - `spec/planet.md`, *each territory has zero or more nodes for each resource, and each
-node has a density*.
+**In** - `spec/planet.md`, *for each resource, a territory has room for some number of
+extractors, and a density that each of them yields*.
 
 The twelve territories are fixed, each chosen to exercise a different consequence of the rules.
-Every territory has at least one food node.
+Every territory has room for at least one food extractor.
 
-| Territory | Food  | Metal | Energy | What it exercises                     |
-| --------- | ----- | ----- | ------ | ------------------------------------- |
-| 1         | 3 x 4 | 3 x 4 | 3 x 4  | The landing site. Everything works    |
-| 2         | 2 x 6 | 2 x 4 | 2 x 4  | Few dense food nodes                  |
-| 3         | 6 x 2 | 2 x 4 | 2 x 4  | Many thin food nodes, same food total |
-| 4         | 1 x 2 | 4 x 5 | 4 x 5  | The minimum a territory can be        |
-| 5         | 3 x 1 | 8 x 8 | 8 x 8  | Food density 1                        |
-| 6         | 4 x 4 | none  | 4 x 5  | No metal                              |
-| 7         | 4 x 4 | 4 x 5 | none   | No energy                             |
-| 8         | 6 x 6 | 1 x 2 | 1 x 2  | Population without industry           |
-| 9         | 2 x 3 | 6 x 8 | 1 x 2  | Rich metal, too few hands to work it  |
-| 10        | 3 x 3 | 1 x 3 | 6 x 8  | An energy depot                       |
-| 11        | 5 x 6 | 5 x 6 | 5 x 6  | The prize                             |
-| 12        | 2 x 2 | 8 x 8 | 8 x 8  | Rich nodes, almost no workers         |
+| Territory | Food  | Metal | Energy | What it exercises                          |
+| --------- | ----- | ----- | ------ | ------------------------------------------ |
+| 1         | 3 x 4 | 3 x 4 | 3 x 4  | The landing site. Everything works         |
+| 2         | 2 x 6 | 2 x 4 | 2 x 4  | Few dense food extractors                  |
+| 3         | 6 x 2 | 2 x 4 | 2 x 4  | Many thin food extractors, same food total |
+| 4         | 1 x 2 | 4 x 5 | 4 x 5  | The minimum a territory can be             |
+| 5         | 3 x 1 | 8 x 8 | 8 x 8  | Food density 1                             |
+| 6         | 4 x 4 | none  | 4 x 5  | No metal                                   |
+| 7         | 4 x 4 | 4 x 5 | none   | No energy                                  |
+| 8         | 6 x 6 | 1 x 2 | 1 x 2  | Population without industry                |
+| 9         | 2 x 3 | 6 x 8 | 1 x 2  | Rich metal, too few hands to work it       |
+| 10        | 3 x 3 | 1 x 3 | 6 x 8  | An energy depot                            |
+| 11        | 5 x 6 | 5 x 6 | 5 x 6  | The prize                                  |
+| 12        | 2 x 2 | 8 x 8 | 8 x 8  | Rich extractors, almost no workers         |
 
 ## The loop
 
 1. No presence on the planet
 2. Land the ark on a territory from orbit, claiming it
 3. Work the food extractor to grow the population
-4. Build extractors to work the metal and energy nodes
+4. Build extractors for metal and energy
 5. Produce pioneers and spread across the planet by land
 6. Build a Yard
 7. Produce an Ark
@@ -70,58 +70,57 @@ readies.
 A quantity is a whole number. It is written in the recipe, or read from a trait of one of
 the ingredients.
 
-| Recipe              | Scope | Role | Thing                                      | Qty                       | Consumed | Bound    |
-| ------------------- | ----- | ---- | ------------------------------------------ | ------------------------- | -------- | -------- |
-| **land**            | here  | in   | ark, in orbit                              | 1                         | yes      | at least |
-|                     |       | in   | garrison                                   | 0                         | no       | at most  |
-|                     |       | out  | garrison                                   | 1                         |          |          |
-|                     |       | out  | citizen                                    | 1                         |          |          |
-|                     |       | out  | extractor, food                            | 1                         |          |          |
-| **move**            | here  | in   | unit, here                                 | 1                         | yes      | at least |
-|                     |       | in   | energy, in that unit                       | 1                         | yes      | at least |
-|                     |       | out  | unit, there                                | 1                         |          |          |
-| **found by land**   | here  | in   | pioneer, arriving                          | 1                         | yes      | at least |
-|                     |       | in   | garrison                                   | 0                         | no       | at most  |
-|                     |       | out  | garrison                                   | 1                         |          |          |
-|                     |       | out  | citizen                                    | 1                         |          |          |
-|                     |       | out  | extractor, food                            | 1                         |          |          |
-| **build extractor** | here  | in   | labor                                      | 1                         | yes      | at least |
-|                     |       | in   | node, unworked                             | 1                         | no       | at least |
-|                     |       | out  | extractor                                  | 1                         |          |          |
-| **build yard**      | here  | in   | metal                                      | 15                        | yes      | at least |
-|                     |       | out  | yard                                       | 1                         |          |          |
-| **produce pioneer** | here  | in   | metal                                      | 8                         | yes      | at least |
-|                     |       | in   | energy                                     | 6                         | yes      | at least |
-|                     |       | in   | citizen                                    | 1                         | yes      | at least |
-|                     |       | in   | garrison                                   | 1                         | no       | at least |
-|                     |       | out  | pioneer                                    | 1                         |          |          |
-| **produce ark**     | here  | in   | metal                                      | 12                        | yes      | at least |
-|                     |       | in   | energy                                     | 12                        | yes      | at least |
-|                     |       | in   | yard                                       | 1                         | no       | at least |
-|                     |       | out  | ark                                        | 1                         |          |          |
-| **launch**          | here  | in   | ark, here                                  | 1                         | yes      | at least |
-|                     |       | in   | energy, in that unit                       | 1                         | yes      | at least |
-|                     |       | out  | ark, in orbit                              | 1                         |          |          |
-| **spend readiness** | here  | in   | citizen, ready                             | 1                         | yes      | at least |
-|                     |       | out  | citizen, exhausted                         | 1                         |          |          |
-|                     |       | out  | labor                                      | 1                         |          |          |
-| **work**            | here  | in   | labor                                      | 1                         | yes      | at least |
-|                     |       | in   | extractor                                  | 1                         | no       | at least |
-|                     |       | out  | resource                                   | the worked node's density |          |          |
-| **eat**             | every | in   | citizen                                    | 1                         | no       | at least |
-|                     |       | in   | food                                       | 1                         | yes      | at least |
-| **grow**            | every | in   | food, surplus                              | 1                         | yes      | at least |
-|                     |       | out  | citizen                                    | 1                         |          |          |
-| **depart**          | every | in   | citizen, unfed                             | 1                         | yes      | at least |
-| **spoil**           | every | in   | food                                       | 1                         | yes      | at least |
-| **ready**           | every | in   | thing, exhausted                           | 1                         | yes      | at least |
-|                     |       | out  | thing, ready                               | 1                         |          |          |
-| **upkeep**          | every | in   | unit with upkeep                           | 1                         | no       | at least |
-|                     |       | in   | food                                       | the unit's upkeep         | yes      | at least |
-| **perish**          | every | in   | unit whose upkeep is unpaid                | 1                         | yes      | at least |
-|                     |       | out  | metal                                      | the unit's metal          |          |          |
-| **revert**          | every | in   | territory, force below its force of nature | 1                         | no       | at least |
-|                     |       | out  | territory, unclaimed                       | 1                         |          |          |
+| Recipe              | Scope | Role | Thing                                      | Qty                                       | Consumed | Bound    |
+| ------------------- | ----- | ---- | ------------------------------------------ | ----------------------------------------- | -------- | -------- |
+| **land**            | here  | in   | ark, in orbit                              | 1                                         | yes      | at least |
+|                     |       | in   | garrison                                   | 0                                         | no       | at most  |
+|                     |       | out  | garrison                                   | 1                                         |          |          |
+|                     |       | out  | citizen                                    | 1                                         |          |          |
+|                     |       | out  | extractor, food                            | 1                                         |          |          |
+| **move**            | here  | in   | unit, here                                 | 1                                         | yes      | at least |
+|                     |       | in   | energy, in that unit                       | 1                                         | yes      | at least |
+|                     |       | out  | unit, there                                | 1                                         |          |          |
+| **found by land**   | here  | in   | pioneer, arriving                          | 1                                         | yes      | at least |
+|                     |       | in   | garrison                                   | 0                                         | no       | at most  |
+|                     |       | out  | garrison                                   | 1                                         |          |          |
+|                     |       | out  | citizen                                    | 1                                         |          |          |
+|                     |       | out  | extractor, food                            | 1                                         |          |          |
+| **build extractor** | here  | in   | labor                                      | 1                                         | yes      | at least |
+|                     |       | out  | extractor                                  | 1                                         |          |          |
+| **build yard**      | here  | in   | metal                                      | 15                                        | yes      | at least |
+|                     |       | out  | yard                                       | 1                                         |          |          |
+| **produce pioneer** | here  | in   | metal                                      | 8                                         | yes      | at least |
+|                     |       | in   | energy                                     | 6                                         | yes      | at least |
+|                     |       | in   | citizen                                    | 1                                         | yes      | at least |
+|                     |       | in   | garrison                                   | 1                                         | no       | at least |
+|                     |       | out  | pioneer                                    | 1                                         |          |          |
+| **produce ark**     | here  | in   | metal                                      | 12                                        | yes      | at least |
+|                     |       | in   | energy                                     | 12                                        | yes      | at least |
+|                     |       | in   | yard                                       | 1                                         | no       | at least |
+|                     |       | out  | ark                                        | 1                                         |          |          |
+| **launch**          | here  | in   | ark, here                                  | 1                                         | yes      | at least |
+|                     |       | in   | energy, in that unit                       | 1                                         | yes      | at least |
+|                     |       | out  | ark, in orbit                              | 1                                         |          |          |
+| **spend readiness** | here  | in   | citizen, ready                             | 1                                         | yes      | at least |
+|                     |       | out  | citizen, exhausted                         | 1                                         |          |          |
+|                     |       | out  | labor                                      | 1                                         |          |          |
+| **work**            | here  | in   | labor                                      | 1                                         | yes      | at least |
+|                     |       | in   | extractor                                  | 1                                         | no       | at least |
+|                     |       | out  | resource                                   | the territory's density for that resource |          |          |
+| **eat**             | every | in   | citizen                                    | 1                                         | no       | at least |
+|                     |       | in   | food                                       | 1                                         | yes      | at least |
+| **grow**            | every | in   | food, surplus                              | 1                                         | yes      | at least |
+|                     |       | out  | citizen                                    | 1                                         |          |          |
+| **depart**          | every | in   | citizen, unfed                             | 1                                         | yes      | at least |
+| **spoil**           | every | in   | food                                       | 1                                         | yes      | at least |
+| **ready**           | every | in   | thing, exhausted                           | 1                                         | yes      | at least |
+|                     |       | out  | thing, ready                               | 1                                         |          |          |
+| **upkeep**          | every | in   | unit with upkeep                           | 1                                         | no       | at least |
+|                     |       | in   | food                                       | the unit's upkeep                         | yes      | at least |
+| **perish**          | every | in   | unit whose upkeep is unpaid                | 1                                         | yes      | at least |
+|                     |       | out  | metal                                      | the unit's metal                          |          |          |
+| **revert**          | every | in   | territory, force below its force of nature | 1                                         | no       | at least |
+|                     |       | out  | territory, unclaimed                       | 1                                         |          |          |
 
 ## Biomes
 
@@ -136,7 +135,8 @@ What each biome gives a territory. Ocean is not claimable and carries nothing.
 | Jungle    | 4 x 6 | 1 x 2 | 1 x 2  | 1               |
 | Mountain  | 1 x 3 | 5 x 7 | 2 x 3  | 1               |
 
-Every biome except ocean has at least one food node of density two or more.
+`5 x 6` is room for five extractors, each yielding six. Every biome except ocean has room for at
+least one food extractor at density two or more.
 
 ## Controls
 

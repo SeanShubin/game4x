@@ -12,7 +12,7 @@ One section per unit type. What is true of *every* unit belongs in
 ## Units that become structures
 
 - A unit may be taken apart into what a territory needs to sustain itself: a structure that holds
-  the ground, a citizen, and an extractor working a food node
+  the ground, a citizen, and a food extractor
 - An Ark is taken apart on arriving from orbit. A Pioneer is taken apart on arriving from an
   adjacent territory
 - The structure it becomes has one less force than the unit, and is operated by citizens

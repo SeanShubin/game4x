@@ -34,7 +34,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - Two territories are adjacent when they share an edge; territories that meet only at a
   corner are not adjacent
 - Each territory has an id, unique within its planet, starting at 1
-- Each territory has zero or more nodes for each resource, and each node has a density
+- For each resource, a territory has room for some number of extractors, and a density that
+  each of them yields
 - Each territory has a biome.
 - A territory's biome is what the terrain gives it. It is not chosen independently of the
   surface the territory covers.

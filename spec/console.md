@@ -61,7 +61,8 @@ And three that change nothing:
 Available only before `start`:
 
 - `create planet <size>` - make a planet and its territories
-- `add node <territory> <resource> <density>` - give a territory one node
+- `set resource <territory> <resource> <extractors> <density>` - give a territory its
+  room and its density for one resource
 - `set force <territory> <force>` - set a territory's force of nature
 - `set biome <territory> <biome>` - give a territory its biome
 - `add <unit> orbit` - place a unit in orbit before play begins

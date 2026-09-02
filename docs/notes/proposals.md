@@ -192,80 +192,44 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-149 - A territory has a density and room for extractors; nodes go
+### P-150 - Labor need not come from a citizen
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
-`spec/planet.md`, `spec/economy.md`, `spec/structures.md`, `spec/control.md`, `spec/orbit.md`,
-`spec/console.md`, `spec/unit-types.md`, `releases/first-release.md`
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** recovered - **into**
+`spec/console.md`, **and** `spec/population.md` -> Labor moving one line to `spec/economy.md`
 
-**Sean's, decided 2026-09-01**: *make all nodes the same, it is the territory that has a density and
-a capacity for extractors*, and *change the language to capacity: each thing that can be built in a
-territory has a number of that thing that can be built in that territory.*
+**Sean's, decided 2026-09-01**: *make sure we don't require labor come from a citizen. It can come
+from a citizen, and does right now, but no need to restrict unnecessarily.*
 
-**A node is eight lines in seven files and carries no rule of its own.** Everything a node does is
-either a count or a density, and both are facts about the territory.
+**The sweep found three places and two of them are in `P-149`**, which rewrites those lines anyway
+and has been amended. This is the third, plus one thing that is not a restriction but reads like one.
 
-> `spec/planet.md`:
+> `spec/console.md`:
 >
-> - For each resource, a territory has room for some number of extractors, and a density that each
->   of them yields
+> - `work <count> <structure> <territory> [<resource>]` - spend that much labor at a structure this
+>   turn
 
-> `spec/economy.md` -> Extraction, three lines and the example:
->
-> - How many extractors can be built for a resource is a fact of the territory
-> - The territory's density for a resource is what each extractor pulls from it each turn
-> - It costs labor to operate extractors
-> - For example, a territory with room for three food extractors at density 6 supports three farms,
->   and a citizen spending a unit of labor at any of them produces 6 food that turn
+> `spec/population.md` -> Labor keeps its first line and loses its second. *Labor is spent when it
+> is used, and is not restored until the end of the turn* moves verbatim to `spec/economy.md` ->
+> Structures and labor.
 
-> `spec/structures.md` -> Extractor:
->
-> - An extractor produces one resource. Once per turn it may take a unit of labor from a citizen and
->   produce the territory's density for that resource
+**Basis: the debt this pays is already written down.** The backlog has said since 2026-08-25 that
+**the model must not hardwire population as biological** - Sean intends worlds rich in energy but
+hostile to life, worked by machines - and that *labor is the abstraction; citizens are one source of
+it*. Three lines quietly said otherwise.
 
-> `spec/control.md`, two lines:
->
-> - An extractor is intentional exploitation, and nature does not exploit
-> - A structure can be built where the territory's own permanent facts allow it: how many it has
->   room for, their densities, its biome. Not whether the player can afford it this turn, and not
->   whether any particular game happened to reach it
+**Why the move and not just the wording.** `A citizen provides labor each turn` belongs in
+`population.md`, because it is a fact about citizens. **`Labor is spent when it is used` is not** -
+it is true of labor from any source, and a rule about labor filed under Population is a rule a reader
+will take to be about citizens. **The heading is doing the restricting**, which is the kind of thing
+a wording sweep misses.
 
-> `spec/orbit.md`: *it has no nodes* becomes *it has room for no extractors*.
+**One thing deliberately left alone.** The release's `spend readiness` takes a ready citizen and
+yields labor. That is not a restriction - it is one recipe that makes labor, and **nothing stops
+another recipe making it from something else**, which is what *the game is data* buys.
 
-> `spec/unit-types.md`: *an extractor working a food node* becomes *a food extractor*.
-
-> `spec/console.md`: `add node <territory> <resource> <density>` becomes
-> `set resource <territory> <resource> <extractors> <density>`, giving a territory its room and its
-> density for one resource.
-
-> `releases/first-release.md` -> Biomes: the note becomes *every biome except ocean has room for at
-> least one food extractor at density two or more*, and a legend line is added: **`5 x 6` is room for
-> five extractors, each yielding six.**
-
-> `releases/first-release.md` -> Recipes: `build extractor` loses its `node, unworked` ingredient,
-> and `work`'s output quantity becomes **the territory's density for that resource**.
-
-**Basis: the ingredient it deletes was never an ingredient.** `build extractor` takes
-`node, unworked`, which asks *is there room here* - and since `P-148`, a capacity is a bin and the
-general rule already answers that for every kind. **The recipe was carrying a special case of a rule
-that now exists**, and with the node gone the derived trait `worked` has nothing left to derive from.
-
-**One thing is genuinely lost, and this lane told Sean otherwise.** It reported that densities were
-already uniform within a territory, which is true of the release and **false of the specification**:
-`spec/economy.md`'s worked example is *a territory with three food nodes of densities 8, 6 and 3*.
-**Per-node variation is a capability the spec has and this removes.** The release never used it - the
-Biomes table gives one density per resource per biome - so nothing breaks, but it should be given up
-knowingly rather than by not noticing.
-
-**Accepted by Sean, 2026-09-01**: *per-node density is intentionally being cut.* Recorded here so
-that the capability was given up by decision and not by nobody noticing.
-
-**What it costs to keep instead.** Varying densities need a node to hang on, which is the kind this
-proposal removes, and the extractor then has to name which one it works. **That is the whole of what
-the node was for**, and one number per resource per territory is what replaces it.
-
-**Two of these are work for the code lane rather than reading.** The console command changes shape,
-and `releases/first-release.md` is what `prototypes/kinds` renders and compares against.
+**And one thing this cannot fix yet.** `P-143` defines labor as *a citizen operating a machine*,
+which is Sean's own phrasing from 2026-08-31 and is now too narrow. `P-143` is already stale pending
+`P-149`; **that definition goes on the list of what its rewrite has to change.**
 
 ### P-143 - The release does not declare its own vocabulary
 
@@ -514,6 +478,7 @@ first**, and it is worth writing down as a bet rather than meeting it later as a
 | P-142, a quantity is a number                                                                                   | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-146, what a thing is made of, and a garrison and an extractor cost 1 metal                                    | `releases/first-release.md` -> Units and structures                                                                    | 2026-09-01 |
 | P-145, `perish` destroys metal, which the specification says cannot happen                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-149, a territory has a density and room for extractors; nodes go                                              | seven spec files and `releases/first-release.md`                                                                       | 2026-09-01 |
 
 ## Rejected
 
