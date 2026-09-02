@@ -135,9 +135,9 @@ ingredients, or read from a trait of the place named by the recipe's scope.
 |                     |       | out  | garrison                                   | 1                                         |          |          |
 |                     |       | out  | citizen                                    | 1                                         |          |          |
 |                     |       | out  | extractor, food                            | 1                                         |          |          |
-| **move**            | here  | in   | unit, here                                 | 1                                         | yes      | at least |
+| **move**            | here  | in   | unit, here, ready                          | 1                                         | yes      | at least |
 |                     |       | in   | energy, in that unit                       | 1                                         | yes      | at least |
-|                     |       | out  | unit, there                                | 1                                         |          |          |
+|                     |       | out  | unit, there, exhausted                     | 1                                         |          |          |
 | **found by land**   | here  | in   | pioneer, arriving                          | 1                                         | yes      | at least |
 |                     |       | in   | garrison                                   | 0                                         | no       | at most  |
 |                     |       | out  | garrison                                   | 1                                         |          |          |
@@ -163,7 +163,8 @@ ingredients, or read from a trait of the place named by the recipe's scope.
 |                     |       | out  | citizen, exhausted                         | 1                                         |          |          |
 |                     |       | out  | labor                                      | 1                                         |          |          |
 | **work**            | here  | in   | labor                                      | 1                                         | yes      | at least |
-|                     |       | in   | extractor                                  | 1                                         | no       | at least |
+|                     |       | in   | extractor, ready                           | 1                                         | yes      | at least |
+|                     |       | out  | extractor, exhausted                       | 1                                         |          |          |
 |                     |       | out  | resource                                   | the territory's density for that resource |          |          |
 | **eat**             | every | in   | citizen                                    | 1                                         | no       | at least |
 |                     |       | in   | food                                       | 1                                         | yes      | at least |

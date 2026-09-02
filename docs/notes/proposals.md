@@ -72,41 +72,6 @@ line is scoped to is not tidying**, so it is filed.
 promotion that makes something else stale either refuses or files the cleanup, and never notes it in
 a paragraph.
 
-### P-155 - Readiness is written in the recipe, not assumed by a rule
-
-**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** recovered
-- **into** `releases/first-release.md` -> Recipes. **Needs `P-157`**
-
-**Sean's, decided 2026-09-01**: *any time a civilian generates labor it becomes exhausted; any time
-labor operates an extractor the extractor becomes exhausted.*
-
-> `work` and `move` name the readiness they spend, as `spend readiness` already does:
->
-> | Recipe | Role | Thing | Qty |
-> | --- | --- | --- | --- |
-> | **work** | in | extractor, ready | 1 |
-> |  | out | extractor, exhausted | 1 |
-> | **move** | in | unit, ready | 1 |
-> |  | out | unit, exhausted | 1 |
-
-**Basis: `consumed` is already a column, so readiness should be data too.** The recipes express *this
-input is used up* in the table rather than as engine behaviour. **Readiness is the same kind of
-fact**, and expressing it as a rule in `spec/turn.md` is the odd one out - a rule the tables cannot
-see is a case in the engine, which `spec/invariants.md` spends a bullet forbidding.
-
-**This lane had it backwards and Sean's question is what caught it.** It reported `spend readiness`'s
-explicit qualifiers as redundant. **No rule makes them redundant**: that recipe *consumes* a ready
-citizen and creates an exhausted one, and *using it exhausts it* cannot reach a consumed input,
-because there is nothing left to exhaust. **One recipe of eighteen was right and the other three were
-missing it.**
-
-**Move-then-act needs nothing here.** Sean asked whether *moved* should be a second trait, then
-answered his own question better: *perhaps a vehicle can be composed of parts, the part that moves
-exhausts, the part that does something limited exhausts.* **Under `P-157` a thing contains things, so
-a part is a thing** - and a unit with an engine and a crane spends each separately with one readiness
-and no new trait. **First release declares one part per unit and gains nothing until a vehicle earns
-a second**, which is why this proposal does not ask for parts and does not need to.
-
 ### P-158 - The Scope column is the owner column wearing a location's name
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
@@ -615,6 +580,7 @@ about garrisons rather than about traits, which makes it Sean's.
 | P-152, the Traits table declares thirteen and the release uses five more                                        | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
 | P-153, `commands/` is in no lane's column                                                                       | `CLAUDE.md` -> Perspectives, the Code row                                                                              | 2026-09-01 |
 | P-157, a thing contains things, and a territory is one                                                          | `spec/logistics.md` -> Containment, replaced whole                                                                     | 2026-09-01 |
+| P-155, readiness is written in the recipe, not assumed by a rule                                                | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 
 ## Rejected
 
