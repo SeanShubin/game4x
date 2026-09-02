@@ -1150,3 +1150,43 @@ bins in a controlled territory*, and the Scope column's `here`. **Both need to k
 something is in**, which for a deeply nested thing means walking up the tree. That is the thing to
 settle before the tree pays - either a territory stays privileged and the tree is uniform everywhere
 else, or those two rules restate in terms of the nearest enclosing place a player controls.
+
+### Said 2026-09-01: a resource-type leaf, or parametric polymorphism
+
+Sean, on `build extractor`'s `<resource>` blank: *we were also making all things trees, so could an
+extractor be a tree with a leaf specifying a resource type? That way we have 3 recipes, one for each
+extractor. Or perhaps we need parametric polymorphism?*
+
+**The leaf works, and it is worth noticing that it does not change the recipe count.** Three recipes
+either way - what changes is whether a food extractor differs from a metal one **by a trait or by a
+part**. Both remove the blank, because both build a concrete thing.
+
+|             | An extractor is                    | `work` reads |
+| ----------- | ---------------------------------- | ------------ |
+| **a trait** | one kind carrying `resource: food` | the trait    |
+| **a leaf**  | one kind containing a food core    | the part     |
+
+**What the leaf adds that the trait does not is retooling.** A part can be taken out and another put
+in; a trait cannot. **Swapping a core to change what an extractor mines is a real option that falls
+out of `P-157` for free**, and it is the only thing either version buys that the other does not.
+
+**And it changes a number Sean set an hour earlier.** `P-170` makes a thing's metal its binding plus
+its parts. **An extractor with a core is 2 metal, not 1** - and territory 1's opening arithmetic,
+`P-165`'s deployment balance and `P-156`'s room values were all set against 1. Not an objection;
+a consequence, and a small one to re-run.
+
+## Parametric polymorphism, and why waiting costs nothing
+
+**Three concrete recipes are exactly what a parameterised one expands to.** So doing three now and
+parameterising later **loses nothing** - the data is the same data, and the parameter is a way of
+writing it shorter rather than a different thing being said.
+
+**It earns its keep when the fixed set stops being small.** Three resources is three rows of the same
+shape; ten would be ten, and a rules editor that cannot say *for each resource* would make a person
+type them.
+
+**The cost is worth naming, because it has been paid three times already.** A quantity that is read
+rather than written was the first step, `$name` references are the second, and a parameter over kinds
+would be the third. **Each is justified on its own and together they are a language** - and *a thin
+engine mapping data to visuals* becomes an interpreter somewhere along that line. **Where that line
+is has not been decided**, and it should be decided deliberately rather than one step at a time.
