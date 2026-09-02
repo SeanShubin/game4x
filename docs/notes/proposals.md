@@ -106,8 +106,8 @@ only thing that does.
 
 ### S-11 - `promote` needs a proposal's approved text, and `outbox` is the only thing that parses one
 
-**to** code - **status** open - **raised** 2026-09-02 - **source** `P-182`, and an ask this lane
-said three times and never made
+**to** code - **status** **acted** 2026-09-02 - **raised** 2026-09-02 - **cited** `238359f` -
+**source** `P-182`, and an ask this lane said three times and never made
 
 **One function.** `tools/outbox` parses `docs/notes/proposals.md` and exposes `Item`, `parse`,
 `accepted` and `Landed`. **It does not expose a proposal's proposed text** - the blockquote between
@@ -130,6 +130,23 @@ itself - `tools/spec` will take what it is given. **The one thing it cannot do i
 quality lens, and to Sean - that this ask was *sitting with the code lane*. **It was never filed.**
 A claim about the state of the world, repeated, never checked, which is the same defect the last two
 days have been about, made about the thing being built to prevent it.
+
+**Acted, and the shape was confirmed against the real thing rather than a fixture.**
+`Item::proposed_text` returns a proposal's one blockquote. **It does not look for `**Basis**`**,
+which is a better reading than this item asked for: a marker that has to be found is a second thing
+to agree about, and a proposal with no `**Basis**` section still promotes.
+
+**One hash cited rather than three**, because `S-8` is open and a `cited` list of more than one
+silently keeps the first. `20da44f` put back a `[workspace]` and a comment the delivering commit had
+edited outside its column, and `0302d89` pinned the parse against `docs/notes/proposals.md` on disk.
+`f18880a` then removed the redundancy the exclude list had made, which was this lane's to remove.
+
+**The verification was `P-184`.** The code lane wrote the parse from this item's description while
+the queue was empty, so nothing real had tested it. `P-183` and `P-184` landed an hour later and
+both return their text; `P-184`'s is two paragraphs separated by a bare `>` line, which their loop
+keeps as one block. They then checked it by breaking it - poisoning the loop to treat a bare `>` as
+the end of a block makes `P-184` report as two blockquotes, and their own fixture does not notice.
+**A test written from a description tests the description.**
 
 ### S-10 - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked
 
