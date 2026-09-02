@@ -152,9 +152,8 @@ An ingredient may be given a name, written `$name`, and another ingredient may r
 recipe that names two things of the same kind must name them, because otherwise a reference has
 two candidates.
 
-An ingredient may be given a name, written `$name`, and another ingredient may refer to it. A
-recipe that names two things of the same kind must name them, because otherwise a reference has
-two candidates.
+A blank is not a zero. It says the row has no such number, and a quantity read from one produces
+nothing.
 
 | Recipe                     | Owner  | Role | Thing                            | Qty                                  | Bound    |
 | -------------------------- | ------ | ---- | -------------------------------- | ------------------------------------ | -------- |

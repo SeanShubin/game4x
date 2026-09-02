@@ -45,42 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-181 - `perish` reads a citizen's metal, and a citizen's metal is blank
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`releases/first-release.md` -> Recipes, **or** -> Units and structures
-
-**`P-176` named this and this lane deleted it on promotion**, which is exactly what the rule added to
-`CLAUDE.md` two hours earlier forbids. **First promotion after the rule, and it was broken.** Filed
-now rather than recovered from a diff later.
-
-**`perish` yields `metal` at *the thing's metal*.** It now applies to any thing with upkeep, which is
-a Pioneer **and a citizen**. *Units and structures* gives a citizen a blank in **Metal in it**,
-because `P-146` said a citizen is blank rather than zero since a citizen is not built. **So the
-lookup reads a blank**, and nothing says what that yields.
-
-**Two ways, and they differ in what a blank means everywhere else.**
-
-- **A blank reads as nothing produced.** A citizen perishes and no metal appears, which is right, and
-  it makes blank mean *this row has no such number* consistently across the table
-- **A citizen's metal becomes 0.** The lookup always finds a number, at the cost of saying a citizen
-  is made of no metal rather than not being made
-
-**This lane would take the first**, because *Force*, *Fuel* and *Upkeep* all carry blanks for the
-same reason and none of them means zero. **A garrison's blank Fuel does not mean it holds no fuel; it
-means a garrison does not have a tank.**
-
-> `releases/first-release.md` -> Recipes gains a fourth sentence, beside the three about reading a
-> row:
->
-> A blank is not a zero. It says the row has no such number, and a quantity read from one produces
-> nothing.
-
-**Written into the proposal on 2026-09-01, having been filed without any.** Sean said promote and
-there was nothing to copy - **the same defect as `P-166` and `P-168`**, and the third time this lane
-has filed a question in a queue whose contract is *here is the text*. The sentence above is the
-recommendation made promotable, and it is his to change before it lands.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -483,6 +447,7 @@ work the release exists to order.
 | P-178, `surplus` is derived from a recipe that no longer exists                                                 | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
 | P-179, a Pioneer may cross its own empire, and one line says it may not                                         | `releases/first-release.md` -> Scope                                                                                   | 2026-09-01 |
 | P-180, the `upkeep` trait says *a unit*, and a citizen has one                                                  | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
+| P-181, `perish` reads a citizen's metal, and a citizen's metal is blank                                         | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 
 ## Rejected
 
