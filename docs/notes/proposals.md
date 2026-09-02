@@ -45,6 +45,51 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-173 - `P-158` deleted the Scope column and two things still depend on it
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
+`releases/first-release.md` -> Recipes
+
+**Found while rewriting the before-and-after pages**, which is the second time that exercise has paid
+for itself before a page was finished.
+
+**`P-158` renamed Scope to Owner and said where a recipe applies is what its ingredients say.** Two
+things were left pointing at the column it removed.
+
+- **The sentence about quantities.** *A quantity is... read from a trait of the place named by the
+  recipe's scope.* **There is no scope.** `work` reads *the territory's density for that resource*
+  and no territory is among its ingredients, which is the case that sentence was written for
+- **`deploy ark` takes `ark, here`.** **`here` is undefined**, and it is the same word `P-166`
+  replaced in `move` with `$from` and `$to`
+
+> The sentence's third clause becomes: *or read from a trait of a named ingredient.*
+>
+> `deploy ark` gains a named territory, the way `move` did:
+>
+> | Recipe | Owner | Role | Thing | Qty | Bound |
+> | --- | --- | --- | --- | --- | --- |
+> | **deploy ark** | player | in | `$where` territory | 1 | at least |
+> |  |  | out | `$where` territory | 1 |  |
+> |  |  | in | ark, in `$where` | 1 | at least |
+>
+> and `work` gains one too, so the density it reads has something to be read from:
+>
+> | **work** | player | in | `$where` territory | 1 | at least |
+> |  |  | out | `$where` territory | 1 |  |
+> |  |  | out | resource | `$where`'s density for that resource | |
+
+**Basis: `P-166` already did this and stopped at one recipe.** Naming the place an ingredient rather
+than assuming it is what let `move` say where it goes; **`deploy ark` and `work` need the same thing
+for the same reason**, and both were left because nothing forced them at the time.
+
+**It also finishes what `P-158` started.** That proposal's whole argument was that `here` said who a
+recipe belonged to rather than where it applied. **Where it applies then had to be said some other
+way**, and `$name` is that way - so this is the second half of one change rather than a new one.
+
+**What it does not touch.** `found by land` takes `pioneer, arriving` and needs no territory: the
+Pioneer is in one, and `arriving` says it just got there. **Only recipes that read a trait of a place
+need to name it.**
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
