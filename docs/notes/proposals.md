@@ -52,7 +52,7 @@ only thing that does.
 
 ### S-10 - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked
 
-**to** code - **status** open - **raised** 2026-09-02 - **source** the quality lens, `Q-39`
+**to** code - **status** open - **raised** 2026-09-02 - **source** the quality lens, `Q-39` - **cited** `544d751`
 
 **This is the quality lens's finding and its design; this lane is relaying it because the build is
 yours.** The report is
