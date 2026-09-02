@@ -340,76 +340,6 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-141 - A unit carries fuel, not cells
-
-**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into** `spec/units.md`,
-**and** `releases/first-release.md` -> Units and structures, Recipes
-
-**Sean's, decided 2026-08-31**: *perhaps we can replace cell with fuel capacity. So units have a gas
-tank, they burn a unit of fuel every time they move.*
-
-> `spec/units.md`, the two lines about cells become:
->
-> - A mobile unit has a bin for fuel. Moving burns a unit of it, and a unit with none cannot move
-> - Fuel moves freely between a controlled territory that has it and anything there that can
->   hold it
-
-> `releases/first-release.md` -> Units and structures: the **Cells** column becomes **Fuel**, and the
-> **A move** column reads `1 fuel` for the Ark and the Pioneer.
-
-> `releases/first-release.md` -> Recipes: the two `cell, on that unit` ingredients become
-> `energy, in that unit`.
-
-**Rewritten in one line, 2026-09-01, after `P-148` was promoted.** *A mobile unit holds fuel, up to a
-capacity of its own* **contradicted a promoted rule** rather than merely reading narrowly:
-`spec/logistics.md` now says a thing is in a bin and **nothing else in the game holds anything**, so
-a unit does not hold fuel - a bin in it does. It now reads *a mobile unit has a bin for fuel*, which
-is shorter and says more.
-
-**One line is still narrower than the truth and is left alone deliberately.** *Fuel moves freely*
-is a special case of **anything moving freely between bins in a controlled territory**, and that
-general rule is not proposed anywhere yet. Promoting the narrow version is safe - it is true - and
-the general one should replace it rather than be smuggled in here.
-
-**Basis:** it removes a kind rather than adding one, and **the specification already said so**.
-`spec/units.md`: *a unit's cells are filled when it is built, and **the energy** is paid in the
-territory that built it.* **A cell was always energy in a wrapper** - the wrapper had a name, a
-column and two recipe ports, and no rule of its own.
-
-**So the kinds table has twelve rows and not thirteen**, which was the question blocking everything
-else in [the data inventory](first-release-data.md). `cell` was the doubtful kind, and the answer is
-that it is not one.
-
-**And it makes a unit a container, which `P-129` already describes.** *A container occupies capacity
-of its own kind and provides capacity of another.* **A fuel capacity is exactly that** - a unit takes
-up room in a territory and provides room for fuel inside itself. So *gas tank* is not a new mechanic;
-it is the capacity rule applied to something that was already carrying energy around.
-
-**Amended 2026-08-31, one word, before Sean approves.** The ingredient was written `fuel, in that
-unit` and is now `energy, in that unit`. **`fuel` as an ingredient name would put the wrapper back**,
-which is the whole thing this proposal removes: there would again be a name in the recipes that is
-not a kind. The **Fuel** column stays, because there it names a *capacity* - how much energy the unit
-can hold - and a capacity is a trait rather than a kind.
-
-**Amended again 2026-08-31, and this one is a rule rather than a word.** Sean: *fuel should be freely
-transferable between a controlled territory that has it and a thing that can hold it.* The line that
-said a unit's fuel is put in when it is built was **too narrow, not wrong** - fuelling at build time
-is one case of the general rule, so the general rule replaces it rather than joining it.
-
-**Free means no labor and no limit but capacity**, and one move a turn is what bounds it: a unit that
-moves is exhausted, so nothing can shuttle. **It also raises the stakes on upkeep.** Loading a
-transport costs nothing, so a vehicle parked in a controlled territory is storage with no friction at
-all - and upkeep is then the only thing making that a choice rather than a free win.
-
-**And it makes a territory's containers one pool for reach and many for the bound.** Within a
-controlled territory a player never has to say which bin holds what, because it can always be moved
-for nothing; the container boundaries decide **how much** can be kept and nothing else.
-
-**One thing left as it is, deliberately.** *Fuel* rather than *energy* in the unit's column, because
-Sean said fuel and the word does work: energy in a store and energy in a tank behave differently -
-one can be spent on anything and one only on moving. **They are the same resource and the distinction
-is where it sits**, which is what a container is for.
-
 ### P-143 - The release does not declare its own vocabulary
 
 **to** sean - **status** open - **raised** 2026-08-31 - **kind** gap - **into**
@@ -653,6 +583,7 @@ first**, and it is worth writing down as a bet rather than meeting it later as a
 | P-140, two recipes the table did not have: upkeep, perish and revert                                            | `releases/first-release.md` -> Recipes                                                                                 | 2026-08-31 |
 | P-148, a bin is where everything is, and a capacity is a bin                                                    | `spec/logistics.md` -> Capacity, replaced whole and renamed Containment                                                | 2026-09-01 |
 | P-147, every cycle among recipes must spend readiness                                                           | `spec/invariants.md` -> The game is data                                                                               | 2026-09-01 |
+| P-141, a unit carries fuel, not cells                                                                           | `spec/units.md`, `releases/first-release.md` -> Units and structures, Recipes                                          | 2026-09-01 |
 
 ## Rejected
 

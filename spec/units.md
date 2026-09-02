@@ -14,8 +14,7 @@ What is true of every unit. Particular units are in [unit types](unit-types.md).
 - Each type of unit has a unique name
 - Each unit has a force
 - A unit may require upkeep each turn, and is lost if it is not paid
-- A mobile unit carries energy cells. Moving spends them, and a unit with none cannot move
-- A unit's cells are filled when it is built, and the energy is paid in the territory that built
-  it
+- A mobile unit has a bin for fuel. Moving burns a unit of it, and a unit with none cannot move
+- Fuel moves freely between a controlled territory that has it and anything there that can hold it
 
 ## Open questions
