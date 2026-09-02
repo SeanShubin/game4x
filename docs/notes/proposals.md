@@ -45,59 +45,73 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-183 - Nothing says where a recipe acts, and only the rendering does
+### P-183 - Where a recipe's results appear is stated nowhere
 
 **to** sean - **status** open - **raised** 2026-09-02 - **kind** gap - **into**
-`releases/first-release.md` -> Recipes, the prose above the table
+`spec/invariants.md` -> The game is data
 
-**Eleven of the sixteen recipes name no territory.** `build metal extractor` takes a labor and a
-metal and yields an extractor, and nothing in the release says the three are in the same place - so
-by the text as written, labor in territory 1 and metal in territory 5 build an extractor in
-territory 9.
+**The input half is already yours.** `spec/invariants.md` says *the player's are offered wherever
+their inputs are present*, which puts a recipe at a place and its inputs there with it. **Nothing
+says where its results go.**
 
-> A recipe acts in one place. Every ingredient and every result is in that place, unless its row
-> names another with `in $name`. Where a recipe names exactly one territory, that place is that
-> territory.
+> A recipe acts in one place, the place its inputs are in. Its results appear there too, unless a
+> row names another place.
 
-**Basis: the rule is already being relied on, and the only place it is written is a rendering.**
-`docs/recipes/README.md` says *the recipe acts where its ingredients are* to explain why `build
-metal extractor` needs no `$where`. **A rendering must not be where a rule lives** - it is derived
-from the release and cannot be the source of something the release lacks.
+**Basis: eleven of the sixteen recipes in the first release name no territory**, and `build metal
+extractor` is the plain case - a labor and a metal yield an extractor, and by the text as written
+that extractor could appear anywhere. The rule is already being relied on: `docs/recipes/README.md`
+says *the recipe acts where its ingredients are*, and **a rendering must not be where a rule
+lives.**
 
-**The three sentences cover every recipe, and the third is what `work` needs.** `move` names two
-territories and every one of its unit rows says `in $from` or `in $to`, so nothing is left to the
-default and the third sentence does not apply. `work` names one, so the extractor it exhausts and
-the resource it yields are in `$where` - which is the territory whose density it reads. **Without
-the third sentence a player reads territory 11's density while exhausting territory 4's
-extractor.**
+**The second clause is what `move` needs**, whose unit rows say `in $from` and `in $to` and
+therefore say otherwise.
 
-### P-184 - The world's recipes have an order, and it is neither stated nor the one the table shows
+### P-184 - The release lists the world's recipes in an order `spec/turn.md` contradicts
 
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** gap - **into**
-`releases/first-release.md` -> Recipes, the prose above the table, and the row order
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** cleanup - **into**
+`releases/first-release.md` -> Recipes
 
-**`Owner` is `player` or `world` and the release never says what that means.** The rendering says
-the world's *fire when the turn ends*, which is another rule living only in a rendering. **And the
-table lists them grow, spoil, ready, upkeep, perish, which is an order they cannot run in.**
+**The order is already yours and the release does not follow it.** `spec/turn.md` gives it, and the
+table lists them grow, spoil, ready, upkeep, perish - upkeep last but one, when three of the others
+read a trait it derives.
 
-> A player's recipes fire when the player chooses them. The world's fire once the turn is over, in
-> this order: `upkeep`, `perish`, `grow`, `spoil`, `ready`.
+> **In** - `spec/turn.md`, *ending a turn: everything that eats, eats; then a population grows on
+> surplus food or starves for want of it; what expires expires, and what was not kept in order is
+> lost; and everything becomes ready again*.
 >
-> The order follows from what the recipes read. `upkeep` derives both `surplus` and `unpaid`, so
-> nothing that reads either can precede it. `grow` takes surplus before `spoil` rots what is left
-> of it. `ready` is last, so that what a thing spent during the turn is restored for the next one.
+> The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
+> that order: `upkeep`, then `grow` and `perish`, then `spoil`, then `ready`. The rows below are in
+> that order.
 
-**Basis: three of the four positions are forced and the fourth is free.** `grow`, `spoil` and
-`perish` all read a trait `upkeep` derives, so all three follow it. `grow` before `spoil` is the
-relationship the rendering already describes - surplus either becomes population or rots - and
-reversing it means surplus always rots. **`perish` against `grow` is the free one and it does not
-matter**: there is surplus food only when every upkeep was paid, and something is unpaid only when
-food ran out, so the two can never both fire in one territory in one turn.
+**Basis: this is a release following the specification, not a new rule.** Every phase maps to one
+recipe - *everything that eats* is `upkeep`, *grows or starves* is `grow` and `perish`, *what
+expires* is `spoil`, *becomes ready again* is `ready`. **`grow` and `perish` share a position and
+that is correct**: there is surplus food only when every upkeep was paid, and something is unpaid
+only when food ran out, so the two can never both fire in one territory in one turn.
 
-**`ready` is the one with no derivation at all.** Nothing anywhere says whether it fires before or
-after the player's turn, and if it fired before, every extractor would work twice.
+**The rows move to match**, because a reader who takes the table for the order gets `upkeep` fourth,
+and `surplus` and `unpaid` do not exist until it has run.
 
-**The rows move to match**, since a stated order the table contradicts is worse than no order.
+### P-185 - `spec/turn.md` names a recipe that `P-176` merged away
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** cleanup - **into**
+`spec/turn.md` -> Order of operations
+
+**`P-176` merged `eat` into `upkeep`**, on the grounds that they were one recipe with two names and
+a citizen's upkeep was assumed rather than written. **The turn still opens its ending with
+*everything that eats, eats*.**
+
+> Ending a turn: everything with upkeep pays it; then a population grows on surplus food or starves
+> for want of it; **what expires expires, and what was not kept in order is lost**; and everything
+> becomes ready again.
+
+**Basis: the same drift `P-178` fixed for `surplus`, one level up.** That trait read *left after
+everything ate* and now reads *left after every upkeep was paid*; this line is the one it was
+derived from and was not carried with it.
+
+**It is wording rather than meaning** - a citizen's upkeep is food, so everything that eats is
+exactly everything with upkeep today. **Filed rather than done**, because this is `spec/` and the
+phrase is the one every other document's ending is read against.
 
 ## Addressed to other perspectives
 

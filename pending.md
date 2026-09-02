@@ -8,8 +8,9 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-183** - Nothing says where a recipe acts, and only the rendering does · `docs/notes/proposals.md`
-- **P-184** - The world's recipes have an order, and it is neither stated nor the one the table shows · `docs/notes/proposals.md`
+- **P-183** - Where a recipe's results appear is stated nowhere · `docs/notes/proposals.md`
+- **P-184** - The release lists the world's recipes in an order `spec/turn.md` contradicts · `docs/notes/proposals.md`
+- **P-185** - `spec/turn.md` names a recipe that `P-176` merged away · `docs/notes/proposals.md`
 
 ## What is outstanding
 
