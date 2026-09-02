@@ -10,16 +10,16 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 - Every resource exists in a particular place; there is no general inventory
 
-## Capacity
+## Containment
 
-- Everything in a territory occupies capacity there: its stores, its structures and the units
-  standing on it
-- Capacity is counted per kind of thing, and a territory has some of each before anything is
-  built. Nothing a player builds ever crowds out something of another kind
-- A container occupies capacity of its own kind and provides capacity of another. Capacity is
-  therefore not conserved
-- No kind of thing may be nested inside itself, at any depth. Since no kind appears twice on a
-  containment path, the deepest nesting is the number of kinds that contain
+- A thing is in a bin. A bin holds one kind of thing, or one family of them, up to a maximum of
+  its own, and nothing else in the game holds anything
+- A bin belongs to something. An extractor has a bin for what it extracts, a vehicle has the bins
+  its recipe gives it, and a territory has one for each kind before anything is built
+- A capacity is a bin. Room for four extractors is a bin that holds extractors, four at most, so
+  nothing a player builds ever crowds out something of another kind
+- A thing that has bins takes up room in one, so capacity is not conserved
+- Nothing contains itself, directly or through anything else
 
 ## Moving materials
 
