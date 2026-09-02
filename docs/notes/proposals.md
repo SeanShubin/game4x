@@ -70,6 +70,34 @@ territories.
 ingredients across 18 recipes, of which six survive their recipe and derive correctly as not
 consumed. **`grow`'s is the only one that survives in fact and does not in the table.**
 
+### P-162 - `P-156` reintroduced the word `bin`, which `P-157` had just removed
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
+`releases/first-release.md` -> What a territory has room for
+
+**One sentence, promoted verbatim, uses a word the specification no longer has.** `P-156` was written
+before `P-157` and ends:
+
+> An extractor's own bin is additional: a territory holds this much, and each extractor holds one
+> cycle of what it makes.
+
+**`P-157` replaced `spec/logistics.md`'s Containment section and the word `bin` appears nowhere in
+it.** A thing contains things; there is no separate object called a bin to be *additional* to
+anything.
+
+> The sentence becomes:
+>
+> What an extractor holds is additional: a territory holds this much, and each extractor holds one
+> cycle of what it makes.
+
+**Basis: promotion is a pure move, so the word shipped as approved and the fix is filed.** Refusing
+the promotion over one word would have cost Sean a re-read of ten numbers he had already decided;
+changing it while promoting would have broken the guarantee that approved text and shipped text are
+the same text. **Filing it is the third option and the only one that costs nothing.**
+
+**It is the same accident as `P-161`, an hour apart.** A proposal written before another one lands,
+promoted after. Neither was wrong when written.
+
 ### P-160 - Adjacency is defined under *What a territory carries*, and it is not one
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
@@ -96,50 +124,6 @@ line is scoped to is not tidying**, so it is filed.
 **Filed immediately after the promotion that caused it**, which is the rule `P-85` produced: a
 promotion that makes something else stale either refuses or files the cleanup, and never notes it in
 a paragraph.
-
-### P-156 - What a territory has room for, which `C-10` has been asking since August
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`releases/first-release.md`, a new section after *Where things are*
-
-**`spec/turn.md` says what a territory can keep is bounded and nothing anywhere says by how much.**
-`P-143` gave the bound a name - `room`, a territory's, per kind - and `P-148` said what it is: a
-territory has a bin for each kind before anything is built. **No value has ever been written.**
-
-> `## What a territory has room for`
->
-> | Kind | Room |
-> | --- | --- |
-> | **citizen** | 8 |
-> | **garrison** | 1 |
-> | **extractor** | what the *Territory resources* table gives, per resource |
-> | **yard** | 1 |
-> | **ark** | 2 |
-> | **pioneer** | 2 |
-> | **labor** | 8 |
-> | **food** | 20 |
-> | **metal** | 20 |
-> | **energy** | 20 |
->
-> An extractor's own bin is additional: a territory holds this much, and each extractor holds one
-> cycle of what it makes.
-
-**Basis: two of the ten are already decided and the rest are Sean's to tune.** A garrison is 1
-because `spec/control.md` says a territory has at most one. An extractor's room is the count already
-in *Territory resources* - which is the one place `room` is per kind **and per resource**, and is
-worth noticing rather than smoothing over.
-
-**The measured floor needs re-measuring, and this proposal does not claim it.** `C-10` established
-that below fifteen no Yard exists anywhere. **That was measured against a single flat bound, which
-`P-144` proposed and Sean withdrew** - under bins, a territory's metal is its own room *plus* one
-cycle in each metal extractor, so territory 1's three extractors at density 4 already hold twelve
-without any room at all. **The floor is therefore lower and per-territory**, and the honest thing is
-to set the numbers first and re-run the loop check against them, which `C-10` says how to do.
-
-**Why it matters now rather than whenever.** Sean asked for a before-and-after per recipe. **Seven of
-the eighteen create something**, and every one of those needs a room line to show whether it fits.
-Without this the pages read *room: not stated* seven times, which is the gap wearing a different
-hat.
 
 ## Addressed to other perspectives
 
@@ -547,6 +531,7 @@ about garrisons rather than about traits, which makes it Sean's.
 | P-155, readiness is written in the recipe, not assumed by a rule                                                | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-158, the Scope column is the owner column wearing a location's name                                           | `releases/first-release.md` -> Recipes, Traits                                                                         | 2026-09-01 |
 | P-159, `consumed` is derived, not declared                                                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-156, what a territory has room for                                                                            | `releases/first-release.md`, a new section                                                                             | 2026-09-01 |
 
 ## Rejected
 

@@ -110,6 +110,24 @@ There are twelve territories and one orbit. Orbit holds units and nothing else.
 | **unpaid**          | a unit                          | yes or no                         | derived: its upkeep was not met    |
 | **houses**          | a thing that contains things    | whether people live in it         | stored                             |
 
+## What a territory has room for
+
+| Kind          | Room                                                     |
+| ------------- | -------------------------------------------------------- |
+| **citizen**   | 8                                                        |
+| **garrison**  | 1                                                        |
+| **extractor** | what the *Territory resources* table gives, per resource |
+| **yard**      | 1                                                        |
+| **ark**       | 2                                                        |
+| **pioneer**   | 2                                                        |
+| **labor**     | 8                                                        |
+| **food**      | 20                                                       |
+| **metal**     | 20                                                       |
+| **energy**    | 20                                                       |
+
+An extractor's own bin is additional: a territory holds this much, and each extractor holds one
+cycle of what it makes.
+
 ## Units and structures
 
 | Thing         | Force | Fuel | A move | Upkeep          | Costs to produce             | Metal in it | Requires   | Readies |
