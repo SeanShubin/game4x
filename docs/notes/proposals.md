@@ -45,27 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-183 - Where a recipe's results appear is stated nowhere
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** gap - **into**
-`spec/invariants.md` -> The game is data
-
-**The input half is already yours.** `spec/invariants.md` says *the player's are offered wherever
-their inputs are present*, which puts a recipe at a place and its inputs there with it. **Nothing
-says where its results go.**
-
-> A recipe acts in one place, the place its inputs are in. Its results appear there too, unless a
-> row names another place.
-
-**Basis: eleven of the sixteen recipes in the first release name no territory**, and `build metal
-extractor` is the plain case - a labor and a metal yield an extractor, and by the text as written
-that extractor could appear anywhere. The rule is already being relied on: `docs/recipes/README.md`
-says *the recipe acts where its ingredients are*, and **a rendering must not be where a rule
-lives.**
-
-**The second clause is what `move` needs**, whose unit rows say `in $from` and `in $to` and
-therefore say otherwise.
-
 ### P-184 - The release lists the world's recipes in an order `spec/turn.md` contradicts
 
 **to** sean - **status** open - **raised** 2026-09-02 - **kind** cleanup - **into**
@@ -112,6 +91,156 @@ derived from and was not carried with it.
 **It is wording rather than meaning** - a citizen's upkeep is food, so everything that eats is
 exactly everything with upkeep today. **Filed rather than done**, because this is `spec/` and the
 phrase is the one every other document's ending is read against.
+
+### P-186 - An Ark and a Pioneer deploy the same things, and both must bind with three metal
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
+`releases/first-release.md` -> Recipes, Units and structures
+
+**Four of your notes are one decision**, because what a unit deploys and what it costs are the same
+number seen twice. **The last paragraph is mine and you may want it otherwise** - it is the
+arithmetic your four force, not something you said.
+
+> | **deploy ark** | player | in | `$where` territory | 1 | at least |
+> | | | out | `$where` territory | 1 | |
+> | | | in | ark, in `$where` | 1 | at least |
+> | | | in | garrison | 0 | at most |
+> | | | out | garrison | 1 | |
+> | | | out | citizen | 2 | |
+> | | | out | extractor, food | 1 | |
+> | | | out | extractor, metal | 1 | |
+> | **found by land** | player | in | pioneer | 1 | at least |
+> | | | in | garrison | 0 | at most |
+> | | | out | garrison | 1 | |
+> | | | out | citizen | 2 | |
+> | | | out | extractor, food | 1 | |
+> | | | out | extractor, metal | 1 | |
+> | **produce pioneer** | player | in | metal | 3 | at least |
+> | | | in | energy | 6 | at least |
+> | | | in | citizen | 2 | at least |
+> | | | out | pioneer | 1 | |
+> | **produce ark** | player | in | metal | 3 | at least |
+> | | | in | energy | 12 | at least |
+> | | | in | citizen | 2 | at least |
+> | | | in | yard | 1 | at least |
+> | | | out | ark | 1 | |
+> | | | out | yard | 1 | |
+>
+> In *Units and structures*, an Ark costs 3 metal, 12 energy and 2 citizens, and a Pioneer costs 3
+> metal, 6 energy and 2 citizens. Both have 3 metal in them and both bind with 3. A Pioneer
+> requires nothing.
+
+**Basis: two citizens because two things must be operated at once** - one at the garrison so the
+territory's force of nature does not overrun it, and one at the food extractor so it does not
+starve. The energy extractor goes because it can be built later, and one extractor of each kind is
+deployed however much capacity the territory has.
+
+**Metal is where this stops being your words and starts being arithmetic.** A garrison and two
+extractors are 1 metal each, so a deployment is 3. An Ark binds with 4 today and a Pioneer with 2 -
+**so an Ark would waste a metal on every landing, and a Pioneer would create one from nothing.**
+`spec/resources.md` says metal is conserved and matter is conserved, so neither is available.
+
+**Three is the only figure that balances both.** It makes the two units cost the same metal and
+differ in energy, 12 against 6, which is already where the Ark's price sat. **If you want them to
+differ in metal, what they deploy has to differ** - and your note says it does not.
+
+**What does not change**: no capacity means the extractor is not built and its metal is wasted,
+which `spec/interface.md` already covers - *an action that would waste part of what it costs says
+so before it is taken, and says how much.*
+
+### P-187 - `spend readiness` is named for what it costs rather than what it makes
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
+`releases/first-release.md` -> Recipes
+
+> The recipe is named `create labor`.
+
+**Basis: every other recipe is named for its result** - `produce ark`, `build yard`, `found by
+land`. `spend readiness` is the one named for its input, and it reads as an accounting entry rather
+than as the thing a player wants.
+
+**The name also survives the generalisation you have in mind.** You noted that machines need labor
+and that labor need not come from a citizen. `create labor` stays true when a second recipe makes
+labor another way; `spend readiness` would then name two unrelated things. **The recipe itself
+still takes a citizen** - widening it is a later decision, and this is only the name.
+
+### P-188 - Capacity is three numbers and the specification has one word for them
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
+`spec/logistics.md` -> Containment
+
+> What a thing may contain is a maximum per kind, or per family of kinds. That maximum is its
+> **total capacity** for that kind; what is occupied is its **used capacity**, and what is left is
+> its **available capacity**. A total capacity of four extractors is a maximum of four, so nothing
+> a player builds ever crowds out something of another kind.
+
+**Basis: `room` is doing all three jobs.** *Room for four extractors* is a total, *no room* is
+available capacity at zero, and nothing names the middle one at all - which is the number that
+grows as a territory is developed, and the one a player watches.
+
+**Total is stored and the other two are derived**, so this adds one stored fact and two computed
+ones. The release's *What a territory has room for* section and its `room` trait become *total
+capacity*, and this lane files that as the cleanup if you promote it.
+
+### P-189 - Food spoils immediately, which is spoilage at its most extreme rather than absent
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
+`releases/first-release.md` -> Traits, Recipes
+
+**Leaving spoilage out did not leave it out.** Food not eaten is gone when the turn ends, which is
+a spoilage rate of zero turns - the harshest setting there is, chosen by not choosing.
+
+> A new trait, **keeps**: of food, the number of turns it will last, stored. Food is made with
+> `keeps` 1.
+>
+> | **spoil** | world | in | food, keeps 0 | 1 | at least |
+> | **age** | world | in | food, keeps at least 1 | 1 | at least |
+> | | | out | food, keeps one less | 1 | |
+>
+> `spoil` runs before `age`, so food made this turn survives one ending and is lost at the next.
+
+**Basis: a number that decrements is what you asked for**, and it is the shape that lets different
+things spoil at different rates later without a second mechanism - another kind with a different
+starting `keeps` needs no new rule.
+
+**One turn is the smallest change that is still a change**, and it has the footing you named:
+populations that learned to preserve food expanded further than those that did not. **A starting
+technology in this game is an available recipe**, so `age` being present from the start is what
+*we already know how to preserve food for one turn* means.
+
+**What to watch is `grow`.** It takes `food, surplus`, and surplus that used to rot now survives -
+so a territory that was feeding itself exactly will start to accumulate. That is a balance
+consequence rather than a rule conflict, and the loop is where it will show.
+
+### P-190 - The recipe table says `in` and `out` where you want six columns
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
+`releases/first-release.md` -> Recipes
+
+**`Role` carries two values and you named six things.** This is the smallest change that gets all
+six without giving up one row per ingredient.
+
+> `Role` takes one of `require`, `consume` or `produce`. Two new columns: **Scope**, which is where
+> the recipe is evaluated - a territory, or everywhere - and **Lifecycle**, which is the part of
+> the turn it belongs to. `Owner` is renamed **Auto**, whose values are `player` and `world`.
+
+**Basis: this reverses `P-159`, and that is the part worth your attention.** That proposal deleted
+a `Consumed` column because consumption is derivable - an ingredient is consumed exactly when the
+same thing with the same traits is not among the results. **It still is derivable.** What changed
+is that you want to read it rather than derive it, and a reader working out whether a garrison
+survives `produce pioneer` is doing that derivation by hand every time.
+
+**On your two "perhaps"**: `Scope` does not fold into `require`, because *everywhere* is not a
+thing that must be present - it says the recipe is not evaluated at a place at all, which no
+ingredient can express. `Auto` does not fold into `Lifecycle`, because lifecycle answers *when* and
+auto answers *who decides*; the world acts at the end of a turn and the player acts during one, and
+those two agree today but need not.
+
+**`Scope` also answers `P-183`**, which asked where a recipe's results appear. That was about to be
+settled with a rule saying *one place*, and **your `everywhere` shows the rule would have been
+wrong.** `P-183` is withdrawn into this one.
+
+**This re-renders `docs/recipes/README.md`**, so it is the one to decide last.
 
 ## Addressed to other perspectives
 
@@ -669,3 +798,4 @@ again in a later session.
 | P-56, "a territory satisfies its own consumption first"                               | Cut with P-46 on 2026-08-26 - it only had work to do while a remainder could reach a neighbour.                                                                                                                                                                                                                                             |
 | P-124, "where a generated file lives"                                                 | Housekeeping rather than a decision, under the split Sean approved 2026-08-30. Settled by the specification lane and landed in `CLAUDE.md` -> Perspectives in the same commit.                                                                                                                                                              |
 | P-144, "capacity and metal content have rules but no numbers"                         | Withdrawn on Sean's instruction, 2026-08-31. Its flat per-territory capacities are wrong under his storage rule: an extractor holds one cycle and a bin holds the rest, so a resource's capacity is the sum of the extractors and bins present, not a constant. **Its metal-content column survives as `P-146`**, which `P-145` depends on. |
+| P-183, a recipe acts in one place and its results appear there                        | Withdrawn into P-190. Sean's `scope` column has a value `everywhere` - food spoils wherever it is - so *one place* would have been wrong as a general rule. The build case was already covered by `spec/logistics.md`: *whatever pays a cost must be in the territory where the thing being paid for is built*.                             |

@@ -8,6 +8,28 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-02, in `temporary-notes/feedback.md`
+
+**Recorded here because that directory is not tracked.** Sean's note is transient by design; this
+is the durable copy, and each line says which proposal carries it.
+
+| What he said                                                              | Where it went                                |
+| ------------------------------------------------------------------------- | -------------------------------------------- |
+| An Ark deploys no energy extractor, and two citizens rather than one      | `P-186`                                      |
+| One food and one metal extractor regardless of capacity                   | `P-186`                                      |
+| A Pioneer deploys the same things an Ark does                             | `P-186`                                      |
+| Producing a Pioneer needs no garrison, and costs two citizens             | `P-186`                                      |
+| Producing an Ark costs two citizens                                       | `P-186`                                      |
+| If there is no capacity the effect is wasted                              | already in `spec/interface.md`, from `P-168` |
+| Future actions are taken by future population as it grows                 | a consequence, nothing to write              |
+| Total, used and available capacity are three different things             | `P-188`                                      |
+| `spend readiness` should be named for what it makes                       | `P-187`                                      |
+| Labor need not come from citizens                                         | already swept, 2026-09-01                    |
+| Food should last one more turn, by a number that decrements               | `P-189`                                      |
+| Preservation is a starting technology, which is an available recipe       | `P-189`                                      |
+| Recipes want require, consume, produce, scope, lifecycle and auto columns | `P-190`                                      |
+| The interface will need a recipe editor                                   | already in `spec/interface.md`               |
+
 ## Resolved
 
 **`spec/overview.md` is dropped.** Genre, inspirations and theme moved to

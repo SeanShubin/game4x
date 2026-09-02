@@ -8,9 +8,13 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-183** - Where a recipe's results appear is stated nowhere · `docs/notes/proposals.md`
 - **P-184** - The release lists the world's recipes in an order `spec/turn.md` contradicts · `docs/notes/proposals.md`
 - **P-185** - `spec/turn.md` names a recipe that `P-176` merged away · `docs/notes/proposals.md`
+- **P-186** - An Ark and a Pioneer deploy the same things, and both must bind with three metal · `docs/notes/proposals.md`
+- **P-187** - `spend readiness` is named for what it costs rather than what it makes · `docs/notes/proposals.md`
+- **P-188** - Capacity is three numbers and the specification has one word for them · `docs/notes/proposals.md`
+- **P-189** - Food spoils immediately, which is spoilage at its most extreme rather than absent · `docs/notes/proposals.md`
+- **P-190** - The recipe table says `in` and `out` where you want six columns · `docs/notes/proposals.md`
 
 ## What is outstanding
 
