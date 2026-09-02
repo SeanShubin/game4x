@@ -215,7 +215,7 @@ Each says what this lane verified, because an answer this lane has not read is n
 
 ### C-12 - The architecture check exists and nothing runs it
 
-**to** code · **status** **acted** 2026-09-01 · `4dbd3ac`
+**to** code · **status** **acted** 2026-09-01 · `302acc4`
 
 Both gates run `cargo test --manifest-path tools/outbox/Cargo.toml` now, so the check that every
 crate has a row in `docs/architecture.md` runs on every push rather than when somebody types its
