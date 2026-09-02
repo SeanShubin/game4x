@@ -57,7 +57,7 @@ pub fn show(game: &Game, subject: &Subject) -> String {
             let mut lines = vec![format!("{} territories", game.territories.len())];
             for place in &game.territories {
                 lines.push(format!(
-                    "  {:>2}  {:<9} citizens {:<3} force {:<3} nodes {}",
+                    "  {:>2}  {:<9} citizens {:<3} force {:<3} extractor room {}",
                     place.id,
                     if place.founded { "yours" } else { "unclaimed" },
                     place.citizens,
@@ -120,21 +120,20 @@ fn territory(game: &Game, id: TerritoryId) -> String {
         place.force_of_nature
     ));
     for resource in Resource::ALL {
-        let nodes: Vec<String> = place
-            .nodes_of(resource)
-            .into_iter()
-            .map(|(_, node)| node.density.to_string())
-            .collect();
+        // Room and density, which is what a territory has of a resource. It used to read as
+        // a list of nodes at their densities; `P-149` made a node a number rather than a
+        // thing, and every extractor for a resource yields the same.
+        let room = place.nodes_of(resource);
+        let density = room.first().map(|(_, node)| node.density);
         lines.push(format!(
-            "  {:<7} {:>3} held, {} extractors of {} nodes{}",
+            "  {:<7} {:>3} held, {} of {} extractors{}",
             resource.name(),
             place.store(resource),
             place.extractors_for(resource).len(),
-            nodes.len(),
-            if nodes.is_empty() {
-                String::new()
-            } else {
-                format!(" at density {}", nodes.join(", "))
+            room.len(),
+            match density {
+                Some(density) => format!(" yielding {density}"),
+                None => String::new(),
             }
         ));
     }
@@ -328,8 +327,8 @@ mod tests {
     fn tiny() -> Session {
         played(&[
             "create planet tiny",
-            "add node 1 food 4",
-            "add node 1 metal 4",
+            "set resource 1 food 1 4",
+            "set resource 1 metal 1 4",
             "set force 1 1",
             "add ark orbit",
             "start",

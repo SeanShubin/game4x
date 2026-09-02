@@ -114,15 +114,24 @@ impl Game {
                     .collect();
                 next.adjacency = adjacency.clone();
             }
-            Transition::AddNode {
+            Transition::SetResource {
                 territory,
                 resource,
+                extractors,
                 density,
             } => {
-                next.territory_mut(*territory)?.nodes.push(Node {
-                    resource: *resource,
-                    density: *density,
-                });
+                // Room for `extractors`, each yielding `density`, held for now as that many
+                // identical nodes. The release gives one density per territory per resource,
+                // so the two are the same fact written differently - and `P-134` replaces
+                // this representation entirely, which is why it is not rebuilt here.
+                let place = next.territory_mut(*territory)?;
+                place.nodes.retain(|node| node.resource != *resource);
+                for _ in 0..*extractors {
+                    place.nodes.push(Node {
+                        resource: *resource,
+                        density: *density,
+                    });
+                }
             }
             Transition::SetForceOfNature { territory, force } => {
                 next.territory_mut(*territory)?.force_of_nature = *force;
@@ -872,18 +881,14 @@ mod tests {
             })
             .unwrap();
         for at in 1..=3u32 {
-            for _ in 0..3 {
+            // Room for three of each, said once. `add node` said it three times, because a
+            // node was a thing you added rather than a number a territory has.
+            for resource in [Resource::Food, Resource::Metal] {
                 game = game
-                    .after(&Transition::AddNode {
+                    .after(&Transition::SetResource {
                         territory: TerritoryId(at),
-                        resource: Resource::Food,
-                        density: 4,
-                    })
-                    .unwrap();
-                game = game
-                    .after(&Transition::AddNode {
-                        territory: TerritoryId(at),
-                        resource: Resource::Metal,
+                        resource,
+                        extractors: 3,
                         density: 4,
                     })
                     .unwrap();
@@ -948,9 +953,10 @@ mod tests {
                 adjacency: ring(3),
                 biomes: vec![Biome::Grassland; 3],
             },
-            Transition::AddNode {
+            Transition::SetResource {
                 territory: TerritoryId(1),
                 resource: Resource::Food,
+                extractors: 1,
                 density: 4,
             },
             Transition::SetForceOfNature {

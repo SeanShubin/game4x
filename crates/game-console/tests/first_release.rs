@@ -626,9 +626,10 @@ fn every_way_the_state_can_change_is_a_command() {
             adjacency: Vec::new(),
             biomes: Vec::new(),
         },
-        Transition::AddNode {
+        Transition::SetResource {
             territory: TerritoryId(1),
             resource: Resource::Food,
+            extractors: 1,
             density: 1,
         },
         Transition::SetForceOfNature {

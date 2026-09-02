@@ -28,9 +28,17 @@ pub enum Transition {
         adjacency: Vec<Vec<TerritoryId>>,
         biomes: Vec<Biome>,
     },
-    AddNode {
+    /// What a territory has of one resource: how many extractors it has room for, and the
+    /// density each of them yields.
+    ///
+    /// `spec/planet.md`: *for each resource, a territory has room for some number of
+    /// extractors, and a density that each of them yields.* It replaces rather than adds,
+    /// because a territory has one answer per resource - `add node` added them one at a
+    /// time, which was the shape when a node was a thing rather than a number.
+    SetResource {
         territory: TerritoryId,
         resource: Resource,
+        extractors: u32,
         density: u32,
     },
     SetForceOfNature {
@@ -77,7 +85,7 @@ pub enum Transition {
         kind: UnitKind,
         territory: TerritoryId,
     },
-    /// Spend that many citizens' labor at a structure this turn.
+    /// Spend that much labor at a structure this turn.
     Work {
         count: u32,
         structure: StructureKind,
@@ -95,7 +103,7 @@ impl Transition {
         matches!(
             self,
             Transition::CreatePlanet { .. }
-                | Transition::AddNode { .. }
+                | Transition::SetResource { .. }
                 | Transition::SetForceOfNature { .. }
                 | Transition::SetBiome { .. }
                 | Transition::AddUnitToOrbit { .. }
@@ -116,9 +124,10 @@ mod tests {
                 adjacency: Vec::new(),
                 biomes: Vec::new(),
             },
-            Transition::AddNode {
+            Transition::SetResource {
                 territory: TerritoryId(1),
                 resource: Resource::Food,
+                extractors: 3,
                 density: 4,
             },
             Transition::SetForceOfNature {

@@ -131,9 +131,10 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
                 biomes: planet_terrain::biomes_of(&solid, &near, WORLD_SEED),
             })
         }
-        form::ADD_NODE => Meaning::Change(Transition::AddNode {
+        form::SET_RESOURCE => Meaning::Change(Transition::SetResource {
             territory: territory("territory")?,
             resource: resource("resource")?,
+            extractors: utterance.number("extractors")? as u32,
             density: utterance.number("density")? as u32,
         }),
         form::SET_FORCE => Meaning::Change(Transition::SetForceOfNature {
@@ -203,7 +204,7 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
 pub fn handled() -> Vec<&'static str> {
     vec![
         form::CREATE_PLANET,
-        form::ADD_NODE,
+        form::SET_RESOURCE,
         form::SET_FORCE,
         form::SET_BIOME,
         form::ADD_UNIT,
