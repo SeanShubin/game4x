@@ -77,6 +77,49 @@ had already fired and was not run**: `releases/first-release.md` -> Recipes had 
 `P-142` and `P-145`, and `P-149` landed in it as the fourth. The trigger exists for exactly this -
 two rules that each passed the staleness check and still cannot both hold.
 
+### P-152 - The Traits table declares thirteen and the release uses at least four more
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`releases/first-release.md` -> Traits
+
+**Found by the code lane, holding `P-143` against the recipes.** They noted that `revert` names a
+**territory** in the *Thing* column, and that *Where things are* says every thing is in a bin while a
+territory **is** a bin. Chasing that found the larger problem: **`revert` reads whether a territory
+is claimed, and no trait says a territory can be.**
+
+**Four traits the release uses and the table does not list.**
+
+| Trait               | Used by                                        | Where it lives today           |
+| ------------------- | ---------------------------------------------- | ------------------------------ |
+| **control**         | `revert`, which outputs `territory, unclaimed` | nowhere                        |
+| **biome**           | the Biomes table, and every territory has one  | `spec/planet.md`               |
+| **force of nature** | `revert`'s condition, and holding a territory  | the Biomes table's last column |
+| **adjacency**       | `move`, and every question about reachability  | `spec/planet.md`               |
+
+> `## Traits` gains four rows:
+>
+> | Trait | Of | Values | Stored or derived |
+> | --- | --- | --- | --- |
+> | **control** | a territory | claimed by a player, or unclaimed | stored |
+> | **biome** | a territory | one of the six | stored |
+> | **force of nature** | a territory | a number | stored |
+> | **adjacency** | a territory | which territories touch it | stored |
+
+**Basis: this is the gap `P-143` existed to close, missed in the same act.** That proposal's whole
+argument was that an editor loading the release finds no row for `metal`. **It now finds no row for
+whether a territory is yours**, which is the fact the entire game is about.
+
+**How it was missed is worth recording.** `P-143` was rewritten once, and the first version had a
+*Places* table whose territory row read *biome, force of nature, its nodes, which territories adjoin
+it*. `P-148` turned *Places* into *Where things are*, and **the rewrite carried the bins forward and
+dropped the territory's traits** - they were in a column that stopped existing. A rewrite is where
+things fall out, and nothing checked the two versions against each other.
+
+**One thing this does not settle**, and the code lane was right not to file it as a defect. The
+*Thing* column in *Recipes* names kinds everywhere except `revert`, where it names a territory. That
+is either fine - a recipe may act on a place - or the column needs a narrower name. **`P-151` is the
+same question about the *Qty* column** and answers it by widening; the two should probably agree.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -132,7 +175,7 @@ working code, and when to follow is yours.
 
 ### S-5 - The gate is red, this lane moved the sentence, and this lane must not fix it
 
-**to** code - **status** open - **raised** 2026-08-31 - **source** a blocked push - **cited**
+**to** code - **status** **acted** 2026-09-01 - **raised** 2026-08-31 - **source** a blocked push - **cited** `735ab85`,
 `ba9f945`
 
 **`cargo test -p game-console --test quotations` fails on `master` and blocks every push, including
@@ -162,6 +205,14 @@ on which, and it is your file and your test.
 **What this blocks meanwhile.** Five commits of specification work are committed and unpushed, and
 `hooks/pre-push` runs the full gate, so a documentation-only push is held on a code test. Per
 `CLAUDE.md` this lane says so and stops; `--no-verify` is Sean's call.
+
+**Closed 2026-09-01 by `735ab85`, with a better reason than this item gave.** This lane argued from
+`C-7`'s self-description - a finding is a claim about a specification at a moment - and reached the
+right exit by the wrong route. **The defect was one word in the guard's own list of attributing
+verbs.** `said` is past tense and every other verb in it is present, so the check compared a claim
+about what the specification *used to* say against what it says *now*. **A record of changed wording
+is correct precisely because the file no longer matches it.** No exemption for withdrawn items was
+needed, and none was added.
 
 ### S-4 - A compilable specification of the kinds and the transformations
 
