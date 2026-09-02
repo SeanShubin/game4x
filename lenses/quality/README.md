@@ -219,6 +219,9 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [What changed was not the rate](2026-09-01-what-changed-was-not-the-rate.md)
+  - 2026-09-01. Invited by the specification lane. The defect rate tracks operations rather
+    than promotions, and nothing checks shipped text against approved text.
 - [Two budgets, counted as one — a correction](2026-08-30-two-budgets.md)
   - 2026-08-30. Why the queue is empty and the counter said fifteen. This lens's error,
     and the one generated document that should replace a remembered command.
