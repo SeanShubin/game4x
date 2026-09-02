@@ -248,6 +248,101 @@ fn brief(s: &str) -> String {
     }
 }
 
+/// Phrases that turn a commit message into an assertion about the tree.
+///
+/// Three of 2026-09-01's defects were a claim made before the check that would refute it, and one
+/// of them - *the word bin now appears nowhere* - was false when written. A message saying one of
+/// these has to say what it counted.
+const ASSERTING: [&str; 6] = [
+    "appears nowhere",
+    "appears in none",
+    "nowhere in the",
+    "does not appear anywhere",
+    "no longer appears anywhere",
+    "appears exactly",
+];
+
+/// Whether a commit message asserts something about the tree that ought to have been counted.
+pub fn asserts_about_the_tree(message: &str) -> bool {
+    let lower = message.to_lowercase();
+    ASSERTING.iter().any(|phrase| lower.contains(phrase))
+}
+
+/// One countable claim. `out_of` is what a claim of **zero** is zero out of.
+pub struct Claim<'a> {
+    pub needle: &'a str,
+    pub expected: usize,
+    pub out_of: Option<&'a str>,
+}
+
+/// Check what a message says against what the text holds.
+///
+/// A claim of zero must name its denominator, and the denominator must not itself be zero. The
+/// quality lens reported that a field did not exist because a grep returned zero - the pattern was
+/// right and the population was empty, so the count was over nothing. **A zero reads as evidence in
+/// a way an empty population does not**, and naming the denominator is what tells them apart.
+pub fn check_claims(text: &str, claims: &[Claim]) -> Result<(), Problem> {
+    for claim in claims {
+        let found = text.matches(claim.needle).count();
+        if found != claim.expected {
+            return problem(format!(
+                "the message says {:?} appears {} times; it appears {found}",
+                claim.needle, claim.expected
+            ));
+        }
+        if claim.expected == 0 {
+            let Some(out_of) = claim.out_of else {
+                return problem(format!(
+                    "a claim that {:?} appears nowhere must say what it is nowhere among",
+                    claim.needle
+                ));
+            };
+            if text.matches(out_of).count() == 0 {
+                return problem(format!(
+                    "{:?} is zero out of {out_of:?}, which is also zero - the count is over nothing",
+                    claim.needle
+                ));
+            }
+        }
+    }
+    Ok(())
+}
+
+/// Open proposals addressed to Sean that carry no text he could approve.
+///
+/// P-166, P-168 and P-181 were filed as findings with options and no verbatim block. He said
+/// *promote* and there was nothing to copy, three times.
+pub fn proposals_without_text(proposals: &str) -> Vec<String> {
+    let Some(open) = proposals.find("## Open") else {
+        return Vec::new();
+    };
+    let end = proposals[open..]
+        .find("## Accepted")
+        .map(|at| open + at)
+        .unwrap_or(proposals.len());
+    let mut without = Vec::new();
+    let mut id: Option<String> = None;
+    let mut to_sean = false;
+    let mut quoted = false;
+    for line in proposals[open..end].lines().chain(["### P-0 "]) {
+        if line.starts_with("### P-") {
+            if let Some(previous) = id.take() {
+                if to_sean && !quoted {
+                    without.push(previous);
+                }
+            }
+            id = line.split_whitespace().nth(1).map(str::to_string);
+            to_sean = false;
+            quoted = false;
+        } else if line.contains("**to** sean") && line.contains("**status** open") {
+            to_sean = true;
+        } else if line.starts_with("> ") {
+            quoted = true;
+        }
+    }
+    without
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -351,5 +446,108 @@ mod tests {
     #[test]
     fn a_document_nobody_has_broken_passes() {
         Doc::new(TRAITS).check().unwrap();
+    }
+
+    /// Computed rather than asserted: the quality lens's point that these ten tests each encode a
+    /// hand-written expectation, which is the component this lane has just called least reliable.
+    /// This one states no expected text - it says only that one cell moved and no other did.
+    #[test]
+    fn setting_a_cell_changes_that_cell_and_no_other() {
+        let before = Doc::new(TRAITS);
+        let mut after = Doc::new(TRAITS);
+        after
+            .set_cell("## Traits", "| **unpaid**", "Of", "anything at all", None)
+            .unwrap();
+        let cells_of = |doc: &Doc| -> Vec<String> {
+            doc.text()
+                .lines()
+                .filter(|l| l.starts_with('|'))
+                .flat_map(|l| {
+                    cells(l)
+                        .iter()
+                        .map(|c| c.trim().to_string())
+                        .collect::<Vec<_>>()
+                })
+                .collect()
+        };
+        let (a, b) = (cells_of(&before), cells_of(&after));
+        assert_eq!(a.len(), b.len(), "the shape of the tables changed");
+        let differing: Vec<usize> = (0..a.len()).filter(|&i| a[i] != b[i]).collect();
+        assert_eq!(differing.len(), 1, "cells that changed: {differing:?}");
+    }
+
+    #[test]
+    fn a_claim_of_zero_must_say_what_it_is_zero_among() {
+        let e = check_claims(
+            "some text",
+            &[Claim {
+                needle: "zzz",
+                expected: 0,
+                out_of: None,
+            }],
+        )
+        .unwrap_err();
+        assert!(e.0.contains("must say what it is nowhere among"), "{e}");
+    }
+
+    /// Exactly the quality lens's own error: the pattern was right and the population was empty.
+    #[test]
+    fn a_claim_of_zero_over_an_empty_population_is_refused() {
+        let e = check_claims(
+            "a file with no proposals in it",
+            &[Claim {
+                needle: "**into**",
+                expected: 0,
+                out_of: Some("### P-"),
+            }],
+        )
+        .unwrap_err();
+        assert!(e.0.contains("the count is over nothing"), "{e}");
+    }
+
+    #[test]
+    fn a_claim_of_zero_over_a_real_population_passes() {
+        check_claims(
+            "### P-1 a proposal\n### P-2 another\n",
+            &[Claim {
+                needle: "**into**",
+                expected: 0,
+                out_of: Some("### P-"),
+            }],
+        )
+        .unwrap();
+    }
+
+    #[test]
+    fn a_count_that_is_wrong_is_refused() {
+        let e = check_claims(
+            "a a a",
+            &[Claim {
+                needle: "a",
+                expected: 2,
+                out_of: None,
+            }],
+        )
+        .unwrap_err();
+        assert!(e.0.contains("it appears 3"), "{e}");
+    }
+
+    #[test]
+    fn a_message_asserting_about_the_tree_is_recognised() {
+        assert!(asserts_about_the_tree(
+            "The word bin now appears nowhere in spec/"
+        ));
+        assert!(!asserts_about_the_tree(
+            "Rewrite P-165 with the conservation arithmetic"
+        ));
+    }
+
+    #[test]
+    fn an_open_proposal_with_no_text_to_approve_is_named() {
+        let queue = "## Open\n\n\
+            ### P-1 - a finding\n\n**to** sean - **status** open - **kind** gap\n\nTwo ways.\n\n\
+            ### P-2 - a proposal\n\n**to** sean - **status** open - **kind** gap\n\n> the text\n\n\
+            ## Accepted\n";
+        assert_eq!(proposals_without_text(queue), vec!["P-1".to_string()]);
     }
 }
