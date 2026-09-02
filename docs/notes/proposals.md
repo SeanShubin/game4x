@@ -282,32 +282,47 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-154 - One recipe unclaims a territory and none claims one
+### P-154 - Control is derived from a citizen being there
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`releases/first-release.md` -> Recipes
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** recovered
+- **into** `releases/first-release.md` -> Traits, Recipes
 
-**`P-152` declared `control` and the recipes cannot set it.** `revert` outputs
-`territory, unclaimed`. Nothing outputs `territory, claimed`. `land` and `found by land` produce a
-garrison, a citizen and a food extractor, and **say nothing about who holds the territory** - so on
-the tables as written, every territory begins unclaimed and can only ever become more so.
+**Sean's, decided 2026-09-01**: *ownership/control is derived by virtue of having a citizen present.*
 
-**Two ways out, and this lane has no view.**
+**That answers the gap by removing it.** This proposal asked why one recipe unclaims a territory and
+none claims one. **The answer is that none needs to**: `land` and `found by land` each produce a
+citizen, and control follows. **They were claiming territories all along and nobody had to say so.**
 
-- **Claiming is a result, and the two landing recipes should say so.** `land` and `found by land`
-  each gain `out territory, claimed 1`, which is what a player would say they had just done
-- **Control is derived from the garrison**, and `P-152`'s row is wrong to say *stored*. A territory
-  is claimed exactly when it holds one, `revert` removes the garrison rather than the claim, and the
-  trait is computed like `unfed` and `surplus`
+> `## Traits`: `control` reads *stored* and becomes:
+>
+> | Trait | Of | Values | Stored or derived |
+> | --- | --- | --- | --- |
+> | **control** | a territory | held by a player, or unclaimed | derived: a citizen of that player is there |
 
-**What decides it is whether a territory can be held without a garrison.** `spec/control.md` says
-holding takes force equal to the force of nature, and that a citizen has force of its own - so
-**force can be present with no garrison**, and under the second reading such a territory would be
-unclaimed while being successfully defended. **That points at the first**, but it turns on a rule
-about garrisons rather than about traits, which makes it Sean's.
+> `## Recipes`: `revert` can no longer output `territory, unclaimed`, because nothing writes a
+> derived trait. It takes the citizens instead:
+>
+> | Recipe | Owner | Role | Thing | Qty | Bound |
+> | --- | --- | --- | --- | --- | --- |
+> | **revert** | world | in | territory, force below its force of nature | 1 | at least |
+> |  |  | out | territory, force below its force of nature | 1 |  |
+> |  |  | in | citizen | 1 | at least |
 
-**Not urgent and not new.** The gap has been in the release since the recipes existed; declaring
-`control` is what made it visible, which is `P-143`'s argument working rather than failing.
+**Basis: a derived trait cannot be assigned, and that is what `revert` was doing.** `P-152` declared
+`control` stored, so `revert` set it. **Derived means computed from what is there**, and
+`spec/invariants.md` says *nothing can leave a derived trait wrong, because nothing writes one* - so
+`revert` has to change what the answer is computed from. **The population is what nature takes**, and
+control follows it out the way it followed a citizen in.
+
+**The territory is echoed and the citizen is not**, which under `P-159` is exactly the difference
+between the condition and the thing consumed. `revert` is the world's, so it applies wherever it
+matches and takes citizens until none are left.
+
+**One thing this does not settle, and first release does not need it to.** Two players with citizens
+in the same territory would both derive control. `spec/control.md` already has the rule that decides
+it - **taking a territory takes force greater than the existing force** - but nothing says how that
+rule and this derivation compose. **First release has one player**, so the question is real and not
+yet urgent.
 
 ## Accepted
 

@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-154** - One recipe unclaims a territory and none claims one · `docs/notes/proposals.md`
+- **P-154** - Control is derived from a citizen being there · `docs/notes/proposals.md`
 
 ## What is outstanding
 
