@@ -37,6 +37,8 @@ docs/
   prototypes/
     README.md ..................... index of prototypes and their shared conventions
     planet-view.md ................ sphere divided into regions; 3D, 2D, simplified views
+  recipes/
+    README.md ..................... every recipe, before and after, in territory 1
   notes/
     README.md ..................... index of derived records; Claude's, not normative
     planet-appearance.md .......... making a Goldberg-divided sphere read as a world

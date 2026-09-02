@@ -8,8 +8,10 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-165** - Deploying an Ark destroys ten metal, and founding destroys six · `docs/notes/proposals.md`
+- **P-166** - `move` has no destination, and nothing sets `arriving` · `docs/notes/proposals.md`
+- **P-167** - `build extractor` takes no metal and names no resource · `docs/notes/proposals.md`
+- **P-168** - Nothing checks room at the moment a thing is created · `docs/notes/proposals.md`
 
 ## What is outstanding
 

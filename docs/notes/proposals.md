@@ -45,6 +45,95 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-165 - Deploying an Ark destroys ten metal, and founding destroys six
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
+`releases/first-release.md` -> Recipes
+
+**Found by walking the recipes one at a time**, which is what
+[the before-and-after pages](../recipes/README.md) are for.
+
+`spec/resources.md`: *a conserved resource is not destroyed by being used. It changes form, and what
+it was made into can be taken apart to get it back.* **An Ark holds 12 metal and deploys into a
+garrison and an extractor, which hold 1 each.** A Pioneer holds 8 and founds the same two. **Ten
+metal and six metal leave the game**, on the two recipes that open every game.
+
+**This is `P-145` again, in the main path rather than the edge case.** That proposal fixed `perish`,
+where an unpaid unit vanished with its metal. **Deployment is the same defect and forty times more
+common**: `perish` may never fire in a first release, and `deploy ark` fires in the first minute of
+every game.
+
+**Two ways out, and they are Sean's own from 2026-08-31.**
+
+- **The Ark deploys into what it cost**, which is the deployment lever - its cost follows its
+  deployment rather than the other way round, so an Ark that becomes two metal's worth costs two
+  metal
+- **The remainder is loose metal**, deployed alongside the structures, which is what his opening
+  walkthrough said: *deploy ark... output 2 civilian, 3 metal*
+
+**The second is what he wrote and the first is what he reasoned to**, and this lane has no view.
+
+### P-166 - `move` has no destination, and nothing sets `arriving`
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`releases/first-release.md` -> Recipes
+
+**Two gaps in one recipe, both found by trying to draw its before-and-after.**
+
+**`move` says `unit, here` and `unit, there`, and nothing says what those are.** `P-158` removed the
+Scope column, so no column names a place; a source and a destination are **parameters of the recipe**
+and the table has nowhere to put them. **Nothing expresses that the two must be adjacent**, either -
+`P-157` made adjacency a fact the container states, and no recipe reads it.
+
+**And `found by land` requires `pioneer, arriving`, which no recipe produces.** `arriving` is
+declared in *Traits* as *stored, cleared at end turn*, and `move` does not set it. **So on the tables
+as written, no Pioneer can ever found a territory.**
+
+**The second is the more urgent and the first is the deeper.** A missing output is one row. A recipe
+that cannot say where it goes is the shape of the table, and `P-163` already leans on it: launching
+is a move to an orbit, which needs a destination the same way.
+
+### P-167 - `build extractor` takes no metal and names no resource
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
+`releases/first-release.md` -> Recipes
+
+**Two tables in one file disagree.** *Units and structures* says an extractor costs **1 labor, 1
+metal**, which Sean set on 2026-09-01. The recipe takes **labor only**.
+
+**And the recipe does not say which resource the extractor is for**, though `work` reads that trait
+to know what it produces - *the territory's density for that resource*. **A recipe that creates a
+thing must set the traits that thing is later read by**, and this one creates an extractor with no
+resource.
+
+> `build extractor` gains `in metal 1` and its result becomes `extractor, <resource>`.
+
+**The second half is the general point.** `work`, `perish` and `upkeep` all read a trait of something
+they were handed. **Nothing checks that the recipes which create those things set them**, and an
+extractor with no resource is the first case where that gap is visible.
+
+### P-168 - Nothing checks room at the moment a thing is created
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`spec/turn.md` -> Order of operations, **or** `releases/first-release.md` -> Recipes
+
+**Six recipes create things and not one asks whether there is room.** `deploy ark`, `found by land`,
+`build extractor`, `build yard`, `produce pioneer`, `produce ark` and `grow` all add to a territory,
+and `P-156` gave every kind a maximum.
+
+**`spec/turn.md` already says what happens: *what a territory can keep is bounded. Anything above the
+bound is lost when the turn ends.*** So the bound is enforced **at the end of the turn and never at
+the moment of creation** - which may be exactly right.
+
+**What is not stated is what that means when it bites.** Room for yards is 1. **A player may build a
+second Yard, and at the end of the turn one of them is lost** - and nothing says which, or whether
+the metal comes back, or whether the player is told before spending it.
+
+**This is the one question the seventeen pages raise that none of them contains**, which is why it is
+filed separately rather than against any recipe. **It is also the first place a rule needs a
+tie-break** - `P-135` promoted that competing effects are gathered and resolved together by a
+deterministic mechanic a player can change, and this is a competition nobody has named.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
