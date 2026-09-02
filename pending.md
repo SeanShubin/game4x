@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-146** - What a thing is made of, which `P-145` needs and `P-144` was carrying · `docs/notes/proposals.md`
 - **P-145** - `perish` destroys metal, which the specification says cannot happen · `docs/notes/proposals.md`
 - **P-143** - The release does not declare its own vocabulary · `docs/notes/proposals.md`
 
@@ -44,8 +43,8 @@ it exists to ask.
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
+- `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
-- `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86

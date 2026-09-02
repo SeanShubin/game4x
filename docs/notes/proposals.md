@@ -45,58 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-146 - What a thing is made of, which `P-145` needs and `P-144` was carrying
-
-**to** sean - **status** open - **raised** 2026-08-31 - **kind** gap - **into**
-`releases/first-release.md` -> Units and structures
-
-**Filed because withdrawing `P-144` would otherwise take something still needed with it.** That
-proposal carried two halves. The flat per-territory capacities are wrong and are gone. **The
-metal-content column is not**, and `P-145` reads it: without it there is no trait for a destroyed
-unit's metal to be looked up from.
-
-> *Units and structures* gains one column, **Metal in it**:
->
-> | Thing | Metal in it |
-> | --- | --- |
-> | **citizen** | |
-> | **garrison** | 1 |
-> | **extractor** | 1 |
-> | **yard** | 15 |
-> | **ark** | 12 |
-> | **pioneer** | 8 |
-
-> And *Costs to produce* changes in the same two rows:
->
-> - **garrison**: `1 labor, 1 metal`
-> - **extractor**: `1 labor, 1 metal`
-
-**This removes a line that was already stale**, and it is worth naming because nothing else would
-have caught it. The garrison's cost reads *not produced; founding gives one*, and **`P-136` purged
-founding**: `spec/control.md` no longer says a territory gains a garrison by being founded, and has
-not since 2026-08-31. The cell has been asserting a rule the specification dropped, and Sean's
-decision is what replaces it rather than merely deleting it.
-
-**One thing it settles by implication, which he should correct if it is wrong.** Building costs
-labor. `P-143` asks whether it should, and the shortfall that raised the question was answered by the
-deployment lever instead - so the labor in his own `build garrison` and `build farm` was never
-withdrawn, and both recipes keep it.
-
-**Basis: it is not a new number.** It is what the thing cost, which *Costs to produce* already gives,
-and conservation is what makes that the right answer rather than a convenient one - `spec/resources.md`
-says a conserved resource *changes form, and what it was made into can be taken apart to get it back*,
-so **the metal did not go anywhere**. A citizen is blank rather than zero because a citizen is not
-built.
-
-**Resolved 2026-09-01 by Sean**: *lets make a garrison and an extractor cost 1 metal.* The two cells
-that disagreed with the release were ahead of it, and **it is the release that moves**.
-
-**Two of these six numbers are about to move**, and that is not a reason to wait. The Ark's 12 is
-almost certainly wrong now: Sean's deployment lever means an Ark deploys into what it cost, so the
-figure is whatever its deployment is worth - three, on the opening worked through today. The column
-should exist either way, because **what changes is the cell and not the schema**, which is the whole
-point of the tables.
-
 ### P-145 - `perish` destroys metal, which the specification says cannot happen
 
 **to** sean - **status** open - **raised** 2026-08-31 - **kind** contradiction - **into**
@@ -528,6 +476,7 @@ first**, and it is worth writing down as a bet rather than meeting it later as a
 | P-147, every cycle among recipes must spend readiness                                                           | `spec/invariants.md` -> The game is data                                                                               | 2026-09-01 |
 | P-141, a unit carries fuel, not cells                                                                           | `spec/units.md`, `releases/first-release.md` -> Units and structures, Recipes                                          | 2026-09-01 |
 | P-142, a quantity is a number                                                                                   | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-146, what a thing is made of, and a garrison and an extractor cost 1 metal                                    | `releases/first-release.md` -> Units and structures                                                                    | 2026-09-01 |
 
 ## Rejected
 

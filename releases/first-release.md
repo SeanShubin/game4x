@@ -53,14 +53,14 @@ Every territory has at least one food node.
 
 ## Units and structures
 
-| Thing         | Force | Fuel | A move | Upkeep          | Costs to produce                 | Requires   | Readies |
-| ------------- | ----- | ---- | ------ | --------------- | -------------------------------- | ---------- | ------- |
-| **citizen**   | 1     |      |        |                 |                                  |            | yes     |
-| **garrison**  | 1     |      |        |                 | not produced; founding gives one |            |         |
-| **extractor** |       |      |        |                 | 1 labor, and nothing else        |            | yes     |
-| **yard**      |       |      |        |                 | 15 metal                         |            |         |
-| **ark**       | 2     | 2    | 1 fuel |                 | 12 metal, 12 energy              | a Yard     | yes     |
-| **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 8 metal, 6 energy, 1 citizen     | a garrison | yes     |
+| Thing         | Force | Fuel | A move | Upkeep          | Costs to produce             | Metal in it | Requires   | Readies |
+| ------------- | ----- | ---- | ------ | --------------- | ---------------------------- | ----------- | ---------- | ------- |
+| **citizen**   | 1     |      |        |                 |                              |             |            | yes     |
+| **garrison**  | 1     |      |        |                 | 1 labor, 1 metal             | 1           |            |         |
+| **extractor** |       |      |        |                 | 1 labor, 1 metal             | 1           |            | yes     |
+| **yard**      |       |      |        |                 | 15 metal                     | 15          |            |         |
+| **ark**       | 2     | 2    | 1 fuel |                 | 12 metal, 12 energy          | 12          | a Yard     | yes     |
+| **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 8 metal, 6 energy, 1 citizen | 8           | a garrison | yes     |
 
 A garrison's multiplier is 1. An Ark can invade land from orbit. Founding produces a garrison, a
 citizen and a food extractor. Nothing outside this table readies.
