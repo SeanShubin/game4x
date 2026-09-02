@@ -1217,3 +1217,39 @@ thing, and every recipe that turns some things into others, is data rather than 
 was written to keep kinds out of the engine, not to keep expressiveness out of the data** - but it
 will read as an objection to somebody eventually, and it is worth deciding whether it needs a
 sentence saying which it meant.
+
+### Said 2026-09-01: the type system is for the player, not the designer
+
+Sean: *the refactoring isn't just for me, or even the one who tunes the data. I expect the player to
+be able to specify sophisticated constructs in the game without programming. So while Distant Worlds
+allows me to tune settings, such as 10% dedicated to patrol, I want to be able to tune behaviours
+with data, giving me much more direct control.*
+
+**Three of the four things this implies are already promoted, which is worth knowing before anything
+is proposed.** `spec/invariants.md` -> Control without tedium says: *rules are specified through the
+interface; playing the game never requires writing a program*; *every rule a player can use is
+composed of rules they can also use, down to single actions*; and - the strongest one - **nothing
+plays itself: every behaviour that acts on a player's behalf is a rule some person wrote, including
+any the game ships with.**
+
+**That last line makes the seventeen recipes the acceptance test for the rules editor.** If the
+game's own behaviour is rules a person wrote, and a player can read and change any rule whatever its
+origin, then **anything the game does that a player cannot express is a hole in the language.** The
+release's own recipes are the worked example, already promoted, and nobody had noticed it was one.
+
+**What the clarification adds is why a type system rather than more expressiveness in general.** A
+player specifying sophisticated constructs **without programming** means structured editing rather
+than text - and **a type system is what lets an editor offer only the valid choices.** Without types
+a data editor is a text box; with them it is a form that cannot be wrong. **That is the mechanism by
+which sophistication and no-programming are compatible**, and it is a sharper test than *how much
+machinery is too much*: **every construct must be offerable as a choice from a typed, finite set.**
+
+**The one thing not promoted is abstraction.** The section says a player can **compose** rules and
+can **name and keep** them. It does not say a player can write one rule that covers many things -
+his own example from 2026-08-31 is *create a set of rules for that pioneer, then every new pioneer
+uses that set by default*, and composition is not that. **A player who cannot abstract copies**, and
+copied rules rot the way a copied example does.
+
+**Against Distant Worlds, the difference is kind rather than degree.** A percentage is a parameter on
+a behaviour somebody else wrote. **Tuning behaviour with data means the behaviour is the data**, and
+the knob disappears because there is nothing left for it to be a knob on.
