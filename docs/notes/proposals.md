@@ -45,6 +45,58 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-174 - A Yard is the only thing a player builds without labor
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
+`releases/first-release.md` -> Recipes, Units and structures
+
+**Found by walking the recipes**, in [the before-and-after pages](../recipes/README.md).
+
+**Every other thing a player builds costs labor and metal.** The three extractor recipes each take
+`labor 1, metal 1`. **`build yard` takes `metal 15` and nothing else** - fifteen metal assembles
+itself.
+
+> `build yard` gains `in labor 1`, and *Units and structures* reads `1 labor, 15 metal`.
+
+**Basis: nothing distinguishes a Yard from an extractor here.** `spec/economy.md` says *it costs
+labor to operate extractors* and `spec/structures.md` describes what each structure does; **neither
+says a structure can be built without hands.** The Yard's row is the odd one and it is odd by
+omission rather than by decision - it was written before `P-146` gave an extractor its metal, and
+never revisited.
+
+**One labor rather than fifteen**, because labor is what it takes to build a thing rather than what
+the thing is made of. **The fifteen is already the metal**, and doubling the cost in both would be a
+balance change rather than a correction.
+
+### P-175 - Nothing clears `arriving`
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
+`releases/first-release.md` -> Recipes
+
+**`Traits` says `arriving` is *stored, cleared at end turn*. Nothing clears it.** `ready` takes
+`thing, exhausted` and yields `thing, ready`, and says nothing about arriving. **A Pioneer that moved
+once is arriving for ever.**
+
+> `ready` gains two rows:
+>
+> | Recipe | Owner | Role | Thing | Qty | Bound |
+> | --- | --- | --- | --- | --- | --- |
+> | **ready** | world | in | thing, arriving | 1 | at least |
+> |  |  | out | thing, not arriving | 1 |  |
+
+**Basis: it is the other half of `P-166`, an hour later.** That proposal fixed `arriving` never being
+**set** - `move` now sets it, and a Pioneer can found a territory again. **It did not notice that
+nothing unset it**, because nothing had to until something set it.
+
+**Whether it matters today is worth saying plainly: barely.** `found by land`'s other ingredient is
+*a garrison, at most 0*, so a permanently-arriving Pioneer still cannot found a second territory.
+**What is wrong is that the table says a thing about itself which is false** - and a trait declared
+*cleared at end turn* that is never cleared is the kind of thing a reader trusts and a check would
+catch.
+
+**And `ready` is the right home rather than a recipe of its own.** It is already the world's recipe
+for putting things back the way a turn starts, and `arriving` is exactly that.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the

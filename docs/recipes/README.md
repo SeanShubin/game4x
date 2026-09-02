@@ -13,72 +13,75 @@ evidence: a recipe that does the right thing *and something else* is the failure
 inputs and outputs alone.
 
 Quantities that are read rather than written say where they were read from, so a lookup is visible
-rather than magic - `the territory's density for that resource` is a number this page had to fetch.
+rather than magic. **A named ingredient is shown by its name** - `$where`, `$from`, `$to` - because
+naming the place is how a recipe says where it acts.
 
 **Territory 1 is the setting throughout**, because it is the landing site and everything works there:
-food, metal and energy each **3 extractors at density 4**, force of nature 1. Room comes from
-[what a territory has room for](../../releases/first-release.md): citizens 8, garrison 1, yard 1,
-arks 2, pioneers 2, labor 8, and 20 each of food, metal and energy.
+food, metal and energy each **3 extractors at density 4**, force of nature 1. Room: citizens 8,
+garrison 1, yard 1, arks 2, pioneers 2, labor 8, and 20 each of food, metal and energy.
 
-**A page ending in a defect line is not a failed page.** Finding those is what the exercise is for,
-and each one is filed rather than only noted here.
+**A page ending in a defect line is not a failed page.** Finding those is the exercise, and each one
+is filed rather than only noted here.
 
-## The player's, in the order the release lists them
+## The player's
 
 ### deploy ark
 
-| territory 1 | before | after    |
-| ----------- | ------ | -------- |
-| ark         | 1      | 0        |
-| garrison    | 0      | 1        |
-| citizen     | 0      | 1        |
-| extractor   | 0      | 1 (food) |
-| metal       | 0      | 0        |
+| territory 1 (`$where`) | before | after |
+| ---------------------- | ------ | ----- |
+| territory              | 1      | 1     |
+| ark                    | 1      | 0     |
+| garrison               | 0      | 1     |
+| citizen                | 0      | 1     |
+| extractor, food        | 0      | 1     |
+| extractor, metal       | 0      | 1     |
+| extractor, energy      | 0      | 1     |
 
-**Defect.** An Ark holds 12 metal. What it becomes holds 2 - a garrison and an extractor at one
-each. **Ten metal leaves the game**, and `spec/resources.md` says metal is conserved and what it was
-made into can be taken apart to get it back. Filed as `P-165`.
+**The territory is named and echoed**, so it is used and not consumed. The garrison line is a guard:
+*at most 0* before, so a second landing on the same territory cannot fire. **Metal balances** - an Ark
+binds with 4 and becomes a garrison and three extractors at 1 each.
+
+**Note, not a defect.** The Ark's tank held energy and the Ark is consumed. Energy is neither
+conserved nor expiring, so no rule is broken - but the player loses it, and `P-168`'s line says an
+action that wastes something says so.
 
 ### move
 
-| territory 1 → 2      | before  | after       |
-| -------------------- | ------- | ----------- |
-| pioneer, in 1        | 1 ready | 0           |
-| pioneer, in 2        | 0       | 1 exhausted |
-| energy, in that unit | 2       | 1           |
+| territories 1 and 2                  | before | after |
+| ------------------------------------ | ------ | ----- |
+| territory 1 (`$from`)                | 1      | 1     |
+| territory 2 (`$to`, next to `$from`) | 1      | 1     |
+| pioneer, in 1, ready                 | 1      | 0     |
+| pioneer, in 2, exhausted, arriving   | 0      | 1     |
+| energy, in that pioneer              | 2      | 1     |
 
-**Defect.** Nothing in the recipe says territories 1 and 2 are adjacent, and since `P-158` removed
-the Scope column nothing says what `here` and `there` are. A source and a destination are parameters
-of a recipe, and the table has no column for one. Filed as `P-166`.
-
-**And a second one.** `found by land` needs `pioneer, arriving`, and **no recipe produces it.** A
-Pioneer that moves in is not marked as having arrived. Filed with the above.
+**Both territories are named, echoed and unconsumed**, which is what stops a move from destroying
+where it came from. **Adjacency is a condition the recipe states** - `next to $from` - read from the
+planet, which says which of the things in it are next to which.
 
 ### found by land
 
-| territory 2 | before     | after    |
-| ----------- | ---------- | -------- |
-| pioneer     | 1 arriving | 0        |
-| garrison    | 0          | 1        |
-| citizen     | 0          | 1        |
-| extractor   | 0          | 1 (food) |
+| territory 2       | before | after |
+| ----------------- | ------ | ----- |
+| pioneer, arriving | 1      | 0     |
+| garrison          | 0      | 1     |
+| citizen           | 0      | 1     |
+| extractor, food   | 0      | 1     |
 
-**Defect.** A Pioneer holds 8 metal and what it becomes holds 2. **Six metal leaves the game**, the
-same way `deploy ark` loses ten. One filing covers both.
+**No territory is named and none is needed**: the Pioneer is in one, and `arriving` says it just got
+there. **Metal balances** - a Pioneer binds with 2 and becomes a garrison and an extractor.
 
-### build extractor
+### build food extractor · build metal extractor · build energy extractor
 
 | territory 1               | before | after |
 | ------------------------- | ------ | ----- |
 | labor                     | 1      | 0     |
-| metal                     | 3      | 3     |
-| extractor                 | 0      | 1 (?) |
+| metal                     | 3      | 2     |
+| extractor, metal          | 0      | 1     |
 | room for metal extractors | 3      | 3     |
 
-**Two defects, and the page cannot be completed without them.** *Units and structures* says an
-extractor costs **1 labor and 1 metal**; the recipe takes labor only, so the two tables in one file
-disagree. And the recipe does not say **which resource** the extractor is for, though `work` reads
-that trait to know what it produces. Filed as `P-167`.
+Three recipes differing in one cell. **The recipe acts where its ingredients are** - the labor and the
+metal are in territory 1, so the extractor appears there, and no territory has to be named.
 
 ### build yard
 
@@ -88,31 +91,32 @@ that trait to know what it produces. Filed as `P-167`.
 | yard           | 0      | 1     |
 | room for yards | 1      | 1     |
 
-Agrees with *Units and structures*: 15 metal. **Nothing checks the room**, which is general rather
-than particular to this recipe - see the note at the end.
+**Defect.** Every other thing a player builds costs **labor and metal**; a Yard costs metal alone.
+**Fifteen metal assembles itself.** Filed as `P-174`.
 
 ### produce pioneer
 
 | territory 1 | before | after |
 | ----------- | ------ | ----- |
-| metal       | 8      | 0     |
+| metal       | 2      | 0     |
 | energy      | 6      | 0     |
 | citizen     | 2      | 1     |
 | garrison    | 1      | 1     |
 | pioneer     | 0      | 1     |
 
-The garrison is echoed, so it survives. Metal is conserved exactly: 8 in, and a Pioneer holds 8.
+The garrison is echoed and survives. **The citizen is not** - producing a Pioneer spends a person.
 
 ### produce ark
 
 | territory 1 | before | after |
 | ----------- | ------ | ----- |
-| metal       | 12     | 0     |
+| metal       | 4      | 0     |
 | energy      | 12     | 0     |
 | yard        | 1      | 1     |
 | ark         | 0      | 1     |
 
-Conserved exactly: 12 in, and an Ark holds 12.
+**Metal balances and energy carries the price**, which is why an Ark costs 4 rather than 12: only
+metal has to equal what the thing becomes.
 
 ### spend readiness
 
@@ -124,16 +128,17 @@ Conserved exactly: 12 in, and an Ark holds 12.
 
 ### work
 
-| territory 1          | before    | after     |
-| -------------------- | --------- | --------- |
-| labor                | 1         | 0         |
-| extractor, ready     | 1 (metal) | 0         |
-| extractor, exhausted | 0         | 1 (metal) |
-| metal                | 0         | 4         |
-| density for metal    | 4         | 4         |
+| territory 1 (`$where`)       | before | after |
+| ---------------------------- | ------ | ----- |
+| territory                    | 1      | 1     |
+| labor                        | 1      | 0     |
+| extractor, metal, ready      | 1      | 0     |
+| extractor, metal, exhausted  | 0      | 1     |
+| metal                        | 0      | 4     |
+| `$where`'s density for metal | 4      | 4     |
 
-**4 is read, not written** - the territory's density for metal. Three extractors at density 4 need
-three labor to yield 12, which is the arithmetic `P-156` rests on.
+**4 is read, not written.** The territory is named so that the density has something to be read from,
+which is the whole of `P-173`. Three extractors at density 4 need three labor to yield 12.
 
 ## The world's, which fire when the turn ends
 
@@ -154,8 +159,8 @@ Fires once per citizen. The citizen is echoed and the food is not.
 | citizen            | 2      | 5     |
 | territory (houses) | 1      | 1     |
 
-`surplus` is what is left after everything ate, so this fires after `eat`. **Three surplus food
-becomes three citizens**, which is the growth rate `P-156`'s citizen room of 8 has to hold.
+`surplus` is *left after everything ate*, so this cannot fire until `eat` has. **The territory is
+echoed** - growing a citizen does not consume the place they live in.
 
 ### depart
 
@@ -166,12 +171,12 @@ becomes three citizens**, which is the growth rate `P-156`'s citizen room of 8 h
 
 ### spoil
 
-| territory 1 | before | after |
-| ----------- | ------ | ----- |
-| food        | 3      | 0     |
+| territory 1   | before | after |
+| ------------- | ------ | ----- |
+| food, surplus | 3      | 0     |
 
-Fires once per food, everywhere, so all uneaten food goes. It runs after `grow`, which is why
-surplus becomes citizens rather than being lost.
+**Takes surplus, not food**, which is what orders it after eating - and it competes with `grow` for
+the same surplus, which is the right relationship: surplus either becomes population or rots.
 
 ### ready
 
@@ -181,8 +186,11 @@ surplus becomes citizens rather than being lost.
 | citizen, ready       | 0      | 2     |
 | extractor, exhausted | 1      | 0     |
 | extractor, ready     | 0      | 1     |
+| pioneer, arriving    | 1      | 1     |
 
-Applies to `thing`, the family, so it covers every kind that readies at once.
+**Defect.** *Traits* says `arriving` is *stored, cleared at end turn*, and **nothing clears it.**
+`ready` restores readiness and says nothing about arriving, so a Pioneer that moved once is arriving
+for ever. Filed as `P-175`.
 
 ### upkeep
 
@@ -191,38 +199,33 @@ Applies to `thing`, the family, so it covers every kind that readies at once.
 | pioneer     | 1      | 1     |
 | food        | 3      | 2     |
 
-**1 is read, not written** - the unit's upkeep. A unit with upkeep 2 eats two, which is the bug
-`P-142` fixed by making it a lookup.
+**1 is read, not written** - the unit's upkeep.
+
+**Not settled.** `upkeep` and `eat` both draw on food and nothing says which goes first. **A unit may
+be unpaid because a citizen ate, or a citizen unfed because a unit was paid**, and this page cannot
+show a definite after-state where food is short. In [the backlog](../notes/spec-backlog.md).
 
 ### perish
 
 | territory 1     | before | after |
 | --------------- | ------ | ----- |
 | pioneer, unpaid | 1      | 0     |
-| metal           | 0      | 8     |
+| metal           | 0      | 2     |
 
-**8 is read, not written** - the unit's metal. The wreck is metal in the territory and is kept only
-if there is room for it, which is what makes salvage a thing a player could be given rather than
-something the engine knows.
+**2 is read, not written** - the unit's metal, which under `P-170` is its binding plus its parts.
+**The wreck is metal in the territory** and is kept only if there is room.
 
 ### revert
 
 | territory 4     | before | after |
 | --------------- | ------ | ----- |
+| territory       | 1      | 1     |
 | citizen         | 1      | 0     |
 | force           | 0      | 0     |
 | force of nature | 1      | 1     |
 
-Fires once per citizen while the force is short. Control is derived, so nothing writes it: **the
-population is what nature takes, and control follows it out.**
+Fires once per citizen while the force is short. **Control is derived, so nothing writes it**: the
+population is what nature takes, and control follows it out.
 
-## One defect that belongs to no single page
-
-**Nothing checks room.** `build yard`, `produce pioneer`, `produce ark`, `build extractor`, `grow`
-and `deploy ark` all create things, and not one of them asks whether there is room. `spec/turn.md`
-says what a territory can keep is bounded and anything above the bound is lost when the turn ends -
-**so the bound is enforced at the end of the turn and never at the moment of creation.**
-
-That may be intended: build what you like, lose what will not fit. It may also mean a player can
-build a second Yard where room is 1 and lose one of them at random. **Nothing says which**, and it is
-the one question these seventeen pages raise that none of them contains. Filed as `P-168`.
+**Not settled.** The garrison, the extractors and whatever is stored are not mentioned. **They stay,
+in a territory nobody holds.** In [the backlog](../notes/spec-backlog.md).
