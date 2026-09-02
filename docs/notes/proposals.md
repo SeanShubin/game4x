@@ -282,38 +282,6 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-164 - *Where things are* still describes bins, and is wrong about orbit too
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
-`releases/first-release.md` -> Where things are, **and** -> Traits
-
-**`P-162` fixed one sentence and this lane asserted the word was gone from the release. It is not.**
-The `Where things are` section is `P-143`'s, written before `P-157`, and it is stale twice over:
-**`P-157` removed the bin**, and **`P-163` made orbit twelve rather than one.**
-
-> `## Where things are`
->
-> Every thing is in another thing, and this release has three sorts of room.
->
-> | Room | Holds | Up to |
-> | --- | --- | --- |
-> | a territory's room for a kind | that kind | what the territory has room for |
-> | an extractor's catch | the resource it was built for | the territory's density for it |
-> | a unit's tank | energy | the unit's fuel |
->
-> There are twelve territories and twelve orbits. An orbit holds units and nothing else.
-
-> `## Traits`: `place` reads *the bin it is in* and becomes **the thing it is in**.
-
-**Basis: nothing here is a decision, and all of it is arithmetic on two promotions.** The three sorts
-of room are unchanged; only what they are called is. The orbit count follows `P-163` directly.
-
-**How it was missed is the same way twice in one hour.** `P-161` and `P-162` were both proposals
-written before another landed and promoted after it. **This is the third**, and it is the first one
-where the promoting commit asserted something false: *the word bin now appears nowhere in spec/ or
-releases/*. **It appears three times**, and the assertion that caught it ran a second too late to
-stop the message.
-
 ### P-154 - One recipe unclaims a territory and none claims one
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
@@ -488,6 +456,7 @@ about garrisons rather than about traits, which makes it Sean's.
 | P-161, `grow`'s new ingredient is the fifth thing that needs echoing                                            | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-163, an orbit sits beside its territory, and launching is a move                                              | `spec/orbit.md`, `releases/first-release.md` -> Recipes                                                                | 2026-09-01 |
 | P-162, `P-156` reintroduced the word `bin`, which `P-157` had just removed                                      | `releases/first-release.md` -> What a territory has room for                                                           | 2026-09-01 |
+| P-164, *Where things are* still describes bins, and is wrong about orbit too                                    | `releases/first-release.md` -> Where things are, Traits                                                                | 2026-09-01 |
 
 ## Rejected
 

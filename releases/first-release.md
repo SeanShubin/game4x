@@ -76,22 +76,22 @@ Every territory has room for at least one food extractor.
 
 ## Where things are
 
-Every thing is in a bin, and this release has three sorts.
+Every thing is in another thing, and this release has three sorts of room.
 
-| Bin                           | Holds                         | Up to                           |
+| Room                          | Holds                         | Up to                           |
 | ----------------------------- | ----------------------------- | ------------------------------- |
 | a territory's room for a kind | that kind                     | what the territory has room for |
 | an extractor's catch          | the resource it was built for | the territory's density for it  |
 | a unit's tank                 | energy                        | the unit's fuel                 |
 
-There are twelve territories and one orbit. Orbit holds units and nothing else.
+There are twelve territories and twelve orbits. An orbit holds units and nothing else.
 
 ## Traits
 
 | Trait               | Of                              | Values                            | Stored or derived                  |
 | ------------------- | ------------------------------- | --------------------------------- | ---------------------------------- |
 | **kind**            | every thing                     | one of the ten                    | stored                             |
-| **place**           | every thing                     | the bin it is in                  | stored                             |
+| **place**           | every thing                     | the thing it is in                | stored                             |
 | **readiness**       | whatever readies                | ready, exhausted                  | stored                             |
 | **force**           | citizen, garrison, ark, pioneer | a number                          | stored                             |
 | **fuel**            | a unit                          | how much energy its tank holds    | stored                             |
