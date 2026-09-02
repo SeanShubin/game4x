@@ -95,7 +95,7 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 | **readiness**       | whatever readies                | ready, exhausted               | stored                                           |
 | **force**           | citizen, garrison, ark, pioneer | a number                       | stored                                           |
 | **fuel**            | a unit                          | how much energy its tank holds | stored                                           |
-| **upkeep**          | a unit                          | food per turn                  | stored                                           |
+| **upkeep**          | a thing with upkeep             | food per turn                  | stored                                           |
 | **metal in it**     | whatever is built               | a number                       | derived: its binding plus the metal in its parts |
 | **resource**        | an extractor                    | food, metal or energy          | stored                                           |
 | **density**         | a territory, per resource       | a number                       | stored                                           |

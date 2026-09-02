@@ -45,27 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-180 - The `upkeep` trait says *a unit*, and a citizen has one
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
-`releases/first-release.md` -> Traits
-
-**`P-176` gave a citizen an upkeep and did not widen the trait that says who can have one.**
-*Traits* reads `upkeep | a unit | food per turn | stored`, and *Families* says a **unit** is an Ark or
-a Pioneer. **A citizen is neither**, and its Upkeep column now reads *1 food per turn*.
-
-> `upkeep` reads *of a thing with upkeep*, which is what `unpaid` beside it already says.
-
-**Basis: it is the half of `P-176` that was named and not done.** That proposal said `unpaid` should
-read *of a thing with upkeep* and said nothing about `upkeep` itself, though the merge made both
-untrue in the same way. **`fuel` is correctly still *of a unit***, because nothing gave a citizen a
-tank.
-
-**Found by dumping the table column by column** rather than reading it, after an index error in this
-lane's own script wrote *a thing with upkeep* into `unpaid`'s **Values** column instead of its **Of**
-column. **The check passed because the string was present**, which is the failure this whole day has
-been about, one level below where it was being discussed.
-
 ### P-181 - `perish` reads a citizen's metal, and a citizen's metal is blank
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
@@ -90,6 +69,17 @@ lookup reads a blank**, and nothing says what that yields.
 **This lane would take the first**, because *Force*, *Fuel* and *Upkeep* all carry blanks for the
 same reason and none of them means zero. **A garrison's blank Fuel does not mean it holds no fuel; it
 means a garrison does not have a tank.**
+
+> `releases/first-release.md` -> Recipes gains a fourth sentence, beside the three about reading a
+> row:
+>
+> A blank is not a zero. It says the row has no such number, and a quantity read from one produces
+> nothing.
+
+**Written into the proposal on 2026-09-01, having been filed without any.** Sean said promote and
+there was nothing to copy - **the same defect as `P-166` and `P-168`**, and the third time this lane
+has filed a question in a queue whose contract is *here is the text*. The sentence above is the
+recommendation made promotable, and it is his to change before it lands.
 
 ## Addressed to other perspectives
 
@@ -492,6 +482,7 @@ work the release exists to order.
 | P-175, `arriving` earns nothing and should go                                                                   | `releases/first-release.md` -> Recipes, Traits                                                                         | 2026-09-01 |
 | P-178, `surplus` is derived from a recipe that no longer exists                                                 | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
 | P-179, a Pioneer may cross its own empire, and one line says it may not                                         | `releases/first-release.md` -> Scope                                                                                   | 2026-09-01 |
+| P-180, the `upkeep` trait says *a unit*, and a citizen has one                                                  | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
 
 ## Rejected
 

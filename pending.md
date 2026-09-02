@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-180** - The `upkeep` trait says *a unit*, and a citizen has one · `docs/notes/proposals.md`
 - **P-181** - `perish` reads a citizen's metal, and a citizen's metal is blank · `docs/notes/proposals.md`
 
 ## What is outstanding
@@ -40,10 +39,10 @@ it exists to ask.
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136
+- `releases/first-release.md` -> Traits - P-152, P-178, P-180
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
-- `releases/first-release.md` -> Traits - P-152, P-178
 - `spec/console.md` - P-69, P-82
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/interface.md` -> Surfaces - P-73, P-116
