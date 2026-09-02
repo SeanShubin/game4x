@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-168** - Nothing checks room at the moment a thing is created · `docs/notes/proposals.md`
+- **P-168** - A player is told what will not fit before committing to it · `docs/notes/proposals.md`
 
 ## What is outstanding
 

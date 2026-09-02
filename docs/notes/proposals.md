@@ -282,32 +282,40 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-168 - Nothing checks room at the moment a thing is created
+### P-168 - A player is told what will not fit before committing to it
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`spec/turn.md` -> Order of operations, **or** `releases/first-release.md` -> Recipes
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
+**into** `spec/turn.md` -> Order of operations
 
-**Twelve recipes of seventeen produce something that was not among their inputs, and not one asks
-whether there is room.** Counted rather than eyed: `build extractor`, `build yard`, `deploy ark`,
-`found by land`, `grow`, `move`, `perish`, `produce ark`, `produce pioneer`, `ready`,
-`spend readiness` and `work`. **Four of those are state changes** - a moved unit, a readied thing, an
-exhausted citizen, an exhausted extractor - **and they occupy room too**, so the count is not eight.
+**Sean's, 2026-09-01**: the excess is **destroyed**. And: *how would a Yard be lost to overflow?*
 
-**`spec/turn.md` already says what happens: *what a territory can keep is bounded. Anything above the
-bound is lost when the turn ends.*** So the bound is enforced **at the end of the turn and never at
-the moment of creation** - which may be exactly right.
+**The Yard was a bad example and this lane should not have led with it.** It needs a player to build
+a second Yard where room is 1 - **deliberately, knowing it will not fit** - and an interface that
+offers only valid choices would never present the second build. **It is a case the design already
+prevents.**
 
-**What is not stated is what that means when it bites.** Room for yards is 1. **A player may build a
-second Yard, and at the end of the turn one of them is lost** - and nothing says which, or whether
-the metal comes back, or whether the player is told before spending it.
+**The case that cannot be prevented is one action producing more than fits.** `deploy ark` creates a
+garrison, a citizen and **an extractor for each resource**. **Territory 6 has no metal**, so its room
+for metal extractors is 0 - and landing an Ark there creates an extractor that is over the bound the
+moment it exists. **The player chose the action, not the results**, so no interface can refuse it
+without refusing the landing.
 
-**Re-checked 2026-09-01 against the release as it now stands**, which is where the twelve came
-from - an earlier draft said six and named seven.
+> `spec/turn.md`, beside *anything above the bound is lost when the turn ends*:
+>
+> - Before a player commits to an action, they are shown what it would create that a place cannot
+>   keep
 
-**This is the one question the seventeen pages raise that none of them contains**, which is why it is
-filed separately rather than against any recipe. **It is also the first place a rule needs a
-tie-break** - `P-135` promoted that competing effects are gathered and resolved together by a
-deterministic mechanic a player can change, and this is a competition nobody has named.
+**Basis: with the excess destroyed, no new rule is needed and only this is missing.** `spec/turn.md`
+already bounds what a place keeps and already loses the remainder at end of turn. **What it does not
+do is let a player see it coming**, and an action that silently wastes part of what it cost is the
+thing `spec/invariants.md` -> Control without tedium exists to forbid.
+
+**And there is no tie-break to write, which is the other thing that changed.** `P-135` promised that
+competing effects are resolved by a deterministic mechanic a player can change, and this looked like
+a competition. **It is not: every case in the release is either a single candidate or several
+identical ones.** An Ark deploys one extractor per resource, so at most one competes for each room.
+`grow` can make more citizens than fit, and **citizens are indistinguishable, so which one is lost
+cannot be asked.** **Nothing in nineteen recipes needs a rule for choosing.**
 
 ## Accepted
 

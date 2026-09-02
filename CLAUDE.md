@@ -405,6 +405,11 @@ two things and never a third:
 - **Refuse the promotion**, saying what has to be decided first, or
 - **File a cleanup proposal immediately after**, so the staleness sits in the queue.
 
+**A promotion that leaves a question open files it before deleting the proposal that asked it.** A
+proposal is where a question gets asked and a promotion is where it stops being one - so anything the
+proposal said it did **not** settle has nowhere to go, and goes nowhere. Eleven promotions on
+2026-09-01 lost four questions this way, all recovered afterwards from a diff, which is not a reader.
+
 Noting it in a discussion paragraph and moving on is the failure. It reads like diligence and
 behaves like forgetting. **The queue is what gets read; prose is not.** P-85 found six
 contradictions in one release file, and two of them had been flagged at the time and left there -
