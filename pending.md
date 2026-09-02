@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-180** - The `upkeep` trait says *a unit*, and a citizen has one · `docs/notes/proposals.md`
+- **P-181** - `perish` reads a citizen's metal, and a citizen's metal is blank · `docs/notes/proposals.md`
 
 ## What is outstanding
 

@@ -66,6 +66,31 @@ lane's own script wrote *a thing with upkeep* into `unpaid`'s **Values** column 
 column. **The check passed because the string was present**, which is the failure this whole day has
 been about, one level below where it was being discussed.
 
+### P-181 - `perish` reads a citizen's metal, and a citizen's metal is blank
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`releases/first-release.md` -> Recipes, **or** -> Units and structures
+
+**`P-176` named this and this lane deleted it on promotion**, which is exactly what the rule added to
+`CLAUDE.md` two hours earlier forbids. **First promotion after the rule, and it was broken.** Filed
+now rather than recovered from a diff later.
+
+**`perish` yields `metal` at *the thing's metal*.** It now applies to any thing with upkeep, which is
+a Pioneer **and a citizen**. *Units and structures* gives a citizen a blank in **Metal in it**,
+because `P-146` said a citizen is blank rather than zero since a citizen is not built. **So the
+lookup reads a blank**, and nothing says what that yields.
+
+**Two ways, and they differ in what a blank means everywhere else.**
+
+- **A blank reads as nothing produced.** A citizen perishes and no metal appears, which is right, and
+  it makes blank mean *this row has no such number* consistently across the table
+- **A citizen's metal becomes 0.** The lookup always finds a number, at the cost of saying a citizen
+  is made of no metal rather than not being made
+
+**This lane would take the first**, because *Force*, *Fuel* and *Upkeep* all carry blanks for the
+same reason and none of them means zero. **A garrison's blank Fuel does not mean it holds no fuel; it
+means a garrison does not have a tank.**
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
