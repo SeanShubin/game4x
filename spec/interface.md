@@ -33,4 +33,8 @@ drag with a mouse and a finger on a touch screen. What the user can do is the sa
 Actions that are not a manipulation of the planet - resetting the view, reaching a surface,
 choosing a planet size - never require a gesture or a key the platform may lack.
 
+## What an action shows
+
+- An action that would waste part of what it costs says so before it is taken, and says how much
+
 ## Open questions

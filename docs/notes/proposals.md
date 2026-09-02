@@ -282,42 +282,6 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-168 - An action that would waste something says so before it is taken
-
-**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
-**into** `spec/interface.md`, a new section
-
-**Sean's, 2026-09-01**: the excess is **destroyed**; *how would a Yard be lost to overflow?*; and
-*this is just a matter of presenting the proper information to the user - so a (3 metal wasted) note
-or something like that.*
-
-**That moves it out of the rules, and this lane had it in the wrong file.** The previous draft put a
-line in `spec/turn.md` beside the bound. **It is not a rule of the turn** - the turn already says
-what a place can keep is bounded and anything above it is lost. **Nothing about what happens needs
-saying; only what the player sees before it happens.**
-
-> `spec/interface.md` gains a section:
->
-> `## What an action shows`
->
-> - An action that would waste part of what it costs says so before it is taken, and says how much
-
-**Basis: three things this lane got wrong are all fixed by moving it.** The Yard example needed a
-player to build knowingly into no room, which an interface offering only valid choices never
-presents. The tie-break `P-135` seemed to demand does not exist, because every case in the release is
-one candidate or several identical ones. **And the destination was wrong**, which is what Sean's
-reading corrected.
-
-**What survives is one case, and it is the opening move.** `deploy ark` creates an extractor for each
-resource; **territory 6 has no metal**, so landing there wastes one. **The player chose the action,
-not its results** - so the interface cannot refuse it, and telling them is the only thing left to do.
-
-**Why it is worded about waste rather than about room.** Room is the only way to waste something
-today, and it will not be the only one - **food that will spoil before anything eats it is the same
-information**, and a player deciding whether to work a fourth farm wants it. **A line about room
-would have to be written again**; a line about waste covers both and says the same thing about the
-case that exists.
-
 ## Accepted
 
 | Proposal                                                                                                        | Landed in                                                                                                              | Date       |
@@ -474,6 +438,7 @@ case that exists.
 | P-166, an ingredient may be named, and `move` names two territories                                             | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-171, three build recipes, one per resource, and the blank goes                                                | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-172, a player can write one rule for many things, not one rule per thing                                      | `spec/invariants.md` -> Control without tedium                                                                         | 2026-09-01 |
+| P-168, an action that would waste something says so before it is taken                                          | `spec/interface.md`, a new section                                                                                     | 2026-09-01 |
 
 ## Rejected
 
