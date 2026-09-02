@@ -106,6 +106,12 @@ rather than earlier.
 the tree; `git diff` read as HEAD against the working tree when it compares the index. The remedy is
 different: check what the command scopes or compares *before* drawing anything from it.
 
+Its sharpest form, because it reads as evidence and is not: **a count of zero says nothing unless
+the population is non-empty.** `grep -c "into" docs/notes/proposals.md` returned 0 and this lens
+reported the field did not exist. The field exists on every open proposal; the *queue* was empty, and
+promotion deletes the field with the body. The number was right, the denominator was zero, and the
+conclusion happened to survive for a reason other than the one given.
+
 The code lane grouped all four as trusting a tool's output. That is right about the cause and blurs
 the remedy - the first family is fixed by when you read, the second by knowing what you ran.
 
