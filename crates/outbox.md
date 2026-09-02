@@ -80,6 +80,13 @@ at the end of every turn, with a comment saying *unused resources are discarded*
 `spec/turn.md` said until `P-126` and `P-138`, and is now true of food alone. A play-through run
 today would hit `C-8`'s wall and prove nothing about the game as specified.
 
+**Weigh this against `spec/turn.md` -> Order of operations, not against the release's table.** The
+specification says a turn ends by eating, then growing or starving, then *what expires expires and
+what was not kept in order is lost*, then everything becomes ready - and separately that what a
+territory can keep is bounded. The model discards all three stores instead, which is neither of
+those things. The release's row order says something different again and `P-184` moves it, so the
+table is the wrong thing to check a model against while it is still moving.
+
 Three divergences, and none of them should be fixed yet:
 
 - **Stores are discarded rather than carried.** The whole of the above.
