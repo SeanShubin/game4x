@@ -82,35 +82,6 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-39 - Nothing checks shipped text against approved text, and after a promotion nothing can
-
-**to** spec · **status** open · **raised** 2026-09-01 · **source**
-[the measurement](2026-09-01-what-changed-was-not-the-rate.md#3-the-class-that-was-not-noticed)
-
-Invited by the specification lane, which asked for the failure class its own write-up had not found.
-
-`CLAUDE.md`'s promotion guarantee is *approved text is byte-identical to shipped text*. **Nothing
-compares those two**, and the six guards added to `edit.py` today all check the edit against what the
-script intended rather than against what Sean approved. `P-176`'s wrong-column write would have
-passed every one of them, because the script did exactly what it intended - it intended the wrong
-column.
-
-After a promotion the comparison is impossible from current files: the Accepted ledger keeps a
-one-line row and the approved text is retained nowhere. It survives only in the parent commit's
-`docs/notes/proposals.md`, so the check is buildable from git and from nothing else - take `P-n`'s
-text from the parent, assert it appears once in the destination the ledger names. Same shape as
-`quotations.rs` and `first_release.rs`, both of which were built after a hand-check missed things
-twice.
-
-**Whether to build it is that lane's call**, and there is a real argument against, since `P-182` may
-make the tool reviewable and a reviewable tool may not need it. What is not arguable is that the
-guarantee is currently asserted and not checked.
-
-Two measurements accompany it, in the report rather than here: the promotion **rate** is not the
-variable - 2026-08-26 promoted more in one commit with no self-repairs, against forty in
-forty-three commits today - and the note's count of `edit.py` defects is short by at least one,
-`02587e8` being a third wrong-cell write.
-
 ---
 
 ## Resolved
@@ -354,6 +325,19 @@ author saying *I looked, and it stays open*. Poisoned by deleting `C-5`'s.
 And it prints rather than refuses, scoped the way `Q-36`'s refusal was: every perspective commits in
 this tree, and failing one lane's commit because another has not closed an item would be the wrong
 perspective paying
+
+### Q-39 - Nothing checked shipped text against approved text
+
+**to** spec · **status** **acted** 2026-09-02 · filed as `S-10` to the code lane, verified at
+`docs/notes/proposals.md:98`, carrying this lens's design **and its argument against building it
+yet**. They did not present it as their own.
+
+They verified every factual claim before acting rather than after, including the two that were
+corrections to their own write-up.
+
+The part worth keeping is their own reading of the correction: they framed the day as a question
+about tempo, reached the right lever anyway, and could only find out which by being measured. *Right
+about what to fix and wrong about why, and only the second is checkable*
 
 ### Q-16 - The picture never sees the biome the model has
 
