@@ -8,9 +8,12 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-154** - One recipe unclaims a territory and none claims one · `docs/notes/proposals.md`
-- **P-155** - Using a thing exhausts it, and moving is a second trait of the same shape · `docs/notes/proposals.md`
+- **P-157** - A thing contains things, and a territory is one · `docs/notes/proposals.md`
+- **P-155** - Readiness is written in the recipe, not assumed by a rule · `docs/notes/proposals.md`
+- **P-158** - The Scope column is the owner column wearing a location's name · `docs/notes/proposals.md`
+- **P-159** - `consumed` is derived, not declared · `docs/notes/proposals.md`
 - **P-156** - What a territory has room for, which `C-10` has been asking since August · `docs/notes/proposals.md`
+- **P-154** - One recipe unclaims a territory and none claims one · `docs/notes/proposals.md`
 
 ## What is outstanding
 

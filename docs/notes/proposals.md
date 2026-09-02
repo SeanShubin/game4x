@@ -45,86 +45,138 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-154 - One recipe unclaims a territory and none claims one
+### P-157 - A thing contains things, and a territory is one
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`releases/first-release.md` -> Recipes
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
+`spec/logistics.md` -> Containment, replacing it whole, **and** `spec/planet.md` for adjacency
 
-**`P-152` declared `control` and the recipes cannot set it.** `revert` outputs
-`territory, unclaimed`. Nothing outputs `territory, claimed`. `land` and `found by land` produce a
-garrison, a citizen and a food extractor, and **say nothing about who holds the territory** - so on
-the tables as written, every territory begins unclaimed and can only ever become more so.
+**Sean's, decided 2026-09-01**: *everything in the game should be composable in a giant tree...
+avoid special cases of rules by applying the same rules at different levels*, and *make territory not
+privileged.* **This is the first of four and everything else waits on it.**
 
-**Two ways out, and this lane has no view.**
+> `## Containment`, five lines replacing five:
+>
+> - A thing may contain things, and is itself in at most one other thing. Nothing else holds
+>   anything
+> - What a thing may contain is a maximum per kind, or per family of kinds. Room for four extractors
+>   is a maximum of four, so nothing a player builds ever crowds out something of another kind
+> - A thing that contains things takes up room in whatever contains it, so room is not conserved
+> - A thing says which of the things in it are next to which. That is a fact about the container
+>   rather than about its contents
+> - Nothing contains itself, directly or through anything else
 
-- **Claiming is a result, and the two landing recipes should say so.** `land` and `found by land`
-  each gain `out territory, claimed 1`, which is what a player would say they had just done
-- **Control is derived from the garrison**, and `P-152`'s row is wrong to say *stored*. A territory
-  is claimed exactly when it holds one, `revert` removes the garrison rather than the claim, and the
-  trait is computed like `unfed` and `surplus`
+**Basis: it is `P-148` with the word *bin* removed and one line added.** Every clause above is that
+proposal's, generalised from a bin to a thing. **The place-versus-thing distinction goes with it** -
+a planet, a territory, a vehicle and an extractor are all things that contain things, differing only
+in what they may contain and what traits they carry.
 
-**What decides it is whether a territory can be held without a garrison.** `spec/control.md` says
-holding takes force equal to the force of nature, and that a citizen has force of its own - so
-**force can be present with no garrison**, and under the second reading such a territory would be
-unclaimed while being successfully defended. **That points at the first**, but it turns on a rule
-about garrisons rather than about traits, which makes it Sean's.
+**The added line is adjacency, and it is the one that stops a territory being special.**
+`spec/planet.md` says which territories adjoin which, as a fact about territories. **Saying it about
+the planet instead makes it uniform**: a vessel with two bays could say the same of its bays, and
+nothing else ever would. **Containment is still a tree and adjacency is still a graph** - what
+changes is that the graph hangs off whatever holds the things it relates, so it needs no level of
+its own.
 
-**Not urgent and not new.** The gap has been in the release since the recipes existed; declaring
-`control` is what made it visible, which is `P-143`'s argument working rather than failing.
+**Measured, because Sean asked for the test rather than the argument.** Across the four proposals
+this begins, **seven concepts go and about ten rows arrive on a table of forty-nine** - and what is
+removed are rules while what is added is data. The full count, and the one place it gets worse, are
+in [one tree](one-tree.md).
 
-### P-155 - Using a thing exhausts it, and moving is a second trait of the same shape
+### P-155 - Readiness is written in the recipe, not assumed by a rule
 
 **to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** recovered
-- **into** `spec/turn.md` -> Order of operations, **and** `releases/first-release.md` -> Traits,
-Recipes
+- **into** `releases/first-release.md` -> Recipes. **Needs `P-157`**
 
 **Sean's, decided 2026-09-01**: *any time a civilian generates labor it becomes exhausted; any time
-labor operates an extractor the extractor becomes exhausted; move vs exhausted are an interesting
-case, because I can imagine something moving first then doing something, so perhaps these need to be
-separate traits that work in a similar way.*
+labor operates an extractor the extractor becomes exhausted.*
 
-> `spec/turn.md` -> Order of operations, the second line becomes:
+> `work` and `move` name the readiness they spend, as `spend readiness` already does:
 >
-> - Producing happens in any order. A thing that readies is ready or exhausted, and using it
->   exhausts it. A thing that moves has moved or not, and moving it spends that. A thing created
->   during a turn begins ready and unmoved and may be used at once. **When nothing can be used or
->   moved there is nothing left to do**
+> | Recipe | Role | Thing | Qty |
+> | --- | --- | --- | --- |
+> | **work** | in | extractor, ready | 1 |
+> |  | out | extractor, exhausted | 1 |
+> | **move** | in | unit, ready | 1 |
+> |  | out | unit, exhausted | 1 |
 
-> `releases/first-release.md` -> Traits gains one row:
+**Basis: `consumed` is already a column, so readiness should be data too.** The recipes express *this
+input is used up* in the table rather than as engine behaviour. **Readiness is the same kind of
+fact**, and expressing it as a rule in `spec/turn.md` is the odd one out - a rule the tables cannot
+see is a case in the engine, which `spec/invariants.md` spends a bullet forbidding.
+
+**This lane had it backwards and Sean's question is what caught it.** It reported `spend readiness`'s
+explicit qualifiers as redundant. **No rule makes them redundant**: that recipe *consumes* a ready
+citizen and creates an exhausted one, and *using it exhausts it* cannot reach a consumed input,
+because there is nothing left to exhaust. **One recipe of eighteen was right and the other three were
+missing it.**
+
+**Move-then-act needs nothing here.** Sean asked whether *moved* should be a second trait, then
+answered his own question better: *perhaps a vehicle can be composed of parts, the part that moves
+exhausts, the part that does something limited exhausts.* **Under `P-157` a thing contains things, so
+a part is a thing** - and a unit with an engine and a crane spends each separately with one readiness
+and no new trait. **First release declares one part per unit and gains nothing until a vehicle earns
+a second**, which is why this proposal does not ask for parts and does not need to.
+
+### P-158 - The Scope column is the owner column wearing a location's name
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
+`releases/first-release.md` -> Recipes, **and** -> Traits. **Needs `P-157`**
+
+**The Scope column says `here` or `every`, and that is not where a recipe applies - it is who it
+belongs to.** `P-139` promoted *a recipe belongs to the player or to the world*, and the table has
+never said which. **The two divisions are the same division**, checked row by row: the ten `here`
+recipes are exactly the player's, and the eight `every` recipes are exactly the world's.
+
+> The **Scope** column becomes **Owner**, and its values become `player` and `world`.
+
+> Where a recipe applies is then what its ingredients say, and `grow` needs one it does not have.
+> `## Traits` gains a row:
 >
 > | Trait | Of | Values | Stored or derived |
 > | --- | --- | --- | --- |
-> | **moved** | whatever moves | yes or no | stored, cleared at end turn |
-
-> `releases/first-release.md` -> Recipes: `ready` gains two rows, so that both are restored:
+> | **houses** | a thing that contains things | whether people live in it | stored |
 >
-> | Recipe | Scope | Role | Thing | Qty | Consumed | Bound |
-> | --- | --- | --- | --- | --- | --- | --- |
-> | **ready** | every | in | thing, moved | 1 | yes | at least |
-> |  |  | out | thing, unmoved | 1 |  |  |
+> and `grow` gains an ingredient: `in thing, houses 1, not consumed`.
 
-**Basis: the release already requires two axes and nobody noticed.** `found by land` takes
-`pioneer, arriving` - a Pioneer that moved into a territory this turn. **A Pioneer that moved and can
-then be acted on is move-then-act**, which is exactly the case Sean describes, and it has been in the
-table since the table existed. One axis cannot express it.
+**Basis: `here` was doing two jobs and neither of them well.** As a location it named a territory,
+which `P-157` stops privileging. As an owner it said the right thing in the wrong word. **Splitting
+them costs one renamed column and gains the division `P-139` promoted and the table never carried.**
 
-**And the rule is general rather than per recipe, which is what the first two answers settle.** The
-Units table's **Readies** column already says which kinds have readiness - citizen, extractor, ark
-and pioneer yes; garrison and yard no. So *using it exhausts it* is a rule over a declared trait
-rather than something the engine knows privately, and no recipe has to restate it. `work` exhausts
-the extractor because an extractor readies, not because `work` says so.
+**Why `grow` needs a trait and the other seven do not.** Under `P-157` a world recipe matches wherever
+its ingredients are, at any depth. **Five are simply right that way** - food spoils in a cargo hold, an
+exhausted thing readies wherever it is, an unpaid unit perishes where it stands. **`revert` is right
+because only a territory has a force of nature.** `grow` is the one that breaks: **a citizen must not
+be born in a fuel tank.**
 
-**One consequence, and it is a choice.** `spend readiness` names `citizen, ready` in and
-`citizen, exhausted` out, which the general rule now makes redundant. **Leaving it is harmless and
-deleting it is tidier**, and this lane has no view - but they should not both be true silently, since
-a reader seeing readiness named in one recipe of eighteen will reasonably infer it is not automatic.
+**That is the strongest thing this whole direction has found.** The old rule was right only because
+nothing else could match it, and **the specification cannot currently say where population lives** -
+which is true whichever model wins.
 
-**What this corrects, from earlier the same day.** This lane argued that *exhausted* could cover
-*moved* with no second trait, because the only non-consuming thing you can do to a resource is move
-it. **That was true of resources and does not extend to units**, which can move and then act - and
-Sean found the case. The two-axis version subsumes the earlier answer rather than replacing it:
-metal that moved is `moved` and can still be spent, which is the behaviour that argument was
-protecting, now with a mechanism instead of a coincidence.
+### P-159 - `consumed` is derived, not declared
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
+`releases/first-release.md` -> Recipes. **Needs `P-158` and the readiness half of `P-155`**
+
+**Sean's, 2026-09-01**: *consumed can be implied by not showing up on both sides of the recipe.*
+**Measured against all eighteen: twenty-four of thirty ingredients already agree.**
+
+> The **Consumed** column is deleted. An ingredient is consumed exactly when the same thing, with the
+> same traits, does not appear among the results.
+>
+> Four recipes gain one result each, being the inputs they leave unchanged: `produce pioneer` a
+> garrison, `produce ark` a yard, `eat` a citizen, `upkeep` the unit.
+
+**Basis: identity includes traits, and that is what makes a move a move.** `move` consumes
+`unit, here` and produces `unit, there` - **the same thing, different traits, so consumed is
+correct** and the rule does not have to know what moving is.
+
+**The six that disagreed are three problems and two of them are already being fixed.** `work`'s
+extractor agrees once readiness is written down, which is `P-155`. `revert`'s territory was never an
+ingredient, which is `P-158`. **Four are simply not echoed**, and echoing them is this proposal.
+
+**What it buys.** A column that can disagree with the rows it summarises stops existing. **Nobody can
+set the flag one way and write the rows the other**, which is the only kind of error the column ever
+permitted.
 
 ### P-156 - What a territory has room for, which `C-10` has been asking since August
 
@@ -406,6 +458,33 @@ Each capability in `releases/first-release.md` now carries an id, `R-1` to `R-6`
 code` field line every outbox item carries. The tool does not look in `releases/`, so all six are
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
+
+### P-154 - One recipe unclaims a territory and none claims one
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`releases/first-release.md` -> Recipes
+
+**`P-152` declared `control` and the recipes cannot set it.** `revert` outputs
+`territory, unclaimed`. Nothing outputs `territory, claimed`. `land` and `found by land` produce a
+garrison, a citizen and a food extractor, and **say nothing about who holds the territory** - so on
+the tables as written, every territory begins unclaimed and can only ever become more so.
+
+**Two ways out, and this lane has no view.**
+
+- **Claiming is a result, and the two landing recipes should say so.** `land` and `found by land`
+  each gain `out territory, claimed 1`, which is what a player would say they had just done
+- **Control is derived from the garrison**, and `P-152`'s row is wrong to say *stored*. A territory
+  is claimed exactly when it holds one, `revert` removes the garrison rather than the claim, and the
+  trait is computed like `unfed` and `surplus`
+
+**What decides it is whether a territory can be held without a garrison.** `spec/control.md` says
+holding takes force equal to the force of nature, and that a citizen has force of its own - so
+**force can be present with no garrison**, and under the second reading such a territory would be
+unclaimed while being successfully defended. **That points at the first**, but it turns on a rule
+about garrisons rather than about traits, which makes it Sean's.
+
+**Not urgent and not new.** The gap has been in the release since the recipes existed; declaring
+`control` is what made it visible, which is `P-143`'s argument working rather than failing.
 
 ## Accepted
 
