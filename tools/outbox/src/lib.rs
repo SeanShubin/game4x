@@ -188,16 +188,38 @@ pub fn parse(text: &str, outbox: &str) -> Vec<Item> {
 /// spaces all work, and changing it later breaks nothing.
 /// Short hashes an item says it has already considered.
 fn considered(line: &str) -> Vec<String> {
-    field(line, "cited")
+    whole_field(line, "cited")
         .into_iter()
         .flat_map(|value| {
             value
                 .split([',', ' '])
-                .map(|word| word.trim_matches(['`', '.']).to_string())
+                .map(|word| word.trim_matches(['`', '.', '*']).to_string())
                 .filter(|word| word.len() >= 7 && word.chars().all(|c| c.is_ascii_hexdigit()))
                 .collect::<Vec<_>>()
         })
         .collect()
+}
+
+/// A field's whole value, up to the next field or the end of the line.
+///
+/// **`field` returns one word, and that is right for the fields that have one.** `to` and
+/// `status` are single words, and stopping at whitespace is what keeps the separator
+/// between fields from mattering.
+///
+/// `cited` is a list, and going through `field` meant it was handed one word and then split
+/// on commas *and spaces* - so the space arm could never fire, and
+/// `` **cited** `a1b2c3d`, `e4f5a6b` `` silently kept the first and dropped the rest. Each
+/// half was right alone and together they lost data, which is why this is a second reader
+/// rather than a change to the first.
+///
+/// Anything in the value that is not hash-shaped is ignored, so a note may sit beside the
+/// hashes.
+fn whole_field(line: &str, name: &str) -> Option<String> {
+    let marker = format!("**{name}**");
+    let after = line.split_once(&marker)?.1;
+    // A middle dot separates fields on the line; the last field runs to the end.
+    let value = after.split('\u{b7}').next()?.trim();
+    (!value.is_empty()).then(|| value.to_string())
 }
 
 fn field(line: &str, name: &str) -> Option<String> {
@@ -920,6 +942,48 @@ One line of what it is.
             "no capability is addressed to the lane that builds them"
         );
         assert!(ordered.iter().any(|item| item.id == "R-6"));
+    }
+
+    /// A `cited` list is read whole, however it is written.
+    ///
+    /// **`S-8`.** It used to go through `field`, which returns one word - so the list was
+    /// handed a single hash and then split on commas and spaces, and the space arm could
+    /// never fire. `` **cited** `a1b2c3d`, `e4f5a6b` `` kept the first and dropped the rest
+    /// in silence, and the only form that worked was one nobody would choose.
+    ///
+    /// Each half was right alone: `field` stops at whitespace so the separator between
+    /// fields never matters, and `considered` splits a list. Together they lost data.
+    #[test]
+    fn a_cited_list_is_read_however_it_is_punctuated() {
+        let both = ["a1b2c3d", "e4f5a6b"];
+        for line in [
+            "**to** spec · **status** open · **cited** `a1b2c3d`, `e4f5a6b`",
+            "**to** spec · **status** open · **cited** `a1b2c3d` `e4f5a6b`",
+            "**to** spec · **status** open · **cited** `a1b2c3d`,`e4f5a6b`",
+            "**to** spec · **status** open · **cited** a1b2c3d, e4f5a6b",
+        ] {
+            assert_eq!(considered(line), both, "`{line}`");
+        }
+
+        // A note may sit beside the hashes; anything not hash-shaped is ignored.
+        assert_eq!(
+            considered("**status** open · **cited** `a1b2c3d`, and see the note"),
+            ["a1b2c3d"]
+        );
+        // And a field after it is not swallowed, because the middle dot ends the value.
+        assert_eq!(
+            considered("**cited** `a1b2c3d` · **raised** 2026-09-01"),
+            ["a1b2c3d"]
+        );
+        assert!(considered("**to** spec · **status** open").is_empty());
+    }
+
+    /// The single-word fields still stop at whitespace, which is why `field` was left alone.
+    #[test]
+    fn a_single_word_field_is_still_one_word() {
+        let line = "**to** spec · **status** open · **raised** 2026-09-01";
+        assert_eq!(field(line, "to").unwrap(), "spec");
+        assert_eq!(field(line, "status").unwrap(), "open");
     }
 
     #[test]
