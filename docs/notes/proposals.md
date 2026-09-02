@@ -45,63 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-142 - A quantity is a number
-
-**to** sean · **status** open · **raised** 2026-08-31 · **kind** recovered · **into**
-`releases/first-release.md` -> Recipes
-
-**Sean's, decided 2026-08-31**: *I would like a quantity to always be an integer, unless there is a
-compelling reason otherwise.*
-
-> The three ports reading `any` become `1`:
->
-> | Recipe | Role | Thing | Qty |
-> | ------ | ---- | ----- | --- |
-> | **spoil** | in | food | 1 |
-> | **ready** | in | thing, exhausted | 1 |
-> |           | out | thing, ready | 1 |
->
-> And two quantities become lookups rather than literals:
->
-> | Recipe | Role | Thing | Qty |
-> | ------ | ---- | ----- | --- |
-> | **work** | out | resource | the worked node's density |
-> | **upkeep** | in | food | the unit's upkeep |
-
-**One cell stale, 2026-09-01.** *The worked node's density* names a node, and Sean's decision of
-2026-09-01 removes nodes: density becomes a trait of the **territory**, per resource. The proposal's
-general line is unaffected - a quantity is still written in the recipe or read from a trait of an
-ingredient - and only the example moves.
-
-**Basis:** `any` was never a quantity. It meant *all of it*, and **the scope column already says that**
-- both recipes are the world's, applied everywhere they match, so a recipe removing one food applied
-everywhere removes all the food. **The `any` was the scope written into the wrong column**, and
-deleting it changes no behaviour.
-
-**And nothing else is an exception, because there never was one.** This lane wrote that `work`'s
-`density` output *is not an integer*. **Sean: a food node of density 8 spent one labor gives 8 food -
-where is the quantity that is not an integer?** He is right. Eight is an integer. **Every quantity in
-the game is an integer and always was.**
-
-**What varies is not the type but where the number comes from.** `15 metal` is written in the recipe.
-`density` is read off one of the ingredients. **Both are integers; one is a literal and one is a
-lookup**, and calling the second *not an integer* confused a question about representation with a
-question about type.
-
-**So the rule is simply his**, with no exception attached:
-
-> A quantity is a whole number. It is written in the recipe, or read from a trait of one of the
-> ingredients.
-
-**And the correction found a second one this lane had mis-encoded.** `upkeep` reads *food, its upkeep*
-at quantity **1** - but *its upkeep* is the amount, and 1 is only the Pioneer's. **The quantity was
-put in the thing column as a note and a literal left in its place**, so a unit with upkeep 2 would eat
-one food. Written as a lookup it is right for every unit.
-
-**Which makes the lookup general rather than a special case for density.** `prototypes/kinds` types it
-as `Exactly | Density | Any`; **`Any` goes away with this proposal, `Density` becomes a trait lookup,
-and the type is two cases rather than three** - a literal, and a trait of a named ingredient.
-
 ### P-146 - What a thing is made of, which `P-145` needs and `P-144` was carrying
 
 **to** sean - **status** open - **raised** 2026-08-31 - **kind** gap - **into**
@@ -584,6 +527,7 @@ first**, and it is worth writing down as a bet rather than meeting it later as a
 | P-148, a bin is where everything is, and a capacity is a bin                                                    | `spec/logistics.md` -> Capacity, replaced whole and renamed Containment                                                | 2026-09-01 |
 | P-147, every cycle among recipes must spend readiness                                                           | `spec/invariants.md` -> The game is data                                                                               | 2026-09-01 |
 | P-141, a unit carries fuel, not cells                                                                           | `spec/units.md`, `releases/first-release.md` -> Units and structures, Recipes                                          | 2026-09-01 |
+| P-142, a quantity is a number                                                                                   | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 
 ## Rejected
 

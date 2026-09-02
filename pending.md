@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-142** - A quantity is a number · `docs/notes/proposals.md`
 - **P-146** - What a thing is made of, which `P-145` needs and `P-144` was carrying · `docs/notes/proposals.md`
 - **P-145** - `perish` destroys metal, which the specification says cannot happen · `docs/notes/proposals.md`
 - **P-143** - The release does not declare its own vocabulary · `docs/notes/proposals.md`
@@ -52,6 +51,7 @@ it exists to ask.
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147
+- `releases/first-release.md` -> Recipes - P-140, P-142
 - `spec/console.md` - P-69, P-82
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/interface.md` -> Surfaces - P-73, P-116
