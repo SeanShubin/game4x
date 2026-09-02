@@ -12,8 +12,9 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What is outstanding
 
-### To code (4)
+### To code (5)
 
+- **S-10** - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked · `docs/notes/proposals.md`
 - **S-9** - Two checks `tools/outbox` could make that would have caught today's shape errors · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`

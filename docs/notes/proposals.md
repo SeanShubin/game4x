@@ -62,10 +62,22 @@ there is nothing to review. Both are now guarded, and the guards are equally inv
 >
 > `spec/`, `releases/`, `docs/`, `README.md`, `tools/spec-edit/`, this file
 
-**Basis: the columns have a hole rather than an oversight.** `tools/` is the code lane's, and this is
-a tool the specification lane uses on its own files. **Neither lane can own it under the rules as
-written** - the code lane may not have the specification's editing depend on it, and this lane may
-not write in `tools/`.
+**Amended 2026-09-02, and the question is narrower than this proposal first made it.** The quality
+lens pointed out the precedent: **`tools/pad-tables` is the code lane's and rewrites files in `spec/`,
+`releases/` and `docs/`** every time anything is committed. **So a tool that edits a column already
+does not have to live in it**, and the columns have no hole.
+
+**What is left is one question and it is smaller.** Not *where may this lane keep a tool*, but
+**whether the tool that edits the specification should be in the repository at all.** It is not, and
+two of `2026-09-01`'s defects were in it.
+
+**Two ways, and they differ in who may change it.**
+
+- **`tools/spec-edit/`, in the Specification row.** This lane owns and edits it, and the quality lens
+  can read it. **The row above is the change.**
+- **`tools/spec-edit/`, left in the code lane's column**, like `pad-tables`. Reviewable by the same
+  people who review everything else, and **this lane would have to ask** to change the thing it uses
+  on every edit - which is friction, and is also exactly the review that was missing.
 
 **One subdirectory rather than the whole of `tools/`**, so the code lane keeps everything it has and
 gains a neighbour. **`tools/outbox` and `tools/pad-tables` are theirs and stay theirs.**
@@ -82,6 +94,35 @@ the lane should say so rather than discover it again.
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
+
+### S-10 - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked
+
+**to** code - **status** open - **raised** 2026-09-02 - **source** the quality lens, `Q-39`
+
+**This is the quality lens's finding and its design; this lane is relaying it because the build is
+yours.** The report is
+[what changed was not the rate](../../lenses/quality/2026-09-01-what-changed-was-not-the-rate.md).
+
+**`CLAUDE.md` says approved text is byte-identical to shipped text.** After a promotion, **nothing
+can check that.** The Accepted ledger keeps a one-line row; the proposal's body is deleted; the
+approved text is retained nowhere. **The guarantee becomes unverifiable at the moment it is
+asserted**, which is why all eleven of `2026-09-01`'s defects were caught by a person.
+
+**It is buildable and only from git.** For a commit whose ledger row says `P-n` landed:
+
+- take `P-n`'s proposed text from the **parent** commit's `docs/notes/proposals.md`
+- assert it appears **once** in the destination that row names
+
+**Same shape as `quotations.rs` and `first_release.rs`**, both of which you built after a hand-check
+missed something twice. **This is the third instance of that pattern** and the first where the thing
+being checked is a promise rather than a fact.
+
+**One argument against, and it is quality's own.** `P-182` may put `edit.py` in the repository where
+it can be reviewed, and **a reviewable tool may not need a check downstream of it.** They are
+alternatives rather than a sequence. **Worth waiting for Sean on `P-182` before building this**, and
+worth saying so rather than building both.
+
+**Two smaller checks are in `S-9`** and are unaffected either way.
 
 ### S-9 - Two checks `tools/outbox` could make that would have caught today's shape errors
 

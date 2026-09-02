@@ -1,8 +1,17 @@
 # How this lane fails
 
-**Derived, 2026-09-01.** Written by Claude at Sean's request, after a day of twenty-eight promotions
-and a visible number of mistakes. Not binding. **The point is the causes, not the count** - four
-causes produced eleven defects, and three of the four have a fix.
+**Derived, 2026-09-01, corrected 2026-09-02.** Written by Claude at Sean's request after a day of
+**forty** promotions - the first version said twenty-eight, a count taken mid-afternoon and never
+re-taken. Not binding.
+
+**Five causes, and the fifth was found by the quality lens rather than by this lane.** Four are
+below; the fifth is at the end, and it is the one that matters.
+
+**And it was not the rate.** Quality measured it rather than judging it: **2026-08-26 was 47
+promotions in 1 commit with 0 self-repairs; 2026-09-01 was 40 promotions in 43 commits with 5.** The
+variable is the number of operations, not the number of decisions - and one of the four causes below,
+a commit chained after a failing script, **can only happen once per operation.** Forty-three chances
+rather than one.
 
 [Notes index](README.md) · [Documentation map](../README.md) · [Root README](../../README.md)
 
@@ -21,8 +30,15 @@ causes produced eleven defects, and three of the four have a fix.
   about in as many words. The check asked whether the sentence was present, not whether it was
   present **once**.
 
-**Both are the same failure the whole day was about** - a green check that proves nothing - one level
-below where it was being discussed.
+- **A third, found by quality and missing from the first version of this note.** `02587e8` cleared
+  an owner cell left on a continuation row: rebuilding `work` blanked the Recipe cell of the row that
+  used to be first and not the Owner cell beside it. **Reported at the time and not counted here**,
+  which matters because the note's confidence rests on the count being complete and **the count was
+  assembled by the instance being reviewed.** `f1feecf` is a fourth candidate of the
+  incomplete-promotion shape and is not verified.
+
+**All three are the same failure the whole day was about** - a green check that proves nothing - one
+level below where it was being discussed.
 
 ### A commit outside the assertion boundary
 
@@ -84,3 +100,31 @@ review.
 `CLAUDE.md` gives `tools/` to the code lane. **A tool the specification lane uses to edit the
 specification has nowhere in its own column to live**, which is a gap in the columns rather than an
 oversight - filed as a proposal.
+
+## The fifth cause, which this lane could not see
+
+**Every guard added above checks the edit against what the script intended. Nothing checks what the
+script intended against what Sean approved.** `P-176` would have passed all six: the script did
+exactly what it meant to, and it meant the wrong column.
+
+**And after a promotion nothing can check it at all.** The Accepted ledger keeps a one-line row and
+**the approved text is retained nowhere**. So the one guarantee the queue exists to provide -
+*approved text is byte-identical to shipped text* - **becomes unverifiable at the moment it is
+asserted.** That is why all eleven defects were caught by a person: the property that matters had no
+check to be careless with.
+
+**It is buildable, and only from git.** For a commit promoting `P-n`, take `P-n`'s text from the
+**parent** commit's proposals file and assert it appears once in the destination the ledger names.
+Same shape as `quotations.rs` and `first_release.rs`, both built after a hand-check missed something
+twice. Filed to the code lane as `S-10`.
+
+**There is a real argument against building it**, and quality made it: `P-182` may put the tool where
+it can be reviewed, and a reviewable tool may not need a check downstream of it. **Those are
+alternatives rather than a sequence**, and choosing costs less than building both.
+
+## What a lane cannot see about itself
+
+**This note was short by one and wrong in its first sentence**, and both were found by a lens rather
+than by re-reading. The count was taken early and stated as though final; the inventory was assembled
+by the instance whose work it inventories. **Neither is a mistake of care** - they are what
+self-assessment is, and the reason a lens reads everything and owes nobody a defence.
