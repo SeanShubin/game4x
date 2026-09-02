@@ -47,31 +47,47 @@ decision that has not been made yet. Two at the end are waiting on something and
 
 ### P-165 - Deploying an Ark destroys ten metal, and founding destroys six
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
-`releases/first-release.md` -> Recipes
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind**
+contradiction - **into** `releases/first-release.md` -> Units and structures
 
 **Found by walking the recipes one at a time**, which is what
 [the before-and-after pages](../recipes/README.md) are for.
 
 `spec/resources.md`: *a conserved resource is not destroyed by being used. It changes form, and what
 it was made into can be taken apart to get it back.* **An Ark holds 12 metal and deploys into a
-garrison and an extractor, which hold 1 each.** A Pioneer holds 8 and founds the same two. **Ten
-metal and six metal leave the game**, on the two recipes that open every game.
+garrison and an extractor, which hold 1 each.** A Pioneer holds 8 and founds the same two. **Ten and
+six metal leave the game**, on the two recipes that open every game.
 
-**This is `P-145` again, in the main path rather than the edge case.** That proposal fixed `perish`,
-where an unpaid unit vanished with its metal. **Deployment is the same defect and forty times more
-common**: `perish` may never fire in a first release, and `deploy ark` fires in the first minute of
-every game.
+**Sean, 2026-09-01**: *the ark deploys directly into the destination structures rather than the
+materials required to build them.* **The recipe already does that**, so the shape is right and only a
+number is wrong.
 
-**Two ways out, and they are Sean's own from 2026-08-31.**
+**Conservation ties three numbers together, and any two of them are free.**
 
-- **The Ark deploys into what it cost**, which is the deployment lever - its cost follows its
-  deployment rather than the other way round, so an Ark that becomes two metal's worth costs two
-  metal
-- **The remainder is loose metal**, deployed alongside the structures, which is what his opening
-  walkthrough said: *deploy ark... output 2 civilian, 3 metal*
+|                      | Today | What conservation requires |
+| -------------------- | ----- | -------------------------- |
+| a garrison's metal   | 1     |                            |
+| an extractor's metal | 1     |                            |
+| an Ark's metal       | 12    | **the other two added: 2** |
 
-**The second is what he wrote and the first is what he reasoned to**, and this lane has no view.
+**So an Ark is a two-metal thing that costs whatever you like, and the price is paid in energy.**
+`spec/resources.md` says metal is conserved and **energy is not** - so metal is pinned by what a
+thing becomes, and energy is free to carry the expense. An Ark at **2 metal and 12 energy** conserves
+exactly and costs what it costs today.
+
+> *Units and structures*: an Ark's **Metal in it** becomes 2 and a Pioneer's becomes 2. *Costs to
+> produce* becomes `2 metal, 12 energy` and `2 metal, 6 energy, 1 citizen`.
+
+**The alternative is to raise what the structures are worth**, so that a garrison and an extractor
+add to twelve. **That makes them expensive to build normally**, which is a real cost - a territory
+builds many extractors and lands one Ark.
+
+**And the third option is Sean's own walkthrough**, which he may prefer: *deploy ark... output 2
+civilian, 3 metal*. **Loose metal alongside the structures** conserves at any Ark price, and a
+territory's metal room of 20 is enough to keep it. **It is the only one of the three that leaves the
+Ark's cost alone**, and the reason he set it aside was labor rather than metal - two civilians can
+build two things or man two things, not both, which is why the Ark deploys structures. **Deploying
+structures *and* the remainder does both.**
 
 ### P-166 - `move` has no destination, and nothing sets `arriving`
 
