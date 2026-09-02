@@ -150,6 +150,44 @@ filed separately rather than against any recipe. **It is also the first place a 
 tie-break** - `P-135` promoted that competing effects are gathered and resolved together by a
 deterministic mechanic a player can change, and this is a competition nobody has named.
 
+### P-169 - Nothing orders `spoil`, so it can eat the food supply before anybody does
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`releases/first-release.md` -> Recipes, **or** `spec/turn.md` -> Order of operations
+
+**Sean asked whether population growth is a recipe or an exception. It is a recipe**, `grow`, owned
+by the world, and nothing about it is special-cased. **The exception is not growth - it is when the
+world's recipes fire.**
+
+**Three of them are ordered by their own ingredients, and that is the mechanism working.** A derived
+trait cannot exist until what derives it has happened:
+
+| Recipe   | Waits for | Because                                  |
+| -------- | --------- | ---------------------------------------- |
+| `grow`   | `eat`     | `surplus` is *left after everything ate* |
+| `depart` | `eat`     | `unfed` is *it did not eat*              |
+| `perish` | `upkeep`  | `unpaid` is *its upkeep was not met*     |
+
+**`spoil` takes plain `food` and waits for nothing.** Applied wherever it matches, it may fire before
+`eat` - and then **there is no food to eat, no surplus to grow on, and every citizen is unfed.** The
+first turn of every game turns on which of two recipes runs first, and nothing in the data says.
+
+**`spec/turn.md` says the order in prose** - *everything that eats, eats; then a population grows on
+surplus food or starves for want of it; what expires expires* - **and prose is not data.** It also
+does not place `upkeep`, `perish` or `revert` at all.
+
+**Two ways out, and they are different in kind.**
+
+- **Give `spoil` a dependency**, so the order falls out the way the other three do. Food that spoils
+  is food nothing ate and nothing grew on, which is a derived trait nothing has yet
+- **Say the world's recipes run in the order `spec/turn.md` lists**, and list all eight. That is an
+  ordering rule, which is the thing the unification has been removing
+
+**The first is the unification and the second is the exception**, and this lane's view is that the
+first is worth trying because the other three already work that way. **What it needs is a trait, and
+naming it is the hard part** - *spare*, or *unclaimed by anything*, and it has to be derivable
+without reference to a recipe that has not run.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
