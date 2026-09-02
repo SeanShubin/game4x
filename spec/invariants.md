@@ -37,6 +37,8 @@ specific rule.
 - Nothing plays itself. Every behaviour that acts on a player's behalf is a rule some person
   wrote, including any the game ships with
 - Any rule can be read and changed by the player using it, whatever its origin
+- A rule can be written for a kind of thing rather than for one thing, so that what a player
+  decides once holds for everything of that kind, including what does not exist yet
 - A rule is not part of any one game. It can be named, kept, used in a later game, and given to
   another player
 - A rule does the same thing for whoever holds it

@@ -282,38 +282,6 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-172 - A player can write one rule for many things, not one rule per thing
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`spec/invariants.md` -> Control without tedium
-
-**Sean's, 2026-09-01**: *I expect the player to be able to specify sophisticated constructs in the
-game without programming... I want to be able to tune behaviours with data.*
-
-**Control without tedium says a player can compose rules and can name and keep them. It does not say
-a player can abstract.** Composing builds a bigger rule out of smaller ones; abstracting writes one
-rule that covers many things. **They are different, and only the first is promoted.**
-
-> One line added:
->
-> - A rule can be written for a kind of thing rather than for one thing, so that what a player
->   decides once holds for everything of that kind, including what does not exist yet
-
-**Basis: his own example needs it and the section cannot express it.** On 2026-08-31 he described
-*create a pioneer, then create a set of rules for that pioneer, then every new pioneer uses that set
-by default.* **Every new pioneer** is the whole of it - a rule about a kind, applying to things that
-did not exist when it was written. **Composition cannot say that**, however deeply it nests.
-
-**And without it a player copies.** A rule per pioneer is the same duplication these tables have in
-`build food extractor` against `build metal extractor`, in the player's hands rather than the
-designer's - **and a copied rule rots exactly the way a copied example does**, which
-[a note from this morning](checks-outlive-examples.md) is entirely about.
-
-**Why it belongs beside *nothing plays itself* rather than anywhere else.** That line makes the
-game's own behaviour rules a person wrote. **So the release's seventeen recipes are what the rules
-editor must be able to express** - and three of them differ in one cell, which is precisely the case
-this line lets a player collapse.
-
 ### P-168 - Nothing checks room at the moment a thing is created
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
@@ -496,6 +464,7 @@ deterministic mechanic a player can change, and this is a competition nobody has
 | P-167, `build extractor` takes no metal and names no resource                                                   | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-166, an ingredient may be named, and `move` names two territories                                             | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-171, three build recipes, one per resource, and the blank goes                                                | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-172, a player can write one rule for many things, not one rule per thing                                      | `spec/invariants.md` -> Control without tedium                                                                         | 2026-09-01 |
 
 ## Rejected
 
