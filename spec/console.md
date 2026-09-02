@@ -45,8 +45,8 @@ One command for each way the game state can change:
   controlled, it is taken
 - `build <structure> <territory> [<resource>]` - build a structure, paying its cost there
 - `produce <unit> <territory>` - produce a unit at a structure that allows it
-- `work <count> <structure> <territory> [<resource>]` - spend that many citizens' labor at a
-  structure this turn
+- `work <count> <structure> <territory> [<resource>]` - spend that much labor at a structure
+  this turn
 - `end turn` - consume, transform, and ready everything
 - `run <file>` - run the commands in a file, as though they had been typed in its place
 

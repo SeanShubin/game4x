@@ -24,6 +24,5 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 ## Labor
 
 - A citizen provides labor each turn
-- Labor is spent when it is used, and is not restored until the end of the turn
 
 ## Open questions

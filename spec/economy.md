@@ -21,5 +21,6 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - A citizen works at one structure and cannot be in two places at once.
 - Structures that produce force and structures that extract resources are alike in this: a
   citizen at one is not at the other.
+- Labor is spent when it is used, and is not restored until the end of the turn
 
 ## Open questions

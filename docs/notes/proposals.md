@@ -50,6 +50,34 @@ decision that has not been made yet. Two at the end are waiting on something and
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-6 - `P-149` and `P-150` change the console grammar
+
+**to** code - **status** open - **raised** 2026-09-01 - **source** two promotions
+
+**`add node` is gone from the specification and `set resource` replaces it.** `P-149` removed the
+node: a territory now carries, per resource, how many extractors it has room for and the density
+each yields. The console command becomes
+`set resource <territory> <resource> <extractors> <density>`.
+
+**That is more work than a rename.** `add node` appears in `binding.rs`, `grammar.rs`, `report.rs`,
+`game.rs` and `tests/first_release.rs`, and one of the grammar tests exists **because of** the name -
+`add_node_is_not_mistaken_for_adding_a_unit_called_node` demonstrates the prefix-ordering rule using
+`add` and `add node`. **The rule it demonstrates is still true; the example it uses is not**, so the
+test needs a new pair rather than deleting.
+
+**And `P-150` changes one help string.** *spend that many citizens' labor at a structure this turn*
+becomes *spend that much labor at a structure this turn*, in `grammar.rs` and in
+`transition.rs`'s doc comment. Sean's reason is that labor need not come from a citizen - it does
+today and that is not a restriction the specification should carry.
+
+**`releases/first-release.md` moved too**, which matters because `prototypes/kinds` renders it and
+compares cell by cell: the recipes table lost `build extractor`'s `node, unworked` ingredient, `work`
+now yields *the territory's density for that resource*, and the *Territory nodes* section is
+*Territory resources*.
+
+**Not urgent from this lane's side.** Nothing here is a defect; it is the specification moving under
+working code, and when to follow is yours.
+
 ### S-5 - The gate is red, this lane moved the sentence, and this lane must not fix it
 
 **to** code - **status** open - **raised** 2026-08-31 - **source** a blocked push - **cited**
@@ -191,45 +219,6 @@ Each capability in `releases/first-release.md` now carries an id, `R-1` to `R-6`
 code` field line every outbox item carries. The tool does not look in `releases/`, so all six are
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
-
-### P-150 - Labor need not come from a citizen
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** recovered - **into**
-`spec/console.md`, **and** `spec/population.md` -> Labor moving one line to `spec/economy.md`
-
-**Sean's, decided 2026-09-01**: *make sure we don't require labor come from a citizen. It can come
-from a citizen, and does right now, but no need to restrict unnecessarily.*
-
-**The sweep found three places and two of them are in `P-149`**, which rewrites those lines anyway
-and has been amended. This is the third, plus one thing that is not a restriction but reads like one.
-
-> `spec/console.md`:
->
-> - `work <count> <structure> <territory> [<resource>]` - spend that much labor at a structure this
->   turn
-
-> `spec/population.md` -> Labor keeps its first line and loses its second. *Labor is spent when it
-> is used, and is not restored until the end of the turn* moves verbatim to `spec/economy.md` ->
-> Structures and labor.
-
-**Basis: the debt this pays is already written down.** The backlog has said since 2026-08-25 that
-**the model must not hardwire population as biological** - Sean intends worlds rich in energy but
-hostile to life, worked by machines - and that *labor is the abstraction; citizens are one source of
-it*. Three lines quietly said otherwise.
-
-**Why the move and not just the wording.** `A citizen provides labor each turn` belongs in
-`population.md`, because it is a fact about citizens. **`Labor is spent when it is used` is not** -
-it is true of labor from any source, and a rule about labor filed under Population is a rule a reader
-will take to be about citizens. **The heading is doing the restricting**, which is the kind of thing
-a wording sweep misses.
-
-**One thing deliberately left alone.** The release's `spend readiness` takes a ready citizen and
-yields labor. That is not a restriction - it is one recipe that makes labor, and **nothing stops
-another recipe making it from something else**, which is what *the game is data* buys.
-
-**And one thing this cannot fix yet.** `P-143` defines labor as *a citizen operating a machine*,
-which is Sean's own phrasing from 2026-08-31 and is now too narrow. `P-143` is already stale pending
-`P-149`; **that definition goes on the list of what its rewrite has to change.**
 
 ### P-143 - The release does not declare its own vocabulary
 
@@ -479,6 +468,7 @@ first**, and it is worth writing down as a bet rather than meeting it later as a
 | P-146, what a thing is made of, and a garrison and an extractor cost 1 metal                                    | `releases/first-release.md` -> Units and structures                                                                    | 2026-09-01 |
 | P-145, `perish` destroys metal, which the specification says cannot happen                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-149, a territory has a density and room for extractors; nodes go                                              | seven spec files and `releases/first-release.md`                                                                       | 2026-09-01 |
+| P-150, labor need not come from a citizen                                                                       | `spec/console.md`, and one line moved from `spec/population.md` -> Labor to `spec/economy.md` -> Structures and labor  | 2026-09-01 |
 
 ## Rejected
 

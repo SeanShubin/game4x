@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-150** - Labor need not come from a citizen · `docs/notes/proposals.md`
 - **P-143** - The release does not declare its own vocabulary · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
@@ -21,8 +20,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (4)
+### To code (5)
 
+- **S-6** - `P-149` and `P-150` change the console grammar · `docs/notes/proposals.md`
 - **S-5** - The gate is red, this lane moved the sentence, and this lane must not fix it · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
