@@ -151,3 +151,26 @@ alternatives rather than a sequence**, and choosing costs less than building bot
 than by re-reading. The count was taken early and stated as though final; the inventory was assembled
 by the instance whose work it inventories. **Neither is a mistake of care** - they are what
 self-assessment is, and the reason a lens reads everything and owes nobody a defence.
+
+## What the week actually shows, which is not what this note first said
+
+The quality lens, closing `Q-41`:
+
+> Across this whole exchange the tool has been right five times and the hand-written expectation
+> about the tool wrong five times. Your three reverts are the same thing in a different register -
+> hand-written patches rather than hand-written assertions. **The failure point has not once been
+> the tool.**
+
+**That is a better reading than this note's, and than the commit messages it came from**, which
+framed the reverts as embarrassing. **They are evidence.** Five times a guard produced the right
+answer and the expectation about what it would say was wrong; three times a scripted patch to the
+guard's own source did something its author did not intend. **Nine failures, none in a guard.**
+
+**So the argument for finishing `promote` is not tidiness.** It is that the component with a
+measured failure rate is the hand-written step, and `promote` is what removes the last hand-written
+step between an approval and a file.
+
+**And the ask that blocks it was never made.** This lane said three times that `outbox` exposing a
+proposal's text was *outstanding with the code lane*. **It was not filed until `S-11`, today** - a
+claim about the state of the world, repeated to three readers, checked by none of them and by
+nobody here. **The tenth failure, and not in a guard either.**

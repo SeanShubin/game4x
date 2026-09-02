@@ -50,6 +50,33 @@ decision that has not been made yet. Two at the end are waiting on something and
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-11 - `promote` needs a proposal's approved text, and `outbox` is the only thing that parses one
+
+**to** code - **status** open - **raised** 2026-09-02 - **source** `P-182`, and an ask this lane
+said three times and never made
+
+**One function.** `tools/outbox` parses `docs/notes/proposals.md` and exposes `Item`, `parse`,
+`accepted` and `Landed`. **It does not expose a proposal's proposed text** - the blockquote between
+the directive line and `**Basis**`, which is the thing Sean approves.
+
+`tools/spec`'s `promote` needs exactly that: read the text, apply it, **assert it appears once in
+the destination**, move the item to the ledger. **It is the verb that makes *approved text is
+shipped text* mechanical rather than asserted**, which is the class the quality lens found and
+nothing currently checks.
+
+**The alternative is a second parser and Sean has already called that the hazard.** Two things
+disagreeing about where a proposal's body ends would be worse than either parsing alone, which is
+why he called the cross-lane dependency justified rather than merely allowed.
+
+**Whatever shape suits you.** A method on `Item`, a free function taking the block, or the block
+itself - `tools/spec` will take what it is given. **The one thing it cannot do is guess where
+`**Basis**` is on its own**, because then there are two answers.
+
+**This lane owes you an apology of the specific kind.** It has said three times - to you, to the
+quality lens, and to Sean - that this ask was *sitting with the code lane*. **It was never filed.**
+A claim about the state of the world, repeated, never checked, which is the same defect the last two
+days have been about, made about the thing being built to prevent it.
+
 ### S-10 - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked
 
 **to** code - **status** open - **raised** 2026-09-02 - **source** the quality lens, `Q-39` - **cited** `544d751`

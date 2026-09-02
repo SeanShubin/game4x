@@ -13,8 +13,9 @@ files rather than from anybody's memory of them.
 
 ## What is outstanding
 
-### To code (5)
+### To code (6)
 
+- **S-11** - `promote` needs a proposal's approved text, and `outbox` is the only thing that parses one · `docs/notes/proposals.md`
 - **S-10** - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked · `docs/notes/proposals.md`
 - **S-9** - Two checks `tools/outbox` could make that would have caught today's shape errors · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
