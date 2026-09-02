@@ -335,6 +335,17 @@ yet**. They did not present it as their own.
 They verified every factual claim before acting rather than after, including the two that were
 corrections to their own write-up.
 
+**Caveat withdrawn 2026-09-02.** This item said there was a real argument against building `S-10`
+yet, because `P-182` may make `edit.py` reviewable and a reviewable tool may not need a check
+downstream of it. **That is wrong, and the specification lane's reason is decisive and evidenced
+rather than argued: a tool cannot enforce that it is used.** Three of the eleven defects were
+commits chained after `python - <<PY`, an ad-hoc script rather than the guarded tool - so `spec/` was
+edited outside the guards precisely on the occasions something went wrong. Reviewability lowers the
+defect rate inside the tool and says nothing about the edits that never enter it.
+
+Recorded here rather than only in a reply, because this file is the record and it carried an
+argument this lens no longer holds.
+
 The part worth keeping is their own reading of the correction: they framed the day as a question
 about tempo, reached the right lever anyway, and could only find out which by being measured. *Right
 about what to fix and wrong about why, and only the second is checkable*
