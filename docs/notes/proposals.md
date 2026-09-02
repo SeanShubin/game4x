@@ -52,7 +52,7 @@ only thing that does.
 
 ### S-8 - A `cited` list of more than one hash silently keeps the first
 
-**to** code - **status** open - **raised** 2026-09-01 - **source** `R-6` firing on every commit
+**to** code - **status** **acted** 2026-09-01 - **raised** 2026-09-01 - **source** `R-6` firing on every commit - **cited** `f01d8cb`
 
 **`tools/outbox` cannot read the field it is written to read.** `considered` splits the `cited`
 value on `[',', ' ']`, so it is built for a list. **`field` hands it one word**, because it takes
@@ -75,6 +75,14 @@ commit is one people learn to scroll past. **This lane scrolled past it about te
 including on the commit that was supposed to fix it. The reconciliation was right every time and got
 quieter each time it repeated - so *the tool was working* and *the tool was not being read* were both
 true, which is the failure mode worth guarding, not the parse bug.
+
+**Closed 2026-09-01 by `f01d8cb`.** `cited` has its own reader now, taking the whole value up to the
+next field, and `field` keeps its single-word behaviour for `to` and `status` - so neither half had
+to give up the reason it had. **`R-6` says `` `faafb5f`, `2f38241` `` again**, the way anyone would
+write it.
+
+**The reconciliation reported this closure on the very next commit and it was read this time**, which
+is the only part of the whole exchange that is evidence rather than argument.
 
 ### S-7 - `P-143` adds four sections to the release for `prototypes/kinds` to render
 
