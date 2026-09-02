@@ -74,3 +74,58 @@ it.**
 - **What `here` means when a recipe could match at two depths.** A recipe satisfied by both a
   territory and a vehicle inside it would fire twice, which is either a feature or the first special
   case creeping back
+
+## The test: simpler or more complex
+
+Sean: *the test is if we end up with something simpler or something more complex... my promoted
+rules may be wrong because I couldn't see the unification at the time, but they would be right if
+attempting to unify them creates more complexity than it reduces.*
+
+**It removes seven concepts and adds about ten rows to a table of forty-nine.**
+
+| Goes away                                                              | Arrives                                        |
+| ---------------------------------------------------------------------- | ---------------------------------------------- |
+| the **place**-versus-**thing** distinction                             | a condition row where a level was assumed      |
+| **bin** as a concept of its own                                        | four echo rows, so `consumed` derives          |
+| the **Scope** column's `here` and `every` as special values            | two readiness rows on `work` and `move`        |
+| the **consumed** column, derived instead                               | adjacency restated as a trait of the container |
+| `revert`'s territory-as-ingredient - the code lane's `Noun::Territory` | parts, on any unit with more than one          |
+| `P-155`'s second trait `moved`, if parts land instead                  |                                                |
+| the *Where things are* section, which becomes one line                 |                                                |
+
+**What is removed are rules and what is added is data**, which is the trade `spec/invariants.md`
+already asks for. A row costs a reader a glance and a rule costs them a thing to remember at every
+other row.
+
+## Where it genuinely gets worse, and how much
+
+**One rule that today does not exist would have to.** `here` prevents a recipe matching at two depths
+by fiat. Under conditions, something must say what happens when a recipe is satisfied by a territory
+**and** by a vehicle standing in it. **That is a new rule, not a removed one**, and it is the
+strongest argument against.
+
+**It is smaller than it looks, and the eight world recipes are how to see that.** `eat`, `grow`,
+`depart`, `spoil`, `ready`, `upkeep`, `perish` and `revert` are scoped `every`, and under a tree they
+match at every depth rather than at every territory.
+
+- **Five are simply right that way.** Food spoils in a cargo hold; an exhausted thing readies wherever
+  it is; an unpaid unit perishes wherever it stands
+- **`revert` is right by accident and for the right reason** - only a territory has a force of
+  nature, so only a territory matches
+- **`grow` is the one that breaks**, and it breaks usefully: a citizen must not be born in a fuel
+  tank. The fix is a condition saying where population lives, which is **a trait rather than a rule**,
+  and it is a real fact about the world that the current model simply cannot state
+
+**Two other things get harder and neither is fatal.** Control at depth needs deciding - a rule that
+walks up, or a trait each thing carries that can disagree with its container. And *everything is a
+tree* stays false while adjacency exists, so a reader still holds one exception.
+
+## The verdict this note reaches
+
+**Simpler, and the saving is in rules rather than rows.** Seven concepts for one new question, where
+the question turns out to be a player-facing choice at most depths and a missing trait at one.
+
+**The one thing worth keeping from the privileged version** is that `grow` found it. A rule that is
+right only because nothing else can match it is not obviously right - and the exercise of removing
+the privilege is what showed that population lives somewhere in particular, which nothing in the
+specification says today.
