@@ -20,10 +20,10 @@ naming the place is how a recipe says where it acts.
 food, metal and energy each **3 extractors at density 4**, force of nature 1. Room: citizens 8,
 garrison 1, yard 1, arks 2, pioneers 2, labor 8, and 20 each of food, metal and energy.
 
-**Sixteen recipes.** There were twenty this morning. `launch` was `move` with a different
+**Seventeen recipes.** There were twenty two mornings ago. `launch` was `move` with a different
 destination, `eat` was `upkeep`, `depart` was `perish`, `revert` could never fire, and `land` became
-`deploy ark` - while `build extractor` became three. **Every one of those was a collapse rather than
-a cut.**
+`deploy ark` - while `build extractor` became three and `age` arrived with spoilage. **Every deletion
+was a collapse rather than a cut.**
 
 ## The player's
 
@@ -34,14 +34,26 @@ a cut.**
 | territory              | 1      | 1     |
 | ark                    | 1      | 0     |
 | garrison               | 0      | 1     |
-| citizen                | 0      | 1     |
+| citizen                | 0      | 2     |
 | extractor, food        | 0      | 1     |
 | extractor, metal       | 0      | 1     |
-| extractor, energy      | 0      | 1     |
 
 **The territory is named and echoed**, so it is used and not consumed. The garrison line is a guard -
-*at most 0* - so a second landing on the same territory cannot fire. **Metal balances**: an Ark binds
-with 4 and becomes a garrison and three extractors at 1 each.
+*at most 0* - so a second landing on the same territory cannot fire.
+
+**Two citizens, because two things have to be operated at once.** One works the garrison so the
+territory's force of nature does not overrun the landing, and one works the food extractor so it does
+not starve. **A third would have nothing to do**: no energy extractor is deployed, because it can be
+built later out of what the first two produce.
+
+**One of each extractor however much room there is.** Territory 1 has space for three of each and
+gets one, so the landing is the same everywhere - the difference between a rich territory and a poor
+one shows up in what is built afterwards, not in what arrives.
+
+**Metal balances**: an Ark binds with 3 and becomes a garrison and two extractors at 1 each. Where a
+territory has no room for one of them - territory 6 has no metal - that extractor is not built and
+its metal is wasted, and `spec/interface.md` requires the interface to say so before the landing is
+taken.
 
 ### move
 
@@ -62,19 +74,25 @@ which says which of the things in it are next to which.
 
 ### found by land
 
-| territory 2     | before | after |
-| --------------- | ------ | ----- |
-| pioneer         | 1      | 0     |
-| garrison        | 0      | 1     |
-| citizen         | 0      | 1     |
-| extractor, food | 0      | 1     |
+| territory 2      | before | after |
+| ---------------- | ------ | ----- |
+| pioneer          | 1      | 0     |
+| garrison         | 0      | 1     |
+| citizen          | 0      | 2     |
+| extractor, food  | 0      | 1     |
+| extractor, metal | 0      | 1     |
 
 **A Pioneer and no garrison is the whole condition.** A Pioneer is only ever produced where there is
 a garrison, so one standing where there is none must have moved there - which is why `arriving` was
-deleted. **Metal balances**: a Pioneer binds with 2 and becomes a garrison and an extractor.
+deleted.
 
-**If it does not found, it starves.** Territory 2 has no extractor and therefore no food, so `upkeep`
-cannot pay the Pioneer and `perish` takes it at the end of that same turn.
+**A Pioneer deploys exactly what an Ark does**, which is why both bind with 3: a garrison and two
+extractors at 1 each. Territory 2 has room for two metal extractors at density 4, so both are built
+here.
+
+**If it does not found, it starves.** Territory 2 has no extractor until the moment it founds, so a
+Pioneer that arrives and does nothing cannot be paid by `upkeep`, and `perish` takes it at the end of
+that same turn.
 
 ### build food extractor · build metal extractor · build energy extractor
 
@@ -86,7 +104,9 @@ cannot pay the Pioneer and `perish` takes it at the end of that same turn.
 | room for metal extractors | 3      | 3     |
 
 Three recipes differing in one cell. **The recipe acts where its ingredients are** - the labor and the
-metal are in territory 1, so the extractor appears there and no territory has to be named.
+metal are in territory 1, so the extractor appears there and no territory has to be named. What the
+specification says is narrower - *whatever pays a cost must be in the territory where the thing being
+paid for is built* - and `P-190` is where that becomes a `scope` each recipe states for itself.
 
 ### build yard
 
@@ -97,40 +117,50 @@ metal are in territory 1, so the extractor appears there and no territory has to
 | yard           | 0      | 1     |
 | room for yards | 1      | 1     |
 
-**Labor and metal, like everything else a player builds.** Until today it took metal alone, and
+**Labor and metal, like everything else a player builds.** Until recently it took metal alone, and
 fifteen metal assembled itself.
 
 ### produce pioneer
 
 | territory 1 | before | after |
 | ----------- | ------ | ----- |
-| metal       | 2      | 0     |
+| metal       | 3      | 0     |
 | energy      | 6      | 0     |
-| citizen     | 2      | 1     |
-| garrison    | 1      | 1     |
+| citizen     | 2      | 0     |
 | pioneer     | 0      | 1     |
 
-The garrison is echoed and survives. **The citizen is not** - producing a Pioneer spends a person.
+**Two citizens leave and two arrive.** A Pioneer carries the people who will operate what it deploys,
+so founding a territory does not conjure a population out of metal - it moves one.
+
+**No garrison is required.** One is usually standing there, because a garrison is the first thing a
+landing deploys - but that is a coincidence of geography rather than a condition, and the recipe no
+longer pretends otherwise.
 
 ### produce ark
 
 | territory 1 | before | after |
 | ----------- | ------ | ----- |
-| metal       | 4      | 0     |
+| metal       | 3      | 0     |
 | energy      | 12     | 0     |
+| citizen     | 2      | 0     |
 | yard        | 1      | 1     |
 | ark         | 0      | 1     |
 
-**Metal balances and energy carries the price**, which is why an Ark costs 4 rather than 12: only
-metal has to equal what the thing becomes.
+**The same metal and the same citizens as a Pioneer, and twice the energy.** The two deploy the same
+things, so they must bind with the same metal; what the extra energy buys is a Yard to build it in
+and the ability to invade land from orbit.
 
-### spend readiness
+### create labor
 
 | territory 1        | before | after |
 | ------------------ | ------ | ----- |
 | citizen, ready     | 1      | 0     |
 | citizen, exhausted | 0      | 1     |
 | labor              | 0      | 1     |
+
+**Named for what it makes.** It was `spend readiness`, which named what it costs - the only recipe in
+the release named for its input. **The labor comes from a citizen here and need not always**;
+widening it is a later decision, and the name already survives it.
 
 ### work
 
@@ -171,14 +201,47 @@ written.**
 `surplus` is *left after every upkeep was paid*, so this cannot fire until `upkeep` has. **The
 territory is echoed** - growing a citizen does not consume the place they live in.
 
+### perish
+
+| territory 1     | before | after |
+| --------------- | ------ | ----- |
+| pioneer, unpaid | 1      | 0     |
+| metal           | 0      | 3     |
+
+**3 is read, not written** - the thing's metal, which is its binding plus the metal in its parts.
+**The wreck is metal in the territory** and is kept only if there is room.
+
+**It also takes an unpaid citizen, and yields nothing for one.** A citizen's *Metal in it* is blank,
+and `P-181` settled what that means: **a blank is not a zero.** It says the row has no such number,
+and a quantity read from one produces nothing.
+
 ### spoil
 
 | territory 1   | before | after |
 | ------------- | ------ | ----- |
-| food, surplus | 2      | 0     |
+| food, keeps 0 | 2      | 0     |
 
-**Takes surplus, not food**, which is what orders it after upkeep - and it competes with `grow` for
-the same surplus, which is the right relationship: surplus either becomes population or rots.
+**Takes food that has run out of turns**, not surplus. Until spoilage was written this took every
+surplus food every turn, which is a spoilage rate of zero - the harshest setting there is, arrived at
+by not choosing one.
+
+### age
+
+| territory 1   | before | after |
+| ------------- | ------ | ----- |
+| food, keeps 1 | 3      | 0     |
+| food, keeps 0 | 0      | 3     |
+
+**The number that decrements.** Food is made with `keeps` 1, so it survives one ending and is lost at
+the next - one turn more than it used to last.
+
+**Order is what makes it exactly one turn.** `spoil` runs first and takes what is already at zero,
+then `age` moves this turn's food down to zero, then `ready` restores what was spent. Food made this
+turn is therefore never taken by the ending that immediately follows it.
+
+**Preservation is a technology, and a technology here is a recipe you have.** `age` being present from
+the start is what *we already know how to keep food for one turn* means, and a civilisation that
+later keeps it longer has a different recipe rather than a different rule.
 
 ### ready
 
@@ -190,17 +253,3 @@ the same surplus, which is the right relationship: surplus either becomes popula
 | extractor, ready     | 0      | 1     |
 
 Applies to `thing`, the family, so it covers every kind that readies at once.
-
-### perish
-
-| territory 1     | before | after |
-| --------------- | ------ | ----- |
-| pioneer, unpaid | 1      | 0     |
-| metal           | 0      | 2     |
-
-**2 is read, not written** - the thing's metal, which is its binding plus the metal in its parts.
-**The wreck is metal in the territory** and is kept only if there is room.
-
-**It also takes an unpaid citizen, and yields nothing for one.** A citizen's *Metal in it* is blank,
-and `P-181` settled what that means: **a blank is not a zero.** It says the row has no such number,
-and a quantity read from one produces nothing.
