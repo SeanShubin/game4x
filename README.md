@@ -87,13 +87,22 @@ docs/
 scripts/
   README.md            how to run each prototype
 crates/
-  sphere-tessellation/ dividing the sphere, the adjacency graph, and the solid
-  graph-coloring/      few-color assignment, no geometry
-  planet-model/        the model: old world + intents -> new world, integers only
-  planet-ecs/          regions as ECS entities; systems that gather and apply
-  planet-render/       camera, software rasterizer and mesh; no graphics engine
-  planet-bevy/         the Bevy adapter: window, input, vsync, the solid in 3D
-  game4x/              the application: composition root, and the page that is published
+  sphere-tessellation/  dividing the sphere, the adjacency graph, and the solid
+  graph-coloring/       few-color assignment, no geometry
+  command-language/     a grammar, a parser and a syntax tree; no game nouns
+  planet-model/         the model: old world + intents -> new world, integers only
+  game-model/           the game: a state, a transition, and the one function between them
+  planet-terrain/       one continuous field over the sphere, and the biome it gives
+  planet-ecs/           regions as ECS entities; systems that gather and apply
+  planet-raster/        a software rasterizer for a tessellated sphere
+  planet-render/        turning a sphere into a screenful of pixels
+  planet-presentation/  how the planet is shown and steered, with no engine under it
+  planet-bevy/          the Bevy adapter: window, input, vsync, the solid in 3D
+  planet-flat/          the Bevy adapter for the flat projection
+  game-console/         the command language bound to the game; the only door into the model
+  game-globe/           binds the globe to the one game
+  game-front/           the front end, with no engine in it
+  game4x/               the application: composition root, and the page that is published
 prototypes/
   planet-view/         composition root; wiring only
 .github/workflows/     one pipeline: gate, deploy to Pages, then verify
