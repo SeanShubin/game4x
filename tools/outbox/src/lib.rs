@@ -49,6 +49,13 @@ pub struct Item {
     pub status: String,
     /// Which outbox it came from, relative to the repository root.
     pub outbox: String,
+    /// Everything under the heading, up to the next item.
+    ///
+    /// Kept so that a reader wanting more than the fields does not have to find the item
+    /// again by hand. `S-11`: `tools/spec` needs the text a proposal proposes, and two
+    /// things disagreeing about where a proposal's body ends would be worse than either
+    /// parsing alone - so the body is cut once, here.
+    pub body: String,
     /// Commits that cite this id and were read without closing it.
     ///
     /// A citation usually means the item was settled, and sometimes it means the commit
@@ -170,16 +177,91 @@ pub fn parse(text: &str, outbox: &str) -> Vec<Item> {
         let Some(to) = field(fields, "to") else {
             continue;
         };
+        // Everything to the next heading of the same level, or to the end.
+        let ends = lines[at + 1..]
+            .iter()
+            .position(|line| line.starts_with("### "))
+            .map(|found| at + 1 + found)
+            .unwrap_or(lines.len());
         items.push(Item {
             id: id.to_string(),
             title: title.to_string(),
             to,
             status: field(fields, "status").unwrap_or_else(|| "open".to_string()),
             outbox: outbox.to_string(),
+            body: lines[at..ends].join(
+                "
+",
+            ),
             cited: considered(fields),
         });
     }
     items
+}
+
+/// Why a proposal's text could not be read.
+///
+/// **Reported rather than guessed**, because the whole point of reading it here is that
+/// there is one answer about where a proposal's body ends. A function that returned its
+/// best effort would give `tools/spec` something to promote that Sean never approved.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum NoText {
+    /// No blockquote at all: an item that proposes nothing.
+    None,
+    /// Several, so which one is the proposal is a guess.
+    Several(usize),
+}
+
+impl std::fmt::Display for NoText {
+    fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            NoText::None => write!(out, "no blockquote, so it proposes no text"),
+            NoText::Several(count) => {
+                write!(
+                    out,
+                    "{count} blockquotes, so which one is proposed is a guess"
+                )
+            }
+        }
+    }
+}
+
+impl Item {
+    /// The text this proposal proposes, as it would appear in the destination.
+    ///
+    /// **`S-11`.** `tools/spec`'s `promote` reads this, applies it, and asserts it appears
+    /// once in the destination - which is what makes *approved text is shipped text*
+    /// mechanical rather than asserted. The alternative was a second parser, and two things
+    /// disagreeing about where a proposal's body ends would be worse than either alone.
+    ///
+    /// **The proposed text is the item's one blockquote.** `S-11` describes it as the
+    /// blockquote between the field line and `**Basis**`, and this does not look for
+    /// `**Basis**` - a blockquote is unambiguous on its own, and a marker that has to be
+    /// found is a second thing to agree about. If a proposal ever carries a second
+    /// blockquote for some other purpose, this reports rather than picks.
+    ///
+    /// The `> ` markers are stripped, because what Sean approves is the text and not its
+    /// quoting.
+    pub fn proposed_text(&self) -> Result<String, NoText> {
+        let mut blocks: Vec<Vec<&str>> = Vec::new();
+        let mut current: Vec<&str> = Vec::new();
+        for line in self.body.lines() {
+            let trimmed = line.trim_start();
+            if let Some(rest) = trimmed.strip_prefix('>') {
+                current.push(rest.strip_prefix(' ').unwrap_or(rest));
+            } else if !current.is_empty() {
+                blocks.push(std::mem::take(&mut current));
+            }
+        }
+        if !current.is_empty() {
+            blocks.push(current);
+        }
+        match blocks.len() {
+            0 => Err(NoText::None),
+            1 => Ok(blocks[0].join("\n").trim_end().to_string()),
+            several => Err(NoText::Several(several)),
+        }
+    }
 }
 
 /// The word after `**name**` on a field line.
@@ -777,6 +859,7 @@ One line of what it is.
             to: "spec".to_string(),
             status: "open".to_string(),
             outbox: "crates/outbox.md".to_string(),
+            body: String::new(),
             cited: cited.iter().map(|hash| hash.to_string()).collect(),
         }
     }
@@ -984,6 +1067,93 @@ One line of what it is.
         let line = "**to** spec · **status** open · **raised** 2026-09-01";
         assert_eq!(field(line, "to").unwrap(), "spec");
         assert_eq!(field(line, "status").unwrap(), "open");
+    }
+
+    /// The text a proposal proposes, in the shape `S-11` describes.
+    ///
+    /// Written from that description rather than from a live proposal, because the queue
+    /// was empty when this was built and `**Basis**` had no instance anywhere in the
+    /// repository. **That is stated rather than hidden**: the first real proposal is what
+    /// confirms the shape, and if it differs this test is the thing that says so.
+    #[test]
+    fn a_proposal_offers_the_text_it_proposes() {
+        let queue = "\
+### P-200 - a one-line title
+
+**to** sean · **status** open · **raised** 2026-09-02 · **into** `spec/turn.md` -> Order
+
+Some reasoning nobody promotes.
+
+> A turn has three parts: producing, consuming and transforming.
+> Producing is the player acting.
+
+**Basis** the reasoning that makes it right.
+
+### P-201 - one that proposes nothing
+
+**to** sean · **status** open · **raised** 2026-09-02
+
+Only prose.
+";
+        let items = parse(queue, "docs/notes/proposals.md");
+        assert_eq!(items.len(), 2);
+
+        assert_eq!(
+            items[0].proposed_text().unwrap(),
+            "A turn has three parts: producing, consuming and transforming.\nProducing is the player acting."
+        );
+        // The prose around it is not the proposal, and neither is the Basis.
+        assert!(!items[0].proposed_text().unwrap().contains("Basis"));
+        assert!(
+            !items[0]
+                .proposed_text()
+                .unwrap()
+                .contains("nobody promotes")
+        );
+
+        assert_eq!(items[1].proposed_text(), Err(NoText::None));
+    }
+
+    /// Two blockquotes are reported rather than picked between.
+    ///
+    /// A best effort here would hand `tools/spec` something to promote that Sean never
+    /// approved, which is the one failure this function exists to make impossible.
+    #[test]
+    fn a_proposal_with_two_blockquotes_is_a_question_rather_than_an_answer() {
+        let queue = "\
+### P-202 - two of them
+
+**to** sean · **status** open · **raised** 2026-09-02
+
+> The first.
+
+Something in between.
+
+> The second.
+";
+        let items = parse(queue, "docs/notes/proposals.md");
+        assert_eq!(items[0].proposed_text(), Err(NoText::Several(2)));
+    }
+
+    /// An item's body stops at the next item.
+    #[test]
+    fn a_body_ends_where_the_next_item_begins() {
+        let queue = "\
+### P-203 - the first
+
+**to** sean · **status** open
+
+> Mine.
+
+### P-204 - the second
+
+**to** sean · **status** open
+
+> Not mine.
+";
+        let items = parse(queue, "docs/notes/proposals.md");
+        assert_eq!(items[0].proposed_text().unwrap(), "Mine.");
+        assert_eq!(items[1].proposed_text().unwrap(), "Not mine.");
     }
 
     #[test]

@@ -27,7 +27,7 @@ members = [
 ]
 # Documentation tooling, deliberately outside the workspace so it never appears in
 # `cargo tree` or `cargo build --workspace`.
-exclude = ["tools/pad-tables", "tools/outbox"]
+exclude = ["tools/pad-tables", "tools/outbox", "tools/spec"]
 
 [workspace.package]
 version = "0.1.0"

@@ -2,15 +2,14 @@
 # repository rather than shipping in it, so it stays out of `cargo tree` and
 # `cargo build --workspace`, like `tools/pad-tables` and `tools/outbox`.
 #
-# Those two are kept out by the root manifest's `exclude` list, which belongs to the code lane.
-# This one declares an empty `[workspace]` of its own instead, so it needs nothing from them to
-# build. Moving it into that list would be tidier and is their line to write.
+# All three are kept out by the root manifest's `exclude` list. This one declared an empty
+# `[workspace]` of its own until the code lane added it there, which is the tidier of the two
+# and was theirs to write.
 [package]
 name = "spec"
 version = "0.1.0"
 edition = "2024"
 
-[workspace]
 
 [lib]
 name = "spec"
