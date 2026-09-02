@@ -21,10 +21,6 @@ files rather than from anybody's memory of them.
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (1)
-
-- **Q-41** - The denominator guard checks that a denominator is non-empty, not that it is the right one · `lenses/quality/outbox.md`
-
 ## Sections that have taken more than one proposal
 
 Not a defect list. Several proposals in one section is what working on one topic looks
