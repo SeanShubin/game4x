@@ -108,6 +108,50 @@ exhausted or unchanged, and the whole point of the exercise is that a reader can
 **Found by walking one recipe by hand.** Eighteen have not been walked, and the exercise exists
 because walking them finds this.
 
+### P-156 - What a territory has room for, which `C-10` has been asking since August
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`releases/first-release.md`, a new section after *Where things are*
+
+**`spec/turn.md` says what a territory can keep is bounded and nothing anywhere says by how much.**
+`P-143` gave the bound a name - `room`, a territory's, per kind - and `P-148` said what it is: a
+territory has a bin for each kind before anything is built. **No value has ever been written.**
+
+> `## What a territory has room for`
+>
+> | Kind | Room |
+> | --- | --- |
+> | **citizen** | 8 |
+> | **garrison** | 1 |
+> | **extractor** | what the *Territory resources* table gives, per resource |
+> | **yard** | 1 |
+> | **ark** | 2 |
+> | **pioneer** | 2 |
+> | **labor** | 8 |
+> | **food** | 20 |
+> | **metal** | 20 |
+> | **energy** | 20 |
+>
+> An extractor's own bin is additional: a territory holds this much, and each extractor holds one
+> cycle of what it makes.
+
+**Basis: two of the ten are already decided and the rest are Sean's to tune.** A garrison is 1
+because `spec/control.md` says a territory has at most one. An extractor's room is the count already
+in *Territory resources* - which is the one place `room` is per kind **and per resource**, and is
+worth noticing rather than smoothing over.
+
+**The measured floor needs re-measuring, and this proposal does not claim it.** `C-10` established
+that below fifteen no Yard exists anywhere. **That was measured against a single flat bound, which
+`P-144` proposed and Sean withdrew** - under bins, a territory's metal is its own room *plus* one
+cycle in each metal extractor, so territory 1's three extractors at density 4 already hold twelve
+without any room at all. **The floor is therefore lower and per-territory**, and the honest thing is
+to set the numbers first and re-run the loop check against them, which `C-10` says how to do.
+
+**Why it matters now rather than whenever.** Sean asked for a before-and-after per recipe. **Seven of
+the eighteen create something**, and every one of those needs a room line to show whether it fits.
+Without this the pages read *room: not stated* seven times, which is the gap wearing a different
+hat.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
