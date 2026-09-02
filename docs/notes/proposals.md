@@ -45,55 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-163 - An orbit sits beside its territory, and launching is a move
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
-`spec/orbit.md`, **and** `releases/first-release.md` -> Recipes
-
-**Sean's, decided 2026-09-01**: *a thing cannot orbit a planet without being above a particular
-territory*, and *perhaps a territory could contain an orbit.*
-
-**Two promoted lines say the opposite.** `spec/orbit.md`: *orbit is a single place above a planet*,
-and *a unit in orbit may land on **any** territory of the planet below it.* Both say position in
-orbit does not exist.
-
-> `## The orbital layer`
->
-> - A planet has an orbit above each of its territories. An orbit is not a territory: it has room
->   for no extractors, and nothing is extracted there
-> - Nothing orbits a planet without being above a particular territory
-
-> `## Crossing between layers`
->
-> - An orbit is next to the territory below it, and next to the orbits above that territory's
->   neighbours
-> - Launching, landing and crossing from one orbit to another are moves, and cost what any other
->   move costs
-
-> `releases/first-release.md` -> Recipes: **`launch` is deleted**, being `move`. **`land` becomes
-> `deploy ark`** and takes `ark, here` rather than `ark, in orbit`, the descent having been a move.
-> Eighteen recipes become seventeen.
-
-**Basis: an orbit beside its territory rather than inside it, and that is the whole of the
-difference.** Sean asked whether a territory could contain its orbit. **It could, and it would cost a
-second kind of move**: `P-157` says a container states which of the things in it are next to which,
-so a unit and an orbit that are siblings can be adjacent, while a unit moving *into* something its
-own container holds is a different operation. **Put the orbits beside the territories and every move
-is one move** - the planet holds twelve territories and twelve orbits, and says which of the
-twenty-four touch.
-
-**What it collapses.** `spec/orbit.md` already says *launching and landing cost what any other move
-costs*, which is the observation this finishes: **if it costs what a move costs, it is a move.**
-`launch`'s three rows are `move`'s three rows with a different destination. `land` is a move followed
-by a deployment, and separating them recovers **the recipe Sean wrote himself** on 2026-08-31, before
-any of this: *deploy ark*.
-
-**One thing it leans on that is not settled.** `move` says `unit, here` and `unit, there`, and since
-`P-158` removed the Scope column nothing says what *here* and *there* are - a source and a
-destination are parameters of the recipe rather than traits of a unit. **That looseness predates this
-proposal** and this one makes it load-bearing, so it is worth naming rather than discovering when the
-before-and-after for `move` is drawn.
-
 ### P-162 - `P-156` reintroduced the word `bin`, which `P-157` had just removed
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** cleanup - **into**
@@ -531,6 +482,7 @@ about garrisons rather than about traits, which makes it Sean's.
 | P-156, what a territory has room for                                                                            | `releases/first-release.md`, a new section                                                                             | 2026-09-01 |
 | P-160, adjacency is defined under *What a territory carries*, and it is not one                                 | `spec/planet.md`, one line moved to Distance                                                                           | 2026-09-01 |
 | P-161, `grow`'s new ingredient is the fifth thing that needs echoing                                            | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-163, an orbit sits beside its territory, and launching is a move                                              | `spec/orbit.md`, `releases/first-release.md` -> Recipes                                                                | 2026-09-01 |
 
 ## Rejected
 

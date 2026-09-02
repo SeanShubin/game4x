@@ -8,8 +8,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## The orbital layer
 
-- Orbit is a single place above a planet. It is not a territory, it has room for no extractors, and nothing is
-  extracted there.
+- A planet has an orbit above each of its territories. An orbit is not a territory: it has room
+  for no extractors, and nothing is extracted there
+- Nothing orbits a planet without being above a particular territory
 
 ## What sits in orbit
 
@@ -17,9 +18,10 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## Crossing between layers
 
-- A unit in a territory may launch to orbit. A unit in orbit may land on any territory of the
-  planet below it.
-- Launching and landing cost what any other move costs.
+- An orbit is next to the territory below it, and next to the orbits above that territory's
+  neighbours
+- Launching, landing and crossing from one orbit to another are moves, and cost what any other
+  move costs
 
 ## Open questions
 

@@ -152,7 +152,7 @@ among the results.
 
 | Recipe              | Owner  | Role | Thing                                      | Qty                                       | Bound    |
 | ------------------- | ------ | ---- | ------------------------------------------ | ----------------------------------------- | -------- |
-| **land**            | player | in   | ark, in orbit                              | 1                                         | at least |
+| **deploy ark**      | player | in   | ark, here                                  | 1                                         | at least |
 |                     |        | in   | garrison                                   | 0                                         | at most  |
 |                     |        | out  | garrison                                   | 1                                         |          |
 |                     |        | out  | citizen                                    | 1                                         |          |
@@ -180,9 +180,6 @@ among the results.
 |                     |        | in   | yard                                       | 1                                         | at least |
 |                     |        | out  | ark                                        | 1                                         |          |
 |                     |        | out  | yard                                       | 1                                         |          |
-| **launch**          | player | in   | ark, here                                  | 1                                         | at least |
-|                     |        | in   | energy, in that unit                       | 1                                         | at least |
-|                     |        | out  | ark, in orbit                              | 1                                         |          |
 | **spend readiness** | player | in   | citizen, ready                             | 1                                         | at least |
 |                     |        | out  | citizen, exhausted                         | 1                                         |          |
 |                     |        | out  | labor                                      | 1                                         |          |
