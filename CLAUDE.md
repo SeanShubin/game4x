@@ -43,11 +43,16 @@ is authored by exactly one instance.
 everything, produces claims about the producers' work, and ships nothing. Quality is one. A lens is
 not a lane beside the others; it is a way of looking at all of them.
 
-| Perspective                     | Writes                                                                                   | Reads      |
-| ------------------------------- | ---------------------------------------------------------------------------------------- | ---------- |
-| **Specification**               | `spec/`, `releases/`, `docs/`, `README.md`, this file                                    | everything |
-| **Code**                        | `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, `commands/`, CI, cargo | everything |
-| **Quality**, and any other lens | its own directory under `lenses/`, and nothing else                                      | everything |
+**The code lane owns the game. Every lane owns the tools for its own work.** Production is what
+ships to a player and is the code lane's alone. **Production support** - `hooks/`, `scripts/`, CI,
+and everything in `tools/` that is not a lane's own - belongs to no lane exclusively: whoever needs
+a check wired adds it, and the bar is a narrow reason rather than a permission.
+
+| Perspective                     | Writes                                                               | Reads      |
+| ------------------------------- | -------------------------------------------------------------------- | ---------- |
+| **Specification**               | `spec/`, `releases/`, `docs/`, `README.md`, `tools/spec/`, this file | everything |
+| **Code**                        | `crates/`, `web/`, `commands/`, `prototypes/`, cargo                 | everything |
+| **Quality**, and any other lens | its own directory under `lenses/`, and `tools/<its name>/`           | everything |
 
 **`temporary-notes/` is Sean's and no instance writes there**, except to create a file he has
 asked for by name. It is not tracked - the files in it are transient, which is what the name says -

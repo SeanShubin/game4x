@@ -45,72 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-182 - A lane owns the tools for its own work; the code lane owns the game
-
-**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-02 - **kind**
-governance - **into** `CLAUDE.md` -> Perspectives
-
-**Sean's, 2026-09-02**: *only the production code is exclusive to the coding instance... I am fine
-with the quality instance writing tools to check for quality, and the specification instance writing
-tools that help maintain the specification.*
-
-**That dissolves the question this proposal was asking and replaces it with a better one.** It asked
-where one scratchpad script may live. **The answer is now general**, and it is worth writing as a
-principle rather than as three more cells.
-
-> `## Perspectives` gains a line above the table:
->
-> **The code lane owns the game. Every lane owns the tools for its own work.** Production is what
-> ships to a player and is the code lane's alone. **Production support** - `hooks/`, `scripts/`, CI,
-> and everything in `tools/` that is not a lane's own - belongs to no lane exclusively: whoever needs
-> a check wired adds it, and the bar is a narrow reason rather than a permission.
-
-> The table becomes:
->
-> | Perspective | Writes | Reads |
-> | --- | --- | --- |
-> | **Specification** | `spec/`, `releases/`, `docs/`, `README.md`, `tools/spec/`, this file | everything |
-> | **Code** | `crates/`, `web/`, `commands/`, `prototypes/`, cargo | everything |
-> | **Quality**, and any other lens | its own directory under `lenses/`, and `tools/<its name>/` | everything |
-
-**Basis: the reason a lens could not write was never that writing is dangerous.** `CLAUDE.md` says
-*a review that alters its subject is no longer a review*, and gives `cargo fmt` as the case. **A
-check is not an alteration.** A quality tool that reads the tree and reports is the same act as a
-quality report, run by a machine instead of by an instance - and **it is the only kind of finding
-that keeps working after the lens that filed it has stopped running.**
-
-**What it changes for this lane is small and overdue.** `edit.py` makes every edit to `spec/` and
-`releases/` from a scratchpad, and two of `2026-09-01`'s defects were in it. **Under this it goes in
-`tools/spec/`**, versioned, and the quality lens can read the thing that has been making every
-specification edit invisibly.
-
-**Sean settled all three on 2026-09-02**, and one of them changed the shape of this proposal.
-
-**The two writers do not conflict.** *`pad-tables` is very special purpose, so while there is overlap
-in which files are changed, there is no overlap in how they are changed - I expect it to work in
-either order but not concurrently.* **The constraint is concurrency, not ordering**, and it already
-binds: the index is shared, so two instances writing at once is a hazard the repository has had
-since it had three lanes.
-
-**Gates blocking every lane is what a gate is for.** *No lane should be able to violate a gate
-protecting production code, but we should be careful not to add gates that do not have a good,
-narrowly scoped reason.* So the caution is on the **reason** rather than on who is blocked.
-
-**And infrastructure is a third category.** *Devops, continuous integration, provisioning, pipeline,
-infrastructure as code and so on is not production, it is production support.* **That answers what
-`hooks/`, `scripts/` and CI are**, and it is not what this proposal assumed - it had left them with
-the code lane on the grounds that somebody runs the gate.
-
-**One thing this lane changed rather than Sean, and it is why the proposal is not promoted yet.**
-The amended line says production support belongs to no lane, **and the table still gave `hooks/`,
-`scripts/` and CI to the code lane.** Promoting that would have shipped a contradiction. The Code row
-now reads `crates/`, `web/`, `commands/`, `prototypes/`, cargo - **it loses production support and
-loses nothing else**, and `tools/` is divided by the line above rather than by a row.
-
-**That is the substantive change and it should be read as one.** Under it **this lane may add a gate
-line** for a specification check, without asking the code lane to do it - which is `S-5` and `S-6`
-and `S-9` all being requests that need not have been.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -566,6 +500,7 @@ work the release exists to order.
 | P-179, a Pioneer may cross its own empire, and one line says it may not                                         | `releases/first-release.md` -> Scope                                                                                   | 2026-09-01 |
 | P-180, the `upkeep` trait says *a unit*, and a citizen has one                                                  | `releases/first-release.md` -> Traits                                                                                  | 2026-09-01 |
 | P-181, `perish` reads a citizen's metal, and a citizen's metal is blank                                         | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-182, a lane owns the tools for its own work; the code lane owns the game                                      | `CLAUDE.md` -> Perspectives                                                                                            | 2026-09-02 |
 
 ## Rejected
 
