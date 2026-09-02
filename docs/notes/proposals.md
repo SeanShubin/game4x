@@ -197,7 +197,8 @@ a spoilage rate of zero turns - the harshest setting there is, chosen by not cho
 > | **age** | world | in | food, keeps at least 1 | 1 | at least |
 > | | | out | food, keeps one less | 1 | |
 >
-> `spoil` runs before `age`, so food made this turn survives one ending and is lost at the next.
+> In the world's order `age` runs after `spoil` and before `ready`, so food made this turn
+> survives one ending and is lost at the next.
 
 **Basis: a number that decrements is what you asked for**, and it is the shape that lets different
 things spoil at different rates later without a second mechanism - another kind with a different
@@ -207,6 +208,10 @@ starting `keeps` needs no new rule.
 populations that learned to preserve food expanded further than those that did not. **A starting
 technology in this game is an available recipe**, so `age` being present from the start is what
 *we already know how to preserve food for one turn* means.
+
+**This adds a recipe to the order `P-184` states**, which lists `upkeep`, then `grow` and
+`perish`, then `spoil`, then `ready`. `age` goes between the last two, and the text above says
+so rather than leaving the two proposals to be reconciled after both have landed.
 
 **What to watch is `grow`.** It takes `food, surplus`, and surplus that used to rot now survives -
 so a territory that was feeding itself exactly will start to accumulate. That is a balance
