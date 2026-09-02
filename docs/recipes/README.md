@@ -1,14 +1,14 @@
 # Recipes, before and after
 
-**Reviewed.** One page per recipe in [the first release](../../releases/first-release.md), showing a
-state the recipe can fire in and the state after it fires. **The tables are the data and this is a
+**Reviewed.** One section per recipe in [the first release](../../releases/first-release.md), all in
+this file, each showing a state the recipe can fire in and the state after it fires. **The tables are the data and this is a
 rendering of them**; where the two disagree, the release is right and a line here is a defect.
 
 [Documentation map](../README.md) · [Root README](../../README.md)
 
 ## What a page shows, and why
 
-Every page shows **the whole territory, not only the rows the recipe touches.** An unchanged line is
+Every section shows **the whole territory, not only the rows the recipe touches.** An unchanged line is
 evidence: a recipe that does the right thing *and something else* is the failure you cannot see from
 inputs and outputs alone.
 
@@ -198,5 +198,6 @@ Applies to `thing`, the family, so it covers every kind that readies at once.
 **2 is read, not written** - the thing's metal, which is its binding plus the metal in its parts.
 **The wreck is metal in the territory** and is kept only if there is room.
 
-**Not settled.** This recipe also takes an unpaid **citizen**, and a citizen's *Metal in it* is blank
-rather than zero. **What a blank yields is not stated** - filed as `P-181`.
+**It also takes an unpaid citizen, and yields nothing for one.** A citizen's *Metal in it* is blank,
+and `P-181` settled what that means: **a blank is not a zero.** It says the row has no such number,
+and a quantity read from one produces nothing.
