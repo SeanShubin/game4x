@@ -19,12 +19,6 @@ files rather than from anybody's memory of them.
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (3)
-
-- **C-10** - What a territory can keep is bounded, and nothing says by how much · `crates/outbox.md`
-- **C-5** - Two documents list every crate, and neither list is right · `crates/outbox.md`
-- **C-4** - The index is shared, so staging is publishing · `crates/outbox.md`
-
 ## Sections that have taken more than one proposal
 
 Not a defect list. Several proposals in one section is what working on one topic looks
