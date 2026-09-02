@@ -338,18 +338,30 @@ unit's metal to be looked up from.
 > | **ark** | 12 |
 > | **pioneer** | 8 |
 
+> And *Costs to produce* changes in the same two rows:
+>
+> - **garrison**: `1 labor, 1 metal`
+> - **extractor**: `1 labor, 1 metal`
+
+**This removes a line that was already stale**, and it is worth naming because nothing else would
+have caught it. The garrison's cost reads *not produced; founding gives one*, and **`P-136` purged
+founding**: `spec/control.md` no longer says a territory gains a garrison by being founded, and has
+not since 2026-08-31. The cell has been asserting a rule the specification dropped, and Sean's
+decision is what replaces it rather than merely deleting it.
+
+**One thing it settles by implication, which he should correct if it is wrong.** Building costs
+labor. `P-143` asks whether it should, and the shortfall that raised the question was answered by the
+deployment lever instead - so the labor in his own `build garrison` and `build farm` was never
+withdrawn, and both recipes keep it.
+
 **Basis: it is not a new number.** It is what the thing cost, which *Costs to produce* already gives,
 and conservation is what makes that the right answer rather than a convenient one - `spec/resources.md`
 says a conserved resource *changes form, and what it was made into can be taken apart to get it back*,
 so **the metal did not go anywhere**. A citizen is blank rather than zero because a citizen is not
 built.
 
-**Two cells disagree with the release on purpose, and it should be said rather than left to be
-found.** *Costs to produce* gives a garrison as *not produced* and an extractor as *1 labor, and
-nothing else*, so on the release as written both are **0**. The table above says **1**, which is
-Sean's opening of 2026-08-31 where a garrison and a farm each cost one metal. **The figures are ahead
-of the release and the basis sentence is behind it**, and whichever moves, the two have to be made to
-agree before this lands.
+**Resolved 2026-09-01 by Sean**: *lets make a garrison and an extractor cost 1 metal.* The two cells
+that disagreed with the release were ahead of it, and **it is the release that moves**.
 
 **Two of these six numbers are about to move**, and that is not a reason to wait. The Ark's 12 is
 almost certainly wrong now: Sean's deployment lever means an Ark deploys into what it cost, so the
