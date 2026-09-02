@@ -282,45 +282,6 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-171 - Three build recipes, one per resource, and the blank goes
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`releases/first-release.md` -> Recipes
-
-**`P-167` shipped a blank.** `build extractor` results in `extractor, <resource>`, and the table has
-no way to say what fills it. **`P-166`'s names do not reach it**, because a name refers to an
-ingredient and a resource label is a trait of a thing that does not exist yet.
-
-> `build extractor` becomes three recipes, and nothing else changes:
->
-> | Recipe | Owner | Role | Thing | Qty | Bound |
-> | --- | --- | --- | --- | --- | --- |
-> | **build food extractor** | player | in | labor | 1 | at least |
-> |  |  | in | metal | 1 | at least |
-> |  |  | out | extractor, food | 1 |  |
-> | **build metal extractor** | player | in | labor | 1 | at least |
-> |  |  | in | metal | 1 | at least |
-> |  |  | out | extractor, metal | 1 |  |
-> | **build energy extractor** | player | in | labor | 1 | at least |
-> |  |  | in | metal | 1 | at least |
-> |  |  | out | extractor, energy | 1 |  |
-
-**Basis: it is the cheapest thing that removes the blank and it changes no number.** An extractor is
-still one metal, so territory 1's arithmetic, `P-165`'s deployment balance and `P-156`'s room values
-all stand. Seventeen recipes become nineteen.
-
-**It keeps both of the other answers open, which is why it is right now rather than merely soonest.**
-Sean's resource-as-a-leaf would make an extractor contain a core, and a trait can become a part later.
-**Parametric polymorphism expands to exactly these three rows**, so writing them out is writing the
-expansion of the thing that would replace them.
-
-**The duplication is deliberate and is the first thing a type system should collapse.** Sean,
-2026-09-01: *I am leaning towards a very sophisticated type system for my data, I want to be able to
-refactor duplication just as aggressively as I can with programming languages.* **These three recipes
-differ in one cell of nine**, and they are the clearest instance of that duplication in the release -
-**so they are a good first test of whatever collapses it**, and a bad thing to leave uncollapsed for
-long.
-
 ### P-172 - A player can write one rule for many things, not one rule per thing
 
 **to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
@@ -534,6 +495,7 @@ deterministic mechanic a player can change, and this is a competition nobody has
 | P-169, `spoil` takes surplus food, and the order falls out                                                      | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-167, `build extractor` takes no metal and names no resource                                                   | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 | P-166, an ingredient may be named, and `move` names two territories                                             | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
+| P-171, three build recipes, one per resource, and the blank goes                                                | `releases/first-release.md` -> Recipes                                                                                 | 2026-09-01 |
 
 ## Rejected
 
