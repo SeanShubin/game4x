@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-166** - `move` has no destination, and nothing sets `arriving` · `docs/notes/proposals.md`
+- **P-166** - An ingredient may be named, and `move` names two territories · `docs/notes/proposals.md`
 - **P-168** - Nothing checks room at the moment a thing is created · `docs/notes/proposals.md`
 
 ## What is outstanding

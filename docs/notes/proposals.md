@@ -282,25 +282,57 @@ code` field line every outbox item carries. The tool does not look in `releases/
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
 
-### P-166 - `move` has no destination, and nothing sets `arriving`
+### P-166 - An ingredient may be named, and `move` names two territories
 
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`releases/first-release.md` -> Recipes
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
+**into** `releases/first-release.md` -> Recipes
 
-**Two gaps in one recipe, both found by trying to draw its before-and-after.**
+**Sean's, 2026-09-01**: *what about (source territory, unit) -> (destination territory, unit)? Is the
+problem a quirk of that making it look like the source territory was consumed, as it does not show up
+in the destination? If so, there should be a pattern or convention we can use to get around that.*
 
-**`move` says `unit, here` and `unit, there`, and nothing says what those are.** `P-158` removed the
-Scope column, so no column names a place; a source and a destination are **parameters of the recipe**
-and the table has nowhere to put them. **Nothing expresses that the two must be adjacent**, either -
-`P-157` made adjacency a fact the container states, and no recipe reads it.
+**That is exactly the problem, and the pattern already exists.** `P-159` says an ingredient is
+consumed exactly when it does not appear among the results, so a territory named as an ingredient and
+not echoed **is destroyed**. **Echoing it is the convention**, and three recipes already use it:
+`grow` echoes the thing that houses, `revert` echoes the territory, `produce ark` echoes the yard.
 
-**And `found by land` requires `pioneer, arriving`, which no recipe produces.** `arriving` is
-declared in *Traits* as *stored, cleared at end turn*, and `move` does not set it. **So on the tables
-as written, no Pioneer can ever found a territory.**
+**Echoing both territories is the whole fix for that half, and it forces the other half.** `P-143`
+settled that *an ingredient refers to the other ingredients of the same recipe*, and said in as many
+words why it was safe: **no recipe names two units or two nodes**, so there is never a second
+candidate. **`move` naming two territories is the day that stops being true**, and the fix named at
+the time was the predecessor's `$name` aliases from `language/Expressions.kt`.
 
-**The second is the more urgent and the first is the deeper.** A missing output is one row. A recipe
-that cannot say where it goes is the shape of the table, and `P-163` already leans on it: launching
-is a move to an orbit, which needs a destination the same way.
+> `## Recipes` gains a sentence, beside the two about quantities and consumption:
+>
+> An ingredient may be given a name, written `$name`, and another ingredient may refer to it. A
+> recipe that names two things of the same kind must name them, because otherwise a reference has
+> two candidates.
+
+> `move` becomes:
+>
+> | Recipe | Owner | Role | Thing | Qty | Bound |
+> | --- | --- | --- | --- | --- | --- |
+> | **move** | player | in | `$from` territory | 1 | at least |
+> |  |  | out | `$from` territory | 1 |  |
+> |  |  | in | `$to` territory, next to `$from` | 1 | at least |
+> |  |  | out | `$to` territory | 1 |  |
+> |  |  | in | unit, in `$from`, ready | 1 | at least |
+> |  |  | out | unit, in `$to`, exhausted, arriving | 1 |  |
+> |  |  | in | energy, in that unit | 1 | at least |
+
+**Basis: it fixes three things with one idea.** The source territory stops being consumed. **The
+destination becomes something the recipe can say** rather than a `here` and a `there` that nothing
+defines. And **adjacency becomes a condition the recipe states** - `next to $from` - reading the fact
+`P-157` made the container responsible for.
+
+**And `arriving` is set, so a Pioneer can found again.** Every move sets it, which is harmless: a
+Pioneer moving between territories a player already holds is `arriving`, and `found by land`'s other
+ingredient - **a garrison, at most 0** - is what stops it founding one twice. **The trait is cleared
+at end of turn**, which *Traits* already says.
+
+**What this does not fix.** `build extractor` now results in `extractor, <resource>`, and that is a
+**choice the player makes**, not a reference to another ingredient. **Names do not reach it**, and it
+is the second thing the six columns cannot say. Left open deliberately rather than folded in.
 
 ### P-168 - Nothing checks room at the moment a thing is created
 
