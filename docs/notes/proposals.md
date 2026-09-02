@@ -45,182 +45,48 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-165 - Deploying an Ark destroys ten metal, and founding destroys six
+### P-170 - A part is one metal arranged, and a thing binds its parts with more
 
 **to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind**
-contradiction - **into** `releases/first-release.md` -> Units and structures
-
-**Found by walking the recipes one at a time**, which is what
-[the before-and-after pages](../recipes/README.md) are for.
-
-`spec/resources.md`: *a conserved resource is not destroyed by being used. It changes form, and what
-it was made into can be taken apart to get it back.* **An Ark holds 12 metal and deploys into a
-garrison and an extractor, which hold 1 each.** A Pioneer holds 8 and founds the same two. **Ten and
-six metal leave the game**, on the two recipes that open every game.
-
-**Sean, 2026-09-01**: *the ark deploys directly into the destination structures rather than the
-materials required to build them.* **The recipe already does that**, so the shape is right and only a
-number is wrong.
-
-**Conservation ties three numbers together, and any two of them are free.**
-
-|                      | Today | What conservation requires |
-| -------------------- | ----- | -------------------------- |
-| a garrison's metal   | 1     |                            |
-| an extractor's metal | 1     |                            |
-| an Ark's metal       | 12    | **the other two added: 2** |
-
-**So an Ark is a two-metal thing that costs whatever you like, and the price is paid in energy.**
-`spec/resources.md` says metal is conserved and **energy is not** - so metal is pinned by what a
-thing becomes, and energy is free to carry the expense. An Ark at **2 metal and 12 energy** conserves
-exactly and costs what it costs today.
-
-> *Units and structures*: an Ark's **Metal in it** becomes 2 and a Pioneer's becomes 2. *Costs to
-> produce* becomes `2 metal, 12 energy` and `2 metal, 6 energy, 1 citizen`.
-
-**The alternative is to raise what the structures are worth**, so that a garrison and an extractor
-add to twelve. **That makes them expensive to build normally**, which is a real cost - a territory
-builds many extractors and lands one Ark.
-
-**And the third option is Sean's own walkthrough**, which he may prefer: *deploy ark... output 2
-civilian, 3 metal*. **Loose metal alongside the structures** conserves at any Ark price, and a
-territory's metal room of 20 is enough to keep it. **It is the only one of the three that leaves the
-Ark's cost alone**, and the reason he set it aside was labor rather than metal - two civilians can
-build two things or man two things, not both, which is why the Ark deploys structures. **Deploying
-structures *and* the remainder does both.**
-
-### P-166 - `move` has no destination, and nothing sets `arriving`
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`releases/first-release.md` -> Recipes
-
-**Two gaps in one recipe, both found by trying to draw its before-and-after.**
-
-**`move` says `unit, here` and `unit, there`, and nothing says what those are.** `P-158` removed the
-Scope column, so no column names a place; a source and a destination are **parameters of the recipe**
-and the table has nowhere to put them. **Nothing expresses that the two must be adjacent**, either -
-`P-157` made adjacency a fact the container states, and no recipe reads it.
-
-**And `found by land` requires `pioneer, arriving`, which no recipe produces.** `arriving` is
-declared in *Traits* as *stored, cleared at end turn*, and `move` does not set it. **So on the tables
-as written, no Pioneer can ever found a territory.**
-
-**The second is the more urgent and the first is the deeper.** A missing output is one row. A recipe
-that cannot say where it goes is the shape of the table, and `P-163` already leans on it: launching
-is a move to an orbit, which needs a destination the same way.
-
-### P-167 - `build extractor` takes no metal and names no resource
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
-`releases/first-release.md` -> Recipes
-
-**Two tables in one file disagree.** *Units and structures* says an extractor costs **1 labor, 1
-metal**, which Sean set on 2026-09-01. The recipe takes **labor only**.
-
-**And the recipe does not say which resource the extractor is for**, though `work` reads that trait
-to know what it produces - *the territory's density for that resource*. **A recipe that creates a
-thing must set the traits that thing is later read by**, and this one creates an extractor with no
-resource.
-
-> `build extractor` gains `in metal 1` and its result becomes `extractor, <resource>`.
-
-**The second half is the general point.** `work`, `perish` and `upkeep` all read a trait of something
-they were handed. **Nothing checks that the recipes which create those things set them**, and an
-extractor with no resource is the first case where that gap is visible.
-
-### P-168 - Nothing checks room at the moment a thing is created
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
-`spec/turn.md` -> Order of operations, **or** `releases/first-release.md` -> Recipes
-
-**Six recipes create things and not one asks whether there is room.** `deploy ark`, `found by land`,
-`build extractor`, `build yard`, `produce pioneer`, `produce ark` and `grow` all add to a territory,
-and `P-156` gave every kind a maximum.
-
-**`spec/turn.md` already says what happens: *what a territory can keep is bounded. Anything above the
-bound is lost when the turn ends.*** So the bound is enforced **at the end of the turn and never at
-the moment of creation** - which may be exactly right.
-
-**What is not stated is what that means when it bites.** Room for yards is 1. **A player may build a
-second Yard, and at the end of the turn one of them is lost** - and nothing says which, or whether
-the metal comes back, or whether the player is told before spending it.
-
-**This is the one question the seventeen pages raise that none of them contains**, which is why it is
-filed separately rather than against any recipe. **It is also the first place a rule needs a
-tie-break** - `P-135` promoted that competing effects are gathered and resolved together by a
-deterministic mechanic a player can change, and this is a competition nobody has named.
-
-### P-169 - `spoil` takes surplus food, and the order falls out
-
-**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
-**into** `releases/first-release.md` -> Recipes
-
-**Sean asked whether population growth is a recipe or an exception. It is a recipe** - `grow`, owned
-by the world - and the exception is not growth but **when the world's recipes fire**. He chose the
-unification over an ordering rule.
-
-**Three of the eight already order themselves**, because a derived trait cannot exist until what
-derives it has happened: `grow` and `depart` wait for `eat`, and `perish` waits for `upkeep`.
-**`spoil` takes plain `food` and waits for nothing**, so it may fire first and leave nothing to eat.
-
-> `spoil`'s ingredient becomes `food, surplus`.
-
-**Basis: it needs no new trait, which is why it is worth trying first.** This lane expected to have
-to invent one - *spare*, or *unclaimed by anything* - and `surplus` already means exactly the right
-thing: **left after everything ate.** Before eating there is no surplus, so `spoil` cannot fire; after
-eating there is, so it can.
-
-**And it makes growth and spoilage compete, which is the right relationship.** Surplus food either
-becomes population or rots, and `P-135` already promoted that **competing effects are gathered and
-resolved together by a deterministic mechanic a player can change**. Room for citizens is what
-decides how much of the surplus growth can take, and the rest spoils. **Nothing new is needed for
-that either.**
-
-**What it does not fix.** `upkeep`, `perish` and `revert` are still unplaced relative to the rest -
-`perish` follows `upkeep` by its trait, but nothing says whether upkeep is paid before or after
-eating, and both draw on food. **That is a real question and a smaller one**, and it should be asked
-against the before-and-after pages rather than in the abstract.
-
-### P-170 - A part is one metal arranged, and a thing's metal is how many it has
-
-**to** sean - **status** open - **raised** 2026-09-01 - **kind** unification - **into**
-`spec/resources.md`, **and** `releases/first-release.md` -> Units and structures
+unification - **into** `spec/resources.md`, **and** `releases/first-release.md` -> Units and
+structures
 
 **Sean's, 2026-09-01**: *give every part of every vehicle or building a cost of 1 metal, then
-vehicles and buildings that contain parts just sum their parts.*
+vehicles and buildings that contain parts just sum their parts* - and then: *a vehicle or building
+with no parts should still cost at least 1 metal, and it is also ok for it to have a cost in addition
+to the cost of its parts, representing the binding material.*
 
-> `spec/resources.md` gains one line, beside *matter is conserved and its arrangement is not*:
+> `spec/resources.md` gains two lines, beside *matter is conserved and its arrangement is not*:
 >
-> - A part is one metal, arranged. What a thing is made of is its parts, and the metal in it is how
->   many it has
+> - A part is one metal, arranged. The metal in a thing is what binds it together plus the metal in
+>   each of its parts
+> - What binds a thing is at least one metal, so a thing made of nothing still costs something
 
-> `releases/first-release.md` -> Units and structures: **Metal in it** stops being a number someone
-> writes and becomes **how many parts the thing has**, which is the same figure derived rather than
-> declared.
+> `releases/first-release.md` -> Units and structures: **Metal in it** becomes derived - binding plus
+> parts - and a new **Binding** column holds what a thing costs beyond its parts. **Nothing in first
+> release has parts**, so every Binding equals the *Metal in it* beside it, and the two columns say
+> the same thing until a vehicle earns a second part.
 
-**Basis: it makes conservation structural instead of a rule to check.** `P-165` exists because an Ark
-holds twelve metal and deploys into two metal's worth, and somebody had to notice. **Under parts
-there is nothing to notice**: an Ark has twelve parts, deploying rearranges them, and twelve parts
-come out however they are grouped. **A rule that cannot be broken needs no check.**
+**Basis: it makes conservation structural rather than a rule to check.** `P-165` exists because an Ark
+holds twelve and becomes two, and somebody had to notice. **Under this there is nothing to notice**:
+taking a thing apart yields its parts, still arranged, and its binding as loose metal. **The count
+comes out however it is grouped.**
 
 **It is `spec/resources.md`'s own sentence made specific.** *Matter is conserved and its arrangement
-is not* - **a part is exactly matter with arrangement**, and loose metal is the same matter without
-it. Taking a thing apart turns parts into metal; building turns metal into parts. **The conserved
-quantity is the count, and the arrangement is what a recipe spends.**
+is not* - a part is matter with arrangement, loose metal is the same matter without it, and **the
+binding is the arrangement that is lost when a thing comes apart.** Taking apart returns the matter
+and not the ordering, which is exactly what that line has said since it was promoted.
 
-**And it is the third job this one idea does.** `P-157` made a part a thing, which gave move-then-act
-for free - the part that moves exhausts, the part that works exhausts. **Now the same parts carry the
-metal.** One concept for containment, readiness granularity and conservation.
+**The minimum is what stops a thing being free.** Without it, a building with no parts costs nothing
+and a player builds unboundedly - which is the same hole `P-168` reports from the other end.
 
-**It does not settle `P-165` and it explains it.** An Ark has twelve parts and deploys into a garrison
-and an extractor, which have one each. **Ten parts have to go somewhere**, and the only place is loose
-metal in the territory - which is Sean's own walkthrough, *deploy ark... output 2 civilian, 3 metal*.
-**Parts make the leftover impossible to ignore rather than impossible to have.**
+**And it is the third job this idea does.** `P-157` made a part a thing, which gave move-then-act for
+nothing: the part that moves exhausts, the part that works exhausts. **Now the same parts carry the
+metal.** One concept for containment, for readiness granularity, and for conservation.
 
-**One thing to decide with it.** Whether a thing's parts are listed or counted. A Yard at fifteen
-parts is fifteen rows if each is named and one row if they are alike. **Naming them is what a crane
-and an engine need**, and first release has nothing that needs it - so counted now, listed when a
-vehicle earns it.
+**What it does to the numbers already promoted.** Nothing is invalidated. `P-146` and `P-156`'s
+figures become **binding** values rather than declared totals - a garrison binds with 1, a Yard with
+15 - and every one is still the number Sean set.
 
 ## Addressed to other perspectives
 
@@ -458,6 +324,129 @@ Each capability in `releases/first-release.md` now carries an id, `R-1` to `R-6`
 code` field line every outbox item carries. The tool does not look in `releases/`, so all six are
 invisible to `outbox --to code` - which is the one place they need to appear, since they are the
 work the release exists to order.
+
+### P-165 - Deploying leaves metal behind, and no recipe says so
+
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind**
+contradiction - **into** `releases/first-release.md` -> Recipes. **Reads better after `P-170`**
+
+**Found by walking the recipes one at a time**, which is what
+[the before-and-after pages](../recipes/README.md) are for. **An Ark holds 12 metal and deploys into
+a garrison and an extractor, which hold 1 each.** A Pioneer holds 8 and founds the same two. **Ten and
+six metal leave the game**, on the two recipes that open every game.
+
+**`P-170` says where it goes and this says it in the table.** Under that proposal a thing comes apart
+into its parts and its binding, and **the binding is loose metal in the territory.** An Ark with no
+parts is twelve metal of binding, two of which bind the garrison and the extractor it becomes.
+
+> `deploy ark` and `found by land` each gain a result:
+>
+> | Recipe | Owner | Role | Thing | Qty | Bound |
+> | --- | --- | --- | --- | --- | --- |
+> | **deploy ark** | player | out | metal | what is left of its binding | |
+> | **found by land** | player | out | metal | what is left of its binding | |
+
+**Basis: this is Sean's own walkthrough, arrived at twice.** On 2026-08-31 he wrote *deploy ark...
+output 2 civilian, 3 metal*, and set the loose-metal opening aside for a reason that was about
+**labor** rather than metal - two civilians can build two things or man two things, not both, which
+is why an Ark deploys structures. **Deploying structures *and* the remainder does both jobs**, and
+nothing about the labor argument objects to it.
+
+**A quantity that is read rather than written**, in the shape `P-151` promoted: what is left of the
+thing's binding after the structures it became have taken theirs. **Not a literal**, because it
+changes the moment any of the three figures does.
+
+### P-167 - `build extractor` takes no metal and names no resource
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** contradiction - **into**
+`releases/first-release.md` -> Recipes
+
+**Two tables in one file disagree.** *Units and structures* says an extractor costs **1 labor, 1
+metal**, which Sean set on 2026-09-01. The recipe takes **labor only**.
+
+**And the recipe does not say which resource the extractor is for**, though `work` reads that trait
+to know what it produces - *the territory's density for that resource*. **A recipe that creates a
+thing must set the traits that thing is later read by**, and this one creates an extractor with no
+resource.
+
+> `build extractor` gains `in metal 1` and its result becomes `extractor, <resource>`.
+
+**The second half is the general point.** `work`, `perish` and `upkeep` all read a trait of something
+they were handed. **Nothing checks that the recipes which create those things set them**, and an
+extractor with no resource is the first case where that gap is visible.
+
+### P-166 - `move` has no destination, and nothing sets `arriving`
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`releases/first-release.md` -> Recipes
+
+**Two gaps in one recipe, both found by trying to draw its before-and-after.**
+
+**`move` says `unit, here` and `unit, there`, and nothing says what those are.** `P-158` removed the
+Scope column, so no column names a place; a source and a destination are **parameters of the recipe**
+and the table has nowhere to put them. **Nothing expresses that the two must be adjacent**, either -
+`P-157` made adjacency a fact the container states, and no recipe reads it.
+
+**And `found by land` requires `pioneer, arriving`, which no recipe produces.** `arriving` is
+declared in *Traits* as *stored, cleared at end turn*, and `move` does not set it. **So on the tables
+as written, no Pioneer can ever found a territory.**
+
+**The second is the more urgent and the first is the deeper.** A missing output is one row. A recipe
+that cannot say where it goes is the shape of the table, and `P-163` already leans on it: launching
+is a move to an orbit, which needs a destination the same way.
+
+### P-169 - `spoil` takes surplus food, and the order falls out
+
+**to** sean - **status** open - **raised** 2026-09-01 - **rewritten** 2026-09-01 - **kind** gap -
+**into** `releases/first-release.md` -> Recipes
+
+**Sean asked whether population growth is a recipe or an exception. It is a recipe** - `grow`, owned
+by the world - and the exception is not growth but **when the world's recipes fire**. He chose the
+unification over an ordering rule.
+
+**Three of the eight already order themselves**, because a derived trait cannot exist until what
+derives it has happened: `grow` and `depart` wait for `eat`, and `perish` waits for `upkeep`.
+**`spoil` takes plain `food` and waits for nothing**, so it may fire first and leave nothing to eat.
+
+> `spoil`'s ingredient becomes `food, surplus`.
+
+**Basis: it needs no new trait, which is why it is worth trying first.** This lane expected to have
+to invent one - *spare*, or *unclaimed by anything* - and `surplus` already means exactly the right
+thing: **left after everything ate.** Before eating there is no surplus, so `spoil` cannot fire; after
+eating there is, so it can.
+
+**And it makes growth and spoilage compete, which is the right relationship.** Surplus food either
+becomes population or rots, and `P-135` already promoted that **competing effects are gathered and
+resolved together by a deterministic mechanic a player can change**. Room for citizens is what
+decides how much of the surplus growth can take, and the rest spoils. **Nothing new is needed for
+that either.**
+
+**What it does not fix.** `upkeep`, `perish` and `revert` are still unplaced relative to the rest -
+`perish` follows `upkeep` by its trait, but nothing says whether upkeep is paid before or after
+eating, and both draw on food. **That is a real question and a smaller one**, and it should be asked
+against the before-and-after pages rather than in the abstract.
+
+### P-168 - Nothing checks room at the moment a thing is created
+
+**to** sean - **status** open - **raised** 2026-09-01 - **kind** gap - **into**
+`spec/turn.md` -> Order of operations, **or** `releases/first-release.md` -> Recipes
+
+**Six recipes create things and not one asks whether there is room.** `deploy ark`, `found by land`,
+`build extractor`, `build yard`, `produce pioneer`, `produce ark` and `grow` all add to a territory,
+and `P-156` gave every kind a maximum.
+
+**`spec/turn.md` already says what happens: *what a territory can keep is bounded. Anything above the
+bound is lost when the turn ends.*** So the bound is enforced **at the end of the turn and never at
+the moment of creation** - which may be exactly right.
+
+**What is not stated is what that means when it bites.** Room for yards is 1. **A player may build a
+second Yard, and at the end of the turn one of them is lost** - and nothing says which, or whether
+the metal comes back, or whether the player is told before spending it.
+
+**This is the one question the seventeen pages raise that none of them contains**, which is why it is
+filed separately rather than against any recipe. **It is also the first place a rule needs a
+tie-break** - `P-135` promoted that competing effects are gathered and resolved together by a
+deterministic mechanic a player can change, and this is a competition nobody has named.
 
 ## Accepted
 
