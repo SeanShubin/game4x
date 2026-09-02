@@ -1,16 +1,10 @@
-# The specification lane's editing tool. Not a member of the game's workspace: it edits the
-# repository rather than shipping in it, so it stays out of `cargo tree` and
-# `cargo build --workspace`, like `tools/pad-tables` and `tools/outbox`.
-#
-# Those two are kept out by the root manifest's `exclude` list, which belongs to the code lane.
-# This one declares an empty `[workspace]` of its own instead, so it needs nothing from them to
-# build. Moving it into that list would be tidier and is their line to write.
+# Not a workspace member. This is the specification lane's editing tool, not part of the game, so
+# it stays out of `cargo build --workspace` and out of `cargo tree`. Sibling of `tools/outbox` and
+# `tools/pad-tables`, and excluded in the workspace root manifest for the same reason.
 [package]
 name = "spec"
 version = "0.1.0"
 edition = "2024"
-
-[workspace]
 
 [lib]
 name = "spec"
