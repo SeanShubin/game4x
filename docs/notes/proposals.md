@@ -45,35 +45,59 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-205 - `node` is your word for something the release calls two other things
+### P-205 - A node is a kind, and that removes the one exception in the capacity table
 
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `releases/first-release.md` -> Kinds, and `spec/planet.md` -> what a territory carries
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** instruction -
+**into** `releases/first-release.md` -> Kinds, What a territory has total capacity for, Recipes,
+Territory resources
 
-**You described nodes as a thing the game has, and `node` appears nowhere in `spec/` or
-`releases/`.** What the release has instead is two traits of a territory: **total capacity** for
-extractors of a resource, and the **density** each yields. **Your sentence and the release's say the
-same thing** - *a number of each type of node, all of the same type having the same density* is
-exactly a count and a shared density.
+**Rewritten as a recommendation, since you asked for one.** You offered two shapes - a node as a
+thing, or a capacity and a density per resource on the territory. **The second is what the release
+already has, and it is the one carrying the special language.**
 
-> A **node** is a place in a territory where one extractor can be built. A territory has some number
-> of nodes for each resource, and every node for a resource in that territory yields the same
-> density. A territory's total capacity for extractors of a resource is its number of nodes for it.
+> A **node** is a kind: a place in a territory where one extractor can be built. **A node is part of
+> the world rather than something a player builds**, so a territory has no capacity for nodes - it
+> has the ones the world gave it. **A node holds at most one extractor.** Each node is for one
+> resource, and what an extractor in it yields is the territory's density for that resource.
+>
+> In *What a territory has total capacity for*, the **extractor** row is removed; what limits
+> extractors is that a node holds one.
+>
+> `build food extractor`, `build metal extractor` and `build energy extractor` each **require a node
+> for that resource holding no extractor**, and produce the extractor **in that node**.
+>
+> **The assertion that proves this was applied**: `Kinds` has thirteen rows and one is `node`;
+> *What a territory has total capacity for* has no `extractor` row and every remaining row is a
+> plain number; and each `build ... extractor` recipe names `node`.
 
-**Basis: the release's words are correct and unreadable, and yours are how you think.** *Territory 1
-has total capacity 3 for metal extractors, at density 4, with 2 built* against *territory 1 has 3
-metal nodes at density 4, 2 with extractors on them*. **The second is what you said without
-prompting**, and the reports exist so that you can read them.
+**Basis: the capacity table has ten rows and nine of them are a number.** The tenth reads *what the
+Territory resources table gives, per resource* - **capacity is a maximum per kind everywhere in this
+game except here**, where it is a maximum per kind and per trait value. **That exception is the
+special language, and a node deletes it**: every row becomes a number, and the limit on extractors
+becomes an ordinary containment - one thing holds one thing.
 
-**And it names a thing that is otherwise nameless.** An extractor is built somewhere, and that
-somewhere has no word - which is why the dump invented one. **`P-192` made `territory` and `orbit`
-kinds because only a thing may contain things**; a node holding an extractor is the same argument
-again, and this proposal deliberately stops short of it - **the text above makes a node a place, not
-a kind**, because making it a kind is a larger change and you have not asked for one.
+**It costs one kind and it uses no new mechanism.** `P-157` says a thing contains things; `P-192`
+made `territory` and `orbit` kinds on the grounds that **only a thing may contain things**. A node
+holding an extractor is that argument a third time, and refusing it is what forced the exception.
 
-**The alternative is to strike the word**, and have the dump say *total capacity* and *density*.
-That is fewer concepts and worse prose, and it would leave you reading a column named after a rule
-rather than after a thing.
+**Density stays exactly where you put it.** You cut per-node density deliberately, and this keeps
+that cut: **density remains a trait of a territory, per resource**, and every node for a resource
+yields it. **Storing the same density on each node would be the `founded` failure again** - a value
+written in many places that can disagree with itself, where the release has one that cannot.
+
+**Three other things stop being awkward, which is how you can tell the shape is right.**
+
+- **`build extractor` gains an honest requirement.** It currently names no place and no limit; *a
+  node for that resource holding no extractor* is both, in the vocabulary recipes already use.
+- **`deploy ark`'s wasted metal stops being a special case.** *If there is no capacity the effect is
+  wasted* becomes a recipe whose requirement is not met.
+- **Containment goes all the way down.** An extractor is in a node, a node is in a territory, a
+  territory is in a planet - and `state.md` can show what you asked to see, because *four metal
+  nodes, two with extractors* is four rows and a join rather than a number nobody can decompose.
+
+**What it costs, said plainly.** Nine nodes per territory on the tiny planet is 108 rows where there
+are now 36, and the *Territory resources* table stops reading `3 x 4` and starts saying how many
+nodes and at what density. **The compound notation was hiding the count**, which is `S-20`.
 
 ## Addressed to other perspectives
 
