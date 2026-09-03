@@ -66,18 +66,19 @@ nine, and it said nothing about markup at all.
 
 **Basis: measured, because the rule bites in three places today and one of them is markup.**
 
-| Where                               | What is hardcoded                                                        |
-| ----------------------------------- | ------------------------------------------------------------------------ |
-| `crates/game4x/index.html`          | the five planet sizes, and the three surfaces - both specification facts |
-| `crates/game-model/src/game.rs`     | thirteen cost constants, `YARD_METAL` through `MOVE_CELLS`               |
-| `crates/game-model/src/identity.rs` | the kinds themselves, as enums with `ALL` arrays                         |
-| `commands/play.4x`                  | **nothing - a scenario is already a file**                               |
+| Where                               | What is hardcoded                                                                |
+| ----------------------------------- | -------------------------------------------------------------------------------- |
+| `crates/game4x/index.html`          | the five planet sizes, and three of the four surfaces - both specification facts |
+| `crates/game-model/src/game.rs`     | thirteen cost constants, `YARD_METAL` through `MOVE_CELLS`                       |
+| `crates/game-model/src/identity.rs` | the kinds themselves, as enums with `ALL` arrays                                 |
+| `commands/play.4x`                  | **nothing - a scenario is already a file**                                       |
 
 **The markup line is the one this lane would not have found**, because the page looked like
 presentation. Five buttons reading `tiny` to `huge` are `spec/planet.md`'s five sizes, and three
 buttons reading `F1 game` to `F3 browser` are `spec/interface.md`'s three surfaces. **A sixth planet
 size would need a hand edit to an HTML file**, which is the definition of a fact living in two
-places.
+places. **`spec/interface.md` names four surfaces and the page has three**, correctly - the release
+keeps the rule editor out - but the fourth arrives as a hand edit to markup for the same reason.
 
 **This is a direction rather than a work order, and most of it is behind `P-134`.** Costs and kinds
 live in the shapes that proposal rewrites, and `C-16` already parks the same question for
