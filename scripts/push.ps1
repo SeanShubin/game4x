@@ -31,6 +31,32 @@ $ErrorActionPreference = "Stop"
 $site = "https://seanshubin.github.io/game4x"
 $deployJob = "Deploy to GitHub Pages"
 
+# `gh --jq` is not usable from PowerShell when the filter contains a quoted string. The
+# quotes do not survive the hand-off to a native command, so
+# `select(.headSha == "ceb51b5...")` reaches jq as `select(.headSha == ceb51b5...)`, jq
+# reads the bare word as a call, and answers `function not defined: ceb51b5.../0`. Sean hit
+# exactly that on 2026-09-02, after the gate was fixed and the push finally got this far.
+#
+# So ask gh for JSON and do the filtering here, where the quoting is PowerShell's own
+# problem and not a round trip through a command line. This is what ../vote/scripts/push.ps1
+# does, and is why that one works.
+function Get-GhJson {
+    param([string[]] $Arguments)
+    $raw = & gh @Arguments 2>$null
+    if (-not $raw) { return $null }
+    try { return (($raw -join "`n") | ConvertFrom-Json) }
+    catch { return $null }
+}
+
+# Set-StrictMode makes a missing property an error rather than a blank, and gh omits a
+# field often enough - a run with no jobs yet, a conclusion before completion - that asking
+# directly turns a normal wait into a crash.
+function Get-Field {
+    param($Object, [string] $Name)
+    if ($Object -and ($Object.PSObject.Properties.Name -contains $Name)) { return $Object.$Name }
+    return $null
+}
+
 Push-Location (Split-Path -Parent $PSScriptRoot)
 try {
     if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
@@ -122,7 +148,9 @@ try {
     $runs = @()
     $previous = @()
     for ($i = 0; $i -lt 40; $i++) {
-        $found = @(gh run list --limit 25 --json databaseId,headSha --jq ".[] | select(.headSha == ""$sha"") | .databaseId" 2>$null)
+        $listed = Get-GhJson @("run", "list", "--limit", "25", "--json", "databaseId,headSha")
+        $found = @($listed | Where-Object { (Get-Field $_ "headSha") -eq $sha } |
+            ForEach-Object { Get-Field $_ "databaseId" })
         if ($found.Count -gt 0 -and $found.Count -eq $previous.Count) {
             $runs = $found
             break
@@ -152,19 +180,22 @@ try {
     foreach ($id in $runs) {
         $status = ""
         for ($i = 0; $i -lt 90; $i++) {
-            $status = (gh run view $id --json status --jq .status 2>$null)
+            $status = Get-Field (Get-GhJson @("run", "view", "$id", "--json", "status")) "status"
             if ($status -eq "completed") { break }
             Start-Sleep -Seconds 10
         }
-        $conclusion = (gh run view $id --json conclusion --jq .conclusion 2>$null)
+        $conclusion = Get-Field (Get-GhJson @("run", "view", "$id", "--json", "conclusion")) "conclusion"
 
         # A cancelled run almost always means a newer push took the concurrency slot.
         # "Failed" would be wrong, and silence would be worse, so name the newer commit.
         if ($conclusion -eq "cancelled") {
-            $newer = (gh run list --limit 10 --branch $branch --json headSha,databaseId --jq "[.[] | select(.headSha != ""$sha"")] | .[0].headSha" 2>$null)
+            $others = Get-GhJson @("run", "list", "--limit", "10", "--branch", $branch,
+                "--json", "headSha,databaseId")
+            $newer = @($others | Where-Object { (Get-Field $_ "headSha") -ne $sha } |
+                ForEach-Object { Get-Field $_ "headSha" })
             Write-Host ""
-            if ($newer -and $newer -ne "null") {
-                Write-Host "run $id was CANCELLED, superseded by $($newer.Substring(0,7))"
+            if ($newer.Count -gt 0) {
+                Write-Host "run $id was CANCELLED, superseded by $($newer[0].Substring(0,7))"
                 Write-Host "this pipeline cancels a run when a newer push arrives on the same branch"
             }
             else {
@@ -175,10 +206,16 @@ try {
         }
 
         Write-Host ""
-        gh run view $id --json jobs --jq '.jobs[] | "  " + (.conclusion // .status) + "  " + .name' 2>$null
+        $jobs = @(Get-Field (Get-GhJson @("run", "view", "$id", "--json", "jobs")) "jobs")
+        foreach ($job in $jobs) {
+            $state = Get-Field $job "conclusion"
+            if (-not $state) { $state = Get-Field $job "status" }
+            Write-Host "  $state  $(Get-Field $job 'name')"
+        }
 
-        $deploy = (gh run view $id --json jobs --jq ".jobs[] | select(.name == ""$deployJob"") | .conclusion" 2>$null)
-        $thisRunDeployed = $deploy -eq "success"
+        $thisRunDeployed = @($jobs | Where-Object {
+                (Get-Field $_ "name") -eq $deployJob -and (Get-Field $_ "conclusion") -eq "success"
+            }).Count -gt 0
         if ($thisRunDeployed) { $deployed = $true }
 
         if ($conclusion -ne "success") {
