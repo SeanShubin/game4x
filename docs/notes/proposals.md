@@ -45,107 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-196 - Nothing can reach an orbit, so the loop's first and last steps have no recipe
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** gap - **shape** instruction -
-**into** `releases/first-release.md` -> Families, Traits, Units and structures, Recipes
-
-**Rewritten 2026-09-02 after you named adjacency and eligibility.** The first version proposed a
-`place` family and nothing else, and **your fifth eligibility rule breaks it**: an Ark may be in a
-territory and be adjacent to another territory and still not use that edge, so eligibility is about
-**edges** and a family of places cannot say it.
-
-> A fourth family, **place**, whose members are `territory` and `orbit`.
->
-> **Adjacency is of a place**, and says which places it touches and by which kind of edge. Three
-> kinds: **border**, between two territories; **orbit border**, between two orbits; and **ascent**,
-> between a territory and its own orbit. The planet states all of them.
->
-> A new column in *Units and structures*, **Crosses**: which kinds of edge the unit may traverse. A
-> Pioneer crosses `border`. An Ark crosses `orbit border` and `ascent`.
->
-> `move` requires `$from` place and `$to` place, and `$to`'s constraint is *joined to `$from` by an
-> edge the unit crosses*.
->
-> `deploy ark` consumes `ark`, in the orbit above `$where`.
->
-> **The assertion that proves this was applied**: the Families table has four rows and `place` names
-> `territory, orbit`; `adjacency` reads *a place*; the Units table has a `Crosses` column, blank for
-> everything that does not move; no row of `move` names `territory`; and `deploy ark`'s `ark` row
-> names the orbit above `$where`.
-
-**Basis: three edge kinds are the fewest that can state your five rules.** `border` and `orbit
-border` must be distinguishable, or *an Ark crosses borders* would let it walk between territories -
-which is the one thing you ruled out.
-
-**One of your five then costs nothing.** *Pioneers are not allowed in orbit* needs no statement: a
-Pioneer crosses only `border`, which never touches an orbit, and no recipe produces one there.
-**Occupancy falls out of reachability**, and the assertion above does not need to say it.
-
-**`deploy ark` taking the Ark from orbit is the half you have not ruled on.** It makes step 2 one
-action, as your loop reads it, and gives an Ark a life with no land-to-land move in it: **produced
-on the ground, ascends once, moves in orbit to choose a site, deploys.** The alternative is
-descend-then-deploy, which is two actions where the loop says one, and which uses `ascent` downward
-so the edge is travelled both ways.
-
-**Either way step 8 is `move` across `ascent`**, which is the launch `spec/control.md` makes the
-win.
-
-### P-197 - The rule about text, rows and instructions never says what a block is
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** cleanup - **shape** instruction -
-**into** `CLAUDE.md` -> Promotion
-
-**`P-194` landed yesterday and reads *A proposal's block is text, rows or an instruction*. Nothing
-in the file says what a block is.** It means the words a proposal offers for you to approve - the
-indented part - and a reader meeting the sentence has no way to know that.
-
-**This replaces those two paragraphs with the same rule in words that define themselves**, and folds
-in the test for telling the three apart, which `P-194` left out and which this lane then got wrong on
-the first proposal to use it.
-
-> **A proposal offers words for you to approve, and a promotion does one of three things with them.**
-> The proposal says which, so that a check can tell whether it was done.
->
-> - **text** - the words go into the file as written, apart from where the lines break
-> - **rows** - the words are rows of a table and go in cell by cell, because the padder rewrites the
->   column widths and the bytes will not match
-> - **an instruction** - the words describe a change rather than being it, as in *this sentence
->   becomes that one*, so none of them appears in the file. An instruction says how to tell it was
->   carried out, and the promoting commit runs that check
->
-> **To tell which, ask what the file will say afterwards.** If it will say these words, that is
-> text. If it will say them as cells in a table, that is rows. If it will say something these words
-> only described, that is an instruction.
->
-> **The assertion that proves this was applied**: `CLAUDE.md` contains *A proposal offers words for
-> you to approve* and no longer contains *A proposal's block is*.
-
-**Basis: two words were introduced and neither was explained, and one of them already meant
-something else here.** Counted in `CLAUDE.md`:
-
-- **block** appears three times - twice as this jargon, once as an ordinary verb, *the questions
-  that block it*
-- **shape** appears five times - twice on the template line as the field name, and **three times as
-  ordinary English**: *the one shape Sean reads*, *`Q-8` is the shape*, *a shape the code could not
-  have predicted*
-
-**So the file uses *shape* to mean "sort of thing" in three places and then borrows it for a
-technical meaning without saying so**, and introduces *block* for something it never names. The rule
-they carry is a good one and it is unreadable to anyone who was not in the conversation that produced
-it.
-
-**And the missing test cost something immediately.** `P-195` described edits - *the closing sentence
-becomes this one*, *the template gains a field* - and was filed as `text`. Nothing in it went into
-the file as written. It was an instruction, and this lane labelled it wrong **while describing it
-correctly in the same message**, which is what a rule with no test looks like from the inside.
-
-**The field keeps the name `shape` unless you want it changed.** A field name is a label rather
-than prose, and `tools/outbox` and the promotion check both read it, so renaming it costs work in
-another lane. **But it does collide with three ordinary uses of the word in the same file**, and
-`kind` - the obvious alternative - is already a field. Say if that trade is wrong and this lane will
-propose a name.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -867,6 +766,8 @@ work the release exists to order.
 | P-193, the tables are the data the game loads, and every other form is generated                                | `spec/invariants.md` -> The game is data                                                                                                     | 2026-09-02 |
 | P-194, a proposal's block is text, rows or an instruction, and says which                                       | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-02 |
 | P-195, the four lines that assumed every block was text, and a `shape` field                                    | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-02 |
+| P-196, a place is a territory or an orbit, edges have kinds, and a unit says which it crosses                   | `releases/first-release.md` -> Families, Traits, Units and structures, Recipes                                                               | 2026-09-03 |
+| P-197, the three things a promotion can do, in words that define themselves                                     | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-03 |
 
 ## Rejected
 

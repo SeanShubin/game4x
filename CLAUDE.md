@@ -399,13 +399,19 @@ The guarantee this buys is that **approved text is byte-identical to shipped tex
 approved rows arrive cell for cell, and that an approved instruction is run with the
 assertion it carries.**
 
-**A proposal's block is text, rows or an instruction, and it says which.**
+**A proposal offers words for you to approve, and a promotion does one of three things with them.**
+The proposal says which, so that a check can tell whether it was done.
 
-**Text** is copied verbatim; line wrapping, bullet-versus-paragraph and heading level are the only
-things a promotion may change. **Rows** are table rows, whose column widths the padder rewrites, so
-what must survive is every cell rather than every byte. **An instruction** describes a change to
-make in more than one place, and nothing lands verbatim - **so it carries the assertion that proves
-it was applied**, and the promoting commit runs it.
+- **text** - the words go into the file as written, apart from where the lines break
+- **rows** - the words are rows of a table and go in cell by cell, because the padder rewrites the
+  column widths and the bytes will not match
+- **an instruction** - the words describe a change rather than being it, as in *this sentence
+  becomes that one*, so none of them appears in the file. An instruction says how to tell it was
+  carried out, and the promoting commit runs that check
+
+**To tell which, ask what the file will say afterwards.** If it will say these words, that is text.
+If it will say them as cells in a table, that is rows. If it will say something these words only
+described, that is an instruction.
 
 **Never leave a promotion uncommitted.** A promotion changes `spec/` or `releases/` and moves a row
 in the queue, and **the other lanes read the working tree** - so an uncommitted promotion is a rule
