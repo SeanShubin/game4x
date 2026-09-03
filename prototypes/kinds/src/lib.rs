@@ -293,7 +293,7 @@ pub const TRAITS: [TraitRow; 17] = [
     TraitRow {
         name: "kind",
         of: "every thing",
-        values: "one of the fourteen",
+        values: "one of the kinds",
         held: Held::Stored,
     },
     TraitRow {
@@ -353,7 +353,7 @@ pub const TRAITS: [TraitRow; 17] = [
     TraitRow {
         name: "biome",
         of: "a territory",
-        values: "one of the six",
+        values: "one of the biomes",
         held: Held::Stored,
     },
     TraitRow {
