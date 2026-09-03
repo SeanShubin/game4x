@@ -146,7 +146,11 @@ fn released_cost(thing: &str) -> Vec<(u32, String)> {
                 let mut words = part.split_whitespace();
                 // "and nothing else" carries no figure, and neither does "not produced".
                 let amount: u32 = words.next()?.parse().ok()?;
-                Some((amount, words.next()?.to_string()))
+                // "2 citizens" and "1 citizen" name the same cost. The figure decides the
+                // plural and the caller should not have to know which it will be.
+                let thing = words.next()?;
+                let thing = thing.strip_suffix('s').unwrap_or(thing);
+                Some((amount, thing.to_string()))
             })
             .collect();
     }
@@ -282,7 +286,7 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
     // spends three turns paying for the extractors it used to be given, and the loop that
     // reaches a second territory is that much longer. The number is a property of
     // `commands/play.4x` and moves whenever the economy does.
-    assert_eq!(session.game.turn, 10, "turn one, then nine endings");
+    assert_eq!(session.game.turn, 8, "turn one, then seven endings");
 
     // The pioneer took a second territory by land and became what it needed there.
     let two = session.game.territory(TerritoryId(2)).unwrap();
@@ -303,6 +307,7 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     assert_eq!(cost_of("pioneer", "citizen"), cost::PIONEER_CITIZENS);
     assert_eq!(cost_of("ark", "metal"), cost::ARK_METAL);
     assert_eq!(cost_of("ark", "energy"), cost::ARK_ENERGY);
+    assert_eq!(cost_of("ark", "citizen"), cost::ARK_CITIZENS);
     assert_eq!(cost_of("yard", "labor"), cost::YARD_LABOR);
     assert_eq!(cost_of("yard", "metal"), cost::YARD_METAL);
     assert_eq!(cost_of("extractor", "labor"), cost::EXTRACTOR_LABOR);
@@ -318,8 +323,8 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
         .map(|thing| released_cost(thing).len())
         .sum();
     assert_eq!(
-        figures, 11,
-        "eleven figures in the Costs to produce column; this checks each one by name"
+        figures, 12,
+        "twelve figures in the Costs to produce column; this checks each one by name"
     );
 }
 
@@ -358,15 +363,21 @@ fn the_landing_site_can_send_a_pioneer_out() {
     let two = session.game.territory(TerritoryId(2)).unwrap();
     assert!(two.founded, "the pioneer took the ground");
     assert!(two.garrison.is_some(), "and became a garrison holding it");
-    // Founding produced one citizen, and because the new farm was worked on the turn it
-    // arrived that citizen fed itself and grew. A territory can pay its own way from the
-    // moment it is founded.
-    assert_eq!(two.citizens, 2, "a citizen, fed and grown");
-    assert_eq!(two.extractors.len(), 1, "and an extractor");
+    // Founding produced two citizens, and because the new farm was worked on the turn it
+    // arrived they fed themselves and grew. A territory can pay its own way from the moment
+    // it is founded.
+    assert_eq!(two.citizens, 4, "two citizens, fed and grown");
+    assert_eq!(two.extractors.len(), 2, "and two extractors");
+    let mut leaves: Vec<Resource> = two
+        .extractors
+        .iter()
+        .map(|extractor| two.nodes[extractor.node].resource)
+        .collect();
+    leaves.sort_by_key(|resource| format!("{resource:?}"));
     assert_eq!(
-        two.nodes[two.extractors[0].node].resource,
-        Resource::Food,
-        "working a food node, which is what a new territory needs"
+        leaves,
+        [Resource::Food, Resource::Metal],
+        "a farm to feed itself and a mine to build with, which is what a new territory needs"
     );
     assert!(session.game.units.is_empty(), "the pioneer was consumed");
 

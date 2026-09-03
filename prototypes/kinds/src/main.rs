@@ -1,4 +1,4 @@
-//! Prints the release's six tables back out, rendered from the data that holds them.
+//! Prints the release's seven tables back out, rendered from the data that holds them.
 //!
 //! `cargo run -p kinds`, or `scripts/kinds.sh`. The rows are the ones
 //! `releases/first-release.md` carries, and `tests/against_the_release.rs` compares them.
@@ -7,8 +7,11 @@ fn main() {
     for (heading, rows) in [
         ("## Kinds", kinds::kinds_table()),
         ("## Families", kinds::families_table()),
-        ("## Where things are", kinds::rooms_table()),
-        ("## What a territory has room for", kinds::room_table()),
+        ("## Where things are", kinds::capacities_table()),
+        (
+            "## What a territory has total capacity for",
+            kinds::capacity_table(),
+        ),
         ("## Traits", kinds::traits_table()),
         ("## Units and structures", kinds::units_table()),
         ("## Recipes", kinds::recipes_table()),

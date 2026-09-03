@@ -1,7 +1,7 @@
 //! The compilable specification and the written one are the same specification.
 //!
-//! `S-4`. Two copies of fifteen recipes would be one copy and one guess: the data
-//! in `src/lib.rs` is rendered back into the release's two tables and compared with
+//! `S-4`. Two copies of seventeen recipes would be one copy and one guess: the data
+//! in `src/lib.rs` is rendered back into the release's seven tables and compared with
 //! `releases/first-release.md` on disk, so neither can move without the other. That is the
 //! habit `crates/game-console/tests/quotations.rs` already has - read the document at test
 //! time rather than trusting a copy of it.
@@ -88,9 +88,8 @@ fn compare(what: &str, written: &[Vec<String>], compiled: &[Vec<String>]) {
 
 /// Every table the release declares, against the data that renders it.
 ///
-/// Six now rather than two. The release declares its kinds, its families, its bins and its
-/// traits, which is what this crate used to infer from the recipes and say so.
-/// Every table the release declares, against the data that renders it.
+/// Seven now rather than two. The release declares its kinds, its families, its capacities
+/// and its traits, which is what this crate used to infer from the recipes and say so.
 ///
 /// **The only test in this file that is worth anything on its own.** The others read this
 /// crate and check it against numbers written in this crate; on the day the release moved,
@@ -104,11 +103,15 @@ fn the_release_tables_are_the_ones_in_this_crate() {
     let tables: [(&str, usize, Vec<Vec<String>>); 7] = [
         ("## Kinds", 10, kinds::kinds_table()),
         ("## Families", 3, kinds::families_table()),
-        ("## Where things are", 3, kinds::rooms_table()),
-        ("## Traits", 16, kinds::traits_table()),
-        ("## What a territory has room for", 10, kinds::room_table()),
+        ("## Where things are", 3, kinds::capacities_table()),
+        ("## Traits", 17, kinds::traits_table()),
+        (
+            "## What a territory has total capacity for",
+            10,
+            kinds::capacity_table(),
+        ),
         ("## Units and structures", 6, kinds::units_table()),
-        ("## Recipes", 40, kinds::recipes_table()),
+        ("## Recipes", 50, kinds::recipes_table()),
     ];
     for (heading, least, compiled) in tables {
         let written = table_under(&document, heading);
@@ -122,12 +125,13 @@ fn the_release_tables_are_the_ones_in_this_crate() {
     }
 }
 
-/// Sixteen. Twenty became sixteen by collapsing, not by cutting: `launch` was `move` with a
-/// different destination, `land` became `deploy ark`, `eat` was `upkeep` with a citizen's
+/// Seventeen. Twenty became sixteen by collapsing, not by cutting: `launch` was `move` with
+/// a different destination, `land` became `deploy ark`, `eat` was `upkeep` with a citizen's
 /// upkeep assumed rather than written, `depart` was `perish`, and `revert` could never fire.
+/// Then food gained a `keeps` counter, and `age` is what counts it down.
 #[test]
-fn there_are_sixteen_recipes() {
-    assert_eq!(kinds::RECIPES.len(), 16);
+fn there_are_seventeen_recipes() {
+    assert_eq!(kinds::RECIPES.len(), 17);
 }
 
 /// A family names several kinds at once, with no hierarchy anywhere.
@@ -147,44 +151,55 @@ fn a_recipe_naming_a_family_matches_every_kind_in_it() {
     }
 }
 
-/// Consumed is worked out, not written down.
+/// Every role the release writes is one of the four, and each is used.
 ///
-/// The column is gone: *an ingredient is consumed exactly when the same thing, with the same
-/// traits, does not appear among the results*. So four recipes gained an echo row, and being
-/// consumed became a fact about the table rather than a second statement that could disagree
-/// with it.
+/// **Consumed is a column now, and used to be worked out.** The rule was *an ingredient is
+/// consumed exactly when the same thing, with the same traits, does not appear among the
+/// results*, so four recipes carried an echo row that existed only to say something
+/// survived. Saying it once is the better trade, and it bought `limit` - *at most none of
+/// these* - which the echo scheme could only spell as zero given back.
+///
+/// So this checks the thing the column made checkable: that every role is exercised, and
+/// that the recipes keeping something are the ones that should.
 #[test]
-fn an_ingredient_is_consumed_unless_it_is_echoed() {
-    let kept: Vec<&str> = kinds::RECIPES
+fn a_role_says_what_becomes_of_what_a_recipe_names() {
+    use kinds::Role;
+
+    let mut seen: std::collections::BTreeSet<&str> = std::collections::BTreeSet::new();
+    for recipe in kinds::RECIPES {
+        for line in recipe.lines {
+            seen.insert(line.role.written());
+        }
+    }
+    assert_eq!(
+        seen.into_iter().collect::<Vec<_>>(),
+        ["consume", "limit", "produce", "require"],
+        "all four roles are used, and nothing else is"
+    );
+
+    // A territory is never consumed by acting in it, unheld ground is a limit rather than an
+    // ingredient, a yard survives producing an ark, and upkeep and grow both need something
+    // they do not eat.
+    let keeps: Vec<&str> = kinds::RECIPES
         .iter()
         .filter(|recipe| {
             recipe
-                .ports
+                .lines
                 .iter()
-                .filter(|port| port.is_ingredient())
-                .any(|port| !recipe.consumes(port))
+                .any(|line| line.is_ingredient() && !line.role.consumes())
         })
         .map(|recipe| recipe.name)
         .collect();
-
-    // A territory is never consumed by acting in it, a garrison survives producing a
-    // pioneer, a yard survives producing an ark, and upkeep gives back what it fed.
-    //
-    // The two claiming recipes are here for a subtler reason, and it is the rule working
-    // rather than an accident: each takes `garrison` at most 0 and gives `garrison` 1, so
-    // the same thing with the same traits does appear among the results. Nothing was
-    // consumed because there was nothing there - which is exactly what *at most zero* asks.
     assert_eq!(
-        kept,
+        keeps,
         [
             "deploy ark",
             "move",
             "found by land",
-            "produce pioneer",
             "produce ark",
             "work",
-            "grow",
-            "upkeep"
+            "upkeep",
+            "grow"
         ]
     );
 
@@ -193,19 +208,19 @@ fn an_ingredient_is_consumed_unless_it_is_echoed() {
         .iter()
         .find(|recipe| recipe.name == "build yard")
         .expect("the release builds yards");
-    for port in build.ports.iter().filter(|port| port.is_ingredient()) {
-        assert!(build.consumes(port));
+    for line in build.lines.iter().filter(|line| line.is_ingredient()) {
+        assert_eq!(line.role, Role::Consume);
     }
 }
 
-/// Every qualifier a recipe uses names a trait the release declares.
+/// Every trait a recipe distinguishes by is one the release declares.
 ///
 /// **The check that holds the two halves of the specification against each other.** The
 /// Traits table says what a thing can be distinguished by; the recipes distinguish things;
 /// nothing else compares them, so a rewrite can take a trait out from under a recipe still
 /// using it - which is how `control`, `force of nature` and `unpaid` came to be missing.
 ///
-/// It reads recipe qualifiers, so it is blind to a trait no recipe qualifies by. A green
+/// It reads the Traits column, so it is blind to a trait no recipe distinguishes by. A green
 /// result here is not evidence that nothing is missing.
 #[test]
 fn every_qualifier_names_a_declared_trait() {
@@ -214,8 +229,8 @@ fn every_qualifier_names_a_declared_trait() {
     let mut seen: std::collections::BTreeSet<&str> = std::collections::BTreeSet::new();
 
     for recipe in kinds::RECIPES {
-        for port in recipe.ports {
-            for qualifier in port.subject().qualifiers {
+        for line in recipe.lines {
+            for qualifier in line.traits {
                 seen.insert(qualifier.written);
                 match qualifier.of_trait {
                     Some(named) => assert!(
@@ -243,24 +258,19 @@ fn every_qualifier_names_a_declared_trait() {
 
 /// A name is how a recipe reaches past what it consumes.
 ///
-/// `$where`, `$from` and `$to` are bound by one ingredient and referred to by others, which
-/// is what lets `work` yield the territory's density without the territory being consumed
-/// and without the table having a column for where a recipe acts.
+/// `$where`, `$from` and `$to` are bound by requiring a territory and referred to by other
+/// lines, which is what lets `work` yield the territory's density without the territory
+/// being consumed, and lets `move` say *this one* and *that one*.
 #[test]
 fn a_named_ingredient_is_bound_before_it_is_referred_to() {
     for recipe in kinds::RECIPES {
-        let bound: Vec<&str> = recipe
-            .ports
-            .iter()
-            .filter_map(|port| port.subject().bound_as)
-            .collect();
-        for port in recipe.ports {
-            let text = format!("{} {}", port.subject().written(), port.quantity().written());
-            for name in ["where", "from", "to"] {
-                if text.contains(&format!("`${name}`")) {
+        let bound = recipe.binds();
+        for text in recipe.mentions() {
+            for name in ["`$where`", "`$from`", "`$to`"] {
+                if text.contains(name) {
                     assert!(
                         bound.contains(&name),
-                        "{} refers to `${name}` and never binds it",
+                        "{} refers to {name} and never binds it",
                         recipe.name
                     );
                 }
@@ -269,17 +279,19 @@ fn a_named_ingredient_is_bound_before_it_is_referred_to() {
     }
 
     // Three recipes name something, and they are the three that act somewhere in particular.
-    let naming: Vec<&str> = kinds::RECIPES
+    let naming: Vec<(&str, Vec<&str>)> = kinds::RECIPES
         .iter()
-        .filter(|recipe| {
-            recipe
-                .ports
-                .iter()
-                .any(|port| port.subject().bound_as.is_some())
-        })
-        .map(|recipe| recipe.name)
+        .filter(|recipe| !recipe.binds().is_empty())
+        .map(|recipe| (recipe.name, recipe.binds()))
         .collect();
-    assert_eq!(naming, ["deploy ark", "move", "work"]);
+    assert_eq!(
+        naming,
+        [
+            ("deploy ark", vec!["`$where`"]),
+            ("move", vec!["`$from`", "`$to`"]),
+            ("work", vec!["`$where`"]),
+        ]
+    );
 }
 
 /// `Metal in it` is derived, and the release says so.

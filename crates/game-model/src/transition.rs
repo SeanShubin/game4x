@@ -28,11 +28,11 @@ pub enum Transition {
         adjacency: Vec<Vec<TerritoryId>>,
         biomes: Vec<Biome>,
     },
-    /// What a territory has of one resource: how many extractors it has room for, and the
-    /// density each of them yields.
+    /// What a territory has of one resource: how many extractors it has total capacity for,
+    /// and the density each of them yields.
     ///
-    /// `spec/planet.md`: *for each resource, a territory has room for some number of
-    /// extractors, and a density that each of them yields.* It replaces rather than adds,
+    /// `spec/planet.md`: *for each resource, a territory has total capacity for some number
+    /// of extractors, and a density that each of them yields.* It replaces rather than adds,
     /// because a territory has one answer per resource - `add node` added them one at a
     /// time, which was the shape when a node was a thing rather than a number.
     SetResource {

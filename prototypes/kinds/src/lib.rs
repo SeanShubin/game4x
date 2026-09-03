@@ -70,8 +70,8 @@ impl Kind {
         }
     }
 
-    /// How many of this kind a territory has room for, as the release writes it.
-    pub fn room(self) -> &'static str {
+    /// How many of this kind a territory has total capacity for, as the release writes it.
+    pub fn total_capacity(self) -> &'static str {
         match self {
             Kind::Citizen => "8",
             Kind::Garrison => "1",
@@ -101,8 +101,8 @@ pub const KINDS: [Kind; 10] = [
     Kind::Labor,
 ];
 
-/// In the order the room table lists them, which is not the same order.
-pub const ROOM_ORDER: [Kind; 10] = [
+/// In the order the total-capacity table lists them, which is not the same order.
+pub const CAPACITY_ORDER: [Kind; 10] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -171,30 +171,30 @@ pub const FAMILIES: [Family; 3] = [Family::Thing, Family::Unit, Family::Resource
 // Where things are
 // ---------------------------------------------------------------------------------------
 
-/// One sort of room a thing can be in.
+/// One sort of capacity a thing can be held in.
 ///
-/// **Every thing is in another thing**, and each sort of room has a capacity - which is why
+/// **Every thing is in another thing**, and each sort of capacity has a limit - which is why
 /// *is there room* never needs to be an ingredient. `build extractor` used to take
 /// `node, unworked` and no longer does, because the general rule already answers it.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct Room {
+pub struct Capacity {
     pub what: &'static str,
     pub holds: &'static str,
     pub up_to: &'static str,
 }
 
-pub const ROOMS: [Room; 3] = [
-    Room {
-        what: "a territory's room for a kind",
+pub const CAPACITIES: [Capacity; 3] = [
+    Capacity {
+        what: "a territory's total capacity for a kind",
         holds: "that kind",
-        up_to: "what the territory has room for",
+        up_to: "its total capacity for that kind",
     },
-    Room {
+    Capacity {
         what: "an extractor's catch",
         holds: "the resource it was built for",
         up_to: "the territory's density for it",
     },
-    Room {
+    Capacity {
         what: "a unit's tank",
         holds: "energy",
         up_to: "the unit's fuel",
@@ -231,7 +231,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 17] = [
+pub const TRAITS: [TraitRow; 18] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -287,7 +287,7 @@ pub const TRAITS: [TraitRow; 17] = [
         held: Held::Stored,
     },
     TraitRow {
-        name: "room",
+        name: "total capacity",
         of: "a territory, per kind",
         values: "a number",
         held: Held::Stored,
@@ -317,6 +317,12 @@ pub const TRAITS: [TraitRow; 17] = [
         held: Held::Stored,
     },
     TraitRow {
+        name: "keeps",
+        of: "food",
+        values: "the number of turns it will last",
+        held: Held::Stored,
+    },
+    TraitRow {
         name: "surplus",
         of: "food",
         values: "yes or no",
@@ -340,7 +346,7 @@ pub const TRAITS: [TraitRow; 17] = [
 // Recipes
 // ---------------------------------------------------------------------------------------
 
-/// Whose recipe it is.
+/// Whose recipe it is, which the release's **Auto** column names.
 ///
 /// **Not where it applies.** It was `here`/`every` and said who a recipe belonged to while
 /// reading as though it said where - a player asks for the first sort and the world runs the
@@ -357,6 +363,46 @@ impl Owner {
             Owner::Player => "player",
             Owner::World => "world",
         }
+    }
+}
+
+/// What one line of a recipe does with the thing it names.
+///
+/// **The release states this now, and used to leave it to be worked out.** The rule was *an
+/// ingredient is consumed exactly when the same thing, with the same traits, does not appear
+/// among the results*, which meant four recipes carried an echo row saying nothing except
+/// that something survived. A column says it once, and `limit` - *at most none of these* -
+/// stopped having to be spelled as a quantity of zero that was also given back.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Role {
+    /// Has to be there, and still is afterwards.
+    Require,
+    /// At most this many, which is how a recipe says *unheld ground*.
+    Limit,
+    /// Has to be there, and is gone afterwards.
+    Consume,
+    /// What the recipe makes.
+    Produce,
+}
+
+impl Role {
+    pub fn written(self) -> &'static str {
+        match self {
+            Role::Require => "require",
+            Role::Limit => "limit",
+            Role::Consume => "consume",
+            Role::Produce => "produce",
+        }
+    }
+
+    /// Whether the line is something the recipe needs rather than something it makes.
+    pub fn is_ingredient(self) -> bool {
+        !matches!(self, Role::Produce)
+    }
+
+    /// Whether the thing named is gone afterwards.
+    pub fn consumes(self) -> bool {
+        matches!(self, Role::Consume)
     }
 }
 
@@ -378,90 +424,17 @@ impl Noun {
 }
 
 /// What distinguishes one of a noun from another, as the release writes it.
-///
-/// Most join with a comma - *ark, in orbit*. Two join as English, *thing with upkeep* and
-/// *thing whose upkeep is unpaid*, which is punctuation rather than meaning and is recorded
-/// rather than smoothed over.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Qualifier {
     pub written: &'static str,
-    pub comma: bool,
     /// The declared trait this is a value of, and `None` when the release declares none.
     pub of_trait: Option<&'static str>,
 }
 
-const fn comma(written: &'static str, of_trait: Option<&'static str>) -> Qualifier {
+const fn by(written: &'static str, of_trait: &'static str) -> Qualifier {
     Qualifier {
         written,
-        comma: true,
-        of_trait,
-    }
-}
-
-const fn phrase(written: &'static str, of_trait: Option<&'static str>) -> Qualifier {
-    Qualifier {
-        written,
-        comma: false,
-        of_trait,
-    }
-}
-
-/// A thing a recipe names: what it is, what distinguishes it, and what it is called here.
-///
-/// **A name is how a recipe says where it acts.** `$where`, `$from` and `$to` are bound by
-/// one ingredient and referred to by others, which is what lets `move` say *this territory*
-/// and *that one* without the table having a column for either.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct Subject {
-    pub bound_as: Option<&'static str>,
-    pub noun: Noun,
-    pub qualifiers: &'static [Qualifier],
-}
-
-impl Subject {
-    pub fn written(self) -> String {
-        let mut out = String::new();
-        if let Some(name) = self.bound_as {
-            out.push_str(&format!("`${name}` "));
-        }
-        out.push_str(self.noun.name());
-        for qualifier in self.qualifiers {
-            if qualifier.comma {
-                out.push_str(", ");
-            } else {
-                out.push(' ');
-            }
-            out.push_str(qualifier.written);
-        }
-        out
-    }
-}
-
-const fn plain(noun: Noun) -> Subject {
-    Subject {
-        bound_as: None,
-        noun,
-        qualifiers: &[],
-    }
-}
-
-const fn of(kind: Kind) -> Subject {
-    plain(Noun::Of(kind))
-}
-
-const fn that_is(noun: Noun, qualifiers: &'static [Qualifier]) -> Subject {
-    Subject {
-        bound_as: None,
-        noun,
-        qualifiers,
-    }
-}
-
-const fn named(name: &'static str, noun: Noun, qualifiers: &'static [Qualifier]) -> Subject {
-    Subject {
-        bound_as: Some(name),
-        noun,
-        qualifiers,
+        of_trait: Some(of_trait),
     }
 }
 
@@ -490,56 +463,32 @@ impl Quantity {
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Bound {
-    AtLeast,
-    AtMost,
-}
-
-impl Bound {
-    pub fn written(self) -> &'static str {
-        match self {
-            Bound::AtLeast => "at least",
-            Bound::AtMost => "at most",
-        }
-    }
-}
-
-/// One line of a recipe.
+/// One line of a recipe: a role, a quantity, a kind, what distinguishes it, and where.
 ///
-/// **There is no consumed column any more.** `releases/first-release.md`: *an ingredient is
-/// consumed exactly when the same thing, with the same traits, does not appear among the
-/// results.* So four recipes gained an echo row - `upkeep` takes a thing with upkeep and
-/// gives it back - and being consumed became a fact you can work out rather than one stated
-/// twice. [`Recipe::consumes`] works it out.
+/// **Where is a column now, and used to be a qualifier.** `in $where` read as a trait of the
+/// thing and was one - `place` - but every recipe that acts somewhere puts every line there,
+/// so it was written once per line to say something true of the whole recipe.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Port {
-    In {
-        subject: Subject,
-        quantity: Quantity,
-        bound: Bound,
-    },
-    Out {
-        subject: Subject,
-        quantity: Quantity,
-    },
+pub struct Line {
+    pub role: Role,
+    pub quantity: Quantity,
+    pub noun: Noun,
+    pub traits: &'static [Qualifier],
+    /// The **Where** column: a name the recipe binds or refers to, or somewhere it points.
+    pub place: Option<&'static str>,
 }
 
-impl Port {
-    pub fn subject(&self) -> Subject {
-        match self {
-            Port::In { subject, .. } | Port::Out { subject, .. } => *subject,
-        }
-    }
-
-    pub fn quantity(&self) -> Quantity {
-        match self {
-            Port::In { quantity, .. } | Port::Out { quantity, .. } => *quantity,
-        }
+impl Line {
+    pub fn traits_written(&self) -> String {
+        self.traits
+            .iter()
+            .map(|qualifier| qualifier.written)
+            .collect::<Vec<_>>()
+            .join(", ")
     }
 
     pub fn is_ingredient(&self) -> bool {
-        matches!(self, Port::In { .. })
+        self.role.is_ingredient()
     }
 }
 
@@ -547,257 +496,268 @@ impl Port {
 pub struct Recipe {
     pub name: &'static str,
     pub owner: Owner,
-    pub ports: &'static [Port],
+    pub lines: &'static [Line],
 }
 
 impl Recipe {
-    /// Whether an ingredient is consumed, worked out rather than stated.
+    /// The names this recipe binds, in the order it binds them.
     ///
-    /// The release's rule exactly: consumed when the same thing, with the same traits, does
-    /// not appear among the results.
-    pub fn consumes(&self, ingredient: &Port) -> bool {
-        !self
-            .ports
+    /// A name is bound by requiring a territory somewhere, and referred to by every other
+    /// line that mentions it. That is how `move` says *this territory* and *that one*
+    /// without the table having a column for either.
+    pub fn binds(&self) -> Vec<&'static str> {
+        self.lines
             .iter()
-            .any(|port| !port.is_ingredient() && port.subject() == ingredient.subject())
+            .filter(|line| line.role == Role::Require && line.noun == Noun::Territory)
+            .filter_map(|line| line.place)
+            .collect()
+    }
+
+    /// Everything this recipe writes in a column a `$name` could appear in.
+    pub fn mentions(&self) -> Vec<String> {
+        let mut out = Vec::new();
+        for line in self.lines {
+            out.push(line.quantity.written());
+            out.push(line.traits_written());
+            out.push(line.place.unwrap_or_default().to_string());
+        }
+        out
     }
 }
 
-const fn takes(subject: Subject, quantity: Quantity, bound: Bound) -> Port {
-    Port::In {
-        subject,
+const fn just(role: Role, count: u32, noun: Noun) -> Line {
+    Line {
+        role,
+        quantity: Quantity::Exactly(count),
+        noun,
+        traits: &[],
+        place: None,
+    }
+}
+
+const fn traited(role: Role, count: u32, noun: Noun, traits: &'static [Qualifier]) -> Line {
+    Line {
+        role,
+        quantity: Quantity::Exactly(count),
+        noun,
+        traits,
+        place: None,
+    }
+}
+
+const fn placed(
+    role: Role,
+    count: u32,
+    noun: Noun,
+    traits: &'static [Qualifier],
+    place: &'static str,
+) -> Line {
+    Line {
+        role,
+        quantity: Quantity::Exactly(count),
+        noun,
+        traits,
+        place: Some(place),
+    }
+}
+
+const fn measured(role: Role, quantity: Quantity, noun: Noun) -> Line {
+    Line {
+        role,
         quantity,
-        bound,
+        noun,
+        traits: &[],
+        place: None,
     }
 }
 
-const fn gives(subject: Subject, quantity: Quantity) -> Port {
-    Port::Out { subject, quantity }
-}
-
-use Bound::{AtLeast, AtMost};
 use Kind::*;
 use Owner::{Player, World};
-use Quantity::{Exactly, OfATrait};
+use Quantity::OfATrait;
+use Role::{Consume, Limit, Produce, Require};
 
-const FOR_FOOD: [Qualifier; 1] = [comma("food", Some("resource"))];
-const FOR_METAL: [Qualifier; 1] = [comma("metal", Some("resource"))];
-const FOR_ENERGY: [Qualifier; 1] = [comma("energy", Some("resource"))];
-const IN_WHERE: [Qualifier; 1] = [comma("in `$where`", Some("place"))];
-const NEXT_TO_FROM: [Qualifier; 1] = [comma("next to `$from`", Some("adjacency"))];
-const IN_FROM_READY: [Qualifier; 2] = [
-    comma("in `$from`", Some("place")),
-    comma("ready", Some("readiness")),
-];
-const IN_TO_EXHAUSTED: [Qualifier; 2] = [
-    comma("in `$to`", Some("place")),
-    comma("exhausted", Some("readiness")),
-];
-const IN_THAT_UNIT: [Qualifier; 1] = [comma("in that unit", Some("place"))];
-const READY: [Qualifier; 1] = [comma("ready", Some("readiness"))];
-const EXHAUSTED: [Qualifier; 1] = [comma("exhausted", Some("readiness"))];
-const SURPLUS: [Qualifier; 1] = [comma("surplus", Some("surplus"))];
-const HOUSES: [Qualifier; 1] = [comma("houses", Some("houses"))];
-const WITH_UPKEEP: [Qualifier; 1] = [phrase("with upkeep", Some("upkeep"))];
-const UPKEEP_UNPAID: [Qualifier; 1] = [phrase("whose upkeep is unpaid", Some("unpaid"))];
+const FOR_FOOD: [Qualifier; 1] = [by("food", "resource")];
+const FOR_METAL: [Qualifier; 1] = [by("metal", "resource")];
+const FOR_ENERGY: [Qualifier; 1] = [by("energy", "resource")];
+const NEXT_TO_FROM: [Qualifier; 1] = [by("next to `$from`", "adjacency")];
+const READY: [Qualifier; 1] = [by("ready", "readiness")];
+const EXHAUSTED: [Qualifier; 1] = [by("exhausted", "readiness")];
+const SURPLUS: [Qualifier; 1] = [by("surplus", "surplus")];
+const HOUSES: [Qualifier; 1] = [by("houses", "houses")];
+const WITH_UPKEEP: [Qualifier; 1] = [by("with upkeep", "upkeep")];
+const UPKEEP_UNPAID: [Qualifier; 1] = [by("whose upkeep is unpaid", "unpaid")];
+const KEEPS_NONE: [Qualifier; 1] = [by("keeps 0", "keeps")];
+const KEEPS_SOME: [Qualifier; 1] = [by("keeps at least 1", "keeps")];
+const KEEPS_LESS: [Qualifier; 1] = [by("keeps one less", "keeps")];
 
-/// The sixteen recipes of `releases/first-release.md`.
+const TERRITORY: Noun = Noun::Territory;
+const UNIT: Noun = Noun::Any(Family::Unit);
+const RESOURCE: Noun = Noun::Any(Family::Resource);
+const THING: Noun = Noun::Any(Family::Thing);
+
+/// The seventeen recipes of `releases/first-release.md`.
 pub const RECIPES: &[Recipe] = &[
     Recipe {
         name: "deploy ark",
         owner: Player,
-        ports: &[
-            takes(named("where", Noun::Territory, &[]), Exactly(1), AtLeast),
-            gives(named("where", Noun::Territory, &[]), Exactly(1)),
-            takes(that_is(Noun::Of(Ark), &IN_WHERE), Exactly(1), AtLeast),
-            takes(of(Garrison), Exactly(0), AtMost),
-            gives(of(Garrison), Exactly(1)),
-            gives(of(Citizen), Exactly(1)),
-            gives(that_is(Noun::Of(Extractor), &FOR_FOOD), Exactly(1)),
-            gives(that_is(Noun::Of(Extractor), &FOR_METAL), Exactly(1)),
-            gives(that_is(Noun::Of(Extractor), &FOR_ENERGY), Exactly(1)),
+        lines: &[
+            placed(Require, 1, TERRITORY, &[], "`$where`"),
+            placed(Consume, 1, Noun::Of(Ark), &[], "`$where`"),
+            just(Limit, 0, Noun::Of(Garrison)),
+            just(Produce, 1, Noun::Of(Garrison)),
+            just(Produce, 2, Noun::Of(Citizen)),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
         ],
     },
     Recipe {
         name: "move",
         owner: Player,
-        ports: &[
-            takes(named("from", Noun::Territory, &[]), Exactly(1), AtLeast),
-            gives(named("from", Noun::Territory, &[]), Exactly(1)),
-            takes(
-                named("to", Noun::Territory, &NEXT_TO_FROM),
-                Exactly(1),
-                AtLeast,
-            ),
-            gives(named("to", Noun::Territory, &[]), Exactly(1)),
-            takes(
-                that_is(Noun::Any(Family::Unit), &IN_FROM_READY),
-                Exactly(1),
-                AtLeast,
-            ),
-            gives(
-                that_is(Noun::Any(Family::Unit), &IN_TO_EXHAUSTED),
-                Exactly(1),
-            ),
-            takes(
-                that_is(Noun::Of(Energy), &IN_THAT_UNIT),
-                Exactly(1),
-                AtLeast,
-            ),
+        lines: &[
+            placed(Require, 1, TERRITORY, &[], "`$from`"),
+            placed(Require, 1, TERRITORY, &NEXT_TO_FROM, "`$to`"),
+            placed(Consume, 1, UNIT, &READY, "`$from`"),
+            placed(Consume, 1, Noun::Of(Energy), &[], "that unit"),
+            placed(Produce, 1, UNIT, &EXHAUSTED, "`$to`"),
         ],
     },
     Recipe {
         name: "found by land",
         owner: Player,
-        ports: &[
-            takes(of(Pioneer), Exactly(1), AtLeast),
-            takes(of(Garrison), Exactly(0), AtMost),
-            gives(of(Garrison), Exactly(1)),
-            gives(of(Citizen), Exactly(1)),
-            gives(that_is(Noun::Of(Extractor), &FOR_FOOD), Exactly(1)),
+        lines: &[
+            just(Consume, 1, Noun::Of(Pioneer)),
+            just(Limit, 0, Noun::Of(Garrison)),
+            just(Produce, 1, Noun::Of(Garrison)),
+            just(Produce, 2, Noun::Of(Citizen)),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
         ],
     },
     Recipe {
         name: "build food extractor",
         owner: Player,
-        ports: &[
-            takes(of(Labor), Exactly(1), AtLeast),
-            takes(of(Metal), Exactly(1), AtLeast),
-            gives(that_is(Noun::Of(Extractor), &FOR_FOOD), Exactly(1)),
+        lines: &[
+            just(Consume, 1, Noun::Of(Labor)),
+            just(Consume, 1, Noun::Of(Metal)),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
         ],
     },
     Recipe {
         name: "build metal extractor",
         owner: Player,
-        ports: &[
-            takes(of(Labor), Exactly(1), AtLeast),
-            takes(of(Metal), Exactly(1), AtLeast),
-            gives(that_is(Noun::Of(Extractor), &FOR_METAL), Exactly(1)),
+        lines: &[
+            just(Consume, 1, Noun::Of(Labor)),
+            just(Consume, 1, Noun::Of(Metal)),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
         ],
     },
     Recipe {
         name: "build energy extractor",
         owner: Player,
-        ports: &[
-            takes(of(Labor), Exactly(1), AtLeast),
-            takes(of(Metal), Exactly(1), AtLeast),
-            gives(that_is(Noun::Of(Extractor), &FOR_ENERGY), Exactly(1)),
+        lines: &[
+            just(Consume, 1, Noun::Of(Labor)),
+            just(Consume, 1, Noun::Of(Metal)),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_ENERGY),
         ],
     },
     Recipe {
         name: "build yard",
         owner: Player,
-        ports: &[
-            takes(of(Labor), Exactly(1), AtLeast),
-            takes(of(Metal), Exactly(15), AtLeast),
-            gives(of(Yard), Exactly(1)),
+        lines: &[
+            just(Consume, 1, Noun::Of(Labor)),
+            just(Consume, 15, Noun::Of(Metal)),
+            just(Produce, 1, Noun::Of(Yard)),
         ],
     },
     Recipe {
         name: "produce pioneer",
         owner: Player,
-        ports: &[
-            takes(of(Metal), Exactly(2), AtLeast),
-            takes(of(Energy), Exactly(6), AtLeast),
-            takes(of(Citizen), Exactly(1), AtLeast),
-            takes(of(Garrison), Exactly(1), AtLeast),
-            gives(of(Pioneer), Exactly(1)),
-            gives(of(Garrison), Exactly(1)),
+        lines: &[
+            just(Consume, 3, Noun::Of(Metal)),
+            just(Consume, 6, Noun::Of(Energy)),
+            just(Consume, 2, Noun::Of(Citizen)),
+            just(Produce, 1, Noun::Of(Pioneer)),
         ],
     },
     Recipe {
         name: "produce ark",
         owner: Player,
-        ports: &[
-            takes(of(Metal), Exactly(4), AtLeast),
-            takes(of(Energy), Exactly(12), AtLeast),
-            takes(of(Yard), Exactly(1), AtLeast),
-            gives(of(Ark), Exactly(1)),
-            gives(of(Yard), Exactly(1)),
+        lines: &[
+            just(Consume, 3, Noun::Of(Metal)),
+            just(Consume, 12, Noun::Of(Energy)),
+            just(Consume, 2, Noun::Of(Citizen)),
+            just(Require, 1, Noun::Of(Yard)),
+            just(Produce, 1, Noun::Of(Ark)),
         ],
     },
     Recipe {
-        name: "spend readiness",
+        name: "create labor",
         owner: Player,
-        ports: &[
-            takes(that_is(Noun::Of(Citizen), &READY), Exactly(1), AtLeast),
-            gives(that_is(Noun::Of(Citizen), &EXHAUSTED), Exactly(1)),
-            gives(of(Labor), Exactly(1)),
+        lines: &[
+            traited(Consume, 1, Noun::Of(Citizen), &READY),
+            traited(Produce, 1, Noun::Of(Citizen), &EXHAUSTED),
+            just(Produce, 1, Noun::Of(Labor)),
         ],
     },
     Recipe {
         name: "work",
         owner: Player,
-        ports: &[
-            takes(named("where", Noun::Territory, &[]), Exactly(1), AtLeast),
-            gives(named("where", Noun::Territory, &[]), Exactly(1)),
-            takes(of(Labor), Exactly(1), AtLeast),
-            takes(that_is(Noun::Of(Extractor), &READY), Exactly(1), AtLeast),
-            gives(that_is(Noun::Of(Extractor), &EXHAUSTED), Exactly(1)),
-            gives(
-                plain(Noun::Any(Family::Resource)),
+        lines: &[
+            placed(Require, 1, TERRITORY, &[], "`$where`"),
+            just(Consume, 1, Noun::Of(Labor)),
+            traited(Consume, 1, Noun::Of(Extractor), &READY),
+            traited(Produce, 1, Noun::Of(Extractor), &EXHAUSTED),
+            measured(
+                Produce,
                 OfATrait("`$where`'s density for that resource"),
+                RESOURCE,
             ),
-        ],
-    },
-    Recipe {
-        name: "grow",
-        owner: World,
-        ports: &[
-            takes(that_is(Noun::Of(Food), &SURPLUS), Exactly(1), AtLeast),
-            takes(
-                that_is(Noun::Any(Family::Thing), &HOUSES),
-                Exactly(1),
-                AtLeast,
-            ),
-            gives(of(Citizen), Exactly(1)),
-            gives(that_is(Noun::Any(Family::Thing), &HOUSES), Exactly(1)),
-        ],
-    },
-    Recipe {
-        name: "spoil",
-        owner: World,
-        ports: &[takes(
-            that_is(Noun::Of(Food), &SURPLUS),
-            Exactly(1),
-            AtLeast,
-        )],
-    },
-    Recipe {
-        name: "ready",
-        owner: World,
-        ports: &[
-            takes(
-                that_is(Noun::Any(Family::Thing), &EXHAUSTED),
-                Exactly(1),
-                AtLeast,
-            ),
-            gives(that_is(Noun::Any(Family::Thing), &READY), Exactly(1)),
         ],
     },
     Recipe {
         name: "upkeep",
         owner: World,
-        ports: &[
-            takes(
-                that_is(Noun::Any(Family::Thing), &WITH_UPKEEP),
-                Exactly(1),
-                AtLeast,
-            ),
-            takes(of(Food), OfATrait("the thing's upkeep"), AtLeast),
-            gives(that_is(Noun::Any(Family::Thing), &WITH_UPKEEP), Exactly(1)),
+        lines: &[
+            traited(Require, 1, THING, &WITH_UPKEEP),
+            measured(Consume, OfATrait("the thing's upkeep"), Noun::Of(Food)),
+        ],
+    },
+    Recipe {
+        name: "grow",
+        owner: World,
+        lines: &[
+            traited(Consume, 1, Noun::Of(Food), &SURPLUS),
+            traited(Require, 1, THING, &HOUSES),
+            just(Produce, 1, Noun::Of(Citizen)),
         ],
     },
     Recipe {
         name: "perish",
         owner: World,
-        ports: &[
-            takes(
-                that_is(Noun::Any(Family::Thing), &UPKEEP_UNPAID),
-                Exactly(1),
-                AtLeast,
-            ),
-            gives(of(Metal), OfATrait("the thing's metal")),
+        lines: &[
+            traited(Consume, 1, THING, &UPKEEP_UNPAID),
+            measured(Produce, OfATrait("the thing's metal"), Noun::Of(Metal)),
+        ],
+    },
+    Recipe {
+        name: "spoil",
+        owner: World,
+        lines: &[traited(Consume, 1, Noun::Of(Food), &KEEPS_NONE)],
+    },
+    Recipe {
+        name: "age",
+        owner: World,
+        lines: &[
+            traited(Consume, 1, Noun::Of(Food), &KEEPS_SOME),
+            traited(Produce, 1, Noun::Of(Food), &KEEPS_LESS),
+        ],
+    },
+    Recipe {
+        name: "ready",
+        owner: World,
+        lines: &[
+            traited(Consume, 1, THING, &EXHAUSTED),
+            traited(Produce, 1, THING, &READY),
         ],
     },
 ];
@@ -837,10 +797,19 @@ impl Producible {
         Some(binding + parts)
     }
 
+    /// The **Costs to produce** column.
+    ///
+    /// *Two citizens*, and *15 metal*: a resource is a mass noun and labor is one too, so
+    /// only the things you can count take a plural. The release writes it that way and this
+    /// is compared with the release, so the rule lives here rather than being smoothed over.
     pub fn cost_written(&self) -> String {
         self.costs
             .iter()
-            .map(|(count, kind)| format!("{count} {}", kind.name()))
+            .map(|(count, kind)| {
+                let mass = Family::Resource.covers(*kind) || *kind == Kind::Labor;
+                let plural = if *count == 1 || mass { "" } else { "s" };
+                format!("{count} {}{plural}", kind.name())
+            })
             .collect::<Vec<_>>()
             .join(", ")
     }
@@ -904,8 +873,8 @@ pub const PRODUCIBLE: &[Producible] = &[
         fuel: Some(2),
         a_move: Some(1),
         upkeep: None,
-        costs: &[(4, Metal), (12, Energy)],
-        binding: Some(4),
+        costs: &[(3, Metal), (12, Energy), (2, Citizen)],
+        binding: Some(3),
         requires: Some("a Yard"),
         readies: true,
     },
@@ -915,9 +884,9 @@ pub const PRODUCIBLE: &[Producible] = &[
         fuel: Some(2),
         a_move: Some(1),
         upkeep: Some((1, Food)),
-        costs: &[(2, Metal), (6, Energy), (1, Citizen)],
-        binding: Some(2),
-        requires: Some("a garrison"),
+        costs: &[(3, Metal), (6, Energy), (2, Citizen)],
+        binding: Some(3),
+        requires: None,
         readies: true,
     },
 ];
@@ -952,13 +921,13 @@ pub fn families_table() -> Vec<Vec<String>> {
     rows
 }
 
-pub fn rooms_table() -> Vec<Vec<String>> {
-    let mut rows = vec![header(&["Room", "Holds", "Up to"])];
-    for room in ROOMS {
+pub fn capacities_table() -> Vec<Vec<String>> {
+    let mut rows = vec![header(&["Capacity", "Holds", "Up to"])];
+    for capacity in CAPACITIES {
         rows.push(vec![
-            room.what.to_string(),
-            room.holds.to_string(),
-            room.up_to.to_string(),
+            capacity.what.to_string(),
+            capacity.holds.to_string(),
+            capacity.up_to.to_string(),
         ]);
     }
     rows
@@ -977,12 +946,12 @@ pub fn traits_table() -> Vec<Vec<String>> {
     rows
 }
 
-pub fn room_table() -> Vec<Vec<String>> {
-    let mut rows = vec![header(&["Kind", "Room"])];
-    for kind in ROOM_ORDER {
+pub fn capacity_table() -> Vec<Vec<String>> {
+    let mut rows = vec![header(&["Kind", "Total capacity"])];
+    for kind in CAPACITY_ORDER {
         rows.push(vec![
             format!("**{}**", kind.name()),
-            kind.room().to_string(),
+            kind.total_capacity().to_string(),
         ]);
     }
     rows
@@ -1026,15 +995,11 @@ pub fn units_table() -> Vec<Vec<String>> {
 
 pub fn recipes_table() -> Vec<Vec<String>> {
     let mut rows = vec![header(&[
-        "Recipe", "Owner", "Role", "Thing", "Qty", "Bound",
+        "Recipe", "Auto", "Role", "Qty", "Kind", "Traits", "Where",
     ])];
     for recipe in RECIPES {
-        for (at, port) in recipe.ports.iter().enumerate() {
+        for (at, line) in recipe.lines.iter().enumerate() {
             let first = at == 0;
-            let (role, bound) = match port {
-                Port::In { bound, .. } => ("in", bound.written().to_string()),
-                Port::Out { .. } => ("out", String::new()),
-            };
             rows.push(vec![
                 if first {
                     format!("**{}**", recipe.name)
@@ -1046,10 +1011,11 @@ pub fn recipes_table() -> Vec<Vec<String>> {
                 } else {
                     String::new()
                 },
-                role.to_string(),
-                port.subject().written(),
-                port.quantity().written(),
-                bound,
+                line.role.written().to_string(),
+                line.quantity.written(),
+                line.noun.name().to_string(),
+                line.traits_written(),
+                line.place.unwrap_or_default().to_string(),
             ]);
         }
     }
