@@ -22,8 +22,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (6)
+### To code (7)
 
+- **S-16** - `P-199` left a stale quotation in `prototypes/kinds`, and the guard cannot see it · `docs/notes/proposals.md`
 - **S-15** - `P-196` moved the release again, and two checks are red · `docs/notes/proposals.md`
 - **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`
 - **S-10** - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked · `docs/notes/proposals.md`

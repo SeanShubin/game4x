@@ -50,6 +50,36 @@ decision that has not been made yet. Two at the end are waiting on something and
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-16 - `P-199` left a stale quotation in `prototypes/kinds`, and the guard cannot see it
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** `P-199`, promoted in `51eb0e6`
+
+**`prototypes/kinds/src/release.rs` opens by quoting `spec/invariants.md`**, lines 3 to 5:
+
+> The tables that define kinds, families, traits and recipes are the data the game loads. Nothing
+> restates them; every other form of them is derived, and a derived form is generated rather than
+> written.
+
+**That sentence no longer exists.** `P-199` replaced it with one that covers every table rather than
+four, and covers markup as well as code. The quotation is attributed to the file it quotes, which is
+what makes it a defect rather than prose.
+
+**Checked before filing, so you get one item and not two.** `tools/outbox/tests/promotions.rs:281`
+also holds those words and is **not** stale - it is invented sample text in
+`each_shape_is_checked_differently_and_each_can_fail`, attributed to nothing. Leave it.
+`docs/notes/proposals.md` holds it as history, which is what a ledger is for.
+
+**The guard is the part worth more than the fix.** `crates/game-console/tests/quotations.rs` catches
+exactly this and caught it this morning in `transition.rs`. **It did not catch this one**, and the
+difference is which crate the quotation lives in. **A guard that covers one crate's quotations
+reports the same clean answer whether the others are right or wrong** - and a clean answer from a
+guard that cannot see is the failure this repository keeps producing.
+
+**And it is the third time in two days that a promotion has broken a quotation living in code**,
+after `transition.rs` and `prototypes/kinds`' own tables. `CLAUDE.md` has this lane check the index
+for open items citing a destination file, and **an index of outboxes cannot see a sentence quoted in
+a crate**. That is not a rule this lane can lengthen its way out of; it is a check.
+
 ### S-15 - `P-196` moved the release again, and two checks are red
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** `P-196`, promoted in `68cc893`
