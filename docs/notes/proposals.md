@@ -45,6 +45,45 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-199 - What the game is made of lives in a data file, not in code and not in markup
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** instruction -
+**into** `spec/invariants.md` -> The game is data
+
+**Your four constraints go further than `P-193` did**, and rather than sit beside it as a broader
+rule saying nearly the same thing, this replaces it. `P-193` named four tables; the release has
+nine, and it said nothing about markup at all.
+
+> The bullet `P-193` added becomes: **What the game is made of lives in a data file, not in code and
+> not in markup.** Rust holds the engine and the hand-written page holds the shell; neither holds a
+> kind, a recipe, a cost, a planet size or a surface. Nothing restates what a data file says; every
+> other form of it is derived, and a derived form is generated rather than written. **A scenario is
+> a file too**, so what a run exercises can be changed without changing the program.
+>
+> **The assertion that proves this was applied**: `spec/invariants.md` contains *What the game is
+> made of lives in a data file* and no longer contains *The tables that define kinds, families,
+> traits and recipes*.
+
+**Basis: measured, because the rule bites in three places today and one of them is markup.**
+
+| Where                               | What is hardcoded                                                        |
+| ----------------------------------- | ------------------------------------------------------------------------ |
+| `crates/game4x/index.html`          | the five planet sizes, and the three surfaces - both specification facts |
+| `crates/game-model/src/game.rs`     | thirteen cost constants, `YARD_METAL` through `MOVE_CELLS`               |
+| `crates/game-model/src/identity.rs` | the kinds themselves, as enums with `ALL` arrays                         |
+| `commands/play.4x`                  | **nothing - a scenario is already a file**                               |
+
+**The markup line is the one this lane would not have found**, because the page looked like
+presentation. Five buttons reading `tiny` to `huge` are `spec/planet.md`'s five sizes, and three
+buttons reading `F1 game` to `F3 browser` are `spec/interface.md`'s three surfaces. **A sixth planet
+size would need a hand edit to an HTML file**, which is the definition of a fact living in two
+places.
+
+**This is a direction rather than a work order, and most of it is behind `P-134`.** Costs and kinds
+live in the shapes that proposal rewrites, and `C-16` already parks the same question for
+`prototypes/kinds`. **The markup is the part that is neither blocked nor large** - the page can ask
+what the sizes and surfaces are instead of naming them.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the

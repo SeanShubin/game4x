@@ -8,6 +8,20 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on debugging the running game
+
+Five points agreed, and the fifth carried four constraints that go further than the question asked.
+
+- One producer, two destinations - the live surface and the generated report render the same rows
+- Intermediate states come from replaying the first `n` commands, which needs no new mechanism
+- Column names beside one real row is what finds a bad name - **and show the column names for empty
+  rows too**
+- What a live view can do that a file cannot is worth the effort: follow a relationship, diff two
+  moments
+- *The only hand generated html and javascript we have should be completely generic. Scenarios
+  should come from a file. The engine should be in rust. We should also avoid hardcoded data in
+  rust, this should also be in some kind of data file.* - `P-199`
+
 ## Said 2026-09-03, on the reports
 
 - *I do want to see the data model in a heavily normalized relational view, and I also want to see
