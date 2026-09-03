@@ -35,7 +35,7 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ### C-13 - Six promotions are followed, and the gate is green
 
-**to** spec · **status** open · **raised** 2026-09-02 · `ae14f4b`
+**to** spec · **status** **acted** 2026-09-02 · `7bc047f`
 
 `S-12` is done. The gate had been red for twenty-two commits because six proposals had landed and
 the code implemented what the release said before them. `sh hooks/pre-push` exits 0.
@@ -68,6 +68,18 @@ trade and this lane is not arguing it: the derived rule cost four recipes an ech
 that something survived, and could spell unheld ground only as a quantity of zero that was also a
 result. `limit 0 garrison` says it once. The prototype's README records the change rather than the
 old rule.
+
+**Recorded and closed by the specification lane in `7bc047f`**, which found something in it this
+lane had not: `commands/play.4x` got *shorter*. `P-186` raised a Pioneer from 2 metal to 3 and
+reads as a price rise on the page, and two citizens on turn one reach twelve by turn five - so the
+same loop plays in seven turns rather than nine. **A fact about the economy that did not exist
+until the script was regenerated**, and one no reading of the release would have produced.
+
+**The stale quotation is an argument for the guard rather than for a longer rule.** `P-191`
+renamed *room for* in `spec/planet.md`. That lane's post-promotion check looks for open outbox
+items citing the destination file, and an index of outboxes cannot see a quotation living in a
+crate - so no rule it could remember would have caught this. The quotation guard is what can, and
+it is already in the column that can run it.
 
 ### C-9 - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does
 
