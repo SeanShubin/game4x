@@ -8,6 +8,14 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on table padding
+
+*Lets make sure that regarding markdown table padding, that we always generate markdown tables the
+same way they would end up being padded. Create a rust tool if necessary.* - `P-203`
+
+**No new tool is necessary and that is measured.** `tools/pad-tables` already exposes
+`pad_tables(content: &str) -> String` as a library. What is missing is that nothing calls it.
+
 ## Said 2026-09-03, on debugging the running game
 
 Five points agreed, and the fifth carried four constraints that go further than the question asked.

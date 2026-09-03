@@ -45,10 +45,69 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-203 - A generated file is written in the form the padder would leave it
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `CLAUDE.md` -> Perspectives, after *specification and presentation*
+
+**No new tool is needed, and that is measured rather than assumed.** `tools/pad-tables` already
+exposes `pad_tables(content: &str) -> String` as a library. **Nothing calls it** - `prototypes/kinds`
+declares no dependencies at all, and the padding happens later, at commit time, to whatever the
+generator wrote.
+
+> **A generated file is written in the form the padder would leave it.** Whatever writes one calls
+> `tools/pad-tables` rather than aligning columns of its own, so generating the same data twice
+> produces the same bytes and the padder finds nothing to change.
+
+**Basis: the widths are currently decided twice and are about to be decided a third time.**
+`crates/game-console/src/dump.rs`, uncommitted in the working tree as this is filed, carries the
+comment *a table with its columns already at the width `tools/pad-tables` would give them* -
+**which is a hand-written second implementation of the padder's rule, in the file being written to
+answer `S-14`.** Caught while it is still being typed rather than after it ships.
+
+**And the cost of not doing this is one you have already paid for repeatedly.** `CLAUDE.md` says
+*the padder runs after an edit, so the file on disk is always in padded form, while a match string
+drafted while writing the edit is not - identical content, different bytes.* **A generator that
+does not pad has the same disease**: its output and the committed file are never the same bytes, so
+a diff shows churn that is not a change, and anything comparing the two must compare cells rather
+than bytes to survive.
+
+**The check is the deliverable, not the call.** Padding a generated file must change nothing -
+asserted per file, with the count of files asserted too, so a check that stopped finding any of
+them fails rather than passes.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
+
+### S-18 - Nothing calls the padder, and `dump.rs` is about to reimplement it
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on table padding; `P-203`
+
+**Filed while you are mid-build deliberately**, because the thing worth saying is about a file that
+is still uncommitted.
+
+**`crates/game-console/src/dump.rs:234`** reads *a table with its columns already at the width
+`tools/pad-tables` would give them*. **That is the padder's rule, written a second time, in the file
+being written to answer `S-14`.** `tools/pad-tables` exposes `pad_tables(content: &str) -> String`
+as a library; calling it costs a dependency and deletes the copy.
+
+**Measured, so you know what is and is not already true:**
+
+- **`catalog.md` and `pending.md` are padded on disk** - the pre-commit hook does it after they are
+  written, not the generators
+- **`prototypes/kinds/Cargo.toml` declares no dependencies**, so the catalog cannot be padding itself
+- **No file outside `tools/pad-tables` calls `pad_tables`**
+
+**So generating twice from the same data gives two different files today**, and only a commit makes
+them agree. That is why `against_the_release.rs` and `tools/outbox` both had to be written to
+compare cells rather than bytes - **a cost already paid twice, in two crates, to work around
+something one dependency would remove.**
+
+**The check matters more than the call, as usual.** Padding a generated file changes nothing, per
+file, **with the number of files asserted** - because a check that stopped finding the generated
+files would otherwise pass by finding none.
 
 ### S-17 - `pending.md` cannot show what waits on a person, and five things have been waiting since 2026-08-30
 
