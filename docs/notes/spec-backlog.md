@@ -8,6 +8,17 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on what a thing is
+
+*Perhaps a thing is a list of capacities for the other things it contains. I expect a thing is more
+than this, but that seems to be the most important part. The parts that make up a thing may provide
+capabilities, so a metal transport contains the movement capability, metal capacity, fuel capacity.*
+
+Elaborated in [what a thing is](what-a-thing-is.md). **Not yet a proposal** - five blanks are named
+there and the largest is whether an Ark and a Pioneer are kinds or names for arrangements of parts.
+
+*Yes we are going to make node a kind* - `P-205`, awaiting the word.
+
 ## Said 2026-09-03, on nodes
 
 *Each territory has a number of each type of node, and all nodes of the same type have the same
