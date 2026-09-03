@@ -17,18 +17,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-20** - `4b912da` Follow P-206, P-207 and P-208, and split the column S-20 named · still open in `docs/notes/proposals.md`
-- **S-17** - `b7be251` S-17: a capability waiting on a person is outstanding · still open in `docs/notes/proposals.md`
 - **S-14** - `8f69847` S-14, first half: a dump that names every table and every column · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 
-### To code (8)
+### To code (5)
 
-- **S-20** - The `node` table calls a total a density, and erases what the twelve territories exist to exercise · `docs/notes/proposals.md`
 - **S-19** - Control is stored as `founded` and the specification derives it from citizens · `docs/notes/proposals.md`
-- **S-18** - Nothing calls the padder, and `dump.rs` is about to reimplement it · `docs/notes/proposals.md`
-- **S-17** - `pending.md` cannot show what waits on a person, and five things have been waiting since 2026-08-30 · `docs/notes/proposals.md`
 - **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`

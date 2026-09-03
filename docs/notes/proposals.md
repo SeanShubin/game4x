@@ -52,7 +52,7 @@ only thing that does.
 
 ### S-20 - The `node` table calls a total a density, and erases what the twelve territories exist to exercise
 
-**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, reading `state.md`
+**to** code - **status** **acted** 2026-09-03 - **cited** `4b912da` - **raised** 2026-09-03 - **source** Sean, reading `state.md`
 
 **Three defects in one table, and the third is the one that matters.**
 
@@ -78,6 +78,12 @@ number twice can state it two ways**, which is the failure `S-19` is about, one 
 
 **The name is a separate question and is with Sean** as `P-205`: **`node` appears nowhere in
 `spec/` or `releases/`.**
+
+**Acted, and it was worse than the wrong label this item reported.** The `density` column held count times density, so `3 x 4`, `2 x 6` and `6 x 2` all read **12** - one number standing for two, named after the one it was not.
+
+The table is `territory resource` now, with **capacity, density and built**. Territory 1 reads 3, 4, 3; territory 3's food reads 6, 2, 0. **`P-206` is what made those three columns honest rather than invented**: three extractor kinds means the capacity is per kind, so all three are facts the release already states.
+
+**The name `node` is not in it**, which is right - `P-205` withdrew that word and a table built an hour earlier would have carried it.
 
 ### S-19 - Control is stored as `founded` and the specification derives it from citizens
 
@@ -133,7 +139,7 @@ be `control`, derived, because that is what the specification has and what he as
 
 ### S-18 - Nothing calls the padder, and `dump.rs` is about to reimplement it
 
-**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on table padding; `P-203`
+**to** code - **status** **acted** 2026-09-03 - **cited** `461e053` - **raised** 2026-09-03 - **source** Sean, on table padding; `P-203`
 
 **Filed while you are mid-build deliberately**, because the thing worth saying is about a file that
 is still uncommitted.
@@ -159,9 +165,15 @@ something one dependency would remove.**
 file, **with the number of files asserted** - because a check that stopped finding the generated
 files would otherwise pass by finding none.
 
+**Acted, and the first fix was refused for a good reason.** This item said whatever writes a generated file should call `tools/pad-tables`. **`crates/game-console` ships inside the WASM binary and the padder is deliberately outside the workspace**, so that dependency would put a documentation tool in the game. `P-203` states the outcome instead and leaves the mechanism open.
+
+`tools/pad-tables/tests/generated_files_are_padded.rs` requires padding to change nothing, with the file list written out and its length asserted **and** a second test showing the padder actually widening a narrow table - because padding is a no-op on a file with no tables, so three generated files containing none between them would pass while exercising nothing.
+
+**And the crate had nine unit tests that neither gate ran.** `C-12` in a different crate six weeks later. Both gates run them now.
+
 ### S-17 - `pending.md` cannot show what waits on a person, and five things have been waiting since 2026-08-30
 
-**to** code - **status** open - **raised** 2026-09-03 - **source** Sean asking what to do next
+**to** code - **status** **acted** 2026-09-03 - **cited** `b7be251` - **raised** 2026-09-03 - **source** Sean asking what to do next
 
 **`pending.md` says *What must be decided: Nothing*. Five capabilities are addressed to Sean and
 waiting for him to look at them.** `R-1` through `R-5` in `releases/first-release.md` are
@@ -189,6 +201,8 @@ while `pending.md` reported that nothing needed deciding.* It has been that way 
 
 **A count would have caught it and there is none.** The index has no assertion that the number of
 outstanding items it prints bears any relation to the number of items that exist.
+
+**Acted.** `OUTSTANDING` is `["open", "built"]` now, so a capability waiting on a person appears in the index instead of vanishing. **Tested against written-out states rather than the live outboxes**, because nothing carries `built` today and a test reading the real files would pass without exercising the case.
 
 ### S-16 - `P-199` left a stale quotation in `prototypes/kinds`, and the guard cannot see it
 
