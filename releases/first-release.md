@@ -106,7 +106,7 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 | **density**         | a territory, per resource       | a number                                           | stored                                           |
 | **total capacity**  | a territory, per kind           | a number                                           | stored                                           |
 | **control**         | a territory                     | held by a player, or unclaimed                     | derived: a citizen of that player is there       |
-| **biome**           | a territory                     | one of the six                                     | stored                                           |
+| **biome**           | a territory                     | one of the biomes                                  | stored                                           |
 | **force of nature** | a territory                     | a number                                           | stored                                           |
 | **adjacency**       | a place                         | which places it touches, and by which kind of edge | stored                                           |
 | **keeps**           | food                            | the number of turns it will last                   | stored                                           |

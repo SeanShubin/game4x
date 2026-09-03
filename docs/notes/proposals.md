@@ -45,24 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-210 - `biome` restates a count too, and will go stale the first time a biome is added
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** cleanup - **shape** text - **into**
-`releases/first-release.md` -> Traits, the `biome` row's *Values* cell
-
-**Found while showing you the before and after for `P-209`.** The row below it has the same shape and
-is **correct today** - the Biomes table has six rows and the cell says *one of the six*.
-
-> one of the biomes
-
-**Basis: it is the same defect, one row down, not yet triggered.** `kind` went stale twice because a
-count was written in two places; `biome` has a count written in two places and has simply not been
-edited yet. **Waiting for it to break first is how `kind` cost two promotions.**
-
-**Filed separately rather than folded into `P-209`**, because you said promote `P-209` and `P-209`
-named one cell. **This is the offer you did not answer**, kept in the queue rather than assumed
-either way.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -1055,6 +1037,7 @@ work the release exists to order.
 | P-207, every kind is bounded and the table says by what                                                         | `releases/first-release.md` -> What bounds a kind in a territory                                                                             | 2026-09-03 |
 | P-208, *Units and structures* lists the three extractor kinds rather than the family                            | `releases/first-release.md` -> Units and structures                                                                                          | 2026-09-03 |
 | P-209, the `kind` trait says one of the kinds rather than restating their number                                | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-03 |
+| P-210, the `biome` trait says one of the biomes rather than restating their number                              | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-03 |
 
 ## Rejected
 

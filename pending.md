@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-210** - `biome` restates a count too, and will go stale the first time a biome is added · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -49,11 +50,11 @@ it exists to ask.
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208
+- `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
-- `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197
