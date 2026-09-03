@@ -113,9 +113,25 @@ fn an_empty_table_is_named_rather_than_omitted() {
 /// states*; a dump that reached for the final state would have to be rebuilt to do it.
 #[test]
 fn the_dump_describes_the_state_it_is_handed() {
-    let fresh = dump::markdown(&Session::new().game, "before");
-    let played = dump::markdown(&played().game, "after");
-    assert_ne!(fresh, played, "two moments must not render the same");
-    assert!(fresh.contains("| design |"), "a new game is in design");
-    assert!(played.contains("| play |"), "a played game is in play");
+    let before = Session::new();
+    let after = played();
+    assert_ne!(
+        dump::markdown(&before.game, "before"),
+        dump::markdown(&after.game, "after"),
+        "two moments must not render the same"
+    );
+
+    // Asserted on the cells rather than on the rendered line. This test used to look for
+    // `| play |` and broke the moment the columns were padded to a fixed width - matching
+    // rendered bytes made it a test of the layout, which is not what it is about.
+    let phase = |session: &Session| {
+        dump::tables(&session.game)
+            .into_iter()
+            .find(|t| t.name == "game")
+            .expect("every dump has a game table")
+            .rows[0][0]
+            .clone()
+    };
+    assert_eq!(phase(&before), "design", "a new game is in design");
+    assert_eq!(phase(&after), "play", "a played game is in play");
 }

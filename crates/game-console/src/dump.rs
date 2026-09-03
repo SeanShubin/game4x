@@ -192,31 +192,85 @@ pub fn tables(game: &Game) -> Vec<Table> {
 /// Pioneer's cost and the play-through got *shorter*, and that fact existed only because
 /// somebody regenerated and noticed. HTML is rendered from these same tables for reading.
 pub fn markdown(game: &Game, title: &str) -> String {
-    let mut out = format!("# {title}\n\n");
+    let mut out = format!(
+        "# {title}
+
+"
+    );
     out.push_str(
-        "**Generated. Do not edit.** Every table and every column is named whether or not \
-         anything\nis in it, because the names are what this is for.\n\n",
+        "**Generated. Do not edit.** Every table and every column is named whether or not          anything
+is in it, because the names are what this is for.
+
+",
     );
     for table in tables(game) {
-        out.push_str(&format!("## {}\n\n", table.name));
-        out.push_str(&format!("| {} |\n", table.columns.join(" | ")));
         out.push_str(&format!(
-            "|{}\n",
-            table
-                .columns
-                .iter()
-                .map(|_| " --- |")
-                .collect::<Vec<_>>()
-                .join("")
+            "## {}
+
+",
+            table.name
         ));
+        out.push_str(&padded(&table));
         if table.rows.is_empty() {
-            out.push_str("\n*(empty) 0 rows*\n\n");
-            continue;
+            out.push_str(
+                "
+*(empty) 0 rows*
+
+",
+            );
+        } else {
+            out.push_str(&format!(
+                "
+{} row(s)
+
+",
+                table.rows.len()
+            ));
         }
-        for row in &table.rows {
-            out.push_str(&format!("| {} |\n", row.join(" | ")));
+    }
+    out
+}
+
+/// A table with its columns already at the width `tools/pad-tables` would give them.
+///
+/// **Otherwise the generator and the padder fight over the file.** The padder rewrites
+/// column widths whenever anything in a markdown file changes, and it runs in the gate - so
+/// a generated table emitted narrow comes back padded, and the next generation makes it
+/// narrow again. Every gate run would show a diff nobody wrote. `catalog.md` never hit this
+/// because it uses bullets; this is the first generated file with tables in it.
+///
+/// So the widths are computed here to the same rule: each column as wide as its widest cell,
+/// header included, and the separator filled to match.
+fn padded(table: &Table) -> String {
+    let mut width: Vec<usize> = table.columns.iter().map(|c| c.chars().count()).collect();
+    for row in &table.rows {
+        for (at, cell) in row.iter().enumerate() {
+            width[at] = width[at].max(cell.chars().count());
         }
-        out.push_str(&format!("\n{} row(s)\n\n", table.rows.len()));
+    }
+
+    let line = |cells: &[String]| {
+        let mut out = String::from("|");
+        for (at, cell) in cells.iter().enumerate() {
+            let pad = width[at] - cell.chars().count();
+            out.push_str(&format!(" {cell}{} |", " ".repeat(pad)));
+        }
+        out.push('\n');
+        out
+    };
+
+    let mut out = line(
+        &table
+            .columns
+            .iter()
+            .map(|c| c.to_string())
+            .collect::<Vec<_>>(),
+    );
+    out.push_str(&line(
+        &width.iter().map(|w| "-".repeat(*w)).collect::<Vec<_>>(),
+    ));
+    for row in &table.rows {
+        out.push_str(&line(row));
     }
     out
 }
