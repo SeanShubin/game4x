@@ -12,6 +12,11 @@ Every section shows **the whole territory, not only the rows the recipe touches.
 evidence: a recipe that does the right thing *and something else* is the failure you cannot see from
 inputs and outputs alone.
 
+**The release's table has seven columns now** - `Recipe`, `Auto`, `Role`, `Qty`, `Kind`, `Traits`
+and `Where` - and `Role` is where a row says whether a thing is required, limited, consumed or
+produced. These pages show what a recipe does to a territory, so they are unchanged by that except
+where the old shape was being explained.
+
 Quantities that are read rather than written say where they were read from, so a lookup is visible
 rather than magic. **A named ingredient is shown by its name** - `$where`, `$from`, `$to` - because
 naming the place is how a recipe says where it acts.
@@ -38,8 +43,9 @@ was a collapse rather than a cut.**
 | extractor, food        | 0      | 1     |
 | extractor, metal       | 0      | 1     |
 
-**The territory is named and echoed**, so it is used and not consumed. The garrison line is a guard -
-*at most 0* - so a second landing on the same territory cannot fire.
+**The territory is `require`d**, which is how a row says the recipe uses a thing without taking it -
+there is no second row echoing it back. The garrison line is a `limit` of 0, so a second landing on
+the same territory cannot fire.
 
 **Two citizens, because two things have to be operated at once.** One works the garrison so the
 territory's force of nature does not overrun the landing, and one works the food extractor so it does
@@ -68,8 +74,8 @@ taken.
 **The recipe is over `unit`, and the Pioneer here is one** - an Ark crossing a boundary by land is
 the same recipe with a different unit in it.
 
-**Both territories are named, echoed and unconsumed**, which is what stops a move destroying where it
-came from. **Adjacency is a condition the recipe states** - `next to $from` - read from the planet,
+**Both territories are named and `require`d rather than consumed**, which is what stops a move
+destroying where it came from. **Adjacency is a condition the recipe states** - `next to $from` - read from the planet,
 which says which of the things in it are next to which.
 
 ### found by land
@@ -103,10 +109,10 @@ that same turn.
 | extractor, metal          | 0      | 1     |
 | room for metal extractors | 3      | 3     |
 
-Three recipes differing in one cell. **The recipe acts where its ingredients are** - the labor and the
-metal are in territory 1, so the extractor appears there and no territory has to be named. What the
-specification says is narrower - *whatever pays a cost must be in the territory where the thing being
-paid for is built* - and `P-190` is where that becomes a `scope` each recipe states for itself.
+Three recipes differing in one cell. **Every row's `Where` is blank, which means the one place the
+recipe acts** - so the labor and the metal are in one territory and the extractor appears there,
+without any territory having to be named. That blank is what `P-190` added, and what `P-183` died
+asking for.
 
 ### build yard
 
@@ -199,7 +205,7 @@ written.**
 | territory (houses) | 1      | 1     |
 
 `surplus` is *left after every upkeep was paid*, so this cannot fire until `upkeep` has. **The
-territory is echoed** - growing a citizen does not consume the place they live in.
+territory is `require`d** - growing a citizen does not consume the place they live in.
 
 ### perish
 
