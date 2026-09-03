@@ -8,6 +8,25 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-02, discussing `P-196`
+
+**Two concepts, in his words.** Not yet a proposal - `P-196` is open and this is the discussion of
+what should replace it.
+
+**Adjacency.**
+
+- Territories sharing a border are adjacent
+- Orbits above territories sharing a border are adjacent
+- A territory is adjacent to its orbit
+
+**Eligibility.** *We already have something that acts as requirements for recipes.*
+
+- Pioneers are not allowed in orbit
+- Arks are allowed in orbit
+- Arks can move in orbit
+- Arks can move between land and orbit
+- **Arks cannot move between land and land**
+
 ## Said 2026-09-02, in `temporary-notes/feedback.md`
 
 **Recorded here because that directory is not tracked.** Sean's note is transient by design; this
