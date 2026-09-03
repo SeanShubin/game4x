@@ -11,20 +11,11 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-193** - The release's tables are the data, not a document the code copies · `docs/notes/proposals.md`
 - **P-194** - Approved text is byte-identical to shipped text, and today it was not, four times · `docs/notes/proposals.md`
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **S-9** - `03b8fe8` S-9's checks both exist; the first one was passing over nothing · still open in `docs/notes/proposals.md`
-
 ## What is outstanding
 
-### To code (5)
+### To code (4)
 
 - **S-10** - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked · `docs/notes/proposals.md`
-- **S-9** - Two checks `tools/outbox` could make that would have caught today's shape errors · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`

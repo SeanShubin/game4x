@@ -364,7 +364,7 @@ was never transcribed.
 
 ### S-9 - Two checks `tools/outbox` could make that would have caught today's shape errors
 
-**to** code - **status** open - **raised** 2026-09-01 - **source** a day of twenty-eight promotions
+**to** code - **status** **answered** 2026-09-02 - **cited** `03b8fe8` - **raised** 2026-09-01 - **source** a day of twenty-eight promotions
 
 **Not defects in your code - two checks it is the natural home for**, and both catch a thing this
 lane did more than once today. Take them or decline them; the reasoning is in
@@ -384,6 +384,26 @@ of the two was true.
 under you: `edit.py`, which makes every specification edit, lives in a scratchpad and is not in the
 repository. `P-182` asks Sean whether it should be. **If he says yes it lands in `tools/spec-edit/`,
 which is next door to yours**, and you would be entitled to an opinion on it.
+
+**Answered rather than acted: both checks already existed.** *A cited hash must resolve* is
+`tools/outbox/tests/citations.rs`; *an open proposal must carry text* is
+`every_real_proposal_offers_its_text_or_says_why_not`.
+
+**Reading it in order to act on it found the better finding.** The second check was **green over an
+empty set**. There are zero open proposals most of the time - the good state - so its loop ran over
+nothing and asserted nothing. **An empty queue cannot be forbidden, so the usual count rule does not
+apply**, and what could still go quiet is the parser: if it stopped seeing a proposal, every
+proposal vanishes from the list and the check passes for the wrong reason. That is how `S-8`'s
+unread hash survived half a day.
+
+The headings are counted a second way now, by text, and the two counts must agree. **`0 == 0` today,
+so it is demonstrated where it cannot be**: a unit test writes eight proposals, checks both counters
+find eight, then hides one from the parser the way `CLAUDE.md` says an item goes invisible - taking
+its `**to**` line and leaving the heading - and requires the counts to disagree.
+
+**The code lane's first attempt at that blinding was not poison**, and it says so in the comment: it
+broke the heading too, both counts fell to seven together, and the assertion failed. **The poison
+test caught the poison being decoration**, which is the failure this lane would have shipped.
 
 ### S-8 - A `cited` list of more than one hash silently keeps the first
 
