@@ -126,6 +126,17 @@ entirely**, and among the world's, `perish` and `spoil` fire only in states it d
 launch cannot be written at all until `P-196` is settled, so **full coverage is blocked on one
 proposal and everything short of it is not**.
 
+**Every command the scenario needs already exists**, so this is writing a longer file rather than
+building a feature. `spec/console.md` has `land <unit> <territory>` - *bring a unit down from
+orbit* - `launch <unit>`, `build`, `produce`, `move`, `work`, `end turn`, and `add <unit> orbit` to
+place the Ark before play begins. **`build yard`, `produce ark` and `launch` are simply not in
+`commands/play.4x`**, and `perish` and `spoil` need states it does not reach rather than commands
+it does not have.
+
+**And `P-196` asked the code for less than it looks.** `land` has always meant *bring a unit down
+from orbit*, so the model already took the Ark from orbit and the release said it was on the
+ground. **The promotion moved the document to where the code already was.**
+
 **What is already here, so this is assembly rather than construction:**
 
 - `report::entities(game)` returns the whole game as `kind`, `id`, and named components - the
