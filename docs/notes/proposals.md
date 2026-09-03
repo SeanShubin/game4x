@@ -45,127 +45,30 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-206 - An extractor is three kinds, and then capacity has no exception
+### P-208 - *Units and structures* still lists `extractor`, which is now a family
 
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** instruction -
-**into** `releases/first-release.md` -> Kinds, Families, Traits, What a territory has total capacity
-for, Recipes
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** cleanup - **shape** instruction -
+**into** `releases/first-release.md` -> Units and structures
 
-**Your counter to `P-205`, which was better than `P-205`.** *Compare this to a territory having a
-capacity for extractors of each kind.* If the extractor **is** three kinds, capacity is a plain
-number per kind and the exception disappears **without inventing anything.**
+**`P-206` made the extractor three kinds and a family**, and its `into` did not name this table, so
+the promotion left a row whose `Thing` is a family rather than a thing. **Every other row there is a
+kind.**
 
-> In *Kinds*, `extractor` becomes three: **food extractor**, **metal extractor** and **energy
-> extractor**, each *built for its resource, and worked to produce it*.
+> The `extractor` row becomes three, one per kind, each identical except its name: **food
+> extractor**, **metal extractor**, **energy extractor**, all costing 1 labor and 1 metal, binding
+> with 1, and readying.
 >
-> In *Families*, a fourth: **extractor**, whose members are those three.
->
-> In *Traits*, the **resource** trait is removed; the kind says which.
->
-> In *What a territory has total capacity for*, the `extractor` row becomes three rows, each **a
-> plain number**, from the *Territory resources* table.
->
-> In *Recipes*, `extractor, food` becomes `food extractor`, and a recipe that meant any of them
-> names the **extractor** family.
->
-> **The assertion that proves this was applied**: `Kinds` has fourteen rows including the three;
-> `Families` has five and one is `extractor`; no trait is named `resource` of an extractor; and
-> **every row of *What a territory has total capacity for* is a number.**
+> **The assertion that proves this was applied**: *Units and structures* has eight rows, three of
+> them the extractors, and no row's `Thing` is a family.
 
-**Basis: the exception exists because one kind carries a trait that behaves like a kind.** Capacity
-is *a maximum per kind* in ten rows and *per kind and per trait value* in one. **Splitting the kind
-is the whole fix.**
+**Basis: this lane's omission rather than a consequence you could have seen.** `P-206`'s `into` line
+named Kinds, Families, Traits, the capacity section and Recipes. **It should have named this one**,
+and the rule is that a promotion which leaves something stale files the cleanup immediately rather
+than letting it be found later.
 
-**Three signs it was already three.** The release has **three build recipes** - `build food
-extractor`, `build metal extractor`, `build energy extractor` - which `docs/recipes/README.md`
-describes as *three recipes differing in one cell*. Recipes write `extractor, food`, a kind plus a
-trait doing a kind's work. And the *Territory resources* table gives three separate numbers per
-territory.
-
-**Why `P-205` was worse, in one line: a territory has capacity 8 for citizens and there is no
-citizen slot.** A node is a slot invented for one kind where nine others need none - **a mechanism
-that would exist in exactly one place**, which is the definition of special language.
-
-**What it costs.** Two more kinds and one more family, against one fewer trait and one fewer
-exception. **The family keeps every general recipe general**: `ready` and `work` name `extractor`
-and go on matching all three.
-
-**One thing said plainly, because it affects when this is worth doing.** You have decided that a
-named arrangement is data the game loads. **Under that, a food extractor may end up an arrangement
-rather than a kind**, and this change would be superseded. It is small, it removes a live exception
-today, and it is `P-134`'s rewrite that would supersede it - **so the question is whether to fix the
-exception now or wait for the rewrite that makes the question different.**
-
-### P-207 - Every kind is bounded, and the table should say by what
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** instruction -
-**into** `releases/first-release.md` -> What a territory has total capacity for
-
-**Your tension, and the dump settles half of it.** *I don't want to specify how many citizens a
-territory can hold when the food production does that for me, but I also think capacity is a
-valuable concept in general and don't want to make exceptions lightly.*
-
-**`state.md` shows territory 1 with twelve citizens. The release says capacity 8.** The model has no
-citizen limit - `population_after(citizens, food)` is the only bound there is. **The number is
-already saying nothing**, and has been since it was written.
-
-> The section is renamed **What bounds a kind in a territory**, and each row names the mechanism
-> rather than always a number.
->
-> | Kind                | Bounded by                                              |
-> | ------------------- | ------------------------------------------------------- |
-> | **citizen**         | the food produced here, through upkeep                  |
-> | **garrison**        | a capacity of 1                                         |
-> | **extractor**       | a capacity, per resource, from *Territory resources*    |
-> | **yard**            | a capacity of 1                                         |
-> | **ark**             | a capacity of 2                                         |
-> | **pioneer**         | a capacity of 2, and the food produced here             |
-> | **labor**           | the citizens that make it, one each per turn            |
-> | **food**            | a capacity of 20, and it keeps for one turn             |
-> | **metal**           | a capacity of 20                                        |
-> | **energy**          | a capacity of 20                                        |
->
-> **Every kind a territory holds has a row, and every row names what stops the number growing.**
->
-> **The assertion that proves this was applied**: the section is *What bounds a kind in a territory*;
-> it has a row for every kind a territory can hold; no row is empty; and no row bounds a citizen by
-> a number.
-
-**Basis: two mechanisms are being called one thing, and they answer different questions.**
-
-- **A capacity prevents.** You cannot build a second yard. The thing never comes into being.
-- **Upkeep removes.** You can have thirteen citizens for a turn, and then one starves.
-
-**Food is not a capacity.** It does not stop a citizen existing; it kills one afterwards. Writing it
-as a capacity would be wrong, and writing a capacity beside it is what you object to - **so the fix
-is a column that can say either.**
-
-**This is not an exception, which is the point.** *Every kind has a capacity* has to make an
-exception for citizens. **Every kind is bounded, and the table says how** has none - and it is
-checkable in a way the first is not: **a kind with no bound named is a kind that can grow forever**,
-which is a defect a test can find.
-
-**It exposes something rather than hiding it.** A Pioneer is bounded twice - a capacity of 2 **and**
-its upkeep. That is legitimate and it is now visible, where before it looked like every other row.
-**A number that can never bind before another mechanism does is the thing worth finding**, and only
-a table that names both can show you one.
-
-**Sean, asked: *I never intended for a territory to have a capacity for citizens.*** So the model
-was right and the release was never right - not stale, but wrong on the day it landed. The reading
-above is confirmed and this proposal is the whole fix.
-
-**How it got in is worth one sentence, because it is not carelessness and it will happen again.**
-`P-156` filed *what a territory has room for* as **ten numbers in one table**, and it was promoted
-as a table. **A number nobody decided reads exactly like nine numbers somebody did**, and nothing
-between then and now would have surfaced it: every document agreed, the model quietly ignored it,
-and the tests compared the documents to each other.
-
-**`state.md` is what surfaced it, on its first day of existing** - twelve citizens beside a stated
-capacity of eight. That is the third rule earning its place: *have a place you can look to tell what
-the AI did.*
-
-**One cascade to land with it.** `docs/recipes/README.md` opens each section with *Room: citizens 8,
-garrison 1, yard 1...* and that line goes when the number does.
+**Three identical rows is the honest cost of the split**, and it is the cost you accepted when you
+chose three kinds over a node. If it reads badly, the alternative is a `Thing` column that may name
+a family - **which is the exception coming back in a different column.**
 
 ## Addressed to other perspectives
 
@@ -1155,6 +1058,8 @@ work the release exists to order.
 | P-202, a control among alternatives shows which is chosen, and the drawing's binding is written down            | `spec/interface.md` -> What an action shows, `releases/first-release.md` -> Controls                                                         | 2026-09-03 |
 | P-203, a generated file is written in the form the padder would leave it                                        | `CLAUDE.md` -> Perspectives                                                                                                                  | 2026-09-03 |
 | P-204, three rules for using AI assistants, the third being a place to look                                     | `docs/process.md`, a new section                                                                                                             | 2026-09-03 |
+| P-206, an extractor is three kinds and a family, and the capacity exception goes                                | `releases/first-release.md` -> Kinds, Families, Traits, Recipes                                                                              | 2026-09-03 |
+| P-207, every kind is bounded and the table says by what                                                         | `releases/first-release.md` -> What bounds a kind in a territory                                                                             | 2026-09-03 |
 
 ## Rejected
 
