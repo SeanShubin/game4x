@@ -991,7 +991,7 @@ pub fn families_table() -> Vec<Vec<String>> {
 }
 
 pub fn capacities_table() -> Vec<Vec<String>> {
-    let mut rows = vec![header(&["Capacity", "Holds", "Up to"])];
+    let mut rows = vec![header(&["Container", "Holds", "Up to"])];
     for capacity in CAPACITIES {
         rows.push(vec![
             capacity.what.to_string(),
@@ -1034,7 +1034,6 @@ pub fn units_table() -> Vec<Vec<String>> {
         "A move",
         "Upkeep",
         "Costs to produce",
-        "Metal in it",
         "Binding",
         "Crosses",
         "Requires",
@@ -1051,10 +1050,6 @@ pub fn units_table() -> Vec<Vec<String>> {
                 .unwrap_or_default(),
             thing.upkeep_written(),
             thing.cost_written(),
-            thing
-                .metal_in_it()
-                .map(|n| n.to_string())
-                .unwrap_or_default(),
             thing.binding.map(|n| n.to_string()).unwrap_or_default(),
             thing.crosses.unwrap_or_default().to_string(),
             thing.requires.unwrap_or_default().to_string(),
@@ -1066,7 +1061,7 @@ pub fn units_table() -> Vec<Vec<String>> {
 
 pub fn recipes_table() -> Vec<Vec<String>> {
     let mut rows = vec![header(&[
-        "Recipe", "Auto", "Role", "Qty", "Kind", "Traits", "Where",
+        "Recipe", "Owner", "Role", "Qty", "Kind", "Traits", "Where",
     ])];
     for recipe in RECIPES {
         for (at, line) in recipe.lines.iter().enumerate() {
