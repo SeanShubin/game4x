@@ -33,17 +33,19 @@ to turn the world, wheel to zoom, `P` to fold it back into a globe, `Esc` to qui
 
 ## Start here
 
-| Document                                | What it covers                                                                           |
-| --------------------------------------- | ---------------------------------------------------------------------------------------- |
-| [Specification](spec/README.md)         | What the game **is**, stated normatively. If it is not there, it is not decided          |
-| [Vision](docs/vision.md)                | What the game is, the design constraints, and the non-negotiables                        |
-| [Architecture](docs/architecture.md)    | Module boundaries, the composition root, dependency rules                                |
-| [Layers](docs/layers.md)                | `(old world, events) -> new world`: what must be reproducible, and how it stays parallel |
-| [Prototypes](docs/prototypes/README.md) | Standalone programs demonstrating one aspect of the game each                            |
-| [Theory](docs/theory/README.md)         | Background research the design leans on                                                  |
-| [Documentation map](docs/README.md)     | Every document in the repo, and the rules for adding one                                 |
-| [Scripts](scripts/README.md)            | How to run each prototype                                                                |
-| [Notes](docs/notes/README.md)           | Derived records of analysis. Not binding                                                 |
+| Document                                | What it covers                                                                                           |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [Specification](spec/README.md)         | What the game **is**, stated normatively. If it is not there, it is not decided                          |
+| [Vision](docs/vision.md)                | What the game is, the design constraints, and the non-negotiables                                        |
+| [Architecture](docs/architecture.md)    | Module boundaries, the composition root, dependency rules                                                |
+| [Layers](docs/layers.md)                | `(old world, events) -> new world`: what must be reproducible, and how it stays parallel                 |
+| [Prototypes](docs/prototypes/README.md) | Standalone programs demonstrating one aspect of the game each                                            |
+| [Theory](docs/theory/README.md)         | Background research the design leans on                                                                  |
+| [Documentation map](docs/README.md)     | Every document in the repo, and the rules for adding one                                                 |
+| [Scripts](scripts/README.md)            | How to run each prototype                                                                                |
+| [Notes](docs/notes/README.md)           | Derived records of analysis. Not binding                                                                 |
+| [Catalog](catalog.md)                   | Every kind, with the families holding it, its traits, its cost and every recipe naming it. **Generated** |
+| [Pending](pending.md)                   | What every outbox has open and who it waits on. **Generated**                                            |
 
 ## The short version
 
