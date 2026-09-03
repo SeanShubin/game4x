@@ -85,12 +85,28 @@ fn is_a_commit(root: &Path, hash: &str) -> bool {
         .unwrap_or(false)
 }
 
+/// Whether this clone has the files without the history.
+///
+/// **`HEAD` resolving does not answer this**, which is what the guard below used to ask.
+/// A shallow clone has exactly one commit and `git cat-file -e HEAD` succeeds in it, so the
+/// guard passed and then every historical citation was reported missing. `actions/checkout`
+/// is shallow by default, so that is every CI run: this failed the gate on 2026-09-02 with
+/// forty-odd citations listed as though the outboxes were wrong.
+fn is_shallow(root: &Path) -> bool {
+    Command::new("git")
+        .current_dir(root)
+        .args(["rev-parse", "--is-shallow-repository"])
+        .output()
+        .map(|out| String::from_utf8_lossy(&out.stdout).trim() == "true")
+        .unwrap_or(false)
+}
+
 #[test]
 fn every_hash_an_outbox_cites_is_a_commit() {
     let root = root();
     // A shallow clone has the files and not the history, and reporting every citation as
     // missing there would be noise rather than a finding.
-    if !is_a_commit(&root, "HEAD") {
+    if !is_a_commit(&root, "HEAD") || is_shallow(&root) {
         return;
     }
 
