@@ -41,7 +41,7 @@ what holds a territory; a territory has at most one.
 
 **Capacity** Total capacity: 1
 
-**As a thing** Force: 1 · Costs to produce: 1 labor, 1 metal · Metal in it: 1 · Binding: 1
+**As a thing** Force: 1 · Costs to produce: 1 labor, 1 metal · Binding: 1
 
 **In recipes**
 
@@ -60,7 +60,7 @@ built for one resource, and worked to produce it.
 
 **Capacity** Total capacity: what the *Territory resources* table gives, per resource
 
-**As a thing** Costs to produce: 1 labor, 1 metal · Metal in it: 1 · Binding: 1 · Readies: yes
+**As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes
 
 **In recipes**
 
@@ -84,7 +84,7 @@ where an Ark is produced.
 
 **Capacity** Total capacity: 1
 
-**As a thing** Costs to produce: 1 labor, 15 metal · Metal in it: 15 · Binding: 15
+**As a thing** Costs to produce: 1 labor, 15 metal · Binding: 15
 
 **In recipes**
 
@@ -101,7 +101,7 @@ carries a landing, and can invade from orbit.
 
 **Capacity** Total capacity: 2
 
-**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Metal in it: 3 · Binding: 3 · Crosses: orbit border, ascent · Requires: a Yard · Readies: yes
+**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border, ascent · Requires: a Yard · Readies: yes
 
 **In recipes**
 
@@ -120,7 +120,7 @@ founds a territory.
 
 **Capacity** Total capacity: 2
 
-**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Metal in it: 3 · Binding: 3 · Crosses: border · Readies: yes
+**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes
 
 **In recipes**
 
