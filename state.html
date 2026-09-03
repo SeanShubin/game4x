@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>State after `commands/play.4x`</title>
+<style>
+:root { color-scheme: light dark }
+body { font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem auto; max-width: 70rem; padding: 0 1rem }
+h2 { margin: 2rem 0 .25rem; font-size: 1.1rem }
+table { border-collapse: collapse; margin: .5rem 0 }
+th, td { border: 1px solid currentColor; padding: .15rem .5rem; text-align: left }
+th { font-weight: 600 }
+.empty { opacity: .7; font-style: italic }
+.count { opacity: .7; font-size: .85rem }
+</style>
+</head>
+<body>
+<h1>State after `commands/play.4x`</h1>
+<p class="count">Generated. Every table and every column is named whether or not anything is in it.</p>
+<h2>game</h2>
+<table>
+<thead>
+<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+</thead>
+<tbody>
+<tr><td>play</td><td>8</td><td>12</td><td>0</td></tr>
+</tbody>
+</table>
+<p class="count">1 row(s)</p>
+<h2>territory</h2>
+<table>
+<thead>
+<tr><th>territory</th><th>biome</th><th>force of nature</th><th>founded</th><th>citizens</th><th>labor spent</th><th>yards</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>grassland</td><td>1</td><td>yes</td><td>12</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>grassland</td><td>1</td><td>yes</td><td>4</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>jungle</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>jungle</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>9</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>10</td><td>desert</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>11</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12</td><td>ice</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+</tbody>
+</table>
+<p class="count">12 row(s)</p>
+<h2>territory resource</h2>
+<table>
+<thead>
+<tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>food</td><td>3</td><td>4</td><td>3</td></tr>
+<tr><td>1</td><td>metal</td><td>3</td><td>4</td><td>3</td></tr>
+<tr><td>1</td><td>energy</td><td>3</td><td>4</td><td>3</td></tr>
+<tr><td>2</td><td>food</td><td>2</td><td>6</td><td>1</td></tr>
+<tr><td>2</td><td>metal</td><td>2</td><td>4</td><td>1</td></tr>
+<tr><td>2</td><td>energy</td><td>2</td><td>4</td><td>0</td></tr>
+<tr><td>3</td><td>food</td><td>6</td><td>2</td><td>0</td></tr>
+<tr><td>3</td><td>metal</td><td>2</td><td>4</td><td>0</td></tr>
+<tr><td>3</td><td>energy</td><td>2</td><td>4</td><td>0</td></tr>
+<tr><td>4</td><td>food</td><td>1</td><td>2</td><td>0</td></tr>
+<tr><td>4</td><td>metal</td><td>4</td><td>5</td><td>0</td></tr>
+<tr><td>4</td><td>energy</td><td>4</td><td>5</td><td>0</td></tr>
+<tr><td>5</td><td>food</td><td>3</td><td>1</td><td>0</td></tr>
+<tr><td>5</td><td>metal</td><td>8</td><td>8</td><td>0</td></tr>
+<tr><td>5</td><td>energy</td><td>8</td><td>8</td><td>0</td></tr>
+<tr><td>6</td><td>food</td><td>4</td><td>4</td><td>0</td></tr>
+<tr><td>6</td><td>metal</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>energy</td><td>4</td><td>5</td><td>0</td></tr>
+<tr><td>7</td><td>food</td><td>4</td><td>4</td><td>0</td></tr>
+<tr><td>7</td><td>metal</td><td>4</td><td>5</td><td>0</td></tr>
+<tr><td>7</td><td>energy</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>food</td><td>6</td><td>6</td><td>0</td></tr>
+<tr><td>8</td><td>metal</td><td>1</td><td>2</td><td>0</td></tr>
+<tr><td>8</td><td>energy</td><td>1</td><td>2</td><td>0</td></tr>
+<tr><td>9</td><td>food</td><td>2</td><td>3</td><td>0</td></tr>
+<tr><td>9</td><td>metal</td><td>6</td><td>8</td><td>0</td></tr>
+<tr><td>9</td><td>energy</td><td>1</td><td>2</td><td>0</td></tr>
+<tr><td>10</td><td>food</td><td>3</td><td>3</td><td>0</td></tr>
+<tr><td>10</td><td>metal</td><td>1</td><td>3</td><td>0</td></tr>
+<tr><td>10</td><td>energy</td><td>6</td><td>8</td><td>0</td></tr>
+<tr><td>11</td><td>food</td><td>5</td><td>6</td><td>0</td></tr>
+<tr><td>11</td><td>metal</td><td>5</td><td>6</td><td>0</td></tr>
+<tr><td>11</td><td>energy</td><td>5</td><td>6</td><td>0</td></tr>
+<tr><td>12</td><td>food</td><td>2</td><td>2</td><td>0</td></tr>
+<tr><td>12</td><td>metal</td><td>8</td><td>8</td><td>0</td></tr>
+<tr><td>12</td><td>energy</td><td>8</td><td>8</td><td>0</td></tr>
+</tbody>
+</table>
+<p class="count">36 row(s)</p>
+<h2>store</h2>
+<table>
+<thead>
+<tr><th>territory</th><th>resource</th><th>amount</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>food</td><td>0</td></tr>
+<tr><td>1</td><td>metal</td><td>0</td></tr>
+<tr><td>1</td><td>energy</td><td>0</td></tr>
+<tr><td>2</td><td>food</td><td>0</td></tr>
+<tr><td>2</td><td>metal</td><td>0</td></tr>
+<tr><td>2</td><td>energy</td><td>0</td></tr>
+<tr><td>3</td><td>food</td><td>0</td></tr>
+<tr><td>3</td><td>metal</td><td>0</td></tr>
+<tr><td>3</td><td>energy</td><td>0</td></tr>
+<tr><td>4</td><td>food</td><td>0</td></tr>
+<tr><td>4</td><td>metal</td><td>0</td></tr>
+<tr><td>4</td><td>energy</td><td>0</td></tr>
+<tr><td>5</td><td>food</td><td>0</td></tr>
+<tr><td>5</td><td>metal</td><td>0</td></tr>
+<tr><td>5</td><td>energy</td><td>0</td></tr>
+<tr><td>6</td><td>food</td><td>0</td></tr>
+<tr><td>6</td><td>metal</td><td>0</td></tr>
+<tr><td>6</td><td>energy</td><td>0</td></tr>
+<tr><td>7</td><td>food</td><td>0</td></tr>
+<tr><td>7</td><td>metal</td><td>0</td></tr>
+<tr><td>7</td><td>energy</td><td>0</td></tr>
+<tr><td>8</td><td>food</td><td>0</td></tr>
+<tr><td>8</td><td>metal</td><td>0</td></tr>
+<tr><td>8</td><td>energy</td><td>0</td></tr>
+<tr><td>9</td><td>food</td><td>0</td></tr>
+<tr><td>9</td><td>metal</td><td>0</td></tr>
+<tr><td>9</td><td>energy</td><td>0</td></tr>
+<tr><td>10</td><td>food</td><td>0</td></tr>
+<tr><td>10</td><td>metal</td><td>0</td></tr>
+<tr><td>10</td><td>energy</td><td>0</td></tr>
+<tr><td>11</td><td>food</td><td>0</td></tr>
+<tr><td>11</td><td>metal</td><td>0</td></tr>
+<tr><td>11</td><td>energy</td><td>0</td></tr>
+<tr><td>12</td><td>food</td><td>0</td></tr>
+<tr><td>12</td><td>metal</td><td>0</td></tr>
+<tr><td>12</td><td>energy</td><td>0</td></tr>
+</tbody>
+</table>
+<p class="count">36 row(s)</p>
+<h2>garrison</h2>
+<table>
+<thead>
+<tr><th>territory</th><th>force</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>1</td></tr>
+<tr><td>2</td><td>1</td></tr>
+</tbody>
+</table>
+<p class="count">2 row(s)</p>
+<h2>extractor</h2>
+<table>
+<thead>
+<tr><th>territory</th><th>node</th><th>resource</th><th>readiness</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>0</td><td>food</td><td>ready</td></tr>
+<tr><td>1</td><td>3</td><td>metal</td><td>ready</td></tr>
+<tr><td>1</td><td>1</td><td>food</td><td>ready</td></tr>
+<tr><td>1</td><td>2</td><td>food</td><td>ready</td></tr>
+<tr><td>1</td><td>4</td><td>metal</td><td>ready</td></tr>
+<tr><td>1</td><td>5</td><td>metal</td><td>ready</td></tr>
+<tr><td>1</td><td>6</td><td>energy</td><td>ready</td></tr>
+<tr><td>1</td><td>7</td><td>energy</td><td>ready</td></tr>
+<tr><td>1</td><td>8</td><td>energy</td><td>ready</td></tr>
+<tr><td>2</td><td>0</td><td>food</td><td>ready</td></tr>
+<tr><td>2</td><td>2</td><td>metal</td><td>ready</td></tr>
+</tbody>
+</table>
+<p class="count">11 row(s)</p>
+<h2>structure</h2>
+<table>
+<thead>
+<tr><th>territory</th><th>structure</th><th>count</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>extractor</td><td>9</td></tr>
+<tr><td>1</td><td>garrison</td><td>1</td></tr>
+<tr><td>1</td><td>yard</td><td>0</td></tr>
+<tr><td>2</td><td>extractor</td><td>2</td></tr>
+<tr><td>2</td><td>garrison</td><td>1</td></tr>
+<tr><td>2</td><td>yard</td><td>0</td></tr>
+<tr><td>3</td><td>extractor</td><td>0</td></tr>
+<tr><td>3</td><td>garrison</td><td>0</td></tr>
+<tr><td>3</td><td>yard</td><td>0</td></tr>
+<tr><td>4</td><td>extractor</td><td>0</td></tr>
+<tr><td>4</td><td>garrison</td><td>0</td></tr>
+<tr><td>4</td><td>yard</td><td>0</td></tr>
+<tr><td>5</td><td>extractor</td><td>0</td></tr>
+<tr><td>5</td><td>garrison</td><td>0</td></tr>
+<tr><td>5</td><td>yard</td><td>0</td></tr>
+<tr><td>6</td><td>extractor</td><td>0</td></tr>
+<tr><td>6</td><td>garrison</td><td>0</td></tr>
+<tr><td>6</td><td>yard</td><td>0</td></tr>
+<tr><td>7</td><td>extractor</td><td>0</td></tr>
+<tr><td>7</td><td>garrison</td><td>0</td></tr>
+<tr><td>7</td><td>yard</td><td>0</td></tr>
+<tr><td>8</td><td>extractor</td><td>0</td></tr>
+<tr><td>8</td><td>garrison</td><td>0</td></tr>
+<tr><td>8</td><td>yard</td><td>0</td></tr>
+<tr><td>9</td><td>extractor</td><td>0</td></tr>
+<tr><td>9</td><td>garrison</td><td>0</td></tr>
+<tr><td>9</td><td>yard</td><td>0</td></tr>
+<tr><td>10</td><td>extractor</td><td>0</td></tr>
+<tr><td>10</td><td>garrison</td><td>0</td></tr>
+<tr><td>10</td><td>yard</td><td>0</td></tr>
+<tr><td>11</td><td>extractor</td><td>0</td></tr>
+<tr><td>11</td><td>garrison</td><td>0</td></tr>
+<tr><td>11</td><td>yard</td><td>0</td></tr>
+<tr><td>12</td><td>extractor</td><td>0</td></tr>
+<tr><td>12</td><td>garrison</td><td>0</td></tr>
+<tr><td>12</td><td>yard</td><td>0</td></tr>
+</tbody>
+</table>
+<p class="count">36 row(s)</p>
+<h2>unit</h2>
+<table>
+<thead>
+<tr><th>unit</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
+</thead>
+<tbody>
+<tr><td class="empty" colspan="5">(empty) 0 rows</td></tr>
+</tbody>
+</table>
+<p class="count">0 row(s)</p>
+<h2>unit kind</h2>
+<table>
+<thead>
+<tr><th>kind</th><th>in play</th></tr>
+</thead>
+<tbody>
+<tr><td>ark</td><td>0</td></tr>
+<tr><td>pioneer</td><td>0</td></tr>
+</tbody>
+</table>
+<p class="count">2 row(s)</p>
+</body>
+</html>

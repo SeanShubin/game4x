@@ -31,7 +31,7 @@ fn root() -> PathBuf {
 /// find them by a marker, and a file that lost its marker would leave the list silently -
 /// which is the failure this repository keeps producing. A name added here is a decision;
 /// a name missing from here fails the count below.
-const GENERATED: [&str; 3] = ["catalog.md", "pending.md", "state.md"];
+const GENERATED: [&str; 4] = ["catalog.md", "pending.md", "state.md", "entities.md"];
 
 #[test]
 fn every_generated_file_is_already_padded() {

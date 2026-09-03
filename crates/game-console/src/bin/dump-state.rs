@@ -35,8 +35,30 @@ fn main() {
             .unwrap_or_else(|why| panic!("`{command}` failed: {why}"));
     }
 
-    let at = root.join("state.md");
-    let text = dump::markdown(&session.game, "State after `commands/play.4x`");
-    std::fs::write(&at, text).unwrap_or_else(|why| panic!("cannot write {}: {why}", at.display()));
-    println!("wrote {}", at.display());
+    // Four files, two views. The markdown is the record because it diffs; the HTML is the
+    // same rows in the form that is comfortable to read. One producer feeds both.
+    let state = "State after `commands/play.4x`";
+    let things = "Entities after `commands/play.4x`";
+    let written: [(&str, String); 4] = [
+        ("state.md", dump::markdown(&session.game, state)),
+        (
+            "state.html",
+            dump::html(&dump::normalized_sections(&session.game), state),
+        ),
+        (
+            "entities.md",
+            dump::entities_markdown(&session.game, things),
+        ),
+        (
+            "entities.html",
+            dump::html(&dump::entity_sections(&session.game), things),
+        ),
+    ];
+
+    for (name, text) in written {
+        let at = root.join(name);
+        std::fs::write(&at, text)
+            .unwrap_or_else(|why| panic!("cannot write {}: {why}", at.display()));
+        println!("wrote {name}");
+    }
 }

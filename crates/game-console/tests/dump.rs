@@ -135,3 +135,87 @@ fn the_dump_describes_the_state_it_is_handed() {
     assert_eq!(phase(&before), "design", "a new game is in design");
     assert_eq!(phase(&after), "play", "a played game is in play");
 }
+
+/// The entity view names every kind, and says plainly when it can name no columns.
+///
+/// **The empty case is different here and the difference is worth stating.** In the
+/// normalized view the columns are written down in code, so an empty table still names them.
+/// In this view a column name *is* a component name and components live on entities - so a
+/// kind with no instances has no columns to show. It says that, rather than printing an
+/// empty header row and implying it knew what would have been there.
+#[test]
+fn the_entity_view_names_every_kind_and_admits_what_it_cannot_name() {
+    let session = played();
+    let tables = dump::entity_tables(&session.game);
+    let kinds: Vec<&str> = tables.iter().map(|t| t.kind.as_str()).collect();
+    assert_eq!(kinds, ["game", "territory", "unit"]);
+
+    let unit = tables.iter().find(|t| t.kind == "unit").expect("listed");
+    assert!(unit.rows.is_empty(), "play.4x leaves no unit alive");
+    let text = dump::entities_markdown(&session.game, "after");
+    assert!(text.contains("## unit"), "an empty kind still gets a table");
+    assert!(
+        text.contains("no columns either"),
+        "and says why it names none"
+    );
+
+    // Every row is as wide as the columns, including entities that carry only some of them.
+    for table in &tables {
+        for row in &table.rows {
+            assert_eq!(row.len(), table.columns.len(), "{}", table.kind);
+        }
+    }
+}
+
+/// The HTML is the same rows as the markdown, and carries no game data of its own.
+///
+/// `spec/invariants.md`: *what the game is made of lives in a data file, not in code and not
+/// in markup.* So the assertion is not that the markup looks right - it is that every name
+/// in it came from the state, and that the two renderings do not disagree.
+#[test]
+fn the_html_carries_the_same_rows_and_names_nothing_itself() {
+    let session = played();
+    let sections = dump::normalized_sections(&session.game);
+    let page = dump::html(&sections, "after");
+
+    for section in &sections {
+        let (name, columns, rows) = (&section.name, &section.columns, &section.rows);
+        assert!(page.contains(name), "the page is missing the {name} table");
+        for column in columns {
+            assert!(page.contains(column), "{name} is missing column {column:?}");
+        }
+        assert!(
+            page.contains(&format!("{} row(s)", rows.len())),
+            "{name} does not say how many rows it has"
+        );
+    }
+
+    // **The content follows the state, which is the claim worth testing.** A page whose
+    // vocabulary came from the markup would be the same page for any game. A fresh game has
+    // no territories, so nothing can have told it about grassland.
+    //
+    // The first version of this asserted that `ark` was absent, and `ark` is legitimately
+    // there - the `unit kind` table names every kind from the model's enumeration whether
+    // any exist or not, which is the whole point of that table. Asserting a name is absent
+    // tests the scenario; asserting the page changes with the state tests the renderer.
+    let empty = dump::html(&dump::normalized_sections(&Session::new().game), "before");
+    assert_ne!(empty, page, "two states must not render the same page");
+    assert!(
+        page.contains("grassland"),
+        "the played game has grassland territories"
+    );
+    assert!(
+        !empty.contains("grassland"),
+        "and a game with no territories cannot have learned that word from the markup"
+    );
+    assert!(page.contains("<!doctype html>"), "and it is a page");
+
+    // Nothing in the frame around the tables names anything in the game.
+    let head = page.split("<body>").next().expect("a page has a head");
+    for word in ["grassland", "citizen", "extractor", "pioneer", "territory"] {
+        assert!(
+            !head.contains(word),
+            "the head names {word:?}, so the markup carries game data"
+        );
+    }
+}
