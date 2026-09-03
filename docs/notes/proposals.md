@@ -122,6 +122,35 @@ wrong.** `P-183` is withdrawn into this one.
 
 **This re-renders `docs/recipes/README.md`**, so it is the one to decide last.
 
+### P-191 - `room` is now a second name for total capacity
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** cleanup - **into** `spec/planet.md`,
+`spec/economy.md`, `spec/orbit.md`, `spec/console.md`, `spec/control.md`, `spec/logistics.md`,
+`releases/first-release.md`
+
+**`P-188` named the thing and six places still use the old word.** They are not wrong, they are a
+synonym - which is worse than wrong in a specification, because a reader cannot tell whether two
+words mean two things.
+
+> Where these documents say a territory or an orbit has **room** for some number of a kind, they say
+> its **total capacity** for that kind. `spec/logistics.md`'s *a thing that contains things takes up
+> room in whatever contains it, so room is not conserved* becomes *takes up capacity in whatever
+> contains it, so capacity is not conserved*. The release's *What a territory has room for* section
+> and its `room` trait become *total capacity*.
+>
+> `spec/invariants.md`'s *nothing a player builds ever has to be removed to make room for something
+> else* keeps the word. That is the ordinary English idiom and not the trait, and swapping it would
+> read as though a rule were being restated.
+
+**Basis: the sites are `spec/planet.md` line 37, `spec/economy.md` 16, `spec/orbit.md` 11,
+`spec/console.md` 65, `spec/control.md` 49 and `spec/logistics.md` 19**, plus five lines of the
+release. Every one of them means the stored maximum, which is exactly what `P-188` named.
+
+**The last paragraph is the one worth reading twice.** `spec/invariants.md` says *nothing a player
+builds ever has to be removed to make room for something else* - your invariant, in the idiom. It is
+the one place the word is not the trait, and a sweep that did not stop there would have quietly
+rewritten a rule while claiming to rename a term.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the

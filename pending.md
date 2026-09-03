@@ -11,6 +11,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-184** - The release lists the world's recipes in an order `spec/turn.md` contradicts · `docs/notes/proposals.md`
 - **P-185** - `spec/turn.md` names a recipe that `P-176` merged away · `docs/notes/proposals.md`
 - **P-190** - The recipe table says `in` and `out` where you want six columns · `docs/notes/proposals.md`
+- **P-191** - `room` is now a second name for total capacity · `docs/notes/proposals.md`
 
 ## What is outstanding
 
