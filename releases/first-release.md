@@ -81,7 +81,7 @@ Every territory has total capacity for at least one food extractor.
 
 Every thing is in another thing, and this release has three sorts of capacity.
 
-| Capacity                                | Holds                         | Up to                            |
+| Container                               | Holds                         | Up to                            |
 | --------------------------------------- | ----------------------------- | -------------------------------- |
 | a territory's total capacity for a kind | that kind                     | its total capacity for that kind |
 | an extractor's catch                    | the resource it was built for | the territory's density for it   |
@@ -134,14 +134,14 @@ cycle of what it makes.
 
 ## Units and structures
 
-| Thing         | Force | Fuel | A move | Upkeep          | Costs to produce               | Metal in it | Binding | Crosses              | Requires | Readies |
-| ------------- | ----- | ---- | ------ | --------------- | ------------------------------ | ----------- | ------- | -------------------- | -------- | ------- |
-| **citizen**   | 1     |      |        | 1 food per turn |                                |             |         |                      |          | yes     |
-| **garrison**  | 1     |      |        |                 | 1 labor, 1 metal               | 1           | 1       |                      |          |         |
-| **extractor** |       |      |        |                 | 1 labor, 1 metal               | 1           | 1       |                      |          | yes     |
-| **yard**      |       |      |        |                 | 1 labor, 15 metal              | 15          | 15      |                      |          |         |
-| **ark**       | 2     | 2    | 1 fuel |                 | 3 metal, 12 energy, 2 citizens | 3           | 3       | orbit border, ascent | a Yard   | yes     |
-| **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 3 metal, 6 energy, 2 citizens  | 3           | 3       | border               |          | yes     |
+| Thing         | Force | Fuel | A move | Upkeep          | Costs to produce               | Binding | Crosses              | Requires | Readies |
+| ------------- | ----- | ---- | ------ | --------------- | ------------------------------ | ------- | -------------------- | -------- | ------- |
+| **citizen**   | 1     |      |        | 1 food per turn |                                |         |                      |          | yes     |
+| **garrison**  | 1     |      |        |                 | 1 labor, 1 metal               | 1       |                      |          |         |
+| **extractor** |       |      |        |                 | 1 labor, 1 metal               | 1       |                      |          | yes     |
+| **yard**      |       |      |        |                 | 1 labor, 15 metal              | 15      |                      |          |         |
+| **ark**       | 2     | 2    | 1 fuel |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border, ascent | a Yard   | yes     |
+| **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 3 metal, 6 energy, 2 citizens  | 3       | border               |          | yes     |
 
 A garrison's multiplier is 1. An Ark can invade land from orbit. Nothing outside this table
 readies.
@@ -177,7 +177,7 @@ The player's recipes fire when the player chooses them. The world's fire when th
 that order: `upkeep`, then `grow` and `perish`, then `spoil`, then `age`, then `ready`. The rows
 below are in that order.
 
-| Recipe                     | Auto   | Role    | Qty                                  | Kind      | Traits                                        | Where                    |
+| Recipe                     | Owner  | Role    | Qty                                  | Kind      | Traits                                        | Where                    |
 | -------------------------- | ------ | ------- | ------------------------------------ | --------- | --------------------------------------------- | ------------------------ |
 | **deploy ark**             | player | require | 1                                    | territory |                                               | `$where`                 |
 |                            |        | consume | 1                                    | ark       |                                               | the orbit above `$where` |
@@ -260,6 +260,7 @@ total capacity for at least one food extractor at density two or more.
 - Rotation is bound to the arrow keys, and to dragging
 - Zoom is bound to the wheel, and to pinching
 - Reset is bound to `R`, and to a control
+- The drawing is bound to `T`, and to a control for each drawing.
 - The three surfaces in this release are reached by `F1`, `F2` and `F3`, by buttons on the page,
   and by `/game`, `/console` and `/browser` typed at the console
 - Choosing a planet size abandons the current game and starts one on a planet of that size. It

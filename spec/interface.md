@@ -38,5 +38,6 @@ choosing a planet size - never require a gesture or a key the platform may lack.
 ## What an action shows
 
 - An action that would waste part of what it costs says so before it is taken, and says how much
+- A control that chooses among alternatives shows which one is chosen, and names the others.
 
 ## Open questions

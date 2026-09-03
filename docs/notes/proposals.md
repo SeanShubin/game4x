@@ -45,77 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-201 - Three column names that do not carry their meaning
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** cleanup - **shape** instruction -
-**into** `releases/first-release.md` -> Recipes, Units and structures, Where things are
-
-**All three arrived in the last three days, in proposals this lane wrote.** They are the ones
-already known to be wrong; the reports exist to find the ones that are not.
-
-> In *Recipes*, the column **Auto** is named **Owner** again.
->
-> In *Units and structures*, the column **Metal in it** is removed. **Binding** stays.
->
-> In *Where things are*, the column **Capacity** is named **Container**.
->
-> **The assertion that proves this was applied**: the recipes table's second column reads `Owner`;
-> *Units and structures* has no `Metal in it` column and still has `Binding`; and *Where things
-> are* opens with `Container`.
-
-**`Auto` was `Owner` until `P-190`.** Its values are `player` and `world`, which are not *auto* and
-*not auto* - they say who fires the recipe. The rename was argued on `Auto` answering *who decides*
-while a `Lifecycle` column answered *when*; **`Lifecycle` was never added**, so `Auto` has no partner
-and no reason.
-
-**`Metal in it` and `Binding` hold the same number in all six rows.** *Binding* is what holds a thing
-together and *metal in it* is that plus the metal in its parts - and nothing in this release has
-parts. **A reader cannot learn the difference from the data**, and one of the two is computed. The
-trait `metal in it` stays in *Traits*, where it is defined as derived; the table loses the column
-that repeats a stored number. **`Binding` is your word from `P-170` and is not touched.**
-
-**`Capacity` names the wrong thing.** Its rows are *a territory's total capacity for a kind*, *an
-extractor's catch*, *a unit's tank* - **containers**. The table then reads *a unit's tank holds
-energy up to the unit's fuel*, which is right, under a heading that says the tank is a capacity.
-**This lane renamed it from `Room` in `P-191` and over-applied the rename**: the trait became *total
-capacity* correctly, and this column was never the trait.
-
-### P-202 - A control that chooses between two things does not say which one is chosen
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** instruction -
-**into** `spec/interface.md` -> What an action shows, and `releases/first-release.md` -> Controls
-
-**Your observation on `R-1`**: the drawing button works, and *the only indicator I have is the planet
-itself*. You asked whether it should be two buttons, a slider, or something else.
-
-> In `spec/interface.md`, under *What an action shows*, a second bullet: **A control that chooses
-> among alternatives shows which one is chosen, and names the others.**
->
-> In `releases/first-release.md`, under *Controls*, a bullet after the reset one: **The drawing is
-> bound to `T`, and to a control for each drawing.**
->
-> **The assertion that proves this was applied**: `spec/interface.md` contains *shows which one is
-> chosen*, and *Controls* names `T`.
-
-**Two buttons, and here is why rather than a slider.** The two drawings are **peers** - practical and
-realistic - not a thing and its absence. **A slider means on and off**, and would name one drawing
-while leaving the other unnamed and unnameable. Two buttons name both, so you can see what you would
-be switching to without pressing anything.
-
-**And the page already does exactly this.** The three surface buttons mark the current one with
-`aria-current` and an accent border. **The drawing is the only control on the page that changes
-something and shows nothing**, so this is one control catching up with its neighbours rather than a
-new idea.
-
-**It also survives a third drawing.** Two buttons become three; a slider cannot.
-
-**On seeing the buttons in both builds - `T` already exists and the release never said so.** The
-*Controls* section binds rotation, zoom, reset, the surfaces and the planet sizes, and **says nothing
-about the drawing at all**, while `planet-bevy` binds `KeyCode::KeyT`. So the capability is in every
-build, as `spec/interface.md` requires, and **the release forgot to write down how it is reached**.
-Whether the desktop build should also carry visible buttons is a further question and is not this
-proposal.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -991,6 +920,8 @@ work the release exists to order.
 | P-198, specification and presentation do not share a format; a rendering is never canonical                     | `CLAUDE.md` -> Perspectives                                                                                                                  | 2026-09-03 |
 | P-199, what the game is made of lives in a data file, not in code and not in markup                             | `spec/invariants.md` -> The game is data                                                                                                     | 2026-09-03 |
 | P-200, the data browser has two views, and both name every column                                               | `spec/interface.md` -> Surfaces                                                                                                              | 2026-09-03 |
+| P-201, Auto is Owner again, the duplicate metal column goes, and Capacity is Container                          | `releases/first-release.md` -> Recipes, Units and structures, Where things are                                                               | 2026-09-03 |
+| P-202, a control among alternatives shows which is chosen, and the drawing's binding is written down            | `spec/interface.md` -> What an action shows, `releases/first-release.md` -> Controls                                                         | 2026-09-03 |
 
 ## Rejected
 
