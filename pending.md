@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-196** - Nothing can reach an orbit, so the loop's first and last steps have no recipe · `docs/notes/proposals.md`
-- **P-197** - What decides a block's shape is what the destination will contain · `docs/notes/proposals.md`
+- **P-197** - The rule about text, rows and instructions never says what a block is · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

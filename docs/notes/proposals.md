@@ -91,26 +91,60 @@ so the edge is travelled both ways.
 **Either way step 8 is `move` across `ascent`**, which is the launch `spec/control.md` makes the
 win.
 
-### P-197 - What decides a block's shape is what the destination will contain
+### P-197 - The rule about text, rows and instructions never says what a block is
 
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** cleanup - **shape** text - **into**
-`CLAUDE.md` -> Promotion
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** cleanup - **shape** instruction -
+**into** `CLAUDE.md` -> Promotion
 
-**`P-194` defines the three shapes and does not say how to tell them apart.** The first proposal to
-carry the field got it wrong, and it was this lane, in the proposal that fixed the section stating
-the rule.
+**`P-194` landed yesterday and reads *A proposal's block is text, rows or an instruction*. Nothing
+in the file says what a block is.** It means the words a proposal offers for you to approve - the
+indented part - and a reader meeting the sentence has no way to know that.
 
-> **What decides the shape is what the destination will contain, not what the block looks like.** If
-> the block's words appear there it is text; if its rows appear cell for cell it is rows; if neither,
-> it is an instruction.
+**This replaces those two paragraphs with the same rule in words that define themselves**, and folds
+in the test for telling the three apart, which `P-194` left out and which this lane then got wrong on
+the first proposal to use it.
 
-**Basis: `P-195` failed that test in all four of its parts and was still filed as text.** Its block
-read *the closing X becomes Y* and *the template gains a field* - it described edits rather than
-being them, and the destination received the quoted inner text, never the block. **A block that
-quotes its destination looks like text and is not**, which is the whole confusion in one sentence.
+> **A proposal offers words for you to approve, and a promotion does one of three things with them.**
+> The proposal says which, so that a check can tell whether it was done.
+>
+> - **text** - the words go into the file as written, apart from where the lines break
+> - **rows** - the words are rows of a table and go in cell by cell, because the padder rewrites the
+>   column widths and the bytes will not match
+> - **an instruction** - the words describe a change rather than being it, as in *this sentence
+>   becomes that one*, so none of them appears in the file. An instruction says how to tell it was
+>   carried out, and the promoting commit runs that check
+>
+> **To tell which, ask what the file will say afterwards.** If it will say these words, that is
+> text. If it will say them as cells in a table, that is rows. If it will say something these words
+> only described, that is an instruction.
+>
+> **The assertion that proves this was applied**: `CLAUDE.md` contains *A proposal offers words for
+> you to approve* and no longer contains *A proposal's block is*.
 
-**One line, because the rule already exists.** `P-194` says *nothing lands verbatim* for an
-instruction; this states the same thing as a question a writer can answer before choosing.
+**Basis: two words were introduced and neither was explained, and one of them already meant
+something else here.** Counted in `CLAUDE.md`:
+
+- **block** appears three times - twice as this jargon, once as an ordinary verb, *the questions
+  that block it*
+- **shape** appears five times - twice on the template line as the field name, and **three times as
+  ordinary English**: *the one shape Sean reads*, *`Q-8` is the shape*, *a shape the code could not
+  have predicted*
+
+**So the file uses *shape* to mean "sort of thing" in three places and then borrows it for a
+technical meaning without saying so**, and introduces *block* for something it never names. The rule
+they carry is a good one and it is unreadable to anyone who was not in the conversation that produced
+it.
+
+**And the missing test cost something immediately.** `P-195` described edits - *the closing sentence
+becomes this one*, *the template gains a field* - and was filed as `text`. Nothing in it went into
+the file as written. It was an instruction, and this lane labelled it wrong **while describing it
+correctly in the same message**, which is what a rule with no test looks like from the inside.
+
+**The field keeps the name `shape` unless you want it changed.** A field name is a label rather
+than prose, and `tools/outbox` and the promotion check both read it, so renaming it costs work in
+another lane. **But it does collide with three ordinary uses of the word in the same file**, and
+`kind` - the obvious alternative - is already a field. Say if that trade is wrong and this lane will
+propose a name.
 
 ## Addressed to other perspectives
 
