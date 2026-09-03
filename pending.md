@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-199** - What the game is made of lives in a data file, not in code and not in markup · `docs/notes/proposals.md`
+- **P-200** - The data browser is specified as one view and you want two · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

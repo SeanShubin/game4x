@@ -85,6 +85,31 @@ live in the shapes that proposal rewrites, and `C-16` already parks the same que
 `prototypes/kinds`. **The markup is the part that is neither blocked nor large** - the page can ask
 what the sizes and surfaces are instead of naming them.
 
+### P-200 - The data browser is specified as one view and you want two
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `spec/interface.md` -> Surfaces, replacing the data browser bullet
+
+**Your answer was that this was already the intent of F3, and the specification does not say it
+yet.** `spec/interface.md` reads *the data browser - every entity in the game and its components,
+read directly*, which is the physical view alone. **The normalized view is a different rendering of
+the same facts**, and nothing in the specification asks for it.
+
+> - **The data browser** - the game's own data, read directly, in two views: every entity with its
+>   components, and the same facts normalized into a table for each relation. **Both name every
+>   table and every column, whether or not anything is in it.**
+
+**Basis: the last sentence is the one that earns its place.** A kind can be exercised thoroughly and
+be gone by the end - a pioneer is produced, moves, founds, and is consumed - so a view that lists
+only what is present hides the names of everything that has already done its job. **Naming the
+columns of an empty table is what makes the browser usable for the thing you want it for**, which is
+finding the names that are wrong.
+
+**Nothing else here needs a rule.** *Nothing is available in one build and not another* already
+settles the desktop question, and *how a thing is presented, and how the user acts on it, may follow
+the platform it runs on* already permits tables on the page and something else in a terminal. **You
+answered that question with a rule you had already written.**
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
