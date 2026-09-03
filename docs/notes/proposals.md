@@ -109,6 +109,37 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
+### S-23 - The recipes have a view and this lane writes it by hand, which `P-199` forbids
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, asking where the recipes are
+
+**`catalog.md` is kind-centred**: a section per kind, with *In recipes* listing the ones that name
+it. **`state.md` and `entities.md` are state.** Nothing is recipe-centred - except
+`docs/recipes/README.md`, **which this lane writes by hand.**
+
+**`P-199`, promoted this afternoon:** *nothing restates what a data file says; every other form of it
+is derived, and **a derived form is generated rather than written**.* That file is a derived form of
+the recipes table and it is written. **It has been re-rendered by hand four times today** - after
+`P-186`, after `P-190`, after `P-196`, and after `P-206`.
+
+**The interesting half is what it contains, because a table dump would be worse.** Each section shows
+a state the recipe can fire in and the state after it fires, over **the whole territory rather than
+the rows the recipe touches** - *an unchanged line is evidence: a recipe that does the right thing
+and something else is the failure you cannot see from inputs and outputs alone.*
+
+**Written by hand, every one of those after-states is a claim.** Generated, each is the model
+actually applying the recipe - **evidence rather than assertion**, and the first thing in the
+repository that would catch a recipe doing something its rows do not say.
+
+**Two things it needs that the other views did not.** A **before-state per recipe**, since a recipe
+that cannot fire has nothing to show - the current file uses territory 1 throughout and says so. And
+**every recipe must appear**, asserted by count, since a generator that quietly skipped the ones it
+could not fire would produce a file that looks complete.
+
+**`docs/recipes/README.md` is retired when this lands**, and its prose is the specification of what
+to generate rather than something to preserve - the tables are the deliverable, the commentary is
+this lane's and can go.
+
 ### S-21 - `P-134` has been a rule since 2026-08-31 and nothing has been filed asking for it
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** Sean, asking what `P-134` is
