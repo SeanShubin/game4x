@@ -291,7 +291,7 @@ only one who can move them.
 
 ### R-2 - Terrain that crosses boundaries
 
-**to** sean · **status** **built** 2026-08-30 · **evidence** one continuous field sampled per point; coastlines cross territory boundaries in the photograph
+**to** sean · **status** **vetted** 2026-09-03 · **evidence** one continuous field sampled per point; coastlines cross territory boundaries in the photograph
 
 - **In** - `spec/planet.md`, *the terrain of the realistic drawing is continuous*
 - **Vetted when** - no line visible in the realistic drawing coincides with a territory boundary,
@@ -299,7 +299,7 @@ only one who can move them.
 
 ### R-3 - A division that cannot be seen
 
-**to** sean · **status** **built** 2026-08-30 · **evidence** no seam and no boundary in the realistic drawing; `Drawn.labels` is zero there
+**to** sean · **status** **vetted** 2026-09-03 · **evidence** no seam and no boundary in the realistic drawing; `Drawn.labels` is zero there
 
 - **In** - `spec/planet.md`, *nothing in the terrain reveals how the sphere was divided*
 - **Vetted when** - a person who has not seen the tessellation is shown the realistic drawing and
@@ -307,7 +307,7 @@ only one who can move them.
 
 ### R-4 - A biome per territory
 
-**to** sean · **status** **built** 2026-08-30 · **evidence** `biomes_of` gives every territory one, and `join_the_land` keeps land connected
+**to** sean · **status** **vetted** 2026-09-03 · **evidence** `biomes_of` gives every territory one, and `join_the_land` keeps land connected
 
 - **In** - `spec/planet.md`, *each territory has a biome*, and *a territory's biome is what the
   terrain gives it*
@@ -316,7 +316,7 @@ only one who can move them.
 
 ### R-5 - Terrain resolved as finely as it is shown
 
-**to** sean · **status** **built** 2026-08-30 · **evidence** 400,000 sub-triangles, blended in parameter space
+**to** sean · **status** **vetted** 2026-09-03 · **evidence** 400,000 sub-triangles, blended in parameter space
 
 - **In** - `spec/planet.md`, *nothing of how a drawing is made is visible in it*
 - **Vetted when** - at the default camera, no facet, band or flat wash betrays how the surface was
