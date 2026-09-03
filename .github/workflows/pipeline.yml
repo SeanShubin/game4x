@@ -50,7 +50,7 @@ jobs:
       #
       # 4.2 MiB across 444 commits, against a Rust toolchain, Trunk and a wasm release
       # build in the same job. The cost is not the reason to skip a check.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -156,7 +156,7 @@ jobs:
           echo "Wrote provenance for ${SHORT} @ ${NOW}"
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: crates/game4x/dist
 
@@ -177,7 +177,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   # -- Verify (notify-only) ---------------------------------------------------
   # The remaining work, run AFTER deploy so the page ships as fast as the gate allows.
@@ -189,7 +189,7 @@ jobs:
     if: always() && needs.gate.result == 'success'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install Bevy Linux dependencies
         run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
@@ -215,7 +215,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install Bevy Linux dependencies
         if: runner.os == 'Linux'
