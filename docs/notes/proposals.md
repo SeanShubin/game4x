@@ -45,6 +45,41 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-201 - Three column names that do not carry their meaning
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** cleanup - **shape** instruction -
+**into** `releases/first-release.md` -> Recipes, Units and structures, Where things are
+
+**All three arrived in the last three days, in proposals this lane wrote.** They are the ones
+already known to be wrong; the reports exist to find the ones that are not.
+
+> In *Recipes*, the column **Auto** is named **Owner** again.
+>
+> In *Units and structures*, the column **Metal in it** is removed. **Binding** stays.
+>
+> In *Where things are*, the column **Capacity** is named **Container**.
+>
+> **The assertion that proves this was applied**: the recipes table's second column reads `Owner`;
+> *Units and structures* has no `Metal in it` column and still has `Binding`; and *Where things
+> are* opens with `Container`.
+
+**`Auto` was `Owner` until `P-190`.** Its values are `player` and `world`, which are not *auto* and
+*not auto* - they say who fires the recipe. The rename was argued on `Auto` answering *who decides*
+while a `Lifecycle` column answered *when*; **`Lifecycle` was never added**, so `Auto` has no partner
+and no reason.
+
+**`Metal in it` and `Binding` hold the same number in all six rows.** *Binding* is what holds a thing
+together and *metal in it* is that plus the metal in its parts - and nothing in this release has
+parts. **A reader cannot learn the difference from the data**, and one of the two is computed. The
+trait `metal in it` stays in *Traits*, where it is defined as derived; the table loses the column
+that repeats a stored number. **`Binding` is your word from `P-170` and is not touched.**
+
+**`Capacity` names the wrong thing.** Its rows are *a territory's total capacity for a kind*, *an
+extractor's catch*, *a unit's tank* - **containers**. The table then reads *a unit's tank holds
+energy up to the unit's fuel*, which is right, under a heading that says the tank is a capacity.
+**This lane renamed it from `Room` in `P-191` and over-applied the rename**: the trait became *total
+capacity* correctly, and this column was never the trait.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
