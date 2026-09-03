@@ -138,14 +138,16 @@ cycle of what it makes.
 
 ## Units and structures
 
-| Thing         | Force | Fuel | A move | Upkeep          | Costs to produce               | Binding | Crosses              | Requires | Readies |
-| ------------- | ----- | ---- | ------ | --------------- | ------------------------------ | ------- | -------------------- | -------- | ------- |
-| **citizen**   | 1     |      |        | 1 food per turn |                                |         |                      |          | yes     |
-| **garrison**  | 1     |      |        |                 | 1 labor, 1 metal               | 1       |                      |          |         |
-| **extractor** |       |      |        |                 | 1 labor, 1 metal               | 1       |                      |          | yes     |
-| **yard**      |       |      |        |                 | 1 labor, 15 metal              | 15      |                      |          |         |
-| **ark**       | 2     | 2    | 1 fuel |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border, ascent | a Yard   | yes     |
-| **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 3 metal, 6 energy, 2 citizens  | 3       | border               |          | yes     |
+| Thing                | Force | Fuel | A move | Upkeep          | Costs to produce               | Binding | Crosses              | Requires | Readies |
+| -------------------- | ----- | ---- | ------ | --------------- | ------------------------------ | ------- | -------------------- | -------- | ------- |
+| **citizen**          | 1     |      |        | 1 food per turn |                                |         |                      |          | yes     |
+| **garrison**         | 1     |      |        |                 | 1 labor, 1 metal               | 1       |                      |          |         |
+| **food extractor**   |       |      |        |                 | 1 labor, 1 metal               | 1       |                      |          | yes     |
+| **metal extractor**  |       |      |        |                 | 1 labor, 1 metal               | 1       |                      |          | yes     |
+| **energy extractor** |       |      |        |                 | 1 labor, 1 metal               | 1       |                      |          | yes     |
+| **yard**             |       |      |        |                 | 1 labor, 15 metal              | 15      |                      |          |         |
+| **ark**              | 2     | 2    | 1 fuel |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border, ascent | a Yard   | yes     |
+| **pioneer**          | 2     | 2    | 1 fuel | 1 food per turn | 3 metal, 6 energy, 2 citizens  | 3       | border               |          | yes     |
 
 A garrison's multiplier is 1. An Ark can invade land from orbit. Nothing outside this table
 readies.

@@ -45,31 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-208 - *Units and structures* still lists `extractor`, which is now a family
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** cleanup - **shape** instruction -
-**into** `releases/first-release.md` -> Units and structures
-
-**`P-206` made the extractor three kinds and a family**, and its `into` did not name this table, so
-the promotion left a row whose `Thing` is a family rather than a thing. **Every other row there is a
-kind.**
-
-> The `extractor` row becomes three, one per kind, each identical except its name: **food
-> extractor**, **metal extractor**, **energy extractor**, all costing 1 labor and 1 metal, binding
-> with 1, and readying.
->
-> **The assertion that proves this was applied**: *Units and structures* has eight rows, three of
-> them the extractors, and no row's `Thing` is a family.
-
-**Basis: this lane's omission rather than a consequence you could have seen.** `P-206`'s `into` line
-named Kinds, Families, Traits, the capacity section and Recipes. **It should have named this one**,
-and the rule is that a promotion which leaves something stale files the cleanup immediately rather
-than letting it be found later.
-
-**Three identical rows is the honest cost of the split**, and it is the cost you accepted when you
-chose three kinds over a node. If it reads badly, the alternative is a `Thing` column that may name
-a family - **which is the exception coming back in a different column.**
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -1060,6 +1035,7 @@ work the release exists to order.
 | P-204, three rules for using AI assistants, the third being a place to look                                     | `docs/process.md`, a new section                                                                                                             | 2026-09-03 |
 | P-206, an extractor is three kinds and a family, and the capacity exception goes                                | `releases/first-release.md` -> Kinds, Families, Traits, Recipes                                                                              | 2026-09-03 |
 | P-207, every kind is bounded and the table says by what                                                         | `releases/first-release.md` -> What bounds a kind in a territory                                                                             | 2026-09-03 |
+| P-208, *Units and structures* lists the three extractor kinds rather than the family                            | `releases/first-release.md` -> Units and structures                                                                                          | 2026-09-03 |
 
 ## Rejected
 
