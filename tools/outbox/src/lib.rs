@@ -1167,7 +1167,33 @@ Only prose.
         let Ok(queue) = std::fs::read_to_string(root.join("docs/notes/proposals.md")) else {
             return;
         };
-        let proposals: Vec<Item> = parse(&queue, "docs/notes/proposals.md")
+        let parsed = parse(&queue, "docs/notes/proposals.md");
+
+        // **What this test does when the queue is empty, which is most of the time.** An
+        // empty queue is the good state, so `open` proposals cannot be required to exist -
+        // and the loop below then runs over nothing and passes having asserted nothing.
+        // The rule itself is held by the unit tests above, over text written to be wrong;
+        // this is the spot-check against the live file.
+        //
+        // What can still go quiet is the parser. If it stopped recognising a proposal
+        // heading, every proposal would vanish from this list and the loop would pass for
+        // the wrong reason - which is exactly how `S-8`'s hash went unread for half a day.
+        // So the headings are counted a second way, by looking for the text, and the two
+        // counts have to agree.
+        let by_heading = queue
+            .lines()
+            .filter(|line| line.trim_start().starts_with("### P-"))
+            .count();
+        let by_parser = parsed
+            .iter()
+            .filter(|item| item.id.starts_with("P-"))
+            .count();
+        assert_eq!(
+            by_parser, by_heading,
+            "the file has {by_heading} proposal headings and the parser found {by_parser};              a proposal it cannot see is one this test cannot check"
+        );
+
+        let proposals: Vec<Item> = parsed
             .into_iter()
             .filter(|item| item.id.starts_with("P-") && item.is_open())
             .collect();
@@ -1205,6 +1231,60 @@ Only prose.
                 several.id
             );
         }
+    }
+
+    /// The heading count and the parser agree over a queue that is not empty.
+    ///
+    /// **The live check above compares 0 with 0 whenever the queue is empty, which is the
+    /// good state and most of the time.** That is the failure this repository keeps
+    /// producing, so the agreement it relies on is demonstrated here instead, over eight
+    /// proposals written out rather than read from a file that empties.
+    ///
+    /// The second half is the part with teeth: one heading is made unreadable, and the two
+    /// counts have to stop agreeing. A comparison that cannot disagree is not a comparison.
+    #[test]
+    fn a_proposal_the_parser_cannot_see_makes_the_two_counts_differ() {
+        let mut queue = String::from("# Proposals\n\n");
+        for n in 1..=8 {
+            queue.push_str(&format!(
+                "### P-{n} - a proposal\n\n**to** sean · **status** open · **kind** shape\n\n> Text {n}.\n\n"
+            ));
+        }
+
+        let headings = |text: &str| {
+            text.lines()
+                .filter(|line| line.trim_start().starts_with("### P-"))
+                .count()
+        };
+        let parsed = |text: &str| {
+            parse(text, "docs/notes/proposals.md")
+                .into_iter()
+                .filter(|item| item.id.starts_with("P-"))
+                .count()
+        };
+
+        assert_eq!(headings(&queue), 8, "eight written");
+        assert_eq!(parsed(&queue), 8, "and eight read");
+
+        // Now hide one from the parser, in the way `CLAUDE.md` says an item goes invisible:
+        // *without the `**to**` line the item is invisible to the index*. The heading is
+        // untouched, so a reader still sees a proposal and the parser does not - which is
+        // the whole reason the two counts are taken separately.
+        //
+        // Blinding both counters instead would prove nothing: the first attempt at this
+        // broke the heading as well, both counts fell to seven together, and the assertion
+        // below failed for the right reason.
+        let blinded = queue.replace(
+            "### P-4 - a proposal\n\n**to** sean · **status** open · **kind** shape",
+            "### P-4 - a proposal\n\nto sean, status open, kind shape",
+        );
+        assert_eq!(headings(&blinded), 8, "a reader still sees eight");
+        assert_ne!(
+            headings(&blinded),
+            parsed(&blinded),
+            "a proposal the parser cannot see has to make the counts differ, or the \
+             comparison in the live check is decoration"
+        );
     }
 
     /// Two blockquotes are reported rather than picked between.
