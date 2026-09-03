@@ -85,6 +85,61 @@ The table is `territory resource` now, with **capacity, density and built**. Ter
 
 **The name `node` is not in it**, which is right - `P-205` withdrew that word and a table built an hour earlier would have carried it.
 
+### S-21 - `P-134` has been a rule since 2026-08-31 and nothing has been filed asking for it
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, asking what `P-134` is
+
+**Four items name `P-134` as the reason to wait and none of them asks for it.** `C-9`, `C-11`,
+`C-16` and `S-19` are all parked behind a rewrite that is in nobody's list, so the largest piece of
+work outstanding has been invisible to every index. **This item is the ask.**
+
+**The rule, promoted 2026-08-31, in `spec/invariants.md`:**
+
+> A game's state is things, in places, and how many of each. A thing is a set of traits, and one of
+> them names its kind.
+>
+> Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
+> reads the state reads it the same way whatever kind it holds.
+
+**Five shapes in `crates/game-model` say otherwise**, and every parked item lives in one of them:
+
+| Shape                                        | Where                   | What it makes impossible                         |
+| -------------------------------------------- | ----------------------- | ------------------------------------------------ |
+| `stores: [u32; 3]`                           | `territory.rs:74`       | carrying a fourth resource; `C-11`'s discard     |
+| `citizens: u32`, `yards: u32`, `labor_spent` | `territory.rs:68,71,77` | a citizen being a thing in a place               |
+| `garrison: Option<Garrison>`                 | `territory.rs:75`       | a garrison being counted like anything else      |
+| `extractors: Vec<Extractor>`                 | `territory.rs:76`       | the three extractor kinds `P-206` just made      |
+| `founded: bool`                              | `territory.rs:67`       | control being derived rather than stored, `S-19` |
+
+**Adding a kind currently adds a field**, which is exactly what the rule forbids: `P-192` added
+`territory` and `orbit`, `P-206` added three extractors, and the model gained nothing for any of
+them.
+
+**The design is already settled and written down.** [What a thing is](what-a-thing-is.md) carries
+Sean's model and his answers to all five of its blanks:
+
+- **A node carries a value and a leaf is a node with no children** - not two types, because *whatever
+  reads the state reads it the same way* forbids the case
+- **Parts and contents are the same list at different depths** - a tank is a part of a pioneer and
+  the energy is in the tank
+- **A part is what makes a recipe apply**, which is where `Crosses`, `Force` and upkeep go
+- **`metal in it` is a fold**: a node's own metal plus its subtree's
+- **A Pioneer is a name for an arrangement of parts, and *the arrangement is data the game loads*** -
+  Sean, 2026-09-03
+
+**What it unblocks, in the order the unblocking happens:**
+
+1. **`S-19`** - control becomes derived and `founded` stops existing
+2. **`C-9`** - `is_fully_exploited` can ask the question `spec/control.md` actually poses
+3. **`C-11`** - what a turn keeps stops being three discarded numbers
+4. **`R-6`** - the loop can be played through, and it is **the last capability of the first release**
+
+**One thing this lane will not decide and you should not have to guess.** How far to go in one step.
+`P-199` says what the game is made of lives in a data file, so the end state has arrangements loaded
+rather than compiled - **but a rewrite that gets to *things in places* without also moving the
+kinds into data would already unblock all four items above.** If you want that split as two items,
+say so and this lane will file the second.
+
 ### S-19 - Control is stored as `founded` and the specification derives it from citizens
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** Sean, reading `state.md`

@@ -21,8 +21,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (5)
+### To code (6)
 
+- **S-21** - `P-134` has been a rule since 2026-08-31 and nothing has been filed asking for it · `docs/notes/proposals.md`
 - **S-19** - Control is stored as `founded` and the specification derives it from citizens · `docs/notes/proposals.md`
 - **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
