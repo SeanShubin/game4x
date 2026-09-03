@@ -45,38 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-192 - A territory is not one of the ten kinds, and four recipes name it as one
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** gap - **into**
-`releases/first-release.md` -> Kinds
-
-**Found by counting.** The `Kind` column of the recipes holds fourteen distinct values: ten kinds,
-three families, and `territory`, which is neither. The `kind` trait says its values are *one of the
-ten*.
-
-> Two more kinds, **territory** - a place things are in, which has a biome, a force of nature, and
-> a density and a total capacity per resource - and **orbit** - a place above one territory, which
-> holds units and nothing else. Twelve kinds.
-
-**Basis: the release already treats both as things everywhere except in the table that lists
-things.** Six traits are *of a territory*. *Where things are* gives a territory's total capacity
-for a kind as one of the three sorts of capacity. `deploy ark`, `move` and `work` name a territory
-as an ingredient and `move` reads its adjacency. An orbit *holds units and nothing else*, and
-`spec/logistics.md` says only a thing may contain things.
-
-**So the ten are the things that move and the two are the places they move between**, and nothing
-in the release says places are a different sort of entity - `P-157` says a thing contains things,
-which is exactly what these two do.
-
-**`planet` is deliberately not proposed.** It contains territories and would be a thirteenth by the
-same argument, but nothing in this release names one in a recipe or gives it a trait, and a kind
-that no rule mentions is a kind this release cannot exercise.
-
-**Nothing checks this today, in either lane.** `prototypes/kinds` compares the tables cell by cell
-and checks that a family names real kinds, and no test asks whether a recipe's `Kind` is a declared
-kind or family. **That check is worth more than this fix**, because it is what would have caught
-`territory` on the day it was written rather than on the day somebody counted.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -678,6 +646,7 @@ work the release exists to order.
 | P-191, `room` is renamed total capacity everywhere it means the stored maximum                                  | `spec/planet.md`, `spec/economy.md`, `spec/orbit.md`, `spec/console.md`, `spec/control.md`, `spec/logistics.md`, `releases/first-release.md` | 2026-09-02 |
 | P-184, the world's recipes fire at the end of a turn, in the order `spec/turn.md` gives                         | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-02 |
 | P-190, the recipe table takes seven columns, and role carries require, limit, consume and produce               | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-02 |
+| P-192, a territory and an orbit are kinds; there are twelve                                                     | `releases/first-release.md` -> Kinds, Traits                                                                                                 | 2026-09-02 |
 
 ## Rejected
 

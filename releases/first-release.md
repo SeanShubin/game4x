@@ -53,18 +53,20 @@ Every territory has total capacity for at least one food extractor.
 
 ## Kinds
 
-| Kind          | What it is                                                    |
-| ------------- | ------------------------------------------------------------- |
-| **citizen**   | a person: provides labor, eats, and grows on surplus          |
-| **garrison**  | what holds a territory; a territory has at most one           |
-| **extractor** | built for one resource, and worked to produce it              |
-| **yard**      | where an Ark is produced                                      |
-| **ark**       | carries a landing, and can invade from orbit                  |
-| **pioneer**   | founds a territory                                            |
-| **food**      | eaten by citizens; expires                                    |
-| **metal**     | what things are built from; conserved                         |
-| **energy**    | what moves things; neither conserved nor expiring             |
-| **labor**     | what working a machine takes; a citizen provides it each turn |
+| Kind          | What it is                                                                                                   |
+| ------------- | ------------------------------------------------------------------------------------------------------------ |
+| **citizen**   | a person: provides labor, eats, and grows on surplus                                                         |
+| **garrison**  | what holds a territory; a territory has at most one                                                          |
+| **extractor** | built for one resource, and worked to produce it                                                             |
+| **yard**      | where an Ark is produced                                                                                     |
+| **ark**       | carries a landing, and can invade from orbit                                                                 |
+| **pioneer**   | founds a territory                                                                                           |
+| **food**      | eaten by citizens; expires                                                                                   |
+| **metal**     | what things are built from; conserved                                                                        |
+| **energy**    | what moves things; neither conserved nor expiring                                                            |
+| **labor**     | what working a machine takes; a citizen provides it each turn                                                |
+| **territory** | a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource |
+| **orbit**     | a place above one territory, which holds units and nothing else                                              |
 
 ## Families
 
@@ -90,7 +92,7 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 
 | Trait               | Of                              | Values                           | Stored or derived                                |
 | ------------------- | ------------------------------- | -------------------------------- | ------------------------------------------------ |
-| **kind**            | every thing                     | one of the ten                   | stored                                           |
+| **kind**            | every thing                     | one of the twelve                | stored                                           |
 | **place**           | every thing                     | the thing it is in               | stored                                           |
 | **readiness**       | whatever readies                | ready, exhausted                 | stored                                           |
 | **force**           | citizen, garrison, ark, pioneer | a number                         | stored                                           |
