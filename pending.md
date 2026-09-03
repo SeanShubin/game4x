@@ -22,8 +22,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (6)
+### To code (7)
 
+- **S-19** - Control is stored as `founded` and the specification derives it from citizens · `docs/notes/proposals.md`
 - **S-18** - Nothing calls the padder, and `dump.rs` is about to reimplement it · `docs/notes/proposals.md`
 - **S-17** - `pending.md` cannot show what waits on a person, and five things have been waiting since 2026-08-30 · `docs/notes/proposals.md`
 - **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`

@@ -50,6 +50,44 @@ decision that has not been made yet. Two at the end are waiting on something and
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-19 - Control is stored as `founded` and the specification derives it from citizens
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, reading `state.md`
+
+**He questioned the column name and the name was the small half.** *`founded` implies a historical
+fact about how the territory came to be, but what really matters to me is whether or not I have
+established control there... should my citizens abandon the area, they are ceding control.*
+
+**That rule is already promoted.** `releases/first-release.md` -> Traits: **control**, of a
+territory, *held by a player, or unclaimed*, **derived: a citizen of that player is there** -
+`P-154`. He restated his own rule without knowing it was there, which is the strongest evidence it
+is the right one.
+
+**`crates/game-model/src/game.rs:261` does something else:**
+
+```rust
+pub fn controlled(&self) -> Vec<TerritoryId> {
+    self.territories.iter().filter(|territory| territory.founded)
+```
+
+**`founded` is stored, and written in four places** - `game.rs:475`, `805`, `861`, `896` - and set
+to `false` by hand in a test at `907`. **A derived trait has no such line.** `spec/invariants.md`:
+*a trait may be derived rather than stored, computed from what is there. **Nothing can leave a
+derived trait wrong, because nothing writes one.***
+
+**So the two disagree the moment a founded territory loses its last citizen**: the model still calls
+it controlled and the specification calls it unclaimed. **`is_fully_exploited` reads `founded` too**,
+at `game.rs:367`, so the win condition rests on it.
+
+**This is a fourth divergence and `C-11` lists three.** Stores discarded, nothing bounded, and
+`is_fully_exploited` asking for a Yard everywhere - **control is not among them**, and `C-11` is the
+item a reader goes to for *where the model and the specification have parted*.
+
+**Whether to fix it now is yours**, and `C-11`'s reasoning probably applies: `P-134` rewrites the
+shapes this lives in, and `founded` is one of the bare fields it removes. **What should not wait is
+`state.md`**, which is a document Sean reads to find exactly this kind of thing: **the column should
+be `control`, derived, because that is what the specification has and what he asked for.**
+
 ### S-18 - Nothing calls the padder, and `dump.rs` is about to reimplement it
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on table padding; `P-203`
