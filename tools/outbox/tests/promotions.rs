@@ -165,6 +165,7 @@ fn a_promotion_lands_what_was_approved() {
     let mut checked = 0usize;
     let mut older = 0usize;
     let mut excepted = 0usize;
+    let mut left_without_landing = 0usize;
     let mut wrong = Vec::new();
 
     for commit in log.lines() {
@@ -176,10 +177,39 @@ fn a_promotion_lands_what_was_approved() {
         else {
             continue;
         };
+        // **A promotion is located by the proposal disappearing, never by the ledger row
+        // appearing.** `git log -S` on a row finds the commit where the padder last widened
+        // that table, not the commit that added it: on `P-1`'s row, landed 2026-08-25, it
+        // answers a commit from 2026-08-28 about naming surfaces. Every row looks added
+        // whenever a column moves.
+        //
+        // **But a disappearance is not a promotion on its own** - a withdrawal removes an
+        // item too, and would be checked here as though its text should have landed
+        // somewhere. So the ledger has to have gained a row for it in the same commit.
+        let landed_now: std::collections::BTreeSet<String> = outbox::accepted(&after)
+            .into_iter()
+            .map(|row| row.id)
+            .collect();
+        let landed_before: std::collections::BTreeSet<String> = outbox::accepted(&before)
+            .into_iter()
+            .map(|row| row.id)
+            .collect();
+
         let gone: Vec<outbox::Item> = outbox::parse(&before, "docs/notes/proposals.md")
             .into_iter()
             .filter(|item| item.id.starts_with("P-") && item.is_open())
             .filter(|item| !after.contains(&format!("### {} ", item.id)))
+            .filter(|item| {
+                let promoted =
+                    landed_now.contains(&item.id) && !landed_before.contains(&item.id);
+                if !promoted {
+                    // Withdrawn, rejected, or promoted without a ledger row. The three are
+                    // not distinguishable from here, so this counts them rather than
+                    // guessing which.
+                    left_without_landing += 1;
+                }
+                promoted
+            })
             .collect();
 
         for item in gone {
@@ -230,7 +260,9 @@ fn a_promotion_lands_what_was_approved() {
 
     // Said rather than asserted: zero checked and all correct are the same green, and an
     // empty queue is the good state, so a count cannot be required.
-    println!("{checked} promotion(s) checked, {excepted} excepted by name; {older} older than the shape field");
+    println!(
+        "{checked} promotion(s) checked, {excepted} excepted by name; \n         {older} older than the shape field, {left_without_landing} left the queue without a ledger row"
+    );
     assert!(
         wrong.is_empty(),
         "a promotion did not land what was approved:\n  {}\n\n\
