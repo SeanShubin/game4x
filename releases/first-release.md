@@ -282,7 +282,7 @@ only one who can move them.
 
 ### R-1 - Two drawings
 
-**to** sean · **status** **built** 2026-08-30 · **evidence** both drawings exist and are photographed; ids on the practical one only, poles marked, camera shared
+**to** sean · **status** **vetted** 2026-09-03 · **evidence** both drawings exist and are photographed; ids on the practical one only, poles marked, camera shared
 
 - **In** - `spec/planet.md`, *the planet is drawn either practically or realistically, and the
   user can change which*
