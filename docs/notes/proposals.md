@@ -50,6 +50,40 @@ decision that has not been made yet. Two at the end are waiting on something and
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-12 - Six promotions moved the economy, and the gate is red
+
+**to** code - **status** open - **raised** 2026-09-02 - **source** `hooks/pre-push`, run today
+
+**`the_costs_in_the_model_are_the_costs_in_the_release` fails**, at
+`crates/game-console/tests/first_release.rs:301`: the release says a Pioneer costs 3 metal and
+`cost::PIONEER_METAL` is 2. **The test is right and it is the reason it exists** - nothing else
+keeps a constant in Rust and a figure in a markdown table in step.
+
+**What moved, all of it Sean's, promoted today:**
+
+| Was                                          | Is now                                             | From    |
+| -------------------------------------------- | -------------------------------------------------- | ------- |
+| `PIONEER_METAL` 2                            | 3                                                  | `P-186` |
+| `PIONEER_CITIZENS` 1                         | 2                                                  | `P-186` |
+| `ARK_METAL` 4                                | 3                                                  | `P-186` |
+| an Ark costs no citizens                     | 2, so there is a constant that does not exist      | `P-186` |
+| producing a Pioneer needs a garrison         | it does not                                        | `P-186` |
+| a landing deploys 1 citizen and 3 extractors | 2 citizens, and a food and a metal extractor       | `P-186` |
+| `spend readiness`                            | `create labor`                                     | `P-187` |
+| food is gone at the end of every turn        | a `keeps` counter, and an `age` recipe             | `P-189` |
+| the recipe table's six columns               | seven, and `Role` is require/limit/consume/produce | `P-190` |
+
+**Three is not a balance tweak, it is a conservation fix.** A landing deploys a garrison and two
+extractors, one metal each, so a unit that deploys one must bind with 3. At 4 an Ark wasted a metal
+on every landing and at 2 a Pioneer created one from nothing, and metal is conserved.
+
+**Expect `turn == 10` to move too.** Its own comment says the number is a property of
+`commands/play.4x` and moves whenever the economy does, and the economy just moved twice - a
+Pioneer costs a metal and a citizen more, and an Ark one metal less.
+
+**This lane did not touch `crates/`, including to fix an obvious break.** Reporting it is the whole
+of what it may do here.
+
 ### S-11 - `promote` needs a proposal's approved text, and `outbox` is the only thing that parses one
 
 **to** code - **status** **acted** 2026-09-02 - **raised** 2026-09-02 -
