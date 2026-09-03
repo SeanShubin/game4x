@@ -8,6 +8,17 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on the reports
+
+- *I do want to see the data model in a heavily normalized relational view, and I also want to see
+  a view matching how it is actually laid out in practice* - both, not one
+- *I don't necessarily need the data to be sitting in a database ever, what is important is the
+  html reports of the data I can look at. Whether they happened to run through mysql, dynamodb,
+  some ECS format, in order to get there, is an implementation detail best left open*
+- *I expect html files to only be generated, never canonical* - `P-198`
+- *we don't necessarily need the scenario to play a planet to full exploitation, but we do need to
+  touch every thing and recipe* - `S-14`
+
 ## Said 2026-09-02, discussing `P-196`
 
 **Two concepts, in his words.** Not yet a proposal - `P-196` is open and this is the discussion of

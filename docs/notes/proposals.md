@@ -45,6 +45,26 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-198 - An HTML file is generated, never canonical
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `CLAUDE.md` -> Perspectives, after *a generated file has no owner*
+
+**Your words, and they settle a question this lane was about to put to you.** `catalog.md` is
+markdown, committed, and diffable, so a rule change shows its consequences in the same commit. HTML
+does not diff. Saying HTML is never canonical decides that without anyone having to weigh it again.
+
+> **An HTML file is generated, never canonical.** Whatever it renders is the thing with an owner,
+> and the HTML is one more derived form of it.
+
+**Basis: it makes the rule above cover the reports without special-casing them.** *A generated file
+has no owner* already says nobody edits one; this says which files are always in that category, so a
+report that arrives as HTML cannot quietly become the place a fact lives.
+
+**And it keeps the property that was argued for.** Because the HTML is derived, whatever it is
+derived *from* is still in the repository and still diffs - so a change to a rule still shows its
+effect on the data in the commit that caused it, however the reports are rendered for reading.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
