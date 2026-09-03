@@ -45,6 +45,45 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-195 - Four lines in `CLAUDE.md` were true only while every block was text
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** cleanup - **shape** text - **into**
+`CLAUDE.md` -> Promotion
+
+**`P-194` landed an hour ago and these four say the old thing.** None of them is wrong about a
+text-shaped block, which is why none of them looked wrong when it was written.
+
+> In *Promotion is a pure move*, the closing **Nothing else, ever.** becomes **Nothing else, ever -
+> for a block of text.**
+>
+> The guarantee becomes: **The guarantee this buys is that approved text is byte-identical to
+> shipped text, that approved rows arrive cell for cell, and that an approved instruction is run
+> with the assertion it carries.**
+>
+> *Every promotion asserts* opens: **Copy, then verify - that the text is present in the target
+> file, that the rows are present cell for cell, or that the instruction's own assertion passes -
+> and fail loudly if it is not.**
+>
+> The proposal template gains a field, between `kind` and `into`:
+>
+> ```
+> **to** sean · **status** open · **raised** <date> · **kind** <kind> · **shape** <shape> · **into** `file` -> section
+> ```
+
+**Basis: `P-194` says a block *says which*, and there is nowhere to say it.** The template is what
+every proposal is copied from, so a field that is not in it is a field that will not be written.
+This proposal carries `**shape** text` already, which is the first one that does.
+
+**The other three are the same sentence in three places.** *Nothing else, ever*, *byte-identical*,
+and *verify the text is present* all describe the one case `P-194` split into three, and a reader
+meeting any of them alone would conclude that `P-191` and `P-190` were promoted wrongly. **They
+were not**, which is what `P-194` was filed to establish.
+
+**Filed rather than folded into the promotion**, because `P-194` was approved as its own words and
+these four lines are not those words. **A promotion that rewrote four neighbouring sentences to fit
+would be the exact thing the pure-move rule forbids** - and it would have done it inside the section
+that states the rule.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
