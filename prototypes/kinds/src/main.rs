@@ -4,6 +4,17 @@
 //! `releases/first-release.md` carries, and `tests/against_the_release.rs` compares them.
 
 fn main() {
+    // `catalog` writes the generated view; with no argument it prints the tables back out,
+    // which is what this binary has always done.
+    if std::env::args().nth(1).as_deref() == Some("catalog") {
+        let at = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../catalog.md");
+        let text = kinds::catalog::catalog(&kinds::release::release());
+        std::fs::write(&at, text)
+            .unwrap_or_else(|why| panic!("cannot write {}: {why}", at.display()));
+        println!("wrote {}", at.display());
+        return;
+    }
+
     for (heading, rows) in [
         ("## Kinds", kinds::kinds_table()),
         ("## Families", kinds::families_table()),

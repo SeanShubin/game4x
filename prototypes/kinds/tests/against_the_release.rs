@@ -11,49 +11,7 @@
 //! whitespace nobody wrote. Trimming each cell compares exactly what the table says and
 //! nothing about how it is laid out.
 
-use std::path::PathBuf;
-
-fn release() -> String {
-    let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md");
-    std::fs::read_to_string(&path)
-        .unwrap_or_else(|why| panic!("cannot read {}: {why}", path.display()))
-}
-
-/// The rows of the first table under this heading, as trimmed cells.
-///
-/// The separator row is dropped: it is punctuation, and the padder rewrites it.
-fn table_under(document: &str, heading: &str) -> Vec<Vec<String>> {
-    let mut rows = Vec::new();
-    let mut inside = false;
-    for line in document.lines() {
-        let line = line.trim();
-        if line.starts_with("## ") {
-            if inside {
-                break;
-            }
-            inside = line == heading;
-            continue;
-        }
-        if !inside || !line.starts_with('|') {
-            if inside && !rows.is_empty() && !line.starts_with('|') && !line.is_empty() {
-                // Prose after the table ends it. A second table under one heading would be
-                // a different document than this test was written for.
-                break;
-            }
-            continue;
-        }
-        let cells: Vec<String> = line
-            .trim_matches('|')
-            .split('|')
-            .map(|cell| cell.trim().to_string())
-            .collect();
-        if cells.iter().all(|cell| cell.chars().all(|c| c == '-')) {
-            continue;
-        }
-        rows.push(cells);
-    }
-    rows
-}
+use kinds::release::{release, table_under};
 
 fn compare(what: &str, written: &[Vec<String>], compiled: &[Vec<String>]) {
     let mut wrong = Vec::new();

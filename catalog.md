@@ -1,0 +1,225 @@
+# Catalog
+
+**Generated. Do not edit.** `cargo run -p kinds -- catalog`, or `scripts/kinds.sh catalog`.
+
+Every kind the release declares, with everything it says about that kind gathered in one place.
+`spec/invariants.md` has the release's tables be the data, and every other form of them derived
+and generated rather than written; this is one such form. It is a view and not a copy - each
+section is a join across six tables that the document does not perform anywhere.
+
+12 kinds, 3 families, 18 traits, 17 recipes.
+
+## citizen
+
+a person: provides labor, eats, and grows on surplus.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `force` (a number)
+
+**Capacity** Total capacity: 8
+
+**As a thing** Force: 1 · Upkeep: 1 food per turn · Readies: yes
+
+**In recipes**
+
+- `deploy ark` produces 2
+- `found by land` produces 2
+- `produce pioneer` consumes 2
+- `produce ark` consumes 2
+- `create labor` consumes 1, ready
+- `create labor` produces 1, exhausted
+- `grow` produces 1
+
+## garrison
+
+what holds a territory; a territory has at most one.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `force` (a number)
+
+**Capacity** Total capacity: 1
+
+**As a thing** Force: 1 · Costs to produce: 1 labor, 1 metal · Metal in it: 1 · Binding: 1
+
+**In recipes**
+
+- `deploy ark` limits 0
+- `deploy ark` produces 1
+- `found by land` limits 0
+- `found by land` produces 1
+
+## extractor
+
+built for one resource, and worked to produce it.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `resource` (food, metal or energy)
+
+**Capacity** Total capacity: what the *Territory resources* table gives, per resource
+
+**As a thing** Costs to produce: 1 labor, 1 metal · Metal in it: 1 · Binding: 1 · Readies: yes
+
+**In recipes**
+
+- `deploy ark` produces 1, food
+- `deploy ark` produces 1, metal
+- `found by land` produces 1, food
+- `found by land` produces 1, metal
+- `build food extractor` produces 1, food
+- `build metal extractor` produces 1, metal
+- `build energy extractor` produces 1, energy
+- `work` consumes 1, ready
+- `work` produces 1, exhausted
+
+## yard
+
+where an Ark is produced.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
+
+**Capacity** Total capacity: 1
+
+**As a thing** Costs to produce: 1 labor, 15 metal · Metal in it: 15 · Binding: 15
+
+**In recipes**
+
+- `build yard` produces 1
+- `produce ark` requires 1
+
+## ark
+
+carries a landing, and can invade from orbit.
+
+**In families** thing, unit
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `force` (a number)
+
+**Capacity** Total capacity: 2
+
+**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Metal in it: 3 · Binding: 3 · Requires: a Yard · Readies: yes
+
+**In recipes**
+
+- `deploy ark` consumes 1, in `$where`
+- `produce ark` produces 1
+
+## pioneer
+
+founds a territory.
+
+**In families** thing, unit
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `force` (a number)
+
+**Capacity** Total capacity: 2
+
+**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Metal in it: 3 · Binding: 3 · Readies: yes
+
+**In recipes**
+
+- `found by land` consumes 1
+- `produce pioneer` produces 1
+
+## food
+
+eaten by citizens; expires.
+
+**In families** thing, resource
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `keeps` (the number of turns it will last), `surplus` (yes or no)
+
+**Capacity** Total capacity: 20
+
+**In recipes**
+
+- `upkeep` consumes the thing's upkeep
+- `grow` consumes 1, surplus
+- `spoil` consumes 1, keeps 0
+- `age` consumes 1, keeps at least 1
+- `age` produces 1, keeps one less
+
+## metal
+
+what things are built from; conserved.
+
+**In families** thing, resource
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
+
+**Capacity** Total capacity: 20
+
+**In recipes**
+
+- `build food extractor` consumes 1
+- `build metal extractor` consumes 1
+- `build energy extractor` consumes 1
+- `build yard` consumes 15
+- `produce pioneer` consumes 3
+- `produce ark` consumes 3
+- `perish` produces the thing's metal
+
+## energy
+
+what moves things; neither conserved nor expiring.
+
+**In families** thing, resource
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
+
+**Capacity** Total capacity: 20
+
+**In recipes**
+
+- `move` consumes 1, in that unit
+- `produce pioneer` consumes 6
+- `produce ark` consumes 12
+
+## labor
+
+what working a machine takes; a citizen provides it each turn.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
+
+**Capacity** Total capacity: 8
+
+**In recipes**
+
+- `build food extractor` consumes 1
+- `build metal extractor` consumes 1
+- `build energy extractor` consumes 1
+- `build yard` consumes 1
+- `create labor` produces 1
+- `work` consumes 1
+
+## territory
+
+a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `density` (a number), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the six), `force of nature` (a number), `adjacency` (which territories touch it)
+
+**In recipes**
+
+- `deploy ark` requires 1, in `$where`
+- `move` requires 1, in `$from`
+- `move` requires 1, next to `$from`, in `$to`
+- `work` requires 1, in `$where`
+
+## orbit
+
+a place above one territory, which holds units and nothing else.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
+
+**In recipes** none name it.
+

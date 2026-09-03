@@ -20,6 +20,9 @@
 //! it against numbers written in the same crate, so they were self-consistent and empty. A
 //! test that reads one artifact can only tell you it has not changed.
 
+pub mod catalog;
+pub mod release;
+
 // ---------------------------------------------------------------------------------------
 // Kinds
 // ---------------------------------------------------------------------------------------

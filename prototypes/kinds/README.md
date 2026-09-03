@@ -12,9 +12,35 @@ It does not play. No turn, no board, no rule, no state. Only what a thing is and
 into what.
 
 ```
-cargo run -p kinds        # prints all seven tables back out, rendered from the data
-cargo test -p kinds       # checks they are the release's tables, cell for cell
+cargo run -p kinds              # prints all seven tables back out, rendered from the data
+cargo run -p kinds -- catalog   # regenerates catalog.md from the release
+cargo test -p kinds             # checks they are the release's tables, cell for cell
 ```
+
+## The catalog
+
+`spec/invariants.md`, promoted 2026-09-02: *the tables that define kinds, families, traits and
+recipes are the data the game loads. Nothing restates them; every other form of them is derived,
+and a derived form is generated rather than written.*
+
+[`catalog.md`](../../catalog.md) is such a form, and it is **a view rather than a reprint**.
+Copying the tables into a second file would be the restatement that sentence forbids. What the
+release has nowhere is *one place per kind*: its description, the families containing it, the
+traits of it, what a territory can hold, what it costs, and every recipe line that requires,
+limits, consumes or produces it. Each fact is in a different table, and a reader assembling them
+is doing a join by hand. **A pioneer's section is a join across six tables.** That is the test of
+whether a derived form was worth generating, and a test asserts it.
+
+**Its first run found something.** No recipe names an `orbit`. The release declares it as a kind —
+*a place above one territory, which holds units and nothing else* — and nothing requires, limits,
+consumes or produces one. That is a fact about the release that no single table shows, which is
+what the view is for.
+
+**A generated file that nobody regenerates is worse than none**, because it reads as derived and
+so is trusted more than prose, while going stale without changing. `the_committed_catalog_is_what_
+the_release_generates` fails on the line that diverged and says what to run. The way that rule
+breaks is not somebody editing `catalog.md`; it is somebody changing the release and not
+regenerating.
 
 ## The answer
 
