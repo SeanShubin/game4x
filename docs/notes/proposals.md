@@ -45,45 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-184 - The release lists the world's recipes in an order `spec/turn.md` contradicts
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** cleanup - **into**
-`releases/first-release.md` -> Recipes
-
-**The order is already yours and the release does not follow it.** `spec/turn.md` gives it, and the
-table lists them grow, spoil, ready, upkeep, perish - upkeep last but one, when three of the others
-read a trait it derives.
-
-> **In** - `spec/turn.md`, *ending a turn: everything with upkeep pays it; then a population grows
-> on surplus food or starves for want of it; what expires expires, and what was not kept in order
-> is lost; and everything becomes ready again*.
->
-> The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
-> that order: `upkeep`, then `grow` and `perish`, then `spoil`, then `age`, then `ready`. The rows
-> below are in that order.
-
-**Amended after you said promote, and not promoted, because two things you approved in the same
-breath made the text above wrong.** Neither changes what this proposal decides; both change what it
-says.
-
-- **`P-189` added `age`**, so the order named five recipes where there are six. `age` now appears
-  between `spoil` and `ready`, which is where `P-189`'s own text already put it.
-- **`P-185` rewrote the sentence this quotes.** *Everything that eats, eats* is no longer in
-  `spec/turn.md`, so the quotation would have cited a line that does not exist.
-
-**Promoting this deletes a sentence.** `P-189`'s *in the world's order `age` runs after `spoil` and
-before `ready`* is in the release's Recipes prose and says a strict subset of what the text above
-says. It goes when this lands, and this paragraph is the notice.
-
-**Basis: this is a release following the specification, not a new rule.** Every phase maps to one
-recipe - *everything that eats* is `upkeep`, *grows or starves* is `grow` and `perish`, *what
-expires* is `spoil`, *becomes ready again* is `ready`. **`grow` and `perish` share a position and
-that is correct**: there is surplus food only when every upkeep was paid, and something is unpaid
-only when food ran out, so the two can never both fire in one territory in one turn.
-
-**The rows move to match**, because a reader who takes the table for the order gets `upkeep` fourth,
-and `surplus` and `unpaid` do not exist until it has run.
-
 ### P-190 - Seven columns, and three of the six you named are not columns
 
 **to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
@@ -678,6 +639,7 @@ work the release exists to order.
 | P-188, capacity is total, used and available, and only the total is stored                                      | `spec/logistics.md` -> Containment                                                                                                           | 2026-09-02 |
 | P-185, the turn's ending says everything with upkeep pays it                                                    | `spec/turn.md` -> Order of operations                                                                                                        | 2026-09-02 |
 | P-191, `room` is renamed total capacity everywhere it means the stored maximum                                  | `spec/planet.md`, `spec/economy.md`, `spec/orbit.md`, `spec/console.md`, `spec/control.md`, `spec/logistics.md`, `releases/first-release.md` | 2026-09-02 |
+| P-184, the world's recipes fire at the end of a turn, in the order `spec/turn.md` gives                         | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-02 |
 
 ## Rejected
 

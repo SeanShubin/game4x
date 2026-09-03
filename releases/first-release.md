@@ -158,8 +158,15 @@ two candidates.
 A blank is not a zero. It says the row has no such number, and a quantity read from one produces
 nothing.
 
-In the world's order `age` runs after `spoil` and before `ready`, so food made this turn
-survives one ending and is lost at the next.
+Food made this turn survives one ending and is lost at the next.
+
+**In** - `spec/turn.md`, *ending a turn: everything with upkeep pays it; then a population grows
+on surplus food or starves for want of it; what expires expires, and what was not kept in order
+is lost; and everything becomes ready again*.
+
+The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
+that order: `upkeep`, then `grow` and `perish`, then `spoil`, then `age`, then `ready`. The rows
+below are in that order.
 
 | Recipe                     | Owner  | Role | Thing                            | Qty                                  | Bound    |
 | -------------------------- | ------ | ---- | -------------------------------- | ------------------------------------ | -------- |
@@ -215,20 +222,20 @@ survives one ending and is lost at the next.
 |                            |        | in   | extractor, ready                 | 1                                    | at least |
 |                            |        | out  | extractor, exhausted             | 1                                    |          |
 |                            |        | out  | resource                         | `$where`'s density for that resource |          |
+| **upkeep**                 | world  | in   | thing with upkeep                | 1                                    | at least |
+|                            |        | in   | food                             | the thing's upkeep                   | at least |
+|                            |        | out  | thing with upkeep                | 1                                    |          |
 | **grow**                   | world  | in   | food, surplus                    | 1                                    | at least |
 |                            |        | in   | thing, houses                    | 1                                    | at least |
 |                            |        | out  | citizen                          | 1                                    |          |
 |                            |        | out  | thing, houses                    | 1                                    |          |
+| **perish**                 | world  | in   | thing whose upkeep is unpaid     | 1                                    | at least |
+|                            |        | out  | metal                            | the thing's metal                    |          |
 | **spoil**                  | world  | in   | food, keeps 0                    | 1                                    | at least |
 | **age**                    | world  | in   | food, keeps at least 1           | 1                                    | at least |
 |                            |        | out  | food, keeps one less             | 1                                    |          |
 | **ready**                  | world  | in   | thing, exhausted                 | 1                                    | at least |
 |                            |        | out  | thing, ready                     | 1                                    |          |
-| **upkeep**                 | world  | in   | thing with upkeep                | 1                                    | at least |
-|                            |        | in   | food                             | the thing's upkeep                   | at least |
-|                            |        | out  | thing with upkeep                | 1                                    |          |
-| **perish**                 | world  | in   | thing whose upkeep is unpaid     | 1                                    | at least |
-|                            |        | out  | metal                            | the thing's metal                    |          |
 
 ## Biomes
 
