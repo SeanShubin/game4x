@@ -121,7 +121,9 @@ jobs:
       # nothing to say so - C-12. A check nobody runs has no answer, and no answer looks
       # exactly like a right one.
       - name: Test (the documentation tools)
-        run: cargo test --manifest-path tools/outbox/Cargo.toml
+        run: |
+          cargo test --manifest-path tools/outbox/Cargo.toml
+          cargo test --manifest-path tools/pad-tables/Cargo.toml
 
       - name: Test (the engine-facing crates)
         run: cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x -p planet-view -p goldberg-view

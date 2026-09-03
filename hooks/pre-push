@@ -46,6 +46,7 @@ cargo test --release --workspace $ENGINE
 # like a right one.
 echo "pre-push: cargo test (the documentation tools)"
 cargo test --manifest-path tools/outbox/Cargo.toml
+cargo test --manifest-path tools/pad-tables/Cargo.toml
 
 echo "pre-push: cargo test (the engine-facing crates)"
 cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x \
