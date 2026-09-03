@@ -109,6 +109,46 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
+### S-24 - Four artifacts, and a human must be able to derive the fourth from the other three
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on what the reference
+material is for
+
+**This is the acceptance test for the whole reporting effort, in his words:** *I should be able to
+take the things, the recipes, the commands, and manually derive the data dump. If I can do that as a
+human, I can be pretty sure that I can detect if the game is working as I intend or not.*
+
+| Artifact                    | Is                        | State                     |
+| --------------------------- | ------------------------- | ------------------------- |
+| thing definitions           | `catalog.md`              | exists                    |
+| recipe definitions          | -                         | **missing**, `S-23`       |
+| **the scenario's commands** | -                         | **missing, and new here** |
+| the scenario's data         | `state.md`, `entities.md` | exists                    |
+
+**The commands are the fourth and they are not a file you can read.** `commands/setup.4x` opens with
+`run world`, so the sequence is a hierarchy across several files, and what actually executed is the
+flattening. **`spec/console.md` already has the thing that produces it**: `history` - *list every
+command executed so far, in order*. **The artifact is that list, rendered.**
+
+**And deriving the dump by hand needs one thing nothing states: which recipe a command fires.**
+`land ark 1` is `deploy ark`; `build extractor 1 metal` is `build metal extractor`; `end turn` is six
+world recipes in an order `spec/turn.md` gives. **`spec/console.md` lists commands and the release
+lists recipes, and no document connects them.** A human with all four artifacts still cannot start.
+
+**So the commands artifact should say, per line, which recipe it fired** - which makes it a record of
+the run rather than a copy of the input file, and makes the derivation possible in one pass.
+
+**The acceptance test is the closure, and it is stronger than any check here.** Every number in the
+dump must follow from the three inputs, and **nothing in the dump may come from anywhere else.** A
+figure that cannot be derived means either the dump is showing hidden state or the definitions are
+incomplete - **and both are defects that no comparison between documents would ever find**, because
+they are all consistent with each other and none of them is consistent with a pencil.
+
+**One consequence worth having before it is discovered the hard way.** The model already derives the
+state from the commands - that is what replay is. **So the machine can do this and the question is
+only whether the documents let a person do it.** Where the answer is no, the missing piece is a fact
+the model knows and no document states.
+
 ### S-23 - The recipe definitions have no view, and the file that looks like one is a scenario
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on context-free against

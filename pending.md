@@ -22,9 +22,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
+- **S-24** - Four artifacts, and a human must be able to derive the fourth from the other three · `docs/notes/proposals.md`
 - **S-23** - The recipe definitions have no view, and the file that looks like one is a scenario · `docs/notes/proposals.md`
 - **S-21** - `P-134` has been a rule since 2026-08-31 and nothing has been filed asking for it · `docs/notes/proposals.md`
 - **S-19** - Control is stored as `founded` and the specification derives it from citizens · `docs/notes/proposals.md`

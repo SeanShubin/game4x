@@ -8,6 +8,18 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on what the reference material is for
+
+*The data dump of the scenario will be the first thing I look at. I will need the thing and recipe
+definitions to validate the scenario got the right answers. And come to think of it, it occurs to me
+that I need a fourth thing, the individual commands run by the scenario. So I should be able to take
+the things, the recipes, the commands, and manually derive the data dump. If I can do that as a
+human, I can be pretty sure that I can detect if the game is working as I intend or not.* - `S-24`
+
+**This is an acceptance test rather than a list of documents**, and it is stronger than any check in
+the repository: every figure in the dump follows from the three inputs, and nothing in the dump
+comes from anywhere else.
+
 ## Said 2026-09-03, on reference material
 
 *There is the context independent information about the game, and there is the context specific data
