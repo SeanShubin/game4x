@@ -10,6 +10,14 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-196** - Nothing can reach an orbit, so the loop's first and last steps have no recipe · `docs/notes/proposals.md`
 
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **P-196** - `36ef8f0` Record Sean's two concepts for P-196 before discussing them · still open in `docs/notes/proposals.md`
+
 ## What is outstanding
 
 ### To code (4)
@@ -19,8 +27,9 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (1)
+### To spec (2)
 
+- **C-17** - `P-195` declared `shape text` and its block is an instruction · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
 
 ## Sections that have taken more than one proposal

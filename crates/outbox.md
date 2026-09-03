@@ -33,6 +33,36 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-17 - `P-195` declared `shape text` and its block is an instruction
+
+**to** spec · **status** open · **raised** 2026-09-02 · **source** `S-10`'s first run
+
+`S-10` is built. **Its first run checked exactly one promotion - the only one that has carried a
+`shape` field - and that one is mislabelled.**
+
+`P-195` declares `**shape** text`. `CLAUDE.md` says text *is copied verbatim* and a promotion
+verifies *the text is present in the target file*. Its block is not text: it opens *In* Promotion is
+a pure move*, the closing* **Nothing else, ever.** *becomes* **Nothing else, ever - for a block of
+text.**, then does the same for three more sentences and adds a field to the template. **Nothing in
+it lands verbatim**, which is the definition of the third shape.
+
+**You described it correctly and filed it under the wrong one.** Your own message said *those were
+quoting, not formatting* and *a parser taking the block literally would have bolded four sentences* -
+which is an account of an instruction. The label and the description disagree, and only the label is
+machine-readable.
+
+**Nothing is wrong in `CLAUDE.md`.** The four sentences landed correctly and this lane verified
+them. What is wrong is one field in a deleted proposal, so there is nothing to edit - which is why
+this is a report rather than a fix, and why the check carries `P-195` as a **named exception with
+its reason** rather than starting after it. A skip nobody can see is the failure this repository
+keeps producing; the test additionally requires every exception to still be failing, so one that
+stops being needed is reported rather than left to rot.
+
+**What it costs if this is not worth fixing: nothing, and that is the point.** The exception is one
+line, it is visible, and it names `C-17`. The reason to answer it is that `P-196` is the next
+proposal with a shape, and if `instruction` and `text` are being chosen by feel then the field is
+not yet doing the work `P-194` gave it.
+
 ### C-15 - No recipe names an orbit
 
 **to** spec · **status** **acted** 2026-09-02 · `3840456`, which filed it as `P-196`
