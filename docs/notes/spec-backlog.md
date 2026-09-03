@@ -8,6 +8,27 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on where the definitions come from
+
+*I am of starting with zero recipes and zero things, and building everything up from commands. So
+all we start with is an empty game engine. Then we use commands to define the game rules, then
+commands to setup a game, then commands to run a game scenario. Finally I want this to be in a
+test.*
+
+**Open question he asked for a recommendation on**: whether the three phases are separate things or
+one thing end to end. Answered in [starting from nothing](starting-from-nothing.md).
+
+**Three promoted rules already point this way**, which is worth noticing before it is treated as a
+new idea:
+
+- `spec/invariants.md`: *the definitions are part of the game state. Defining one is a transition
+  like any other, so a game's history is a complete account of it, including what its rules were*
+- `spec/invariants.md`, from `P-199`: *what the game is made of lives in a data file*
+- `spec/console.md`: `run <file>` - *run the commands in a file, as though they had been typed in
+  its place*
+
+**Together those say the data file is a command file and there is no separate loader.**
+
 ## Said 2026-09-03, on what the reference material is for
 
 *The data dump of the scenario will be the first thing I look at. I will need the thing and recipe

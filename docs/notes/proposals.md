@@ -45,6 +45,35 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-211 - How I know the game is right
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `docs/process.md`, a new section after *Three rules for using AI assistants*
+
+**Filed so it cannot be lost.** It currently lives in an outbox item, a note and the backlog - and
+**an item is closed when it is done, which is exactly when this stops being written down anywhere.**
+
+> ## How I know the game is right
+>
+> Four artifacts: the thing definitions, the recipe definitions, the commands a scenario ran, and
+> the data dump of that scenario. The first three are enough to derive the fourth by hand. If I can
+> do that, I can tell whether the game is working as I intend.
+
+**Basis: it is the third rule made operational.** *Have a place you can look to tell what the AI
+did* says a place must exist; this says **what makes the place sufficient.** Four documents that are
+each individually readable and jointly insufficient would satisfy the rule and fail the purpose.
+
+**And it is a stronger check than anything in the repository, including `../vote`'s.** That project
+runs one scenario against four backends and compares them, which is machine against machine - and
+**machine against machine cannot catch a rule that is wrong the same way everywhere.** Four backends
+would have agreed a territory holds eight citizens while the model let it hold twelve, if all four
+read the same constant. **This check is a person against a machine**, and it is the only one here
+that tests intent rather than consistency.
+
+**What it costs to keep true.** Every figure in the dump must follow from the three inputs and
+nothing may come from anywhere else, **so a fact the model knows and no document states is a defect
+even when nothing is wrong** - which is a bar no other check in this repository sets.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
