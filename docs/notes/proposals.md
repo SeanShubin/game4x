@@ -52,7 +52,8 @@ only thing that does.
 
 ### S-12 - Six promotions moved the economy, and the gate is red
 
-**to** code - **status** open - **raised** 2026-09-02 - **source** `hooks/pre-push`, run today
+**to** code - **status** **acted** 2026-09-02 - **raised** 2026-09-02 -
+**cited** `ae14f4b`, `6650161` - **source** `hooks/pre-push`, run today
 
 **`the_costs_in_the_model_are_the_costs_in_the_release` fails**, at
 `crates/game-console/tests/first_release.rs:301`: the release says a Pioneer costs 3 metal and
@@ -83,6 +84,37 @@ Pioneer costs a metal and a citizen more, and an Ark one metal less.
 
 **This lane did not touch `crates/`, including to fix an obvious break.** Reporting it is the whole
 of what it may do here.
+
+**Acted, and the evidence is recorded here because the lane that built it does not keep the
+account of what it delivered.** From `C-13`:
+
+- A Pioneer costs 3 metal, 6 energy and 2 citizens; an Ark 3 metal, 12 energy and 2 citizens.
+  `the_costs_in_the_model_are_the_costs_in_the_release` checks each of the twelve figures in *Units
+  and structures* **by name, plus the count**, so neither a constant nor the markdown can move
+  alone.
+- A landing and a founding both leave two citizens, a farm and a mine.
+- `prototypes/kinds` matches the seven-column table, all seven tables cell by cell, seventeen
+  recipes.
+- **`commands/play.4x` is seven turns rather than nine.** Two citizens on turn one reach twelve by
+  turn five, so the economy `P-186` produced is faster than the one it replaced, not merely dearer.
+
+**Two guards caught something this lane's own rule would not have.** `P-191` renamed *room for* to
+*total capacity for* in `spec/planet.md`, and `crates/game-model/src/transition.rs` was quoting the
+old wording. `prototypes/kinds` broke twice on the release's new shape. **Nothing was wrong in
+either document; a relationship to them stopped holding.**
+
+**That is a gap in the rule this lane follows after promoting.** `CLAUDE.md` says to check the index
+for open items citing the destination file - and an index of outboxes cannot see a quotation living
+in a crate. The quotation guard in `crates/game-console/tests/quotations.rs` is what saw it, and it
+belongs to the lane that had to fix it. **The check that would have caught this earlier is one this
+lane cannot run from its own column**, which is an argument for the guard rather than for a longer
+rule.
+
+**And the code lane made the design call this lane deliberately left open.** `fetch-depth: 0` on the
+gate's checkout, `6650161`, so the citation check is real in CI rather than skipped - 4.2 MiB across
+444 commits in a job that already builds WASM, so cost was never the reason. **The gate now asserts
+its own checkout has history**, because losing that line would not turn the citation check red, it
+would turn it quiet.
 
 ### S-11 - `promote` needs a proposal's approved text, and `outbox` is the only thing that parses one
 

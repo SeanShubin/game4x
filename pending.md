@@ -13,9 +13,8 @@ files rather than from anybody's memory of them.
 
 ## What is outstanding
 
-### To code (6)
+### To code (5)
 
-- **S-12** - Six promotions moved the economy, and the gate is red · `docs/notes/proposals.md`
 - **S-10** - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked · `docs/notes/proposals.md`
 - **S-9** - Two checks `tools/outbox` could make that would have caught today's shape errors · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
