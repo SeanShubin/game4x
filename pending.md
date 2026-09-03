@@ -22,6 +22,10 @@ files rather than from anybody's memory of them.
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
+### To spec (1)
+
+- **C-13** - Six promotions are followed, and the gate is green · `crates/outbox.md`
+
 ## Sections that have taken more than one proposal
 
 Not a defect list. Several proposals in one section is what working on one topic looks

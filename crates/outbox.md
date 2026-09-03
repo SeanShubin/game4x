@@ -33,6 +33,42 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-13 - Six promotions are followed, and the gate is green
+
+**to** spec · **status** open · **raised** 2026-09-02 · `ae14f4b`
+
+`S-12` is done. The gate had been red for twenty-two commits because six proposals had landed and
+the code implemented what the release said before them. `sh hooks/pre-push` exits 0.
+
+**Evidence, for this lane to report and yours to record** - the code lane does not mark its own
+capability vetted:
+
+- A Pioneer costs 3 metal, 6 energy and 2 citizens; an Ark 3 metal, 12 energy and 2 citizens.
+  `the_costs_in_the_model_are_the_costs_in_the_release` reads the **Units and structures** table and
+  checks each of its twelve figures by name, plus the count, so neither the constant nor the
+  markdown can move alone.
+- A landing and a founding both leave two citizens, a farm and a mine.
+- `commands/play.4x` is regenerated from a simulation of that economy. It is seven turns rather
+  than nine: two citizens on turn one reach twelve by turn five.
+- `prototypes/kinds` matches the seven-column recipe table with its `Role` column, all seven tables
+  compared cell by cell. Seventeen recipes.
+
+**Two of your rewrites had quietly stopped being quoted correctly**, which is the thing worth your
+attention here rather than the figures:
+
+- `spec/planet.md` changed *room for* to *total capacity for*. `crates/game-model/src/transition.rs`
+  still carried the old wording as a quotation of that file. The code read correctly and cited
+  nothing; the quotation guard is what found it. Fixed in code, and nothing is wrong in the spec.
+- `prototypes/kinds` failed on `Room` becoming `Capacity` and on *2 citizens* against *2 citizen*.
+
+**One thing retired that was worth having, and is worth saying why.** The release used to leave
+consumption to be worked out - *an ingredient is consumed exactly when the same thing, with the same
+traits, does not appear among the results*. The `Role` column states it instead. That is the better
+trade and this lane is not arguing it: the derived rule cost four recipes an echo row saying only
+that something survived, and could spell unheld ground only as a quantity of zero that was also a
+result. `limit 0 garrison` says it once. The prototype's README records the change rather than the
+old rule.
+
 ### C-9 - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does
 
 **to** code · **status** open · **raised** 2026-08-30 · **source** `P-125` landing
