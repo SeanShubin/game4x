@@ -68,6 +68,36 @@ inferred turned out not to be kinds at all: `node` became a trait of a territory
 became fuel in a unit's tank. **Both were nouns the recipes used and nothing listed**, which
 is exactly what a declaration is for.
 
+### A territory is a kind, and this crate could say it was not
+
+`P-192`. The recipes' `Kind` column held **`territory` in four rows**, and `territory` was in
+neither the Kinds table nor the Families table — the release named a kind it had not declared,
+while the `kind` trait said *one of the ten*. It had been that way for as long as the recipes have
+existed.
+
+**This crate is the reason it survived being expressible.** `Noun` had a third case,
+`Noun::Territory`, sitting beside `Of(Kind)` and `Any(Family)` — added so the crate could render a
+name that was not a kind. A crate built to stop the two halves of the specification disagreeing had
+a hand-cut hole for the one place they did. The case is gone: a name is a declared kind or a
+declared family, and there is no longer a way to write one that is neither.
+
+**One rule changed rather than one table growing.** `thing` is *every kind above*, so it now
+includes a territory — and `grow` requires `thing, houses`, a trait *of a thing that contains
+things*. A territory houses its citizens, so `grow` can match one, and could not before.
+[`docs/recipes/README.md`](../../docs/recipes/README.md) has shown `territory (houses)` in that
+recipe since it was written: the rendering was right and the data could not say it.
+
+`orbit` came with it — it holds units and nothing else, and `spec/logistics.md` says only a thing
+may contain things. `planet` did not: no recipe names one and no trait is of one.
+
+**The check is worth more than the fix, and it is a two-line assertion.** Nothing asked whether a
+recipe's `Kind` names something declared. The comparison test holds this crate against the release;
+the family test holds a family against its members; an undeclared name fell exactly between them.
+`every_kind_a_recipe_names_is_declared` reads the **document**, not this crate, because the crate's
+types now make the bug unwritable — a type stops this crate disagreeing with itself, and the defect
+was the release disagreeing with itself. A second test runs it against that release in miniature,
+so the check has failed for the reason it exists.
+
 ### And the finding this crate produced about itself
 
 On the day the release moved furthest, **seven of its eight tests passed against data that

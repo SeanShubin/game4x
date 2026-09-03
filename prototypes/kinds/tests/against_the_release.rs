@@ -101,7 +101,7 @@ fn compare(what: &str, written: &[Vec<String>], compiled: &[Vec<String>]) {
 fn the_release_tables_are_the_ones_in_this_crate() {
     let document = release();
     let tables: [(&str, usize, Vec<Vec<String>>); 7] = [
-        ("## Kinds", 10, kinds::kinds_table()),
+        ("## Kinds", 12, kinds::kinds_table()),
         ("## Families", 3, kinds::families_table()),
         ("## Where things are", 3, kinds::capacities_table()),
         ("## Traits", 17, kinds::traits_table()),
@@ -134,6 +134,120 @@ fn there_are_seventeen_recipes() {
     assert_eq!(kinds::RECIPES.len(), 17);
 }
 
+/// Every name in the recipes' `Kind` column is a kind or a family the release declares.
+///
+/// **The check that was missing, and the gap it sat in is the point.** The comparison above
+/// holds this crate against the release; `a_recipe_naming_a_family_matches_every_kind_in_it`
+/// holds a family against its members. Nothing asked whether the recipes use a name the
+/// release declares at all - and `territory` appeared in four recipe rows, in neither the
+/// Kinds table nor the Families table, for as long as the recipes have existed. `P-192`
+/// fixed it; this is what would have found it.
+///
+/// **It reads the document rather than this crate, deliberately.** The crate's types now
+/// make the bug unwritable, which is worth having and is not a check: a type stops this
+/// crate from disagreeing with itself, and the defect was the release disagreeing with
+/// itself. Only the document can answer that, so only the document is read.
+#[test]
+fn every_kind_a_recipe_names_is_declared() {
+    let document = release();
+    let (used, undeclared) = undeclared_kinds(&document);
+    assert!(
+        undeclared.is_empty(),
+        "the recipes name {undeclared:?}, which the Kinds and Families tables do not declare"
+    );
+
+    // Over every case, and how many cases there were. A column that stopped being the fifth
+    // would leave this checking an empty set and passing.
+    assert_eq!(
+        used.len(),
+        14,
+        "fourteen distinct names across the recipes' Kind column, and these are {used:?}"
+    );
+}
+
+/// Every name the recipes use, and the ones no table declares.
+///
+/// Separated from the test so it can be run against a document written to be wrong. A check
+/// that has never failed is a claim, not evidence.
+fn undeclared_kinds(document: &str) -> (Vec<String>, Vec<String>) {
+    let mut declared: Vec<String> = Vec::new();
+    for heading in ["## Kinds", "## Families"] {
+        for row in table_under(document, heading).iter().skip(1) {
+            if let Some(cell) = row.first() {
+                declared.push(cell.trim_matches('*').to_string());
+            }
+        }
+    }
+
+    let mut used: Vec<String> = Vec::new();
+    for row in table_under(document, "## Recipes").iter().skip(1) {
+        let named = row.get(4).map(|cell| cell.trim()).unwrap_or_default();
+        if !named.is_empty() && !used.iter().any(|seen| seen == named) {
+            used.push(named.to_string());
+        }
+    }
+    used.sort();
+
+    let undeclared = used
+        .iter()
+        .filter(|name| !declared.contains(name))
+        .cloned()
+        .collect();
+    (used, undeclared)
+}
+
+/// The bug `P-192` fixed, as a document this check is run against.
+///
+/// **`territory` appeared in four recipe rows and in neither declaring table**, for as long
+/// as the recipes have existed, and nothing asked. The comparison test holds this crate
+/// against the release and the family test holds a family against its members; an
+/// undeclared name fell exactly between them. This is that release in miniature - the
+/// recipes name a territory, the Kinds table does not list one - and the check has to find
+/// it, or it is not the check that would have found it.
+#[test]
+fn the_check_finds_the_bug_it_exists_for() {
+    let wrong = "## Kinds
+
+| Kind        | What it is    |
+| ----------- | ------------- |
+| **citizen** | a person      |
+| **ark**     | carries a landing |
+
+## Families
+
+| Family    | Members          |
+| --------- | ---------------- |
+| **thing** | every kind above |
+
+## Recipes
+
+| Recipe         | Auto   | Role    | Qty | Kind      | Traits | Where    |
+| -------------- | ------ | ------- | --- | --------- | ------ | -------- |
+| **deploy ark** | player | require | 1   | territory |        | `$where` |
+|                |        | consume | 1   | ark       |        | `$where` |
+|                |        | produce | 1   | citizen   |        |          |
+";
+    let (used, undeclared) = undeclared_kinds(wrong);
+    assert_eq!(used, ["ark", "citizen", "territory"], "it read the column");
+    assert_eq!(
+        undeclared,
+        ["territory"],
+        "an undeclared name in the Kind column has to be found"
+    );
+
+    // And a document that declares it is clean, so the check is not simply always red.
+    let fixed = wrong.replace(
+        "| **ark**     | carries a landing |",
+        "| **ark**     | carries a landing |
+| **territory** | a place things are in |",
+    );
+    let (_, undeclared) = undeclared_kinds(&fixed);
+    assert!(
+        undeclared.is_empty(),
+        "declaring it is enough: {undeclared:?}"
+    );
+}
+
 /// A family names several kinds at once, with no hierarchy anywhere.
 #[test]
 fn a_recipe_naming_a_family_matches_every_kind_in_it() {
@@ -149,6 +263,32 @@ fn a_recipe_naming_a_family_matches_every_kind_in_it() {
     for kind in kinds::KINDS {
         assert!(Family::Thing.covers(kind), "{} is a thing", kind.name());
     }
+
+    // **A rule changed when the table grew, and this is where it shows.** `thing` is *every
+    // kind above*, so declaring a territory put one inside the family - and `grow` requires
+    // `thing, houses`, a trait *of a thing that contains things*. A territory houses its
+    // citizens, and `grow` could not match one before `P-192`.
+    //
+    // `docs/recipes/README.md` has rendered `territory (houses)` in that recipe since it
+    // was written. The rendering was right and the data could not say it.
+    assert!(
+        Family::Thing.covers(Kind::Territory),
+        "a territory is a thing, so `grow` can require the thing that houses its citizens"
+    );
+    let grow = kinds::RECIPES
+        .iter()
+        .find(|recipe| recipe.name == "grow")
+        .expect("the world grows citizens");
+    let houses = grow
+        .lines
+        .iter()
+        .find(|line| line.traits.iter().any(|t| t.written == "houses"))
+        .expect("grow requires something that houses");
+    assert_eq!(
+        houses.noun.name(),
+        "thing",
+        "and it requires it by family, which is what makes a territory eligible"
+    );
 }
 
 /// Every role the release writes is one of the four, and each is used.

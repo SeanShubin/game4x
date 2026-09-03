@@ -24,7 +24,13 @@
 // Kinds
 // ---------------------------------------------------------------------------------------
 
-/// The ten kinds the release declares.
+/// The twelve kinds the release declares.
+///
+/// **Ten until `P-192`.** The recipes' `Kind` column had held `territory` in four rows all
+/// along, and the Kinds table did not list it - so the release named a kind it had not
+/// declared, and this crate carried a `Noun::Territory` beside `Noun::Of(Kind)` to render
+/// it. That escape hatch is what let the two halves disagree in a crate built to stop them,
+/// and it is gone: a territory is a kind.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Kind {
     Citizen,
@@ -37,6 +43,8 @@ pub enum Kind {
     Metal,
     Energy,
     Labor,
+    Territory,
+    Orbit,
 }
 
 impl Kind {
@@ -52,6 +60,8 @@ impl Kind {
             Kind::Metal => "metal",
             Kind::Energy => "energy",
             Kind::Labor => "labor",
+            Kind::Territory => "territory",
+            Kind::Orbit => "orbit",
         }
     }
 
@@ -67,12 +77,21 @@ impl Kind {
             Kind::Metal => "what things are built from; conserved",
             Kind::Energy => "what moves things; neither conserved nor expiring",
             Kind::Labor => "what working a machine takes; a citizen provides it each turn",
+            Kind::Territory => concat!(
+                "a place things are in, which has a biome, a force of nature, ",
+                "and a density and a total capacity per resource"
+            ),
+            Kind::Orbit => "a place above one territory, which holds units and nothing else",
         }
     }
 
     /// How many of this kind a territory has total capacity for, as the release writes it.
-    pub fn total_capacity(self) -> &'static str {
-        match self {
+    ///
+    /// `None` for the two kinds that are places rather than contents. A territory has no
+    /// capacity for territories, and the table says so by not having a row - which is a
+    /// fact worth a type rather than a blank string that would render an empty row.
+    pub fn total_capacity(self) -> Option<&'static str> {
+        Some(match self {
             Kind::Citizen => "8",
             Kind::Garrison => "1",
             Kind::Extractor => "what the *Territory resources* table gives, per resource",
@@ -83,12 +102,13 @@ impl Kind {
             Kind::Food => "20",
             Kind::Metal => "20",
             Kind::Energy => "20",
-        }
+            Kind::Territory | Kind::Orbit => return None,
+        })
     }
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 10] = [
+pub const KINDS: [Kind; 12] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -99,9 +119,15 @@ pub const KINDS: [Kind; 10] = [
     Kind::Metal,
     Kind::Energy,
     Kind::Labor,
+    Kind::Territory,
+    Kind::Orbit,
 ];
 
 /// In the order the total-capacity table lists them, which is not the same order.
+///
+/// **Ten, not twelve.** A territory has no capacity for territories or for orbits, and the
+/// release says so by not giving them a row. [`Kind::total_capacity`] returns `None` for
+/// both, so adding one here fails loudly rather than rendering a blank.
 pub const CAPACITY_ORDER: [Kind; 10] = [
     Kind::Citizen,
     Kind::Garrison,
@@ -235,7 +261,7 @@ pub const TRAITS: [TraitRow; 18] = [
     TraitRow {
         name: "kind",
         of: "every thing",
-        values: "one of the ten",
+        values: "one of the twelve",
         held: Held::Stored,
     },
     TraitRow {
@@ -406,11 +432,18 @@ impl Role {
     }
 }
 
+/// What a recipe line names: one kind, or a family standing for several.
+///
+/// **There is no third case any more.** `Noun::Territory` sat here because the release used
+/// `territory` in its recipes and declared it nowhere, so the crate needed a way to write a
+/// name that was not a kind. That is exactly the disagreement this crate exists to prevent,
+/// and it survived by being expressible. Now that a territory is a kind, the type says what
+/// the release says: a name is a declared kind or a declared family, and there is no way to
+/// write one that is neither.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Noun {
     Of(Kind),
     Any(Family),
-    Territory,
 }
 
 impl Noun {
@@ -418,7 +451,6 @@ impl Noun {
         match self {
             Noun::Of(kind) => kind.name(),
             Noun::Any(family) => family.name(),
-            Noun::Territory => "territory",
         }
     }
 }
@@ -508,7 +540,7 @@ impl Recipe {
     pub fn binds(&self) -> Vec<&'static str> {
         self.lines
             .iter()
-            .filter(|line| line.role == Role::Require && line.noun == Noun::Territory)
+            .filter(|line| line.role == Role::Require && line.noun == Noun::Of(Kind::Territory))
             .filter_map(|line| line.place)
             .collect()
     }
@@ -590,7 +622,7 @@ const KEEPS_NONE: [Qualifier; 1] = [by("keeps 0", "keeps")];
 const KEEPS_SOME: [Qualifier; 1] = [by("keeps at least 1", "keeps")];
 const KEEPS_LESS: [Qualifier; 1] = [by("keeps one less", "keeps")];
 
-const TERRITORY: Noun = Noun::Territory;
+const TERRITORY: Noun = Noun::Of(Kind::Territory);
 const UNIT: Noun = Noun::Any(Family::Unit);
 const RESOURCE: Noun = Noun::Any(Family::Resource);
 const THING: Noun = Noun::Any(Family::Thing);
@@ -949,10 +981,10 @@ pub fn traits_table() -> Vec<Vec<String>> {
 pub fn capacity_table() -> Vec<Vec<String>> {
     let mut rows = vec![header(&["Kind", "Total capacity"])];
     for kind in CAPACITY_ORDER {
-        rows.push(vec![
-            format!("**{}**", kind.name()),
-            kind.total_capacity().to_string(),
-        ]);
+        let capacity = kind
+            .total_capacity()
+            .unwrap_or_else(|| panic!("{} is a place, and has no capacity row", kind.name()));
+        rows.push(vec![format!("**{}**", kind.name()), capacity.to_string()]);
     }
     rows
 }
