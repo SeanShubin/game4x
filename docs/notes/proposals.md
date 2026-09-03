@@ -94,6 +94,49 @@ not state:
 **The bootstrap you asked about is the third row.** It is what turns the tables from a description
 of the starting position into the starting position.
 
+### P-194 - Approved text is byte-identical to shipped text, and today it was not, four times
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** correction - **into** `CLAUDE.md`
+-> Promotion
+
+**`S-10` is about to be built as a check that approved text appears in its destination, and it would
+fail on four of today's eleven promotions.** Not because those promotions were wrong. Because a
+proposal's block is not always text to insert.
+
+> A proposal's block is **text**, **rows** or **an instruction**, and it says which.
+>
+> **Text** is copied verbatim; line wrapping, bullet-versus-paragraph and heading level are the only
+> things a promotion may change. **Rows** are table rows, whose column widths the padder rewrites,
+> so what must survive is every cell rather than every byte. **An instruction** describes a change
+> to make in more than one place, and nothing lands verbatim - **so it carries the assertion that
+> proves it was applied**, and the promoting commit runs it.
+
+**Basis: measured over the eleven promotions of 2026-09-02.**
+
+| Proposal | What its block was                                 | Byte-identical? |
+| -------- | -------------------------------------------------- | --------------- |
+| `P-188`  | a sentence for one bullet                          | **yes**         |
+| `P-184`  | two paragraphs of prose                            | **yes**         |
+| `P-186`  | twenty-four table rows                             | no - repadded   |
+| `P-192`  | prose describing two kinds, landed as two rows     | no              |
+| `P-190`  | column definitions **and** a migration instruction | no - half of it |
+| `P-191`  | a rename to apply across seven files               | no - none of it |
+
+**`P-190` is the one that shows why this is not a wording problem.** Its block held two things: the
+seven columns, which are release content, and *every row today becomes a row under this scheme*,
+which is an instruction to this lane and correctly appears nowhere. **A check reading that block
+would report a promotion that was performed exactly as approved.**
+
+**`P-191` shows the shape that needs the third case.** Nothing it said could land verbatim - it
+renamed a word across six spec files and the release. **But it was checkable, and it was checked**:
+the promoting commit asserted the word `room` appears nowhere in any of the seven files. That
+assertion is the evidence, and it is stronger than a byte comparison because it covers sites the
+proposal never enumerated - it found a seventh the proposal had missed.
+
+**So the guarantee is right and its statement is too narrow**, and `S-10` cannot be built until this
+says which promotions it covers. **The correction is worth making even if `S-10` were abandoned**,
+because `CLAUDE.md` currently promises something four promotions today did not do.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
