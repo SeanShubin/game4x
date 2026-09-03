@@ -389,12 +389,15 @@ merely reporting that it changed.
 
 **Promotion is a pure move.** The only things Claude may change while promoting are line
 wrapping, bullet-versus-paragraph, and heading level - because those depend on the
-destination file and cannot be settled in the proposal. Nothing else, ever.
+destination file and cannot be settled in the proposal. Nothing else, ever - for a block
+of text.
 
 If Claude wants a word changed, it changes the **proposal** and says so, before Sean
 approves. Fixing phrasing during promotion would mean the text Sean reviewed and the text in
 the spec are not the same text, and he would have no reason to re-read the spec to find out.
-The guarantee this buys is that **approved text is byte-identical to shipped text.**
+The guarantee this buys is that **approved text is byte-identical to shipped text, that
+approved rows arrive cell for cell, and that an approved instruction is run with the
+assertion it carries.**
 
 **A proposal's block is text, rows or an instruction, and it says which.**
 
@@ -458,7 +461,8 @@ none of them was work for it - true of *building* - and two of its open findings
 `P-126` and `P-138` without anyone saying so. **It re-ran them itself and caught it**, which is the
 expensive way.
 
-**Every promotion asserts.** Copy, then verify the text is present in the target file, and
+**Every promotion asserts.** Copy, then verify - that the text is present in the target file,
+that the rows are present cell for cell, or that the instruction's own assertion passes - and
 fail loudly if it is not. Claude has three times reported that something landed when it had
 not - thirteen missing rows in the proposals file, three files missing from the spec index -
 and every one was a report of intent rather than of fact. An operation that cannot fail
@@ -475,7 +479,7 @@ outstanding* silently stops covering the queue - which is the one place it most 
 ```
 ### P-n - a one-line title
 
-**to** sean · **status** open · **raised** <date> · **kind** <kind> · **into** `file` -> section
+**to** sean · **status** open · **raised** <date> · **kind** <kind> · **shape** <shape> · **into** `file` -> section
 ```
 
 Proposals go in [`docs/notes/proposals.md`](docs/notes/proposals.md), numbered, each labelled

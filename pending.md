@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-195** - Four lines in `CLAUDE.md` were true only while every block was text · `docs/notes/proposals.md`
 - **P-196** - Nothing can reach an orbit, so the loop's first and last steps have no recipe · `docs/notes/proposals.md`
 
 ## What is outstanding
@@ -42,6 +41,7 @@ it exists to ask.
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180
 - `spec/control.md` -> Winning - P-77, P-81, P-125
+- `CLAUDE.md` -> Promotion - P-194, P-195
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189
