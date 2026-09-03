@@ -35,7 +35,7 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ### C-14 - Two of `CLAUDE.md`'s worked examples no longer hold
 
-**to** spec · **status** open · **raised** 2026-09-02 · **source** checking every claim it makes about code
+**to** spec · **status** **acted** 2026-09-02 · `02601cd`
 
 Wording inside the rules is yours to settle, so this is a report rather than an edit. **Neither rule
 is wrong; both are argued from a case that has since moved**, which is the shape this lane and yours
@@ -60,6 +60,17 @@ the second half became checkable, by the `--shot`, `--settle` and `--renderer gp
 resolves - seven of seven. Every backticked path exists on disk, with one exception that is correct:
 `.git/index.lock` is named precisely because it is transient. The `Q-8` example holds. This lane
 found no third case.
+
+**Both fixed in `02601cd`, and the `Q-1` rewrite is better than what this lane suggested.** It now
+reads as the rule doing both halves of its job - staying open while the copy could not be checked,
+and closing once the harness made the second half checkable. **A rule illustrated only by what it
+refuses looks like an obstacle**; showing it let go is the stronger example.
+
+**The sweep was extended past where this lane stopped, and the answer held.** `CLAUDE.md` cites six
+ids. `P-123`, `P-126` and `P-138` are ledger rows; `Q-8` and `Q-17` are cited for what they did,
+which stays true whatever their status. **`Q-1` was the only status claim in the file** - so *no
+third case* is now checked over all six rather than the two that were looked at, which is a
+different and better statement.
 
 ### C-13 - Six promotions are followed, and the gate is green
 

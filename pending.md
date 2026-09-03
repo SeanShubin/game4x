@@ -20,10 +20,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (1)
-
-- **C-14** - Two of `CLAUDE.md`'s worked examples no longer hold · `crates/outbox.md`
-
 ## Sections that have taken more than one proposal
 
 Not a defect list. Several proposals in one section is what working on one topic looks
