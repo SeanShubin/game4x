@@ -84,63 +84,66 @@ only when food ran out, so the two can never both fire in one territory in one t
 **The rows move to match**, because a reader who takes the table for the order gets `upkeep` fourth,
 and `surplus` and `unpaid` do not exist until it has run.
 
-### P-190 - The recipe table says `in` and `out` where you want six columns
+### P-190 - Seven columns, and three of the six you named are not columns
 
 **to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
 `releases/first-release.md` -> Recipes
 
-**`Role` carries two values and you named six things.** This is the smallest change that gets all
-six without giving up one row per ingredient.
+**`require`, `consume` and `produce` are three values of one column.** That is why six was an
+awkward number: the list mixes one per-ingredient fact with three per-recipe ones, and the two do
+not belong in the same table the same way.
 
-> `Role` takes one of `require`, `consume` or `produce`. `Owner` is renamed **Auto**, whose values
-> are `player` and `world`. Two new columns: **Scope**, which is where the recipe is evaluated,
-> either `a territory` or `everywhere`; and **Lifecycle**, which is the part of the turn it belongs
-> to, one of `producing`, `consuming` or `transforming`.
+> The recipe table has seven columns: **Recipe**, **Auto**, **Role**, **Qty**, **Kind**, **Traits**
+> and **Where**.
 >
-> Every recipe whose `Auto` is `player` has `Scope` `a territory` and `Lifecycle` `producing`.
-> `upkeep`, `perish` and `spoil` have `Scope` `everywhere` and `Lifecycle` `consuming`. `grow`,
-> `age` and `ready` have `Scope` `everywhere` and `Lifecycle` `transforming`.
+> **Auto** is `player` or `world`. **Role** is one of `require`, `limit`, `consume` or `produce`: a
+> requirement must be present and is not taken, a limit is a maximum that must not be exceeded, a
+> consumption is taken, and a production is made. **Qty** is a whole number or an expression.
+> **Kind** is the kind or the family alone. **Traits** are the constraints on it. **Where** is the
+> place the row is about, and a blank means the one place the recipe acts.
+>
+> Every row today becomes a row under this scheme. An `in` row bounded `at most` becomes `limit`.
+> An `in` row whose thing and quantity also appear as an `out` row of the same recipe becomes
+> `require`, and that `out` row is dropped. Any other `in` row becomes `consume`, and any other
+> `out` row becomes `produce`. The `Thing` cell splits three ways: the kind or family into
+> **Kind**, an `in $name` into **Where**, and everything else into **Traits**. `Bound` is deleted.
 
-**Amended after you said promote, and not promoted, because the original named three columns and
-no values.** Filling thirty-four cells by my own judgment and shipping them into a normative file is
-authoring, not promoting - so the values are above now, where you can approve them or correct them
-in one read.
+**Basis: measured over all seventeen recipes and all sixty-six rows.**
 
-**Two of the three values are derived from something you already own** and one is not.
-`Lifecycle`'s three values are `spec/turn.md`'s three parts of a turn, and the split of the world's
-six between `consuming` and `transforming` is **my reading of your sentence**: paying upkeep,
-perishing and spoiling take things away, while growing, ageing and readying change what is there.
-**If that split is wrong, it is the only line here that can be.**
+| Column                     | What it earns                                                            |
+| -------------------------- | ------------------------------------------------------------------------ |
+| **Role** absorbing `Bound` | `Bound` says something other than its role's default in **2 of 66 rows** |
+| **Role** collapsing echoes | 66 rows become **60**: six pairs exist only to say *not consumed*        |
+| **Traits**                 | **27 of 66 rows** constrain one                                          |
+| **Where**                  | **4 rows** name a place and **8** bind or use a `$name`                  |
+| **Scope**                  | **nothing**: it is `everywhere` exactly when `Auto` is `world`           |
+| **Lifecycle**              | **little**: eleven of seventeen recipes fall in one bucket               |
 
-**And a finding you should have before you decide.** Across all seventeen recipes, `Scope` is
-`everywhere` exactly when `Auto` is `world` - **so the column carries no information this release
-can use.** `Lifecycle` is almost as bad: it separates the world's six into two groups and puts
-every one of the player's eleven in one bucket.
+**`move` is the recipe that shows all of it**, going from seven rows to five:
 
-**That is an argument for the columns, not against them, but it is a different argument than
-presence.** They earn their place the first time a recipe breaks the pattern - a player's recipe
-that applies everywhere, or a world recipe that fires during a turn rather than at its end - and
-until one does, a reader who sees the columns will reasonably infer they are independent when they
-are not. **You may want them anyway**, because the editor you have in mind will need somewhere to
-put those values before the first recipe needs them.
+| move | player | require | 1 | territory | | `$from` |
+| | | require | 1 | territory | next to `$from` | `$to` |
+| | | consume | 1 | unit | ready | `$from` |
+| | | produce | 1 | unit | exhausted | `$to` |
+| | | consume | 1 | energy | | in that unit |
 
-**Basis: this reverses `P-159`, and that is the part worth your attention.** That proposal deleted
-a `Consumed` column because consumption is derivable - an ingredient is consumed exactly when the
-same thing with the same traits is not among the results. **It still is derivable.** What changed
-is that you want to read it rather than derive it, and a reader working out whether a garrison
-survives `produce pioneer` is doing that derivation by hand every time.
+**`Where` is the column that matters most and the one you did not name.** `P-183` died asking where
+a recipe acts, and this is the answer in the shape your `scope` pointed at: a blank means *the one
+place this recipe acts*, so the eleven recipes that name no territory say so by saying nothing, and
+the five rows that mean somewhere else say which.
 
-**On your two "perhaps"**: `Scope` does not fold into `require`, because *everywhere* is not a
-thing that must be present - it says the recipe is not evaluated at a place at all, which no
-ingredient can express. `Auto` does not fold into `Lifecycle`, because lifecycle answers *when* and
-auto answers *who decides*; the world acts at the end of a turn and the player acts during one, and
-those two agree today but need not.
+**On leaving `Scope` and `Lifecycle` out.** They are per-recipe facts in a per-ingredient table, so
+each costs sixty rows to state seventeen things, and today neither states anything a reader could
+not get from `Auto`. **If you want them, take them as a second table** - one row per recipe, four
+columns, `Recipe`, `Auto`, `Scope`, `Lifecycle` - which costs seventeen cells rather than sixty and
+leaves this one narrow. That split is also what the rule editor will want, because the two tables
+are the two things it edits.
 
-**`Scope` also answers `P-183`**, which asked where a recipe's results appear. That was about to be
-settled with a rule saying *one place*, and **your `everywhere` shows the rule would have been
-wrong.** `P-183` is withdrawn into this one.
+**This still reverses `P-159`**, which deleted a `Consumed` column because consumption is derivable.
+It is still derivable; what changed is that you want to read it rather than derive it, and the six
+echo rows are what deriving it costs.
 
-**This re-renders `docs/recipes/README.md`**, so it is the one to decide last.
+**This re-renders `docs/recipes/README.md`.**
 
 ## Addressed to other perspectives
 

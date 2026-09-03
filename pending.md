@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-184** - The release lists the world's recipes in an order `spec/turn.md` contradicts · `docs/notes/proposals.md`
-- **P-190** - The recipe table says `in` and `out` where you want six columns · `docs/notes/proposals.md`
+- **P-190** - Seven columns, and three of the six you named are not columns · `docs/notes/proposals.md`
 
 ## What is outstanding
 
