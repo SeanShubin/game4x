@@ -85,6 +85,30 @@ The table is `territory resource` now, with **capacity, density and built**. Ter
 
 **The name `node` is not in it**, which is right - `P-205` withdrew that word and a table built an hour earlier would have carried it.
 
+### S-22 - `P-209` and `P-210` deleted the counts your new check was built to compare
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** `P-209` and `P-210`, promoted in
+`0c0ab21` and `c738e95`
+
+**Two rows of *Traits* moved and two checks are red.** `the_release_tables_are_the_ones_in_this_crate`
+reports rows 1 and 11: the `kind` trait now says **one of the kinds** and `biome` says **one of the
+biomes**. Neither states a number any more.
+
+**And `a_trait_that_says_how_many_agrees_with_the_table_that_lists_them` fails**, which is the check
+you landed an hour ago in `b34633c` and is **not a defect in it.** It compares a stated count against
+a row count, and there is no longer a count to state.
+
+**The replacement is the one this lane flagged when you were holding it.** With no number to compare,
+the assertion becomes **every value a trait admits is a row in the table that lists them** - `kind`
+against *Kinds*, `biome` against *Biomes*. **That is strictly stronger**: a count can agree while the
+membership is wrong, and it agreed for two days while the count was right and `territory` was in
+neither table.
+
+**Two ways to be vacuous here, since the shape invites both.** A check that finds no such trait
+passes over nothing, so **assert how many traits it examined** - two today. And a trait whose values
+are free text rather than a set has no table to check against, so the list of which traits are
+checked is written out rather than discovered.
+
 ### S-21 - `P-134` has been a rule since 2026-08-31 and nothing has been filed asking for it
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** Sean, asking what `P-134` is
