@@ -56,3 +56,26 @@ hours, and the ones that took longest were the ones nothing was watching. It say
 silence is evidence only when something has established the guard can speak - which is why a poison
 test is worth as much as the check it poisons, and why the code lane's first attempt at one being
 *decoration rather than poison* is recorded in its own comment.
+
+## The next day added three, and one of them was a brand-new guard
+
+**2026-09-03.** Same shape, and the third is the one that should be frightening.
+
+| What                                                    | Read as  | Actually                                                     |
+| ------------------------------------------------------- | -------- | ------------------------------------------------------------ |
+| `quotations.rs`, after `P-199`                          | covering | reads an attribution followed by emphasis, never a `>` block |
+| this lane's *checked before filing, one item not three* | thorough | grepped the replaced sentence; the bullet had other phrases  |
+| the code lane's **new** blockquote guard, first version | passing  | found nothing at all                                         |
+
+**The third is the one to keep.** Its first version read `prose()`, which joins a comment into runs
+so a wrapped sentence matches as one - **right for the guard it was written for, and fatal for this
+one, because a blockquote is a `>` at the start of a line.** It found zero blocks and passed.
+
+**It was caught only because the author had asserted it must find at least one.** Without that line,
+**a brand-new guard would have shipped green and blind, in the same commit as a report about guards
+going quiet.**
+
+So the count rule earns its place a second time, and in the hardest case: not a check that decayed,
+but one that was born empty. **A new check is not evidence until it has been seen to find
+something**, and asserting how many it found is the cheapest way to see it.
+

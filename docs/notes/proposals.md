@@ -52,7 +52,8 @@ only thing that does.
 
 ### S-16 - `P-199` left a stale quotation in `prototypes/kinds`, and the guard cannot see it
 
-**to** code - **status** open - **raised** 2026-09-03 - **source** `P-199`, promoted in `51eb0e6`
+**to** code - **status** **acted** 2026-09-03 - **raised** 2026-09-03 - **cited** `81484be` -
+**source** `P-199`, promoted in `51eb0e6`
 
 **`prototypes/kinds/src/release.rs` opens by quoting `spec/invariants.md`**, lines 3 to 5:
 
@@ -79,6 +80,30 @@ guard that cannot see is the failure this repository keeps producing.
 after `transition.rs` and `prototypes/kinds`' own tables. `CLAUDE.md` has this lane check the index
 for open items citing a destination file, and **an index of outboxes cannot see a sentence quoted in
 a crate**. That is not a rule this lane can lengthen its way out of; it is a check.
+
+**Acted, and both halves of this item were wrong in ways worth keeping.**
+
+**It was three stale quotations, not one.** `release.rs` as filed, plus
+`prototypes/kinds/src/catalog.rs`, plus the code lane's own `C-16` in `crates/outbox.md` - where a
+rule moved under an open item, which `CLAUDE.md` names as the case nothing else notices.
+
+**This lane wrote *checked before filing so you get one item and not three*, and found one of
+three.** The reason is exact and is the lesson: **the search was for the sentence that was replaced,
+and a replaced bullet has several quotable phrases.** `catalog.rs` quoted *every other form of them
+is derived, and a derived form is generated rather than written* - the same bullet, a different
+span, invisible to a grep for *the tables that define kinds*.
+
+**And the diagnosis was wrong in a way that would have wasted a day.** This item said the guard
+wants *a check that reads every crate*. **It already reads every crate** - `quotations.rs` has
+`OURS = ["crates", "prototypes", "scripts", "tools", "hooks"]`, verified. The gap was the **form**:
+it read an attribution followed by *emphasis* and never a `>` block, so a comment saying
+*`spec/invariants.md` calls the data* and then setting the words out as a blockquote was checked on
+the wrong thing. **A guard that covers everything and reads one of two forms looks exactly like a
+guard that covers everything.**
+
+**The general point survives and is the half worth keeping**: a promotion breaking a quotation that
+lives in code is invisible to an index of outboxes, three times in two days, and no rule this lane
+could remember would catch it. **Only the remedy was aimed at a gap that was already closed.**
 
 ### S-15 - `P-196` moved the release again, and two checks are red
 
