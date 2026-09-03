@@ -197,7 +197,7 @@ fn a_promotion_lands_what_was_approved() {
 
         let gone: Vec<outbox::Item> = outbox::parse(&before, "docs/notes/proposals.md")
             .into_iter()
-            .filter(|item| item.id.starts_with("P-") && item.is_open())
+            .filter(|item| item.id.starts_with("P-") && item.is_outstanding())
             .filter(|item| !after.contains(&format!("### {} ", item.id)))
             .filter(|item| {
                 let promoted =
@@ -327,4 +327,59 @@ fn a_field_is_read_whatever_separates_it() {
         Some("spec/planet.md".to_string())
     );
     assert_eq!(field(middot, "nonesuch"), None);
+}
+
+/// A capability waiting on a person is outstanding, and shows up as such.
+///
+/// **`S-17`.** `releases/first-release.md` gives a capability three states, and the middle
+/// one - `built`, addressed `to sean` - means *the code lane says it is done and nobody has
+/// looked*. Reading only `open` made that item vanish from the index at exactly the moment
+/// it started waiting on somebody. `CLAUDE.md` records the consequence: five capabilities
+/// could never move while `pending.md` reported that nothing needed deciding.
+///
+/// **Written against text rather than against the live outboxes, deliberately.** Nothing
+/// carries `built` today - all six capabilities are `vetted` or `open` - so a test reading
+/// the real files would pass without exercising the case at all, and would go on passing
+/// after somebody reintroduced the bug. The states are written out here instead.
+#[test]
+fn a_capability_that_is_built_is_still_waiting_on_somebody() {
+    let release = "\
+### R-9 - something not built yet
+
+**to** code · **status** open · **vetted when** somebody looks
+
+### R-10 - something built and unlooked-at
+
+**to** sean · **status** **built** 2026-09-03 · **evidence** it exists
+
+### R-11 - something a person has observed
+
+**to** sean · **status** **vetted** 2026-09-03 · **evidence** it held
+";
+    let items = outbox::parse(release, "releases/first-release.md");
+    assert_eq!(items.len(), 3, "three capabilities written, three read");
+
+    let waiting: Vec<&str> = items
+        .iter()
+        .filter(|item| item.is_outstanding())
+        .map(|item| item.id.as_str())
+        .collect();
+    assert_eq!(
+        waiting,
+        ["R-9", "R-10"],
+        "a capability is outstanding while it is open and while it is built; only a person \
+         setting it vetted ends that"
+    );
+
+    // The half that would have caught the original bug on its own.
+    let built = items
+        .iter()
+        .find(|item| item.id == "R-10")
+        .expect("written above");
+    assert!(
+        built.is_outstanding(),
+        "`built` means nobody has looked yet, so it is the one state that most needs to be \
+         visible - it is where every capability vetted by looking waits"
+    );
+    assert_eq!(built.to, "sean", "and it waits on a person, not on the code lane");
 }

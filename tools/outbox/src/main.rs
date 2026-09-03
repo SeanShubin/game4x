@@ -54,7 +54,7 @@ fn main() {
             }
         }
         Some("--count") => {
-            let open = all.items.iter().filter(|item| item.is_open()).count();
+            let open = all.items.iter().filter(|item| item.is_outstanding()).count();
             // The count and nothing more, until `Q-32` settles what the limit counts.
             //
             // This used to add "past the limit: reviewing now costs as much as writing".
@@ -72,7 +72,7 @@ fn main() {
             0
         }
         Some("--check") => {
-            let open: Vec<&Item> = all.items.iter().filter(|item| item.is_open()).collect();
+            let open: Vec<&Item> = all.items.iter().filter(|item| item.is_outstanding()).collect();
             if open.is_empty() {
                 println!("nothing open; every perspective knows of nothing outstanding");
                 0

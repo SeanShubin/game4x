@@ -65,9 +65,28 @@ pub struct Item {
     pub cited: Vec<String>,
 }
 
+/// The statuses that mean somebody still has to do something.
+///
+/// **`built` is one of them, and leaving it out is how the index went quiet.**
+/// `releases/first-release.md` gives a capability three states: `open` addressed `to code`,
+/// then **`built`, addressed `to sean` - the code lane says it is done, and nobody has
+/// looked**, then `vetted`. So `built` is not a finished state; it is the state of waiting
+/// on a person, and it is where every capability vetted by looking will sit.
+///
+/// This read `status == "open"` alone, so a capability vanished from `pending.md` at exactly
+/// the moment it began waiting on Sean. `CLAUDE.md` records that happening: five capabilities
+/// could never move while the index reported that nothing needed deciding. The rule was
+/// written into the release and never into the code that reads it.
+pub const OUTSTANDING: [&str; 2] = ["open", "built"];
+
 impl Item {
-    pub fn is_open(&self) -> bool {
-        self.status == "open"
+    /// Whether this item still needs somebody to act.
+    ///
+    /// Named for what it means rather than for one of its values: *nothing open means
+    /// nothing outstanding* is the promise, and `open` is a status while outstanding is the
+    /// question.
+    pub fn is_outstanding(&self) -> bool {
+        OUTSTANDING.contains(&self.status.as_str())
     }
 }
 
@@ -574,7 +593,7 @@ pub struct Unclosed {
 /// in commits about code or documents somewhere else.
 pub fn unclosed(items: &[Item], commits: &[Commit]) -> Vec<Unclosed> {
     let mut found = Vec::new();
-    for item in items.iter().filter(|item| item.is_open()) {
+    for item in items.iter().filter(|item| item.is_outstanding()) {
         for commit in commits {
             if commit.touched.iter().any(|path| path == &item.outbox) {
                 continue;
@@ -664,7 +683,7 @@ pub fn history(root: &Path, depth: usize) -> Vec<Commit> {
 /// Open items, grouped by who has to act, addressees in alphabetical order.
 pub fn open_by_addressee(items: &[Item]) -> BTreeMap<String, Vec<&Item>> {
     let mut grouped: BTreeMap<String, Vec<&Item>> = BTreeMap::new();
-    for item in items.iter().filter(|item| item.is_open()) {
+    for item in items.iter().filter(|item| item.is_outstanding()) {
         grouped.entry(item.to.clone()).or_default().push(item);
     }
     grouped
@@ -1195,7 +1214,7 @@ Only prose.
 
         let proposals: Vec<Item> = parsed
             .into_iter()
-            .filter(|item| item.id.starts_with("P-") && item.is_open())
+            .filter(|item| item.id.starts_with("P-") && item.is_outstanding())
             .collect();
 
         for proposal in &proposals {
