@@ -85,6 +85,26 @@ fn is_a_commit(root: &Path, hash: &str) -> bool {
         .unwrap_or(false)
 }
 
+/// Whether a fresh clone of this repository would have the commit.
+///
+/// **Existing here is not the question.** `git cat-file -e` succeeds for any object in the
+/// local database, including one no ref points at - an amended commit, a reset branch, a
+/// `commit-tree` - and a clone only ever receives what is reachable. So a citation to an
+/// orphan passes on the machine that wrote it and fails in CI, which is the most confusing
+/// direction for a check to fail in.
+///
+/// Latent rather than theoretical: all 61 citations were reachable when this was written,
+/// and `6650161` had just made the check run in CI for the first time. The gap was found
+/// looking for what the first live run could hit.
+fn is_reachable(root: &Path, hash: &str) -> bool {
+    Command::new("git")
+        .current_dir(root)
+        .args(["merge-base", "--is-ancestor", hash, "HEAD"])
+        .status()
+        .map(|status| status.success())
+        .unwrap_or(false)
+}
+
 /// Whether this clone has the files without the history.
 ///
 /// **`HEAD` resolving does not answer this**, which is what the guard below used to ask.
@@ -99,6 +119,60 @@ fn is_shallow(root: &Path) -> bool {
         .output()
         .map(|out| String::from_utf8_lossy(&out.stdout).trim() == "true")
         .unwrap_or(false)
+}
+
+/// The two questions differ, in a repository built to make them differ.
+///
+/// **A check that has never been seen to go red is a claim.** This builds a throwaway
+/// repository, makes a commit no ref points at, and requires `is_a_commit` to say yes while
+/// `is_reachable` says no - which is exactly the state that would pass on a developer's
+/// machine and fail in CI, where the clone only has what is reachable.
+///
+/// It touches nothing outside its own temporary directory, and removes it afterwards.
+#[test]
+fn an_unreachable_commit_exists_here_and_would_not_survive_a_clone() {
+    let at = std::env::temp_dir().join("outbox-reachability-check");
+    let _ = std::fs::remove_dir_all(&at);
+    std::fs::create_dir_all(&at).expect("a directory to build a repository in");
+
+    let git = |args: &[&str]| -> String {
+        let out = Command::new("git")
+            .current_dir(&at)
+            .args(args)
+            .output()
+            .unwrap_or_else(|why| panic!("git {args:?}: {why}"));
+        assert!(
+            out.status.success(),
+            "git {args:?}: {}",
+            String::from_utf8_lossy(&out.stderr)
+        );
+        String::from_utf8_lossy(&out.stdout).trim().to_string()
+    };
+
+    git(&["init", "--quiet"]);
+    git(&["config", "user.email", "check@example.com"]);
+    git(&["config", "user.name", "check"]);
+    std::fs::write(at.join("a.txt"), "a").expect("a file to commit");
+    git(&["add", "a.txt"]);
+    git(&["commit", "--quiet", "-m", "reachable"]);
+
+    let reachable = git(&["rev-parse", "HEAD"]);
+    // A commit object with no ref pointing at it, which is what an amend or a reset leaves
+    // behind. `commit-tree` writes the object and updates nothing.
+    let tree = git(&["rev-parse", "HEAD^{tree}"]);
+    let orphan = git(&["commit-tree", &tree, "-p", &reachable, "-m", "unreachable"]);
+
+    assert!(is_a_commit(&at, &reachable) && is_reachable(&at, &reachable));
+    assert!(
+        is_a_commit(&at, &orphan),
+        "the old question: the object is here"
+    );
+    assert!(
+        !is_reachable(&at, &orphan),
+        "the question that matters: nothing reaches it, so a clone gets nothing"
+    );
+
+    std::fs::remove_dir_all(&at).ok();
 }
 
 #[test]
@@ -119,7 +193,12 @@ fn every_hash_an_outbox_cites_is_a_commit() {
         for hash in cited(&text) {
             checked += 1;
             if !is_a_commit(&root, &hash) {
-                missing.push(format!("{}: {hash}", at.display()));
+                missing.push(format!("{}: {hash} is not a commit here", at.display()));
+            } else if !is_reachable(&root, &hash) {
+                missing.push(format!(
+                    "{}: {hash} exists here but nothing reaches it, so a clone will not have it",
+                    at.display()
+                ));
             }
         }
     }
