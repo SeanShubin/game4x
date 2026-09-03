@@ -45,37 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-204 - The third rule for using AI assistants
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `docs/process.md`, a new section at the top, before *Specification Instance*
-
-**Your words, filed rather than typed in**, because `docs/process.md` is your statement of what this
-process is for and this is a new idea in it.
-
-> ## Three rules for using AI assistants
->
-> - Never let AI make a decision
-> - Never blindly trust anything an AI tells you
-> - Have a place you can look to tell what the AI did
->
-> The third one is the data dump in this case.
-
-**Basis: the first two are already enforced by machinery in this repository and the third was not.**
-*Never let AI make a decision* is the promotion protocol - nothing reaches `spec/` without you
-saying the word. *Never blindly trust* is why a commit that claims something about the tree has to
-check it, and why a proposal shows you the text rather than reporting that it changed.
-
-**The third had nothing.** Until `state.md` existed there was no place to look at what the work
-actually produced - only documents describing it, written by the thing being checked. **It found
-something on its first day**: you read one column name and it led to `S-19`, where the model
-computes control from a stored `founded` while the specification derives it from a citizen being
-present. **No document would have shown you that**, because every document said the right thing.
-
-**And it names why the reports are not a convenience.** `P-193` argued generated views on the
-grounds that prose drifts. This is the stronger reason: **a document written by the assistant is
-evidence about the assistant, and the dump is evidence about the work.**
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -1034,6 +1003,7 @@ work the release exists to order.
 | P-201, Auto is Owner again, the duplicate metal column goes, and Capacity is Container                          | `releases/first-release.md` -> Recipes, Units and structures, Where things are                                                               | 2026-09-03 |
 | P-202, a control among alternatives shows which is chosen, and the drawing's binding is written down            | `spec/interface.md` -> What an action shows, `releases/first-release.md` -> Controls                                                         | 2026-09-03 |
 | P-203, a generated file is written in the form the padder would leave it                                        | `CLAUDE.md` -> Perspectives                                                                                                                  | 2026-09-03 |
+| P-204, three rules for using AI assistants, the third being a place to look                                     | `docs/process.md`, a new section                                                                                                             | 2026-09-03 |
 
 ## Rejected
 

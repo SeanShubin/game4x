@@ -5,6 +5,14 @@
   - 1 instance for coding
   - 1 instance for each type of research, but I always include quality as one of my research instances
 
+## Three rules for using AI assistants
+
+- Never let AI make a decision
+- Never blindly trust anything an AI tells you
+- Have a place you can look to tell what the AI did
+
+The third one is the data dump in this case.
+
 ## Specification Instance
 - I have Claude generate proposals for changes to the specification
 - I work with claude to make sure I approve the exact text of the proposals
