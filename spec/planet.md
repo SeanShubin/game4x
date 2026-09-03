@@ -34,7 +34,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 ## What a territory carries
 
 - Each territory has an id, unique within its planet, starting at 1
-- For each resource, a territory has room for some number of extractors, and a density that
+- For each resource, a territory has total capacity for some number of extractors, and a density that
   each of them yields.
 - Each territory has a biome.
 - A territory's biome is what the terrain gives it. It is not chosen independently of the

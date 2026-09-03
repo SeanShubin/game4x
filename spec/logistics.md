@@ -19,7 +19,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   holds, and **available capacity** is the total less the used; both are derived, so neither can
   disagree with what is there. A total capacity of four extractors is a maximum of four, so nothing
   a player builds ever crowds out something of another kind.
-- A thing that contains things takes up room in whatever contains it, so room is not conserved
+- A thing that contains things takes up capacity in whatever contains it, so capacity is not conserved
 - A thing says which of the things in it are next to which. That is a fact about the container
   rather than about its contents
 - Nothing contains itself, directly or through anything else

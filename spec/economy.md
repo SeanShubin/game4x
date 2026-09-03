@@ -13,7 +13,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - How many extractors can be built for a resource is a fact of the territory
 - The territory's density for a resource is what each extractor pulls from it each turn
 - It costs labor to operate extractors
-- For example, a territory with room for three food extractors at density 6 supports three farms,
+- For example, a territory with total capacity for three food extractors at density 6 supports three farms,
   and a unit of labor spent at any of them produces 6 food that turn
 
 ## Structures and labor

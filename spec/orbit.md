@@ -8,7 +8,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## The orbital layer
 
-- A planet has an orbit above each of its territories. An orbit is not a territory: it has room
+- A planet has an orbit above each of its territories. An orbit is not a territory: it has total capacity
   for no extractors, and nothing is extracted there
 - Nothing orbits a planet without being above a particular territory
 

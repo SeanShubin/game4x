@@ -19,11 +19,11 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ### Territory resources
 
-**In** - `spec/planet.md`, *for each resource, a territory has room for some number of
-extractors, and a density that each of them yields*.
+**In** - `spec/planet.md`, *for each resource, a territory has total capacity for some number
+of extractors, and a density that each of them yields*.
 
 The twelve territories are fixed, each chosen to exercise a different consequence of the rules.
-Every territory has room for at least one food extractor.
+Every territory has total capacity for at least one food extractor.
 
 | Territory | Food  | Metal | Energy | What it exercises                          |
 | --------- | ----- | ----- | ------ | ------------------------------------------ |
@@ -76,13 +76,13 @@ Every territory has room for at least one food extractor.
 
 ## Where things are
 
-Every thing is in another thing, and this release has three sorts of room.
+Every thing is in another thing, and this release has three sorts of capacity.
 
-| Room                          | Holds                         | Up to                           |
-| ----------------------------- | ----------------------------- | ------------------------------- |
-| a territory's room for a kind | that kind                     | what the territory has room for |
-| an extractor's catch          | the resource it was built for | the territory's density for it  |
-| a unit's tank                 | energy                        | the unit's fuel                 |
+| Capacity                                | Holds                         | Up to                            |
+| --------------------------------------- | ----------------------------- | -------------------------------- |
+| a territory's total capacity for a kind | that kind                     | its total capacity for that kind |
+| an extractor's catch                    | the resource it was built for | the territory's density for it   |
+| a unit's tank                           | energy                        | the unit's fuel                  |
 
 There are twelve territories and twelve orbits. An orbit holds units and nothing else.
 
@@ -99,7 +99,7 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 | **metal in it**     | whatever is built               | a number                         | derived: its binding plus the metal in its parts |
 | **resource**        | an extractor                    | food, metal or energy            | stored                                           |
 | **density**         | a territory, per resource       | a number                         | stored                                           |
-| **room**            | a territory, per kind           | a number                         | stored                                           |
+| **total capacity**  | a territory, per kind           | a number                         | stored                                           |
 | **control**         | a territory                     | held by a player, or unclaimed   | derived: a citizen of that player is there       |
 | **biome**           | a territory                     | one of the six                   | stored                                           |
 | **force of nature** | a territory                     | a number                         | stored                                           |
@@ -111,9 +111,9 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 
 Food is made with `keeps` 1.
 
-## What a territory has room for
+## What a territory has total capacity for
 
-| Kind          | Room                                                     |
+| Kind          | Total capacity                                           |
 | ------------- | -------------------------------------------------------- |
 | **citizen**   | 8                                                        |
 | **garrison**  | 1                                                        |
@@ -157,6 +157,9 @@ two candidates.
 
 A blank is not a zero. It says the row has no such number, and a quantity read from one produces
 nothing.
+
+In the world's order `age` runs after `spoil` and before `ready`, so food made this turn
+survives one ending and is lost at the next.
 
 | Recipe                     | Owner  | Role | Thing                            | Qty                                  | Bound    |
 | -------------------------- | ------ | ---- | -------------------------------- | ------------------------------------ | -------- |
@@ -240,8 +243,8 @@ What each biome gives a territory. Ocean is not claimable and carries nothing.
 | Jungle    | 4 x 6 | 1 x 2 | 1 x 2  | 1               |
 | Mountain  | 1 x 3 | 5 x 7 | 2 x 3  | 1               |
 
-`5 x 6` is room for five extractors, each yielding six. Every biome except ocean has room for at
-least one food extractor at density two or more.
+`5 x 6` is total capacity for five extractors, each yielding six. Every biome except ocean has
+total capacity for at least one food extractor at density two or more.
 
 ## Controls
 

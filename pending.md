@@ -9,9 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-184** - The release lists the world's recipes in an order `spec/turn.md` contradicts · `docs/notes/proposals.md`
-- **P-185** - `spec/turn.md` names a recipe that `P-176` merged away · `docs/notes/proposals.md`
 - **P-190** - The recipe table says `in` and `out` where you want six columns · `docs/notes/proposals.md`
-- **P-191** - `room` is now a second name for total capacity · `docs/notes/proposals.md`
 
 ## What is outstanding
 
@@ -34,10 +32,10 @@ it exists to ask.
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146
+- `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
-- `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147
