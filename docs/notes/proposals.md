@@ -150,11 +150,22 @@ its upkeep. That is legitimate and it is now visible, where before it looked lik
 **A number that can never bind before another mechanism does is the thing worth finding**, and only
 a table that names both can show you one.
 
-**What this does not decide.** Whether the citizen capacity of 8 was ever meant to bind. **If it
-was, the model is wrong and this is the wrong fix** - the release would keep the number and the code
-would gain a limit. `state.md` says twelve citizens on a territory producing twelve food, which is
-the food bound exactly, so this lane's reading is that the model is doing what you want and the
-release is the stale half. **You are the only one who can say which.**
+**Sean, asked: *I never intended for a territory to have a capacity for citizens.*** So the model
+was right and the release was never right - not stale, but wrong on the day it landed. The reading
+above is confirmed and this proposal is the whole fix.
+
+**How it got in is worth one sentence, because it is not carelessness and it will happen again.**
+`P-156` filed *what a territory has room for* as **ten numbers in one table**, and it was promoted
+as a table. **A number nobody decided reads exactly like nine numbers somebody did**, and nothing
+between then and now would have surfaced it: every document agreed, the model quietly ignored it,
+and the tests compared the documents to each other.
+
+**`state.md` is what surfaced it, on its first day of existing** - twelve citizens beside a stated
+capacity of eight. That is the third rule earning its place: *have a place you can look to tell what
+the AI did.*
+
+**One cascade to land with it.** `docs/recipes/README.md` opens each section with *Room: citizens 8,
+garrison 1, yard 1...* and that line goes when the number does.
 
 ## Addressed to other perspectives
 

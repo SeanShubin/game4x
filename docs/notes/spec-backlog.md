@@ -18,6 +18,9 @@ capacity is a valuable concept in general and don't want to make exceptions ligh
 **Measured while answering**: `state.md` shows territory 1 with twelve citizens; the release says a
 capacity of 8; the model has no citizen limit at all.
 
+*I never intended for a territory to have a capacity for citizens.* **So the release was wrong on
+the day it landed rather than stale**, and the model was right all along.
+
 ## Said 2026-09-03, on arrangements and on nodes
 
 - *The arrangement is data the game loads* - the tree model in
