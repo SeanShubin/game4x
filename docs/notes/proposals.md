@@ -54,13 +54,26 @@ decision that has not been made yet. Two at the end are waiting on something and
 table lists them grow, spoil, ready, upkeep, perish - upkeep last but one, when three of the others
 read a trait it derives.
 
-> **In** - `spec/turn.md`, *ending a turn: everything that eats, eats; then a population grows on
-> surplus food or starves for want of it; what expires expires, and what was not kept in order is
-> lost; and everything becomes ready again*.
+> **In** - `spec/turn.md`, *ending a turn: everything with upkeep pays it; then a population grows
+> on surplus food or starves for want of it; what expires expires, and what was not kept in order
+> is lost; and everything becomes ready again*.
 >
 > The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
-> that order: `upkeep`, then `grow` and `perish`, then `spoil`, then `ready`. The rows below are in
-> that order.
+> that order: `upkeep`, then `grow` and `perish`, then `spoil`, then `age`, then `ready`. The rows
+> below are in that order.
+
+**Amended after you said promote, and not promoted, because two things you approved in the same
+breath made the text above wrong.** Neither changes what this proposal decides; both change what it
+says.
+
+- **`P-189` added `age`**, so the order named five recipes where there are six. `age` now appears
+  between `spoil` and `ready`, which is where `P-189`'s own text already put it.
+- **`P-185` rewrote the sentence this quotes.** *Everything that eats, eats* is no longer in
+  `spec/turn.md`, so the quotation would have cited a line that does not exist.
+
+**Promoting this deletes a sentence.** `P-189`'s *in the world's order `age` runs after `spoil` and
+before `ready`* is in the release's Recipes prose and says a strict subset of what the text above
+says. It goes when this lands, and this paragraph is the notice.
 
 **Basis: this is a release following the specification, not a new rule.** Every phase maps to one
 recipe - *everything that eats* is `upkeep`, *grows or starves* is `grow` and `perish`, *what
@@ -79,9 +92,37 @@ and `surplus` and `unpaid` do not exist until it has run.
 **`Role` carries two values and you named six things.** This is the smallest change that gets all
 six without giving up one row per ingredient.
 
-> `Role` takes one of `require`, `consume` or `produce`. Two new columns: **Scope**, which is where
-> the recipe is evaluated - a territory, or everywhere - and **Lifecycle**, which is the part of
-> the turn it belongs to. `Owner` is renamed **Auto**, whose values are `player` and `world`.
+> `Role` takes one of `require`, `consume` or `produce`. `Owner` is renamed **Auto**, whose values
+> are `player` and `world`. Two new columns: **Scope**, which is where the recipe is evaluated,
+> either `a territory` or `everywhere`; and **Lifecycle**, which is the part of the turn it belongs
+> to, one of `producing`, `consuming` or `transforming`.
+>
+> Every recipe whose `Auto` is `player` has `Scope` `a territory` and `Lifecycle` `producing`.
+> `upkeep`, `perish` and `spoil` have `Scope` `everywhere` and `Lifecycle` `consuming`. `grow`,
+> `age` and `ready` have `Scope` `everywhere` and `Lifecycle` `transforming`.
+
+**Amended after you said promote, and not promoted, because the original named three columns and
+no values.** Filling thirty-four cells by my own judgment and shipping them into a normative file is
+authoring, not promoting - so the values are above now, where you can approve them or correct them
+in one read.
+
+**Two of the three values are derived from something you already own** and one is not.
+`Lifecycle`'s three values are `spec/turn.md`'s three parts of a turn, and the split of the world's
+six between `consuming` and `transforming` is **my reading of your sentence**: paying upkeep,
+perishing and spoiling take things away, while growing, ageing and readying change what is there.
+**If that split is wrong, it is the only line here that can be.**
+
+**And a finding you should have before you decide.** Across all seventeen recipes, `Scope` is
+`everywhere` exactly when `Auto` is `world` - **so the column carries no information this release
+can use.** `Lifecycle` is almost as bad: it separates the world's six into two groups and puts
+every one of the player's eleven in one bucket.
+
+**That is an argument for the columns, not against them, but it is a different argument than
+presence.** They earn their place the first time a recipe breaks the pattern - a player's recipe
+that applies everywhere, or a world recipe that fires during a turn rather than at its end - and
+until one does, a reader who sees the columns will reasonably infer they are independent when they
+are not. **You may want them anyway**, because the editor you have in mind will need somewhere to
+put those values before the first recipe needs them.
 
 **Basis: this reverses `P-159`, and that is the part worth your attention.** That proposal deleted
 a `Consumed` column because consumption is derivable - an ingredient is consumed exactly when the
