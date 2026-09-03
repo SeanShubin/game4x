@@ -399,3 +399,110 @@ fn metal_in_it_is_its_binding_plus_its_parts() {
         assert_eq!(thing.metal_in_it(), thing.binding, "{}", thing.kind.name());
     }
 }
+
+/// A trait that says how many values it has agrees with the table that lists them.
+///
+/// **This is the check the comparison above structurally cannot make.** That one holds this
+/// crate against the release - and this crate *copies* the release, so when the `kind` trait
+/// said *one of the twelve* while the Kinds table had fourteen rows, both said twelve and
+/// both agreed. **A comparison of two things that agree cannot notice that they are both
+/// wrong.** Only reading the number in one cell against the count of rows in another does.
+///
+/// It has gone stale twice in two days: *ten* until `P-192` added a territory and an orbit,
+/// *twelve* until `P-206` split the extractor into three.
+///
+/// **Written as the general form on purpose.** `P-209` proposes deleting the count, so the
+/// cell would read *one of the kinds* - and then there is no number to compare. The rule
+/// that survives that is *whatever the cell says about how many, the table that enumerates
+/// them has to bear out*, with a stated count being the strong case and no count being the
+/// case where there is nothing to be wrong about. Both are handled, so this does not need
+/// rewriting the day that lands.
+#[test]
+fn a_trait_that_says_how_many_agrees_with_the_table_that_lists_them() {
+    let document = release();
+
+    // The traits that name a closed set, and the table each set is written out in.
+    let counted: [(&str, &str); 2] = [("kind", "## Kinds"), ("biome", "## Biomes")];
+
+    let word = |said: &str| -> Option<usize> {
+        let mut found: Option<(usize, usize)> = None;
+        for (name, value) in [
+            ("one", 1usize),
+            ("two", 2),
+            ("three", 3),
+            ("four", 4),
+            ("five", 5),
+            ("six", 6),
+            ("seven", 7),
+            ("eight", 8),
+            ("nine", 9),
+            ("ten", 10),
+            ("eleven", 11),
+            ("twelve", 12),
+            ("thirteen", 13),
+            ("fourteen", 14),
+            ("fifteen", 15),
+            ("sixteen", 16),
+            ("seventeen", 17),
+            ("eighteen", 18),
+            ("nineteen", 19),
+            ("twenty", 20),
+        ] {
+            // The **last** match, not the first: *one of the fourteen* opens with a
+            // number word that is not the count, and taking the first found 1.
+            if said
+                .split_whitespace()
+                .filter(|w| w.trim_matches(',') == name)
+                .count()
+                > 0
+            {
+                found = Some((said.rfind(name).unwrap_or(0), value));
+            }
+        }
+        if let Some((_, value)) = found {
+            return Some(value);
+        }
+        said.split_whitespace().find_map(|w| w.parse().ok())
+    };
+
+    let mut checked = 0usize;
+    for (name, heading) in counted {
+        let row = table_under(&document, "## Traits")
+            .into_iter()
+            .find(|row| row.first().map(|c| c.trim_matches('*')) == Some(name))
+            .unwrap_or_else(|| panic!("the Traits table declares no `{name}`"));
+        let values = row.get(2).cloned().unwrap_or_default();
+
+        let listed = table_under(&document, heading).len().saturating_sub(1);
+        assert!(
+            listed > 0,
+            "{heading} lists nothing, so this would agree with any number at all"
+        );
+
+        match word(&values) {
+            Some(said) => {
+                checked += 1;
+                assert_eq!(
+                    said, listed,
+                    "the `{name}` trait says its values are {values:?}, and {heading} has \
+                     {listed} rows. One of them moved and the other did not - and this crate \
+                     copies the release, so the cell-by-cell comparison agrees with both."
+                );
+            }
+            // `P-209`'s shape: no number, nothing to disagree with, and the table above is
+            // still required to list something.
+            None => assert!(
+                values.contains(name) || values.contains("kinds") || values.contains("biomes"),
+                "the `{name}` trait says {values:?}, which names neither a count nor the set"
+            ),
+        }
+    }
+
+    // Both cases carry a number today. If a future release drops both, this says so rather
+    // than passing over an empty list.
+    assert!(
+        checked >= 1,
+        "no trait states a count any more; if that is deliberate the general arm above is \
+         doing the work and this line should go"
+    );
+}

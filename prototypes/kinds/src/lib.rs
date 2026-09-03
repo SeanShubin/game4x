@@ -293,7 +293,7 @@ pub const TRAITS: [TraitRow; 17] = [
     TraitRow {
         name: "kind",
         of: "every thing",
-        values: "one of the twelve",
+        values: "one of the fourteen",
         held: Held::Stored,
     },
     TraitRow {
