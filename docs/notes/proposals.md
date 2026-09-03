@@ -48,40 +48,69 @@ decision that has not been made yet. Two at the end are waiting on something and
 ### P-196 - Nothing can reach an orbit, so the loop's first and last steps have no recipe
 
 **to** sean - **status** open - **raised** 2026-09-02 - **kind** gap - **shape** instruction -
-**into** `releases/first-release.md` -> Families, Traits, Recipes
+**into** `releases/first-release.md` -> Families, Traits, Units and structures, Recipes
 
-**Found by the catalog's first run**, which puts every kind beside the recipes naming it and left
-`orbit` with none. **It is the only kind of which that is true**, and the two steps it breaks are
-step 2 and step 8.
+**Rewritten 2026-09-02 after you named adjacency and eligibility.** The first version proposed a
+`place` family and nothing else, and **your fifth eligibility rule breaks it**: an Ark may be in a
+territory and be adjacent to another territory and still not use that edge, so eligibility is about
+**edges** and a family of places cannot say it.
 
 > A fourth family, **place**, whose members are `territory` and `orbit`.
 >
-> `move`'s two `require` rows name `place` rather than `territory`. The `adjacency` trait is **of a
-> place**, and the planet says an orbit is next to the territory below it and to nothing else.
+> **Adjacency is of a place**, and says which places it touches and by which kind of edge. Three
+> kinds: **border**, between two territories; **orbit border**, between two orbits; and **ascent**,
+> between a territory and its own orbit. The planet states all of them.
+>
+> A new column in *Units and structures*, **Crosses**: which kinds of edge the unit may traverse. A
+> Pioneer crosses `border`. An Ark crosses `orbit border` and `ascent`.
+>
+> `move` requires `$from` place and `$to` place, and `$to`'s constraint is *joined to `$from` by an
+> edge the unit crosses*.
+>
+> `deploy ark` consumes `ark`, in the orbit above `$where`.
 >
 > **The assertion that proves this was applied**: the Families table has four rows and `place` names
-> `territory, orbit`; no row of `move` names `territory`; and `adjacency` reads *a place*.
+> `territory, orbit`; `adjacency` reads *a place*; the Units table has a `Crosses` column, blank for
+> everything that does not move; no row of `move` names `territory`; and `deploy ark`'s `ark` row
+> names the orbit above `$where`.
 
-**Basis: two collapses assumed a destination the rows cannot express.** `launch` was folded into
-`move` because it was *`move` with a different destination*, and `land` became `deploy ark`.
-**`move` requires `$to territory, next to $from` - both territories** - and `deploy ark` consumes
-`ark, in $where` where `$where` is a territory, so the ark is already on the ground. Neither absorbed
-what it was said to absorb.
+**Basis: three edge kinds are the fewest that can state your five rules.** `border` and `orbit
+border` must be distinguishable, or *an Ark crosses borders* would let it walk between territories -
+which is the one thing you ruled out.
 
-**So the game as written cannot be started or won.** *Land the ark on a territory from orbit* and
-*Launch the Ark into orbit* are steps 2 and 8 of your own loop, and `spec/control.md` makes launching
-the win.
+**One of your five then costs nothing.** *Pioneers are not allowed in orbit* needs no statement: a
+Pioneer crosses only `border`, which never touches an orbit, and no recipe produces one there.
+**Occupancy falls out of reachability**, and the assertion above does not need to say it.
 
-**Why a family rather than two recipes back.** The collapses were right: launching is moving, and the
-only thing that made it a second recipe was that its destination was a different sort of place.
-**Naming that sort makes one recipe cover both** - and it costs one family row, because adjacency is
-already *a fact the container states*, so a planet saying an orbit is next to its territory needs no
-new mechanism.
+**`deploy ark` taking the Ark from orbit is the half you have not ruled on.** It makes step 2 one
+action, as your loop reads it, and gives an Ark a life with no land-to-land move in it: **produced
+on the ground, ascends once, moves in orbit to choose a site, deploys.** The alternative is
+descend-then-deploy, which is two actions where the loop says one, and which uses `ascent` downward
+so the edge is travelled both ways.
 
-**Landing then becomes two actions rather than one**, and that is the part to weigh: move the ark
-from orbit to the territory, then `deploy ark`. Step 2 reads as one step and would be two.
-**Restoring `launch` and `land` as their own recipes is the alternative**, and it costs two recipes
-to save one click.
+**Either way step 8 is `move` across `ascent`**, which is the launch `spec/control.md` makes the
+win.
+
+### P-197 - What decides a block's shape is what the destination will contain
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** cleanup - **shape** text - **into**
+`CLAUDE.md` -> Promotion
+
+**`P-194` defines the three shapes and does not say how to tell them apart.** The first proposal to
+carry the field got it wrong, and it was this lane, in the proposal that fixed the section stating
+the rule.
+
+> **What decides the shape is what the destination will contain, not what the block looks like.** If
+> the block's words appear there it is text; if its rows appear cell for cell it is rows; if neither,
+> it is an instruction.
+
+**Basis: `P-195` failed that test in all four of its parts and was still filed as text.** Its block
+read *the closing X becomes Y* and *the template gains a field* - it described edits rather than
+being them, and the destination received the quoted inner text, never the block. **A block that
+quotes its destination looks like text and is not**, which is the whole confusion in one sentence.
+
+**One line, because the rule already exists.** `P-194` says *nothing lands verbatim* for an
+instruction; this states the same thing as a question a writer can answer before choosing.
 
 ## Addressed to other perspectives
 

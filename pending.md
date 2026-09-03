@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-196** - Nothing can reach an orbit, so the loop's first and last steps have no recipe · `docs/notes/proposals.md`
+- **P-197** - What decides a block's shape is what the destination will contain · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -17,7 +18,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **P-196** - `36ef8f0` Record Sean's two concepts for P-196 before discussing them · still open in `docs/notes/proposals.md`
-- **S-10** - `fc4d191` S-10: check a promotion landed what was approved, from git · still open in `docs/notes/proposals.md`
+- **S-10** - `11c56fe` Measure S-10's last ask before building it, and it does not survive · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 
