@@ -45,6 +45,37 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-204 - The third rule for using AI assistants
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `docs/process.md`, a new section at the top, before *Specification Instance*
+
+**Your words, filed rather than typed in**, because `docs/process.md` is your statement of what this
+process is for and this is a new idea in it.
+
+> ## Three rules for using AI assistants
+>
+> - Never let AI make a decision
+> - Never blindly trust anything an AI tells you
+> - Have a place you can look to tell what the AI did
+>
+> The third one is the data dump in this case.
+
+**Basis: the first two are already enforced by machinery in this repository and the third was not.**
+*Never let AI make a decision* is the promotion protocol - nothing reaches `spec/` without you
+saying the word. *Never blindly trust* is why a commit that claims something about the tree has to
+check it, and why a proposal shows you the text rather than reporting that it changed.
+
+**The third had nothing.** Until `state.md` existed there was no place to look at what the work
+actually produced - only documents describing it, written by the thing being checked. **It found
+something on its first day**: you read one column name and it led to `S-19`, where the model
+computes control from a stored `founded` while the specification derives it from a citizen being
+present. **No document would have shown you that**, because every document said the right thing.
+
+**And it names why the reports are not a convenience.** `P-193` argued generated views on the
+grounds that prose drifts. This is the stronger reason: **a document written by the assistant is
+evidence about the assistant, and the dump is evidence about the work.**
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -82,6 +113,20 @@ at `game.rs:367`, so the win condition rests on it.
 **This is a fourth divergence and `C-11` lists three.** Stores discarded, nothing bounded, and
 `is_fully_exploited` asking for a Yard everywhere - **control is not among them**, and `C-11` is the
 item a reader goes to for *where the model and the specification have parted*.
+
+**How this does not get forgotten, since Sean asked.** An item in an outbox is durable but
+passive - it sits in `pending.md` until somebody acts, and nothing forces the day. **The thing that
+would force it is a check that fails on purpose.**
+
+`crates/game-console/tests/first_release.rs` already reads the release and checks the model against
+it, figure by figure. **The same shape works for traits**: every trait the release marks *derived* is
+derived in the model rather than stored. That check **fails today** on `control`, which is the point
+- so it carries `control` as a **named exception citing this item**, and requires every exception to
+still be failing, exactly as the promotion checker does for `P-195`.
+
+**Then the day control becomes derived, the exception fails and forces its own deletion.** An item
+can be forgotten; an exception that must keep failing cannot. **That is the difference between
+recording a divergence and holding one.**
 
 **Whether to fix it now is yours**, and `C-11`'s reasoning probably applies: `P-134` rewrites the
 shapes this lives in, and `founded` is one of the bare fields it removes. **What should not wait is

@@ -8,6 +8,16 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, three rules for using AI assistants
+
+*I used to have 2 rules for using ai assistants, now I have 3.*
+
+- *never let AI make a decision*
+- *never blindly trust anything an AI tells you*
+- *have a place you can look to tell what the AI did*
+
+*That third one is the data dump in this case.* - `P-204`
+
 ## Said 2026-09-03, on table padding
 
 *Lets make sure that regarding markdown table padding, that we always generate markdown tables the
