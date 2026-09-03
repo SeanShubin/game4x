@@ -50,31 +50,29 @@ decision that has not been made yet. Two at the end are waiting on something and
 **to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
 **into** `CLAUDE.md` -> Perspectives, after *specification and presentation*
 
-**No new tool is needed, and that is measured rather than assumed.** `tools/pad-tables` already
-exposes `pad_tables(content: &str) -> String` as a library. **Nothing calls it** - `prototypes/kinds`
-declares no dependencies at all, and the padding happens later, at commit time, to whatever the
-generator wrote.
+**Rewritten after the code lane refused this proposal's first mechanism, correctly.** It said
+whatever writes a generated file should call `tools/pad-tables`. **For the generator that matters
+most, that fix cannot be taken**, and the reason is a boundary somebody drew on purpose.
 
-> **A generated file is written in the form the padder would leave it.** Whatever writes one calls
-> `tools/pad-tables` rather than aligning columns of its own, so generating the same data twice
-> produces the same bytes and the padder finds nothing to change.
+> **A generated file is written in the form the padder would leave it.** Generating the same data
+> twice produces the same bytes, and `tools/pad-tables` finds nothing to change. **How a generator
+> manages that is its own business**; what is required is that padding a generated file changes
+> nothing, and that a check says so.
 
-**Basis: the widths are currently decided twice and are about to be decided a third time.**
-`crates/game-console/src/dump.rs`, uncommitted in the working tree as this is filed, carries the
-comment *a table with its columns already at the width `tools/pad-tables` would give them* -
-**which is a hand-written second implementation of the padder's rule, in the file being written to
-answer `S-14`.** Caught while it is still being typed rather than after it ships.
+**Basis: `tools/pad-tables` is deliberately outside the workspace** - *not part of the game, so it
+stays out of `cargo build --workspace` and out of `cargo tree`.* **`crates/game-console` ships
+inside the WASM binary**, by way of `crates/game4x`, so a dependency on the padder would put a
+documentation tool in the game to save writing one rule twice. **Verified rather than taken:
+`game4x/Cargo.toml` names `game-console`, and the root manifest excludes `tools/pad-tables`.**
 
-**And the cost of not doing this is one you have already paid for repeatedly.** `CLAUDE.md` says
-*the padder runs after an edit, so the file on disk is always in padded form, while a match string
-drafted while writing the edit is not - identical content, different bytes.* **A generator that
-does not pad has the same disease**: its output and the committed file are never the same bytes, so
-a diff shows churn that is not a change, and anything comparing the two must compare cells rather
-than bytes to survive.
+**So the rule states the outcome and leaves the mechanism open.** One generator can call the
+library; one that ships cannot, and writes its own widths. **What may not happen is the two
+disagreeing**, and that is a check rather than a call.
 
-**The check is the deliverable, not the call.** Padding a generated file must change nothing -
-asserted per file, with the count of files asserted too, so a check that stopped finding any of
-them fails rather than passes.
+**The check is the whole of it, and it can be vacuous in two ways.** Padding is a no-op on a file
+with no tables, so a test that reads three generated files and finds no table between them passes
+without exercising anything. **It needs the count of files and a demonstration that the padder
+actually widens something** - the code lane built both, `461e053`.
 
 ## Addressed to other perspectives
 

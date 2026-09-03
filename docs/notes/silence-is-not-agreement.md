@@ -79,3 +79,18 @@ So the count rule earns its place a second time, and in the hardest case: not a 
 but one that was born empty. **A new check is not evidence until it has been seen to find
 something**, and asserting how many it found is the cheapest way to see it.
 
+## A tenth, and it is `C-12` wearing a different crate
+
+**2026-09-03.** `tools/pad-tables` held **nine unit tests that neither gate ran.** Written, correct,
+and silent, because the pre-push hook named `tools/outbox` by path and nothing named this one.
+
+That is exactly `C-12` - *the architecture check exists and nothing runs it* - recurring in another
+crate six weeks later, and found only because somebody had a reason to add a tenth test to that
+file. **A crate outside the workspace is not reached by `--workspace`, so its tests run only when a
+person types its path**, and a path that is never typed looks precisely like a suite that passes.
+
+**The general form, which is the fourth face of this note.** A check can be absent, empty, wrong
+about its subject, **or never invoked** - and only the last one leaves no trace at all in the thing
+it was supposed to guard. The first three can be found by reading the check. This one can only be
+found by asking what runs it.
+
