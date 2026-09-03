@@ -16,6 +16,7 @@
 //! because the type it produces has no way to say otherwise.
 
 pub mod binding;
+pub mod dump;
 pub mod grammar;
 pub mod report;
 
