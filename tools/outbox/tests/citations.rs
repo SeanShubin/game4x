@@ -96,6 +96,18 @@ fn is_a_commit(root: &Path, hash: &str) -> bool {
 /// Latent rather than theoretical: all 61 citations were reachable when this was written,
 /// and `6650161` had just made the check run in CI for the first time. The gap was found
 /// looking for what the first live run could hit.
+///
+/// **Known and deliberately not handled: this asks *ancestor of `HEAD`*.** Every lane
+/// commits to `master` and there are no branches, so the two questions coincide. If this
+/// repository ever grows one, a citation to a commit on a pushed side branch is reachable
+/// in a clone and would be reported here as unreachable. That is where the false positive
+/// will come from, and it is written down so it costs nobody any attention until it does.
+///
+/// The fix then is a containment test over **all** refs - `git branch --all --contains` -
+/// and not over remote ones alone. At pre-push time the commit being pushed is on no remote
+/// branch yet: `git branch -r --contains HEAD` is empty right now, so remote-only
+/// containment would reject exactly the citations this repository routinely writes, which
+/// is how `C-13` cited `ae14f4b` before it was pushed.
 fn is_reachable(root: &Path, hash: &str) -> bool {
     Command::new("git")
         .current_dir(root)
