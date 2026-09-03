@@ -8,6 +8,19 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, answering the five blanks
+
+- **5**: *a pioneer is a name for an arrangement of parts*
+- **1**: everything is a tree; the question is whether a node carries a value or only children
+- **2**: *that is essentially what I am puzzling out in (1)*
+- **3**: *perhaps there is a more abstract "behavior" type, that covers both disappearing due to
+  lack of upkeep or satisfying the prerequisite to a move recipe*
+- **4**: *I am still not sure about binding, if it is useful we should keep it, but if we are more
+  elegant without it we should get rid of it*
+
+Answered in [what a thing is](what-a-thing-is.md). **One thing is still open**: whether a named
+arrangement is data the game loads or a kind in its own right.
+
 ## Said 2026-09-03, on what a thing is
 
 *Perhaps a thing is a list of capacities for the other things it contains. I expect a thing is more

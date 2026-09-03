@@ -93,3 +93,78 @@ before the composition does.
 **What it does not simplify is the leaves.** A citizen is not usefully a list of capacities, and
 saying it has an empty one buys nothing. **The unification is real for containers and forced for the
 rest**, which is worth knowing before it is written as a rule.
+
+## Sean's answers, 2026-09-03, and what they settle
+
+He answered all five. Four of them collapse into one shape.
+
+### The tree node carries a value. A leaf is a node with no children
+
+**His own rule decides it.** `spec/invariants.md`: *nothing in the state is special to a kind. Adding
+a kind adds no field and no case, and **whatever reads the state reads it the same way whatever kind
+it holds***. A branch-or-leaf split is a case, in the one place the specification forbids one.
+
+**Three more reasons, and each is a fact about this game rather than a preference:**
+
+- **A container has a value of its own.** A territory has a biome and contains citizens. An
+  extractor has a resource and contains its catch. Under *branches have no value* neither can be
+  said, so the shape collapses back to nodes-with-values anyway - **arriving there by force rather
+  than by choice.**
+- **A leaf that gains contents would change type.** `P-192` made `territory` and `orbit` kinds
+  because only a thing may contain things; if leaves were a different type that argument could not
+  have been made without changing what a territory *is*.
+- **`P-157` says a thing contains things**, with no exception for the ones that contain none.
+
+**So *leaf* is an observation and not a type**: a node with an empty list of children.
+
+### Parts and contents are the same list, at different depths
+
+This is his (2), and the tree answers it without a second mechanism.
+
+```
+pioneer
++-- movement            a part: makes `move` apply
++-- tank                a part: holds energy
+|   +-- energy x2       contents
++-- (its own metal)
+```
+
+**Capacity belongs to the part that holds, because the part is what holds.** A Pioneer's fuel
+capacity is the tank's capacity. Nothing needs to distinguish *parts* from *cargo* - the tree
+already does, by depth.
+
+**And `metal in it = binding plus the metal in its parts` becomes a fold**: a node's own metal plus
+the metal of its subtree. The rule was written before there was a structure to run it on.
+
+### A part is what makes a recipe apply
+
+This is his (3), and it is more than a name for two cases. *Disappears without upkeep* and *can move*
+are both **which recipes reach this thing**. A movement part makes `move` applicable; an upkeep part
+makes `upkeep` and `perish` applicable.
+
+**It has a consequence worth weighing before anyone commits to it.** `move` currently requires
+`unit, ready`, and the `unit` family is exactly *ark and pioneer* - which is exactly *the things that
+can move*. **If a recipe names a part, the family stops being declared and starts being derived**,
+and `Families` shrinks by a row that was never saying anything else.
+
+### Binding: keep the constraint, drop the word
+
+His (4), and the tree decides it too. Under a fold there is **one trait - a node's own metal** - and
+**one derivation - the sum over its subtree.** `Binding` and `Metal in it` were two names for those,
+which is why they held the same number in all six rows while nothing had parts.
+
+**`P-170`'s constraint survives and is worth keeping**: *what binds a thing is at least one metal, so
+a thing made of nothing still costs something.* That is a floor on a node's own metal, and it can be
+said without the word.
+
+## What is still open
+
+**Only one thing, and it is the one that decides the size of the change.** If a Pioneer is a name for
+an arrangement, then the twelve kinds are **a few parts and some named arrangements** - and the
+question is whether an arrangement is *data the game loads* or *a kind in its own right*. `P-199`
+says what the game is made of lives in a data file. **A named arrangement is exactly that**, which
+suggests the kinds table shrinks to the parts and the arrangements move to the world's data.
+
+**That is a bigger change than anything promoted so far, and it is `P-134`'s territory.** It should
+not be proposed piecemeal.
+
