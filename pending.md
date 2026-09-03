@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-198** - An HTML file is generated, never canonical · `docs/notes/proposals.md`
+- **P-198** - Specification and presentation are different concerns and do not share a format · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -16,6 +16,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-15** - `c9e5ebf` S-15: follow P-196, and fix a join that would have stayed wrong · still open in `docs/notes/proposals.md`
 - **S-10** - `11c56fe` Measure S-10's last ask before building it, and it does not survive · still open in `docs/notes/proposals.md`
 
 ## What is outstanding

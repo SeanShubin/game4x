@@ -45,25 +45,30 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-198 - An HTML file is generated, never canonical
+### P-198 - Specification and presentation are different concerns and do not share a format
 
 **to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
 **into** `CLAUDE.md` -> Perspectives, after *a generated file has no owner*
 
-**Your words, and they settle a question this lane was about to put to you.** `catalog.md` is
-markdown, committed, and diffable, so a rule change shows its consequences in the same commit. HTML
-does not diff. Saying HTML is never canonical decides that without anyone having to weigh it again.
+**Rewritten after you said the HTML rule is a special case.** It was, and filing the case rather than
+the concept would have left the next format to be argued about from scratch.
 
-> **An HTML file is generated, never canonical.** Whatever it renders is the thing with an owner,
-> and the HTML is one more derived form of it.
+> **Specification and presentation are different concerns and do not share a format.** A fact is
+> stated in a form chosen for stating it, and rendered into a form chosen for reading it. **The
+> rendering is generated and never canonical**, so nothing is ever decided in it. HTML is the case
+> that comes up; it is only a case.
 
-**Basis: it makes the rule above cover the reports without special-casing them.** *A generated file
-has no owner* already says nobody edits one; this says which files are always in that category, so a
-report that arrives as HTML cannot quietly become the place a fact lives.
+**Basis: the rule above already says nobody edits a generated file, and this says which files are
+always in that category.** A report that arrives as HTML cannot quietly become the place a fact
+lives, and neither can the next presentation format - a rendered image, a slide, a page served from
+somewhere.
 
-**And it keeps the property that was argued for.** Because the HTML is derived, whatever it is
-derived *from* is still in the repository and still diffs - so a change to a rule still shows its
-effect on the data in the commit that caused it, however the reports are rendered for reading.
+**And it keeps a property that would otherwise be traded away silently.** Because the rendering is
+derived, whatever it is derived *from* stays in the repository and stays diffable, **so a rule
+change still shows its effect on the data in the commit that caused it.** `P-186` raised a Pioneer's
+cost and made the play-through shorter, and that fact existed only because somebody regenerated and
+noticed. A consequence visible in a diff is found by whoever reads the commit; one visible only in a
+rendered page is found by whoever happens to look.
 
 ## Addressed to other perspectives
 
@@ -132,6 +137,16 @@ documents, and this lane will take the wording of either if you would rather not
   no rows**, the way `sql.html` prints *(empty) 0 rows* for four of its tables. A dump that omits
   what is empty hides exactly the names he is trying to read.
 - **the state as entities** - `kind`, `id`, components, which is `report::entities` rendered
+
+**Sean, 2026-09-03, on the tables that will be empty anyway:** *that is not a deal breaker, I may
+just have to add more reporting that allows me to browse intermediate states.*
+
+**That is a design constraint on this build even though it is not a requirement of it.** A pioneer
+exists between being produced and founding; an ark between being produced and deploying. The
+end-state dump cannot show either, and **the answer is more moments rather than a cleverer dump** -
+so whatever writes a state should take a state as an argument rather than assume the final one, and
+whatever names the tables should name them from the catalog rather than from what happens to be
+there.
 
 **One correction to `P-193` from this lane.** Its table said the relational state dump *needs the
 bootstrap you named*. **It does not** - the state after `play.4x` exists in the model already, and

@@ -15,7 +15,11 @@ When an item lands in the spec, delete the row. Nothing here is decided.
 - *I don't necessarily need the data to be sitting in a database ever, what is important is the
   html reports of the data I can look at. Whether they happened to run through mysql, dynamodb,
   some ECS format, in order to get there, is an implementation detail best left open*
-- *I expect html files to only be generated, never canonical* - `P-198`
+- *I expect html files to only be generated, never canonical*, and *the html rule is just a
+  special case of the concept where we don't want to mix concerns with formats suitable for
+  specification vs presentation* - `P-198`
+- On empty tables: *that is not a deal breaker, I may just have to add more reporting that
+  allows me to browse intermediate states*
 - *we don't necessarily need the scenario to play a planet to full exploitation, but we do need to
   touch every thing and recipe* - `S-14`
 
