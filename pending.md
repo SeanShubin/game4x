@@ -9,6 +9,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-211** - How I know the game is right · `docs/notes/proposals.md`
+- **P-212** - A command is a node, and a value may be another one · `docs/notes/proposals.md`
+- **P-213** - A definition arrives whole · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

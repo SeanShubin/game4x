@@ -74,6 +74,66 @@ that tests intent rather than consistency.
 nothing may come from anywhere else, **so a fact the model knows and no document states is a defect
 even when nothing is wrong** - which is a bar no other check in this repository sets.
 
+### P-212 - A command is a node, and a value may be another one
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `spec/console.md` -> Commands, before the list
+
+> A command is written `{name field:value ...}`. Its name is the words that open it and its
+> arguments are named. **A value is a word, a number, or another command in the same form**, so a
+> command may carry a tree.
+
+**Basis: a recipe is a tree and a line cannot hold one.** `move` is five rows of role, quantity,
+kind, traits and place. Without nesting a recipe is defined by several commands assembling it, which
+makes a half-defined recipe a state the game can be in - and `spec/invariants.md` says *the
+definitions are part of the game state*, so that half-made rule would be real, replayable and
+dumpable.
+
+**Named arguments are what make the reference material sufficient.** `build extractor 1 metal`
+cannot be read without knowing that `1` is the territory, **and no artifact states that.** Deriving
+the dump by hand is the test this exists to pass.
+
+**`crates/command-language/src/grammar.rs` predicted this and said what it costs:** *if the language
+ever grows nesting or arithmetic, this is the file that has to grow a real expression type, and the
+absence of left recursion will have to be faced deliberately rather than inherited by accident.*
+
+**Two things this deliberately does not do.**
+
+**It does not abbreviate.** This lane recommended letting a form's fields have an order as well as
+names, so `{move pioneer 3}` would mean `{move unit:pioneer to:3}` and the console stayed terse.
+**You said the structured form and this proposes only that** - the abbreviation is a separate idea
+and yours to ask for.
+
+**It does not change what the reports look like.** `state.md` stays tabular; you read it by scanning
+columns, and nesting is good for writing a tree and bad for comparing rows.
+
+**The command list in that file contradicts this the moment it lands**, and the cleanup is filed
+with it - **every command's arguments have to be named, and each name is a decision worth seeing.**
+`{end turn}` needs none; `{set resource ...}` needs four.
+
+### P-213 - A definition arrives whole
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `spec/invariants.md` -> The game is data, after *the definitions are part of the game
+state*
+
+> A definition arrives in one transition. There is no state in which a kind or a recipe is half
+> defined.
+
+**Basis: without it, a half-made rule is real.** *The definitions are part of the game state.
+Defining one is a transition like any other, so a game's history is a complete account of it* - so a
+recipe assembled by five commands **exists with two of its rows after the second one**, and that
+state is replayable, dumpable and reachable by stopping a script early.
+
+**Every check in this repository compares complete things.** `prototypes/kinds` renders the tables
+and compares them cell by cell; the catalog joins six tables per kind; the closure test asks a
+person to derive a dump. **None of them has an answer for a recipe with three rows missing**, and
+none would report one - they would compare a partial thing to a partial thing and agree.
+
+**It is also what makes a rules file safe to fail.** `spec/console.md` has a script stop at the
+first line that fails. **With whole definitions, stopping early leaves fewer rules; with assembled
+ones it leaves a broken rule**, which is a worse thing to hand to a dump than an absent one.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the

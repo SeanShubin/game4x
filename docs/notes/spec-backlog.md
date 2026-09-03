@@ -8,6 +8,16 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-03, on command format
+
+- **The notation**: *Definitely `{move unit:pioneer to:3}`* - `P-212`
+- **A rule definition**: *one transition, not a bunch of add row commands* - `P-213`
+
+**Four of the six decisions remain**: whether the reports share the notation, three files or one,
+whether `catalog.md` keeps its recipe join, and where a failure points inside a nested command.
+Recommendations for all four are in [what a command should look like](command-format.md) and
+[starting from nothing](starting-from-nothing.md).
+
 ## Said 2026-09-03, on command format
 
 Three candidates offered: traditional flags, `move --unit pioneer --from 10 --to 3`; structured
