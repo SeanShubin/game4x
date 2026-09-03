@@ -13,8 +13,9 @@ files rather than from anybody's memory of them.
 
 ## What is outstanding
 
-### To code (5)
+### To code (6)
 
+- **S-13** - `P-192` makes it twelve kinds, and the gate is red again · `docs/notes/proposals.md`
 - **S-10** - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked · `docs/notes/proposals.md`
 - **S-9** - Two checks `tools/outbox` could make that would have caught today's shape errors · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`

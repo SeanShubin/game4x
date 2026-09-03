@@ -50,6 +50,32 @@ decision that has not been made yet. Two at the end are waiting on something and
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-13 - `P-192` makes it twelve kinds, and the gate is red again
+
+**to** code - **status** open - **raised** 2026-09-02 - **source** `P-192`, promoted in `ab22c6d`
+
+**`the_release_tables_are_the_ones_in_this_crate` fails.** `prototypes/kinds` holds ten kinds and
+the release now holds twelve: **territory** and **orbit**. The `kind` trait's values went from *one
+of the ten* to *one of the twelve*.
+
+**Why it was two kinds and not a typo.** The recipes' `Kind` column already held `territory` in four
+rows, and `territory` was in neither the Kinds table nor the Families table - so the release named a
+kind it did not declare. `orbit` comes with it because it *holds units and nothing else*, and
+`spec/logistics.md` says only a thing may contain things. `planet` is deliberately not a kind: no
+recipe names one and no trait is of one.
+
+**One consequence is a rule changing rather than a table growing.** The `thing` family is *every
+kind above*, so it now includes a territory - and `grow` requires `thing, houses`, a trait *of a
+thing that contains things*. **A territory houses its citizens.** `grow` could not match one before,
+because a territory was not a kind. `docs/recipes/README.md` has shown `territory (houses)` in that
+recipe since it was written; the rendering was right and the data could not say it.
+
+**And the check `P-192` said was worth more than the fix is still not wired anywhere.** Nothing asks
+whether a recipe's `Kind` is a declared kind or family. `prototypes/kinds` compares the tables cell
+by cell and checks that a family names real kinds, and `territory` fell between the two for as long
+as it has existed. **This lane ran it by hand in `ab22c6d`** - fourteen distinct `Kind` values, all
+now declared - which is the wrong place for it to live.
+
 ### S-12 - Six promotions moved the economy, and the gate is red
 
 **to** code - **status** **acted** 2026-09-02 - **raised** 2026-09-02 -
