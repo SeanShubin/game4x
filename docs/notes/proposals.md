@@ -45,31 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-198 - Specification and presentation are different concerns and do not share a format
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `CLAUDE.md` -> Perspectives, after *a generated file has no owner*
-
-**Rewritten after you said the HTML rule is a special case.** It was, and filing the case rather than
-the concept would have left the next format to be argued about from scratch.
-
-> **Specification and presentation are different concerns and do not share a format.** A fact is
-> stated in a form chosen for stating it, and rendered into a form chosen for reading it. **The
-> rendering is generated and never canonical**, so nothing is ever decided in it. HTML is the case
-> that comes up; it is only a case.
-
-**Basis: the rule above already says nobody edits a generated file, and this says which files are
-always in that category.** A report that arrives as HTML cannot quietly become the place a fact
-lives, and neither can the next presentation format - a rendered image, a slide, a page served from
-somewhere.
-
-**And it keeps a property that would otherwise be traded away silently.** Because the rendering is
-derived, whatever it is derived *from* stays in the repository and stays diffable, **so a rule
-change still shows its effect on the data in the commit that caused it.** `P-186` raised a Pioneer's
-cost and made the play-through shorter, and that fact existed only because somebody regenerated and
-noticed. A consequence visible in a diff is found by whoever reads the commit; one visible only in a
-rendered page is found by whoever happens to look.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -829,6 +804,7 @@ work the release exists to order.
 | P-195, the four lines that assumed every block was text, and a `shape` field                                    | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-02 |
 | P-196, a place is a territory or an orbit, edges have kinds, and a unit says which it crosses                   | `releases/first-release.md` -> Families, Traits, Units and structures, Recipes                                                               | 2026-09-03 |
 | P-197, the three things a promotion can do, in words that define themselves                                     | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-03 |
+| P-198, specification and presentation do not share a format; a rendering is never canonical                     | `CLAUDE.md` -> Perspectives                                                                                                                  | 2026-09-03 |
 
 ## Rejected
 

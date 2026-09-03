@@ -100,6 +100,11 @@ them, so a generated file can publish work in progress - a defect in whatever wr
 than something this rule allows. This covers only a file that is generated in full - one with any hand-written part has an author,
 and belongs in that author's directory.
 
+**Specification and presentation are different concerns and do not share a format.** A fact is
+stated in a form chosen for stating it, and rendered into a form chosen for reading it. **The
+rendering is generated and never canonical**, so nothing is ever decided in it. HTML is the case
+that comes up; it is only a case.
+
 **Quality runs nothing that writes.** Reading the tree and running `cargo clippy`, `cargo test` and
 `cargo tree` are all fine. `cargo fmt`, `cargo fix` and `clippy --fix` are not, because they modify
 the very files being judged - and a review that alters its subject is no longer a review.
