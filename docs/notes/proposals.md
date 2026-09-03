@@ -144,6 +144,26 @@ figure that cannot be derived means either the dump is showing hidden state or t
 incomplete - **and both are defects that no comparison between documents would ever find**, because
 they are all consistent with each other and none of them is consistent with a pencil.
 
+**What `../vote` does and does not do, read rather than assumed** -
+[the note](votes-scenario.md). Its scenario is thirteen lines of Kotlin run **four times against
+four backends**, so `sql.html` and `dynamodb.html` come from a running MySQL and a running DynamoDB
+and **disagreement between them would mean a bug**. Ours are two renderings of one `Game` and
+cannot disagree.
+
+**Three things there transfer directly.** The scenario's own comment says its purpose is *so the
+generated HTML has meaningful rows in each projection* - which is this item's coverage requirement,
+stated as being about the reports rather than about testing. `DocumentationRecorder` keeps **section
+markers, calls and events in one chronological list**, so the run narrates itself - and
+`commands/play.4x` already carries that narration in comments, so **the fourth artifact is the
+flattened history with the comments kept.** And the index is generated first, *so we know what files
+we're creating*.
+
+**The closure is not borrowed and is stronger than what it resembles.** Vote checks four
+implementations against each other, which is machine against machine and **cannot catch a rule that
+is wrong the same way everywhere**: four backends would have agreed that a territory holds eight
+citizens while the model let it hold twelve, had all four read the same constant. **A pencil would
+not have.**
+
 **One consequence worth having before it is discovered the hard way.** The model already derives the
 state from the commands - that is what replay is. **So the machine can do this and the question is
 only whether the documents let a person do it.** Where the answer is no, the missing piece is a fact
