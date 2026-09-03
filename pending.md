@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-209** - The `kind` trait restates a count, and it has gone stale twice · `docs/notes/proposals.md`
+- **P-210** - `biome` restates a count too, and will go stale the first time a biome is added · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -53,10 +53,10 @@ it exists to ask.
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
+- `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197
-- `releases/first-release.md` -> Traits - P-152, P-178, P-180
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175

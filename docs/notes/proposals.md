@@ -45,35 +45,23 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-209 - The `kind` trait restates a count, and it has gone stale twice
+### P-210 - `biome` restates a count too, and will go stale the first time a biome is added
 
 **to** sean - **status** open - **raised** 2026-09-03 - **kind** cleanup - **shape** text - **into**
-`releases/first-release.md` -> Traits, the `kind` row's *Values* cell
+`releases/first-release.md` -> Traits, the `biome` row's *Values* cell
 
-**It said *one of the ten* until `P-192` made it twelve, and *one of the twelve* until `P-206` made
-it fourteen.** The second time nothing caught it - the code lane found it by eye, because its own
-checks compare the crate against the release and **the crate copies the release**, so both said
-twelve and both agreed. **A comparison of two things that agree cannot notice that both are wrong.**
+**Found while showing you the before and after for `P-209`.** The row below it has the same shape and
+is **correct today** - the Biomes table has six rows and the cell says *one of the six*.
 
-> one of the kinds
+> one of the biomes
 
-**Basis: the count is the number of rows in the table two sections above.** Restating it in a cell
-buys nothing a reader could not get by looking, and costs a stale line every time a kind is added -
-**twice in two days.** `spec/invariants.md` says *nothing restates what a data file says*, and this
-is that rule applied to a document restating itself.
+**Basis: it is the same defect, one row down, not yet triggered.** `kind` went stale twice because a
+count was written in two places; `biome` has a count written in two places and has simply not been
+edited yet. **Waiting for it to break first is how `kind` cost two promotions.**
 
-**The cell reads almost tautologically afterwards, and that is correct.** *The `kind` trait's values
-are one of the kinds* is the whole fact; the number was the only thing adding information, and it
-was information that belonged in the Kinds table, where it is the number of rows.
-
-**This unblocks a check the code lane is holding.** They will not land an assertion that the stated
-count matches the rows, because it would fail today on a file in this lane's column and red their
-gate on something they must not touch. **With no count to check, the assertion becomes the stronger
-one**: every value the `kind` trait admits is a row in *Kinds*.
-
-**The stopgap is already applied and is reported here.** The cell now says *one of the fourteen*, so
-the release is not stating something false while this waits. **That is a number this lane wrote**,
-entailed by a table you approved rather than approved by you, and it goes when this lands.
+**Filed separately rather than folded into `P-209`**, because you said promote `P-209` and `P-209`
+named one cell. **This is the offer you did not answer**, kept in the queue rather than assumed
+either way.
 
 ## Addressed to other perspectives
 
@@ -1066,6 +1054,7 @@ work the release exists to order.
 | P-206, an extractor is three kinds and a family, and the capacity exception goes                                | `releases/first-release.md` -> Kinds, Families, Traits, Recipes                                                                              | 2026-09-03 |
 | P-207, every kind is bounded and the table says by what                                                         | `releases/first-release.md` -> What bounds a kind in a territory                                                                             | 2026-09-03 |
 | P-208, *Units and structures* lists the three extractor kinds rather than the family                            | `releases/first-release.md` -> Units and structures                                                                                          | 2026-09-03 |
+| P-209, the `kind` trait says one of the kinds rather than restating their number                                | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-03 |
 
 ## Rejected
 
