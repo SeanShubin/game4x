@@ -1,8 +1,9 @@
 //! Reading the release's tables, which `spec/invariants.md` calls the data.
 //!
-//! > The tables that define kinds, families, traits and recipes are the data the game loads.
-//! > Nothing restates them; every other form of them is derived, and a derived form is
-//! > generated rather than written.
+//! > What the game is made of lives in a data file, not in code and not in markup.
+//!
+//! > Nothing restates what a data file says; every other form of it is derived, and a
+//! > derived form is generated rather than written.
 //!
 //! **This parser existed and threw its answer away.** It lived in
 //! `tests/against_the_release.rs`, where it read the tables only to compare them with data

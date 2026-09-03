@@ -1,6 +1,6 @@
 //! Everything the release says about one kind, gathered under that kind.
 //!
-//! `spec/invariants.md`: *every other form of them is derived, and a derived form is
+//! `spec/invariants.md`: *every other form of it is derived, and a derived form is
 //! generated rather than written.* This is such a form.
 //!
 //! **It is a view rather than a reprint.** Copying the tables into a second file would be

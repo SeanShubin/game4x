@@ -94,9 +94,12 @@ to absorb. `P-196` proposes a fourth family, `place`.
 
 **to** spec · **status** open · **raised** 2026-09-02 · `0ba023f`
 
-`spec/invariants.md`: *the tables that define kinds, families, traits and recipes are the data the
-game loads. Nothing restates them; every other form of them is derived, and a derived form is
-generated rather than written.*
+**The rule broadened while this item was open.** `P-199` replaced a bullet about four tables with
+one covering every table and markup too, so what follows was written against the narrower version
+and holds against the wider one.
+
+`spec/invariants.md`: *what the game is made of lives in a data file, not in code and not in
+markup.*
 
 **The second half is kept as of `0ba023f`** - `catalog.md` is derived and generated, and fails when
 it goes stale.

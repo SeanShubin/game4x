@@ -389,6 +389,144 @@ fn past_tense_is_a_record_and_present_tense_is_a_claim() {
     assert_eq!(quotations(here, "`spec/turn.md`'s *three parts*").len(), 1);
 }
 
+/// Lines as a reader sees them, with a comment marker taken off and nothing joined.
+///
+/// **Not [`prose`], and the difference is the whole of why the first attempt found
+/// nothing.** `prose` joins a comment into runs so that a sentence wrapped across three
+/// lines can be matched as one - which is right for its purpose and destroys the only thing
+/// a blockquote is: a `>` at the start of a line.
+fn comment_lines(path: &Path, text: &str) -> Vec<String> {
+    let rust = path.extension().and_then(|e| e.to_str()) == Some("rs");
+    text.lines()
+        .map(|line| {
+            if !rust {
+                return line.to_string();
+            }
+            let trimmed = line.trim_start();
+            for marker in ["//!", "///", "//"] {
+                if let Some(rest) = trimmed.strip_prefix(marker) {
+                    return rest.trim_start().to_string();
+                }
+            }
+            String::new()
+        })
+        .collect()
+}
+
+/// A blockquote under a named file, which is the other way code quotes a document.
+///
+/// **The guard read emphasis and not blockquotes, and that is how `S-16` got through.** A
+/// doc comment that says *`spec/invariants.md` calls the data* and then sets the words out
+/// as `> ...` was checked on the phrase after the verb and never on the block. Both are
+/// quotation; only one was being read. `prototypes/kinds/src/release.rs` carried the
+/// pre-`P-199` sentence that way for a day, in a crate this guard already covered - so the
+/// coverage was never the problem, the form was.
+///
+/// A block counts as quoting a file when a backticked path to one appears within three
+/// prose lines above it. That bound is what keeps an unrelated block further down the
+/// comment from being attributed to a file mentioned at the top.
+fn blocks(path: &Path, text: &str) -> Vec<(String, String)> {
+    let lines = comment_lines(path, text);
+    let mut found = Vec::new();
+    let mut named: Option<(String, usize)> = None;
+
+    for (at, line) in lines.iter().enumerate() {
+        let trimmed = line.trim();
+        if let Some(rest) = trimmed.strip_prefix("> ") {
+            let Some((file, said_at)) = named.clone() else {
+                continue;
+            };
+            if at.saturating_sub(said_at) > 3 {
+                continue;
+            }
+            // A run of `>` lines is one quotation, so the run is joined rather than each
+            // line checked alone - a sentence wrapped across three lines is still one
+            // sentence, and checking the lines separately would pass on fragments.
+            let mut block = rest.trim().to_string();
+            let mut ahead = at + 1;
+            while let Some(more) = lines.get(ahead).map(|l| l.trim().to_string()) {
+                match more.strip_prefix("> ") {
+                    Some(rest) => block.push_str(&format!(" {}", rest.trim())),
+                    None if more == ">" => {}
+                    None => break,
+                }
+                ahead += 1;
+            }
+            if block.split_whitespace().count() >= 4 {
+                found.push((file, block));
+            }
+            continue;
+        }
+        if trimmed.is_empty() {
+            continue;
+        }
+        // `spec/x.md` or `releases/x.md`, in backticks, is what names a document.
+        for start in trimmed.match_indices('`').map(|(i, _)| i) {
+            let rest = &trimmed[start + 1..];
+            let Some(end) = rest.find('`') else { continue };
+            let candidate = &rest[..end];
+            if (candidate.starts_with("spec/") || candidate.starts_with("releases/"))
+                && candidate.ends_with(".md")
+            {
+                named = Some((candidate.to_string(), at));
+            }
+        }
+    }
+    found
+}
+
+/// Every block a comment quotes under a named file is in that file.
+///
+/// The sibling of `every_quotation_of_the_specification_says_what_it_says_now`, for the form
+/// it could not see. Compared with whitespace collapsed, because a doc comment wraps where
+/// the line ends and the document wraps where its own line ends.
+#[test]
+fn every_block_quoted_under_a_file_is_in_that_file() {
+    let root = root();
+    let mut checked = 0usize;
+    let mut wrong = Vec::new();
+
+    for path in sources() {
+        let Ok(text) = std::fs::read_to_string(&path) else {
+            continue;
+        };
+        for (file, block) in blocks(&path, &text) {
+            let Ok(document) = std::fs::read_to_string(root.join(&file)) else {
+                wrong.push(format!(
+                    "{}\n  quotes {file}, which is not there",
+                    path.display()
+                ));
+                continue;
+            };
+            checked += 1;
+            let flat: String = document.split_whitespace().collect::<Vec<_>>().join(" ");
+            let want: String = block.split_whitespace().collect::<Vec<_>>().join(" ");
+            // Emphasis inside a document is not always emphasis inside a quotation of it.
+            let bare_flat = flat.replace("**", "").replace('*', "");
+            let bare_want = want.replace("**", "").replace('*', "");
+            if !bare_flat.contains(&bare_want) {
+                wrong.push(format!(
+                    "{}\n  quotes {file} as: {}\n  which {file} does not say",
+                    path.display(),
+                    want.chars().take(90).collect::<String>()
+                ));
+            }
+        }
+    }
+
+    assert!(
+        wrong.is_empty(),
+        "{} block quotation(s) of the specification are of wording it no longer has:\n\n{}",
+        wrong.len(),
+        wrong.join("\n\n")
+    );
+    // A pass over no blocks would be the same green as a pass over correct ones.
+    assert!(
+        checked >= 1,
+        "no block quotations found at all; the way one is written has probably changed"
+    );
+}
+
 #[test]
 fn every_quotation_of_the_specification_says_what_it_says_now() {
     let mut checked = 0usize;
