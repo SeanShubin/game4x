@@ -96,7 +96,7 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 
 | Trait               | Of                              | Values                                             | Stored or derived                                |
 | ------------------- | ------------------------------- | -------------------------------------------------- | ------------------------------------------------ |
-| **kind**            | every thing                     | one of the twelve                                  | stored                                           |
+| **kind**            | every thing                     | one of the fourteen                                | stored                                           |
 | **place**           | every thing                     | the thing it is in                                 | stored                                           |
 | **readiness**       | whatever readies                | ready, exhausted                                   | stored                                           |
 | **force**           | citizen, garrison, ark, pioneer | a number                                           | stored                                           |
