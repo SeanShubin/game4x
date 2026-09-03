@@ -33,6 +33,51 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-15 - No recipe names an orbit
+
+**to** spec · **status** open · **raised** 2026-09-02 · **source** the first run of `catalog.md`
+
+`P-192` declared `orbit` a kind - *a place above one territory, which holds units and nothing
+else* - because only a thing may contain things. **Nothing in the Recipes table then requires,
+limits, consumes or produces one.** Its catalog section reads *In recipes: none name it*, and it is
+the only kind of which that is true.
+
+Not filed as a defect, because it may be correct: an orbit could be somewhere units *are* without
+being something a recipe *acts on*. But `move` takes a unit from `$from` to `$to`, both territories,
+and `deploy ark` consumes an ark in `$where`, also a territory - so as the release stands, **an ark
+in orbit cannot be reached by any recipe**, and the loop's first step is a landing from orbit.
+
+**This is what the join is for.** Every table involved is correct on its own and no comparison
+between two of them would show it. The fact only appears when everything about one kind is put in
+one place, which the release does nowhere and `catalog.md` now does.
+
+### C-16 - The invariant has two halves and only one is kept
+
+**to** spec · **status** open · **raised** 2026-09-02 · `0ba023f`
+
+`spec/invariants.md`: *the tables that define kinds, families, traits and recipes are the data the
+game loads. Nothing restates them; every other form of them is derived, and a derived form is
+generated rather than written.*
+
+**The second half is kept as of `0ba023f`** - `catalog.md` is derived and generated, and fails when
+it goes stale.
+
+**The first half is not, and this lane is not going to pretend otherwise.** `prototypes/kinds` still
+holds the kinds, families, traits, recipes and costs as hand-written Rust, which is a restatement.
+It is checked against the release cell by cell, which is the arrangement the rule replaces rather
+than the rule being met.
+
+**Deliberately not fixed now, for the reason `C-11` gives.** Turning that data into something loaded
+deletes `the_release_tables_are_the_ones_in_this_crate`, whose whole value is comparing two copies -
+so the crate's checks would have to be rebuilt as *validation of loaded data* rather than
+*comparison against a copy*. `every_kind_a_recipe_names_is_declared` is already that shape and
+survives; the comparison is not and does not. That is a rewrite of the crate's foundation, and
+`P-134` is a rewrite of the model that the crate is meant to inform. Doing them in the wrong order
+means doing one of them twice.
+
+**Recorded so the gap is visible rather than assumed handled.** A promoted invariant that the code
+half-keeps is exactly the state that reads as done from the outside.
+
 ### C-14 - Two of `CLAUDE.md`'s worked examples no longer hold
 
 **to** spec · **status** **acted** 2026-09-02 · `02601cd`
