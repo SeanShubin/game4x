@@ -14,8 +14,11 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 - A thing may contain things, and is itself in at most one other thing. Nothing else holds
   anything
-- What a thing may contain is a maximum per kind, or per family of kinds. Room for four extractors
-  is a maximum of four, so nothing a player builds ever crowds out something of another kind
+- What a thing may contain is a maximum per kind, or per family of kinds. That maximum is its
+  **total capacity** for that kind, and it is stored. **Used capacity** is how many of that kind it
+  holds, and **available capacity** is the total less the used; both are derived, so neither can
+  disagree with what is there. A total capacity of four extractors is a maximum of four, so nothing
+  a player builds ever crowds out something of another kind.
 - A thing that contains things takes up room in whatever contains it, so room is not conserved
 - A thing says which of the things in it are next to which. That is a fact about the container
   rather than about its contents
