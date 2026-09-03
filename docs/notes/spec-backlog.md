@@ -8,6 +8,17 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on command format
+
+Three candidates offered: traditional flags, `move --unit pioneer --from 10 --to 3`; structured
+data, `{move unit:pioneer from:10 to:3}`; and a compact format such as Clojure's EDN. And: *if we
+have a command interpreter we will need to know the source for error reporting.*
+
+Answered in [what a command should look like](command-format.md). **Recommendation: named fields
+with nesting, one notation, keep the grammar.** Two things must be decided before it can be built -
+whether a rule definition is one transition or several, and where a failure points inside a nested
+command.
+
 ## Said 2026-09-03, on where the definitions come from
 
 *I am of starting with zero recipes and zero things, and building everything up from commands. So
