@@ -17,6 +17,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **P-196** - `36ef8f0` Record Sean's two concepts for P-196 before discussing them · still open in `docs/notes/proposals.md`
+- **S-10** - `fc4d191` S-10: check a promotion landed what was approved, from git · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 

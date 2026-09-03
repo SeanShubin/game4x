@@ -82,3 +82,28 @@ body ends. **The first is right and it is their call.**
 **`tools/pad-tables` stays where it is and keeps writing the same files.** Sean: *there is no overlap
 in how the files are changed - I expect it to work in either order but not concurrently.* **The
 constraint is concurrency**, and it already binds on three instances sharing an index.
+
+## The ledger's destination is not the `into` field, measured 2026-09-02
+
+**`S-10` asks that `promote` write the ledger row's destination from the `**into**` field**, so the
+thing the check reads was never transcribed. Measured against the promotions that can be checked
+reliably, that would make the ledger **less** accurate, not more.
+
+Eight of the day's rows resolve to the commit that really added them. **Seven agree with their
+proposal's `into`. One differs, and the ledger is the correct one**: `P-192` said `-> Kinds` and
+landed in `Kinds` **and** `Traits`, because declaring two more kinds forced the `kind` trait's values
+from *one of the ten* to *one of the twelve*. That consequence was found while promoting, which is
+after the field was written.
+
+**So the field is what was intended and the row is what happened, and a promotion that discovers a
+consequence makes them differ legitimately.** `promote` should therefore **offer** the `into` field
+as the row's default and require the promoter to say when it landed elsewhere - so a difference is
+declared rather than typed, and an undeclared difference is the error.
+
+**The other seven rows could not be checked and the reason is worth keeping.** `git log -S` on a
+ledger row finds the commit where the padder last rewrote that table, not the commit that added the
+row - **every row looks added whenever a column widens.** That is the table hazard `CLAUDE.md`
+warns about, arriving in a measurement rather than an edit, and it means any check built on *the
+commit that added this row* is reading the wrong parent most of the time. `promote` writing the row
+avoids the question entirely.
+
