@@ -22,8 +22,9 @@ rather than magic. **A named ingredient is shown by its name** - `$where`, `$fro
 naming the place is how a recipe says where it acts.
 
 **Territory 1 is the setting throughout**, because it is the landing site and everything works there:
-food, metal and energy each **3 extractors at density 4**, force of nature 1. Room: citizens 8,
-garrison 1, yard 1, arks 2, pioneers 2, labor 8, and 20 each of food, metal and energy.
+food, metal and energy each **3 extractors at density 4**, force of nature 1. **Citizens are bounded by
+the food produced here rather than by a number**; a garrison, a yard, 2 arks, 2 pioneers, 8 labor
+and 20 each of food, metal and energy are the capacities.
 
 **Seventeen recipes.** There were twenty two mornings ago. `launch` was `move` with a different
 destination, `eat` was `upkeep`, `depart` was `perish`, `revert` could never fire, and `land` became
@@ -40,8 +41,8 @@ was a collapse rather than a cut.**
 | ark                    | 1      | 0     |
 | garrison               | 0      | 1     |
 | citizen                | 0      | 2     |
-| extractor, food        | 0      | 1     |
-| extractor, metal       | 0      | 1     |
+| food extractor         | 0      | 1     |
+| metal extractor        | 0      | 1     |
 
 **The territory is `require`d**, which is how a row says the recipe uses a thing without taking it -
 there is no second row echoing it back. The garrison line is a `limit` of 0, so a second landing on
@@ -57,7 +58,8 @@ gets one, so the landing is the same everywhere - the difference between a rich 
 one shows up in what is built afterwards, not in what arrives.
 
 **Metal balances**: an Ark binds with 3 and becomes a garrison and two extractors at 1 each. Where a
-territory has no room for one of them - territory 6 has no metal - that extractor is not built and
+territory has no capacity for one of them - territory 6 has no metal - that extractor is not built
+and
 its metal is wasted, and `spec/interface.md` requires the interface to say so before the landing is
 taken.
 
@@ -80,20 +82,21 @@ which says which of the things in it are next to which.
 
 ### found by land
 
-| territory 2      | before | after |
-| ---------------- | ------ | ----- |
-| pioneer          | 1      | 0     |
-| garrison         | 0      | 1     |
-| citizen          | 0      | 2     |
-| extractor, food  | 0      | 1     |
-| extractor, metal | 0      | 1     |
+| territory 2     | before | after |
+| --------------- | ------ | ----- |
+| pioneer         | 1      | 0     |
+| garrison        | 0      | 1     |
+| citizen         | 0      | 2     |
+| food extractor  | 0      | 1     |
+| metal extractor | 0      | 1     |
 
 **A Pioneer and no garrison is the whole condition.** A Pioneer is only ever produced where there is
 a garrison, so one standing where there is none must have moved there - which is why `arriving` was
 deleted.
 
 **A Pioneer deploys exactly what an Ark does**, which is why both bind with 3: a garrison and two
-extractors at 1 each. Territory 2 has room for two metal extractors at density 4, so both are built
+extractors at 1 each. Territory 2 has capacity for two metal extractors at density 4, so both are
+built
 here.
 
 **If it does not found, it starves.** Territory 2 has no extractor until the moment it founds, so a
@@ -102,12 +105,12 @@ that same turn.
 
 ### build food extractor · build metal extractor · build energy extractor
 
-| territory 1               | before | after |
-| ------------------------- | ------ | ----- |
-| labor                     | 1      | 0     |
-| metal                     | 3      | 2     |
-| extractor, metal          | 0      | 1     |
-| room for metal extractors | 3      | 3     |
+| territory 1                   | before | after |
+| ----------------------------- | ------ | ----- |
+| labor                         | 1      | 0     |
+| metal                         | 3      | 2     |
+| metal extractor               | 0      | 1     |
+| capacity for metal extractors | 3      | 3     |
 
 Three recipes differing in one cell. **Every row's `Where` is blank, which means the one place the
 recipe acts** - so the labor and the metal are in one territory and the extractor appears there,
@@ -116,12 +119,12 @@ asking for.
 
 ### build yard
 
-| territory 1    | before | after |
-| -------------- | ------ | ----- |
-| labor          | 1      | 0     |
-| metal          | 15     | 0     |
-| yard           | 0      | 1     |
-| room for yards | 1      | 1     |
+| territory 1        | before | after |
+| ------------------ | ------ | ----- |
+| labor              | 1      | 0     |
+| metal              | 15     | 0     |
+| yard               | 0      | 1     |
+| capacity for yards | 1      | 1     |
 
 **Labor and metal, like everything else a player builds.** Until recently it took metal alone, and
 fifteen metal assembled itself.
@@ -174,8 +177,8 @@ widening it is a later decision, and the name already survives it.
 | ---------------------------- | ------ | ----- |
 | territory                    | 1      | 1     |
 | labor                        | 1      | 0     |
-| extractor, metal, ready      | 1      | 0     |
-| extractor, metal, exhausted  | 0      | 1     |
+| metal extractor, ready       | 1      | 0     |
+| metal extractor, exhausted   | 0      | 1     |
 | metal                        | 0      | 4     |
 | `$where`'s density for metal | 4      | 4     |
 
