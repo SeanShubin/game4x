@@ -73,6 +73,9 @@ specific rule.
 
 - Every kind of thing, and every recipe that turns some things into others, is data rather than
   code
+- The tables that define kinds, families, traits and recipes are the data the game loads.
+  Nothing restates them; every other form of them is derived, and a derived form is generated
+  rather than written.
 - A recipe expresses inputs and outputs. Where its inputs are available, it can be used to create
   its outputs. Some inputs are consumed and some are not, and an input says whether its quantity
   is a least or a most

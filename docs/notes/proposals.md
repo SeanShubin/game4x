@@ -45,98 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-193 - The release's tables are the data, not a document the code copies
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own, from `../vote` - **into**
-`spec/invariants.md` -> The game is data
-
-**`spec/invariants.md` already says the game is data, and it is not yet true.** The kinds and
-recipes live in markdown, `prototypes/kinds` holds the same content as hand-written Rust, and a test
-renders the Rust back into tables to compare. **Two hand-maintained copies kept in step by a
-check** - which is the arrangement your `vote` pattern replaces with one source and generated views.
-
-> The tables that define kinds, families, traits and recipes are the data the game loads. Nothing
-> restates them; every other form of them is derived, and a derived form is generated rather than
-> written.
-
-**Basis: the parser already exists and throws its answer away.**
-`prototypes/kinds/tests/against_the_release.rs` reads `releases/first-release.md`, parses the rows
-under each heading, and uses them only to compare. Turning *parse and compare* into *parse and load*
-deletes the second copy rather than adding machinery.
-
-**The evidence that the second copy is the problem is `P-192`.** `prototypes/kinds` carried a
-`Noun::Territory` case cut into it so it could render a name the Kinds table did not declare. **A
-crate that exists to stop the two halves disagreeing had a hand-made exemption at the one place they
-did.** A loaded table cannot have an exemption, because there is nothing to write it in.
-
-**And `docs/recipes/README.md` is the same failure in prose.** Seventeen before-and-after sections,
-written by hand, re-rendered by hand three times today after promotions - each time correct only
-because a script compared them afterwards. **That is the narrative prose your `vote` documentation
-exists to stop trusting**, and here it is being trusted about your own rules.
-
-**One adaptation rather than a copy, and it is the part worth arguing.** `vote` publishes its dumps
-as HTML you browse. **Generate these as markdown and commit them**, because then a rule change shows
-its consequences in the same diff. `P-186` raised a Pioneer's cost and the play-through got
-*shorter* - nine turns to seven - and that fact existed only because the code lane happened to
-regenerate `commands/play.4x` and mention it. A committed dump would have shown it in the commit
-that caused it.
-
-**Four views, in the order they become possible**, none of them needing a rule this proposal does
-not state:
-
-| View                  | What it is                                                 | Ready when                       |
-| --------------------- | ---------------------------------------------------------- | -------------------------------- |
-| **Catalog**           | every declared kind, family, trait, recipe row, capacity   | now - the parser exists          |
-| **Scenario**          | what `commands/play.4x` did, in order, in English          | now - it is already generated    |
-| **State, relational** | after that scenario: one row per thing, place and quantity | needs the bootstrap you named    |
-| **State, ECS**        | the same state as components and archetypes                | after `P-134` rewrites the model |
-
-**The bootstrap you asked about is the third row.** It is what turns the tables from a description
-of the starting position into the starting position.
-
-### P-194 - Approved text is byte-identical to shipped text, and today it was not, four times
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** correction - **into** `CLAUDE.md`
--> Promotion
-
-**`S-10` is about to be built as a check that approved text appears in its destination, and it would
-fail on four of today's eleven promotions.** Not because those promotions were wrong. Because a
-proposal's block is not always text to insert.
-
-> A proposal's block is **text**, **rows** or **an instruction**, and it says which.
->
-> **Text** is copied verbatim; line wrapping, bullet-versus-paragraph and heading level are the only
-> things a promotion may change. **Rows** are table rows, whose column widths the padder rewrites,
-> so what must survive is every cell rather than every byte. **An instruction** describes a change
-> to make in more than one place, and nothing lands verbatim - **so it carries the assertion that
-> proves it was applied**, and the promoting commit runs it.
-
-**Basis: measured over the eleven promotions of 2026-09-02.**
-
-| Proposal | What its block was                                 | Byte-identical? |
-| -------- | -------------------------------------------------- | --------------- |
-| `P-188`  | a sentence for one bullet                          | **yes**         |
-| `P-184`  | two paragraphs of prose                            | **yes**         |
-| `P-186`  | twenty-four table rows                             | no - repadded   |
-| `P-192`  | prose describing two kinds, landed as two rows     | no              |
-| `P-190`  | column definitions **and** a migration instruction | no - half of it |
-| `P-191`  | a rename to apply across seven files               | no - none of it |
-
-**`P-190` is the one that shows why this is not a wording problem.** Its block held two things: the
-seven columns, which are release content, and *every row today becomes a row under this scheme*,
-which is an instruction to this lane and correctly appears nowhere. **A check reading that block
-would report a promotion that was performed exactly as approved.**
-
-**`P-191` shows the shape that needs the third case.** Nothing it said could land verbatim - it
-renamed a word across six spec files and the release. **But it was checkable, and it was checked**:
-the promoting commit asserted the word `room` appears nowhere in any of the seven files. That
-assertion is the evidence, and it is stronger than a byte comparison because it covers sites the
-proposal never enumerated - it found a seventh the proposal had missed.
-
-**So the guarantee is right and its statement is too narrow**, and `S-10` cannot be built until this
-says which promotions it covers. **The correction is worth making even if `S-10` were abandoned**,
-because `CLAUDE.md` currently promises something four promotions today did not do.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -813,6 +721,8 @@ work the release exists to order.
 | P-184, the world's recipes fire at the end of a turn, in the order `spec/turn.md` gives                         | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-02 |
 | P-190, the recipe table takes seven columns, and role carries require, limit, consume and produce               | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-02 |
 | P-192, a territory and an orbit are kinds; there are twelve                                                     | `releases/first-release.md` -> Kinds, Traits                                                                                                 | 2026-09-02 |
+| P-193, the tables are the data the game loads, and every other form is generated                                | `spec/invariants.md` -> The game is data                                                                                                     | 2026-09-02 |
+| P-194, a proposal's block is text, rows or an instruction, and says which                                       | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-02 |
 
 ## Rejected
 

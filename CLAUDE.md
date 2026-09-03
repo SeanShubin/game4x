@@ -396,6 +396,14 @@ approves. Fixing phrasing during promotion would mean the text Sean reviewed and
 the spec are not the same text, and he would have no reason to re-read the spec to find out.
 The guarantee this buys is that **approved text is byte-identical to shipped text.**
 
+**A proposal's block is text, rows or an instruction, and it says which.**
+
+**Text** is copied verbatim; line wrapping, bullet-versus-paragraph and heading level are the only
+things a promotion may change. **Rows** are table rows, whose column widths the padder rewrites, so
+what must survive is every cell rather than every byte. **An instruction** describes a change to
+make in more than one place, and nothing lands verbatim - **so it carries the assertion that proves
+it was applied**, and the promoting commit runs it.
+
 **Never leave a promotion uncommitted.** A promotion changes `spec/` or `releases/` and moves a row
 in the queue, and **the other lanes read the working tree** - so an uncommitted promotion is a rule
 they may already be building against, with no way to see when it arrived or why. That is the

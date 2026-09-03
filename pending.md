@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-193** - The release's tables are the data, not a document the code copies · `docs/notes/proposals.md`
-- **P-194** - Approved text is byte-identical to shipped text, and today it was not, four times · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## What is outstanding
 
@@ -35,9 +35,9 @@ it exists to ask.
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127
+- `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180
 - `spec/control.md` -> Winning - P-77, P-81, P-125
-- `spec/invariants.md` -> The game is data - P-130, P-134, P-147
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189
