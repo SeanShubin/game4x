@@ -80,6 +80,42 @@ energy up to the unit's fuel*, which is right, under a heading that says the tan
 **This lane renamed it from `Room` in `P-191` and over-applied the rename**: the trait became *total
 capacity* correctly, and this column was never the trait.
 
+### P-202 - A control that chooses between two things does not say which one is chosen
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** instruction -
+**into** `spec/interface.md` -> What an action shows, and `releases/first-release.md` -> Controls
+
+**Your observation on `R-1`**: the drawing button works, and *the only indicator I have is the planet
+itself*. You asked whether it should be two buttons, a slider, or something else.
+
+> In `spec/interface.md`, under *What an action shows*, a second bullet: **A control that chooses
+> among alternatives shows which one is chosen, and names the others.**
+>
+> In `releases/first-release.md`, under *Controls*, a bullet after the reset one: **The drawing is
+> bound to `T`, and to a control for each drawing.**
+>
+> **The assertion that proves this was applied**: `spec/interface.md` contains *shows which one is
+> chosen*, and *Controls* names `T`.
+
+**Two buttons, and here is why rather than a slider.** The two drawings are **peers** - practical and
+realistic - not a thing and its absence. **A slider means on and off**, and would name one drawing
+while leaving the other unnamed and unnameable. Two buttons name both, so you can see what you would
+be switching to without pressing anything.
+
+**And the page already does exactly this.** The three surface buttons mark the current one with
+`aria-current` and an accent border. **The drawing is the only control on the page that changes
+something and shows nothing**, so this is one control catching up with its neighbours rather than a
+new idea.
+
+**It also survives a third drawing.** Two buttons become three; a slider cannot.
+
+**On seeing the buttons in both builds - `T` already exists and the release never said so.** The
+*Controls* section binds rotation, zoom, reset, the surfaces and the planet sizes, and **says nothing
+about the drawing at all**, while `planet-bevy` binds `KeyCode::KeyT`. So the capability is in every
+build, as `spec/interface.md` requires, and **the release forgot to write down how it is reached**.
+Whether the desktop build should also carry visible buttons is a further question and is not this
+proposal.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
