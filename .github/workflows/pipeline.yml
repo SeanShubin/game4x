@@ -42,7 +42,29 @@ jobs:
     name: Gate (lint - geometry tests - WASM build)
     runs-on: ubuntu-latest
     steps:
+      # The whole history, because `tools/outbox` checks that every commit an outbox cites
+      # exists. `actions/checkout` is shallow by default, and a shallow clone has exactly
+      # one commit - so that check found forty-odd citations missing on 2026-09-02, all of
+      # which exist. It skips a shallow clone now, correctly, which means the default
+      # checkout would leave it running nowhere but the pre-push hook.
+      #
+      # 4.2 MiB across 444 commits, against a Rust toolchain, Trunk and a wasm release
+      # build in the same job. The cost is not the reason to skip a check.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # A check that silently stops running looks exactly like a check that passes, which
+      # is the failure this whole step exists because of. If the line above is ever lost,
+      # the citation check goes quiet rather than red - so this goes red instead.
+      - name: The checkout has history
+        run: |
+          if [ "$(git rev-parse --is-shallow-repository)" != "false" ]; then
+            echo "the gate's checkout is shallow, so the citation check will skip silently" >&2
+            echo "restore 'fetch-depth: 0' on actions/checkout in this job" >&2
+            exit 1
+          fi
+          echo "$(git rev-list --count HEAD) commits; the citation check can see them"
 
       # Clippy compiles the Bevy-facing crates natively, so this job needs Bevy's Linux
       # system libraries. The wasm32 Trunk build links none of them; installing here is
