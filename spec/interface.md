@@ -16,7 +16,9 @@ The game presents four surfaces, all reachable from the front end, in every buil
 - **The game itself** - the planet, its territories, and what the player does with them
 - **The console** - typing commands, with help listing every command and its syntax, and
   errors that say what was wrong and what was expected
-- **The data browser** - every entity in the game and its components, read directly
+- **The data browser** - the game's own data, read directly, in two views: every entity with its
+  components, and the same facts normalized into a table for each relation. **Both name every
+  table and every column, whether or not anything is in it.**
 - **The rule editor** - the rules the player has, read and changed
 
 The rule editor is two-dimensional. It may carry three-dimensional decoration, and nothing the

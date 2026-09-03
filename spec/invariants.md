@@ -73,9 +73,11 @@ specific rule.
 
 - Every kind of thing, and every recipe that turns some things into others, is data rather than
   code
-- The tables that define kinds, families, traits and recipes are the data the game loads.
-  Nothing restates them; every other form of them is derived, and a derived form is generated
-  rather than written.
+- **What the game is made of lives in a data file, not in code and not in markup.** Rust holds
+  the engine and the hand-written page holds the shell; neither holds a kind, a recipe, a cost,
+  a planet size or a surface. Nothing restates what a data file says; every other form of it is
+  derived, and a derived form is generated rather than written. **A scenario is a file too**, so
+  what a run exercises can be changed without changing the program.
 - A recipe expresses inputs and outputs. Where its inputs are available, it can be used to create
   its outputs. Some inputs are consumed and some are not, and an input says whether its quantity
   is a least or a most

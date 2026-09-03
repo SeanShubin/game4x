@@ -45,71 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-199 - What the game is made of lives in a data file, not in code and not in markup
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** instruction -
-**into** `spec/invariants.md` -> The game is data
-
-**Your four constraints go further than `P-193` did**, and rather than sit beside it as a broader
-rule saying nearly the same thing, this replaces it. `P-193` named four tables; the release has
-nine, and it said nothing about markup at all.
-
-> The bullet `P-193` added becomes: **What the game is made of lives in a data file, not in code and
-> not in markup.** Rust holds the engine and the hand-written page holds the shell; neither holds a
-> kind, a recipe, a cost, a planet size or a surface. Nothing restates what a data file says; every
-> other form of it is derived, and a derived form is generated rather than written. **A scenario is
-> a file too**, so what a run exercises can be changed without changing the program.
->
-> **The assertion that proves this was applied**: `spec/invariants.md` contains *What the game is
-> made of lives in a data file* and no longer contains *The tables that define kinds, families,
-> traits and recipes*.
-
-**Basis: measured, because the rule bites in three places today and one of them is markup.**
-
-| Where                               | What is hardcoded                                                                |
-| ----------------------------------- | -------------------------------------------------------------------------------- |
-| `crates/game4x/index.html`          | the five planet sizes, and three of the four surfaces - both specification facts |
-| `crates/game-model/src/game.rs`     | thirteen cost constants, `YARD_METAL` through `MOVE_CELLS`                       |
-| `crates/game-model/src/identity.rs` | the kinds themselves, as enums with `ALL` arrays                                 |
-| `commands/play.4x`                  | **nothing - a scenario is already a file**                                       |
-
-**The markup line is the one this lane would not have found**, because the page looked like
-presentation. Five buttons reading `tiny` to `huge` are `spec/planet.md`'s five sizes, and three
-buttons reading `F1 game` to `F3 browser` are `spec/interface.md`'s three surfaces. **A sixth planet
-size would need a hand edit to an HTML file**, which is the definition of a fact living in two
-places. **`spec/interface.md` names four surfaces and the page has three**, correctly - the release
-keeps the rule editor out - but the fourth arrives as a hand edit to markup for the same reason.
-
-**This is a direction rather than a work order, and most of it is behind `P-134`.** Costs and kinds
-live in the shapes that proposal rewrites, and `C-16` already parks the same question for
-`prototypes/kinds`. **The markup is the part that is neither blocked nor large** - the page can ask
-what the sizes and surfaces are instead of naming them.
-
-### P-200 - The data browser is specified as one view and you want two
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `spec/interface.md` -> Surfaces, replacing the data browser bullet
-
-**Your answer was that this was already the intent of F3, and the specification does not say it
-yet.** `spec/interface.md` reads *the data browser - every entity in the game and its components,
-read directly*, which is the physical view alone. **The normalized view is a different rendering of
-the same facts**, and nothing in the specification asks for it.
-
-> - **The data browser** - the game's own data, read directly, in two views: every entity with its
->   components, and the same facts normalized into a table for each relation. **Both name every
->   table and every column, whether or not anything is in it.**
-
-**Basis: the last sentence is the one that earns its place.** A kind can be exercised thoroughly and
-be gone by the end - a pioneer is produced, moves, founds, and is consumed - so a view that lists
-only what is present hides the names of everything that has already done its job. **Naming the
-columns of an empty table is what makes the browser usable for the thing you want it for**, which is
-finding the names that are wrong.
-
-**Nothing else here needs a rule.** *Nothing is available in one build and not another* already
-settles the desktop question, and *how a thing is presented, and how the user acts on it, may follow
-the platform it runs on* already permits tables on the page and something else in a terminal. **You
-answered that question with a rule you had already written.**
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -870,6 +805,8 @@ work the release exists to order.
 | P-196, a place is a territory or an orbit, edges have kinds, and a unit says which it crosses                   | `releases/first-release.md` -> Families, Traits, Units and structures, Recipes                                                               | 2026-09-03 |
 | P-197, the three things a promotion can do, in words that define themselves                                     | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-03 |
 | P-198, specification and presentation do not share a format; a rendering is never canonical                     | `CLAUDE.md` -> Perspectives                                                                                                                  | 2026-09-03 |
+| P-199, what the game is made of lives in a data file, not in code and not in markup                             | `spec/invariants.md` -> The game is data                                                                                                     | 2026-09-03 |
+| P-200, the data browser has two views, and both name every column                                               | `spec/interface.md` -> Surfaces                                                                                                              | 2026-09-03 |
 
 ## Rejected
 
