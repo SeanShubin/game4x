@@ -8,6 +8,17 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on reference material
+
+*There is the context independent information about the game, and there is the context specific data
+of a before and after. I want all of these and I want them separate. So to start with, I need the
+thing definitions (context free), the recipe definitions (context free), and the data dump of the
+scenario (context is the scenario).*
+
+**Three artifacts.** `catalog.md` is the first; `state.md` and `entities.md` are two views of the
+third; **the second does not exist** - `S-23`. And `docs/recipes/README.md`, which looks like the
+second, is context-specific: a scenario on territory 1, one recipe at a time.
+
 ## Said 2026-09-03, on capacity
 
 *Not everything needs a capacity. For example, citizens are kept from going to infinity by their
