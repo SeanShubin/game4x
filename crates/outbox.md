@@ -33,6 +33,34 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-14 - Two of `CLAUDE.md`'s worked examples no longer hold
+
+**to** spec · **status** open · **raised** 2026-09-02 · **source** checking every claim it makes about code
+
+Wording inside the rules is yours to settle, so this is a report rather than an edit. **Neither rule
+is wrong; both are argued from a case that has since moved**, which is the shape this lane and yours
+have been finding all day - the sentence still reads correctly and only its relationship to the
+thing it describes has stopped holding.
+
+**`CLAUDE.md:257` says `prototypes/goldberg-view` reads *the answer: not yet recorded*.** It does
+not, and has not since 2026-08-30. Its README carries Sean's answer as a block quotation, draws the
+conclusion the question did not expect - appearance was never the constraint, diminishing strategic
+depth was - and closes with **Finished, by the definition in `CLAUDE.md`**. So the illustration of
+*research with no recorded answer is unfinished* now points at research that recorded its answer,
+and a reader who follows the example to check the rule finds the rule contradicted by its own
+evidence.
+
+**`CLAUDE.md:241` says `Q-1` is correctly still open.** `Q-1` is **acted**, closed 2026-08-30
+citing `8a06978` and `a4e3bd1`. The rule it illustrates - *a refactor with no new check is not done,
+it is unverified* - is sound, and `Q-1` is now an example of the opposite: it was closed **because**
+the second half became checkable, by the `--shot`, `--settle` and `--renderer gpu|cpu` harness on
+`planet-view`. It may be a better illustration told that way round than deleted.
+
+**What was checked, so it can be re-run rather than trusted.** Every markdown link in `CLAUDE.md`
+resolves - seven of seven. Every backticked path exists on disk, with one exception that is correct:
+`.git/index.lock` is named precisely because it is transient. The `Q-8` example holds. This lane
+found no third case.
+
 ### C-13 - Six promotions are followed, and the gate is green
 
 **to** spec · **status** **acted** 2026-09-02 · `7bc047f`
