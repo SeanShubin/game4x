@@ -158,6 +158,7 @@ pub enum Family {
     Thing,
     Unit,
     Resource,
+    Place,
 }
 
 impl Family {
@@ -166,6 +167,7 @@ impl Family {
             Family::Thing => "thing",
             Family::Unit => "unit",
             Family::Resource => "resource",
+            Family::Place => "place",
         }
     }
 
@@ -174,6 +176,7 @@ impl Family {
             Family::Thing => KINDS.to_vec(),
             Family::Unit => vec![Kind::Ark, Kind::Pioneer],
             Family::Resource => vec![Kind::Food, Kind::Metal, Kind::Energy],
+            Family::Place => vec![Kind::Territory, Kind::Orbit],
         }
     }
 
@@ -194,7 +197,7 @@ impl Family {
     }
 }
 
-pub const FAMILIES: [Family; 3] = [Family::Thing, Family::Unit, Family::Resource];
+pub const FAMILIES: [Family; 4] = [Family::Thing, Family::Unit, Family::Resource, Family::Place];
 
 // ---------------------------------------------------------------------------------------
 // Where things are
@@ -341,8 +344,8 @@ pub const TRAITS: [TraitRow; 18] = [
     },
     TraitRow {
         name: "adjacency",
-        of: "a territory",
-        values: "which territories touch it",
+        of: "a place",
+        values: "which places it touches, and by which kind of edge",
         held: Held::Stored,
     },
     TraitRow {
@@ -450,6 +453,20 @@ pub enum Noun {
 }
 
 impl Noun {
+    /// Whether this names somewhere rather than something in it.
+    ///
+    /// **A name is bound by requiring a place**, and until `P-196` the only place a recipe
+    /// could require was a territory - so this read `== Noun::Of(Kind::Territory)` and
+    /// stopped finding `move`'s two names the moment `move` began taking places. The
+    /// question was always *is this somewhere*, and it was written as the one answer that
+    /// existed at the time.
+    pub fn is_a_place(self) -> bool {
+        match self {
+            Noun::Of(kind) => Family::Place.covers(kind),
+            Noun::Any(family) => family == Family::Place,
+        }
+    }
+
     pub fn name(self) -> &'static str {
         match self {
             Noun::Of(kind) => kind.name(),
@@ -543,7 +560,7 @@ impl Recipe {
     pub fn binds(&self) -> Vec<&'static str> {
         self.lines
             .iter()
-            .filter(|line| line.role == Role::Require && line.noun == Noun::Of(Kind::Territory))
+            .filter(|line| line.role == Role::Require && line.noun.is_a_place())
             .filter_map(|line| line.place)
             .collect()
     }
@@ -614,7 +631,10 @@ use Role::{Consume, Limit, Produce, Require};
 const FOR_FOOD: [Qualifier; 1] = [by("food", "resource")];
 const FOR_METAL: [Qualifier; 1] = [by("metal", "resource")];
 const FOR_ENERGY: [Qualifier; 1] = [by("energy", "resource")];
-const NEXT_TO_FROM: [Qualifier; 1] = [by("next to `$from`", "adjacency")];
+const JOINED_TO_FROM: [Qualifier; 1] = [by(
+    "joined to `$from` by an edge the unit crosses",
+    "adjacency",
+)];
 const READY: [Qualifier; 1] = [by("ready", "readiness")];
 const EXHAUSTED: [Qualifier; 1] = [by("exhausted", "readiness")];
 const SURPLUS: [Qualifier; 1] = [by("surplus", "surplus")];
@@ -629,6 +649,7 @@ const TERRITORY: Noun = Noun::Of(Kind::Territory);
 const UNIT: Noun = Noun::Any(Family::Unit);
 const RESOURCE: Noun = Noun::Any(Family::Resource);
 const THING: Noun = Noun::Any(Family::Thing);
+const PLACE: Noun = Noun::Any(Family::Place);
 
 /// The seventeen recipes of `releases/first-release.md`.
 pub const RECIPES: &[Recipe] = &[
@@ -637,7 +658,7 @@ pub const RECIPES: &[Recipe] = &[
         owner: Player,
         lines: &[
             placed(Require, 1, TERRITORY, &[], "`$where`"),
-            placed(Consume, 1, Noun::Of(Ark), &[], "`$where`"),
+            placed(Consume, 1, Noun::Of(Ark), &[], "the orbit above `$where`"),
             just(Limit, 0, Noun::Of(Garrison)),
             just(Produce, 1, Noun::Of(Garrison)),
             just(Produce, 2, Noun::Of(Citizen)),
@@ -649,8 +670,8 @@ pub const RECIPES: &[Recipe] = &[
         name: "move",
         owner: Player,
         lines: &[
-            placed(Require, 1, TERRITORY, &[], "`$from`"),
-            placed(Require, 1, TERRITORY, &NEXT_TO_FROM, "`$to`"),
+            placed(Require, 1, PLACE, &[], "`$from`"),
+            placed(Require, 1, PLACE, &JOINED_TO_FROM, "`$to`"),
             placed(Consume, 1, UNIT, &READY, "`$from`"),
             placed(Consume, 1, Noun::Of(Energy), &[], "that unit"),
             placed(Produce, 1, UNIT, &EXHAUSTED, "`$to`"),
@@ -811,6 +832,13 @@ pub struct Producible {
     pub costs: &'static [(u32, Kind)],
     /// What holds it together, and what `perish` gives back before its parts are counted.
     pub binding: Option<u32>,
+    /// Which kinds of edge it may move along, which is what decides where it can ever be.
+    ///
+    /// **An Ark's life has no land-to-land move in it**: it crosses `orbit border` and
+    /// `ascent` and not `border`, so it is produced on the ground, ascends once, moves in
+    /// orbit to choose a site, and deploys. Sean's rule that an Ark cannot move between two
+    /// territories is now a consequence of this column rather than something merely obeyed.
+    pub crosses: Option<&'static str>,
     pub requires: Option<&'static str>,
     pub readies: bool,
 }
@@ -866,6 +894,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         upkeep: Some((1, Food)),
         costs: &[],
         binding: None,
+        crosses: None,
         requires: None,
         readies: true,
     },
@@ -877,6 +906,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         upkeep: None,
         costs: &[(1, Labor), (1, Metal)],
         binding: Some(1),
+        crosses: None,
         requires: None,
         readies: false,
     },
@@ -888,6 +918,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         upkeep: None,
         costs: &[(1, Labor), (1, Metal)],
         binding: Some(1),
+        crosses: None,
         requires: None,
         readies: true,
     },
@@ -899,6 +930,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         upkeep: None,
         costs: &[(1, Labor), (15, Metal)],
         binding: Some(15),
+        crosses: None,
         requires: None,
         readies: false,
     },
@@ -910,6 +942,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         upkeep: None,
         costs: &[(3, Metal), (12, Energy), (2, Citizen)],
         binding: Some(3),
+        crosses: Some("orbit border, ascent"),
         requires: Some("a Yard"),
         readies: true,
     },
@@ -921,6 +954,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         upkeep: Some((1, Food)),
         costs: &[(3, Metal), (6, Energy), (2, Citizen)],
         binding: Some(3),
+        crosses: Some("border"),
         requires: None,
         readies: true,
     },
@@ -1002,6 +1036,7 @@ pub fn units_table() -> Vec<Vec<String>> {
         "Costs to produce",
         "Metal in it",
         "Binding",
+        "Crosses",
         "Requires",
         "Readies",
     ])];
@@ -1021,6 +1056,7 @@ pub fn units_table() -> Vec<Vec<String>> {
                 .map(|n| n.to_string())
                 .unwrap_or_default(),
             thing.binding.map(|n| n.to_string()).unwrap_or_default(),
+            thing.crosses.unwrap_or_default().to_string(),
             thing.requires.unwrap_or_default().to_string(),
             if thing.readies { "yes" } else { "" }.to_string(),
         ]);

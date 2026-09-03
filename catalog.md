@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-12 kinds, 3 families, 18 traits, 17 recipes.
+12 kinds, 4 families, 18 traits, 17 recipes.
 
 ## citizen
 
@@ -101,11 +101,13 @@ carries a landing, and can invade from orbit.
 
 **Capacity** Total capacity: 2
 
-**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Metal in it: 3 · Binding: 3 · Requires: a Yard · Readies: yes
+**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Metal in it: 3 · Binding: 3 · Crosses: orbit border, ascent · Requires: a Yard · Readies: yes
 
 **In recipes**
 
-- `deploy ark` consumes 1, in `$where`
+- `deploy ark` consumes 1, in the orbit above `$where`
+- `move` consumes 1 (as a unit), ready, in `$from`
+- `move` produces 1 (as a unit), exhausted, in `$to`
 - `produce ark` produces 1
 
 ## pioneer
@@ -118,10 +120,12 @@ founds a territory.
 
 **Capacity** Total capacity: 2
 
-**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Metal in it: 3 · Binding: 3 · Readies: yes
+**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Metal in it: 3 · Binding: 3 · Crosses: border · Readies: yes
 
 **In recipes**
 
+- `move` consumes 1 (as a unit), ready, in `$from`
+- `move` produces 1 (as a unit), exhausted, in `$to`
 - `found by land` consumes 1
 - `produce pioneer` produces 1
 
@@ -137,6 +141,7 @@ eaten by citizens; expires.
 
 **In recipes**
 
+- `work` produces `$where`'s density for that resource (as a resource)
 - `upkeep` consumes the thing's upkeep
 - `grow` consumes 1, surplus
 - `spoil` consumes 1, keeps 0
@@ -161,6 +166,7 @@ what things are built from; conserved.
 - `build yard` consumes 15
 - `produce pioneer` consumes 3
 - `produce ark` consumes 3
+- `work` produces `$where`'s density for that resource (as a resource)
 - `perish` produces the thing's metal
 
 ## energy
@@ -178,6 +184,7 @@ what moves things; neither conserved nor expiring.
 - `move` consumes 1, in that unit
 - `produce pioneer` consumes 6
 - `produce ark` consumes 12
+- `work` produces `$where`'s density for that resource (as a resource)
 
 ## labor
 
@@ -202,24 +209,28 @@ what working a machine takes; a citizen provides it each turn.
 
 a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource.
 
-**In families** thing
+**In families** thing, place
 
-**Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `density` (a number), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the six), `force of nature` (a number), `adjacency` (which territories touch it)
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `density` (a number), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the six), `force of nature` (a number)
 
 **In recipes**
 
 - `deploy ark` requires 1, in `$where`
-- `move` requires 1, in `$from`
-- `move` requires 1, next to `$from`, in `$to`
+- `move` requires 1 (as a place), in `$from`
+- `move` requires 1 (as a place), joined to `$from` by an edge the unit crosses, in `$to`
 - `work` requires 1, in `$where`
 
 ## orbit
 
 a place above one territory, which holds units and nothing else.
 
-**In families** thing
+**In families** thing, place
 
 **Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
 
-**In recipes** none name it.
+**In recipes**
+
+- `deploy ark` consumes 1 (as the place holding ark), in the orbit above `$where`
+- `move` requires 1 (as a place), in `$from`
+- `move` requires 1 (as a place), joined to `$from` by an edge the unit crosses, in `$to`
 

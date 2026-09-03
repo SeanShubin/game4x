@@ -131,16 +131,47 @@ fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
         }
     }
 
+    // Which families name this kind, so a recipe taking `place` is found under `orbit`.
+    //
+    // **`P-196` is why this exists.** Before it, no recipe named an orbit and the catalog
+    // said so - which is what raised `C-15` and became that proposal. `move` now takes a
+    // `place`, so an orbit is named by a recipe through its family, and a join matching the
+    // Kind cell literally would have gone on reporting *none name it* after the thing it
+    // reported had been fixed. A view that stays wrong once the world moves is worse than
+    // no view.
+    let mut families_of: Vec<String> = body_under(document, "## Families")
+        .iter()
+        .filter(|row| {
+            let members = row.get(1).map(String::as_str).unwrap_or_default();
+            members.split(',').any(|m| m.trim() == kind)
+        })
+        .map(|row| plain(&row[0]))
+        .collect();
+    families_of.push(kind.to_string());
+
     let mut lines: Vec<String> = Vec::new();
     for (recipe, row) in rows_with_recipe(document) {
-        if row.get(4).map(|c| plain(c)).unwrap_or_default() != kind {
+        let named = row.get(4).map(|c| plain(c)).unwrap_or_default();
+        let place = row.get(6).cloned().unwrap_or_default();
+        // The Where column names a place too: `deploy ark` takes its Ark from *the orbit
+        // above `$where`*, which is the only line in the table that reaches an orbit.
+        let in_where = place
+            .split(|c: char| !c.is_alphanumeric())
+            .any(|w| w == kind);
+        if !families_of.iter().any(|f| f == &named) && !in_where {
             continue;
         }
+        let via = if named == kind {
+            String::new()
+        } else if in_where && !families_of.iter().any(|f| f == &named) {
+            format!(" (as the place holding {named})")
+        } else {
+            format!(" (as a {named})")
+        };
         let role = row.get(2).cloned().unwrap_or_default();
         let qty = row.get(3).cloned().unwrap_or_default();
         let traits = row.get(5).cloned().unwrap_or_default();
-        let place = row.get(6).cloned().unwrap_or_default();
-        let mut said = format!("`{recipe}` {role}s {qty}");
+        let mut said = format!("`{recipe}` {role}s {qty}{via}");
         if !traits.is_empty() {
             said.push_str(&format!(", {traits}"));
         }

@@ -118,8 +118,8 @@ fn every_kind_a_recipe_names_is_declared() {
     // would leave this checking an empty set and passing.
     assert_eq!(
         used.len(),
-        14,
-        "fourteen distinct names across the recipes' Kind column, and these are {used:?}"
+        15,
+        "fifteen distinct names across the recipes' Kind column, and these are {used:?}"
     );
 }
 
