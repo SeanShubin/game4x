@@ -50,6 +50,37 @@ decision that has not been made yet. Two at the end are waiting on something and
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-17 - `pending.md` cannot show what waits on a person, and five things have been waiting since 2026-08-30
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** Sean asking what to do next
+
+**`pending.md` says *What must be decided: Nothing*. Five capabilities are addressed to Sean and
+waiting for him to look at them.** `R-1` through `R-5` in `releases/first-release.md` are
+`**built**` and `**to** sean`, dated 2026-08-30, each carrying its evidence. **None appears in the
+index.**
+
+**The cause is one line.** `Item::is_open` is `self.status == "open"`, and both outstanding lists
+filter on it - `lib.rs:577` and `lib.rs:667`. **A capability marked `built` is not `open`, so it
+disappears**, and `built` is precisely the status that means *a person has not yet looked*.
+
+> `built` is not a terminal status. An item is outstanding while its status is `open` **or**
+> `built`; it stops being outstanding at `acted`, `rejected`, `withdrawn`, `answered` or `vetted`.
+
+**Basis: `CLAUDE.md` already has the rule and the index does not implement it.** *A capability
+therefore has two addressees in turn: `open` and `to code` while it is being built; `built` and `to
+sean` once the code lane says it is done and a person has not yet looked.* **The addressing was
+fixed and the reading was not**, so the second addressee has never once been shown a thing waiting
+for them.
+
+**And it is the exact failure the whole file is built to prevent.** *Nothing open means nothing
+outstanding* is true by its own wording and false in fact: five things are outstanding, they are
+addressed correctly, and the index reports none of them. **CLAUDE.md's own account of why this rule
+exists describes this state as the one that should be impossible** - *five items could never move,
+while `pending.md` reported that nothing needed deciding.* It has been that way for four days.
+
+**A count would have caught it and there is none.** The index has no assertion that the number of
+outstanding items it prints bears any relation to the number of items that exist.
+
 ### S-16 - `P-199` left a stale quotation in `prototypes/kinds`, and the guard cannot see it
 
 **to** code - **status** **acted** 2026-09-03 - **raised** 2026-09-03 - **cited** `81484be` -
@@ -107,7 +138,7 @@ could remember would catch it. **Only the remedy was aimed at a gap that was alr
 
 ### S-15 - `P-196` moved the release again, and two checks are red
 
-**to** code - **status** open - **raised** 2026-09-03 - **source** `P-196`, promoted in `68cc893`
+**to** code - **status** **acted** 2026-09-03 - **cited** `c9e5ebf` - **raised** 2026-09-03 - **source** `P-196`, promoted in `68cc893`
 
 `the_release_tables_are_the_ones_in_this_crate` and `every_kind_a_recipe_names_is_declared` both
 fail. What moved:
@@ -130,6 +161,12 @@ merely obeyed**, and `commands/play.4x` opens with `land ark 1` which is now a d
 
 **`every_kind_a_recipe_names_is_declared` failing is your check working**, not a second defect -
 `place` is a family the crate does not have yet.
+
+**Acted.** All six changes followed, and two of the crate's own checks turned out to be written
+around the world as it was: `binds()` asked whether a noun was a territory, because until
+`P-196` a territory was the only place a recipe could require, and the catalog would have gone
+on reporting that no recipe names an orbit - **still arguing for a proposal that had already
+landed.**
 
 ### S-14 - A scenario that touches every kind and every recipe, and a dump of what it left
 
@@ -373,7 +410,7 @@ the end of a block makes `P-184` report as two blockquotes, and their own fixtur
 
 ### S-10 - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked
 
-**to** code - **status** open - **raised** 2026-09-02 - **source** the quality lens, `Q-39` - **cited** `544d751`
+**to** code - **status** **acted** 2026-09-03 - **cited** `fc4d191` - **raised** 2026-09-02 - **source** the quality lens, `Q-39` - **cited** `544d751`
 
 **This is the quality lens's finding and its design; this lane is relaying it because the build is
 yours.** The report is
@@ -413,6 +450,16 @@ the `**into**` field. **`promote` should write it from the field**, so that the 
 was never transcribed.
 
 **Two smaller checks are in `S-9`** and are unaffected either way.
+
+**Acted, once `P-195` gave it a field to read.** Three checks selected by shape: text must appear
+with whitespace collapsed, rows cell for cell, and an instruction lands nowhere so that arm
+checks only that it declared itself one - **weakest of the three and labelled weak.**
+
+**Its first run caught this lane**, `C-17`: `P-195` declared `shape text` and its block was an
+instruction. **The last paragraph of this item did not survive measurement** - it asked that
+`promote` write the ledger row's destination from the `**into**` field, and `11c56fe` found that
+would make the ledger less accurate, because a promotion that discovers a consequence differs
+from its field legitimately.
 
 ### S-9 - Two checks `tools/outbox` could make that would have caught today's shape errors
 

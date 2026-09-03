@@ -11,22 +11,12 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 Nothing. Every perspective has said so in its own outbox, and this is read from those
 files rather than from anybody's memory of them.
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **S-15** - `c9e5ebf` S-15: follow P-196, and fix a join that would have stayed wrong · still open in `docs/notes/proposals.md`
-- **S-10** - `11c56fe` Measure S-10's last ask before building it, and it does not survive · still open in `docs/notes/proposals.md`
-
 ## What is outstanding
 
-### To code (6)
+### To code (5)
 
-- **S-15** - `P-196` moved the release again, and two checks are red · `docs/notes/proposals.md`
+- **S-17** - `pending.md` cannot show what waits on a person, and five things have been waiting since 2026-08-30 · `docs/notes/proposals.md`
 - **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`
-- **S-10** - A promoted proposal's text is retained nowhere, so the one guarantee cannot be checked · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
