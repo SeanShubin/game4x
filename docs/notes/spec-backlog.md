@@ -8,6 +8,14 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on arrangements and on nodes
+
+- *The arrangement is data the game loads* - the tree model in
+  [what a thing is](what-a-thing-is.md) is the direction, and this is the answer to the one thing
+  it left open. **`P-134`'s territory; not to be proposed piecemeal.**
+- On `P-205`: *I am not so sure, compare this to a territory having a capacity for extractors of
+  each kind* - **`P-205` withdrawn, `P-206` filed.**
+
 ## Said 2026-09-03, answering the five blanks
 
 - **5**: *a pioneer is a name for an arrangement of parts*

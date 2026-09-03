@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-205** - A node is a kind, and that removes the one exception in the capacity table · `docs/notes/proposals.md`
+- **P-206** - An extractor is three kinds, and then capacity has no exception · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

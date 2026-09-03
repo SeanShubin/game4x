@@ -45,59 +45,56 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-205 - A node is a kind, and that removes the one exception in the capacity table
+### P-206 - An extractor is three kinds, and then capacity has no exception
 
 **to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** instruction -
-**into** `releases/first-release.md` -> Kinds, What a territory has total capacity for, Recipes,
-Territory resources
+**into** `releases/first-release.md` -> Kinds, Families, Traits, What a territory has total capacity
+for, Recipes
 
-**Rewritten as a recommendation, since you asked for one.** You offered two shapes - a node as a
-thing, or a capacity and a density per resource on the territory. **The second is what the release
-already has, and it is the one carrying the special language.**
+**Your counter to `P-205`, which was better than `P-205`.** *Compare this to a territory having a
+capacity for extractors of each kind.* If the extractor **is** three kinds, capacity is a plain
+number per kind and the exception disappears **without inventing anything.**
 
-> A **node** is a kind: a place in a territory where one extractor can be built. **A node is part of
-> the world rather than something a player builds**, so a territory has no capacity for nodes - it
-> has the ones the world gave it. **A node holds at most one extractor.** Each node is for one
-> resource, and what an extractor in it yields is the territory's density for that resource.
+> In *Kinds*, `extractor` becomes three: **food extractor**, **metal extractor** and **energy
+> extractor**, each *built for its resource, and worked to produce it*.
 >
-> In *What a territory has total capacity for*, the **extractor** row is removed; what limits
-> extractors is that a node holds one.
+> In *Families*, a fourth: **extractor**, whose members are those three.
 >
-> `build food extractor`, `build metal extractor` and `build energy extractor` each **require a node
-> for that resource holding no extractor**, and produce the extractor **in that node**.
+> In *Traits*, the **resource** trait is removed; the kind says which.
 >
-> **The assertion that proves this was applied**: `Kinds` has thirteen rows and one is `node`;
-> *What a territory has total capacity for* has no `extractor` row and every remaining row is a
-> plain number; and each `build ... extractor` recipe names `node`.
+> In *What a territory has total capacity for*, the `extractor` row becomes three rows, each **a
+> plain number**, from the *Territory resources* table.
+>
+> In *Recipes*, `extractor, food` becomes `food extractor`, and a recipe that meant any of them
+> names the **extractor** family.
+>
+> **The assertion that proves this was applied**: `Kinds` has fourteen rows including the three;
+> `Families` has five and one is `extractor`; no trait is named `resource` of an extractor; and
+> **every row of *What a territory has total capacity for* is a number.**
 
-**Basis: the capacity table has ten rows and nine of them are a number.** The tenth reads *what the
-Territory resources table gives, per resource* - **capacity is a maximum per kind everywhere in this
-game except here**, where it is a maximum per kind and per trait value. **That exception is the
-special language, and a node deletes it**: every row becomes a number, and the limit on extractors
-becomes an ordinary containment - one thing holds one thing.
+**Basis: the exception exists because one kind carries a trait that behaves like a kind.** Capacity
+is *a maximum per kind* in ten rows and *per kind and per trait value* in one. **Splitting the kind
+is the whole fix.**
 
-**It costs one kind and it uses no new mechanism.** `P-157` says a thing contains things; `P-192`
-made `territory` and `orbit` kinds on the grounds that **only a thing may contain things**. A node
-holding an extractor is that argument a third time, and refusing it is what forced the exception.
+**Three signs it was already three.** The release has **three build recipes** - `build food
+extractor`, `build metal extractor`, `build energy extractor` - which `docs/recipes/README.md`
+describes as *three recipes differing in one cell*. Recipes write `extractor, food`, a kind plus a
+trait doing a kind's work. And the *Territory resources* table gives three separate numbers per
+territory.
 
-**Density stays exactly where you put it.** You cut per-node density deliberately, and this keeps
-that cut: **density remains a trait of a territory, per resource**, and every node for a resource
-yields it. **Storing the same density on each node would be the `founded` failure again** - a value
-written in many places that can disagree with itself, where the release has one that cannot.
+**Why `P-205` was worse, in one line: a territory has capacity 8 for citizens and there is no
+citizen slot.** A node is a slot invented for one kind where nine others need none - **a mechanism
+that would exist in exactly one place**, which is the definition of special language.
 
-**Three other things stop being awkward, which is how you can tell the shape is right.**
+**What it costs.** Two more kinds and one more family, against one fewer trait and one fewer
+exception. **The family keeps every general recipe general**: `ready` and `work` name `extractor`
+and go on matching all three.
 
-- **`build extractor` gains an honest requirement.** It currently names no place and no limit; *a
-  node for that resource holding no extractor* is both, in the vocabulary recipes already use.
-- **`deploy ark`'s wasted metal stops being a special case.** *If there is no capacity the effect is
-  wasted* becomes a recipe whose requirement is not met.
-- **Containment goes all the way down.** An extractor is in a node, a node is in a territory, a
-  territory is in a planet - and `state.md` can show what you asked to see, because *four metal
-  nodes, two with extractors* is four rows and a join rather than a number nobody can decompose.
-
-**What it costs, said plainly.** Nine nodes per territory on the tiny planet is 108 rows where there
-are now 36, and the *Territory resources* table stops reading `3 x 4` and starts saying how many
-nodes and at what density. **The compound notation was hiding the count**, which is `S-20`.
+**One thing said plainly, because it affects when this is worth doing.** You have decided that a
+named arrangement is data the game loads. **Under that, a food extractor may end up an arrangement
+rather than a kind**, and this change would be superseded. It is small, it removes a live exception
+today, and it is `P-134`'s rewrite that would supersede it - **so the question is whether to fix the
+exception now or wait for the rewrite that makes the question different.**
 
 ## Addressed to other perspectives
 
@@ -1117,3 +1114,4 @@ again in a later session.
 | P-124, "where a generated file lives"                                                 | Housekeeping rather than a decision, under the split Sean approved 2026-08-30. Settled by the specification lane and landed in `CLAUDE.md` -> Perspectives in the same commit.                                                                                                                                                              |
 | P-144, "capacity and metal content have rules but no numbers"                         | Withdrawn on Sean's instruction, 2026-08-31. Its flat per-territory capacities are wrong under his storage rule: an extractor holds one cycle and a bin holds the rest, so a resource's capacity is the sum of the extractors and bins present, not a constant. **Its metal-content column survives as `P-146`**, which `P-145` depends on. |
 | P-183, a recipe acts in one place and its results appear there                        | Withdrawn into P-190. Sean's `scope` column has a value `everywhere` - food spoils wherever it is - so *one place* would have been wrong as a general rule. The build case was already covered by `spec/logistics.md`: *whatever pays a cost must be in the territory where the thing being paid for is built*.                             |
+| P-205, a node is a kind, and a territory has no capacity for nodes                    | Withdrawn for Sean's own counter, which is better. A territory has capacity 8 for citizens and there is no citizen slot kind; a node is a slot invented for one kind of thing where nine others manage without one. `P-206` removes the same exception by splitting the extractor into three kinds, which adds no mechanism at all.         |
