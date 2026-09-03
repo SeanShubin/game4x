@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-206** - An extractor is three kinds, and then capacity has no exception · `docs/notes/proposals.md`
+- **P-207** - Every kind is bounded, and the table should say by what · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

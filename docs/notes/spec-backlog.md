@@ -8,6 +8,16 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on capacity
+
+*Not everything needs a capacity. For example, citizens are kept from going to infinity by their
+food requirement. But this invites special cases that I don't like either. I don't want to specify
+how many citizens a territory can hold when the food production does that for me, but I also think
+capacity is a valuable concept in general and don't want to make exceptions lightly.* - `P-207`
+
+**Measured while answering**: `state.md` shows territory 1 with twelve citizens; the release says a
+capacity of 8; the model has no citizen limit at all.
+
 ## Said 2026-09-03, on arrangements and on nodes
 
 - *The arrangement is data the game loads* - the tree model in

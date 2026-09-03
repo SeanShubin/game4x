@@ -96,6 +96,66 @@ rather than a kind**, and this change would be superseded. It is small, it remov
 today, and it is `P-134`'s rewrite that would supersede it - **so the question is whether to fix the
 exception now or wait for the rewrite that makes the question different.**
 
+### P-207 - Every kind is bounded, and the table should say by what
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** instruction -
+**into** `releases/first-release.md` -> What a territory has total capacity for
+
+**Your tension, and the dump settles half of it.** *I don't want to specify how many citizens a
+territory can hold when the food production does that for me, but I also think capacity is a
+valuable concept in general and don't want to make exceptions lightly.*
+
+**`state.md` shows territory 1 with twelve citizens. The release says capacity 8.** The model has no
+citizen limit - `population_after(citizens, food)` is the only bound there is. **The number is
+already saying nothing**, and has been since it was written.
+
+> The section is renamed **What bounds a kind in a territory**, and each row names the mechanism
+> rather than always a number.
+>
+> | Kind                | Bounded by                                              |
+> | ------------------- | ------------------------------------------------------- |
+> | **citizen**         | the food produced here, through upkeep                  |
+> | **garrison**        | a capacity of 1                                         |
+> | **extractor**       | a capacity, per resource, from *Territory resources*    |
+> | **yard**            | a capacity of 1                                         |
+> | **ark**             | a capacity of 2                                         |
+> | **pioneer**         | a capacity of 2, and the food produced here             |
+> | **labor**           | the citizens that make it, one each per turn            |
+> | **food**            | a capacity of 20, and it keeps for one turn             |
+> | **metal**           | a capacity of 20                                        |
+> | **energy**          | a capacity of 20                                        |
+>
+> **Every kind a territory holds has a row, and every row names what stops the number growing.**
+>
+> **The assertion that proves this was applied**: the section is *What bounds a kind in a territory*;
+> it has a row for every kind a territory can hold; no row is empty; and no row bounds a citizen by
+> a number.
+
+**Basis: two mechanisms are being called one thing, and they answer different questions.**
+
+- **A capacity prevents.** You cannot build a second yard. The thing never comes into being.
+- **Upkeep removes.** You can have thirteen citizens for a turn, and then one starves.
+
+**Food is not a capacity.** It does not stop a citizen existing; it kills one afterwards. Writing it
+as a capacity would be wrong, and writing a capacity beside it is what you object to - **so the fix
+is a column that can say either.**
+
+**This is not an exception, which is the point.** *Every kind has a capacity* has to make an
+exception for citizens. **Every kind is bounded, and the table says how** has none - and it is
+checkable in a way the first is not: **a kind with no bound named is a kind that can grow forever**,
+which is a defect a test can find.
+
+**It exposes something rather than hiding it.** A Pioneer is bounded twice - a capacity of 2 **and**
+its upkeep. That is legitimate and it is now visible, where before it looked like every other row.
+**A number that can never bind before another mechanism does is the thing worth finding**, and only
+a table that names both can show you one.
+
+**What this does not decide.** Whether the citizen capacity of 8 was ever meant to bind. **If it
+was, the model is wrong and this is the wrong fix** - the release would keep the number and the code
+would gain a limit. `state.md` says twelve citizens on a territory producing twelve food, which is
+the food bound exactly, so this lane's reading is that the model is doing what you want and the
+release is the stale half. **You are the only one who can say which.**
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
