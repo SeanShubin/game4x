@@ -105,6 +105,11 @@ stated in a form chosen for stating it, and rendered into a form chosen for read
 rendering is generated and never canonical**, so nothing is ever decided in it. HTML is the case
 that comes up; it is only a case.
 
+**A generated file is written in the form the padder would leave it.** Generating the same data
+twice produces the same bytes, and `tools/pad-tables` finds nothing to change. **How a generator
+manages that is its own business**; what is required is that padding a generated file changes
+nothing, and that a check says so.
+
 **Quality runs nothing that writes.** Reading the tree and running `cargo clippy`, `cargo test` and
 `cargo tree` are all fine. `cargo fmt`, `cargo fix` and `clippy --fix` are not, because they modify
 the very files being judged - and a review that alters its subject is no longer a review.

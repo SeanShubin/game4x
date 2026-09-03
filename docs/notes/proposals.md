@@ -45,35 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-203 - A generated file is written in the form the padder would leave it
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `CLAUDE.md` -> Perspectives, after *specification and presentation*
-
-**Rewritten after the code lane refused this proposal's first mechanism, correctly.** It said
-whatever writes a generated file should call `tools/pad-tables`. **For the generator that matters
-most, that fix cannot be taken**, and the reason is a boundary somebody drew on purpose.
-
-> **A generated file is written in the form the padder would leave it.** Generating the same data
-> twice produces the same bytes, and `tools/pad-tables` finds nothing to change. **How a generator
-> manages that is its own business**; what is required is that padding a generated file changes
-> nothing, and that a check says so.
-
-**Basis: `tools/pad-tables` is deliberately outside the workspace** - *not part of the game, so it
-stays out of `cargo build --workspace` and out of `cargo tree`.* **`crates/game-console` ships
-inside the WASM binary**, by way of `crates/game4x`, so a dependency on the padder would put a
-documentation tool in the game to save writing one rule twice. **Verified rather than taken:
-`game4x/Cargo.toml` names `game-console`, and the root manifest excludes `tools/pad-tables`.**
-
-**So the rule states the outcome and leaves the mechanism open.** One generator can call the
-library; one that ships cannot, and writes its own widths. **What may not happen is the two
-disagreeing**, and that is a check rather than a call.
-
-**The check is the whole of it, and it can be vacuous in two ways.** Padding is a no-op on a file
-with no tables, so a test that reads three generated files and finds no table between them passes
-without exercising anything. **It needs the count of files and a demonstration that the padder
-actually widens something** - the code lane built both, `461e053`.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -979,6 +950,7 @@ work the release exists to order.
 | P-200, the data browser has two views, and both name every column                                               | `spec/interface.md` -> Surfaces                                                                                                              | 2026-09-03 |
 | P-201, Auto is Owner again, the duplicate metal column goes, and Capacity is Container                          | `releases/first-release.md` -> Recipes, Units and structures, Where things are                                                               | 2026-09-03 |
 | P-202, a control among alternatives shows which is chosen, and the drawing's binding is written down            | `spec/interface.md` -> What an action shows, `releases/first-release.md` -> Controls                                                         | 2026-09-03 |
+| P-203, a generated file is written in the form the padder would leave it                                        | `CLAUDE.md` -> Perspectives                                                                                                                  | 2026-09-03 |
 
 ## Rejected
 
