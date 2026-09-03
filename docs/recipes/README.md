@@ -6,7 +6,7 @@ rendering of them**; where the two disagree, the release is right and a line her
 
 [Documentation map](../README.md) · [Root README](../../README.md)
 
-## What a page shows, and why
+## What a section shows, and why
 
 Every section shows **the whole territory, not only the rows the recipe touches.** An unchanged line is
 evidence: a recipe that does the right thing *and something else* is the failure you cannot see from
@@ -14,7 +14,7 @@ inputs and outputs alone.
 
 **The release's table has seven columns now** - `Recipe`, `Auto`, `Role`, `Qty`, `Kind`, `Traits`
 and `Where` - and `Role` is where a row says whether a thing is required, limited, consumed or
-produced. These pages show what a recipe does to a territory, so they are unchanged by that except
+produced. These sections show what a recipe does to a territory, so they are unchanged by that except
 where the old shape was being explained.
 
 Quantities that are read rather than written say where they were read from, so a lookup is visible
