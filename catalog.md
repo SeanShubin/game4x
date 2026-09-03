@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-12 kinds, 4 families, 18 traits, 17 recipes.
+14 kinds, 5 families, 17 traits, 17 recipes.
 
 ## citizen
 
@@ -17,7 +17,7 @@ a person: provides labor, eats, and grows on surplus.
 
 **Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `force` (a number)
 
-**Capacity** Total capacity: 8
+**Bounded by** the food produced here, through upkeep
 
 **As a thing** Force: 1 · Upkeep: 1 food per turn · Readies: yes
 
@@ -39,7 +39,7 @@ what holds a territory; a territory has at most one.
 
 **Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `force` (a number)
 
-**Capacity** Total capacity: 1
+**Bounded by** a capacity of 1
 
 **As a thing** Force: 1 · Costs to produce: 1 labor, 1 metal · Binding: 1
 
@@ -50,29 +50,63 @@ what holds a territory; a territory has at most one.
 - `found by land` limits 0
 - `found by land` produces 1
 
-## extractor
+## food extractor
 
-built for one resource, and worked to produce it.
+built for food, and worked to produce it.
 
-**In families** thing
+**In families** thing, extractor
 
-**Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `resource` (food, metal or energy)
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
 
-**Capacity** Total capacity: what the *Territory resources* table gives, per resource
+**Bounded by** a capacity, from *Territory resources*
 
 **As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes
 
 **In recipes**
 
-- `deploy ark` produces 1, food
-- `deploy ark` produces 1, metal
-- `found by land` produces 1, food
-- `found by land` produces 1, metal
-- `build food extractor` produces 1, food
-- `build metal extractor` produces 1, metal
-- `build energy extractor` produces 1, energy
-- `work` consumes 1, ready
-- `work` produces 1, exhausted
+- `deploy ark` produces 1
+- `found by land` produces 1
+- `build food extractor` produces 1
+- `work` consumes 1 (as a extractor), ready
+- `work` produces 1 (as a extractor), exhausted
+
+## metal extractor
+
+built for metal, and worked to produce it.
+
+**In families** thing, extractor
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
+
+**Bounded by** a capacity, from *Territory resources*
+
+**As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes
+
+**In recipes**
+
+- `deploy ark` produces 1
+- `found by land` produces 1
+- `build metal extractor` produces 1
+- `work` consumes 1 (as a extractor), ready
+- `work` produces 1 (as a extractor), exhausted
+
+## energy extractor
+
+built for energy, and worked to produce it.
+
+**In families** thing, extractor
+
+**Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
+
+**Bounded by** a capacity, from *Territory resources*
+
+**As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes
+
+**In recipes**
+
+- `build energy extractor` produces 1
+- `work` consumes 1 (as a extractor), ready
+- `work` produces 1 (as a extractor), exhausted
 
 ## yard
 
@@ -82,7 +116,7 @@ where an Ark is produced.
 
 **Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
 
-**Capacity** Total capacity: 1
+**Bounded by** a capacity of 1
 
 **As a thing** Costs to produce: 1 labor, 15 metal · Binding: 15
 
@@ -99,7 +133,7 @@ carries a landing, and can invade from orbit.
 
 **Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `force` (a number)
 
-**Capacity** Total capacity: 2
+**Bounded by** a capacity of 2
 
 **As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border, ascent · Requires: a Yard · Readies: yes
 
@@ -118,7 +152,7 @@ founds a territory.
 
 **Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `force` (a number)
 
-**Capacity** Total capacity: 2
+**Bounded by** a capacity of 2, and the food produced here
 
 **As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes
 
@@ -137,7 +171,7 @@ eaten by citizens; expires.
 
 **Traits of it** `kind` (one of the twelve), `place` (the thing it is in), `keeps` (the number of turns it will last), `surplus` (yes or no)
 
-**Capacity** Total capacity: 20
+**Bounded by** a capacity of 20, and it keeps for one turn
 
 **In recipes**
 
@@ -156,7 +190,7 @@ what things are built from; conserved.
 
 **Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
 
-**Capacity** Total capacity: 20
+**Bounded by** a capacity of 20
 
 **In recipes**
 
@@ -177,7 +211,7 @@ what moves things; neither conserved nor expiring.
 
 **Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
 
-**Capacity** Total capacity: 20
+**Bounded by** a capacity of 20
 
 **In recipes**
 
@@ -194,7 +228,7 @@ what working a machine takes; a citizen provides it each turn.
 
 **Traits of it** `kind` (one of the twelve), `place` (the thing it is in)
 
-**Capacity** Total capacity: 8
+**Bounded by** the citizens that make it, one each per turn
 
 **In recipes**
 

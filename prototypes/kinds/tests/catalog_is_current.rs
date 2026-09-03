@@ -66,7 +66,7 @@ fn a_section_gathers_what_six_tables_say_separately() {
         "founds a territory",          // Kinds
         "**In families** thing, unit", // Families
         "`force`",                     // Traits
-        "Total capacity: 2",           // What a territory has total capacity for
+        "a capacity of 2",             // What bounds a kind in a territory
         "Costs to produce: 3 metal",   // Units and structures
         "`found by land` consumes 1",  // Recipes
     ] {

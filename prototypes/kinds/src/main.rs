@@ -20,8 +20,8 @@ fn main() {
         ("## Families", kinds::families_table()),
         ("## Where things are", kinds::capacities_table()),
         (
-            "## What a territory has total capacity for",
-            kinds::capacity_table(),
+            "## What bounds a kind in a territory",
+            kinds::bounds_table(),
         ),
         ("## Traits", kinds::traits_table()),
         ("## Units and structures", kinds::units_table()),

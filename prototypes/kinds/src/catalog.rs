@@ -106,7 +106,7 @@ fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
     }
 
     for (heading, label) in [
-        ("## What a territory has total capacity for", "Capacity"),
+        ("## What bounds a kind in a territory", "Bounded by"),
         ("## Units and structures", "As a thing"),
     ] {
         if let Some(row) = body_under(document, heading)
@@ -122,7 +122,13 @@ fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
                 .filter(|(_, cell)| !cell.is_empty())
                 .map(|(at, cell)| {
                     let column = names.get(at).cloned().unwrap_or_default();
-                    format!("{column}: {cell}")
+                    // A one-column table whose column is named the same as the section
+                    // label would otherwise read *Bounded by: Bounded by: a capacity of 2*.
+                    if column == label {
+                        cell.clone()
+                    } else {
+                        format!("{column}: {cell}")
+                    }
                 })
                 .collect();
             if !said.is_empty() {

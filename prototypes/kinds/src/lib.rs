@@ -27,7 +27,7 @@ pub mod release;
 // Kinds
 // ---------------------------------------------------------------------------------------
 
-/// The twelve kinds the release declares.
+/// The fourteen kinds the release declares.
 ///
 /// **Ten until `P-192`.** The recipes' `Kind` column had held `territory` in four rows all
 /// along, and the Kinds table did not list it - so the release named a kind it had not
@@ -38,7 +38,9 @@ pub mod release;
 pub enum Kind {
     Citizen,
     Garrison,
-    Extractor,
+    FoodExtractor,
+    MetalExtractor,
+    EnergyExtractor,
     Yard,
     Ark,
     Pioneer,
@@ -55,7 +57,9 @@ impl Kind {
         match self {
             Kind::Citizen => "citizen",
             Kind::Garrison => "garrison",
-            Kind::Extractor => "extractor",
+            Kind::FoodExtractor => "food extractor",
+            Kind::MetalExtractor => "metal extractor",
+            Kind::EnergyExtractor => "energy extractor",
             Kind::Yard => "yard",
             Kind::Ark => "ark",
             Kind::Pioneer => "pioneer",
@@ -72,7 +76,9 @@ impl Kind {
         match self {
             Kind::Citizen => "a person: provides labor, eats, and grows on surplus",
             Kind::Garrison => "what holds a territory; a territory has at most one",
-            Kind::Extractor => "built for one resource, and worked to produce it",
+            Kind::FoodExtractor => "built for food, and worked to produce it",
+            Kind::MetalExtractor => "built for metal, and worked to produce it",
+            Kind::EnergyExtractor => "built for energy, and worked to produce it",
             Kind::Yard => "where an Ark is produced",
             Kind::Ark => "carries a landing, and can invade from orbit",
             Kind::Pioneer => "founds a territory",
@@ -88,33 +94,42 @@ impl Kind {
         }
     }
 
-    /// How many of this kind a territory has total capacity for, as the release writes it.
+    /// What bounds this kind in a territory, as the release writes it.
     ///
-    /// `None` for the two kinds that are places rather than contents. A territory has no
-    /// capacity for territories, and the table says so by not having a row - which is a
-    /// fact worth a type rather than a blank string that would render an empty row.
-    pub fn total_capacity(self) -> Option<&'static str> {
+    /// **It was a number and is now a mechanism.** `P-207` replaced *What a territory has
+    /// total capacity for* with *What bounds a kind in a territory*, because most of the
+    /// entries were never capacities: a citizen is bounded by the food produced here through
+    /// upkeep, and labor by the citizens that make it. Writing those as numbers had already
+    /// produced one wrong number - a stated capacity of 8 citizens that the model never
+    /// implemented and Sean never intended.
+    ///
+    /// `None` for the two kinds that are places rather than things in one.
+    pub fn bounded_by(self) -> Option<&'static str> {
         Some(match self {
-            Kind::Citizen => "8",
-            Kind::Garrison => "1",
-            Kind::Extractor => "what the *Territory resources* table gives, per resource",
-            Kind::Yard => "1",
-            Kind::Ark => "2",
-            Kind::Pioneer => "2",
-            Kind::Labor => "8",
-            Kind::Food => "20",
-            Kind::Metal => "20",
-            Kind::Energy => "20",
+            Kind::Citizen => "the food produced here, through upkeep",
+            Kind::Garrison => "a capacity of 1",
+            Kind::FoodExtractor | Kind::MetalExtractor | Kind::EnergyExtractor => {
+                "a capacity, from *Territory resources*"
+            }
+            Kind::Yard => "a capacity of 1",
+            Kind::Ark => "a capacity of 2",
+            Kind::Pioneer => "a capacity of 2, and the food produced here",
+            Kind::Labor => "the citizens that make it, one each per turn",
+            Kind::Food => "a capacity of 20, and it keeps for one turn",
+            Kind::Metal => "a capacity of 20",
+            Kind::Energy => "a capacity of 20",
             Kind::Territory | Kind::Orbit => return None,
         })
     }
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 12] = [
+pub const KINDS: [Kind; 14] = [
     Kind::Citizen,
     Kind::Garrison,
-    Kind::Extractor,
+    Kind::FoodExtractor,
+    Kind::MetalExtractor,
+    Kind::EnergyExtractor,
     Kind::Yard,
     Kind::Ark,
     Kind::Pioneer,
@@ -126,15 +141,13 @@ pub const KINDS: [Kind; 12] = [
     Kind::Orbit,
 ];
 
-/// In the order the total-capacity table lists them, which is not the same order.
-///
-/// **Ten, not twelve.** A territory has no capacity for territories or for orbits, and the
-/// release says so by not giving them a row. [`Kind::total_capacity`] returns `None` for
-/// both, so adding one here fails loudly rather than rendering a blank.
-pub const CAPACITY_ORDER: [Kind; 10] = [
+/// In the order the bounds table lists them, which is not the Kinds order.
+pub const BOUND_ORDER: [Kind; 12] = [
     Kind::Citizen,
     Kind::Garrison,
-    Kind::Extractor,
+    Kind::FoodExtractor,
+    Kind::MetalExtractor,
+    Kind::EnergyExtractor,
     Kind::Yard,
     Kind::Ark,
     Kind::Pioneer,
@@ -159,6 +172,7 @@ pub enum Family {
     Unit,
     Resource,
     Place,
+    Extractor,
 }
 
 impl Family {
@@ -168,6 +182,7 @@ impl Family {
             Family::Unit => "unit",
             Family::Resource => "resource",
             Family::Place => "place",
+            Family::Extractor => "extractor",
         }
     }
 
@@ -177,6 +192,11 @@ impl Family {
             Family::Unit => vec![Kind::Ark, Kind::Pioneer],
             Family::Resource => vec![Kind::Food, Kind::Metal, Kind::Energy],
             Family::Place => vec![Kind::Territory, Kind::Orbit],
+            Family::Extractor => vec![
+                Kind::FoodExtractor,
+                Kind::MetalExtractor,
+                Kind::EnergyExtractor,
+            ],
         }
     }
 
@@ -197,7 +217,13 @@ impl Family {
     }
 }
 
-pub const FAMILIES: [Family; 4] = [Family::Thing, Family::Unit, Family::Resource, Family::Place];
+pub const FAMILIES: [Family; 5] = [
+    Family::Thing,
+    Family::Unit,
+    Family::Resource,
+    Family::Place,
+    Family::Extractor,
+];
 
 // ---------------------------------------------------------------------------------------
 // Where things are
@@ -263,7 +289,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 18] = [
+pub const TRAITS: [TraitRow; 17] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -305,12 +331,6 @@ pub const TRAITS: [TraitRow; 18] = [
         of: "whatever is built",
         values: "a number",
         held: Held::Derived("its binding plus the metal in its parts"),
-    },
-    TraitRow {
-        name: "resource",
-        of: "an extractor",
-        values: "food, metal or energy",
-        held: Held::Stored,
     },
     TraitRow {
         name: "density",
@@ -628,9 +648,6 @@ use Owner::{Player, World};
 use Quantity::OfATrait;
 use Role::{Consume, Limit, Produce, Require};
 
-const FOR_FOOD: [Qualifier; 1] = [by("food", "resource")];
-const FOR_METAL: [Qualifier; 1] = [by("metal", "resource")];
-const FOR_ENERGY: [Qualifier; 1] = [by("energy", "resource")];
 const JOINED_TO_FROM: [Qualifier; 1] = [by(
     "joined to `$from` by an edge the unit crosses",
     "adjacency",
@@ -650,6 +667,7 @@ const UNIT: Noun = Noun::Any(Family::Unit);
 const RESOURCE: Noun = Noun::Any(Family::Resource);
 const THING: Noun = Noun::Any(Family::Thing);
 const PLACE: Noun = Noun::Any(Family::Place);
+const EXTRACTOR: Noun = Noun::Any(Family::Extractor);
 
 /// The seventeen recipes of `releases/first-release.md`.
 pub const RECIPES: &[Recipe] = &[
@@ -662,8 +680,8 @@ pub const RECIPES: &[Recipe] = &[
             just(Limit, 0, Noun::Of(Garrison)),
             just(Produce, 1, Noun::Of(Garrison)),
             just(Produce, 2, Noun::Of(Citizen)),
-            traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
-            traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
+            just(Produce, 1, Noun::Of(FoodExtractor)),
+            just(Produce, 1, Noun::Of(MetalExtractor)),
         ],
     },
     Recipe {
@@ -685,8 +703,8 @@ pub const RECIPES: &[Recipe] = &[
             just(Limit, 0, Noun::Of(Garrison)),
             just(Produce, 1, Noun::Of(Garrison)),
             just(Produce, 2, Noun::Of(Citizen)),
-            traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
-            traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
+            just(Produce, 1, Noun::Of(FoodExtractor)),
+            just(Produce, 1, Noun::Of(MetalExtractor)),
         ],
     },
     Recipe {
@@ -695,7 +713,7 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[
             just(Consume, 1, Noun::Of(Labor)),
             just(Consume, 1, Noun::Of(Metal)),
-            traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
+            just(Produce, 1, Noun::Of(FoodExtractor)),
         ],
     },
     Recipe {
@@ -704,7 +722,7 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[
             just(Consume, 1, Noun::Of(Labor)),
             just(Consume, 1, Noun::Of(Metal)),
-            traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
+            just(Produce, 1, Noun::Of(MetalExtractor)),
         ],
     },
     Recipe {
@@ -713,7 +731,7 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[
             just(Consume, 1, Noun::Of(Labor)),
             just(Consume, 1, Noun::Of(Metal)),
-            traited(Produce, 1, Noun::Of(Extractor), &FOR_ENERGY),
+            just(Produce, 1, Noun::Of(EnergyExtractor)),
         ],
     },
     Recipe {
@@ -761,8 +779,8 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[
             placed(Require, 1, TERRITORY, &[], "`$where`"),
             just(Consume, 1, Noun::Of(Labor)),
-            traited(Consume, 1, Noun::Of(Extractor), &READY),
-            traited(Produce, 1, Noun::Of(Extractor), &EXHAUSTED),
+            traited(Consume, 1, EXTRACTOR, &READY),
+            traited(Produce, 1, EXTRACTOR, &EXHAUSTED),
             measured(
                 Produce,
                 OfATrait("`$where`'s density for that resource"),
@@ -911,7 +929,31 @@ pub const PRODUCIBLE: &[Producible] = &[
         readies: false,
     },
     Producible {
-        kind: Extractor,
+        kind: FoodExtractor,
+        force: None,
+        fuel: None,
+        a_move: None,
+        upkeep: None,
+        costs: &[(1, Labor), (1, Metal)],
+        binding: Some(1),
+        crosses: None,
+        requires: None,
+        readies: true,
+    },
+    Producible {
+        kind: MetalExtractor,
+        force: None,
+        fuel: None,
+        a_move: None,
+        upkeep: None,
+        costs: &[(1, Labor), (1, Metal)],
+        binding: Some(1),
+        crosses: None,
+        requires: None,
+        readies: true,
+    },
+    Producible {
+        kind: EnergyExtractor,
         force: None,
         fuel: None,
         a_move: None,
@@ -1015,13 +1057,13 @@ pub fn traits_table() -> Vec<Vec<String>> {
     rows
 }
 
-pub fn capacity_table() -> Vec<Vec<String>> {
-    let mut rows = vec![header(&["Kind", "Total capacity"])];
-    for kind in CAPACITY_ORDER {
-        let capacity = kind
-            .total_capacity()
-            .unwrap_or_else(|| panic!("{} is a place, and has no capacity row", kind.name()));
-        rows.push(vec![format!("**{}**", kind.name()), capacity.to_string()]);
+pub fn bounds_table() -> Vec<Vec<String>> {
+    let mut rows = vec![header(&["Kind", "Bounded by"])];
+    for kind in BOUND_ORDER {
+        let bound = kind
+            .bounded_by()
+            .unwrap_or_else(|| panic!("{} is a place, and is not bounded in one", kind.name()));
+        rows.push(vec![format!("**{}**", kind.name()), bound.to_string()]);
     }
     rows
 }

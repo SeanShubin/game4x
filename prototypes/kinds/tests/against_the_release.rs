@@ -59,14 +59,14 @@ fn compare(what: &str, written: &[Vec<String>], compiled: &[Vec<String>]) {
 fn the_release_tables_are_the_ones_in_this_crate() {
     let document = release();
     let tables: [(&str, usize, Vec<Vec<String>>); 7] = [
-        ("## Kinds", 12, kinds::kinds_table()),
+        ("## Kinds", 14, kinds::kinds_table()),
         ("## Families", 3, kinds::families_table()),
         ("## Where things are", 3, kinds::capacities_table()),
-        ("## Traits", 17, kinds::traits_table()),
+        ("## Traits", 16, kinds::traits_table()),
         (
-            "## What a territory has total capacity for",
+            "## What bounds a kind in a territory",
             10,
-            kinds::capacity_table(),
+            kinds::bounds_table(),
         ),
         ("## Units and structures", 6, kinds::units_table()),
         ("## Recipes", 50, kinds::recipes_table()),
@@ -118,8 +118,8 @@ fn every_kind_a_recipe_names_is_declared() {
     // would leave this checking an empty set and passing.
     assert_eq!(
         used.len(),
-        15,
-        "fifteen distinct names across the recipes' Kind column, and these are {used:?}"
+        18,
+        "eighteen distinct names across the recipes' Kind column, and these are {used:?}"
     );
 }
 

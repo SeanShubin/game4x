@@ -30,46 +30,46 @@ is in it, because the names are what this is for.
 
 12 row(s)
 
-## node
+## territory resource
 
-| territory | resource | density |
-| --------- | -------- | ------- |
-| 1         | food     | 12      |
-| 1         | metal    | 12      |
-| 1         | energy   | 12      |
-| 2         | food     | 12      |
-| 2         | metal    | 8       |
-| 2         | energy   | 8       |
-| 3         | food     | 12      |
-| 3         | metal    | 8       |
-| 3         | energy   | 8       |
-| 4         | food     | 2       |
-| 4         | metal    | 20      |
-| 4         | energy   | 20      |
-| 5         | food     | 3       |
-| 5         | metal    | 64      |
-| 5         | energy   | 64      |
-| 6         | food     | 16      |
-| 6         | metal    | 0       |
-| 6         | energy   | 20      |
-| 7         | food     | 16      |
-| 7         | metal    | 20      |
-| 7         | energy   | 0       |
-| 8         | food     | 36      |
-| 8         | metal    | 2       |
-| 8         | energy   | 2       |
-| 9         | food     | 6       |
-| 9         | metal    | 48      |
-| 9         | energy   | 2       |
-| 10        | food     | 9       |
-| 10        | metal    | 3       |
-| 10        | energy   | 48      |
-| 11        | food     | 30      |
-| 11        | metal    | 30      |
-| 11        | energy   | 30      |
-| 12        | food     | 4       |
-| 12        | metal    | 64      |
-| 12        | energy   | 64      |
+| territory | resource | capacity | density | built |
+| --------- | -------- | -------- | ------- | ----- |
+| 1         | food     | 3        | 4       | 3     |
+| 1         | metal    | 3        | 4       | 3     |
+| 1         | energy   | 3        | 4       | 3     |
+| 2         | food     | 2        | 6       | 1     |
+| 2         | metal    | 2        | 4       | 1     |
+| 2         | energy   | 2        | 4       | 0     |
+| 3         | food     | 6        | 2       | 0     |
+| 3         | metal    | 2        | 4       | 0     |
+| 3         | energy   | 2        | 4       | 0     |
+| 4         | food     | 1        | 2       | 0     |
+| 4         | metal    | 4        | 5       | 0     |
+| 4         | energy   | 4        | 5       | 0     |
+| 5         | food     | 3        | 1       | 0     |
+| 5         | metal    | 8        | 8       | 0     |
+| 5         | energy   | 8        | 8       | 0     |
+| 6         | food     | 4        | 4       | 0     |
+| 6         | metal    | 0        | 0       | 0     |
+| 6         | energy   | 4        | 5       | 0     |
+| 7         | food     | 4        | 4       | 0     |
+| 7         | metal    | 4        | 5       | 0     |
+| 7         | energy   | 0        | 0       | 0     |
+| 8         | food     | 6        | 6       | 0     |
+| 8         | metal    | 1        | 2       | 0     |
+| 8         | energy   | 1        | 2       | 0     |
+| 9         | food     | 2        | 3       | 0     |
+| 9         | metal    | 6        | 8       | 0     |
+| 9         | energy   | 1        | 2       | 0     |
+| 10        | food     | 3        | 3       | 0     |
+| 10        | metal    | 1        | 3       | 0     |
+| 10        | energy   | 6        | 8       | 0     |
+| 11        | food     | 5        | 6       | 0     |
+| 11        | metal    | 5        | 6       | 0     |
+| 11        | energy   | 5        | 6       | 0     |
+| 12        | food     | 2        | 2       | 0     |
+| 12        | metal    | 8        | 8       | 0     |
+| 12        | energy   | 8        | 8       | 0     |
 
 36 row(s)
 

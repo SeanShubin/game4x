@@ -18,7 +18,7 @@
 //! commands. Written this way, browsing turn *n* is a loop over states; written around the
 //! final state, it is a rewrite.
 
-use game_model::{Game, Location, Phase, Resource, StructureKind, UnitKind};
+use game_model::{Game, Location, Node, Phase, Resource, StructureKind, UnitKind};
 
 /// One table: its name, its column names, and its rows.
 ///
@@ -92,7 +92,17 @@ pub fn tables(game: &Game) -> Vec<Table> {
             "yards",
         ],
     );
-    let mut node = Table::new("node", &["territory", "resource", "density"]);
+    // **Three facts, not one.** This was a single `density` column holding count times
+    // density, so territories that are 3 x 4, 2 x 6 and 6 x 2 all read 12 - one number
+    // standing for two, labelled with the name of the one it was not. `S-20`.
+    //
+    // `P-206` is what makes the split honest rather than invented: three extractor kinds
+    // means the capacity is per kind, so *how many the ground has room for*, *what each
+    // yields* and *how many are built* are each a fact the release already states.
+    let mut node = Table::new(
+        "territory resource",
+        &["territory", "resource", "capacity", "density", "built"],
+    );
     let mut store = Table::new("store", &["territory", "resource", "amount"]);
     let mut garrison = Table::new("garrison", &["territory", "force"]);
     let mut extractor = Table::new("extractor", &["territory", "node", "resource", "readiness"]);
@@ -112,16 +122,32 @@ pub fn tables(game: &Game) -> Vec<Table> {
         // Every resource, not every resource that has a node here. A territory with no
         // energy is a fact worth being able to see.
         for resource in Resource::ALL {
-            let density: u32 = place
+            let here: Vec<&Node> = place
                 .nodes
                 .iter()
                 .filter(|n| n.resource == resource)
-                .map(|n| n.density)
-                .sum();
+                .collect();
+            // Every node of a resource is set to one density by `SetResource`, so this is
+            // one number - but it is read out rather than assumed, and a ground that ever
+            // held two would say both instead of quietly showing one.
+            let mut densities: Vec<String> = here.iter().map(|n| n.density.to_string()).collect();
+            densities.sort();
+            densities.dedup();
+            let built = place
+                .extractors
+                .iter()
+                .filter(|e| place.nodes[e.node].resource == resource)
+                .count();
             node.push(vec![
                 place.id.0.to_string(),
                 resource.name().to_string(),
-                density.to_string(),
+                here.len().to_string(),
+                if densities.is_empty() {
+                    "0".to_string()
+                } else {
+                    densities.join(", ")
+                },
+                built.to_string(),
             ]);
             store.push(vec![
                 place.id.0.to_string(),
