@@ -45,6 +45,55 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-193 - The release's tables are the data, not a document the code copies
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own, from `../vote` - **into**
+`spec/invariants.md` -> The game is data
+
+**`spec/invariants.md` already says the game is data, and it is not yet true.** The kinds and
+recipes live in markdown, `prototypes/kinds` holds the same content as hand-written Rust, and a test
+renders the Rust back into tables to compare. **Two hand-maintained copies kept in step by a
+check** - which is the arrangement your `vote` pattern replaces with one source and generated views.
+
+> The tables that define kinds, families, traits and recipes are the data the game loads. Nothing
+> restates them; every other form of them is derived, and a derived form is generated rather than
+> written.
+
+**Basis: the parser already exists and throws its answer away.**
+`prototypes/kinds/tests/against_the_release.rs` reads `releases/first-release.md`, parses the rows
+under each heading, and uses them only to compare. Turning *parse and compare* into *parse and load*
+deletes the second copy rather than adding machinery.
+
+**The evidence that the second copy is the problem is `P-192`.** `prototypes/kinds` carried a
+`Noun::Territory` case cut into it so it could render a name the Kinds table did not declare. **A
+crate that exists to stop the two halves disagreeing had a hand-made exemption at the one place they
+did.** A loaded table cannot have an exemption, because there is nothing to write it in.
+
+**And `docs/recipes/README.md` is the same failure in prose.** Seventeen before-and-after sections,
+written by hand, re-rendered by hand three times today after promotions - each time correct only
+because a script compared them afterwards. **That is the narrative prose your `vote` documentation
+exists to stop trusting**, and here it is being trusted about your own rules.
+
+**One adaptation rather than a copy, and it is the part worth arguing.** `vote` publishes its dumps
+as HTML you browse. **Generate these as markdown and commit them**, because then a rule change shows
+its consequences in the same diff. `P-186` raised a Pioneer's cost and the play-through got
+*shorter* - nine turns to seven - and that fact existed only because the code lane happened to
+regenerate `commands/play.4x` and mention it. A committed dump would have shown it in the commit
+that caused it.
+
+**Four views, in the order they become possible**, none of them needing a rule this proposal does
+not state:
+
+| View                  | What it is                                                 | Ready when                       |
+| --------------------- | ---------------------------------------------------------- | -------------------------------- |
+| **Catalog**           | every declared kind, family, trait, recipe row, capacity   | now - the parser exists          |
+| **Scenario**          | what `commands/play.4x` did, in order, in English          | now - it is already generated    |
+| **State, relational** | after that scenario: one row per thing, place and quantity | needs the bootstrap you named    |
+| **State, ECS**        | the same state as components and archetypes                | after `P-134` rewrites the model |
+
+**The bootstrap you asked about is the third row.** It is what turns the tables from a description
+of the starting position into the starting position.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
