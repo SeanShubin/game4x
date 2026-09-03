@@ -8,6 +8,15 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on the tree and the commands
+
+*It also occurs to me that I have been moving towards the everything-is-a-tree concept, does this
+impact the design of our command format.*
+
+**It does, one level deeper than `P-212`** - `P-214`. `P-212` makes a command a node. `P-214` says
+what its name and fields are: **a command names a recipe and binds what the recipe leaves open**, so
+the command list is the recipe list and the two vocabularies stop being separate.
+
 ## Decided 2026-09-03, on command format
 
 - **The notation**: *Definitely `{move unit:pioneer to:3}`* - `P-212`

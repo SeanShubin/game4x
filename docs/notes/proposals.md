@@ -134,6 +134,59 @@ none would report one - they would compare a partial thing to a partial thing an
 first line that fails. **With whole definitions, stopping early leaves fewer rules; with assembled
 ones it leaves a broken rule**, which is a worse thing to hand to a dump than an absent one.
 
+### P-214 - A command names a recipe, so the command list is the recipe list
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `spec/console.md` -> Commands, replacing *one command for each way the game state can
+change* and the list beneath it
+
+**You asked whether everything-is-a-tree changes the command format. It does, one level deeper than
+`P-212`.**
+
+> **A command names a recipe and binds what that recipe leaves open**: the place it acts in, and any
+> ingredient it names with a `$`. **There is one command for each recipe the player may fire**, and
+> ending a turn fires the world's.
+>
+> The commands are therefore not a list this document keeps. They are the recipes whose owner is the
+> player, and adding a recipe adds a command.
+
+**Basis: they are two vocabularies today with nothing connecting them, and that is a hole in your own
+acceptance test.** `spec/console.md` lists seven commands that change state; the release has eleven
+recipes owned by the player. **Nothing maps one to the other** - `land ark 1` is `deploy ark`, and no
+document says so. A person holding the things, the recipes and the commands **cannot start**, which
+`S-24` reported as a gap to be documented. **This closes it by construction instead.**
+
+**How the seven cover the eleven, which is where the special language is hiding:**
+
+| Command   | Recipes it fires                                                   |
+| --------- | ------------------------------------------------------------------ |
+| `build`   | **four** - the three extractors and the yard                       |
+| `produce` | **two** - pioneer and ark                                          |
+| `move`    | **two** - `move`, and `found by land` when the ground is unclaimed |
+| `land`    | `deploy ark`                                                       |
+| `launch`  | `move`, across an `ascent` edge                                    |
+| `work`    | `work`                                                             |
+| -         | **`create labor` has no command at all**                           |
+
+**Six of the eleven are reached by a command that decides which recipe from its arguments**, and one
+is reached by nothing. **That deciding is the special language** - it lives in the binding code and
+in no document, and it is why `build extractor 1 metal` cannot be read without knowing what `1` is.
+
+**And it is the tree argument, applied to the layer above the state.** A thing is a node; the state
+is a tree of them; **a recipe describes a change to that tree; a command names a recipe and says
+where.** Three layers, each one shape. **A command list maintained by hand is a fourth vocabulary
+that nothing derives**, which is exactly what `P-199` forbids for the game's data and this document
+still does for its commands.
+
+**What it costs, and it is not small.** `{move unit:pioneer to:3}` becomes two commands rather than
+one - `{move ...}` and `{found-by-land ...}` - because they are two recipes, and today the model
+chooses between them by looking at the ground. **Making the player choose is more honest and less
+convenient**, and you should decide that deliberately rather than inherit it.
+
+**`create labor` is the other half of the same question.** It is a recipe with no command, fired
+implicitly when labor is needed. **Under this it becomes a command a player types**, which is either
+the right amount of control or a click nobody wants.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
