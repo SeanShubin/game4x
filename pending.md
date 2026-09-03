@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-195** - Four lines in `CLAUDE.md` were true only while every block was text · `docs/notes/proposals.md`
+- **P-196** - Nothing can reach an orbit, so the loop's first and last steps have no recipe · `docs/notes/proposals.md`
 
 ## What is outstanding
 

@@ -84,6 +84,44 @@ these four lines are not those words. **A promotion that rewrote four neighbouri
 would be the exact thing the pure-move rule forbids** - and it would have done it inside the section
 that states the rule.
 
+### P-196 - Nothing can reach an orbit, so the loop's first and last steps have no recipe
+
+**to** sean - **status** open - **raised** 2026-09-02 - **kind** gap - **shape** instruction -
+**into** `releases/first-release.md` -> Families, Traits, Recipes
+
+**Found by the catalog's first run**, which puts every kind beside the recipes naming it and left
+`orbit` with none. **It is the only kind of which that is true**, and the two steps it breaks are
+step 2 and step 8.
+
+> A fourth family, **place**, whose members are `territory` and `orbit`.
+>
+> `move`'s two `require` rows name `place` rather than `territory`. The `adjacency` trait is **of a
+> place**, and the planet says an orbit is next to the territory below it and to nothing else.
+>
+> **The assertion that proves this was applied**: the Families table has four rows and `place` names
+> `territory, orbit`; no row of `move` names `territory`; and `adjacency` reads *a place*.
+
+**Basis: two collapses assumed a destination the rows cannot express.** `launch` was folded into
+`move` because it was *`move` with a different destination*, and `land` became `deploy ark`.
+**`move` requires `$to territory, next to $from` - both territories** - and `deploy ark` consumes
+`ark, in $where` where `$where` is a territory, so the ark is already on the ground. Neither absorbed
+what it was said to absorb.
+
+**So the game as written cannot be started or won.** *Land the ark on a territory from orbit* and
+*Launch the Ark into orbit* are steps 2 and 8 of your own loop, and `spec/control.md` makes launching
+the win.
+
+**Why a family rather than two recipes back.** The collapses were right: launching is moving, and the
+only thing that made it a second recipe was that its destination was a different sort of place.
+**Naming that sort makes one recipe cover both** - and it costs one family row, because adjacency is
+already *a fact the container states*, so a planet saying an orbit is next to its territory needs no
+new mechanism.
+
+**Landing then becomes two actions rather than one**, and that is the part to weigh: move the ark
+from orbit to the territory, then `deploy ark`. Step 2 reads as one step and would be two.
+**Restoring `launch` and `land` as their own recipes is the alternative**, and it costs two recipes
+to save one click.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
