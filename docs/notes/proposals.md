@@ -45,10 +45,69 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-205 - `node` is your word for something the release calls two other things
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `releases/first-release.md` -> Kinds, and `spec/planet.md` -> what a territory carries
+
+**You described nodes as a thing the game has, and `node` appears nowhere in `spec/` or
+`releases/`.** What the release has instead is two traits of a territory: **total capacity** for
+extractors of a resource, and the **density** each yields. **Your sentence and the release's say the
+same thing** - *a number of each type of node, all of the same type having the same density* is
+exactly a count and a shared density.
+
+> A **node** is a place in a territory where one extractor can be built. A territory has some number
+> of nodes for each resource, and every node for a resource in that territory yields the same
+> density. A territory's total capacity for extractors of a resource is its number of nodes for it.
+
+**Basis: the release's words are correct and unreadable, and yours are how you think.** *Territory 1
+has total capacity 3 for metal extractors, at density 4, with 2 built* against *territory 1 has 3
+metal nodes at density 4, 2 with extractors on them*. **The second is what you said without
+prompting**, and the reports exist so that you can read them.
+
+**And it names a thing that is otherwise nameless.** An extractor is built somewhere, and that
+somewhere has no word - which is why the dump invented one. **`P-192` made `territory` and `orbit`
+kinds because only a thing may contain things**; a node holding an extractor is the same argument
+again, and this proposal deliberately stops short of it - **the text above makes a node a place, not
+a kind**, because making it a kind is a larger change and you have not asked for one.
+
+**The alternative is to strike the word**, and have the dump say *total capacity* and *density*.
+That is fewer concepts and worse prose, and it would leave you reading a column named after a rule
+rather than after a thing.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
+
+### S-20 - The `node` table calls a total a density, and erases what the twelve territories exist to exercise
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, reading `state.md`
+
+**Three defects in one table, and the third is the one that matters.**
+
+**The column named `density` holds the total.** Territory 1 is `3 x 4` in the release and the dump
+says `12`. Territory 2's food is `2 x 6` and says `12`; its metal is `2 x 4` and says `8`. **It is
+count times density, under a heading that says density.**
+
+**The count is absent, so it cannot be recovered.** Nothing in the row says three, or two, or six.
+
+**And territories 1, 2 and 3 all read `food 12`** - the three chosen to differ. `3 x 4`, `2 x 6`,
+`6 x 2`. **Territory 3's stated purpose in the release is *many thin food extractors, same food
+total***, and the only column the dump gives is the total. **The table erases the exact distinction
+those territories exist to exercise**, and does it while looking correct.
+
+**What Sean expects to see, in his words**: *something like 4 metal nodes of 6 density each, two
+with extractors built on top of them.* Three facts per resource per territory - **how many, at what
+density, and how many are taken** - and all three are already in the model, in `place.nodes` and
+`place.extractors`.
+
+**A caution about the fix.** The `extractor` table is beside this one with eleven rows, so *how many
+are taken* can be counted from there rather than duplicated here. **A dump that states a derived
+number twice can state it two ways**, which is the failure `S-19` is about, one table over.
+
+**The name is a separate question and is with Sean** as `P-205`: **`node` appears nowhere in
+`spec/` or `releases/`.**
 
 ### S-19 - Control is stored as `founded` and the specification derives it from citizens
 

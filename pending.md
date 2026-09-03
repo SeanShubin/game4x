@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-205** - `node` is your word for something the release calls two other things · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -22,8 +21,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (7)
+### To code (8)
 
+- **S-20** - The `node` table calls a total a density, and erases what the twelve territories exist to exercise · `docs/notes/proposals.md`
 - **S-19** - Control is stored as `founded` and the specification derives it from citizens · `docs/notes/proposals.md`
 - **S-18** - Nothing calls the padder, and `dump.rs` is about to reimplement it · `docs/notes/proposals.md`
 - **S-17** - `pending.md` cannot show what waits on a person, and five things have been waiting since 2026-08-30 · `docs/notes/proposals.md`

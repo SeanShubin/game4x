@@ -8,6 +8,13 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on nodes
+
+*Each territory has a number of each type of node, and all nodes of the same type have the same
+density. From the data I am only seeing one of each type of node in each territory, where I would
+expect to see something like 4 metal nodes of 6 density each, two with extractors built on top of
+them.* - `S-20`, and `P-205` for the word
+
 ## Said 2026-09-03, three rules for using AI assistants
 
 *I used to have 2 rules for using ai assistants, now I have 3.*
