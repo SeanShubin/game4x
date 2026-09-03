@@ -50,6 +50,32 @@ decision that has not been made yet. Two at the end are waiting on something and
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-15 - `P-196` moved the release again, and two checks are red
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** `P-196`, promoted in `68cc893`
+
+`the_release_tables_are_the_ones_in_this_crate` and `every_kind_a_recipe_names_is_declared` both
+fail. What moved:
+
+- **A fourth family, `place`**, whose members are `territory` and `orbit`
+- **`adjacency` is of a place**, and its values are *which places it touches, and by which kind of
+  edge*
+- **Three edge kinds**: `border` between territories, `orbit border` between orbits, `ascent`
+  between a territory and its own orbit. The planet states all of them
+- **A `Crosses` column** in *Units and structures*, between `Binding` and `Requires`. A Pioneer
+  crosses `border`; an Ark crosses `orbit border, ascent`; everything else is blank
+- **`move` takes places**, and its destination's constraint is *joined to `$from` by an edge the
+  unit crosses*
+- **`deploy ark` takes the Ark from the orbit above `$where`**
+
+**The last one is the change with consequences past the tables.** An Ark's life now has no
+land-to-land move in it: produced on the ground, ascends once, moves in orbit to choose a site,
+deploys. **Sean's rule that an Ark cannot move between land and land is never tested rather than
+merely obeyed**, and `commands/play.4x` opens with `land ark 1` which is now a deploy from orbit.
+
+**`every_kind_a_recipe_names_is_declared` failing is your check working**, not a second defect -
+`place` is a family the crate does not have yet.
+
 ### S-14 - A scenario that touches every kind and every recipe, and a dump of what it left
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on `../vote`'s
