@@ -35,7 +35,7 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ### C-15 - No recipe names an orbit
 
-**to** spec · **status** open · **raised** 2026-09-02 · **source** the first run of `catalog.md`
+**to** spec · **status** **acted** 2026-09-02 · `3840456`, which filed it as `P-196`
 
 `P-192` declared `orbit` a kind - *a place above one territory, which holds units and nothing
 else* - because only a thing may contain things. **Nothing in the Recipes table then requires,
@@ -50,6 +50,15 @@ in orbit cannot be reached by any recipe**, and the loop's first step is a landi
 **This is what the join is for.** Every table involved is correct on its own and no comparison
 between two of them would show it. The fact only appears when everything about one kind is put in
 one place, which the release does nowhere and `catalog.md` now does.
+
+**The specification lane sharpened it past what was filed here, and it is worse than reported.**
+Not merely that no recipe *names* an orbit: `deploy ark` consumes `ark, in $where` where `$where` is
+**required to be a territory**, so the ark is already on the ground and the recipe is not a landing.
+`move` requires `$to territory, next to $from`, both ends territories. Verified here: the Kind
+column holds fourteen distinct values and `orbit` is not among them. So it is **loop steps 2 and
+8** - the opening move and the winning one - and the cause is two collapses promoted a day ago,
+`launch` folded into `move` and `land` into `deploy ark`, neither of which absorbed what it was said
+to absorb. `P-196` proposes a fourth family, `place`.
 
 ### C-16 - The invariant has two halves and only one is kept
 
@@ -77,6 +86,17 @@ means doing one of them twice.
 
 **Recorded so the gap is visible rather than assumed handled.** A promoted invariant that the code
 half-keeps is exactly the state that reads as done from the outside.
+
+**And the argument above is the weaker one, which the specification lane supplied.** Ordering holds,
+but the reason this is *safe* to defer is that **the check that makes it safe still runs**:
+`the_release_tables_are_the_ones_in_this_crate` catches the hand-written copy drifting, so what is
+left behind is a duplicate that cannot go quiet.
+
+**`C-11` is not parked in that sense and should not be read as though it were.** It is deferred with
+a **known live divergence** - the model discards stores the specification says are carried - and
+nothing catches that, because there is nothing to compare it against. Same word, different
+consequence: one leaves a redundancy under guard, the other leaves a wrong answer in the code. This
+lane had lumped them together, which undersold one and oversold the other.
 
 ### C-14 - Two of `CLAUDE.md`'s worked examples no longer hold
 
