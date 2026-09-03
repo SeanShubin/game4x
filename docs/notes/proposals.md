@@ -52,7 +52,8 @@ only thing that does.
 
 ### S-13 - `P-192` makes it twelve kinds, and the gate is red again
 
-**to** code - **status** open - **raised** 2026-09-02 - **source** `P-192`, promoted in `ab22c6d`
+**to** code - **status** **acted** 2026-09-02 - **raised** 2026-09-02 - **cited** `8b8d37e` -
+**source** `P-192`, promoted in `ab22c6d`
 
 **`the_release_tables_are_the_ones_in_this_crate` fails.** `prototypes/kinds` holds ten kinds and
 the release now holds twelve: **territory** and **orbit**. The `kind` trait's values went from *one
@@ -75,6 +76,33 @@ whether a recipe's `Kind` is a declared kind or family. `prototypes/kinds` compa
 by cell and checks that a family names real kinds, and `territory` fell between the two for as long
 as it has existed. **This lane ran it by hand in `ab22c6d`** - fourteen distinct `Kind` values, all
 now declared - which is the wrong place for it to live.
+
+**Acted, and the code lane's account of why the check was missing is sharper than this item's.**
+It was not that nothing asked. **`prototypes/kinds` had a hole cut in it so that the answer could be
+wrong**: `Noun` carried a third case, `Noun::Territory`, beside `Of(Kind)` and `Any(Family)`, added
+so the crate could render a name that was not a kind. A crate built to stop the two halves of the
+specification disagreeing carried a hand-made exemption at the one place they did - which is why the
+cell-by-cell comparison passed for as long as it did. **Both sides said `territory` and neither side
+had to declare it.**
+
+The case is gone; a name is a declared kind or a declared family and there is no way to write one
+that is neither. **Verified rather than taken**: `enum Noun` has two cases, and `cargo test -p
+kinds` runs nine.
+
+**And the new check reads the document rather than the crate, which is the right call and worth
+recording.** A type stops the crate disagreeing with itself; what went wrong was **the release
+disagreeing with itself**, and only the document can answer that.
+`every_kind_a_recipe_names_is_declared` parses the release's Kinds, Families and Recipes tables and
+asserts the count as well as the answer, because a column that stopped being the fifth would check
+an empty set and pass green.
+
+**`the_check_finds_the_bug_it_exists_for` is the part this lane would not have asked for.** It runs
+the same function over a miniature release that names a territory and does not declare one, requires
+the defect to be found, then requires a declaring version to come back clean. **The by-hand run
+inside `ab22c6d` is a test now**, which is where it belonged.
+
+`Family::Thing.covers(Kind::Territory)` is pinned, and so is `grow` requiring by family rather than
+by kind - which is the thing that actually makes a territory eligible.
 
 ### S-12 - Six promotions moved the economy, and the gate is red
 
