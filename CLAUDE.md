@@ -238,8 +238,9 @@ nothing here - they passed beforehand too. `Q-8` is the pattern: one test compar
 derivations at every planet size, and a second demonstrating that the old path diverged under jitter
 while every other test in the repository went on passing. **The second test is the verification.**
 So a refactor with no new check is not done, it is *unverified*, and says so rather than closing
-quietly. `Q-1` is correctly still open for exactly this reason - the copy that could not be checked
-was not deleted, because deleting blind proves nothing either way.
+quietly. **`Q-1` is the rule doing both halves of its job**: it stayed open while the copy could not be
+checked, because deleting blind proves nothing either way, and it closed on 2026-08-30 once a
+harness - `--shot`, `--settle` and `--renderer` - made the second half checkable.
 
 **Check the rule over every case, not on one case, and assert how many cases there were.** A test
 that shows a rule on one example stops showing anything the moment that example is edited away, and
@@ -254,8 +255,10 @@ on 2026-09-01 and all three stayed green -
 answer is the deliverable; the code is a byproduct* - and it generalises: the question is stated, the
 answer is recorded, and the document is reachable by links from the root README, which
 [`docs/README.md`](docs/README.md) makes the test of existing at all. **Research with no recorded
-answer is unfinished**, however much was built. `prototypes/goldberg-view` currently reads *the
-answer: not yet recorded*, which makes it an unfinished task wearing a finished one's clothes.
+answer is unfinished**, however much was built. `prototypes/goldberg-view` was exactly that until
+2026-08-30 and is not now: it records an answer the question did not expect - appearance was
+never the constraint, diminishing strategic depth was - which is the deliverable arriving in a
+shape the code could not have predicted.
 
 **Research never reaches Sean as research.** If its answer implies a decision it becomes a proposal;
 otherwise it is recorded and findable, and that is the whole of done.
