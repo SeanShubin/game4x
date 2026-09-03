@@ -71,8 +71,37 @@ try {
     # so this works in a clone where core.hooksPath was never set. The hook is executed
     # rather than copied: one list of what the gate is, in the file that owns it.
     if (-not $NoGate) {
+        # `sh` is Git's and lives in its install rather than on PowerShell's PATH, so calling
+        # it by name works from Git Bash - which is why `scripts/push.sh` never saw this - and
+        # fails here with "the term 'sh' is not recognized". Found by running the script,
+        # 2026-09-02; the gate had never run from PowerShell.
+        #
+        # Deliberately not falling back to `bash`: the one on PATH is
+        # C:\Windows\system32\bash.exe, which is WSL, and that is a different machine as far
+        # as cargo and the workspace are concerned. Better no shell than the wrong one.
+        $sh = $null
+        $git = Get-Command git -ErrorAction SilentlyContinue
+        $candidates = @()
+        if ($git) {
+            # ...\Git\cmd\git.exe and ...\Git\mingw64\bin\git.exe both sit two below the root.
+            $root = Split-Path -Parent (Split-Path -Parent $git.Source)
+            $candidates += (Join-Path $root "bin\sh.exe")
+            $candidates += (Join-Path $root "usr\bin\sh.exe")
+            $candidates += (Join-Path (Split-Path -Parent $root) "bin\sh.exe")
+        }
+        $candidates += "C:\Program Files\Git\bin\sh.exe"
+        foreach ($candidate in $candidates) {
+            if (Test-Path $candidate) { $sh = $candidate; break }
+        }
+        if (-not $sh) {
+            Write-Host "cannot find Git's sh.exe to run hooks/pre-push; looked in:"
+            $candidates | ForEach-Object { Write-Host "  $_" }
+            Write-Host "run scripts/push.sh from Git Bash, or pass -NoGate having run the gate yourself"
+            exit 1
+        }
+
         Write-Host "==> Gate (hooks/pre-push)"
-        & sh hooks/pre-push
+        & $sh hooks/pre-push
         if ($LASTEXITCODE -ne 0) {
             Write-Host ""
             Write-Host "gate failed; nothing pushed"
