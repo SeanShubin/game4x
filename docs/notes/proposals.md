@@ -151,6 +151,48 @@ propose a name.
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 
+### S-14 - A scenario that touches every kind and every recipe, and a dump of what it left
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on `../vote`'s
+documentation and on `P-193`
+
+**Sean's purpose, in his words:** *something like that is the only way I am going to be able to
+actually identify the problems with names.* He is looking at column and table names laid out beside
+real values, which is what `../vote/generated/documentation/sql.html` gives him and what nothing
+here does.
+
+**And his one requirement on the scenario:** *we don't necessarily need the scenario to play a
+planet to full exploitation, but we do need to touch every thing and recipe.* **Coverage rather than
+completion**, and it is checkable by count - twelve kinds, seventeen recipes.
+
+**Where `commands/play.4x` stands.** Its commands are `land ark`, `work`, `build extractor`,
+`produce pioneer`, `move pioneer` and `end turn`. **`build yard` and `produce ark` are absent
+entirely**, and among the world's, `perish` and `spoil` fire only in states it does not reach. The
+launch cannot be written at all until `P-196` is settled, so **full coverage is blocked on one
+proposal and everything short of it is not**.
+
+**What is already here, so this is assembly rather than construction:**
+
+- `report::entities(game)` returns the whole game as `kind`, `id`, and named components - the
+  physical view, in code, never written to a file
+- `commands/play.4x` is already generated from a simulation rather than typed
+- `prototypes/kinds` already writes a generated markdown document, `catalog.md`, so the shape of
+  one is settled
+
+**What is missing is that nothing writes the state to a file after running the scenario.** Two
+documents, and this lane will take the wording of either if you would rather not:
+
+- **the state, normalized** - one table per sort of fact, every table and column named. **This is
+  the one that serves his purpose**, and it must name a table and its columns **even when it holds
+  no rows**, the way `sql.html` prints *(empty) 0 rows* for four of its tables. A dump that omits
+  what is empty hides exactly the names he is trying to read.
+- **the state as entities** - `kind`, `id`, components, which is `report::entities` rendered
+
+**One correction to `P-193` from this lane.** Its table said the relational state dump *needs the
+bootstrap you named*. **It does not** - the state after `play.4x` exists in the model already, and
+dumping it needs nothing loaded. The bootstrap is about the definitions becoming the starting
+position, which is a different job.
+
 ### S-13 - `P-192` makes it twelve kinds, and the gate is red again
 
 **to** code - **status** **acted** 2026-09-02 - **raised** 2026-09-02 - **cited** `8b8d37e` -
