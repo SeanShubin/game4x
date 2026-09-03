@@ -45,6 +45,8 @@ to turn the world, wheel to zoom, `P` to fold it back into a globe, `Esc` to qui
 | [Scripts](scripts/README.md)            | How to run each prototype                                                                                |
 | [Notes](docs/notes/README.md)           | Derived records of analysis. Not binding                                                                 |
 | [Catalog](catalog.md)                   | Every kind, with the families holding it, its traits, its cost and every recipe naming it. **Generated** |
+| [State](state.md)                       | The scenario's result as one table per relation, fully normalized. **Generated**                         |
+| [Entities](entities.md)                 | The same result as every thing with its components, which is what F3 shows. **Generated**                |
 | [Pending](pending.md)                   | What every outbox has open and who it waits on. **Generated**                                            |
 
 ## The short version
