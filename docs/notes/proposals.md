@@ -45,67 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-190 - Seven columns, and three of the six you named are not columns
-
-**to** sean - **status** open - **raised** 2026-09-02 - **kind** Sean's own - **into**
-`releases/first-release.md` -> Recipes
-
-**`require`, `consume` and `produce` are three values of one column.** That is why six was an
-awkward number: the list mixes one per-ingredient fact with three per-recipe ones, and the two do
-not belong in the same table the same way.
-
-> The recipe table has seven columns: **Recipe**, **Auto**, **Role**, **Qty**, **Kind**, **Traits**
-> and **Where**.
->
-> **Auto** is `player` or `world`. **Role** is one of `require`, `limit`, `consume` or `produce`: a
-> requirement must be present and is not taken, a limit is a maximum that must not be exceeded, a
-> consumption is taken, and a production is made. **Qty** is a whole number or an expression.
-> **Kind** is the kind or the family alone. **Traits** are the constraints on it. **Where** is the
-> place the row is about, and a blank means the one place the recipe acts.
->
-> Every row today becomes a row under this scheme. An `in` row bounded `at most` becomes `limit`.
-> An `in` row whose thing and quantity also appear as an `out` row of the same recipe becomes
-> `require`, and that `out` row is dropped. Any other `in` row becomes `consume`, and any other
-> `out` row becomes `produce`. The `Thing` cell splits three ways: the kind or family into
-> **Kind**, an `in $name` into **Where**, and everything else into **Traits**. `Bound` is deleted.
-
-**Basis: measured over all seventeen recipes and all sixty-six rows.**
-
-| Column                     | What it earns                                                            |
-| -------------------------- | ------------------------------------------------------------------------ |
-| **Role** absorbing `Bound` | `Bound` says something other than its role's default in **2 of 66 rows** |
-| **Role** collapsing echoes | 66 rows become **60**: six pairs exist only to say *not consumed*        |
-| **Traits**                 | **27 of 66 rows** constrain one                                          |
-| **Where**                  | **4 rows** name a place and **8** bind or use a `$name`                  |
-| **Scope**                  | **nothing**: it is `everywhere` exactly when `Auto` is `world`           |
-| **Lifecycle**              | **little**: eleven of seventeen recipes fall in one bucket               |
-
-**`move` is the recipe that shows all of it**, going from seven rows to five:
-
-| move | player | require | 1 | territory | | `$from` |
-| | | require | 1 | territory | next to `$from` | `$to` |
-| | | consume | 1 | unit | ready | `$from` |
-| | | produce | 1 | unit | exhausted | `$to` |
-| | | consume | 1 | energy | | in that unit |
-
-**`Where` is the column that matters most and the one you did not name.** `P-183` died asking where
-a recipe acts, and this is the answer in the shape your `scope` pointed at: a blank means *the one
-place this recipe acts*, so the eleven recipes that name no territory say so by saying nothing, and
-the five rows that mean somewhere else say which.
-
-**On leaving `Scope` and `Lifecycle` out.** They are per-recipe facts in a per-ingredient table, so
-each costs sixty rows to state seventeen things, and today neither states anything a reader could
-not get from `Auto`. **If you want them, take them as a second table** - one row per recipe, four
-columns, `Recipe`, `Auto`, `Scope`, `Lifecycle` - which costs seventeen cells rather than sixty and
-leaves this one narrow. That split is also what the rule editor will want, because the two tables
-are the two things it edits.
-
-**This still reverses `P-159`**, which deleted a `Consumed` column because consumption is derivable.
-It is still derivable; what changed is that you want to read it rather than derive it, and the six
-echo rows are what deriving it costs.
-
-**This re-renders `docs/recipes/README.md`.**
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -640,6 +579,7 @@ work the release exists to order.
 | P-185, the turn's ending says everything with upkeep pays it                                                    | `spec/turn.md` -> Order of operations                                                                                                        | 2026-09-02 |
 | P-191, `room` is renamed total capacity everywhere it means the stored maximum                                  | `spec/planet.md`, `spec/economy.md`, `spec/orbit.md`, `spec/console.md`, `spec/control.md`, `spec/logistics.md`, `releases/first-release.md` | 2026-09-02 |
 | P-184, the world's recipes fire at the end of a turn, in the order `spec/turn.md` gives                         | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-02 |
+| P-190, the recipe table takes seven columns, and role carries require, limit, consume and produce               | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-02 |
 
 ## Rejected
 
