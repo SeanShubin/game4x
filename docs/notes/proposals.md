@@ -109,6 +109,41 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
+### S-25 - `labor` is a kind with no table, and `create labor` is a recipe nothing fires
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** preparing Sean's manual
+derivation
+
+**Found by working out what a person would do with `work 1 extractor 1 food`.** The release says
+that command's effect is two recipes - `create labor` turns a ready citizen into labor and an
+exhausted citizen, then `work` consumes the labor. **The model fires neither.**
+
+`crates/game-model/src/territory.rs` has **`labor_spent: u32`** and
+**`labor_available() = citizens - labor_spent`**. So labor is a counter derived from citizens, not a
+thing in a place - and `state.md` has **nine tables and none of them is `labor`**, while the release
+lists it as one of the fourteen kinds with a bound of its own.
+
+**A person deriving the dump by hand asks where the labor rows are and finds none.** That is the
+closure test working on its first attempt, before anybody has run it.
+
+**Three things are true at once and only one of them is wrong**, which is why this is worth an item
+rather than a line:
+
+- **The release** says labor is a kind, produced by `create labor`, bounded by the citizens that
+  make it
+- **The model** says labor is `citizens - labor_spent`, reset at the end of a turn
+- **`P-214`** now says there is one command for each recipe the player may fire, **and `create
+  labor` has no command**
+
+**The model's version may be the right one** - a counter that resets is exactly *one each per turn* -
+in which case the release is describing a thing that should not be a kind. **This lane is not
+deciding that**; `S-21` rewrites these shapes and this is a fourth case for it, beside `founded`,
+`stores` and the bare counts.
+
+**What is needed now is smaller than the fix**: whatever renders `state.md` should show `labor` as a
+table, empty or not, because `P-200` requires every kind to have one. **An absent table is the one
+thing a reader cannot tell from a wrong one.**
+
 ### S-24 - Four artifacts, and a human must be able to derive the fourth from the other three
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on what the reference
