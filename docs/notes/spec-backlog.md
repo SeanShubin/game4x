@@ -8,6 +8,19 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Asked 2026-09-04, whether `code-structure`'s regression workflow belongs here
+
+*My workflow for this directory is to make possibly drastic changes to the code, then diff the
+results in version control, then decide if the results are what I wanted... If the results are what
+I wanted, I delete the expected directory, run the regression test, the regression test
+automatically assumes no expected means that I expect what it currently does, so regenerates the
+expected data, and then I commit and push the expected directory. In this way, I maintained
+executive control.*
+
+**Two of the three parts transfer** - `P-225` for the regeneration protocol, `S-32` for the
+three-way comparison. **The third, `memory/`, does not**: measured, `crates/` has no clock and no
+rng outside a `#[cfg(test)]` benchmark. [What the harness does](regression-by-directory.md).
+
 ## Asked 2026-09-04, for regression paths in wording written before `P-218`
 
 *I want to make sure there is no possibility of regression to less refined interpretations based on

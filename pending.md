@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-225** - `P-219` says the test locks the expected data and does not say how you unlock it · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -24,9 +23,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (16)
+### To code (17)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
+- **S-32** - The comparison is three-way, and `extra` is the half we do not have · `docs/notes/proposals.md`
 - **S-31** - `C-16` is not answered in the way `C-17` and `C-18` are, and should not close with them · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`

@@ -45,6 +45,39 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-225 - `P-219` says the test locks the expected data and does not say how you unlock it
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **shape** text -
+**into** `docs/process.md` -> How I know the game is right
+
+**The hole is exactly one sentence wide.** `P-219` says *once I have confirmed them, the test locks
+them in place - not so that they cannot change, but so that my changing my mind can be told apart
+from something slipping in by accident.* **It never says what changing your mind looks like**, and
+the unstated answer is *edit the file* - which is the one act that cannot be told from an accident.
+
+**Your own workflow answers it, and the answer is deletion rather than editing:**
+
+> When I change my mind, I delete the expected data and run the scenario again. **Absent expected
+> data means I accept what it does now**, so the test writes it, and what I review is the diff in
+> version control. Nothing else may write it: an expectation that can be edited in place is one that
+> can be edited by accident, which is the thing it exists to prevent.
+
+**Basis: it is five lines of `RegressionTest.kt` and it is the load-bearing part.**
+`seedExpectationIfNecessary` returns immediately if `expected/` exists and copies `actual/` into it
+if it does not. **Deleting a directory is deliberate, visible in `git status`, and impossible to do
+by accident**; editing one number in a committed file is none of those.
+
+**One thing it needs that `code-structure` gets for free.** There, seeding is safe because there is
+always a diff to read - delete a directory that had content, regenerate, and version control shows
+exactly what changed. **The first seeding has no diff**, and that is the one this repository would
+be doing. Accepting it means accepting the program's output because the program produced it.
+
+**So the first expected data comes from your pencil and not from the program** - which is `S-24`, the
+closure test, already open. **After that, absence-means-acceptance is exactly right**, and this is
+the mechanism `P-219` was missing rather than a new idea.
+
+[What the harness does, measured](regression-by-directory.md).
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -108,6 +141,33 @@ neither table.
 passes over nothing, so **assert how many traits it examined** - two today. And a trait whose values
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
+
+### S-32 - The comparison is three-way, and `extra` is the half we do not have
+
+**to** code - **status** open - **raised** 2026-09-04 - **source** `code-structure`'s
+`RegressionTest.kt`, which Sean pointed at
+
+**Its comparison walks both trees and reports three lists** - `missing`, `extra`, `different` -
+summed by `RegressionSummary.regressionCount()` and asserted at zero, with every path in the failure
+message.
+
+**`extra` is the direction that matters and the one we lack.** Walking only the expected side passes
+while the program grows output nobody asked for. **`dump.rs` has seven tests, all about shape, and
+none of them would notice a new file.** Neither would a currency test written as *regenerate each
+known file and compare*, because the set of known files is the thing that went stale.
+
+**So the currency test you are building now should compare sets, not just contents**: every file
+that should exist does, **no file exists that should not**, and every shared file matches - with all
+three counted, and the count asserted. `catalog_is_current.rs` is the content half already.
+
+**And seed on absence.** `seedExpectationIfNecessary` is five lines: if the expected directory does
+not exist, copy actual into it. **That is `P-225`, filed to Sean today**, and it is what makes
+updating an expectation a deletion rather than an edit. Build the comparison so that adding it later
+is a branch at the top rather than a rewrite.
+
+**What does not transfer**: `code-structure`'s `memory/` directory records a real clock so a rerun
+replays it. **Measured 2026-09-04 - `crates/` has no clock and no rng** outside one `#[cfg(test)]`
+benchmark, and no generated file carries a date. Do not build it.
 
 ### S-31 - `C-16` is not answered in the way `C-17` and `C-18` are, and should not close with them
 

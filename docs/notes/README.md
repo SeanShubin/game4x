@@ -17,6 +17,7 @@ disagree, the spec is right and the note needs a superseded marker.
 | [What ../vote's scenario actually does](votes-scenario.md)                   | One scenario run against four backends, what transfers, and why the closure test is new                             | 2026-09-03 |
 | [What a thing is](what-a-thing-is.md)                                        | Sean's idea that a thing is mostly capacities, tested against the twelve kinds, and the five blanks in it           | 2026-09-03 |
 | [Silence is not agreement](silence-is-not-agreement.md)                      | Eight failures in one day where a thing read correctly and its relationship to another had stopped holding          | 2026-09-02 |
+| [Regression by directory](regression-by-directory.md)                        | What `code-structure`'s `expected/` and `memory/` do, and which two of the three parts belong here                  | 2026-09-04 |
 | [Control without tedium](control-without-tedium.md)                          | The principle that both goals are one axis only while control means acting, and the middle layer                    | 2026-08-28 |
 | [Making the planet look like a world](planet-appearance.md)                  | Prior art from seans-arcade, and the tension between continuous terrain and a discrete grid                         | 2026-08-28 |
 | [When an intermediate step earns its place](intermediate-steps.md)           | A test for prerequisites versus building directly, and how to keep depth addable later                              | 2026-08-26 |
