@@ -31,6 +31,10 @@ If a release needs a rule the spec does not have, the rule goes in the spec firs
 [proposal](../docs/notes/proposals.md) if Claude drafted it - and then the release refers to
 it. A release spec is never where a decision is made.
 
+A release states scope, capabilities and what is deliberately left out, in prose. **It does not
+contain the game's data.** Where a release needs to show data, it links to the generated view of
+it, which is a file of its own.
+
 ## Vetting, and deletion
 
 Every capability carries a **vetted when** line: the observable thing that has to be true.

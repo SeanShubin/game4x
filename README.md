@@ -35,7 +35,7 @@ to turn the world, wheel to zoom, `P` to fold it back into a globe, `Esc` to qui
 
 | Document                                | What it covers                                                                                           |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [Specification](spec/README.md)         | What the game **is**, stated normatively. If it is not there, it is not decided                          |
+| [Specification](spec/README.md)         | What the game **is**, stated normatively. A rule is decided there; the game's data in its data file      |
 | [Vision](docs/vision.md)                | What the game is, the design constraints, and the non-negotiables                                        |
 | [Architecture](docs/architecture.md)    | Module boundaries, the composition root, dependency rules                                                |
 | [Layers](docs/layers.md)                | `(old world, events) -> new world`: what must be reproducible, and how it stays parallel                 |

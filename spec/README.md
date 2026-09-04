@@ -45,6 +45,6 @@ Add a file when a topic firms up. Add its row here first.
    for why. Keep this directory short enough to hold in your head.
 5. **Open questions go at the bottom of the file**, under that heading, never scattered.
 6. **Record what was rejected** when the rejection is load-bearing.
-7. **Relationships here, numbers elsewhere.** State that a predator has more force than a
-   scavenger; state the actual values in a [release](../releases/README.md), where they can
-   be tuned without touching the specification.
+7. **Relationships here, data elsewhere.** State that a predator has more force than a
+   scavenger; state the game's data in a data file, where it can be tuned without touching the
+   specification.

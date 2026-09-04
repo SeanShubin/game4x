@@ -45,78 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-220 - Rule 7 tells you to put the game's data in markdown
-
-**to** sean - **status** open - **raised** 2026-09-04 - **revised** 2026-09-04 - **kind**
-contradiction - **shape** instruction - **into** `spec/README.md` -> Rules for this directory
-
-**Widened on your word, 2026-09-04, from numbers to data.** The first draft moved the destination and
-left the category, so rule 7 would have read *the quantities go in a data file, and the roles, kinds
-and traits stay here* - one of a recipe's seven columns is a number.
-
-**Rule 7 as it stands:**
-
-> 7. **Relationships here, numbers elsewhere.** State that a predator has more force than a
->    scavenger; state the actual values in a [release](../releases/README.md), where they can be
->    tuned without touching the specification.
-
-**A release is markdown.** So anyone obeying rule 7 puts the game's data exactly where `P-218`
-forbids it - and is following a numbered rule while doing it. **This is where the release's eight
-data tables came from.**
-
-**Rule 7 as it would read:**
-
-> 7. **Relationships here, data elsewhere.** State that a predator has more force than a
->    scavenger; state the game's data in a data file, where it can be tuned without touching the
->    specification.
-
-**Three changes and no fourth.** *numbers* becomes *data* in the heading; *the actual values in a
-release* becomes *the game's data in a data file*; *they can* becomes *it can*, which is agreement
-following the first two and not a choice. **The reason clause is kept word for word** - it is why the
-rule exists, and it is more true of a data file than of a release.
-
-**Assertion**: rule 7 contains no link to `releases/README.md`, contains *state the game's data in a
-data file*, and its final clause matches the parent commit's character for character; and `grep -rn`
-over `spec/`, `CLAUDE.md`, `docs/README.md` and `README.md` finds no other sentence routing the
-game's data to `releases/`. **Measured 2026-09-04: rule 7 is the only one.**
-
-**What it opens is filed as `S-30`.** The release's eight tables become a replication with nothing
-generating them, so the moment this lands `releases/first-release.md` is not compliant with
-`spec/README.md`. **Known and recorded rather than discovered** - `S-29` and `S-23` build the
-machinery and neither of them names these tables.
-
-**The root `README.md` restates the line `P-221` amended and is this lane's to update**, after this
-lands rather than before, so the two never disagree.
-
-### P-224 - A release cannot hold generated tables, by `CLAUDE.md`'s own rule
-
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **shape** text -
-**into** `releases/README.md` -> The rule that keeps them from contradicting each other
-
-**`P-220` makes the release's eight data tables generated, and `CLAUDE.md` forbids the file that
-would result:**
-
-> This covers only a file that is generated in full - one with any hand-written part has an author,
-> and belongs in that author's directory.
-
-**`releases/first-release.md` is mostly hand-written prose** - Scope, The loop, Controls,
-Capabilities, Open questions - so it cannot be a generated file. **And it cannot hold generated
-tables inside hand-written prose either**, because that is exactly the mixed file the rule names.
-
-> A release states scope, capabilities and what is deliberately left out, in prose. **It does not
-> contain the game's data.** Where a release needs to show data, it links to the generated view of
-> it, which is a file of its own.
-
-**Basis: the alternative is a marked region inside a hand-written file**, and that is the
-arrangement the generated-file rule exists to prevent - **a reader cannot tell by looking which
-lines they may edit**, and the padder rewrites both kinds alike.
-
-**It is also the arrangement that already works.** `catalog.md` is a whole generated file that
-`README.md` links to, and nothing about it is ambiguous.
-
-**This blocks `S-30`**, which asks the code lane to generate those eight tables and cannot say into
-what.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -201,10 +129,12 @@ each other*. **That comment is correct about two copies and becomes wrong about 
 the data file exists, the release is generated from it and the parse is a currency check, not a
 reconciliation.
 
-**Blocked by `P-224`, filed the same day.** This item cannot say what file the tables are
-generated into: `releases/first-release.md` is mostly hand-written prose, and `CLAUDE.md`
-says a file with any hand-written part is not a generated file. **Do the data file first and
-leave the release's tables alone until `P-224` lands.**
+**Unblocked by `P-224`, 2026-09-04, which named the destination.** A release does not contain the
+game's data; it links to the generated view, which is a file of its own. **So these eight tables
+leave `releases/first-release.md` entirely** rather than becoming generated regions inside it -
+`releases/first-release.md` stays hand-written prose and links out, the way `README.md` links to
+`catalog.md`. **The data file is still first**; nothing can be generated before there is something
+to generate it from.
 
 **Not a decision and not urgent.** It is filed so the gap is visible while it is open, rather than
 discovered when somebody edits a table by hand and nothing objects.
@@ -1559,6 +1489,8 @@ work the release exists to order.
 | P-221, a rule is decided in the spec and the game's data in its data file                                       | `spec/README.md` -> Rules for this directory, under rule 3                                                                                   | 2026-09-04 |
 | P-222, `markup` and `restates` replaced with what `P-218` says precisely                                        | `spec/invariants.md` -> The game is data                                                                                                     | 2026-09-04 |
 | P-223, two kinds of stated fact, and markdown's tier named                                                      | `CLAUDE.md` -> Perspectives                                                                                                                  | 2026-09-04 |
+| P-220, rule 7 sends the game's data to a data file rather than a release                                        | `spec/README.md` -> Rules for this directory, rule 7                                                                                         | 2026-09-04 |
+| P-224, a release does not contain the game's data and links to the generated view                               | `releases/README.md` -> The rule that keeps them from contradicting each other                                                               | 2026-09-04 |
 
 ## Rejected
 
