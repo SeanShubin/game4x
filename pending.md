@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-227** - `P-225` says what happens when you change your mind, not how the first one is set · `docs/notes/proposals.md`
 - **P-226** - A proposal that quotes two passages does not say which one it is offering · `docs/notes/proposals.md`
+- **P-228** - A test is for what a person cannot repeat, not for what happens once · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -18,6 +18,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
+- **S-34** - `1c76c23` S-34: nothing moved, and the headline said it did · still open in `docs/notes/proposals.md`
 - **S-33** - `9d71f66` S-33: say what the directory scope is for, and fix the header S-28 quotes · still open in `docs/notes/proposals.md`
 - **S-32** - `b456283` S-32: missing, extra and different, over a set that is found rather than listed · still open in `docs/notes/proposals.md`
 - **S-27** - `35ca2ea` S-27: a dump per turn, so a wrong number names its turn · still open in `docs/notes/proposals.md`

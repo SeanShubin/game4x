@@ -8,6 +8,18 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-04, on what a test is for
+
+*As a human i can remember to vet the scenario test the first time, it is remembering to do some
+mundane task each time that is impossible for a human, which is why we need a test to fail for those
+times to remind the human. So don't worry too much about the first case being a false positive. I
+know it is a false positive, this is a special case that I know how to deal with. Once we have the
+first case in place I can start the very first review based on my knowledge that I need to kick off
+the process, and for future reviews I will rely on the test failures to draw my attention to
+changes.*
+
+`P-227` withdrawn on it; `P-228` is the principle.
+
 ## Asked 2026-09-04, whether `code-structure`'s regression workflow belongs here
 
 *My workflow for this directory is to make possibly drastic changes to the code, then diff the
