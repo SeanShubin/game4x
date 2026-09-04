@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-231** - Is `labor` a kind, or an allowance that resets? · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -18,11 +17,13 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
+- **S-35** - `0523046` S-35: the expected file claimed a review nobody had done · still open in `docs/notes/proposals.md`
 - **S-33** - `9d71f66` S-33: say what the directory scope is for, and fix the header S-28 quotes · still open in `docs/notes/proposals.md`
 - **S-32** - `b456283` S-32: missing, extra and different, over a set that is found rather than listed · still open in `docs/notes/proposals.md`
 - **S-27** - `35ca2ea` S-27: a dump per turn, so a wrong number names its turn · still open in `docs/notes/proposals.md`
 - **S-25** - `66cb193` S-25: one table naming every kind, and my first check for it was decoration · still open in `docs/notes/proposals.md`
 - **S-23** - `3bbf573` S-23: a view of the recipes, which nothing had · still open in `docs/notes/proposals.md`
+- **S-21** - `53547fc` S-21, first shape: a store is things in a place · still open in `docs/notes/proposals.md`
 - **S-14** - `b394c81` S-14: the entity view and the HTML, from the same rows · still open in `docs/notes/proposals.md`
 
 ## What is outstanding

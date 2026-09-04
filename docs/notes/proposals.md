@@ -45,6 +45,50 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-231 - Is `labor` a kind, or an allowance that resets?
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **asks** a decision
+- **into** `releases/first-release.md` -> Kinds and Recipes, once you have chosen
+
+**The first proposal written under `P-229` as a decision rather than an approval**, so it carries no
+quotation: no wording can be right until you choose. The `asks` field is how this lane chose to say
+which; if you would rather it were a sentence, say so.
+
+**You will hit this on your first derivation and it will look like an error in your arithmetic.**
+The release says `work 1 extractor 1 food` is two recipes - `create labor` turns a ready citizen into
+labor and an exhausted citizen, then `work` consumes the labor. **`state.md` has nine tables and none
+of them is `labor`.** You would ask where the labor rows are and find none.
+
+**Three things are true and they cannot all be:**
+
+- **The release** lists `labor` as one of fourteen kinds, produced by `create labor`, bounded by the
+  citizens that make it
+- **The model** has `labor_spent: u32` and `labor_available() = citizens - labor_spent` - a counter
+  reset at the end of a turn, not a thing in a place
+- **`P-214`** says there is one command for each recipe the player may fire, **and `create labor` has
+  no command**
+
+**Choice A - `labor` is a kind, and the model is wrong.** It gets a table like every other kind. Rows
+appear when a citizen is spent and vanish when work consumes them, inside one turn. `create labor`
+becomes a world recipe that `work` fires, so it needs no command of its own.
+
+**Choice B - `labor` is not a kind, and the release is wrong.** It is an allowance derived from
+citizens, the way `control` is derived from a citizen being present. The release drops it from
+*Kinds* and drops `create labor` from *Recipes*: **fourteen kinds becomes thirteen and seventeen
+recipes becomes sixteen**, and every count asserted against those tables changes with them.
+
+**This lane recommends A, and the reason is a rule you have already promoted.**
+`spec/invariants.md` says *a game's state is things, in places, and how many of each* and **nothing
+in the state is special to a kind. Adding a kind adds no field and no case.** Under B, labor is
+precisely a special case - the one quantity that is not a thing - and something has to know that.
+Under A it is a thing with a count, made by one recipe and consumed by another, which is the recipe
+system doing its job. It also satisfies *every cycle among recipes must spend readiness somewhere
+along it*: the citizen is what gets spent.
+
+**Timing: the code lane is rewriting these exact shapes right now.** `S-21` replaces `labor_spent`
+along with `founded`, `stores` and the bare counts, so **the answer decides what it builds** rather
+than being applied afterwards.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -426,6 +470,9 @@ rather than a line:
 - **The model** says labor is `citizens - labor_spent`, reset at the end of a turn
 - **`P-214`** now says there is one command for each recipe the player may fire, **and `create
   labor` has no command**
+
+**`P-231` puts this to Sean, 2026-09-04**, because the line below saying this lane is not
+deciding it meant nobody was.
 
 **The model's version may be the right one** - a counter that resets is exactly *one each per turn* -
 in which case the release is describing a thing that should not be a kind. **This lane is not
@@ -848,8 +895,11 @@ completion**, and it is checkable by count - twelve kinds, seventeen recipes.
 **Where `commands/play.4x` stands.** Its commands are `land ark`, `work`, `build extractor`,
 `produce pioneer`, `move pioneer` and `end turn`. **`build yard` and `produce ark` are absent
 entirely**, and among the world's, `perish` and `spoil` fire only in states it does not reach. The
-launch cannot be written at all until `P-196` is settled, so **full coverage is blocked on one
-proposal and everything short of it is not**.
+launch is writable. **`P-196` was promoted in `68cc893` and the line that stood here is
+stale as of 2026-09-03**; it said the launch
+could not be written until `P-196` was settled, and it has been settled for a day. **Full coverage
+is not blocked.** Left visible rather than deleted, because a blocker that quietly disappears is how
+a lane goes on holding back for a reason that has stopped existing.
 
 **Every command the scenario needs already exists**, so this is writing a longer file rather than
 building a feature. `spec/console.md` has `land <unit> <territory>` - *bring a unit down from
