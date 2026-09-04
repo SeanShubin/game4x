@@ -18,6 +18,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
+- **S-25** - `66cb193` S-25: one table naming every kind, and my first check for it was decoration · still open in `docs/notes/proposals.md`
 - **S-14** - `b394c81` S-14: the entity view and the HTML, from the same rows · still open in `docs/notes/proposals.md`
 
 ## What is outstanding

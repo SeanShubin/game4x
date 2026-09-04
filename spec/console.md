@@ -41,7 +41,7 @@ A command is written `{name field:value ...}`. Its name is the words that open i
 arguments are named. **A value is a word, a number, or another command in the same form**, so a
 command may carry a tree.
 
-A command names a recipe and binds what that recipe leaves open: the place it acts in, and any
+**A command names a recipe and binds what that recipe leaves open**: the place it acts in, and any
 ingredient it names with a `$`. **There is one command for each recipe the player may fire**, and
 ending a turn fires the world's.
 
