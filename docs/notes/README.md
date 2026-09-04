@@ -11,6 +11,7 @@ disagree, the spec is right and the note needs a superseded marker.
 
 | Note                                                                         | What it records                                                                                                     | Date       |
 | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------- |
+| [Expressive cells](expressive-cells.md)                                      | When a table cell should hold a node, and why the two views already answer it differently                           | 2026-09-03 |
 | [What a command should look like](command-format.md)                         | Flags, structured data or EDN, and why a recipe definition decides it                                               | 2026-09-03 |
 | [Starting from nothing](starting-from-nothing.md)                            | Whether defining rules, setting up and playing are separate or one thing, and what three promoted rules already say | 2026-09-03 |
 | [What ../vote's scenario actually does](votes-scenario.md)                   | One scenario run against four backends, what transfers, and why the closure test is new                             | 2026-09-03 |
