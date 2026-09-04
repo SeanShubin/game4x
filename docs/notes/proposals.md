@@ -275,6 +275,15 @@ each other*. **That comment is correct about two copies and becomes wrong about 
 the data file exists, the release is generated from it and the parse is a currency check, not a
 reconciliation.
 
+**Measured and disproved, 2026-09-04: the checks reading the release do not go green when the
+tables leave.** The code lane raised it, **this lane confirmed it by naming the failure shape rather
+than by measuring**, and then the code lane tested it: with every table row stripped from the
+release, `the_release_tables_are_the_ones_in_this_crate`, `every_kind_a_recipe_names_is_declared`,
+`what_a_trait_says_its_values_are_is_borne_out_by_the_table`, `the_costs_in_the_model_are_the_costs_in_the_release`
+and `released_table` **all fail**. Every one already asserts a count and every count fails on zero.
+The release was restored byte-identical. **Recorded so it is not raised a third time**, and because
+recognising a shape is not the same as finding it.
+
 **Its first appearance needs no reviewed expectation, and you say so when you make it.** Sean, 2026-09-04: a new artifact's first appearance is the same memorable one-off as the first seed, so **mention it in the report rather than guarding it with a check**.
 
 **Unblocked by `P-224`, 2026-09-04, which named the destination.** A release does not contain the
