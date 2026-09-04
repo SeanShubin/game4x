@@ -109,6 +109,47 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
+### S-26 - The command language has to follow seven promotions, and they do not all land at once
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** `P-211` through `P-217`, promoted
+in `1f0f762` and `b74fa0a`
+
+**Sean wants the code caught up to the new format while he verifies the scenario by hand.** Seven
+proposals landed; **three of them you can do now and two wait on `S-21`.**
+
+**Now, and independent of everything else:**
+
+- **`P-212`** - a command is written `{name field:value ...}`, its name is the words that open it,
+  its arguments are named, and **a value may be another command in the same form.**
+  `crates/command-language/src/grammar.rs` says this is the file that has to grow a real expression
+  type, and warns that **the absence of left recursion has to be faced deliberately rather than
+  inherited by accident.**
+- **`P-215`** - a rejection names the line and column it was found at, **and the command it was
+  found inside.** `every_word_knows_where_it_started` already carries the position and no failure
+  uses it. The enclosing command is the half that is easy to skip and is what makes a nested command
+  debuggable.
+- **`P-216`** - a value compared across rows is a column; one that is not may be a node in a cell.
+  **The normalized view has no nested cells; the entity view may.** `entities.md`'s territory table
+  is seventeen columns and its garrison cell already reads `force 1 multiplier 1 manned 0` - a node
+  written by hand. **`state.md` does not change.**
+
+**Waiting on `S-21`, because they are true only once recipes are data:**
+
+- **`P-214`** - a command names a recipe and binds what it leaves open, so **the command list is the
+  recipe list.** Today seven commands cover eleven player recipes: `build` fires four, `produce`
+  two, `move` two, and **`create labor` has none.**
+- **`P-213`** - a definition arrives in one transition, which cannot be tested until a definition
+  can be written at all.
+
+**And `P-217` is documentation of what already exists** - the query commands and the design commands
+are listed because neither is a recipe. Nothing to build.
+
+**One thing to decide early rather than discover.** `P-214` makes `move` two commands, because `move`
+and `found by land` are two recipes and the model currently chooses between them by looking at the
+ground. **Sean was told that cost and took it**, so the choice moves to the player rather than being
+inferred - but the `.4x` files change when it does, and `commands/play.4x` is what he is deriving by
+hand this week. **Do not change the scenario's commands under him without saying so.**
+
 ### S-25 - `labor` is a kind with no table, and `create labor` is a recipe nothing fires
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** preparing Sean's manual
