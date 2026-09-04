@@ -156,7 +156,7 @@ perspective has to read.
 - A file in `releases/` is an outbox too: each capability is an item addressed to the code
   lane, `open` until its *vetted when* line is observed.
 
-Every item in an outbox carries four things:
+Every item in an outbox carries four things, and a proposal carries one more:
 
 | Field      | What it is                                                                                                                                                                                |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -164,6 +164,7 @@ Every item in an outbox carries four things:
 | **to**     | `spec`, `code`, or a named lens - or **absent**, meaning *not ready, no reader*. Only the proposal queue addresses `sean`                                                                 |
 | **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered` - and for a release capability, `open`, then `built` when the code lane says it is done, then `vetted` when a person has observed it |
 | one line   | What it is, so a reader can triage it without opening the source                                                                                                                          |
+| **asks**   | `approval`, meaning the words are final and reading them is the whole of the work, or `a decision`, meaning a choice is open. Only a proposal carries it                                  |
 
 **Nothing but a proposal is addressed to Sean.** A lens addresses `to spec` and so does the code
 lane; the specification lane turns either into a numbered proposal, which is the one shape Sean

@@ -73,83 +73,6 @@ byte-identical, because it already said `build extractor 1 food`.
 **What this does not do.** It does not touch `garrison` or `yard`, which are one kind each already,
 and it does not change any cost or capacity. **Every number in the release is the same afterwards.**
 
-### P-235 - Directions: a place for what the design expects to move
-
-**to** sean - **status** open - **raised** 2026-09-04 - **revised** 2026-09-04 - **kind** Sean's own
-- **shape** text - **into** `docs/vision.md`, a new section after *Constraints*, and one row in
-`docs/README.md` -> What goes where
-
-**You said this does not belong in the spec and may inform future decisions, and asked where. There
-is nowhere.** Checked: `docs/README.md`'s *What goes where* has nine content rows and none of them fits.
-The nearest is `docs/vision.md` -> *Constraints*, and it is **exactly wrong** - it opens *these are
-the fixed points of the design. Everything else is negotiable*, and yours is a point the design
-expects to move.
-
-> ## Directions
->
-> These are not fixed points. They are movements the design already expects, written down so that
-> nothing is built as though they will not happen. **A direction is never a reason something must be
-> done - only a reason not to foreclose it.**
->
-> ### A trait may become a quantity
->
-> I expect many of these traits to start out as a boolean then evolve into a quantity. Nothing
-> should depend on a trait having only two values.
-
-**Why `vision.md` rather than a new file.** *Constraints* and *Directions* are the two halves of one
-question - what will not move, and what will - and `vision.md` already draws the line in its own
-words: *everything else is negotiable*. **A separate document would be one nobody opens at the moment
-it matters**, which is while they are reading the constraints.
-
-**The third sentence is what stops it becoming a shadow specification.** `docs/README.md` already
-guards the notes this way - *a note must never read as though it settled something* - and a
-directions section has the same hazard with more authority, because it is in a document that is
-reviewed. **Saying it binds nothing is what keeps `spec/` the only place a decision lives.**
-
-**It has teeth today even binding nothing.** `crates/game-model/src/territory.rs` holds readiness as
-`Trait::Exhausted`, a **presence flag** - set or clear - which is the one representation that cannot
-become a quantity without every reader changing. **The code lane is rewriting that file now**, and a
-direction it can read is the difference between choosing that shape and inheriting it.
-
-**And it needs the row in `docs/README.md` or it will not be found.** That table is how anything
-gets filed, and a category with no row in it is a category the next person re-invents:
-*a movement the design expects but has not made* -> `vision.md`, *Directions*.
-
-### P-236 - The `asks` field is in use and nothing declares it
-
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **shape** text - **into**
-`CLAUDE.md` -> Outboxes, the table of four fields
-
-**`P-229` says a proposal *asks one of two things, and says which*. It does not say how**, and this
-lane picked a field - `**asks** approval` or `**asks** a decision` - without saying so. **Three
-proposals now use it**: `P-232`, `P-233` and this one's neighbours. That is the same shape as the
-thing `P-226` was filed about, one level up: **a convention a checker will depend on, that nothing
-declares.**
-
-> **asks** - `approval`, meaning the words are final and reading them is the whole of the work, or
-> `a decision`, meaning a choice is open. Only a proposal carries it.
-
-**Basis: a tool already depends on it, and it is still undeclared.** `tools/outbox/src/lib.rs` line
-1226 filters on `**asks**` - a proposal carrying it is exempted from the check that every proposal
-offers text, with the reason written out above it: *requiring text of one would push whoever wrote it
-to invent a quotation for a question*. **So the convention has already reached code**, and the only
-place it is not written down is `CLAUDE.md`.
-
-**This lane first claimed the word appears nowhere in `tools/outbox/src/`. That was wrong** - it is
-there three times, and the claim was made after checking `main.rs` alone. **The correction makes the
-proposal stronger**: an undeclared convention nothing uses is untidy, and one a test already depends
-on is a rule in everything but name.
-
-**What is still missing is the half you asked for.** The tool uses `asks` to *exempt*; it does not
-use it to *split*. `pending.md` is one undifferentiated list, so how many proposals you can read and
-approve, and how many need you to think, is a thing you can only learn by opening each. **With the
-field declared, that becomes two counts in a generated file.**
-
-**One thing to note rather than decide.** `kind` and `shape` are also undeclared - neither appears in
-`CLAUDE.md`'s field table, and both have been in use for months. **This proposal does not fix
-them**, because they are conventions this lane invented for its own filing and nothing outside reads
-them. `asks` is different only because a tool is meant to.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -1753,6 +1676,8 @@ work the release exists to order.
 | P-239, `pending.md` is for the instances; my two acts are creating and validating                               | `docs/process.md` -> Specification Instance, Outboxes and the index                                                                          | 2026-09-04 |
 | P-240, production support is the code lane's                                                                    | `docs/process.md` -> Who writes what, and `CLAUDE.md` -> Perspectives                                                                        | 2026-09-04 |
 | P-233, `ready` is a boolean trait and the world recipe is `refresh`                                             | `releases/first-release.md` -> Traits, Recipes                                                                                               | 2026-09-04 |
+| P-235, *Directions* - what the design expects to move, binding nothing                                          | `docs/vision.md` -> Directions, and `docs/README.md` -> What goes where                                                                      | 2026-09-04 |
+| P-236, the `asks` field is declared                                                                             | `CLAUDE.md` -> Outboxes                                                                                                                      | 2026-09-04 |
 
 ## Rejected
 

@@ -9,8 +9,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-234** - One `extractor` kind with a resource trait, in place of three kinds · `docs/notes/proposals.md`
-- **P-235** - Directions: a place for what the design expects to move · `docs/notes/proposals.md`
-- **P-236** - The `asks` field is in use and nothing declares it · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

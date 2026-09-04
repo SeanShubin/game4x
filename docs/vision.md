@@ -58,6 +58,17 @@ before it becomes part of the game. See [prototypes](prototypes/README.md).
 
 Everything is reachable from the root README. See [the documentation map](README.md).
 
+## Directions
+
+These are not fixed points. They are movements the design already expects, written down so that
+nothing is built as though they will not happen. **A direction is never a reason something must be
+done - only a reason not to foreclose it.**
+
+### A trait may become a quantity
+
+I expect many of these traits to start out as a boolean then evolve into a quantity. Nothing
+should depend on a trait having only two values.
+
 ## The planet
 
 The surface of the world is a sphere divided into regions.
