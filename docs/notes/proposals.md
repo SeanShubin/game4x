@@ -342,6 +342,21 @@ Sean's model and his answers to all five of its blanks:
 3. **`C-11`** - what a turn keeps stops being three discarded numbers
 4. **`R-6`** - the loop can be played through, and it is **the last capability of the first release**
 
+**Nine test files parse markdown today, and that is a symptom of this item rather than a design.**
+`crates/game-console/tests/first_release.rs` says why in its own words: *read from the release rather
+than copied out of it. If somebody retunes a number there, this test starts failing until the command
+file is retuned to match, **which is the only way the two stay honest about each other***.
+
+**There are two copies, so something has to compare them, so a test parses a document.** When the
+rules are loaded there is one copy and **the parsing has nowhere to live** - the tests that exist to
+compare become tests of loaded data, and the six that read `releases/first-release.md` stop needing
+to.
+
+**Sean's manual derivation is the acceptance test for this rewrite.** He is deriving the scenario by
+hand now, against the model as it stands, and **what he writes down is what the rewritten model must
+produce.** Doing it before rather than after is deliberate: a derivation against the current model
+gives this rewrite a checklist, and one done afterwards would be checking new code with no baseline.
+
 **One thing this lane will not decide and you should not have to guess.** How far to go in one step.
 `P-199` says what the game is made of lives in a data file, so the end state has arrangements loaded
 rather than compiled - **but a rewrite that gets to *things in places* without also moving the
