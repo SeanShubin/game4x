@@ -236,7 +236,7 @@ pub fn entities(game: &Game) -> Vec<Entry> {
         let mut components = vec![
             ("founded".to_string(), place.founded.to_string()),
             ("citizens".to_string(), place.citizens().to_string()),
-            ("labor spent".to_string(), place.labor_spent.to_string()),
+            ("labor spent".to_string(), place.labor_spent().to_string()),
             (
                 "force of nature".to_string(),
                 place.force_of_nature.to_string(),

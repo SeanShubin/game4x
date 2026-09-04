@@ -125,7 +125,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
             place.force_of_nature.to_string(),
             yes(place.founded),
             place.citizens().to_string(),
-            place.labor_spent.to_string(),
+            place.labor_spent().to_string(),
             place.yards().to_string(),
         ]);
 
@@ -182,7 +182,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
         labor.push(vec![
             place.id.0.to_string(),
             place.citizens().to_string(),
-            place.labor_spent.to_string(),
+            place.labor_spent().to_string(),
             place.labor_available().to_string(),
         ]);
 

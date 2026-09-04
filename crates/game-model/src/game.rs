@@ -665,7 +665,7 @@ impl Game {
                 needed: amount,
             });
         }
-        self.territory_mut(territory)?.labor_spent += amount;
+        self.territory_mut(territory)?.spend_labor(amount);
         Ok(())
     }
 

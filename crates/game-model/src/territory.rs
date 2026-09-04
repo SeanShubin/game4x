@@ -6,7 +6,7 @@
 
 use crate::Biome;
 use crate::identity::{Resource, TerritoryId};
-use crate::thing::{Kind, Thing};
+use crate::thing::{Kind, Thing, Trait};
 
 /// What one citizen is worth in violence. `releases/first-release.md`: Citizen, force 1.
 pub const CITIZEN_FORCE: u32 = 1;
@@ -69,7 +69,7 @@ pub struct Territory {
 
     /// Labor used this turn. A citizen provides one, and it is not restored until the
     /// turn ends.
-    pub labor_spent: u32,
+
     /// What is here now. `spec/logistics.md`: there is no general inventory, so this is
     /// per territory and nothing crosses a boundary.
     /// What is here now, as things rather than as three numbers.
@@ -99,7 +99,6 @@ impl Territory {
             force_of_nature: 0,
             founded: false,
 
-            labor_spent: 0,
             held: Vec::new(),
             garrison: None,
             extractors: Vec::new(),
@@ -197,7 +196,40 @@ impl Territory {
 
     /// Labor not yet spent this turn. A citizen provides one each turn.
     pub fn labor_available(&self) -> u32 {
-        self.citizens().saturating_sub(self.labor_spent)
+        self.held
+            .iter()
+            .filter(|thing| thing.kind == Kind::Citizen && !thing.is(Trait::Exhausted))
+            .count() as u32
+    }
+
+    /// Labor already made and spent this turn, which is a citizen no longer ready.
+    pub fn labor_spent(&self) -> u32 {
+        self.citizens() - self.labor_available()
+    }
+
+    /// Spend a citizen's readiness, which is what `create labor` consumes.
+    ///
+    /// **`P-231`: labor is a kind, and `labor_spent: u32` was the model disagreeing with the
+    /// release.** The release's `create labor` takes a *citizen, ready* and gives back a
+    /// *citizen, exhausted* and a *labor* - so what was spent is a trait of the citizen, not
+    /// a counter beside it. Adding a kind added a field, which is what the rewrite removes.
+    ///
+    /// **The seam Sean approved:** `work` still creates and consumes the labor in one step,
+    /// so `commands/play.4x` does not change and `expected/play.4x` stays a check on this
+    /// rewrite rather than something regenerated with it. `P-232` is where the labor becomes
+    /// visible between the two halves, by a command or by a rule for when the world fires
+    /// one; either is a small change from here, because the kind already exists.
+    pub fn spend_labor(&mut self, amount: u32) {
+        let mut left = amount;
+        for thing in &mut self.held {
+            if left == 0 {
+                break;
+            }
+            if thing.kind == Kind::Citizen && !thing.is(Trait::Exhausted) {
+                thing.set(Trait::Exhausted, 1);
+                left -= 1;
+            }
+        }
     }
 
     /// Every node of one resource, with its position, in id order.
@@ -260,7 +292,12 @@ impl Territory {
 
     /// Makes everything ready again, which is what ending a turn does.
     pub fn make_ready(&mut self) {
-        self.labor_spent = 0;
+        // Every thing here becomes ready, whatever kind it is - which is `ready` in the
+        // release, a world recipe over `thing, exhausted`. Naming the kinds that can be
+        // exhausted would be a list to keep in step with the kinds.
+        for thing in &mut self.held {
+            thing.clear(Trait::Exhausted);
+        }
         for extractor in &mut self.extractors {
             extractor.exhausted = false;
         }
@@ -283,7 +320,6 @@ impl Territory {
         // one would be a list to keep in step with the kinds, which is the thing this shape
         // exists to stop.
         self.held.clear();
-        self.labor_spent = 0;
     }
 }
 
@@ -429,7 +465,7 @@ mod tests {
     fn ending_a_turn_makes_everything_ready_again() {
         let mut territory = with_nodes(&[(Resource::Food, 4)]);
         territory.set_count(Kind::Citizen, 2);
-        territory.labor_spent = 2;
+        territory.spend_labor(2);
         territory.extractors.push(Extractor {
             node: 0,
             exhausted: true,
