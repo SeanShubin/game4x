@@ -37,6 +37,10 @@ Add a file when a topic firms up. Add its row here first.
 1. **Present tense, normative.** "A missile has a range." Not "a missile could have."
 2. **One topic per file.** If a file grows its own table of contents, split it.
 3. **If it is not here, it is not decided.** Discussion is not decision.
+
+   A rule is decided here. **The game's data is decided in its data file**, reviewed by hand and
+   locked by the scenario test. Neither is decided in a discussion, in a note, or in a rendering
+   of either one.
 4. **Reasoning lives in [notes](../docs/notes/README.md).** State the rule here; link down
    for why. Keep this directory short enough to hold in your head.
 5. **Open questions go at the bottom of the file**, under that heading, never scattered.

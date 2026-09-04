@@ -73,11 +73,11 @@ specific rule.
 
 - Every kind of thing, and every recipe that turns some things into others, is data rather than
   code
-- **What the game is made of lives in a data file, not in code and not in markup.** Rust holds
-  the engine and the hand-written page holds the shell; neither holds a kind, a recipe, a cost,
-  a planet size or a surface. Nothing restates what a data file says; every other form of it is
-  derived, and a derived form is generated rather than written. **A scenario is a file too**, so
-  what a run exercises can be changed without changing the program.
+- **What the game is made of lives in a data file, not in code and not in a presentation
+  file.** Rust holds the engine and the hand-written page holds the shell; neither holds a kind,
+  a recipe, a cost, a planet size or a surface. Nothing states by hand what a data file says;
+  every other form of it is derived, and a derived form is generated rather than written. **A
+  scenario is a file too**, so what a run exercises can be changed without changing the program.
 - The data that runs the game lives in a data file. **Not a presentation file such as markdown or
   HTML, and not a programming language file such as Rust.** The format may be a standard one or one
   we invent. A data file may carry presentation data - commentary for a presentation layer to

@@ -105,6 +105,11 @@ stated in a form chosen for stating it, and rendered into a form chosen for read
 rendering is generated and never canonical**, so nothing is ever decided in it. HTML is the case
 that comes up; it is only a case.
 
+**Two kinds of fact are stated, and they do not share a format either.** A rule is stated in prose,
+in `spec/`. **The game's data is stated in a data file.** Markdown is a stating form for the first
+and a rendering for the second, so a table of game data in markdown is a rendering and never a
+source.
+
 **A generated file is written in the form the padder would leave it.** Generating the same data
 twice produces the same bytes, and `tools/pad-tables` finds nothing to change. **How a generator
 manages that is its own business**; what is required is that padding a generated file changes

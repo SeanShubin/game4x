@@ -9,9 +9,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-220** - Rule 7 tells you to put the game's numbers in markdown · `docs/notes/proposals.md`
-- **P-221** - *If it is not here, it is not decided* now has a second home · `docs/notes/proposals.md`
-- **P-222** - The older half of *The game is data* is weaker than the newer half · `docs/notes/proposals.md`
-- **P-223** - `CLAUDE.md` describes two kinds of format and there are three · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -26,9 +23,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (14)
+### To code (15)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
+- **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-28** - Runs of spaces in the prose of three generated files · `docs/notes/proposals.md`
 - **S-27** - A dump per turn, before Sean derives eight of them by hand · `docs/notes/proposals.md`
@@ -58,16 +56,16 @@ it exists to ask.
 - `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172
+- `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
-- `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
+- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
-- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md`, a new section - P-204, P-211

@@ -76,76 +76,6 @@ Traits, Units and structures, Recipes, Territory resources, Biomes and What boun
 renderings generated from the data file - which is what `P-218`'s third sentence already permits,
 and `S-29` and `S-23` already ask the code lane for.
 
-### P-221 - *If it is not here, it is not decided* now has a second home
-
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **shape** text -
-**into** `spec/README.md` -> Rules for this directory, after rule 3
-
-**Said three times and true of one thing where it used to be true of two.** `spec/README.md` line 9,
-rule 3, and the root `README.md` all say a thing is decided only if it is in `spec/`. **`P-218` puts
-the recipes in a data file and `P-219` says what decides them there** - reviewed by hand, locked by
-the scenario test. So as written, the specification says its own recipes are not decided.
-
-> A rule is decided here. **The game's data is decided in its data file**, reviewed by hand and
-> locked by the scenario test. Neither is decided in a discussion, in a note, or in a rendering of
-> either one.
-
-**Basis: the danger is which way the rule gets applied.** Read as written, it says data in a file is
-undecided, and **the obvious repair is to copy the data back into markdown** - which is the exact
-regression this is checking for. Naming the second home closes it, and the third sentence keeps what
-rule 3 was actually for.
-
-**The root `README.md` restates this line and is this lane's to update**, after the promotion rather
-than before, so the two never disagree.
-
-### P-222 - The older half of *The game is data* is weaker than the newer half
-
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **shape** instruction -
-**into** `spec/invariants.md` -> The game is data
-
-**Two bullets on one subject, and the weaker one is first.** `P-199`'s says *not in code and not in
-markup*; `P-218`'s says *not a presentation file such as markdown or HTML*. **The word `markup` is
-what let markdown sit outside this rule** - it is the single word this whole question turned on, and
-a reader who stops at the first bullet has the version that lost.
-
-**And *Nothing restates what a data file says* reads as absolute**, while `P-218` permits a
-replication in the presentation layer. They agree - **a generated replication is a derived form,
-which the same sentence permits** - but the agreement rests entirely on how one word is read.
-
-**Instruction, two edits, nothing else in the bullet touched:**
-
-- *not in code and not in markup* becomes *not in code and not in a presentation file*
-- *Nothing restates what a data file says* becomes *Nothing states by hand what a data file says*
-
-**Assertion**: the word `markup` appears nowhere in `spec/` - **measured 2026-09-04, it appears once,
-here**; and the bullet's other three sentences are character for character what they were, checked
-against the parent commit.
-
-### P-223 - `CLAUDE.md` describes two kinds of format and there are three
-
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **shape** text -
-**into** `CLAUDE.md` -> Perspectives, after the paragraph beginning *Specification and presentation*
-
-> Specification and presentation are different concerns and do not share a format. A fact is stated
-> in a form chosen for stating it, and rendered into a form chosen for reading it.
-
-**Two tiers, and markdown's tier is not named.** `spec/` is markdown and is a stating form, so a
-reader concludes markdown states - and a table of recipes in markdown passes this rule. **It is the
-sentence that would license writing the release's tables again**, having been promoted to prevent
-precisely that kind of mixing.
-
-> **Two kinds of fact are stated, and they do not share a format either.** A rule is stated in prose,
-> in `spec/`. **The game's data is stated in a data file.** Markdown is a stating form for the first
-> and a rendering for the second, so a table of game data in markdown is a rendering and never a
-> source.
-
-**Basis: this is the same rule one level down, and it was already written that way.** The paragraph
-ends *HTML is the case that comes up; it is only a case* - **so it already knows it is general**, and
-this names the case it did not have when it was written.
-
-**Filed rather than fixed as wording.** `CLAUDE.md` says wording and consistency inside its rules are
-this lane's to settle, and **this changes what the rule says**, which is not wording.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -209,6 +139,29 @@ neither table.
 passes over nothing, so **assert how many traits it examined** - two today. And a trait whose values
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
+
+### S-30 - The release's eight data tables have no data file to be generated from
+
+**to** code - **status** open - **raised** 2026-09-04 - **source** `P-218`, and `P-220` when it lands
+
+**`P-218` made these a replication and nothing generates them.** Territory resources, Kinds,
+Families, Traits, What bounds a kind, Units and structures, Recipes and Biomes in
+`releases/first-release.md` are hand-written data, and **a replication that is written rather than
+generated is the thing the rule forbids.**
+
+**`S-29` and `S-23` ask for the machinery and neither names these tables.** `S-29` is the scenario
+test's input and expected; `S-23` is `recipes.md`, a new view. **The release's own tables are a
+third consumer of the same data file** and would otherwise stay hand-written while everything
+around them moved.
+
+**`crates/game-console/tests/first_release.rs` is what holds them today**, by parsing the release -
+*read from the release rather than copied out of it, which is the only way the two stay honest about
+each other*. **That comment is correct about two copies and becomes wrong about one source**: when
+the data file exists, the release is generated from it and the parse is a currency check, not a
+reconciliation.
+
+**Not a decision and not urgent.** It is filed so the gap is visible while it is open, rather than
+discovered when somebody edits a table by hand and nothing objects.
 
 ### S-29 - Input and expected are data files; the dumps are neither
 
@@ -1557,6 +1510,9 @@ work the release exists to order.
 | P-217, the commands that are not recipes, and why they are listed                                               | `spec/console.md` -> Commands                                                                                                                | 2026-09-03 |
 | P-218, the data that runs the game lives in a data file                                                         | `spec/invariants.md` -> The game is data                                                                                                     | 2026-09-04 |
 | P-219, what the scenario test locks, and what locking means                                                     | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-04 |
+| P-221, a rule is decided in the spec and the game's data in its data file                                       | `spec/README.md` -> Rules for this directory, under rule 3                                                                                   | 2026-09-04 |
+| P-222, `markup` and `restates` replaced with what `P-218` says precisely                                        | `spec/invariants.md` -> The game is data                                                                                                     | 2026-09-04 |
+| P-223, two kinds of stated fact, and markdown's tier named                                                      | `CLAUDE.md` -> Perspectives                                                                                                                  | 2026-09-04 |
 
 ## Rejected
 
