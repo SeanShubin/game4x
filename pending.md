@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-218** - `P-199` already forbids the release's tables being the data, and nobody noticed · `docs/notes/proposals.md`
-- **P-219** - A dump is a record until someone has derived it · `docs/notes/proposals.md`
+- **P-218** - The data that runs the game lives in a data file · `docs/notes/proposals.md`
+- **P-219** - What the scenario test locks, and what locking means · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

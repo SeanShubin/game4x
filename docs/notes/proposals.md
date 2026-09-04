@@ -45,71 +45,62 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-218 - `P-199` already forbids the release's tables being the data, and nobody noticed
+### P-218 - The data that runs the game lives in a data file
 
 **to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
 **into** `spec/invariants.md` -> The game is data, extending the bullet `P-199` landed
 
-**You said data files should be in data formats. `P-199` says so already, in words this lane wrote
-and did not read carefully enough**: *what the game is made of lives in a data file, **not in code
-and not in markup***.
+**Rewritten in your words, which say more than the question asked.** You settled that *not in
+markup* covers markdown, and added three things the proposal did not have: the format is open, a
+data file may carry presentation data, and a replication is allowed but never canonical.
 
-**Markdown is markup.** The release's tables hold the kinds, the recipes and the twelve territories,
-and by the letter of the rule they may not.
+> The data that runs the game lives in a data file. **Not a presentation file such as markdown or
+> HTML, and not a programming language file such as Rust.** The format may be a standard one or one
+> we invent. A data file may carry presentation data - commentary for a presentation layer to
+> display. **The data may be replicated in the presentation layer, and no replication is
+> canonical.**
 
-> The data file is a file of commands. Nothing else is loaded, and a table in a document is a
-> rendering of what a command file says rather than a source for it.
+**Basis: the bullet already said it and this makes it unambiguous.** *Neither holds a kind, a
+recipe, a cost, a planet size or a surface* - and `releases/first-release.md` holds **all five.**
+*Nothing restates what a data file says; every other form of it is derived, and a derived form is
+generated rather than written* - and `commands/nodes.4x` opens with *taken from the table in
+`releases/first-release.md`*, which is a data file restating a document.
 
-**Basis: the duplication is measurable and one of the files admits it.** `commands/nodes.4x` opens
-with *taken from the table in `releases/first-release.md`* - **thirty-six facts written twice**, and
-`crates/game-console/tests/first_release.rs` parses the release to keep the copies honest, saying so
-in its own comment: *the only way the two stay honest about each other*.
+**The third sentence is the one that keeps the tables.** They may exist and they may be read; they
+stop being the source. **That is `catalog.md`'s arrangement applied to the release itself.**
 
-**The scenario is the only one of the three that is already right.** `commands/play.4x` exists once,
-in a data format, and no test parses a document to check it. **The world and the rules exist twice
-each**, and everything that also exists in markdown is duplicated while the thing that does not, is
-not.
+**And the second sentence is what makes a `.4x` file readable.** `commands/nodes.4x` already carries
+twelve lines of commentary explaining what `3 x 4` means and why `set resource` replaced `add node`.
+**Under this that commentary is not tolerated but intended**, and a presentation layer may display
+it.
 
-**What changes, and it is your review surface.** You approve tables today. Under this you approve a
-command file - `{recipe name:move {require qty:1 kind:place where:$from} ...}` - **and read the
-table, which becomes generated like `catalog.md`.** Nesting is fine for approving one recipe;
-scanning many is what a table is for, and you would still have one.
-
-**What does not change.** `releases/first-release.md` keeps Scope, The loop, Capabilities, Controls
-and Open questions - **the prose that is not data and is not parsed by anything.**
-
-**This lane is not confident the letter should win.** `P-199` was argued from `index.html`
-hardcoding five planet sizes, and **markup meant the page.** That the same word covers markdown is
-true and was not the intent. **You are the only one who can say whether the rule you approved means
-what it says or what it was for**, and both answers are defensible - the reason it is a proposal
-rather than a report is that a rule this lane wrote should not be widened by the lane that wrote it.
-
-### P-219 - A dump is a record until someone has derived it
+### P-219 - What the scenario test locks, and what locking means
 
 **to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
 **into** `docs/process.md` -> How I know the game is right
 
-> A dump of a scenario is a record of what the game did until I have derived it by hand, and an
-> expectation afterwards. The dump says which it is.
+**Rewritten in your words.** The proposal said a dump is a record until derived; **you said what the
+test is for**, which is the same distinction with the mechanism attached.
 
-**Basis: it is `built` and `vetted` again, one layer down.** A release capability is `built` when the
-code lane says it works and `vetted` when you have looked - **because the lane that made a thing
-cannot certify it.** A dump has the same two states and one name.
+> The scenario test reads the data files for its input, reads the data files for what is expected,
+> computes what actually happens, and compares. **The input and the expected are what I review by
+> hand for correctness.** Once I have confirmed them, the test locks them in place - **not so that
+> they cannot change, but so that my changing my mind can be told apart from something slipping in
+> by accident.**
 
-**Regenerating a dump and finding it unchanged proves the code agrees with itself.** That is worth
-having and it is not verification: **every figure in `state.md` was put there by the model whose
-correctness is the question.** The four artifacts and the derivation between them are what make one
-an expectation, and until you have done it, `turns.md` is a very detailed record of what happened
-rather than a statement of what should.
+**Basis: it names what the test is a guard against**, which nothing here has said. Every check in
+this repository asks whether two things agree. **This one asks whether a disagreement was
+intended**, and that is a different question - a rogue misunderstanding and a decision look identical
+in a diff unless somebody has said which they are.
 
-**It matters because the difference is invisible and the file is about to be used as a test.**
-`S-29` asks for the scenario's expected values to move out of Rust and into these files. **A number
-nobody has checked, sitting in a file called expected, is worse than the same number in a Rust
-assertion** - it looks like it was agreed.
+**It also settles what the expected values are and where they live.** They are data files, reviewed
+by hand, **not `assert_eq!` lines** - which is `S-29`, and this is the sentence that makes it
+required rather than tidier.
 
-**The smallest form is a line in the header**, the way each of these files already says *Generated.
-Do not edit.* **What it costs you is saying so when you finish**, which is the same act as saying
-`promote` or `vetted`.
+**And it is `built` and `vetted` a third time.** A capability is built when the code lane says so and
+vetted when you look; a proposal is filed when this lane writes it and promoted when you say so;
+**expected data is written when it is generated and locked when you have checked it.** Three places,
+one shape: **the thing that made it cannot certify it.**
 
 ## Addressed to other perspectives
 

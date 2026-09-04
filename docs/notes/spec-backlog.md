@@ -8,6 +8,25 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Settled 2026-09-04, what a data file is and what the scenario test locks
+
+*The data that actually runs the application, should be in data files. Not presentation files such
+as markdown or html. Not programming language files such as rust. The data files can be in a
+standard format or one we invent. The data files can have presentation data in them (such as
+commentary for the presentation files to display). The data files can be replicated in the
+presentation layer, but no replication is canonical.*
+
+*The first use case for the data files is the scenario test, which reads the data files for "input",
+reads the data files for "expected", computes the "actual" and compares them. The data files "input"
+and "expected" are what the user will review manually for correctness. Once those are confirmed by
+the user, they are locked in place by the scenario test who automatically computes "actual". Locked
+in place doesn't mean the user can't change his mind later, it just means that the user changing his
+mind can be distinguished from something accidentally slipping in. The scenario test is there as a
+guard to ensure we can verify the user is ACTUALLY changing his mind, and there is not some rogue
+misunderstanding running amok.*
+
+`P-218` and `P-219`.
+
 ## Said 2026-09-03, on reading a test's data
 
 *When I look at the scenario test, I should be able to look directly at all the data files, input
