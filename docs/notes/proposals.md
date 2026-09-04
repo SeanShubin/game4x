@@ -102,6 +102,41 @@ rather than 35** - the scenario you are about to derive, half as long again.
 through `S-21`, which is what lets `expected/play.4x` stay a check on the rewrite rather than being
 regenerated along with it.
 
+**What `../game-4x` did, read on 2026-09-04 because you asked.**
+[The note](game-4x-on-things-and-readiness.md) has the detail; three things bear on this.
+
+**Its shape is `P-134`, already built.** `game/.../Land.kt` is `List<Pair<Thing, Int>>` - things
+with quantities - and `Thing.kt` is `List<Pair<String, Attribute>>`, a bag of named attributes.
+**There is no field per kind because there are no fields.** So the old project is evidence for A's
+shape argument and not merely for A.
+
+**Readiness was an attribute on the thing that does the work, and you have already agreed.**
+`Things.createCitizen(activated = false)`, `createGatherer(resource, activated)`,
+`createNode(resource, density, activated)`. In `ApiSetupTest` a land holds **four unactivated food
+nodes and two activated ones as two separate rows with their own counts** - the readiness attribute
+is what makes them different things. **The release already says this**: `readiness` is a **stored**
+trait, and `create labor` already consumes a ready citizen and produces an exhausted one.
+
+**It had no `labor`.** Its kinds were colonizer, node, gatherer, citizen and supply. **But it also
+never had five recipes that cost labor**, so it does not settle whether labor should exist - it
+settles that if it exists it is a thing with a count, like everything else.
+
+**Which surfaces a third option, and an argument for A that neither lane made.**
+
+**Choice C - no `labor`, and readiness carries it alone.** Every recipe that costs labor consumes a
+ready citizen and produces an exhausted one directly, the way `create labor` already does. **This is
+the old project's answer.**
+
+**Measured against the release as it stands: `labor` is consumed by five recipes** - the three
+extractors, the yard, and `work` - and produced by one. **So labor is the currency that factors a
+repeated pair of rows out of five recipes.** Under C, `create labor`'s three rows go and each of the
+five gains a row: **59 recipe rows becomes 61, seventeen recipes becomes sixteen, fourteen kinds
+becomes thirteen** - and the citizen's exhaustion is stated five times instead of once.
+
+**That is the strongest argument for A and neither lane found it**: labor is not a bookkeeping
+counter, it is the thing that lets *spending a citizen* be written once and referred to five times.
+B keeps a field the invariant forbids; **C keeps the invariant and duplicates the rule.**
+
 **Timing: the code lane is rewriting these shapes right now.** It is doing citizens, garrison,
 extractors and yards and **leaving `labor_spent` alone until you answer**, because building either
 answer first means building one of them twice. If you pick B it wants the record to show that B

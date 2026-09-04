@@ -23,7 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-27** - `35ca2ea` S-27: a dump per turn, so a wrong number names its turn · still open in `docs/notes/proposals.md`
 - **S-25** - `66cb193` S-25: one table naming every kind, and my first check for it was decoration · still open in `docs/notes/proposals.md`
 - **S-23** - `3bbf573` S-23: a view of the recipes, which nothing had · still open in `docs/notes/proposals.md`
-- **S-21** - `53547fc` S-21, first shape: a store is things in a place · still open in `docs/notes/proposals.md`
+- **S-21** - `175078c` S-21: citizens and yards are things, and the expectation caught two bugs · still open in `docs/notes/proposals.md`
 - **S-14** - `b394c81` S-14: the entity view and the HTML, from the same rows · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
