@@ -187,6 +187,26 @@ convenient**, and you should decide that deliberately rather than inherit it.
 implicitly when labor is needed. **Under this it becomes a command a player types**, which is either
 the right amount of control or a click nobody wants.
 
+### P-215 - A failure inside a nested command needs a position inside it
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `spec/console.md` -> Commands, beside *a script stops at the first line that fails*
+
+**`P-212` makes a command able to span many lines**, and *stops at the first line that fails* stops
+being enough to find anything.
+
+> A rejection names the line and column it was found at, and the command it was found inside.
+
+**Basis: the information exists and nothing uses it.** `command-language` has
+`every_word_knows_where_it_started` - every token already carries where it began - and no failure
+reports it. **A rules file of several hundred lines whose error says only *line 1* is a puzzle**,
+because line 1 is where the command opened.
+
+**Naming the enclosing command is the half that is easy to miss.** A position alone tells you where
+the parser stopped; **the command tells you what it was trying to read**, which is usually further
+back than where it gave up, and is what `spec/console.md` already promises when it says a rejection
+says *what was expected*.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -306,6 +326,10 @@ is wrong the same way everywhere**: four backends would have agreed that a terri
 citizens while the model let it hold twelve, had all four read the same constant. **A pencil would
 not have.**
 
+**Decided 2026-09-03: three files, not one.** Rules, world and scenario, run in sequence.
+`run <file>` makes them one history, so composition costs nothing, and **the rules can be
+rendered without running a game** - which is what keeps the first two artifacts context-free.
+
 **One consequence worth having before it is discovered the hard way.** The model already derives the
 state from the commands - that is what replay is. **So the machine can do this and the question is
 only whether the documents let a person do it.** Where the answer is no, the missing piece is a fact
@@ -343,6 +367,12 @@ seen not to answer it.**
 **So: one new view, `recipes.md`, context-free**, beside `catalog.md`. Every recipe appears,
 asserted by count - seventeen - because a generator that skipped one would produce a file that looks
 complete.
+
+**Decided 2026-09-03: `catalog.md` keeps its *In recipes* join.** Separation is about
+context-free against context-specific, not about the two context-free views being disjoint.
+**That join is what found `orbit` unreachable**, and no comparison between two tables could
+have. `recipes.md` carries the same join from the other side, and a check can hold them to
+agreeing.
 
 **`docs/recipes/README.md` is this lane's to retire and it is not retired yet.** It is the only
 place the before-and-after exists, and deleting it before the turn-by-turn dump replaces it would

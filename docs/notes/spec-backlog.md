@@ -8,6 +8,16 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-03, the remaining three
+
+- **Three files**, not one: rules, world, scenario - `S-24`
+- **`catalog.md` keeps its recipe join** - `S-23`
+- **A failure names line, column and the enclosing command** - `P-215`
+
+**And on whether reports share the notation:** *I like the tables, but I also like extra
+expressiveness in a single cell of a table.* Brainstormed in
+[expressive cells](expressive-cells.md).
+
 ## Said 2026-09-03, on the tree and the commands
 
 *It also occurs to me that I have been moving towards the everything-is-a-tree concept, does this
