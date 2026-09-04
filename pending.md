@@ -8,11 +8,11 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-232** - Choice A leaves `create labor` a player recipe with no command · `docs/notes/proposals.md`
 - **P-233** - Readiness becomes a boolean, and its name collides with a recipe's · `docs/notes/proposals.md`
 - **P-234** - One `extractor` kind with a resource trait, in place of three kinds · `docs/notes/proposals.md`
 - **P-235** - A trait may be a boolean now and a quantity later · `docs/notes/proposals.md`
 - **P-236** - The `asks` field is in use and nothing declares it · `docs/notes/proposals.md`
+- **P-237** - Merging your process note into `docs/process.md` left three collisions · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -32,9 +32,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (18)
+### To code (19)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
+- **S-36** - `create labor` gets a command, and `commands/play.4x` grows by 18 lines · `docs/notes/proposals.md`
 - **S-35** - `expected/play.4x` says it was reviewed by hand and it has not been · `docs/notes/proposals.md`
 - **S-33** - The generated set is found by a marker, and a marker is content that can be quoted · `docs/notes/proposals.md`
 - **S-32** - The comparison is three-way, and `extra` is the half we do not have · `docs/notes/proposals.md`

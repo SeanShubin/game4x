@@ -45,50 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-232 - Choice A leaves `create labor` a player recipe with no command
-
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **asks** a decision -
-**into** `releases/first-release.md` -> Recipes, one cell, or `commands/play.4x`, depending
-
-**Filed before `P-231` is closed, because choosing A settled two of its three contradictions and not
-the third.** The release says labor is a kind: true, and now the model will agree. The model said
-labor was a counter: wrong, and it is being fixed. **`P-214` said there is one command for each
-recipe the player may fire, and `create labor` still has none.**
-
-**The seam does not remove it, it postpones it.** `work` creating and consuming labor in one step
-keeps `commands/play.4x` byte-identical through the rewrite, which is what makes `expected/play.4x` a
-check on the rewrite rather than something regenerated with it. **That is worth having and it is not
-an answer.**
-
-**Choice 1 - `create labor` becomes a world recipe.** Its **Auto** cell changes from `player` to
-`world`, and it needs no command because the world's recipes are not offered. **The cost is that
-nothing says when a world recipe fires mid-turn.** `spec/turn.md` gives the ending order - `upkeep`,
-`grow`, `perish`, `spoil`, `age`, `ready` - and `create labor` cannot wait for the end, because the
-labor is spent during producing. **So this needs a second rule you do not have.**
-
-**Choice 2 - `create labor` keeps a command.** `P-214` holds as written, and `commands/play.4x` gains
-one `create labor` before each of its 18 `work` commands: **35 commands becomes 53.** The scenario
-you derive by hand gets half as long again, and every step of it is a recipe you can name.
-
-**You have since answered this without meaning to, and it is the strongest thing in the item.** In
-the trace you wrote by hand on 2026-09-04:
-
-    Apply recipe
-    {citizen ready:true} -> ({citizen ready:false}, labor)
-
-**You applied `create labor` as a step of its own, named, with a state before it and a state after.**
-That is choice 2, written out. Under choice 1 that middle block of your trace has no line that
-produced it: the citizen goes from ready to not ready and the labor appears, and nothing in the
-command list says when.
-
-**This lane recommends 2, and the reason is your own closure test.** *The first three artifacts are
-enough to derive the fourth by hand.* **Under choice 1 they are not**: a reader with the definitions
-and the commands cannot know that a citizen was spent, because nothing in the command list says so
-and no rule says when the world would have done it. **Under choice 2 every state change has a line.**
-
-**The 18 extra lines are the cost of the closure test being true**, and they are lines you can check
-rather than lines you have to trust.
-
 ### P-233 - Readiness becomes a boolean, and its name collides with a recipe's
 
 **to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **asks** a decision -
@@ -195,6 +151,39 @@ field declared, that becomes two counts in a generated file.**
 them**, because they are conventions this lane invented for its own filing and nothing outside reads
 them. `asks` is different only because a tool is meant to.
 
+### P-237 - Merging your process note into `docs/process.md` left three collisions
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **asks** a decision
+- **into** `docs/process.md`, three places
+
+**The merge is done and nothing was lost - 74 lines added, none removed.** Three pairs of lines now
+sit in the same document saying different things. **Both halves of each are yours**, which is why
+this asks rather than picks.
+
+**1. Who writes a proposal.** Your note says every lane *may write proposals for each other*. The
+document says *the specification instance is the only one that writes a proposal*, and gives the
+reason: **one author and one length is what makes your queue reviewable.** These reconcile if
+*proposal* means two things - an item addressed to another lane, and the numbered thing you read -
+but as written they contradict. **Which word do you want for which?**
+
+**2. Whether `pending.md` is one of the things you read.** Your note says you generally read nothing
+but *the proposals, the specification, and the scenario tests*. The document says `pending.md` **is
+where you start**. `pending.md` is generated at every commit and a good deal is built on it being
+your first stop. **Did it drop out deliberately, or is the note listing what you read from each
+lane and not the index?**
+
+**3. Who owns production support.** Your note says *pipeline, automation and tooling are not
+production code, they are production support* - which says what they are, not who writes them. The
+document's *Who writes what* gives `tools/`, `scripts/`, `hooks/` and CI to the **coding instance**.
+`CLAUDE.md` says production support **belongs to no lane exclusively**, and that whoever needs a
+check wired adds it. **So the document and `CLAUDE.md` already disagreed** and your note settles the
+category without settling the ownership.
+
+**This lane's reading of each, offered and not applied**: on 1, that your note means outbox items
+and the document means the queue; on 2, that the note lists what you read *from each lane* and
+`pending.md` is not from a lane; on 3, that `CLAUDE.md` is right and the document's line is the stale
+one. **All three are guesses about your intent and none is safe to write.**
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -258,6 +247,28 @@ neither table.
 passes over nothing, so **assert how many traits it examined** - two today. And a trait whose values
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
+
+### S-36 - `create labor` gets a command, and `commands/play.4x` grows by 18 lines
+
+**to** code - **status** open - **raised** 2026-09-04 - **source** Sean deciding `P-232`, choice 2
+
+**He chose 2. `P-214` holds as written and the release does not change**: `create labor` stays a
+player recipe, and it gets the command every player recipe has.
+
+**`commands/play.4x` gains one `create labor` before each of its 18 `work` commands - 35 becomes
+53.** Nothing else in the file changes, and no number in the release changes.
+
+**The seam ends here.** `work` stops creating labor implicitly; it consumes labor that a command
+before it produced. **A reader with the definitions and the commands can now account for every
+citizen that was spent**, which is the closure test and is why he chose this one.
+
+**Timing, and it is the whole of the risk.** Changing that file changes `expected/play.4x`, which
+changes what he vets. **He wants everything known landed before he vets**, so this goes in **before**
+he starts, not after - and ideally in the same run as `S-21`, so the dump moves once rather than
+twice.
+
+**Assert the count.** 18 `create labor` lines added, one before each `work`, and 53 commands after -
+**a partial application would otherwise be a smaller number rather than a failure.**
 
 ### S-35 - `expected/play.4x` says it was reviewed by hand and it has not been
 
@@ -1771,6 +1782,7 @@ work the release exists to order.
 | P-229, a proposal says whether it wants approval or a decision, and the quotation is the offer                  | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-04 |
 | P-230, an instruction may carry no quotation, and carries its check instead                                     | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-04 |
 | P-231, `labor` is a kind - Sean chose A, 2026-09-04                                                             | no text landed: the release already said it and the model is what changes. `S-21` builds it, `P-232` carries the question it left            | 2026-09-04 |
+| P-232, `create labor` keeps a command - Sean chose 2, 2026-09-04                                                | no text landed: `P-214` holds as written and the release is unchanged. `S-36` adds the 18 commands                                           | 2026-09-04 |
 
 ## Rejected
 

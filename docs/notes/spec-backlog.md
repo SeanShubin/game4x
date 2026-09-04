@@ -8,6 +8,16 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Merged 2026-09-04, `temporary-notes/process.md` into `docs/process.md`
+
+At his request. **74 lines added and none removed** - three new sections, *What I read, and what I
+do*, *What verification requires* and *All lanes*, plus additions to *Specification Instance*,
+*Coding instance*, *Research instances*, *Quality instance* and *Claude bookkeeping*. Three
+collisions came out of it and are `P-237`.
+
+*Regarding P-232, I agree with choice 2* - `create labor` keeps a command. No text landed; `S-36`
+adds the 18 lines to `commands/play.4x`.
+
 ## Said 2026-09-04, four answers on a worked trace
 
 He wrote the `create labor` / `work` trace out by hand and answered four divergences from what is
