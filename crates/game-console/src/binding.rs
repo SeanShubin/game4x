@@ -170,6 +170,10 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
             kind: unit("unit")?,
             territory: territory("territory")?,
         }),
+        form::CREATE_LABOR => Meaning::Change(Transition::CreateLabor {
+            count: utterance.number("count")? as u32,
+            territory: territory("territory")?,
+        }),
         form::WORK => Meaning::Change(Transition::Work {
             count: utterance.number("count")? as u32,
             structure: structure("structure")?,
@@ -214,6 +218,7 @@ pub fn handled() -> Vec<&'static str> {
         form::MOVE,
         form::BUILD,
         form::PRODUCE,
+        form::CREATE_LABOR,
         form::WORK,
         form::END_TURN,
         form::SHOW_TERRITORY,

@@ -318,3 +318,78 @@ fn every_turn_of_the_scenario_is_dumped() {
         );
     }
 }
+
+/// Every command that consumes labor is preceded by one that makes it.
+///
+/// **`P-232`, choice 2, and the count is what makes a partial application fail.** `work` and
+/// `build` used to make their own labor; now `create labor` does, so a scenario that spends
+/// labor without saying where it came from would be refused at run time - but *some* of them
+/// missing would only make the scenario shorter, and a shorter scenario still passes.
+///
+/// **The closure test is what this guards.** `docs/process.md` asks that the definitions and
+/// the commands are enough to derive the dump by hand. A `work` with no `create labor` in
+/// front of it is a citizen spent with nothing in the command list saying so.
+#[test]
+fn every_labor_consumer_is_preceded_by_a_create_labor() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let mut checked = 0usize;
+
+    for name in ["play", "spread"] {
+        let text = std::fs::read_to_string(root.join(format!("commands/{name}.4x")))
+            .unwrap_or_else(|why| panic!("commands/{name}.4x: {why}"));
+        let lines: Vec<&str> = text
+            .lines()
+            .map(str::trim)
+            .filter(|line| !line.is_empty() && !line.starts_with('#'))
+            .collect();
+
+        let mut consumers = 0usize;
+        for (at, line) in lines.iter().enumerate() {
+            let wants = line.starts_with("work ") || line.starts_with("build ");
+            if !wants {
+                continue;
+            }
+            consumers += 1;
+            checked += 1;
+            let before = at.checked_sub(1).and_then(|n| lines.get(n)).copied();
+            let made = before.is_some_and(|line| line.starts_with("create labor "));
+            assert!(
+                made,
+                "commands/{name}.4x line {}: `{line}` spends labor and the command before it \
+                 is {before:?}, which does not make any",
+                at + 1
+            );
+
+            // And it makes as much as the consumer spends: `work 3` needs three.
+            let wanted: u32 = if line.starts_with("work ") {
+                line.split_whitespace()
+                    .nth(1)
+                    .unwrap_or("0")
+                    .parse()
+                    .unwrap_or(0)
+            } else {
+                1
+            };
+            let made: u32 = before
+                .and_then(|l| l.split_whitespace().nth(2))
+                .unwrap_or("0")
+                .parse()
+                .unwrap_or(0);
+            assert_eq!(
+                made,
+                wanted,
+                "commands/{name}.4x line {}: `{line}` spends {wanted} and the line before \
+                 makes {made}",
+                at + 1
+            );
+        }
+        assert!(consumers > 0, "commands/{name}.4x spends no labor at all");
+    }
+
+    // Over every case, and how many there were: a scenario that stopped spending labor
+    // would satisfy every assertion above by having nothing to check.
+    assert_eq!(
+        checked, 38,
+        "twenty-five labor consumers in play.4x and thirteen in spread.4x; found {checked}"
+    );
+}

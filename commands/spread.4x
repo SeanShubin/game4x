@@ -12,9 +12,13 @@
 
 # Turn 10. Territory 1 is complete and pays for itself. Territory 2 has one farm at density
 # six, so its single citizen becomes two.
+create labor 3 1
 work 3 extractor 1 food
+create labor 3 1
 work 3 extractor 1 metal
+create labor 3 1
 work 3 extractor 1 energy
+create labor 1 2
 work 1 extractor 2 food
 end turn
 
@@ -22,9 +26,13 @@ end turn
 # on yet - a second farm needs a metal that territory 2 cannot make, having no mine and no
 # way to build one until it has metal. That is the same bootstrap the landing site was
 # spared by arriving with three extractors, and a pioneer does not carry them.
+create labor 3 1
 work 3 extractor 1 food
+create labor 3 1
 work 3 extractor 1 metal
+create labor 3 1
 work 3 extractor 1 energy
+create labor 1 2
 work 1 extractor 2 food
 
 # The landing site can afford another pioneer every turn: two metal and six energy against
@@ -33,10 +41,15 @@ produce pioneer 1
 end turn
 
 # Turn 12. The second pioneer crosses to territory 3.
+create labor 3 1
 work 3 extractor 1 food
+create labor 3 1
 work 3 extractor 1 metal
+create labor 3 1
 work 3 extractor 1 energy
+create labor 1 2
 work 1 extractor 2 food
 move pioneer 3
+create labor 1 3
 work 1 extractor 3 food
 end turn

@@ -1223,7 +1223,18 @@ Only prose.
         let proposals: Vec<Item> = parsed
             .into_iter()
             .filter(|item| item.id.starts_with("P-") && item.is_outstanding())
-            .filter(|item| !item.body.contains("**asks**"))
+            // **Two kinds of proposal offer no text, and neither is malformed.** One asks a
+            // decision - `P-229`'s split, marked `**asks**` - and no wording can be right
+            // until Sean chooses. The other is `shape instruction`: it describes a change to
+            // make in several places, nothing lands verbatim, and it carries the assertion
+            // that proves it was applied instead.
+            //
+            // `tools/outbox/tests/promotions.rs` learned the second of these days ago and
+            // this check had not. The same rule, in two places, out of step - which is what
+            // one place asking two questions looks like from the inside.
+            .filter(|item| {
+                !item.body.contains("**asks**") && !item.body.contains("**shape** instruction")
+            })
             .collect();
 
         for proposal in &proposals {

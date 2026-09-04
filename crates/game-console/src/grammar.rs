@@ -23,6 +23,7 @@ pub mod form {
     pub const MOVE: &str = "move";
     pub const BUILD: &str = "build";
     pub const PRODUCE: &str = "produce";
+    pub const CREATE_LABOR: &str = "create labor";
     pub const WORK: &str = "work";
     pub const END_TURN: &str = "end-turn";
 
@@ -144,6 +145,16 @@ pub fn grammar() -> Grammar {
                 Term::required("territory", Kind::Number),
             ],
             "produce a unit at a structure that allows it",
+        ),
+        Form::new(
+            form::CREATE_LABOR,
+            vec![
+                Term::Keyword("create"),
+                Term::Keyword("labor"),
+                Term::required("count", Kind::Number),
+                Term::required("territory", Kind::Number),
+            ],
+            "turn that many ready citizens into that much labor",
         ),
         Form::new(
             form::WORK,

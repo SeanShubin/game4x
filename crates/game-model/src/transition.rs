@@ -86,6 +86,20 @@ pub enum Transition {
         territory: TerritoryId,
     },
     /// Spend that much labor at a structure this turn.
+    /// `create labor <count> <territory>`.
+    ///
+    /// **`P-232`, choice 2.** The release's `create labor` takes a *citizen, ready* and
+    /// gives back a *citizen, exhausted* and a *labor*, and `P-214` says every player recipe
+    /// has a command. `work` used to do both halves in one step - Sean's seam through
+    /// `S-21` - and this is where they separate.
+    ///
+    /// **The closure test is why he chose it**: with the definitions and the commands, a
+    /// reader can account for every citizen spent. Under a world recipe nothing in the
+    /// command list would say one was.
+    CreateLabor {
+        count: u32,
+        territory: TerritoryId,
+    },
     Work {
         count: u32,
         structure: StructureKind,

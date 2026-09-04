@@ -171,6 +171,9 @@ impl Game {
                 resource,
             } => next.build(*structure, *territory, *resource)?,
             Transition::Produce { kind, territory } => next.produce(*kind, *territory)?,
+            Transition::CreateLabor { count, territory } => {
+                next.create_labor(*count, *territory)?
+            }
             Transition::Work {
                 count,
                 structure,
@@ -656,16 +659,47 @@ impl Game {
         Ok(())
     }
 
-    fn spend_labor(&mut self, territory: TerritoryId, amount: u32) -> Result<(), Rejection> {
-        let available = self.territory(territory)?.labor_available();
-        if available < amount {
+    /// `create labor`: turn ready citizens into labor.
+    ///
+    /// **`P-232`, choice 2.** The release's recipe consumes a *citizen, ready* and produces
+    /// a *citizen, exhausted* and a *labor*. That is exactly this, and until now `work` and
+    /// `build` did it implicitly - which is why nothing in a command list said a citizen had
+    /// been spent, and why the definitions and the commands were not enough to derive the
+    /// dump by hand.
+    fn create_labor(&mut self, count: u32, territory: TerritoryId) -> Result<(), Rejection> {
+        let place = self.territory_mut(territory)?;
+        let ready = place.labor_available();
+        if ready < count {
             return Err(Rejection::NotEnoughLabor {
                 territory,
-                available,
-                needed: amount,
+                needed: count,
+                available: ready,
             });
         }
-        self.territory_mut(territory)?.spend_labor(amount);
+        place.spend_labor(count);
+        place.put(Kind::Labor, count);
+        Ok(())
+    }
+
+    fn spend_labor(&mut self, territory: TerritoryId, amount: u32) -> Result<(), Rejection> {
+        // **The labor was made by `create labor` and is here as things.** This used to ask
+        // whether there were ready citizens, which was the same question while `work` made
+        // its own labor. It is not the same question now: `create labor` exhausts the
+        // citizen and leaves the labor, so asking about citizens says *none* at exactly the
+        // moment the labor is sitting there.
+        //
+        // I left the old check above the new one and it fired first. Two checks for one
+        // thing, and the wrong one answered - which is `S-34`'s two expectations in
+        // miniature, inside a single function.
+        let place = self.territory_mut(territory)?;
+        let taken = place.remove(Kind::Labor, amount);
+        if taken < amount {
+            return Err(Rejection::NotEnoughLabor {
+                territory,
+                needed: amount,
+                available: taken,
+            });
+        }
         Ok(())
     }
 
@@ -957,6 +991,16 @@ mod tests {
 
     /// A landed ark, which is a founded territory: one garrison, one citizen, one food
     /// extractor. Landing is the whole of it - there is no second step.
+    /// Labor in hand, which `create labor` is now the only way to get.
+    ///
+    /// **`P-232` split what `work` used to do in one step.** A test that works an extractor
+    /// is testing the working, not the labor, so this says the uninteresting half once
+    /// rather than in nine places.
+    fn with_labor(game: Game, count: u32, territory: TerritoryId) -> Game {
+        game.after(&Transition::CreateLabor { count, territory })
+            .unwrap_or_else(|why| panic!("create labor {count} {}: {why}", territory.0))
+    }
+
     fn founded() -> Game {
         started()
             .after(&Transition::Land {
@@ -1147,7 +1191,7 @@ mod tests {
 
     #[test]
     fn working_an_extractor_produces_its_nodes_density() {
-        let game = founded()
+        let game = with_labor(founded(), 1, TerritoryId(1))
             .after(&Transition::Work {
                 count: 1,
                 structure: StructureKind::Extractor,
@@ -1163,7 +1207,7 @@ mod tests {
     /// Once per turn: an extractor already worked cannot be worked again.
     #[test]
     fn an_extractor_works_only_once_a_turn() {
-        let game = founded()
+        let game = with_labor(founded(), 1, TerritoryId(1))
             .after(&Transition::Work {
                 count: 1,
                 structure: StructureKind::Extractor,
@@ -1202,12 +1246,23 @@ mod tests {
         // One of each, because the ground has room for two more of each and a third build
         // of the same resource would be refused for capacity. That refusal would read as
         // this one passing while testing nothing.
-        let rejected = game
+        //
+        // **The refusal has moved, and that is `P-232` working.** It used to come from
+        // `build`, which made its own labor and found there were no citizens left. Now
+        // `create labor` refuses, because that is the command that spends a citizen - so
+        // the command list says where the population ran out instead of leaving a reader to
+        // infer it from a build that did not happen.
+        let spent = with_labor(game, 1, TerritoryId(1))
             .after(&build(Resource::Metal))
-            .unwrap()
+            .unwrap();
+        let spent = with_labor(spent, 1, TerritoryId(1))
             .after(&build(Resource::Food))
-            .unwrap()
-            .after(&build(Resource::Metal))
+            .unwrap();
+        let rejected = spent
+            .after(&Transition::CreateLabor {
+                count: 1,
+                territory: TerritoryId(1),
+            })
             .unwrap_err();
         assert!(
             matches!(rejected, Rejection::NotEnoughLabor { .. }),
@@ -1217,7 +1272,7 @@ mod tests {
 
     #[test]
     fn a_population_grows_on_the_food_it_gathered() {
-        let game = founded()
+        let game = with_labor(founded(), 1, TerritoryId(1))
             .after(&Transition::Work {
                 count: 1,
                 structure: StructureKind::Extractor,
@@ -1236,21 +1291,24 @@ mod tests {
     fn resources_left_at_the_end_of_a_turn_are_discarded() {
         let mut game = founded();
         game.territories[0].add(Resource::Metal, 5);
-        let game = game
+        let game = with_labor(game, 1, TerritoryId(1))
             .after(&Transition::Build {
                 structure: StructureKind::Extractor,
                 territory: TerritoryId(1),
                 resource: Some(Resource::Metal),
             })
             .unwrap();
-        let game = game
+        // The labor is made either way; whether the work succeeds is what this tolerates.
+        let ready = with_labor(game, 1, TerritoryId(1));
+        let game = ready
+            .clone()
             .after(&Transition::Work {
                 count: 1,
                 structure: StructureKind::Extractor,
                 territory: TerritoryId(1),
                 resource: Some(Resource::Metal),
             })
-            .unwrap_or(game);
+            .unwrap_or(ready);
         let after = game.after(&Transition::EndTurn).unwrap();
         assert_eq!(
             after
@@ -1283,7 +1341,7 @@ mod tests {
 
     #[test]
     fn a_yard_costs_metal_that_has_to_be_there() {
-        let rejected = founded()
+        let rejected = with_labor(founded(), 1, TerritoryId(1))
             .after(&Transition::Build {
                 structure: StructureKind::Yard,
                 territory: TerritoryId(1),
@@ -1305,7 +1363,7 @@ mod tests {
     /// founding unit becomes rather than something built.
     #[test]
     fn a_garrison_cannot_be_built() {
-        let rejected = founded()
+        let rejected = with_labor(founded(), 1, TerritoryId(1))
             .after(&Transition::Build {
                 structure: StructureKind::Garrison,
                 territory: TerritoryId(1),

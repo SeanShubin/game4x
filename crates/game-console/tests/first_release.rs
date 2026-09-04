@@ -676,10 +676,16 @@ fn every_way_the_state_can_change_is_a_command() {
             territory: TerritoryId(1),
             resource: Some(Resource::Food),
         },
+        Transition::CreateLabor {
+            count: 1,
+            territory: TerritoryId(1),
+        },
         Transition::EndTurn,
     ];
-    // Thirteen ways to change the state, and thirteen forms that produce one.
-    assert_eq!(changing.len(), 13);
+    // Fourteen ways to change the state, and fourteen forms that produce one. `P-232`
+    // added `create labor`: `P-214` says every player recipe has a command, and it was the
+    // one recipe with none.
+    assert_eq!(changing.len(), 14);
     let commands_that_change = grammar
         .forms()
         .iter()

@@ -17,42 +17,63 @@ land ark 1
 
 # Turn 1. Two citizens and two extractors, which is what a landing leaves. One holds the food,
 # one opens the mine.
+create labor 1 1
 work 1 extractor 1 food
+create labor 1 1
 work 1 extractor 1 metal
 end turn
 
 # Turn 2. Four citizens. The mine pays for two more farms, which is what turns four into twelve.
+create labor 1 1
 work 1 extractor 1 food
+create labor 1 1
 work 1 extractor 1 metal
+create labor 1 1
 build extractor 1 food
+create labor 1 1
 build extractor 1 food
 end turn
 
 # Turn 3. Three farms feed twelve, and the population is limited by hands rather than by food.
+create labor 3 1
 work 3 extractor 1 food
+create labor 1 1
 work 1 extractor 1 metal
 end turn
 
 # Turn 4. Eight citizens, four spare hands and four metal: two more mines and the first two wells.
+create labor 3 1
 work 3 extractor 1 food
+create labor 1 1
 work 1 extractor 1 metal
+create labor 1 1
 build extractor 1 metal
+create labor 1 1
 build extractor 1 metal
+create labor 1 1
 build extractor 1 energy
+create labor 1 1
 build extractor 1 energy
 end turn
 
 # Turn 5. Twelve, and the last well. From here the territory makes twelve of each a turn.
+create labor 3 1
 work 3 extractor 1 food
+create labor 3 1
 work 3 extractor 1 metal
+create labor 2 1
 work 2 extractor 1 energy
+create labor 1 1
 build extractor 1 energy
 end turn
 
 # Turn 6. Everything worked, and nothing left to build. A pioneer costs three metal, six energy
 # and two citizens.
+create labor 3 1
 work 3 extractor 1 food
+create labor 3 1
 work 3 extractor 1 metal
+create labor 3 1
 work 3 extractor 1 energy
 
 # 5. The landing site can send a pioneer out.
@@ -61,8 +82,11 @@ end turn
 
 # Turn 7. The farms are worked first - a population that gathers nothing this turn starves
 # at the end of it, whatever else is going on.
+create labor 3 1
 work 3 extractor 1 food
+create labor 3 1
 work 3 extractor 1 metal
+create labor 3 1
 work 3 extractor 1 energy
 
 # The pioneer crosses into a neighbouring territory. It is not held, so arriving there takes
@@ -71,5 +95,6 @@ work 3 extractor 1 energy
 move pioneer 2
 
 # The new ground feeds itself on the very turn it is claimed.
+create labor 1 2
 work 1 extractor 2 food
 end turn
