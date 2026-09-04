@@ -753,7 +753,7 @@ impl Game {
         // Unused resources are discarded, and everything becomes ready again. Nothing
         // transforms here: founding happens when a unit arrives, so by the time a turn
         // ends there is never a unit waiting to become something.
-        self.territories[id.index()].stores = [0; 3];
+        self.territories[id.index()].held.clear();
         self.territories[id.index()].make_ready();
     }
 }
@@ -1429,7 +1429,7 @@ mod tests {
         pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
         // Nothing was gathered, so there is no food to pay it with.
-        game.territories[0].stores = [0; 3];
+        game.territories[0].held.clear();
 
         let after = game.after(&Transition::EndTurn).unwrap();
         let pioneer = after.units.iter().find(|u| u.kind == UnitKind::Pioneer);

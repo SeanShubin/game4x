@@ -6,6 +6,7 @@
 
 use crate::Biome;
 use crate::identity::{Resource, TerritoryId};
+use crate::thing::{Kind, Thing};
 
 /// What one citizen is worth in violence. `releases/first-release.md`: Citizen, force 1.
 pub const CITIZEN_FORCE: u32 = 1;
@@ -71,7 +72,16 @@ pub struct Territory {
     pub labor_spent: u32,
     /// What is here now. `spec/logistics.md`: there is no general inventory, so this is
     /// per territory and nothing crosses a boundary.
-    pub stores: [u32; 3],
+    /// What is here now, as things rather than as three numbers.
+    ///
+    /// **`stores: [u32; 3]` could not carry a fourth resource** and, more to the point, made
+    /// a unit of food something other than a thing in a place - which is what
+    /// `spec/invariants.md` says the state is. Adding a resource added an array element;
+    /// now it adds nothing, because a resource is a kind and a kind is already general.
+    ///
+    /// Held as one `Thing` per unit. Twelve food is twelve things, because *how many of
+    /// each* is a fact the state is read for rather than a compression of it.
+    pub held: Vec<Thing>,
     pub garrison: Option<Garrison>,
     pub extractors: Vec<Extractor>,
     pub yards: u32,
@@ -91,7 +101,7 @@ impl Territory {
             founded: false,
             citizens: 0,
             labor_spent: 0,
-            stores: [0; 3],
+            held: Vec::new(),
             garrison: None,
             extractors: Vec::new(),
             yards: 0,
@@ -99,15 +109,29 @@ impl Territory {
     }
 
     pub fn store(&self, resource: Resource) -> u32 {
-        self.stores[resource.index()]
+        self.held
+            .iter()
+            .filter(|thing| thing.kind == Kind::from_resource(resource))
+            .count() as u32
     }
 
     pub fn add(&mut self, resource: Resource, amount: u32) {
-        self.stores[resource.index()] += amount;
+        for _ in 0..amount {
+            self.held.push(Thing::of(Kind::from_resource(resource)));
+        }
     }
 
     pub fn take(&mut self, resource: Resource, amount: u32) {
-        self.stores[resource.index()] = self.stores[resource.index()].saturating_sub(amount);
+        let kind = Kind::from_resource(resource);
+        let mut left = amount;
+        self.held.retain(|thing| {
+            if left > 0 && thing.kind == kind {
+                left -= 1;
+                false
+            } else {
+                true
+            }
+        });
     }
 
     /// Labor not yet spent this turn. A citizen provides one each turn.
@@ -195,7 +219,7 @@ impl Territory {
         self.garrison = None;
         self.extractors.clear();
         self.yards = 0;
-        self.stores = [0; 3];
+        self.held.clear();
         self.labor_spent = 0;
     }
 }
