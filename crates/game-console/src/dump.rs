@@ -469,7 +469,8 @@ fn escaped(text: &str) -> String {
 /// this is the same data in the form that is comfortable to read.
 ///
 /// **No game data in the markup.** `spec/invariants.md` again: *what the game is made of
-/// lives in a data file, not in code and not in markup.* Every table name, column name and
+/// lives in a data file, not in code and not in a presentation file.* Every table name,
+/// column name and
 /// value here comes from the state that was passed in. The only literals are structural -
 /// tags, and a stylesheet that mentions no kind, no resource and no size.
 pub fn html(sections: &[Section], title: &str) -> String {
@@ -567,4 +568,89 @@ pub fn entity_sections(game: &Game) -> Vec<Section> {
             rows: t.rows,
         })
         .collect()
+}
+
+/// The five generated dump files, as names and contents.
+///
+/// **One producer for the writer and the check.** `bin/dump-state` writes these and
+/// `tests/dumps_are_current.rs` compares them with what is committed - so the function that
+/// knows how to run the scenario and render it lives here rather than in either. A test that
+/// reproduced the scenario itself would be checking its own copy of the steps, which is the
+/// arrangement `S-29` exists to end.
+///
+/// `catalog.md` is not among them: `prototypes/kinds` generates it and already holds it to
+/// being current. Nor is `pending.md`, and that one is deliberate - `hooks/pre-commit`
+/// **refuses** to rewrite it while any outbox has unstaged changes, so that it never renders
+/// somebody's half-written finding. A test requiring it to be current would fail on a
+/// correct refusal, and the fix for that would be making the hook unconditional, which is
+/// the wrong direction.
+pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
+    let mut session = crate::Session::new();
+    for line in ["run setup", "start"] {
+        session
+            .run(line, commands)
+            .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
+    }
+
+    let scenario = commands
+        .fetch("play")
+        .unwrap_or_else(|| panic!("commands/play.4x is not there"));
+    let boundaries = scenario
+        .lines()
+        .filter(|line| line.trim() == "end turn")
+        .count();
+
+    let mut turns: Vec<String> = Vec::new();
+    for line in scenario.lines() {
+        let line = line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        session
+            .run(line, commands)
+            .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
+        if line == "end turn" {
+            turns.push(markdown(&session.game, ""));
+        }
+    }
+
+    // **The count, because a loop that stopped early produces a file that looks finished.**
+    assert_eq!(
+        turns.len(),
+        boundaries,
+        "commands/play.4x has {boundaries} `end turn` lines and {} states were taken",
+        turns.len()
+    );
+
+    let state = "State after `commands/play.4x`";
+    let things = "Entities after `commands/play.4x`";
+
+    let mut per_turn = String::from("# Every turn of `commands/play.4x`\n\n");
+    per_turn.push_str(&format!(
+        "**Generated. Do not edit.** One section per `end turn` in the scenario - {} of \
+         them.\nThe turn numbers are the scenario's own boundaries, so they line up with \
+         its comments.\n\n",
+        turns.len()
+    ));
+    for (at, text) in turns.iter().enumerate() {
+        per_turn.push_str(&format!("# Turn {}\n\n", at + 1));
+        match text.split_once("\n\n## ") {
+            Some((_, rest)) => per_turn.push_str(&format!("## {rest}")),
+            None => per_turn.push_str(text),
+        }
+    }
+
+    vec![
+        ("state.md", markdown(&session.game, state)),
+        (
+            "state.html",
+            html(&normalized_sections(&session.game), state),
+        ),
+        ("entities.md", entities_markdown(&session.game, things)),
+        (
+            "entities.html",
+            html(&entity_sections(&session.game), things),
+        ),
+        ("turns.md", per_turn),
+    ]
 }

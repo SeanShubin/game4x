@@ -170,7 +170,8 @@ fn the_entity_view_names_every_kind_and_admits_what_it_cannot_name() {
 /// The HTML is the same rows as the markdown, and carries no game data of its own.
 ///
 /// `spec/invariants.md`: *what the game is made of lives in a data file, not in code and not
-/// in markup.* So the assertion is not that the markup looks right - it is that every name
+/// in a presentation file.* So the assertion is not that the markup looks right - it is that
+/// every name
 /// in it came from the state, and that the two renderings do not disagree.
 #[test]
 fn the_html_carries_the_same_rows_and_names_nothing_itself() {

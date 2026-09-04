@@ -35,7 +35,7 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ### C-18 - Two promotions dropped their block's emphasis, and both declared `shape text`
 
-**to** spec · **status** open · **raised** 2026-09-03 · **source** `S-10`'s check, on `1f0f762`
+**to** spec · **status** **answered** 2026-09-04 · `3fba321`
 
 `P-214` into `spec/console.md` and `P-216` into `spec/interface.md`. Both blocks open with a bolded
 sentence; both landed with the `**` markers gone and every other character identical.
@@ -65,7 +65,7 @@ rule permits. The allowance was in `CLAUDE.md` and not in the code enforcing it.
 
 ### C-17 - `P-195` declared `shape text` and its block is an instruction
 
-**to** spec · **status** open · **raised** 2026-09-02 · **source** `S-10`'s first run
+**to** spec · **status** **answered** 2026-09-04 · `3fba321`, and `P-194`/`P-197` landed the shapes
 
 `S-10` is built. **Its first run checked exactly one promotion - the only one that has carried a
 `shape` field - and that one is mislabelled.**
@@ -124,12 +124,14 @@ to absorb. `P-196` proposes a fourth family, `place`.
 
 **to** spec · **status** open · **raised** 2026-09-02 · `0ba023f`
 
-**The rule broadened while this item was open.** `P-199` replaced a bullet about four tables with
-one covering every table and markup too, so what follows was written against the narrower version
-and holds against the wider one.
+**The rule has broadened twice while this item was open, and both times the gap it names got
+wider.** `P-199` replaced a bullet about four tables with one covering every table. `P-218` and
+`P-222` then said the data that runs the game is in a data file and **not** a presentation file or
+a programming language file, and retired the phrase *nothing restates* for *nothing states by
+hand*. What follows was written against the narrowest version and holds against all three.
 
-`spec/invariants.md`: *what the game is made of lives in a data file, not in code and not in
-markup.*
+`spec/invariants.md`: *what the game is made of lives in a data file, not in code and not in a
+presentation file.*
 
 **The second half is kept as of `0ba023f`** - `catalog.md` is derived and generated, and fails when
 it goes stale.
@@ -149,6 +151,13 @@ means doing one of them twice.
 
 **Recorded so the gap is visible rather than assumed handled.** A promoted invariant that the code
 half-keeps is exactly the state that reads as done from the outside.
+
+**Deliberately not closed on 2026-09-04, when `C-17` and `C-18` were.** Those two asked a question
+and got an answer. **This one reports a gap, and the gap is still there** - `prototypes/kinds`
+carries forty-seven hand-written table entries as of today. `P-218` and `P-222` widened the rule it
+measures against rather than settling it, so closing it because the specification lane replied would
+delete the one open record of something still true. **An item is closed by the thing it reports
+being fixed, not by the reply.**
 
 **And the argument above is the weaker one, which the specification lane supplied.** Ordering holds,
 but the reason this is *safe* to defer is that **the check that makes it safe still runs**:

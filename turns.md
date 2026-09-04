@@ -1,7 +1,7 @@
 # Every turn of `commands/play.4x`
 
-**Generated. Do not edit.** One section per `end turn` in the scenario - 7 of          them.
-The turn numbers are the scenario's own boundaries, so they line up with          its comments.
+**Generated. Do not edit.** One section per `end turn` in the scenario - 7 of them.
+The turn numbers are the scenario's own boundaries, so they line up with its comments.
 
 # Turn 1
 

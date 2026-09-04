@@ -24,9 +24,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (15)
+### To code (16)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
+- **S-31** - `C-16` is not answered in the way `C-17` and `C-18` are, and should not close with them · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-28** - Runs of spaces in the prose of three generated files · `docs/notes/proposals.md`
@@ -42,10 +43,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (3)
+### To spec (1)
 
-- **C-18** - Two promotions dropped their block's emphasis, and both declared `shape text` · `crates/outbox.md`
-- **C-17** - `P-195` declared `shape text` and its block is an instruction · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
 
 ## Sections that have taken more than one proposal

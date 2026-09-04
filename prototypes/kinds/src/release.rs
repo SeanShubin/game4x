@@ -1,6 +1,7 @@
 //! Reading the release's tables, which `spec/invariants.md` calls the data.
 //!
-//! > What the game is made of lives in a data file, not in code and not in markup.
+//! > What the game is made of lives in a data file, not in code and not in a presentation
+//! > file.
 //!
 //! > Nothing restates what a data file says; every other form of it is derived, and a
 //! > derived form is generated rather than written.
