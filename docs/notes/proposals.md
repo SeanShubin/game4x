@@ -45,63 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-218 - The data that runs the game lives in a data file
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `spec/invariants.md` -> The game is data, extending the bullet `P-199` landed
-
-**Rewritten in your words, which say more than the question asked.** You settled that *not in
-markup* covers markdown, and added three things the proposal did not have: the format is open, a
-data file may carry presentation data, and a replication is allowed but never canonical.
-
-> The data that runs the game lives in a data file. **Not a presentation file such as markdown or
-> HTML, and not a programming language file such as Rust.** The format may be a standard one or one
-> we invent. A data file may carry presentation data - commentary for a presentation layer to
-> display. **The data may be replicated in the presentation layer, and no replication is
-> canonical.**
-
-**Basis: the bullet already said it and this makes it unambiguous.** *Neither holds a kind, a
-recipe, a cost, a planet size or a surface* - and `releases/first-release.md` holds **all five.**
-*Nothing restates what a data file says; every other form of it is derived, and a derived form is
-generated rather than written* - and `commands/nodes.4x` opens with *taken from the table in
-`releases/first-release.md`*, which is a data file restating a document.
-
-**The third sentence is the one that keeps the tables.** They may exist and they may be read; they
-stop being the source. **That is `catalog.md`'s arrangement applied to the release itself.**
-
-**And the second sentence is what makes a `.4x` file readable.** `commands/nodes.4x` already carries
-twelve lines of commentary explaining what `3 x 4` means and why `set resource` replaced `add node`.
-**Under this that commentary is not tolerated but intended**, and a presentation layer may display
-it.
-
-### P-219 - What the scenario test locks, and what locking means
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `docs/process.md` -> How I know the game is right
-
-**Rewritten in your words.** The proposal said a dump is a record until derived; **you said what the
-test is for**, which is the same distinction with the mechanism attached.
-
-> The scenario test reads the data files for its input, reads the data files for what is expected,
-> computes what actually happens, and compares. **The input and the expected are what I review by
-> hand for correctness.** Once I have confirmed them, the test locks them in place - **not so that
-> they cannot change, but so that my changing my mind can be told apart from something slipping in
-> by accident.**
-
-**Basis: it names what the test is a guard against**, which nothing here has said. Every check in
-this repository asks whether two things agree. **This one asks whether a disagreement was
-intended**, and that is a different question - a rogue misunderstanding and a decision look identical
-in a diff unless somebody has said which they are.
-
-**It also settles what the expected values are and where they live.** They are data files, reviewed
-by hand, **not `assert_eq!` lines** - which is `S-29`, and this is the sentence that makes it
-required rather than tidier.
-
-**And it is `built` and `vetted` a third time.** A capability is built when the code lane says so and
-vetted when you look; a proposal is filed when this lane writes it and promoted when you say so;
-**expected data is written when it is generated and locked when you have checked it.** Three places,
-one shape: **the thing that made it cannot certify it.**
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -1500,6 +1443,8 @@ work the release exists to order.
 | P-215, a rejection names line, column and the enclosing command                                                 | `spec/console.md` -> Errors                                                                                                                  | 2026-09-03 |
 | P-216, normalize what you compare, nest what you do not                                                         | `spec/interface.md` -> Surfaces                                                                                                              | 2026-09-03 |
 | P-217, the commands that are not recipes, and why they are listed                                               | `spec/console.md` -> Commands                                                                                                                | 2026-09-03 |
+| P-218, the data that runs the game lives in a data file                                                         | `spec/invariants.md` -> The game is data                                                                                                     | 2026-09-04 |
+| P-219, what the scenario test locks, and what locking means                                                     | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-04 |
 
 ## Rejected
 

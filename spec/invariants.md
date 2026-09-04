@@ -78,6 +78,11 @@ specific rule.
   a planet size or a surface. Nothing restates what a data file says; every other form of it is
   derived, and a derived form is generated rather than written. **A scenario is a file too**, so
   what a run exercises can be changed without changing the program.
+- The data that runs the game lives in a data file. **Not a presentation file such as markdown or
+  HTML, and not a programming language file such as Rust.** The format may be a standard one or one
+  we invent. A data file may carry presentation data - commentary for a presentation layer to
+  display. **The data may be replicated in the presentation layer, and no replication is
+  canonical.**
 - A recipe expresses inputs and outputs. Where its inputs are available, it can be used to create
   its outputs. Some inputs are consumed and some are not, and an input says whether its quantity
   is a least or a most

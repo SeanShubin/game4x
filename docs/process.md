@@ -19,6 +19,12 @@ Four artifacts: the thing definitions, the recipe definitions, the commands a sc
 data dump of that scenario. The first three are enough to derive the fourth by hand. If I can do
 that, I can tell whether the game is working as I intend.
 
+The scenario test reads the data files for its input, reads the data files for what is expected,
+computes what actually happens, and compares. **The input and the expected are what I review by
+hand for correctness.** Once I have confirmed them, the test locks them in place - **not so that
+they cannot change, but so that my changing my mind can be told apart from something slipping in
+by accident.**
+
 ## Specification Instance
 - I have Claude generate proposals for changes to the specification
 - I work with claude to make sure I approve the exact text of the proposals
