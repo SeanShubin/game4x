@@ -109,6 +109,36 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
+### S-28 - Runs of spaces in the prose of three generated files
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** reading `turns.md`
+
+**Reported now because it has appeared a second time.** This lane saw it in `state.md` yesterday and
+did not file it, on the grounds that a file being actively written would fix itself. **It did not,
+and `turns.md` was born with it.**
+
+```
+**Generated. Do not edit.** One section per `end turn` in the scenario - 7 of          them.
+The turn numbers are the scenario's own boundaries, so they line up with          its comments.
+```
+
+```
+**Generated. Do not edit.** Every table and every column is named whether or not          anything
+is in it, because the names are what this is for.
+```
+
+**Ten spaces mid-sentence, in the header of every generated document Sean reads**, and always
+immediately before the word that would have started the next line. **It looks like a wrapper padding
+to a column width and then not breaking**, which would make it one function and one fix.
+
+**It is cosmetic and it is in the first two lines of the artifact this whole effort exists to
+produce**, which is the only reason it is worth an item at all.
+
+**And the check is the cheap half**: no line outside a table in a generated file contains a run of
+three or more spaces. **That check would have failed on `state.md` the day it was written**, and
+`tools/pad-tables/tests/generated_files_are_padded.rs` already reads exactly these files and already
+knows which lines are tables.
+
 ### S-27 - A dump per turn, before Sean derives eight of them by hand
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** Sean, about to verify the scenario

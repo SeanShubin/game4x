@@ -18,14 +18,16 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
+- **S-27** - `35ca2ea` S-27: a dump per turn, so a wrong number names its turn · still open in `docs/notes/proposals.md`
 - **S-25** - `66cb193` S-25: one table naming every kind, and my first check for it was decoration · still open in `docs/notes/proposals.md`
 - **S-14** - `b394c81` S-14: the entity view and the HTML, from the same rows · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
+- **S-28** - Runs of spaces in the prose of three generated files · `docs/notes/proposals.md`
 - **S-27** - A dump per turn, before Sean derives eight of them by hand · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **S-25** - `labor` is a kind with no table, and `create labor` is a recipe nothing fires · `docs/notes/proposals.md`
