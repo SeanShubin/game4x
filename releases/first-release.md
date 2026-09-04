@@ -98,7 +98,7 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 | ------------------- | ------------------------------- | -------------------------------------------------- | ------------------------------------------------ |
 | **kind**            | every thing                     | one of the kinds                                   | stored                                           |
 | **place**           | every thing                     | the thing it is in                                 | stored                                           |
-| **readiness**       | whatever readies                | ready, exhausted                                   | stored                                           |
+| **ready**           | whatever readies                | yes or no                                          | stored                                           |
 | **force**           | citizen, garrison, ark, pioneer | a number                                           | stored                                           |
 | **fuel**            | a unit                          | how much energy its tank holds                     | stored                                           |
 | **upkeep**          | a thing with upkeep             | food per turn                                      | stored                                           |
@@ -180,7 +180,7 @@ on surplus food or starves for want of it; what expires expires, and what was no
 is lost; and everything becomes ready again*.
 
 The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
-that order: `upkeep`, then `grow` and `perish`, then `spoil`, then `age`, then `ready`. The rows
+that order: `upkeep`, then `grow` and `perish`, then `spoil`, then `age`, then `refresh`. The rows
 below are in that order.
 
 | Recipe                     | Owner  | Role    | Qty                                  | Kind             | Traits                                        | Where                    |
@@ -196,7 +196,7 @@ below are in that order.
 |                            |        | require | 1                                    | place            | joined to `$from` by an edge the unit crosses | `$to`                    |
 |                            |        | consume | 1                                    | unit             | ready                                         | `$from`                  |
 |                            |        | consume | 1                                    | energy           |                                               | that unit                |
-|                            |        | produce | 1                                    | unit             | exhausted                                     | `$to`                    |
+|                            |        | produce | 1                                    | unit             | not ready                                     | `$to`                    |
 | **found by land**          | player | consume | 1                                    | pioneer          |                                               |                          |
 |                            |        | limit   | 0                                    | garrison         |                                               |                          |
 |                            |        | produce | 1                                    | garrison         |                                               |                          |
@@ -225,12 +225,12 @@ below are in that order.
 |                            |        | require | 1                                    | yard             |                                               |                          |
 |                            |        | produce | 1                                    | ark              |                                               |                          |
 | **create labor**           | player | consume | 1                                    | citizen          | ready                                         |                          |
-|                            |        | produce | 1                                    | citizen          | exhausted                                     |                          |
+|                            |        | produce | 1                                    | citizen          | not ready                                     |                          |
 |                            |        | produce | 1                                    | labor            |                                               |                          |
 | **work**                   | player | require | 1                                    | territory        |                                               | `$where`                 |
 |                            |        | consume | 1                                    | labor            |                                               |                          |
 |                            |        | consume | 1                                    | extractor        | ready                                         |                          |
-|                            |        | produce | 1                                    | extractor        | exhausted                                     |                          |
+|                            |        | produce | 1                                    | extractor        | not ready                                     |                          |
 |                            |        | produce | `$where`'s density for that resource | resource         |                                               |                          |
 | **upkeep**                 | world  | require | 1                                    | thing            | with upkeep                                   |                          |
 |                            |        | consume | the thing's upkeep                   | food             |                                               |                          |
@@ -242,7 +242,7 @@ below are in that order.
 | **spoil**                  | world  | consume | 1                                    | food             | keeps 0                                       |                          |
 | **age**                    | world  | consume | 1                                    | food             | keeps at least 1                              |                          |
 |                            |        | produce | 1                                    | food             | keeps one less                                |                          |
-| **ready**                  | world  | consume | 1                                    | thing            | exhausted                                     |                          |
+| **refresh**                | world  | consume | 1                                    | thing            | not ready                                     |                          |
 |                            |        | produce | 1                                    | thing            | ready                                         |                          |
 
 ## Biomes

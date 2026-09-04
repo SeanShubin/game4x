@@ -45,43 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-233 - `ready` becomes a boolean trait and the recipe becomes `refresh`
-
-**to** sean - **status** open - **raised** 2026-09-04 - **revised** 2026-09-04 - **kind** Sean's own
-- **shape** instruction - **asks** approval - **into** `releases/first-release.md` -> Traits and
-Recipes
-
-**You chose the boolean, then chose `refresh`. This is what that comes to, in six edits**, shown
-rather than applied because one of them is a choice you have not seen.
-
-**In the *Traits* table**, one row:
-
-- `| **readiness** | whatever readies | ready, exhausted | stored |`
-- becomes `| **ready** | whatever readies | yes or no | stored |`
-
-**In the *Recipes* table**, the recipe named `ready` becomes `refresh` - one cell - and the ending
-order sentence changes with it: *`upkeep`, then `grow` and `perish`, then `spoil`, then `age`, then
-`refresh`*.
-
-**And four rows whose *Traits* cell says `exhausted` say `not ready`** - `move`'s produced unit,
-`create labor`'s produced citizen, `work`'s produced extractor, and `refresh`'s consumed thing. The
-four that say `ready` are unchanged.
-
-**That last one is the choice you have not seen.** With the trait a boolean named `ready`, the word
-`exhausted` is no longer the name of anything - it would be the only word in the *Traits* column that
-does not correspond to a trait. **`not ready` follows from the boolean rather than being a separate
-decision**, but it is your vocabulary and this lane will not change it silently.
-
-**Assertion**: `readiness` and `exhausted` appear nowhere in `releases/first-release.md` - **measured
-2026-09-04: `readiness` once, `exhausted` four times**; `refresh` appears twice, in the recipe table
-and the ending order; the *Traits* table still has 17 rows and the recipe table still names 17
-recipes.
-
-**`spec/turn.md` is deliberately not touched.** It says *anything that can be used is ready or
-exhausted* and *everything becomes ready again* - prose about the concept, not a trait value or a
-recipe name, and still true as English. **Say if you want it to follow**; this lane will not edit
-your prose to match a table.
-
 ### P-234 - One `extractor` kind with a resource trait, in place of three kinds
 
 **to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **shape** instruction -
@@ -1789,6 +1752,7 @@ work the release exists to order.
 | P-238, why my surface is small, and that a proposal is a thing addressed to me                                  | `docs/process.md` -> What I read, and what I do                                                                                              | 2026-09-04 |
 | P-239, `pending.md` is for the instances; my two acts are creating and validating                               | `docs/process.md` -> Specification Instance, Outboxes and the index                                                                          | 2026-09-04 |
 | P-240, production support is the code lane's                                                                    | `docs/process.md` -> Who writes what, and `CLAUDE.md` -> Perspectives                                                                        | 2026-09-04 |
+| P-233, `ready` is a boolean trait and the world recipe is `refresh`                                             | `releases/first-release.md` -> Traits, Recipes                                                                                               | 2026-09-04 |
 
 ## Rejected
 

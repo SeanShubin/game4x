@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-233** - `ready` becomes a boolean trait and the recipe becomes `refresh` · `docs/notes/proposals.md`
 - **P-234** - One `extractor` kind with a resource trait, in place of three kinds · `docs/notes/proposals.md`
 - **P-235** - Directions: a place for what the design expects to move · `docs/notes/proposals.md`
 - **P-236** - The `asks` field is in use and nothing declares it · `docs/notes/proposals.md`
@@ -79,11 +78,11 @@ it exists to ask.
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228
+- `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md`, a new section - P-204, P-211
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
-- `releases/first-release.md` -> Traits, Recipes - P-154, P-189
 - `spec/console.md` - P-69, P-82
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
