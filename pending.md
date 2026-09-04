@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-229** - The queue does not say what it wants from you · `docs/notes/proposals.md`
+- **P-230** - `P-229` makes an instruction-shaped proposal malformed, and `P-222` was one · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -67,10 +67,10 @@ it exists to ask.
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223
+- `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
-- `CLAUDE.md` -> Promotion - P-194, P-195, P-197
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md`, a new section - P-204, P-211

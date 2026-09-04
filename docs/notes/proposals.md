@@ -45,45 +45,30 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-229 - The queue does not say what it wants from you
+### P-230 - `P-229` makes an instruction-shaped proposal malformed, and `P-222` was one
 
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **shape** text -
-**into** `CLAUDE.md` -> Promotion, replacing nothing and added after the paragraph naming text, rows
-and an instruction
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **shape** text - **into**
+`CLAUDE.md` -> Promotion, appended to the paragraph `P-229` landed
 
-**Two parts, and the second is only worth having because of the first.**
+**Filed immediately because promoting `P-229` made an existing practice non-compliant.** It says *a
+proposal asking for approval carries exactly one quotation*. **An instruction often carries none**,
+because its offer is a described change rather than words that land: `P-222` said
 
-> **A proposal asks one of two things, and says which.** It asks for **approval**, meaning the words
-> are final and reading them is the whole of the work; or it asks for **a decision**, meaning a
-> choice is open and no wording can be final until it is made. A proposal that asks for approval
-> **contains no choice Claude made quietly** - where there is one, it is a decision, and the
-> proposal states the choice rather than resolving it.
->
-> **The indented quotation is reserved for what is being offered.** Anything else a proposal quotes -
-> the words being replaced, an existing rule, a line of code - is shown some other way. So a
-> proposal asking for approval carries exactly one quotation, and a proposal asking for a decision
-> carries none until it becomes the other kind.
+- *not in code and not in markup* becomes *not in code and not in a presentation file*
+- *Nothing restates what a data file says* becomes *Nothing states by hand what a data file says*
 
-**Basis for the first part: `P-220` is the case, and it read as ready when it was not.** It arrived
-proposing *state the actual values in a data file* - and the choice between *numbers* and *data* was
-yours, not mine. You caught it. **Nothing in the queue was going to.** A proposal that presents a
-decision as settled wording is the expensive failure here, because the cost of missing it is a rule
-in `spec/` that says something you did not choose.
+and you approved it. **Under the rule as it now reads, that proposal is malformed**, and so is the
+next one of its kind.
 
-**Basis for the second part: it dissolves `P-226` rather than answering it.** That proposal asked
-which of several quotations lands, and offered *the last one*. **With the quotation reserved for the
-offer there is nothing to disambiguate** - the check reads the one quotation, and a proposal with two
-is malformed rather than ambiguous. The code lane's three unreadable promotions become checkable, and
-so does every future one, without a counting rule anybody has to remember.
+> **An instruction may carry no quotation at all**, because what it offers is a change described
+> rather than words that land. What it must carry instead is the check that says it was made.
 
-**What it costs.** `P-220` showed rule 7 as it stands and as it would read, and both were useful. It
-would now show the current wording in italics or indented as code, and only the offer as a
-quotation. **One formatting habit, in exchange for the offer never being in doubt.**
+**Basis: `CLAUDE.md` already says the second half**, three bullets above - *an instruction says how
+to tell it was carried out, and the promoting commit runs that check*. **This says that the check is
+what an instruction has in place of a quotation**, which is what makes *exactly one* not apply to it.
 
-**What it enables, if you want it.** `tools/outbox` reads these fields and writes `pending.md`, so
-**the split can be generated rather than maintained** - two lists, *ready to approve* and *needs a
-decision*, with counts. That is a small change to a tool and no change to how anything is written; it
-is mentioned because the field is what makes it possible, not because it has to happen now.
+**One line, and it is the difference between a rule that holds and a rule with a known exception
+nobody wrote down.**
 
 ## Addressed to other perspectives
 
@@ -1644,6 +1629,7 @@ work the release exists to order.
 | P-224, a release does not contain the game's data and links to the generated view                               | `releases/README.md` -> The rule that keeps them from contradicting each other                                                               | 2026-09-04 |
 | P-225, deleting the expected data is how I change my mind, and absence means acceptance                         | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-04 |
 | P-228, a test is for what a person cannot repeat, not for what happens once                                     | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-04 |
+| P-229, a proposal says whether it wants approval or a decision, and the quotation is the offer                  | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-04 |
 
 ## Rejected
 

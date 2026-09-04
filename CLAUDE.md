@@ -424,6 +424,17 @@ The proposal says which, so that a check can tell whether it was done.
   becomes that one*, so none of them appears in the file. An instruction says how to tell it was
   carried out, and the promoting commit runs that check
 
+**A proposal asks one of two things, and says which.** It asks for **approval**, meaning the words
+are final and reading them is the whole of the work; or it asks for **a decision**, meaning a choice
+is open and no wording can be final until it is made. A proposal that asks for approval **contains
+no choice Claude made quietly** - where there is one, it is a decision, and the proposal states the
+choice rather than resolving it.
+
+**The indented quotation is reserved for what is being offered.** Anything else a proposal quotes -
+the words being replaced, an existing rule, a line of code - is shown some other way. So a proposal
+asking for approval carries exactly one quotation, and a proposal asking for a decision carries none
+until it becomes the other kind.
+
 **To tell which, ask what the file will say afterwards.** If it will say these words, that is text.
 If it will say them as cells in a table, that is rows. If it will say something these words only
 described, that is an instruction.
