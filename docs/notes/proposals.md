@@ -187,39 +187,6 @@ field declared, that becomes two counts in a generated file.**
 them**, because they are conventions this lane invented for its own filing and nothing outside reads
 them. `asks` is different only because a tool is meant to.
 
-### P-237 - Merging your process note into `docs/process.md` left three collisions
-
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **asks** a decision
-- **into** `docs/process.md`, three places
-
-**The merge is done and nothing was lost - 74 lines added, none removed.** Three pairs of lines now
-sit in the same document saying different things. **Both halves of each are yours**, which is why
-this asks rather than picks.
-
-**1. Who writes a proposal.** Your note says every lane *may write proposals for each other*. The
-document says *the specification instance is the only one that writes a proposal*, and gives the
-reason: **one author and one length is what makes your queue reviewable.** These reconcile if
-*proposal* means two things - an item addressed to another lane, and the numbered thing you read -
-but as written they contradict. **Which word do you want for which?**
-
-**2. Whether `pending.md` is one of the things you read.** Your note says you generally read nothing
-but *the proposals, the specification, and the scenario tests*. The document says `pending.md` **is
-where you start**. `pending.md` is generated at every commit and a good deal is built on it being
-your first stop. **Did it drop out deliberately, or is the note listing what you read from each
-lane and not the index?**
-
-**3. Who owns production support.** Your note says *pipeline, automation and tooling are not
-production code, they are production support* - which says what they are, not who writes them. The
-document's *Who writes what* gives `tools/`, `scripts/`, `hooks/` and CI to the **coding instance**.
-`CLAUDE.md` says production support **belongs to no lane exclusively**, and that whoever needs a
-check wired adds it. **So the document and `CLAUDE.md` already disagreed** and your note settles the
-category without settling the ownership.
-
-**This lane's reading of each, offered and not applied**: on 1, that your note means outbox items
-and the document means the queue; on 2, that the note lists what you read *from each lane* and
-`pending.md` is not from a lane; on 3, that `CLAUDE.md` is right and the document's line is the stale
-one. **All three are guesses about your intent and none is safe to write.**
-
 ### P-238 - Why my surface is small, and what a proposal is
 
 **to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **shape** text -
@@ -1939,3 +1906,4 @@ again in a later session.
 | P-205, a node is a kind, and a territory has no capacity for nodes                    | Withdrawn for Sean's own counter, which is better. A territory has capacity 8 for citizens and there is no citizen slot kind; a node is a slot invented for one kind of thing where nine others manage without one. `P-206` removes the same exception by splitting the extractor into three kinds, which adds no mechanism at all.                         |
 | P-227, the first expected data is derived rather than accepted                        | Sean, 2026-09-04: *As a human I can remember to vet the scenario test the first time, it is remembering to do some mundane task each time that is impossible for a human, which is why we need a test to fail for those times to remind the human.* The first seed is a known special case he handles by knowing to. `P-228` is the principle underneath it |
 | P-226, when a proposal quotes more than one passage the last is the offer             | Sean, 2026-09-04: the distinction that matters is *between proposals that are ready for me to approve, and proposals that are drawing attention to decisions I need to make*. `P-229` makes that split and dissolves this ambiguity instead of ruling on it                                                                                                 |
+| P-237, three collisions from merging his process note                                 | Sean answered all three on 2026-09-04. Each is now its own item, which is what he can act on: `P-238` for what a proposal is, `P-239` for `pending.md`, `P-240` for who owns production support                                                                                                                                                             |
