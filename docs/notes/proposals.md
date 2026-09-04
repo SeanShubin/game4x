@@ -166,44 +166,50 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
-### S-29 - The scenario's inputs are data files and its expected values are Rust
+### S-29 - Input and expected are data files; the dumps are neither
 
-**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on what he should be able to
-read
+**to** code - **status** open - **raised** 2026-09-03 - **revised** 2026-09-04 - **source** Sean, on
+what he should be able to read
 
-**He wants to look at a test's data files - input and expected - and check them himself.** The
-inputs are files: `commands/*.4x`. **The expected values are `assert_eq!` lines in
-`crates/game-console/tests/first_release.rs`** - `citizens`, `turn`, densities, counts - and there
-is no file that says what the scenario should produce.
+**Revised, and the second half of it changed.** The first version asked for the scenario's expected
+values to move into the committed markdown dumps. **Sean has since ruled that out** - the data that
+runs the game is not in markdown or HTML - so expected is a data file and the dumps stay
+presentation. `P-218` and `P-219` carry his words; the backlog records them verbatim. **Nothing here
+is buildable until those land**, except the first bullet, which was always independent.
+
+**What he wants**: to look at a test's data files - input and expected - and check them himself.
+**The inputs are files**: `commands/*.4x`. **The expected values are `assert_eq!` lines in
+`crates/game-console/tests/first_release.rs`** - `citizens`, `turn`, densities, counts - and there is
+no file that says what the scenario should produce.
 
 **And the dumps are not held to anything.** `dump.rs` has seven tests and every one is about
 **shape** - each table names its columns, an empty table is named rather than omitted, every kind is
 a table or a value, every turn is dumped. **None asks whether the committed `state.md` is what the
-scenario produces now.**
+scenario produces now.** `prototypes/kinds/tests/catalog_is_current.rs` already has exactly that test
+for the catalog, and says why in its own first line: **a generated file that nobody regenerates is
+worse than no generated file.**
 
-**`prototypes/kinds/tests/catalog_is_current.rs` already has exactly that test for the catalog**, and
-says why in its own first line: ***a generated file that nobody regenerates is worse than no
-generated file. It reads as*** - and then goes on. **`catalog.md` is held to it; `state.md`,
-`entities.md`, `turns.md` and the two HTML files are not.**
-
-**So two things, and the first is nearly free:**
+**So three things, and only the first is free:**
 
 - **A currency test for the five generated dump files**, the same shape as
   `the_committed_catalog_is_what_the_release_generates`. Regenerating changes nothing, **with the
   number of files asserted**, since a loop that stopped finding them would pass by checking none.
-- **The scenario's expected values move out of Rust and into the committed dumps.** `turns.md` says
-  territory 1 has four citizens after turn 1; `first_release.rs` says
-  `assert_eq!(place.citizens, 4)`. **The second is unreadable to Sean and says the same thing.**
-  With the currency test, the file is the assertion.
+  **Independent of everything below** - a generated file has to be current whatever generates it.
+- **The scenario's expected values move out of Rust into a data file** - in the same format the
+  input is in, or another data format, and **not markdown**. `turns.md` says territory 1 has four
+  citizens after turn 1 and `first_release.rs` says `assert_eq!(place.citizens, 4)`; **neither is
+  where it belongs**, one being unreadable to Sean and the other being presentation.
+- **The test reads input, reads expected, computes actual, compares.** That is the shape he named,
+  and it is what makes the expected file a lock rather than a record: **a difference means either he
+  changed his mind or something slipped in**, and the test is what forces somebody to say which.
 
 **What stays in Rust is what a file cannot say.** `dump.rs`'s seven shape tests are about the dump's
 form rather than the game's numbers and belong where they are. So does anything that has to fail -
 `a_player_is_told_what_went_wrong_and_where` cannot be a row in a table.
 
-**One thing this does not settle and `P-219` puts to Sean.** A dump regenerated from the code is a
-**record**, and comparing the code to it proves the code agrees with itself. **It becomes an
-expectation only when a person has derived it**, which is what he is about to do - and nothing
-currently distinguishes the two.
+**And the markdown dumps keep their job.** They are the presentation layer, they may replicate what
+the data files say, and **no replication is canonical** - so they are generated, held current by the
+first bullet, and never read by the scenario test.
 
 ### S-28 - Runs of spaces in the prose of three generated files
 

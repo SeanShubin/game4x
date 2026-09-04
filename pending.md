@@ -27,7 +27,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 ### To code (14)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
-- **S-29** - The scenario's inputs are data files and its expected values are Rust · `docs/notes/proposals.md`
+- **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-28** - Runs of spaces in the prose of three generated files · `docs/notes/proposals.md`
 - **S-27** - A dump per turn, before Sean derives eight of them by hand · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
