@@ -226,8 +226,16 @@ otherwise*, *What is outstanding* - **19 items open to code and 1 to spec right 
 proposals and nothing else. **The other three are about the lanes**, which you have just called
 details.
 
-**Choice 1 - drop it from your list.** Your surface becomes three things: the proposals, the
-specification, the scenario test's input and expected. `pending.md` stays, generated, for the lanes.
+**Your own test for this, 2026-09-04**: *proposals is where I create and the scenario test is where I
+validate, so there is no getting around needing those two.* **Two are irreducible, and everything
+else has to earn its place against them.** The specification is not a third act - it is what the
+proposals create, so you read it while approving rather than as a separate errand.
+
+**By that test `pending.md` does not earn its place.** It is neither where you create nor where you
+validate.
+
+**Choice 1 - drop it from your list.** Your surface is the two acts: proposals, and the scenario
+test's input and expected. `pending.md` stays, generated, for the lanes.
 **`docs/process.md` currently says it is where you start, and that line goes.**
 
 **Choice 2 - keep it and read it.** You get one thing the queue cannot give you: whether a lane is
