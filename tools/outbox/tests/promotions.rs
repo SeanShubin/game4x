@@ -69,6 +69,40 @@ pub fn destination_file(into: &str) -> Option<String> {
     Some(into[start..end].to_string())
 }
 
+/// Every blockquote in an item, each with its `> ` markers off.
+///
+/// **`Item::proposed_text` refuses when there are several and that is right for its
+/// caller** - `tools/spec` promotes one block and must not choose between two. This is a
+/// different question: *did all of the approved text land*. A proposal quoting two
+/// paragraphs separately has two blocks and both should be there, so refusing to read them
+/// would leave a text proposal unchecked for having said more.
+///
+/// `P-223` and `P-224` were reported as *no readable block* for exactly that reason - both
+/// carried several, both landed correctly, and the check could not see either.
+fn blocks(body: &str) -> Vec<String> {
+    let mut found = Vec::new();
+    let mut current: Vec<String> = Vec::new();
+    for line in body.lines() {
+        let trimmed = line.trim();
+        if let Some(rest) = trimmed.strip_prefix('>') {
+            current.push(rest.trim().to_string());
+        } else if trimmed.is_empty() {
+            // A blank line inside a quotation does not end it; a blank line after one does.
+            if !current.is_empty() && !current.last().is_some_and(|l| l.is_empty()) {
+                current.push(String::new());
+            }
+        } else if !current.is_empty() {
+            found.push(current.join(" ").trim().to_string());
+            current.clear();
+        }
+    }
+    if !current.is_empty() {
+        found.push(current.join(" ").trim().to_string());
+    }
+    found.retain(|b| b.split_whitespace().count() >= 3);
+    found
+}
+
 /// Whitespace collapsed, so that re-wrapping a paragraph is not a difference.
 ///
 /// Wrapping is one of the three things `CLAUDE.md` allows a promotion to change, so a
@@ -95,6 +129,19 @@ pub enum Verdict {
     /// their emphasis and `3fba321` restored it: the guarantee - *approved text is what is
     /// shipped* - holds again, and holding again is the outcome this exists to produce.
     Repaired,
+    /// Several blocks, and no way to tell which one is the proposal.
+    ///
+    /// **Not a pass and not a failure.** A proposal often quotes context - *rule 7 as it
+    /// stands* - beside the text it proposes, and nothing marks which is which. Requiring
+    /// every block to land flags the context; requiring any one to land is satisfied by the
+    /// context alone, since context is quoted *because* it is already there. Either answer
+    /// would be wrong in the direction that looks right.
+    ///
+    /// So these are counted and named rather than judged. **A check that cannot answer
+    /// should say so**, because the alternative is a green light that means nothing - and
+    /// `P-223` and `P-224` both landed correctly, so guessing would have been right twice
+    /// and taught me to trust it.
+    Ambiguous,
 }
 
 /// The rule, over strings, so it can be run on documents written to be wrong.
@@ -185,6 +232,7 @@ fn a_promotion_lands_what_was_approved() {
     let mut older = 0usize;
     let mut excepted = 0usize;
     let mut repaired = 0usize;
+    let mut ambiguous: Vec<String> = Vec::new();
     let mut left_without_landing = 0usize;
     let mut wrong = Vec::new();
 
@@ -244,21 +292,33 @@ fn a_promotion_lands_what_was_approved() {
                 wrong.push(format!("{}: no readable **into** field", item.id));
                 continue;
             };
-            let Ok(block) = item.proposed_text() else {
-                wrong.push(format!("{}: no readable block", item.id));
+            // **An instruction carries no text that lands**, so it needs no block at all -
+            // `P-222` had none and `P-220` had a before and an after. The destination check
+            // below already declines to ask anything of an instruction; requiring a block
+            // first meant refusing to read the ones that were correct.
+            let quoted = blocks(&item.body);
+            if shape != "instruction" && quoted.is_empty() {
+                wrong.push(format!("{}: shape {shape} and no block to land", item.id));
                 continue;
-            };
+            }
             let Some(destination) = git(&root, &["show", &format!("{commit}:{into}")]) else {
                 wrong.push(format!("{}: {into} is not in {}", item.id, &commit[..7]));
                 continue;
             };
             checked += 1;
-            let mut verdict = check(&shape, &block, &destination);
+            let mut verdict = match quoted.len() {
+                0 => Verdict::Landed, // an instruction; nothing lands verbatim
+                1 => check(&shape, &quoted[0], &destination),
+                _ => Verdict::Ambiguous,
+            };
             // If it did not land then, ask whether it has landed since. Only a `Missing` is
             // worth re-asking: an unknown shape is unknown at every commit.
             if matches!(verdict, Verdict::Missing { .. }) {
                 if let Some(now) = git(&root, &["show", &format!("HEAD:{into}")]) {
-                    if matches!(check(&shape, &block, &now), Verdict::Landed) {
+                    if quoted
+                        .iter()
+                        .all(|block| matches!(check(&shape, block, &now), Verdict::Landed))
+                    {
                         verdict = Verdict::Repaired;
                     }
                 }
@@ -278,6 +338,7 @@ fn a_promotion_lands_what_was_approved() {
             match verdict {
                 Verdict::Landed => {}
                 Verdict::Repaired => repaired += 1,
+                Verdict::Ambiguous => ambiguous.push(item.id.clone()),
                 Verdict::UnknownShape(what) => wrong.push(format!(
                     "{} declares shape {what:?}, which is not text, rows or an instruction",
                     item.id
@@ -294,7 +355,8 @@ fn a_promotion_lands_what_was_approved() {
     // Said rather than asserted: zero checked and all correct are the same green, and an
     // empty queue is the good state, so a count cannot be required.
     println!(
-        "{checked} promotion(s) checked, {repaired} repaired after the fact, {excepted} excepted by name; \n         {older} older than the shape field, {left_without_landing} left the queue without a ledger row"
+        "{checked} promotion(s) checked, {repaired} repaired after the fact, {excepted} excepted by name, {} unreadable ({ambiguous:?}); \n         {older} older than the shape field, {left_without_landing} left the queue without a ledger row",
+        ambiguous.len()
     );
     assert!(
         wrong.is_empty(),
