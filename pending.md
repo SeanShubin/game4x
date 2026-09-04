@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-225** - `P-219` says the test locks the expected data and does not say how you unlock it · `docs/notes/proposals.md`
-- **P-226** - A proposal with more than one block does not say which one lands · `docs/notes/proposals.md`
+- **P-227** - `P-225` says what happens when you change your mind, not how the first one is set · `docs/notes/proposals.md`
+- **P-226** - A proposal that quotes two passages does not say which one it is offering · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -18,7 +18,9 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
+- **S-33** - `9d71f66` S-33: say what the directory scope is for, and fix the header S-28 quotes · still open in `docs/notes/proposals.md`
 - **S-32** - `b456283` S-32: missing, extra and different, over a set that is found rather than listed · still open in `docs/notes/proposals.md`
+- **S-28** - `9d71f66` S-33: say what the directory scope is for, and fix the header S-28 quotes · still open in `docs/notes/proposals.md`
 - **S-27** - `35ca2ea` S-27: a dump per turn, so a wrong number names its turn · still open in `docs/notes/proposals.md`
 - **S-25** - `66cb193` S-25: one table naming every kind, and my first check for it was decoration · still open in `docs/notes/proposals.md`
 - **S-14** - `b394c81` S-14: the entity view and the HTML, from the same rows · still open in `docs/notes/proposals.md`
@@ -71,6 +73,7 @@ it exists to ask.
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197
 - `spec/control.md` -> Winning - P-77, P-81, P-125
+- `docs/process.md` -> How I know the game is right - P-219, P-225
 - `docs/process.md`, a new section - P-204, P-211
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186

@@ -25,6 +25,11 @@ hand for correctness.** Once I have confirmed them, the test locks them in place
 they cannot change, but so that my changing my mind can be told apart from something slipping in
 by accident.**
 
+When I change my mind, I delete the expected data and run the scenario again. **Absent expected
+data means I accept what it does now**, so the test writes it, and what I review is the diff in
+version control. Nothing else may write it: an expectation that can be edited in place is one that
+can be edited by accident, which is the thing it exists to prevent.
+
 ## Specification Instance
 - I have Claude generate proposals for changes to the specification
 - I work with claude to make sure I approve the exact text of the proposals

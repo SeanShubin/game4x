@@ -45,67 +45,61 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-225 - `P-219` says the test locks the expected data and does not say how you unlock it
-
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **shape** text -
-**into** `docs/process.md` -> How I know the game is right
-
-**The hole is exactly one sentence wide.** `P-219` says *once I have confirmed them, the test locks
-them in place - not so that they cannot change, but so that my changing my mind can be told apart
-from something slipping in by accident.* **It never says what changing your mind looks like**, and
-the unstated answer is *edit the file* - which is the one act that cannot be told from an accident.
-
-**Your own workflow answers it, and the answer is deletion rather than editing:**
-
-> When I change my mind, I delete the expected data and run the scenario again. **Absent expected
-> data means I accept what it does now**, so the test writes it, and what I review is the diff in
-> version control. Nothing else may write it: an expectation that can be edited in place is one that
-> can be edited by accident, which is the thing it exists to prevent.
-
-**Basis: it is five lines of `RegressionTest.kt` and it is the load-bearing part.**
-`seedExpectationIfNecessary` returns immediately if `expected/` exists and copies `actual/` into it
-if it does not. **Deleting a directory is deliberate, visible in `git status`, and impossible to do
-by accident**; editing one number in a committed file is none of those.
-
-**One thing it needs that `code-structure` gets for free.** There, seeding is safe because there is
-always a diff to read - delete a directory that had content, regenerate, and version control shows
-exactly what changed. **The first seeding has no diff**, and that is the one this repository would
-be doing. Accepting it means accepting the program's output because the program produced it.
-
-**So the first expected data comes from your pencil and not from the program** - which is `S-24`, the
-closure test, already open. **After that, absence-means-acceptance is exactly right**, and this is
-the mechanism `P-219` was missing rather than a new idea.
-
-[What the harness does, measured](regression-by-directory.md).
-
-### P-226 - A proposal with more than one block does not say which one lands
+### P-227 - `P-225` says what happens when you change your mind, not how the first one is set
 
 **to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **shape** text - **into**
-`CLAUDE.md` -> Promotion, after the paragraph naming text, rows and an instruction
+`docs/process.md` -> How I know the game is right, after the paragraph `P-225` landed
 
-**The code lane's `S-10` reports three of twenty-nine promotions as unreadable, and the reason is
-this lane's.** A proposal may quote the text it is replacing beside the text it proposes - *rule 7 as
-it stands*, then *rule 7 as it would read* - and **nothing marks which is which**. Requiring every
-block to land flags the quotation; requiring any one to land is satisfied by the quotation alone,
-since it is quoted because it is already there.
+**`P-225` is scoped to changing your mind, correctly, and that leaves the first time uncovered.**
+*Absent expected data means I accept what it does now* is safe when the data existed a moment ago,
+because deleting and regenerating shows you every difference. **The first time, there is nothing to
+diff against** - the whole file arrives as new, and accepting it means accepting the program's
+output because the program produced it.
 
-> When a proposal carries more than one block, **the one that lands is the last**. Every earlier
-> block is a quotation of something that already exists, and a promotion checks that it still does.
+> The first expected data is derived rather than accepted. **I work it out from the definitions and
+> the commands before I look at what the program produced**, and after that, absence means
+> acceptance.
 
-**Basis: this lane has been relying on the convention without declaring it.** The promotion script
-for `P-220`, `P-223` and `P-224` takes the last block and verifies each earlier one against the
-tree. **It worked, and it worked by accident** - nothing said the order had to be that way, so the
-next proposal could have put the quotation last and the check would have passed on the wrong block.
+**Basis: `P-211` already says how, and nothing connects the two.** *The first three are enough to
+derive the fourth by hand* - that is the derivation, and this says when it is required. Without the
+link, the natural reading of `P-225` alone is that the first seed is accepted like any other.
 
-**The second sentence is what makes it fail loudly instead of quietly.** A proposal that ended with a
-quotation would satisfy a last-block check on its own, because the quotation is already present.
-**It cannot satisfy both**: its proposed text would then sit in an earlier position, and would not
-already exist.
+**This was in `P-225`'s argument and would have been lost.** A proposal is where a question gets
+asked and a promotion is where it stops being one, so what the proposal did **not** settle has
+nowhere to go unless it is filed. It is filed.
 
-**It costs no new syntax and no new field**, and it makes three currently unreadable promotions
-checkable. **Three out of twenty-nine may be a fine price to leave**, which is the code lane's own
-view - it named the problem and declined to propose the fix. This lane thinks the fix is cheaper
-than the reporting.
+### P-226 - A proposal that quotes two passages does not say which one it is offering
+
+**to** sean - **status** open - **raised** 2026-09-04 - **revised** 2026-09-04 - **kind** cleanup -
+**shape** text - **into** `CLAUDE.md` -> Promotion, after the paragraph naming text, rows and an
+instruction
+
+**Rewritten without the word `block`, 2026-09-04**, which you asked about and which turns out not to
+be a term this repository defines. It appears once in `CLAUDE.md` as a noun, at the end of a
+sentence - *nothing else, ever - for a block of text* - and I had been using it in proposals as
+though it were defined.
+
+**A proposal shows the words it offers by indenting them as a quotation.** Sometimes it also quotes
+the words those replace, so you can see both - `P-220` showed *rule 7 as it stands* and *rule 7 as it
+would read*. **Nothing says which quotation is the offer**, so a check that a promotion landed what
+you approved cannot tell them apart: **requiring both to appear flags the old one, and requiring
+either to appear is satisfied by the old one alone**, since it is quoted because it is already there.
+
+> When a proposal quotes more than one passage, **the one being offered is the last**. Everything
+> quoted above it is there to show what already exists, and a promotion checks that it still does.
+
+**Basis: I have been relying on this without saying so.** My promotion script for `P-220`, `P-223`
+and `P-224` takes the last quotation and checks the earlier ones against the tree. **It worked, and
+it worked by accident** - nothing said the order had to be that way, so the next proposal could have
+put the old words last and the check would have approved the wrong passage.
+
+**The second sentence is what makes a mistake fail loudly.** A proposal that ended with the old words
+would satisfy a last-quotation check on its own, because the old words are already present. **It
+cannot satisfy both**: the words being offered would then sit higher up, and would not already exist.
+
+**It costs no new punctuation and no new field**, and it makes three currently unreadable promotions
+checkable - three of twenty-nine. **The code lane named the problem and declined to propose this**,
+thinking three may be a fine price to leave. You get both views.
 
 ## Addressed to other perspectives
 
@@ -1657,6 +1651,7 @@ work the release exists to order.
 | P-223, two kinds of stated fact, and markdown's tier named                                                      | `CLAUDE.md` -> Perspectives                                                                                                                  | 2026-09-04 |
 | P-220, rule 7 sends the game's data to a data file rather than a release                                        | `spec/README.md` -> Rules for this directory, rule 7                                                                                         | 2026-09-04 |
 | P-224, a release does not contain the game's data and links to the generated view                               | `releases/README.md` -> The rule that keeps them from contradicting each other                                                               | 2026-09-04 |
+| P-225, deleting the expected data is how I change my mind, and absence means acceptance                         | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-04 |
 
 ## Rejected
 
