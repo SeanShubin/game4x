@@ -48,6 +48,10 @@ ending a turn fires the world's.
 The commands are therefore not a list this document keeps. They are the recipes whose owner is the
 player, and adding a recipe adds a command.
 
+A command that changes the game names a recipe. `show`, `help` and `history` change nothing, and
+the design commands build a world before there is a game to change; both are listed here because
+neither is a recipe.
+
 - `run <file>` - run the commands in a file, as though they had been typed in its place
 
 And three that change nothing:

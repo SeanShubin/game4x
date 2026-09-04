@@ -45,29 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-217 - `P-214` leaves two lists of commands unaccounted for
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** cleanup - **shape** text - **into**
-`spec/console.md` -> Commands
-
-**`P-214` says the commands are the player's recipes, and `spec/console.md` still lists ten that are
-not.** Three change nothing - `show`, `help`, `history` - and six are available only before `start`,
-plus `start` itself. **None of them is a recipe and all of them are commands.**
-
-> A command that changes the game names a recipe. `show`, `help` and `history` change nothing, and
-> the design commands build a world before there is a game to change; both are listed here because
-> neither is a recipe.
-
-**Basis: promoting `P-214` deleted a sentence that covered them and put nothing in its place.** *One
-command for each way the game state can change* was the heading over eight bullets, and the two
-lists below it were understood by contrast. **With that sentence gone, a reader meets *the commands
-are not a list this document keeps* and then two lists.**
-
-**And `run <file>` was kept by hand.** It sat in the deleted list and is not a recipe - it executes
-other commands - so promoting `P-214` literally would have removed the mechanism the three-file
-split depends on. **It is still there and this proposal is where that gets said properly**, since
-keeping it was this lane's decision and not yours.
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -1268,6 +1245,7 @@ work the release exists to order.
 | P-214, a command names a recipe, so the command list is the recipe list                                         | `spec/console.md` -> Commands                                                                                                                | 2026-09-03 |
 | P-215, a rejection names line, column and the enclosing command                                                 | `spec/console.md` -> Errors                                                                                                                  | 2026-09-03 |
 | P-216, normalize what you compare, nest what you do not                                                         | `spec/interface.md` -> Surfaces                                                                                                              | 2026-09-03 |
+| P-217, the commands that are not recipes, and why they are listed                                               | `spec/console.md` -> Commands                                                                                                                | 2026-09-03 |
 
 ## Rejected
 
