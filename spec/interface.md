@@ -24,6 +24,10 @@ The game presents four surfaces, all reachable from the front end, in every buil
 The rule editor is two-dimensional. It may carry three-dimensional decoration, and nothing the
 player has to read or act on is in that decoration.
 
+A value that would be compared across rows is a column; a value that would not may be a node in
+a cell. So the normalized view has no nested cells - that is what normalizing is - and the entity
+view may have them, because it groups a thing's parts into one row.
+
 ## Availability and presentation
 
 Nothing is available in one build and not another.

@@ -87,6 +87,8 @@ specific rule.
 - Every cycle among recipes must spend readiness somewhere along it
 - The definitions are part of the game state. Defining one is a transition like any other, so a
   game's history is a complete account of it, including what its rules were
+- A definition arrives in one transition. There is no state in which a kind or a recipe is half
+  defined
 - A game's state is things, in places, and how many of each. A thing is a set of traits, and one of
   them names its kind
 - Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever

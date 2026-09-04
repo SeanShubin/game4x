@@ -45,201 +45,28 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-211 - How I know the game is right
+### P-217 - `P-214` leaves two lists of commands unaccounted for
 
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `docs/process.md`, a new section after *Three rules for using AI assistants*
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** cleanup - **shape** text - **into**
+`spec/console.md` -> Commands
 
-**Filed so it cannot be lost.** It currently lives in an outbox item, a note and the backlog - and
-**an item is closed when it is done, which is exactly when this stops being written down anywhere.**
+**`P-214` says the commands are the player's recipes, and `spec/console.md` still lists ten that are
+not.** Three change nothing - `show`, `help`, `history` - and six are available only before `start`,
+plus `start` itself. **None of them is a recipe and all of them are commands.**
 
-> ## How I know the game is right
->
-> Four artifacts: the thing definitions, the recipe definitions, the commands a scenario ran, and
-> the data dump of that scenario. The first three are enough to derive the fourth by hand. If I can
-> do that, I can tell whether the game is working as I intend.
+> A command that changes the game names a recipe. `show`, `help` and `history` change nothing, and
+> the design commands build a world before there is a game to change; both are listed here because
+> neither is a recipe.
 
-**Basis: it is the third rule made operational.** *Have a place you can look to tell what the AI
-did* says a place must exist; this says **what makes the place sufficient.** Four documents that are
-each individually readable and jointly insufficient would satisfy the rule and fail the purpose.
+**Basis: promoting `P-214` deleted a sentence that covered them and put nothing in its place.** *One
+command for each way the game state can change* was the heading over eight bullets, and the two
+lists below it were understood by contrast. **With that sentence gone, a reader meets *the commands
+are not a list this document keeps* and then two lists.**
 
-**And it is a stronger check than anything in the repository, including `../vote`'s.** That project
-runs one scenario against four backends and compares them, which is machine against machine - and
-**machine against machine cannot catch a rule that is wrong the same way everywhere.** Four backends
-would have agreed a territory holds eight citizens while the model let it hold twelve, if all four
-read the same constant. **This check is a person against a machine**, and it is the only one here
-that tests intent rather than consistency.
-
-**What it costs to keep true.** Every figure in the dump must follow from the three inputs and
-nothing may come from anywhere else, **so a fact the model knows and no document states is a defect
-even when nothing is wrong** - which is a bar no other check in this repository sets.
-
-### P-212 - A command is a node, and a value may be another one
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `spec/console.md` -> Commands, before the list
-
-> A command is written `{name field:value ...}`. Its name is the words that open it and its
-> arguments are named. **A value is a word, a number, or another command in the same form**, so a
-> command may carry a tree.
-
-**Basis: a recipe is a tree and a line cannot hold one.** `move` is five rows of role, quantity,
-kind, traits and place. Without nesting a recipe is defined by several commands assembling it, which
-makes a half-defined recipe a state the game can be in - and `spec/invariants.md` says *the
-definitions are part of the game state*, so that half-made rule would be real, replayable and
-dumpable.
-
-**Named arguments are what make the reference material sufficient.** `build extractor 1 metal`
-cannot be read without knowing that `1` is the territory, **and no artifact states that.** Deriving
-the dump by hand is the test this exists to pass.
-
-**`crates/command-language/src/grammar.rs` predicted this and said what it costs:** *if the language
-ever grows nesting or arithmetic, this is the file that has to grow a real expression type, and the
-absence of left recursion will have to be faced deliberately rather than inherited by accident.*
-
-**Two things this deliberately does not do.**
-
-**It does not abbreviate.** This lane recommended letting a form's fields have an order as well as
-names, so `{move pioneer 3}` would mean `{move unit:pioneer to:3}` and the console stayed terse.
-**You said the structured form and this proposes only that** - the abbreviation is a separate idea
-and yours to ask for.
-
-**It does not change what the reports look like.** `state.md` stays tabular; you read it by scanning
-columns, and nesting is good for writing a tree and bad for comparing rows.
-
-**The command list in that file contradicts this the moment it lands**, and the cleanup is filed
-with it - **every command's arguments have to be named, and each name is a decision worth seeing.**
-`{end turn}` needs none; `{set resource ...}` needs four.
-
-### P-213 - A definition arrives whole
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `spec/invariants.md` -> The game is data, after *the definitions are part of the game
-state*
-
-> A definition arrives in one transition. There is no state in which a kind or a recipe is half
-> defined.
-
-**Basis: without it, a half-made rule is real.** *The definitions are part of the game state.
-Defining one is a transition like any other, so a game's history is a complete account of it* - so a
-recipe assembled by five commands **exists with two of its rows after the second one**, and that
-state is replayable, dumpable and reachable by stopping a script early.
-
-**Every check in this repository compares complete things.** `prototypes/kinds` renders the tables
-and compares them cell by cell; the catalog joins six tables per kind; the closure test asks a
-person to derive a dump. **None of them has an answer for a recipe with three rows missing**, and
-none would report one - they would compare a partial thing to a partial thing and agree.
-
-**It is also what makes a rules file safe to fail.** `spec/console.md` has a script stop at the
-first line that fails. **With whole definitions, stopping early leaves fewer rules; with assembled
-ones it leaves a broken rule**, which is a worse thing to hand to a dump than an absent one.
-
-### P-214 - A command names a recipe, so the command list is the recipe list
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `spec/console.md` -> Commands, replacing *one command for each way the game state can
-change* and the list beneath it
-
-**You asked whether everything-is-a-tree changes the command format. It does, one level deeper than
-`P-212`.**
-
-> **A command names a recipe and binds what that recipe leaves open**: the place it acts in, and any
-> ingredient it names with a `$`. **There is one command for each recipe the player may fire**, and
-> ending a turn fires the world's.
->
-> The commands are therefore not a list this document keeps. They are the recipes whose owner is the
-> player, and adding a recipe adds a command.
-
-**Basis: they are two vocabularies today with nothing connecting them, and that is a hole in your own
-acceptance test.** `spec/console.md` lists seven commands that change state; the release has eleven
-recipes owned by the player. **Nothing maps one to the other** - `land ark 1` is `deploy ark`, and no
-document says so. A person holding the things, the recipes and the commands **cannot start**, which
-`S-24` reported as a gap to be documented. **This closes it by construction instead.**
-
-**How the seven cover the eleven, which is where the special language is hiding:**
-
-| Command   | Recipes it fires                                                   |
-| --------- | ------------------------------------------------------------------ |
-| `build`   | **four** - the three extractors and the yard                       |
-| `produce` | **two** - pioneer and ark                                          |
-| `move`    | **two** - `move`, and `found by land` when the ground is unclaimed |
-| `land`    | `deploy ark`                                                       |
-| `launch`  | `move`, across an `ascent` edge                                    |
-| `work`    | `work`                                                             |
-| -         | **`create labor` has no command at all**                           |
-
-**Six of the eleven are reached by a command that decides which recipe from its arguments**, and one
-is reached by nothing. **That deciding is the special language** - it lives in the binding code and
-in no document, and it is why `build extractor 1 metal` cannot be read without knowing what `1` is.
-
-**And it is the tree argument, applied to the layer above the state.** A thing is a node; the state
-is a tree of them; **a recipe describes a change to that tree; a command names a recipe and says
-where.** Three layers, each one shape. **A command list maintained by hand is a fourth vocabulary
-that nothing derives**, which is exactly what `P-199` forbids for the game's data and this document
-still does for its commands.
-
-**What it costs, and it is not small.** `{move unit:pioneer to:3}` becomes two commands rather than
-one - `{move ...}` and `{found-by-land ...}` - because they are two recipes, and today the model
-chooses between them by looking at the ground. **Making the player choose is more honest and less
-convenient**, and you should decide that deliberately rather than inherit it.
-
-**`create labor` is the other half of the same question.** It is a recipe with no command, fired
-implicitly when labor is needed. **Under this it becomes a command a player types**, which is either
-the right amount of control or a click nobody wants.
-
-### P-215 - A failure inside a nested command needs a position inside it
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `spec/console.md` -> Commands, beside *a script stops at the first line that fails*
-
-**`P-212` makes a command able to span many lines**, and *stops at the first line that fails* stops
-being enough to find anything.
-
-> A rejection names the line and column it was found at, and the command it was found inside.
-
-**Basis: the information exists and nothing uses it.** `command-language` has
-`every_word_knows_where_it_started` - every token already carries where it began - and no failure
-reports it. **A rules file of several hundred lines whose error says only *line 1* is a puzzle**,
-because line 1 is where the command opened.
-
-**Naming the enclosing command is the half that is easy to miss.** A position alone tells you where
-the parser stopped; **the command tells you what it was trying to read**, which is usually further
-back than where it gave up, and is what `spec/console.md` already promises when it says a rejection
-says *what was expected*.
-
-### P-216 - Normalize what you compare, nest what you do not
-
-**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
-**into** `spec/interface.md` -> Surfaces, as prose after the four bullets
-
-> **A value that would be compared across rows is a column; a value that would not may be a node in
-> a cell.** So the normalized view has no nested cells - that is what normalizing is - and the
-> entity view may have them, because it groups a thing's parts into one row.
-
-**Basis: the two views already differ in exactly this, and nothing said so.** `P-200` gave the data
-browser two views and required both to name every table and column. **It did not say what a cell may
-hold**, and the two answers are not a style choice - **a nested cell in the normalized view is a
-normalization failure with a nicer syntax, and a flattened node in the entity view is seventeen
-columns.**
-
-**Seventeen is measured, not rhetorical.** `entities.md`'s territory table has seventeen columns
-today, six of which are two facts times three resources spread across the header, and its garrison
-cell reads `force 1 multiplier 1 manned 0` - **a node written by hand because there was no notation
-for one.**
-
-**The test is not whether a value is structured but whether you would ever line it up.** A garrison's
-force against another territory's, no. **Capacity, density and built per resource, yes** - `3 x 4`
-against `2 x 6` against `6 x 2` is the whole reason the twelve territories are designed as they are,
-and a nested cell would hide it. **`state.md` already gets that right** with a row per territory and
-resource, which beats both a nested cell and six columns.
-
-**It states a rule for the browser and the generated files at once**, because `S-14` has them
-rendering the same rows from one producer - so a rule about the views is a rule about both
-destinations.
-
-**It needs `P-212` and does not depend on it.** Without the notation a cell can still hold a node,
-written by hand as `entities.md` does now; with it, the node has a syntax. **The rule is about which
-cells may, not about how they are spelled.**
+**And `run <file>` was kept by hand.** It sat in the deleted list and is not a recipe - it executes
+other commands - so promoting `P-214` literally would have removed the mechanism the three-file
+split depends on. **It is still there and this proposal is where that gets said properly**, since
+keeping it was this lane's decision and not yours.
 
 ## Addressed to other perspectives
 
@@ -1435,6 +1262,12 @@ work the release exists to order.
 | P-208, *Units and structures* lists the three extractor kinds rather than the family                            | `releases/first-release.md` -> Units and structures                                                                                          | 2026-09-03 |
 | P-209, the `kind` trait says one of the kinds rather than restating their number                                | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-03 |
 | P-210, the `biome` trait says one of the biomes rather than restating their number                              | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-03 |
+| P-211, how I know the game is right: four artifacts and the closure between them                                | `docs/process.md`, a new section                                                                                                             | 2026-09-03 |
+| P-212, a command is a node and a value may be another one                                                       | `spec/console.md` -> Commands                                                                                                                | 2026-09-03 |
+| P-213, a definition arrives whole                                                                               | `spec/invariants.md` -> The game is data                                                                                                     | 2026-09-03 |
+| P-214, a command names a recipe, so the command list is the recipe list                                         | `spec/console.md` -> Commands                                                                                                                | 2026-09-03 |
+| P-215, a rejection names line, column and the enclosing command                                                 | `spec/console.md` -> Errors                                                                                                                  | 2026-09-03 |
+| P-216, normalize what you compare, nest what you do not                                                         | `spec/interface.md` -> Surfaces                                                                                                              | 2026-09-03 |
 
 ## Rejected
 

@@ -37,17 +37,17 @@ help move
 - Commands to query the game state are available
 - A sequence of commands may be run one at a time interactively, or run in full as a test
 
-One command for each way the game state can change:
+A command is written `{name field:value ...}`. Its name is the words that open it and its
+arguments are named. **A value is a word, a number, or another command in the same form**, so a
+command may carry a tree.
 
-- `land <unit> <territory>` - bring a unit down from orbit. It founds the territory
-- `launch <unit>` - send a unit from the territory it is in up to orbit
-- `move <unit> <territory>` - move a unit to an adjacent territory. If the territory is not already
-  controlled, it is taken
-- `build <structure> <territory> [<resource>]` - build a structure, paying its cost there
-- `produce <unit> <territory>` - produce a unit at a structure that allows it
-- `work <count> <structure> <territory> [<resource>]` - spend that much labor at a structure
-  this turn
-- `end turn` - consume, transform, and ready everything
+A command names a recipe and binds what that recipe leaves open: the place it acts in, and any
+ingredient it names with a `$`. **There is one command for each recipe the player may fire**, and
+ending a turn fires the world's.
+
+The commands are therefore not a list this document keeps. They are the recipes whose owner is the
+player, and adding a recipe adds a command.
+
 - `run <file>` - run the commands in a file, as though they had been typed in its place
 
 And three that change nothing:
@@ -78,5 +78,6 @@ and help does not list them. A game's history begins when the game does.
 
 A command that cannot be run says why, and says it in terms of the game rather than the parser.
 A rejection names what was wrong, where, and what was expected instead.
+A rejection names the line and column it was found at, and the command it was found inside.
 
 ## Open questions

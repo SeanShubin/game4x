@@ -13,6 +13,12 @@
 
 The third one is the data dump in this case.
 
+## How I know the game is right
+
+Four artifacts: the thing definitions, the recipe definitions, the commands a scenario ran, and the
+data dump of that scenario. The first three are enough to derive the fourth by hand. If I can do
+that, I can tell whether the game is working as I intend.
+
 ## Specification Instance
 - I have Claude generate proposals for changes to the specification
 - I work with claude to make sure I approve the exact text of the proposals
