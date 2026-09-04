@@ -350,6 +350,11 @@ not have.**
 `run <file>` makes them one history, so composition costs nothing, and **the rules can be
 rendered without running a game** - which is what keeps the first two artifacts context-free.
 
+**`P-218` says where the first two artifacts come from, 2026-09-04.** The thing definitions and the
+recipe definitions are data files; `catalog.md` and `recipes.md` are renderings of them. **The table
+above is unchanged** - what was missing is still missing - but *exists* now means *is generated from
+a data file*, and `catalog.md` is generated from hand-written Rust, which is `C-16`.
+
 **One consequence worth having before it is discovered the hard way.** The model already derives the
 state from the commands - that is what replay is. **So the machine can do this and the question is
 only whether the documents let a person do it.** Where the answer is no, the missing piece is a fact
@@ -393,6 +398,12 @@ context-free against context-specific, not about the two context-free views bein
 **That join is what found `orbit` unreachable**, and no comparison between two tables could
 have. `recipes.md` carries the same join from the other side, and a check can hold them to
 agreeing.
+
+**`P-218` moved the source out from under this item, 2026-09-04.** It said *`releases/first-release.md`
+has them and nothing renders them*, and the release is now a replication rather than the source -
+so `recipes.md` is generated from a data file, and the release's Recipes table is generated from
+the same one. **The gap is unchanged and what fills it is not**: the missing view is still every
+recipe, context-free, asserted by count.
 
 **`docs/recipes/README.md` is this lane's to retire and it is not retired yet.** It is the only
 place the before-and-after exists, and deleting it before the turn-by-turn dump replaces it would
