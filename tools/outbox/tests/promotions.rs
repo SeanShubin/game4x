@@ -86,6 +86,15 @@ pub enum Verdict {
     Missing {
         what: String,
     },
+    /// It did not land as approved, and the destination says so now.
+    ///
+    /// **A repaired promotion is not a standing failure.** This compares against the
+    /// destination as it stood in the promoting commit, which is the precise question at
+    /// the time - and no later commit can change what a past one contained, so a deviation
+    /// caught and then fixed would otherwise stay red forever. `P-214` and `P-216` dropped
+    /// their emphasis and `3fba321` restored it: the guarantee - *approved text is what is
+    /// shipped* - holds again, and holding again is the outcome this exists to produce.
+    Repaired,
 }
 
 /// The rule, over strings, so it can be run on documents written to be wrong.
@@ -139,20 +148,10 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 /// scoping the check to start after them - which turns it off for a reason no reader can
 /// see. One line each, and the test below requires every one of them to still be failing,
 /// so an exception that has stopped being needed is reported rather than left to rot.
-const KNOWN: &[(&str, &str)] = &[
-    (
-        "P-214",
-        "landed with its block's `**` markers stripped. The text is otherwise identical,          and the block declared `shape text` - for which the only permitted changes are          wrapping, bullet-versus-paragraph and heading level. Reported as `C-18`; either          the emphasis should have landed or the rule should say that `**` in a block marks          what is being quoted rather than how it is set.",
-    ),
-    (
-        "P-216",
-        "the same, in `spec/interface.md`, in the same commit. Two in one promotion is what          makes it a convention rather than a slip. `C-18`.",
-    ),
-    (
-        "P-195",
-        "declared `shape text` and its block is an instruction - it says what four sentences      in `CLAUDE.md` become and adds a template field, and nothing in it lands verbatim.      The first proposal to carry the field mislabelled its own shape, which is what this      check found on its first run. Reported as `C-17`.",
-    ),
-];
+const KNOWN: &[(&str, &str)] = &[(
+    "P-195",
+    "declared `shape text` and its block is an instruction - it says what four sentences in      `CLAUDE.md` become and adds a template field, and nothing in it lands verbatim. The      first proposal to carry the field mislabelled its own shape, which is what this check      found on its first run. **No repair can clear this one**: the four sentences landed      correctly, so there is nothing in the destination to fix - the wrong thing is one field      in a deleted proposal. `C-17`, answered.",
+)];
 
 /// Every promotion since the `shape` field existed put its block where it said.
 #[test]
@@ -185,6 +184,7 @@ fn a_promotion_lands_what_was_approved() {
     let mut checked = 0usize;
     let mut older = 0usize;
     let mut excepted = 0usize;
+    let mut repaired = 0usize;
     let mut left_without_landing = 0usize;
     let mut wrong = Vec::new();
 
@@ -253,7 +253,16 @@ fn a_promotion_lands_what_was_approved() {
                 continue;
             };
             checked += 1;
-            let verdict = check(&shape, &block, &destination);
+            let mut verdict = check(&shape, &block, &destination);
+            // If it did not land then, ask whether it has landed since. Only a `Missing` is
+            // worth re-asking: an unknown shape is unknown at every commit.
+            if matches!(verdict, Verdict::Missing { .. }) {
+                if let Some(now) = git(&root, &["show", &format!("HEAD:{into}")]) {
+                    if matches!(check(&shape, &block, &now), Verdict::Landed) {
+                        verdict = Verdict::Repaired;
+                    }
+                }
+            }
             if let Some((_, why)) = KNOWN.iter().find(|(id, _)| *id == item.id) {
                 // The exception has to still be needed, or it is hiding a passing case and
                 // will hide a failing one later.
@@ -268,6 +277,7 @@ fn a_promotion_lands_what_was_approved() {
             }
             match verdict {
                 Verdict::Landed => {}
+                Verdict::Repaired => repaired += 1,
                 Verdict::UnknownShape(what) => wrong.push(format!(
                     "{} declares shape {what:?}, which is not text, rows or an instruction",
                     item.id
@@ -284,7 +294,7 @@ fn a_promotion_lands_what_was_approved() {
     // Said rather than asserted: zero checked and all correct are the same green, and an
     // empty queue is the good state, so a count cannot be required.
     println!(
-        "{checked} promotion(s) checked, {excepted} excepted by name; \n         {older} older than the shape field, {left_without_landing} left the queue without a ledger row"
+        "{checked} promotion(s) checked, {repaired} repaired after the fact, {excepted} excepted by name; \n         {older} older than the shape field, {left_without_landing} left the queue without a ledger row"
     );
     assert!(
         wrong.is_empty(),
