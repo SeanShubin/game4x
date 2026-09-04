@@ -23,9 +23,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
+- **S-27** - A dump per turn, before Sean derives eight of them by hand · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **S-25** - `labor` is a kind with no table, and `create labor` is a recipe nothing fires · `docs/notes/proposals.md`
 - **S-24** - Four artifacts, and a human must be able to derive the fourth from the other three · `docs/notes/proposals.md`

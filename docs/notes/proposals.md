@@ -109,6 +109,37 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
+### S-27 - A dump per turn, before Sean derives eight of them by hand
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, about to verify the scenario
+by hand
+
+**Small, and it should go before `S-21`.** He is about to derive `commands/play.4x` by hand -
+thirty-five commands over eight turns - and **`state.md` is turn 8 only.** A mismatch at turn 3
+reaches him as a wrong number at turn 8 with eight turns of arithmetic to search.
+
+**You already built for this.** `dump-state.rs` says so in its own comment: *it takes the state as an
+argument rather than reaching for the final one, **so writing a dump per turn is a loop around this
+call rather than a second implementation***.
+
+**What is wanted is the loop**: run `setup`, then `play` one `end turn` at a time, and write the
+state after each. Eight files, or eight sections in one - **whichever you would rather maintain, and
+one file is probably kinder to a diff.**
+
+**Two things about how it should behave, both of which matter more than the format.**
+
+**Every turn is dumped, and the count is asserted.** A loop that stopped early would produce a file
+that looks complete, and Sean would derive against a truncated run without knowing.
+
+**The turn boundaries have to be the scenario's own.** `play.4x` marks them with `end turn` and
+narrates them in comments - *Turn 2. Four citizens* - so the dump's turn 2 must be the state after
+the second `end turn` and not after the second group of anything else. **His checkpoints are those
+comments; a dump that counts differently is worse than none.**
+
+**And it makes his derivation the thing it is meant to be.** With one end state he can only report
+that the answer is wrong. **With eight he can say which turn it went wrong in**, which is the
+difference between a finding and a mystery.
+
 ### S-26 - The command language has to follow seven promotions, and they do not all land at once
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** `P-211` through `P-217`, promoted
