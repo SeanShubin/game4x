@@ -70,6 +70,17 @@ labor is spent during producing. **So this needs a second rule you do not have.*
 one `create labor` before each of its 18 `work` commands: **35 commands becomes 53.** The scenario
 you derive by hand gets half as long again, and every step of it is a recipe you can name.
 
+**You have since answered this without meaning to, and it is the strongest thing in the item.** In
+the trace you wrote by hand on 2026-09-04:
+
+    Apply recipe
+    {citizen ready:true} -> ({citizen ready:false}, labor)
+
+**You applied `create labor` as a step of its own, named, with a state before it and a state after.**
+That is choice 2, written out. Under choice 1 that middle block of your trace has no line that
+produced it: the citizen goes from ready to not ready and the labor appears, and nothing in the
+command list says when.
+
 **This lane recommends 2, and the reason is your own closure test.** *The first three artifacts are
 enough to derive the fourth by hand.* **Under choice 1 they are not**: a reader with the definitions
 and the commands cannot know that a citizen was spent, because nothing in the command list says so
@@ -148,6 +159,34 @@ a **presence flag** - set or clear - which is the one representation that cannot
 without every reader changing. `make_ready()` calls `thing.clear(Trait::Exhausted)`. **The rule says
 that shape is wrong before it has to be unpicked**, and the code lane is rewriting exactly this file
 right now.
+
+### P-236 - The `asks` field is in use and nothing declares it
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **shape** text - **into**
+`CLAUDE.md` -> Outboxes, the table of four fields
+
+**`P-229` says a proposal *asks one of two things, and says which*. It does not say how**, and this
+lane picked a field - `**asks** approval` or `**asks** a decision` - without saying so. **Three
+proposals now use it**: `P-232`, `P-233` and this one's neighbours. That is the same shape as the
+thing `P-226` was filed about, one level up: **a convention a checker will depend on, that nothing
+declares.**
+
+> **asks** - `approval`, meaning the words are final and reading them is the whole of the work, or
+> `a decision`, meaning a choice is open. Only a proposal carries it.
+
+**Basis: the field is what makes your split generated rather than remembered.** `tools/outbox` reads
+`to`, `status` and the title from every item and writes `pending.md`. **It does not read `asks`** -
+checked, the word appears nowhere in `tools/outbox/src/` - so today the queue is one undifferentiated
+list and the distinction you asked for exists only in the prose of each item.
+
+**With the field declared, `pending.md` can print two counts**: how many you can read and approve,
+and how many need you to think. **That was the point of the reframing** and it is a small change to a
+tool once the field is real.
+
+**One thing to note rather than decide.** `kind` and `shape` are also undeclared - neither appears in
+`CLAUDE.md`'s field table, and both have been in use for months. **This proposal does not fix
+them**, because they are conventions this lane invented for its own filing and nothing outside reads
+them. `asks` is different only because a tool is meant to.
 
 ## Addressed to other perspectives
 

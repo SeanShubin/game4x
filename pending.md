@@ -12,6 +12,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-233** - Readiness becomes a boolean, and its name collides with a recipe's · `docs/notes/proposals.md`
 - **P-234** - One `extractor` kind with a resource trait, in place of three kinds · `docs/notes/proposals.md`
 - **P-235** - A trait may be a boolean now and a quantity later · `docs/notes/proposals.md`
+- **P-236** - The `asks` field is in use and nothing declares it · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
