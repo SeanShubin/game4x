@@ -493,7 +493,7 @@ pub fn html(sections: &[Section], title: &str) -> String {
     );
     out.push_str(&format!("<h1>{}</h1>\n", escaped(title)));
     out.push_str(
-        "<p class=\"count\">Generated. Every table and every column is named whether or not \
+        "<p class=\"count\">Generated. Do not edit. Every table and every column is named whether or not \
          anything is in it.</p>\n",
     );
 

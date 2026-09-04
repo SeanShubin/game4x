@@ -37,13 +37,67 @@ impl Library for Files {
     }
 }
 
+/// Every file carrying the generated marker, found on disk rather than listed here.
+///
+/// **This is the half a list cannot do.** A test that regenerates each *known* file and
+/// compares it will pass while the program grows output nobody asked for, or while a file it
+/// stopped producing sits on disk being read - because the list of known files is the thing
+/// that went stale. So the set is discovered, and the marker is what makes discovery
+/// possible: every generated file says `Generated. Do not edit.` in its own first lines.
+///
+/// `catalog.md` carries the marker and is excluded by name: `prototypes/kinds` produces it
+/// and already holds it to being current. `pending.md` carries no marker, which is just as
+/// well - `hooks/pre-commit` refuses to rewrite it while an outbox has unstaged changes, so
+/// it can be correctly stale and does not belong in a currency comparison at all.
+fn marked_on_disk(root: &Path) -> Vec<String> {
+    let mut found = Vec::new();
+    let Ok(entries) = std::fs::read_dir(root) else {
+        return found;
+    };
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if !path.is_file() {
+            continue;
+        }
+        let name = path
+            .file_name()
+            .unwrap_or_default()
+            .to_string_lossy()
+            .to_string();
+        if name == "catalog.md" {
+            continue;
+        }
+        let Ok(text) = std::fs::read_to_string(&path) else {
+            continue;
+        };
+        // Only the head, so a file *discussing* the marker is not mistaken for one carrying
+        // it. Twenty-four lines because the HTML puts it below its stylesheet, at line 20 -
+        // twelve found the three markdown dumps and silently missed both pages, which is the
+        // failure this test is about, arriving inside the test itself.
+        let head: String = text.lines().take(24).collect::<Vec<_>>().join(
+            "
+",
+        );
+        if head.contains("Generated. Do not edit.") {
+            found.push(name);
+        }
+    }
+    found.sort();
+    found
+}
+
+/// The committed dumps are what the scenario produces, in all three directions.
+///
+/// **`missing`, `extra` and `different`, summed and asserted at zero.** Two of those a list
+/// can find and one it cannot: `extra` is a file on disk that nothing produces any more, and
+/// no amount of regenerating what is listed will notice it, because the list is what went
+/// stale. That file goes on being read after it has stopped being true - and it reads as
+/// authoritative, because it says it was generated.
 #[test]
 fn every_committed_dump_is_what_the_scenario_produces() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let generated = dump::generated(&Files(root.join("commands")));
 
-    // The count first, because a loop that stopped finding files would pass by checking
-    // none - and this is the check whose whole job is noticing absence.
     assert_eq!(
         generated.len(),
         5,
@@ -51,26 +105,29 @@ fn every_committed_dump_is_what_the_scenario_produces() {
         generated.len()
     );
 
-    let mut stale = Vec::new();
+    let produced: std::collections::BTreeSet<String> =
+        generated.iter().map(|(name, _)| name.to_string()).collect();
+    let on_disk: std::collections::BTreeSet<String> = marked_on_disk(&root).into_iter().collect();
+
+    let missing: Vec<&String> = produced.difference(&on_disk).collect();
+    let extra: Vec<&String> = on_disk.difference(&produced).collect();
+
+    let mut different = Vec::new();
     for (name, text) in &generated {
-        let at = root.join(name);
-        let Ok(committed) = std::fs::read_to_string(&at) else {
-            stale.push(format!("{name} is generated and is not committed"));
-            continue;
+        let Ok(committed) = std::fs::read_to_string(root.join(name)) else {
+            continue; // counted as missing above
         };
         if &committed == text {
             continue;
         }
-        // Name the line, because a whole-file diff of a padded table is unreadable and the
-        // answer is nearly always one row.
         let at_line = committed
             .lines()
             .zip(text.lines())
             .position(|(theirs, ours)| theirs != ours)
             .map(|n| n + 1);
-        stale.push(match at_line {
+        different.push(match at_line {
             Some(line) => format!(
-                "{name} line {line}:\n    committed: {}\n    generates: {}",
+                "{name} line {line}:\n      committed: {}\n      generates: {}",
                 committed.lines().nth(line - 1).unwrap_or("").trim_end(),
                 text.lines().nth(line - 1).unwrap_or("").trim_end()
             ),
@@ -82,12 +139,28 @@ fn every_committed_dump_is_what_the_scenario_produces() {
         });
     }
 
-    assert!(
-        stale.is_empty(),
-        "a committed dump is not what the scenario produces:\n\n  {}\n\n\
+    let wrong = missing.len() + extra.len() + different.len();
+    assert_eq!(
+        wrong,
+        0,
+        "the committed dumps and the scenario disagree:\n\n  \
+         missing ({}): {missing:?}\n  \
+         extra ({}): {extra:?} - on disk, marked generated, and produced by nothing\n  \
+         different ({}):\n    {}\n\n\
          Run `cargo run -p game-console --bin dump-state` and commit the result in the same \
          commit as the change that caused it.",
-        stale.join("\n\n  ")
+        missing.len(),
+        extra.len(),
+        different.len(),
+        different.join("\n    ")
+    );
+
+    // The set was discovered, so it can be empty for the wrong reason. This says it was not.
+    assert_eq!(
+        on_disk.len(),
+        5,
+        "five files carry the generated marker; found {} ({on_disk:?})",
+        on_disk.len()
     );
 }
 
