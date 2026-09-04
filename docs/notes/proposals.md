@@ -45,6 +45,45 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-218 - `P-199` already forbids the release's tables being the data, and nobody noticed
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `spec/invariants.md` -> The game is data, extending the bullet `P-199` landed
+
+**You said data files should be in data formats. `P-199` says so already, in words this lane wrote
+and did not read carefully enough**: *what the game is made of lives in a data file, **not in code
+and not in markup***.
+
+**Markdown is markup.** The release's tables hold the kinds, the recipes and the twelve territories,
+and by the letter of the rule they may not.
+
+> The data file is a file of commands. Nothing else is loaded, and a table in a document is a
+> rendering of what a command file says rather than a source for it.
+
+**Basis: the duplication is measurable and one of the files admits it.** `commands/nodes.4x` opens
+with *taken from the table in `releases/first-release.md`* - **thirty-six facts written twice**, and
+`crates/game-console/tests/first_release.rs` parses the release to keep the copies honest, saying so
+in its own comment: *the only way the two stay honest about each other*.
+
+**The scenario is the only one of the three that is already right.** `commands/play.4x` exists once,
+in a data format, and no test parses a document to check it. **The world and the rules exist twice
+each**, and everything that also exists in markdown is duplicated while the thing that does not, is
+not.
+
+**What changes, and it is your review surface.** You approve tables today. Under this you approve a
+command file - `{recipe name:move {require qty:1 kind:place where:$from} ...}` - **and read the
+table, which becomes generated like `catalog.md`.** Nesting is fine for approving one recipe;
+scanning many is what a table is for, and you would still have one.
+
+**What does not change.** `releases/first-release.md` keeps Scope, The loop, Capabilities, Controls
+and Open questions - **the prose that is not data and is not parsed by anything.**
+
+**This lane is not confident the letter should win.** `P-199` was argued from `index.html`
+hardcoding five planet sizes, and **markup meant the page.** That the same word covers markdown is
+true and was not the intent. **You are the only one who can say whether the rule you approved means
+what it says or what it was for**, and both answers are defensible - the reason it is a proposal
+rather than a report is that a rule this lane wrote should not be widened by the lane that wrote it.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the

@@ -8,6 +8,17 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on the organization of the scenario test
+
+*I would expect data files to be in data formats, and to be able to read them myself.*
+
+**Measured**: `commands/nodes.4x` says *taken from the table in `releases/first-release.md`* -
+thirty-six world facts written twice, reconciled by a test that parses markdown. The rules are the
+same shape. **`commands/play.4x` is the only one of the three that exists once**, and it is the only
+one that has no markdown twin.
+
+`P-218` puts the question, which is whether `P-199`'s *not in markup* covers markdown.
+
 ## Decided 2026-09-03, the remaining three
 
 - **Three files**, not one: rules, world, scenario - `S-24`
