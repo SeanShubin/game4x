@@ -18,7 +18,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
-- **S-34** - `1c76c23` S-34: nothing moved, and the headline said it did · still open in `docs/notes/proposals.md`
 - **S-33** - `9d71f66` S-33: say what the directory scope is for, and fix the header S-28 quotes · still open in `docs/notes/proposals.md`
 - **S-32** - `b456283` S-32: missing, extra and different, over a set that is found rather than listed · still open in `docs/notes/proposals.md`
 - **S-27** - `35ca2ea` S-27: a dump per turn, so a wrong number names its turn · still open in `docs/notes/proposals.md`
@@ -31,7 +30,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 ### To code (18)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
-- **S-34** - The ninety-six assertions are still there, and two expectations of one scenario can drift · `docs/notes/proposals.md`
+- **S-35** - `expected/play.4x` says it was reviewed by hand and it has not been · `docs/notes/proposals.md`
 - **S-33** - The generated set is found by a marker, and a marker is content that can be quoted · `docs/notes/proposals.md`
 - **S-32** - The comparison is three-way, and `extra` is the half we do not have · `docs/notes/proposals.md`
 - **S-31** - `C-16` is not answered in the way `C-17` and `C-18` are, and should not close with them · `docs/notes/proposals.md`
