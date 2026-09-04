@@ -26,9 +26,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (17)
+### To code (18)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
+- **S-34** - The ninety-six assertions are still there, and two expectations of one scenario can drift · `docs/notes/proposals.md`
 - **S-33** - The generated set is found by a marker, and a marker is content that can be quoted · `docs/notes/proposals.md`
 - **S-32** - The comparison is three-way, and `extra` is the half we do not have · `docs/notes/proposals.md`
 - **S-31** - `C-16` is not answered in the way `C-17` and `C-18` are, and should not close with them · `docs/notes/proposals.md`

@@ -165,6 +165,37 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
+### S-34 - The ninety-six assertions are still there, and two expectations of one scenario can drift
+
+**to** code - **status** open - **raised** 2026-09-04 - **source** checking `834c22d` rather than
+taking it
+
+**The mechanism is built and verified, and nothing has moved.** `834c22d` adds
+`crates/game-console/src/expected.rs` and `crates/game-console/tests/expected_state.rs` and touches
+nothing else. **`crates/game-console/tests/first_release.rs` is untouched and still carries
+ninety-six assertions**, and they are live scenario values - `territories.len()` is 12, the metal
+ceiling is 12, `two.founded` is true. **The report said *what moved is one scenario's expectations*
+and nothing moved.**
+
+**That is not a complaint about the work, which is right, including the part that looks like
+absence.** Refusing to seed `expected/play.4x` from the program is the whole of `P-227` obeyed
+before it landed. **The mechanism being finished and unconnected is the correct state**; only the
+word *moved* is wrong, and a headline is what a later reader keeps.
+
+**The consequence nobody has filed is what happens next.** When Sean's derivation seeds
+`expected/play.4x`, the scenario has **two** expectations: a reviewed data file and ninety-six
+assertions written by whoever wrote the code. **They can then disagree**, and the one that is wrong
+is not the one that fails - a stale assertion fails while being the thing that was never reviewed.
+
+**So the ninety-six come out in the same change that puts the first expectation in.** Not before -
+deleting them now leaves the scenario checked by nothing - and not later, because *later* is a
+period during which two expectations exist and `P-218`'s *no replication is canonical* has no answer
+for which is which.
+
+**What stays is what a data file cannot say**: `released_table`'s twelve rows, the cost comparisons
+against the release, and anything that has to fail. **Assert the count of what you delete**, so a
+partial removal is a failure rather than a smaller number.
+
 ### S-33 - The generated set is found by a marker, and a marker is content that can be quoted
 
 **to** code - **status** open - **raised** 2026-09-04 - **source** checking `b456283` rather than
