@@ -171,6 +171,43 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
+### S-33 - The generated set is found by a marker, and a marker is content that can be quoted
+
+**to** code - **status** open - **raised** 2026-09-04 - **source** checking `b456283` rather than
+taking it
+
+**The six in the repository root are right** - `catalog.md`, `entities.md`, `entities.html`,
+`state.md`, `state.html`, `turns.md` - and finding the set rather than listing it is the correct
+call for the reason you gave.
+
+**Run the same predicate without the directory scope and it finds a seventh: this file.**
+`docs/notes/proposals.md` carries `Generated. Do not edit.` twice, at lines 325 and 330, because
+`S-28` quotes the headers of `turns.md` and `state.md` in order to report the spacing defect in
+them. **The quotation is legitimate and will happen again** - reporting a defect in a generated
+file's header means writing that header down.
+
+**So the predicate is unbounded content matching, and what contains it is a directory scope chosen
+for a different reason.** Every generated file happens to live in the root today. **The check is
+correct, and correct for a reason nothing states** - which is the shape the whole of `S-32` exists
+to catch, one level up from where it is looking.
+
+**Two ways it bites, neither today:**
+
+- **`S-30` puts the release's data in a generated file.** If that file lands anywhere but the root -
+  and `P-224` only says *a file of its own* - the scan widens, and widening it picks up this file
+  immediately.
+- **A hand-written file in the root that quotes the marker.** `README.md` and `CLAUDE.md` are both
+  there. Neither carries it today; nothing stops one.
+
+**The cheap fix is to say what the scope is for.** A comment beside the scan asserting that the root
+is the boundary *because* it is, plus the count you already assert, is enough - **the count is what
+turns a widened scan into a failure rather than a silent extra file.** A stronger fix is a marker
+that cannot be quoted in prose, but that costs every generated file a change and may not be worth
+it.
+
+**Not urgent and not a defect in what you shipped.** Filed because the reason it passes is not
+written down, and a reason that is not written down stops being true without anything noticing.
+
 ### S-32 - The comparison is three-way, and `extra` is the half we do not have
 
 **to** code - **status** open - **raised** 2026-09-04 - **source** `code-structure`'s
