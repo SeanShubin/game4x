@@ -88,6 +88,35 @@ machinery and neither of them names these tables.
 **The root `README.md` restates the line `P-221` amended and is this lane's to update**, after this
 lands rather than before, so the two never disagree.
 
+### P-224 - A release cannot hold generated tables, by `CLAUDE.md`'s own rule
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **shape** text -
+**into** `releases/README.md` -> The rule that keeps them from contradicting each other
+
+**`P-220` makes the release's eight data tables generated, and `CLAUDE.md` forbids the file that
+would result:**
+
+> This covers only a file that is generated in full - one with any hand-written part has an author,
+> and belongs in that author's directory.
+
+**`releases/first-release.md` is mostly hand-written prose** - Scope, The loop, Controls,
+Capabilities, Open questions - so it cannot be a generated file. **And it cannot hold generated
+tables inside hand-written prose either**, because that is exactly the mixed file the rule names.
+
+> A release states scope, capabilities and what is deliberately left out, in prose. **It does not
+> contain the game's data.** Where a release needs to show data, it links to the generated view of
+> it, which is a file of its own.
+
+**Basis: the alternative is a marked region inside a hand-written file**, and that is the
+arrangement the generated-file rule exists to prevent - **a reader cannot tell by looking which
+lines they may edit**, and the padder rewrites both kinds alike.
+
+**It is also the arrangement that already works.** `catalog.md` is a whole generated file that
+`README.md` links to, and nothing about it is ambiguous.
+
+**This blocks `S-30`**, which asks the code lane to generate those eight tables and cannot say into
+what.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -171,6 +200,11 @@ around them moved.
 each other*. **That comment is correct about two copies and becomes wrong about one source**: when
 the data file exists, the release is generated from it and the parse is a currency check, not a
 reconciliation.
+
+**Blocked by `P-224`, filed the same day.** This item cannot say what file the tables are
+generated into: `releases/first-release.md` is mostly hand-written prose, and `CLAUDE.md`
+says a file with any hand-written part is not a generated file. **Do the data file first and
+leave the release's tables alone until `P-224` lands.**
 
 **Not a decision and not urgent.** It is filed so the gap is visible while it is open, rather than
 discovered when somebody edits a table by hand and nothing objects.

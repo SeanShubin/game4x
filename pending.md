@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-220** - Rule 7 tells you to put the game's data in markdown · `docs/notes/proposals.md`
+- **P-224** - A release cannot hold generated tables, by `CLAUDE.md`'s own rule · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
