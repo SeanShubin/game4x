@@ -8,6 +8,19 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Answered 2026-09-04, the three collisions in `P-237`
+
+1. *Perhaps this is a naming issue, the specification instance is the only thing that has me as its
+   primary target audience... my primary mechanism of coordination is through the specification
+   instance. The other instances are details, I need to keep my surface area small because human
+   attention is the most scarce resource when it comes to programming with an ai assistant.* -
+   `P-238`.
+2. *Where is pending, I haven't been reading it and don't know where it is, perhaps i should, but as
+   with point 1, my attention is limited so it is dangerous to point me to too many files.* -
+   `P-239`. **A generated index built for him that he has never opened.**
+3. *Thats because I can't think of what lane should own it, or if there should be a separate lane for
+   it, or if it should be the quality lane, what do you recommend?* - `P-240`.
+
 ## Merged 2026-09-04, `temporary-notes/process.md` into `docs/process.md`
 
 At his request. **74 lines added and none removed** - three new sections, *What I read, and what I
