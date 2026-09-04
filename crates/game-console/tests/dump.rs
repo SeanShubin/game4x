@@ -278,3 +278,42 @@ fn every_kind_the_model_knows_is_a_table_or_a_value_in_one() {
         wanted.len()
     );
 }
+
+/// `turns.md` has a section for every `end turn` the scenario contains.
+///
+/// **`S-27`, and the count is the whole point.** Sean is deriving these turns by hand, and a
+/// loop that stopped early would produce a file that looks finished - he would derive
+/// against a truncated run and find nothing wrong with it. A wrong number invites a
+/// question; a missing turn invites none.
+///
+/// **The boundaries are the scenario's own `end turn` lines**, because his checkpoints are
+/// `play.4x`'s comments - *Turn 2. Four citizens* - and a dump that counted turns its own
+/// way would be worse than no dump at all.
+#[test]
+fn every_turn_of_the_scenario_is_dumped() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let scenario = std::fs::read_to_string(root.join("commands/play.4x"))
+        .expect("commands/play.4x is the scenario");
+    let boundaries = scenario
+        .lines()
+        .filter(|line| line.trim() == "end turn")
+        .count();
+    assert!(boundaries > 1, "a scenario of one turn tests nothing here");
+
+    let turns = std::fs::read_to_string(root.join("turns.md")).expect("turns.md is generated");
+    let sections = turns.lines().filter(|l| l.starts_with("# Turn ")).count();
+    assert_eq!(
+        sections, boundaries,
+        "commands/play.4x ends {boundaries} turns and turns.md has {sections} sections. \
+         Run `cargo run -p game-console --bin dump-state`."
+    );
+
+    // Numbered from one and consecutive, so a section cannot go missing from the middle
+    // while the count still adds up.
+    for at in 1..=sections {
+        assert!(
+            turns.contains(&format!("\n# Turn {at}\n")),
+            "turns.md has {sections} sections and no `Turn {at}`"
+        );
+    }
+}
