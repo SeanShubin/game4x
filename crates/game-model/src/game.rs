@@ -3,6 +3,7 @@
 use crate::identity::{Resource, StructureKind, TerritoryId, UnitId, UnitKind};
 use crate::rejection::Rejection;
 use crate::territory::{Extractor, Garrison, Node, Territory, population_after};
+use crate::thing::Kind;
 use crate::transition::Transition;
 use crate::unit::{Location, Unit};
 
@@ -275,7 +276,7 @@ impl Game {
 
     pub fn has_lost(&self) -> bool {
         self.phase == Phase::Play
-            && self.territories.iter().all(|t| t.citizens == 0)
+            && self.territories.iter().all(|t| t.citizens() == 0)
             && !self.units.iter().any(|unit| unit.usable)
     }
 
@@ -364,7 +365,7 @@ impl Game {
             .iter()
             .filter(|place| place.biome.is_claimable())
             .all(|place| {
-                place.founded && place.yards > 0 && place.extractors.len() == place.nodes.len()
+                place.founded && place.yards() > 0 && place.extractors.len() == place.nodes.len()
             })
     }
 
@@ -445,7 +446,7 @@ impl Game {
         // `spec/unit-types.md`: the structure a founding unit becomes has one less force
         // than the unit. `spec/control.md`: founding is a garrison's only source.
         place.garrison = Some(Garrison::from_founding_unit(force));
-        place.citizens += citizens;
+        place.put(Kind::Citizen, citizens);
         for resource in leaves {
             if let Some(node) = place.best_free_node(*resource) {
                 place.extractors.push(Extractor {
@@ -492,7 +493,7 @@ impl Game {
                 // the reason that is true rather than for the one asked about second.
                 self.spend_labor(territory, cost::YARD_LABOR)?;
                 self.spend(territory, Resource::Metal, cost::YARD_METAL)?;
-                self.territory_mut(territory)?.yards += 1;
+                self.territory_mut(territory)?.put(Kind::Yard, 1);
                 Ok(())
             }
             StructureKind::Extractor => {
@@ -521,34 +522,36 @@ impl Game {
         }
         match kind {
             UnitKind::Ark => {
-                if place.yards == 0 {
+                if place.yards() == 0 {
                     return Err(Rejection::NoYard(territory));
                 }
-                if place.citizens < cost::ARK_CITIZENS {
+                if place.citizens() < cost::ARK_CITIZENS {
                     return Err(Rejection::NotEnoughCitizens {
                         territory,
-                        held: place.citizens,
+                        held: place.citizens(),
                         needed: cost::ARK_CITIZENS,
                     });
                 }
                 self.spend(territory, Resource::Metal, cost::ARK_METAL)?;
                 self.spend(territory, Resource::Energy, cost::ARK_ENERGY)?;
-                self.territory_mut(territory)?.citizens -= cost::ARK_CITIZENS;
+                self.territory_mut(territory)?
+                    .remove(Kind::Citizen, cost::ARK_CITIZENS);
             }
             UnitKind::Pioneer => {
                 // A garrison is no longer required. It was, and the release's Requires
                 // column is empty for a Pioneer now - what a Pioneer needs is metal,
                 // energy and the people who go with it.
-                if place.citizens < cost::PIONEER_CITIZENS {
+                if place.citizens() < cost::PIONEER_CITIZENS {
                     return Err(Rejection::NotEnoughCitizens {
                         territory,
-                        held: place.citizens,
+                        held: place.citizens(),
                         needed: cost::PIONEER_CITIZENS,
                     });
                 }
                 self.spend(territory, Resource::Metal, cost::PIONEER_METAL)?;
                 self.spend(territory, Resource::Energy, cost::PIONEER_ENERGY)?;
-                self.territory_mut(territory)?.citizens -= cost::PIONEER_CITIZENS;
+                self.territory_mut(territory)?
+                    .remove(Kind::Citizen, cost::PIONEER_CITIZENS);
             }
         }
         let id = UnitId(self.units.len() as u32 + 1);
@@ -747,13 +750,13 @@ impl Game {
 
         // Then a population grows on surplus food, or starves for want of it.
         let food = self.territories[id.index()].store(Resource::Food);
-        let citizens = self.territories[id.index()].citizens;
-        self.territories[id.index()].citizens = population_after(citizens, food);
+        let citizens = self.territories[id.index()].citizens();
+        self.territories[id.index()].set_count(Kind::Citizen, population_after(citizens, food));
 
         // Unused resources are discarded, and everything becomes ready again. Nothing
         // transforms here: founding happens when a unit arrives, so by the time a turn
         // ends there is never a unit waiting to become something.
-        self.territories[id.index()].held.clear();
+        self.territories[id.index()].discard_resources();
         self.territories[id.index()].make_ready();
     }
 }
@@ -803,7 +806,7 @@ mod tests {
         // condition rather than about the economy.
         for place in &mut game.territories {
             place.founded = true;
-            place.yards = 1;
+            place.set_count(Kind::Yard, 1);
             place.extractors = (0..place.nodes.len())
                 .map(|node| Extractor {
                     node,
@@ -859,7 +862,7 @@ mod tests {
         let mut game = designed().after(&Transition::Start).unwrap();
         for place in &mut game.territories {
             place.founded = true;
-            place.yards = 1;
+            place.set_count(Kind::Yard, 1);
             place.extractors = (0..place.nodes.len())
                 .map(|node| Extractor {
                     node,
@@ -894,7 +897,7 @@ mod tests {
         let mut game = designed().after(&Transition::Start).unwrap();
         for place in &mut game.territories {
             place.founded = true;
-            place.yards = 1;
+            place.set_count(Kind::Yard, 1);
             place.extractors = (0..place.nodes.len())
                 .map(|node| Extractor {
                     node,
@@ -905,7 +908,7 @@ mod tests {
         // Make one of them water and take everything off it.
         game.territories[1].biome = Biome::Ocean;
         game.territories[1].founded = false;
-        game.territories[1].yards = 0;
+        game.territories[1].set_count(Kind::Yard, 0);
         game.territories[1].extractors.clear();
         assert!(
             game.is_fully_exploited(),
@@ -1102,7 +1105,7 @@ mod tests {
             place.garrison.is_some(),
             "a structure that holds the ground"
         );
-        assert_eq!(place.citizens, 2);
+        assert_eq!(place.citizens(), 2);
 
         // One per resource a landing leaves, which is food and metal. The rule is *for
         // each resource it leaves*, not *two* - the ground here has room for energy too,
@@ -1187,7 +1190,7 @@ mod tests {
         let mut game = founded();
         game.territories[0].add(Resource::Metal, 5);
         assert_eq!(
-            game.territory(TerritoryId(1)).unwrap().citizens,
+            game.territory(TerritoryId(1)).unwrap().citizens(),
             2,
             "two hands, so two builds and then a refusal"
         );
@@ -1225,7 +1228,7 @@ mod tests {
             .after(&Transition::EndTurn)
             .unwrap();
         // Two citizens and four food: two spare feed two new, at most doubling.
-        assert_eq!(game.territory(TerritoryId(1)).unwrap().citizens, 4);
+        assert_eq!(game.territory(TerritoryId(1)).unwrap().citizens(), 4);
     }
 
     /// `spec/turn.md`: unused resources are discarded.
@@ -1402,7 +1405,7 @@ mod tests {
         let two = moved.territory(TerritoryId(2)).unwrap();
         assert!(two.founded);
         assert!(two.garrison.is_some());
-        assert_eq!(two.citizens, 2);
+        assert_eq!(two.citizens(), 2);
         assert_eq!(two.extractors.len(), 2, "a farm and a mine");
         assert!(
             !moved.units.iter().any(|u| u.kind == UnitKind::Pioneer),
@@ -1428,8 +1431,10 @@ mod tests {
         let mut pioneer = Unit::new(id, UnitKind::Pioneer);
         pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
-        // Nothing was gathered, so there is no food to pay it with.
-        game.territories[0].held.clear();
+        // Nothing was gathered, so there is no food to pay it with. **The resources
+        // only** - `held.clear()` would take the citizens too now that they are things in
+        // the same list, and the fixture would be testing starvation with nobody to starve.
+        game.territories[0].discard_resources();
 
         let after = game.after(&Transition::EndTurn).unwrap();
         let pioneer = after.units.iter().find(|u| u.kind == UnitKind::Pioneer);

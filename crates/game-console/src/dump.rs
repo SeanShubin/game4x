@@ -124,9 +124,9 @@ pub fn tables(game: &Game) -> Vec<Table> {
             format!("{:?}", place.biome).to_lowercase(),
             place.force_of_nature.to_string(),
             yes(place.founded),
-            place.citizens.to_string(),
+            place.citizens().to_string(),
             place.labor_spent.to_string(),
-            place.yards.to_string(),
+            place.yards().to_string(),
         ]);
 
         // Every resource, not every resource that has a node here. A territory with no
@@ -181,7 +181,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
 
         labor.push(vec![
             place.id.0.to_string(),
-            place.citizens.to_string(),
+            place.citizens().to_string(),
             place.labor_spent.to_string(),
             place.labor_available().to_string(),
         ]);
@@ -190,7 +190,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
             let count = match kind {
                 StructureKind::Extractor => place.extractors.len() as u32,
                 StructureKind::Garrison => place.garrison.iter().count() as u32,
-                StructureKind::Yard => place.yards,
+                StructureKind::Yard => place.yards(),
             };
             structure.push(vec![
                 place.id.0.to_string(),
@@ -230,7 +230,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
     let total = |count: &dyn Fn(&game_model::Territory) -> u32| -> u32 {
         game.territories.iter().map(count).sum()
     };
-    kinds.push(vec!["citizen".into(), total(&|t| t.citizens).to_string()]);
+    kinds.push(vec!["citizen".into(), total(&|t| t.citizens()).to_string()]);
     kinds.push(vec![
         "labor".into(),
         total(&|t| t.labor_available()).to_string(),
@@ -247,7 +247,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
             total(&|t| match kind {
                 StructureKind::Extractor => t.extractors.len() as u32,
                 StructureKind::Garrison => t.garrison.iter().count() as u32,
-                StructureKind::Yard => t.yards,
+                StructureKind::Yard => t.yards(),
             })
             .to_string(),
         ]);

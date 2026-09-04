@@ -60,7 +60,7 @@ pub fn show(game: &Game, subject: &Subject) -> String {
                     "  {:>2}  {:<9} citizens {:<3} force {:<3} extractor room {}",
                     place.id,
                     if place.founded { "yours" } else { "unclaimed" },
-                    place.citizens,
+                    place.citizens(),
                     game.force_in(place.id),
                     place.nodes.len()
                 ));
@@ -114,7 +114,7 @@ fn territory(game: &Game, id: TerritoryId) -> String {
     )];
     lines.push(format!(
         "  citizens {}  labor left {}  force {} against nature {}",
-        place.citizens,
+        place.citizens(),
         place.labor_available(),
         game.force_in(id),
         place.force_of_nature
@@ -144,8 +144,8 @@ fn territory(game: &Game, id: TerritoryId) -> String {
         )),
         None => lines.push("  no garrison".to_string()),
     }
-    if place.yards > 0 {
-        lines.push(format!("  yards {}", place.yards));
+    if place.yards() > 0 {
+        lines.push(format!("  yards {}", place.yards()));
     }
     for unit in game.units_on(id) {
         lines.push(format!(
@@ -235,7 +235,7 @@ pub fn entities(game: &Game) -> Vec<Entry> {
     for place in &game.territories {
         let mut components = vec![
             ("founded".to_string(), place.founded.to_string()),
-            ("citizens".to_string(), place.citizens.to_string()),
+            ("citizens".to_string(), place.citizens().to_string()),
             ("labor spent".to_string(), place.labor_spent.to_string()),
             (
                 "force of nature".to_string(),
@@ -276,7 +276,7 @@ pub fn entities(game: &Game) -> Vec<Entry> {
                 None => "none".to_string(),
             },
         ));
-        components.push(("yards".to_string(), place.yards.to_string()));
+        components.push(("yards".to_string(), place.yards().to_string()));
 
         entries.push(Entry {
             kind: "territory".to_string(),

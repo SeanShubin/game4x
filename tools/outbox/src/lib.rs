@@ -1212,9 +1212,18 @@ Only prose.
             "the file has {by_heading} proposal headings and the parser found {by_parser};              a proposal it cannot see is one this test cannot check"
         );
 
+        // **A proposal that asks a decision offers no text, and must not be required to.**
+        // `P-229` split the queue in two: proposals ready for Sean to approve, and proposals
+        // drawing attention to a decision he has to make. The second kind carries `**asks**`
+        // and no quotation, because no wording can be right until he chooses - `P-231` is
+        // the first, asking whether `labor` is a kind.
+        //
+        // Requiring text of one would push whoever wrote it to invent a quotation for a
+        // question, which is the opposite of what the split is for.
         let proposals: Vec<Item> = parsed
             .into_iter()
             .filter(|item| item.id.starts_with("P-") && item.is_outstanding())
+            .filter(|item| !item.body.contains("**asks**"))
             .collect();
 
         for proposal in &proposals {

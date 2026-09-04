@@ -66,7 +66,7 @@ pub struct Territory {
     pub force_of_nature: u32,
     /// Whether the player controls it. A territory is founded by a unit taking it.
     pub founded: bool,
-    pub citizens: u32,
+
     /// Labor used this turn. A citizen provides one, and it is not restored until the
     /// turn ends.
     pub labor_spent: u32,
@@ -84,7 +84,6 @@ pub struct Territory {
     pub held: Vec<Thing>,
     pub garrison: Option<Garrison>,
     pub extractors: Vec<Extractor>,
-    pub yards: u32,
 }
 
 impl Territory {
@@ -99,12 +98,11 @@ impl Territory {
             nodes: Vec::new(),
             force_of_nature: 0,
             founded: false,
-            citizens: 0,
+
             labor_spent: 0,
             held: Vec::new(),
             garrison: None,
             extractors: Vec::new(),
-            yards: 0,
         }
     }
 
@@ -134,9 +132,72 @@ impl Territory {
         });
     }
 
+    /// Throw away what a turn does not carry.
+    ///
+    /// **Only the resources**, which is what `stores = [0; 3]` used to mean when stores were
+    /// a separate array. Putting citizens and yards into the same list made `clear()` wipe
+    /// the population as well - caught immediately by `expected/play.4x`, which is what a
+    /// change of representation that alters behaviour looks like when something is watching.
+    ///
+    /// `C-11` is the open question about whether this should happen at all: `spec/turn.md`
+    /// carries what a territory keeps, and this discards it. That is a behaviour change and
+    /// comes on its own, where the diff shows it.
+    pub fn discard_resources(&mut self) {
+        self.held.retain(|thing| thing.kind.resource().is_none());
+    }
+
+    /// How many of a kind are here.
+    ///
+    /// **The one way to ask.** `citizens` and `yards` were fields, so counting a citizen and
+    /// counting a yard were different operations and counting a kind nobody had thought of
+    /// was impossible. `spec/invariants.md`: *whatever reads the state reads it the same way
+    /// whatever kind it holds.*
+    pub fn count_of(&self, kind: Kind) -> u32 {
+        self.held.iter().filter(|thing| thing.kind == kind).count() as u32
+    }
+
+    pub fn citizens(&self) -> u32 {
+        self.count_of(Kind::Citizen)
+    }
+
+    pub fn yards(&self) -> u32 {
+        self.count_of(Kind::Yard)
+    }
+
+    /// Put this many of a kind here.
+    pub fn put(&mut self, kind: Kind, count: u32) {
+        for _ in 0..count {
+            self.held.push(Thing::of(kind));
+        }
+    }
+
+    /// Remove up to this many of a kind, and say how many went.
+    pub fn remove(&mut self, kind: Kind, count: u32) -> u32 {
+        let mut left = count;
+        self.held.retain(|thing| {
+            if left > 0 && thing.kind == kind {
+                left -= 1;
+                false
+            } else {
+                true
+            }
+        });
+        count - left
+    }
+
+    /// Leave exactly this many of a kind here.
+    pub fn set_count(&mut self, kind: Kind, count: u32) {
+        let now = self.count_of(kind);
+        if now > count {
+            self.remove(kind, now - count);
+        } else {
+            self.put(kind, count - now);
+        }
+    }
+
     /// Labor not yet spent this turn. A citizen provides one each turn.
     pub fn labor_available(&self) -> u32 {
-        self.citizens.saturating_sub(self.labor_spent)
+        self.citizens().saturating_sub(self.labor_spent)
     }
 
     /// Every node of one resource, with its position, in id order.
@@ -192,7 +253,7 @@ impl Territory {
             // Citizens are capable of violence but not of coordination, so what they
             // present is the highest among them rather than the total - and a citizen is
             // force 1, so however many there are the answer is one.
-            None if self.citizens > 0 => CITIZEN_FORCE,
+            None if self.citizens() > 0 => CITIZEN_FORCE,
             None => 0,
         }
     }
@@ -215,10 +276,12 @@ impl Territory {
     /// where units are.
     pub fn lost_to_nature(&mut self) {
         self.founded = false;
-        self.citizens = 0;
         self.garrison = None;
         self.extractors.clear();
-        self.yards = 0;
+        // Everything held goes, which is the one place `clear` is the right verb: nature
+        // takes the population, the stores and the yards together. Naming the kinds one by
+        // one would be a list to keep in step with the kinds, which is the thing this shape
+        // exists to stop.
         self.held.clear();
         self.labor_spent = 0;
     }
@@ -334,7 +397,7 @@ mod tests {
     #[test]
     fn a_garrison_lets_citizens_add_their_force_together() {
         let mut territory = with_nodes(&[]);
-        territory.citizens = 4;
+        territory.set_count(Kind::Citizen, 4);
         assert_eq!(
             territory.held_force(),
             1,
@@ -365,7 +428,7 @@ mod tests {
     #[test]
     fn ending_a_turn_makes_everything_ready_again() {
         let mut territory = with_nodes(&[(Resource::Food, 4)]);
-        territory.citizens = 2;
+        territory.set_count(Kind::Citizen, 2);
         territory.labor_spent = 2;
         territory.extractors.push(Extractor {
             node: 0,
@@ -387,7 +450,7 @@ mod tests {
     fn nature_taking_a_territory_back_leaves_nothing_of_it() {
         let mut territory = with_nodes(&[(Resource::Food, 4)]);
         territory.founded = true;
-        territory.citizens = 6;
+        territory.set_count(Kind::Citizen, 6);
         territory.garrison = Some(Garrison::from_founding_unit(2));
         territory.extractors.push(Extractor {
             node: 0,
@@ -397,7 +460,7 @@ mod tests {
 
         territory.lost_to_nature();
         assert!(!territory.founded);
-        assert_eq!(territory.citizens, 0, "its entire population perishes");
+        assert_eq!(territory.citizens(), 0, "its entire population perishes");
         assert!(territory.garrison.is_none());
         assert!(territory.extractors.is_empty());
         assert_eq!(territory.store(Resource::Metal), 0);
