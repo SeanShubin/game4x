@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-218** - `P-199` already forbids the release's tables being the data, and nobody noticed · `docs/notes/proposals.md`
+- **P-219** - A dump is a record until someone has derived it · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -23,9 +24,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (13)
+### To code (14)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
+- **S-29** - The scenario's inputs are data files and its expected values are Rust · `docs/notes/proposals.md`
 - **S-28** - Runs of spaces in the prose of three generated files · `docs/notes/proposals.md`
 - **S-27** - A dump per turn, before Sean derives eight of them by hand · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`

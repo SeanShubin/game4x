@@ -8,6 +8,16 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-03, on reading a test's data
+
+*When I look at the scenario test, I should be able to look directly at all the data files, input
+and expected, and verify them myself.*
+
+**Measured**: the inputs are `commands/*.4x`; **the expected values are `assert_eq!` lines in
+`crates/game-console/tests/first_release.rs`**, and no test asks whether the committed dumps are
+what the scenario produces - though `catalog_is_current.rs` does exactly that for `catalog.md`.
+`S-29` and `P-219`.
+
 ## Said 2026-09-03, on the organization of the scenario test
 
 *I would expect data files to be in data formats, and to be able to read them myself.*

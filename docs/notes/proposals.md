@@ -84,6 +84,33 @@ true and was not the intent. **You are the only one who can say whether the rule
 what it says or what it was for**, and both answers are defensible - the reason it is a proposal
 rather than a report is that a rule this lane wrote should not be widened by the lane that wrote it.
 
+### P-219 - A dump is a record until someone has derived it
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `docs/process.md` -> How I know the game is right
+
+> A dump of a scenario is a record of what the game did until I have derived it by hand, and an
+> expectation afterwards. The dump says which it is.
+
+**Basis: it is `built` and `vetted` again, one layer down.** A release capability is `built` when the
+code lane says it works and `vetted` when you have looked - **because the lane that made a thing
+cannot certify it.** A dump has the same two states and one name.
+
+**Regenerating a dump and finding it unchanged proves the code agrees with itself.** That is worth
+having and it is not verification: **every figure in `state.md` was put there by the model whose
+correctness is the question.** The four artifacts and the derivation between them are what make one
+an expectation, and until you have done it, `turns.md` is a very detailed record of what happened
+rather than a statement of what should.
+
+**It matters because the difference is invisible and the file is about to be used as a test.**
+`S-29` asks for the scenario's expected values to move out of Rust and into these files. **A number
+nobody has checked, sitting in a file called expected, is worse than the same number in a Rust
+assertion** - it looks like it was agreed.
+
+**The smallest form is a line in the header**, the way each of these files already says *Generated.
+Do not edit.* **What it costs you is saying so when you finish**, which is the same act as saying
+`promote` or `vetted`.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -147,6 +174,45 @@ neither table.
 passes over nothing, so **assert how many traits it examined** - two today. And a trait whose values
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
+
+### S-29 - The scenario's inputs are data files and its expected values are Rust
+
+**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on what he should be able to
+read
+
+**He wants to look at a test's data files - input and expected - and check them himself.** The
+inputs are files: `commands/*.4x`. **The expected values are `assert_eq!` lines in
+`crates/game-console/tests/first_release.rs`** - `citizens`, `turn`, densities, counts - and there
+is no file that says what the scenario should produce.
+
+**And the dumps are not held to anything.** `dump.rs` has seven tests and every one is about
+**shape** - each table names its columns, an empty table is named rather than omitted, every kind is
+a table or a value, every turn is dumped. **None asks whether the committed `state.md` is what the
+scenario produces now.**
+
+**`prototypes/kinds/tests/catalog_is_current.rs` already has exactly that test for the catalog**, and
+says why in its own first line: ***a generated file that nobody regenerates is worse than no
+generated file. It reads as*** - and then goes on. **`catalog.md` is held to it; `state.md`,
+`entities.md`, `turns.md` and the two HTML files are not.**
+
+**So two things, and the first is nearly free:**
+
+- **A currency test for the five generated dump files**, the same shape as
+  `the_committed_catalog_is_what_the_release_generates`. Regenerating changes nothing, **with the
+  number of files asserted**, since a loop that stopped finding them would pass by checking none.
+- **The scenario's expected values move out of Rust and into the committed dumps.** `turns.md` says
+  territory 1 has four citizens after turn 1; `first_release.rs` says
+  `assert_eq!(place.citizens, 4)`. **The second is unreadable to Sean and says the same thing.**
+  With the currency test, the file is the assertion.
+
+**What stays in Rust is what a file cannot say.** `dump.rs`'s seven shape tests are about the dump's
+form rather than the game's numbers and belong where they are. So does anything that has to fail -
+`a_player_is_told_what_went_wrong_and_where` cannot be a row in a table.
+
+**One thing this does not settle and `P-219` puts to Sean.** A dump regenerated from the code is a
+**record**, and comparing the code to it proves the code agrees with itself. **It becomes an
+expectation only when a person has derived it**, which is what he is about to do - and nothing
+currently distinguishes the two.
 
 ### S-28 - Runs of spaces in the prose of three generated files
 
