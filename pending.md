@@ -9,6 +9,9 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-232** - Choice A leaves `create labor` a player recipe with no command · `docs/notes/proposals.md`
+- **P-233** - Readiness becomes a boolean, and its name collides with a recipe's · `docs/notes/proposals.md`
+- **P-234** - One `extractor` kind with a resource trait, in place of three kinds · `docs/notes/proposals.md`
+- **P-235** - A trait may be a boolean now and a quantity later · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

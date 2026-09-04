@@ -8,6 +8,23 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-04, four answers on a worked trace
+
+He wrote the `create labor` / `work` trace out by hand and answered four divergences from what is
+written:
+
+1. *Lets go with the boolean. I expect many of these traits to start out as a boolean then evolve
+   into a quantity.* - `P-233` and `P-235`.
+2. *density belongs to the territory, the extractor was my mistake* - **no change**; the release is
+   right and his sketch was the slip.
+3. *probably simpler to not make quantity a trait* - **no change**; quantity stays the count beside
+   the thing, which is `P-134` and `spec/invariants.md`'s *how many of each*.
+4. *yes, and also I think we are going to need to think about generic or templated recipes, our data
+   language is definitely going to need some form of abstractions, maybe several forms.* - `P-234`
+   collapses the extractors, which is the first instance. **The abstraction question is not
+   proposed**: it is a direction, and `$where`/`$from`/`$to` are the only abstraction the recipe
+   table has today - eight uses.
+
 ## Decided 2026-09-04, `labor` is a kind
 
 *Lets go with choice A for now* - `P-231`. So the release was right, the model was wrong, and no

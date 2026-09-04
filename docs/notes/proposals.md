@@ -78,6 +78,77 @@ and no rule says when the world would have done it. **Under choice 2 every state
 **The 18 extra lines are the cost of the closure test being true**, and they are lines you can check
 rather than lines you have to trust.
 
+### P-233 - Readiness becomes a boolean, and its name collides with a recipe's
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **asks** a decision -
+**into** `releases/first-release.md` -> Traits and Recipes
+
+**You chose the boolean and that part is settled.** The trait's values become yes or no, and the
+four recipe rows whose *Traits* cell says `exhausted` say `not ready` instead. **Measured: four rows
+say `exhausted` and four say `ready`.**
+
+**One collision, which is why this asks rather than tells.** There is a world recipe **named**
+`ready` - *consume 1 thing exhausted, produce 1 thing ready*. Today the trait is `readiness` and the
+recipe is `ready`, so nothing clashes. **Naming the trait `ready`, as your sketch does, makes a trait
+and a recipe share a word.**
+
+- **Choice 1 - trait `ready`, values yes or no.** `{citizen ready:true}`, exactly your sketch. The
+  recipe keeps its name and reads *consume 1 thing not ready, produce 1 thing ready*.
+- **Choice 2 - trait stays `readiness`, values yes or no.** `{citizen readiness:true}`. No collision,
+  and further from what you wrote.
+- **Choice 3 - trait `ready`, and the recipe is renamed** to something like `restore`.
+
+**This lane recommends 1.** A recipe name and a trait name are read in different columns and never
+compared, and *consume 1 thing not ready, produce 1 thing ready* says exactly what it does. **The
+collision is in the word and not in the meaning**, and your sketch is the version you will be reading
+in the dumps.
+
+### P-234 - One `extractor` kind with a resource trait, in place of three kinds
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **shape** instruction -
+**into** `releases/first-release.md` -> Kinds, What bounds a kind, Units and structures, Recipes
+
+**The three-way split exists in one place: the definitions.** `commands/play.4x` already writes
+`build extractor 1 food`, so the command language has always treated the resource as a parameter.
+`crates/game-model/src/territory.rs` has one `Extractor { node, exhausted }`, which names a node
+rather than a resource. **Only the release has three.**
+
+**And its three rows are identical apart from one word**, in all four tables: *Units and structures*
+gives each `1 labor, 1 metal`, binding 1, readies yes; *What bounds a kind* gives each *a capacity,
+from Territory resources*; the three `build` recipes differ only in what they produce.
+
+**Instruction.** `food extractor`, `metal extractor` and `energy extractor` become one kind,
+`extractor`, carrying a **resource** trait. The three rows collapse to one in *Kinds*, in *What
+bounds a kind* and in *Units and structures*; `build food extractor`, `build metal extractor` and
+`build energy extractor` become one `build extractor` naming the resource; and `work`'s *produce
+`$where`'s density for that resource* now reads the extractor's own trait rather than its kind.
+
+**Assertion**: the words `food extractor`, `metal extractor` and `energy extractor` appear nowhere in
+`releases/first-release.md` - **measured 2026-09-04, 27 occurrences on 25 lines**; *Kinds* holds 12 rows
+where it held 14; the recipe table names 15 recipes where it named 17; and `commands/play.4x` is
+byte-identical, because it already said `build extractor 1 food`.
+
+**What this does not do.** It does not touch `garrison` or `yard`, which are one kind each already,
+and it does not change any cost or capacity. **Every number in the release is the same afterwards.**
+
+### P-235 - A trait may be a boolean now and a quantity later
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **shape** text -
+**into** `spec/invariants.md` -> The game is data, beside the rule that a trait may be derived
+
+> A trait may be a boolean now and a quantity later. **Nothing may depend on a trait having only
+> two values**, so a check counts what is there rather than asking whether it is set.
+
+**Basis: it is the reason you gave for choosing the boolean** - *I expect many of these traits to
+start out as a boolean then evolve into a quantity* - and without it that expectation is a plan
+rather than a constraint.
+
+**It has teeth today.** `crates/game-model/src/territory.rs` holds readiness as `Trait::Exhausted`,
+a **presence flag** - set or clear - which is the one representation that cannot become a quantity
+without every reader changing. `make_ready()` calls `thing.clear(Trait::Exhausted)`. **The rule says
+that shape is wrong before it has to be unpicked**, and the code lane is rewriting exactly this file
+right now.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
