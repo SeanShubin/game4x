@@ -65,10 +65,27 @@ and a recipe share a word.**
   and further from what you wrote.
 - **Choice 3 - trait `ready`, and the recipe is renamed** to something like `restore`.
 
-**This lane recommends 1.** A recipe name and a trait name are read in different columns and never
-compared, and *consume 1 thing not ready, produce 1 thing ready* says exactly what it does. **The
-collision is in the word and not in the meaning**, and your sketch is the version you will be reading
-in the dumps.
+**You have since pointed at 3, and it is better than the 1 this lane recommended.** *Many card games
+have a refresh or reset stage, or something of that nature.*
+
+**The reason it is better is in the list the recipe already sits in.** `spec/turn.md` ends a turn
+with `upkeep`, `grow`, `perish`, `spoil`, `age`, `ready` - and five of those six are **what happens**.
+`ready` is the odd one: it names the state it leaves behind rather than the act. **`refresh` is a
+verb in a list of verbs**, and it frees the word `ready` for the trait, which is where your sketch
+puts it.
+
+**So this lane now recommends 3, with `refresh`.** The trait is `ready`, values yes or no, exactly as
+you wrote it; the world recipe is `refresh`, and reads *consume 1 thing not ready, produce 1 thing
+ready* - **which is what a refresh stage does.** `reset` is the other candidate and says something
+slightly different: reset suggests returning to a starting value, and this returns to *usable*, which
+is what refresh means in the games you are thinking of.
+
+**What it costs**: the word `ready` as a recipe name appears in two places - the recipe table and
+`spec/turn.md`'s ending order - and both become `refresh`. **Nothing else in the release mentions it.**
+
+**Recorded because this lane recommended 1 an hour ago**: 1 was argued from the collision being
+harmless. Your point is that the collision was a symptom - the recipe had the wrong sort of name
+before the trait ever wanted the word.
 
 ### P-234 - One `extractor` kind with a resource trait, in place of three kinds
 
