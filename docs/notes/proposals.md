@@ -115,23 +115,47 @@ byte-identical, because it already said `build extractor 1 food`.
 **What this does not do.** It does not touch `garrison` or `yard`, which are one kind each already,
 and it does not change any cost or capacity. **Every number in the release is the same afterwards.**
 
-### P-235 - A trait may be a boolean now and a quantity later
+### P-235 - Directions: a place for what the design expects to move
 
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **shape** text -
-**into** `spec/invariants.md` -> The game is data, beside the rule that a trait may be derived
+**to** sean - **status** open - **raised** 2026-09-04 - **revised** 2026-09-04 - **kind** Sean's own
+- **shape** text - **into** `docs/vision.md`, a new section after *Constraints*, and one row in
+`docs/README.md` -> What goes where
 
-> A trait may be a boolean now and a quantity later. **Nothing may depend on a trait having only
-> two values**, so a check counts what is there rather than asking whether it is set.
+**You said this does not belong in the spec and may inform future decisions, and asked where. There
+is nowhere.** Checked: `docs/README.md`'s *What goes where* has nine content rows and none of them fits.
+The nearest is `docs/vision.md` -> *Constraints*, and it is **exactly wrong** - it opens *these are
+the fixed points of the design. Everything else is negotiable*, and yours is a point the design
+expects to move.
 
-**Basis: it is the reason you gave for choosing the boolean** - *I expect many of these traits to
-start out as a boolean then evolve into a quantity* - and without it that expectation is a plan
-rather than a constraint.
+> ## Directions
+>
+> These are not fixed points. They are movements the design already expects, written down so that
+> nothing is built as though they will not happen. **A direction is never a reason something must be
+> done - only a reason not to foreclose it.**
+>
+> ### A trait may become a quantity
+>
+> I expect many of these traits to start out as a boolean then evolve into a quantity. Nothing
+> should depend on a trait having only two values.
 
-**It has teeth today.** `crates/game-model/src/territory.rs` holds readiness as `Trait::Exhausted`,
-a **presence flag** - set or clear - which is the one representation that cannot become a quantity
-without every reader changing. `make_ready()` calls `thing.clear(Trait::Exhausted)`. **The rule says
-that shape is wrong before it has to be unpicked**, and the code lane is rewriting exactly this file
-right now.
+**Why `vision.md` rather than a new file.** *Constraints* and *Directions* are the two halves of one
+question - what will not move, and what will - and `vision.md` already draws the line in its own
+words: *everything else is negotiable*. **A separate document would be one nobody opens at the moment
+it matters**, which is while they are reading the constraints.
+
+**The third sentence is what stops it becoming a shadow specification.** `docs/README.md` already
+guards the notes this way - *a note must never read as though it settled something* - and a
+directions section has the same hazard with more authority, because it is in a document that is
+reviewed. **Saying it binds nothing is what keeps `spec/` the only place a decision lives.**
+
+**It has teeth today even binding nothing.** `crates/game-model/src/territory.rs` holds readiness as
+`Trait::Exhausted`, a **presence flag** - set or clear - which is the one representation that cannot
+become a quantity without every reader changing. **The code lane is rewriting that file now**, and a
+direction it can read is the difference between choosing that shape and inheriting it.
+
+**And it needs the row in `docs/README.md` or it will not be found.** That table is how anything
+gets filed, and a category with no row in it is a category the next person re-invents:
+*a movement the design expects but has not made* -> `vision.md`, *Directions*.
 
 ### P-236 - The `asks` field is in use and nothing declares it
 
