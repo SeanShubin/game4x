@@ -207,6 +207,40 @@ the parser stopped; **the command tells you what it was trying to read**, which 
 back than where it gave up, and is what `spec/console.md` already promises when it says a rejection
 says *what was expected*.
 
+### P-216 - Normalize what you compare, nest what you do not
+
+**to** sean - **status** open - **raised** 2026-09-03 - **kind** Sean's own - **shape** text -
+**into** `spec/interface.md` -> Surfaces, as prose after the four bullets
+
+> **A value that would be compared across rows is a column; a value that would not may be a node in
+> a cell.** So the normalized view has no nested cells - that is what normalizing is - and the
+> entity view may have them, because it groups a thing's parts into one row.
+
+**Basis: the two views already differ in exactly this, and nothing said so.** `P-200` gave the data
+browser two views and required both to name every table and column. **It did not say what a cell may
+hold**, and the two answers are not a style choice - **a nested cell in the normalized view is a
+normalization failure with a nicer syntax, and a flattened node in the entity view is seventeen
+columns.**
+
+**Seventeen is measured, not rhetorical.** `entities.md`'s territory table has seventeen columns
+today, six of which are two facts times three resources spread across the header, and its garrison
+cell reads `force 1 multiplier 1 manned 0` - **a node written by hand because there was no notation
+for one.**
+
+**The test is not whether a value is structured but whether you would ever line it up.** A garrison's
+force against another territory's, no. **Capacity, density and built per resource, yes** - `3 x 4`
+against `2 x 6` against `6 x 2` is the whole reason the twelve territories are designed as they are,
+and a nested cell would hide it. **`state.md` already gets that right** with a row per territory and
+resource, which beats both a nested cell and six columns.
+
+**It states a rule for the browser and the generated files at once**, because `S-14` has them
+rendering the same rows from one producer - so a rule about the views is a rule about both
+destinations.
+
+**It needs `P-212` and does not depend on it.** Without the notation a cell can still hold a node,
+written by hand as `entities.md` does now; with it, the node has a syntax. **The rule is about which
+cells may, not about how they are spelled.**
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the

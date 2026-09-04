@@ -13,6 +13,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-213** - A definition arrives whole · `docs/notes/proposals.md`
 - **P-214** - A command names a recipe, so the command list is the recipe list · `docs/notes/proposals.md`
 - **P-215** - A failure inside a nested command needs a position inside it · `docs/notes/proposals.md`
+- **P-216** - Normalize what you compare, nest what you do not · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
