@@ -8,6 +8,13 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-04, `labor` is a kind
+
+*Lets go with choice A for now* - `P-231`. So the release was right, the model was wrong, and no
+specification text changed. `S-21` builds labor as a thing with a count; `work` keeps creating and
+consuming it in one step so `commands/play.4x` stays byte-identical through the rewrite. **`P-232`
+carries what A did not settle**: `create labor` is still a player recipe with no command.
+
 ## Said 2026-09-04, on first appearances and on what the queue is for
 
 *First appearances of artifacts are fine as well for the same reason, just have the instances

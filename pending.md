@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-231** - Is `labor` a kind, or an allowance that resets? · `docs/notes/proposals.md`
+- **P-232** - Choice A leaves `create labor` a player recipe with no command · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

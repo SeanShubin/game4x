@@ -45,102 +45,38 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-231 - Is `labor` a kind, or an allowance that resets?
+### P-232 - Choice A leaves `create labor` a player recipe with no command
 
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **asks** a decision
-- **into** `releases/first-release.md` -> Kinds and Recipes, once you have chosen
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **asks** a decision -
+**into** `releases/first-release.md` -> Recipes, one cell, or `commands/play.4x`, depending
 
-**The first proposal written under `P-229` as a decision rather than an approval**, so it carries no
-quotation: no wording can be right until you choose. The `asks` field is how this lane chose to say
-which; if you would rather it were a sentence, say so.
+**Filed before `P-231` is closed, because choosing A settled two of its three contradictions and not
+the third.** The release says labor is a kind: true, and now the model will agree. The model said
+labor was a counter: wrong, and it is being fixed. **`P-214` said there is one command for each
+recipe the player may fire, and `create labor` still has none.**
 
-**You will hit this on your first derivation and it will look like an error in your arithmetic.**
-The release says `work 1 extractor 1 food` is two recipes - `create labor` turns a ready citizen into
-labor and an exhausted citizen, then `work` consumes the labor. **`state.md` has nine tables and none
-of them is `labor`.** You would ask where the labor rows are and find none.
+**The seam does not remove it, it postpones it.** `work` creating and consuming labor in one step
+keeps `commands/play.4x` byte-identical through the rewrite, which is what makes `expected/play.4x` a
+check on the rewrite rather than something regenerated with it. **That is worth having and it is not
+an answer.**
 
-**Three things are true and they cannot all be:**
+**Choice 1 - `create labor` becomes a world recipe.** Its **Auto** cell changes from `player` to
+`world`, and it needs no command because the world's recipes are not offered. **The cost is that
+nothing says when a world recipe fires mid-turn.** `spec/turn.md` gives the ending order - `upkeep`,
+`grow`, `perish`, `spoil`, `age`, `ready` - and `create labor` cannot wait for the end, because the
+labor is spent during producing. **So this needs a second rule you do not have.**
 
-- **The release** lists `labor` as one of fourteen kinds, produced by `create labor`, bounded by the
-  citizens that make it
-- **The model** has `labor_spent: u32` and `labor_available() = citizens - labor_spent` - a counter
-  reset at the end of a turn, not a thing in a place
-- **`P-214`** says there is one command for each recipe the player may fire, **and `create labor` has
-  no command**
+**Choice 2 - `create labor` keeps a command.** `P-214` holds as written, and `commands/play.4x` gains
+one `create labor` before each of its 18 `work` commands: **35 commands becomes 53.** The scenario
+you derive by hand gets half as long again, and every step of it is a recipe you can name.
 
-**Choice A - `labor` is a kind, and the model is wrong.** It gets a table like every other kind. Rows
-appear when a citizen is spent and vanish when work consumes them, inside one turn. `create labor`
-becomes a world recipe that `work` fires, so it needs no command of its own.
+**This lane recommends 2, and the reason is your own closure test.** *The first three artifacts are
+enough to derive the fourth by hand.* **Under choice 1 they are not**: a reader with the definitions
+and the commands cannot know that a citizen was spent, because nothing in the command list says so
+and no rule says when the world would have done it. **Under choice 2 every state change has a line.**
 
-**Choice B - `labor` is not a kind, and the release is wrong.** It is an allowance derived from
-citizens, the way `control` is derived from a citizen being present. The release drops it from
-*Kinds* and drops `create labor` from *Recipes*: **fourteen kinds becomes thirteen and seventeen
-recipes becomes sixteen**, and every count asserted against those tables changes with them.
-
-**Both lanes recommend A. The code lane's reason is better than this lane's and is the one to read.**
-
-This lane argued from the release calling `labor` a kind. **That is the weak reason, because the
-release can be changed.** The code lane's is from inside the shape being rewritten: **B is not a
-different way to model labor, it is a re-introduction of the exact thing `S-21` exists to delete.**
-`labor_spent: u32` is a field per kind, and `spec/invariants.md` says *adding a kind adds no field
-and no case, and whatever reads the state reads it the same way whatever kind it holds*. **Under the
-new shape A costs nothing** - labor is counted by the same code that counts food. **B costs a field
-and a reader that knows labor is special**: `labor_available()` has to know about citizens and about
-exhaustion, which is a case in the one place the rule forbids one.
-
-**A has one cost neither lane had stated, and you should have it before answering.** Today `work`
-does implicitly what `create labor` does explicitly - `game.rs:657` checks `labor_available()` and
-`game.rs:665` increments `labor_spent`. **If labor is a thing, `work` needs labor to exist**, so
-either the console keeps creating it inside `work`, or every `work` gets a `create labor` before it.
-**Measured: `commands/play.4x` has 18 `work` commands in 35, so the explicit form is 53 commands
-rather than 35** - the scenario you are about to derive, half as long again.
-
-**So the code lane recommends A with a seam**, and this lane agrees: labor becomes a thing now, and
-`work` keeps creating and consuming it in one step until `P-214` splits the commands deliberately.
-`P-214` says the command list is the recipe list, so the explicit form arrives eventually - **but as
-`P-214`'s change and not as a side effect of this one.** That keeps `commands/play.4x` byte-identical
-through `S-21`, which is what lets `expected/play.4x` stay a check on the rewrite rather than being
-regenerated along with it.
-
-**What `../game-4x` did, read on 2026-09-04 because you asked.**
-[The note](game-4x-on-things-and-readiness.md) has the detail; three things bear on this.
-
-**Its shape is `P-134`, already built.** `game/.../Land.kt` is `List<Pair<Thing, Int>>` - things
-with quantities - and `Thing.kt` is `List<Pair<String, Attribute>>`, a bag of named attributes.
-**There is no field per kind because there are no fields.** So the old project is evidence for A's
-shape argument and not merely for A.
-
-**Readiness was an attribute on the thing that does the work, and you have already agreed.**
-`Things.createCitizen(activated = false)`, `createGatherer(resource, activated)`,
-`createNode(resource, density, activated)`. In `ApiSetupTest` a land holds **four unactivated food
-nodes and two activated ones as two separate rows with their own counts** - the readiness attribute
-is what makes them different things. **The release already says this**: `readiness` is a **stored**
-trait, and `create labor` already consumes a ready citizen and produces an exhausted one.
-
-**It had no `labor`.** Its kinds were colonizer, node, gatherer, citizen and supply. **But it also
-never had five recipes that cost labor**, so it does not settle whether labor should exist - it
-settles that if it exists it is a thing with a count, like everything else.
-
-**Which surfaces a third option, and an argument for A that neither lane made.**
-
-**Choice C - no `labor`, and readiness carries it alone.** Every recipe that costs labor consumes a
-ready citizen and produces an exhausted one directly, the way `create labor` already does. **This is
-the old project's answer.**
-
-**Measured against the release as it stands: `labor` is consumed by five recipes** - the three
-extractors, the yard, and `work` - and produced by one. **So labor is the currency that factors a
-repeated pair of rows out of five recipes.** Under C, `create labor`'s three rows go and each of the
-five gains a row: **59 recipe rows becomes 61, seventeen recipes becomes sixteen, fourteen kinds
-becomes thirteen** - and the citizen's exhaustion is stated five times instead of once.
-
-**That is the strongest argument for A and neither lane found it**: labor is not a bookkeeping
-counter, it is the thing that lets *spending a citizen* be written once and referred to five times.
-B keeps a field the invariant forbids; **C keeps the invariant and duplicates the rule.**
-
-**Timing: the code lane is rewriting these shapes right now.** It is doing citizens, garrison,
-extractors and yards and **leaving `labor_spent` alone until you answer**, because building either
-answer first means building one of them twice. If you pick B it wants the record to show that B
-keeps a field the invariant forbids, so nobody later reads the shape as finished.
+**The 18 extra lines are the cost of the closure test being true**, and they are lines you can check
+rather than lines you have to trust.
 
 ## Addressed to other perspectives
 
@@ -523,6 +459,10 @@ rather than a line:
 - **The model** says labor is `citizens - labor_spent`, reset at the end of a turn
 - **`P-214`** now says there is one command for each recipe the player may fire, **and `create
   labor` has no command**
+
+**Answered 2026-09-04: Sean chose A - `labor` is a kind and the model is wrong.** `S-21`
+builds it as a thing with a count; `work` keeps creating and consuming it in one step until
+`P-232` settles whether `create labor` gets a command of its own.
 
 **`P-231` puts this to Sean, 2026-09-04**, because the line below saying this lane is not
 deciding it meant nobody was.
@@ -1713,6 +1653,7 @@ work the release exists to order.
 | P-228, a test is for what a person cannot repeat, not for what happens once                                     | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-04 |
 | P-229, a proposal says whether it wants approval or a decision, and the quotation is the offer                  | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-04 |
 | P-230, an instruction may carry no quotation, and carries its check instead                                     | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-04 |
+| P-231, `labor` is a kind - Sean chose A, 2026-09-04                                                             | no text landed: the release already said it and the model is what changes. `S-21` builds it, `P-232` carries the question it left            | 2026-09-04 |
 
 ## Rejected
 
