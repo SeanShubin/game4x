@@ -76,3 +76,44 @@ fn a_section_gathers_what_six_tables_say_separately() {
         );
     }
 }
+
+/// The committed `recipes.md` is what the release generates today.
+///
+/// **The same rule as the catalog, and it earns its place the same way.** `P-228`: a check
+/// guards the repetition rather than the one-off. Regenerating after every promotion is
+/// exactly the mundane thing nobody remembers - and a stale recipe view is worse than none,
+/// because it reads as derived and is therefore trusted harder than prose while being wrong.
+#[test]
+fn the_committed_recipes_are_what_the_release_generates() {
+    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../recipes.md");
+    let committed = std::fs::read_to_string(&at)
+        .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
+    let generated = kinds::recipes::recipes(&kinds::release::release());
+
+    let mismatch = committed
+        .lines()
+        .zip(generated.lines())
+        .enumerate()
+        .find(|(_, (theirs, ours))| theirs != ours);
+    if let Some((at, (theirs, ours))) = mismatch {
+        panic!(
+            "recipes.md line {} is stale:\n  committed: {theirs}\n  generates: {ours}\n\n\
+             Run `cargo run -p kinds -- recipes` and commit the result.",
+            at + 1
+        );
+    }
+    assert_eq!(
+        committed.lines().count(),
+        generated.lines().count(),
+        "recipes.md has a different number of lines than the release generates"
+    );
+
+    // Over every recipe, and how many there were: a view of nothing would compare clean.
+    let sections = generated.lines().filter(|l| l.starts_with("## ")).count();
+    assert_eq!(
+        sections,
+        kinds::RECIPES.len(),
+        "{sections} recipes rendered and {} declared",
+        kinds::RECIPES.len()
+    );
+}

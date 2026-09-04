@@ -81,7 +81,10 @@ fn marked_on_disk(root: &Path) -> Vec<String> {
             .unwrap_or_default()
             .to_string_lossy()
             .to_string();
-        if name == "catalog.md" {
+        // `prototypes/kinds` produces these and holds each to being current itself. They
+        // are excluded here rather than added, because this test is about the dumps and a
+        // file belongs to whatever generates it.
+        if name == "catalog.md" || name == "recipes.md" {
             continue;
         }
         let Ok(text) = std::fs::read_to_string(&path) else {

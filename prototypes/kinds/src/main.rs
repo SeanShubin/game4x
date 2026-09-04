@@ -6,6 +6,14 @@
 fn main() {
     // `catalog` writes the generated view; with no argument it prints the tables back out,
     // which is what this binary has always done.
+    if std::env::args().nth(1).as_deref() == Some("recipes") {
+        let at = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../recipes.md");
+        let text = kinds::recipes::recipes(&kinds::release::release());
+        std::fs::write(&at, text)
+            .unwrap_or_else(|why| panic!("cannot write {}: {why}", at.display()));
+        println!("wrote {}", at.display());
+        return;
+    }
     if std::env::args().nth(1).as_deref() == Some("catalog") {
         let at = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../catalog.md");
         let text = kinds::catalog::catalog(&kinds::release::release());

@@ -21,6 +21,7 @@
 //! test that reads one artifact can only tell you it has not changed.
 
 pub mod catalog;
+pub mod recipes;
 pub mod release;
 
 // ---------------------------------------------------------------------------------------
