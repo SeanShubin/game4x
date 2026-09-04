@@ -45,6 +45,107 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-220 - Rule 7 tells you to put the game's numbers in markdown
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **shape**
+instruction - **into** `spec/README.md` -> Rules for this directory
+
+**The worst of the six, because it is an instruction rather than an implication.** Rule 7, in your
+own directory:
+
+> **Relationships here, numbers elsewhere.** State that a predator has more force than a
+> scavenger; state the actual values in a [release](../releases/README.md), where they can be tuned
+> without touching the specification.
+
+**A release is markdown.** So anyone obeying rule 7 puts the game's data exactly where `P-218`
+forbids it - and is following a numbered rule while doing it. **This is where the release's eight
+data tables came from.**
+
+**Instruction.** In rule 7, *state the actual values in a [release](../releases/README.md)* becomes
+*state the actual values in a data file*. **The rest of the rule is kept verbatim** - *where they can
+be tuned without touching the specification* is the reason for the rule, and it is more true of a
+data file than of a release.
+
+**Assertion**: `spec/README.md` contains no link to `releases/README.md` from rule 7 and does
+contain *state the actual values in a data file*; and `grep -rn` over `spec/`, `CLAUDE.md`,
+`docs/README.md` and `README.md` finds no other sentence routing numbers to `releases/`. **Measured
+2026-09-04: rule 7 is the only one.**
+
+**What this makes stale, so it is decided with it rather than after.** The release's Kinds, Families,
+Traits, Units and structures, Recipes, Territory resources, Biomes and What bounds a kind become
+renderings generated from the data file - which is what `P-218`'s third sentence already permits,
+and `S-29` and `S-23` already ask the code lane for.
+
+### P-221 - *If it is not here, it is not decided* now has a second home
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **shape** text -
+**into** `spec/README.md` -> Rules for this directory, after rule 3
+
+**Said three times and true of one thing where it used to be true of two.** `spec/README.md` line 9,
+rule 3, and the root `README.md` all say a thing is decided only if it is in `spec/`. **`P-218` puts
+the recipes in a data file and `P-219` says what decides them there** - reviewed by hand, locked by
+the scenario test. So as written, the specification says its own recipes are not decided.
+
+> A rule is decided here. **The game's data is decided in its data file**, reviewed by hand and
+> locked by the scenario test. Neither is decided in a discussion, in a note, or in a rendering of
+> either one.
+
+**Basis: the danger is which way the rule gets applied.** Read as written, it says data in a file is
+undecided, and **the obvious repair is to copy the data back into markdown** - which is the exact
+regression this is checking for. Naming the second home closes it, and the third sentence keeps what
+rule 3 was actually for.
+
+**The root `README.md` restates this line and is this lane's to update**, after the promotion rather
+than before, so the two never disagree.
+
+### P-222 - The older half of *The game is data* is weaker than the newer half
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **shape** instruction -
+**into** `spec/invariants.md` -> The game is data
+
+**Two bullets on one subject, and the weaker one is first.** `P-199`'s says *not in code and not in
+markup*; `P-218`'s says *not a presentation file such as markdown or HTML*. **The word `markup` is
+what let markdown sit outside this rule** - it is the single word this whole question turned on, and
+a reader who stops at the first bullet has the version that lost.
+
+**And *Nothing restates what a data file says* reads as absolute**, while `P-218` permits a
+replication in the presentation layer. They agree - **a generated replication is a derived form,
+which the same sentence permits** - but the agreement rests entirely on how one word is read.
+
+**Instruction, two edits, nothing else in the bullet touched:**
+
+- *not in code and not in markup* becomes *not in code and not in a presentation file*
+- *Nothing restates what a data file says* becomes *Nothing states by hand what a data file says*
+
+**Assertion**: the word `markup` appears nowhere in `spec/` - **measured 2026-09-04, it appears once,
+here**; and the bullet's other three sentences are character for character what they were, checked
+against the parent commit.
+
+### P-223 - `CLAUDE.md` describes two kinds of format and there are three
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **shape** text -
+**into** `CLAUDE.md` -> Perspectives, after the paragraph beginning *Specification and presentation*
+
+> Specification and presentation are different concerns and do not share a format. A fact is stated
+> in a form chosen for stating it, and rendered into a form chosen for reading it.
+
+**Two tiers, and markdown's tier is not named.** `spec/` is markdown and is a stating form, so a
+reader concludes markdown states - and a table of recipes in markdown passes this rule. **It is the
+sentence that would license writing the release's tables again**, having been promoted to prevent
+precisely that kind of mixing.
+
+> **Two kinds of fact are stated, and they do not share a format either.** A rule is stated in prose,
+> in `spec/`. **The game's data is stated in a data file.** Markdown is a stating form for the first
+> and a rendering for the second, so a table of game data in markdown is a rendering and never a
+> source.
+
+**Basis: this is the same rule one level down, and it was already written that way.** The paragraph
+ends *HTML is the case that comes up; it is only a case* - **so it already knows it is general**, and
+this names the case it did not have when it was written.
+
+**Filed rather than fixed as wording.** `CLAUDE.md` says wording and consistency inside its rules are
+this lane's to settle, and **this changes what the rule says**, which is not wording.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the

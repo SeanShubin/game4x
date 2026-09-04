@@ -8,6 +8,16 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Asked 2026-09-04, for regression paths in wording written before `P-218`
+
+*I want to make sure there is no possibility of regression to less refined interpretations based on
+wording written before we had such a precise understanding of the intent. Check for vulnerabilities
+that come from outdated phrasing and propose a fix or fixes.*
+
+**Six found, four filed** - `P-220` to `P-223`. The two not filed are in `CLAUDE.md`'s authority
+table and in `releases/README.md`, and both follow from `P-220` rather than being separate
+decisions.
+
 ## Settled 2026-09-04, what a data file is and what the scenario test locks
 
 *The data that actually runs the application, should be in data files. Not presentation files such

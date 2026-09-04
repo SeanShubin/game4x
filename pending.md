@@ -8,8 +8,10 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-220** - Rule 7 tells you to put the game's numbers in markdown · `docs/notes/proposals.md`
+- **P-221** - *If it is not here, it is not decided* now has a second home · `docs/notes/proposals.md`
+- **P-222** - The older half of *The game is data* is weaker than the newer half · `docs/notes/proposals.md`
+- **P-223** - `CLAUDE.md` describes two kinds of format and there are three · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
