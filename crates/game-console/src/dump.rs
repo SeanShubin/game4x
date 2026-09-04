@@ -107,6 +107,16 @@ pub fn tables(game: &Game) -> Vec<Table> {
     let mut garrison = Table::new("garrison", &["territory", "force"]);
     let mut extractor = Table::new("extractor", &["territory", "node", "resource", "readiness"]);
     let mut structure = Table::new("structure", &["territory", "structure", "count"]);
+    // **`labor` is one of the fourteen kinds and had no table at all.** It existed only as a
+    // `labor spent` column inside `territory`, so a reader looking for the kind found
+    // nothing - and an absent table is the one thing that cannot be told from a wrong one.
+    // `S-25`.
+    //
+    // It is derived rather than stored: a citizen provides one each turn and the model keeps
+    // what was spent, so *made* and *left* are read out rather than held. That is a fact
+    // about labor worth being able to see, and `S-21` is where whether it should be stored
+    // at all gets decided.
+    let mut labor = Table::new("labor", &["territory", "made", "spent", "left"]);
 
     for place in &game.territories {
         territory.push(vec![
@@ -169,6 +179,13 @@ pub fn tables(game: &Game) -> Vec<Table> {
             ]);
         }
 
+        labor.push(vec![
+            place.id.0.to_string(),
+            place.citizens.to_string(),
+            place.labor_spent.to_string(),
+            place.labor_available().to_string(),
+        ]);
+
         for kind in StructureKind::ALL {
             let count = match kind {
                 StructureKind::Extractor => place.extractors.len() as u32,
@@ -197,17 +214,52 @@ pub fn tables(game: &Game) -> Vec<Table> {
         ]);
     }
 
-    // Named from the model's enumeration rather than from the units present, so a kind that
-    // is nowhere still has a row saying so. This is the table that answers *is there an Ark
-    // anywhere*, which `unit` can only answer by absence.
-    let mut unit_kind = Table::new("unit kind", &["kind", "in play"]);
+    // **Every kind the model knows, and how many there are.** This replaces a `unit kind`
+    // table that named two of them.
+    //
+    // `S-25` found `labor` in no table at all, and the check written for it then found
+    // `citizen` in the same state - both existed only as a column of `territory`, which is
+    // not the same as the kind being represented. A table each would have answered those two
+    // and left the next one to be found the same way. **One table naming every kind answers
+    // the question the reader is actually asking**, which is Sean's: he reads these to find
+    // the names that are wrong, and a name he cannot find is one he cannot judge.
+    //
+    // Counts are across the whole game, because *is there one anywhere* is what a missing
+    // table leaves unanswerable. Where they sit is what the other tables are for.
+    let mut kinds = Table::new("kind", &["kind", "in play"]);
+    let total = |count: &dyn Fn(&game_model::Territory) -> u32| -> u32 {
+        game.territories.iter().map(count).sum()
+    };
+    kinds.push(vec!["citizen".into(), total(&|t| t.citizens).to_string()]);
+    kinds.push(vec![
+        "labor".into(),
+        total(&|t| t.labor_available()).to_string(),
+    ]);
+    for resource in Resource::ALL {
+        kinds.push(vec![
+            resource.name().to_string(),
+            total(&|t| t.store(resource)).to_string(),
+        ]);
+    }
+    for kind in StructureKind::ALL {
+        kinds.push(vec![
+            kind.name().to_string(),
+            total(&|t| match kind {
+                StructureKind::Extractor => t.extractors.len() as u32,
+                StructureKind::Garrison => t.garrison.iter().count() as u32,
+                StructureKind::Yard => t.yards,
+            })
+            .to_string(),
+        ]);
+    }
     for kind in UnitKind::ALL {
         let count = game.units.iter().filter(|u| u.kind == kind).count();
-        unit_kind.push(vec![kind.name().to_string(), count.to_string()]);
+        kinds.push(vec![kind.name().to_string(), count.to_string()]);
     }
+    kinds.push(vec!["territory".into(), game.territories.len().to_string()]);
 
     vec![
-        summary, territory, node, store, garrison, extractor, structure, unit, unit_kind,
+        summary, territory, node, store, garrison, extractor, structure, labor, unit, kinds,
     ]
 }
 

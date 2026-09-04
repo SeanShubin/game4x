@@ -36,8 +36,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (2)
+### To spec (3)
 
+- **C-18** - Two promotions dropped their block's emphasis, and both declared `shape text` · `crates/outbox.md`
 - **C-17** - `P-195` declared `shape text` and its block is an instruction · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
 

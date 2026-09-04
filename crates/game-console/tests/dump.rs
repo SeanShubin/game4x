@@ -219,3 +219,62 @@ fn the_html_carries_the_same_rows_and_names_nothing_itself() {
         );
     }
 }
+
+/// Every kind the model knows is a table, or a value in one.
+///
+/// **`S-25` is why this exists, and my first version of it did not work.** `labor` is one of
+/// the release's kinds and the dump had no table for it - it lived as a `labor spent` column
+/// inside `territory`, so a reader looking for labor found nothing. **An absent table is the
+/// one thing that cannot be told from a wrong one**: a wrong number invites a question and a
+/// missing name invites none.
+///
+/// The first attempt searched the rendered markdown for each kind's name. It passed with the
+/// labor table deleted, because `labor spent` contains the word - **so it would have passed
+/// on the very defect it was written for.** A column name mentioning a kind is not the same
+/// as the kind being represented, which is the whole of what `S-25` says.
+///
+/// So this reads the structure: a kind is named when it **is** a table, or **is** a value in
+/// one. Column names deliberately do not count.
+///
+/// It reads the model's own enumerations rather than a list written here, so a kind added to
+/// the model and forgotten in the dump fails this rather than passing quietly. It cannot
+/// read the release's fourteen - the model has no such vocabulary yet, and `S-21` is where
+/// it gets one - so this checks what the code knows and grows when the code does.
+#[test]
+fn every_kind_the_model_knows_is_a_table_or_a_value_in_one() {
+    use game_model::{Resource, StructureKind, UnitKind};
+
+    let session = played();
+    let tables = dump::tables(&session.game);
+
+    let mut named: std::collections::BTreeSet<String> = std::collections::BTreeSet::new();
+    for table in &tables {
+        named.insert(table.name.to_string());
+        for row in &table.rows {
+            for cell in row {
+                named.insert(cell.clone());
+            }
+        }
+    }
+
+    let mut wanted: Vec<String> = vec!["citizen".into(), "labor".into(), "territory".into()];
+    wanted.extend(Resource::ALL.iter().map(|r| r.name().to_string()));
+    wanted.extend(UnitKind::ALL.iter().map(|k| k.name().to_string()));
+    wanted.extend(StructureKind::ALL.iter().map(|k| k.name().to_string()));
+
+    let missing: Vec<&String> = wanted.iter().filter(|k| !named.contains(*k)).collect();
+    assert!(
+        missing.is_empty(),
+        "{missing:?} is a kind the model knows and the dump neither has a table for nor \
+         puts in a cell. A reader looking for it finds nothing, which reads exactly like a \
+         kind that does not exist. Mentioning it in a column name does not count."
+    );
+
+    // Over every case, and how many there were: an empty enumeration would pass this
+    // without looking at anything.
+    assert!(
+        wanted.len() >= 11,
+        "only {} kinds checked; the model's enumerations have probably moved",
+        wanted.len()
+    );
+}

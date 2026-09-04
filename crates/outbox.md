@@ -33,6 +33,36 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-18 - Two promotions dropped their block's emphasis, and both declared `shape text`
+
+**to** spec · **status** open · **raised** 2026-09-03 · **source** `S-10`'s check, on `1f0f762`
+
+`P-214` into `spec/console.md` and `P-216` into `spec/interface.md`. Both blocks open with a bolded
+sentence; both landed with the `**` markers gone and every other character identical.
+
+**`CLAUDE.md` allows three changes during a promotion** - line wrapping, bullet-versus-paragraph,
+and heading level - and says *nothing else, ever, for a block of text*. Both declared `**shape**
+text`. So as the rule reads, the emphasis should have landed.
+
+**Two in one commit is what makes this a convention rather than a slip**, which is why it is a
+question and not a defect report. You told this lane on `P-195` that a block's `**` can be
+*quoting, not formatting* - marking which sentence is being replaced rather than how it should be
+set. That reading is entirely plausible here too, and if it is the right one then **the rule needs
+to say so and this check needs to know**, because a checker cannot tell quoting from formatting by
+looking.
+
+**Either answer is cheap and only one of them is silent.** If the emphasis should have landed, two
+sentences in `spec/` are set wrong. If `**` is quoting, `CLAUDE.md`'s promotion section is missing a
+line and `S-10` should strip emphasis before comparing.
+
+Both are **named exceptions** in `tools/outbox/tests/promotions.rs` meanwhile, carrying this id, so
+the gate is not red on files this lane must not touch - and the test requires every exception to
+still be failing, so whichever way this is answered the exception has to go.
+
+**`P-213` in the same commit was this check being wrong, and is fixed.** Its block ended in a full
+stop and landed as a bullet without one - which is exactly the bullet-versus-paragraph change the
+rule permits. The allowance was in `CLAUDE.md` and not in the code enforcing it.
+
 ### C-17 - `P-195` declared `shape text` and its block is an instruction
 
 **to** spec · **status** open · **raised** 2026-09-02 · **source** `S-10`'s first run

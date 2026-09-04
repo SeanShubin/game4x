@@ -83,18 +83,28 @@ pub enum Verdict {
     Landed,
     /// Declared a shape this checker does not know.
     UnknownShape(String),
-    Missing { what: String },
+    Missing {
+        what: String,
+    },
 }
 
 /// The rule, over strings, so it can be run on documents written to be wrong.
 pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
     match shape {
         "text" => {
-            if flat(destination).contains(&flat(block)) {
+            let there = flat(destination);
+            let want = flat(block);
+            // **A paragraph promoted as a bullet loses its full stop**, and
+            // bullet-versus-paragraph is one of the three changes a promotion may make. So
+            // the same text ending without its period is the same text. `P-213` landed
+            // correctly and this reported it as missing until the allowance was written
+            // down - the rule was in `CLAUDE.md` and not in the code that enforces it.
+            let without = want.trim_end_matches('.').to_string();
+            if there.contains(&want) || there.contains(&without) {
                 Verdict::Landed
             } else {
                 Verdict::Missing {
-                    what: flat(block).chars().take(70).collect(),
+                    what: want.chars().take(70).collect(),
                 }
             }
         }
@@ -129,10 +139,20 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 /// scoping the check to start after them - which turns it off for a reason no reader can
 /// see. One line each, and the test below requires every one of them to still be failing,
 /// so an exception that has stopped being needed is reported rather than left to rot.
-const KNOWN: &[(&str, &str)] = &[(
-    "P-195",
-    "declared `shape text` and its block is an instruction - it says what four sentences      in `CLAUDE.md` become and adds a template field, and nothing in it lands verbatim.      The first proposal to carry the field mislabelled its own shape, which is what this      check found on its first run. Reported as `C-17`.",
-)];
+const KNOWN: &[(&str, &str)] = &[
+    (
+        "P-214",
+        "landed with its block's `**` markers stripped. The text is otherwise identical,          and the block declared `shape text` - for which the only permitted changes are          wrapping, bullet-versus-paragraph and heading level. Reported as `C-18`; either          the emphasis should have landed or the rule should say that `**` in a block marks          what is being quoted rather than how it is set.",
+    ),
+    (
+        "P-216",
+        "the same, in `spec/interface.md`, in the same commit. Two in one promotion is what          makes it a convention rather than a slip. `C-18`.",
+    ),
+    (
+        "P-195",
+        "declared `shape text` and its block is an instruction - it says what four sentences      in `CLAUDE.md` become and adds a template field, and nothing in it lands verbatim.      The first proposal to carry the field mislabelled its own shape, which is what this      check found on its first run. Reported as `C-17`.",
+    ),
+];
 
 /// Every promotion since the `shape` field existed put its block where it said.
 #[test]
@@ -169,12 +189,16 @@ fn a_promotion_lands_what_was_approved() {
     let mut wrong = Vec::new();
 
     for commit in log.lines() {
-        let Some(before) = git(&root, &["show", &format!("{commit}^:docs/notes/proposals.md")])
-        else {
+        let Some(before) = git(
+            &root,
+            &["show", &format!("{commit}^:docs/notes/proposals.md")],
+        ) else {
             continue;
         };
-        let Some(after) = git(&root, &["show", &format!("{commit}:docs/notes/proposals.md")])
-        else {
+        let Some(after) = git(
+            &root,
+            &["show", &format!("{commit}:docs/notes/proposals.md")],
+        ) else {
             continue;
         };
         // **A promotion is located by the proposal disappearing, never by the ledger row
@@ -200,8 +224,7 @@ fn a_promotion_lands_what_was_approved() {
             .filter(|item| item.id.starts_with("P-") && item.is_outstanding())
             .filter(|item| !after.contains(&format!("### {} ", item.id)))
             .filter(|item| {
-                let promoted =
-                    landed_now.contains(&item.id) && !landed_before.contains(&item.id);
+                let promoted = landed_now.contains(&item.id) && !landed_before.contains(&item.id);
                 if !promoted {
                     // Withdrawn, rejected, or promoted without a ledger row. The three are
                     // not distinguishable from here, so this counts them rather than
@@ -315,7 +338,8 @@ fn each_shape_is_checked_differently_and_each_can_fail() {
 #[test]
 fn a_field_is_read_whatever_separates_it() {
     let middot = "**to** sean \u{b7} **kind** cleanup \u{b7} **shape** text \u{b7} **into** `CLAUDE.md` -> Promotion";
-    let hyphen = "**to** sean - **kind** cleanup - **shape** rows - **into** `spec/planet.md` -> Shape";
+    let hyphen =
+        "**to** sean - **kind** cleanup - **shape** rows - **into** `spec/planet.md` -> Shape";
     assert_eq!(field(middot, "shape").as_deref(), Some("text"));
     assert_eq!(field(hyphen, "shape").as_deref(), Some("rows"));
     assert_eq!(
@@ -381,5 +405,8 @@ fn a_capability_that_is_built_is_still_waiting_on_somebody() {
         "`built` means nobody has looked yet, so it is the one state that most needs to be \
          visible - it is where every capability vetted by looking waits"
     );
-    assert_eq!(built.to, "sean", "and it waits on a person, not on the code lane");
+    assert_eq!(
+        built.to, "sean",
+        "and it waits on a person, not on the code lane"
+    );
 }

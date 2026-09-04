@@ -186,6 +186,25 @@ is in it, because the names are what this is for.
 
 36 row(s)
 
+## labor
+
+| territory | made | spent | left |
+| --------- | ---- | ----- | ---- |
+| 1         | 12   | 0     | 12   |
+| 2         | 4    | 0     | 4    |
+| 3         | 0    | 0     | 0    |
+| 4         | 0    | 0     | 0    |
+| 5         | 0    | 0     | 0    |
+| 6         | 0    | 0     | 0    |
+| 7         | 0    | 0     | 0    |
+| 8         | 0    | 0     | 0    |
+| 9         | 0    | 0     | 0    |
+| 10        | 0    | 0     | 0    |
+| 11        | 0    | 0     | 0    |
+| 12        | 0    | 0     | 0    |
+
+12 row(s)
+
 ## unit
 
 | unit | kind | place | fuel | readiness |
@@ -193,12 +212,21 @@ is in it, because the names are what this is for.
 
 *(empty) 0 rows*
 
-## unit kind
+## kind
 
-| kind    | in play |
-| ------- | ------- |
-| ark     | 0       |
-| pioneer | 0       |
+| kind      | in play |
+| --------- | ------- |
+| citizen   | 16      |
+| labor     | 16      |
+| food      | 0       |
+| metal     | 0       |
+| energy    | 0       |
+| extractor | 11      |
+| garrison  | 2       |
+| yard      | 0       |
+| ark       | 0       |
+| pioneer   | 0       |
+| territory | 12      |
 
-2 row(s)
+11 row(s)
 
