@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-230** - `P-229` makes an instruction-shaped proposal malformed, and `P-222` was one · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -22,6 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-32** - `b456283` S-32: missing, extra and different, over a set that is found rather than listed · still open in `docs/notes/proposals.md`
 - **S-27** - `35ca2ea` S-27: a dump per turn, so a wrong number names its turn · still open in `docs/notes/proposals.md`
 - **S-25** - `66cb193` S-25: one table naming every kind, and my first check for it was decoration · still open in `docs/notes/proposals.md`
+- **S-23** - `3bbf573` S-23: a view of the recipes, which nothing had · still open in `docs/notes/proposals.md`
 - **S-14** - `b394c81` S-14: the entity view and the HTML, from the same rows · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
@@ -64,10 +66,10 @@ it exists to ask.
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208
+- `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223
-- `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216

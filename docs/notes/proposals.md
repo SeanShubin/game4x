@@ -45,31 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-230 - `P-229` makes an instruction-shaped proposal malformed, and `P-222` was one
-
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **shape** text - **into**
-`CLAUDE.md` -> Promotion, appended to the paragraph `P-229` landed
-
-**Filed immediately because promoting `P-229` made an existing practice non-compliant.** It says *a
-proposal asking for approval carries exactly one quotation*. **An instruction often carries none**,
-because its offer is a described change rather than words that land: `P-222` said
-
-- *not in code and not in markup* becomes *not in code and not in a presentation file*
-- *Nothing restates what a data file says* becomes *Nothing states by hand what a data file says*
-
-and you approved it. **Under the rule as it now reads, that proposal is malformed**, and so is the
-next one of its kind.
-
-> **An instruction may carry no quotation at all**, because what it offers is a change described
-> rather than words that land. What it must carry instead is the check that says it was made.
-
-**Basis: `CLAUDE.md` already says the second half**, three bullets above - *an instruction says how
-to tell it was carried out, and the promoting commit runs that check*. **This says that the check is
-what an instruction has in place of a quotation**, which is what makes *exactly one* not apply to it.
-
-**One line, and it is the difference between a rule that holds and a rule with a known exception
-nobody wrote down.**
-
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
@@ -1639,6 +1614,7 @@ work the release exists to order.
 | P-225, deleting the expected data is how I change my mind, and absence means acceptance                         | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-04 |
 | P-228, a test is for what a person cannot repeat, not for what happens once                                     | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-04 |
 | P-229, a proposal says whether it wants approval or a decision, and the quotation is the offer                  | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-04 |
+| P-230, an instruction may carry no quotation, and carries its check instead                                     | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-04 |
 
 ## Rejected
 
