@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-225** - `P-219` says the test locks the expected data and does not say how you unlock it · `docs/notes/proposals.md`
+- **P-226** - A proposal with more than one block does not say which one lands · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

@@ -78,6 +78,35 @@ the mechanism `P-219` was missing rather than a new idea.
 
 [What the harness does, measured](regression-by-directory.md).
 
+### P-226 - A proposal with more than one block does not say which one lands
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **shape** text - **into**
+`CLAUDE.md` -> Promotion, after the paragraph naming text, rows and an instruction
+
+**The code lane's `S-10` reports three of twenty-nine promotions as unreadable, and the reason is
+this lane's.** A proposal may quote the text it is replacing beside the text it proposes - *rule 7 as
+it stands*, then *rule 7 as it would read* - and **nothing marks which is which**. Requiring every
+block to land flags the quotation; requiring any one to land is satisfied by the quotation alone,
+since it is quoted because it is already there.
+
+> When a proposal carries more than one block, **the one that lands is the last**. Every earlier
+> block is a quotation of something that already exists, and a promotion checks that it still does.
+
+**Basis: this lane has been relying on the convention without declaring it.** The promotion script
+for `P-220`, `P-223` and `P-224` takes the last block and verifies each earlier one against the
+tree. **It worked, and it worked by accident** - nothing said the order had to be that way, so the
+next proposal could have put the quotation last and the check would have passed on the wrong block.
+
+**The second sentence is what makes it fail loudly instead of quietly.** A proposal that ended with a
+quotation would satisfy a last-block check on its own, because the quotation is already present.
+**It cannot satisfy both**: its proposed text would then sit in an earlier position, and would not
+already exist.
+
+**It costs no new syntax and no new field**, and it makes three currently unreadable promotions
+checkable. **Three out of twenty-nine may be a fine price to leave**, which is the code lane's own
+view - it named the problem and declined to propose the fix. This lane thinks the fix is cheaper
+than the reporting.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
