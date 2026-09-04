@@ -174,14 +174,21 @@ declares.**
 > **asks** - `approval`, meaning the words are final and reading them is the whole of the work, or
 > `a decision`, meaning a choice is open. Only a proposal carries it.
 
-**Basis: the field is what makes your split generated rather than remembered.** `tools/outbox` reads
-`to`, `status` and the title from every item and writes `pending.md`. **It does not read `asks`** -
-checked, the word appears nowhere in `tools/outbox/src/` - so today the queue is one undifferentiated
-list and the distinction you asked for exists only in the prose of each item.
+**Basis: a tool already depends on it, and it is still undeclared.** `tools/outbox/src/lib.rs` line
+1226 filters on `**asks**` - a proposal carrying it is exempted from the check that every proposal
+offers text, with the reason written out above it: *requiring text of one would push whoever wrote it
+to invent a quotation for a question*. **So the convention has already reached code**, and the only
+place it is not written down is `CLAUDE.md`.
 
-**With the field declared, `pending.md` can print two counts**: how many you can read and approve,
-and how many need you to think. **That was the point of the reframing** and it is a small change to a
-tool once the field is real.
+**This lane first claimed the word appears nowhere in `tools/outbox/src/`. That was wrong** - it is
+there three times, and the claim was made after checking `main.rs` alone. **The correction makes the
+proposal stronger**: an undeclared convention nothing uses is untidy, and one a test already depends
+on is a rule in everything but name.
+
+**What is still missing is the half you asked for.** The tool uses `asks` to *exempt*; it does not
+use it to *split*. `pending.md` is one undifferentiated list, so how many proposals you can read and
+approve, and how many need you to think, is a thing you can only learn by opening each. **With the
+field declared, that becomes two counts in a generated file.**
 
 **One thing to note rather than decide.** `kind` and `shape` are also undeclared - neither appears in
 `CLAUDE.md`'s field table, and both have been in use for months. **This proposal does not fix
