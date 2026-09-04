@@ -1,9 +1,11 @@
 //! The scenario's expected state, read from a data file rather than from Rust.
 //!
 //! **`S-29`, and half of `P-218`.** A data file the *test* reads is not a data file the
-//! *game loads*; the kinds, recipes and costs are still Rust and markdown. What moves is one
-//! scenario's expectations, out of ninety-six `assert_eq!` lines and into something Sean can
-//! read and check.
+//! *game loads*; the kinds, recipes and costs are still Rust and markdown.
+//!
+//! **Nothing has moved out of `first_release.rs` yet** - all ninety-six assertions are still
+//! there. This is the mechanism waiting for something to compare against, and `S-34` says
+//! the assertions come out in the same change that puts the first expectation in.
 //!
 //! **The real expectation is not seeded here and that is deliberate.** `P-225` says changing
 //! his mind means deleting the expected data, and absence means acceptance - so a missing

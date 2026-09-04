@@ -9,9 +9,15 @@
 //!
 //! **This is half of `P-218` and only half.** A data file the *test* reads is not a data
 //! file the *game loads*, and the rule wants the second. The kinds, recipes and costs are
-//! still Rust and markdown; what moves here is one scenario's expectations. Saying so
-//! matters, because a step that satisfies half a rule and is reported without the qualifier
-//! is how a rule gets recorded as met while still broken.
+//! still Rust and markdown.
+//!
+//! **And nothing has moved yet.** This is the mechanism; `tests/first_release.rs` still
+//! carries all ninety-six assertions, and they are live scenario values. `S-34`: they come
+//! out in the **same change** that puts the first reviewed expectation in. Not before, or
+//! the scenario is checked by nothing. Not after, because *after* is a window in which the
+//! scenario has two expectations - a reviewed file and ninety-six lines written by whoever
+//! wrote the code - and **the one that is wrong is not the one that fails**. A stale
+//! assertion fails loudly while being the thing nobody ever reviewed.
 //!
 //! # The notation
 //!
