@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-233** - Readiness becomes a boolean, and its name collides with a recipe's · `docs/notes/proposals.md`
+- **P-233** - `ready` becomes a boolean trait and the recipe becomes `refresh` · `docs/notes/proposals.md`
 - **P-234** - One `extractor` kind with a resource trait, in place of three kinds · `docs/notes/proposals.md`
 - **P-235** - Directions: a place for what the design expects to move · `docs/notes/proposals.md`
 - **P-236** - The `asks` field is in use and nothing declares it · `docs/notes/proposals.md`

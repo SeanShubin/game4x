@@ -45,47 +45,42 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-233 - Readiness becomes a boolean, and its name collides with a recipe's
+### P-233 - `ready` becomes a boolean trait and the recipe becomes `refresh`
 
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **asks** a decision -
-**into** `releases/first-release.md` -> Traits and Recipes
+**to** sean - **status** open - **raised** 2026-09-04 - **revised** 2026-09-04 - **kind** Sean's own
+- **shape** instruction - **asks** approval - **into** `releases/first-release.md` -> Traits and
+Recipes
 
-**You chose the boolean and that part is settled.** The trait's values become yes or no, and the
-four recipe rows whose *Traits* cell says `exhausted` say `not ready` instead. **Measured: four rows
-say `exhausted` and four say `ready`.**
+**You chose the boolean, then chose `refresh`. This is what that comes to, in six edits**, shown
+rather than applied because one of them is a choice you have not seen.
 
-**One collision, which is why this asks rather than tells.** There is a world recipe **named**
-`ready` - *consume 1 thing exhausted, produce 1 thing ready*. Today the trait is `readiness` and the
-recipe is `ready`, so nothing clashes. **Naming the trait `ready`, as your sketch does, makes a trait
-and a recipe share a word.**
+**In the *Traits* table**, one row:
 
-- **Choice 1 - trait `ready`, values yes or no.** `{citizen ready:true}`, exactly your sketch. The
-  recipe keeps its name and reads *consume 1 thing not ready, produce 1 thing ready*.
-- **Choice 2 - trait stays `readiness`, values yes or no.** `{citizen readiness:true}`. No collision,
-  and further from what you wrote.
-- **Choice 3 - trait `ready`, and the recipe is renamed** to something like `restore`.
+- `| **readiness** | whatever readies | ready, exhausted | stored |`
+- becomes `| **ready** | whatever readies | yes or no | stored |`
 
-**You have since pointed at 3, and it is better than the 1 this lane recommended.** *Many card games
-have a refresh or reset stage, or something of that nature.*
+**In the *Recipes* table**, the recipe named `ready` becomes `refresh` - one cell - and the ending
+order sentence changes with it: *`upkeep`, then `grow` and `perish`, then `spoil`, then `age`, then
+`refresh`*.
 
-**The reason it is better is in the list the recipe already sits in.** `spec/turn.md` ends a turn
-with `upkeep`, `grow`, `perish`, `spoil`, `age`, `ready` - and five of those six are **what happens**.
-`ready` is the odd one: it names the state it leaves behind rather than the act. **`refresh` is a
-verb in a list of verbs**, and it frees the word `ready` for the trait, which is where your sketch
-puts it.
+**And four rows whose *Traits* cell says `exhausted` say `not ready`** - `move`'s produced unit,
+`create labor`'s produced citizen, `work`'s produced extractor, and `refresh`'s consumed thing. The
+four that say `ready` are unchanged.
 
-**So this lane now recommends 3, with `refresh`.** The trait is `ready`, values yes or no, exactly as
-you wrote it; the world recipe is `refresh`, and reads *consume 1 thing not ready, produce 1 thing
-ready* - **which is what a refresh stage does.** `reset` is the other candidate and says something
-slightly different: reset suggests returning to a starting value, and this returns to *usable*, which
-is what refresh means in the games you are thinking of.
+**That last one is the choice you have not seen.** With the trait a boolean named `ready`, the word
+`exhausted` is no longer the name of anything - it would be the only word in the *Traits* column that
+does not correspond to a trait. **`not ready` follows from the boolean rather than being a separate
+decision**, but it is your vocabulary and this lane will not change it silently.
 
-**What it costs**: the word `ready` as a recipe name appears in two places - the recipe table and
-`spec/turn.md`'s ending order - and both become `refresh`. **Nothing else in the release mentions it.**
+**Assertion**: `readiness` and `exhausted` appear nowhere in `releases/first-release.md` - **measured
+2026-09-04: `readiness` once, `exhausted` four times**; `refresh` appears twice, in the recipe table
+and the ending order; the *Traits* table still has 17 rows and the recipe table still names 17
+recipes.
 
-**Recorded because this lane recommended 1 an hour ago**: 1 was argued from the collision being
-harmless. Your point is that the collision was a symptom - the recipe had the wrong sort of name
-before the trait ever wanted the word.
+**`spec/turn.md` is deliberately not touched.** It says *anything that can be used is ready or
+exhausted* and *everything becomes ready again* - prose about the concept, not a trait value or a
+recipe name, and still true as English. **Say if you want it to follow**; this lane will not edit
+your prose to match a table.
 
 ### P-234 - One `extractor` kind with a resource trait, in place of three kinds
 
