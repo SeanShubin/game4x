@@ -112,13 +112,35 @@ pub fn rows(game: &game_model::Game) -> Vec<Row> {
     out
 }
 
+/// What a freshly written file says about whether anybody has looked at it.
+///
+/// **`S-35`.** This line used to read *Expected. Reviewed by hand* on a file the program had
+/// just written from its own output. **The one artifact whose entire value is that a person
+/// checked it opened by claiming a person had checked it** - correct about every number and
+/// false about the only thing that made the numbers mean anything.
+///
+/// It is not deleted, because a file with no status line reads as reviewed to anyone who
+/// does not know the history, which is everyone later. It says the true thing instead, and
+/// **the line is where the state lives**: `P-219`'s lock and `P-225`'s deletion protocol
+/// both turn on whether a person has looked, so Sean edits this line when he has. One act,
+/// in the file, visible in the diff, impossible by accident - the same shape as `vetted`,
+/// which only he sets.
+///
+/// A re-seed writes it back to unreviewed, which is right: a file the program rewrote is one
+/// nobody has checked, whatever was true of the version before it.
+pub const REVIEW_LINE: &str =
+    "# Expected. NOT YET REVIEWED - written from the program's own output, awaiting Sean.
+";
+
 /// A state as a data file.
 pub fn write(game: &game_model::Game, about: &str) -> String {
     let mut out = format!("# {about}\n");
+    out.push_str(REVIEW_LINE);
     out.push_str(
-        "# Expected. Reviewed by hand; the scenario test compares what it computes with \
-         this.\n# Deleting a row, or this file, is how changing your mind is said - \
-         `docs/process.md`.\n",
+        "# When you have read it and it is what the scenario should produce, replace the \
+         line\n# above with: `# Expected. REVIEWED by Sean.` That edit is the review, and it \
+         is the\n# only record of one.\n#\n# Deleting a row, or this file, is how changing \
+         your mind is said - `docs/process.md`.\n",
     );
     let mut last = String::new();
     for row in rows(game) {
