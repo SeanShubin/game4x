@@ -8,6 +8,16 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-04, on first appearances and on what the queue is for
+
+*First appearances of artifacts are fine as well for the same reason, just have the instances
+mention them.* - so a new generated artifact is a one-off like the first seed, and the duty is to
+say so in the report rather than to build a check. Recorded on `S-30` and sent to the code lane.
+
+*I think the important thing is to distinguish between proposals that are ready for me to approve,
+and proposals that are drawing attention to decisions I need to make.* - `P-226` withdrawn on it,
+`P-229` filed.
+
 ## Said 2026-09-04, on what a test is for
 
 *As a human i can remember to vet the scenario test the first time, it is remembering to do some

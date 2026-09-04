@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-226** - A proposal that quotes two passages does not say which one it is offering · `docs/notes/proposals.md`
-- **P-228** - A test is for what a person cannot repeat, not for what happens once · `docs/notes/proposals.md`
+- **P-229** - The queue does not say what it wants from you · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -72,8 +71,8 @@ it exists to ask.
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197
+- `docs/process.md` -> How I know the game is right - P-219, P-225, P-228
 - `spec/control.md` -> Winning - P-77, P-81, P-125
-- `docs/process.md` -> How I know the game is right - P-219, P-225
 - `docs/process.md`, a new section - P-204, P-211
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186

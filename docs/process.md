@@ -30,6 +30,10 @@ data means I accept what it does now**, so the test writes it, and what I review
 version control. Nothing else may write it: an expectation that can be edited in place is one that
 can be edited by accident, which is the thing it exists to prevent.
 
+A test is there for what I cannot reliably repeat. **I can remember to do a thing the first time;
+what I cannot do is remember a mundane check every time after that**, and that is what a failing
+test is for. So a check earns its place by guarding the repetition, not the one-off.
+
 ## Specification Instance
 - I have Claude generate proposals for changes to the specification
 - I work with claude to make sure I approve the exact text of the proposals

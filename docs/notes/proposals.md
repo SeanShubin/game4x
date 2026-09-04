@@ -45,64 +45,45 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-226 - A proposal that quotes two passages does not say which one it is offering
-
-**to** sean - **status** open - **raised** 2026-09-04 - **revised** 2026-09-04 - **kind** cleanup -
-**shape** text - **into** `CLAUDE.md` -> Promotion, after the paragraph naming text, rows and an
-instruction
-
-**Rewritten without the word `block`, 2026-09-04**, which you asked about and which turns out not to
-be a term this repository defines. It appears once in `CLAUDE.md` as a noun, at the end of a
-sentence - *nothing else, ever - for a block of text* - and I had been using it in proposals as
-though it were defined.
-
-**A proposal shows the words it offers by indenting them as a quotation.** Sometimes it also quotes
-the words those replace, so you can see both - `P-220` showed *rule 7 as it stands* and *rule 7 as it
-would read*. **Nothing says which quotation is the offer**, so a check that a promotion landed what
-you approved cannot tell them apart: **requiring both to appear flags the old one, and requiring
-either to appear is satisfied by the old one alone**, since it is quoted because it is already there.
-
-> When a proposal quotes more than one passage, **the one being offered is the last**. Everything
-> quoted above it is there to show what already exists, and a promotion checks that it still does.
-
-**Basis: I have been relying on this without saying so.** My promotion script for `P-220`, `P-223`
-and `P-224` takes the last quotation and checks the earlier ones against the tree. **It worked, and
-it worked by accident** - nothing said the order had to be that way, so the next proposal could have
-put the old words last and the check would have approved the wrong passage.
-
-**The second sentence is what makes a mistake fail loudly.** A proposal that ended with the old words
-would satisfy a last-quotation check on its own, because the old words are already present. **It
-cannot satisfy both**: the words being offered would then sit higher up, and would not already exist.
-
-**It costs no new punctuation and no new field**, and it makes three currently unreadable promotions
-checkable - three of twenty-nine. **The code lane named the problem and declined to propose this**,
-thinking three may be a fine price to leave. You get both views.
-
-### P-228 - A test is for what a person cannot repeat, not for what happens once
+### P-229 - The queue does not say what it wants from you
 
 **to** sean - **status** open - **raised** 2026-09-04 - **kind** Sean's own - **shape** text -
-**into** `docs/process.md` -> How I know the game is right
+**into** `CLAUDE.md` -> Promotion, replacing nothing and added after the paragraph naming text, rows
+and an instruction
 
-**Your reason for withdrawing `P-227` is worth more than `P-227` was**, and it is a rule this lane
-needed today rather than a description of one case.
+**Two parts, and the second is only worth having because of the first.**
 
-> A test is there for what I cannot reliably repeat. **I can remember to do a thing the first
-> time; what I cannot do is remember a mundane check every time after that**, and that is what a
-> failing test is for. So a check earns its place by guarding the repetition, not the one-off.
+> **A proposal asks one of two things, and says which.** It asks for **approval**, meaning the words
+> are final and reading them is the whole of the work; or it asks for **a decision**, meaning a
+> choice is open and no wording can be final until it is made. A proposal that asks for approval
+> **contains no choice Claude made quietly** - where there is one, it is a decision, and the
+> proposal states the choice rather than resolving it.
+>
+> **The indented quotation is reserved for what is being offered.** Anything else a proposal quotes -
+> the words being replaced, an existing rule, a line of code - is shown some other way. So a
+> proposal asking for approval carries exactly one quotation, and a proposal asking for a decision
+> carries none until it becomes the other kind.
 
-**Basis: it would have stopped `P-227` being filed.** That proposal existed to make the *first*
-seeding safe - one event, memorable, and yours. **It was a rule written for the case a person is
-best at**, which is the opposite of where a check belongs, and nothing here said so.
+**Basis for the first part: `P-220` is the case, and it read as ready when it was not.** It arrived
+proposing *state the actual values in a data file* - and the choice between *numbers* and *data* was
+yours, not mine. You caught it. **Nothing in the queue was going to.** A proposal that presents a
+decision as settled wording is the expensive failure here, because the cost of missing it is a rule
+in `spec/` that says something you did not choose.
 
-**It is also the missing half of a rule already promoted.** `CLAUDE.md` says a quality improvement
-is verified by a check that would have failed before it - **which says what a check must prove and
-not what is worth checking.** This is the second question, and the answer is repetition.
+**Basis for the second part: it dissolves `P-226` rather than answering it.** That proposal asked
+which of several quotations lands, and offered *the last one*. **With the quotation reserved for the
+offer there is nothing to disambiguate** - the check reads the one quotation, and a proposal with two
+is malformed rather than ambiguous. The code lane's three unreadable promotions become checkable, and
+so does every future one, without a counting rule anybody has to remember.
 
-**One thing it does not settle, said here rather than left implied.** A new generated artifact has
-a first appearance too - `S-30`'s data file will have one - so *the first time* recurs per artifact
-rather than once ever. **On your own reasoning that is still fine**: each is a single memorable
-event at the moment somebody creates the thing. It is worth knowing that the special case is not
-unique, so nobody later mistakes a recurrence for a defect.
+**What it costs.** `P-220` showed rule 7 as it stands and as it would read, and both were useful. It
+would now show the current wording in italics or indented as code, and only the offer as a
+quotation. **One formatting habit, in exchange for the offer never being in doubt.**
+
+**What it enables, if you want it.** `tools/outbox` reads these fields and writes `pending.md`, so
+**the split can be generated rather than maintained** - two lists, *ready to approve* and *needs a
+decision*, with counts. That is a small change to a tool and no change to how anything is written; it
+is mentioned because the field is what makes it possible, not because it has to happen now.
 
 ## Addressed to other perspectives
 
@@ -308,6 +289,8 @@ around them moved.
 each other*. **That comment is correct about two copies and becomes wrong about one source**: when
 the data file exists, the release is generated from it and the parse is a currency check, not a
 reconciliation.
+
+**Its first appearance needs no reviewed expectation, and you say so when you make it.** Sean, 2026-09-04: a new artifact's first appearance is the same memorable one-off as the first seed, so **mention it in the report rather than guarding it with a check**.
 
 **Unblocked by `P-224`, 2026-09-04, which named the destination.** A release does not contain the
 game's data; it links to the generated view, which is a file of its own. **So these eight tables
@@ -1660,6 +1643,7 @@ work the release exists to order.
 | P-220, rule 7 sends the game's data to a data file rather than a release                                        | `spec/README.md` -> Rules for this directory, rule 7                                                                                         | 2026-09-04 |
 | P-224, a release does not contain the game's data and links to the generated view                               | `releases/README.md` -> The rule that keeps them from contradicting each other                                                               | 2026-09-04 |
 | P-225, deleting the expected data is how I change my mind, and absence means acceptance                         | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-04 |
+| P-228, a test is for what a person cannot repeat, not for what happens once                                     | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-04 |
 
 ## Rejected
 
@@ -1692,3 +1676,4 @@ again in a later session.
 | P-183, a recipe acts in one place and its results appear there                        | Withdrawn into P-190. Sean's `scope` column has a value `everywhere` - food spoils wherever it is - so *one place* would have been wrong as a general rule. The build case was already covered by `spec/logistics.md`: *whatever pays a cost must be in the territory where the thing being paid for is built*.                                             |
 | P-205, a node is a kind, and a territory has no capacity for nodes                    | Withdrawn for Sean's own counter, which is better. A territory has capacity 8 for citizens and there is no citizen slot kind; a node is a slot invented for one kind of thing where nine others manage without one. `P-206` removes the same exception by splitting the extractor into three kinds, which adds no mechanism at all.                         |
 | P-227, the first expected data is derived rather than accepted                        | Sean, 2026-09-04: *As a human I can remember to vet the scenario test the first time, it is remembering to do some mundane task each time that is impossible for a human, which is why we need a test to fail for those times to remind the human.* The first seed is a known special case he handles by knowing to. `P-228` is the principle underneath it |
+| P-226, when a proposal quotes more than one passage the last is the offer             | Sean, 2026-09-04: the distinction that matters is *between proposals that are ready for me to approve, and proposals that are drawing attention to decisions I need to make*. `P-229` makes that split and dissolves this ambiguity instead of ruling on it                                                                                                 |
