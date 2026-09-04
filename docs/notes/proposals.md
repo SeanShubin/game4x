@@ -109,6 +109,28 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
+### S-31 - `C-16` is not answered in the way `C-17` and `C-18` are, and should not close with them
+
+**to** code - **status** open - **raised** 2026-09-04 - **source** the code lane's plan of
+2026-09-04, which groups all three
+
+**`C-17` and `C-18` are answered and should close.** `C-18` was answered in `3fba321` - emphasis is
+text, `CLAUDE.md` is not missing a line, `S-10` should not strip `**` before comparing, and the
+`P-195` reading it relied on was withdrawn. `C-17` was answered by `P-194` and `P-197` landing the
+three shapes.
+
+**`C-16` is different in kind.** It does not ask a question this lane answered; **it records that
+the first half of the invariant is not kept** - `prototypes/kinds` still holds the kinds, families,
+traits, recipes and costs as hand-written Rust. **That is still true**, and `P-218` and `P-222`
+widened the rule it measures against, so it is more true than when it was filed.
+
+**Closing it deletes the only record of the gap while the gap is open.** Its own last line says why
+it exists: *a promoted invariant that the code half-keeps is exactly the state that reads as done
+from the outside.* **Closing it produces that state.**
+
+**It closes when `prototypes/kinds` loads its data rather than declaring it** - which is step 4 of
+the plan, not step 1.
+
 ### S-30 - The release's eight data tables have no data file to be generated from
 
 **to** code - **status** open - **raised** 2026-09-04 - **source** `P-218`, and `P-220` when it lands
@@ -167,7 +189,17 @@ worse than no generated file.**
 - **A currency test for the five generated dump files**, the same shape as
   `the_committed_catalog_is_what_the_release_generates`. Regenerating changes nothing, **with the
   number of files asserted**, since a loop that stopped finding them would pass by checking none.
-  **Independent of everything below** - a generated file has to be current whatever generates it.
+  **Independent of everything below** - a generated file has to be current whatever generates it. **Five, and the count is the point: there are seven generated files and two are already
+  held.** `catalog.md` by `prototypes/kinds/tests/catalog_is_current.rs`, and `pending.md` by
+  `hooks/pre-commit`, which rewrites it at every commit. The five are `state.md`, `state.html`,
+  `entities.md`, `entities.html` and `turns.md`.
+
+  **Do not extend it to `pending.md` without reading the hook.** It **refuses** to rewrite when an
+  outbox has unstaged changes, deliberately, so that a half-written finding is never rendered into
+  the index - and it says so on stderr. **So `pending.md` can be correctly stale**, and a test
+  asserting it is current would fail on a refusal working as designed. Scope the test to the five,
+  or handle the refusal. **Making the hook unconditional to make a test pass would delete the
+  reason it is conditional.**
 - **The scenario's expected values move out of Rust into a data file** - in the same format the
   input is in, or another data format, and **not markdown**. `turns.md` says territory 1 has four
   citizens after turn 1 and `first_release.rs` says `assert_eq!(place.citizens, 4)`; **neither is
@@ -175,6 +207,14 @@ worse than no generated file.**
 - **The test reads input, reads expected, computes actual, compares.** That is the shape he named,
   and it is what makes the expected file a lock rather than a record: **a difference means either he
   changed his mind or something slipped in**, and the test is what forces somebody to say which.
+
+**A data file the test reads is not yet a data file the game loads, and only one of those is
+`P-218`.** Moving the 96 expected values out of Rust is real and is half the rule; the model still
+holds thirteen costs as `pub const` and the game still loads no definitions. **Say which half when
+reporting it** - a step that satisfies half a rule, reported without the qualifier, is how a rule
+gets recorded as met while still being broken. This is the shape in
+[silence-is-not-agreement.md](silence-is-not-agreement.md), and it is the cheapest of the eleven to
+avoid: one clause in a sentence.
 
 **What stays in Rust is what a file cannot say.** `dump.rs`'s seven shape tests are about the dump's
 form rather than the game's numbers and belong where they are. So does anything that has to fail -
