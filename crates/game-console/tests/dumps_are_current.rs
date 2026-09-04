@@ -49,6 +49,23 @@ impl Library for Files {
 /// and already holds it to being current. `pending.md` carries no marker, which is just as
 /// well - `hooks/pre-commit` refuses to rewrite it while an outbox has unstaged changes, so
 /// it can be correctly stale and does not belong in a currency comparison at all.
+///
+/// # Why only this directory
+///
+/// **`S-33`: the predicate is unbounded content matching, and the scope is what saves it.**
+/// Any file containing that sentence matches - and `docs/notes/proposals.md` contains it
+/// three times, because reporting a defect in a generated file's header means writing that
+/// header down. The scan does not see it only because generated files all happen to live in
+/// the repository root today, which is a fact nothing states.
+///
+/// So it is stated here, and the count below is what keeps it honest. **If a generated file
+/// ever lands outside the root** - `P-224` says only *a file of its own* - widening this
+/// scan picks up prose immediately, and the count fails rather than the extra file passing
+/// as a dump. **If a hand-written root file ever quotes the marker**, the same. `README.md`
+/// and `CLAUDE.md` are both in the root and neither carries it, but nothing stops one.
+///
+/// A marker that cannot be quoted in prose would be stronger and costs every generated file
+/// a change. Not worth it while the count holds.
 fn marked_on_disk(root: &Path) -> Vec<String> {
     let mut found = Vec::new();
     let Ok(entries) = std::fs::read_dir(root) else {

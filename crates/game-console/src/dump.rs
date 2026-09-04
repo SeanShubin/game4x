@@ -276,10 +276,8 @@ pub fn markdown(game: &Game, title: &str) -> String {
 "
     );
     out.push_str(
-        "**Generated. Do not edit.** Every table and every column is named whether or not          anything
-is in it, because the names are what this is for.
-
-",
+        "**Generated. Do not edit.** Every table and every column is named whether or not \
+         anything\nis in it, because the names are what this is for.\n\n",
     );
     for table in tables(game) {
         out.push_str(&format!(

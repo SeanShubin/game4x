@@ -1,6 +1,6 @@
 # State after `commands/play.4x`
 
-**Generated. Do not edit.** Every table and every column is named whether or not          anything
+**Generated. Do not edit.** Every table and every column is named whether or not anything
 is in it, because the names are what this is for.
 
 ## game
