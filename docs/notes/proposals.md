@@ -73,6 +73,33 @@ byte-identical, because it already said `build extractor 1 food`.
 **What this does not do.** It does not touch `garrison` or `yard`, which are one kind each already,
 and it does not change any cost or capacity. **Every number in the release is the same afterwards.**
 
+### P-241 - The match-string rule is about tables and the bug is about wrapping
+
+**to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **shape** text - **asks**
+approval - **into** `CLAUDE.md` -> A mistake worth not repeating, after the two habits
+
+**You asked whether the padder was causing the churn. Counted, it was not** - one failure of about
+sixteen today. **Three were this**, and the rule that would have prevented them is written for tables
+only.
+
+> **The same thing happens to a sentence, and the cause is wrapping rather than padding.** A match
+> string drafted as one sentence meets a file that broke it across two lines, and matches nothing.
+> **Locate prose the way you locate a row**: by a fragment short enough to sit on one line.
+
+**Basis: the paragraph above it already states the general form and then narrows.** *A match string
+drafted while writing the edit* is not the bytes on disk - **that is true whatever put the newline
+there**, and the two habits under it both say `|`. So the diagnosis is general and the cure is
+specific, which is why the same bug arrives wearing prose.
+
+**It is written down because the tooling that catches it does not survive.** This lane's helper now
+reports where the wrap fell and what to match instead, which turns three round trips into one - **but
+it lives in a scratchpad and dies with the session.** `CLAUDE.md` is what the next instance reads.
+
+**The other eight failures were a different thing and need no rule.** A number counted with `grep -c`
+- which counts lines - and then checked with a regex, which counts occurrences. **The guard refused
+every one before it reached a commit message**, and the helper now measures with the expression the
+guard will use, so the two cannot disagree.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
