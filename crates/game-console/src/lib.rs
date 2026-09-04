@@ -17,6 +17,7 @@
 
 pub mod binding;
 pub mod dump;
+pub mod expected;
 pub mod grammar;
 pub mod report;
 
