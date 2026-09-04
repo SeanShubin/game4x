@@ -257,42 +257,19 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
     ));
 
     // -- playing -----------------------------------------------------------
+    //
+    // **What the scenario leaves is in `expected/play.4x` and no longer here.** Twelve
+    // assertions about the end state - citizens, extractors, stores, turn, control - came
+    // out when that file went in, in the same change, because keeping both would give the
+    // scenario two expectations. They can disagree, and **the one that is wrong is not the
+    // one that fails**: an assertion nobody reviewed fails loudly against a file somebody
+    // did. `S-34`.
+    //
+    // What stays above is what a data file cannot say: the release's table against the
+    // model's, the two refusals, and the state before play, which an end-state file does
+    // not describe.
     run(&mut session, "run play");
-
-    let one = session.game.territory(TerritoryId(1)).unwrap();
-    assert!(one.founded, "the landing site is held");
-    assert!(one.garrison.is_some(), "the ark became a garrison");
-    assert!(session.game.units.is_empty(), "and is no longer a unit");
-
-    // Twelve citizens: every hand the food here can feed. Three food nodes at density
-    // four is twelve food a turn, and a population cannot outgrow what feeds it.
-    assert_eq!(one.citizens, 12);
-    assert_eq!(
-        one.extractors.len(),
-        9,
-        "three nodes of each resource, all worked"
-    );
-    for resource in Resource::ALL {
-        assert_eq!(one.extractors_for(resource).len(), 3, "{resource}");
-    }
-
-    // `spec/turn.md`: unused resources are discarded. Nothing is carried into the next turn.
-    for resource in Resource::ALL {
-        assert_eq!(one.store(resource), 0, "{resource} was discarded");
-    }
-    // And everything is ready again.
-    assert_eq!(one.labor_available(), one.citizens);
-    // Nine endings rather than six. An extractor costs a metal now, so the landing site
-    // spends three turns paying for the extractors it used to be given, and the loop that
-    // reaches a second territory is that much longer. The number is a property of
-    // `commands/play.4x` and moves whenever the economy does.
-    assert_eq!(session.game.turn, 8, "turn one, then seven endings");
-
-    // The pioneer took a second territory by land and became what it needed there.
-    let two = session.game.territory(TerritoryId(2)).unwrap();
-    assert!(two.founded, "spread across the planet by land");
-    assert!(two.garrison.is_some());
-    assert_eq!(session.game.controlled(), [TerritoryId(1), TerritoryId(2)]);
+    assert_eq!(session.game.phase, Phase::Play, "and it played through");
 }
 
 /// The model's costs are the release's costs.
@@ -374,30 +351,12 @@ fn the_landing_site_can_send_a_pioneer_out() {
     run(&mut session, "start");
     run(&mut session, "run play");
 
-    // Territory 2 was taken by land, founded, and the pioneer became what it needed.
-    let two = session.game.territory(TerritoryId(2)).unwrap();
-    assert!(two.founded, "the pioneer took the ground");
-    assert!(two.garrison.is_some(), "and became a garrison holding it");
-    // Founding produced two citizens, and because the new farm was worked on the turn it
-    // arrived they fed themselves and grew. A territory can pay its own way from the moment
-    // it is founded.
-    assert_eq!(two.citizens, 4, "two citizens, fed and grown");
-    assert_eq!(two.extractors.len(), 2, "and two extractors");
-    let mut leaves: Vec<Resource> = two
-        .extractors
-        .iter()
-        .map(|extractor| two.nodes[extractor.node].resource)
-        .collect();
-    leaves.sort_by_key(|resource| format!("{resource:?}"));
-    assert_eq!(
-        leaves,
-        [Resource::Food, Resource::Metal],
-        "a farm to feed itself and a mine to build with, which is what a new territory needs"
-    );
-    assert!(session.game.units.is_empty(), "the pioneer was consumed");
-
-    // Two territories held, which is more than the release started with.
-    assert_eq!(session.game.controlled(), [TerritoryId(1), TerritoryId(2)]);
+    // **What the pioneer left is in `expected/play.4x`**, not here - founded, garrison,
+    // citizens, extractors, the consumed unit and what is controlled. Seven assertions came
+    // out with the file going in. `S-34`.
+    //
+    // What stays is the line above, which is the release's ceiling against the model's cost:
+    // a comparison between two documents, which no dump of one state can make.
 }
 
 /// Which territory id sits where.

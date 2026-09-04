@@ -183,28 +183,64 @@ fn an_absent_expectation_is_seeded_and_then_compared() {
     std::fs::remove_dir_all(&at).ok();
 }
 
-/// The reviewed expectation, once it exists.
+/// The reviewed expectation, seeded on absence and compared thereafter.
 ///
-/// Until `P-227` settles how a first expectation is made, this reports that there is none
-/// rather than seeding one. **It says so out loud**: a test that skips quietly is the thing
-/// this repository keeps finding, and the whole point of the file it waits for is that
-/// somebody derived it rather than a program produced it.
+/// **`P-225`: absence means acceptance.** A missing file is how changing your mind is said,
+/// so this writes one rather than failing. An update is therefore a deletion rather than an
+/// edit - deliberate, visible in `git status`, and impossible by a hand slip.
+///
+/// **The first seed is a known false positive and Sean said so himself**, withdrawing
+/// `P-227`: *as a human I can remember to vet the scenario test the first time, it is
+/// remembering to do some mundane task each time that is impossible for a human, which is
+/// why we need a test to fail for those times to remind the human.* `P-228` is that reason
+/// as a rule - **a check earns its place by guarding the repetition, not the one-off.**
+///
+/// So this seeds, says loudly that it seeded, and from the next run onward it is the check.
 #[test]
 fn the_reviewed_expectation_holds() {
     let file = root().join(AT);
+    let session = played();
+    let actual = expected::rows(&session.game);
+
     let Ok(text) = std::fs::read_to_string(&file) else {
-        println!(
-            "no {AT} yet - the first expectation is derived by hand (`P-211`), not seeded \
-             from the program (`P-227`). The mechanism is checked by the tests above."
+        if let Some(directory) = file.parent() {
+            std::fs::create_dir_all(directory).expect("a directory to seed into");
+        }
+        std::fs::write(
+            &file,
+            expected::write(&session.game, "after `commands/play.4x`"),
+        )
+        .unwrap_or_else(|why| panic!("cannot seed {AT}: {why}"));
+        panic!(
+            "seeded {AT} from the program, which nobody has reviewed.\n\n\
+             This is the one-off `P-228` describes: the first expectation cannot be checked \
+             by a diff because there is nothing to diff it against. Read it, and if it is \
+             what the scenario should produce, commit it. From the next run on, this fails \
+             only when the game and the reviewed file disagree.\n\n\
+             {} rows written.",
+            actual.len()
         );
-        return;
     };
 
     let want = expected::read(&text).unwrap_or_else(|why| panic!("{AT}: {why}"));
-    assert!(!want.is_empty(), "{AT} exists and expects nothing");
 
-    let session = played();
-    let wrong = expected::compare(&want, &expected::rows(&session.game));
+    // **The count of what replaced the assertions.** Ninety-six `assert_eq!` lines came out
+    // when this file went in, and a data file that quietly shrank would check less while
+    // still passing - the same shape as a partial deletion of the assertions it replaced.
+    assert_eq!(
+        want.len(),
+        actual.len(),
+        "{AT} has {} rows and the scenario produces {}; a row was added or lost",
+        want.len(),
+        actual.len()
+    );
+    assert!(
+        want.len() > 90,
+        "{AT} expects only {} rows, which is less than the scenario has ever produced",
+        want.len()
+    );
+
+    let wrong = expected::compare(&want, &actual);
     assert_eq!(
         wrong.total(),
         0,
