@@ -77,17 +77,35 @@ citizens, the way `control` is derived from a citizen being present. The release
 *Kinds* and drops `create labor` from *Recipes*: **fourteen kinds becomes thirteen and seventeen
 recipes becomes sixteen**, and every count asserted against those tables changes with them.
 
-**This lane recommends A, and the reason is a rule you have already promoted.**
-`spec/invariants.md` says *a game's state is things, in places, and how many of each* and **nothing
-in the state is special to a kind. Adding a kind adds no field and no case.** Under B, labor is
-precisely a special case - the one quantity that is not a thing - and something has to know that.
-Under A it is a thing with a count, made by one recipe and consumed by another, which is the recipe
-system doing its job. It also satisfies *every cycle among recipes must spend readiness somewhere
-along it*: the citizen is what gets spent.
+**Both lanes recommend A. The code lane's reason is better than this lane's and is the one to read.**
 
-**Timing: the code lane is rewriting these exact shapes right now.** `S-21` replaces `labor_spent`
-along with `founded`, `stores` and the bare counts, so **the answer decides what it builds** rather
-than being applied afterwards.
+This lane argued from the release calling `labor` a kind. **That is the weak reason, because the
+release can be changed.** The code lane's is from inside the shape being rewritten: **B is not a
+different way to model labor, it is a re-introduction of the exact thing `S-21` exists to delete.**
+`labor_spent: u32` is a field per kind, and `spec/invariants.md` says *adding a kind adds no field
+and no case, and whatever reads the state reads it the same way whatever kind it holds*. **Under the
+new shape A costs nothing** - labor is counted by the same code that counts food. **B costs a field
+and a reader that knows labor is special**: `labor_available()` has to know about citizens and about
+exhaustion, which is a case in the one place the rule forbids one.
+
+**A has one cost neither lane had stated, and you should have it before answering.** Today `work`
+does implicitly what `create labor` does explicitly - `game.rs:657` checks `labor_available()` and
+`game.rs:665` increments `labor_spent`. **If labor is a thing, `work` needs labor to exist**, so
+either the console keeps creating it inside `work`, or every `work` gets a `create labor` before it.
+**Measured: `commands/play.4x` has 18 `work` commands in 35, so the explicit form is 53 commands
+rather than 35** - the scenario you are about to derive, half as long again.
+
+**So the code lane recommends A with a seam**, and this lane agrees: labor becomes a thing now, and
+`work` keeps creating and consuming it in one step until `P-214` splits the commands deliberately.
+`P-214` says the command list is the recipe list, so the explicit form arrives eventually - **but as
+`P-214`'s change and not as a side effect of this one.** That keeps `commands/play.4x` byte-identical
+through `S-21`, which is what lets `expected/play.4x` stay a check on the rewrite rather than being
+regenerated along with it.
+
+**Timing: the code lane is rewriting these shapes right now.** It is doing citizens, garrison,
+extractors and yards and **leaving `labor_spent` alone until you answer**, because building either
+answer first means building one of them twice. If you pick B it wants the record to show that B
+keeps a field the invariant forbids, so nobody later reads the shape as finished.
 
 ## Addressed to other perspectives
 
