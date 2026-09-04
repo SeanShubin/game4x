@@ -14,6 +14,10 @@ When an item lands in the spec, delete the row. Nothing here is decided.
 wording written before we had such a precise understanding of the intent. Check for vulnerabilities
 that come from outdated phrasing and propose a fix or fixes.*
 
+**Widened `P-220` from numbers to data, 2026-09-04**, on his word: *your recommendation is
+sound, approved*. One of a recipe's seven columns is a number, so moving only the numbers would
+have left the roles, kinds and traits in the specification.
+
 **Six found, four filed** - `P-220` to `P-223`. The two not filed are in `CLAUDE.md`'s authority
 table and in `releases/README.md`, and both follow from `P-220` rather than being separate
 decisions.

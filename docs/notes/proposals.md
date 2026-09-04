@@ -45,36 +45,48 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-220 - Rule 7 tells you to put the game's numbers in markdown
+### P-220 - Rule 7 tells you to put the game's data in markdown
 
-**to** sean - **status** open - **raised** 2026-09-04 - **kind** contradiction - **shape**
-instruction - **into** `spec/README.md` -> Rules for this directory
+**to** sean - **status** open - **raised** 2026-09-04 - **revised** 2026-09-04 - **kind**
+contradiction - **shape** instruction - **into** `spec/README.md` -> Rules for this directory
 
-**The worst of the six, because it is an instruction rather than an implication.** Rule 7, in your
-own directory:
+**Widened on your word, 2026-09-04, from numbers to data.** The first draft moved the destination and
+left the category, so rule 7 would have read *the quantities go in a data file, and the roles, kinds
+and traits stay here* - one of a recipe's seven columns is a number.
 
-> **Relationships here, numbers elsewhere.** State that a predator has more force than a
-> scavenger; state the actual values in a [release](../releases/README.md), where they can be tuned
-> without touching the specification.
+**Rule 7 as it stands:**
+
+> 7. **Relationships here, numbers elsewhere.** State that a predator has more force than a
+>    scavenger; state the actual values in a [release](../releases/README.md), where they can be
+>    tuned without touching the specification.
 
 **A release is markdown.** So anyone obeying rule 7 puts the game's data exactly where `P-218`
 forbids it - and is following a numbered rule while doing it. **This is where the release's eight
 data tables came from.**
 
-**Instruction.** In rule 7, *state the actual values in a [release](../releases/README.md)* becomes
-*state the actual values in a data file*. **The rest of the rule is kept verbatim** - *where they can
-be tuned without touching the specification* is the reason for the rule, and it is more true of a
-data file than of a release.
+**Rule 7 as it would read:**
 
-**Assertion**: `spec/README.md` contains no link to `releases/README.md` from rule 7 and does
-contain *state the actual values in a data file*; and `grep -rn` over `spec/`, `CLAUDE.md`,
-`docs/README.md` and `README.md` finds no other sentence routing numbers to `releases/`. **Measured
-2026-09-04: rule 7 is the only one.**
+> 7. **Relationships here, data elsewhere.** State that a predator has more force than a
+>    scavenger; state the game's data in a data file, where it can be tuned without touching the
+>    specification.
 
-**What this makes stale, so it is decided with it rather than after.** The release's Kinds, Families,
-Traits, Units and structures, Recipes, Territory resources, Biomes and What bounds a kind become
-renderings generated from the data file - which is what `P-218`'s third sentence already permits,
-and `S-29` and `S-23` already ask the code lane for.
+**Three changes and no fourth.** *numbers* becomes *data* in the heading; *the actual values in a
+release* becomes *the game's data in a data file*; *they can* becomes *it can*, which is agreement
+following the first two and not a choice. **The reason clause is kept word for word** - it is why the
+rule exists, and it is more true of a data file than of a release.
+
+**Assertion**: rule 7 contains no link to `releases/README.md`, contains *state the game's data in a
+data file*, and its final clause matches the parent commit's character for character; and `grep -rn`
+over `spec/`, `CLAUDE.md`, `docs/README.md` and `README.md` finds no other sentence routing the
+game's data to `releases/`. **Measured 2026-09-04: rule 7 is the only one.**
+
+**What it opens is filed as `S-30`.** The release's eight tables become a replication with nothing
+generating them, so the moment this lands `releases/first-release.md` is not compliant with
+`spec/README.md`. **Known and recorded rather than discovered** - `S-29` and `S-23` build the
+machinery and neither of them names these tables.
+
+**The root `README.md` restates the line `P-221` amended and is this lane's to update**, after this
+lands rather than before, so the two never disagree.
 
 ## Addressed to other perspectives
 
