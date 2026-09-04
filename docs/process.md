@@ -26,6 +26,14 @@ The third one is the data dump in this case.
 - The three rules above say the rest of it: I make all the decisions, and I evaluate which AI
   responses are true and which are false
 
+The specification instance is the only one that has me as its primary audience. All the instances
+talk to each other and only need me sometimes, because **my primary mechanism of coordination is
+the specification instance**. The other instances are details. **I need to keep my surface area
+small, because human attention is the most scarce resource when programming with an AI assistant.**
+
+So a **proposal** is a thing addressed to me. What the lanes send each other are items in an
+outbox, and there is no limit on those.
+
 ## How I know the game is right
 
 Four artifacts: the thing definitions, the recipe definitions, the commands a scenario ran, and the
@@ -101,10 +109,13 @@ test is for. So a check earns its place by guarding the repetition, not the one-
 - An approved proposal leaves the queue, and a one-line row stays in a ledger saying what
   was approved and where it landed. That ledger is what stops the same idea being proposed
   again a month later
+- Two things necessarily require my attention, and everything else has to earn its place against
+  them: **the proposals are where I create, and the scenario test is where I validate**
 - The main documents I consume as a human are
-  - `pending.md`, which is where I start: what must be decided, then what is outstanding
   - the proposals, where I either approve them or tell claude what to change
-  - the specification, especially the invariants
+  - the scenario test's input and expected data, which I check by hand
+  - the specification, especially the invariants - which I read while approving a proposal rather
+    than as a separate errand
 - a proposal is not done until it is committed, and Claude commits it without being asked
 - pushing is not part of done - I decide when to push, partly because the branch is shared and a push carries the other instances' local commits too
 - I have no preference between one commit per proposal and several proposals in one commit
@@ -166,7 +177,12 @@ test is for. So a check earns its place by guarding the repetition, not the one-
 ## Who writes what
 - Every instance reads everything. No instance writes outside its own directories
   - Specification instance: `spec/`, `releases/`, `docs/`, `README.md`, `CLAUDE.md`
-  - Coding instance: `crates/`, `tools/`, `prototypes/`, `web/`, `scripts/`, `hooks/`, CI, cargo
+  - Coding instance: `crates/`, `prototypes/`, `web/`, cargo, and production support - `hooks/`,
+    `scripts/`, CI, and everything in `tools/` that is not a lane's own
+  - Every lane owns the tools for its own work: `tools/spec/` is the specification instance's,
+    `tools/<name>/` is that lens's. Production support is everything else, and it has one owner for
+    the same reason every other file does - two instances editing one file lose each other's edits
+  - A lane that needs a check wired files it to the coding instance rather than wiring it itself
   - A research instance: `lenses/<its own name>/`, and nothing else
 - This is not only about authority. Two instances editing one file would silently lose each other's
   edits, and Claude has no way to lock a file, so one writer per file is what makes running several
@@ -182,11 +198,12 @@ test is for. So a check earns its place by guarding the repetition, not the one-
   instance has to read
 - The specification instance's outbox is the proposal queue
 - Every item carries an id, who it is addressed to, a status, and one line saying what it is
-- `pending.md` is the one place I go to see what is outstanding. I open the file rather than run a
-  command: running the command still leaves me reading the result, so it is two things where
-  opening the file is one
-- It is generated from every outbox at every commit, so it is never something somebody remembered
-  to update, and it says what must be decided before it says anything else
+- `pending.md` is for the instances rather than for me. It is generated from every outbox at every
+  commit, so it is never something somebody remembered to update, and it says what must be decided
+  before it says anything else
+- The one thing it would tell me that the queue cannot - whether a lane is blocked or idle - the
+  specification instance tells me in a sentence instead, so the guarantee below survives without my
+  opening another file
 - `scripts/outbox.ps1` answers the same question from a terminal, and filters by who an item is
   addressed to. That is mostly for the instances rather than for me
 - If nothing anywhere is open and addressed, then nothing any instance knows to be wrong is

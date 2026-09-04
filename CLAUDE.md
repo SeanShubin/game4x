@@ -45,8 +45,13 @@ not a lane beside the others; it is a way of looking at all of them.
 
 **The code lane owns the game. Every lane owns the tools for its own work.** Production is what
 ships to a player and is the code lane's alone. **Production support** - `hooks/`, `scripts/`, CI,
-and everything in `tools/` that is not a lane's own - belongs to no lane exclusively: whoever needs
-a check wired adds it, and the bar is a narrow reason rather than a permission.
+and everything in `tools/` that is not a lane's own - **is the code lane's too**. A lane that needs
+a check wired files it rather than wiring it, because one writer per file is what makes running
+several instances at once safe, and an exception for tooling is still an exception.
+
+Sean, 2026-09-04, choosing between the code lane, the quality lane and a new lane: a lens that ships
+something stops being independent evidence, and a new lane costs an instance he has to run. **The
+code lane was the only one that cost nothing already being paid.**
 
 | Perspective                     | Writes                                                               | Reads      |
 | ------------------------------- | -------------------------------------------------------------------- | ---------- |
