@@ -133,8 +133,19 @@ impl Kind {
 /// variant here, and adding a trait is what the release's *Traits* table is for.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Trait {
-    /// Exhausted this turn. Absent means ready.
-    Exhausted,
+    /// Ready, as a number. Absent means ready, and zero means not.
+    ///
+    /// **`P-233` renamed the trait and `P-235` says why it is a number.** The release used
+    /// to call this `readiness` with values *ready, exhausted*; it is now `ready`, yes or
+    /// no. This held `Exhausted` as a presence flag, which was doubly wrong afterwards - the
+    /// negative of the trait the release names, and a shape that cannot hold anything but
+    /// two states.
+    ///
+    /// `docs/vision.md` → Directions: *a trait may become a quantity, and nothing should
+    /// depend on one having only two values.* A citizen with two actions a turn is that
+    /// direction, and it needs a number here rather than a rename later. So this is a count,
+    /// read through [`Thing::is_ready`], and every caller asks that rather than the value.
+    Ready,
     /// Which of a territory's nodes an extractor works.
     Works,
     /// Force of its own.
@@ -174,6 +185,27 @@ impl Thing {
 
     pub fn is(&self, name: Trait) -> bool {
         self.traits.contains_key(&name)
+    }
+
+    /// Whether this thing can still act.
+    ///
+    /// **Absent means ready**, so a thing made this turn needs no trait to be usable, and
+    /// **nothing outside this method reads the number**. That is what keeps `P-235`'s
+    /// direction open: a citizen with two actions is a different value here and no change
+    /// anywhere else.
+    pub fn is_ready(&self) -> bool {
+        self.trait_of(Trait::Ready).unwrap_or(1) > 0
+    }
+
+    /// Spend one of whatever readiness this thing has.
+    pub fn spend_readiness(&mut self) {
+        let left = self.trait_of(Trait::Ready).unwrap_or(1);
+        self.set(Trait::Ready, left.saturating_sub(1));
+    }
+
+    /// What `refresh` does: everything can act again.
+    pub fn refresh(&mut self) {
+        self.clear(Trait::Ready);
     }
 
     pub fn set(&mut self, name: Trait, value: u32) {

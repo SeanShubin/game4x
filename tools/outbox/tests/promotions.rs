@@ -195,10 +195,16 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 /// scoping the check to start after them - which turns it off for a reason no reader can
 /// see. One line each, and the test below requires every one of them to still be failing,
 /// so an exception that has stopped being needed is reported rather than left to rot.
-const KNOWN: &[(&str, &str)] = &[(
-    "P-195",
-    "declared `shape text` and its block is an instruction - it says what four sentences in      `CLAUDE.md` become and adds a template field, and nothing in it lands verbatim. The      first proposal to carry the field mislabelled its own shape, which is what this check      found on its first run. **No repair can clear this one**: the four sentences landed      correctly, so there is nothing in the destination to fix - the wrong thing is one field      in a deleted proposal. `C-17`, answered.",
-)];
+const KNOWN: &[(&str, &str)] = &[
+    (
+        "P-236",
+        "declared `shape text` and its quotation is a table row - `**asks** - <value>`,          which landed as `| **asks** | <value> |` in `CLAUDE.md`'s field table. The          promotion is correct: a row landed as a row, repadded by `tools/pad-tables`, which          is exactly what `shape rows` means and is compared cell for cell. Only the label          is wrong, and a label is what this check reads. `C-19`.",
+    ),
+    (
+        "P-195",
+        "declared `shape text` and its block is an instruction - it says what four sentences in      `CLAUDE.md` become and adds a template field, and nothing in it lands verbatim. The      first proposal to carry the field mislabelled its own shape, which is what this check      found on its first run. **No repair can clear this one**: the four sentences landed      correctly, so there is nothing in the destination to fix - the wrong thing is one field      in a deleted proposal. `C-17`, answered.",
+    ),
+];
 
 /// Every promotion since the `shape` field existed put its block where it said.
 #[test]

@@ -304,9 +304,9 @@ pub const TRAITS: [TraitRow; 17] = [
         held: Held::Stored,
     },
     TraitRow {
-        name: "readiness",
+        name: "ready",
         of: "whatever readies",
-        values: "ready, exhausted",
+        values: "yes or no",
         held: Held::Stored,
     },
     TraitRow {
@@ -653,8 +653,8 @@ const JOINED_TO_FROM: [Qualifier; 1] = [by(
     "joined to `$from` by an edge the unit crosses",
     "adjacency",
 )];
-const READY: [Qualifier; 1] = [by("ready", "readiness")];
-const EXHAUSTED: [Qualifier; 1] = [by("exhausted", "readiness")];
+const READY: [Qualifier; 1] = [by("ready", "ready")];
+const NOT_READY: [Qualifier; 1] = [by("not ready", "ready")];
 const SURPLUS: [Qualifier; 1] = [by("surplus", "surplus")];
 const HOUSES: [Qualifier; 1] = [by("houses", "houses")];
 const WITH_UPKEEP: [Qualifier; 1] = [by("with upkeep", "upkeep")];
@@ -693,7 +693,7 @@ pub const RECIPES: &[Recipe] = &[
             placed(Require, 1, PLACE, &JOINED_TO_FROM, "`$to`"),
             placed(Consume, 1, UNIT, &READY, "`$from`"),
             placed(Consume, 1, Noun::Of(Energy), &[], "that unit"),
-            placed(Produce, 1, UNIT, &EXHAUSTED, "`$to`"),
+            placed(Produce, 1, UNIT, &NOT_READY, "`$to`"),
         ],
     },
     Recipe {
@@ -770,7 +770,7 @@ pub const RECIPES: &[Recipe] = &[
         owner: Player,
         lines: &[
             traited(Consume, 1, Noun::Of(Citizen), &READY),
-            traited(Produce, 1, Noun::Of(Citizen), &EXHAUSTED),
+            traited(Produce, 1, Noun::Of(Citizen), &NOT_READY),
             just(Produce, 1, Noun::Of(Labor)),
         ],
     },
@@ -781,7 +781,7 @@ pub const RECIPES: &[Recipe] = &[
             placed(Require, 1, TERRITORY, &[], "`$where`"),
             just(Consume, 1, Noun::Of(Labor)),
             traited(Consume, 1, EXTRACTOR, &READY),
-            traited(Produce, 1, EXTRACTOR, &EXHAUSTED),
+            traited(Produce, 1, EXTRACTOR, &NOT_READY),
             measured(
                 Produce,
                 OfATrait("`$where`'s density for that resource"),
@@ -828,10 +828,10 @@ pub const RECIPES: &[Recipe] = &[
         ],
     },
     Recipe {
-        name: "ready",
+        name: "refresh",
         owner: World,
         lines: &[
-            traited(Consume, 1, THING, &EXHAUSTED),
+            traited(Consume, 1, THING, &NOT_READY),
             traited(Produce, 1, THING, &READY),
         ],
     },

@@ -28,7 +28,7 @@ Run by the **player**.
 - **require** 1 place, joined to `$from` by an edge the unit crosses, in `$to`
 - **consume** 1 unit, ready, in `$from`
 - **consume** 1 energy, in that unit
-- **produce** 1 unit, exhausted, in `$to`
+- **produce** 1 unit, not ready, in `$to`
 
 ## found by land
 
@@ -97,7 +97,7 @@ Run by the **player**.
 Run by the **player**.
 
 - **consume** 1 citizen, ready
-- **produce** 1 citizen, exhausted
+- **produce** 1 citizen, not ready
 - **produce** 1 labor
 
 ## work
@@ -107,7 +107,7 @@ Run by the **player**.
 - **require** 1 territory, in `$where`
 - **consume** 1 labor
 - **consume** 1 extractor, ready
-- **produce** 1 extractor, exhausted
+- **produce** 1 extractor, not ready
 - **produce** resource — `$where`'s density for that resource
 
 ## upkeep
@@ -145,9 +145,9 @@ Run by the **world**.
 - **consume** 1 food, keeps at least 1
 - **produce** 1 food, keeps one less
 
-## ready
+## refresh
 
 Run by the **world**.
 
-- **consume** 1 thing, exhausted
+- **consume** 1 thing, not ready
 - **produce** 1 thing, ready

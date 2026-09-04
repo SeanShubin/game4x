@@ -52,8 +52,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (1)
+### To spec (2)
 
+- **C-19** - `P-236` declared `shape text` and its quotation is a table row · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
 
 ## Sections that have taken more than one proposal

@@ -28,7 +28,7 @@ a person: provides labor, eats, and grows on surplus.
 - `produce pioneer` consumes 2
 - `produce ark` consumes 2
 - `create labor` consumes 1, ready
-- `create labor` produces 1, exhausted
+- `create labor` produces 1, not ready
 - `grow` produces 1
 
 ## garrison
@@ -68,7 +68,7 @@ built for food, and worked to produce it.
 - `found by land` produces 1
 - `build food extractor` produces 1
 - `work` consumes 1 (as a extractor), ready
-- `work` produces 1 (as a extractor), exhausted
+- `work` produces 1 (as a extractor), not ready
 
 ## metal extractor
 
@@ -88,7 +88,7 @@ built for metal, and worked to produce it.
 - `found by land` produces 1
 - `build metal extractor` produces 1
 - `work` consumes 1 (as a extractor), ready
-- `work` produces 1 (as a extractor), exhausted
+- `work` produces 1 (as a extractor), not ready
 
 ## energy extractor
 
@@ -106,7 +106,7 @@ built for energy, and worked to produce it.
 
 - `build energy extractor` produces 1
 - `work` consumes 1 (as a extractor), ready
-- `work` produces 1 (as a extractor), exhausted
+- `work` produces 1 (as a extractor), not ready
 
 ## yard
 
@@ -141,7 +141,7 @@ carries a landing, and can invade from orbit.
 
 - `deploy ark` consumes 1, in the orbit above `$where`
 - `move` consumes 1 (as a unit), ready, in `$from`
-- `move` produces 1 (as a unit), exhausted, in `$to`
+- `move` produces 1 (as a unit), not ready, in `$to`
 - `produce ark` produces 1
 
 ## pioneer
@@ -159,7 +159,7 @@ founds a territory.
 **In recipes**
 
 - `move` consumes 1 (as a unit), ready, in `$from`
-- `move` produces 1 (as a unit), exhausted, in `$to`
+- `move` produces 1 (as a unit), not ready, in `$to`
 - `found by land` consumes 1
 - `produce pioneer` produces 1
 

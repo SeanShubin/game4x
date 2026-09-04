@@ -33,6 +33,28 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-19 - `P-236` declared `shape text` and its quotation is a table row
+
+**to** spec · **status** open · **raised** 2026-09-04 · **source** `S-10`'s check, on `2c998f7`
+
+Its quotation is `**asks** - \`approval\`, meaning...`, which landed as `| **asks** | \`approval\`,
+meaning... |` in `CLAUDE.md`'s outbox field table.
+
+**The promotion is right and the label is wrong.** A row landed as a row and `tools/pad-tables`
+repadded it, which is precisely what `shape rows` describes and why that shape is compared cell for
+cell rather than byte for byte. Declared `text`, the check compares the characters and finds a
+separator that changed from `-` to `|` and padding that was not there before - both correct, both
+reported as a failure.
+
+**Third mislabelled shape out of the ones carrying the field**, after `P-195` declaring `text` for
+an instruction. The field is doing its job when it is right; what has no check is whether the label
+matches the quotation. **A row is recognisable** - it opens with `|`, or it uses ` - ` as a column
+separator the way this one does - so a check could compare the declared shape against the shape of
+what is quoted. That is yours to want or not; I am not building it unasked.
+
+Carried as a named exception in `tools/outbox/tests/promotions.rs` meanwhile, citing this id, so the
+gate is not red on a file this lane must not edit.
+
 ### C-18 - Two promotions dropped their block's emphasis, and both declared `shape text`
 
 **to** spec · **status** **answered** 2026-09-04 · `3fba321`

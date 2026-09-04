@@ -6,7 +6,7 @@
 
 use crate::Biome;
 use crate::identity::{Resource, TerritoryId};
-use crate::thing::{Kind, Thing, Trait};
+use crate::thing::{Kind, Thing};
 
 /// What one citizen is worth in violence. `releases/first-release.md`: Citizen, force 1.
 pub const CITIZEN_FORCE: u32 = 1;
@@ -198,7 +198,7 @@ impl Territory {
     pub fn labor_available(&self) -> u32 {
         self.held
             .iter()
-            .filter(|thing| thing.kind == Kind::Citizen && !thing.is(Trait::Exhausted))
+            .filter(|thing| thing.kind == Kind::Citizen && thing.is_ready())
             .count() as u32
     }
 
@@ -225,8 +225,8 @@ impl Territory {
             if left == 0 {
                 break;
             }
-            if thing.kind == Kind::Citizen && !thing.is(Trait::Exhausted) {
-                thing.set(Trait::Exhausted, 1);
+            if thing.kind == Kind::Citizen && thing.is_ready() {
+                thing.spend_readiness();
                 left -= 1;
             }
         }
@@ -292,11 +292,11 @@ impl Territory {
 
     /// Makes everything ready again, which is what ending a turn does.
     pub fn make_ready(&mut self) {
-        // Every thing here becomes ready, whatever kind it is - which is `ready` in the
-        // release, a world recipe over `thing, exhausted`. Naming the kinds that can be
-        // exhausted would be a list to keep in step with the kinds.
+        // Every thing here becomes ready, whatever kind it is - which is `refresh` in the
+        // release, a world recipe over `thing, not ready`. Naming the kinds that can stop
+        // being ready would be a list to keep in step with the kinds.
         for thing in &mut self.held {
-            thing.clear(Trait::Exhausted);
+            thing.refresh();
         }
         for extractor in &mut self.extractors {
             extractor.exhausted = false;
