@@ -63,60 +63,45 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-254 - A thing's own identifier is `id`
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `spec/console.md` -> The language
-
-**You saw it on `territory` and it is three kinds, measured**: `{territory territory:1 ...}`,
-`{unit unit:1 ...}` and `{kind kind:... }` - twelve, one and eleven rows of the expected data.
-
-> **A thing's own identifier is `id`.** A field named for a kind is a reference to one - so
-> `{extractor territory:1}` is an extractor in territory 1, and `{territory id:1}` is the territory
-> itself.
-
-**Basis: the doubling is not only ugly, it is the one case where the existing convention is
-ambiguous.** Everywhere else `territory:1` means *in territory 1* and reads correctly.
-**`{territory territory:1}` uses the same field to mean *is* territory 1**, so one notation carries
-two relations and only position tells them apart.
-
-### P-255 - `founded` is in the data and is not a trait the release declares
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
-- **into** `releases/first-release.md` -> Traits, or nothing, depending
-
-**You asked whether we still need it. Measured, it is worse than not needed: `founded` appears **0
-times** in `releases/first-release.md`.** It is not a declared trait, and the dump renders it on
-every territory anyway.
-
-**What the release does declare is `control`** - *of a territory, held by a player or unclaimed,
-**derived: a citizen of that player is there***. Which is exactly what you just said it should be.
-**And `control` appears 0 times in the dump.** So the data shows an undeclared field and hides the
-declared one.
-
-**`S-19` closed on the model half and I did not check the data half.** `founded` is gone from
-`Territory` and control *is* derived in the model - that part is done. **What nobody checked is what
-the dump prints**, and it still prints the old name.
-
-**Choice A - the dump prints `control`, and `founded` disappears.** The release already declares it,
-so nothing changes in `spec/` or the release. **One line of the dump and the expected data
-regenerates.**
-
-**Choice B - drop it from the data entirely.** `control` is derivable from the citizens already in
-the row, so printing it is printing something the reader could compute. **Cheaper, and it makes the
-expected data smaller.**
-
-**This lane recommends A, and the reason is that you are about to check a derivation by hand.**
-`docs/process.md`: the report is worth having when it lets you check that these commands produced
-this change. **A derived value shown beside what it derives from is checkable in place**; one left
-out has to be recomputed by the reader every time. **The citizens are right there in the same row**,
-so `control` costs one field and saves you the arithmetic.
-
-**One thing neither choice fixes.** Nothing asserts that the dump only prints traits the release
-declares. **`founded` survived every check for weeks** because no check asks that question - and it
-is the same shape as the `move` gap, where a name that looked right was never held to anything.
-
 ## Addressed to other perspectives
+
+### S-43 - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release
+
+**to** code - **status** open - **raised** 2026-09-05 - **source** `P-254` promoted, and `P-255`
+decided choice B
+
+**Both change `scenario/expected/play.4x`, so they belong with `P-214` and `S-42`.** One pass, one
+regeneration.
+
+**1. A thing's own identifier is `id`.** `spec/console.md`: *A field named for a kind is a reference
+to one - so `{extractor territory:1}` is an extractor in territory 1, and `{territory id:1}` is
+the territory itself.* **Measured: 24 rows double a name** - `territory`, `unit` and `kind`.
+
+**2. `founded` goes and nothing replaces it.** Sean, choosing B: *lets drop it entirely, if we
+actually need it I will notice when reviewing.* **Measured: 12 occurrences in the expected data.**
+
+**Drop the field from the data - the dump's column and the entity view's pair.** `Territory::founded()`
+**stays**, because `report.rs` branches on it; what goes is printing it. And **do not add `control`**
+- he considered it and declined, and noticing its absence while reviewing is the test he set for
+whether it is wanted.
+
+**3. The finding underneath both, and the one worth your judgement.** `founded` was never in
+`releases/first-release.md` - **checked with `git log -S`, the string has never appeared in that
+file in any commit.** It entered the report in `8f69847`, *a dump that names every table and every
+column*, **because the dump's columns come from the model and the release's traits are a separate
+list, and nothing compares them.**
+
+**So it survived every check for weeks, and so would the next one.** `control` is declared and has
+never been printed; `founded` was printed and never declared. **Neither fact was visible to
+anything.**
+
+**Can a check say that every field the dump prints is a trait the release declares?** The traits
+table is parseable and the columns are known. **The hard part is the fields that are not traits** -
+an id, a table name, a count - so it may need a declared list of exemptions, which is the kind of
+list that rots. **If it cannot be built without one, say so**; you have been right twice this week
+about which checks are not worth having, and that answer is more useful than a guard with an
+exemption list nobody maintains.
+
 
 ### S-42 - The dashes rule and `nature` land in the data, and jungle's force changes with them
 
@@ -1335,6 +1320,8 @@ work the release exists to order.
 | P-251, a proposal landing in more than one file carries one quotation for each                                     | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-05 |
 | P-252, no quotes in data; multi-word names take dashes; `force of nature` is `nature`                              | `spec/console.md` -> The language, and `releases/first-release.md` -> Traits                                                                 | 2026-09-05 |
 | P-253, jungle holds itself with a force of 2                                                                       | `releases/first-release.md` -> Biomes, and Scope                                                                                             | 2026-09-05 |
+| P-254, a thing's own identifier is `id`                                                                            | `spec/console.md` -> The language                                                                                                            | 2026-09-05 |
+| P-255, `founded` is dropped from the data - Sean chose B, 2026-09-05                                               | no text landed: `control` stays declared and unprinted, and he will notice if he wants it. `S-43` does it                                    | 2026-09-05 |
 
 ## Rejected
 

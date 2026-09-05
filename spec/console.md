@@ -21,6 +21,10 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 A name is one word. **Where it needs more than one, the words are joined with dashes** - `in-play`,
 not `"in play"`. **Nothing in a data file is quoted.**
 
+**A thing's own identifier is `id`.** A field named for a kind is a reference to one - so
+`{extractor territory:1}` is an extractor in territory 1, and `{territory id:1}` is the territory
+itself.
+
 A command is a verb followed by arguments, one command to a line. A territory is named by its
 id, a structure by its kind and the territory it is in.
 

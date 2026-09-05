@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-254** - A thing's own identifier is `id` · `docs/notes/proposals.md`
-- **P-255** - `founded` is in the data and is not a trait the release declares · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -24,8 +24,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
+- **S-43** - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release · `docs/notes/proposals.md`
 - **S-42** - The dashes rule and `nature` land in the data, and jungle's force changes with them · `docs/notes/proposals.md`
 - **S-41** - `P-250`'s second half needs `tools/outbox` to list at a close · `docs/notes/proposals.md`
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
