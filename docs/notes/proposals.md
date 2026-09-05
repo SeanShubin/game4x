@@ -63,45 +63,43 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-249 - `R-6` is now buildable and its evidence is about 240 commands
+### P-249 - Two kinds of scenario: the one I vet, and the ones that rest on it
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
-**into** `releases/first-release.md` -> `R-6`, its *vetted when* line
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
+- **shape** text - **asks** approval - **into** `docs/process.md` -> How I know the game is right,
+and `releases/first-release.md` -> `R-6`
 
-**`R-6` is unblocked.** `C-7` withdrawn, `C-11` and `C-9` both landed today, and **nothing in the
-code blocks it** - I corrected its line, which had been stale twice. **It is the last capability, and
-the release file is deleted when you have vetted it.**
+**Neither choice this lane offered was right.** You did not pick a smaller observable or keep the
+larger one; **you split the scenarios in two.**
 
-**Now that *fully exploited* is decidable, its evidence can be counted, and the code lane counted
-it.** Twelve territories founded, **110 extractors** - 129 nodes less territory 5's nineteen, which
-it can never work - and **ten yards**. Each of those 120 buildings costs a labor, and labor is a
-command. **So the buildings alone are about 240 commands**, before anything that gathers the 260
-metal they cost or the food that sustains the hands.
+> There is a **main scenario** that touches every single thing and every recipe. **That is what I
+> vet, and it is the foundation.** I do not need to walk every step of the win condition by hand.
+>
+> As long as that foundation is maintained, other scenarios check that particular end states are
+> reachable. **Those rest on the foundation rather than on me**, and they will make heavy use of the
+> automation.
 
-**Your committed scenario is 73 commands.**
+**And `R-6`'s *vetted when* becomes**, in place of a person reaching a fully exploited planet by hand:
 
-**The rule is not in question.** *A player wins by launching an Ark from a fully exploited planet* is
-`spec/control.md` and it is the game. **What is in question is whether `R-6`'s evidence has to be the
-whole of it.**
+> A scenario reaches a fully exploited planet and launches an Ark, on the definitions and the
+> machinery of the main scenario - **which I have vetted, and which is what makes this one worth
+> trusting.**
 
-**Choice A - leave it.** The evidence is a full play-through, and you vet it when a scenario reaches
-it. **Honest and unambiguous; you would be reading a report of several hundred commands**, and
-nothing smaller counts.
+**Basis: it is the only answer that scales, and it says why the foundation carries the weight.** A
+240-command read is something a person does once; **a coverage scenario is something a person can
+actually check and re-check**, and everything automated afterwards inherits whatever that check was
+worth. Choice A made you read too much and choice B gave up a claim you did not need to give up.
 
-**Choice B - a smaller observable that still says the loop closes.** Something like: one territory
-reaches its own full exploitation, produces an Ark, and launches it - **every recipe in the loop
-fires and the win condition is reached in miniature.** Cheaper to read, and it does not demonstrate
-the planet-wide claim the rule makes.
+**One consequence you should have before approving, because it reprices something I told you an hour
+ago.** The main scenario is now **the foundation**, so a gap in its coverage is not a small miss.
+**It does not fire `move`** - one `move` line, at line 95, which arrives somewhere nobody was and
+fires `found by land` instead. `C-21`. **Twelve kinds are covered and one player recipe of nine is
+not**, and under this proposal that is a hole in the thing everything else rests on rather than an
+untidy corner.
 
-**This lane recommends B, and the reason is your own test for a check.** *A test is there for what I
-cannot reliably repeat.* **Reading 240 commands by hand is not something a person does twice**, so an
-evidence line that requires it is one you will do once and never re-check - which makes it a
-ceremony rather than a guard. **A smaller observable you would actually re-read is worth more than a
-larger one you would not.**
-
-**What B costs, said plainly.** The release would stop claiming the whole rule is demonstrated. **The
-rule stays in `spec/`** and the demonstration of it moves to whenever a scenario is written that
-reaches it - which nothing currently requires.
+**`P-214` fixes it as a side effect** - it splits `move` from `found by land`, so the two stop
+sharing a command. **It is held until you finish vetting**, which is right, but it is now the thing
+that completes the foundation rather than a tidy-up.
 
 ### P-250 - A number goes stale when another item closes, and nothing here asks
 
