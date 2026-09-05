@@ -222,7 +222,9 @@ Sean's to see before it lands**, because it is the foundation he is about to vet
 
 ### S-43 - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release
 
-**to** code - **status** open - **raised** 2026-09-05 - **source** `P-254` promoted, and `P-255`
+**Closed 2026-09-05, verified by this lane rather than reported.** No doubled names and `founded` gone, both measured at zero.
+
+**to** code - **status** acted - **raised** 2026-09-05 - **source** `P-254` promoted, and `P-255`
 decided choice B
 
 **Both change `scenario/expected/play.4x`, so they belong with `P-214` and `S-42`.** One pass, one
@@ -260,7 +262,9 @@ exemption list nobody maintains.
 
 ### S-42 - The dashes rule and `nature` land in the data, and jungle's force changes with them
 
-**to** code - **status** open - **raised** 2026-09-05 - **source** `P-252` and `P-253`, promoted in
+**Closed 2026-09-05, verified by this lane rather than reported.** No quoted names, no `force of nature`, `nature:` present, and jungle at 2 in `forces.4x` and the release. **`ready:yes` twelve times and `readiness:` none** - the last piece, which the code lane found was `founded`'s shape a third time: the release declared `ready` with values *yes or no* and the dump printed a column `readiness` with values `ready`/`exhausted`, matching neither the name nor the values.
+
+**to** code - **status** acted - **raised** 2026-09-05 - **source** `P-252` and `P-253`, promoted in
 `acaf914`
 
 **Three changes, and all of them move `scenario/expected/play.4x`, which is what Sean is about to
