@@ -8,55 +8,55 @@
 
 {game phase:play turn:10 territories:12 units:1}
 
-{territory territory:1 biome:grassland "force of nature":1 founded:yes citizens:12 "labor spent":0 yards:1}
-{territory territory:2 biome:grassland "force of nature":1 founded:yes citizens:6 "labor spent":0 yards:0}
-{territory territory:3 biome:grassland "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
-{territory territory:4 biome:mountain "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
-{territory territory:5 biome:mountain "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
-{territory territory:6 biome:jungle "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
-{territory territory:7 biome:jungle "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
-{territory territory:8 biome:grassland "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
-{territory territory:9 biome:mountain "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
-{territory territory:10 biome:desert "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
-{territory territory:11 biome:grassland "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
-{territory territory:12 biome:ice "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
+{territory territory:1 biome:grassland nature:1 founded:yes citizens:12 labor-spent:0 yards:1}
+{territory territory:2 biome:grassland nature:1 founded:yes citizens:6 labor-spent:0 yards:0}
+{territory territory:3 biome:grassland nature:1 founded:no citizens:0 labor-spent:0 yards:0}
+{territory territory:4 biome:mountain nature:1 founded:no citizens:0 labor-spent:0 yards:0}
+{territory territory:5 biome:mountain nature:1 founded:no citizens:0 labor-spent:0 yards:0}
+{territory territory:6 biome:jungle nature:2 founded:no citizens:0 labor-spent:0 yards:0}
+{territory territory:7 biome:jungle nature:2 founded:no citizens:0 labor-spent:0 yards:0}
+{territory territory:8 biome:grassland nature:1 founded:no citizens:0 labor-spent:0 yards:0}
+{territory territory:9 biome:mountain nature:1 founded:no citizens:0 labor-spent:0 yards:0}
+{territory territory:10 biome:desert nature:1 founded:no citizens:0 labor-spent:0 yards:0}
+{territory territory:11 biome:grassland nature:1 founded:no citizens:0 labor-spent:0 yards:0}
+{territory territory:12 biome:ice nature:1 founded:no citizens:0 labor-spent:0 yards:0}
 
-{"territory resource" territory:1 resource:food capacity:3 density:4 built:3}
-{"territory resource" territory:1 resource:metal capacity:3 density:4 built:3}
-{"territory resource" territory:1 resource:energy capacity:3 density:4 built:3}
-{"territory resource" territory:2 resource:food capacity:2 density:6 built:1}
-{"territory resource" territory:2 resource:metal capacity:2 density:4 built:1}
-{"territory resource" territory:2 resource:energy capacity:2 density:4 built:0}
-{"territory resource" territory:3 resource:food capacity:6 density:2 built:0}
-{"territory resource" territory:3 resource:metal capacity:2 density:4 built:0}
-{"territory resource" territory:3 resource:energy capacity:2 density:4 built:0}
-{"territory resource" territory:4 resource:food capacity:1 density:2 built:0}
-{"territory resource" territory:4 resource:metal capacity:4 density:5 built:0}
-{"territory resource" territory:4 resource:energy capacity:4 density:5 built:0}
-{"territory resource" territory:5 resource:food capacity:3 density:1 built:0}
-{"territory resource" territory:5 resource:metal capacity:8 density:8 built:0}
-{"territory resource" territory:5 resource:energy capacity:8 density:8 built:0}
-{"territory resource" territory:6 resource:food capacity:4 density:4 built:0}
-{"territory resource" territory:6 resource:metal capacity:0 density:0 built:0}
-{"territory resource" territory:6 resource:energy capacity:4 density:5 built:0}
-{"territory resource" territory:7 resource:food capacity:4 density:4 built:0}
-{"territory resource" territory:7 resource:metal capacity:4 density:5 built:0}
-{"territory resource" territory:7 resource:energy capacity:0 density:0 built:0}
-{"territory resource" territory:8 resource:food capacity:6 density:6 built:0}
-{"territory resource" territory:8 resource:metal capacity:1 density:2 built:0}
-{"territory resource" territory:8 resource:energy capacity:1 density:2 built:0}
-{"territory resource" territory:9 resource:food capacity:2 density:3 built:0}
-{"territory resource" territory:9 resource:metal capacity:6 density:8 built:0}
-{"territory resource" territory:9 resource:energy capacity:1 density:2 built:0}
-{"territory resource" territory:10 resource:food capacity:3 density:3 built:0}
-{"territory resource" territory:10 resource:metal capacity:1 density:3 built:0}
-{"territory resource" territory:10 resource:energy capacity:6 density:8 built:0}
-{"territory resource" territory:11 resource:food capacity:5 density:6 built:0}
-{"territory resource" territory:11 resource:metal capacity:5 density:6 built:0}
-{"territory resource" territory:11 resource:energy capacity:5 density:6 built:0}
-{"territory resource" territory:12 resource:food capacity:2 density:2 built:0}
-{"territory resource" territory:12 resource:metal capacity:8 density:8 built:0}
-{"territory resource" territory:12 resource:energy capacity:8 density:8 built:0}
+{territory-resource territory:1 resource:food capacity:3 density:4 built:3}
+{territory-resource territory:1 resource:metal capacity:3 density:4 built:3}
+{territory-resource territory:1 resource:energy capacity:3 density:4 built:3}
+{territory-resource territory:2 resource:food capacity:2 density:6 built:1}
+{territory-resource territory:2 resource:metal capacity:2 density:4 built:1}
+{territory-resource territory:2 resource:energy capacity:2 density:4 built:0}
+{territory-resource territory:3 resource:food capacity:6 density:2 built:0}
+{territory-resource territory:3 resource:metal capacity:2 density:4 built:0}
+{territory-resource territory:3 resource:energy capacity:2 density:4 built:0}
+{territory-resource territory:4 resource:food capacity:1 density:2 built:0}
+{territory-resource territory:4 resource:metal capacity:4 density:5 built:0}
+{territory-resource territory:4 resource:energy capacity:4 density:5 built:0}
+{territory-resource territory:5 resource:food capacity:3 density:1 built:0}
+{territory-resource territory:5 resource:metal capacity:8 density:8 built:0}
+{territory-resource territory:5 resource:energy capacity:8 density:8 built:0}
+{territory-resource territory:6 resource:food capacity:4 density:4 built:0}
+{territory-resource territory:6 resource:metal capacity:0 density:0 built:0}
+{territory-resource territory:6 resource:energy capacity:4 density:5 built:0}
+{territory-resource territory:7 resource:food capacity:4 density:4 built:0}
+{territory-resource territory:7 resource:metal capacity:4 density:5 built:0}
+{territory-resource territory:7 resource:energy capacity:0 density:0 built:0}
+{territory-resource territory:8 resource:food capacity:6 density:6 built:0}
+{territory-resource territory:8 resource:metal capacity:1 density:2 built:0}
+{territory-resource territory:8 resource:energy capacity:1 density:2 built:0}
+{territory-resource territory:9 resource:food capacity:2 density:3 built:0}
+{territory-resource territory:9 resource:metal capacity:6 density:8 built:0}
+{territory-resource territory:9 resource:energy capacity:1 density:2 built:0}
+{territory-resource territory:10 resource:food capacity:3 density:3 built:0}
+{territory-resource territory:10 resource:metal capacity:1 density:3 built:0}
+{territory-resource territory:10 resource:energy capacity:6 density:8 built:0}
+{territory-resource territory:11 resource:food capacity:5 density:6 built:0}
+{territory-resource territory:11 resource:metal capacity:5 density:6 built:0}
+{territory-resource territory:11 resource:energy capacity:5 density:6 built:0}
+{territory-resource territory:12 resource:food capacity:2 density:2 built:0}
+{territory-resource territory:12 resource:metal capacity:8 density:8 built:0}
+{territory-resource territory:12 resource:energy capacity:8 density:8 built:0}
 
 {store territory:1 resource:food amount:0}
 {store territory:1 resource:metal amount:14}
@@ -162,14 +162,14 @@
 
 {unit unit:1 kind:ark place:orbit fuel:1 readiness:ready}
 
-{kind kind:citizen "in play":18}
-{kind kind:labor "in play":0}
-{kind kind:food "in play":0}
-{kind kind:metal "in play":14}
-{kind kind:energy "in play":20}
-{kind kind:extractor "in play":11}
-{kind kind:garrison "in play":2}
-{kind kind:yard "in play":1}
-{kind kind:ark "in play":1}
-{kind kind:pioneer "in play":0}
-{kind kind:territory "in play":12}
+{kind kind:citizen in-play:18}
+{kind kind:labor in-play:0}
+{kind kind:food in-play:0}
+{kind kind:metal in-play:14}
+{kind kind:energy in-play:20}
+{kind kind:extractor in-play:11}
+{kind kind:garrison in-play:2}
+{kind kind:yard in-play:1}
+{kind kind:ark in-play:1}
+{kind kind:pioneer in-play:0}
+{kind kind:territory in-play:12}

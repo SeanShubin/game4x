@@ -50,17 +50,23 @@ pub struct Row {
     pub key: usize,
 }
 
-/// A word as it must be written to survive being read back.
+/// A word, checked to be one.
 ///
-/// Quoted when it is empty or holds a space, because those are the two ways a bare word
-/// stops being one word. A `"` inside becomes `'`: no value in a state has one, and a
-/// quoting rule with an escape is a second thing to get wrong.
-fn quoted(word: &str) -> String {
-    if word.is_empty() || word.contains(' ') || word.contains('"') {
-        format!("\"{}\"", word.replace('"', "'"))
-    } else {
-        word.to_string()
-    }
+/// **`P-252`.** `spec/console.md`: *Nothing in a data file is quoted.* A name is one word,
+/// and where it needs more than one the words are joined with dashes. This used to quote a
+/// word holding a space, which made the rule a convention - the writer could always fall
+/// back on quotes, so a name with a space in it never had to be fixed, and four of them
+/// were not, in seventy-one places.
+///
+/// So it panics rather than quoting. **A writer that cannot express a bad name cannot write
+/// one**, and the failure is at the moment the name is invented rather than in a file
+/// somebody reads later.
+fn one_word(word: &str) -> &str {
+    assert!(
+        !word.is_empty() && !word.contains(' ') && !word.contains('"'),
+        "{word:?} is not one word - `P-252`: join the words with dashes, and never quote"
+    );
+    word
 }
 
 impl Row {
@@ -68,14 +74,14 @@ impl Row {
     pub fn written(&self) -> String {
         // The table's name is quoted for the same reason - one of them is called
         // *territory resource*.
-        let mut out = format!("{{{}", quoted(&self.table));
+        let mut out = format!("{{{}", one_word(&self.table));
         // **Names are quoted too, not only values.** A column is called *force of nature*,
         // and writing that bare made the row unreadable at three words rather than one
         // field. The round-trip test found it on its first run, which is what a round-trip
         // is for - the writer and the reader are the two halves most likely to agree with
         // each other and disagree with the truth.
         for (name, value) in &self.fields {
-            out.push_str(&format!(" {}:{}", quoted(name), quoted(value)));
+            out.push_str(&format!(" {}:{}", one_word(name), one_word(value)));
         }
         out.push('}');
         out
@@ -283,18 +289,27 @@ pub fn read(text: &str) -> Result<Vec<Row>, String> {
     Ok(out)
 }
 
-/// Split on spaces, except inside quotes.
+/// Split on spaces. A quote is not a grouping character and is not allowed at all.
+///
+/// **`P-252` is a rule only if the reader enforces it.** This used to group on quotes, so a
+/// file with `"force of nature"` in it read perfectly - which meant the writer could be
+/// fixed and the format would still accept the thing it was fixed to stop producing.
+/// Nothing would have failed, and the next generator to want a two-word name would have
+/// found the door open.
+///
+/// Returned rather than panicking would be better and is not what this function can do: it
+/// yields words and has no error channel. The panic is acceptable because reading these
+/// files happens in a test and in one binary, both of which should stop.
 fn split(text: &str) -> impl Iterator<Item = String> + use<> {
+    assert!(
+        !text.contains('"'),
+        "`{text}` is quoted - `P-252`: nothing in a data file is, and a name that needs          two words joins them with dashes"
+    );
     let mut words = Vec::new();
     let mut current = String::new();
-    let mut quoted = false;
     for character in text.chars() {
         match character {
-            '"' => {
-                quoted = !quoted;
-                current.push(character);
-            }
-            ' ' if !quoted => {
+            ' ' => {
                 if !current.is_empty() {
                     words.push(std::mem::take(&mut current));
                 }

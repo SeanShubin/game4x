@@ -32,20 +32,20 @@ end turn
 
 - game phase:play · turn: 1 → 2
 - game phase:play · units: 1 → 0
-- kind kind:ark · in play: 1 → 0
-- kind kind:citizen · in play: 0 → 4
-- kind kind:extractor · in play: 0 → 2
-- kind kind:garrison · in play: 0 → 1
-- kind kind:metal · in play: 0 → 4
+- kind kind:ark · in-play: 1 → 0
+- kind kind:citizen · in-play: 0 → 4
+- kind kind:extractor · in-play: 0 → 2
+- kind kind:garrison · in-play: 0 → 1
+- kind kind:metal · in-play: 0 → 4
 - labor territory:1 · made: 0 → 4
 - labor territory:1 · left: 0 → 4
 - store territory:1 resource:metal · amount: 0 → 4
 - structure territory:1 structure:extractor · count: 0 → 2
 - structure territory:1 structure:garrison · count: 0 → 1
-- territory resource territory:1 resource:food · built: 0 → 1
-- territory resource territory:1 resource:metal · built: 0 → 1
 - territory territory:1 · founded: no → yes
 - territory territory:1 · citizens: 0 → 4
+- territory-resource territory:1 resource:food · built: 0 → 1
+- territory-resource territory:1 resource:metal · built: 0 → 1
 
 ## what is there now
 
@@ -59,24 +59,24 @@ end turn
 
 ### territory
 
-| territory | biome     | force of nature | founded | citizens | labor spent | yards |
-| --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1               | yes     | 4        | 0           | 0     |
-| 2         | grassland | 1               | no      | 0        | 0           | 0     |
-| 3         | grassland | 1               | no      | 0        | 0           | 0     |
-| 4         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 5         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 6         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 7         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 8         | grassland | 1               | no      | 0        | 0           | 0     |
-| 9         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 10        | desert    | 1               | no      | 0        | 0           | 0     |
-| 11        | grassland | 1               | no      | 0        | 0           | 0     |
-| 12        | ice       | 1               | no      | 0        | 0           | 0     |
+| territory | biome     | nature | founded | citizens | labor-spent | yards |
+| --------- | --------- | ------ | ------- | -------- | ----------- | ----- |
+| 1         | grassland | 1      | yes     | 4        | 0           | 0     |
+| 2         | grassland | 1      | no      | 0        | 0           | 0     |
+| 3         | grassland | 1      | no      | 0        | 0           | 0     |
+| 4         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 5         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 6         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 7         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 8         | grassland | 1      | no      | 0        | 0           | 0     |
+| 9         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 10        | desert    | 1      | no      | 0        | 0           | 0     |
+| 11        | grassland | 1      | no      | 0        | 0           | 0     |
+| 12        | ice       | 1      | no      | 0        | 0           | 0     |
 
 12 row(s)
 
-### territory resource
+### territory-resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -250,7 +250,7 @@ end turn
 
 ### kind
 
-| kind      | in play |
+| kind      | in-play |
 | --------- | ------- |
 | citizen   | 4       |
 | labor     | 0       |
@@ -292,11 +292,11 @@ end turn
 **changed** (6)
 
 - game phase:play · turn: 2 → 3
-- kind kind:extractor · in play: 2 → 4
-- kind kind:metal · in play: 4 → 6
+- kind kind:extractor · in-play: 2 → 4
+- kind kind:metal · in-play: 4 → 6
 - store territory:1 resource:metal · amount: 4 → 6
 - structure territory:1 structure:extractor · count: 2 → 4
-- territory resource territory:1 resource:food · built: 1 → 3
+- territory-resource territory:1 resource:food · built: 1 → 3
 
 ## what is there now
 
@@ -310,24 +310,24 @@ end turn
 
 ### territory
 
-| territory | biome     | force of nature | founded | citizens | labor spent | yards |
-| --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1               | yes     | 4        | 0           | 0     |
-| 2         | grassland | 1               | no      | 0        | 0           | 0     |
-| 3         | grassland | 1               | no      | 0        | 0           | 0     |
-| 4         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 5         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 6         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 7         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 8         | grassland | 1               | no      | 0        | 0           | 0     |
-| 9         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 10        | desert    | 1               | no      | 0        | 0           | 0     |
-| 11        | grassland | 1               | no      | 0        | 0           | 0     |
-| 12        | ice       | 1               | no      | 0        | 0           | 0     |
+| territory | biome     | nature | founded | citizens | labor-spent | yards |
+| --------- | --------- | ------ | ------- | -------- | ----------- | ----- |
+| 1         | grassland | 1      | yes     | 4        | 0           | 0     |
+| 2         | grassland | 1      | no      | 0        | 0           | 0     |
+| 3         | grassland | 1      | no      | 0        | 0           | 0     |
+| 4         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 5         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 6         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 7         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 8         | grassland | 1      | no      | 0        | 0           | 0     |
+| 9         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 10        | desert    | 1      | no      | 0        | 0           | 0     |
+| 11        | grassland | 1      | no      | 0        | 0           | 0     |
+| 12        | ice       | 1      | no      | 0        | 0           | 0     |
 
 12 row(s)
 
-### territory resource
+### territory-resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -503,7 +503,7 @@ end turn
 
 ### kind
 
-| kind      | in play |
+| kind      | in-play |
 | --------- | ------- |
 | citizen   | 4       |
 | labor     | 0       |
@@ -536,8 +536,8 @@ end turn
 **changed** (7)
 
 - game phase:play · turn: 3 → 4
-- kind kind:citizen · in play: 4 → 8
-- kind kind:metal · in play: 6 → 10
+- kind kind:citizen · in-play: 4 → 8
+- kind kind:metal · in-play: 6 → 10
 - labor territory:1 · made: 4 → 8
 - labor territory:1 · left: 4 → 8
 - store territory:1 resource:metal · amount: 6 → 10
@@ -555,24 +555,24 @@ end turn
 
 ### territory
 
-| territory | biome     | force of nature | founded | citizens | labor spent | yards |
-| --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1               | yes     | 8        | 0           | 0     |
-| 2         | grassland | 1               | no      | 0        | 0           | 0     |
-| 3         | grassland | 1               | no      | 0        | 0           | 0     |
-| 4         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 5         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 6         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 7         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 8         | grassland | 1               | no      | 0        | 0           | 0     |
-| 9         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 10        | desert    | 1               | no      | 0        | 0           | 0     |
-| 11        | grassland | 1               | no      | 0        | 0           | 0     |
-| 12        | ice       | 1               | no      | 0        | 0           | 0     |
+| territory | biome     | nature | founded | citizens | labor-spent | yards |
+| --------- | --------- | ------ | ------- | -------- | ----------- | ----- |
+| 1         | grassland | 1      | yes     | 8        | 0           | 0     |
+| 2         | grassland | 1      | no      | 0        | 0           | 0     |
+| 3         | grassland | 1      | no      | 0        | 0           | 0     |
+| 4         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 5         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 6         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 7         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 8         | grassland | 1      | no      | 0        | 0           | 0     |
+| 9         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 10        | desert    | 1      | no      | 0        | 0           | 0     |
+| 11        | grassland | 1      | no      | 0        | 0           | 0     |
+| 12        | ice       | 1      | no      | 0        | 0           | 0     |
 
 12 row(s)
 
-### territory resource
+### territory-resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -748,7 +748,7 @@ end turn
 
 ### kind
 
-| kind      | in play |
+| kind      | in-play |
 | --------- | ------- |
 | citizen   | 8       |
 | labor     | 0       |
@@ -796,14 +796,14 @@ end turn
 **changed** (9)
 
 - game phase:play · turn: 4 → 5
-- kind kind:citizen · in play: 8 → 12
-- kind kind:extractor · in play: 4 → 8
+- kind kind:citizen · in-play: 8 → 12
+- kind kind:extractor · in-play: 4 → 8
 - labor territory:1 · made: 8 → 12
 - labor territory:1 · left: 8 → 12
 - structure territory:1 structure:extractor · count: 4 → 8
-- territory resource territory:1 resource:energy · built: 0 → 2
-- territory resource territory:1 resource:metal · built: 1 → 3
 - territory territory:1 · citizens: 8 → 12
+- territory-resource territory:1 resource:energy · built: 0 → 2
+- territory-resource territory:1 resource:metal · built: 1 → 3
 
 ## what is there now
 
@@ -817,24 +817,24 @@ end turn
 
 ### territory
 
-| territory | biome     | force of nature | founded | citizens | labor spent | yards |
-| --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1               | yes     | 12       | 0           | 0     |
-| 2         | grassland | 1               | no      | 0        | 0           | 0     |
-| 3         | grassland | 1               | no      | 0        | 0           | 0     |
-| 4         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 5         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 6         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 7         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 8         | grassland | 1               | no      | 0        | 0           | 0     |
-| 9         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 10        | desert    | 1               | no      | 0        | 0           | 0     |
-| 11        | grassland | 1               | no      | 0        | 0           | 0     |
-| 12        | ice       | 1               | no      | 0        | 0           | 0     |
+| territory | biome     | nature | founded | citizens | labor-spent | yards |
+| --------- | --------- | ------ | ------- | -------- | ----------- | ----- |
+| 1         | grassland | 1      | yes     | 12       | 0           | 0     |
+| 2         | grassland | 1      | no      | 0        | 0           | 0     |
+| 3         | grassland | 1      | no      | 0        | 0           | 0     |
+| 4         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 5         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 6         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 7         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 8         | grassland | 1      | no      | 0        | 0           | 0     |
+| 9         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 10        | desert    | 1      | no      | 0        | 0           | 0     |
+| 11        | grassland | 1      | no      | 0        | 0           | 0     |
+| 12        | ice       | 1      | no      | 0        | 0           | 0     |
 
 12 row(s)
 
-### territory resource
+### territory-resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1014,7 +1014,7 @@ end turn
 
 ### kind
 
-| kind      | in play |
+| kind      | in-play |
 | --------- | ------- |
 | citizen   | 12      |
 | labor     | 0       |
@@ -1055,13 +1055,13 @@ end turn
 **changed** (8)
 
 - game phase:play · turn: 5 → 6
-- kind kind:energy · in play: 0 → 8
-- kind kind:extractor · in play: 8 → 9
-- kind kind:metal · in play: 10 → 20
+- kind kind:energy · in-play: 0 → 8
+- kind kind:extractor · in-play: 8 → 9
+- kind kind:metal · in-play: 10 → 20
 - store territory:1 resource:energy · amount: 0 → 8
 - store territory:1 resource:metal · amount: 10 → 20
 - structure territory:1 structure:extractor · count: 8 → 9
-- territory resource territory:1 resource:energy · built: 2 → 3
+- territory-resource territory:1 resource:energy · built: 2 → 3
 
 ## what is there now
 
@@ -1075,24 +1075,24 @@ end turn
 
 ### territory
 
-| territory | biome     | force of nature | founded | citizens | labor spent | yards |
-| --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1               | yes     | 12       | 0           | 0     |
-| 2         | grassland | 1               | no      | 0        | 0           | 0     |
-| 3         | grassland | 1               | no      | 0        | 0           | 0     |
-| 4         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 5         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 6         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 7         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 8         | grassland | 1               | no      | 0        | 0           | 0     |
-| 9         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 10        | desert    | 1               | no      | 0        | 0           | 0     |
-| 11        | grassland | 1               | no      | 0        | 0           | 0     |
-| 12        | ice       | 1               | no      | 0        | 0           | 0     |
+| territory | biome     | nature | founded | citizens | labor-spent | yards |
+| --------- | --------- | ------ | ------- | -------- | ----------- | ----- |
+| 1         | grassland | 1      | yes     | 12       | 0           | 0     |
+| 2         | grassland | 1      | no      | 0        | 0           | 0     |
+| 3         | grassland | 1      | no      | 0        | 0           | 0     |
+| 4         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 5         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 6         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 7         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 8         | grassland | 1      | no      | 0        | 0           | 0     |
+| 9         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 10        | desert    | 1      | no      | 0        | 0           | 0     |
+| 11        | grassland | 1      | no      | 0        | 0           | 0     |
+| 12        | ice       | 1      | no      | 0        | 0           | 0     |
 
 12 row(s)
 
-### territory resource
+### territory-resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1273,7 +1273,7 @@ end turn
 
 ### kind
 
-| kind      | in play |
+| kind      | in-play |
 | --------- | ------- |
 | citizen   | 12      |
 | labor     | 0       |
@@ -1308,15 +1308,15 @@ end turn
 
 **new** (1)
 
-- {unit unit:1 kind:pioneer place:"territory 1" fuel:2 readiness:ready}
+- {unit unit:1 kind:pioneer place:territory-1 fuel:2 readiness:ready}
 
 **changed** (9)
 
 - game phase:play · turn: 6 → 7
 - game phase:play · units: 0 → 1
-- kind kind:citizen · in play: 12 → 11
-- kind kind:energy · in play: 8 → 14
-- kind kind:pioneer · in play: 0 → 1
+- kind kind:citizen · in-play: 12 → 11
+- kind kind:energy · in-play: 8 → 14
+- kind kind:pioneer · in-play: 0 → 1
 - labor territory:1 · made: 12 → 11
 - labor territory:1 · left: 12 → 11
 - store territory:1 resource:energy · amount: 8 → 14
@@ -1334,24 +1334,24 @@ end turn
 
 ### territory
 
-| territory | biome     | force of nature | founded | citizens | labor spent | yards |
-| --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1               | yes     | 11       | 0           | 0     |
-| 2         | grassland | 1               | no      | 0        | 0           | 0     |
-| 3         | grassland | 1               | no      | 0        | 0           | 0     |
-| 4         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 5         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 6         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 7         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 8         | grassland | 1               | no      | 0        | 0           | 0     |
-| 9         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 10        | desert    | 1               | no      | 0        | 0           | 0     |
-| 11        | grassland | 1               | no      | 0        | 0           | 0     |
-| 12        | ice       | 1               | no      | 0        | 0           | 0     |
+| territory | biome     | nature | founded | citizens | labor-spent | yards |
+| --------- | --------- | ------ | ------- | -------- | ----------- | ----- |
+| 1         | grassland | 1      | yes     | 11       | 0           | 0     |
+| 2         | grassland | 1      | no      | 0        | 0           | 0     |
+| 3         | grassland | 1      | no      | 0        | 0           | 0     |
+| 4         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 5         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 6         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 7         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 8         | grassland | 1      | no      | 0        | 0           | 0     |
+| 9         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 10        | desert    | 1      | no      | 0        | 0           | 0     |
+| 11        | grassland | 1      | no      | 0        | 0           | 0     |
+| 12        | ice       | 1      | no      | 0        | 0           | 0     |
 
 12 row(s)
 
-### territory resource
+### territory-resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1527,13 +1527,13 @@ end turn
 
 | unit | kind    | place       | fuel | readiness |
 | ---- | ------- | ----------- | ---- | --------- |
-| 1    | pioneer | territory 1 | 2    | ready     |
+| 1    | pioneer | territory-1 | 2    | ready     |
 
 1 row(s)
 
 ### kind
 
-| kind      | in play |
+| kind      | in-play |
 | --------- | ------- |
 | citizen   | 11      |
 | labor     | 0       |
@@ -1570,7 +1570,7 @@ end turn
 
 **gone** (1)
 
-- {unit unit:1 kind:pioneer place:"territory 1" fuel:2 readiness:ready}
+- {unit unit:1 kind:pioneer place:territory-1 fuel:2 readiness:ready}
 
 **new** (3)
 
@@ -1582,11 +1582,11 @@ end turn
 
 - game phase:play · turn: 7 → 8
 - game phase:play · units: 1 → 0
-- kind kind:citizen · in play: 11 → 16
-- kind kind:energy · in play: 14 → 20
-- kind kind:extractor · in play: 9 → 11
-- kind kind:garrison · in play: 1 → 2
-- kind kind:pioneer · in play: 1 → 0
+- kind kind:citizen · in-play: 11 → 16
+- kind kind:energy · in-play: 14 → 20
+- kind kind:extractor · in-play: 9 → 11
+- kind kind:garrison · in-play: 1 → 2
+- kind kind:pioneer · in-play: 1 → 0
 - labor territory:1 · made: 11 → 12
 - labor territory:1 · left: 11 → 12
 - labor territory:2 · made: 0 → 4
@@ -1594,11 +1594,11 @@ end turn
 - store territory:1 resource:energy · amount: 14 → 20
 - structure territory:2 structure:extractor · count: 0 → 2
 - structure territory:2 structure:garrison · count: 0 → 1
-- territory resource territory:2 resource:food · built: 0 → 1
-- territory resource territory:2 resource:metal · built: 0 → 1
 - territory territory:1 · citizens: 11 → 12
 - territory territory:2 · founded: no → yes
 - territory territory:2 · citizens: 0 → 4
+- territory-resource territory:2 resource:food · built: 0 → 1
+- territory-resource territory:2 resource:metal · built: 0 → 1
 
 ## what is there now
 
@@ -1612,24 +1612,24 @@ end turn
 
 ### territory
 
-| territory | biome     | force of nature | founded | citizens | labor spent | yards |
-| --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1               | yes     | 12       | 0           | 0     |
-| 2         | grassland | 1               | yes     | 4        | 0           | 0     |
-| 3         | grassland | 1               | no      | 0        | 0           | 0     |
-| 4         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 5         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 6         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 7         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 8         | grassland | 1               | no      | 0        | 0           | 0     |
-| 9         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 10        | desert    | 1               | no      | 0        | 0           | 0     |
-| 11        | grassland | 1               | no      | 0        | 0           | 0     |
-| 12        | ice       | 1               | no      | 0        | 0           | 0     |
+| territory | biome     | nature | founded | citizens | labor-spent | yards |
+| --------- | --------- | ------ | ------- | -------- | ----------- | ----- |
+| 1         | grassland | 1      | yes     | 12       | 0           | 0     |
+| 2         | grassland | 1      | yes     | 4        | 0           | 0     |
+| 3         | grassland | 1      | no      | 0        | 0           | 0     |
+| 4         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 5         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 6         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 7         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 8         | grassland | 1      | no      | 0        | 0           | 0     |
+| 9         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 10        | desert    | 1      | no      | 0        | 0           | 0     |
+| 11        | grassland | 1      | no      | 0        | 0           | 0     |
+| 12        | ice       | 1      | no      | 0        | 0           | 0     |
 
 12 row(s)
 
-### territory resource
+### territory-resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1813,7 +1813,7 @@ end turn
 
 ### kind
 
-| kind      | in play |
+| kind      | in-play |
 | --------- | ------- |
 | citizen   | 16      |
 | labor     | 0       |
@@ -1853,16 +1853,16 @@ end turn
 
 **new** (1)
 
-- {unit unit:1 kind:ark place:"territory 2" fuel:1 readiness:ready}
+- {unit unit:1 kind:ark place:territory-2 fuel:1 readiness:ready}
 
 **changed** (12)
 
 - game phase:play · turn: 8 → 9
 - game phase:play · units: 0 → 1
-- kind kind:ark · in play: 0 → 1
-- kind kind:citizen · in play: 16 → 18
-- kind kind:metal · in play: 20 → 14
-- kind kind:yard · in play: 0 → 1
+- kind kind:ark · in-play: 0 → 1
+- kind kind:citizen · in-play: 16 → 18
+- kind kind:metal · in-play: 20 → 14
+- kind kind:yard · in-play: 0 → 1
 - labor territory:2 · made: 4 → 6
 - labor territory:2 · left: 4 → 6
 - store territory:1 resource:metal · amount: 20 → 14
@@ -1882,24 +1882,24 @@ end turn
 
 ### territory
 
-| territory | biome     | force of nature | founded | citizens | labor spent | yards |
-| --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1               | yes     | 12       | 0           | 1     |
-| 2         | grassland | 1               | yes     | 6        | 0           | 0     |
-| 3         | grassland | 1               | no      | 0        | 0           | 0     |
-| 4         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 5         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 6         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 7         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 8         | grassland | 1               | no      | 0        | 0           | 0     |
-| 9         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 10        | desert    | 1               | no      | 0        | 0           | 0     |
-| 11        | grassland | 1               | no      | 0        | 0           | 0     |
-| 12        | ice       | 1               | no      | 0        | 0           | 0     |
+| territory | biome     | nature | founded | citizens | labor-spent | yards |
+| --------- | --------- | ------ | ------- | -------- | ----------- | ----- |
+| 1         | grassland | 1      | yes     | 12       | 0           | 1     |
+| 2         | grassland | 1      | yes     | 6        | 0           | 0     |
+| 3         | grassland | 1      | no      | 0        | 0           | 0     |
+| 4         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 5         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 6         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 7         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 8         | grassland | 1      | no      | 0        | 0           | 0     |
+| 9         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 10        | desert    | 1      | no      | 0        | 0           | 0     |
+| 11        | grassland | 1      | no      | 0        | 0           | 0     |
+| 12        | ice       | 1      | no      | 0        | 0           | 0     |
 
 12 row(s)
 
-### territory resource
+### territory-resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -2078,13 +2078,13 @@ end turn
 
 | unit | kind | place       | fuel | readiness |
 | ---- | ---- | ----------- | ---- | --------- |
-| 1    | ark  | territory 2 | 1    | ready     |
+| 1    | ark  | territory-2 | 1    | ready     |
 
 1 row(s)
 
 ### kind
 
-| kind      | in play |
+| kind      | in-play |
 | --------- | ------- |
 | citizen   | 18      |
 | labor     | 0       |
@@ -2118,7 +2118,7 @@ end turn
 **changed** (2)
 
 - game phase:play · turn: 9 → 10
-- unit unit:1 · place: territory 2 → orbit
+- unit unit:1 · place: territory-2 → orbit
 
 ## what is there now
 
@@ -2132,24 +2132,24 @@ end turn
 
 ### territory
 
-| territory | biome     | force of nature | founded | citizens | labor spent | yards |
-| --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1               | yes     | 12       | 0           | 1     |
-| 2         | grassland | 1               | yes     | 6        | 0           | 0     |
-| 3         | grassland | 1               | no      | 0        | 0           | 0     |
-| 4         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 5         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 6         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 7         | jungle    | 1               | no      | 0        | 0           | 0     |
-| 8         | grassland | 1               | no      | 0        | 0           | 0     |
-| 9         | mountain  | 1               | no      | 0        | 0           | 0     |
-| 10        | desert    | 1               | no      | 0        | 0           | 0     |
-| 11        | grassland | 1               | no      | 0        | 0           | 0     |
-| 12        | ice       | 1               | no      | 0        | 0           | 0     |
+| territory | biome     | nature | founded | citizens | labor-spent | yards |
+| --------- | --------- | ------ | ------- | -------- | ----------- | ----- |
+| 1         | grassland | 1      | yes     | 12       | 0           | 1     |
+| 2         | grassland | 1      | yes     | 6        | 0           | 0     |
+| 3         | grassland | 1      | no      | 0        | 0           | 0     |
+| 4         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 5         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 6         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 7         | jungle    | 2      | no      | 0        | 0           | 0     |
+| 8         | grassland | 1      | no      | 0        | 0           | 0     |
+| 9         | mountain  | 1      | no      | 0        | 0           | 0     |
+| 10        | desert    | 1      | no      | 0        | 0           | 0     |
+| 11        | grassland | 1      | no      | 0        | 0           | 0     |
+| 12        | ice       | 1      | no      | 0        | 0           | 0     |
 
 12 row(s)
 
-### territory resource
+### territory-resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -2334,7 +2334,7 @@ end turn
 
 ### kind
 
-| kind      | in play |
+| kind      | in-play |
 | --------- | ------- |
 | citizen   | 18      |
 | labor     | 0       |

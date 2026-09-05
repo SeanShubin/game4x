@@ -244,11 +244,8 @@ pub fn entities(game: &Game) -> Vec<Entry> {
         let mut components = vec![
             ("founded".to_string(), place.founded().to_string()),
             ("citizens".to_string(), place.citizens().to_string()),
-            ("labor spent".to_string(), place.labor_spent().to_string()),
-            (
-                "force of nature".to_string(),
-                place.force_of_nature.to_string(),
-            ),
+            ("labor-spent".to_string(), place.labor_spent().to_string()),
+            ("nature".to_string(), place.force_of_nature.to_string()),
             ("force".to_string(), game.force_in(place.id).to_string()),
         ];
         for resource in Resource::ALL {
@@ -304,7 +301,7 @@ pub fn entities(game: &Game) -> Vec<Entry> {
                     "location".to_string(),
                     match unit.location {
                         Location::Orbit => "orbit".to_string(),
-                        Location::On(id) => format!("territory {id}"),
+                        Location::On(id) => format!("territory-{id}"),
                     },
                 ),
                 ("cells".to_string(), unit.cells.to_string()),

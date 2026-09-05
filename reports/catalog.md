@@ -205,7 +205,7 @@ a place things are in, which has a biome, a force of nature, and a density and a
 
 **In families** thing, place
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `density` (a number), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `force of nature` (a number)
+**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `density` (a number), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number)
 
 **In recipes**
 

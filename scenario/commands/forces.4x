@@ -1,12 +1,18 @@
-# Every territory has a force of nature of 1 in this release.
+# What holds each territory against being taken, from the release's Biomes table.
+#
+# It was one everywhere, and the comment here said so. `P-253` gave jungle a nature of two,
+# and territories 6 and 7 are the jungles - so this file's opening sentence became false
+# without a line of it changing, which is what a scenario written as prose plus data does
+# when only the data has a check on it. `the_forces_are_the_ones_the_release_gives_each
+# _biome` reads the release now, so the next one fails here rather than reading wrongly.
 
 set force 1 1
 set force 2 1
 set force 3 1
 set force 4 1
 set force 5 1
-set force 6 1
-set force 7 1
+set force 6 2
+set force 7 2
 set force 8 1
 set force 9 1
 set force 10 1

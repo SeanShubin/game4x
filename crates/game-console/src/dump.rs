@@ -80,7 +80,7 @@ fn readiness(exhausted: bool) -> String {
 /// two declarations, and a row that round-tripped into a different identity.
 pub fn key_of(table: &str) -> usize {
     match table {
-        "store" | "extractor" | "structure" | "territory resource" => 2,
+        "store" | "extractor" | "structure" | "territory-resource" => 2,
         _ => 1,
     }
 }
@@ -110,10 +110,10 @@ pub fn tables(game: &Game) -> Vec<Table> {
         &[
             "territory",
             "biome",
-            "force of nature",
+            "nature",
             "founded",
             "citizens",
-            "labor spent",
+            "labor-spent",
             "yards",
         ],
     );
@@ -125,7 +125,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
     // means the capacity is per kind, so *how many the ground has room for*, *what each
     // yields* and *how many are built* are each a fact the release already states.
     let mut node = Table::new(
-        "territory resource",
+        "territory-resource",
         &["territory", "resource", "capacity", "density", "built"],
     );
     let mut store = Table::new("store", &["territory", "resource", "amount"]);
@@ -232,7 +232,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
             flying.kind.name().to_string(),
             match flying.location {
                 Location::Orbit => "orbit".to_string(),
-                Location::On(at) => format!("territory {}", at.0),
+                Location::On(at) => format!("territory-{}", at.0),
             },
             flying.cells.to_string(),
             readiness(flying.exhausted),
@@ -251,7 +251,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
     //
     // Counts are across the whole game, because *is there one anywhere* is what a missing
     // table leaves unanswerable. Where they sit is what the other tables are for.
-    let mut kinds = Table::new("kind", &["kind", "in play"]);
+    let mut kinds = Table::new("kind", &["kind", "in-play"]);
     let total = |count: &dyn Fn(&game_model::Territory) -> u32| -> u32 {
         game.territories.iter().map(count).sum()
     };

@@ -75,21 +75,38 @@ fn a_state_survives_being_written_and_read() {
         direct.len()
     );
 
-    // **The awkward words are the ones a notation loses**, and they turned out to be the
-    // names rather than the values: a table called *territory resource*, a column called
-    // *force of nature*. My first version of this counted only values, found none, and
-    // would have declared the quoting untested while three kinds of name depended on it.
-    let awkward = direct
-        .iter()
-        .flat_map(|row| {
-            std::iter::once(row.table.clone())
-                .chain(row.fields.iter().flat_map(|(n, v)| [n.clone(), v.clone()]))
-        })
-        .filter(|word| word.contains(' ') || word.is_empty())
-        .count();
+    // **`P-252`: nothing in a data file is quoted, so nothing in one may need to be.**
+    //
+    // This assertion used to run the other way - it counted the words that *needed*
+    // quoting and failed when there were too few, on the grounds that a notation is
+    // untested until its awkward cases appear. The awkward cases were four names, in
+    // seventy-one places: `force of nature`, `in play`, `labor spent`, `territory
+    // resource`. Sean read the data and said no. `spec/console.md` now has it: *a name is
+    // one word; where it needs more than one, the words are joined with dashes.*
+    //
+    // So the count is asserted at zero, and `expected::one_word` panics rather than
+    // quoting - the writer cannot express a bad name, which is a stronger guarantee than
+    // any count. Every word is checked and the number of them is asserted, because a run
+    // over no words would satisfy a count of zero for the wrong reason.
+    let mut words = 0;
+    let mut quoted = Vec::new();
+    for row in &direct {
+        for word in std::iter::once(row.table.clone())
+            .chain(row.fields.iter().flat_map(|(n, v)| [n.clone(), v.clone()]))
+        {
+            if word.contains(' ') || word.contains('"') || word.is_empty() {
+                quoted.push(word.clone());
+            }
+            words += 1;
+        }
+    }
     assert!(
-        awkward > 2,
-        "only {awkward} words here need quoting, so the quoting is barely tested"
+        quoted.is_empty(),
+        "these would have to be quoted, and nothing in a data file is: {quoted:?}"
+    );
+    assert!(
+        words > 500,
+        "only {words} words examined, so an empty run would pass the assertion above"
     );
 }
 

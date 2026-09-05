@@ -214,9 +214,16 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
             place.id,
             near.len()
         );
-        assert_eq!(
-            place.force_of_nature, 1,
-            "every territory has a force of nature of 1"
+        // **`P-253`: not one everywhere any more.** Jungle holds itself with two, and the
+        // planet has two jungles. Asserting the flat 1 here was true of the release for as
+        // long as the release said so, and the moment it stopped this was the only thing
+        // that noticed - which is the right outcome, and is why it now reads the release
+        // rather than a number. `tests/biomes_can_be_held.rs` holds every territory to its
+        // own biome's force; this only says nature is set at all.
+        assert!(
+            place.force_of_nature >= 1,
+            "territory {} has no force of nature",
+            place.id
         );
         assert!(!place.founded(), "nothing is claimed before play");
     }

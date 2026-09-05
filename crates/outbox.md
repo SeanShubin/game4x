@@ -33,6 +33,41 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-24 - Nothing the release provides can take a jungle
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-42`, building the check it asked for
+
+**The check can be built, and it fails.** `S-42` asked whether one could say that a claimable
+biome can be held at all by what the release provides, and said the interesting answer would be
+*no, and here is why*. The answer is that it can be built, it is built, and **jungle does not
+pass**.
+
+`spec/control.md`: *taking a territory takes force greater than the existing force*. `P-253` gave
+jungle a nature of **2**. The release's *Units and structures* table gives an ark force **2** and a
+pioneer force **2**, and they are the only two things that take ground. Asked of the model rather
+than of arithmetic about it, the refusal is: **`taking territory 2 needs more than 2 force, and you
+bring 2`**.
+
+**Territories 6 and 7 are the jungles, and neither can ever be claimed by anybody.** Ocean is the
+other unclaimable biome and is unclaimable on purpose; this is three of twelve unclaimable, two of
+them by accident.
+
+**Holding is fine and is a different number.** Holding takes force *equal to* nature, and a
+founding leaves a garrison and two citizens, which organised sums to at least two. So a jungle
+could be held if it could ever be taken. **The two rules use different comparisons and that is
+exactly where this fell through** - every check that existed asked about holding.
+
+**Not repaired here, because every number in it is yours.** Any of four fixes would do and they are
+not the same decision: jungle's nature back to 1, a pioneer's force to 3, *taking* changed to *at
+least*, or jungle declared unclaimable like ocean. Carried as one named exception in
+`tests/biomes_can_be_held.rs` that **fails if jungle ever becomes takeable**, so it cannot outlive
+the gap.
+
+**Also relevant to `R-6`.** *Fully exploited* requires every territory that can be taken to have
+been taken. `Biome::is_claimable` says jungle can be, and nothing can take it - so a scenario
+reaching a fully exploited planet is currently impossible for a second reason, and this one is not
+in the code.
+
 ### C-23 - `P-215`'s enclosing command is built; the nested-command half has no case yet
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** building `S-26`'s `P-215`

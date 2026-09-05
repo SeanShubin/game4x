@@ -339,7 +339,7 @@ pub const TRAITS: [TraitRow; 18] = [
         held: Held::Stored,
     },
     TraitRow {
-        name: "force of nature",
+        name: "nature",
         of: "a territory",
         values: "a number",
         held: Held::Stored,
