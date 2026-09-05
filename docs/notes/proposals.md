@@ -105,8 +105,16 @@ that these commands produced this change. **A store at 20 of 20 is the interesti
 where production stops mattering and things start being lost at the turn's end - **and it is exactly
 the case the current row cannot show you.**
 
-**And whichever you pick, `capacity` needs two names or one of them needs a different word.**
-Extractor capacity and storage capacity are different limits and the data calls both `capacity`.
+**Corrected 2026-09-05: `capacity` does not need two names, it needs the type the specification
+already gives it.** `spec/logistics.md`: *what a thing may contain is a maximum **per kind, or per
+family of kinds**. That maximum is its total capacity **for that kind**.* **So capacity is typed
+already**, and there is one concept rather than two - a territory's capacity **for extractors** and
+its capacity **for metal**.
+
+**The report is what drops the type.** It prints `capacity:3` on a `territory-resource` row and the
+reader has to know it means extractors. **A store row printing `capacity:20` beside it would be the
+same word meaning something else only because neither says what it is for.** Whatever carries a
+capacity should say what kind it is a capacity for, and then the word is unambiguous everywhere.
 
 ## Addressed to other perspectives
 

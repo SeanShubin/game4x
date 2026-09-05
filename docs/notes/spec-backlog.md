@@ -8,6 +8,36 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-05, on bins, and it is mostly already specified
+
+*I think it might need a type instead. A territory that can store 10 metal is acting as a bin. And we
+can have bins within bins as long as we don't end up with a certain kind of cycle... It is an
+equivalent decision to have a bin with capacities for multiple materials, or allow a thing to contain
+multiple bins, each containing a single material. As I have described it now I think it has more
+degrees of freedom than it should, there should be some organization imposed. I don't want to have
+too many ways to accomplish the same goal, I think that could get confusing to the player. The player
+should be presented with an organizational structure they can understand that provides them all the
+capabilities they need. We also have vehicles such as a metal transport with a bin for fuel and a bin
+for metal.*
+
+**Most of this is `spec/logistics.md` -> Containment already**, and the overlap is close enough to be
+worth listing rather than summarising:
+
+| What he said                           | What the specification already says                                      |
+| -------------------------------------- | ------------------------------------------------------------------------ |
+| capacity needs a type                  | *a maximum **per kind, or per family of kinds**... for that kind*        |
+| bins within bins                       | *a thing may contain things, and is itself in at most one other*         |
+| as long as there is no cycle           | *nothing contains itself, directly or through anything else*             |
+| a territory storing metal **is** a bin | nothing distinguishes a container from anything else                     |
+| a bin takes room in what holds it      | *a thing that contains things takes up capacity in whatever contains it* |
+
+**What it does not say is the thing he is actually asking for.** The rules permit **both**
+arrangements - one bin with capacities for several kinds, or several single-kind bins - and choose
+neither. **That is the freedom he wants removed**, and no rule currently removes it.
+
+**Not proposed.** He is thinking rather than deciding, and the question is *which organization*
+rather than *whether one*. A proposal now would be this lane guessing at a design.
+
 ## Answered 2026-09-04, the three collisions in `P-237`
 
 1. *Perhaps this is a naming issue, the specification instance is the only thing that has me as its
