@@ -63,6 +63,46 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-249 - `R-6` is now buildable and its evidence is about 240 commands
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
+**into** `releases/first-release.md` -> `R-6`, its *vetted when* line
+
+**`R-6` is unblocked.** `C-7` withdrawn, `C-11` and `C-9` both landed today, and **nothing in the
+code blocks it** - I corrected its line, which had been stale twice. **It is the last capability, and
+the release file is deleted when you have vetted it.**
+
+**Now that *fully exploited* is decidable, its evidence can be counted, and the code lane counted
+it.** Twelve territories founded, **110 extractors** - 129 nodes less territory 5's nineteen, which
+it can never work - and **ten yards**. Each of those 120 buildings costs a labor, and labor is a
+command. **So the buildings alone are about 240 commands**, before anything that gathers the 260
+metal they cost or the food that sustains the hands.
+
+**Your committed scenario is 73 commands.**
+
+**The rule is not in question.** *A player wins by launching an Ark from a fully exploited planet* is
+`spec/control.md` and it is the game. **What is in question is whether `R-6`'s evidence has to be the
+whole of it.**
+
+**Choice A - leave it.** The evidence is a full play-through, and you vet it when a scenario reaches
+it. **Honest and unambiguous; you would be reading a report of several hundred commands**, and
+nothing smaller counts.
+
+**Choice B - a smaller observable that still says the loop closes.** Something like: one territory
+reaches its own full exploitation, produces an Ark, and launches it - **every recipe in the loop
+fires and the win condition is reached in miniature.** Cheaper to read, and it does not demonstrate
+the planet-wide claim the rule makes.
+
+**This lane recommends B, and the reason is your own test for a check.** *A test is there for what I
+cannot reliably repeat.* **Reading 240 commands by hand is not something a person does twice**, so an
+evidence line that requires it is one you will do once and never re-check - which makes it a
+ceremony rather than a guard. **A smaller observable you would actually re-read is worth more than a
+larger one you would not.**
+
+**What B costs, said plainly.** The release would stop claiming the whole rule is demonstrated. **The
+rule stays in `spec/`** and the demonstration of it moves to whenever a scenario is written that
+reaches it - which nothing currently requires.
+
 ## Addressed to other perspectives
 
 ### S-20 - The `node` table calls a total a density, and erases what the twelve territories exist to exercise
