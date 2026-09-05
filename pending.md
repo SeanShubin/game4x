@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-234** - One `extractor` kind, and a `$` that may name a trait value · `docs/notes/proposals.md`
 - **P-241** - The match-string rule is about tables and the bug is about wrapping · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise

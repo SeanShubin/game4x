@@ -45,46 +45,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-234 - One `extractor` kind, and a `$` that may name a trait value
-
-**to** sean - **status** open - **raised** 2026-09-04 - **revised** 2026-09-04 - **kind** Sean's own
-- **shape** instruction - **asks** approval - **into** `spec/console.md` -> Commands **first**, then
-`releases/first-release.md` -> Kinds, Families, Traits, What bounds a kind, Units and structures,
-Recipes
-
-**You chose A. One thing has to land before the rest, and it is three words.** `CLAUDE.md`: *a
-release never invents a rule; if it needs one the specification lacks, that becomes a proposal first
-and the release then refers to it.* **The release cannot use `$resource` until `spec/console.md`
-allows it.**
-
-**In `spec/console.md`, one sentence, three words added:**
-
-- now: *the place it acts in, and any **ingredient** it names with a `$`*
-- becomes: *the place it acts in, and any **ingredient or trait value** it names with a `$`*
-
-**Then the release, in six places, all mechanical:**
-
-- **Kinds**: three rows become one, `extractor`. **14 kinds becomes 12**
-- **Families**: the `extractor` row goes. **5 becomes 4.** `work`'s two rows are untouched - they
-  say `extractor` already and now resolve to a kind
-- **Traits**: one new row - `resource`, of an extractor, one of the resources, stored
-- **What bounds a kind**: three identical rows become one
-- **Units and structures**: three identical rows become one. **8 rows becomes 6**
-- **Recipes**: `deploy ark` and `found by land` produce `extractor` with the resource in *Traits*;
-  the three `build` recipes become one `build extractor` producing `1 extractor` with `$resource`.
-  **17 recipes becomes 15**
-
-**The prose is untouched** - five lines say *food extractor* and keep saying it, which is good
-English for an extractor whose resource is food.
-
-**Assertion**: `spec/console.md` says *ingredient or trait value*; the release names 12 kinds, 4
-families, 15 recipes; `food extractor`, `metal extractor` and `energy extractor` appear only in
-prose and in no table; `commands/play.4x` is byte-identical; and **no number in the release changes**
-- every cost, capacity and density is what it was.
-
-**Measured 2026-09-04**: 9 uses of `$where`, `$from` and `$to` in the release, and `$resource` will
-be the first parameter that is not a place.
-
 ### P-241 - The match-string rule is about tables and the bug is about wrapping
 
 **to** sean - **status** open - **raised** 2026-09-04 - **kind** cleanup - **shape** text - **asks**
@@ -1717,6 +1677,7 @@ work the release exists to order.
 | P-233, `ready` is a boolean trait and the world recipe is `refresh`                                             | `releases/first-release.md` -> Traits, Recipes                                                                                               | 2026-09-04 |
 | P-235, *Directions* - what the design expects to move, binding nothing                                          | `docs/vision.md` -> Directions, and `docs/README.md` -> What goes where                                                                      | 2026-09-04 |
 | P-236, the `asks` field is declared                                                                             | `CLAUDE.md` -> Outboxes                                                                                                                      | 2026-09-04 |
+| P-234, one `extractor` kind, and a `$` may name a trait value                                                   | `spec/console.md` -> Commands, and `releases/first-release.md` -> six places                                                                 | 2026-09-05 |
 
 ## Rejected
 

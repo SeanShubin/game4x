@@ -42,7 +42,7 @@ arguments are named. **A value is a word, a number, or another command in the sa
 command may carry a tree.
 
 **A command names a recipe and binds what that recipe leaves open**: the place it acts in, and any
-ingredient it names with a `$`. **There is one command for each recipe the player may fire**, and
+ingredient or trait value it names with a `$`. **There is one command for each recipe the player may fire**, and
 ending a turn fires the world's.
 
 The commands are therefore not a list this document keeps. They are the recipes whose owner is the
