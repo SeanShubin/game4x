@@ -128,28 +128,36 @@ reader has to know it means extractors. **A store row printing `capacity:20` bes
 same word meaning something else only because neither says what it is for.** Whatever carries a
 capacity should say what kind it is a capacity for, and then the word is unambiguous everywhere.
 
-### P-258 - No storage is inherent to a territory
+### P-258 - A territory declares no capacity for a resource
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `releases/first-release.md` -> What bounds a kind
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
+- **shape** text - **asks** approval - **into** `releases/first-release.md` -> What bounds a kind
 
-**This settles the bins question in the direction the analysis said it would be settled.** *Each
-territory should allow the player to build storage* means **capacity is built, so the noun is real**
-- a `metal store` earns being a kind because building one costs something.
+**Reworded on your objection, which was right.** *No storage is inherent to a territory* denies
+something true: **a territory's capacity for stores is inherent.** What is not inherent is capacity
+for what a store holds. **The distinction is exactly the one `P-257` landed** - a branch holds
+things, and material sits in the things that declare capacity for it.
 
-> No storage is inherent to a territory. An extractor holds some of what it makes; everything else a
-> territory keeps is in something the player built to keep it in. **Material that is in nothing is in
-> disorder, and cannot be reached.**
+> A territory declares no capacity for a resource. It declares capacity for the things that hold
+> them - an extractor holds some of what it makes, and a store holds what it was built to hold. **A
+> resource that is in nothing is in disorder, and cannot be reached.**
 
 **Basis: it removes the three lines that gave a territory storage for free.** *What bounds a kind*
-currently says food, metal and energy each have **a capacity of 20** - measured, three times - and
-none of them is built or paid for. **Under this, a territory starts able to keep nothing.**
+says food, metal and energy each have **a capacity of 20** - measured, three times - none of them
+built or paid for. **Under this a territory can hold stores from the start and can hold no metal at
+all until one is built.**
 
-**It also fits the tree without an exception.** A store is a branch declaring capacity for one leaf
-kind; a territory is a branch declaring capacity for stores. **Nothing new is needed** - `P-257`
-landed an hour ago and this is its first real use.
+**Said in `resource` rather than in *material*, because `resource` is declared and *material* is
+not.** The release's families give `resource` as food, metal and energy - **so this touches those
+three and nothing else.**
 
-**What it leaves open is `P-259`**, and the two should be read together.
+**Which leaves `labor` alone, deliberately, and it is worth saying why.** `labor` is not a resource;
+it is bounded by *the citizens that make it, one each per turn* rather than by a capacity. **It is
+made and consumed inside a turn and never needs somewhere to sit** - so requiring a store for it
+would be a rule with no case.
+
+**`P-259` is decided and this is the half that lands text.** Disorder is lost at the turn's end,
+which `spec/turn.md` already says; **this changes what the bound is.**
 
 ## Addressed to other perspectives
 
