@@ -88,6 +88,8 @@ Crate READMEs cover how a crate works internally and are linked from
 | What the game **is**, normatively                              | `spec/<name>.md` - Sean's words only, see [CLAUDE.md](../CLAUDE.md)                 |
 | A record of analysis or a rejected path                        | `docs/notes/<name>.md` - derived, dated, not binding                                |
 | A movement the design expects but has not made                 | [vision.md](vision.md) - *Directions*. Informs a decision, binds nothing            |
+| A generated report I browse                                    | `reports/<name>.md` and `.html`, reached from `reports/index.html`                  |
+| The scenario's input, and what it should produce               | `scenario/commands/` and `scenario/expected/`                                       |
 | What the game is, and why                                      | [vision.md](vision.md)                                                              |
 | How the code is split up                                       | [architecture.md](architecture.md)                                                  |
 | Why it is split that way, and what must be reproducible        | [layers.md](layers.md)                                                              |

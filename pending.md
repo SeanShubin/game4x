@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-246** - Where the reports live, and what is missing from the turn-by-turn · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -25,8 +26,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
+- **S-38** - Move the reports out of the root, index them, and make the turns a transformation · `docs/notes/proposals.md`
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
