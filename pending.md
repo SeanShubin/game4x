@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-263** - A promotion says what it is for the code lane, and silence is not an answer · `docs/notes/proposals.md`
 - **P-264** - The scenario changes what it demonstrates, and the shape is yours · `docs/notes/proposals.md`
+- **P-265** - `P-260` dropped its own answer, and left a contradiction where it landed · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

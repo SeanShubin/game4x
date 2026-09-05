@@ -138,6 +138,37 @@ everything else rests on, and a scenario that never reaches the win condition le
 chain in the game unvetted. The code lane is building the model and recipes now either way, and holds
 only the scenario rewrite.
 
+### P-265 - `P-260` dropped its own answer, and left a contradiction where it landed
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** rows -
+**asks** approval - **into** `releases/first-release.md` -> Where things are
+
+**This is not a question you have to answer twice.** You answered `P-260`'s C - *that number seems
+safe* - and **the promotion did not carry it.** The code lane found it by trying to build from the
+release and finding no number in it. `C-27`.
+
+> | Container                               | Holds                         | Up to                            |
+> | --------------------------------------- | ----------------------------- | -------------------------------- |
+> | a territory's total capacity for a kind | that kind                     | its total capacity for that kind |
+> | a store                                 | the resource it was built for | 10                               |
+> | a unit's tank                           | energy                        | the unit's fuel                  |
+
+**Two things change and the count above the table stays three.** The store row is new and carries
+the number. **The extractor's catch row goes**, because it says an extractor holds the resource up
+to the territory's density **while the paragraph fifty lines below says an extractor holds nothing** -
+both landed by promotions of mine, an hour apart, and they cannot both be true. `C-26`.
+
+**What went wrong, exactly.** `P-260` asked four questions; you answered all four; **the promotion
+asserted the two that were countable** - thirteen kinds, sixteen recipes - **and asserted nothing
+about the number, so nothing noticed it was missing.** Then I told you and the code lane it was
+settled in `c2e9266`. **It was settled by you and not written down**, which is the failure `P-263`
+was filed about, committed in the same hour I filed it.
+
+**The code lane is holding rather than guessing**, which is right: 10 against any other number
+decides whether territory 1 needs one metal store or two, and therefore what the scenario shows.
+**The gate is red until this lands** - the model cannot have a store whose capacity no document
+states.
+
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
