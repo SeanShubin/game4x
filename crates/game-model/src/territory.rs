@@ -64,14 +64,10 @@ pub struct Territory {
     pub nodes: Vec<Node>,
     /// `spec/control.md`: force inherent to the territory, which nature holds it with.
     pub force_of_nature: u32,
-    /// Whether the player controls it. A territory is founded by a unit taking it.
-
-    /// Labor used this turn. A citizen provides one, and it is not restored until the
-    /// turn ends.
-
-    /// What is here now. `spec/logistics.md`: there is no general inventory, so this is
-    /// per territory and nothing crosses a boundary.
-    /// What is here now, as things rather than as three numbers.
+    /// What is here now, as things rather than as fields.
+    ///
+    /// `spec/logistics.md`: there is no general inventory, so this is per territory and
+    /// nothing crosses a boundary.
     ///
     /// **`stores: [u32; 3]` could not carry a fourth resource** and, more to the point, made
     /// a unit of food something other than a thing in a place - which is what

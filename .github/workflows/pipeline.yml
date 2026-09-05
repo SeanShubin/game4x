@@ -120,10 +120,20 @@ jobs:
       # docs/architecture.md, and while it was unwired the table went stale twice with
       # nothing to say so - C-12. A check nobody runs has no answer, and no answer looks
       # exactly like a right one.
+      # Found rather than listed - `Q-46`. A name list goes stale the moment a fourth tool
+      # exists, and one had: `tools/spec` was reached by nothing here or in the hook.
       - name: Test (the documentation tools)
         run: |
-          cargo test --manifest-path tools/outbox/Cargo.toml
-          cargo test --manifest-path tools/pad-tables/Cargo.toml
+          for manifest in tools/*/Cargo.toml; do
+            echo "== $manifest"
+            cargo fmt --manifest-path "$manifest" -- --check
+            cargo test --manifest-path "$manifest"
+            # tools/spec is the specification lane's own; it has a live warning this lane
+            # may not fix. Q-46. The exclusion goes when they do.
+            if [ "$manifest" != "tools/spec/Cargo.toml" ]; then
+              cargo clippy --manifest-path "$manifest" --all-targets -- -D warnings
+            fi
+          done
 
       - name: Test (the engine-facing crates)
         run: cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x -p planet-view -p goldberg-view

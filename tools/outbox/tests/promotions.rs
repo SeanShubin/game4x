@@ -327,15 +327,13 @@ fn a_promotion_lands_what_was_approved() {
             };
             // If it did not land then, ask whether it has landed since. Only a `Missing` is
             // worth re-asking: an unknown shape is unknown at every commit.
-            if matches!(verdict, Verdict::Missing { .. }) {
-                if let Some(now) = git(&root, &["show", &format!("HEAD:{into}")]) {
-                    if quoted
-                        .iter()
-                        .all(|block| matches!(check(&shape, block, &now), Verdict::Landed))
-                    {
-                        verdict = Verdict::Repaired;
-                    }
-                }
+            if matches!(verdict, Verdict::Missing { .. })
+                && let Some(now) = git(&root, &["show", &format!("HEAD:{into}")])
+                && quoted
+                    .iter()
+                    .all(|block| matches!(check(&shape, block, &now), Verdict::Landed))
+            {
+                verdict = Verdict::Repaired;
             }
             if let Some((_, why)) = KNOWN.iter().find(|(id, _)| *id == item.id) {
                 // The exception has to still be needed, or it is hiding a passing case and

@@ -294,21 +294,30 @@ mod tests {
             "more text
 "
         );
-        assert_eq!(pad_tables(text), text, "a diagram inside a fence must not be touched");
+        assert_eq!(
+            pad_tables(text),
+            text,
+            "a diagram inside a fence must not be touched"
+        );
     }
 
     #[test]
     fn a_row_may_omit_its_trailing_pipe() {
-        let out = pad_tables("| a | bbbb
+        let out = pad_tables(
+            "| a | bbbb
 | --- | ---
 | cccccc | d
-");
+",
+        );
         for line in out.lines() {
             assert!(line.ends_with('|'), "trailing pipe not normalised: {line}");
         }
         let widths: Vec<usize> = out.lines().map(|l| l.chars().count()).collect();
-        assert!(widths.windows(2).all(|w| w[0] == w[1]), "not aligned:
-{out}");
+        assert!(
+            widths.windows(2).all(|w| w[0] == w[1]),
+            "not aligned:
+{out}"
+        );
     }
 
     #[test]

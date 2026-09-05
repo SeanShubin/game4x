@@ -109,18 +109,35 @@ impl Kind {
 
 /// What a thing can be distinguished by, beyond its kind.
 ///
-/// **A trait is a slot, not a field per kind.** `Works` is which node an extractor works and
-/// means nothing to a citizen; a citizen simply does not carry it. Adding a kind adds no
-/// variant here, and adding a trait is what the release's *Traits* table is for.
+/// **A trait is a slot, not a field per kind.** A citizen simply does not carry the ones that
+/// mean nothing to it. Adding a kind adds no variant here.
+///
+/// # Only what something reads
+///
+/// **`Q-45`.** This carried six variants and five of them were never set and never read -
+/// `Resource`, `Works`, `Force`, `Multiplier` and `Manned`. The rules decide by kind, and
+/// `work` reached `garrison.manned` as a named field while `Trait::Manned` sat unused in the
+/// map beside it.
+///
+/// The quality lens named why that is worse than ordinary duplication, and the argument is
+/// the one that decided this: **every other two-source case in this repository had both
+/// sides read, so a divergence eventually showed.** An unread representation cannot diverge
+/// detectably. Those five could have said anything at all and no test, no drawing and no
+/// command would have differed.
+///
+/// So they are gone. They were me writing down where this is going as though it were state,
+/// and *going to be read* is not a property the compiler or a test can tell from *dead*.
+/// Each comes back in the commit that makes a rule read it.
+///
+/// **`Ready` stays because it is read.** It is what `is_ready`, `spend_readiness` and
+/// `refresh` are, it is the release's `ready` trait, and `P-235` wants it able to become a
+/// quantity - which it is.
+///
+/// **And the migration is half done, which is worth saying rather than leaving to be
+/// noticed.** `held` is things; `garrison` and `extractors` are still typed structs with
+/// named fields. That is not a design, it is a state of the work.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Trait {
-    /// Which resource an extractor is built for.
-    ///
-    /// **`P-234` put this back.** `P-206` had split the extractor into three kinds and this
-    /// trait went with it; the split existed in the definitions and nowhere else -
-    /// `commands/play.4x` has always written `build extractor 1 food`, treating the resource
-    /// as a parameter. One kind with a trait is what the command language already said.
-    Resource,
     /// Ready, as a number. Absent means ready, and zero means not.
     ///
     /// **`P-233` renamed the trait and `P-235` says why it is a number.** The release used
@@ -134,14 +151,6 @@ pub enum Trait {
     /// direction, and it needs a number here rather than a rename later. So this is a count,
     /// read through [`Thing::is_ready`], and every caller asks that rather than the value.
     Ready,
-    /// Which of a territory's nodes an extractor works.
-    Works,
-    /// Force of its own.
-    Force,
-    /// What a citizen working here produces in force.
-    Multiplier,
-    /// Citizens working here this turn.
-    Manned,
 }
 
 /// A thing: its kind, its own traits, and what it contains.

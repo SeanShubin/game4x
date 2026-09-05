@@ -48,7 +48,9 @@ fn every_generated_file_is_already_padded() {
     for name in GENERATED {
         let at: &Path = &root.join(name);
         let Ok(content) = std::fs::read_to_string(at) else {
-            wrong.push(format!("{name} is not there, and it is on the generated list"));
+            wrong.push(format!(
+                "{name} is not there, and it is on the generated list"
+            ));
             continue;
         };
         checked += 1;

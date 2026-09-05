@@ -44,9 +44,30 @@ cargo test --release --workspace $ENGINE
 # docs/architecture.md, and in the six weeks it was unwired the table went stale twice with
 # nothing to say so - C-12. A check nobody runs has no answer, and no answer looks exactly
 # like a right one.
-echo "pre-push: cargo test (the documentation tools)"
-cargo test --manifest-path tools/outbox/Cargo.toml
-cargo test --manifest-path tools/pad-tables/Cargo.toml
+# **Found rather than listed** - Q-46. Each tool declares its own `[workspace]` so it stays
+# out of `cargo tree` and `cargo build --workspace`, which is deliberate and right; the cost
+# is that `--all` and `--workspace` cannot reach any of them, so a gate has to name them. A
+# name list goes stale the moment a fourth exists, and one had: `tools/spec` was tested,
+# linted and format-checked by nothing, and was carrying a live clippy warning that no gate
+# could have caught. **The tool whose tests exist to catch unverified claims was the one
+# nothing verified.**
+#
+# This is Q-37 in the one place that fix could not reach: coverage is the default now, and
+# leaving a tool out is an explicit act rather than a name somebody forgot to add.
+echo "pre-push: the documentation tools"
+for manifest in tools/*/Cargo.toml; do
+    echo "  $manifest"
+    cargo fmt --manifest-path "$manifest" -- --check
+    cargo test --manifest-path "$manifest"
+    # `tools/spec` is the specification lane's own and this lane may not edit it. It has a
+    # live `collapsible_if` today, which is the finding: nothing was linting it. Reported to
+    # that lane; when they fix it this exclusion goes, and until then a gate red on a file
+    # this lane cannot touch would be the trap `CLAUDE.md` names.
+    case "$manifest" in
+        tools/spec/Cargo.toml) echo "    clippy skipped - Q-46, reported to the spec lane" ;;
+        *) cargo clippy --manifest-path "$manifest" --all-targets -- -D warnings ;;
+    esac
+done
 
 echo "pre-push: cargo test (the engine-facing crates)"
 cargo test -p planet-ecs -p planet-bevy -p planet-flat -p game-globe -p game4x \
