@@ -59,7 +59,11 @@ pub fn show(game: &Game, subject: &Subject) -> String {
                 lines.push(format!(
                     "  {:>2}  {:<9} citizens {:<3} force {:<3} extractor room {}",
                     place.id,
-                    if place.founded { "yours" } else { "unclaimed" },
+                    if place.founded() {
+                        "yours"
+                    } else {
+                        "unclaimed"
+                    },
                     place.citizens(),
                     game.force_in(place.id),
                     place.nodes.len()
@@ -109,7 +113,11 @@ fn territory(game: &Game, id: TerritoryId) -> String {
     };
     let mut lines = vec![format!(
         "territory {id}, {}, {}",
-        if place.founded { "yours" } else { "unclaimed" },
+        if place.founded() {
+            "yours"
+        } else {
+            "unclaimed"
+        },
         place.biome
     )];
     lines.push(format!(
@@ -234,7 +242,7 @@ pub fn entities(game: &Game) -> Vec<Entry> {
 
     for place in &game.territories {
         let mut components = vec![
-            ("founded".to_string(), place.founded.to_string()),
+            ("founded".to_string(), place.founded().to_string()),
             ("citizens".to_string(), place.citizens().to_string()),
             ("labor spent".to_string(), place.labor_spent().to_string()),
             (

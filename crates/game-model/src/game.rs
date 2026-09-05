@@ -247,7 +247,7 @@ impl Game {
         let Ok(territory) = self.territory(id) else {
             return 0;
         };
-        if territory.founded {
+        if territory.founded() {
             self.force_in(id)
         } else {
             territory.force_of_nature
@@ -265,7 +265,7 @@ impl Game {
     pub fn controlled(&self) -> Vec<TerritoryId> {
         self.territories
             .iter()
-            .filter(|territory| territory.founded)
+            .filter(|territory| territory.founded())
             .map(|territory| territory.id)
             .collect()
     }
@@ -368,7 +368,7 @@ impl Game {
             .iter()
             .filter(|place| place.biome.is_claimable())
             .all(|place| {
-                place.founded && place.yards() > 0 && place.extractors.len() == place.nodes.len()
+                place.founded() && place.yards() > 0 && place.extractors.len() == place.nodes.len()
             })
     }
 
@@ -402,7 +402,7 @@ impl Game {
             })?;
 
         self.units[at].cells -= cost::MOVE_CELLS;
-        if self.territory(territory)?.founded {
+        if self.territory(territory)?.founded() {
             self.units[at].location = Location::On(territory);
             self.units[at].exhausted = true;
             return Ok(());
@@ -466,7 +466,7 @@ impl Game {
     /// `spec/control.md`: taking a territory takes force greater than the existing force.
     fn take(&mut self, territory: TerritoryId, force: u32) -> Result<(), Rejection> {
         let defending = self.defending_force(territory);
-        if self.territory(territory)?.founded {
+        if self.territory(territory)?.founded() {
             return Err(Rejection::AlreadyControlled(territory));
         }
         if force <= defending {
@@ -476,7 +476,6 @@ impl Game {
                 needed: defending,
             });
         }
-        self.territory_mut(territory)?.founded = true;
         Ok(())
     }
 
@@ -486,7 +485,7 @@ impl Game {
         territory: TerritoryId,
         resource: Option<Resource>,
     ) -> Result<(), Rejection> {
-        if !self.territory(territory)?.founded {
+        if !self.territory(territory)?.founded() {
             return Err(Rejection::NotControlled(territory));
         }
         match structure {
@@ -520,7 +519,7 @@ impl Game {
 
     fn produce(&mut self, kind: UnitKind, territory: TerritoryId) -> Result<(), Rejection> {
         let place = self.territory(territory)?;
-        if !place.founded {
+        if !place.founded() {
             return Err(Rejection::NotControlled(territory));
         }
         match kind {
@@ -571,7 +570,7 @@ impl Game {
         territory: TerritoryId,
         resource: Option<Resource>,
     ) -> Result<(), Rejection> {
-        if !self.territory(territory)?.founded {
+        if !self.territory(territory)?.founded() {
             return Err(Rejection::NotControlled(territory));
         }
         match structure {
@@ -839,7 +838,10 @@ mod tests {
         // Finish the planet by hand rather than by playing it, so the test is about the
         // condition rather than about the economy.
         for place in &mut game.territories {
-            place.founded = true;
+            // A citizen is what holds it, since `S-19` made control derived. Setting a flag
+            // beside an empty territory used to do this, which is the disagreement that
+            // rule removes.
+            place.put(Kind::Citizen, 1);
             place.set_count(Kind::Yard, 1);
             place.extractors = (0..place.nodes.len())
                 .map(|node| Extractor {
@@ -895,7 +897,10 @@ mod tests {
     fn winning_is_the_launch_rather_than_the_state_afterwards() {
         let mut game = designed().after(&Transition::Start).unwrap();
         for place in &mut game.territories {
-            place.founded = true;
+            // A citizen is what holds it, since `S-19` made control derived. Setting a flag
+            // beside an empty territory used to do this, which is the disagreement that
+            // rule removes.
+            place.put(Kind::Citizen, 1);
             place.set_count(Kind::Yard, 1);
             place.extractors = (0..place.nodes.len())
                 .map(|node| Extractor {
@@ -930,7 +935,10 @@ mod tests {
     fn ocean_does_not_keep_a_planet_from_being_finished() {
         let mut game = designed().after(&Transition::Start).unwrap();
         for place in &mut game.territories {
-            place.founded = true;
+            // A citizen is what holds it, since `S-19` made control derived. Setting a flag
+            // beside an empty territory used to do this, which is the disagreement that
+            // rule removes.
+            place.put(Kind::Citizen, 1);
             place.set_count(Kind::Yard, 1);
             place.extractors = (0..place.nodes.len())
                 .map(|node| Extractor {
@@ -941,7 +949,6 @@ mod tests {
         }
         // Make one of them water and take everything off it.
         game.territories[1].biome = Biome::Ocean;
-        game.territories[1].founded = false;
         game.territories[1].set_count(Kind::Yard, 0);
         game.territories[1].extractors.clear();
         assert!(
@@ -1029,8 +1036,8 @@ mod tests {
                 territory: TerritoryId(1),
             })
             .unwrap();
-        assert!(!before.territory(TerritoryId(1)).unwrap().founded);
-        assert!(after.territory(TerritoryId(1)).unwrap().founded);
+        assert!(!before.territory(TerritoryId(1)).unwrap().founded());
+        assert!(after.territory(TerritoryId(1)).unwrap().founded());
     }
 
     /// A game is exactly the result of applying every transition in order to the start.
@@ -1096,7 +1103,7 @@ mod tests {
                 territory: TerritoryId(1),
             })
             .unwrap();
-        assert!(game.territory(TerritoryId(1)).unwrap().founded);
+        assert!(game.territory(TerritoryId(1)).unwrap().founded());
         assert!(game.units.is_empty(), "the ark is consumed by founding");
     }
 
@@ -1182,9 +1189,14 @@ mod tests {
     /// Force of nature 1, garrison force 1: equal is enough to hold.
     #[test]
     fn a_garrison_holds_a_territory_against_its_force_of_nature() {
-        let game = founded().after(&Transition::EndTurn).unwrap();
+        // Fed, because this is about force and not about starving. Since `S-19` control is
+        // derived from a citizen being there, so a test that lets the population die is
+        // testing upkeep whatever it says in its name.
+        let mut game = founded();
+        game.territories[0].add(Resource::Food, 9);
+        let game = game.after(&Transition::EndTurn).unwrap();
         assert!(
-            game.territory(TerritoryId(1)).unwrap().founded,
+            game.territory(TerritoryId(1)).unwrap().founded(),
             "still held a turn later"
         );
     }
@@ -1421,8 +1433,11 @@ mod tests {
     fn a_move_within_your_own_ground_spends_a_cell_and_keeps_the_unit() {
         let mut game = founded();
         // Found territory 2 as well, so moving there is a move rather than a founding.
-        game.territories[1].founded = true;
+        // **A citizen is what founds it now** - `S-19`. The garrison came with a flag
+        // beside it before, and the flag was the thing that could be set without anybody
+        // being there.
         game.territories[1].garrison = Some(Garrison::from_founding_unit(2));
+        game.territories[1].put(Kind::Citizen, 1);
         let id = UnitId(game.units.len() as u32 + 1);
         let mut pioneer = Unit::new(id, UnitKind::Pioneer);
         pioneer.location = Location::On(TerritoryId(1));
@@ -1461,7 +1476,7 @@ mod tests {
             })
             .unwrap();
         let two = moved.territory(TerritoryId(2)).unwrap();
-        assert!(two.founded);
+        assert!(two.founded());
         assert!(two.garrison.is_some());
         assert_eq!(two.citizens(), 2);
         assert_eq!(two.extractors.len(), 2, "a farm and a mine");

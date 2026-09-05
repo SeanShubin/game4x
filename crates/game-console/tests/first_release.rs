@@ -201,7 +201,7 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
             place.force_of_nature, 1,
             "every territory has a force of nature of 1"
         );
-        assert!(!place.founded, "nothing is claimed before play");
+        assert!(!place.founded(), "nothing is claimed before play");
     }
 
     // Every node the release calls for is there, and nothing else is.
@@ -570,20 +570,38 @@ fn taking_and_holding_a_territory_follow_the_force_rules() {
     // and taking it *is* founding it, so what stands there afterwards is the garrison the
     // ark became rather than the ark itself.
     run(&mut session, "land ark 1");
-    assert!(session.game.territory(TerritoryId(1)).unwrap().founded);
+    assert!(session.game.territory(TerritoryId(1)).unwrap().founded());
     assert!(session.game.units.is_empty(), "founding consumes the ark");
 
     let one = session.game.territory(TerritoryId(1)).unwrap();
     assert_eq!(one.garrison.unwrap().force, 1, "one less than the unit");
     assert_eq!(session.game.force_in(TerritoryId(1)), 1);
     assert_eq!(one.force_of_nature, 1);
-    assert!(one.founded, "equal force is enough to hold");
+    assert!(one.founded(), "equal force is enough to hold");
 
-    // And it is still held many turns later, with nothing else done.
+    // **And it is lost if nobody works it, which is `S-19` correcting this test.**
+    //
+    // It used to assert the ground was still held five empty turns later. It was not: with
+    // no extractor worked there is no food, the citizens starve at the first turn's end, and
+    // the territory sat with `founded: true` and nobody on it. **The flag was saying *held*
+    // about ground with no citizens** - which is exactly the disagreement a stored derived
+    // trait can have, and `releases/first-release.md` calls `control` *derived: a citizen of
+    // that player is there*.
+    //
+    // So what the force rules give you is ground you can hold, not ground that holds itself.
     for _ in 0..5 {
         run(&mut session, "end turn");
     }
-    assert!(session.game.territory(TerritoryId(1)).unwrap().founded);
+    let one = session.game.territory(TerritoryId(1)).unwrap();
+    assert_eq!(
+        one.citizens(),
+        0,
+        "nothing was worked, so nothing was eaten"
+    );
+    assert!(
+        !one.founded(),
+        "and ground with no citizens on it is not held by anybody"
+    );
 }
 
 /// The ground the release actually plays on is ground it can be played on.

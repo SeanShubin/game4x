@@ -65,7 +65,6 @@ pub struct Territory {
     /// `spec/control.md`: force inherent to the territory, which nature holds it with.
     pub force_of_nature: u32,
     /// Whether the player controls it. A territory is founded by a unit taking it.
-    pub founded: bool,
 
     /// Labor used this turn. A citizen provides one, and it is not restored until the
     /// turn ends.
@@ -97,7 +96,6 @@ impl Territory {
             biome,
             nodes: Vec::new(),
             force_of_nature: 0,
-            founded: false,
 
             held: Vec::new(),
             garrison: None,
@@ -143,6 +141,20 @@ impl Territory {
     /// comes on its own, where the diff shows it.
     pub fn discard_resources(&mut self) {
         self.held.retain(|thing| thing.kind.resource().is_none());
+    }
+
+    /// Whether a player holds this ground.
+    ///
+    /// **`S-19`: derived, not stored.** `releases/first-release.md` gives `control` as
+    /// *derived: a citizen of that player is there*, and `spec/invariants.md` says a derived
+    /// trait cannot be left wrong **because nothing writes one**. `founded: bool` was
+    /// written in four places and cleared in one, and every one of them was a chance for it
+    /// to disagree with the citizens it was meant to describe.
+    ///
+    /// A population that starves to nothing therefore loses the ground, without anybody
+    /// remembering to say so.
+    pub fn founded(&self) -> bool {
+        self.citizens() > 0
     }
 
     /// How many of a kind are here.
@@ -312,7 +324,6 @@ impl Territory {
     /// unusable. The ark is dealt with by the caller, which is the only place that knows
     /// where units are.
     pub fn lost_to_nature(&mut self) {
-        self.founded = false;
         self.garrison = None;
         self.extractors.clear();
         // Everything held goes, which is the one place `clear` is the right verb: nature
@@ -485,8 +496,10 @@ mod tests {
     #[test]
     fn nature_taking_a_territory_back_leaves_nothing_of_it() {
         let mut territory = with_nodes(&[(Resource::Food, 4)]);
-        territory.founded = true;
+        // Six citizens is what makes it founded now - `S-19`, control derived rather than
+        // stored. Setting a flag beside them was the thing that could disagree with them.
         territory.set_count(Kind::Citizen, 6);
+        assert!(territory.founded(), "citizens are what holding it means");
         territory.garrison = Some(Garrison::from_founding_unit(2));
         territory.extractors.push(Extractor {
             node: 0,
@@ -495,7 +508,7 @@ mod tests {
         territory.add(Resource::Metal, 10);
 
         territory.lost_to_nature();
-        assert!(!territory.founded);
+        assert!(!territory.founded());
         assert_eq!(territory.citizens(), 0, "its entire population perishes");
         assert!(territory.garrison.is_none());
         assert!(territory.extractors.is_empty());

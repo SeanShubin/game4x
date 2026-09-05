@@ -123,7 +123,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
             place.id.0.to_string(),
             format!("{:?}", place.biome).to_lowercase(),
             place.force_of_nature.to_string(),
-            yes(place.founded),
+            yes(place.founded()),
             place.citizens().to_string(),
             place.labor_spent().to_string(),
             place.yards().to_string(),
