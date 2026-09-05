@@ -46,6 +46,8 @@ use std::collections::BTreeMap;
 pub struct Row {
     pub table: String,
     pub fields: Vec<(String, String)>,
+    /// How many leading fields name this row rather than describe it.
+    pub key: usize,
 }
 
 /// A word as it must be written to survive being read back.
@@ -86,10 +88,16 @@ impl Row {
     /// with its counterpart before their fields are compared. Without that, a changed value
     /// reads as one row missing and another extra, which says where to look far less well.
     pub fn identity(&self) -> String {
-        match self.fields.first() {
-            Some((name, value)) => format!("{} {name}:{value}", self.table),
-            None => self.table.clone(),
+        if self.key == 0 || self.fields.is_empty() {
+            return self.table.clone();
         }
+        let named: Vec<String> = self
+            .fields
+            .iter()
+            .take(self.key)
+            .map(|(name, value)| format!("{name}:{value}"))
+            .collect();
+        format!("{} {}", self.table, named.join(" "))
     }
 }
 
@@ -106,6 +114,7 @@ pub fn rows(game: &game_model::Game) -> Vec<Row> {
                     .zip(values)
                     .map(|(name, value)| (name.to_string(), value.clone()))
                     .collect(),
+                key: table.key,
             });
         }
     }
@@ -264,7 +273,12 @@ pub fn read(text: &str) -> Result<Vec<Row>, String> {
                 value.trim_matches('"').to_string(),
             ));
         }
-        out.push(Row { table, fields });
+        // **A row written to a file does not carry its key**, because that would be noise
+        // in the one artifact a person reads. So reading one asks the same question the
+        // writer asked, from the same declaration - two would be a row that round-trips
+        // into a different identity.
+        let key = crate::dump::key_of(&table);
+        out.push(Row { table, fields, key });
     }
     Ok(out)
 }

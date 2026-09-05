@@ -22,12 +22,13 @@ end turn
 
 - {unit unit:1 kind:ark place:orbit fuel:2 readiness:ready}
 
-**new** (2)
+**new** (3)
 
+- {extractor territory:1 node:0 resource:food readiness:ready}
 - {extractor territory:1 node:3 resource:metal readiness:ready}
 - {garrison territory:1 force:1}
 
-**changed** (11)
+**changed** (16)
 
 - game phase:play · turn: 1 → 2
 - game phase:play · units: 1 → 0
@@ -38,6 +39,11 @@ end turn
 - kind kind:metal · in play: 0 → 4
 - labor territory:1 · made: 0 → 4
 - labor territory:1 · left: 0 → 4
+- store territory:1 resource:metal · amount: 0 → 4
+- structure territory:1 structure:extractor · count: 0 → 2
+- structure territory:1 structure:garrison · count: 0 → 1
+- territory resource territory:1 resource:food · built: 0 → 1
+- territory resource territory:1 resource:metal · built: 0 → 1
 - territory territory:1 · founded: no → yes
 - territory territory:1 · citizens: 0 → 4
 
@@ -51,7 +57,7 @@ end turn
 
 1 row(s)
 
-## territory
+### territory
 
 | territory | biome     | force of nature | founded | citizens | labor spent | yards |
 | --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
@@ -70,7 +76,7 @@ end turn
 
 12 row(s)
 
-## territory resource
+### territory resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -113,7 +119,7 @@ end turn
 
 36 row(s)
 
-## store
+### store
 
 | territory | resource | amount |
 | --------- | -------- | ------ |
@@ -156,7 +162,7 @@ end turn
 
 36 row(s)
 
-## garrison
+### garrison
 
 | territory | force |
 | --------- | ----- |
@@ -164,7 +170,7 @@ end turn
 
 1 row(s)
 
-## extractor
+### extractor
 
 | territory | node | resource | readiness |
 | --------- | ---- | -------- | --------- |
@@ -173,7 +179,7 @@ end turn
 
 2 row(s)
 
-## structure
+### structure
 
 | territory | structure | count |
 | --------- | --------- | ----- |
@@ -216,7 +222,7 @@ end turn
 
 36 row(s)
 
-## labor
+### labor
 
 | territory | made | spent | left |
 | --------- | ---- | ----- | ---- |
@@ -235,14 +241,14 @@ end turn
 
 12 row(s)
 
-## unit
+### unit
 
 | unit | kind | place | fuel | readiness |
 | ---- | ---- | ----- | ---- | --------- |
 
 *(empty) 0 rows*
 
-## kind
+### kind
 
 | kind      | in play |
 | --------- | ------- |
@@ -278,13 +284,19 @@ end turn
 
 ## what changed
 
-**changed** (5)
+**new** (2)
 
-- extractor territory:1 · node: 3 → 2
-- extractor territory:1 · resource: metal → food
+- {extractor territory:1 node:1 resource:food readiness:ready}
+- {extractor territory:1 node:2 resource:food readiness:ready}
+
+**changed** (6)
+
 - game phase:play · turn: 2 → 3
 - kind kind:extractor · in play: 2 → 4
 - kind kind:metal · in play: 4 → 6
+- store territory:1 resource:metal · amount: 4 → 6
+- structure territory:1 structure:extractor · count: 2 → 4
+- territory resource territory:1 resource:food · built: 1 → 3
 
 ## what is there now
 
@@ -296,7 +308,7 @@ end turn
 
 1 row(s)
 
-## territory
+### territory
 
 | territory | biome     | force of nature | founded | citizens | labor spent | yards |
 | --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
@@ -315,7 +327,7 @@ end turn
 
 12 row(s)
 
-## territory resource
+### territory resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -358,7 +370,7 @@ end turn
 
 36 row(s)
 
-## store
+### store
 
 | territory | resource | amount |
 | --------- | -------- | ------ |
@@ -401,7 +413,7 @@ end turn
 
 36 row(s)
 
-## garrison
+### garrison
 
 | territory | force |
 | --------- | ----- |
@@ -409,7 +421,7 @@ end turn
 
 1 row(s)
 
-## extractor
+### extractor
 
 | territory | node | resource | readiness |
 | --------- | ---- | -------- | --------- |
@@ -420,7 +432,7 @@ end turn
 
 4 row(s)
 
-## structure
+### structure
 
 | territory | structure | count |
 | --------- | --------- | ----- |
@@ -463,7 +475,7 @@ end turn
 
 36 row(s)
 
-## labor
+### labor
 
 | territory | made | spent | left |
 | --------- | ---- | ----- | ---- |
@@ -482,14 +494,14 @@ end turn
 
 12 row(s)
 
-## unit
+### unit
 
 | unit | kind | place | fuel | readiness |
 | ---- | ---- | ----- | ---- | --------- |
 
 *(empty) 0 rows*
 
-## kind
+### kind
 
 | kind      | in play |
 | --------- | ------- |
@@ -521,13 +533,14 @@ end turn
 
 ## what changed
 
-**changed** (6)
+**changed** (7)
 
 - game phase:play · turn: 3 → 4
 - kind kind:citizen · in play: 4 → 8
 - kind kind:metal · in play: 6 → 10
 - labor territory:1 · made: 4 → 8
 - labor territory:1 · left: 4 → 8
+- store territory:1 resource:metal · amount: 6 → 10
 - territory territory:1 · citizens: 4 → 8
 
 ## what is there now
@@ -540,7 +553,7 @@ end turn
 
 1 row(s)
 
-## territory
+### territory
 
 | territory | biome     | force of nature | founded | citizens | labor spent | yards |
 | --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
@@ -559,7 +572,7 @@ end turn
 
 12 row(s)
 
-## territory resource
+### territory resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -602,7 +615,7 @@ end turn
 
 36 row(s)
 
-## store
+### store
 
 | territory | resource | amount |
 | --------- | -------- | ------ |
@@ -645,7 +658,7 @@ end turn
 
 36 row(s)
 
-## garrison
+### garrison
 
 | territory | force |
 | --------- | ----- |
@@ -653,7 +666,7 @@ end turn
 
 1 row(s)
 
-## extractor
+### extractor
 
 | territory | node | resource | readiness |
 | --------- | ---- | -------- | --------- |
@@ -664,7 +677,7 @@ end turn
 
 4 row(s)
 
-## structure
+### structure
 
 | territory | structure | count |
 | --------- | --------- | ----- |
@@ -707,7 +720,7 @@ end turn
 
 36 row(s)
 
-## labor
+### labor
 
 | territory | made | spent | left |
 | --------- | ---- | ----- | ---- |
@@ -726,14 +739,14 @@ end turn
 
 12 row(s)
 
-## unit
+### unit
 
 | unit | kind | place | fuel | readiness |
 | ---- | ---- | ----- | ---- | --------- |
 
 *(empty) 0 rows*
 
-## kind
+### kind
 
 | kind      | in play |
 | --------- | ------- |
@@ -773,16 +786,23 @@ end turn
 
 ## what changed
 
+**new** (4)
+
+- {extractor territory:1 node:4 resource:metal readiness:ready}
+- {extractor territory:1 node:5 resource:metal readiness:ready}
+- {extractor territory:1 node:6 resource:energy readiness:ready}
+- {extractor territory:1 node:7 resource:energy readiness:ready}
+
 **changed** (9)
 
-- extractor territory:1 · node: 2 → 7
-- extractor territory:1 · resource: food → energy
 - game phase:play · turn: 4 → 5
 - kind kind:citizen · in play: 8 → 12
 - kind kind:extractor · in play: 4 → 8
 - labor territory:1 · made: 8 → 12
 - labor territory:1 · left: 8 → 12
-- territory resource territory:1 · built: 0 → 2
+- structure territory:1 structure:extractor · count: 4 → 8
+- territory resource territory:1 resource:energy · built: 0 → 2
+- territory resource territory:1 resource:metal · built: 1 → 3
 - territory territory:1 · citizens: 8 → 12
 
 ## what is there now
@@ -795,7 +815,7 @@ end turn
 
 1 row(s)
 
-## territory
+### territory
 
 | territory | biome     | force of nature | founded | citizens | labor spent | yards |
 | --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
@@ -814,7 +834,7 @@ end turn
 
 12 row(s)
 
-## territory resource
+### territory resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -857,7 +877,7 @@ end turn
 
 36 row(s)
 
-## store
+### store
 
 | territory | resource | amount |
 | --------- | -------- | ------ |
@@ -900,7 +920,7 @@ end turn
 
 36 row(s)
 
-## garrison
+### garrison
 
 | territory | force |
 | --------- | ----- |
@@ -908,7 +928,7 @@ end turn
 
 1 row(s)
 
-## extractor
+### extractor
 
 | territory | node | resource | readiness |
 | --------- | ---- | -------- | --------- |
@@ -923,7 +943,7 @@ end turn
 
 8 row(s)
 
-## structure
+### structure
 
 | territory | structure | count |
 | --------- | --------- | ----- |
@@ -966,7 +986,7 @@ end turn
 
 36 row(s)
 
-## labor
+### labor
 
 | territory | made | spent | left |
 | --------- | ---- | ----- | ---- |
@@ -985,14 +1005,14 @@ end turn
 
 12 row(s)
 
-## unit
+### unit
 
 | unit | kind | place | fuel | readiness |
 | ---- | ---- | ----- | ---- | --------- |
 
 *(empty) 0 rows*
 
-## kind
+### kind
 
 | kind      | in play |
 | --------- | ------- |
@@ -1028,15 +1048,20 @@ end turn
 
 ## what changed
 
-**changed** (7)
+**new** (1)
 
-- extractor territory:1 · node: 7 → 8
+- {extractor territory:1 node:8 resource:energy readiness:ready}
+
+**changed** (8)
+
 - game phase:play · turn: 5 → 6
 - kind kind:energy · in play: 0 → 8
 - kind kind:extractor · in play: 8 → 9
 - kind kind:metal · in play: 10 → 20
-- store territory:1 · amount: 0 → 8
-- territory resource territory:1 · built: 2 → 3
+- store territory:1 resource:energy · amount: 0 → 8
+- store territory:1 resource:metal · amount: 10 → 20
+- structure territory:1 structure:extractor · count: 8 → 9
+- territory resource territory:1 resource:energy · built: 2 → 3
 
 ## what is there now
 
@@ -1048,7 +1073,7 @@ end turn
 
 1 row(s)
 
-## territory
+### territory
 
 | territory | biome     | force of nature | founded | citizens | labor spent | yards |
 | --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
@@ -1067,7 +1092,7 @@ end turn
 
 12 row(s)
 
-## territory resource
+### territory resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1110,7 +1135,7 @@ end turn
 
 36 row(s)
 
-## store
+### store
 
 | territory | resource | amount |
 | --------- | -------- | ------ |
@@ -1153,7 +1178,7 @@ end turn
 
 36 row(s)
 
-## garrison
+### garrison
 
 | territory | force |
 | --------- | ----- |
@@ -1161,7 +1186,7 @@ end turn
 
 1 row(s)
 
-## extractor
+### extractor
 
 | territory | node | resource | readiness |
 | --------- | ---- | -------- | --------- |
@@ -1177,7 +1202,7 @@ end turn
 
 9 row(s)
 
-## structure
+### structure
 
 | territory | structure | count |
 | --------- | --------- | ----- |
@@ -1220,7 +1245,7 @@ end turn
 
 36 row(s)
 
-## labor
+### labor
 
 | territory | made | spent | left |
 | --------- | ---- | ----- | ---- |
@@ -1239,14 +1264,14 @@ end turn
 
 12 row(s)
 
-## unit
+### unit
 
 | unit | kind | place | fuel | readiness |
 | ---- | ---- | ----- | ---- | --------- |
 
 *(empty) 0 rows*
 
-## kind
+### kind
 
 | kind      | in play |
 | --------- | ------- |
@@ -1294,7 +1319,7 @@ end turn
 - kind kind:pioneer · in play: 0 → 1
 - labor territory:1 · made: 12 → 11
 - labor territory:1 · left: 12 → 11
-- store territory:1 · amount: 8 → 14
+- store territory:1 resource:energy · amount: 8 → 14
 - territory territory:1 · citizens: 12 → 11
 
 ## what is there now
@@ -1307,7 +1332,7 @@ end turn
 
 1 row(s)
 
-## territory
+### territory
 
 | territory | biome     | force of nature | founded | citizens | labor spent | yards |
 | --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
@@ -1326,7 +1351,7 @@ end turn
 
 12 row(s)
 
-## territory resource
+### territory resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1369,7 +1394,7 @@ end turn
 
 36 row(s)
 
-## store
+### store
 
 | territory | resource | amount |
 | --------- | -------- | ------ |
@@ -1412,7 +1437,7 @@ end turn
 
 36 row(s)
 
-## garrison
+### garrison
 
 | territory | force |
 | --------- | ----- |
@@ -1420,7 +1445,7 @@ end turn
 
 1 row(s)
 
-## extractor
+### extractor
 
 | territory | node | resource | readiness |
 | --------- | ---- | -------- | --------- |
@@ -1436,7 +1461,7 @@ end turn
 
 9 row(s)
 
-## structure
+### structure
 
 | territory | structure | count |
 | --------- | --------- | ----- |
@@ -1479,7 +1504,7 @@ end turn
 
 36 row(s)
 
-## labor
+### labor
 
 | territory | made | spent | left |
 | --------- | ---- | ----- | ---- |
@@ -1498,7 +1523,7 @@ end turn
 
 12 row(s)
 
-## unit
+### unit
 
 | unit | kind    | place       | fuel | readiness |
 | ---- | ------- | ----------- | ---- | --------- |
@@ -1506,7 +1531,7 @@ end turn
 
 1 row(s)
 
-## kind
+### kind
 
 | kind      | in play |
 | --------- | ------- |
@@ -1547,12 +1572,13 @@ end turn
 
 - {unit unit:1 kind:pioneer place:"territory 1" fuel:2 readiness:ready}
 
-**new** (2)
+**new** (3)
 
+- {extractor territory:2 node:0 resource:food readiness:ready}
 - {extractor territory:2 node:2 resource:metal readiness:ready}
 - {garrison territory:2 force:1}
 
-**changed** (15)
+**changed** (19)
 
 - game phase:play · turn: 7 → 8
 - game phase:play · units: 1 → 0
@@ -1565,7 +1591,11 @@ end turn
 - labor territory:1 · left: 11 → 12
 - labor territory:2 · made: 0 → 4
 - labor territory:2 · left: 0 → 4
-- store territory:1 · amount: 14 → 20
+- store territory:1 resource:energy · amount: 14 → 20
+- structure territory:2 structure:extractor · count: 0 → 2
+- structure territory:2 structure:garrison · count: 0 → 1
+- territory resource territory:2 resource:food · built: 0 → 1
+- territory resource territory:2 resource:metal · built: 0 → 1
 - territory territory:1 · citizens: 11 → 12
 - territory territory:2 · founded: no → yes
 - territory territory:2 · citizens: 0 → 4
@@ -1580,7 +1610,7 @@ end turn
 
 1 row(s)
 
-## territory
+### territory
 
 | territory | biome     | force of nature | founded | citizens | labor spent | yards |
 | --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
@@ -1599,7 +1629,7 @@ end turn
 
 12 row(s)
 
-## territory resource
+### territory resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1642,7 +1672,7 @@ end turn
 
 36 row(s)
 
-## store
+### store
 
 | territory | resource | amount |
 | --------- | -------- | ------ |
@@ -1685,7 +1715,7 @@ end turn
 
 36 row(s)
 
-## garrison
+### garrison
 
 | territory | force |
 | --------- | ----- |
@@ -1694,7 +1724,7 @@ end turn
 
 2 row(s)
 
-## extractor
+### extractor
 
 | territory | node | resource | readiness |
 | --------- | ---- | -------- | --------- |
@@ -1712,7 +1742,7 @@ end turn
 
 11 row(s)
 
-## structure
+### structure
 
 | territory | structure | count |
 | --------- | --------- | ----- |
@@ -1755,7 +1785,7 @@ end turn
 
 36 row(s)
 
-## labor
+### labor
 
 | territory | made | spent | left |
 | --------- | ---- | ----- | ---- |
@@ -1774,14 +1804,14 @@ end turn
 
 12 row(s)
 
-## unit
+### unit
 
 | unit | kind | place | fuel | readiness |
 | ---- | ---- | ----- | ---- | --------- |
 
 *(empty) 0 rows*
 
-## kind
+### kind
 
 | kind      | in play |
 | --------- | ------- |
@@ -1825,7 +1855,7 @@ end turn
 
 - {unit unit:1 kind:ark place:orbit fuel:2 readiness:ready}
 
-**changed** (11)
+**changed** (12)
 
 - game phase:play · turn: 8 → 9
 - game phase:play · units: 0 → 1
@@ -1835,7 +1865,8 @@ end turn
 - kind kind:yard · in play: 0 → 1
 - labor territory:2 · made: 4 → 6
 - labor territory:2 · left: 4 → 6
-- structure territory:1 · count: 0 → 1
+- store territory:1 resource:metal · amount: 20 → 14
+- structure territory:1 structure:yard · count: 0 → 1
 - territory territory:1 · yards: 0 → 1
 - territory territory:2 · citizens: 4 → 6
 
@@ -1849,7 +1880,7 @@ end turn
 
 1 row(s)
 
-## territory
+### territory
 
 | territory | biome     | force of nature | founded | citizens | labor spent | yards |
 | --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
@@ -1868,7 +1899,7 @@ end turn
 
 12 row(s)
 
-## territory resource
+### territory resource
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1911,7 +1942,7 @@ end turn
 
 36 row(s)
 
-## store
+### store
 
 | territory | resource | amount |
 | --------- | -------- | ------ |
@@ -1954,7 +1985,7 @@ end turn
 
 36 row(s)
 
-## garrison
+### garrison
 
 | territory | force |
 | --------- | ----- |
@@ -1963,7 +1994,7 @@ end turn
 
 2 row(s)
 
-## extractor
+### extractor
 
 | territory | node | resource | readiness |
 | --------- | ---- | -------- | --------- |
@@ -1981,7 +2012,7 @@ end turn
 
 11 row(s)
 
-## structure
+### structure
 
 | territory | structure | count |
 | --------- | --------- | ----- |
@@ -2024,7 +2055,7 @@ end turn
 
 36 row(s)
 
-## labor
+### labor
 
 | territory | made | spent | left |
 | --------- | ---- | ----- | ---- |
@@ -2043,7 +2074,7 @@ end turn
 
 12 row(s)
 
-## unit
+### unit
 
 | unit | kind | place | fuel | readiness |
 | ---- | ---- | ----- | ---- | --------- |
@@ -2051,7 +2082,7 @@ end turn
 
 1 row(s)
 
-## kind
+### kind
 
 | kind      | in play |
 | --------- | ------- |

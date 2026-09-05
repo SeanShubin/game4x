@@ -133,6 +133,7 @@ fn the_comparison_finds_missing_extra_and_different() {
     absent.push(Row {
         table: "territory".to_string(),
         fields: vec![("territory".to_string(), "99".to_string())],
+        key: 1,
     });
     assert_eq!(
         expected::compare(&absent, &actual).missing.len(),

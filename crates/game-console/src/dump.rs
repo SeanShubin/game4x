@@ -28,6 +28,17 @@ pub struct Table {
     pub name: &'static str,
     pub columns: &'static [&'static str],
     pub rows: Vec<Vec<String>>,
+    /// How many leading columns name a row rather than describe it.
+    ///
+    /// **Without this a comparison pairs the wrong rows.** `expected::compare` matched on
+    /// the table and its first column, which is right for `territory` and wrong for
+    /// `extractor`: every extractor in territory 1 shared one identity, so building two of
+    /// them read as *one row changed* instead of *two rows appeared*. Turn 2's delta said
+    /// `extractor territory:1 · node: 3 → 2` - true of nothing that happened.
+    ///
+    /// Found by the check that reconciles a printed delta against the printed states, on its
+    /// first run, which is the check I had declined to build.
+    pub key: usize,
 }
 
 impl Table {
@@ -36,6 +47,7 @@ impl Table {
             name,
             columns,
             rows: Vec::new(),
+            key: key_of(name),
         }
     }
 
@@ -58,6 +70,19 @@ fn yes(value: bool) -> String {
 
 fn readiness(exhausted: bool) -> String {
     if exhausted { "exhausted" } else { "ready" }.to_string()
+}
+
+/// How many leading columns name a row of this table.
+///
+/// **One declaration, read by the writer and by the reader.** A row written to a file does
+/// not carry its key - that would be noise in the one artifact a person reads - so reading
+/// one back has to ask the same question the writer asked. Asking a different place would be
+/// two declarations, and a row that round-tripped into a different identity.
+pub fn key_of(table: &str) -> usize {
+    match table {
+        "store" | "extractor" | "structure" | "territory resource" => 2,
+        _ => 1,
+    }
 }
 
 /// Every table, in a fixed order, for one moment of one game.
@@ -688,17 +713,15 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
         );
         per_turn.push_str(&turn.changed.as_a_turn());
 
-        per_turn.push_str(
-            "## what is there now
-
-",
-        );
-        match turn.state.split_once(
-            "
-
-## ",
-        ) {
-            Some((_, rest)) => per_turn.push_str(&format!("### {rest}")),
+        per_turn.push_str("## what is there now\n\n");
+        // **Every table demoted, not just the first.** A turn's three parts are `##`, so a
+        // state's tables belong at `###` beneath them - demoting only the first left
+        // `territory` sitting as a sibling of `commands`. It read wrong and parsed worse:
+        // the check that counts rows per table saw one table of 156 rows.
+        match turn.state.split_once("\n\n## ") {
+            Some((_, rest)) => {
+                per_turn.push_str(&format!("### {}", rest.replace("\n## ", "\n### ")))
+            }
             None => per_turn.push_str(&turn.state),
         }
     }

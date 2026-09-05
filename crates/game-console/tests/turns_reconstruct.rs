@@ -144,3 +144,119 @@ fn replaying_what_the_report_lists_reaches_what_the_report_shows() {
          written down, which is exactly what this exists to catch"
     );
 }
+
+/// The printed delta accounts for every row the printed states gained or lost.
+///
+/// **The check I first declined, and my reason for declining was wrong.** I said the delta
+/// and the states share `dump::tables`, so there is no second derivation and comparing them
+/// would compare a path to itself. The specification lane pointed out that the lens's
+/// caution forbids a second derivation that shares the **computation**, not one that shares
+/// the inputs - and reading the printed tables back out of `turns.md` and counting them
+/// calls neither `expected::compare` nor `dump::tables`. It runs on the artifact.
+///
+/// **The real reason to stop short is cost, and it is why this counts rows rather than
+/// differencing fields.** The delta prints as items and the state prints as tables, so a
+/// full comparison means translating between two representations - and a translator wrong in
+/// the same direction as the printer is circular again, only harder to see. Row counts need
+/// no translation: a table has so many rows before and so many after, and the delta says how
+/// many appeared and vanished. Those must agree.
+///
+/// So this catches a delta that **omits** a row - `S-39`'s failure - and does not catch one
+/// that reports a field wrongly. Field-level differencing is buildable and not built, and
+/// the reason is the translator, not circularity.
+#[test]
+fn the_delta_accounts_for_every_row_the_states_gained_or_lost() {
+    let report = std::fs::read_to_string(root().join("turns.md")).expect("turns.md is generated");
+
+    // Rows per table, in each turn's printed state, counted from the text.
+    let counts = |state: &str| -> std::collections::BTreeMap<String, usize> {
+        let mut out = std::collections::BTreeMap::new();
+        let mut table = String::new();
+        for line in state.lines() {
+            if let Some(name) = line.trim().strip_prefix("### ") {
+                table = name.trim().to_string();
+                continue;
+            }
+            let line = line.trim();
+            // A body row: starts with `|`, and is not the header or the separator.
+            if line.starts_with('|') && !line.contains("---") && !table.is_empty() {
+                *out.entry(table.clone()).or_insert(0usize) += 1;
+            }
+        }
+        // The header of each table counted as a row above; take it back off.
+        for value in out.values_mut() {
+            *value = value.saturating_sub(1);
+        }
+        out
+    };
+
+    let turns: Vec<&str> = report.split("\n# Turn ").skip(1).collect();
+    assert!(turns.len() > 1, "only {} turns parsed", turns.len());
+
+    let mut checked = 0usize;
+    let mut previous: Option<std::collections::BTreeMap<String, usize>> = None;
+    for (at, turn) in turns.iter().enumerate() {
+        let state = turn.split("## what is there now").nth(1).unwrap_or("");
+        let now = counts(state);
+        assert!(!now.is_empty(), "turn {} prints no tables", at + 1);
+
+        if let Some(before) = previous {
+            let delta = turn
+                .split("## what changed")
+                .nth(1)
+                .and_then(|rest| rest.split("## what is there now").next())
+                .unwrap_or("");
+
+            // How many rows of each table the delta says appeared and vanished. A row reads
+            // `- {table field:value ...}` under **new** or **gone**.
+            let named = |heading: &str| -> std::collections::BTreeMap<String, usize> {
+                let mut out = std::collections::BTreeMap::new();
+                let Some(section) = delta.split(heading).nth(1) else {
+                    return out;
+                };
+                for line in section.lines() {
+                    let line = line.trim();
+                    if line.starts_with("**") {
+                        break;
+                    }
+                    if let Some(row) = line.strip_prefix("- {") {
+                        let table = row
+                            .split_whitespace()
+                            .next()
+                            .unwrap_or("")
+                            .trim_matches('"')
+                            .to_string();
+                        *out.entry(table).or_insert(0) += 1;
+                    }
+                }
+                out
+            };
+            let appeared = named("**new**");
+            let vanished = named("**gone**");
+
+            for (table, after) in &now {
+                let was = before.get(table).copied().unwrap_or(0);
+                let grew = *after as i64 - was as i64;
+                let said = appeared.get(table).copied().unwrap_or(0) as i64
+                    - vanished.get(table).copied().unwrap_or(0) as i64;
+                assert_eq!(
+                    grew,
+                    said,
+                    "turn {}: the `{table}` table went from {was} rows to {after}, and the \
+                     delta accounts for {said}. A row changed hands without the delta \
+                     saying so, which is what a correct-looking report that omits \
+                     something looks like.",
+                    at + 1
+                );
+                checked += 1;
+            }
+        }
+        previous = Some(now);
+    }
+
+    // Over every case, and how many there were.
+    assert!(
+        checked > 20,
+        "only {checked} table-turns compared; the report's shape has probably changed"
+    );
+}
