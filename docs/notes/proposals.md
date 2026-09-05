@@ -63,55 +63,38 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-260 - Storage: your three questions are one decision, and the third answers the second
+### P-260 - Four questions left on storage, and the first follows from `P-234`
 
 **to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
-- **asks** a decision - **into** `releases/first-release.md` -> Units and structures, What bounds a
-kind, and Recipes
+- **asks** a decision - **into** `releases/first-release.md` -> Kinds, What bounds a kind, Units and
+structures, Recipes
 
-**Cost is settled: 1 labor, 1 metal.** The rest below.
+**Settled and not repeated here**: a store costs 1 labor and 1 metal; extractors hold nothing;
+`deploy ark` and `found by land` produce stores; energy gets none, deliberately - `P-261`.
 
-**Your second and third questions cannot be answered separately, and that is the finding.**
+**A. One `store` kind with a `resource` trait, or three kinds?** **This one you have effectively
+already answered.** `P-234` collapsed `food extractor`, `metal extractor` and `energy extractor` into
+one `extractor` carrying a `resource` trait, and `build extractor` names it with **`$resource`** -
+the parameter that promotion added. **The same shape applies unchanged**, and choosing three kinds
+here would undo `P-234`'s argument a week after making it. **Recommended: one kind.**
 
-**Removing storage from extractors alone is a deadlock.** A store costs 1 metal; if nothing holds
-metal until a store exists, **the first store can never be paid for.** `spec/logistics.md` closes the
-escape: *whatever pays a cost must be in the territory where the thing being paid for is built.*
+**B. How many stores a territory takes. Recommended: as many as extractors of that resource** - no
+new number. Mountain 5, desert 3, ice 2, grassland and jungle 1.
 
-**Your third question is exactly what unblocks it.** `deploy ark` and `found by land` already produce
-a garrison, two citizens and two extractors - **food and metal.** If they also produce a food store
-and a metal store, **the territory begins able to hold, extractors need no storage of their own, and
-the bootstrap problem never arises.**
+**C. What a store holds. Recommended: 10.** The only new number in the whole change.
 
-**So the recommendation is to take both together**: `deploy ark` and `found by land` each produce one
-food store and one metal store alongside the extractors they already produce, and **an extractor
-holds nothing** - what it makes goes to a store or it is in disorder. **Neither half works alone**:
-extractors keeping their storage makes the founding stores redundant, and founding without stores
-makes removing extractor storage fatal.
+**D. Does the founding store count toward that limit, or sit outside it? Recommended: counts.**
+Otherwise every territory has one more of everything than its biome says, and the biome numbers stop
+being the whole story.
 
-**And that is simpler than what we have**, which is your reason for asking. It **deletes a rule** -
-*an extractor holds some of what it makes*, which `P-258` landed twenty minutes ago and which this
-would edit. **Production then has one destination instead of two**: a store, or disorder.
+**What the answers move, measured**: **12 kinds becomes 13** and **15 recipes becomes 16** - a
+`build store`, taking `$resource` exactly as `build extractor` does. *What bounds a kind* gains a row
+for `store`, which is B's answer.
 
-**The two numbers, and the second is the one to look hardest at.**
-
-**How many stores a territory takes - recommended: as many as it can take extractors of that
-resource.** No new number. Against the biomes: **mountain 5, desert 3, ice 2, grassland and jungle
-1.** The founding store counts toward that limit rather than being extra.
-
-**What a store holds - recommended: 10.** The only new number.
-
-**What those two do together, and it is a real consequence rather than a rounding.** A Yard costs
-**15 metal**, so it needs two metal stores. **Mountain, desert and ice can build one; grassland and
-jungle cannot.** `C-9`'s question answered by geography instead of a special rule - **and grassland is
-territory 1's biome**, so check that against the scenario you are about to vet.
-
-**Energy is settled, 2026-09-05.** Founding produces no energy extractor and therefore no energy
-store, and **a territory starts unable to hold energy at all** while an Ark costs 12. **That is
-deliberate**: *the three resources are supposed to feel different.* `P-261` records the principle.
-
-**So what is left of this proposal is the two numbers and the structure** - stores as many as
-extractors of that resource, ten each, extractors holding nothing, founding producing a food store
-and a metal store.
+**And the consequence worth looking at twice.** A Yard costs 15 metal, so it needs **two** metal
+stores. Under B and C, **grassland and jungle cannot build one** - and **grassland is territory 1's
+biome**, the territory the scenario develops. **If that is wrong, it is B or C that is wrong**, and
+this is the last moment before the scenario is rebuilt around them.
 
 ### P-261 - The three resources are supposed to feel different
 
