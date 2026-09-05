@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-243** - Three sentences describing arrangements that were replaced · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
