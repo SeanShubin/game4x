@@ -141,6 +141,48 @@ decides whether territory 1 needs one metal store or two, and therefore what the
 **The gate is red until this lands** - the model cannot have a store whose capacity no document
 states.
 
+### P-267 - What of the process lives where you do not read it
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
+- **into** `docs/process.md` -> What I read and what I do, and Who writes what
+
+**The test I applied: a rule that governs what you do, or a guarantee you rely on, belongs in your
+document.** Today's failure is that shape exactly - *answering is not promoting* was written in
+`CLAUDE.md`, which is Claude's operating file and which **you do not open.** A rule about your
+actions was invisible to the one person it constrains.
+
+**Your document already has the protocol** - *I work with claude to make sure I approve the exact
+text*, *once I directly confirm the proposal matches my intent I promote it*. **Four candidates sit
+outside it.**
+
+**A. Answering a question is not confirming, and a proposal with a question in it cannot be
+promoted.** `P-266`, promoted an hour ago into `CLAUDE.md`. **Recommend moving it**: it is a rule
+about your reply, and it failed for exactly the reason it was in the wrong file.
+
+**B. You are asked one of two things and the proposal says which** - **approval**, meaning the words
+are final and reading them is the whole of the work, or **a decision**, meaning a choice is open.
+`P-229` and `P-236`. **Recommend moving it**: it tells you what kind of reply is wanted, which is
+your side of A.
+
+**C. What a promotion may change: line wrapping, bullet-versus-paragraph, heading level, and nothing
+else.** **Recommend moving one sentence** - *the text you approved is byte-for-byte the text that
+ships* - because that guarantee is the whole reason reading exact text is worth your time. The list
+of three exceptions is operating detail and stays.
+
+**D. The fifteen-proposal limit on the queue. Recommend leaving it** and linking. It is a budget
+Claude is held to, and your document already states the reason it exists.
+
+**E. And the real hole, which is none of these: nothing in the repository says how to start an
+instance.** `You are the ...` appears **once in the whole tree, in `CLAUDE.md`, for a lens** -
+measured. The prompts that start the specification, code and quality instances exist only in the
+chat that started them. **To re-run this process from nothing you would need scrollback**, which is
+the opposite of repeatable.
+
+**Where those prompts live is yours to say and I have not guessed**, because a file that starts an
+instance is process and `docs/process.md` is yours, while three per-lane prompt files are not
+obviously your document either. **The two shapes are: one section of your document holding all
+three, or a `prompts/` directory with a file each and your document pointing at it.**
+
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
