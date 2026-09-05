@@ -279,6 +279,29 @@ if it is ever repaired.
 
 ### C-24 - Nothing the release provides can take a jungle
 
+**Answered 2026-09-05, asked of the model: force sums where units stand, and taking is handed one
+unit's force.** Two pioneers placed in territory 1, next to the jungle at territory 6:
+
+- `force_in(1)` reports **5** - the garrison, the citizens and both pioneers, summed, because
+  `spec/control.md` says *a military unit carries coordination with it rather than needing a place*
+- `FoundByLand { territory: 6 }` is refused: **`taking territory 6 needs more than 2 force, and you
+  bring 2`**
+
+`found_by_land` picks one pioneer and `take` is given `self.units[unit_at].kind.force()`. The other
+pioneer stands next door and contributes nothing. **So force sums for presence and does not sum for
+taking**, and the two rules are in one document without either mentioning the other.
+
+**`spec/control.md` does not settle it.** *Taking a territory takes force greater than the existing
+force* says how much and not whose - it never says how the taking force is assembled, and the
+*Coordination* section is about force *present in a place*, which is what a unit crossing a border
+is not yet. **So this is a gap rather than a defect in the model**, and the model's reading is the
+conservative one.
+
+**It decides whether `C-24` is real.** If two units may take together, a jungle at nature 2 falls to
+two pioneers and there is nothing to fix. If they may not, the jungle is unclaimable however good
+its food is. **Nothing to implement either way until it is said.**
+
+
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `S-42`, building the check it asked for
 **derived from** taking a territory takes force greater than the existing force - `spec/control.md`
 
