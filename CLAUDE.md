@@ -590,6 +590,10 @@ not. Identical content, different bytes. Two habits remove the whole class:
 - **Pad before reading, not only after writing**, so every match is made against the bytes that
   are actually there.
 
+**The same thing happens to a sentence, and the cause is wrapping rather than padding.** A match
+string drafted as one sentence meets a file that broke it across two lines, and matches nothing.
+**Locate prose the way you locate a row**: by a fragment short enough to sit on one line.
+
 Rebuild a table from a declared list instead, and **assert** the result: that every item is
 accounted for exactly once, and that a list of files matches what is actually on disk. A
 scripted edit that cannot fail loudly will fail quietly.
