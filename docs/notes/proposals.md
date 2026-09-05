@@ -65,41 +65,6 @@ decision that has not been made yet. Two at the end are waiting on something and
 
 ## Addressed to other perspectives
 
-### S-40 - Three reports have no HTML, and the index does not say which link is the default
-
-**to** code - **status** open - **raised** 2026-09-05 - **source** Sean, reading
-`reports/index.html` in a browser
-
-**He opened it and the markdown tables are hard to read there.** *I find tables clunky when reading
-markdown from the browser.*
-
-**Measured: five reports, two have HTML.** `state` and `entities` do; **`catalog`, `recipes` and
-`turns` do not**, so three of the five links on the index open raw markdown in a browser. `turns` is
-the worst of the three - it is the longest and the one he will read most while checking the state
-function.
-
-**Two things, and the second is his design call rather than a consequence.**
-
-**1. Every report gets both.** Five markdown and five HTML, generated from one model, neither
-canonical. `P-246` settled why both exist: **markdown is the surface a change is reviewed on**,
-because he reviews a change as a diff in version control and HTML diffs badly; **HTML is the surface
-things are browsed on.**
-
-**2. The index makes HTML the default and markdown available.** His words: *make it visually obvious
-that the html links are the default but the markdown links are available*. **The report's name is
-the HTML link**; the markdown sits beside it, quieter - smaller, dimmer, plainly secondary. Not
-hidden: he asked for available, not tucked away.
-
-**Leave the two scenario files exactly as they are.** They are canonical data linked as raw files and
-they must not acquire a rendering - `P-218`, and it is the distinction the page already marks. **The
-default-and-alternate treatment is for the generated views only**, and applying it to the scenario
-files would suggest a rendering exists.
-
-**The currency check should cover ten files, not five.** `dumps_are_current.rs` finds them by the
-generated marker; **three new HTML pages carry it and the count assertion is what will catch a
-generator that produced four of five.** That is `S-33` working again, and it caught the last move.
-
-
 ### S-20 - The `node` table calls a total a density, and erases what the twelve territories exist to exercise
 
 **to** code - **status** **acted** 2026-09-03 - **cited** `4b912da` - **raised** 2026-09-03 - **source** Sean, reading `state.md`
@@ -373,82 +338,6 @@ state from the commands - that is what replay is. **So the machine can do this a
 only whether the documents let a person do it.** Where the answer is no, the missing piece is a fact
 the model knows and no document states.
 
-### S-21 - `P-134` has been a rule since 2026-08-31 and nothing has been filed asking for it
-
-**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, asking what `P-134` is
-
-**Four items name `P-134` as the reason to wait and none of them asks for it.** `C-9`, `C-11`,
-`C-16` and `S-19` are all parked behind a rewrite that is in nobody's list, so the largest piece of
-work outstanding has been invisible to every index. **This item is the ask.**
-
-**The rule, promoted 2026-08-31, in `spec/invariants.md`:**
-
-> A game's state is things, in places, and how many of each. A thing is a set of traits, and one of
-> them names its kind.
->
-> Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
-> reads the state reads it the same way whatever kind it holds.
-
-**Four of five are gone as of `6ab76ee`, and the fifth is still here.** `citizens`, `labor_spent`,
-`stores`, `yards` and `founded` are all out of `Territory`; **`garrison: Option<Garrison>` is at
-`territory.rs:80`**, and the table below names it as one of the five. `extractors: Vec<Extractor>`
-is beside it and is the same shape. **Both render as things in the dump and neither is one in the
-model**, which is the gap `P-134` names: *nothing in the state is special to a kind*.
-
-**Five shapes in `crates/game-model` say otherwise**, and every parked item lives in one of them:
-
-| Shape                                        | Where                   | What it makes impossible                         |
-| -------------------------------------------- | ----------------------- | ------------------------------------------------ |
-| `stores: [u32; 3]`                           | `territory.rs:74`       | carrying a fourth resource; `C-11`'s discard     |
-| `citizens: u32`, `yards: u32`, `labor_spent` | `territory.rs:68,71,77` | a citizen being a thing in a place               |
-| `garrison: Option<Garrison>`                 | `territory.rs:75`       | a garrison being counted like anything else      |
-| `extractors: Vec<Extractor>`                 | `territory.rs:76`       | the three extractor kinds `P-206` just made      |
-| `founded: bool`                              | `territory.rs:67`       | control being derived rather than stored, `S-19` |
-
-**Adding a kind currently adds a field**, which is exactly what the rule forbids: `P-192` added
-`territory` and `orbit`, `P-206` added three extractors, and the model gained nothing for any of
-them.
-
-**The design is already settled and written down.** [What a thing is](what-a-thing-is.md) carries
-Sean's model and his answers to all five of its blanks:
-
-- **A node carries a value and a leaf is a node with no children** - not two types, because *whatever
-  reads the state reads it the same way* forbids the case
-- **Parts and contents are the same list at different depths** - a tank is a part of a pioneer and
-  the energy is in the tank
-- **A part is what makes a recipe apply**, which is where `Crosses`, `Force` and upkeep go
-- **`metal in it` is a fold**: a node's own metal plus its subtree's
-- **A Pioneer is a name for an arrangement of parts, and *the arrangement is data the game loads*** -
-  Sean, 2026-09-03
-
-**What it unblocks, in the order the unblocking happens:**
-
-1. **`S-19`** - control becomes derived and `founded` stops existing
-2. **`C-9`** - `is_fully_exploited` can ask the question `spec/control.md` actually poses
-3. **`C-11`** - what a turn keeps stops being three discarded numbers
-4. **`R-6`** - the loop can be played through, and it is **the last capability of the first release**
-
-**Nine test files parse markdown today, and that is a symptom of this item rather than a design.**
-`crates/game-console/tests/first_release.rs` says why in its own words: *read from the release rather
-than copied out of it. If somebody retunes a number there, this test starts failing until the command
-file is retuned to match, **which is the only way the two stay honest about each other***.
-
-**There are two copies, so something has to compare them, so a test parses a document.** When the
-rules are loaded there is one copy and **the parsing has nowhere to live** - the tests that exist to
-compare become tests of loaded data, and the six that read `releases/first-release.md` stop needing
-to.
-
-**Sean's manual derivation is the acceptance test for this rewrite.** He is deriving the scenario by
-hand now, against the model as it stands, and **what he writes down is what the rewritten model must
-produce.** Doing it before rather than after is deliberate: a derivation against the current model
-gives this rewrite a checklist, and one done afterwards would be checking new code with no baseline.
-
-**One thing this lane will not decide and you should not have to guess.** How far to go in one step.
-`P-199` says what the game is made of lives in a data file, so the end state has arrangements loaded
-rather than compiled - **but a rewrite that gets to *things in places* without also moving the
-kinds into data would already unblock all four items above.** If you want that split as two items,
-say so and this lane will file the second.
-
 ### S-18 - Nothing calls the padder, and `dump.rs` is about to reimplement it
 
 **to** code - **status** **acted** 2026-09-03 - **cited** `461e053` - **raised** 2026-09-03 - **source** Sean, on table padding; `P-203`
@@ -602,78 +491,6 @@ around the world as it was: `binds()` asked whether a noun was a territory, beca
 `P-196` a territory was the only place a recipe could require, and the catalog would have gone
 on reporting that no recipe names an orbit - **still arguing for a proposal that had already
 landed.**
-
-### S-14 - A scenario that touches every kind and every recipe, and a dump of what it left
-
-**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on `../vote`'s
-documentation and on `P-193`
-
-**The scenario is extended and the count is not asserted, as of `7a7284a`.** It now reaches every
-player recipe and leaves a unit alive, which is the work. **What this item asked for was a check by
-count** - *it is checkable by count, twelve kinds and seventeen recipes* - and **nothing asserts
-either number**. Twelve kinds and fifteen recipes now, after `P-234`. Without it the coverage is
-true today and nothing notices when a kind is added.
-
-**Sean's purpose, in his words:** *something like that is the only way I am going to be able to
-actually identify the problems with names.* He is looking at column and table names laid out beside
-real values, which is what `../vote/generated/documentation/sql.html` gives him and what nothing
-here does.
-
-**And his one requirement on the scenario:** *we don't necessarily need the scenario to play a
-planet to full exploitation, but we do need to touch every thing and recipe.* **Coverage rather than
-completion**, and it is checkable by count - twelve kinds, seventeen recipes.
-
-**Where `commands/play.4x` stands.** Its commands are `land ark`, `work`, `build extractor`,
-`produce pioneer`, `move pioneer` and `end turn`. **`build yard` and `produce ark` are absent
-entirely**, and among the world's, `perish` and `spoil` fire only in states it does not reach. The
-launch is writable. **`P-196` was promoted in `68cc893` and the line that stood here is
-stale as of 2026-09-03**; it said the launch
-could not be written until `P-196` was settled, and it has been settled for a day. **Full coverage
-is not blocked.** Left visible rather than deleted, because a blocker that quietly disappears is how
-a lane goes on holding back for a reason that has stopped existing.
-
-**Every command the scenario needs already exists**, so this is writing a longer file rather than
-building a feature. `spec/console.md` has `land <unit> <territory>` - *bring a unit down from
-orbit* - `launch <unit>`, `build`, `produce`, `move`, `work`, `end turn`, and `add <unit> orbit` to
-place the Ark before play begins. **`build yard`, `produce ark` and `launch` are simply not in
-`commands/play.4x`**, and `perish` and `spoil` need states it does not reach rather than commands
-it does not have.
-
-**And `P-196` asked the code for less than it looks.** `land` has always meant *bring a unit down
-from orbit*, so the model already took the Ark from orbit and the release said it was on the
-ground. **The promotion moved the document to where the code already was.**
-
-**What is already here, so this is assembly rather than construction:**
-
-- `report::entities(game)` returns the whole game as `kind`, `id`, and named components - the
-  physical view, in code, never written to a file
-- `commands/play.4x` is already generated from a simulation rather than typed
-- `prototypes/kinds` already writes a generated markdown document, `catalog.md`, so the shape of
-  one is settled
-
-**What is missing is that nothing writes the state to a file after running the scenario.** Two
-documents, and this lane will take the wording of either if you would rather not:
-
-- **the state, normalized** - one table per sort of fact, every table and column named. **This is
-  the one that serves his purpose**, and it must name a table and its columns **even when it holds
-  no rows**, the way `sql.html` prints *(empty) 0 rows* for four of its tables. A dump that omits
-  what is empty hides exactly the names he is trying to read.
-- **the state as entities** - `kind`, `id`, components, which is `report::entities` rendered
-
-**Sean, 2026-09-03, on the tables that will be empty anyway:** *that is not a deal breaker, I may
-just have to add more reporting that allows me to browse intermediate states.*
-
-**That is a design constraint on this build even though it is not a requirement of it.** A pioneer
-exists between being produced and founding; an ark between being produced and deploying. The
-end-state dump cannot show either, and **the answer is more moments rather than a cleverer dump** -
-so whatever writes a state should take a state as an argument rather than assume the final one, and
-whatever names the tables should name them from the catalog rather than from what happens to be
-there.
-
-**One correction to `P-193` from this lane.** Its table said the relational state dump *needs the
-bootstrap you named*. **It does not** - the state after `play.4x` exists in the model already, and
-dumping it needs nothing loaded. The bootstrap is about the definitions becoming the starting
-position, which is a different job.
 
 ### S-13 - `P-192` makes it twelve kinds, and the gate is red again
 

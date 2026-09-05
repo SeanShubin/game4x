@@ -18,22 +18,17 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
-- **S-21** - `13c3b5e` S-21: garrison and extractors are things, and the migration is finished · still open in `docs/notes/proposals.md`
-- **S-14** - `287ccec` Format the S-14 guards · still open in `docs/notes/proposals.md`
-- **R-6** - `92786a9` Close C-11 and C-19, and say where R-6 actually stands · still open in `releases/first-release.md`
+- **R-6** - `58c8b4a` Close C-9, and file C-20: R-6 is unblocked and large · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (10)
+### To code (7)
 
-- **S-40** - Three reports have no HTML, and the index does not say which link is the default · `docs/notes/proposals.md`
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **S-24** - Four artifacts, and a human must be able to derive the fourth from the other three · `docs/notes/proposals.md`
-- **S-21** - `P-134` has been a rule since 2026-08-31 and nothing has been filed asking for it · `docs/notes/proposals.md`
-- **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 
