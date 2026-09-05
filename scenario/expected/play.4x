@@ -98,17 +98,17 @@
 {garrison territory:1 force:1}
 {garrison territory:2 force:1}
 
-{extractor territory:1 node:0 resource:food readiness:ready}
-{extractor territory:1 node:3 resource:metal readiness:ready}
-{extractor territory:1 node:1 resource:food readiness:ready}
-{extractor territory:1 node:2 resource:food readiness:ready}
-{extractor territory:1 node:4 resource:metal readiness:ready}
-{extractor territory:1 node:5 resource:metal readiness:ready}
-{extractor territory:1 node:6 resource:energy readiness:ready}
-{extractor territory:1 node:7 resource:energy readiness:ready}
-{extractor territory:1 node:8 resource:energy readiness:ready}
-{extractor territory:2 node:0 resource:food readiness:ready}
-{extractor territory:2 node:2 resource:metal readiness:ready}
+{extractor territory:1 node:0 resource:food ready:yes}
+{extractor territory:1 node:3 resource:metal ready:yes}
+{extractor territory:1 node:1 resource:food ready:yes}
+{extractor territory:1 node:2 resource:food ready:yes}
+{extractor territory:1 node:4 resource:metal ready:yes}
+{extractor territory:1 node:5 resource:metal ready:yes}
+{extractor territory:1 node:6 resource:energy ready:yes}
+{extractor territory:1 node:7 resource:energy ready:yes}
+{extractor territory:1 node:8 resource:energy ready:yes}
+{extractor territory:2 node:0 resource:food ready:yes}
+{extractor territory:2 node:2 resource:metal ready:yes}
 
 {structure territory:1 structure:extractor count:9}
 {structure territory:1 structure:garrison count:1}
@@ -160,7 +160,7 @@
 {labor territory:11 made:0 spent:0 left:0}
 {labor territory:12 made:0 spent:0 left:0}
 
-{unit id:1 kind:ark place:orbit fuel:1 readiness:ready}
+{unit id:1 kind:ark place:orbit fuel:1 ready:yes}
 
 {kind id:citizen in-play:18}
 {kind id:labor in-play:0}

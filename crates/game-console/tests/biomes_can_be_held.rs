@@ -90,6 +90,14 @@ fn planet() -> Session {
 #[test]
 fn every_claimable_biome_can_be_taken_by_something_the_release_provides() {
     /// Biomes nothing can take, and why each is allowed to be here.
+    // **The pattern, and where it stops working.** A named exception carries a reason and
+    // fails when it is repaired, so a gap cannot outlive itself and cannot be closed by
+    // quietly weakening the assertion. It holds at one or two. **Past about two it stops
+    // being a guard and becomes the list written twice** - the same reason
+    // `closed_sets.rs` declines to check every dump column against the release's traits:
+    // an exemption list of seventeen against a population of twenty-five is not a check,
+    // it is a second copy of the thing being checked, and the second copy is what rots.
+    // If a third is wanted here, that is the signal to fix the rule rather than the list.
     const CANNOT: [(&str, &str); 1] = [(
         "jungle",
         "`P-253` gave it a nature of 2, and the only two units that take ground - ark and \

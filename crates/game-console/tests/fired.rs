@@ -112,6 +112,14 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
     /// `P-214` split the command in two and the scenario now says which it means, so the
     /// exception expired on schedule rather than being deleted to make a test pass - the
     /// assertion below fails when an excepted recipe starts firing, and that is what it did.
+    // **The pattern, and where it stops working.** A named exception carries a reason and
+    // fails when it is repaired, so a gap cannot outlive itself and cannot be closed by
+    // quietly weakening the assertion. It holds at one or two. **Past about two it stops
+    // being a guard and becomes the list written twice** - the same reason
+    // `closed_sets.rs` declines to check every dump column against the release's traits:
+    // an exemption list of seventeen against a population of twenty-five is not a check,
+    // it is a second copy of the thing being checked, and the second copy is what rots.
+    // If a third is wanted here, that is the signal to fix the rule rather than the list.
     const NOT_FIRED: [(&str, &str); 0] = [];
 
     let players: Vec<String> = declared()

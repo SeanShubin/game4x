@@ -20,12 +20,12 @@ end turn
 
 **gone** (1)
 
-- {unit id:1 kind:ark place:orbit fuel:2 readiness:ready}
+- {unit id:1 kind:ark place:orbit fuel:2 ready:yes}
 
 **new** (3)
 
-- {extractor territory:1 node:0 resource:food readiness:ready}
-- {extractor territory:1 node:3 resource:metal readiness:ready}
+- {extractor territory:1 node:0 resource:food ready:yes}
+- {extractor territory:1 node:3 resource:metal ready:yes}
 - {garrison territory:1 force:1}
 
 **changed** (15)
@@ -171,10 +171,10 @@ end turn
 
 ### extractor
 
-| territory | node | resource | readiness |
-| --------- | ---- | -------- | --------- |
-| 1         | 0    | food     | ready     |
-| 1         | 3    | metal    | ready     |
+| territory | node | resource | ready |
+| --------- | ---- | -------- | ----- |
+| 1         | 0    | food     | yes   |
+| 1         | 3    | metal    | yes   |
 
 2 row(s)
 
@@ -242,8 +242,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | readiness |
-| --- | ---- | ----- | ---- | --------- |
+| id  | kind | place | fuel | ready |
+| --- | ---- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -285,8 +285,8 @@ end turn
 
 **new** (2)
 
-- {extractor territory:1 node:1 resource:food readiness:ready}
-- {extractor territory:1 node:2 resource:food readiness:ready}
+- {extractor territory:1 node:1 resource:food ready:yes}
+- {extractor territory:1 node:2 resource:food ready:yes}
 
 **changed** (6)
 
@@ -422,12 +422,12 @@ end turn
 
 ### extractor
 
-| territory | node | resource | readiness |
-| --------- | ---- | -------- | --------- |
-| 1         | 0    | food     | ready     |
-| 1         | 3    | metal    | ready     |
-| 1         | 1    | food     | ready     |
-| 1         | 2    | food     | ready     |
+| territory | node | resource | ready |
+| --------- | ---- | -------- | ----- |
+| 1         | 0    | food     | yes   |
+| 1         | 3    | metal    | yes   |
+| 1         | 1    | food     | yes   |
+| 1         | 2    | food     | yes   |
 
 4 row(s)
 
@@ -495,8 +495,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | readiness |
-| --- | ---- | ----- | ---- | --------- |
+| id  | kind | place | fuel | ready |
+| --- | ---- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -667,12 +667,12 @@ end turn
 
 ### extractor
 
-| territory | node | resource | readiness |
-| --------- | ---- | -------- | --------- |
-| 1         | 0    | food     | ready     |
-| 1         | 3    | metal    | ready     |
-| 1         | 1    | food     | ready     |
-| 1         | 2    | food     | ready     |
+| territory | node | resource | ready |
+| --------- | ---- | -------- | ----- |
+| 1         | 0    | food     | yes   |
+| 1         | 3    | metal    | yes   |
+| 1         | 1    | food     | yes   |
+| 1         | 2    | food     | yes   |
 
 4 row(s)
 
@@ -740,8 +740,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | readiness |
-| --- | ---- | ----- | ---- | --------- |
+| id  | kind | place | fuel | ready |
+| --- | ---- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -787,10 +787,10 @@ end turn
 
 **new** (4)
 
-- {extractor territory:1 node:4 resource:metal readiness:ready}
-- {extractor territory:1 node:5 resource:metal readiness:ready}
-- {extractor territory:1 node:6 resource:energy readiness:ready}
-- {extractor territory:1 node:7 resource:energy readiness:ready}
+- {extractor territory:1 node:4 resource:metal ready:yes}
+- {extractor territory:1 node:5 resource:metal ready:yes}
+- {extractor territory:1 node:6 resource:energy ready:yes}
+- {extractor territory:1 node:7 resource:energy ready:yes}
 
 **changed** (9)
 
@@ -929,16 +929,16 @@ end turn
 
 ### extractor
 
-| territory | node | resource | readiness |
-| --------- | ---- | -------- | --------- |
-| 1         | 0    | food     | ready     |
-| 1         | 3    | metal    | ready     |
-| 1         | 1    | food     | ready     |
-| 1         | 2    | food     | ready     |
-| 1         | 4    | metal    | ready     |
-| 1         | 5    | metal    | ready     |
-| 1         | 6    | energy   | ready     |
-| 1         | 7    | energy   | ready     |
+| territory | node | resource | ready |
+| --------- | ---- | -------- | ----- |
+| 1         | 0    | food     | yes   |
+| 1         | 3    | metal    | yes   |
+| 1         | 1    | food     | yes   |
+| 1         | 2    | food     | yes   |
+| 1         | 4    | metal    | yes   |
+| 1         | 5    | metal    | yes   |
+| 1         | 6    | energy   | yes   |
+| 1         | 7    | energy   | yes   |
 
 8 row(s)
 
@@ -1006,8 +1006,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | readiness |
-| --- | ---- | ----- | ---- | --------- |
+| id  | kind | place | fuel | ready |
+| --- | ---- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -1049,7 +1049,7 @@ end turn
 
 **new** (1)
 
-- {extractor territory:1 node:8 resource:energy readiness:ready}
+- {extractor territory:1 node:8 resource:energy ready:yes}
 
 **changed** (8)
 
@@ -1187,17 +1187,17 @@ end turn
 
 ### extractor
 
-| territory | node | resource | readiness |
-| --------- | ---- | -------- | --------- |
-| 1         | 0    | food     | ready     |
-| 1         | 3    | metal    | ready     |
-| 1         | 1    | food     | ready     |
-| 1         | 2    | food     | ready     |
-| 1         | 4    | metal    | ready     |
-| 1         | 5    | metal    | ready     |
-| 1         | 6    | energy   | ready     |
-| 1         | 7    | energy   | ready     |
-| 1         | 8    | energy   | ready     |
+| territory | node | resource | ready |
+| --------- | ---- | -------- | ----- |
+| 1         | 0    | food     | yes   |
+| 1         | 3    | metal    | yes   |
+| 1         | 1    | food     | yes   |
+| 1         | 2    | food     | yes   |
+| 1         | 4    | metal    | yes   |
+| 1         | 5    | metal    | yes   |
+| 1         | 6    | energy   | yes   |
+| 1         | 7    | energy   | yes   |
+| 1         | 8    | energy   | yes   |
 
 9 row(s)
 
@@ -1265,8 +1265,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | readiness |
-| --- | ---- | ----- | ---- | --------- |
+| id  | kind | place | fuel | ready |
+| --- | ---- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -1307,7 +1307,7 @@ end turn
 
 **new** (1)
 
-- {unit id:1 kind:pioneer place:territory-1 fuel:2 readiness:ready}
+- {unit id:1 kind:pioneer place:territory-1 fuel:2 ready:yes}
 
 **changed** (9)
 
@@ -1446,17 +1446,17 @@ end turn
 
 ### extractor
 
-| territory | node | resource | readiness |
-| --------- | ---- | -------- | --------- |
-| 1         | 0    | food     | ready     |
-| 1         | 3    | metal    | ready     |
-| 1         | 1    | food     | ready     |
-| 1         | 2    | food     | ready     |
-| 1         | 4    | metal    | ready     |
-| 1         | 5    | metal    | ready     |
-| 1         | 6    | energy   | ready     |
-| 1         | 7    | energy   | ready     |
-| 1         | 8    | energy   | ready     |
+| territory | node | resource | ready |
+| --------- | ---- | -------- | ----- |
+| 1         | 0    | food     | yes   |
+| 1         | 3    | metal    | yes   |
+| 1         | 1    | food     | yes   |
+| 1         | 2    | food     | yes   |
+| 1         | 4    | metal    | yes   |
+| 1         | 5    | metal    | yes   |
+| 1         | 6    | energy   | yes   |
+| 1         | 7    | energy   | yes   |
+| 1         | 8    | energy   | yes   |
 
 9 row(s)
 
@@ -1524,9 +1524,9 @@ end turn
 
 ### unit
 
-| id  | kind    | place       | fuel | readiness |
-| --- | ------- | ----------- | ---- | --------- |
-| 1   | pioneer | territory-1 | 2    | ready     |
+| id  | kind    | place       | fuel | ready |
+| --- | ------- | ----------- | ---- | ----- |
+| 1   | pioneer | territory-1 | 2    | yes   |
 
 1 row(s)
 
@@ -1569,12 +1569,12 @@ end turn
 
 **gone** (1)
 
-- {unit id:1 kind:pioneer place:territory-1 fuel:2 readiness:ready}
+- {unit id:1 kind:pioneer place:territory-1 fuel:2 ready:yes}
 
 **new** (3)
 
-- {extractor territory:2 node:0 resource:food readiness:ready}
-- {extractor territory:2 node:2 resource:metal readiness:ready}
+- {extractor territory:2 node:0 resource:food ready:yes}
+- {extractor territory:2 node:2 resource:metal ready:yes}
 - {garrison territory:2 force:1}
 
 **changed** (18)
@@ -1724,19 +1724,19 @@ end turn
 
 ### extractor
 
-| territory | node | resource | readiness |
-| --------- | ---- | -------- | --------- |
-| 1         | 0    | food     | ready     |
-| 1         | 3    | metal    | ready     |
-| 1         | 1    | food     | ready     |
-| 1         | 2    | food     | ready     |
-| 1         | 4    | metal    | ready     |
-| 1         | 5    | metal    | ready     |
-| 1         | 6    | energy   | ready     |
-| 1         | 7    | energy   | ready     |
-| 1         | 8    | energy   | ready     |
-| 2         | 0    | food     | ready     |
-| 2         | 2    | metal    | ready     |
+| territory | node | resource | ready |
+| --------- | ---- | -------- | ----- |
+| 1         | 0    | food     | yes   |
+| 1         | 3    | metal    | yes   |
+| 1         | 1    | food     | yes   |
+| 1         | 2    | food     | yes   |
+| 1         | 4    | metal    | yes   |
+| 1         | 5    | metal    | yes   |
+| 1         | 6    | energy   | yes   |
+| 1         | 7    | energy   | yes   |
+| 1         | 8    | energy   | yes   |
+| 2         | 0    | food     | yes   |
+| 2         | 2    | metal    | yes   |
 
 11 row(s)
 
@@ -1804,8 +1804,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | readiness |
-| --- | ---- | ----- | ---- | --------- |
+| id  | kind | place | fuel | ready |
+| --- | ---- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -1851,7 +1851,7 @@ end turn
 
 **new** (1)
 
-- {unit id:1 kind:ark place:territory-2 fuel:1 readiness:ready}
+- {unit id:1 kind:ark place:territory-2 fuel:1 ready:yes}
 
 **changed** (12)
 
@@ -1994,19 +1994,19 @@ end turn
 
 ### extractor
 
-| territory | node | resource | readiness |
-| --------- | ---- | -------- | --------- |
-| 1         | 0    | food     | ready     |
-| 1         | 3    | metal    | ready     |
-| 1         | 1    | food     | ready     |
-| 1         | 2    | food     | ready     |
-| 1         | 4    | metal    | ready     |
-| 1         | 5    | metal    | ready     |
-| 1         | 6    | energy   | ready     |
-| 1         | 7    | energy   | ready     |
-| 1         | 8    | energy   | ready     |
-| 2         | 0    | food     | ready     |
-| 2         | 2    | metal    | ready     |
+| territory | node | resource | ready |
+| --------- | ---- | -------- | ----- |
+| 1         | 0    | food     | yes   |
+| 1         | 3    | metal    | yes   |
+| 1         | 1    | food     | yes   |
+| 1         | 2    | food     | yes   |
+| 1         | 4    | metal    | yes   |
+| 1         | 5    | metal    | yes   |
+| 1         | 6    | energy   | yes   |
+| 1         | 7    | energy   | yes   |
+| 1         | 8    | energy   | yes   |
+| 2         | 0    | food     | yes   |
+| 2         | 2    | metal    | yes   |
 
 11 row(s)
 
@@ -2074,9 +2074,9 @@ end turn
 
 ### unit
 
-| id  | kind | place       | fuel | readiness |
-| --- | ---- | ----------- | ---- | --------- |
-| 1   | ark  | territory-2 | 1    | ready     |
+| id  | kind | place       | fuel | ready |
+| --- | ---- | ----------- | ---- | ----- |
+| 1   | ark  | territory-2 | 1    | yes   |
 
 1 row(s)
 
@@ -2244,19 +2244,19 @@ end turn
 
 ### extractor
 
-| territory | node | resource | readiness |
-| --------- | ---- | -------- | --------- |
-| 1         | 0    | food     | ready     |
-| 1         | 3    | metal    | ready     |
-| 1         | 1    | food     | ready     |
-| 1         | 2    | food     | ready     |
-| 1         | 4    | metal    | ready     |
-| 1         | 5    | metal    | ready     |
-| 1         | 6    | energy   | ready     |
-| 1         | 7    | energy   | ready     |
-| 1         | 8    | energy   | ready     |
-| 2         | 0    | food     | ready     |
-| 2         | 2    | metal    | ready     |
+| territory | node | resource | ready |
+| --------- | ---- | -------- | ----- |
+| 1         | 0    | food     | yes   |
+| 1         | 3    | metal    | yes   |
+| 1         | 1    | food     | yes   |
+| 1         | 2    | food     | yes   |
+| 1         | 4    | metal    | yes   |
+| 1         | 5    | metal    | yes   |
+| 1         | 6    | energy   | yes   |
+| 1         | 7    | energy   | yes   |
+| 1         | 8    | energy   | yes   |
+| 2         | 0    | food     | yes   |
+| 2         | 2    | metal    | yes   |
 
 11 row(s)
 
@@ -2324,9 +2324,9 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | readiness |
-| --- | ---- | ----- | ---- | --------- |
-| 1   | ark  | orbit | 1    | ready     |
+| id  | kind | place | fuel | ready |
+| --- | ---- | ----- | ---- | ----- |
+| 1   | ark  | orbit | 1    | yes   |
 
 1 row(s)
 

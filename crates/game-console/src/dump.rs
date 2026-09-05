@@ -64,8 +64,20 @@ impl Table {
     }
 }
 
-fn readiness(exhausted: bool) -> String {
-    if exhausted { "exhausted" } else { "ready" }.to_string()
+/// The `ready` trait, printed the way the release declares it.
+///
+/// **`releases/first-release.md` -> *Traits*: `ready`, of *whatever readies*, values *yes or
+/// no*.** The column was called `readiness` and its values were `ready` and `exhausted` -
+/// neither the trait's name nor its values, so a person holding the release and the dump had
+/// to guess that the two were the same fact. `founded`'s shape again, and the third instance
+/// of it this week: a dump takes its columns from the model, the release declares its traits
+/// elsewhere, and until `closed_sets.rs` nothing compared the two lists at all.
+///
+/// That check covers traits *of a territory*, and `ready` is of whatever readies - so it
+/// would not have caught this one either. What caught it was reading the two documents side
+/// by side, which is what the four artifacts are for.
+fn ready(exhausted: bool) -> String {
+    if exhausted { "no" } else { "yes" }.to_string()
 }
 
 /// How many leading columns name a row of this table.
@@ -130,7 +142,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
     );
     let mut store = Table::new("store", &["territory", "resource", "amount"]);
     let mut garrison = Table::new("garrison", &["territory", "force"]);
-    let mut extractor = Table::new("extractor", &["territory", "node", "resource", "readiness"]);
+    let mut extractor = Table::new("extractor", &["territory", "node", "resource", "ready"]);
     let mut structure = Table::new("structure", &["territory", "structure", "count"]);
     // **`labor` is one of the fourteen kinds and had no table at all.** It existed only as a
     // `labor spent` column inside `territory`, so a reader looking for the kind found
@@ -199,7 +211,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
                 place.id.0.to_string(),
                 built.node.to_string(),
                 place.nodes[built.node].resource.name().to_string(),
-                readiness(built.exhausted),
+                ready(built.exhausted),
             ]);
         }
 
@@ -224,7 +236,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
         }
     }
 
-    let mut unit = Table::new("unit", &["id", "kind", "place", "fuel", "readiness"]);
+    let mut unit = Table::new("unit", &["id", "kind", "place", "fuel", "ready"]);
     for flying in &game.units {
         unit.push(vec![
             flying.id.0.to_string(),
@@ -234,7 +246,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
                 Location::On(at) => format!("territory-{}", at.0),
             },
             flying.cells.to_string(),
-            readiness(flying.exhausted),
+            ready(flying.exhausted),
         ]);
     }
 

@@ -222,6 +222,14 @@ fn the_check_catches_a_value_missing_from_the_table_and_one_missing_from_the_mod
 #[test]
 fn every_trait_of_a_territory_is_shown_in_the_dump() {
     /// Traits of a territory the dump does not show under that name, and why.
+    // **The pattern, and where it stops working.** A named exception carries a reason and
+    // fails when it is repaired, so a gap cannot outlive itself and cannot be closed by
+    // quietly weakening the assertion. It holds at one or two. **Past about two it stops
+    // being a guard and becomes the list written twice** - the same reason
+    // `closed_sets.rs` declines to check every dump column against the release's traits:
+    // an exemption list of seventeen against a population of twenty-five is not a check,
+    // it is a second copy of the thing being checked, and the second copy is what rots.
+    // If a third is wanted here, that is the signal to fix the rule rather than the list.
     const NOT_SHOWN: [(&str, &str); 2] = [
         (
             "control",

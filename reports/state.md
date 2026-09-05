@@ -127,19 +127,19 @@ is in it, because the names are what this is for.
 
 ## extractor
 
-| territory | node | resource | readiness |
-| --------- | ---- | -------- | --------- |
-| 1         | 0    | food     | ready     |
-| 1         | 3    | metal    | ready     |
-| 1         | 1    | food     | ready     |
-| 1         | 2    | food     | ready     |
-| 1         | 4    | metal    | ready     |
-| 1         | 5    | metal    | ready     |
-| 1         | 6    | energy   | ready     |
-| 1         | 7    | energy   | ready     |
-| 1         | 8    | energy   | ready     |
-| 2         | 0    | food     | ready     |
-| 2         | 2    | metal    | ready     |
+| territory | node | resource | ready |
+| --------- | ---- | -------- | ----- |
+| 1         | 0    | food     | yes   |
+| 1         | 3    | metal    | yes   |
+| 1         | 1    | food     | yes   |
+| 1         | 2    | food     | yes   |
+| 1         | 4    | metal    | yes   |
+| 1         | 5    | metal    | yes   |
+| 1         | 6    | energy   | yes   |
+| 1         | 7    | energy   | yes   |
+| 1         | 8    | energy   | yes   |
+| 2         | 0    | food     | yes   |
+| 2         | 2    | metal    | yes   |
 
 11 row(s)
 
@@ -207,9 +207,9 @@ is in it, because the names are what this is for.
 
 ## unit
 
-| id  | kind | place | fuel | readiness |
-| --- | ---- | ----- | ---- | --------- |
-| 1   | ark  | orbit | 1    | ready     |
+| id  | kind | place | fuel | ready |
+| --- | ---- | ----- | ---- | ----- |
+| 1   | ark  | orbit | 1    | yes   |
 
 1 row(s)
 
