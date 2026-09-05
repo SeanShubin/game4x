@@ -29,6 +29,7 @@ no matter how thoroughly it was discussed.
 | [Console](console.md)       | The command language                                             |
 | [Combat](combat.md)         | Ranges, weapons, resolution                                      |
 | [Orbit](orbit.md)           | The orbital layer and what sits in it                            |
+| [Scenarios](scenarios.md)   | The scenarios that demonstrate the game, and what each is for    |
 
 Add a file when a topic firms up. Add its row here first.
 

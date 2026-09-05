@@ -63,51 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-264 - The main scenario moves to the specification, and your document keeps the rule
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
-- **shape** text - **asks** approval - **into** `docs/process.md` -> How I know the game is right,
-then a new `spec/scenarios.md`, then `spec/README.md` -> The documents
-
-**Your document should start any project, so what stays is the rule and what moves is this game.**
-Three destinations, one quotation each, in that order.
-
-**First, `docs/process.md`. These two paragraphs replace the two that are there** - *there is a main
-scenario that touches every single thing and every recipe* through *heavy use of the automation*.
-
-> There is a **main scenario** that a person can follow end to end. **That is what I vet, and it is
-> the foundation.** I do not need to walk every step of the win condition by hand.
->
-> As long as that foundation is maintained, other scenarios check that particular end states are
-> reachable. **Those rest on the foundation rather than on me**, and they will make heavy use of the
-> automation. **What the main scenario has to cover is a fact about the game and is stated with the
-> game.**
-
-**Second, a new `spec/scenarios.md`** - the whole file.
-
-> # Scenarios
->
-> - There is one **main scenario**, and it touches everything a typical game uses. It is the
->   foundation, and it is vetted by hand
-> - A mechanic that only appears in an unusual situation belongs in a scenario of its own. Those are
->   not built until the main scenario satisfies its reader
-> - Other scenarios check that particular end states are reachable, including the win condition.
->   They rest on the foundation rather than on a person
-
-**Third, `spec/README.md` -> The documents.** One row, at the end of the table, which is sixteen rows
-now - measured.
-
-> | [Scenarios](scenarios.md) | The scenarios that demonstrate the game, and what each is for |
-
-**Why the specification rather than the release.** `releases/` is deleted once vetted, and the main
-scenario outlives it - it is the foundation the later scenarios rest on, which is a permanent
-arrangement rather than a schedule.
-
-**Nothing in the code breaks, and I checked rather than assumed.** The coverage check is
-`the_scenario_fires_every_player_recipe_the_release_declares`, scoped to **player** recipes;
-`perish` and `spoil` fire from `end turn` and were never in its population. **No check asserts that
-every world recipe fires** - worth knowing, and not work this creates.
-
 ### P-265 - `P-260` dropped its own answer, and left a contradiction where it landed
 
 **to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** rows -
@@ -1601,6 +1556,7 @@ work the release exists to order.
 | P-262, templating gives variety without complexity                                                                           | `docs/vision.md` -> Directions                                                                                                               | 2026-09-05 |
 | P-263, a promotion says what it is for the code lane, and silence is not an answer                                           | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-05 |
 | P-266, a proposal that asks a decision cannot be promoted; answering it makes it one that asks approval                      | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-05 |
+| P-264, the main scenario moves to the specification, and the process document keeps the rule                                 | `docs/process.md` -> How I know the game is right, `spec/scenarios.md`, `spec/README.md`                                                     | 2026-09-05 |
 
 ## Rejected
 
