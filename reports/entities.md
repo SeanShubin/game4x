@@ -1,4 +1,4 @@
-# Entities after `commands/play.4x`
+# Entities after `scenario/commands/play.4x`
 
 **Generated. Do not edit.** Every kind gets a table whether or not anything is of that kind.
 These are the rows the F3 browser shows, from the same function.
