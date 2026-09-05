@@ -22,10 +22,11 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-21** - `175078c` S-21: citizens and yards are things, and the expectation caught two bugs · still open in `docs/notes/proposals.md`
 - **S-19** - `6ab76ee` S-19: control is derived from a citizen being there · still open in `docs/notes/proposals.md`
 - **S-14** - `7a7284a` S-14: the scenario reaches every player recipe, and C-11 is why it can · still open in `docs/notes/proposals.md`
+- **R-6** - `92786a9` Close C-11 and C-19, and say where R-6 actually stands · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (12)
+### To code (11)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
@@ -38,7 +39,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-43** - The citation check fires forever on an item that takes several commits · `lenses/quality/outbox.md`
 
 ### To spec (1)
 

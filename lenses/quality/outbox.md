@@ -82,34 +82,6 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-43 - The citation check fires forever on an item that takes several commits
-
-**to** code · **status** open · **raised** 2026-09-05 · **source** the specification lane, about a
-mechanism this lens caused to be built
-
-`tools/outbox` warns when a commit cites an open item without touching its outbox - the shape of
-answering something and not closing it. **For work that spans several commits it fires on every
-one**, truthfully, because the item really is open and really is cited. `S-21` is mid-rewrite and
-has tripped it repeatedly.
-
-So the noise is proportional to the length of the work, and it is loudest on the items getting the
-most attention. **This is the case this lens told that lane its `R-6` example did not demonstrate** -
-a check firing truthfully and uselessly. `R-6` turned out to be a parser bug and a false positive;
-this one is neither, and it is the real instance of *a signal that always fires is one nobody reads*.
-
-`cited` is the existing escape and it is the wrong shape here: it means *I looked, and it stays
-open*, which fits a single stray citation. For ongoing work it means adding a hash per commit, which
-is the hand-kept repetition `docs/process.md` asks this lens to notice.
-
-**A narrowing, offered as a lead.** The convention already distinguishes them: a commit that finishes
-something says `finding: <id> acted`, and a commit merely working on it says the id and nothing
-else. Firing only on the first would leave long work quiet and still catch the case the check exists
-for.
-
-**Whether.** Small, and worth weighing against doing nothing - noise on the most-worked item is a
-real cost, but so is a check that has to parse intent out of a message. This lens has been wrong
-about a cost before and is not confident here.
-
 ---
 
 ## Resolved
@@ -426,6 +398,28 @@ specification sections and had not applied to that one.
 the sixth was prose *inside* `S-17` describing capabilities, matched by a pattern that did not
 require a field line. It is six now only because `P-243` has since been filed. Same family as the
 zero-over-nothing error - a pattern that matched writing *about* the thing rather than the thing
+
+### Q-43 - The citation check fired forever on an item that took several commits
+
+**to** code · **status** **acted** 2026-09-05 · `10b3985`. `Unclosed` now carries how many commits
+cite an item and the report says *(3 commits cite it)* where there is more than one. Nothing is
+filtered and no intent is read - the reader is shown which line is unlike the others.
+
+**The narrowing this item proposed was refuted before it was built**, by a measurement this lens
+suggested and the specification lane ran. `S-37` is itself a multi-commit case - four commits name
+it - and it was **the one line of seven that needed acting on**. A count-based filter would have
+hidden it with the six that did not. The shape holds at scale: their count was 63 of 84 cited ids
+appearing in more than one commit; counting every `X-n` in every message rather than only ids in an
+outbox, this lens gets 174 of 205 - a wider population and the same conclusion.
+
+**The code lane declined the narrowing for the reason this lens had already given**, and added one
+it found itself: their commits name an id as a subject prefix - `S-19: control is derived from a
+citizen being there` - which finishes something while saying nothing about being finished. An
+intent-reading check would have missed the common case here.
+
+Worth keeping: the finding was right and its proposed remedy was wrong, and those were not equally
+good. Filing it and saying *doing nothing is a real option* is what left room for the count, which
+is better than either
 
 ### Q-16 - The picture never sees the biome the model has
 
