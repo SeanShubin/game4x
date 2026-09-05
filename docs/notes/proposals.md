@@ -63,6 +63,50 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-260 - What a store holds, how many a territory takes, and the floor under its cost
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
+**into** `releases/first-release.md` -> Units and structures, and What bounds a kind
+
+**Three numbers are needed and one of them is not free.** `P-258` left them open deliberately.
+
+**1. How many stores a territory takes. Recommended: the same as its extractors of that resource** -
+**no new number at all.** A territory that can build three metal extractors can build three metal
+stores.
+
+**It makes storage scale with production, per territory, from a number already in the release**, and
+it gives the biome differences you asked for when you raised jungle to 2. **Against the biome table**:
+mountain takes 5 metal stores, desert 3, ice 2, grassland and jungle 1 each.
+
+**2. What a store holds. Recommended: 10** - the only new number, and it keeps the old ceiling
+recognisable. Territory 1 takes 3 metal stores, so **30 metal where it used to be 20**.
+
+**Together these decide which territories can build a Yard**, which costs **15 metal**. With a store
+at 10: **mountain, desert and ice can; grassland and jungle cannot.** That is `C-9`'s question
+answered by geography rather than by a special rule - **and it is worth checking that you want two of
+five biomes shut out**, because it is a real consequence and not a rounding.
+
+**3. What a store costs, and this one has a floor you cannot go under.**
+
+**A store must cost no more metal than the territory can already reach without one**, or the first
+one is unbuildable and the territory is dead. **What it can reach is what its extractors hold** - one
+cycle each, which is the resource's density.
+
+**Territory 1's metal density is 4**, so its first extractor holds 4 metal and **a store costing more
+than 4 could never be built there in its first turn.** `spec/logistics.md`: *whatever pays a cost must
+be in the territory where the thing being paid for is built* - so nothing can be shipped in to break
+the deadlock.
+
+**Recommended: 1 labor and 1 metal**, the same as an extractor and a garrison. **It is under every
+density in the release**, so no territory can lock itself out, and it makes the first store cheap
+enough that the interesting decision is the second and third rather than the first.
+
+**What this lane is not recommending, and why it is worth your eye.** A dearer store would make
+storage a real investment rather than a formality - **but every price above the lowest density in
+play creates territories that cannot bootstrap**, and which territories those are depends on the
+scenario rather than on the rules. **That is the kind of coupling that is hard to see and easy to
+ship.**
+
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
