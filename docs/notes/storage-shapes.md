@@ -222,6 +222,60 @@ containment**, and this is the sentence that would need to.
 parent, no cycles, capacity per kind, adjacency recorded by the container. **What is genuinely new is
 the root**, and the one-way phrasing of the leaf rule.
 
+## The planet breaks *one kind against many kinds*, and shows what the axis really is
+
+*Our leaf containers only hold one kind of thing, our branch containers hold many types of
+containers, but our planet seems to be both. Territories are the same kind of thing but they have
+different ids, they are not fungible the way metal is.*
+
+**He is right and the fault is in my phrasing.** A planet holds twelve territories - **one kind, and
+not fungible.** So *how many kinds* was a proxy, and it breaks here.
+
+**The axis is whether the contents are counted or listed**, and `spec/invariants.md` already draws
+it: *a game's state is things, in places, and **how many of each**.*
+
+- **Counted.** Fourteen metal is a number. Two metal with the same traits **collapse into one row
+  with a count**, and nothing is lost
+- **Listed.** Twelve territories do not collapse. **Territory 1 and territory 2 differ**, and a count
+  of twelve throws the state away
+
+**And what prevents collapsing is an id.** `P-254` just settled that a thing's own identifier is
+`id`, and the data shows it exactly: `{{territory id:1 ...}}` carries one and `{{metal ...}}` does
+not. **So the marker already exists and is already promoted.**
+
+**Corrected**: a **leaf** holds a quantity of one fungible kind. A **branch** holds identified
+things, of any kinds. **A branch holding one kind is still a branch** - the planet - and that is no
+longer a contradiction.
+
+## Is a thing that contains nothing automatically a leaf?
+
+*Can we represent the same thing with a leaf and an empty branch? If so how do we decide, or do we
+allow both?*
+
+**They are not the same thing, and the difference is what is permitted rather than what is present.**
+An empty branch **may come to hold something**; a leaf **may never**. Identical today, different in
+what the rules allow tomorrow.
+
+**So the decision is never made per instance and never made by looking.** It follows from the kind:
+
+- **a kind that declares no capacity is a leaf**
+- **a kind that declares capacity is a branch**, whether or not anything is in it
+
+**You never choose between representing something as a leaf or as an empty branch.** You choose
+whether the kind may ever hold anything, and the representation follows. **A citizen is a leaf until
+the day a rule lets one carry something**, and on that day it is a branch because a rule changed -
+visibly, in the specification - rather than because a citizen picked something up.
+
+**And both are allowed, because they are different declarations.** A locked box and a solid block
+look alike and are not alike. What is forbidden is the same kind being **either**, decided case by
+case.
+
+## One thing worth saying because *leaf* invites it
+
+**A leaf is not featureless.** A citizen has `force`; food has `keeps`. **Being a leaf means holding
+nothing, not being simple** - `spec/invariants.md` says a thing is a set of traits whatever else it
+is, and that applies at both ends of the tree.
+
 ## What this leaves open, which is his to settle
 
 - **Where N's bound comes from** - given by the place, upgraded, or derived from what the place
