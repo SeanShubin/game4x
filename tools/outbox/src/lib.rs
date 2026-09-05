@@ -576,6 +576,19 @@ pub struct Unclosed {
     pub outbox: String,
     pub hash: String,
     pub subject: String,
+    /// How many commits have cited it without closing it.
+    ///
+    /// **`Q-43`.** Work spanning several commits cites its item in each one, and the report
+    /// fired every time - truthfully, since the item really is open and really is cited, so
+    /// **the noise was proportional to how much attention something was getting.** The
+    /// quality lens offered a narrowing that reads finality out of the commit message; that
+    /// is a different kind of check from one that counts, and it would miss a commit which
+    /// finishes something without saying the word.
+    ///
+    /// A count needs no intent. One citation is the shape the check was built for - answered
+    /// and not closed. Nine is somebody in the middle of `S-21`, and says so without anybody
+    /// having to phrase a commit a particular way.
+    pub citations: usize,
 }
 
 /// Items whose id a commit cites, and which nobody has closed.
@@ -609,6 +622,13 @@ pub fn unclosed(items: &[Item], commits: &[Commit]) -> Vec<Unclosed> {
                 outbox: item.outbox.clone(),
                 hash: commit.hash.clone(),
                 subject: commit.subject.clone(),
+                citations: commits
+                    .iter()
+                    .filter(|other| {
+                        cites(&other.subject, &item.id)
+                            && !other.touched.iter().any(|path| path == &item.outbox)
+                    })
+                    .count(),
             });
             break;
         }
@@ -992,6 +1012,7 @@ One line of what it is.
             outbox: "crates/outbox.md".to_string(),
             hash: "6e3cd6c".to_string(),
             subject: "Settle C-1 as housekeeping".to_string(),
+            citations: 1,
         }];
         let document = pending(&all, &settled);
         assert!(

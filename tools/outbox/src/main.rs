@@ -98,8 +98,17 @@ fn main() {
                 0
             } else {
                 for item in &settled {
+                    // The count is what tells *answered and not closed* from *somebody is
+                    // in the middle of it* - `Q-43`. One citation is the shape this was
+                    // built for; nine is ongoing work, and says so without reading intent
+                    // out of a commit message.
+                    let many = if item.citations > 1 {
+                        format!(" ({} commits cite it)", item.citations)
+                    } else {
+                        String::new()
+                    };
                     println!(
-                        "{} - still open in {}, but {} says: {}",
+                        "{} - still open in {}, but {} says: {}{many}",
                         item.id, item.outbox, item.hash, item.subject
                     );
                 }
