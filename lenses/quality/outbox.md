@@ -128,7 +128,8 @@ or match both spellings and assert the total, so the check fails if a third spel
 
 ### Q-50 - A run of spaces sits mid-sentence in a failure message, in eighteen places
 
-**to** code · **status** open · **raised** 2026-09-05 · **updated** 2026-09-05 after `fc4029a` ·
+**to** code · **status** open · **cited** `fc4029a`, which acted on part of it · **raised**
+2026-09-05 ·
 **source** a scan of every non-comment string literal in `crates/`, `tools/` and `prototypes/`
 
 A message reads *"if that table          moved or changed shape"*. **Eighteen runs over six lines in

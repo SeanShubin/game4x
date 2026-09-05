@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-274** - The rebalanced biome table · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -21,12 +22,12 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
-- **Q-50** - `fc4029a` Q-49 and part of Q-50, and a warning about the rest of Q-50 · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
+- **S-45** - The node data contradicts the biome table, and every territory is affected · `docs/notes/proposals.md`
 - **S-44** - Storage becomes a built thing, and the scenario cannot run until it is · `docs/notes/proposals.md`
 - **S-41** - `P-250`'s second half needs `tools/outbox` to list at a close · `docs/notes/proposals.md`
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
@@ -76,6 +77,7 @@ it exists to ask.
 - `docs/process.md` -> All lanes - P-247, P-248
 - `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md`, a new section - P-204, P-211
+- `releases/first-release.md` -> Biomes - P-103, P-274
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
