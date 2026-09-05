@@ -6,10 +6,10 @@
 #
 # Deleting a row, or this file, is how changing your mind is said - `docs/process.md`.
 
-{game phase:play turn:8 territories:12 units:0}
+{game phase:play turn:9 territories:12 units:1}
 
-{territory territory:1 biome:grassland "force of nature":1 founded:yes citizens:12 "labor spent":0 yards:0}
-{territory territory:2 biome:grassland "force of nature":1 founded:yes citizens:4 "labor spent":0 yards:0}
+{territory territory:1 biome:grassland "force of nature":1 founded:yes citizens:12 "labor spent":0 yards:1}
+{territory territory:2 biome:grassland "force of nature":1 founded:yes citizens:6 "labor spent":0 yards:0}
 {territory territory:3 biome:grassland "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
 {territory territory:4 biome:mountain "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
 {territory territory:5 biome:mountain "force of nature":1 founded:no citizens:0 "labor spent":0 yards:0}
@@ -59,8 +59,8 @@
 {"territory resource" territory:12 resource:energy capacity:8 density:8 built:0}
 
 {store territory:1 resource:food amount:0}
-{store territory:1 resource:metal amount:0}
-{store territory:1 resource:energy amount:0}
+{store territory:1 resource:metal amount:14}
+{store territory:1 resource:energy amount:20}
 {store territory:2 resource:food amount:0}
 {store territory:2 resource:metal amount:0}
 {store territory:2 resource:energy amount:0}
@@ -112,7 +112,7 @@
 
 {structure territory:1 structure:extractor count:9}
 {structure territory:1 structure:garrison count:1}
-{structure territory:1 structure:yard count:0}
+{structure territory:1 structure:yard count:1}
 {structure territory:2 structure:extractor count:2}
 {structure territory:2 structure:garrison count:1}
 {structure territory:2 structure:yard count:0}
@@ -148,7 +148,7 @@
 {structure territory:12 structure:yard count:0}
 
 {labor territory:1 made:12 spent:0 left:12}
-{labor territory:2 made:4 spent:0 left:4}
+{labor territory:2 made:6 spent:0 left:6}
 {labor territory:3 made:0 spent:0 left:0}
 {labor territory:4 made:0 spent:0 left:0}
 {labor territory:5 made:0 spent:0 left:0}
@@ -160,14 +160,16 @@
 {labor territory:11 made:0 spent:0 left:0}
 {labor territory:12 made:0 spent:0 left:0}
 
-{kind kind:citizen "in play":16}
-{kind kind:labor "in play":16}
+{unit unit:1 kind:ark place:orbit fuel:2 readiness:ready}
+
+{kind kind:citizen "in play":18}
+{kind kind:labor "in play":0}
 {kind kind:food "in play":0}
-{kind kind:metal "in play":0}
-{kind kind:energy "in play":0}
+{kind kind:metal "in play":14}
+{kind kind:energy "in play":20}
 {kind kind:extractor "in play":11}
 {kind kind:garrison "in play":2}
-{kind kind:yard "in play":0}
-{kind kind:ark "in play":0}
+{kind kind:yard "in play":1}
+{kind kind:ark "in play":1}
 {kind kind:pioneer "in play":0}
 {kind kind:territory "in play":12}

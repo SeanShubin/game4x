@@ -150,14 +150,15 @@ fn the_entity_view_names_every_kind_and_admits_what_it_cannot_name() {
     let kinds: Vec<&str> = tables.iter().map(|t| t.kind.as_str()).collect();
     assert_eq!(kinds, ["game", "territory", "unit"]);
 
+    // **The scenario leaves a unit alive now**, since `S-14` extended it through `produce
+    // ark` and `launch`. It used to leave none, and this asserted the empty case here -
+    // which made the demonstration depend on the scenario reaching nothing rather than on
+    // the renderer. `an_empty_table_is_named_rather_than_omitted` shows it against a fresh
+    // game, where emptiness is a property of the state and not an accident of coverage.
     let unit = tables.iter().find(|t| t.kind == "unit").expect("listed");
-    assert!(unit.rows.is_empty(), "play.4x leaves no unit alive");
+    assert!(!unit.rows.is_empty(), "the launched ark is still a unit");
     let text = dump::entities_markdown(&session.game, "after");
-    assert!(text.contains("## unit"), "an empty kind still gets a table");
-    assert!(
-        text.contains("no columns either"),
-        "and says why it names none"
-    );
+    assert!(text.contains("## unit"), "and it has a table");
 
     // Every row is as wide as the columns, including entities that carry only some of them.
     for table in &tables {
@@ -389,7 +390,7 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
     // Over every case, and how many there were: a scenario that stopped spending labor
     // would satisfy every assertion above by having nothing to check.
     assert_eq!(
-        checked, 38,
-        "twenty-five labor consumers in play.4x and thirteen in spread.4x; found {checked}"
+        checked, 43,
+        "thirty labor consumers in play.4x and thirteen in spread.4x; found {checked}"
     );
 }

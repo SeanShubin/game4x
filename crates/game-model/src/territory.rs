@@ -139,8 +139,8 @@ impl Territory {
     /// End-of-turn losses: what expires, and what is above the bound.
     ///
     /// **`C-11`.** `spec/turn.md`: *what expires expires, and what was not kept in order is
-    /// lost*, and *what a territory can keep is bounded - anything above the bound is lost
-    /// when the turn ends*. The model discarded **all three** resources every turn, which is
+    /// lost*, and *what a territory can keep is bounded. Anything above the bound is lost
+    /// when the turn ends.* The model discarded **all three** resources every turn, which is
     /// neither of those rules. Food expires, because the release gives it *a capacity of 20,
     /// and it keeps for one turn*; metal and energy have a capacity and no expiry, so they
     /// carry.

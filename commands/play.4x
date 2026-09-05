@@ -98,3 +98,24 @@ move pioneer 2
 create labor 1 2
 work 1 extractor 2 food
 end turn
+
+# Turn 9. The last three recipes, and they are reachable only because `C-11` let metal
+# carry. A Yard costs fifteen and a worked turn makes twelve, so while every store was
+# discarded at each turn's end no territory could ever afford one - `build yard` and
+# everything behind it were unreachable rather than merely unused.
+#
+# The farms are worked first, as always: a population that gathers nothing this turn
+# starves at the end of it, whatever else is going on.
+create labor 3 1
+work 3 extractor 1 food
+create labor 3 1
+work 3 extractor 1 metal
+create labor 3 1
+work 3 extractor 1 energy
+create labor 1 2
+work 1 extractor 2 food
+create labor 1 1
+build yard 1
+produce ark 1
+launch ark
+end turn

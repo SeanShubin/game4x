@@ -7,7 +7,7 @@ is in it, because the names are what this is for.
 
 | phase | turn | territories | units |
 | ----- | ---- | ----------- | ----- |
-| play  | 8    | 12          | 0     |
+| play  | 9    | 12          | 1     |
 
 1 row(s)
 
@@ -15,8 +15,8 @@ is in it, because the names are what this is for.
 
 | territory | biome     | force of nature | founded | citizens | labor spent | yards |
 | --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1               | yes     | 12       | 0           | 0     |
-| 2         | grassland | 1               | yes     | 4        | 0           | 0     |
+| 1         | grassland | 1               | yes     | 12       | 0           | 1     |
+| 2         | grassland | 1               | yes     | 6        | 0           | 0     |
 | 3         | grassland | 1               | no      | 0        | 0           | 0     |
 | 4         | mountain  | 1               | no      | 0        | 0           | 0     |
 | 5         | mountain  | 1               | no      | 0        | 0           | 0     |
@@ -78,8 +78,8 @@ is in it, because the names are what this is for.
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 0      |
-| 1         | energy   | 0      |
+| 1         | metal    | 14     |
+| 1         | energy   | 20     |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
 | 2         | energy   | 0      |
@@ -149,7 +149,7 @@ is in it, because the names are what this is for.
 | --------- | --------- | ----- |
 | 1         | extractor | 9     |
 | 1         | garrison  | 1     |
-| 1         | yard      | 0     |
+| 1         | yard      | 1     |
 | 2         | extractor | 2     |
 | 2         | garrison  | 1     |
 | 2         | yard      | 0     |
@@ -191,7 +191,7 @@ is in it, because the names are what this is for.
 | territory | made | spent | left |
 | --------- | ---- | ----- | ---- |
 | 1         | 12   | 0     | 12   |
-| 2         | 4    | 0     | 4    |
+| 2         | 6    | 0     | 6    |
 | 3         | 0    | 0     | 0    |
 | 4         | 0    | 0     | 0    |
 | 5         | 0    | 0     | 0    |
@@ -209,22 +209,23 @@ is in it, because the names are what this is for.
 
 | unit | kind | place | fuel | readiness |
 | ---- | ---- | ----- | ---- | --------- |
+| 1    | ark  | orbit | 2    | ready     |
 
-*(empty) 0 rows*
+1 row(s)
 
 ## kind
 
 | kind      | in play |
 | --------- | ------- |
-| citizen   | 16      |
-| labor     | 16      |
+| citizen   | 18      |
+| labor     | 0       |
 | food      | 0       |
-| metal     | 0       |
-| energy    | 0       |
+| metal     | 14      |
+| energy    | 20      |
 | extractor | 11      |
 | garrison  | 2       |
-| yard      | 0       |
-| ark       | 0       |
+| yard      | 1       |
+| ark       | 1       |
 | pioneer   | 0       |
 | territory | 12      |
 

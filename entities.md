@@ -7,7 +7,7 @@ These are the rows the F3 browser shows, from the same function.
 
 | id       | phase | turn | territories | units |
 | -------- | ----- | ---- | ----------- | ----- |
-| the game | play  | 8    | 12          | 0     |
+| the game | play  | 9    | 12          | 1     |
 
 1 row(s)
 
@@ -15,8 +15,8 @@ These are the rows the F3 browser shows, from the same function.
 
 | id  | founded | citizens | labor spent | force of nature | force | food | food nodes       | food extractors | metal | metal nodes            | metal extractors | energy | energy nodes           | energy extractors | garrison                      | yards |
 | --- | ------- | -------- | ----------- | --------------- | ----- | ---- | ---------------- | --------------- | ----- | ---------------------- | ---------------- | ------ | ---------------------- | ----------------- | ----------------------------- | ----- |
-| 1   | true    | 12       | 0           | 1               | 1     | 0    | 4, 4, 4          | 3               | 0     | 4, 4, 4                | 3                | 0      | 4, 4, 4                | 3                 | force 1 multiplier 1 manned 0 | 0     |
-| 2   | true    | 4        | 0           | 1               | 1     | 0    | 6, 6             | 1               | 0     | 4, 4                   | 1                | 0      | 4, 4                   | 0                 | force 1 multiplier 1 manned 0 | 0     |
+| 1   | true    | 12       | 0           | 1               | 1     | 0    | 4, 4, 4          | 3               | 14    | 4, 4, 4                | 3                | 20     | 4, 4, 4                | 3                 | force 1 multiplier 1 manned 0 | 1     |
+| 2   | true    | 6        | 0           | 1               | 1     | 0    | 6, 6             | 1               | 0     | 4, 4                   | 1                | 0      | 4, 4                   | 0                 | force 1 multiplier 1 manned 0 | 0     |
 | 3   | false   | 0        | 0           | 1               | 0     | 0    | 2, 2, 2, 2, 2, 2 | 0               | 0     | 4, 4                   | 0                | 0      | 4, 4                   | 0                 | none                          | 0     |
 | 4   | false   | 0        | 0           | 1               | 0     | 0    | 2                | 0               | 0     | 5, 5, 5, 5             | 0                | 0      | 5, 5, 5, 5             | 0                 | none                          | 0     |
 | 5   | false   | 0        | 0           | 1               | 0     | 0    | 1, 1, 1          | 0               | 0     | 8, 8, 8, 8, 8, 8, 8, 8 | 0                | 0      | 8, 8, 8, 8, 8, 8, 8, 8 | 0                 | none                          | 0     |
@@ -32,6 +32,9 @@ These are the rows the F3 browser shows, from the same function.
 
 ## unit
 
-*(empty) 0 rows* - and no columns either, because a component name lives on an entity
-and there is none of this kind to read one from.
+| id  | kind | location | cells | force | exhausted | usable |
+| --- | ---- | -------- | ----- | ----- | --------- | ------ |
+| 1   | ark  | orbit    | 2     | 2     | false     | true   |
+
+1 row(s)
 

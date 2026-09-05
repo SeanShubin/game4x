@@ -235,7 +235,7 @@ fn the_reviewed_expectation_holds() {
         actual.len()
     );
     assert!(
-        want.len() > 90,
+        want.len() > 150,
         "{AT} expects only {} rows, which is less than the scenario has ever produced",
         want.len()
     );

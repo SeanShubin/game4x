@@ -231,9 +231,14 @@ pub fn tables(game: &Game) -> Vec<Table> {
         game.territories.iter().map(count).sum()
     };
     kinds.push(vec!["citizen".into(), total(&|t| t.citizens()).to_string()]);
+    // **Labor things, not ready citizens.** This counted `labor_available` - how much
+    // labor *could* be made - which was the only reading available while labor was a
+    // counter. `P-231` made it a kind, so this counts the kind like every other row, and
+    // reads zero at a turn boundary because `create labor` and `work` both happen inside a
+    // turn. The `labor` table beside it is where the flow shows.
     kinds.push(vec![
         "labor".into(),
-        total(&|t| t.labor_available()).to_string(),
+        total(&|t| t.count_of(game_model::thing::Kind::Labor)).to_string(),
     ]);
     for resource in Resource::ALL {
         kinds.push(vec![
