@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-272** - The scenario's territories do not match the release's biome table · `docs/notes/proposals.md`
 - **P-273** - The coding instance's prompt sends it to the wrong files · `docs/notes/proposals.md`
+- **P-274** - Rebalancing the biomes, and the two that are dominated · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -22,6 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
+- **Q-48** - `13497da` Q-48: assert the population before looping over it · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 

@@ -139,6 +139,68 @@ section opens by saying each prompt points at a document rather than restating o
 three files inside a prompt is exactly the restatement that went wrong.** The code lane offered both
 fixes and had no preference, since the file is yours.
 
+### P-274 - Rebalancing the biomes, and the two that are dominated
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
+**into** `releases/first-release.md` -> Biomes
+
+**You are right that the jungle gives nothing for its danger, and it is worse than that: it is
+strictly worse than grassland on all three resources *and* harder to take.** Totals are extractors
+times density, computed from the table:
+
+| Biome     | Food   | Metal | Energy | Nature |
+| --------- | ------ | ----- | ------ | ------ |
+| Ice       | 2      | 6     | 2      | 1      |
+| Desert    | 8      | 12    | 30     | 1      |
+| Grassland | 30     | 3     | 3      | 1      |
+| Jungle    | **24** | **2** | **2**  | **2**  |
+| Mountain  | 3      | 35    | 6      | 1      |
+
+**Ice is dominated too, by desert, and pays nothing for it** - 2 against 8, 6 against 12, 2 against
+30, at the same nature. **Two of five biomes are things a player has no reason to want.**
+
+**Three principles, and it is these you are deciding rather than the numbers.**
+
+1. **Every biome leads at something.** A biome nobody has a reason to take is a territory that only
+   matters for its position
+2. **Danger is paid for.** The jungle's nature of 2 buys the best food on the planet
+3. **The table is the truth**, and a territory takes its numbers from its biome - which is `P-272`'s
+   choice A, and this proposal assumes it
+
+**A table that satisfies them, changing two rows.**
+
+| Biome     | Food      | Metal     | Energy | Force of nature |
+| --------- | --------- | --------- | ------ | --------------- |
+| Ocean     | -         | -         | -      | -               |
+| Ice       | 1 x 2     | **3 x 5** | 1 x 2  | 1               |
+| Desert    | 2 x 4     | 3 x 4     | 5 x 6  | 1               |
+| Grassland | 5 x 6     | **2 x 3** | 1 x 3  | 1               |
+| Jungle    | **6 x 6** | 1 x 2     | 1 x 2  | 2               |
+| Mountain  | 1 x 3     | 5 x 7     | 2 x 3  | 1               |
+
+- **Jungle 4 x 6 becomes 6 x 6** - 36 food, the most on the planet, against grassland's 30. That is
+  what the danger buys
+- **Ice 2 x 3 becomes 3 x 5** - 15 metal, second to mountain and ahead of desert. Ice leads nothing,
+  but it is no longer dominated by anything
+
+**And a third row has to move for a reason that is not balance.** **Grassland metal 1 x 3 becomes
+2 x 3**, because **one metal extractor means one metal store means ten capacity, and a Yard costs
+fifteen.** Territory 1 is grassland and is the landing site. **Under the table as written the main
+scenario could never build a Yard**, which is `C-29`'s failure arriving at the one territory that
+cannot afford it.
+
+**What this costs, and it is not small.** Territory 1 goes from 12 metal a turn to 6, and from 12
+energy to 3. **The scenario gets materially longer** - an Ark's 12 energy is four turns of production
+rather than one. If that is too slow, the lever is desert and mountain energy rather than grassland,
+because grassland leading food is what makes it the starting biome.
+
+**One thing I cannot answer and the code lane can.** `C-24` says nothing in the release can *take* a
+jungle: taking needs force **greater than** nature, jungle is 2, and an ark and a pioneer are both
+force 2. **If force sums across units in one place** - and `spec/control.md`'s *organised* suggests it
+might - two units take it and there is no defect. **If it does not sum, the jungle is unclaimable
+however good its food is**, and this rebalance is decorative. Asked, and I will bring the answer back
+with the table.
+
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
