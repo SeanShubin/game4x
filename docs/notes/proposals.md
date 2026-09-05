@@ -63,62 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-261 - The three resources are supposed to feel different
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/vision.md` -> Constraints
-
-**You said it settling a smaller question and it is bigger than that question.** Asked whether a
-territory starting unable to hold energy was an oversight in the symmetry:
-
-> The three resources are supposed to feel different. **Where food, metal and energy behave alike,
-> that is a placeholder rather than a decision** - and where they differ, the difference is the
-> point.
-
-**Basis: it has already been doing work and nothing recorded it.** `food` keeps for one turn and the
-other two do not - a real difference, in the release today. **And `20, 20, 20` was the opposite**:
-three identical numbers for three things meant to differ, which this lane flagged as reading like a
-placeholder before you had said why it was one. **`P-258` removed them.**
-
-**It also decides `P-260`'s last question without being about it.** Founding gives a food store and a
-metal store and no energy store, so **energy is the resource you must build to hold at all** - which
-is a difference of kind rather than of number, and the strongest of the three.
-
-**It belongs in *Constraints* rather than *Directions*.** A direction is a movement you expect to
-make; **this is a fixed point you are holding to**, and its use is to refuse things - a uniform
-default, a symmetric table, a rule written once and applied three times **because it was tidier**.
-
-**What it costs, which is the honest half.** Three resources behaving differently is three sets of
-rules to hold in mind, for you and for a player. **The saving is that no difference has to be
-justified twice** - once it is a fixed point, *why is energy not like metal* stops being a question
-that needs answering each time it comes up.
-
-### P-262 - Templating is how variety arrives without complexity
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/vision.md` -> Directions
-
-**You gave this as the reason for `P-260`'s A and it is bigger than that answer.**
-
-> We are going to rely heavily on templating to give the player variety in content without
-> overwhelming them with complexity. **One kind with a trait beats several kinds that differ in one
-> word.**
-
-**Basis: it has decided two things already and was written down neither time.** `P-234` collapsed
-three extractor kinds into one carrying a `resource` trait; `P-260` did the same for `store` **and
-the argument was already made**, which is why that question was barely open. **Twice is a pattern and
-the third time it should not need re-arguing.**
-
-**Directions rather than Constraints, and the difference is real.** A constraint refuses things; this
-one **expects** something - that the data language grows abstractions, which you said outright when
-`P-234` needed `$resource`: *we are going to need to think about generic or templated recipes, our
-data language is definitely going to need some form of abstractions, maybe several forms.*
-
-**What it does not license.** *Fewer kinds* is not the goal - **`P-261` says the three resources are
-supposed to feel different**, and collapsing them would be this principle used against the other one.
-**It applies where kinds differ in one word and not where they differ in behaviour**, which is the
-line `P-234` and `P-260` both sat on.
-
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
@@ -1422,6 +1366,8 @@ work the release exists to order.
 | P-258, a territory declares no capacity for a resource                                                                       | `releases/first-release.md` -> What bounds a kind                                                                                            | 2026-09-05 |
 | P-256, the report shows a territory's derived capacity for a resource - Sean said yes, 2026-09-05                            | no text landed: it is a report decision and no rule moves. `S-44` does it                                                                    | 2026-09-05 |
 | P-260, `store` is one kind with a `resource` trait, holding 10, as many as the extractors of its resource, founding included | `releases/first-release.md` -> Kinds, Traits, What bounds a kind, Units and structures, Recipes                                              | 2026-09-05 |
+| P-261, the three resources are supposed to feel different                                                                    | `docs/vision.md` -> Constraints                                                                                                              | 2026-09-05 |
+| P-262, templating gives variety without complexity                                                                           | `docs/vision.md` -> Directions                                                                                                               | 2026-09-05 |
 
 ## Rejected
 

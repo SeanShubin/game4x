@@ -58,6 +58,11 @@ before it becomes part of the game. See [prototypes](prototypes/README.md).
 
 Everything is reachable from the root README. See [the documentation map](README.md).
 
+### The three resources feel different
+
+The three resources are supposed to feel different. **Where food, metal and energy behave alike,
+that is a placeholder rather than a decision** - and where they differ, the difference is the point.
+
 ## Directions
 
 These are not fixed points. They are movements the design already expects, written down so that
@@ -74,6 +79,12 @@ should depend on a trait having only two values.
 A territory has nature in it, the nature has a force, and the force is a number - `{nature: {force:
 1}}`. It is written `nature: 1` because most of that is vacuous detail right now. Sean, 2026-09-05,
 declining to build the nesting rather than deciding against it.
+
+### Templating gives variety without complexity
+
+We are going to rely heavily on templating to give the player variety in content without
+overwhelming them with complexity. **One kind with a trait beats several kinds that differ in one
+word.**
 
 ## The planet
 
