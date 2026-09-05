@@ -58,6 +58,11 @@ pub enum Rejection {
     },
     /// The unit is where it should be and has already acted this turn.
     AlreadyUsed(UnitKind),
+    /// The territory is already holding as many of that kind as it can.
+    NoRoomForAnother {
+        territory: TerritoryId,
+        kind: crate::thing::Kind,
+    },
     NotControlled(TerritoryId),
     AlreadyControlled(TerritoryId),
     NoCells(UnitKind),
@@ -156,6 +161,11 @@ impl fmt::Display for Rejection {
             Rejection::AlreadyUsed(kind) => write!(
                 out,
                 "that {kind} has already been used this turn; it can go on the next one"
+            ),
+            Rejection::NoRoomForAnother { territory, kind } => write!(
+                out,
+                "territory {territory} has as many {} things as it can hold",
+                kind.name()
             ),
             Rejection::NotControlled(id) => write!(out, "you do not control territory {id}"),
             Rejection::AlreadyControlled(id) => write!(out, "you already control territory {id}"),

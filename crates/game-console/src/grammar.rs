@@ -22,6 +22,7 @@ pub mod form {
     pub const LAUNCH: &str = "launch";
     pub const MOVE: &str = "move";
     pub const FOUND_BY_LAND: &str = "found by land";
+    pub const BUILD_STORE: &str = "build store";
     pub const BUILD: &str = "build";
     pub const PRODUCE: &str = "produce";
     pub const CREATE_LABOR: &str = "create labor";
@@ -137,6 +138,16 @@ pub fn grammar() -> Grammar {
                 Term::required("territory", Kind::Number),
             ],
             "send a pioneer onto adjacent unclaimed ground and found it there",
+        ),
+        Form::new(
+            form::BUILD_STORE,
+            vec![
+                Term::Keyword("build"),
+                Term::Keyword("store"),
+                Term::required("territory", Kind::Number),
+                Term::required("resource", Kind::Name),
+            ],
+            "build somewhere to keep one resource; a store holds ten of it",
         ),
         Form::new(
             form::BUILD,

@@ -437,8 +437,9 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
     // `tests/fired.rs` asks the model what actually happened and carries that gap as one
     // named exception. This is kept because it is the cheaper question and it fails earlier:
     // a recipe with no command at all is a hole in the console, and that is what it is for.
-    let fired_by: [(&str, &str); 9] = [
+    let fired_by: [(&str, &str); 10] = [
         ("deploy ark", "land ark"),
+        ("build store", "build store"),
         ("move", "move "),
         ("found by land", "move "),
         ("build extractor", "build extractor"),
@@ -472,8 +473,8 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
 
     assert_eq!(
         declared.len(),
-        9,
-        "nine player recipes were declared when this was written; the release now has {} \
+        10,
+        "ten player recipes were declared when this was written; the release now has {} \
          ({declared:?}). If one was added, name what fires it above and make the scenario \
          fire it.",
         declared.len()
@@ -502,8 +503,8 @@ fn the_scenario_touches_every_kind_and_there_are_twelve() {
 
     assert_eq!(
         Kind::ALL.len(),
-        12,
-        "twelve kinds since `P-234` collapsed the three extractors; the model has {}",
+        13,
+        "thirteen kinds: twelve after `P-234` collapsed the extractors, and `store` from `P-260`; the model has {}",
         Kind::ALL.len()
     );
 

@@ -4,6 +4,19 @@
 //! boundary, which is why ending a turn can resolve every territory independently and in
 //! any order - see [`crate::game::Game::after`].
 
+/// What one store holds, whatever it was built for.
+///
+/// `releases/first-release.md` -> *Where things are*: **a store holds the resource it was
+/// built for, up to 10.** A fact about the kind and not about any one store -
+/// `spec/logistics.md` says what a kind may contain is a fact about the kind.
+///
+/// **This number was decided and then lost for a day.** `P-260` asked for it, Sean answered,
+/// and the promotion asserted the two countable things around it - thirteen kinds, sixteen
+/// recipes - while dropping the number itself, so nothing noticed it was gone. It was
+/// relayed between lanes as settled while appearing in no document, and `P-265` is what
+/// finally wrote it down. `C-27`.
+pub const HOLDS: u32 = 10;
+
 use crate::Biome;
 use crate::identity::{Resource, TerritoryId};
 use crate::thing::{Kind, Thing, Trait};
@@ -121,14 +134,7 @@ impl Territory {
         });
     }
 
-    /// What a territory can keep, per kind.
-    ///
-    /// `releases/first-release.md` → *What bounds a kind in a territory*: twenty of each
-    /// resource. A citizen is bounded by the food produced here, and labor by the citizens
-    /// that make it, so neither is a number - those are enforced where they happen.
-    const KEEPS: u32 = 20;
-
-    /// End-of-turn losses: what expires, and what is above the bound.
+    /// End-of-turn losses: what expires, and what nothing is holding.
     ///
     /// **`C-11`.** `spec/turn.md`: *what expires expires, and what was not kept in order is
     /// lost*, and *what a territory can keep is bounded. Anything above the bound is lost
@@ -136,6 +142,19 @@ impl Territory {
     /// neither of those rules. Food expires, because the release gives it *a capacity of 20,
     /// and it keeps for one turn*; metal and energy have a capacity and no expiry, so they
     /// carry.
+    ///
+    /// **`P-258` moved the bound off the territory and onto the things in it.** It was a
+    /// flat twenty of each, which was a property of the wrong thing - a territory that had
+    /// built nothing could keep twenty of everything. What a territory keeps is now what its
+    /// stores hold, and it has none until it builds them.
+    ///
+    /// **`P-270` says what happens to the rest, and it is not disorder.** *A resource that is
+    /// in nothing can be used the turn it is made, and is lost when that turn ends - use it
+    /// immediately, store it, or lose it.* That replaced *a resource that is in nothing is in
+    /// disorder, and cannot be reached*, which would have been a second behaviour: something
+    /// present and unspendable. **There is one behaviour now - spendable within the turn,
+    /// gone at its end - so nothing here has to make a resource unreachable**, and the only
+    /// thing this function does is decide what survives.
     ///
     /// Labor is not a resource and is not carried either: it is bounded by *the citizens
     /// that make it, one each per turn*, so labor left at the end of a turn was made by a
@@ -148,7 +167,7 @@ impl Territory {
         });
         for resource in [Resource::Metal, Resource::Energy] {
             let kind = Kind::from_resource(resource);
-            let over = self.count_of(kind).saturating_sub(Self::KEEPS);
+            let over = self.count_of(kind).saturating_sub(self.capacity(resource));
             if over > 0 {
                 self.remove(kind, over);
             }
@@ -218,6 +237,47 @@ impl Territory {
                 .with(Trait::Works, node as u32)
                 .with(Trait::Resource, resource.index() as u32),
         );
+    }
+
+    /// How many stores this territory has for a resource.
+    ///
+    /// `P-260`: a store is one kind with a `Resource` trait, the same shape an extractor
+    /// has had since `P-234` - templating rather than three kinds differing in one word.
+    pub fn stores(&self, resource: Resource) -> usize {
+        self.held
+            .iter()
+            .filter(|thing| thing.kind == Kind::Store)
+            .filter(|thing| thing.trait_of(Trait::Resource) == Some(resource.index() as u32))
+            .count()
+    }
+
+    /// Build a store for a resource.
+    pub fn add_store(&mut self, resource: Resource) {
+        self.held
+            .push(Thing::of(Kind::Store).with(Trait::Resource, resource.index() as u32));
+    }
+
+    /// How many stores this territory could ever have for a resource.
+    ///
+    /// `releases/first-release.md` -> *What bounds a kind*: a store is bounded by **as many
+    /// as the extractors of its resource**, the founding one counted. So the bound is the
+    /// node count, since that is what bounds the extractors.
+    pub fn store_capacity(&self, resource: Resource) -> usize {
+        self.node_count(resource)
+    }
+
+    /// What this territory can keep of a resource between turns.
+    ///
+    /// **`P-258`: a territory declares no capacity for a resource.** It declares capacity
+    /// for the things that hold them, and this is derived from those - how many stores it
+    /// has, times what a store holds. It replaced a flat bound of twenty on the territory
+    /// itself, which was a property of the wrong thing: a territory that had built nothing
+    /// could keep twenty of everything.
+    ///
+    /// `P-256`, decided yes: the report shows this. Sean went looking for the number, could
+    /// not find it, and asked - the one report addition requested by hitting its absence.
+    pub fn capacity(&self, resource: Resource) -> u32 {
+        self.stores(resource) as u32 * HOLDS
     }
 
     /// Spend the readiness of the extractor at that position.
@@ -444,30 +504,33 @@ impl Territory {
 
     /// Whether this territory can ever hold a Yard.
     ///
-    /// A Yard costs fifteen metal, so the question is whether fifteen metal can ever be
-    /// gathered here. **Since `C-11` that is not a question about one turn.** Metal carries
-    /// between turns to [`Self::KEEPS`], which is twenty, so a territory producing any
-    /// metal at all reaches fifteen by waiting - and one producing none never does, however
-    /// long the game runs.
+    /// **`C-29`, and this rule has now been derived three times from three different
+    /// premises.** A Yard costs fifteen metal, so the question is whether fifteen can ever be
+    /// brought together here at once.
     ///
-    /// `C-9` stated this as *the most metal the territory can hold in one turn reaches
-    /// fifteen*, and that was right when it was written, under the rule that discarded
-    /// every store at the end of a turn. `C-11` replaced that rule five days later and
-    /// nothing re-derived the sentence. **Implemented as written it would have been false
-    /// of the scenario that already exists**: territory 1 produces twelve metal a turn,
-    /// builds a Yard on its second, and the one-turn rule says it can never hold one.
-    /// Four territories would qualify. C-11's own note says ten, and ten is what *produces
-    /// any metal at all* gives.
+    /// - Under the original rule every store was discarded at the end of a turn, so it was
+    ///   *fifteen in one turn*. `C-9` recorded that and it qualified four territories.
+    /// - `C-11` had metal carry to a flat twenty, so it became *any metal at all reaches
+    ///   fifteen by waiting*. Ten territories.
+    /// - `P-258` moved the bound onto the things in a territory, and `P-270` made what is in
+    ///   nothing spendable on the turn it is made. So it is what its stores can hold, plus
+    ///   what one turn can make.
     ///
-    /// The bound is asserted rather than assumed, because the two numbers are independent
-    /// and only their order makes this rule true. If what a territory keeps ever drops
-    /// below what a Yard costs, waiting stops working and this needs deriving again.
+    /// A store holds ten and a territory may build as many as it has extractors of that
+    /// resource, so **a territory with one metal node can never hold more than ten** and
+    /// needs five a turn on top to reach a Yard. Territories 8 and 10 have one metal node
+    /// each and make two and three a turn: twelve and thirteen, and no Yard, though they
+    /// produce metal every turn. **Eight territories, not ten** - and the two it loses are
+    /// not the two that produce nothing.
+    ///
+    /// **The compile-time assert that used to sit here did its job by failing.** It said
+    /// `KEEPS >= YARD_METAL`, and `P-258` deleted `KEEPS`, so this stopped compiling the
+    /// moment its premise moved rather than going quietly stale the way `C-9` did.
     pub fn can_hold_yard(&self) -> bool {
-        const _: () = assert!(
-            Territory::KEEPS >= crate::game::cost::YARD_METAL,
-            "a territory keeps less metal than a Yard costs, so accumulating cannot reach one"
-        );
-        self.most_in_one_turn(Resource::Metal) >= 1
+        let can_store = self.store_capacity(Resource::Metal) as u32 * HOLDS;
+        let in_one_turn = self.most_in_one_turn(Resource::Metal);
+        // Nothing at all in a turn means no hands to spare, so the stores would never fill.
+        in_one_turn >= 1 && can_store + in_one_turn >= crate::game::cost::YARD_METAL
     }
 
     /// The force the territory itself presents, before any unit standing on it.
@@ -806,15 +869,22 @@ mod tests {
         );
     }
 
-    /// A Yard needs metal to be gatherable, not gatherable fifteen at a time.
+    /// A Yard needs fifteen metal to be holdable at once, which is stores plus one turn.
     ///
-    /// **`C-9` said fifteen in one turn and that has been wrong since `C-11`.** Metal
-    /// carries between turns to twenty, so one a turn reaches fifteen by waiting. The
-    /// third case is the one that caught it: territory 1 produces twelve, builds a Yard on
-    /// turn two in the committed scenario, and the one-turn rule calls it impossible.
+    /// **Third derivation of one rule, and the premise moved under it twice** - `C-29`.
+    /// `C-9` said *fifteen in one turn*, correct while every store was discarded at a turn's
+    /// end. `C-11` had metal carry to a flat twenty and it became *any metal at all*, which
+    /// qualified ten territories. `P-258` then moved the bound onto the things in a
+    /// territory and `P-270` made what is in nothing spendable the turn it is made, so it is
+    /// now **what the stores can hold, plus what one turn makes**.
+    ///
+    /// The last case is the one that changed answer and is why the count is eight rather
+    /// than ten: one metal node is one store is ten, and ten plus a slow turn never reaches
+    /// fifteen. A territory can produce metal every turn of the game and never afford a
+    /// Yard, which the previous rule could not express.
     #[test]
     fn a_yard_needs_metal_to_be_reachable_rather_than_reachable_at_once() {
-        let cases: [(&[(Resource, u32)], bool, &str); 4] = [
+        let cases: [(&[(Resource, u32)], bool, &str); 5] = [
             (&[(Resource::Food, 4)], false, "no metal node, so never"),
             (
                 &[(Resource::Food, 1), (Resource::Metal, 20)],
@@ -829,18 +899,27 @@ mod tests {
                     (Resource::Metal, 4),
                 ],
                 true,
-                "twelve a turn, which is under fifteen and reaches it on the second",
+                "three nodes, so three stores and thirty; twelve a turn on top",
             ),
             (
-                &[(Resource::Food, 2), (Resource::Metal, 1)],
+                &[(Resource::Food, 4), (Resource::Metal, 5)],
                 true,
-                "one a turn is slow and is not never",
+                "one store of ten and five a turn is exactly fifteen - the boundary",
+            ),
+            (
+                &[(Resource::Food, 4), (Resource::Metal, 4)],
+                false,
+                "one store of ten and four a turn is fourteen, and it is never fifteen                  however long the game runs. Territories 8 and 10 are this case",
             ),
         ];
         for (nodes, expected, why) in cases {
             let territory = with_nodes(nodes);
             assert_eq!(territory.can_hold_yard(), expected, "{why}");
         }
-        assert_eq!(cases.len(), 4, "four cases, two either side");
+        assert_eq!(
+            cases.len(),
+            5,
+            "five cases, and two of them either side of fifteen"
+        );
     }
 }

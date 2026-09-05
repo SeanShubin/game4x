@@ -90,6 +90,15 @@ pub enum Transition {
     FoundByLand {
         territory: TerritoryId,
     },
+    /// Build a store for one resource.
+    ///
+    /// **`P-260`: one recipe with a `$resource`, not three.** `build store` takes the
+    /// resource the way `build extractor` always has, which is what makes `store` one kind
+    /// with a trait rather than three kinds differing in one word.
+    BuildStore {
+        resource: Resource,
+        territory: TerritoryId,
+    },
     Build {
         structure: StructureKind,
         territory: TerritoryId,

@@ -13,6 +13,9 @@ use crate::unit::{Location, Unit};
 /// `spec/README.md` keeps relationships in the specification and numbers in a release, so
 /// these are the numbers and they are meant to move without any rule moving with them.
 pub mod cost {
+    /// A store costs 1 labor and 1 metal, and holds ten of one resource.
+    pub const STORE_LABOR: u32 = 1;
+    pub const STORE_METAL: u32 = 1;
     /// A Yard costs 1 labor and 15 metal.
     pub const YARD_LABOR: u32 = 1;
     pub const YARD_METAL: u32 = 15;
@@ -166,6 +169,10 @@ impl Game {
             Transition::Launch { kind } => next.launch(*kind)?,
             Transition::Move { kind, territory } => next.move_unit(*kind, *territory)?,
             Transition::FoundByLand { territory } => next.found_by_land(*territory)?,
+            Transition::BuildStore {
+                resource,
+                territory,
+            } => next.build_store(*resource, *territory)?,
             Transition::Build {
                 structure,
                 territory,
@@ -528,6 +535,17 @@ impl Game {
             if let Some(node) = place.best_free_node(*resource) {
                 place.add_extractor(node);
             }
+            // **`P-261`: a food store and a metal store, and no energy store.** Deliberate -
+            // *the three resources are supposed to feel different*, and energy is the one a
+            // player must build somewhere to keep before any of it survives a turn. It is
+            // also what makes an Ark expensive in a way a Yard is not: twelve energy, on
+            // ground that starts with nowhere to put a single unit of it.
+            //
+            // The same two resources as the extractors, so a founding leaves each of them
+            // somewhere to produce into. An extractor holds nothing - `P-260` - so a
+            // founding leaving a mine and no metal store would produce metal it could not
+            // keep past the turn it was dug.
+            place.add_store(*resource);
         }
         Ok(())
     }
@@ -547,6 +565,34 @@ impl Game {
                 needed: defending,
             });
         }
+        Ok(())
+    }
+
+    /// `build store`: somewhere to keep one resource between turns.
+    ///
+    /// **`P-258` made this necessary rather than useful.** A territory used to keep twenty
+    /// of each by declaration; it now declares capacity only for the things that hold them,
+    /// so a territory that has built no store keeps nothing at all overnight.
+    ///
+    /// Bounded by *as many as the extractors of its resource* - the founding one counted -
+    /// so the ceiling is the node count, which is what bounds the extractors themselves.
+    fn build_store(&mut self, resource: Resource, territory: TerritoryId) -> Result<(), Rejection> {
+        let place = self.territory(territory)?;
+        if !place.founded() {
+            return Err(Rejection::NotControlled(territory));
+        }
+        if place.stores(resource) >= place.store_capacity(resource) {
+            return Err(Rejection::NoRoomForAnother {
+                territory,
+                kind: Kind::Store,
+            });
+        }
+        // Labor first, so a territory with the metal and no hands is refused for the reason
+        // that is true rather than for the one asked about second - the same order `build`
+        // uses below.
+        self.spend_labor(territory, cost::STORE_LABOR)?;
+        self.spend(territory, Resource::Metal, cost::STORE_METAL)?;
+        self.territory_mut(territory)?.add_store(resource);
         Ok(())
     }
 
@@ -1391,6 +1437,14 @@ mod tests {
     #[test]
     fn food_expires_at_the_end_of_a_turn_and_metal_carries() {
         let mut game = founded();
+        // **A founding leaves a metal store** - `P-261` - so five metal has somewhere to be.
+        // Before `P-258` a territory kept twenty of everything by declaration and this
+        // fixture needed nothing; now what it keeps is what its stores hold.
+        assert_eq!(
+            game.territories[0].capacity(Resource::Metal),
+            10,
+            "one store from founding, holding ten"
+        );
         game.territories[0].add(Resource::Metal, 5);
         game.territories[0].add(Resource::Food, 9);
         let after = game.after(&Transition::EndTurn).unwrap();
@@ -1401,9 +1455,18 @@ mod tests {
     }
 
     /// Anything above what a territory can keep is lost when the turn ends.
+    ///
+    /// **`P-258` moved the bound off the territory and onto the things in it**, so this
+    /// tests two stores rather than a flat twenty. The difference is not the number: a
+    /// territory that has built nothing now keeps *nothing*, where before it kept twenty of
+    /// everything without having built anywhere to put it.
     #[test]
     fn what_is_over_the_bound_is_lost_when_the_turn_ends() {
         let mut game = founded();
+        // One store comes with the founding; this is the second, so the bound is twenty and
+        // the arithmetic below is the one this test was written for.
+        game.territories[0].add_store(Resource::Metal);
+        assert_eq!(game.territories[0].capacity(Resource::Metal), 20);
         game.territories[0].add(Resource::Metal, 25);
         game.territories[0].add(Resource::Food, 9);
         let after = game.after(&Transition::EndTurn).unwrap();
@@ -1413,7 +1476,7 @@ mod tests {
                 .unwrap()
                 .store(Resource::Metal),
             20,
-            "a capacity of 20, and five over it"
+            "two stores of ten, and five over them"
         );
     }
 

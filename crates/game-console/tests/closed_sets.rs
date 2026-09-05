@@ -134,9 +134,13 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
 
     // Over every case, and how many cases there were. Twelve kinds and six biomes; a run
     // that compared two empty sets twice would satisfy everything above it.
+    // Thirteen since `P-260` added `store` - one kind with a `resource` trait rather than
+    // three differing in one word. This count is what caught the kind arriving: the release
+    // declared it, the model did not have it, and the gate was red for every lane until the
+    // model followed.
     assert_eq!(
-        compared, 18,
-        "twelve kinds and six biomes were compared when this was written; {compared} were"
+        compared, 19,
+        "thirteen kinds and six biomes were compared when this was written; {compared} were"
     );
 }
 

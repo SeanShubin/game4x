@@ -77,6 +77,7 @@ pub fn fired(transition: &Transition) -> (Vec<&'static str>, &'static str) {
         },
         Transition::Move { .. } => (vec!["move"], ""),
         Transition::FoundByLand { .. } => (vec!["found by land"], ""),
+        Transition::BuildStore { .. } => (vec!["build store"], ""),
         Transition::Build { structure, .. } => match structure {
             StructureKind::Extractor => (vec!["build extractor"], ""),
             StructureKind::Yard => (vec!["build yard"], ""),

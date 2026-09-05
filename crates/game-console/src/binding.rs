@@ -166,6 +166,10 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
         form::FOUND_BY_LAND => Meaning::Change(Transition::FoundByLand {
             territory: territory("territory")?,
         }),
+        form::BUILD_STORE => Meaning::Change(Transition::BuildStore {
+            resource: resource("resource")?,
+            territory: territory("territory")?,
+        }),
         form::BUILD => Meaning::Change(Transition::Build {
             structure: structure("structure")?,
             territory: territory("territory")?,
@@ -222,6 +226,7 @@ pub fn handled() -> Vec<&'static str> {
         form::LAUNCH,
         form::MOVE,
         form::FOUND_BY_LAND,
+        form::BUILD_STORE,
         form::BUILD,
         form::PRODUCE,
         form::CREATE_LABOR,

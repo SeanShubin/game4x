@@ -40,6 +40,11 @@ pub enum Kind {
     Citizen,
     Garrison,
     Extractor,
+    /// **`P-260`: one kind with a `resource` trait, not three that differ in one word.**
+    /// `spec/invariants.md` -> templating gives variety without complexity. A store holds
+    /// ten of the resource it was built for, and that ten is a fact about the kind rather
+    /// than about any one store - `spec/logistics.md`.
+    Store,
     Yard,
     Ark,
     Pioneer,
@@ -57,6 +62,7 @@ impl Kind {
             Kind::Citizen => "citizen",
             Kind::Garrison => "garrison",
             Kind::Extractor => "extractor",
+            Kind::Store => "store",
             Kind::Yard => "yard",
             Kind::Ark => "ark",
             Kind::Pioneer => "pioneer",
@@ -70,10 +76,11 @@ impl Kind {
     }
 
     /// Every kind, so that a reader can name one that is nowhere.
-    pub const ALL: [Kind; 12] = [
+    pub const ALL: [Kind; 13] = [
         Kind::Citizen,
         Kind::Garrison,
         Kind::Extractor,
+        Kind::Store,
         Kind::Yard,
         Kind::Ark,
         Kind::Pioneer,
