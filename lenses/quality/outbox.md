@@ -82,6 +82,50 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
+### Q-47 - *Presentations are never canonical* is checkable, and the obvious check would be decoration
+
+**to** code · **status** open · **raised** 2026-09-05 · **source** `docs/process.md` →
+[What verification requires](../../docs/process.md#presentation), read at the specification lane's
+pointing
+
+`docs/process.md` says **presentations are never canonical** and **presentations are generated from
+data**. Nothing enforces either. It is the only one of that section's six checkable statements whose
+failure is **silent** - a presentation read as a source looks exactly like a presentation until the
+data changes underneath it.
+
+**The rule currently holds**, so this is preventive rather than corrective. Every reference to
+`reports/` in the tree:
+
+| Role      | File                                                   |
+| --------- | ------------------------------------------------------ |
+| generator | `crates/game-console/src/bin/dump-state.rs`            |
+| check     | `crates/game-console/tests/dump.rs`                    |
+| check     | `crates/game-console/tests/dumps_are_current.rs`       |
+| check     | `crates/game-console/tests/turns_reconstruct.rs`       |
+| check     | `tools/pad-tables/tests/generated_files_are_padded.rs` |
+
+**No production file reads a report.** Five, not the four the specification lane counted - their
+list included `src/dump.rs`, which contains the word *reports* only inside HTML it emits, and
+omitted the `pad-tables` test.
+
+**The distinction they worried about does not need semantics.** *Reading to verify* versus *reading
+as input* is drawable by path: the generator is `src/bin/`, the checks are `*/tests/*`, and the rule
+is that **nothing else may name the directory**. A test reading a report is a test; production
+depending on one is the failure.
+
+**The trap is the spelling, and it is the reason to file this rather than just build it.** Two
+spellings are in use - `"reports/…"` and `.join("reports")` - and they interleave:
+
+- searching only the literal finds **3 of 5**, and misses the generator
+- searching only the join finds **2 of 5**
+
+**Both lanes fell into this within minutes of each other**, on the same question, from opposite
+sides. A check written the way either of us searched would have reported clean while missing
+readers - which is the guard-that-cannot-fail this repository has built twice and caught twice.
+
+**Whether.** Worth building, and worth building carefully: match the directory rather than a string,
+or match both spellings and assert the total, so the check fails if a third spelling appears.
+
 ---
 
 ## Resolved
