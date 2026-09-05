@@ -22,28 +22,18 @@ So a report names what to do, not merely what is wrong.
 ## What this lens is for, and what bounds it
 
 [`docs/process.md`](../../docs/process.md) is Sean's own statement and is authoritative; this file is
-detail beneath it and must not contradict it. Its **Quality instance** section gives this lens seven
-jobs. Kept close to its words rather than paraphrased, because a paraphrase is what drifts:
+detail beneath it and must not contradict it.
 
-- a proper module structure emanating from composition roots
-- **the module structure isolates dependencies from each other** - it must not be possible for code
-  that is algorithmic or mathematical to depend on code that knows about platform concerns
-- **a separate, thin module drives dependencies via composition roots**, so no implementation of one
-  thing knows the implementation details of another
-- the widest separation between generic code and code with dependencies
-- a dependency that provides a home rather than operations confined to one crate
-- **automation in our process instead of repetition** - a proper automated pipeline and proper
-  support tooling
-- **rules enforced, where possible, by reliable code rather than by human or AI habits**
+**What this lens is for is [`docs/process.md` → Quality instance](../../docs/process.md#quality-instance-a-type-of-research-instance), and is deliberately not restated here.**
+That section also carries the constraint that matters most in practice - this lens **finds and
+reports** every one of those jobs and **builds none**, because production support is the coding
+instance's and a lane that needs a check wired files it rather than wiring it.
 
-**And the constraint that ends that section: this lens finds and reports every one of them and
-builds none.** Production support - `hooks/`, `scripts/`, CI, and everything in `tools/` that is not
-a lane's own - is the coding instance's. A lane that needs a check wired **files it rather than
-wiring it**, because one writer per file is what makes running several instances at once safe.
-
-**Its own tools are its own.** `docs/process.md:190` and `CLAUDE.md` → Starting a new lens both give
-a research instance `lenses/<its own name>/` **and** `tools/<its own name>/`. The shared pipeline is
-not that.
+Not restated because restating it is what failed. This file said the section gave three jobs; it was
+right when written and wrong four days later, and the four it lost included both of the ones that
+aim this lens at structure and at the pipeline. **Listing them again more faithfully would have been
+the same mistake with a longer half-life** - the first copy was close to the source's words too, and
+closeness is not what kept it current.
 
 **Eight items open to any one instance, and close or withdraw before filing a ninth.** Not a
 borrowed number: about two days of a producer's throughput. It is deliberately where the judgement
@@ -208,10 +198,18 @@ have prevented it. It is a countable claim about another file, made once and nev
 which is the same shape as *the word bin appears nowhere*, and the shape `tools/spec`'s
 `check_claims` was built for.
 
-Nothing checks this lens's claims about `docs/process.md`. `tools/<its own name>/` is now this
-lens's to write, so such a check would be its own to build rather than to file. **Not built, and
-recorded here rather than filed**, because a lens that starts building tooling for itself is a lens
-that has stopped reading.
+Nothing checks this lens's claims about `docs/process.md`, and the answer turned out not to be a
+checker. **The answer is to stop copying**: the section is linked above rather than listed, so there
+is no second copy to go stale and nothing to check.
+
+That is `P-245`, filed by the specification lane from a decision this lens left in a reply - which
+`docs/process.md` forbids, because a decision in a reply is invisible to `pending.md` and gone when
+the session ends. **The rule this lens quoted at another lane, broken by this lens, three days
+later.**
+
+Worth keeping as the sharpest instance available: **having just been burned by a stale copy, this
+file's first correction was to make a better copy** - seven bullets instead of three, closer to the
+source's words. One commit later, linking replaced them.
 
 ## Say it and stop
 
