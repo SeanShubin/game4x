@@ -63,6 +63,65 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-252 - No quotes in the data, and `force of nature` becomes `nature`
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `spec/console.md` -> The language, and `releases/first-release.md` ->
+Traits
+
+**Measured: four names are quoted in `scenario/expected/play.4x`** - `force of nature`, `in play`,
+`labor spent`, `territory resource`. **Your rename removes one of them** and the other three become
+`in-play`, `labor-spent`, `territory-resource`.
+
+> A name is one word. **Where it needs more than one, the words are joined with dashes** - `in-play`,
+> not `"in play"`. **Nothing in a data file is quoted.**
+
+**And the trait's name, in the release's *Traits* table:**
+
+> `nature` - of a territory, a number, stored. **The force nature holds a territory with.**
+
+**Basis for the rename, in your words: the concept is nested and the nesting is not worth having
+yet.** A territory has nature in it, the nature has a force, and the force is one - `{nature: {force:
+1}}` says all of that and **most of it is vacuous detail right now**. `nature: 1` says the part that
+does work. **This lane has recorded the fuller shape as a direction** in `docs/vision.md`, which is
+where a movement the design expects but has not made now goes.
+
+**What it touches beyond the two destinations, so nothing is discovered later.** `spec/control.md`
+says *force of nature* four times as English prose about the rule - **that is not a name and it does
+not change.** `spec/console.md`'s `set force` command already uses the short form. `scenario/commands/forces.4x`
+carries a comment saying every territory has a force of nature of 1, which `P-253` makes false
+anyway.
+
+### P-253 - Jungle holds itself with a force of 2
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** rows -
+**asks** approval - **into** `releases/first-release.md` -> Biomes, and Scope
+
+**Your reason: the territories are different now and the scenarios should feel it.** *We had
+deferred that for simplicity, but now that territories are different I would rather have scenarios
+that feel more natural so I can tune them.*
+
+**One cell in the Biomes table:**
+
+> | Jungle | 4 x 6 | 1 x 2 | 1 x 2 | 2 |
+
+**And one line of Scope has to go, because it stops being true:**
+
+> Every territory has a force of nature of 1
+
+**Basis: it is the first territory-shaped difference in the release that is not about resources.**
+Every biome differs in what it yields and **none differs in what it costs to hold**. Jungle at 2 is
+the smallest change that makes holding a place a decision rather than a formality.
+
+**What it costs, measured.** Two territories are jungle - **6 and 7** - and `scenario/commands/forces.4x`
+sets all twelve to 1, so two of its lines change and its opening comment goes. **Nothing else in the
+scenario moves**, because neither territory is reached: `reports/state.md` shows both unfounded.
+
+**One thing to know rather than decide.** `spec/control.md` says *holding a territory takes force
+equal to its force of nature*, and a citizen has force 1. **So a jungle needs two citizens present
+to hold, or a garrison** - which is the tuning you are after and is also a real change to how those
+two territories play.
+
 ## Addressed to other perspectives
 
 ### S-41 - `P-250`'s second half needs `tools/outbox` to list at a close
