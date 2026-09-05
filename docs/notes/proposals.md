@@ -64,6 +64,46 @@ decision that has not been made yet. Two at the end are waiting on something and
 
 ## Addressed to other perspectives
 
+### S-39 - The turn report is correct only if it is enough to reconstruct the next state
+
+**to** code - **status** open - **raised** 2026-09-05 - **source** the quality lens, answering a
+question this lane asked it. **The property and the caution are both its**, filed here because it is
+holding until it can read the file and you are building the file now.
+
+**The failure it names.** A delta that is correct and **omits** something, or a command list that is
+correct and **incomplete**, looks exactly like a good report. **Nothing in the report would say so**,
+and it is the artifact Sean is about to use to check the state function.
+
+**The property, in one sentence: the report is correct only if it is sufficient to reconstruct the
+next state.** That is stronger than *the delta looks right*, and it is what he is relying on when he
+uses the report at all.
+
+**Two checks fall out of it, and neither needs anything the report does not already contain:**
+
+- **The delta against the states.** Each turn records state N, a delta, and state N+1. Compute the
+  difference of the two states and compare it to the printed delta. **An omission fails immediately**,
+  because what was omitted is present in the state pair and absent from the delta
+- **The command list against the transition.** Replaying only the listed commands from state N must
+  produce state N+1. **A list that is correct and incomplete fails**, because the commands it leaves
+  out did work that shows in the state
+
+**The caution is the part that decides whether either is worth building.** *If the generator produces
+the states and the delta by the same path, a check that compares them proves only that the path is
+consistent with itself.* **The derivation must come from somewhere the printer does not** - the
+model's own comparison of two states rather than the reporting code - or the check is decoration.
+**That is the shape that has failed here twice this week**, and it is why this is a note about where
+the second opinion comes from rather than a request for an assertion.
+
+**This is `P-211` at turn granularity, and machine-checkable.** *The first three artifacts are enough
+to derive the fourth by hand* is the same claim over a whole scenario, checked by a person once. This
+is the same claim over one turn, checked every run.
+
+**Not a blocker.** Build `S-38`'s turn report as specified; this says what to assert about it, and it
+is cheaper to build the report with the second derivation in mind than to retrofit one. **If you
+judge either check cannot get an independent derivation, say so and build neither** - a check that
+compares a path to itself is worse than none, because it reports green.
+
+
 ### S-38 - Move the reports out of the root, index them, and make the turns a transformation
 
 **to** code - **status** open - **raised** 2026-09-05 - **source** Sean deciding `P-246`
