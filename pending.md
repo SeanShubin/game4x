@@ -11,6 +11,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-264** - The main scenario is a typical game, and unusual mechanics go elsewhere · `docs/notes/proposals.md`
 - **P-265** - `P-260` dropped its own answer, and left a contradiction where it landed · `docs/notes/proposals.md`
 - **P-267** - What of the process lives where you do not read it · `docs/notes/proposals.md`
+- **P-268** - The prompts that start the instances · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

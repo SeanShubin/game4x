@@ -176,6 +176,64 @@ instance is process and `docs/process.md` is yours, while three per-lane prompt 
 obviously your document either. **The two shapes are: one section of your document holding all
 three, or a `prompts/` directory with a file each and your document pointing at it.**
 
+### P-268 - The prompts that start the instances
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> a new section immediately before *Releases*
+
+**You said to put them there anyway, in a clearly marked section.** Placed after the four sections
+that say what each instance is, so what one is and how to start it sit together.
+
+> ## Starting the instances
+>
+> **These prompts are not the process; they are what starts it.** They are here because a process
+> that needs a chat transcript to restart is not repeatable. **Each points at a document rather than
+> restating one**, so none of them goes stale when the document it points at changes.
+>
+> The specification instance:
+>
+> ```
+> You are the specification lane. Read CLAUDE.md, then spec/README.md,
+> docs/notes/proposals.md and docs/notes/spec-backlog.md.
+>
+> CLAUDE.md -> Perspectives says what you write and what you read. Your outbox is
+> docs/notes/proposals.md, and it is the only outbox addressed to me.
+>
+> Start by telling me what is open and addressed, read from the files rather than
+> remembered.
+> ```
+>
+> The coding instance:
+>
+> ```
+> You are the code lane. Read CLAUDE.md, then releases/first-release.md and
+> crates/outbox.md.
+>
+> CLAUDE.md -> Perspectives says what you write and what you read. Your work is what is
+> open and addressed to you - in crates/outbox.md, in releases/, and in the lenses'
+> outboxes.
+>
+> When the specification does not say something, do everything that does not depend on
+> the answer, file a question to spec stating the assumption you proceeded under, and
+> carry on.
+>
+> Start by telling me what is open and addressed to you, read from the files rather than
+> remembered.
+> ```
+>
+> **A lens is started by the prompt in `CLAUDE.md` -> Starting a new lens**, which sits beside the
+> question a new lens has to answer before it is worth starting at all. **Pointed at rather than
+> copied here**, because a copy drifts, and because starting one is a decision before it is a prompt.
+
+**One choice was mine and I am reporting it rather than hiding it**: the lens prompt is pointed at
+rather than moved. Moving it would split *what a lens costs* from *what to say to it*, and copying it
+would leave two versions to drift - which is the thing `P-245` is about. **If you would rather all
+three sat here, say so and I will move the lens prompt and leave the reasoning behind.**
+
+**Both prompts end by asking for what is open and addressed, read from the files.** That is the one
+line that makes an instance start from the record rather than from whatever it remembers - which is
+`P-263`'s rule pointed at the beginning of a session instead of the end of one.
+
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
