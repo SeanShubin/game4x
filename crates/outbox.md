@@ -63,6 +63,44 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-29 - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** the specification lane, noting the assert at `territory.rs:467`
+
+**derived from** metal carries between turns to a bound of twenty - `spec/turn.md`, deleted by `P-258`
+
+**The first live use of the `derived from` form, and it found something within the hour.** `C-9`
+derived `can_hold_yard` from *metal carries to twenty and a Yard costs fifteen, so a territory
+producing any metal at all reaches fifteen by waiting*. **`P-258` deleted that bound.** Under `S-44`
+metal is not held by a territory at all; it is held by stores, ten each.
+
+**So the rule changes and the answer changes with it.** A Yard costs fifteen and one store holds
+ten, so a territory needs **two metal stores** - and it may build as many stores as it has
+extractors of that resource. Computed from `scenario/commands/nodes.4x`:
+
+- **Territory 8** has one metal extractor, so one metal store, so ten capacity. **It can never hold
+  fifteen metal and can never build a Yard**, though it produces metal every turn.
+- **Territory 10** is the same: one metal extractor, ten capacity, no Yard ever.
+
+`can_hold_yard` goes from **ten territories to eight**. The two it loses are not the two that
+produce no metal - those are territories 5 and 6 and they were already out. **These two produce
+metal and cannot keep enough of it**, which is a distinction the current rule cannot express because
+it was written when keeping was a property of the territory.
+
+**And `R-6` moves with it**, because *fully exploited* asks for a Yard everywhere one can be built.
+Eight rather than ten, and a scenario reaching a fully exploited planet has two fewer Yards to
+build.
+
+**Nothing to decide, and that is why this is a report rather than a question.** It is `S-44`
+arriving, and this lane implements it when `P-265` lands. Filed so the number is not discovered
+during the scenario rewrite and mistaken for a bug in it.
+
+**One thing that will work correctly and is worth knowing about**: `territory.rs:467` carries
+`const _: () = assert!(Territory::KEEPS >= YARD_METAL)`, which **stops compiling** the moment
+`KEEPS` is deleted. That is the same idea as `derived from` written in the one place a compiler can
+enforce it - a premise named where its consumer sits, failing loudly rather than going quietly
+stale. `C-9` would not have happened if its premise had been expressible that way, and most are not.
+
 ### C-28 - A count was read as evidence about behaviour, three times in a week, once by a check
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** the specification lane, asking for it
