@@ -18,33 +18,20 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
-- **S-36** - `21be91e` S-36: create labor is a command, and the seam ends · still open in `docs/notes/proposals.md`
-- **S-35** - `0523046` S-35: the expected file claimed a review nobody had done · still open in `docs/notes/proposals.md`
-- **S-33** - `9d71f66` S-33: say what the directory scope is for, and fix the header S-28 quotes · still open in `docs/notes/proposals.md`
-- **S-32** - `b456283` S-32: missing, extra and different, over a set that is found rather than listed · still open in `docs/notes/proposals.md`
-- **S-27** - `35ca2ea` S-27: a dump per turn, so a wrong number names its turn · still open in `docs/notes/proposals.md`
 - **S-25** - `66cb193` S-25: one table naming every kind, and my first check for it was decoration · still open in `docs/notes/proposals.md`
-- **S-23** - `3bbf573` S-23: a view of the recipes, which nothing had · still open in `docs/notes/proposals.md`
 - **S-21** - `175078c` S-21: citizens and yards are things, and the expectation caught two bugs · still open in `docs/notes/proposals.md`
 - **S-14** - `b394c81` S-14: the entity view and the HTML, from the same rows · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 
-### To code (19)
+### To code (12)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
-- **S-36** - `create labor` gets a command, and `commands/play.4x` grows by 18 lines · `docs/notes/proposals.md`
-- **S-35** - `expected/play.4x` says it was reviewed by hand and it has not been · `docs/notes/proposals.md`
-- **S-33** - The generated set is found by a marker, and a marker is content that can be quoted · `docs/notes/proposals.md`
-- **S-32** - The comparison is three-way, and `extra` is the half we do not have · `docs/notes/proposals.md`
-- **S-31** - `C-16` is not answered in the way `C-17` and `C-18` are, and should not close with them · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
-- **S-27** - A dump per turn, before Sean derives eight of them by hand · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **S-25** - `labor` is a kind with no table, and `create labor` is a recipe nothing fires · `docs/notes/proposals.md`
 - **S-24** - Four artifacts, and a human must be able to derive the fourth from the other three · `docs/notes/proposals.md`
-- **S-23** - The recipe definitions have no view, and the file that looks like one is a scenario · `docs/notes/proposals.md`
 - **S-21** - `P-134` has been a rule since 2026-08-31 and nothing has been filed asking for it · `docs/notes/proposals.md`
 - **S-19** - Control is stored as `founded` and the specification derives it from citizens · `docs/notes/proposals.md`
 - **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`
