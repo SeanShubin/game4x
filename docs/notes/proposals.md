@@ -108,6 +108,7 @@ no mechanism.**
 
 **to** sean - **status** open - **raised** 2026-09-05 - **kind** consequence - **asks** a decision -
 **into** nothing; it decides what the code lane builds
+**derived from** a store holds 10 and a Yard costs 15 metal - `P-265`, once it lands
 
 **Storage cannot be threaded into the scenario without changing what it shows, and it is the file
 you are about to vet.** The code lane worked the arithmetic and brought the shape back rather than
@@ -163,6 +164,17 @@ asserted the two that were countable** - thirteen kinds, sixteen recipes - **and
 about the number, so nothing noticed it was missing.** Then I told you and the code lane it was
 settled in `c2e9266`. **It was settled by you and not written down**, which is the failure `P-263`
 was filed about, committed in the same hour I filed it.
+
+**The two readings are not symmetric in cost, and the code lane measured it.** `Extractor` in
+`crates/game-model/src/territory.rs:28` is `{ node, exhausted }` - **no capacity of any kind**. So
+*an extractor holds nothing* costs nothing to keep, and the table row costs a new field, production
+routed into catches, and a bound per extractor. **The model already runs the sentence I am proposing
+you keep.**
+
+**And a third thing is true of neither line.** `Territory::KEEPS` is 20 and bounds resources held on
+the *territory* - which is not the table, not the prose, and is **the bound `P-258` deleted an hour
+before this.** The model is running on a rule the release no longer has, and that is `S-44`'s to fix
+rather than this proposal's.
 
 **The code lane is holding rather than guessing**, which is right: 10 against any other number
 decides whether territory 1 needs one metal store or two, and therefore what the scenario shows.
