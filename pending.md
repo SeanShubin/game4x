@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-267** - What of the process lives where you do not read it · `docs/notes/proposals.md`
+- **P-267** - Four rules about you, kept where you do not read them · `docs/notes/proposals.md`
 - **P-268** - The prompts that start the instances · `docs/notes/proposals.md`
 - **P-269** - The rest of what names this project in your document · `docs/notes/proposals.md`
 
