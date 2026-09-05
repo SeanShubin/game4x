@@ -63,112 +63,64 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-272 - The scenario's territories do not match the release's biome table
+### P-272 - A biome gives a territory its numbers, said in the specification
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
-- **into** `releases/first-release.md` -> Biomes, or `scenario/commands/nodes.4x`
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind**
+contradiction - **shape** text - **asks** approval - **into** `spec/planet.md` -> after *for each
+resource, a territory has total capacity*
 
-**Found by checking my own arithmetic in `P-270`, which was wrong.** I told you grassland yields 3
-metal a turn and a Yard therefore needs two stores. **I read that off the Biomes table. The scenario
-does not use those numbers.**
+**Your choice A, and it needed a rewrite before it could be promoted** - the version you read offered
+two choices and carried no words, which under `P-266` is a proposal nothing can promote. **This is
+that same choice written down.**
 
-**Five territories are grassland and no two of them are alike, and none is the table's grassland.**
-Measured from `scenario/commands/biomes.4x` and `nodes.4x`:
+> - A territory's biome gives it its total capacity and density for each resource. Two territories
+>   with the same biome have the same numbers
 
-| Territory                  | Food    | Metal   | Energy  |
-| -------------------------- | ------- | ------- | ------- |
-| Grassland, per the release | `5 x 6` | `1 x 3` | `1 x 3` |
-| 1                          | `3 x 4` | `3 x 4` | `3 x 4` |
-| 2                          | `2 x 6` | `2 x 4` | `2 x 4` |
-| 3                          | `6 x 2` | `2 x 4` | `2 x 4` |
-| 8                          | `6 x 6` | `1 x 2` | `1 x 2` |
-| 11                         | `5 x 6` | `5 x 6` | `5 x 6` |
+**Why `spec/planet.md` and not the release.** The specification states both facts and never links
+them: *for each resource, a territory has total capacity for some number of extractors, and a density
+that each of them yields*, and separately *each territory has a biome*. **The link exists only as the
+heading of a release table** - *What each biome gives a territory*, one occurrence, measured - **and a
+heading is not where a rule lives.** That is why the data could drift from the table for as long as
+it did without contradicting anything the specification says.
 
-**It is systematic rather than one bad row.** The mountains do the same: the table says
-`1 x 3 / 5 x 7 / 2 x 3`, territory 4 is `1 x 2 / 4 x 5 / 4 x 5` and territory 5 is
-`3 x 1 / 8 x 8 / 8 x 8`.
+**What it makes wrong, immediately and deliberately.** `scenario/commands/nodes.4x` sets five
+grassland territories to five different pairs of numbers, none of them the table's. **Every one of
+them becomes a defect the moment this lands**, and it is work for the code lane rather than for you -
+filed the moment you promote it.
 
-**And the data file says it took them from that table** - `nodes.4x`, one occurrence, measured:
-*taken from the table in `releases/first-release.md`*, wrapped across two lines. **The comment is what makes this a defect
-rather than a design.** If the numbers were deliberately per-territory, nothing would claim they came
-from a table they do not match.
+### P-274 - The rebalanced biome table
 
-**What it cost, immediately.** Territory 1 makes **12 metal a turn, not 3**. So under `P-270` a
-single metal store plus one turn's production is 22 against a Yard's 15 - **one store, where I told
-you two.** Energy is 12 a turn against an Ark's 12, so **it may need no energy store at all**, which
-is a far larger claim than the one I made and I am not making it here: whether the turns can be
-scheduled that way is the code lane's to answer.
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
+- **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Biomes
 
-**Choice A - the biome table is the truth and the data is wrong.** Every grassland territory becomes
-`5 x 6 / 1 x 3 / 1 x 3`. **This changes the scenario substantially** - territory 1 goes from 12 metal
-a turn to 3.
+**The same table you read, now as rows to promote rather than a choice to make.** Three rows change
+and three do not.
 
-**Choice B - a biome is a floor or a flavour and a territory carries its own numbers.** Then the
-table needs to say so and the comment in `nodes.4x` is what is wrong.
+> | Biome     | Food  | Metal | Energy | Force of nature |
+> | --------- | ----- | ----- | ------ | --------------- |
+> | Ocean     | -     | -     | -      | -               |
+> | Ice       | 1 x 2 | 3 x 5 | 1 x 2  | 1               |
+> | Desert    | 2 x 4 | 3 x 4 | 5 x 6  | 1               |
+> | Grassland | 5 x 6 | 2 x 3 | 1 x 3  | 1               |
+> | Jungle    | 6 x 6 | 1 x 2 | 1 x 2  | 2               |
+> | Mountain  | 1 x 3 | 5 x 7 | 2 x 3  | 1               |
 
-**No recommendation.** Whether a biome fixes a territory's yields or merely characterises it is a
-design question you have not been asked, and the answer changes the shape of the planet rather than
-the wording of a document.
+**Jungle food `4 x 6` becomes `6 x 6`** - 36, the most on the planet, against grassland's 30. **That
+is what its nature of 2 buys**, and `P-275` is what makes the danger real: two pioneers take it where
+one takes a grassland.
 
-### P-274 - Rebalancing the biomes, and the two that are dominated
+**Ice metal `2 x 3` becomes `3 x 5`** - 15, second to mountain. Ice led nothing and was strictly below
+desert on all three at the same nature; now nothing dominates it.
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
-**into** `releases/first-release.md` -> Biomes
+**Grassland metal `1 x 3` becomes `2 x 3`, and this one is not about balance.** One metal extractor is
+one metal store is ten capacity, and a Yard costs fifteen. **Territory 1 is grassland and is the
+landing site**, so without this the main scenario could never build a Yard - `C-29` arriving at the
+one territory that cannot afford it.
 
-**You are right that the jungle gives nothing for its danger, and it is worse than that: it is
-strictly worse than grassland on all three resources *and* harder to take.** Totals are extractors
-times density, computed from the table:
-
-| Biome     | Food   | Metal | Energy | Nature |
-| --------- | ------ | ----- | ------ | ------ |
-| Ice       | 2      | 6     | 2      | 1      |
-| Desert    | 8      | 12    | 30     | 1      |
-| Grassland | 30     | 3     | 3      | 1      |
-| Jungle    | **24** | **2** | **2**  | **2**  |
-| Mountain  | 3      | 35    | 6      | 1      |
-
-**Ice is dominated too, by desert, and pays nothing for it** - 2 against 8, 6 against 12, 2 against
-30, at the same nature. **Two of five biomes are things a player has no reason to want.**
-
-**Three principles, and it is these you are deciding rather than the numbers.**
-
-1. **Every biome leads at something.** A biome nobody has a reason to take is a territory that only
-   matters for its position
-2. **Danger is paid for.** The jungle's nature of 2 buys the best food on the planet
-3. **The table is the truth**, and a territory takes its numbers from its biome - which is `P-272`'s
-   choice A, and this proposal assumes it
-
-**A table that satisfies them, changing two rows.**
-
-| Biome     | Food      | Metal     | Energy | Force of nature |
-| --------- | --------- | --------- | ------ | --------------- |
-| Ocean     | -         | -         | -      | -               |
-| Ice       | 1 x 2     | **3 x 5** | 1 x 2  | 1               |
-| Desert    | 2 x 4     | 3 x 4     | 5 x 6  | 1               |
-| Grassland | 5 x 6     | **2 x 3** | 1 x 3  | 1               |
-| Jungle    | **6 x 6** | 1 x 2     | 1 x 2  | 2               |
-| Mountain  | 1 x 3     | 5 x 7     | 2 x 3  | 1               |
-
-- **Jungle 4 x 6 becomes 6 x 6** - 36 food, the most on the planet, against grassland's 30. That is
-  what the danger buys
-- **Ice 2 x 3 becomes 3 x 5** - 15 metal, second to mountain and ahead of desert. Ice leads nothing,
-  but it is no longer dominated by anything
-
-**And a third row has to move for a reason that is not balance.** **Grassland metal 1 x 3 becomes
-2 x 3**, because **one metal extractor means one metal store means ten capacity, and a Yard costs
-fifteen.** Territory 1 is grassland and is the landing site. **Under the table as written the main
-scenario could never build a Yard**, which is `C-29`'s failure arriving at the one territory that
-cannot afford it.
-
-**What this costs, and it is not small.** Territory 1 goes from 12 metal a turn to 6, and from 12
-energy to 3. **The scenario gets materially longer** - an Ark's 12 energy is four turns of production
-rather than one. If that is too slow, the lever is desert and mountain energy rather than grassland,
-because grassland leading food is what makes it the starting biome.
-
-**Answer this after `P-275`, which it depends on and which you have now settled.** `C-24` said
-nothing in the release can take a jungle. **Under `P-275` two pioneers make 4 against a jungle's 2**,
-so the jungle is dangerous rather than closed - **it costs two units where a grassland costs one**,
-and that is the price in force this rebalance is paying for.
+**What it costs, unchanged from what you read.** Under `P-272` territory 1 goes from 12 metal a turn
+to 6 and from 12 energy to 3, so **the scenario gets materially longer** - an Ark's 12 energy is four
+turns rather than one. If that is too slow the lever is desert and mountain energy, because grassland
+leading food is what makes it the starting biome.
 
 ## Addressed to other perspectives
 
