@@ -169,7 +169,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
             densities.sort();
             densities.dedup();
             let built = place
-                .extractors
+                .extractors()
                 .iter()
                 .filter(|e| place.nodes[e.node].resource == resource)
                 .count();
@@ -191,11 +191,11 @@ pub fn tables(game: &Game) -> Vec<Table> {
             ]);
         }
 
-        if let Some(held) = &place.garrison {
+        if let Some(held) = &place.garrison() {
             garrison.push(vec![place.id.0.to_string(), held.force.to_string()]);
         }
 
-        for built in &place.extractors {
+        for built in &place.extractors() {
             extractor.push(vec![
                 place.id.0.to_string(),
                 built.node.to_string(),
@@ -213,8 +213,8 @@ pub fn tables(game: &Game) -> Vec<Table> {
 
         for kind in StructureKind::ALL {
             let count = match kind {
-                StructureKind::Extractor => place.extractors.len() as u32,
-                StructureKind::Garrison => place.garrison.iter().count() as u32,
+                StructureKind::Extractor => place.extractors().len() as u32,
+                StructureKind::Garrison => place.garrison().iter().count() as u32,
                 StructureKind::Yard => place.yards(),
             };
             structure.push(vec![
@@ -275,8 +275,8 @@ pub fn tables(game: &Game) -> Vec<Table> {
         kinds.push(vec![
             kind.name().to_string(),
             total(&|t| match kind {
-                StructureKind::Extractor => t.extractors.len() as u32,
-                StructureKind::Garrison => t.garrison.iter().count() as u32,
+                StructureKind::Extractor => t.extractors().len() as u32,
+                StructureKind::Garrison => t.garrison().iter().count() as u32,
                 StructureKind::Yard => t.yards(),
             })
             .to_string(),

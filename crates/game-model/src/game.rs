@@ -2,7 +2,7 @@
 
 use crate::identity::{Resource, StructureKind, TerritoryId, UnitId, UnitKind};
 use crate::rejection::Rejection;
-use crate::territory::{Extractor, Garrison, Node, Territory, population_after};
+use crate::territory::{Garrison, Node, Territory, population_after};
 use crate::thing::Kind;
 use crate::transition::Transition;
 use crate::unit::{Location, Unit};
@@ -231,7 +231,7 @@ impl Game {
             .into_iter()
             .map(|unit| unit.force())
             .collect();
-        let coordinated = territory.garrison.is_some() || units.iter().any(|force| *force > 0);
+        let coordinated = territory.garrison().is_some() || units.iter().any(|force| *force > 0);
         if coordinated {
             territory.held_force() + units.iter().sum::<u32>()
         } else {
@@ -368,7 +368,9 @@ impl Game {
             .iter()
             .filter(|place| place.biome.is_claimable())
             .all(|place| {
-                place.founded() && place.yards() > 0 && place.extractors.len() == place.nodes.len()
+                place.founded()
+                    && place.yards() > 0
+                    && place.extractors().len() == place.nodes.len()
             })
     }
 
@@ -448,14 +450,11 @@ impl Game {
         let place = &mut self.territories[territory.index()];
         // `spec/unit-types.md`: the structure a founding unit becomes has one less force
         // than the unit. `spec/control.md`: founding is a garrison's only source.
-        place.garrison = Some(Garrison::from_founding_unit(force));
+        place.set_garrison(Some(Garrison::from_founding_unit(force)));
         place.put(Kind::Citizen, citizens);
         for resource in leaves {
             if let Some(node) = place.best_free_node(*resource) {
-                place.extractors.push(Extractor {
-                    node,
-                    exhausted: false,
-                });
+                place.add_extractor(node);
             }
         }
         Ok(())
@@ -508,10 +507,7 @@ impl Game {
                 )?;
                 self.spend_labor(territory, cost::EXTRACTOR_LABOR)?;
                 self.spend(territory, Resource::Metal, cost::EXTRACTOR_METAL)?;
-                self.territory_mut(territory)?.extractors.push(Extractor {
-                    node,
-                    exhausted: false,
-                });
+                self.territory_mut(territory)?.add_extractor(node);
                 Ok(())
             }
         }
@@ -575,14 +571,14 @@ impl Game {
         }
         match structure {
             StructureKind::Garrison => {
-                if self.territory(territory)?.garrison.is_none() {
+                if self.territory(territory)?.garrison().is_none() {
                     return Err(Rejection::NothingToWorkAt {
                         territory,
                         structure,
                     });
                 }
                 self.spend_labor(territory, count)?;
-                if let Some(garrison) = &mut self.territory_mut(territory)?.garrison {
+                if let Some(garrison) = &mut self.territory_mut(territory)?.garrison() {
                     garrison.manned += count;
                 }
                 Ok(())
@@ -593,7 +589,7 @@ impl Game {
                     .territory(territory)?
                     .extractors_for(resource)
                     .into_iter()
-                    .filter(|at| !self.territories[territory.index()].extractors[*at].exhausted)
+                    .filter(|at| !self.territories[territory.index()].extractors()[*at].exhausted)
                     .collect();
                 if ready.is_empty() {
                     return Err(Rejection::NothingToWorkAt {
@@ -616,14 +612,14 @@ impl Game {
                     .into_iter()
                     .map(|at| {
                         let place = &self.territories[territory.index()];
-                        (place.nodes[place.extractors[at].node].density, at)
+                        (place.nodes[place.extractors()[at].node].density, at)
                     })
                     .collect();
                 by_density.sort_by_key(|(density, at)| (std::cmp::Reverse(*density), *at));
 
                 let mut produced = 0;
                 for (density, at) in by_density.into_iter().take(count as usize) {
-                    self.territories[territory.index()].extractors[at].exhausted = true;
+                    self.territories[territory.index()].exhaust_extractor(at);
                     produced += density;
                 }
                 self.territory_mut(territory)?.add(resource, produced);
@@ -843,12 +839,15 @@ mod tests {
             // rule removes.
             place.put(Kind::Citizen, 1);
             place.set_count(Kind::Yard, 1);
-            place.extractors = (0..place.nodes.len())
-                .map(|node| Extractor {
-                    node,
-                    exhausted: false,
-                })
-                .collect();
+            // **Replaced, not appended.** This was an assignment to `extractors` and became
+            // a loop that adds - so a territory the landing had already given two kept them
+            // and ended with eleven of nine nodes. An assignment says *these are the
+            // extractors now* and a push says *one more*, and only one of those is what
+            // finishing a planet by hand means.
+            place.held.retain(|thing| thing.kind != Kind::Extractor);
+            for node in 0..place.nodes.len() {
+                place.add_extractor(node);
+            }
         }
         assert!(game.is_fully_exploited());
         assert!(!game.has_won(), "nobody has launched anything yet");
@@ -902,12 +901,15 @@ mod tests {
             // rule removes.
             place.put(Kind::Citizen, 1);
             place.set_count(Kind::Yard, 1);
-            place.extractors = (0..place.nodes.len())
-                .map(|node| Extractor {
-                    node,
-                    exhausted: false,
-                })
-                .collect();
+            // **Replaced, not appended.** This was an assignment to `extractors` and became
+            // a loop that adds - so a territory the landing had already given two kept them
+            // and ended with eleven of nine nodes. An assignment says *these are the
+            // extractors now* and a push says *one more*, and only one of those is what
+            // finishing a planet by hand means.
+            place.held.retain(|thing| thing.kind != Kind::Extractor);
+            for node in 0..place.nodes.len() {
+                place.add_extractor(node);
+            }
         }
         // A finished planet nobody has launched from is not a win.
         assert!(game.is_fully_exploited());
@@ -940,17 +942,22 @@ mod tests {
             // rule removes.
             place.put(Kind::Citizen, 1);
             place.set_count(Kind::Yard, 1);
-            place.extractors = (0..place.nodes.len())
-                .map(|node| Extractor {
-                    node,
-                    exhausted: false,
-                })
-                .collect();
+            // **Replaced, not appended.** This was an assignment to `extractors` and became
+            // a loop that adds - so a territory the landing had already given two kept them
+            // and ended with eleven of nine nodes. An assignment says *these are the
+            // extractors now* and a push says *one more*, and only one of those is what
+            // finishing a planet by hand means.
+            place.held.retain(|thing| thing.kind != Kind::Extractor);
+            for node in 0..place.nodes.len() {
+                place.add_extractor(node);
+            }
         }
         // Make one of them water and take everything off it.
         game.territories[1].biome = Biome::Ocean;
         game.territories[1].set_count(Kind::Yard, 0);
-        game.territories[1].extractors.clear();
+        game.territories[1]
+            .held
+            .retain(|thing| thing.kind != Kind::Extractor);
         assert!(
             game.is_fully_exploited(),
             "an unclaimable territory is not an unfinished one"
@@ -1153,7 +1160,7 @@ mod tests {
         let game = founded();
         let place = game.territory(TerritoryId(1)).unwrap();
         assert!(
-            place.garrison.is_some(),
+            place.garrison().is_some(),
             "a structure that holds the ground"
         );
         assert_eq!(place.citizens(), 2);
@@ -1161,7 +1168,7 @@ mod tests {
         // One per resource a landing leaves, which is food and metal. The rule is *for
         // each resource it leaves*, not *two* - the ground here has room for energy too,
         // and a landing does not open it.
-        assert_eq!(place.extractors.len(), 2);
+        assert_eq!(place.extractors().len(), 2);
         for resource in [Resource::Food, Resource::Metal] {
             assert_eq!(
                 place.extractors_for(resource).len(),
@@ -1443,7 +1450,7 @@ mod tests {
         // **A citizen is what founds it now** - `S-19`. The garrison came with a flag
         // beside it before, and the flag was the thing that could be set without anybody
         // being there.
-        game.territories[1].garrison = Some(Garrison::from_founding_unit(2));
+        game.territories[1].set_garrison(Some(Garrison::from_founding_unit(2)));
         game.territories[1].put(Kind::Citizen, 1);
         let id = UnitId(game.units.len() as u32 + 1);
         let mut pioneer = Unit::new(id, UnitKind::Pioneer);
@@ -1484,9 +1491,9 @@ mod tests {
             .unwrap();
         let two = moved.territory(TerritoryId(2)).unwrap();
         assert!(two.founded());
-        assert!(two.garrison.is_some());
+        assert!(two.garrison().is_some());
         assert_eq!(two.citizens(), 2);
-        assert_eq!(two.extractors.len(), 2, "a farm and a mine");
+        assert_eq!(two.extractors().len(), 2, "a farm and a mine");
         assert!(
             !moved.units.iter().any(|u| u.kind == UnitKind::Pioneer),
             "the pioneer became the territory"

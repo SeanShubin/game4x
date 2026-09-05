@@ -574,7 +574,7 @@ fn taking_and_holding_a_territory_follow_the_force_rules() {
     assert!(session.game.units.is_empty(), "founding consumes the ark");
 
     let one = session.game.territory(TerritoryId(1)).unwrap();
-    assert_eq!(one.garrison.unwrap().force, 1, "one less than the unit");
+    assert_eq!(one.garrison().unwrap().force, 1, "one less than the unit");
     assert_eq!(session.game.force_in(TerritoryId(1)), 1);
     assert_eq!(one.force_of_nature, 1);
     assert!(one.founded(), "equal force is enough to hold");

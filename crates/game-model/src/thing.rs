@@ -114,10 +114,15 @@ impl Kind {
 ///
 /// # Only what something reads
 ///
-/// **`Q-45`.** This carried six variants and five of them were never set and never read -
-/// `Resource`, `Works`, `Force`, `Multiplier` and `Manned`. The rules decide by kind, and
-/// `work` reached `garrison.manned` as a named field while `Trait::Manned` sat unused in the
-/// map beside it.
+/// **`Q-45`, and the returning half of it.** These five were once here unread - the rules
+/// decided by kind, and `work` reached `garrison.manned` as a named field while
+/// `Trait::Manned` sat unused in the map beside it. They were deleted, because *going to be
+/// read* is not something a compiler or a test can tell from *dead*, and an unread
+/// representation cannot diverge detectably.
+///
+/// **They are back in the commit that makes a rule read them**, which is what deleting them
+/// was for: a garrison and an extractor are things now, and these are what distinguish
+/// them. Nothing here is written down against a future.
 ///
 /// The quality lens named why that is worse than ordinary duplication, and the argument is
 /// the one that decided this: **every other two-source case in this repository had both
@@ -133,11 +138,24 @@ impl Kind {
 /// `refresh` are, it is the release's `ready` trait, and `P-235` wants it able to become a
 /// quantity - which it is.
 ///
-/// **And the migration is half done, which is worth saying rather than leaving to be
-/// noticed.** `held` is things; `garrison` and `extractors` are still typed structs with
-/// named fields. That is not a design, it is a state of the work.
+/// The migration is finished: `garrison` and `extractors` were the last two typed structs
+/// with named fields, and a territory now holds only things.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Trait {
+    /// Which of a territory's nodes an extractor works.
+    Works,
+    /// Which resource an extractor is built for.
+    ///
+    /// `P-234` collapsed three extractor kinds back into one with this trait, which is what
+    /// the command language always said - `build extractor 1 food` treats the resource as a
+    /// parameter.
+    Resource,
+    /// Force of its own.
+    Force,
+    /// What a citizen working here produces in force.
+    Multiplier,
+    /// Citizens working here this turn.
+    Manned,
     /// Ready, as a number. Absent means ready, and zero means not.
     ///
     /// **`P-233` renamed the trait and `P-235` says why it is a number.** The release used

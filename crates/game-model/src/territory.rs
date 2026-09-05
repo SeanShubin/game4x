@@ -6,7 +6,7 @@
 
 use crate::Biome;
 use crate::identity::{Resource, TerritoryId};
-use crate::thing::{Kind, Thing};
+use crate::thing::{Kind, Thing, Trait};
 
 /// What one citizen is worth in violence. `releases/first-release.md`: Citizen, force 1.
 pub const CITIZEN_FORCE: u32 = 1;
@@ -77,8 +77,6 @@ pub struct Territory {
     /// Held as one `Thing` per unit. Twelve food is twelve things, because *how many of
     /// each* is a fact the state is read for rather than a compression of it.
     pub held: Vec<Thing>,
-    pub garrison: Option<Garrison>,
-    pub extractors: Vec<Extractor>,
 }
 
 impl Territory {
@@ -94,8 +92,6 @@ impl Territory {
             force_of_nature: 0,
 
             held: Vec::new(),
-            garrison: None,
-            extractors: Vec::new(),
         }
     }
 
@@ -156,6 +152,83 @@ impl Territory {
             if over > 0 {
                 self.remove(kind, over);
             }
+        }
+    }
+
+    /// The garrison holding this ground, if there is one.
+    ///
+    /// **A thing, since `S-21` finished.** It was `Option<Garrison>` with three named
+    /// fields, so a garrison was the one structure the state knew by name - which is what
+    /// `spec/invariants.md` forbids: *nothing in the state is special to a kind*.
+    pub fn garrison(&self) -> Option<Garrison> {
+        self.held
+            .iter()
+            .find(|thing| thing.kind == Kind::Garrison)
+            .map(|thing| Garrison {
+                force: thing.trait_of(Trait::Force).unwrap_or(0),
+                multiplier: thing.trait_of(Trait::Multiplier).unwrap_or(1),
+                manned: thing.trait_of(Trait::Manned).unwrap_or(0),
+            })
+    }
+
+    pub fn set_garrison(&mut self, garrison: Option<Garrison>) {
+        self.held.retain(|thing| thing.kind != Kind::Garrison);
+        if let Some(garrison) = garrison {
+            self.held.push(
+                Thing::of(Kind::Garrison)
+                    .with(Trait::Force, garrison.force)
+                    .with(Trait::Multiplier, garrison.multiplier)
+                    .with(Trait::Manned, garrison.manned),
+            );
+        }
+    }
+
+    /// Set how many citizens are manning the garrison this turn.
+    ///
+    /// **`garrison()` returns a copy, so mutating what it hands back changes nothing.**
+    /// That is the cost of the accessor and it needs an operation rather than a field: the
+    /// test for this wrote `garrison().as_mut().unwrap().manned = 3` and silently mutated a
+    /// temporary. Production never did - it went through `set_garrison` - but nothing would
+    /// have said so if it had.
+    pub fn man_garrison(&mut self, citizens: u32) {
+        for thing in &mut self.held {
+            if thing.kind == Kind::Garrison {
+                thing.set(Trait::Manned, citizens);
+            }
+        }
+    }
+
+    /// Every extractor here, in the order they were built.
+    pub fn extractors(&self) -> Vec<Extractor> {
+        self.held
+            .iter()
+            .filter(|thing| thing.kind == Kind::Extractor)
+            .map(|thing| Extractor {
+                node: thing.trait_of(Trait::Works).unwrap_or(0) as usize,
+                exhausted: !thing.is_ready(),
+            })
+            .collect()
+    }
+
+    /// Build one, working that node.
+    pub fn add_extractor(&mut self, node: usize) {
+        let resource = self.nodes[node].resource;
+        self.held.push(
+            Thing::of(Kind::Extractor)
+                .with(Trait::Works, node as u32)
+                .with(Trait::Resource, resource.index() as u32),
+        );
+    }
+
+    /// Spend the readiness of the extractor at that position.
+    pub fn exhaust_extractor(&mut self, at: usize) {
+        if let Some(thing) = self
+            .held
+            .iter_mut()
+            .filter(|thing| thing.kind == Kind::Extractor)
+            .nth(at)
+        {
+            thing.set(Trait::Ready, 0);
         }
     }
 
@@ -279,7 +352,7 @@ impl Territory {
     }
 
     pub fn extractors_for(&self, resource: Resource) -> Vec<usize> {
-        self.extractors
+        self.extractors()
             .iter()
             .enumerate()
             .filter(|(_, extractor)| self.nodes[extractor.node].resource == resource)
@@ -293,7 +366,7 @@ impl Territory {
     /// best one left, which is what a player would mean. Ties break on node position, so
     /// the choice never depends on iteration order.
     pub fn best_free_node(&self, resource: Resource) -> Option<usize> {
-        let taken: Vec<usize> = self.extractors.iter().map(|e| e.node).collect();
+        let taken: Vec<usize> = self.extractors().iter().map(|e| e.node).collect();
         self.nodes_of(resource)
             .into_iter()
             .filter(|(at, _)| !taken.contains(at))
@@ -308,7 +381,7 @@ impl Territory {
     /// every manned citizen's contribution add up; without one, the citizens present the
     /// highest among them rather than the total.
     pub fn held_force(&self) -> u32 {
-        match self.garrison {
+        match self.garrison() {
             Some(garrison) => garrison.force + garrison.manned * garrison.multiplier,
             // Citizens are capable of violence but not of coordination, so what they
             // present is the highest among them rather than the total - and a citizen is
@@ -326,12 +399,12 @@ impl Territory {
         for thing in &mut self.held {
             thing.refresh();
         }
-        for extractor in &mut self.extractors {
-            extractor.exhausted = false;
-        }
-        if let Some(garrison) = &mut self.garrison {
-            garrison.manned = 0;
-        }
+        // **The two loops that used to follow this were mutating copies.** `extractors()`
+        // and `garrison()` hand back owned values now, so `extractor.exhausted = false` and
+        // `garrison.manned = 0` changed a temporary and vanished. The refresh above already
+        // readies every extractor, because it names no kind; the manning needed an
+        // operation rather than a field.
+        self.man_garrison(0);
     }
 
     /// What nature does when it takes a territory back.
@@ -340,8 +413,8 @@ impl Territory {
     /// unusable. The ark is dealt with by the caller, which is the only place that knows
     /// where units are.
     pub fn lost_to_nature(&mut self) {
-        self.garrison = None;
-        self.extractors.clear();
+        self.set_garrison(None);
+        self.held.retain(|thing| thing.kind != Kind::Extractor);
         // Everything held goes, which is the one place `clear` is the right verb: nature
         // takes the population, the stores and the yards together. Naming the kinds one by
         // one would be a list to keep in step with the kinds, which is the thing this shape
@@ -431,28 +504,19 @@ mod tests {
             Some(1),
             "density 6"
         );
-        territory.extractors.push(Extractor {
-            node: 1,
-            exhausted: false,
-        });
+        territory.add_extractor(1);
         assert_eq!(
             territory.best_free_node(Resource::Food),
             Some(2),
             "density 4"
         );
-        territory.extractors.push(Extractor {
-            node: 2,
-            exhausted: false,
-        });
+        territory.add_extractor(2);
         assert_eq!(
             territory.best_free_node(Resource::Food),
             Some(0),
             "density 2"
         );
-        territory.extractors.push(Extractor {
-            node: 0,
-            exhausted: false,
-        });
+        territory.add_extractor(0);
         assert_eq!(territory.best_free_node(Resource::Food), None, "all worked");
     }
 
@@ -467,13 +531,13 @@ mod tests {
             "uncoordinated, the highest present"
         );
 
-        territory.garrison = Some(Garrison {
+        territory.set_garrison(Some(Garrison {
             force: 1,
             multiplier: 1,
             manned: 0,
-        });
+        }));
         assert_eq!(territory.held_force(), 1, "the garrison's own force");
-        territory.garrison.as_mut().unwrap().manned = 3;
+        territory.man_garrison(3);
         assert_eq!(
             territory.held_force(),
             4,
@@ -493,20 +557,21 @@ mod tests {
         let mut territory = with_nodes(&[(Resource::Food, 4)]);
         territory.set_count(Kind::Citizen, 2);
         territory.spend_labor(2);
-        territory.extractors.push(Extractor {
-            node: 0,
-            exhausted: true,
-        });
-        territory.garrison = Some(Garrison {
+        // Built, then worked - `extractors()` hands back a copy, so pushing to it changed a
+        // temporary and left the territory with none. That is what made this fail with an
+        // index out of bounds rather than with a wrong answer.
+        territory.add_extractor(0);
+        territory.exhaust_extractor(0);
+        territory.set_garrison(Some(Garrison {
             force: 1,
             multiplier: 1,
             manned: 2,
-        });
+        }));
 
         territory.make_ready();
         assert_eq!(territory.labor_available(), 2);
-        assert!(!territory.extractors[0].exhausted);
-        assert_eq!(territory.garrison.unwrap().manned, 0);
+        assert!(!territory.extractors()[0].exhausted);
+        assert_eq!(territory.garrison().unwrap().manned, 0);
     }
 
     #[test]
@@ -516,18 +581,15 @@ mod tests {
         // stored. Setting a flag beside them was the thing that could disagree with them.
         territory.set_count(Kind::Citizen, 6);
         assert!(territory.founded(), "citizens are what holding it means");
-        territory.garrison = Some(Garrison::from_founding_unit(2));
-        territory.extractors.push(Extractor {
-            node: 0,
-            exhausted: false,
-        });
+        territory.set_garrison(Some(Garrison::from_founding_unit(2)));
+        territory.add_extractor(0);
         territory.add(Resource::Metal, 10);
 
         territory.lost_to_nature();
         assert!(!territory.founded());
         assert_eq!(territory.citizens(), 0, "its entire population perishes");
-        assert!(territory.garrison.is_none());
-        assert!(territory.extractors.is_empty());
+        assert!(territory.garrison().is_none());
+        assert!(territory.extractors().is_empty());
         assert_eq!(territory.store(Resource::Metal), 0);
         assert_eq!(territory.nodes.len(), 1, "the land itself remains");
     }
