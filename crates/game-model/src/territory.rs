@@ -374,6 +374,102 @@ impl Territory {
             .map(|(at, _)| at)
     }
 
+    /// Whether this territory can ever build an extractor, from its nodes alone.
+    ///
+    /// `spec/control.md`: *a structure can be built where the territory's own permanent
+    /// facts allow it: how many it has total capacity for, their densities, its biome. Not
+    /// whether the player can afford it this turn, and not whether any particular game
+    /// happened to reach it.*
+    ///
+    /// So the question is answered from `nodes` and nothing else - not from what is
+    /// standing there, and not from how the game went.
+    ///
+    /// **Population settles at the food the territory produces.** A citizen yields one
+    /// labor and eats one food, so working the `k` densest food nodes sustains `F(k)`
+    /// citizens while costing `k` hands, leaving `F(k) - k` spare. Working only the best
+    /// one leaves `d - 1`, and a node of density one adds a hand and eats it - so a spare
+    /// hand exists for some allocation exactly when the best food node has density two or
+    /// more.
+    ///
+    /// Territory 5's nineteen nodes are all density one, which is why it holds the one
+    /// extractor it was founded with and can never build a twentieth.
+    pub fn can_build_extractors(&self) -> bool {
+        self.nodes_of(Resource::Food)
+            .iter()
+            .any(|(_, node)| node.density >= 2)
+    }
+
+    /// The most of one resource this territory could produce in a single turn.
+    ///
+    /// Every extractor it can build is built, and its hands are split between food, which
+    /// is what sets how many hands there are, and the resource asked for. Maximised over
+    /// how many food nodes are worked, because working one more food node buys `f - 1`
+    /// spare hands and there is no reason the best split is at either end.
+    ///
+    /// A territory with no food node has no population and so produces nothing, whatever
+    /// its other nodes say. That falls out rather than being a case: `F(0)` is zero, no
+    /// hands, nothing worked.
+    pub fn most_in_one_turn(&self, resource: Resource) -> u32 {
+        let mut food: Vec<u32> = self
+            .nodes_of(Resource::Food)
+            .iter()
+            .map(|(_, node)| node.density)
+            .collect();
+        food.sort_unstable_by(|a, b| b.cmp(a));
+
+        let mut wanted: Vec<u32> = self
+            .nodes_of(resource)
+            .iter()
+            .map(|(_, node)| node.density)
+            .collect();
+        wanted.sort_unstable_by(|a, b| b.cmp(a));
+
+        // Food asked for is the one case where the two lists are the same list: the hands
+        // working food are already producing it, so the answer is the largest `F(k)`.
+        let mut best = 0;
+        for worked in 0..=food.len() {
+            let produced: u32 = food.iter().take(worked).sum();
+            if resource == Resource::Food {
+                best = best.max(produced);
+                continue;
+            }
+            // Citizens are what the food sustains, and `worked` of them are holding food
+            // nodes. Saturating because a territory can work more food nodes than it can
+            // sustain hands for, and that allocation simply has nothing spare.
+            let spare = produced.saturating_sub(worked as u32) as usize;
+            best = best.max(wanted.iter().take(spare).sum());
+        }
+        best
+    }
+
+    /// Whether this territory can ever hold a Yard.
+    ///
+    /// A Yard costs fifteen metal, so the question is whether fifteen metal can ever be
+    /// gathered here. **Since `C-11` that is not a question about one turn.** Metal carries
+    /// between turns to [`Self::KEEPS`], which is twenty, so a territory producing any
+    /// metal at all reaches fifteen by waiting - and one producing none never does, however
+    /// long the game runs.
+    ///
+    /// `C-9` stated this as *the most metal the territory can hold in one turn reaches
+    /// fifteen*, and that was right when it was written, under the rule that discarded
+    /// every store at the end of a turn. `C-11` replaced that rule five days later and
+    /// nothing re-derived the sentence. **Implemented as written it would have been false
+    /// of the scenario that already exists**: territory 1 produces twelve metal a turn,
+    /// builds a Yard on its second, and the one-turn rule says it can never hold one.
+    /// Four territories would qualify. C-11's own note says ten, and ten is what *produces
+    /// any metal at all* gives.
+    ///
+    /// The bound is asserted rather than assumed, because the two numbers are independent
+    /// and only their order makes this rule true. If what a territory keeps ever drops
+    /// below what a Yard costs, waiting stops working and this needs deriving again.
+    pub fn can_hold_yard(&self) -> bool {
+        const _: () = assert!(
+            Territory::KEEPS >= crate::game::cost::YARD_METAL,
+            "a territory keeps less metal than a Yard costs, so accumulating cannot reach one"
+        );
+        self.most_in_one_turn(Resource::Metal) >= 1
+    }
+
     /// The force the territory itself presents, before any unit standing on it.
     ///
     /// `spec/control.md`: organised force sums, unorganised force is the highest present.
@@ -592,5 +688,159 @@ mod tests {
         assert!(territory.extractors().is_empty());
         assert_eq!(territory.store(Resource::Metal), 0);
         assert_eq!(territory.nodes.len(), 1, "the land itself remains");
+    }
+
+    /// The extractor rule, either side of its one boundary and not on an example of it.
+    ///
+    /// `C-9`. A citizen yields one labor and eats one food, so the `k` densest food nodes
+    /// sustain `F(k)` citizens while occupying `k` of them. A density-one node adds a hand
+    /// and eats it; a density-two node adds a hand and half feeds another. So a spare hand
+    /// exists for some allocation exactly when a food node has density two.
+    #[test]
+    fn a_spare_hand_exists_exactly_when_a_food_node_has_density_two() {
+        let cases: [(&[(Resource, u32)], bool, &str); 6] = [
+            (&[], false, "no food at all is no population and no hands"),
+            (
+                &[(Resource::Food, 1)],
+                false,
+                "one hand, holding its own node",
+            ),
+            (
+                &[
+                    (Resource::Food, 1),
+                    (Resource::Food, 1),
+                    (Resource::Food, 1),
+                ],
+                false,
+                "three of them, and each still eats what it gathers - territory 5",
+            ),
+            (
+                &[(Resource::Food, 2)],
+                true,
+                "two fed, one node worked, one spare",
+            ),
+            (
+                &[(Resource::Food, 1), (Resource::Food, 2)],
+                true,
+                "the best node is what decides, not the first or the worst",
+            ),
+            (
+                &[(Resource::Metal, 9), (Resource::Food, 1)],
+                false,
+                "metal it cannot reach does not feed anyone",
+            ),
+        ];
+        for (nodes, expected, why) in cases {
+            let territory = with_nodes(nodes);
+            assert_eq!(territory.can_build_extractors(), expected, "{why}");
+        }
+        assert_eq!(
+            cases.len(),
+            6,
+            "six cases, three either side of the boundary"
+        );
+    }
+
+    /// The most of a resource one turn can yield, maximised over how the hands are split.
+    ///
+    /// **The split is not at either end**, which is why this is a search rather than a
+    /// formula. Working one more food node costs a hand and buys `f` of them.
+    #[test]
+    fn the_most_in_one_turn_splits_the_hands_where_it_pays_best() {
+        let cases: [(&[(Resource, u32)], Resource, u32, &str); 6] = [
+            (
+                &[(Resource::Food, 4)],
+                Resource::Metal,
+                0,
+                "no metal node, no metal",
+            ),
+            (
+                &[(Resource::Food, 4), (Resource::Metal, 9)],
+                Resource::Metal,
+                9,
+                "four fed, one holds food, three spare and one metal node to work",
+            ),
+            (
+                &[
+                    (Resource::Food, 4),
+                    (Resource::Metal, 9),
+                    (Resource::Metal, 2),
+                ],
+                Resource::Metal,
+                11,
+                "three spare hands reach both metal nodes",
+            ),
+            (
+                &[(Resource::Food, 1), (Resource::Metal, 9)],
+                Resource::Metal,
+                0,
+                "one hand, and it is holding the food node",
+            ),
+            (
+                &[
+                    (Resource::Food, 2),
+                    (Resource::Food, 2),
+                    (Resource::Metal, 9),
+                    (Resource::Metal, 9),
+                    (Resource::Metal, 9),
+                ],
+                Resource::Metal,
+                18,
+                "working the second food node costs a hand and buys two - so two spare, not one",
+            ),
+            (
+                &[(Resource::Food, 4), (Resource::Food, 3)],
+                Resource::Food,
+                7,
+                "asked for food, the answer is what the hands gathered",
+            ),
+        ];
+        for (nodes, resource, expected, why) in cases {
+            let territory = with_nodes(nodes);
+            assert_eq!(territory.most_in_one_turn(resource), expected, "{why}");
+        }
+        assert_eq!(
+            cases.len(),
+            6,
+            "six splits, including one that is at neither end"
+        );
+    }
+
+    /// A Yard needs metal to be gatherable, not gatherable fifteen at a time.
+    ///
+    /// **`C-9` said fifteen in one turn and that has been wrong since `C-11`.** Metal
+    /// carries between turns to twenty, so one a turn reaches fifteen by waiting. The
+    /// third case is the one that caught it: territory 1 produces twelve, builds a Yard on
+    /// turn two in the committed scenario, and the one-turn rule calls it impossible.
+    #[test]
+    fn a_yard_needs_metal_to_be_reachable_rather_than_reachable_at_once() {
+        let cases: [(&[(Resource, u32)], bool, &str); 4] = [
+            (&[(Resource::Food, 4)], false, "no metal node, so never"),
+            (
+                &[(Resource::Food, 1), (Resource::Metal, 20)],
+                false,
+                "metal in the ground with no hand free to dig it is no metal",
+            ),
+            (
+                &[
+                    (Resource::Food, 4),
+                    (Resource::Metal, 4),
+                    (Resource::Metal, 4),
+                    (Resource::Metal, 4),
+                ],
+                true,
+                "twelve a turn, which is under fifteen and reaches it on the second",
+            ),
+            (
+                &[(Resource::Food, 2), (Resource::Metal, 1)],
+                true,
+                "one a turn is slow and is not never",
+            ),
+        ];
+        for (nodes, expected, why) in cases {
+            let territory = with_nodes(nodes);
+            assert_eq!(territory.can_hold_yard(), expected, "{why}");
+        }
+        assert_eq!(cases.len(), 4, "four cases, two either side");
     }
 }

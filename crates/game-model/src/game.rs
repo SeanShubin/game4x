@@ -345,20 +345,32 @@ impl Game {
     /// taken has been taken, every structure has been built everywhere it can be built, and
     /// every storage structure on it is full.*
     ///
-    /// **This does not implement that sentence yet, and the difference matters.** It asks
-    /// for a Yard in every claimable territory; the specification asks for one everywhere a
-    /// Yard *can* be built, which `spec/control.md` defines as *where the territory's own
-    /// permanent facts allow it: its nodes, their densities, its biome. Not whether the
-    /// player can afford it this turn, and not whether any particular game happened to
-    /// reach it.*
+    /// **`can be built` is the qualifier, and it is not `has been reached`.**
     ///
-    /// Eight of the release's twelve territories can never hold a Yard - one of them has no
-    /// metal at all - so as written this can never be true. That is `C-7`, and the
-    /// specification moved to settle it; this function has not caught up. `C-9`.
+    /// `spec/control.md`: *a structure can be built where the territory's own permanent
+    /// facts allow it: how many it has total capacity for, their densities, its biome. Not
+    /// whether the player can afford it this turn, and not whether any particular game
+    /// happened to reach it.*
     ///
-    /// Nothing in play depends on the difference, for a worse reason: `C-8`. An Ark can
-    /// only be produced in territory 11, which can never be claimed, so no Ark ever reaches
-    /// the planet to be launched from it.
+    /// The file is named next to the words rather than back at the top of this comment,
+    /// because `crates/game-console/tests/quotations.rs` checks a quotation only where it
+    /// can see which document it belongs to. Attributed to *the same section* it reads as
+    /// prose, and this comment misquoted the sentence for a whole session under exactly
+    /// that cover - `its nodes` where the specification says `how many it has total
+    /// capacity for`. `C-11` recorded the limitation; this is what it looks like when it
+    /// bites.
+    ///
+    /// This asked for a Yard and a full set of extractors in **every** claimable territory
+    /// until `C-9`, which is a condition the release's planet cannot satisfy - one of its
+    /// territories has no metal node at all, and territory 5's nineteen nodes are every one
+    /// of them density one, so it can never build a twentieth extractor or pay for a Yard.
+    /// The predicate was therefore false forever, and `R-6` - *a person reaches a fully
+    /// exploited planet and launches an Ark* - could not be vetted by playing the game.
+    ///
+    /// Both halves are decided from the territory's nodes alone, by
+    /// [`Territory::can_build_extractors`] and [`Territory::can_hold_yard`], so a territory
+    /// that can build nothing is fully exploited the moment it is founded, and one that can
+    /// build both is not until both are there.
     ///
     /// *Every storage structure is full* holds because there are none. No structure in
     /// `spec/structures.md` stores anything. If one is ever added, this stops being vacuous
@@ -369,8 +381,9 @@ impl Game {
             .filter(|place| place.biome.is_claimable())
             .all(|place| {
                 place.founded()
-                    && place.yards() > 0
-                    && place.extractors().len() == place.nodes.len()
+                    && (!place.can_hold_yard() || place.yards() > 0)
+                    && (!place.can_build_extractors()
+                        || place.extractors().len() == place.nodes.len())
             })
     }
 
