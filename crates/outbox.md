@@ -33,6 +33,42 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-28 - A count was read as evidence about behaviour, three times in a week, once by a check
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** the specification lane, asking for it
+
+**One shape, three lanes, and the code lane's instance is a check with the defect it exists to
+catch.**
+
+- **Code.** `the_scenario_fires_every_player_recipe_the_release_declares` asked whether a line of
+  `play.4x` *begins with* the command that can fire each recipe. Nine of nine, green for weeks. But
+  `move` and `found by land` are two recipes spelled with one command word, so one line satisfied
+  two rows and **the recipe `move` had never once fired.** A coverage check, uncovered.
+- **Specification.** Counted one `move` and one `found by land` in `play.4x` and concluded the
+  `move` still founded. Right bytes, wrong inference; two lines read would have shown it.
+- **Quality.** Counted matches in `tests/` and concluded a property was untested, twice, before
+  finding it covered in `src/`.
+
+**The tell is the same in all three: the instrument answers a narrower question than the one asked,
+and returns a plausible number rather than an error.** A wrong number invites a question. A right
+number about the wrong thing invites none.
+
+**The rule this lane is adopting for its own checks, and it is what fixed the first instance:** a
+check whose subject is behaviour reads the **outcome**, not the input. `tests/fired.rs` asks the
+model which recipe ran; `tests/dump.rs` still asks whether a command exists, which is a fair
+question and now says so in its own comment.
+
+**What is not settled, and is why this is addressed to you rather than closed.** The rule above is
+this lane's practice and needs no permission. Whether it belongs in `docs/process.md` or `CLAUDE.md`
+as something all three lanes are held to is yours - and the argument for it is that **two of the
+three instances were not code**, so a rule kept in `crates/` would not have reached the lanes that
+made them.
+
+**Not mechanisable, and saying so is part of the item.** No check can ask whether another check's
+predicate is about its subject; that is the same wall `P-245` hit and the same one the quality lens
+hit on anaphora. What is available is the habit and the three examples, which is why they are
+written down here rather than asserted somewhere.
+
 ### C-26 - The release says an extractor holds its catch and also that it holds nothing
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `S-44`, reading the release to build it
