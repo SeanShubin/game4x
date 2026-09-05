@@ -178,6 +178,26 @@ before it. Both are cheaper than the alternative and both produce confident pros
 is not care. It is a step that cannot be completed without the reading, which is why the quotation
 guard in `game-console` works.
 
+## A self-check may share inputs; it may not share the computation
+
+When a report is checked against itself, the question is whether the check is real or decoration.
+This lens first put the line in the wrong place - *the derivation must come from somewhere the
+printer does not* - which forbids too much. The specification lane sharpened it and was right:
+
+**Sharing the inputs is fine. Sharing the computation is what makes it circular.**
+
+Two derivations reading the same recorded states and disagreeing is evidence. Two derivations
+produced by one code path agreeing proves only that the path agrees with itself.
+
+The distinction earned itself the same day. The code lane declined a delta check on this lens's
+over-broad caution, was pushed back on, built it against the printed artifact, and **it found a real
+bug on its first run**: `expected::compare` paired rows by table and first column, so two extractors
+built in one territory read as one row changing, and turn 2's delta claimed `node: 3 → 2` - true of
+nothing that happened. That was the artifact Sean was about to check the state function against.
+
+**A caution drawn too wide costs a check that would have worked.** That is a different failure from
+a caution drawn too narrow, and this lens had not weighed it.
+
 ## Re-read the source, not the summary
 
 This file said `docs/process.md` *gives this lens three jobs* and listed three. **It was right on
