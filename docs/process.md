@@ -107,6 +107,10 @@ the way past, not a place to stop.
 And a reply to a report **ends with the next thing to do, or says plainly that there is nothing**. A
 reply that only acknowledges wakes an instance, gives it nothing, and it stops again.
 
+A lane that is waiting **files it**, addressed to the lane it is waiting on, saying what it is
+waiting for. The lane that finishes that thing tells it. A hold that lives only in a message is gone
+when the session ends, and nobody can see who is waiting on what.
+
 ## Specification Instance
 - I have Claude generate proposals for changes to the specification
 - I work with claude to make sure I approve the exact text of the proposals
