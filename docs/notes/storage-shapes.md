@@ -116,6 +116,60 @@ capacity as a consequence of being a Yard. Then:
 a Yard for its own sake, and that is a real coupling rather than a free lunch. **It is the option
 that adds the least and it is not the option that adds nothing.**
 
+## The two-type structure, and why neither type needs a name
+
+Sean, 2026-09-05, with two future use cases - **the player can build more metal storage but only up
+to a point**, and **the player can upgrade how many things fit in a single container** - and a
+structure:
+
+> Type A bins can store each kind of type B bin according to a per-kind limit. Type B bins can not
+> store other bins at all but only non-bin materials, and only a single kind. So a territory would
+> also be a type A bin, a metal transport would be a type A bin with two type B bins inside, one
+> fuel and one metal.
+
+**A and B are not two kinds of thing. They are two constraints on what a thing may contain**, and
+under `spec/logistics.md`'s existing rule - *a maximum per kind, or per family of kinds* - they say:
+
+- **A thing that holds material holds exactly one kind of it, and holds no containers.**
+- **A thing that holds containers holds no material.**
+
+Together: **nothing mixes two materials, and nothing mixes material with containers.** That is the
+organizing principle, and it is two sentences of constraint rather than any new noun.
+
+**Which is why neither type needs a name.** *Type A* and *type B* are **derived from what a thing can
+contain** - ask what its capacities are over and the answer tells you which it is. **Naming a derived
+property is the mistake `founded` was**: a name in the data for something the rules already
+determine, which then has to be kept in step with the thing it was derived from.
+
+**The player never needs the category either.** They need *this territory holds up to ten metal
+stores* and *this metal store holds ten metal*. **Neither sentence is helped by knowing that one is
+an A and the other a B.**
+
+## One thing his sketch leaves out, and a transport is the case
+
+**A holds A.** A metal transport is a type A and it sits in a territory, which is also a type A - so
+the structure is not two levels. `spec/logistics.md` already handles it: *a thing that contains
+things takes up capacity in whatever contains it*, so a transport occupies territory capacity like
+anything else.
+
+**So the real distinction is binary and not layered**: a thing either **holds material** - one kind,
+no containers - or it **holds things**. Leaf or branch. **The depth is however deep the game happens
+to go**, and it terminates because nothing contains itself.
+
+## The upgrade use case is the one that can bring the madness back
+
+> The player can upgrade how many things can be stored in a single container.
+
+**If that upgrade is per kind - every metal store now holds fifteen - the factorization stays fixed
+and nothing is exposed.** It is Far Cry's pouch: one number, raised once, for all of them.
+
+**If it is per instance - this store holds ten and that one fifteen - the freedom comes straight
+back**, and the player is arranging again. **This is the same distinction that made *a bin's capacity
+is a property of its kind* work**, and the use case is worded ambiguously between the two.
+
+**Worth settling deliberately**, because it is the one place where a natural-sounding feature undoes
+the organizing principle.
+
 ## What this leaves open, which is his to settle
 
 - **Where N's bound comes from** - given by the place, upgraded, or derived from what the place
