@@ -26,7 +26,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (14)
+### To code (11)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
@@ -39,9 +39,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-44** - Three doc comments outlived their fields and now describe `held` · `lenses/quality/outbox.md`
-- **Q-45** - The trait system is defined and nothing reads it · `lenses/quality/outbox.md`
-- **Q-46** - The gates name the tools one by one, and the newest one is on no list · `lenses/quality/outbox.md`
 
 ### To spec (1)
 

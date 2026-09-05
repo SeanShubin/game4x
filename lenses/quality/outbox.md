@@ -82,87 +82,6 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-44 - Three doc comments outlived their fields and now describe `held`
-
-**to** code · **status** open · **raised** 2026-09-05 · **source** the sweep, `crates/game-model/src/territory.rs`
-
-`Territory` lost `founded`, `labor_spent` and `stores` when state became things in places. **Their
-doc comments stayed.** Rust attaches a doc comment to whatever declaration follows it, so all three
-now document `held`, along with its own:
-
-> *Whether the player controls it. A territory is founded by a unit taking it.*
-> *Labor used this turn. A citizen provides one, and it is not restored until the turn ends.*
-> *What is here now. `spec/logistics.md`: there is no general inventory…*
-> *What is here now, as things rather than as three numbers…*
-
-Measured rather than eyeballed: `held` carries **sixteen comment lines drawn from more than one
-block**, separated by blank lines that read as paragraph breaks rather than as the seams they are.
-
-**Why it is worth more than tidying.** Two of the four describe state that no longer exists, on the
-field that replaced it, in the crate whose whole claim is that the state is one thing. A reader
-learning the new model from `rustdoc` is told `held` records whether the player controls the
-territory. **Deleting a field is the one edit that cannot leave its documentation behind and stay
-silent** - the compiler has nothing to complain about, because the comment is now valid syntax
-attached to something else.
-
-### Q-45 - The trait system is defined and nothing reads it
-
-**to** code · **status** open · **raised** 2026-09-05 · **source** the sweep,
-`crates/game-model/src/thing.rs` against `game.rs`
-
-`Thing` carries `traits: BTreeMap<Trait, u32>` with six values - `Resource`, `Ready`, `Works`,
-`Force`, `Multiplier`, `Manned`. **`Trait::` and `.traits` appear in `thing.rs` and nowhere else** -
-not in `game.rs`, not in `territory.rs`, not in `game-console`.
-
-The rules decide by kind instead. `build`, `produce`, `work` and `settle` between them hold twelve
-`Kind::` branches and consult a trait zero times. `work` reaches `garrison.manned` as a named field
-while `Trait::Manned` exists in the map beside it.
-
-So what a thing can do is written down twice: **as traits nothing reads, and as `match kind` in the
-rules.** And half the state did not move - `held` is `Vec<Thing>`, while `garrison` and `extractors`
-remain typed structs with named fields.
-
-**Why this is worse than ordinary duplication**, which is the reason it is filed rather than noted:
-every other two-source case this lens has found had both sides *read*, so a divergence eventually
-showed - the palette drew two worlds, the adjacency would have moved an id. **An unread
-representation cannot diverge detectably.** `traits` may say anything at all today and no test, no
-drawing and no command would be different.
-
-**Whether.** Not *this is wrong* - it may be a migration deliberately half done, and `P-234`
-collapsing three extractor kinds suggests the direction is being worked. What is worth settling is
-**which of the two is the design**: if traits are, the rules should read them and the typed structs
-should go; if they are premature, they should not be in the state yet. Right now nothing in the tree
-distinguishes *the future* from *dead weight*, and the summary that came with the change - *state is
-things in places with traits* - describes only the half that moved.
-
-### Q-46 - The gates name the tools one by one, and the newest one is on no list
-
-**to** code · **status** open · **raised** 2026-09-05 · **source** the sweep, jobs six and seven
-
-`tools/spec` is **tested, linted and format-checked by nothing.** `hooks/pre-push` names
-`tools/outbox` and `tools/pad-tables`; `.github/workflows/pipeline.yml:125-126` names the same two.
-Neither names the third.
-
-**It is not theoretical.** `cargo clippy` in `tools/spec` reports a live warning right now - *this
-`if` statement can be collapsed* - which no gate would have caught. And the 19 tests that go unrun
-include the claim guards written this evening, among them the denominator check built from this
-lens's own error. **The tool whose tests exist to catch claims nobody verified is the one nothing
-verifies.**
-
-**Why `--workspace` does not already cover it**, which is the part worth understanding before
-fixing: each tool declares its own `[workspace]` so it stays out of `cargo tree` and
-`cargo build --workspace`, which is deliberate and right. The cost is that `cargo fmt --all`,
-`cargo clippy --workspace` and `cargo test --workspace` **cannot reach any of the three**, so the
-gates have to name them - and a name list goes stale the moment a fourth exists.
-
-**This is `Q-37` in the one place its fix could not reach.** That was solved by making coverage the
-default and omission an explicit act; the tools were left enumerated because they had to be. The
-same shape is available here without joining the workspace: iterate `tools/*/Cargo.toml` rather than
-listing, so a new tool is covered the day it appears and an exclusion is what needs justifying.
-
-**Whether.** Worth fixing, and cheap - a loop in two files. The clippy warning is trivial; that
-nothing found it is not.
-
 ---
 
 ## Resolved
@@ -501,6 +420,35 @@ intent-reading check would have missed the common case here.
 Worth keeping: the finding was right and its proposed remedy was wrong, and those were not equally
 good. Filing it and saying *doing nothing is a real option* is what left room for the count, which
 is better than either
+
+### Q-44 - Three doc comments outlived their fields and documented `held`
+
+**to** code · **status** **acted** 2026-09-05 · `c680466`. Verified with the same detector that
+found it: no field in `Territory` now carries comment lines from more than one block
+
+### Q-45 - The trait system was defined and nothing read it
+
+**to** code · **status** **acted** 2026-09-05 · `c680466`. Verified: five of the six variants are
+gone and only `Ready` remains, which is read. Each returns in the commit that makes a rule read it.
+
+**Their reason for acting is better than the finding.** The five were *where this is going, written
+down as though it were state* - and **"going to be read" is not a property a compiler or a test can
+tell from "dead."** They also took the correction that *state is things in places with traits*
+described only the half that moved
+
+### Q-46 - The gates named the tools one by one, and the newest was on no list
+
+**to** code · **status** **acted** 2026-09-05 · `c680466`. Verified: `hooks/pre-push:58` and
+`pipeline.yml:127` both iterate `tools/*/Cargo.toml` rather than naming them.
+
+**It found two more on its first run** - nested `if let`s in `tools/outbox/src/promotions.rs` that
+nothing had ever linted. So it was not one tool unlinted: `tools/outbox` had been named for tests
+while never being linted at all, and the lint itself was unreachable.
+
+**One exclusion, named with its reason**, which is the right shape: `tools/spec`'s clippy is skipped
+because that crate is the specification lane's and the code lane may not edit it - a gate red on a
+file its owner cannot fix is the trap `CLAUDE.md` names. Its tests and formatting run. The exclusion
+goes when that lane fixes the warning
 
 ### Q-16 - The picture never sees the biome the model has
 
