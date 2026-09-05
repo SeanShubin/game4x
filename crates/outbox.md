@@ -29,6 +29,36 @@ carrying `**to**` and `**status**`; everything else is prose for a person.
 Ids are `C-1` upward, and unique across every outbox - a duplicated id is how a status silently
 stops meaning anything, because a commit citing it no longer says which item it closed.
 
+## `derived from`, and why an item carries one
+
+**`S-41`'s first half. The form is this lane's to choose and this is the choice**, so that the
+specification lane has something to write before the listing that reads it exists.
+
+**An item that states a derived number carries a `**derived from**` line naming the rule it was
+derived from.** One line, immediately under the addressing line, and only on an item that derives
+something:
+
+```
+**derived from** stores are discarded at the end of a turn - `spec/turn.md`
+```
+
+**The rule, not the file.** `spec/turn.md` changes constantly and a reader matching on it would
+match everything. What a reader needs is the sentence that would have to move for the number to
+stop being true.
+
+**Why it exists.** `C-9` stated *fifteen metal in one turn* and was right when written. `C-11`
+replaced the discard rule five days later, nothing edited `C-9`, and its words went on reading
+exactly as before - so it was implemented, contradicted a committed scenario, and was caught by
+accident. **An item can go stale without changing, and nothing in a working tree announces that a
+premise moved.** The same failure happened again within the day: `P-260` asked for how much a store
+holds, the answer was given, the promotion dropped it, and the number was relayed as settled while
+appearing in no document - `C-27`.
+
+**It makes the failure findable, not found**, and that limit is promoted with the rule. What caught
+`C-9` was re-deriving its arithmetic before implementing it, which is a habit rather than a
+mechanism. The annotation is what lets a mechanism exist; `S-41`'s second half is that mechanism,
+listing the open items naming the same rule whenever an item closes, and it is not built.
+
 ---
 
 ## Open
@@ -152,6 +182,7 @@ if it is ever repaired.
 ### C-24 - Nothing the release provides can take a jungle
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `S-42`, building the check it asked for
+**derived from** taking a territory takes force greater than the existing force - `spec/control.md`
 
 **The check can be built, and it fails.** `S-42` asked whether one could say that a claimable
 biome can be held at all by what the release provides, and said the interesting answer would be
@@ -309,6 +340,7 @@ gone, and `fired.rs`'s disambiguation becomes dead code that should be deleted r
 ### C-20 - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `C-9` landing
+**derived from** each building costs one labor, and labor is a command - `releases/first-release.md` -> *Recipes*
 
 Two things, and only the first is a correction.
 
