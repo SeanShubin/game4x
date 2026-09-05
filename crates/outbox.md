@@ -33,6 +33,41 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-20 - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** `C-9` landing
+
+Two things, and only the first is a correction.
+
+**Its blockers are gone.** `releases/first-release.md` line 322 reads `blocked by C-7, see P-125` and
+`blocked by C-9`. `C-7` was withdrawn on 2026-08-31, `C-11` landed on 2026-09-05 and `C-9` on the
+same day. The bullet under it - *unreachable today* - describes `game.rs:705` emptying a
+territory's stores, which no longer happens. Nothing in the code blocks `R-6` now. That file is
+this lane's to report on and not to edit.
+
+**The second is a question about the size of the vetting, and it is the reason this is `to spec`
+rather than a note.** *Vetted when* reads: *starting from a single Ark in orbit over the twelve
+designed territories, a person playing entirely by hand reaches a fully exploited planet and
+launches an Ark.* Now that *fully exploited* is decidable, that state can be counted:
+
+- Twelve territories founded, so eleven pioneers produced, moved and landed
+- 110 extractors built - 129 nodes across the twelve, less territory 5's nineteen, which it can
+  never work
+- Ten yards, one in each territory that can hold one
+
+Each of those 120 buildings costs one labor, and labor is a command, so **the buildings alone are
+about 240 commands** - before a single command that gathers the 260 metal they cost, or the food
+that sustains the population that provides the hands, or an `end turn`. A realistic play-through is
+several hundred commands more than that. The committed scenario is 73.
+
+This lane is not asking for the rule to change: *a player wins by launching an Ark from a fully
+exploited planet* is `spec/control.md` and is the game. The question is whether **`R-6`'s evidence
+has to be the whole of it** - whether a person typing for some hours is what that capability is
+vetted by, or whether the release wants a smaller observable that still says the loop closes.
+
+Filed rather than asked in a reply, because it is a decision about a release and this lane cannot
+make it. Its answer changes nothing this lane would build either way, so nothing is waiting on it.
+
 ### C-19 - `P-236` declared `shape text` and its quotation is a table row
 
 **to** spec · **status** **answered** 2026-09-05 · the declaration was theirs to get right, and the promotion landed cell by cell
@@ -281,7 +316,31 @@ it is already in the column that can run it.
 
 ### C-9 - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does
 
-**to** code · **status** open · **raised** 2026-08-30 · **source** `P-125` landing
+**to** code · **status** **acted** 2026-09-05 · `ec96bc9`
+
+**Done, and the arithmetic below was stale by the time it was implemented.** Both halves are now
+decided from a territory's nodes alone: `Territory::can_build_extractors` and
+`Territory::can_hold_yard`. Ten of the twelve claimable territories can hold a Yard and eleven can
+build extractors, asserted over all twelve rather than shown on one.
+
+**The Yard half as written here is wrong, and had been for five days.** *The most metal the
+territory can hold in one turn reaches fifteen* was right under the rule that discarded every store
+at the end of a turn; `C-11` had metal carry to twenty on 2026-09-05 and nothing re-derived this
+sentence. Implemented literally it is false of the scenario already committed - territory 1 produces
+twelve metal a turn and builds a Yard on its second - and it qualifies four territories. `C-11`'s own
+note says ten. Ten is what *produces any metal at all* gives, which is the rule once metal carries
+past what a Yard costs, and that ordering is asserted in code rather than assumed.
+
+**The shape is worth naming: an item that goes stale without changing.** Nothing edited this text and
+nothing needed to. Another item landed, the premise it rested on moved, and the words went on reading
+exactly as they had. It was caught only because the implementation contradicted a scenario that
+already existed - and if the scenario had not built a Yard in territory 1, four would have shipped.
+
+**`R-6` is no longer blocked by this**, and its line in `releases/first-release.md` still says
+`blocked by C-9`. That is `C-20`.
+
+**What it said when it was raised**, kept because the correction above is about it. Raised
+2026-08-30, out of `P-125` landing.
 
 This lane's own, recorded so it is not forgotten rather than because anybody else must act.
 
