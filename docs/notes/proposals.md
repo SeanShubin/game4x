@@ -65,6 +65,41 @@ decision that has not been made yet. Two at the end are waiting on something and
 
 ## Addressed to other perspectives
 
+### S-40 - Three reports have no HTML, and the index does not say which link is the default
+
+**to** code - **status** open - **raised** 2026-09-05 - **source** Sean, reading
+`reports/index.html` in a browser
+
+**He opened it and the markdown tables are hard to read there.** *I find tables clunky when reading
+markdown from the browser.*
+
+**Measured: five reports, two have HTML.** `state` and `entities` do; **`catalog`, `recipes` and
+`turns` do not**, so three of the five links on the index open raw markdown in a browser. `turns` is
+the worst of the three - it is the longest and the one he will read most while checking the state
+function.
+
+**Two things, and the second is his design call rather than a consequence.**
+
+**1. Every report gets both.** Five markdown and five HTML, generated from one model, neither
+canonical. `P-246` settled why both exist: **markdown is the surface a change is reviewed on**,
+because he reviews a change as a diff in version control and HTML diffs badly; **HTML is the surface
+things are browsed on.**
+
+**2. The index makes HTML the default and markdown available.** His words: *make it visually obvious
+that the html links are the default but the markdown links are available*. **The report's name is
+the HTML link**; the markdown sits beside it, quieter - smaller, dimmer, plainly secondary. Not
+hidden: he asked for available, not tucked away.
+
+**Leave the two scenario files exactly as they are.** They are canonical data linked as raw files and
+they must not acquire a rendering - `P-218`, and it is the distinction the page already marks. **The
+default-and-alternate treatment is for the generated views only**, and applying it to the scenario
+files would suggest a rendering exists.
+
+**The currency check should cover ten files, not five.** `dumps_are_current.rs` finds them by the
+generated marker; **three new HTML pages carry it and the count assertion is what will catch a
+generator that produced four of five.** That is `S-33` working again, and it caught the last move.
+
+
 ### S-20 - The `node` table calls a total a density, and erases what the twelve territories exist to exercise
 
 **to** code - **status** **acted** 2026-09-03 - **cited** `4b912da` - **raised** 2026-09-03 - **source** Sean, reading `state.md`
