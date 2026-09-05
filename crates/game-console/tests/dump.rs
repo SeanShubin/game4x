@@ -398,3 +398,120 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
         "thirty labor consumers in play.4x and thirteen in spread.4x; found {checked}"
     );
 }
+
+/// The scenario fires every player recipe the release declares, counted.
+///
+/// **`S-14` asked for a check by count and the coverage was guarded by nothing.** It was
+/// true when written and would have stayed silent the day a recipe was added - which is what
+/// `CLAUDE.md` calls unverified rather than done.
+///
+/// **The list comes from the release, not from here.** A hand-kept list of nine would pass
+/// forever; reading the Recipes table means a tenth player recipe fails this until the
+/// scenario fires it.
+///
+/// # What is not checked, and why
+///
+/// The release declares fifteen recipes and six are the world's - `upkeep`, `grow`,
+/// `perish`, `spoil`, `age`, `refresh`. **Three fire every turn and cannot not fire**;
+/// `perish` needs a thing whose upkeep is unpaid, which this scenario deliberately never
+/// reaches because it feeds everybody; and `spoil` and `age` are not separable in the model,
+/// which expires all food at a turn's end rather than counting `keeps` down. So *fifteen
+/// recipes fired* is not assertable here, and claiming it by counting to fifteen some other
+/// way would be the coverage-guarded-by-nothing this test exists to end.
+#[test]
+fn the_scenario_fires_every_player_recipe_the_release_declares() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let release = std::fs::read_to_string(root.join("releases/first-release.md"))
+        .expect("the release is there");
+    let scenario = std::fs::read_to_string(root.join("scenario/commands/play.4x"))
+        .expect("the scenario is there");
+
+    // Which command fires which recipe. Small, and checked for completeness below - a recipe
+    // the release adds and this does not name fails rather than going unnoticed.
+    let fired_by: [(&str, &str); 9] = [
+        ("deploy ark", "land ark"),
+        ("move", "move "),
+        ("found by land", "move "),
+        ("build extractor", "build extractor"),
+        ("build yard", "build yard"),
+        ("produce pioneer", "produce pioneer"),
+        ("produce ark", "produce ark"),
+        ("create labor", "create labor"),
+        ("work", "work "),
+    ];
+
+    let mut declared: Vec<String> = Vec::new();
+    let mut inside = false;
+    for line in release.lines() {
+        if line.starts_with("## ") {
+            if inside {
+                break;
+            }
+            inside = line.trim() == "## Recipes";
+            continue;
+        }
+        if !inside || !line.trim().starts_with("| **") {
+            continue;
+        }
+        let cells: Vec<&str> = line.trim_matches('|').split('|').collect();
+        let name = cells.first().unwrap_or(&"").trim().trim_matches('*').trim();
+        let owner = cells.get(1).unwrap_or(&"").trim();
+        if owner == "player" {
+            declared.push(name.to_string());
+        }
+    }
+
+    assert_eq!(
+        declared.len(),
+        9,
+        "nine player recipes were declared when this was written; the release now has {} \
+         ({declared:?}). If one was added, name what fires it above and make the scenario \
+         fire it.",
+        declared.len()
+    );
+
+    for recipe in &declared {
+        let command = fired_by
+            .iter()
+            .find(|(name, _)| name == recipe)
+            .unwrap_or_else(|| panic!("nothing here says what fires `{recipe}`"))
+            .1;
+        assert!(
+            scenario.lines().any(|line| line.trim().starts_with(command)),
+            "no command in the scenario fires `{recipe}` - looked for a line beginning \
+             `{command}`"
+        );
+    }
+}
+
+/// The scenario touches every kind the model knows, counted.
+#[test]
+fn the_scenario_touches_every_kind_and_there_are_twelve() {
+    use game_model::thing::Kind;
+
+    assert_eq!(
+        Kind::ALL.len(),
+        12,
+        "twelve kinds since `P-234` collapsed the three extractors; the model has {}",
+        Kind::ALL.len()
+    );
+
+    let session = played();
+    let named: std::collections::BTreeSet<String> = dump::tables(&session.game)
+        .iter()
+        .flat_map(|table| {
+            std::iter::once(table.name.to_string())
+                .chain(table.rows.iter().flatten().cloned())
+        })
+        .collect();
+
+    let missing: Vec<&str> = Kind::ALL
+        .iter()
+        .map(|kind| kind.name())
+        .filter(|name| !named.contains(*name))
+        .collect();
+    assert!(
+        missing.is_empty(),
+        "the scenario never names {missing:?}, so a reader looking for one finds nothing"
+    );
+}
