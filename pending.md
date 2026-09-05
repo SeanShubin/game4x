@@ -17,19 +17,15 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-39** - `b0e4347` S-38 and S-39: a turn is what ran, what changed, and what is there · still open in `docs/notes/proposals.md`
-- **S-38** - `d6fe407` S-38: scenario/ and reports/, and an index that links both · still open in `docs/notes/proposals.md`
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
 - **S-21** - `175078c` S-21: citizens and yards are things, and the expectation caught two bugs · still open in `docs/notes/proposals.md`
-- **S-14** - `e985623` S-14: the coverage is guarded, and one number is not assertable · still open in `docs/notes/proposals.md`
+- **S-14** - `287ccec` Format the S-14 guards · still open in `docs/notes/proposals.md`
 - **R-6** - `92786a9` Close C-11 and C-19, and say where R-6 actually stands · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (12)
+### To code (10)
 
-- **S-39** - The turn report is correct only if it is enough to reconstruct the next state · `docs/notes/proposals.md`
-- **S-38** - Move the reports out of the root, index them, and make the turns a transformation · `docs/notes/proposals.md`
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
