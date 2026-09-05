@@ -62,40 +62,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-247 - An instance stops when it reports, and reporting is not finishing
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/process.md` -> All lanes
-
-**You asked the code lane what would keep work flowing, and it gave the cause in one sentence:**
-*I stopped because I'd finished a commit and defaulted to reporting, rather than because the work
-was blocked.* **It had eleven items open at the time.**
-
-**This lane cannot see it happen.** `P-242`: blocked is in the outboxes and running is recorded
-nowhere. **But a report arriving is evidence** - it proves the lane was running when it sent, and
-the turn usually ends there, so **a report is the best available warning that a lane is about to be
-idle.** That is the half this lane can act on and had not.
-
-> An instance ends its turn when it is blocked, when it is holding for a stated reason, or when
-> nothing is open to it. **Never merely because it has just reported.** Reporting is something done
-> on the way past, not a place to stop.
->
-> And a reply to a report **ends with the next thing to do, or says plainly that there is nothing**.
-> A reply that only acknowledges wakes an instance, gives it nothing, and it stops again.
-
-**Basis: it has happened twice today and both times cost hours.** The code lane stopped at 16:23
-after `S-36` and again at 09:46 after `S-38`'s first half, each time with a full queue, each time
-having just reported. **Both were noticed by you rather than by the process.**
-
-**The second sentence is the one that would have caught it without you.** This lane received both
-reports and replied to both. **Neither reply ended with what to do next**, so the instance woke,
-read an acknowledgement and stopped again - which is the same event a second time and looks like
-nothing.
-
-**And it must not read as *never stop*.** The quality lens is idle right now **for a good reason it
-stated**: it will not sweep a tree that is being rewritten under it. That is holding, and the rule
-names it, because a rule that made that lens keep working would be worse than the problem.
-
 ## Addressed to other perspectives
 
 ### S-39 - The turn report is correct only if it is enough to reconstruct the next state
@@ -1586,6 +1552,7 @@ work the release exists to order.
 | P-244, quality finds and reports production support; the coding instance builds it                                 | `docs/process.md` -> Quality instance                                                                                                        | 2026-09-05 |
 | P-245, a document that restates another links to it rather than listing it                                         | `docs/README.md` -> What goes where                                                                                                          | 2026-09-05 |
 | P-246, reports in `reports/` with an index, scenario in `scenario/`, and each turn carrying its commands and delta | `docs/README.md` -> What goes where; `S-38` builds it                                                                                        | 2026-09-05 |
+| P-247, reporting is not a place to stop, and a reply ends with the next thing                                      | `docs/process.md` -> All lanes                                                                                                               | 2026-09-05 |
 
 ## Rejected
 

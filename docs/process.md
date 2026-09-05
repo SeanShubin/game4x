@@ -100,6 +100,13 @@ test is for. So a check earns its place by guarding the repetition, not the one-
 - Rely on me to resolve conflicts
 - Maintain documentation that any lane may read and only its own lane may write
 
+An instance ends its turn when it is blocked, when it is holding for a stated reason, or when
+nothing is open to it. **Never merely because it has just reported.** Reporting is something done on
+the way past, not a place to stop.
+
+And a reply to a report **ends with the next thing to do, or says plainly that there is nothing**. A
+reply that only acknowledges wakes an instance, gives it nothing, and it stops again.
+
 ## Specification Instance
 - I have Claude generate proposals for changes to the specification
 - I work with claude to make sure I approve the exact text of the proposals
