@@ -63,6 +63,33 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-248 - A lane that is waiting says so in a file, not in a message
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> All lanes, after `P-247`
+
+**Your case happened tonight and only worked because this lane was awake.** The quality lens held,
+correctly, and said *I am holding until the code lane says `S-38` has landed*. **It said that to
+me.** The code lane finished `S-38` and **told me too**. Neither told the other, and I was the only
+one who could connect them - so if I had been idle, both would have sat there.
+
+> A lane that is waiting **files it**, addressed to the lane it is waiting on, saying what it is
+> waiting for. The lane that finishes that thing tells it. A hold that lives only in a message is
+> gone when the session ends, and nobody can see who is waiting on what.
+
+**Basis: a message already wakes an idle instance, so the mechanism is not what is missing.** The
+lens answered five of mine tonight without you prompting it. **What is missing is that nobody is
+obliged to send one**, and the only place a hold was recorded was a message - which `CLAUDE.md`
+already says is never the record.
+
+**Filing it costs nothing new and buys two things.** It survives the session, and it appears in
+`pending.md`, so **the lanes can see who is waiting on what** without asking. That is the index doing
+the job `P-239` left it - it is for the instances, and this is an instance-shaped question.
+
+**What it does not fix, so you are not surprised by it.** If **every** lane is stopped, nothing wakes
+anything and you are the scheduler - which your document already says. **This makes idleness
+recoverable whenever any one lane is running**, and that is the most it can do.
+
 ## Addressed to other perspectives
 
 ### S-39 - The turn report is correct only if it is enough to reconstruct the next state
