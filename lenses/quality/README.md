@@ -96,6 +96,21 @@ That last column is the one that keeps a report from becoming a wish list. **Mos
 Two failures that look alike and are not, both of which cost this lens a wrong conclusion this
 session.
 
+**All of these are one shape, named by the code lane and confirmed across three lanes: a proxy
+standing in for the thing, passing silently.** The two families below differ in their remedy, which
+is why they stay apart, but the parent is worth having because it is what makes them recognisable
+before they are diagnosed.
+
+Instances, one per lane, within a week: a **count** read as evidence about behaviour - one `move`
+line taken to mean the recipe fired; a **directory** read as the population - `crates/*/tests/`
+searched when the assertion was in `src/`, twice, five times in variants; and a **filtered tool
+output** read as the bytes - `git show` and `grep` both applying a line-ending filter, so a phantom
+CRLF problem survived four tool calls until `git cat-file blob` read the bytes themselves.
+
+**The tell is the same every time: the instrument answers a narrower question than the one asked,
+and returns a plausible number rather than an error.** Nothing distinguishes it from the true answer
+except going and getting the thing.
+
 **A match string is a claim about the current bytes.** A table row written before the padder ran, a
 grep for `fn window()` against a signature that had since gained an argument. The remedy is to
 locate by prefix and rebuild rather than match, and to read the file at the moment of matching
