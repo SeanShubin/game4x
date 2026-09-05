@@ -331,7 +331,14 @@ impl Game {
         // P-137 purged the word founding, and this quotation was of the wording it purged.
         // The code still calls it `found`; renaming that is a change to the model rather
         // than to a comment, and the model is being rewritten for P-134 anyway.
-        self.found(territory, at, &[Resource::Food, Resource::Metal], 2)
+        let brought = self.force_brought_to(territory);
+        self.found(
+            territory,
+            at,
+            brought,
+            &[Resource::Food, Resource::Metal],
+            2,
+        )
     }
 
     fn launch(&mut self, kind: UnitKind) -> Result<(), Rejection> {
@@ -491,7 +498,14 @@ impl Game {
             })?;
 
         self.units[at].cells -= cost::MOVE_CELLS;
-        self.found(territory, at, &[Resource::Food, Resource::Metal], 2)
+        let brought = self.force_brought_to(territory);
+        self.found(
+            territory,
+            at,
+            brought,
+            &[Resource::Food, Resource::Metal],
+            2,
+        )
     }
 
     /// Takes a territory and founds it with a unit, which the founding consumes.
@@ -509,10 +523,35 @@ impl Game {
     /// ground that arrived with only a farm could never build a second thing. Taking the
     /// count and the resources as arguments keeps that a fact about the recipe rather than
     /// about this function.
+    /// The organised force a player can bring to bear on a territory it does not hold.
+    ///
+    /// `spec/control.md`: *a military unit is organised force in itself, so several brought
+    /// to one place sum.* So this is a sum and not a maximum - the coordination rule that
+    /// makes unorganised citizens present only their highest does not apply to units, which
+    /// carry coordination with them.
+    ///
+    /// **What counts as brought is *able to arrive*** - adjacent, with a cell to spend. A
+    /// unit two territories away is not at the battle, and one with no fuel cannot cross.
+    fn force_brought_to(&self, territory: TerritoryId) -> u32 {
+        self.units
+            .iter()
+            .filter(|unit| match unit.location {
+                Location::On(from) => {
+                    unit.cells >= cost::MOVE_CELLS && self.are_adjacent(from, territory)
+                }
+                // An Ark invades from orbit, which `spec/unit-types.md` allows and is how
+                // the first territory of a game is ever taken.
+                Location::Orbit => true,
+            })
+            .map(|unit| unit.kind.force())
+            .sum()
+    }
+
     fn found(
         &mut self,
         territory: TerritoryId,
         unit_at: usize,
+        brought: u32,
         leaves: &[Resource],
         citizens: u32,
     ) -> Result<(), Rejection> {
@@ -522,8 +561,18 @@ impl Game {
         if !self.territory(territory)?.biome.is_claimable() {
             return Err(Rejection::CannotClaimOcean(territory));
         }
+        // **`P-275`: taking uses the organised force *brought*, not the force of the one
+        // unit consumed.** *A military unit is organised force in itself, so several brought
+        // to one place sum. Taking a territory uses the organised force brought to it, and
+        // several units may take together.*
+        //
+        // Two numbers, and they are different: `brought` is what the attack presents, and
+        // the unit at `unit_at` is the one the recipe consumes and whose force the garrison
+        // inherits. Before this they were the same number, which is why a jungle at nature
+        // two could not be taken by anything - `C-24`, and it was never a defect in the
+        // model so much as a rule nobody had written.
+        self.take(territory, brought)?;
         let force = self.units[unit_at].kind.force();
-        self.take(territory, force)?;
         self.units.remove(unit_at);
 
         let place = &mut self.territories[territory.index()];

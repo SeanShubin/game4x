@@ -95,7 +95,7 @@ fn released_table() -> BTreeMap<u32, Vec<(Resource, u32, u32)>> {
         // **`Q-49`: the count catches a new id and not a colliding one.** `insert` returns
         // the value it replaced and discarding it is how a second row claiming territory 3
         // would overwrite territory 3's expected nodes while the length stayed twelve - the
-        // test then checking the real territory against somebody else'''s row and reporting
+        // test then checking the real territory against somebody else's row and reporting
         // nothing about the swap. Nothing collides today; this is the half of the parse's
         // luck that a count cannot convert into a failure.
         assert!(

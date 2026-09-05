@@ -63,6 +63,37 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-31 - A jungle can now be taken and cannot be held for a single turn
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** implementing `P-275`
+
+**derived from** a founding leaves a garrison and two citizens - `releases/first-release.md` -> *Recipes*, `found by land`
+
+**`P-275` closed the taking half of `C-24` and opened the holding half.** Two pioneers are force 4
+against a jungle's nature of 2, so it falls. Asked of the model: it is taken, and then
+`force_in` reports **1** against a nature of **2**.
+
+`spec/control.md`: *should the force in a territory fall below its force of nature, nature takes it
+back. Its entire population perishes.* **So the jungle is claimed and lost on the same turn**, and
+the two pioneers that took it are spent for nothing.
+
+**The arithmetic, so it can be checked rather than trusted.** A founding consumes one pioneer and
+leaves a garrison of *one less force than the unit* - so force 1 - plus two citizens. Citizens are
+*capable of violence but not of coordination*, and a garrison lets them sum, so the presented force
+should be garrison plus citizens. The model reports 1, which is the garrison alone. **Either the
+citizens are not counted where they should be, or a founding simply leaves too little for a
+nature-2 biome** - and this lane cannot tell which, because the release gives a citizen force 1 and
+`spec/control.md` gives a garrison a multiplier of 1 without saying whether a citizen who is not
+working contributes.
+
+**Two questions, and neither is this lane's.** Does a garrison's multiplier apply to citizens who
+are not working? And if it does not, is a founding meant to leave enough to hold nature 2 - which
+would mean the founding recipe's numbers, not the biome's.
+
+**Recorded in `tests/biomes_can_be_held.rs` as a count rather than passed over**: exactly one
+claimable biome is taken and immediately lost, asserted, so it fails when the release changes what a
+founding leaves in either direction.
+
 ### C-30 - The coding instance's start prompt omits the file holding most of its work
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** reading `docs/process.md` -> *Starting the instances* rather than taking a summary of it
