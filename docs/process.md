@@ -267,15 +267,11 @@ lens has to answer before it is worth starting lives. The three above are the on
 - A release file is deleted once everything in it has been vetted
 
 ## Who writes what
-- Every instance reads everything. No instance writes outside its own directories
-  - Specification instance: `spec/`, `releases/`, `docs/`, `README.md`, `CLAUDE.md`
-  - Coding instance: `crates/`, `prototypes/`, `web/`, cargo, and production support - `hooks/`,
-    `scripts/`, CI, and everything in `tools/` that is not a lane's own
-  - Every lane owns the tools for its own work: `tools/spec/` is the specification instance's,
-    `tools/<name>/` is that lens's. Production support is everything else, and it has one owner for
-    the same reason every other file does - two instances editing one file lose each other's edits
-  - A lane that needs a check wired files it to the coding instance rather than wiring it itself
-  - A research instance: `lenses/<its own name>/`, and `tools/<its own name>/`
+- Every instance reads everything. No instance writes outside its own directories, and
+  [`CLAUDE.md`](../CLAUDE.md) says which those are
+- Every lane owns the tools for its own work. Production support is everything else, and it has one
+  owner for the same reason every other file does
+- A lane that needs a check wired files it to the coding instance rather than wiring it itself
 - This is not only about authority. Two instances editing one file would silently lose each other's
   edits, and Claude has no way to lock a file, so one writer per file is what makes running several
   at once safe

@@ -63,33 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-271 - The directory list goes, and the rule stays
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
-**asks** approval - **into** `docs/process.md` -> Who writes what, the first bullet and its
-sub-list
-
-**Your B.** These three bullets replace the first bullet and the **five** sub-bullets under it -
-measured - and **everything below them is untouched.**
-
-> - Every instance reads everything. No instance writes outside its own directories, and
->   [`CLAUDE.md`](../CLAUDE.md) says which those are
-> - Every lane owns the tools for its own work. Production support is everything else, and it has one
->   owner for the same reason every other file does
-> - A lane that needs a check wired files it to the coding instance rather than wiring it itself
-
-**What goes is every directory name** - `spec/`, `releases/`, `crates/`, `prototypes/`, `web/`,
-cargo, `hooks/`, `scripts/`, `tools/`. **What stays is every rule**, including the two that were
-buried in the sub-list and are now bullets of their own.
-
-**Two reasons, and either would do.** Another project deletes a directory list rather than rewording
-it, which is your test. **And it is a copy** of `CLAUDE.md` -> Perspectives, which `P-245` says
-should be a link.
-
-**What this makes stale, and it is nothing.** Nothing in `spec/` or `releases/` cites these lines.
-The sentence about the shared git index, and the one about an instance that sees a problem outside
-its own directories, are below the sub-list and stay exactly as they are.
-
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
@@ -1419,6 +1392,7 @@ work the release exists to order.
 | P-268, the prompts that start the specification, code and quality instances                                                  | `docs/process.md` -> Starting the instances                                                                                                  | 2026-09-05 |
 | P-267, what a proposal asks him, what answering one does, and that what he approves is what ships                            | `docs/process.md` -> What I read and what I do                                                                                               | 2026-09-05 |
 | P-269, the four artifacts said without naming this game's model                                                              | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-05 |
+| P-271, the directory list goes and every rule stays, with `CLAUDE.md` linked                                                 | `docs/process.md` -> Who writes what                                                                                                         | 2026-09-05 |
 
 ## Rejected
 
