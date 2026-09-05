@@ -149,11 +149,12 @@ three, or a `prompts/` directory with a file each and your document pointing at 
 
 ### P-268 - The prompts that start the instances
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/process.md` -> a new section immediately before *Releases*
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
+- **shape** text - **asks** approval - **into** `docs/process.md` -> a new section immediately
+before *Releases*
 
-**You said to put them there anyway, in a clearly marked section.** Placed after the four sections
-that say what each instance is, so what one is and how to start it sit together.
+**Three prompts, on your instruction.** Placed after the four sections that say what each instance
+is, so what one is and how to start it sit together.
 
 > ## Starting the instances
 >
@@ -192,18 +193,34 @@ that say what each instance is, so what one is and how to start it sit together.
 > remembered.
 > ```
 >
-> **A lens is started by the prompt in `CLAUDE.md` -> Starting a new lens**, which sits beside the
-> question a new lens has to answer before it is worth starting at all. **Pointed at rather than
-> copied here**, because a copy drifts, and because starting one is a decision before it is a prompt.
+> The quality instance:
+>
+> ```
+> You are the quality lens. Read CLAUDE.md, then lenses/quality/README.md and
+> lenses/quality/outbox.md.
+>
+> CLAUDE.md -> Perspectives says what you write and what you read, and -> Starting a new
+> lens says what every finding has to say and how few of them should matter. You never
+> edit what you review, and you never run cargo fmt, cargo fix or clippy --fix, because
+> they modify the files you are judging.
+>
+> Your outbox is lenses/quality/outbox.md. Each finding carries an id, a to, a status and
+> one line, and points at a dated report that carries the argument.
+>
+> Start by telling me what is open and addressed, read from the files rather than
+> remembered.
+> ```
+>
+> **A new lens is started from `CLAUDE.md` -> Starting a new lens**, which is where the question a
+> lens has to answer before it is worth starting lives. The three above are the ones that exist.
 
-**One choice was mine and I am reporting it rather than hiding it**: the lens prompt is pointed at
-rather than moved. Moving it would split *what a lens costs* from *what to say to it*, and copying it
-would leave two versions to drift - which is the thing `P-245` is about. **If you would rather all
-three sat here, say so and I will move the lens prompt and leave the reasoning behind.**
+**One thing each prompt does not do: repeat a rule.** The quality one points at *Starting a new lens*
+for what a finding must say rather than restating it, which is why it is eight lines instead of
+twenty-five and why it cannot drift from the rule it depends on.
 
-**Both prompts end by asking for what is open and addressed, read from the files.** That is the one
-line that makes an instance start from the record rather than from whatever it remembers - which is
-`P-263`'s rule pointed at the beginning of a session instead of the end of one.
+**All three end the same way** - *tell me what is open and addressed, read from the files rather than
+remembered*. That is `P-263`'s rule aimed at the start of a session instead of the end of one, and it
+is the line that stops an instance beginning from what it thinks it remembers.
 
 ### P-269 - The rest of what names this project in your document
 
@@ -269,6 +286,8 @@ could reach none of it. The scenario builds **7 extractors** and a yard costing 
 three metal extractors at density four hold twelve between them. **`scenario/commands/play.4x` cannot
 run unchanged** - it needs stores before its first `build`, which is more commands and a different
 shape of turn.
+
+**`P-270`, promoted `fe34b32`: an unstored resource is spendable within the turn and discarded at its end.** One behaviour rather than two - nothing is unreachable. **It saves exactly one `build store energy`**: an Ark costs 12, a store holds 10, grassland yields 3 a turn. **Metal is unchanged** - 15 against 3 a turn still needs two stores.
 
 **The numbers are settled as of `c2e9266`, so nothing here waits on Sean.** A `store` is one kind
 with a `resource` trait; it costs **1 labor, 1 metal**; it holds **10**; a territory takes **as many
