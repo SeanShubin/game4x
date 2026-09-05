@@ -63,44 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-249 - Two kinds of scenario: the one I vet, and the ones that rest on it
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
-- **shape** text - **asks** approval - **into** `docs/process.md` -> How I know the game is right,
-and `releases/first-release.md` -> `R-6`
-
-**Neither choice this lane offered was right.** You did not pick a smaller observable or keep the
-larger one; **you split the scenarios in two.**
-
-> There is a **main scenario** that touches every single thing and every recipe. **That is what I
-> vet, and it is the foundation.** I do not need to walk every step of the win condition by hand.
->
-> As long as that foundation is maintained, other scenarios check that particular end states are
-> reachable. **Those rest on the foundation rather than on me**, and they will make heavy use of the
-> automation.
-
-**And `R-6`'s *vetted when* becomes**, in place of a person reaching a fully exploited planet by hand:
-
-> A scenario reaches a fully exploited planet and launches an Ark, on the definitions and the
-> machinery of the main scenario - **which I have vetted, and which is what makes this one worth
-> trusting.**
-
-**Basis: it is the only answer that scales, and it says why the foundation carries the weight.** A
-240-command read is something a person does once; **a coverage scenario is something a person can
-actually check and re-check**, and everything automated afterwards inherits whatever that check was
-worth. Choice A made you read too much and choice B gave up a claim you did not need to give up.
-
-**One consequence you should have before approving, because it reprices something I told you an hour
-ago.** The main scenario is now **the foundation**, so a gap in its coverage is not a small miss.
-**It does not fire `move`** - one `move` line, at line 95, which arrives somewhere nobody was and
-fires `found by land` instead. `C-21`. **Twelve kinds are covered and one player recipe of nine is
-not**, and under this proposal that is a hole in the thing everything else rests on rather than an
-untidy corner.
-
-**`P-214` fixes it as a side effect** - it splits `move` from `found by land`, so the two stop
-sharing a command. **It is held until you finish vetting**, which is right, but it is now the thing
-that completes the foundation rather than a tidy-up.
-
 ## Addressed to other perspectives
 
 ### S-41 - `P-250`'s second half needs `tools/outbox` to list at a close
@@ -1286,6 +1248,7 @@ work the release exists to order.
 | P-247, reporting is not a place to stop, and a reply ends with the next thing                                      | `docs/process.md` -> All lanes                                                                                                               | 2026-09-05 |
 | P-248, a lane that is waiting files the hold, and the lane that finishes tells it                                  | `docs/process.md` -> All lanes                                                                                                               | 2026-09-05 |
 | P-250, a derived number names its rule, and closing an item lists who else named it                                | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-05 |
+| P-249, a main scenario I vet, and end-state scenarios that rest on it                                              | `docs/process.md` -> How I know the game is right, and `releases/first-release.md` -> `R-6`                                                  | 2026-09-05 |
 
 ## Rejected
 

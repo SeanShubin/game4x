@@ -322,8 +322,9 @@ only one who can move them.
 **to** code - **status** open - **cited** `faafb5f`, `2f38241` - **nothing in the code blocks it**, 2026-09-05
 
 - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
-- **Vetted when** - starting from a single Ark in orbit over the twelve designed territories, a
-  person playing entirely by hand reaches a fully exploited planet and launches an Ark
+- **Vetted when** - A scenario reaches a fully exploited planet and launches an Ark, on the
+  definitions and the machinery of the main scenario - **which I have vetted, and which is what
+  makes this one worth trusting.**
 - **Nothing in the code blocks it, as of 2026-09-05.** `C-7` was withdrawn on the 31st; `C-11` landed in `05097a6` and a territory's stores carry; `C-9` landed in `ec96bc9` and *fully exploited* is decidable from a territory alone. **What is now in question is not whether it can be played but how much of it has to be** - see the proposal queue.
 
 ## Open questions

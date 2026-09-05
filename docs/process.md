@@ -55,6 +55,13 @@ A test is there for what I cannot reliably repeat. **I can remember to do a thin
 what I cannot do is remember a mundane check every time after that**, and that is what a failing
 test is for. So a check earns its place by guarding the repetition, not the one-off.
 
+There is a **main scenario** that touches every single thing and every recipe. **That is what I vet,
+and it is the foundation.** I do not need to walk every step of the win condition by hand.
+
+As long as that foundation is maintained, other scenarios check that particular end states are
+reachable. **Those rest on the foundation rather than on me**, and they will make heavy use of the
+automation.
+
 ## What verification requires
 
 ### State
