@@ -58,6 +58,7 @@ Every territory has total capacity for at least one food extractor.
 | **garrison**  | what holds a territory; a territory has at most one                                                          |
 | **extractor** | built for one resource, and worked to produce it                                                             |
 | **yard**      | where an Ark is produced                                                                                     |
+| **store**     | built to hold one resource, and holds nothing else                                                           |
 | **ark**       | carries a landing, and can invade from orbit                                                                 |
 | **pioneer**   | founds a territory                                                                                           |
 | **food**      | eaten by citizens; expires                                                                                   |
@@ -95,7 +96,7 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 | **kind**           | every thing                     | one of the kinds                                   | stored                                           |
 | **place**          | every thing                     | the thing it is in                                 | stored                                           |
 | **ready**          | whatever readies                | yes or no                                          | stored                                           |
-| **resource**       | an extractor                    | one of the resources                               | stored                                           |
+| **resource**       | an extractor or a store         | one of the resources                               | stored                                           |
 | **force**          | citizen, garrison, ark, pioneer | a number                                           | stored                                           |
 | **fuel**           | a unit                          | how much energy its tank holds                     | stored                                           |
 | **upkeep**         | a thing with upkeep             | food per turn                                      | stored                                           |
@@ -120,6 +121,7 @@ Food is made with `keeps` 1. The force nature holds a territory with.
 | **citizen**   | the food produced here, through upkeep                   |
 | **garrison**  | a capacity of 1                                          |
 | **extractor** | a capacity, from *Territory resources*                   |
+| **store**     | as many as the extractors of its resource                |
 | **yard**      | a capacity of 1                                          |
 | **ark**       | a capacity of 2                                          |
 | **pioneer**   | a capacity of 2, and the food produced here              |
@@ -129,8 +131,7 @@ Food is made with `keeps` 1. The force nature holds a territory with.
 | **energy**    | the things in it that hold it                            |
 
 A territory declares no capacity for a resource. It declares capacity for the things that
-hold them - an extractor holds some of what it makes, and a store holds what it was built to
-hold. **A resource that is in nothing is in disorder, and cannot be reached.**
+hold them - a store holds what it was built to hold, and an extractor holds nothing. **A resource that is in nothing is in disorder, and cannot be reached.**
 
 ## Units and structures
 
@@ -140,6 +141,7 @@ hold. **A resource that is in nothing is in disorder, and cannot be reached.**
 | **garrison**  | 1     |      |        |                 | 1 labor, 1 metal               | 1       |                      |          |         |
 | **extractor** |       |      |        |                 | 1 labor, 1 metal               | 1       |                      |          | yes     |
 | **yard**      |       |      |        |                 | 1 labor, 15 metal              | 15      |                      |          |         |
+| **store**     |       |      |        |                 | 1 labor, 1 metal               | 1       |                      |          |         |
 | **ark**       | 2     | 2    | 1 fuel |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border, ascent | a Yard   | yes     |
 | **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 3 metal, 6 energy, 2 citizens  | 3       | border               |          | yes     |
 
@@ -186,6 +188,8 @@ below are in that order.
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
 |                     |        | produce | 1                                    | extractor | food                                          |                          |
 |                     |        | produce | 1                                    | extractor | metal                                         |                          |
+|                     |        | produce | 1                                    | store     | food                                          |                          |
+|                     |        | produce | 1                                    | store     | metal                                         |                          |
 | **move**            | player | require | 1                                    | place     |                                               | `$from`                  |
 |                     |        | require | 1                                    | place     | joined to `$from` by an edge the unit crosses | `$to`                    |
 |                     |        | consume | 1                                    | unit      | ready                                         | `$from`                  |
@@ -197,9 +201,14 @@ below are in that order.
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
 |                     |        | produce | 1                                    | extractor | food                                          |                          |
 |                     |        | produce | 1                                    | extractor | metal                                         |                          |
+|                     |        | produce | 1                                    | store     | food                                          |                          |
+|                     |        | produce | 1                                    | store     | metal                                         |                          |
 | **build extractor** | player | consume | 1                                    | labor     |                                               |                          |
 |                     |        | consume | 1                                    | metal     |                                               |                          |
 |                     |        | produce | 1                                    | extractor | `$resource`                                   |                          |
+| **build store**     | player | consume | 1                                    | labor     |                                               |                          |
+|                     |        | consume | 1                                    | metal     |                                               |                          |
+|                     |        | produce | 1                                    | store     | `$resource`                                   |                          |
 | **build yard**      | player | consume | 1                                    | labor     |                                               |                          |
 |                     |        | consume | 15                                   | metal     |                                               |                          |
 |                     |        | produce | 1                                    | yard      |                                               |                          |
