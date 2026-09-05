@@ -250,10 +250,10 @@ What each biome gives a territory. Ocean is not claimable and carries nothing.
 | Biome     | Food  | Metal | Energy | Force of nature |
 | --------- | ----- | ----- | ------ | --------------- |
 | Ocean     | -     | -     | -      | -               |
-| Ice       | 1 x 2 | 2 x 3 | 1 x 2  | 1               |
+| Ice       | 1 x 2 | 3 x 5 | 1 x 2  | 1               |
 | Desert    | 2 x 4 | 3 x 4 | 5 x 6  | 1               |
-| Grassland | 5 x 6 | 1 x 3 | 1 x 3  | 1               |
-| Jungle    | 4 x 6 | 1 x 2 | 1 x 2  | 2               |
+| Grassland | 5 x 6 | 2 x 3 | 1 x 3  | 1               |
+| Jungle    | 6 x 6 | 1 x 2 | 1 x 2  | 2               |
 | Mountain  | 1 x 3 | 5 x 7 | 2 x 3  | 1               |
 
 `5 x 6` is total capacity for five extractors, each yielding six. Every biome except ocean has

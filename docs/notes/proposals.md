@@ -63,41 +63,27 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-274 - The rebalanced biome table
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
-- **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Biomes
-
-**The same table you read, now as rows to promote rather than a choice to make.** Three rows change
-and three do not.
-
-> | Biome     | Food  | Metal | Energy | Force of nature |
-> | --------- | ----- | ----- | ------ | --------------- |
-> | Ocean     | -     | -     | -      | -               |
-> | Ice       | 1 x 2 | 3 x 5 | 1 x 2  | 1               |
-> | Desert    | 2 x 4 | 3 x 4 | 5 x 6  | 1               |
-> | Grassland | 5 x 6 | 2 x 3 | 1 x 3  | 1               |
-> | Jungle    | 6 x 6 | 1 x 2 | 1 x 2  | 2               |
-> | Mountain  | 1 x 3 | 5 x 7 | 2 x 3  | 1               |
-
-**Jungle food `4 x 6` becomes `6 x 6`** - 36, the most on the planet, against grassland's 30. **That
-is what its nature of 2 buys**, and `P-275` is what makes the danger real: two pioneers take it where
-one takes a grassland.
-
-**Ice metal `2 x 3` becomes `3 x 5`** - 15, second to mountain. Ice led nothing and was strictly below
-desert on all three at the same nature; now nothing dominates it.
-
-**Grassland metal `1 x 3` becomes `2 x 3`, and this one is not about balance.** One metal extractor is
-one metal store is ten capacity, and a Yard costs fifteen. **Territory 1 is grassland and is the
-landing site**, so without this the main scenario could never build a Yard - `C-29` arriving at the
-one territory that cannot afford it.
-
-**What it costs, unchanged from what you read.** Under `P-272` territory 1 goes from 12 metal a turn
-to 6 and from 12 energy to 3, so **the scenario gets materially longer** - an Ark's 12 energy is four
-turns rather than one. If that is too slow the lever is desert and mountain energy, because grassland
-leading food is what makes it the starting biome.
-
 ## Addressed to other perspectives
+
+### S-45 - The node data contradicts the biome table, and every territory is affected
+
+**to** code - **status** open - **raised** 2026-09-05 - **source** `P-272` and `P-274`, promoted
+together
+
+**`P-272` makes a biome give a territory its numbers, and `P-274` changes what three biomes give.**
+`scenario/commands/nodes.4x` follows neither. Five territories are grassland and carry five different
+pairs; the two mountains carry a third and a fourth thing again. **Its own comment says the values
+were taken from the table.**
+
+**So the file is regenerated from the table rather than edited.** Every territory's three lines come
+from its biome in `releases/first-release.md`, and **a check should say so** - that is the second
+half of *done*, and it is what stops this drifting again.
+
+**What it costs, and Sean has accepted it.** Territory 1 goes from 12 metal a turn to 6 and from 12
+energy to 3. **The scenario gets materially longer.**
+
+**Take it with `S-44`'s scenario half**, since both rewrite the same files and the numbers here are
+what that scenario rests on.
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
 
@@ -1430,6 +1416,7 @@ work the release exists to order.
 | P-273, the coding instance's prompt points at `pending.md` instead of naming three files                                     | `docs/process.md` -> Starting the instances                                                                                                  | 2026-09-05 |
 | P-275, a military unit is organised force in itself, and taking uses the organised force brought                             | `spec/control.md` -> Gaining and holding ground                                                                                              | 2026-09-05 |
 | P-272, a biome gives a territory its total capacity and density for each resource                                            | `spec/planet.md`                                                                                                                             | 2026-09-05 |
+| P-274, the rebalanced biome table: jungle food, ice metal and grassland metal                                                | `releases/first-release.md` -> Biomes                                                                                                        | 2026-09-05 |
 
 ## Rejected
 
