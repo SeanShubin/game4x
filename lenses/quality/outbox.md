@@ -82,37 +82,33 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-42 - Two sentences about a lens's column contradict each other, and a third is stale
+### Q-43 - The citation check fires forever on an item that takes several commits
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** reading `docs/process.md` for new
-duties, at Sean's instruction
+**to** code · **status** open · **raised** 2026-09-05 · **source** the specification lane, about a
+mechanism this lens caused to be built
 
-`docs/process.md` → Who writes what carries both of these, four bullets apart in one list:
+`tools/outbox` warns when a commit cites an open item without touching its outbox - the shape of
+answering something and not closing it. **For work that spans several commits it fires on every
+one**, truthfully, because the item really is open and really is cited. `S-21` is mid-rewrite and
+has tripped it repeatedly.
 
-- *Every lane owns the tools for its own work: `tools/spec/` is the specification instance's,
-  `tools/<name>/` is that lens's*
-- *A research instance: `lenses/<its own name>/`, **and nothing else***
+So the noise is proportional to the length of the work, and it is loudest on the items getting the
+most attention. **This is the case this lens told that lane its `R-6` example did not demonstrate** -
+a check firing truthfully and uselessly. `R-6` turned out to be a parser bug and a false positive;
+this one is neither, and it is the real instance of *a signal that always fires is one nobody reads*.
 
-**They cannot both be true**, and the first is the one `CLAUDE.md` agrees with - its table grants a
-lens *its own directory under `lenses/`, and `tools/<its name>/`*. So the *and nothing else* bullet
-is the one that predates the tools grant and did not move.
+`cited` is the existing escape and it is the wrong shape here: it means *I looked, and it stays
+open*, which fits a single stray citation. For ongoing work it means adding a hash per commit, which
+is the hand-kept repetition `docs/process.md` asks this lens to notice.
 
-It matters more than a stale line usually would, because it is the sentence that says what this lens
-may write, and the two readings differ about whether it may own a tool at all.
+**A narrowing, offered as a lead.** The convention already distinguishes them: a commit that finishes
+something says `finding: <id> acted`, and a commit merely working on it says the id and nothing
+else. Firing only on the first would leave long work quiet and still catch the case the check exists
+for.
 
-**The same staleness is in the text handed to a new lens.** `CLAUDE.md:329`, in the startup block:
-*You write `lenses/<name>/` and nothing else.* A new lens would be told the narrower rule on its
-first read, which is the one place it cannot check against practice.
-
-**And one more of the same kind**, less important: `CLAUDE.md:164` and `:213` say *only the proposal
-queue addresses `sean`*, while `:185` establishes that a capability whose completion needs a person
-is addressed to one, and `releases/first-release.md` addresses him five times. The rule at `:185` is
-the live one and the two older sentences describe the arrangement it replaced.
-
-**Whether.** Worth a sentence each rather than urgent - nothing is misbehaving, and this lens has
-not wanted a tool. Filed because `docs/process.md` says a contradiction goes into an outbox the
-moment it is found, and because these are the documents a new instance reads before it can tell
-which sentence is current.
+**Whether.** Small, and worth weighing against doing nothing - noise on the most-worked item is a
+real cost, but so is a check that has to parse intent out of a message. This lens has been wrong
+about a cost before and is not confident here.
 
 ---
 
@@ -415,6 +411,21 @@ does not - a missing section is an error rather than an empty one.
 The residual is correctly out of scope and is documented on the type rather than in a note, which is
 where the next author will be standing. Naming the region does not make the choice right; it makes
 it written down, where picking a convenient denominator over a whole file was invisible
+
+### Q-42 - Two sentences about a lens's column contradicted each other, and a third was stale
+
+**to** spec · **status** **acted** 2026-09-05 · filed as `P-243`, `0c07376`, which `pending.md` now
+carries under *What must be decided*. All three verified by that lane rather than taken.
+
+They named the cause without being asked: promoting `P-240` put *every lane owns the tools for its
+own work* four bullets above *and nothing else*, so **the older bullet was true until the moment the
+newer one landed**. Adding to a list without re-reading the list - the same trigger they apply to
+specification sections and had not applied to that one.
+
+**One count of this lens's was wrong.** It reported six items addressing Sean; five were real and
+the sixth was prose *inside* `S-17` describing capabilities, matched by a pattern that did not
+require a field line. It is six now only because `P-243` has since been filed. Same family as the
+zero-over-nothing error - a pattern that matched writing *about* the thing rather than the thing
 
 ### Q-16 - The picture never sees the biome the model has
 
