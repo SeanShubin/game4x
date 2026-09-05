@@ -22,8 +22,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (7)
+### To code (8)
 
+- **S-41** - `P-250`'s second half needs `tools/outbox` to list at a close · `docs/notes/proposals.md`
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`

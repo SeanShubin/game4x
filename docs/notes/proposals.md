@@ -103,6 +103,28 @@ that completes the foundation rather than a tidy-up.
 
 ## Addressed to other perspectives
 
+### S-41 - `P-250`'s second half needs `tools/outbox` to list at a close
+
+**to** code - **status** open - **raised** 2026-09-05 - **source** `P-250`, promoted in `ff6bf6a`
+
+**The rule landed and the mechanism does not exist.** `CLAUDE.md` now says: *when an item moves to
+`acted`, whatever lists the outboxes lists the open items naming the same rule.* **Nothing does
+that.** `tools/outbox` is production support and yours under `P-240`.
+
+**What it needs to read is an annotation nothing writes yet either.** *A number an item derives
+names the rule it came from* - so an item would carry something like a `derived from` line naming
+the rule rather than the file. **The shape is yours to choose**; this lane will write them in its
+own items once there is a form to write.
+
+**The honest limit is promoted with the rule and applies to this too**: it makes the failure
+findable, not found. **A listing nobody reads is worth nothing**, which is the argument for putting
+it where the citation check already prints - that output gets read, because it is what found the
+stale `R-6` blocker this morning.
+
+**Not urgent.** Nothing waits on it. **Filed because a promoted rule whose mechanism nobody owns
+reads as working**, which is the failure the rule itself is about.
+
+
 ### S-20 - The `node` table calls a total a density, and erases what the twelve territories exist to exercise
 
 **to** code - **status** **acted** 2026-09-03 - **cited** `4b912da` - **raised** 2026-09-03 - **source** Sean, reading `state.md`
