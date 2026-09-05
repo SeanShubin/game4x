@@ -89,6 +89,19 @@ canonical.
 **`index.html` links every report and says in one line what each answers.** It is the only entry
 point he should need.
 
+**And it links the scenario's own files, which makes the whole thing two entry points rather than
+three.** Sean, 2026-09-05. `scenario/commands/*.4x` and `scenario/expected/*.4x` appear on the index
+**as links to the raw files, not as renderings**: they are the canonical data, and a rendering of
+them would be one more thing that can drift from what it renders.
+
+**Mark the two groups apart on the page.** The scenario files are what he validates and are canonical;
+everything else on the index is a generated view and is not. **`P-218` is the reason** - a
+replication is allowed and never canonical - and a reader who cannot tell which is which on the page
+has the same problem `S-35` had in a file.
+
+**So: `docs/notes/proposals.md` is where he creates, `reports/index.html` is where he does everything
+else.** Two.
+
 **3. Each turn carries its commands and its delta.** `turns.md` is **1804 lines** of eight full
 states and **contains no commands at all** - measured. So it shows the endpoints of a transformation
 and never the transformation.
@@ -102,7 +115,8 @@ difference himself, eight times.
 turn section, and the turn sections number what the scenario's `end turn` commands number.
 
 **What this lane does after you, and cannot do before.** `README.md` links `catalog.md`, `state.md`
-and `entities.md` by path - three links that break the moment the files move. **Tell me when they
+and `entities.md` by path, and this file's own reading list links `commands/play.4x` and
+`expected/play.4x` - **five links that break the moment the files move. Tell me when they
 have moved and I will fix them**; doing it first would break them instead.
 
 **Not urgent against the vetting.** He is waiting on the model, not on this. **If it lands before he
