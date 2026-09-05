@@ -24,36 +24,28 @@ So a report names what to do, not merely what is wrong.
 [`docs/process.md`](../../docs/process.md) is Sean's own statement and is authoritative; this file is
 detail beneath it and must not contradict it.
 
-**What this lens is for is [`docs/process.md` → Quality instance](../../docs/process.md#quality-instance-a-type-of-research-instance), and is deliberately not restated here.**
-That section also carries the constraint that matters most in practice - this lens **finds and
-reports** every one of those jobs and **builds none**, because production support is the coding
-instance's and a lane that needs a check wired files it rather than wiring it.
+**What this lens is for, what bounds it, and how it tells a dependency that provides a home from one
+that provides operations are all in `docs/process.md` - under
+[Quality instance](../../docs/process.md#quality-instance-a-type-of-research-instance),
+[Research instances](../../docs/process.md#research-instances) and
+[Dependencies](../../docs/process.md#dependencies). None of it is restated here.**
 
-Not restated because restating it is what failed. This file said the section gave three jobs; it was
-right when written and wrong four days later, and the four it lost included both of the ones that
-aim this lens at structure and at the pipeline. **Listing them again more faithfully would have been
-the same mistake with a longer half-life** - the first copy was close to the source's words too, and
-closeness is not what kept it current.
+Not restated because restating it is what failed. This file said the Quality instance section gave
+three jobs; it was right when written and wrong four days later, and the four it lost included both
+of the ones that aim this lens at structure and at the pipeline. **Listing them again more
+faithfully would have been the same mistake with a longer half-life** - the first copy was close to
+the source's words too, and closeness is not what kept it current. `docs/README.md` now carries the
+rule: a document that restates another links to it instead of listing it.
 
-**Eight items open to any one instance, and close or withdraw before filing a ninth.** Not a
-borrowed number: about two days of a producer's throughput. It is deliberately where the judgement
-already is - most of what this lens notices is meant to be `noted`, and a cap is what makes that
-cost something rather than being a good intention.
+### What is not in `docs/process.md`, and is this lens's own
 
-### The test this lens was missing
+**Two findings, as worked examples of the dependency test rather than a copy of it.** Both were
+reached the long way, by counting what a prototype linked, and both fall straight out of asking
+whether the dependency appears in this project's own types:
 
-`docs/process.md` → Dependencies states it better than anything here did. **A dependency provides
-operations or it provides a home. Operations are functions over data you already had; a home decides
-where the data lives and when the code runs. The test is whether it appears in your own types: an
-operation never does, and a home cannot avoid it.**
-
-That is a sharper instrument than the reasoning this lens actually used, and it would have reached
-two findings faster:
-
-- `Q-2` - `Biome` was `game-model`'s, and it appeared in `planet_terrain::Sample`'s surface. A
+- `Q-2` - `Biome` belonged to `game-model`, and appeared in `planet_terrain::Sample`'s surface. A
   fact about the game had become a fact about the terrain crate's types.
-- `Q-3` - Bevy is a home, and it had two crates to have opinions in rather than one. The rule names
-  the defect directly; this lens got there by counting what a prototype linked.
+- `Q-3` - Bevy is a home, and it had two crates to have opinions in rather than one.
 
 ## The outbox
 
