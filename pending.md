@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-272** - A biome gives a territory its numbers, said in the specification · `docs/notes/proposals.md`
 - **P-274** - The rebalanced biome table · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise

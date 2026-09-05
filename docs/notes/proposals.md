@@ -63,31 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-272 - A biome gives a territory its numbers, said in the specification
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind**
-contradiction - **shape** text - **asks** approval - **into** `spec/planet.md` -> after *for each
-resource, a territory has total capacity*
-
-**Your choice A, and it needed a rewrite before it could be promoted** - the version you read offered
-two choices and carried no words, which under `P-266` is a proposal nothing can promote. **This is
-that same choice written down.**
-
-> - A territory's biome gives it its total capacity and density for each resource. Two territories
->   with the same biome have the same numbers
-
-**Why `spec/planet.md` and not the release.** The specification states both facts and never links
-them: *for each resource, a territory has total capacity for some number of extractors, and a density
-that each of them yields*, and separately *each territory has a biome*. **The link exists only as the
-heading of a release table** - *What each biome gives a territory*, one occurrence, measured - **and a
-heading is not where a rule lives.** That is why the data could drift from the table for as long as
-it did without contradicting anything the specification says.
-
-**What it makes wrong, immediately and deliberately.** `scenario/commands/nodes.4x` sets five
-grassland territories to five different pairs of numbers, none of them the table's. **Every one of
-them becomes a defect the moment this lands**, and it is work for the code lane rather than for you -
-filed the moment you promote it.
-
 ### P-274 - The rebalanced biome table
 
 **to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
@@ -1454,6 +1429,7 @@ work the release exists to order.
 | P-271, the directory list goes and every rule stays, with `CLAUDE.md` linked                                                 | `docs/process.md` -> Who writes what                                                                                                         | 2026-09-05 |
 | P-273, the coding instance's prompt points at `pending.md` instead of naming three files                                     | `docs/process.md` -> Starting the instances                                                                                                  | 2026-09-05 |
 | P-275, a military unit is organised force in itself, and taking uses the organised force brought                             | `spec/control.md` -> Gaining and holding ground                                                                                              | 2026-09-05 |
+| P-272, a biome gives a territory its total capacity and density for each resource                                            | `spec/planet.md`                                                                                                                             | 2026-09-05 |
 
 ## Rejected
 
