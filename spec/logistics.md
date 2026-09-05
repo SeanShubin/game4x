@@ -23,6 +23,15 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - A thing says which of the things in it are next to which. That is a fact about the container
   rather than about its contents
 - Nothing contains itself, directly or through anything else
+- Every thing is in the game, directly or through what contains it. **The game is the one thing that
+  is in nothing**, so containment is a tree rather than a scattering
+- **A kind that declares no capacity contains nothing, and never can.** A kind that declares capacity
+  may contain, and may happen to be empty - so a thing holding nothing today is not thereby a thing
+  that never could
+- **What a kind may contain is a fact about the kind and not about any one of them.** Nothing becomes
+  a different sort of thing by picking something up
+- **Containing is not referring.** A thing may name another without holding it - an extractor names
+  the node it works, and the node is not inside it
 
 ## Moving materials
 

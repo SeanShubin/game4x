@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-256** - A store shows how much is there and never what it can hold · `docs/notes/proposals.md`
-- **P-257** - Containment is a tree, and four sentences make it one · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -78,6 +77,7 @@ it exists to ask.
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
 - `spec/invariants.md` -> The game is one function - P-75, P-115
+- `spec/logistics.md` -> Containment - P-188, P-257
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28
 - `spec/resources.md` -> The list - P-49, P-65
