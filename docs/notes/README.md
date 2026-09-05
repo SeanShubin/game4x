@@ -19,6 +19,7 @@ disagree, the spec is right and the note needs a superseded marker.
 | [Silence is not agreement](silence-is-not-agreement.md)                      | Eight failures in one day where a thing read correctly and its relationship to another had stopped holding          | 2026-09-02 |
 | [What `../game-4x` did](game-4x-on-things-and-readiness.md)                  | Things with quantities, readiness as an attribute, and no labor                                                     | 2026-09-04 |
 | [Regression by directory](regression-by-directory.md)                        | What `code-structure`'s `expected/` and `memory/` do, and which two of the three parts belong here                  | 2026-09-04 |
+| [What the predecessor built](game-4x-survey.md)                              | The four things in `../game-4x` worth taking, and the paths to find them                                            | 2026-09-05 |
 | [Control without tedium](control-without-tedium.md)                          | The principle that both goals are one axis only while control means acting, and the middle layer                    | 2026-08-28 |
 | [Making the planet look like a world](planet-appearance.md)                  | Prior art from seans-arcade, and the tension between continuous terrain and a discrete grid                         | 2026-08-28 |
 | [When an intermediate step earns its place](intermediate-steps.md)           | A test for prerequisites versus building directly, and how to keep depth addable later                              | 2026-08-26 |
