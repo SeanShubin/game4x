@@ -115,21 +115,22 @@ Food is made with `keeps` 1. The force nature holds a territory with.
 
 ## What bounds a kind in a territory
 
-| Kind          | Bounded by                                   |
-| ------------- | -------------------------------------------- |
-| **citizen**   | the food produced here, through upkeep       |
-| **garrison**  | a capacity of 1                              |
-| **extractor** | a capacity, from *Territory resources*       |
-| **yard**      | a capacity of 1                              |
-| **ark**       | a capacity of 2                              |
-| **pioneer**   | a capacity of 2, and the food produced here  |
-| **labor**     | the citizens that make it, one each per turn |
-| **food**      | a capacity of 20, and it keeps for one turn  |
-| **metal**     | a capacity of 20                             |
-| **energy**    | a capacity of 20                             |
+| Kind          | Bounded by                                               |
+| ------------- | -------------------------------------------------------- |
+| **citizen**   | the food produced here, through upkeep                   |
+| **garrison**  | a capacity of 1                                          |
+| **extractor** | a capacity, from *Territory resources*                   |
+| **yard**      | a capacity of 1                                          |
+| **ark**       | a capacity of 2                                          |
+| **pioneer**   | a capacity of 2, and the food produced here              |
+| **labor**     | the citizens that make it, one each per turn             |
+| **food**      | the things in it that hold it, and it keeps for one turn |
+| **metal**     | the things in it that hold it                            |
+| **energy**    | the things in it that hold it                            |
 
-What an extractor holds is additional: a territory holds this much, and each extractor holds one
-cycle of what it makes.
+A territory declares no capacity for a resource. It declares capacity for the things that
+hold them - an extractor holds some of what it makes, and a store holds what it was built to
+hold. **A resource that is in nothing is in disorder, and cannot be reached.**
 
 ## Units and structures
 

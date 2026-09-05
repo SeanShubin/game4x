@@ -128,37 +128,6 @@ reader has to know it means extractors. **A store row printing `capacity:20` bes
 same word meaning something else only because neither says what it is for.** Whatever carries a
 capacity should say what kind it is a capacity for, and then the word is unambiguous everywhere.
 
-### P-258 - A territory declares no capacity for a resource
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
-- **shape** text - **asks** approval - **into** `releases/first-release.md` -> What bounds a kind
-
-**Reworded on your objection, which was right.** *No storage is inherent to a territory* denies
-something true: **a territory's capacity for stores is inherent.** What is not inherent is capacity
-for what a store holds. **The distinction is exactly the one `P-257` landed** - a branch holds
-things, and material sits in the things that declare capacity for it.
-
-> A territory declares no capacity for a resource. It declares capacity for the things that hold
-> them - an extractor holds some of what it makes, and a store holds what it was built to hold. **A
-> resource that is in nothing is in disorder, and cannot be reached.**
-
-**Basis: it removes the three lines that gave a territory storage for free.** *What bounds a kind*
-says food, metal and energy each have **a capacity of 20** - measured, three times - none of them
-built or paid for. **Under this a territory can hold stores from the start and can hold no metal at
-all until one is built.**
-
-**Said in `resource` rather than in *material*, because `resource` is declared and *material* is
-not.** The release's families give `resource` as food, metal and energy - **so this touches those
-three and nothing else.**
-
-**Which leaves `labor` alone, deliberately, and it is worth saying why.** `labor` is not a resource;
-it is bounded by *the citizens that make it, one each per turn* rather than by a capacity. **It is
-made and consumed inside a turn and never needs somewhere to sit** - so requiring a store for it
-would be a rule with no case.
-
-**`P-259` is decided and this is the half that lands text.** Disorder is lost at the turn's end,
-which `spec/turn.md` already says; **this changes what the bound is.**
-
 ## Addressed to other perspectives
 
 ### S-43 - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release
@@ -1420,6 +1389,7 @@ work the release exists to order.
 | P-255, `founded` is dropped from the data - Sean chose B, 2026-09-05                                                  | no text landed: `control` stays declared and unprinted, and he will notice if he wants it. `S-43` does it                                    | 2026-09-05 |
 | P-257, containment is a tree: a root, a one-way leaf rule, the kind not the instance, and containing is not referring | `spec/logistics.md` -> Containment                                                                                                           | 2026-09-05 |
 | P-259, disorder is lost at the turn's end - Sean chose B, 2026-09-05                                                  | no text landed: `spec/turn.md` already says anything above the bound is lost when the turn ends, and `P-258` is what changes the bound       | 2026-09-05 |
+| P-258, a territory declares no capacity for a resource                                                                | `releases/first-release.md` -> What bounds a kind                                                                                            | 2026-09-05 |
 
 ## Rejected
 
