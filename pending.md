@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-272** - The scenario's territories do not match the release's biome table · `docs/notes/proposals.md`
 - **P-274** - Rebalancing the biomes, and the two that are dominated · `docs/notes/proposals.md`
+- **P-275** - A military unit is organised force, and taking uses what is brought · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -22,11 +23,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
-- **Q-48** - `13497da` Q-48: assert the population before looping over it · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
 - **S-44** - Storage becomes a built thing, and the scenario cannot run until it is · `docs/notes/proposals.md`
 - **S-41** - `P-250`'s second half needs `tools/outbox` to list at a close · `docs/notes/proposals.md`
@@ -37,7 +37,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-24** - Four artifacts, and a human must be able to derive the fourth from the other three · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
-- **Q-48** - Two guards loop over a parsed population and assert nothing about its size · `lenses/quality/outbox.md`
+- **Q-49** - The count guard on `released_table` makes an added row loud and leaves a colliding row silent · `lenses/quality/outbox.md`
+- **Q-50** - Twenty-two runs of spaces sit mid-sentence in failure messages, and two arrived today · `lenses/quality/outbox.md`
 
 ### To spec (9)
 

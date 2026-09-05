@@ -126,40 +126,64 @@ readers - which is the guard-that-cannot-fail this repository has built twice an
 **Whether.** Worth building, and worth building carefully: match the directory rather than a string,
 or match both spellings and assert the total, so the check fails if a third spelling appears.
 
-### Q-48 - Two guards loop over a parsed population and assert nothing about its size
+### Q-49 - The count guard on `released_table` makes an added row loud and leaves a colliding row silent
 
-**to** code · **status** open · **raised** 2026-09-06 · **source** the specification lane's target -
-*which of our checks would still pass if its subject were deleted* - run against every test in the
-tree
+**to** code · **status** open · **raised** 2026-09-05 · **source** reading `13497da`, the fix for
+`Q-48`
 
-**`first_release.rs` is the one that matters.** `released_table()` parses
-`releases/first-release.md` by taking every line that starts with `|`, has at least four cells, and
-whose first cell parses as an integer. It returns **twelve rows today**, ids 1 to 12 - replicated
-here against the current file. The test loops over them and **every assertion is inside the loop**,
-including `!place.nodes_of(Food).is_empty()`.
+The fix is right and this is the half of it that is still open. `released_table` finds rows by shape
+across the **whole file** rather than under a heading - the code lane established that by renaming
+`## Territory resources` and watching nothing break - so any table that grows an integer first cell
+and four cells joins the population.
 
-**Nothing asserts that twelve came back.** Rename the heading, restructure the table, drop it below
-four columns, and the parse yields nothing, the loop runs zero times, and the test that proves the
-release is buildable goes green having checked no territory at all.
+`assert_eq!(table.len(), 12)` catches that when the stray row's id is new: thirteen rows, and it
+fails. **It does not catch it when the id collides.** `table.insert(id, nodes)` returns the previous
+value and the code discards it, so a stray row claiming an id in 1 to 12 **replaces** that
+territory's expected nodes and the length is still twelve. The test then checks the real territory
+against somebody else's row and says nothing about the swap.
 
-That is not hypothetical for this document. The release's tables have changed repeatedly this week -
-`founded` dropped, `force-of-nature` renamed to `nature`, columns added. Each of those was a change
-to the shape this parse depends on, and none of them would have announced itself.
+Measured against the file as it stands: twelve rows, ids 1 to 12, no duplicates, and every one of
+them from `## Scope`. **So this is prophylactic rather than live** - it is filed because the fix's
+own reasoning is that the parse holds by luck, and this is the part of the luck the new assertion
+does not convert into a failure.
 
-**`poles.rs` is the same shape and trivial**: four tests loop over `arrangements()`, which is
-`goldberg::arrangements_up_to(200)`, with no floor. Included because it is one line to fix while the
-subject is open, not because the risk is comparable.
+**Whether.** One line, and it is the assertion that says what the parse means:
+`assert!(table.insert(id, nodes).is_none(), "two rows claim territory {id}")`. Worth it or not is
+the code lane's; the count alone should not be read as covering it.
 
-**Whether.** Worth fixing, and it is one assertion each - `assert_eq!(released_table().len(), 12)`
-and a non-empty check on `arrangements()`. `quotations.rs` already does this with `checked >= 1`, so
-the habit exists in the tree and these two are where it is missing.
+### Q-50 - Twenty-two runs of spaces sit mid-sentence in failure messages, and two arrived today
 
-**What this cost to find, because it bears on whether the target can be automated.** A detector for
-*loops over a computed population with no floor* flagged four files. Two were false: `fully_exploited.rs`
-floors `claimable.len()` at twelve and `quotations.rs` floors `checked`, and my pattern saw neither
-because it was looking for the population's own name. **Reading four files found two real ones; the
-pattern alone would have reported four.** The target is worth running and is not worth trusting
-unread - which is `C-28` about the instrument used to look for `C-28`.
+**to** code · **status** open · **raised** 2026-09-05 · **source** a scan of every non-comment string
+literal in `crates/`, `tools/` and `prototypes/`
+
+A message reads *"if that table          moved or changed shape"*. Eleven lines across seven files
+carry a run of four or more spaces between two words inside a string literal, twenty-two runs in
+all: `game-console/src/expected.rs`, `game-console/src/grammar.rs`,
+`game-console/tests/first_release.rs` twice, `game-model/src/territory.rs`,
+`sphere-tessellation/src/quality.rs`, `sphere-tessellation/tests/poles.rs`,
+`tools/outbox/src/lib.rs`, and `tools/outbox/tests/promotions.rs` at three lines, where the `KNOWN`
+exceptions each carry several.
+
+**Two of them are from `13497da`** - `first_release.rs:247` and `poles.rs:50`, the two messages the
+`Q-48` fix added. So this is a live rate rather than a historical residue, which is the only reason
+it is filed rather than left alone.
+
+**Why it is more than tidying, barely.** These strings are read in exactly one situation: a check has
+failed and somebody is working out why. A green run never shows them, so nothing in normal use
+applies any pressure to them at all - the same property that let `Q-48` exist.
+
+**Not asserted: the cause.** The run length tracks the literal's indentation - six spaces in a
+shallow one, twenty-two in `grammar.rs`'s nested match - which is what a wrapped line looks like
+after its continuation is joined back. That is an observation about the bytes, not a claim about
+what did it. `rustfmt` leaves string literals alone, so whatever it is, the formatter is not going to
+find it.
+
+**Whether.** Mechanical, and checkable: no non-comment string literal holds a run of four or more
+spaces between two word characters unless a newline escape precedes it. That exception is
+load-bearing - `dumps_are_current.rs` and `prototypes/kinds/tests/against_the_release.rs` indent
+under a newline deliberately, and I confirmed both by reading rather than by trusting the pattern.
+If it is built it needs poisoning like anything else.
+
 
 ---
 
@@ -528,6 +552,25 @@ while never being linted at all, and the lint itself was unreachable.
 because that crate is the specification lane's and the code lane may not edit it - a gate red on a
 file its owner cannot fix is the trap `CLAUDE.md` names. Its tests and formatting run. The exclusion
 goes when that lane fixes the warning
+
+### Q-48 - Two guards looped over a parsed population and asserted nothing about its size
+
+**to** code · **status** **acted** 2026-09-05 · `13497da`. Verified: `first_release.rs` asserts
+twelve both where the table is parsed and before the loop, and counts the territories checked after
+it; `poles.rs` floors `arrangements_up_to(200)` at eight. Both poison-tested by the code lane, and
+the parse re-run here against the current release - twelve rows, ids 1 to 12
+
+**The code lane found it looser than this lens did.** `released_table` keys on no heading at all: it
+scans every line in the file, which they established by renaming `## Territory resources` and
+watching nothing break. So the failure mode was never only *the table moves* - it was also *any
+other table grows an integer first column and four cells*. The release gained store rows in two
+sections today and neither has an integer first cell, so it held by luck. See `Q-49` for the half of
+that luck the count assertion does not cover.
+
+**`poles.rs` is floored at eight rather than at twelve, deliberately**, and their reason is better
+than a number would have been: the count is a property of the tessellation and not of the test, so a
+bound needing an edit whenever the geometry gains an arrangement would be edited without being
+thought about
 
 ### Q-16 - The picture never sees the biome the model has
 
