@@ -276,6 +276,43 @@ case.
 nothing, not being simple** - `spec/invariants.md` says a thing is a set of traits whatever else it
 is, and that applies at both ends of the tree.
 
+## His adjacency example names the cause, and the id was only the marker
+
+*I couldn't just add a territory to a planet, because it plugs into adjacency.*
+
+**Adding a leaf's contents changes nothing else.** Fourteen metal becomes fifteen; no other row moves.
+
+**Adding a territory rewrites its neighbours.** `adjacency` is a **stored** trait of a place - *which
+places it touches, and by which kind of edge* - so a thirteenth territory means writing adjacency
+for it **and editing every neighbour's**. **Adding a child mutates its siblings.**
+
+**That is the real difference, and identity is downstream of it.** The chain runs:
+
+1. something must refer to a thing **individually** - adjacency refers to territory 7
+2. so it needs an **id**, because *next to metal* refers to nothing
+3. so it **cannot collapse into a count**
+4. so its container **lists** rather than counts, and is a branch
+
+**So *fungible* is the consequence, *id* is the marker, and *something refers to it individually* is
+the cause.** The test to apply to a new kind is the third one, and it is the only one that can be
+answered before the kind exists.
+
+## Which makes the planet a particular sort of branch
+
+**Its children are settled when it is made, because its adjacency is geometry rather than
+bookkeeping.** `spec/planet.md`: *the distance between any two territories is fixed, and can be
+computed by adjacency.* **You cannot add a territory at runtime because you cannot add a face to a
+solid.**
+
+**Not a new category, and worth not making one.** It is a branch whose parent's structure makes
+adding expensive - and the general statement covers it: **adding a child costs whatever the parent's
+structure requires**, which for most containers is nothing beyond capacity, and for a planet is a new
+sphere.
+
+**A territory's extractors are the contrast.** Identified, listed, in a branch - and **nothing says
+which extractor is next to which**, so adding one costs only capacity. **Same shape, different price,
+and the price is a fact about the parent rather than about the child.**
+
 ## What this leaves open, which is his to settle
 
 - **Where N's bound comes from** - given by the place, upgraded, or derived from what the place
