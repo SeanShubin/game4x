@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-256** - A store shows how much is there and never what it can hold · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -17,6 +16,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-43** - `30e6b1e` S-43: a thing's own identifier is id, and founded goes · still open in `docs/notes/proposals.md`
 - **S-42** - `ca16593` S-42: nothing is quoted, nature is one word, and jungle holds itself with 2 · still open in `docs/notes/proposals.md`
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`

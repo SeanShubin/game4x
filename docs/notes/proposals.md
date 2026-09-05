@@ -63,6 +63,51 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-256 - A store shows how much is there and never what it can hold
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
+- **into** `releases/first-release.md` -> Traits, and the dump
+
+**You asked where the limit is tracked and could not find it. It is not in the report.**
+
+**What the rules say.** There are **no bins** - `spec/logistics.md`: *every resource exists in a
+particular place; there is no general inventory*. A territory's limit is its **total capacity** for
+a kind, which is a stored trait, and *What bounds a kind* gives **a capacity of 20** to each of
+food, metal and energy - measured, three times. **How much is there is derived**, and `spec/turn.md`
+says anything above the bound is lost when the turn ends.
+
+**So the answer to your question is: the bins do not exist, the limit is 20, and the report never
+says so.**
+
+**Three things make that hard to see, and two are defects.**
+
+**1. The store row carries no limit.** `{{store territory:1 resource:energy amount:20}}` is at its
+maximum and reads identically to one that is not. **You cannot tell a full store from a half-empty
+one without knowing the number from elsewhere.**
+
+**2. `capacity` in the data means something else.** `{{territory-resource territory:1 resource:food
+capacity:3 ...}}` is **how many extractors can be built**, not how much food can be kept. **One word,
+two limits, and the one you were looking for is the absent one.**
+
+**3. `amount` is not a declared name.** It appears **0 times** in `releases/first-release.md`,
+measured - the same shape as `founded`, and found the same way: by you reading the data and asking
+what it meant.
+
+**Choice A - the store row carries both.** `{{store territory:1 resource:metal amount:14
+capacity:20}}`. **You can see fullness at a glance**, which is what you were trying to do.
+
+**Choice B - the store row carries what is there, and capacity lives on the territory.** One row per
+territory per kind saying its limit, beside the rows saying its contents. **No repetition**, and it
+costs a lookup.
+
+**This lane recommends A**, on `docs/process.md`: a report is worth having when it lets you check
+that these commands produced this change. **A store at 20 of 20 is the interesting case** - it is
+where production stops mattering and things start being lost at the turn's end - **and it is exactly
+the case the current row cannot show you.**
+
+**And whichever you pick, `capacity` needs two names or one of them needs a different word.**
+Extractor capacity and storage capacity are different limits and the data calls both `capacity`.
+
 ## Addressed to other perspectives
 
 ### S-43 - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release
