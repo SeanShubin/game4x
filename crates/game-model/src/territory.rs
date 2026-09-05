@@ -129,18 +129,38 @@ impl Territory {
         });
     }
 
-    /// Throw away what a turn does not carry.
+    /// What a territory can keep, per kind.
     ///
-    /// **Only the resources**, which is what `stores = [0; 3]` used to mean when stores were
-    /// a separate array. Putting citizens and yards into the same list made `clear()` wipe
-    /// the population as well - caught immediately by `expected/play.4x`, which is what a
-    /// change of representation that alters behaviour looks like when something is watching.
+    /// `releases/first-release.md` → *What bounds a kind in a territory*: twenty of each
+    /// resource. A citizen is bounded by the food produced here, and labor by the citizens
+    /// that make it, so neither is a number - those are enforced where they happen.
+    const KEEPS: u32 = 20;
+
+    /// End-of-turn losses: what expires, and what is above the bound.
     ///
-    /// `C-11` is the open question about whether this should happen at all: `spec/turn.md`
-    /// carries what a territory keeps, and this discards it. That is a behaviour change and
-    /// comes on its own, where the diff shows it.
-    pub fn discard_resources(&mut self) {
-        self.held.retain(|thing| thing.kind.resource().is_none());
+    /// **`C-11`.** `spec/turn.md`: *what expires expires, and what was not kept in order is
+    /// lost*, and *what a territory can keep is bounded - anything above the bound is lost
+    /// when the turn ends*. The model discarded **all three** resources every turn, which is
+    /// neither of those rules. Food expires, because the release gives it *a capacity of 20,
+    /// and it keeps for one turn*; metal and energy have a capacity and no expiry, so they
+    /// carry.
+    ///
+    /// Labor is not a resource and is not carried either: it is bounded by *the citizens
+    /// that make it, one each per turn*, so labor left at the end of a turn was made by a
+    /// citizen who is about to be refreshed and would otherwise be counted twice.
+    pub fn end_of_turn_losses(&mut self) {
+        self.held.retain(|thing| {
+            // Food keeps for one turn, so what is here at the end was made this turn and
+            // expires now.
+            thing.kind != Kind::Food && thing.kind != Kind::Labor
+        });
+        for resource in [Resource::Metal, Resource::Energy] {
+            let kind = Kind::from_resource(resource);
+            let over = self.count_of(kind).saturating_sub(Self::KEEPS);
+            if over > 0 {
+                self.remove(kind, over);
+            }
+        }
     }
 
     /// Whether a player holds this ground.

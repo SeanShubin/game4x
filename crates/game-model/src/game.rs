@@ -786,10 +786,10 @@ impl Game {
         let citizens = self.territories[id.index()].citizens();
         self.territories[id.index()].set_count(Kind::Citizen, population_after(citizens, food));
 
-        // Unused resources are discarded, and everything becomes ready again. Nothing
-        // transforms here: founding happens when a unit arrives, so by the time a turn
-        // ends there is never a unit waiting to become something.
-        self.territories[id.index()].discard_resources();
+        // What expires expires and what is over the bound is lost; metal and energy carry.
+        // Nothing transforms here: founding happens when a unit arrives, so by the time a
+        // turn ends there is never a unit waiting to become something.
+        self.territories[id.index()].end_of_turn_losses();
         self.territories[id.index()].make_ready();
     }
 }
@@ -1298,36 +1298,43 @@ mod tests {
         assert_eq!(game.territory(TerritoryId(1)).unwrap().citizens(), 4);
     }
 
-    /// `spec/turn.md`: unused resources are discarded.
+    /// What a turn ends with: food expires, metal and energy carry, and both are bounded.
+    ///
+    /// **`C-11`.** This used to be called *resources left at the end of a turn are
+    /// discarded* and asserted metal went to zero. `spec/turn.md` says *what expires
+    /// expires, and what was not kept in order is lost*, and *what a territory can keep is
+    /// bounded* - neither of which is *everything goes*. The release gives food *a capacity
+    /// of 20, and it keeps for one turn*; metal and energy have a capacity and no expiry.
+    ///
+    /// **The old name is the tell.** It described the code rather than the rule, so it went
+    /// on passing while the code and the rule disagreed, and reading it told you the model
+    /// was right.
     #[test]
-    fn resources_left_at_the_end_of_a_turn_are_discarded() {
+    fn food_expires_at_the_end_of_a_turn_and_metal_carries() {
         let mut game = founded();
         game.territories[0].add(Resource::Metal, 5);
-        let game = with_labor(game, 1, TerritoryId(1))
-            .after(&Transition::Build {
-                structure: StructureKind::Extractor,
-                territory: TerritoryId(1),
-                resource: Some(Resource::Metal),
-            })
-            .unwrap();
-        // The labor is made either way; whether the work succeeds is what this tolerates.
-        let ready = with_labor(game, 1, TerritoryId(1));
-        let game = ready
-            .clone()
-            .after(&Transition::Work {
-                count: 1,
-                structure: StructureKind::Extractor,
-                territory: TerritoryId(1),
-                resource: Some(Resource::Metal),
-            })
-            .unwrap_or(ready);
+        game.territories[0].add(Resource::Food, 9);
+        let after = game.after(&Transition::EndTurn).unwrap();
+        let place = after.territory(TerritoryId(1)).unwrap();
+
+        assert_eq!(place.store(Resource::Metal), 5, "metal has no expiry");
+        assert_eq!(place.store(Resource::Food), 0, "food keeps for one turn");
+    }
+
+    /// Anything above what a territory can keep is lost when the turn ends.
+    #[test]
+    fn what_is_over_the_bound_is_lost_when_the_turn_ends() {
+        let mut game = founded();
+        game.territories[0].add(Resource::Metal, 25);
+        game.territories[0].add(Resource::Food, 9);
         let after = game.after(&Transition::EndTurn).unwrap();
         assert_eq!(
             after
                 .territory(TerritoryId(1))
                 .unwrap()
                 .store(Resource::Metal),
-            0
+            20,
+            "a capacity of 20, and five over it"
         );
     }
 
@@ -1507,7 +1514,7 @@ mod tests {
         // Nothing was gathered, so there is no food to pay it with. **The resources
         // only** - `held.clear()` would take the citizens too now that they are things in
         // the same list, and the fixture would be testing starvation with nobody to starve.
-        game.territories[0].discard_resources();
+        game.territories[0].end_of_turn_losses();
 
         let after = game.after(&Transition::EndTurn).unwrap();
         let pioneer = after.units.iter().find(|u| u.kind == UnitKind::Pioneer);
