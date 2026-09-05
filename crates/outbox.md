@@ -63,6 +63,52 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-30 - The coding instance's start prompt omits the file holding most of its work
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** reading `docs/process.md` -> *Starting the instances* rather than taking a summary of it
+
+**Found by doing what the notice asked.** The specification lane sent a list of what had changed and
+said to go and read the documents rather than take the list. This is what reading them turned up,
+and a summary could not have contained it.
+
+`docs/process.md` -> *Starting the instances* gives the coding instance's prompt:
+
+> Your work is what is open and addressed to you - in `crates/outbox.md`, in `releases/`, and in the
+> lenses' outboxes.
+
+**Three places, and the one that carries most of the work is not among them.** Counted from
+`pending.md` as it stands:
+
+| Where                       | Open `to code`                                                 |
+| --------------------------- | -------------------------------------------------------------- |
+| `docs/notes/proposals.md`   | **7** - `S-44`, `S-41`, `S-30`, `S-29`, `S-26`, `S-24`, `S-22` |
+| `releases/first-release.md` | 1 - `R-6`                                                      |
+| `lenses/quality/outbox.md`  | 1 - `Q-47`                                                     |
+| `crates/outbox.md`          | **0**                                                          |
+
+**The prompt names the two files holding two items and the one holding none, and omits the file
+holding seven.** `crates/outbox.md` is this lane's *outbox* - what it addresses to others - so it is
+the one place that never holds work for this lane by construction. Naming it and not
+`docs/notes/proposals.md` has the direction backwards.
+
+**Every substantive thing this lane built today came from the missing file** - `S-40`, `S-22`,
+`S-24`, `S-42`, `S-43`, `S-44`, `S-41`. A fresh instance started from that prompt would find `R-6`
+and `Q-47` and conclude it had almost nothing to do.
+
+**`CLAUDE.md` -> *What each perspective reads* has it right**: *Code: `to code`, plus `releases/`.*
+The prompt tried to name where `to code` items live and got the list wrong, which is the hazard of
+enumerating what another document already states as a rule.
+
+**Two ways to fix it and this lane has no preference**, since `docs/process.md` is Sean's:
+name `docs/notes/proposals.md` in the list, or point at `pending.md`, which is generated from every
+outbox and cannot go stale the way an enumeration does.
+
+**And one thing that is right and worth not losing.** *Who writes what* no longer names production
+support as this lane's - the specification lane flagged the thinning itself. `CLAUDE.md` ->
+Perspectives still says it outright, so nothing is lost, but it is now stated in exactly one place
+and this lane relies on it: `hooks/`, `scripts/`, CI and `tools/` are what `S-41` and the padder
+work sits in.
+
 ### C-29 - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** the specification lane, noting the assert at `territory.rs:467`
