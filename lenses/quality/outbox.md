@@ -82,6 +82,38 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
+### Q-42 - Two sentences about a lens's column contradict each other, and a third is stale
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** reading `docs/process.md` for new
+duties, at Sean's instruction
+
+`docs/process.md` → Who writes what carries both of these, four bullets apart in one list:
+
+- *Every lane owns the tools for its own work: `tools/spec/` is the specification instance's,
+  `tools/<name>/` is that lens's*
+- *A research instance: `lenses/<its own name>/`, **and nothing else***
+
+**They cannot both be true**, and the first is the one `CLAUDE.md` agrees with - its table grants a
+lens *its own directory under `lenses/`, and `tools/<its name>/`*. So the *and nothing else* bullet
+is the one that predates the tools grant and did not move.
+
+It matters more than a stale line usually would, because it is the sentence that says what this lens
+may write, and the two readings differ about whether it may own a tool at all.
+
+**The same staleness is in the text handed to a new lens.** `CLAUDE.md:329`, in the startup block:
+*You write `lenses/<name>/` and nothing else.* A new lens would be told the narrower rule on its
+first read, which is the one place it cannot check against practice.
+
+**And one more of the same kind**, less important: `CLAUDE.md:164` and `:213` say *only the proposal
+queue addresses `sean`*, while `:185` establishes that a capability whose completion needs a person
+is addressed to one, and `releases/first-release.md` addresses him five times. The rule at `:185` is
+the live one and the two older sentences describe the arrangement it replaced.
+
+**Whether.** Worth a sentence each rather than urgent - nothing is misbehaving, and this lens has
+not wanted a tool. Filed because `docs/process.md` says a contradiction goes into an outbox the
+moment it is found, and because these are the documents a new instance reads before it can tell
+which sentence is current.
+
 ---
 
 ## Resolved
