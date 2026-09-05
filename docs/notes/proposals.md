@@ -141,36 +141,6 @@ decides whether territory 1 needs one metal store or two, and therefore what the
 **The gate is red until this lands** - the model cannot have a store whose capacity no document
 states.
 
-### P-266 - A proposal that asks a decision cannot be promoted
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
-**asks** approval - **into** `CLAUDE.md` -> Promotion
-
-**Your diagnosis is right, and the record is worse than you put it: you never said promote `P-260`.**
-You answered its four questions; the promotion is `c2e9266`; **your next message named `P-261` and
-`P-262` and not it.**
-
-> **A proposal that asks a decision cannot be promoted.** An answer to it is not a promotion and
-> never implies one - it turns the proposal into one that **asks approval**, which is a rewrite for
-> you to read. **So `asks` is checkable rather than descriptive**: promoting an item still marked *a
-> decision* is a defect a tool can name.
-
-**Why that is the cause rather than a coincidence.** `P-260` asked A, B, C and D and, asking a
-decision, **carried no quotation** - `P-229` forbids one. So there was **never a version of the text
-containing 10.** The promotion had nothing to copy, and its assertion checked what happened to be
-countable - thirteen kinds, sixteen recipes - and passed. **The number was not dropped from the text.
-There was no text.**
-
-**This is `CLAUDE.md`'s own rule with the loophole shut.** It already says *accepting a proposal is
-not permission to write it, and it is never inferred from the word "accepted"* - and **the failure
-never used the word.** Four answers in one message read as an instruction, and the rule as written
-did not reach them.
-
-**Your third clause is the one that makes it mechanical**, and it is what the quotation says. The
-other two are already the protocol: the table says you say what should change, this lane changes it
-and shows the result, and only then do you say *promote*. **What was missing is that nothing stopped
-a proposal from skipping the middle row.**
-
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
@@ -1491,6 +1461,7 @@ work the release exists to order.
 | P-261, the three resources are supposed to feel different                                                                    | `docs/vision.md` -> Constraints                                                                                                              | 2026-09-05 |
 | P-262, templating gives variety without complexity                                                                           | `docs/vision.md` -> Directions                                                                                                               | 2026-09-05 |
 | P-263, a promotion says what it is for the code lane, and silence is not an answer                                           | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-05 |
+| P-266, a proposal that asks a decision cannot be promoted; answering it makes it one that asks approval                      | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-05 |
 
 ## Rejected
 

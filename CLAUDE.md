@@ -557,6 +557,11 @@ not - thirteen missing rows in the proposals file, three files missing from the 
 and every one was a report of intent rather than of fact. An operation that cannot fail
 loudly will fail quietly.
 
+**A proposal that asks a decision cannot be promoted.** An answer to it is not a promotion and
+never implies one - it turns the proposal into one that **asks approval**, which is a rewrite for
+you to read. **So `asks` is checkable rather than descriptive**: promoting an item still marked *a
+decision* is a defect a tool can name.
+
 **Accepting a proposal is not permission to write it.** Claude's job ends at proposing. If
 Sean explicitly asks Claude to enter an accepted line, that is a separate instruction and
 Claude may - but it is never the default, and never inferred from the word "accepted".
