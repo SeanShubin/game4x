@@ -161,6 +161,10 @@ test is for. So a check earns its place by guarding the repetition, not the one-
 - Makes sure that where possible rules are enforced via reliable code rather than relying on human
   or AI habits
 
+Every one of these is something the quality instance **finds and reports**. It builds none of them:
+production support is the coding instance's, so quality says what is missing and the coding instance
+wires it.
+
 ## Releases
 - The specification says what the game is when it is finished. A release says what is being built now
 - A release never invents a rule. If it needs one the specification lacks, that becomes a proposal
@@ -183,7 +187,7 @@ test is for. So a check earns its place by guarding the repetition, not the one-
     `tools/<name>/` is that lens's. Production support is everything else, and it has one owner for
     the same reason every other file does - two instances editing one file lose each other's edits
   - A lane that needs a check wired files it to the coding instance rather than wiring it itself
-  - A research instance: `lenses/<its own name>/`, and nothing else
+  - A research instance: `lenses/<its own name>/`, and `tools/<its own name>/`
 - This is not only about authority. Two instances editing one file would silently lose each other's
   edits, and Claude has no way to lock a file, so one writer per file is what makes running several
   at once safe

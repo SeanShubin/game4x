@@ -71,83 +71,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-243 - Three sentences describing arrangements that were replaced
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape**
-instruction - **asks** approval - **into** `docs/process.md` -> Who writes what, and `CLAUDE.md` ->
-Perspectives, Outboxes, Starting a new lens
-
-**The quality lens filed these as `Q-42`; this lane checked all three and all three hold.** Each is
-the same shape: a rule changed, and an older sentence describing what it replaced stayed where it
-was.
-
-**1. A lens may write its own tools, and one bullet still says it may not.** `docs/process.md` ->
-*Who writes what* carries both, four bullets apart:
-
-- *Every lane owns the tools for its own work: `tools/spec/` is the specification instance's,
-  `tools/<name>/` is that lens's*
-- *A research instance: `lenses/<its own name>/`, **and nothing else***
-
-**This one is mine from this evening.** Promoting `P-240` put the first bullet into that list, four
-above a bullet that had been true until that moment. **I added to a list and did not re-read it.**
-`CLAUDE.md`'s column table agrees with the first. **Fix**: *and nothing else* becomes *and
-`tools/<its own name>/`*.
-
-**2. The same staleness in the text handed to a new lens.** `CLAUDE.md`, *Starting a new lens*:
-*You write `lenses/<name>/` and nothing else.* **That is the first thing a lens reads, before it has
-read anything it could check the rule against.** **Fix**: *and nothing else* becomes *and
-`tools/<name>/`, and nothing else*.
-
-**3. Two sentences say only the proposal queue addresses you.** `CLAUDE.md` -> Outboxes: *Only the
-proposal queue addresses `sean`*, and the reading table: *the open proposals, which are the only
-thing addressed `to sean`*. **The rule three sections earlier says an item whose completion needs a
-person is addressed to a person** - and `releases/first-release.md` addresses you **5 times**,
-measured. **Fix**: the first becomes *The proposal queue addresses `sean`, and so does a release
-capability once it is `built`*; the table cell becomes *the open proposals, and any release
-capability waiting on him*.
-
-**Assertion**: *and nothing else* appears nowhere in `docs/process.md` or `CLAUDE.md` in either
-sense; *only the proposal queue addresses* appears nowhere; and the count of `**to** sean` in the
-release is unchanged at 5, because none of this changes who anything is addressed to - only what the
-documents say about it.
-
-**Nothing is misbehaving and the lens said so.** No lens has wanted a tool, and nothing is currently
-reading the wrong sentence. **It filed because these are the documents an instance reads before it
-can tell which sentence is current** - which is the case where being stale costs the most.
-
-### P-244 - The Quality section reads as though quality builds the pipeline
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
-**asks** approval - **into** `docs/process.md` -> Quality instance, appended
-
-**You caught this and this lane had not.** `P-240` settled that production support is the coding
-instance's, and the *Quality instance* section - your own words, merged on 2026-09-04 - reads like
-ownership:
-
-- *Makes sure we have automation in our process instead of repetition, which means a proper
-  automated pipeline and proper support tooling*
-- *Makes sure that where possible rules are enforced via reliable code rather than relying on human
-  or AI habits*
-
-**`CLAUDE.md` settles it and `docs/process.md` does not say so.** Production support *is the code
-lane's too. A lane that needs a check wired files it rather than wiring it.* And a lens never writes
-into a producer's directory. **So the rule exists; the section a lens reads about itself does not
-carry it.**
-
-> Every one of these is something the quality instance **finds and reports**. It builds none of
-> them: production support is the coding instance's, so quality says what is missing and the coding
-> instance wires it.
-
-**Basis: the ambiguity is doing real work already.** The quality lens's `Q-42` this evening was three
-findings about documentation and none about structure or the pipeline - and `S-37` found its README
-still says this section gives it *three jobs* when it gives seven. **A lens reading *makes sure we
-have a proper automated pipeline* has no sentence nearby telling it that means filing rather than
-building.**
-
-**It also keeps the lens honest in the way `CLAUDE.md` already wants.** *A lens is refutable, and a
-producer is the thing that refutes it* - which only works while the lens ships nothing. **The
-sentence protects quality's independence rather than restricting it.**
-
 ## Addressed to other perspectives
 
 ### S-37 - Your README says `docs/process.md` gives you three jobs, and it gives you seven
@@ -1573,6 +1496,8 @@ work the release exists to order.
 | P-234, one `extractor` kind, and a `$` may name a trait value                                                   | `spec/console.md` -> Commands, and `releases/first-release.md` -> six places                                                                 | 2026-09-05 |
 | P-241, a match string breaks on a wrapped sentence as it does on a padded row                                   | `CLAUDE.md` -> A mistake worth not repeating                                                                                                 | 2026-09-05 |
 | P-242, blocked is observable and running is not, so a report says which                                         | `docs/process.md` -> Outboxes and the index                                                                                                  | 2026-09-05 |
+| P-243, three sentences describing arrangements that had been replaced                                           | `docs/process.md` -> Who writes what, `CLAUDE.md` -> Outboxes, Starting a new lens                                                           | 2026-09-05 |
+| P-244, quality finds and reports production support; the coding instance builds it                              | `docs/process.md` -> Quality instance                                                                                                        | 2026-09-05 |
 
 ## Rejected
 

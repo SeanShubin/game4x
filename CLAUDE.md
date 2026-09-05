@@ -161,7 +161,7 @@ Every item in an outbox carries four things, and a proposal carries one more:
 | Field      | What it is                                                                                                                                                                                |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **id**     | Stable and unique, so a commit can cite it and a later report can say what became of it                                                                                                   |
-| **to**     | `spec`, `code`, or a named lens - or **absent**, meaning *not ready, no reader*. Only the proposal queue addresses `sean`                                                                 |
+| **to**     | `spec`, `code`, or a named lens - or **absent**, meaning *not ready, no reader*. The proposal queue addresses `sean`, and so does a release capability once it is `built`                 |
 | **status** | `open`, `acted`, `rejected`, `withdrawn`, `answered` - and for a release capability, `open`, then `built` when the code lane says it is done, then `vetted` when a person has observed it |
 | one line   | What it is, so a reader can triage it without opening the source                                                                                                                          |
 | **asks**   | `approval`, meaning the words are final and reading them is the whole of the work, or `a decision`, meaning a choice is open. Only a proposal carries it                                  |
@@ -208,12 +208,12 @@ its author gives it a reader - held back by not having one, rather than by disci
 
 ### What each perspective reads
 
-| Perspective | Inbox                                                            | Never has to read       |
-| ----------- | ---------------------------------------------------------------- | ----------------------- |
-| **Sean**    | the open proposals, which are the only thing addressed `to sean` | any lens's raw research |
-| **Spec**    | `to spec`, plus `docs/notes/spec-backlog.md`                     | code reviews            |
-| **Code**    | `to code`, plus `releases/`                                      | the proposal queue      |
-| **A lens**  | everything - that is what a lens is for                          | -                       |
+| Perspective | Inbox                                                         | Never has to read       |
+| ----------- | ------------------------------------------------------------- | ----------------------- |
+| **Sean**    | the open proposals, and any release capability waiting on him | any lens's raw research |
+| **Spec**    | `to spec`, plus `docs/notes/spec-backlog.md`                  | code reviews            |
+| **Code**    | `to code`, plus `releases/`                                   | the proposal queue      |
+| **A lens**  | everything - that is what a lens is for                       | -                       |
 
 ## Nothing open means nothing outstanding
 
@@ -326,7 +326,7 @@ To start one, create `lenses/<name>/README.md` and `lenses/<name>/outbox.md`, an
 
 > You are the `<name>` lens. Read `CLAUDE.md` → Perspectives, then `lenses/<name>/README.md`.
 >
-> You write `lenses/<name>/` and nothing else. You read everything. You never edit what you review,
+> You write `lenses/<name>/` and `tools/<name>/`, and nothing else. You read everything. You never edit what you review,
 > and you never run `cargo fmt`, `cargo fix` or `clippy --fix` - they modify the files you are
 > judging.
 >
