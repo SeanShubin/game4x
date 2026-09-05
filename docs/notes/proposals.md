@@ -93,6 +93,18 @@ two limits, and the one you were looking for is the absent one.**
 measured - the same shape as `founded`, and found the same way: by you reading the data and asking
 what it meant.
 
+**Waiting on the storage decision, 2026-09-05, and not contradicted by `P-257`.** Both choices below
+survive it: `P-257` is about the model's shape and says nothing about what a report prints.
+
+**But `store` is a projection rather than a thing.** Fourteen metal in territory 1 is fourteen metal
+**in** the territory; the `store` row is one the report invents, and the capacity in question is the
+**territory's** capacity for metal. **So choice B is already what the model says**, and choice A is a
+presentation on top of it.
+
+**If the storage conversation makes `metal store` a kind, this question changes meaning** - the row
+would then be a real thing with its own declared capacity, and *does the row carry its capacity*
+would be a different question with a different answer. **Answering it now risks answering it twice.**
+
 **Choice A - the store row carries both.** `{{store territory:1 resource:metal amount:14
 capacity:20}}`. **You can see fullness at a glance**, which is what you were trying to do.
 
