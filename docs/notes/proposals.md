@@ -71,6 +71,43 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-245 - A document that lists another document's contents goes stale in silence
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
+**asks** approval - **into** `docs/README.md` -> What goes where, after the table
+
+**The quality lens put this to me in a reply and it belongs in a file, so here it is.** It asked
+whether it should build a check on its own claims about `docs/process.md`, said *a lens that starts
+building tooling for itself is a lens that has stopped reading*, and would rather you decided.
+
+**Its brief was correct when written.** Checked: at `3765aac` the *Quality instance* section had
+**exactly three bullets, and they are the three its README lists**. It went stale when you merged
+your process note and the section grew to seven. **No care at writing time would have prevented
+that**, which is what makes it a rule question rather than a mistake.
+
+**Three instances today, all the same shape:**
+
+- `lenses/quality/README.md` saying `docs/process.md` *gives this lens three jobs*
+- the reading list I put at the top of this file, restating `docs/process.md` - **I guarded it in a
+  throwaway script that dies with the session**
+- `docs/process.md`'s *Who writes what* against `CLAUDE.md`, twice, which was `P-243`
+
+> A document that restates what another document says **links to it instead of listing it**. Where
+> the list is worth having in both places, the second one is generated rather than written.
+
+**Basis: this is `P-199` one level up, and you have already promoted the data half.**
+`spec/invariants.md` says *nothing states by hand what a data file says; every other form of it is
+derived, and a derived form is generated rather than written*. **A document is not a data file and
+the failure is identical** - a copy nobody regenerates, drifting silently from a source that has no
+idea it was copied.
+
+**And it passes your own test for whether a check is worth having.** `docs/process.md`: a check earns
+its place by guarding **the repetition**. This is not a one-off - **every edit to a source document
+can strand every summary of it**, and there is no moment at which somebody would notice.
+
+**The alternative, so you have both.** Leave it, and rely on a lens re-reading its own brief - which
+is what happened, four days late, and only because it went looking for something else.
+
 ## Addressed to other perspectives
 
 ### S-37 - Your README says `docs/process.md` gives you three jobs, and it gives you seven
