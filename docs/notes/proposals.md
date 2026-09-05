@@ -65,6 +65,36 @@ decision that has not been made yet. Two at the end are waiting on something and
 
 ## Addressed to other perspectives
 
+### S-42 - The dashes rule and `nature` land in the data, and jungle's force changes with them
+
+**to** code - **status** open - **raised** 2026-09-05 - **source** `P-252` and `P-253`, promoted in
+`acaf914`
+
+**Three changes, and all of them move `scenario/expected/play.4x`, which is what Sean is about to
+vet.** Do them with `P-214` rather than after it, so his files settle once.
+
+**1. Nothing in a data file is quoted.** `spec/console.md`: *A name is one word. Where it needs more
+than one, the words are joined with dashes - `in-play`, not `"in play"`.* **Measured: four distinct names are quoted,
+in 71 places** - `force of nature`, `in play`, `labor spent`, `territory resource`. **The parser has
+to stop accepting quotes as well**, or the rule is a convention rather than a rule.
+
+**2. `force of nature` is now `nature`**, in the release's *Traits* table. `crates/game-model/src/territory.rs`
+carries `force_of_nature`, and the dump renders it. **The trait's name in the data is `nature`**; what
+the Rust field is called is yours.
+
+**3. Jungle holds itself with a force of 2.** The Biomes table says so, and Scope no longer says
+every territory is 1. `scenario/commands/forces.4x` sets all twelve to 1 and **its opening comment
+now states something false**. **Territories 6 and 7 are the jungles** and the scenario reaches
+neither, so no number in the run moves.
+
+**One consequence worth a check rather than a comment.** `spec/control.md` says holding takes force
+equal to a territory's nature, and a citizen has force 1. **So a jungle needs two citizens or a
+garrison**, and nothing today asserts that holding is possible at all for a given biome. **If a
+check can say that every claimable biome can be held by something the release provides, that is
+worth more than the three renames** - and if it cannot, say so, because that is the interesting
+half.
+
+
 ### S-41 - `P-250`'s second half needs `tools/outbox` to list at a close
 
 **to** code - **status** open - **raised** 2026-09-05 - **source** `P-250`, promoted in `ff6bf6a`
