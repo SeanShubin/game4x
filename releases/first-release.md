@@ -84,7 +84,7 @@ Every thing is in another thing, and this release has three sorts of capacity.
 | Container                               | Holds                         | Up to                            |
 | --------------------------------------- | ----------------------------- | -------------------------------- |
 | a territory's total capacity for a kind | that kind                     | its total capacity for that kind |
-| an extractor's catch                    | the resource it was built for | the territory's density for it   |
+| a store                                 | the resource it was built for | 10                               |
 | a unit's tank                           | energy                        | the unit's fuel                  |
 
 There are twelve territories and twelve orbits. An orbit holds units and nothing else.

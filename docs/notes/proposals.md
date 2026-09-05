@@ -63,48 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-265 - `P-260` dropped its own answer, and left a contradiction where it landed
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** rows -
-**asks** approval - **into** `releases/first-release.md` -> Where things are
-
-**This is not a question you have to answer twice.** You answered `P-260`'s C - *that number seems
-safe* - and **the promotion did not carry it.** The code lane found it by trying to build from the
-release and finding no number in it. `C-27`.
-
-> | Container                               | Holds                         | Up to                            |
-> | --------------------------------------- | ----------------------------- | -------------------------------- |
-> | a territory's total capacity for a kind | that kind                     | its total capacity for that kind |
-> | a store                                 | the resource it was built for | 10                               |
-> | a unit's tank                           | energy                        | the unit's fuel                  |
-
-**Two things change and the count above the table stays three.** The store row is new and carries
-the number. **The extractor's catch row goes**, because it says an extractor holds the resource up
-to the territory's density **while the paragraph fifty lines below says an extractor holds nothing** -
-both landed by promotions of mine, an hour apart, and they cannot both be true. `C-26`.
-
-**What went wrong, exactly.** `P-260` asked four questions; you answered all four; **the promotion
-asserted the two that were countable** - thirteen kinds, sixteen recipes - **and asserted nothing
-about the number, so nothing noticed it was missing.** Then I told you and the code lane it was
-settled in `c2e9266`. **It was settled by you and not written down**, which is the failure `P-263`
-was filed about, committed in the same hour I filed it.
-
-**The two readings are not symmetric in cost, and the code lane measured it.** `Extractor` in
-`crates/game-model/src/territory.rs:28` is `{ node, exhausted }` - **no capacity of any kind**. So
-*an extractor holds nothing* costs nothing to keep, and the table row costs a new field, production
-routed into catches, and a bound per extractor. **The model already runs the sentence I am proposing
-you keep.**
-
-**And a third thing is true of neither line.** `Territory::KEEPS` is 20 and bounds resources held on
-the *territory* - which is not the table, not the prose, and is **the bound `P-258` deleted an hour
-before this.** The model is running on a rule the release no longer has, and that is `S-44`'s to fix
-rather than this proposal's.
-
-**The code lane is holding rather than guessing**, which is right: 10 against any other number
-decides whether territory 1 needs one metal store or two, and therefore what the scenario shows.
-**The gate is red until this lands** - the model cannot have a store whose capacity no document
-states.
-
 ### P-267 - What of the process lives where you do not read it
 
 **to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
@@ -1577,6 +1535,7 @@ work the release exists to order.
 | P-266, a proposal that asks a decision cannot be promoted; answering it makes it one that asks approval                      | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-05 |
 | P-264, the main scenario moves to the specification, and the process document keeps the rule                                 | `docs/process.md` -> How I know the game is right, `spec/scenarios.md`, `spec/README.md`                                                     | 2026-09-05 |
 | P-270, an unstored resource can be used the turn it is made and is lost when that turn ends                                  | `releases/first-release.md` -> What bounds a kind                                                                                            | 2026-09-05 |
+| P-265, a store holds 10 and the extractor's catch row goes, which P-260 asked for and did not carry                          | `releases/first-release.md` -> Where things are                                                                                              | 2026-09-05 |
 
 ## Rejected
 
