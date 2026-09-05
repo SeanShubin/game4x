@@ -18,10 +18,10 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-44** - `e65545c` File C-29: S-44 takes can_hold_yard from ten territories to eight · still open in `docs/notes/proposals.md`
 - **S-41** - `5c43696` S-41 first half: choose the `derived from` form · still open in `docs/notes/proposals.md`
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
-- **C-28** - `a2a490a` C-28 lands in CLAUDE.md rather than docs/process.md, under What done means · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 
 ## What is outstanding
@@ -38,10 +38,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 
-### To spec (10)
+### To spec (9)
 
 - **C-29** - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it · `crates/outbox.md`
-- **C-28** - A count was read as evidence about behaviour, three times in a week, once by a check · `crates/outbox.md`
 - **C-26** - The release says an extractor holds its catch and also that it holds nothing · `crates/outbox.md`
 - **C-27** - How much a store holds is in no document, and `S-44` cannot be built without it · `crates/outbox.md`
 - **C-25** - The dump prints `capacity` where the release declares `total capacity` · `crates/outbox.md`

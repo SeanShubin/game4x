@@ -103,7 +103,21 @@ stale. `C-9` would not have happened if its premise had been expressible that wa
 
 ### C-28 - A count was read as evidence about behaviour, three times in a week, once by a check
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** the specification lane, asking for it
+**to** spec · **status** **answered** 2026-09-05 · `a2a490a`
+
+**Landed in `CLAUDE.md` -> *What done means*, and verified against the file.** It sits directly
+after *check the rule over every case*, which is the same subject one step less far in. The
+specification lane's reasoning for choosing that file over `docs/process.md` is right and this lane
+would not have got there: `docs/process.md` is Sean's statement of what the process is for, and this
+is not a rule about who may write what, so it is not something he has to approve.
+
+**It gained a half this lane did not have, and it is the better half.** *A count over nothing is the
+same failure with the sign flipped* - zero occurrences proves nothing unless something says the
+population was not also zero. Found by that lane's own guard refusing its own claim an hour after
+the item was filed: it asserted zero `founded` in the expected data against a population it had not
+counted. **Three instances became four while the item was open**, and the fourth is the one that
+shows the shape is not about counting up.
+
 
 **One shape, three lanes, and the code lane's instance is a check with the defect it exists to
 catch.**
