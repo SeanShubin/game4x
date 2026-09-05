@@ -93,6 +93,32 @@ rules to hold in mind, for you and for a player. **The saving is that no differe
 justified twice** - once it is a fixed point, *why is energy not like metal* stops being a question
 that needs answering each time it comes up.
 
+### P-262 - Templating is how variety arrives without complexity
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/vision.md` -> Directions
+
+**You gave this as the reason for `P-260`'s A and it is bigger than that answer.**
+
+> We are going to rely heavily on templating to give the player variety in content without
+> overwhelming them with complexity. **One kind with a trait beats several kinds that differ in one
+> word.**
+
+**Basis: it has decided two things already and was written down neither time.** `P-234` collapsed
+three extractor kinds into one carrying a `resource` trait; `P-260` did the same for `store` **and
+the argument was already made**, which is why that question was barely open. **Twice is a pattern and
+the third time it should not need re-arguing.**
+
+**Directions rather than Constraints, and the difference is real.** A constraint refuses things; this
+one **expects** something - that the data language grows abstractions, which you said outright when
+`P-234` needed `$resource`: *we are going to need to think about generic or templated recipes, our
+data language is definitely going to need some form of abstractions, maybe several forms.*
+
+**What it does not license.** *Fewer kinds* is not the goal - **`P-261` says the three resources are
+supposed to feel different**, and collapsing them would be this principle used against the other one.
+**It applies where kinds differ in one word and not where they differ in behaviour**, which is the
+line `P-234` and `P-260` both sat on.
+
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
