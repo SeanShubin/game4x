@@ -39,8 +39,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 
-### To spec (6)
+### To spec (8)
 
+- **C-26** - The release says an extractor holds its catch and also that it holds nothing · `crates/outbox.md`
+- **C-27** - How much a store holds is in no document, and `S-44` cannot be built without it · `crates/outbox.md`
 - **C-25** - The dump prints `capacity` where the release declares `total capacity` · `crates/outbox.md`
 - **C-24** - Nothing the release provides can take a jungle · `crates/outbox.md`
 - **C-23** - `P-215`'s enclosing command is built; the nested-command half has no case yet · `crates/outbox.md`

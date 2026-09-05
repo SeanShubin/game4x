@@ -33,6 +33,52 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-26 - The release says an extractor holds its catch and also that it holds nothing
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-44`, reading the release to build it
+
+**Filed the moment it was found, and it is inside one file.** `releases/first-release.md` says both
+of these:
+
+- Line 87, *Where things are*: an **extractor's catch** holds *the resource it was built for*, up to
+  *the territory's density for it*
+- Line 134, under *What bounds a kind*: *a store holds what it was built to hold, and **an extractor
+  holds nothing***
+
+`P-260` landed the second and left the first. They cannot both hold, and **the whole of `S-44` turns
+on which is true**: if an extractor holds its catch then a territory can already keep what it
+produces and stores are an addition; if it holds nothing then production goes to a store or is lost,
+which is what `S-44` says it should build.
+
+**And *Where things are* has no row for a store**, which is the one kind whose entire purpose is
+holding. Three sorts of capacity are listed and the new one is not among them.
+
+### C-27 - How much a store holds is in no document, and `S-44` cannot be built without it
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-44`
+
+**`S-44`'s own words: *if you need them to build, say so and they become a proposal rather than a
+guess*.** This lane needs it, and it is a guess today.
+
+The specification lane relayed that a store holds **10** and that the numbers were settled in
+`c2e9266`. **The cost is in the release** - *1 labor, 1 metal*, in *Units and structures* - and
+**the amount is not.** Searched `releases/` and `spec/` for the number and for any sentence saying
+how much a store holds: nothing. `spec/logistics.md` says what a kind may contain is a fact about
+the kind, which is the rule but not the number.
+
+**This is the difference `CLAUDE.md` draws between a fact and an authority.** *A store holds 10* is
+checkable, so it travels freely - and this lane checked it, against the documents, and it is not
+there. So it is not a relay this lane can act on; it is a number that has to land.
+
+**Everything else in `S-44` is buildable without it** and is not blocked: `store` as a kind with a
+`resource` trait, `build store` as a command and a recipe, extractors holding nothing, disorder lost
+at the turn's end. What needs the number is the derived capacity - `P-256`'s report column - and any
+scenario at all, since whether territory 1 needs one metal store or two is the whole question.
+
+**Not proceeding under an assumed 10.** The number decides how many commands the scenario gains and
+therefore what it demonstrates, which `S-44` itself says is Sean's to see before it lands. Guessing
+it would put a number he has not stated into the file he is about to vet.
+
 ### C-25 - The dump prints `capacity` where the release declares `total capacity`
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `S-43`, building the check it asked for
