@@ -6,6 +6,32 @@ offered for Sean's review. A proposal becomes real only when he accepts it and i
 
 [Notes index](README.md) · [Documentation map](../README.md) · [Root README](../../README.md)
 
+## The files that need you
+
+**Two, because there are two things only you can do** - `docs/process.md`, which is where this is
+decided; this is a copy for convenience and that document wins.
+
+| To           | Read                                                                                                                                                                          |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **create**   | this file. You approve, or say what to change                                                                                                                                 |
+| **validate** | [`expected/play.4x`](../../expected/play.4x) beside [`commands/play.4x`](../../commands/play.4x) - what the scenario is expected to produce, and the commands that produce it |
+
+**Two more you read while doing one of those, not instead:**
+
+- [the specification](../../spec/README.md), especially [invariants](../../spec/invariants.md) -
+  where an approved proposal lands, so you read it while approving
+- [the release](../../releases/first-release.md) - the same, and it still holds the game's data
+  until `S-30` moves it out
+
+**And what is deliberately not yours.** `pending.md` is for the instances; the one thing it would
+tell you that this file cannot - whether a lane is blocked or idle - reaches you in a sentence
+instead. `docs/notes/` is Claude's record of how a decision came from you. `catalog.md`,
+`recipes.md`, `state.md`, `entities.md`, `turns.md` and the two HTML pages are generated views:
+open one when you want to browse, never because something needs you to.
+
+**Anything here earns its place or comes off the list**, which is what happened to `pending.md` on
+2026-09-04.
+
 ## How this works
 
 Claude drafts faster than Sean can, but cannot tell which of its inferences are correct.
