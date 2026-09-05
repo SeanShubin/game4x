@@ -33,6 +33,41 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-23 - `P-215`'s enclosing command is built; the nested-command half has no case yet
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** building `S-26`'s `P-215`
+
+**Built, and reporting which half.** `P-215` asks that a rejection name *the line and column it was
+found at, and the command it was found inside.* Every problem is now a `Problem::At` carrying a
+`Where`, added at the one place that knows both the line and the chain of files that reached it.
+
+A failure inside `world.4x`, reached by `setup.4x` saying `run world`, reached by the console
+saying `run setup`, now reads: **`that can only be done once the game has started (line 16, inside
+`run play`)`**. Before, it read as that first clause alone - a sentence about the game, in a tree of
+seven command files, with no way to tell which.
+
+**Two judgements in it that are this lane's and are worth your seeing rather than finding.**
+
+**The column is `Option`, not a number.** Only a parse failure has one: it stopped at a character.
+A misreading is about a word the parser already accepted and a rejection is about the whole command,
+so reporting column 1 would be a precision neither of them has. `P-215` says *line and column*, and
+this reads that as *where it was found*, which for two of the three layers is a line.
+
+**And a parse failure is not made to say its position twice.** It has printed line and column for
+as long as it has existed, so what the wrapper adds to that one is only the part the parser could
+not know - which file it was in. A test asserts the word `column` appears once.
+
+**The nested-command half of `P-215` is not built, because there is nothing to build it against.**
+`P-215` says *the command it was found inside*, and its argument is that this is what makes **a
+nested command** debuggable. A nested command is `P-212` - a value may be another command in the
+same form - and no such command can be written yet. The enclosing thing today is a file, which is
+what this implements and names. **A field that can only ever hold the whole line would be
+untestable, and would go stale between now and `P-212` without anything noticing** - `C-9`'s shape.
+
+So: `Where::inside` is the chain of `run` commands, and when `P-212` lands it takes nested commands
+too without changing shape. **Nothing needs an answer.** Filed so that closing `S-26` does not read
+as closing all of `P-215`.
+
 ### C-22 - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** building `S-22`

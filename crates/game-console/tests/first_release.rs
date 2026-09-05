@@ -171,10 +171,27 @@ fn run(session: &mut Session, line: &str) -> Outcome {
         .unwrap_or_else(|why| panic!("`{line}` failed: {why}"))
 }
 
+/// What went wrong, with where it was found unwrapped away.
+///
+/// **`P-215` made every problem a located one**, so a caller matching on `Problem::Rule`
+/// now meets a `Problem::At` wrapping it. Unwrapped here rather than at twenty call sites,
+/// because every one of them is asking *what* went wrong. `refused_at` is for the one test
+/// that asks *where*.
 fn refuse(session: &mut Session, line: &str) -> Problem {
-    session
+    match refused_at(session, line) {
+        (_, what) => what,
+    }
+}
+
+/// What went wrong and where, for the test that is about the second half.
+fn refused_at(session: &mut Session, line: &str) -> (game_console::Where, Problem) {
+    let problem = session
         .run(line, &Files::commands())
-        .expect_err(&format!("`{line}` should have been refused"))
+        .expect_err(&format!("`{line}` should have been refused"));
+    match problem {
+        Problem::At { found, what } => (found, *what),
+        other => panic!("`{line}` was refused without saying where: {other}"),
+    }
 }
 
 /// The whole script, and what each stage of it leaves behind.
@@ -556,6 +573,39 @@ fn a_player_is_told_what_went_wrong_and_where() {
             .contains("no pioneer"),
         "a unit that does not exist"
     );
+
+    // **And where, which is the half this test was named for and did not check** - `P-215`.
+    // A rejection said what was wrong about the game and nothing about which of seven files
+    // it was in, so a failure five lines into `world.4x` reached by `setup.4x` reached by
+    // the console read as a bare sentence.
+    let (found, _) = refused_at(&mut session, "land ark 99");
+    assert_eq!(
+        found.line, 1,
+        "typed at the console, so line one of nothing"
+    );
+    assert!(
+        found.inside.is_empty(),
+        "nothing called it, so there is no chain to name"
+    );
+    assert_eq!(
+        found.column, None,
+        "a rejection is about the whole command, so inventing a column would be a precision          it does not have"
+    );
+
+    // **Inside a file, and the chain is what makes it usable.** Running the scenario without
+    // `start` fails somewhere in the middle of `play.4x`, and the whole value of this is
+    // that the message says which file and which line rather than one sentence about the
+    // game. The line is asserted to be past the first rather than to be a particular number,
+    // so this stays true when the scenario moves.
+    let mut nested = Session::new();
+    run(&mut nested, "run setup");
+    let (found, what) = refused_at(&mut nested, "run play");
+    assert!(
+        what.to_string().contains("once the game has started"),
+        "{what}"
+    );
+    assert!(found.line > 1, "a line inside the file, not the call to it");
+    assert_eq!(found.inside, ["run play"], "and which file that line is in");
 }
 
 /// Landing needs more force than what holds the ground, and holding it needs as much as

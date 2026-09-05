@@ -89,6 +89,60 @@ pub enum Outcome {
     Nothing,
 }
 
+/// Where a problem was found, and what led there.
+///
+/// **`P-215`.** A failure used to say what was wrong and, for a parse failure alone, which
+/// column. Nothing said which *line*, and nothing said which file - so a rejection raised on
+/// line five of `world.4x`, reached by `setup.4x` saying `run world`, reached in turn by the
+/// console saying `run setup`, was reported as a bare sentence about the game.
+///
+/// **The chain is the half that is easy to skip and is the half that makes it debuggable.**
+/// A line number alone is worse than none when seven files are in play: it names a line in a
+/// file the reader has to guess.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Where {
+    /// Which line of the file it was in. One-based, as an editor counts.
+    pub line: usize,
+    /// Which column, where that means anything.
+    ///
+    /// **`None` rather than one**, because only a parse failure has a column: it failed at a
+    /// character. A misreading is about a word the parser already accepted and a rejection
+    /// is about the whole command, so pointing at column one would be inventing a precision
+    /// neither of them has.
+    pub column: Option<usize>,
+    /// The `run` commands enclosing it, outermost first. Empty at the console.
+    pub inside: Vec<String>,
+}
+
+impl std::fmt::Display for Where {
+    fn fmt(&self, out: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(out, "line {}", self.line)?;
+        if let Some(column) = self.column {
+            write!(out, ", column {column}")?;
+        }
+        if !self.inside.is_empty() {
+            write!(out, ", inside `{}`", self.chain())?;
+        }
+        Ok(())
+    }
+}
+
+impl Where {
+    /// The `run` commands that led here, innermost first.
+    ///
+    /// Innermost first because that is the order a reader wants: the file the line is in,
+    /// then how it was reached. The list is stored outermost first because that is the order
+    /// it is built in, and reversing it here keeps one truth about the order in each place.
+    pub fn chain(&self) -> String {
+        self.inside
+            .iter()
+            .rev()
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("`, called from `")
+    }
+}
+
 /// Everything that can go wrong, in the order the layers are crossed.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Problem {
@@ -104,6 +158,15 @@ pub enum Problem {
     },
     /// Files calling each other without end.
     TooDeep,
+    /// One of the above, and where it happened.
+    ///
+    /// **A wrapper rather than a field on each**, so that adding the location did not have
+    /// to be repeated five times and cannot be forgotten on the sixth. It is added once, at
+    /// the one place that knows both the line and the chain of files that reached it.
+    At {
+        found: Where,
+        what: Box<Problem>,
+    },
 }
 
 impl std::fmt::Display for Problem {
@@ -121,6 +184,16 @@ impl std::fmt::Display for Problem {
                 known.join(", ")
             ),
             Problem::TooDeep => write!(out, "command files are calling each other without end"),
+            // **A parse failure already says where it is**, because the parser knew the
+            // character it stopped at and has printed the line and column for as long as it
+            // has existed. Repeating them reads as two different positions that happen to
+            // agree. So what is added to that one is the part it could not know: which file
+            // it was in, and what called it.
+            Problem::At { found, what } => match **what {
+                Problem::Parse(_) if found.inside.is_empty() => write!(out, "{what}"),
+                Problem::Parse(_) => write!(out, "{what} (inside `{}`)", found.chain()),
+                _ => write!(out, "{what} ({found})"),
+            },
         }
     }
 }
@@ -166,7 +239,7 @@ impl Session {
 
     /// Runs one line.
     pub fn run(&mut self, line: &str, library: &dyn Library) -> Result<Outcome, Problem> {
-        self.run_at(line, 1, library, 0)
+        self.run_at(line, 1, library, &[])
     }
 
     /// Runs every line of a script, stopping at the first problem.
@@ -178,18 +251,18 @@ impl Session {
         text: &str,
         library: &dyn Library,
     ) -> Result<Vec<Outcome>, Problem> {
-        self.run_script_at(text, library, 0)
+        self.run_script_at(text, library, &[])
     }
 
     fn run_script_at(
         &mut self,
         text: &str,
         library: &dyn Library,
-        depth: usize,
+        inside: &[String],
     ) -> Result<Vec<Outcome>, Problem> {
         let mut outcomes = Vec::new();
         for (offset, line) in text.lines().enumerate() {
-            outcomes.push(self.run_at(line, offset + 1, library, depth)?);
+            outcomes.push(self.run_at(line, offset + 1, library, inside)?);
         }
         Ok(outcomes)
     }
@@ -199,18 +272,32 @@ impl Session {
         line: &str,
         line_number: usize,
         library: &dyn Library,
-        depth: usize,
+        inside: &[String],
     ) -> Result<Outcome, Problem> {
-        let Some(utterance) =
-            parse_line(&self.grammar, line, line_number).map_err(Problem::Parse)?
+        // **Added once, here, where both halves are known.** The line is this function's
+        // argument and the chain is its caller's; nowhere below this knows either, and
+        // nowhere above this knows what went wrong.
+        let locate = |what: Problem, column: Option<usize>| Problem::At {
+            found: Where {
+                line: line_number,
+                column,
+                inside: inside.to_vec(),
+            },
+            what: Box::new(what),
+        };
+
+        let Some(utterance) = parse_line(&self.grammar, line, line_number).map_err(|failure| {
+            let column = failure.position.column;
+            locate(Problem::Parse(failure), Some(column))
+        })?
         else {
             return Ok(Outcome::Nothing);
         };
-        let meaning = interpret(&utterance).map_err(Problem::Misread)?;
+        let meaning = interpret(&utterance).map_err(|why| locate(Problem::Misread(why), None))?;
 
         match meaning {
             Meaning::Change(transition) => {
-                self.apply(&transition)?;
+                self.apply(&transition).map_err(|why| locate(why, None))?;
                 self.history.push(utterance.source.clone());
                 Ok(Outcome::Changed)
             }
@@ -218,18 +305,28 @@ impl Session {
             Meaning::Help(command) => Ok(Outcome::Said(report::help(&self.grammar, command))),
             Meaning::History => Ok(Outcome::Said(report::history(&self.history))),
             Meaning::Run(name) => {
-                if depth >= DEEPEST {
-                    return Err(Problem::TooDeep);
+                // The chain's length is the depth, so one field does both jobs and the two
+                // cannot disagree - a counter beside a list is a second account of the same
+                // fact.
+                if inside.len() >= DEEPEST {
+                    return Err(locate(Problem::TooDeep, None));
                 }
-                let text = library.fetch(&name).ok_or(Problem::NoSuchFile {
-                    name: name.clone(),
-                    known: library.names(),
+                let text = library.fetch(&name).ok_or_else(|| {
+                    locate(
+                        Problem::NoSuchFile {
+                            name: name.clone(),
+                            known: library.names(),
+                        },
+                        None,
+                    )
                 })?;
                 // Calling a file is not itself a change, and the commands inside it
                 // record themselves. Recording both would make the history do everything
                 // twice when it is replayed - which is what a history is *for*, since it
                 // is the only account of how a game got where it is.
-                self.run_script_at(&text, library, depth + 1)?;
+                let mut deeper = inside.to_vec();
+                deeper.push(utterance.source.clone());
+                self.run_script_at(&text, library, &deeper)?;
                 Ok(Outcome::Changed)
             }
         }
@@ -423,20 +520,34 @@ set force 1 1
     fn each_layer_reports_its_own_kind_of_problem() {
         let mut session = Session::new();
 
+        // Every problem is located now - `P-215` - so each is unwrapped before its kind is
+        // asked about. Where it was found is checked in its own tests; this one is still
+        // about the three layers reporting three different kinds of thing.
+        let at = |problem: &Problem| match problem {
+            Problem::At { what, .. } => (**what).clone(),
+            other => panic!("every problem carries where it was found; got {other}"),
+        };
+
         let parse = session.run("land ark somewhere", &NoLibrary).unwrap_err();
-        assert!(matches!(parse, Problem::Parse(_)), "{parse}");
+        assert!(matches!(at(&parse), Problem::Parse(_)), "{parse}");
+        // And it says its position once rather than twice: the parser already knew the
+        // column, so the wrapper adds only what the parser could not know.
+        assert_eq!(parse.to_string().matches("column").count(), 1, "{parse}");
         assert!(parse.to_string().contains("expected a number"), "{parse}");
 
         let misread = session
             .run("create planet enormous", &NoLibrary)
             .unwrap_err();
-        assert!(matches!(misread, Problem::Misread(_)), "{misread}");
+        assert!(matches!(at(&misread), Problem::Misread(_)), "{misread}");
 
         session.run("create planet tiny", &NoLibrary).unwrap();
         session.run("start", &NoLibrary).unwrap();
         let rule = session.run("land ark 1", &NoLibrary).unwrap_err();
-        assert!(matches!(rule, Problem::Rule(_)), "{rule}");
+        assert!(matches!(at(&rule), Problem::Rule(_)), "{rule}");
         assert!(rule.to_string().contains("no ark"), "{rule}");
+        // A rejection is about the whole command, so it says the line and no column.
+        assert!(rule.to_string().contains("line 1"), "{rule}");
+        assert!(!rule.to_string().contains("column"), "{rule}");
     }
 
     /// A rejected command changes nothing. The game is exactly the transitions that were
@@ -485,10 +596,15 @@ set force 1 1
     fn files_that_call_each_other_without_end_are_stopped() {
         let library = Embedded::of(&[("a", "run b\n"), ("b", "run a\n")]);
         let mut session = Session::new();
-        assert_eq!(
-            session.run("run a", &library).unwrap_err(),
-            Problem::TooDeep
-        );
+        let problem = session.run("run a", &library).unwrap_err();
+        let Problem::At { found, what } = problem else {
+            panic!("expected a located problem")
+        };
+        assert_eq!(*what, Problem::TooDeep);
+        // The chain is the depth, so one says the other rather than a counter agreeing with
+        // a list. Sixteen calls deep is `DEEPEST`, which is what stopped it.
+        assert_eq!(found.inside.len(), DEEPEST);
+        assert!(found.to_string().contains("called from"), "{found}");
     }
 
     /// A failure inside a subroutine is reported against the line it is on.
@@ -497,9 +613,21 @@ set force 1 1
         let library = Embedded::of(&[("setup", "create planet tiny\nland ark nowhere\n")]);
         let mut session = Session::new();
         let problem = session.run("run setup", &library).unwrap_err();
-        match problem {
+        let Problem::At { found, what } = &problem else {
+            panic!("expected a located problem, got {problem}")
+        };
+        match &**what {
             Problem::Parse(failure) => assert_eq!(failure.position.line, 2),
             other => panic!("expected a parse failure, got {other}"),
         }
+        // **And which file that line is in** - `P-215`. A line number alone is worse than
+        // none when seven files are in play, because it names a line in a file the reader
+        // has to guess. That is the half that was missing.
+        assert_eq!(found.line, 2);
+        assert_eq!(found.inside, ["run setup"]);
+        assert!(
+            problem.to_string().contains("inside `run setup`"),
+            "{problem}"
+        );
     }
 }
