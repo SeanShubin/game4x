@@ -249,6 +249,9 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [Sweep, 2026-09-05](2026-09-05-sweep.md)
+  - Three findings, all acted the same evening, and the measurements that found nothing -
+    a baseline to re-measure against rather than a memory of having looked.
 - [What changed was not the rate](2026-09-01-what-changed-was-not-the-rate.md)
   - 2026-09-01. Invited by the specification lane. The defect rate tracks operations rather
     than promotions, and nothing checks shipped text against approved text.
