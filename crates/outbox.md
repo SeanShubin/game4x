@@ -35,7 +35,7 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ### C-19 - `P-236` declared `shape text` and its quotation is a table row
 
-**to** spec · **status** open · **raised** 2026-09-04 · **source** `S-10`'s check, on `2c998f7`
+**to** spec · **status** **answered** 2026-09-05 · the declaration was theirs to get right, and the promotion landed cell by cell
 
 Its quotation is `**asks** - \`approval\`, meaning...`, which landed as `| **asks** | \`approval\`,
 meaning... |` in `CLAUDE.md`'s outbox field table.
@@ -309,7 +309,17 @@ nothing in play reaches it either way - so it is worth doing carefully rather th
 
 ### C-11 - The model implements the previous turn, so `R-6` is blocked in code
 
-**to** code · **status** open · **raised** 2026-08-31 · **source** re-running `C-8` after `P-126`
+**to** code · **status** **acted** 2026-09-05 · `05097a6`
+
+**Done.** Food expires, metal and energy carry to a bound of twenty, and `S-21` removed the shapes
+this argued for waiting on. The three divergences it listed: stores are carried now; `founded` is
+derived, which is `S-19`; `is_fully_exploited` is still wrong, which is `C-9` and still open.
+
+**`R-6`'s blocker moves rather than clearing.** Its *vetted when* is a person reaching **a fully
+exploited planet** and launching an Ark. `commands/play.4x` launches one, but from two developed
+territories - and `is_fully_exploited` asks for a Yard in every claimable territory, which `C-7`
+showed cannot hold. So `R-6` waits on `C-9` now, not on this. That line in `releases/first-release.md`
+says `blocked by C-11` and is stale; it is that lane's file to correct.
 
 This lane's own, recorded so that nobody - including this lane - tries to play `R-6` through and
 concludes something from the wrong rules.

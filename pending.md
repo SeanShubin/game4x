@@ -17,17 +17,15 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-37** - `66bea10` S-37: this lens's brief named three of seven jobs · still open in `docs/notes/proposals.md`
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
 - **S-25** - `66cb193` S-25: one table naming every kind, and my first check for it was decoration · still open in `docs/notes/proposals.md`
 - **S-21** - `175078c` S-21: citizens and yards are things, and the expectation caught two bugs · still open in `docs/notes/proposals.md`
 - **S-19** - `6ab76ee` S-19: control is derived from a citizen being there · still open in `docs/notes/proposals.md`
-- **S-14** - `b394c81` S-14: the entity view and the HTML, from the same rows · still open in `docs/notes/proposals.md`
-- **C-11** - `05097a6` C-11: what expires expires, and metal and energy carry · still open in `crates/outbox.md`
+- **S-14** - `7a7284a` S-14: the scenario reaches every player recipe, and C-11 is why it can · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 
-### To code (13)
+### To code (12)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
@@ -39,17 +37,11 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-19** - Control is stored as `founded` and the specification derives it from citizens · `docs/notes/proposals.md`
 - **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
-- **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-43** - The citation check fires forever on an item that takes several commits · `lenses/quality/outbox.md`
 
-### To quality (1)
+### To spec (1)
 
-- **S-37** - Your README says `docs/process.md` gives you three jobs, and it gives you seven · `docs/notes/proposals.md`
-
-### To spec (2)
-
-- **C-19** - `P-236` declared `shape text` and its quotation is a table row · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
 
 ## Sections that have taken more than one proposal
