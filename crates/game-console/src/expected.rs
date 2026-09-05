@@ -303,7 +303,7 @@ pub fn read(text: &str) -> Result<Vec<Row>, String> {
 fn split(text: &str) -> impl Iterator<Item = String> + use<> {
     assert!(
         !text.contains('"'),
-        "`{text}` is quoted - `P-252`: nothing in a data file is, and a name that needs          two words joins them with dashes"
+        "`{text}` is quoted - `P-252`: nothing in a data file is, and a name that needs two words joins them with dashes"
     );
     let mut words = Vec::new();
     let mut current = String::new();

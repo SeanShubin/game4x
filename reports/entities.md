@@ -15,7 +15,7 @@ These are the rows the F3 browser shows, from the same function.
 
 | id  | citizens | labor-spent | nature | force | food | food nodes       | food extractors | metal | metal nodes            | metal extractors | energy | energy nodes           | energy extractors | garrison                      | yards |
 | --- | -------- | ----------- | ------ | ----- | ---- | ---------------- | --------------- | ----- | ---------------------- | ---------------- | ------ | ---------------------- | ----------------- | ----------------------------- | ----- |
-| 1   | 12       | 0           | 1      | 1     | 0    | 4, 4, 4          | 3               | 14    | 4, 4, 4                | 3                | 20     | 4, 4, 4                | 3                 | force 1 multiplier 1 manned 0 | 1     |
+| 1   | 12       | 0           | 1      | 1     | 0    | 4, 4, 4          | 3               | 4     | 4, 4, 4                | 3                | 0      | 4, 4, 4                | 3                 | force 1 multiplier 1 manned 0 | 1     |
 | 2   | 6        | 0           | 1      | 1     | 0    | 6, 6             | 1               | 0     | 4, 4                   | 1                | 0      | 4, 4                   | 0                 | force 1 multiplier 1 manned 0 | 0     |
 | 3   | 0        | 0           | 1      | 0     | 0    | 2, 2, 2, 2, 2, 2 | 0               | 0     | 4, 4                   | 0                | 0      | 4, 4                   | 0                 | none                          | 0     |
 | 4   | 0        | 0           | 1      | 0     | 0    | 2                | 0               | 0     | 5, 5, 5, 5             | 0                | 0      | 5, 5, 5, 5             | 0                 | none                          | 0     |

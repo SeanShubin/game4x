@@ -912,7 +912,7 @@ pub fn index(generated: &[(&str, String)]) -> String {
     out.push_str(
         "<style>
          :root { color-scheme: light dark }
-         body { font: 15px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem          auto; max-width: 48rem; padding: 0 1rem }
+         body { font: 15px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem auto; max-width: 48rem; padding: 0 1rem }
          h2 { margin: 2rem 0 .25rem; font-size: 1.05rem }
          ul { list-style: none; padding: 0 }
          li { margin: .5rem 0 }
@@ -937,7 +937,7 @@ pub fn index(generated: &[(&str, String)]) -> String {
 ",
     );
     out.push_str(
-        "<p class=\"note\">Source, not a rendering. These are the files themselves - a view          of either would be one more thing that can drift from it.</p>
+        "<p class=\"note\">Source, not a rendering. These are the files themselves - a view of either would be one more thing that can drift from it.</p>
 <ul>
 ",
     );

@@ -78,8 +78,8 @@ is in it, because the names are what this is for.
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 14     |
-| 1         | energy   | 20     |
+| 1         | metal    | 4      |
+| 1         | energy   | 0      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
 | 2         | energy   | 0      |
@@ -220,8 +220,8 @@ is in it, because the names are what this is for.
 | citizen   | 18      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 14      |
-| energy    | 20      |
+| metal     | 4       |
+| energy    | 0       |
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 1       |

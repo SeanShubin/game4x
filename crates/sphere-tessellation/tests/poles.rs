@@ -47,7 +47,7 @@ fn arrangements() -> Vec<(usize, usize)> {
     // gained an arrangement would be edited without being thought about.
     assert!(
         all.len() >= 8,
-        "only {} Goldberg arrangements up to 200, which is not enough to be checking          anything",
+        "only {} Goldberg arrangements up to 200, which is not enough to be checking anything",
         all.len()
     );
     all

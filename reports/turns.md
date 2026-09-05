@@ -1051,14 +1051,10 @@ end turn
 
 - {extractor territory:1 node:8 resource:energy ready:yes}
 
-**changed** (8)
+**changed** (4)
 
 - game phase:play · turn: 5 → 6
-- kind id:energy · in-play: 0 → 8
 - kind id:extractor · in-play: 8 → 9
-- kind id:metal · in-play: 10 → 20
-- store territory:1 resource:energy · amount: 0 → 8
-- store territory:1 resource:metal · amount: 10 → 20
 - structure territory:1 structure:extractor · count: 8 → 9
 - territory-resource territory:1 resource:energy · built: 2 → 3
 
@@ -1139,8 +1135,8 @@ end turn
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 20     |
-| 1         | energy   | 8      |
+| 1         | metal    | 10     |
+| 1         | energy   | 0      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
 | 2         | energy   | 0      |
@@ -1277,8 +1273,8 @@ end turn
 | citizen   | 12      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 20      |
-| energy    | 8       |
+| metal     | 10      |
+| energy    | 0       |
 | extractor | 9       |
 | garrison  | 1       |
 | yard      | 0       |
@@ -1309,16 +1305,14 @@ end turn
 
 - {unit id:1 kind:pioneer place:territory-1 fuel:2 ready:yes}
 
-**changed** (9)
+**changed** (7)
 
 - game phase:play · turn: 6 → 7
 - game phase:play · units: 0 → 1
 - kind id:citizen · in-play: 12 → 11
-- kind id:energy · in-play: 8 → 14
 - kind id:pioneer · in-play: 0 → 1
 - labor territory:1 · made: 12 → 11
 - labor territory:1 · left: 12 → 11
-- store territory:1 resource:energy · amount: 8 → 14
 - territory id:1 · citizens: 12 → 11
 
 ## what is there now
@@ -1398,8 +1392,8 @@ end turn
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 20     |
-| 1         | energy   | 14     |
+| 1         | metal    | 10     |
+| 1         | energy   | 0      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
 | 2         | energy   | 0      |
@@ -1537,8 +1531,8 @@ end turn
 | citizen   | 11      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 20      |
-| energy    | 14      |
+| metal     | 10      |
+| energy    | 0       |
 | extractor | 9       |
 | garrison  | 1       |
 | yard      | 0       |
@@ -1577,12 +1571,11 @@ end turn
 - {extractor territory:2 node:2 resource:metal ready:yes}
 - {garrison territory:2 force:1}
 
-**changed** (18)
+**changed** (16)
 
 - game phase:play · turn: 7 → 8
 - game phase:play · units: 1 → 0
 - kind id:citizen · in-play: 11 → 16
-- kind id:energy · in-play: 14 → 20
 - kind id:extractor · in-play: 9 → 11
 - kind id:garrison · in-play: 1 → 2
 - kind id:pioneer · in-play: 1 → 0
@@ -1590,7 +1583,6 @@ end turn
 - labor territory:1 · left: 11 → 12
 - labor territory:2 · made: 0 → 4
 - labor territory:2 · left: 0 → 4
-- store territory:1 resource:energy · amount: 14 → 20
 - structure territory:2 structure:extractor · count: 0 → 2
 - structure territory:2 structure:garrison · count: 0 → 1
 - territory id:1 · citizens: 11 → 12
@@ -1675,8 +1667,8 @@ end turn
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 20     |
-| 1         | energy   | 20     |
+| 1         | metal    | 10     |
+| 1         | energy   | 0      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
 | 2         | energy   | 0      |
@@ -1816,8 +1808,8 @@ end turn
 | citizen   | 16      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 20      |
-| energy    | 20      |
+| metal     | 10      |
+| energy    | 0       |
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 0       |
@@ -1859,11 +1851,11 @@ end turn
 - game phase:play · units: 0 → 1
 - kind id:ark · in-play: 0 → 1
 - kind id:citizen · in-play: 16 → 18
-- kind id:metal · in-play: 20 → 14
+- kind id:metal · in-play: 10 → 4
 - kind id:yard · in-play: 0 → 1
 - labor territory:2 · made: 4 → 6
 - labor territory:2 · left: 4 → 6
-- store territory:1 resource:metal · amount: 20 → 14
+- store territory:1 resource:metal · amount: 10 → 4
 - structure territory:1 structure:yard · count: 0 → 1
 - territory id:1 · yards: 0 → 1
 - territory id:2 · citizens: 4 → 6
@@ -1945,8 +1937,8 @@ end turn
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 14     |
-| 1         | energy   | 20     |
+| 1         | metal    | 4      |
+| 1         | energy   | 0      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
 | 2         | energy   | 0      |
@@ -2087,8 +2079,8 @@ end turn
 | citizen   | 18      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 14      |
-| energy    | 20      |
+| metal     | 4       |
+| energy    | 0       |
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 1       |
@@ -2195,8 +2187,8 @@ end turn
 | territory | resource | amount |
 | --------- | -------- | ------ |
 | 1         | food     | 0      |
-| 1         | metal    | 14     |
-| 1         | energy   | 20     |
+| 1         | metal    | 4      |
+| 1         | energy   | 0      |
 | 2         | food     | 0      |
 | 2         | metal    | 0      |
 | 2         | energy   | 0      |
@@ -2337,8 +2329,8 @@ end turn
 | citizen   | 18      |
 | labor     | 0       |
 | food      | 0       |
-| metal     | 14      |
-| energy    | 20      |
+| metal     | 4       |
+| energy    | 0       |
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 1       |

@@ -92,7 +92,16 @@ fn released_table() -> BTreeMap<u32, Vec<(Resource, u32, u32)>> {
                 density.trim().parse().expect("a density"),
             ));
         }
-        table.insert(id, nodes);
+        // **`Q-49`: the count catches a new id and not a colliding one.** `insert` returns
+        // the value it replaced and discarding it is how a second row claiming territory 3
+        // would overwrite territory 3's expected nodes while the length stayed twelve - the
+        // test then checking the real territory against somebody else'''s row and reporting
+        // nothing about the swap. Nothing collides today; this is the half of the parse's
+        // luck that a count cannot convert into a failure.
+        assert!(
+            table.insert(id, nodes).is_none(),
+            "two rows in the release both claim territory {id}"
+        );
     }
     assert_eq!(table.len(), 12, "the release lists twelve territories");
     table
@@ -244,7 +253,7 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
     assert_eq!(
         released.len(),
         12,
-        "the release describes twelve territories and the parse found {}; if that table          moved or changed shape, `released_table` is reading the wrong thing",
+        "the release describes twelve territories and the parse found {}; if that table moved or changed shape, `released_table` is reading the wrong thing",
         released.len()
     );
     let mut checked = 0;
@@ -619,7 +628,7 @@ fn a_player_is_told_what_went_wrong_and_where() {
     );
     assert_eq!(
         found.column, None,
-        "a rejection is about the whole command, so inventing a column would be a precision          it does not have"
+        "a rejection is about the whole command, so inventing a column would be a precision it does not have"
     );
 
     // **Inside a file, and the chain is what makes it usable.** Running the scenario without

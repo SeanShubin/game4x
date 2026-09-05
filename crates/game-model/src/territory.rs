@@ -909,7 +909,7 @@ mod tests {
             (
                 &[(Resource::Food, 4), (Resource::Metal, 4)],
                 false,
-                "one store of ten and four a turn is fourteen, and it is never fifteen                  however long the game runs. Territories 8 and 10 are this case",
+                "one store of ten and four a turn is fourteen, and it is never fifteen however long the game runs. Territories 8 and 10 are this case",
             ),
         ];
         for (nodes, expected, why) in cases {
