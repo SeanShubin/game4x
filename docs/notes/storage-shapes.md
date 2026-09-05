@@ -1,8 +1,9 @@
-# Storage: what the references have in common, and where the real choice is
+# Storage: capacity and bins are one thing, and the freedom is the factorization
 
-**2026-09-05.** Sean asked to brainstorm a storage system, offering three references and one
-principle. This is the thinking, not a decision. Nothing here is settled until it is in
-[the specification](../../spec/README.md).
+**2026-09-05.** Sean asked to brainstorm a storage system, then corrected the analysis. **This
+document is the second version and the first was wrong**; what it got wrong is recorded at the
+bottom, because the mistake is instructive. This is thinking, not a decision. Nothing is settled
+until it is in [the specification](../../spec/README.md).
 
 ## His principle is already written down
 
@@ -11,72 +12,86 @@ principle. This is the thinking, not a decision. Nothing here is settled until i
 
 [`spec/logistics.md`](../../spec/logistics.md) says it in almost those words: *a total capacity of
 four extractors is a maximum of four, **so nothing a player builds ever crowds out something of
-another kind**.* **Per-type capacity is not a new decision, it is a rule he already promoted**, and
-the question is only how far it reaches.
+another kind**.* **Per-type is not a new decision, it is a rule he already promoted.**
 
-## What the three references actually share
+## The correction: capacity and bins are the same thing
 
-|                 | Limit is                      | Per type?     | Player organises? |
-| --------------- | ----------------------------- | ------------- | ----------------- |
-| **Zelda 1**     | fixed, upgraded at set points | yes, one each | no                |
-| **Far Cry 4**   | fixed, upgraded by crafting   | yes, per pelt | no                |
-| **Baldur's G3** | emergent from total weight    | **no**        | **yes**           |
+> A capacity can be thought of as a number of bins... Zelda could be thought of as having one bin
+> with capacity for 255 rupees, or 255 bins with capacity for 1 rupee each. However exposing this
+> level of freedom to the user is madness.
 
-**The one he hates is the one where the player does the organising**, and it is also the only one
-where the limit is a single pool. Those are two different faults and they arrive together, which
-makes them easy to confuse.
+**A capacity for N of a kind, where each holds M, is a capacity for N x M.** The two numbers are a
+**factorization of one product**, and every factorization describes the same game. **That is the
+whole of the freedom, and it is why it is madness to expose** - the player would be choosing between
+descriptions rather than between outcomes.
 
-**The one nobody notices**: in all three, **capacity is a property you have, not a thing you build
-and place.** Zelda's wallet, Far Cry's pouch - both are upgrades to a number, not objects competing
-for room. **That cuts against bins as buildable things**, which is where the bin language was
-heading.
+## So the organizing principle has to fix the factorization
 
-## Where the real choice is
+**One rule does it: a bin's capacity is a property of its kind, never of the instance.**
 
-Not per-type against pooled - he has settled that. **It is where a capacity comes from**, and there
-are four answers:
+Every `metal store` holds ten metal. Not *this one holds ten and that one holds fifteen*. **Then the
+only number the player moves is how many**, and the product follows.
 
-- **Given.** A territory simply has a capacity of 20 for each resource. **This is the release
-  today**, and it is the Zelda model
-- **Upgraded.** Capacity is given, and something raises it - a structure, a technology. Far Cry's
-  pouch
-- **Built and placed.** A bin is a thing you build that grants capacity. **This is what the bin
-  language implies** and what none of his references do
-- **Derived from production.** A territory's metal capacity is a function of its metal extractors.
-  Storage follows production and is never a decision at all
+Everything wanted falls out of that one sentence:
 
-## The argument against bins as things, which is the useful finding
+- **Per-type, no competition.** A territory's capacity for metal stores is separate from its capacity
+  for energy stores. Build seven and eight; neither crowds the other
+- **Build more, never decide which** - his own restatement of the promoted rule
+- **No arranging.** There is nothing to arrange, because two stores of the same kind are
+  interchangeable
+- **The factorization is not a choice.** M is fixed by the kind and N is bounded by the place, so
+  there is exactly one way to describe any amount of storage
 
-**Keep the per-type principle strictly and a bin becomes invisible.** A bin that holds only metal,
-in a territory with a per-type limit on metal bins, is **arithmetically identical to a larger metal
-capacity**. The nesting adds a noun and no decision.
+## And it is one rule, not two, which is the part worth noticing
 
-**Nesting is only interesting when something is shared** - when bins compete for a slot, or one bin
-can hold two kinds. **And sharing is exactly the thing he does not want**, because it is what makes
-a player decide which rather than build more.
+**Capacity for N things of a kind is already the only rule there is.** `spec/logistics.md`: *what a
+thing may contain is a maximum per kind, or per family of kinds.*
 
-So bins in a territory are either **redundant** or they **reintroduce the trade-off he dislikes**.
-There is no third case.
+- a territory has capacity **3** for `extractor`
+- a territory has capacity **10** for `metal store`
+- a metal store has capacity **10** for `metal`
 
-## Where bins do earn their existence
+**Three applications of one sentence at three levels**, and nothing new is needed to say any of them.
+**The recursion terminates because the containment graph is acyclic**, which he already promoted:
+*nothing contains itself, directly or through anything else.*
 
-**In transit.** A metal transport with a bin for fuel and a bin for metal is not redundant, because
-**the bin moves**. Its capacity is not a property of any place; it is a property of the vehicle, and
-it goes where the vehicle goes.
+## What makes a bin real rather than presentational
 
-Which suggests a shape with very few degrees of freedom:
+If nothing can happen to a bin that cannot happen to a unit of capacity, **the bin is a display
+choice** and should not exist as a thing. A bin earns being a thing when something distinguishes N
+from N x M:
 
-- **Capacity in a place is a property of the place**, per kind. No bins to build, nothing to arrange
-- **Capacity in transit is a property of the vehicle**, per kind. A transport declares what it can
-  carry and how much
-- **`spec/logistics.md`'s containment rules stay exactly as they are** and are what makes the second
-  one work - a vehicle is a thing that contains things and takes up capacity in whatever holds it
+- **It costs something to build**, so N is a decision with a price
+- **It can be destroyed**, so a loss takes ten metal rather than one
+- **It has upkeep**
+- **It is captured with the territory**
 
-**The player never arranges storage. They choose what to move.**
+**At least one of those has to be true, or the kind is a noun with no consequences.** This is the
+question to answer before writing any of it down.
+
+## What this leaves open, which is his to settle
+
+- **Where N's bound comes from** - given by the place, upgraded, or derived from what the place
+  produces
+- **Whether a vehicle is the same rule.** A metal transport with a bin for fuel and a bin for metal
+  is capacity for `fuel store` and `metal store` on a thing that moves. **It looks like the same
+  rule with no exception**, which is a good sign
+- **Whether every kind of stored thing needs a store**, or only some. Twenty metal with no store is
+  the release today
 
 ## One thing to reconsider while deciding
 
 **20, 20, 20 is arbitrary uniformity.** Food already differs - it has `keeps` 1, so its limit is
-about spoilage while metal's is about room. **Three resources with identical numbers and
-non-identical behaviour** is the kind of thing that reads as a placeholder, and it is worth knowing
-whether it is one before building anything on top of it.
+about spoilage while metal's is about room. **Under this model food's store is a kind whose contents
+expire**, which is a real difference between store kinds rather than an exception to bolt on.
+
+## What the first version of this note got wrong
+
+It argued that **a bin in a territory is either redundant or reintroduces the trade-off he
+dislikes**, and concluded bins only earn their existence in transit.
+
+**The first half was right and the conclusion was wrong.** A bin *is* redundant with capacity - that
+is the isomorphism, and he pointed it out rather than disputing it. **Redundancy is not an argument
+against the bin, it is an argument that the two are one concept**, and the question is which face
+of it to show. Arguing from the redundancy to *therefore no bins in a territory* skipped the step
+where the redundancy is the finding.

@@ -8,6 +8,20 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Corrected 2026-09-05, capacity and bins are one thing
+
+*A capacity can be thought of as a number of bins... Zelda could be thought of as having one bin with
+capacity for 255 rupees, or 255 bins with capacity for 1 rupee each. However exposing this level of
+freedom to the user is madness, so I want to come up with organizational principles.*
+
+**He is right and it broke the first analysis.** A capacity for N of a kind, each holding M, is a
+capacity for N x M - **the two numbers factor one product**, and every factorization is the same
+game.
+
+**One rule fixes it: a bin's capacity is a property of its kind, never of the instance.** Every metal
+store holds ten; the only number the player moves is how many.
+[The rewritten note](storage-shapes.md), including what the first version got wrong.
+
 ## Said 2026-09-05, three storage references and one principle
 
 *The per-type is really a re-statement of no building working against you, you only have to build
