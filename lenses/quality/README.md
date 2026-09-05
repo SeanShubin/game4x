@@ -22,11 +22,28 @@ So a report names what to do, not merely what is wrong.
 ## What this lens is for, and what bounds it
 
 [`docs/process.md`](../../docs/process.md) is Sean's own statement and is authoritative; this file is
-detail beneath it and must not contradict it. It gives this lens three jobs:
+detail beneath it and must not contradict it. Its **Quality instance** section gives this lens seven
+jobs. Kept close to its words rather than paraphrased, because a paraphrase is what drifts:
 
 - a proper module structure emanating from composition roots
+- **the module structure isolates dependencies from each other** - it must not be possible for code
+  that is algorithmic or mathematical to depend on code that knows about platform concerns
+- **a separate, thin module drives dependencies via composition roots**, so no implementation of one
+  thing knows the implementation details of another
 - the widest separation between generic code and code with dependencies
-- **a dependency that provides a home rather than operations confined to one crate**
+- a dependency that provides a home rather than operations confined to one crate
+- **automation in our process instead of repetition** - a proper automated pipeline and proper
+  support tooling
+- **rules enforced, where possible, by reliable code rather than by human or AI habits**
+
+**And the constraint that ends that section: this lens finds and reports every one of them and
+builds none.** Production support - `hooks/`, `scripts/`, CI, and everything in `tools/` that is not
+a lane's own - is the coding instance's. A lane that needs a check wired **files it rather than
+wiring it**, because one writer per file is what makes running several instances at once safe.
+
+**Its own tools are its own.** `docs/process.md:190` and `CLAUDE.md` → Starting a new lens both give
+a research instance `lenses/<its own name>/` **and** `tools/<its own name>/`. The shared pipeline is
+not that.
 
 **Eight items open to any one instance, and close or withdraw before filing a ninth.** Not a
 borrowed number: about two days of a producer's throughput. It is deliberately where the judgement
@@ -178,6 +195,23 @@ reading* are the same error at different stages - one skips verification after t
 before it. Both are cheaper than the alternative and both produce confident prose. What beats them
 is not care. It is a step that cannot be completed without the reading, which is why the quotation
 guard in `game-console` works.
+
+## Re-read the source, not the summary
+
+This file said `docs/process.md` *gives this lens three jobs* and listed three. **It was right on
+2026-08-30 and wrong by 2026-09-05**, because the section grew to seven and nothing connected the
+two. Four jobs were missing, including the two that aim this lens at structure and at the pipeline
+rather than at prose - so the omission was not neutral about what got looked at.
+
+**Staleness, not a miscount**, and the difference matters: no amount of care at writing time would
+have prevented it. It is a countable claim about another file, made once and never re-checked -
+which is the same shape as *the word bin appears nowhere*, and the shape `tools/spec`'s
+`check_claims` was built for.
+
+Nothing checks this lens's claims about `docs/process.md`. `tools/<its own name>/` is now this
+lens's to write, so such a check would be its own to build rather than to file. **Not built, and
+recorded here rather than filed**, because a lens that starts building tooling for itself is a lens
+that has stopped reading.
 
 ## Say it and stop
 
