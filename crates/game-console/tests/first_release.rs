@@ -228,8 +228,29 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
         assert!(!place.founded(), "nothing is claimed before play");
     }
 
+    // **`Q-48`: the population is asserted before it is looped over.**
+    //
+    // `released_table` finds its rows by shape - a line starting with `|`, four or more
+    // cells, an integer first cell - and every assertion below sits inside the loop. A parse
+    // that returned nothing would run it zero times, and **this test would report green
+    // having checked no territory at all** while claiming the release is buildable.
+    //
+    // Not hypothetical for this document. Its tables changed four times this week - `founded`
+    // dropped, `force of nature` renamed to `nature`, columns added, a store row arriving -
+    // and every one was a change to the shape this parse depends on. **None would have
+    // announced itself.** `CLAUDE.md` -> *What done means* carries the rule and this test did
+    // not follow it: check the rule over every case, and assert how many cases there were.
+    let released = released_table();
+    assert_eq!(
+        released.len(),
+        12,
+        "the release describes twelve territories and the parse found {}; if that table          moved or changed shape, `released_table` is reading the wrong thing",
+        released.len()
+    );
+    let mut checked = 0;
+
     // Every node the release calls for is there, and nothing else is.
-    for (id, expected) in released_table() {
+    for (id, expected) in released {
         let place = session.game.territory(TerritoryId(id)).unwrap();
         for (resource, count, density) in &expected {
             let nodes = place.nodes_of(*resource);
@@ -257,7 +278,9 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
             !place.nodes_of(Resource::Food).is_empty(),
             "every territory has at least one food node"
         );
+        checked += 1;
     }
+    assert_eq!(checked, 12, "twelve territories checked; {checked} were");
 
     // One ark, in orbit, and nothing on the planet.
     assert_eq!(session.game.units.len(), 1);
@@ -729,6 +752,10 @@ fn every_way_the_state_can_change_is_a_command() {
         Transition::FoundByLand {
             territory: TerritoryId(1),
         },
+        Transition::BuildStore {
+            resource: Resource::Metal,
+            territory: TerritoryId(1),
+        },
         Transition::Build {
             structure: StructureKind::Yard,
             territory: TerritoryId(1),
@@ -750,12 +777,13 @@ fn every_way_the_state_can_change_is_a_command() {
         },
         Transition::EndTurn,
     ];
-    // Fifteen ways to change the state, and fifteen forms that produce one. `P-232` added
+    // Sixteen ways to change the state, and sixteen forms that produce one. `P-260`
+    // added `build store`, which is what a territory needs before it keeps anything at all. `P-232` added
     // `create labor`: `P-214` says every player recipe has a command, and it was the one
     // recipe with none. `P-214` then took the other half - `move` fired `move` or
     // `found by land` depending on the ground, so one command covered two recipes and the
     // player never said which.
-    assert_eq!(changing.len(), 15);
+    assert_eq!(changing.len(), 16);
     let commands_that_change = grammar
         .forms()
         .iter()

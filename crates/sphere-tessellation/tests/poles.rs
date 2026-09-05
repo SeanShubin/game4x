@@ -35,7 +35,22 @@ fn face_under(seeds: &[Vec3], point: Direction) -> (usize, f64) {
 /// which includes the chiral ones, where the pentagons stay put and only the hexagons
 /// between them are rearranged.
 fn arrangements() -> Vec<(usize, usize)> {
-    goldberg::arrangements_up_to(200)
+    let all = goldberg::arrangements_up_to(200);
+    // **`Q-48`: the population is asserted where it is computed**, so the four tests below
+    // cannot loop over nothing and report green. Every assertion in each of them sits inside
+    // `for (m, n) in arrangements()`, so an empty return is four passing tests that checked
+    // no arrangement at all - `CLAUDE.md` -> *What done means*: check the rule over every
+    // case, and assert how many cases there were.
+    //
+    // Floored rather than fixed at a number, because the count is a property of the
+    // tessellation and not of this test: a bound that had to be edited whenever the geometry
+    // gained an arrangement would be edited without being thought about.
+    assert!(
+        all.len() >= 8,
+        "only {} Goldberg arrangements up to 200, which is not enough to be checking          anything",
+        all.len()
+    );
+    all
 }
 
 #[test]
