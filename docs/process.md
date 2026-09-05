@@ -201,9 +201,10 @@ test is for. So a check earns its place by guarding the repetition, not the one-
 - `pending.md` is for the instances rather than for me. It is generated from every outbox at every
   commit, so it is never something somebody remembered to update, and it says what must be decided
   before it says anything else
-- The one thing it would tell me that the queue cannot - whether a lane is blocked or idle - the
-  specification instance tells me in a sentence instead, so the guarantee below survives without my
-  opening another file
+- The specification instance can tell me whether a lane is **blocked**, because that is in the
+  outboxes and it can read them. **It cannot tell me whether a lane is running.** Nothing in the
+  repository records that, and the only way to find out is to send a message - which starts it. So
+  when it reports, it says which of the two it is answering
 - `scripts/outbox.ps1` answers the same question from a terminal, and filters by who an item is
   addressed to. That is mostly for the instances rather than for me
 - If nothing anywhere is open and addressed, then nothing any instance knows to be wrong is
