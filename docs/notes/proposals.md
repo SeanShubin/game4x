@@ -63,47 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-263 - A promotion says what it is for the code lane, and silence is not an answer
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
-**asks** approval - **into** `CLAUDE.md` -> Promotion, after *a promotion can withdraw a finding*
-
-**You said the code lane may be idle through rapid changes as long as it catches up completely. It
-cannot, and three things today show why: the catch-up list is assembled from my memory rather than
-read from the record.**
-
-> **The create half is an item, and *not work* is an item too.** A promotion either files something
-> addressed to the code lane citing it, or records that it is not work for that lane - **never
-> silence, because silence and *nobody has looked yet* are the same bytes.** The catch-up list is
-> then **read from the index rather than assembled from memory**, which is the only version of it
-> that stays complete after a lane has been idle through forty promotions.
->
-> **A promotion that adds a row to a table the code generates from makes the gate red until the code
-> follows**, and says so in the same breath as the rule. The lane that has to fix it is not the only
-> lane the gate stops.
-
-**Basis, and all three happened in the last four hours.**
-
-**1. `P-233` never became an item.** It reached the code lane through a message and through nothing
-else, and a message is never the record. The data carried `readiness` until the lane happened to be
-awake to hear me say so.
-
-**2. `P-214` became a false item.** I reported it unbuilt; `5e4a9c6` had built it at 12:37, four
-hours earlier. **And not because I read a stale tree** - I had one `move` and one `found by land`,
-and concluded the `move` still founded. **A count cannot show that**, and an item that is wrong costs
-its reader exactly what a real one does.
-
-**3. `P-260` made the gate red for every lane, and the promotion did not say so.** Adding `store` to
-the release's Kinds table at 15:05 left `closed_sets.rs:126` failing with *`## Kinds` lists and the
-model does not have: `["store"]`* - measured just now. **No lane can commit through the gate until
-`S-44` lands**, which is a fact about the whole repository that arrived inside a promotion about
-storage.
-
-**Why here rather than in a tool.** The paragraph above this one already says a promotion can
-*withdraw a finding as easily as it can create work, and both need saying* - and then gives the
-mechanism for withdrawing only. **The duty is already written; the half that failed is the half with
-no mechanism.**
-
 ### P-264 - The scenario changes what it demonstrates, and the shape is yours
 
 **to** sean - **status** open - **raised** 2026-09-05 - **kind** consequence - **asks** a decision -
@@ -1500,6 +1459,7 @@ work the release exists to order.
 | P-260, `store` is one kind with a `resource` trait, holding 10, as many as the extractors of its resource, founding included | `releases/first-release.md` -> Kinds, Traits, What bounds a kind, Units and structures, Recipes                                              | 2026-09-05 |
 | P-261, the three resources are supposed to feel different                                                                    | `docs/vision.md` -> Constraints                                                                                                              | 2026-09-05 |
 | P-262, templating gives variety without complexity                                                                           | `docs/vision.md` -> Directions                                                                                                               | 2026-09-05 |
+| P-263, a promotion says what it is for the code lane, and silence is not an answer                                           | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-05 |
 
 ## Rejected
 

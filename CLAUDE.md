@@ -540,6 +540,16 @@ none of them was work for it - true of *building* - and two of its open findings
 `P-126` and `P-138` without anyone saying so. **It re-ran them itself and caught it**, which is the
 expensive way.
 
+**The create half is an item, and *not work* is an item too.** A promotion either files something
+addressed to the code lane citing it, or records that it is not work for that lane - **never
+silence, because silence and *nobody has looked yet* are the same bytes.** The catch-up list is
+then **read from the index rather than assembled from memory**, which is the only version of it
+that stays complete after a lane has been idle through forty promotions.
+
+**A promotion that adds a row to a table the code generates from makes the gate red until the code
+follows**, and says so in the same breath as the rule. The lane that has to fix it is not the only
+lane the gate stops.
+
 **Every promotion asserts.** Copy, then verify - that the text is present in the target file,
 that the rows are present cell for cell, or that the instruction's own assertion passes - and
 fail loudly if it is not. Claude has three times reported that something landed when it had
