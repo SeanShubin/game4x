@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-264** - The minimal scenario, and the one thing your principle leaves open · `docs/notes/proposals.md`
+- **P-264** - The main scenario is a typical game, and unusual mechanics go elsewhere · `docs/notes/proposals.md`
 - **P-265** - `P-260` dropped its own answer, and left a contradiction where it landed · `docs/notes/proposals.md`
 - **P-267** - What of the process lives where you do not read it · `docs/notes/proposals.md`
 

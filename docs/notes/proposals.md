@@ -63,41 +63,34 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-264 - The minimal scenario, and the one thing your principle leaves open
+### P-264 - The main scenario is a typical game, and unusual mechanics go elsewhere
 
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** consequence
-- **asks** a decision - **into** nothing; it decides what the code lane builds
-**derived from** a store holds 10 and a Yard costs 15 metal - `P-265`, once it lands
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
+- **shape** text - **asks** approval - **into** `docs/process.md` -> How I know the game is right
 
-**Your principle answers both questions, and the release turns out to agree with it already.**
+**Your answer contradicts one sentence of your own document, which is why this came back as words
+rather than as a work order.** `docs/process.md` says the main scenario *touches every single thing
+and every recipe*. **`perish` and `spoil` are recipes**, so as written it requires the deliberate
+starvation you have just said you do not want.
 
-**Question 1, restructure or lengthen: restructure, to the minimum that touches every mechanic.**
+> There is a **main scenario** that touches every single thing and every recipe **a typical game
+> uses**. **That is what I vet, and it is the foundation.** I do not need to walk every step of the
+> win condition by hand, and **a mechanic that only fires in an unusual situation - a starvation, a
+> spoilage - belongs in a scenario of its own, which I will not build until this one satisfies me.**
 
-**Question 2, the Ark: it is produced and deployed, and nothing is won.** **There is no `launch`
-recipe.** The sixteen are `age`, `build extractor`, `build store`, `build yard`, `create labor`,
-`deploy ark`, `found by land`, `grow`, `move`, `perish`, `produce ark`, `produce pioneer`, `refresh`,
-`spoil`, `upkeep` and `work`. Winning is `spec/control.md`'s *launching an Ark from a fully exploited
-planet*, and **exploitation is the half the main scenario drops.** `R-6` already says as much - *a
-scenario reaches a fully exploited planet and launches an Ark, on the definitions and the machinery
-of the main scenario* - **so the split you just described is the one already written.**
+**The paragraph after it already carries the other half** - *other scenarios check that particular
+end states are reachable, and those rest on the foundation rather than on me* - so this adds the
+case where the unusual thing is a **mechanic** rather than an end state.
 
-**Minimal is not short, and that is the part worth knowing.** `produce ark` is a mechanic, so a Yard
-is built; a Yard costs 15 metal; a store holds 10; **so two metal stores exist before the Yard
-does.** The floor is set by the most expensive mechanic, not by how much of the planet is developed.
+**Nothing in the code breaks, and I checked rather than assumed.** The coverage check is
+`the_scenario_fires_every_player_recipe_the_release_declares`, scoped to the **player** recipes;
+`perish` and `spoil` fire from `end turn` and are world recipes, so they were never in its
+population. **No check asserts that every world recipe fires**, which is worth knowing and is not
+work this creates.
 
-**What remains open, and it is one thing.** **`perish` and `spoil` are mechanics that a well-played
-scenario never triggers.** To touch them, a territory has to run out of food and food has to sit a
-turn too long - **the scenario has to play badly on purpose**, somewhere, in the file you vet.
-
-**Three ways to go, and this lane recommends the first**: let it make the two mistakes deliberately,
-with a line saying so; or accept that two of sixteen are untouched here and say where they are
-touched instead; or drop them from *every mechanic* by deciding they are consequences rather than
-mechanics.
-
-**And I cannot tell you whether they fire today.** `reports/commands.md` lists `perish` and `spoil`
-against every `end turn` - **but that column is what the command can fire, not what fired**, which is
-the confusion `C-28` is about. The code lane's `tests/fired.rs` asks the model instead, and that is
-what would answer it.
+**What is settled and needs no words**: restructure to the minimum, produce and deploy an Ark, win
+nothing, and `R-6` keeps the win condition. **Two metal stores still come before the Yard** - that is
+`produce ark` being a typical mechanic, not thoroughness.
 
 ### P-265 - `P-260` dropped its own answer, and left a contradiction where it landed
 
