@@ -18,6 +18,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - Commands may be organized in a hierarchy of files, one file invoking another as a subroutine
 - A `#` begins a comment. The rest of the line is ignored
 
+A name is one word. **Where it needs more than one, the words are joined with dashes** - `in-play`,
+not `"in play"`. **Nothing in a data file is quoted.**
+
 A command is a verb followed by arguments, one command to a line. A territory is named by its
 id, a structure by its kind and the territory it is in.
 

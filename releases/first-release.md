@@ -13,7 +13,6 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - Each territory is self-contained. No resource and no citizen crosses a territory boundary
 - A mobile unit may move across a boundary, usually to conquer and start another self-contained
   territory
-- Every territory has a force of nature of 1
 - The rule editor is not in this release
 - A Pioneer that enters a territory nobody holds must found it, or it perishes for want of food
 
@@ -91,28 +90,28 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 
 ## Traits
 
-| Trait               | Of                              | Values                                             | Stored or derived                                |
-| ------------------- | ------------------------------- | -------------------------------------------------- | ------------------------------------------------ |
-| **kind**            | every thing                     | one of the kinds                                   | stored                                           |
-| **place**           | every thing                     | the thing it is in                                 | stored                                           |
-| **ready**           | whatever readies                | yes or no                                          | stored                                           |
-| **resource**        | an extractor                    | one of the resources                               | stored                                           |
-| **force**           | citizen, garrison, ark, pioneer | a number                                           | stored                                           |
-| **fuel**            | a unit                          | how much energy its tank holds                     | stored                                           |
-| **upkeep**          | a thing with upkeep             | food per turn                                      | stored                                           |
-| **metal in it**     | whatever is built               | a number                                           | derived: its binding plus the metal in its parts |
-| **density**         | a territory, per resource       | a number                                           | stored                                           |
-| **total capacity**  | a territory, per kind           | a number                                           | stored                                           |
-| **control**         | a territory                     | held by a player, or unclaimed                     | derived: a citizen of that player is there       |
-| **biome**           | a territory                     | one of the biomes                                  | stored                                           |
-| **force of nature** | a territory                     | a number                                           | stored                                           |
-| **adjacency**       | a place                         | which places it touches, and by which kind of edge | stored                                           |
-| **keeps**           | food                            | the number of turns it will last                   | stored                                           |
-| **surplus**         | food                            | yes or no                                          | derived: left after every upkeep was paid        |
-| **unpaid**          | a thing with upkeep             | yes or no                                          | derived: its upkeep was not met                  |
-| **houses**          | a thing that contains things    | whether people live in it                          | stored                                           |
+| Trait              | Of                              | Values                                             | Stored or derived                                |
+| ------------------ | ------------------------------- | -------------------------------------------------- | ------------------------------------------------ |
+| **kind**           | every thing                     | one of the kinds                                   | stored                                           |
+| **place**          | every thing                     | the thing it is in                                 | stored                                           |
+| **ready**          | whatever readies                | yes or no                                          | stored                                           |
+| **resource**       | an extractor                    | one of the resources                               | stored                                           |
+| **force**          | citizen, garrison, ark, pioneer | a number                                           | stored                                           |
+| **fuel**           | a unit                          | how much energy its tank holds                     | stored                                           |
+| **upkeep**         | a thing with upkeep             | food per turn                                      | stored                                           |
+| **metal in it**    | whatever is built               | a number                                           | derived: its binding plus the metal in its parts |
+| **density**        | a territory, per resource       | a number                                           | stored                                           |
+| **total capacity** | a territory, per kind           | a number                                           | stored                                           |
+| **control**        | a territory                     | held by a player, or unclaimed                     | derived: a citizen of that player is there       |
+| **biome**          | a territory                     | one of the biomes                                  | stored                                           |
+| **nature**         | a territory                     | a number                                           | stored                                           |
+| **adjacency**      | a place                         | which places it touches, and by which kind of edge | stored                                           |
+| **keeps**          | food                            | the number of turns it will last                   | stored                                           |
+| **surplus**        | food                            | yes or no                                          | derived: left after every upkeep was paid        |
+| **unpaid**         | a thing with upkeep             | yes or no                                          | derived: its upkeep was not met                  |
+| **houses**         | a thing that contains things    | whether people live in it                          | stored                                           |
 
-Food is made with `keeps` 1.
+Food is made with `keeps` 1. The force nature holds a territory with.
 
 ## What bounds a kind in a territory
 
@@ -243,7 +242,7 @@ What each biome gives a territory. Ocean is not claimable and carries nothing.
 | Ice       | 1 x 2 | 2 x 3 | 1 x 2  | 1               |
 | Desert    | 2 x 4 | 3 x 4 | 5 x 6  | 1               |
 | Grassland | 5 x 6 | 1 x 3 | 1 x 3  | 1               |
-| Jungle    | 4 x 6 | 1 x 2 | 1 x 2  | 1               |
+| Jungle    | 4 x 6 | 1 x 2 | 1 x 2  | 2               |
 | Mountain  | 1 x 3 | 5 x 7 | 2 x 3  | 1               |
 
 `5 x 6` is total capacity for five extractors, each yielding six. Every biome except ocean has
