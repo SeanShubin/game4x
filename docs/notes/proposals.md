@@ -79,7 +79,7 @@ resource it builds for:
 - today: `build food extractor` produces `1 food extractor`, and so on, three times
 - collapsed: `build extractor` produces `1 extractor` with the resource **named by a parameter**
 
-**Every parameter in the recipe table today is a place** - `$where`, `$from`, `$to`, eight uses. A
+**Every parameter in the recipe table today is a place** - `$where`, `$from`, `$to`, 9 uses. A
 `$resource` would be the first that is not. **`P-214` is close and does not quite cover it**: it says
 a command binds *the place it acts in, and any ingredient it names with a `$`*, and the resource is
 neither - it is a trait value.
