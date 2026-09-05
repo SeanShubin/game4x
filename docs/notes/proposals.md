@@ -63,34 +63,50 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-264 - The main scenario is a typical game, and unusual mechanics go elsewhere
+### P-264 - The main scenario moves to the specification, and your document keeps the rule
 
 **to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
-- **shape** text - **asks** approval - **into** `docs/process.md` -> How I know the game is right
+- **shape** text - **asks** approval - **into** `docs/process.md` -> How I know the game is right,
+then a new `spec/scenarios.md`, then `spec/README.md` -> The documents
 
-**Your answer contradicts one sentence of your own document, which is why this came back as words
-rather than as a work order.** `docs/process.md` says the main scenario *touches every single thing
-and every recipe*. **`perish` and `spoil` are recipes**, so as written it requires the deliberate
-starvation you have just said you do not want.
+**Your document should start any project, so what stays is the rule and what moves is this game.**
+Three destinations, one quotation each, in that order.
 
-> There is a **main scenario** that touches every single thing and every recipe **a typical game
-> uses**. **That is what I vet, and it is the foundation.** I do not need to walk every step of the
-> win condition by hand, and **a mechanic that only fires in an unusual situation - a starvation, a
-> spoilage - belongs in a scenario of its own, which I will not build until this one satisfies me.**
+**First, `docs/process.md`. These two paragraphs replace the two that are there** - *there is a main
+scenario that touches every single thing and every recipe* through *heavy use of the automation*.
 
-**The paragraph after it already carries the other half** - *other scenarios check that particular
-end states are reachable, and those rest on the foundation rather than on me* - so this adds the
-case where the unusual thing is a **mechanic** rather than an end state.
+> There is a **main scenario** that a person can follow end to end. **That is what I vet, and it is
+> the foundation.** I do not need to walk every step of the win condition by hand.
+>
+> As long as that foundation is maintained, other scenarios check that particular end states are
+> reachable. **Those rest on the foundation rather than on me**, and they will make heavy use of the
+> automation. **What the main scenario has to cover is a fact about the game and is stated with the
+> game.**
+
+**Second, a new `spec/scenarios.md`** - the whole file.
+
+> # Scenarios
+>
+> - There is one **main scenario**, and it touches everything a typical game uses. It is the
+>   foundation, and it is vetted by hand
+> - A mechanic that only appears in an unusual situation belongs in a scenario of its own. Those are
+>   not built until the main scenario satisfies its reader
+> - Other scenarios check that particular end states are reachable, including the win condition.
+>   They rest on the foundation rather than on a person
+
+**Third, `spec/README.md` -> The documents.** One row, at the end of the table, which is sixteen rows
+now - measured.
+
+> | [Scenarios](scenarios.md) | The scenarios that demonstrate the game, and what each is for |
+
+**Why the specification rather than the release.** `releases/` is deleted once vetted, and the main
+scenario outlives it - it is the foundation the later scenarios rest on, which is a permanent
+arrangement rather than a schedule.
 
 **Nothing in the code breaks, and I checked rather than assumed.** The coverage check is
-`the_scenario_fires_every_player_recipe_the_release_declares`, scoped to the **player** recipes;
-`perish` and `spoil` fire from `end turn` and are world recipes, so they were never in its
-population. **No check asserts that every world recipe fires**, which is worth knowing and is not
-work this creates.
-
-**What is settled and needs no words**: restructure to the minimum, produce and deploy an Ark, win
-nothing, and `R-6` keeps the win condition. **Two metal stores still come before the Yard** - that is
-`produce ark` being a typical mechanic, not thoroughness.
+`the_scenario_fires_every_player_recipe_the_release_declares`, scoped to **player** recipes;
+`perish` and `spoil` fire from `end turn` and were never in its population. **No check asserts that
+every world recipe fires** - worth knowing, and not work this creates.
 
 ### P-265 - `P-260` dropped its own answer, and left a contradiction where it landed
 
@@ -233,6 +249,36 @@ three sat here, say so and I will move the lens prompt and leave the reasoning b
 **Both prompts end by asking for what is open and addressed, read from the files.** That is the one
 line that makes an instance start from the record rather than from whatever it remembers - which is
 `P-263`'s rule pointed at the beginning of a session instead of the end of one.
+
+### P-269 - The rest of what names this project in your document
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
+- **into** `docs/process.md` -> How I know the game is right, and Who writes what
+
+**Nothing slipped in unread: the words are yours and the address was mine.** A proposal shows you
+the text and names the destination, and **the destination is the half you were never asked about.**
+That is how `P-249`'s paragraph reached a generic document.
+
+**Measured against *it should start any project*, `P-264` takes the largest piece and two remain.**
+
+**1. The four artifacts name this game's model.** `recipe` appears **twice** in the document;
+`P-264` takes one, and **the one left is load-bearing** - *the thing definitions, the recipe
+definitions* are two of the four that let you derive the fourth by hand, which is the method
+itself. **Generic would be *the definitions of the things, and of the transformations
+over them*.** This lane has no view worth having on whether that reads better to you, which is why
+it is a question rather than a recommendation.
+
+**2. *Who writes what* lists this repository's directories** - `crates/`, `prototypes/`, `web/`,
+cargo, `hooks/`, `scripts/`, `tools/spec/`. **It is also a copy**: `CLAUDE.md` -> Perspectives has
+the same table, and `P-245` says a document that restates another links to it instead. **Recommend
+replacing the sub-list with the rule and a pointer** - *no instance writes outside its own
+directories, and `CLAUDE.md` says which those are* - and keeping every sentence under it, which is
+the generic part and the part that is actually about how you work.
+
+**What this lane recommends leaving.** *Win condition*, *scenario test*, and *the game* itself. They
+name what you personally verify; a document that cannot mention its own subject is not more generic,
+only vaguer. **The test that separates them from the two above is whether another project would
+delete the sentence or reword it** - it would reword these and delete a directory list.
 
 ## Addressed to other perspectives
 
