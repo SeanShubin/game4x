@@ -94,35 +94,35 @@ direction - it takes *out* what names this project. **These four put rules in an
 detail out, so they do not collide**, but they land in the same file and this lane will re-read the
 section whole after the second of them.
 
-### P-269 - The rest of what names this project in your document
+### P-269 - Two lines in your document that name this project
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
-- **into** `docs/process.md` -> How I know the game is right, and Who writes what
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind**
+contradiction - **asks** a decision - **into** `docs/process.md` -> How I know the game is right,
+and Who writes what
 
-**Nothing slipped in unread: the words are yours and the address was mine.** A proposal shows you
-the text and names the destination, and **the destination is the half you were never asked about.**
-That is how `P-249`'s paragraph reached a generic document.
+**Two yes-or-no answers, and no text is final yet** - same shape as `P-267`. Say yes to either and it
+comes back carrying the words.
 
-**Measured against *it should start any project*, `P-264` takes the largest piece and two remain.**
+**How they got there: the words are yours and the address was mine.** A proposal shows you the text
+and *names* the destination, and **the destination is the half you are never asked about.** Nothing
+slipped in unread.
 
-**1. The four artifacts name this game's model.** `recipe` appears **twice** in the document;
-`P-264` takes one, and **the one left is load-bearing** - *the thing definitions, the recipe
-definitions* are two of the four that let you derive the fourth by hand, which is the method
-itself. **Generic would be *the definitions of the things, and of the transformations
-over them*.** This lane has no view worth having on whether that reads better to you, which is why
-it is a question rather than a recommendation.
+**The test: would another project reword this sentence, or delete it?** Reword means it is about how
+you work and it stays. Delete means it is about this game and belongs elsewhere. `P-264` already took
+the biggest one out.
 
-**2. *Who writes what* lists this repository's directories** - `crates/`, `prototypes/`, `web/`,
-cargo, `hooks/`, `scripts/`, `tools/spec/`. **It is also a copy**: `CLAUDE.md` -> Perspectives has
-the same table, and `P-245` says a document that restates another links to it instead. **Recommend
-replacing the sub-list with the rule and a pointer** - *no instance writes outside its own
-directories, and `CLAUDE.md` says which those are* - and keeping every sentence under it, which is
-the generic part and the part that is actually about how you work.
+|       | The line                                                                                                                                                     | This lane recommends                                                                                                                                                                                                                                                                                                                                                                                      |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **A** | *The thing definitions, the **recipe** definitions* - one of the four artifacts. `recipe` is a name for this game's data, and appears **once** now, measured | **No recommendation, which is why it is a question.** Generic would be *the definitions of the things, and of the transformations over them*. It is load-bearing either way - the four are what let you derive the fourth by hand - and whether the generic phrasing still reads as yours is not something this lane can judge                                                                            |
+| **B** | *Who writes what* lists `crates/`, `prototypes/`, `web/`, cargo, `hooks/`, `scripts/`, `tools/spec/`                                                         | **Yes.** Another project deletes a directory list rather than rewording it - **and it is also a copy** of `CLAUDE.md` -> Perspectives, which `P-245` forbids. Replace the sub-list with the rule and a pointer: *no instance writes outside its own directories, and `CLAUDE.md` says which those are*. **Every sentence under it stays** - that is the generic part, and the part that is actually yours |
 
-**What this lane recommends leaving.** *Win condition*, *scenario test*, and *the game* itself. They
-name what you personally verify; a document that cannot mention its own subject is not more generic,
-only vaguer. **The test that separates them from the two above is whether another project would
-delete the sentence or reword it** - it would reword these and delete a directory list.
+**What this lane is not asking about.** *Win condition*, *scenario test*, *the game*. Another project
+rewords those rather than deleting them, and **a document that cannot mention its own subject is not
+more generic, only vaguer.**
+
+**`P-267` edits the same file in the other direction.** It puts rules about you in; this takes
+project detail out. **After the second of them lands this lane re-reads the section whole**, which
+`CLAUDE.md` requires and which is the check neither proposal can do for itself.
 
 ## Addressed to other perspectives
 

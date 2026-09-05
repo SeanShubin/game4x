@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-267** - Four rules about you, kept where you do not read them · `docs/notes/proposals.md`
-- **P-269** - The rest of what names this project in your document · `docs/notes/proposals.md`
+- **P-269** - Two lines in your document that name this project · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
