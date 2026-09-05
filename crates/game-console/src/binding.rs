@@ -161,6 +161,11 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
             kind: unit("unit")?,
             territory: territory("territory")?,
         }),
+        // `P-214`: one command per recipe, so the player says which of the two this is
+        // rather than the model deciding by looking at the ground.
+        form::FOUND_BY_LAND => Meaning::Change(Transition::FoundByLand {
+            territory: territory("territory")?,
+        }),
         form::BUILD => Meaning::Change(Transition::Build {
             structure: structure("structure")?,
             territory: territory("territory")?,
@@ -216,6 +221,7 @@ pub fn handled() -> Vec<&'static str> {
         form::LAND,
         form::LAUNCH,
         form::MOVE,
+        form::FOUND_BY_LAND,
         form::BUILD,
         form::PRODUCE,
         form::CREATE_LABOR,

@@ -106,11 +106,13 @@ fn ending_a_turn_runs_exactly_the_recipes_the_release_calls_the_worlds() {
 #[test]
 fn every_player_recipe_the_release_declares_is_actually_fired() {
     /// The recipes no command in the scenario has ever fired, and why each is allowed.
-    const NOT_FIRED: [(&str, &str); 1] = [(
-        "move",
-        "the scenario's one `move` founds, so it fires `found by land`; adding a plain move \
-         means editing play.4x, which is frozen for hand-vetting - `C-21`, `S-26`",
-    )];
+    ///
+    /// **Empty, and it was not.** `move` sat here because the scenario's one `move` line
+    /// founded, so it fired `found by land` and the recipe `move` had never once run.
+    /// `P-214` split the command in two and the scenario now says which it means, so the
+    /// exception expired on schedule rather than being deleted to make a test pass - the
+    /// assertion below fails when an excepted recipe starts firing, and that is what it did.
+    const NOT_FIRED: [(&str, &str); 0] = [];
 
     let players: Vec<String> = declared()
         .into_iter()
@@ -156,7 +158,11 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
             "`{name}` is excepted here and the release no longer declares it"
         );
     }
-    assert_eq!(NOT_FIRED.len(), 1, "one exception, and it is `move`");
+    assert_eq!(
+        NOT_FIRED.len(),
+        0,
+        "no exceptions: all nine player recipes fire"
+    );
 }
 
 /// Every command in the artifact says something, and none of them says nothing.
@@ -192,7 +198,7 @@ fn a_command_that_fires_no_recipe_says_why_rather_than_leaving_a_gap() {
 
 /// The flattening does something: the artifact is longer than the file it starts from.
 ///
-/// **`run setup` is followed rather than recorded.** `play.4x` is 73 commands and the run is
+/// **`run setup` is followed rather than recorded.** `play.4x` is 79 commands and the run is
 /// 136, because the design that `setup.4x` reaches through two more files is where half the
 /// numbers in `state.md` come from. An artifact that merely copied `play.4x` would look
 /// right, be shorter than the truth, and leave a person deriving by hand without the
@@ -209,7 +215,7 @@ fn the_artifact_is_the_flattening_and_not_a_copy_of_the_scenario_file() {
         })
         .count();
 
-    assert_eq!(lines, 73, "play.4x is 73 commands; it is now {lines}");
+    assert_eq!(lines, 79, "play.4x is 79 commands; it is now {lines}");
     assert!(
         ran.len() > lines,
         "the run is {} commands and play.4x is {lines}, so nothing was flattened in",
@@ -225,5 +231,79 @@ fn the_artifact_is_the_flattening_and_not_a_copy_of_the_scenario_file() {
     assert!(
         ran.iter().all(|one| !one.command.starts_with("run ")),
         "a `run` line reached the artifact"
+    );
+}
+
+/// Every `# Turn n.` in the scenario is the turn the game is actually on beneath it.
+///
+/// **This was wrong, and it was wrong in the file Sean derives from by hand.** `play.4x`
+/// labelled its blocks 1 to 7 and then jumped to 9, so every comment after the gap read one
+/// turn high - a block headed *Turn 9* over commands the dump calls turn 8. A person
+/// checking the dump against the commands finds two documents disagreeing and no way to tell
+/// which is lying, which is exactly the hunt these artifacts exist to prevent.
+///
+/// It is a comment, so no test could ever have failed on it and none did. This one can,
+/// because `fired::ran` knows which turn each command ran in and the label is right above
+/// it.
+#[test]
+fn every_turn_the_scenario_labels_is_the_turn_it_is_on() {
+    let play = std::fs::read_to_string(root().join("scenario/commands/play.4x")).expect("play.4x");
+    let ran = ran();
+
+    // Walk the file and the run together. A label applies to the next command after it, and
+    // that command's turn is what the model says it is.
+    let mut turn_of: Vec<u32> = Vec::new();
+    for one in &ran {
+        if one.turn > 0 {
+            turn_of.push(one.turn);
+        }
+    }
+
+    let mut labels: Vec<u32> = Vec::new();
+    let mut at = 0usize; // how many play commands have been passed
+    let mut pending: Option<u32> = None;
+    for line in play.lines() {
+        let line = line.trim();
+        if let Some(rest) = line.strip_prefix("# Turn ") {
+            if let Some(number) = rest.split('.').next().and_then(|n| n.parse::<u32>().ok()) {
+                pending = Some(number);
+            }
+            continue;
+        }
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        if let Some(said) = pending.take() {
+            let actually = turn_of
+                .get(at)
+                .copied()
+                .unwrap_or_else(|| panic!("the run is shorter than play.4x"));
+            assert_eq!(
+                said, actually,
+                "`# Turn {said}.` sits above `{line}`, which runs in turn {actually}"
+            );
+            labels.push(said);
+        }
+        at += 1;
+    }
+
+    // Consecutive from one, so a label cannot be skipped the way `Turn 8` was. Each one
+    // agreeing with the run individually would not catch a gap: the labels after it were
+    // each wrong by one, and each would have been checked against the wrong command.
+    assert_eq!(
+        labels,
+        (1..=labels.len() as u32).collect::<Vec<_>>(),
+        "the turn labels are not 1, 2, 3 ... with nothing missed"
+    );
+    assert_eq!(
+        labels.len(),
+        9,
+        "nine labelled turns; found {}",
+        labels.len()
+    );
+    assert_eq!(
+        turn_of.iter().max().copied().unwrap_or(0),
+        9,
+        "and nine is the last turn a command runs in"
     );
 }

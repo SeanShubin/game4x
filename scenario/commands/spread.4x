@@ -49,7 +49,7 @@ create labor 3 1
 work 3 extractor 1 energy
 create labor 1 2
 work 1 extractor 2 food
-move pioneer 3
+found by land 3
 create labor 1 3
 work 1 extractor 3 food
 end turn

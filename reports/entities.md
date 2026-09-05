@@ -7,7 +7,7 @@ These are the rows the F3 browser shows, from the same function.
 
 | id       | phase | turn | territories | units |
 | -------- | ----- | ---- | ----------- | ----- |
-| the game | play  | 9    | 12          | 1     |
+| the game | play  | 10   | 12          | 1     |
 
 1 row(s)
 
@@ -34,7 +34,7 @@ These are the rows the F3 browser shows, from the same function.
 
 | id  | kind | location | cells | force | exhausted | usable |
 | --- | ---- | -------- | ----- | ----- | --------- | ------ |
-| 1   | ark  | orbit    | 2     | 2     | false     | true   |
+| 1   | ark  | orbit    | 1     | 2     | false     | true   |
 
 1 row(s)
 

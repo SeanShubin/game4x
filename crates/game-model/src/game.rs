@@ -165,6 +165,7 @@ impl Game {
             Transition::Land { kind, territory } => next.land(*kind, *territory)?,
             Transition::Launch { kind } => next.launch(*kind)?,
             Transition::Move { kind, territory } => next.move_unit(*kind, *territory)?,
+            Transition::FoundByLand { territory } => next.found_by_land(*territory)?,
             Transition::Build {
                 structure,
                 territory,
@@ -327,9 +328,22 @@ impl Game {
     }
 
     fn launch(&mut self, kind: UnitKind) -> Result<(), Rejection> {
-        let at = self
-            .pick(kind, |unit| !unit.in_orbit())
-            .ok_or(Rejection::NotOnThePlanet(kind))?;
+        // **`pick` takes only a ready unit**, so an exhausted one is no unit at all as far
+        // as it is concerned - and this said *not on the planet* about an Ark standing on
+        // the planet, having moved there that turn. The two are told apart before the
+        // message is chosen, because a player who is told the wrong reason looks in the
+        // wrong place. Found by `P-214`: splitting `move` out put a real move into the
+        // scenario for the first time, and the very next line hit this.
+        let at = self.pick(kind, |unit| !unit.in_orbit()).ok_or_else(|| {
+            let exhausted = self
+                .units
+                .iter()
+                .any(|unit| unit.kind == kind && !unit.ready() && !unit.in_orbit());
+            match exhausted {
+                true => Rejection::AlreadyUsed(kind),
+                false => Rejection::NotOnThePlanet(kind),
+            }
+        })?;
         // `spec/control.md`: *a player wins by launching an Ark from a fully exploited
         // planet.* Asked before the Ark leaves, because it is the planet it left that has
         // to have been finished.
@@ -416,15 +430,60 @@ impl Game {
                 },
             })?;
 
-        self.units[at].cells -= cost::MOVE_CELLS;
-        if self.territory(territory)?.founded() {
-            self.units[at].location = Location::On(territory);
-            self.units[at].exhausted = true;
-            return Ok(());
+        // **`P-214`: moving is moving, and founding is a different command.** This used
+        // to found the territory when it arrived on unclaimed ground, so one command fired
+        // whichever of two recipes the ground happened to call for and the player never
+        // said which. The rejection names the other command rather than merely refusing,
+        // because the player asked for something reasonable in the wrong words.
+        if !self.territory(territory)?.founded() {
+            return Err(Rejection::NotFoundedYet { territory });
         }
-        // Unclaimed ground is taken and founded by arriving on it, which consumes the
-        // unit. So a founding unit never stands on ground it has taken but not founded,
-        // and never has to be fed there.
+        self.units[at].cells -= cost::MOVE_CELLS;
+        self.units[at].location = Location::On(territory);
+        self.units[at].exhausted = true;
+        Ok(())
+    }
+
+    /// `found by land`: a pioneer takes adjacent unclaimed ground and is consumed by it.
+    ///
+    /// **The unit is not an argument because the recipe names it.** `found by land`
+    /// consumes one pioneer and nothing else can run it, so a command binding what the
+    /// recipe leaves open binds only the place.
+    ///
+    /// Unclaimed ground is taken and founded by arriving on it, which consumes the unit. So
+    /// a founding unit never stands on ground it has taken but not founded, and never has
+    /// to be fed there - which is why this is one act rather than a move and then a
+    /// founding.
+    fn found_by_land(&mut self, territory: TerritoryId) -> Result<(), Rejection> {
+        if self.territory(territory)?.founded() {
+            return Err(Rejection::AlreadyFounded { territory });
+        }
+        let kind = UnitKind::Pioneer;
+        let anywhere = self.pick(kind, |unit| !unit.in_orbit());
+        let at = self
+            .pick(kind, |unit| match unit.location {
+                Location::On(from) => {
+                    unit.cells >= cost::MOVE_CELLS && self.are_adjacent(from, territory)
+                }
+                Location::Orbit => false,
+            })
+            .ok_or_else(|| match anywhere {
+                Some(other) => match self.units[other].location {
+                    Location::On(from) if !self.are_adjacent(from, territory) => {
+                        Rejection::NotAdjacent {
+                            from,
+                            to: territory,
+                        }
+                    }
+                    _ => Rejection::NoCells(kind),
+                },
+                None => Rejection::NoUnitAvailable {
+                    kind,
+                    where_from: "on the planet",
+                },
+            })?;
+
+        self.units[at].cells -= cost::MOVE_CELLS;
         self.found(territory, at, &[Resource::Food, Resource::Metal], 2)
     }
 
@@ -1489,16 +1548,35 @@ mod tests {
     /// unit is consumed and there is never a pioneer standing on ground it has taken but
     /// not founded.
     #[test]
-    fn a_move_onto_unclaimed_ground_founds_it_and_consumes_the_unit() {
+    fn founding_by_land_takes_the_ground_and_consumes_the_unit() {
         let mut game = founded();
         let id = UnitId(game.units.len() as u32 + 1);
         let mut pioneer = Unit::new(id, UnitKind::Pioneer);
         pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
 
-        let moved = game
+        // **`P-214`: this used to be a `move`**, and the model worked out from the ground
+        // which of two recipes was meant. Both directions are checked now, because the
+        // whole of the change is that each command refuses the other's case.
+        let refused = game
             .after(&Transition::Move {
                 kind: UnitKind::Pioneer,
+                territory: TerritoryId(2),
+            })
+            .expect_err("moving onto unclaimed ground is `found by land`");
+        assert!(
+            refused.to_string().contains("found by land 2"),
+            "the refusal names the command that does work: {refused}"
+        );
+        let refused = game
+            .after(&Transition::FoundByLand {
+                territory: TerritoryId(1),
+            })
+            .expect_err("founding ground already held is `move`");
+        assert!(refused.to_string().contains("already founded"), "{refused}");
+
+        let moved = game
+            .after(&Transition::FoundByLand {
                 territory: TerritoryId(2),
             })
             .unwrap();

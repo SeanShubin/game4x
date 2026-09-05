@@ -717,6 +717,11 @@ fn every_way_the_state_can_change_is_a_command() {
             kind: UnitKind::Pioneer,
             territory: TerritoryId(1),
         },
+        // `P-214`: one command per recipe, so the two the model used to choose between by
+        // looking at the ground are two transitions and two commands.
+        Transition::FoundByLand {
+            territory: TerritoryId(1),
+        },
         Transition::Build {
             structure: StructureKind::Yard,
             territory: TerritoryId(1),
@@ -738,10 +743,12 @@ fn every_way_the_state_can_change_is_a_command() {
         },
         Transition::EndTurn,
     ];
-    // Fourteen ways to change the state, and fourteen forms that produce one. `P-232`
-    // added `create labor`: `P-214` says every player recipe has a command, and it was the
-    // one recipe with none.
-    assert_eq!(changing.len(), 14);
+    // Fifteen ways to change the state, and fifteen forms that produce one. `P-232` added
+    // `create labor`: `P-214` says every player recipe has a command, and it was the one
+    // recipe with none. `P-214` then took the other half - `move` fired `move` or
+    // `found by land` depending on the ground, so one command covered two recipes and the
+    // player never said which.
+    assert_eq!(changing.len(), 15);
     let commands_that_change = grammar
         .forms()
         .iter()

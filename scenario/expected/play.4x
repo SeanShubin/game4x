@@ -1,4 +1,4 @@
-# after `commands/play.4x`
+# after `scenario/commands/play.4x`
 # Expected. NOT YET REVIEWED - written from the program's own output, awaiting Sean.
 # When you have read it and it is what the scenario should produce, replace the line
 # above with: `# Expected. REVIEWED by Sean.` That edit is the review, and it is the
@@ -6,7 +6,7 @@
 #
 # Deleting a row, or this file, is how changing your mind is said - `docs/process.md`.
 
-{game phase:play turn:9 territories:12 units:1}
+{game phase:play turn:10 territories:12 units:1}
 
 {territory territory:1 biome:grassland "force of nature":1 founded:yes citizens:12 "labor spent":0 yards:1}
 {territory territory:2 biome:grassland "force of nature":1 founded:yes citizens:6 "labor spent":0 yards:0}
@@ -160,7 +160,7 @@
 {labor territory:11 made:0 spent:0 left:0}
 {labor territory:12 made:0 spent:0 left:0}
 
-{unit unit:1 kind:ark place:orbit fuel:2 readiness:ready}
+{unit unit:1 kind:ark place:orbit fuel:1 readiness:ready}
 
 {kind kind:citizen "in play":18}
 {kind kind:labor "in play":0}

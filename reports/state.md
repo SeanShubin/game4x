@@ -7,7 +7,7 @@ is in it, because the names are what this is for.
 
 | phase | turn | territories | units |
 | ----- | ---- | ----------- | ----- |
-| play  | 9    | 12          | 1     |
+| play  | 10   | 12          | 1     |
 
 1 row(s)
 
@@ -209,7 +209,7 @@ is in it, because the names are what this is for.
 
 | unit | kind | place | fuel | readiness |
 | ---- | ---- | ----- | ---- | --------- |
-| 1    | ark  | orbit | 2    | ready     |
+| 1    | ark  | orbit | 1    | ready     |
 
 1 row(s)
 

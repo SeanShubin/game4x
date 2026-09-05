@@ -92,14 +92,18 @@ work 3 extractor 1 energy
 # The pioneer crosses into a neighbouring territory. It is not held, so arriving there takes
 # it and claims it: force 2 against a force of nature of 1, and the pioneer becomes a
 # garrison, two citizens, a farm and a mine.
-move pioneer 2
+#
+# `P-214`: the player says which recipe this is. Arriving on unclaimed ground used to be
+# written `move`, and the model worked out from the ground whether that meant `move` or
+# `found by land` - so one command fired either of two recipes and no file ever said which.
+found by land 2
 
 # The new ground feeds itself on the very turn it is claimed.
 create labor 1 2
 work 1 extractor 2 food
 end turn
 
-# Turn 9. The last three recipes, and they are reachable only because `C-11` let metal
+# Turn 8. The last three recipes, and they are reachable only because `C-11` let metal
 # carry. A Yard costs fifteen and a worked turn makes twelve, so while every store was
 # discarded at each turn's end no territory could ever afford one - `build yard` and
 # everything behind it were unreachable rather than merely unused.
@@ -117,5 +121,28 @@ work 1 extractor 2 food
 create labor 1 1
 build yard 1
 produce ark 1
+
+# The Ark crosses to territory 2 before it leaves, which is the only `move` in this file.
+#
+# **It is here because the scenario is the foundation and had a hole in it.** `P-214` split
+# `move` from `found by land`, and splitting them showed that every `move` this scenario
+# had ever run was a founding - so the recipe `move` had never once fired, while a check
+# reported nine of nine player recipes covered. It could report that because both recipes
+# were spelled `move` and it was reading the command rather than what ran. `C-21`.
+#
+# Territory 2 is held, so this is a move and not a claim. Ground already yours is the whole
+# difference between the two recipes, and it is now the player who says which.
+move ark 2
+end turn
+
+# Turn 9. Moving exhausts a unit, so the Ark leaves on the turn after the one it crossed on.
+#
+# The farms are worked first, and here that is not a habit but the whole turn: a population
+# that gathers nothing starves at the end, and a turn spent only launching would end with
+# both territories empty and unfounded. The first draft of this turn did exactly that.
+create labor 3 1
+work 3 extractor 1 food
+create labor 1 2
+work 1 extractor 2 food
 launch ark
 end turn

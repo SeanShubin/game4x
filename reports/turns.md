@@ -1,6 +1,6 @@
 # Every turn of `scenario/commands/play.4x`
 
-**Generated. Do not edit.** One section per `end turn` in the scenario - 8 of them.
+**Generated. Do not edit.** One section per `end turn` in the scenario - 9 of them.
 The turn numbers are the scenario's own boundaries, so they line up with its comments.
 
 # Turn 1
@@ -1560,7 +1560,7 @@ create labor 3 1
 work 3 extractor 1 metal
 create labor 3 1
 work 3 extractor 1 energy
-move pioneer 2
+found by land 2
 create labor 1 2
 work 1 extractor 2 food
 end turn
@@ -1845,7 +1845,7 @@ work 1 extractor 2 food
 create labor 1 1
 build yard 1
 produce ark 1
-launch ark
+move ark 2
 end turn
 ```
 
@@ -1853,7 +1853,7 @@ end turn
 
 **new** (1)
 
-- {unit unit:1 kind:ark place:orbit fuel:2 readiness:ready}
+- {unit unit:1 kind:ark place:"territory 2" fuel:1 readiness:ready}
 
 **changed** (12)
 
@@ -2076,9 +2076,259 @@ end turn
 
 ### unit
 
+| unit | kind | place       | fuel | readiness |
+| ---- | ---- | ----------- | ---- | --------- |
+| 1    | ark  | territory 2 | 1    | ready     |
+
+1 row(s)
+
+### kind
+
+| kind      | in play |
+| --------- | ------- |
+| citizen   | 18      |
+| labor     | 0       |
+| food      | 0       |
+| metal     | 14      |
+| energy    | 20      |
+| extractor | 11      |
+| garrison  | 2       |
+| yard      | 1       |
+| ark       | 1       |
+| pioneer   | 0       |
+| territory | 12      |
+
+11 row(s)
+
+# Turn 9
+
+## commands
+
+```
+create labor 3 1
+work 3 extractor 1 food
+create labor 1 2
+work 1 extractor 2 food
+launch ark
+end turn
+```
+
+## what changed
+
+**changed** (2)
+
+- game phase:play · turn: 9 → 10
+- unit unit:1 · place: territory 2 → orbit
+
+## what is there now
+
+### game
+
+| phase | turn | territories | units |
+| ----- | ---- | ----------- | ----- |
+| play  | 10   | 12          | 1     |
+
+1 row(s)
+
+### territory
+
+| territory | biome     | force of nature | founded | citizens | labor spent | yards |
+| --------- | --------- | --------------- | ------- | -------- | ----------- | ----- |
+| 1         | grassland | 1               | yes     | 12       | 0           | 1     |
+| 2         | grassland | 1               | yes     | 6        | 0           | 0     |
+| 3         | grassland | 1               | no      | 0        | 0           | 0     |
+| 4         | mountain  | 1               | no      | 0        | 0           | 0     |
+| 5         | mountain  | 1               | no      | 0        | 0           | 0     |
+| 6         | jungle    | 1               | no      | 0        | 0           | 0     |
+| 7         | jungle    | 1               | no      | 0        | 0           | 0     |
+| 8         | grassland | 1               | no      | 0        | 0           | 0     |
+| 9         | mountain  | 1               | no      | 0        | 0           | 0     |
+| 10        | desert    | 1               | no      | 0        | 0           | 0     |
+| 11        | grassland | 1               | no      | 0        | 0           | 0     |
+| 12        | ice       | 1               | no      | 0        | 0           | 0     |
+
+12 row(s)
+
+### territory resource
+
+| territory | resource | capacity | density | built |
+| --------- | -------- | -------- | ------- | ----- |
+| 1         | food     | 3        | 4       | 3     |
+| 1         | metal    | 3        | 4       | 3     |
+| 1         | energy   | 3        | 4       | 3     |
+| 2         | food     | 2        | 6       | 1     |
+| 2         | metal    | 2        | 4       | 1     |
+| 2         | energy   | 2        | 4       | 0     |
+| 3         | food     | 6        | 2       | 0     |
+| 3         | metal    | 2        | 4       | 0     |
+| 3         | energy   | 2        | 4       | 0     |
+| 4         | food     | 1        | 2       | 0     |
+| 4         | metal    | 4        | 5       | 0     |
+| 4         | energy   | 4        | 5       | 0     |
+| 5         | food     | 3        | 1       | 0     |
+| 5         | metal    | 8        | 8       | 0     |
+| 5         | energy   | 8        | 8       | 0     |
+| 6         | food     | 4        | 4       | 0     |
+| 6         | metal    | 0        | 0       | 0     |
+| 6         | energy   | 4        | 5       | 0     |
+| 7         | food     | 4        | 4       | 0     |
+| 7         | metal    | 4        | 5       | 0     |
+| 7         | energy   | 0        | 0       | 0     |
+| 8         | food     | 6        | 6       | 0     |
+| 8         | metal    | 1        | 2       | 0     |
+| 8         | energy   | 1        | 2       | 0     |
+| 9         | food     | 2        | 3       | 0     |
+| 9         | metal    | 6        | 8       | 0     |
+| 9         | energy   | 1        | 2       | 0     |
+| 10        | food     | 3        | 3       | 0     |
+| 10        | metal    | 1        | 3       | 0     |
+| 10        | energy   | 6        | 8       | 0     |
+| 11        | food     | 5        | 6       | 0     |
+| 11        | metal    | 5        | 6       | 0     |
+| 11        | energy   | 5        | 6       | 0     |
+| 12        | food     | 2        | 2       | 0     |
+| 12        | metal    | 8        | 8       | 0     |
+| 12        | energy   | 8        | 8       | 0     |
+
+36 row(s)
+
+### store
+
+| territory | resource | amount |
+| --------- | -------- | ------ |
+| 1         | food     | 0      |
+| 1         | metal    | 14     |
+| 1         | energy   | 20     |
+| 2         | food     | 0      |
+| 2         | metal    | 0      |
+| 2         | energy   | 0      |
+| 3         | food     | 0      |
+| 3         | metal    | 0      |
+| 3         | energy   | 0      |
+| 4         | food     | 0      |
+| 4         | metal    | 0      |
+| 4         | energy   | 0      |
+| 5         | food     | 0      |
+| 5         | metal    | 0      |
+| 5         | energy   | 0      |
+| 6         | food     | 0      |
+| 6         | metal    | 0      |
+| 6         | energy   | 0      |
+| 7         | food     | 0      |
+| 7         | metal    | 0      |
+| 7         | energy   | 0      |
+| 8         | food     | 0      |
+| 8         | metal    | 0      |
+| 8         | energy   | 0      |
+| 9         | food     | 0      |
+| 9         | metal    | 0      |
+| 9         | energy   | 0      |
+| 10        | food     | 0      |
+| 10        | metal    | 0      |
+| 10        | energy   | 0      |
+| 11        | food     | 0      |
+| 11        | metal    | 0      |
+| 11        | energy   | 0      |
+| 12        | food     | 0      |
+| 12        | metal    | 0      |
+| 12        | energy   | 0      |
+
+36 row(s)
+
+### garrison
+
+| territory | force |
+| --------- | ----- |
+| 1         | 1     |
+| 2         | 1     |
+
+2 row(s)
+
+### extractor
+
+| territory | node | resource | readiness |
+| --------- | ---- | -------- | --------- |
+| 1         | 0    | food     | ready     |
+| 1         | 3    | metal    | ready     |
+| 1         | 1    | food     | ready     |
+| 1         | 2    | food     | ready     |
+| 1         | 4    | metal    | ready     |
+| 1         | 5    | metal    | ready     |
+| 1         | 6    | energy   | ready     |
+| 1         | 7    | energy   | ready     |
+| 1         | 8    | energy   | ready     |
+| 2         | 0    | food     | ready     |
+| 2         | 2    | metal    | ready     |
+
+11 row(s)
+
+### structure
+
+| territory | structure | count |
+| --------- | --------- | ----- |
+| 1         | extractor | 9     |
+| 1         | garrison  | 1     |
+| 1         | yard      | 1     |
+| 2         | extractor | 2     |
+| 2         | garrison  | 1     |
+| 2         | yard      | 0     |
+| 3         | extractor | 0     |
+| 3         | garrison  | 0     |
+| 3         | yard      | 0     |
+| 4         | extractor | 0     |
+| 4         | garrison  | 0     |
+| 4         | yard      | 0     |
+| 5         | extractor | 0     |
+| 5         | garrison  | 0     |
+| 5         | yard      | 0     |
+| 6         | extractor | 0     |
+| 6         | garrison  | 0     |
+| 6         | yard      | 0     |
+| 7         | extractor | 0     |
+| 7         | garrison  | 0     |
+| 7         | yard      | 0     |
+| 8         | extractor | 0     |
+| 8         | garrison  | 0     |
+| 8         | yard      | 0     |
+| 9         | extractor | 0     |
+| 9         | garrison  | 0     |
+| 9         | yard      | 0     |
+| 10        | extractor | 0     |
+| 10        | garrison  | 0     |
+| 10        | yard      | 0     |
+| 11        | extractor | 0     |
+| 11        | garrison  | 0     |
+| 11        | yard      | 0     |
+| 12        | extractor | 0     |
+| 12        | garrison  | 0     |
+| 12        | yard      | 0     |
+
+36 row(s)
+
+### labor
+
+| territory | made | spent | left |
+| --------- | ---- | ----- | ---- |
+| 1         | 12   | 0     | 12   |
+| 2         | 6    | 0     | 6    |
+| 3         | 0    | 0     | 0    |
+| 4         | 0    | 0     | 0    |
+| 5         | 0    | 0     | 0    |
+| 6         | 0    | 0     | 0    |
+| 7         | 0    | 0     | 0    |
+| 8         | 0    | 0     | 0    |
+| 9         | 0    | 0     | 0    |
+| 10        | 0    | 0     | 0    |
+| 11        | 0    | 0     | 0    |
+| 12        | 0    | 0     | 0    |
+
+12 row(s)
+
+### unit
+
 | unit | kind | place | fuel | readiness |
 | ---- | ---- | ----- | ---- | --------- |
-| 1    | ark  | orbit | 2    | ready     |
+| 1    | ark  | orbit | 1    | ready     |
 
 1 row(s)
 

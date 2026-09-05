@@ -18,15 +18,16 @@
 //! them - so a person holding all four artifacts still cannot begin. This is that
 //! connection, which makes the artifact a record of the run rather than a copy of the input.
 //!
-//! # The one command whose recipe is not in the command
+//! # Every command names its recipe, and one of them did not
 //!
-//! `move` fires `move` or `found by land` depending on what is on the ground, because the
-//! model looks rather than being told. So the recipe is read from **what happened** - the
-//! target territory gaining its first citizen - and not from the words. That is the honest
-//! derivation while it lasts: `P-214` splits the command in two so the player says which,
-//! and when it does this disambiguation becomes dead and should go rather than be kept.
+//! `move` used to fire `move` or `found by land` depending on what was on the ground,
+//! because the model looked rather than being told - so this had to read the recipe from
+//! **what happened**, the target territory gaining its first citizen, rather than from the
+//! words. **`P-214` split the command in two and that disambiguation is gone.** It was
+//! written to be deleted and it was: a command names a recipe now, and the mapping below is
+//! a lookup rather than an inference.
 
-use game_model::{Game, StructureKind, Transition, UnitKind};
+use game_model::{StructureKind, Transition, UnitKind};
 
 /// The six recipes an `end turn` runs, in `spec/turn.md`'s order.
 ///
@@ -68,34 +69,14 @@ pub struct Fired {
 /// this being an omission: `P-217` says the query commands and the design commands are
 /// listed *because neither is a recipe*. `launch` fires nothing either, and that one is a
 /// fact about the release rather than about the console - no recipe in it names an orbit.
-pub fn fired(
-    transition: &Transition,
-    before: &Game,
-    after: &Game,
-) -> (Vec<&'static str>, &'static str) {
+pub fn fired(transition: &Transition) -> (Vec<&'static str>, &'static str) {
     match transition {
         Transition::Land { kind, .. } => match kind {
             UnitKind::Ark => (vec!["deploy ark"], ""),
             _ => (Vec::new(), "no recipe lands one of these"),
         },
-        Transition::Move { territory, .. } => {
-            // `found by land` is `move` that arrives somewhere nobody was. Asked of the two
-            // states rather than of the command, because the model decides by looking and
-            // the command cannot say. `P-214` ends this.
-            let was = before
-                .territories
-                .get(territory.index())
-                .is_some_and(|place| place.founded());
-            let is = after
-                .territories
-                .get(territory.index())
-                .is_some_and(|place| place.founded());
-            if !was && is {
-                (vec!["found by land"], "")
-            } else {
-                (vec!["move"], "")
-            }
-        }
+        Transition::Move { .. } => (vec!["move"], ""),
+        Transition::FoundByLand { .. } => (vec!["found by land"], ""),
         Transition::Build { structure, .. } => match structure {
             StructureKind::Extractor => (vec!["build extractor"], ""),
             StructureKind::Yard => (vec!["build yard"], ""),
@@ -172,18 +153,18 @@ fn walk(
             }
         }
         crate::Meaning::Change(transition) => {
-            let before = session.game.clone();
+            let turn = session.game.turn;
             session
                 .run(line, library)
                 .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
-            let (recipes, instead) = fired(&transition, &before, &session.game);
+            let (recipes, instead) = fired(&transition);
             out.push(Fired {
                 command: line.to_string(),
                 recipes,
                 instead,
                 // The turn it ran *in*, so an `end turn` belongs to the turn it ended
-                // rather than to the one it started. Before, not after.
-                turn: before.turn,
+                // rather than to the one it started. Read before applying, not after.
+                turn,
             });
         }
         // A query answers a question and moves nothing, so it is not part of the derivation.

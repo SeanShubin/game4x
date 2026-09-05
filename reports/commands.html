@@ -28,7 +28,7 @@ ul { padding-left: 1.2rem }
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p game-console --bin dump-state</code>.</p>
 <p>Every command that ran, in order, with the recipe it fired. <code>S-24</code>: the third of the four artifacts a person needs to derive the data dump by hand, the others being <code>catalog.md</code>, <code>recipes.md</code> and <code>state.md</code>.</p>
 <p>The hierarchy is flattened. <code>run setup</code> opens <code>setup.4x</code>, which opens others, and a <code>run</code> line is not listed - it is where the next commands are kept rather than a move in the game.</p>
-<p>136 commands over 8 turn(s), and 63 of them before the game began.</p>
+<p>142 commands over 9 turn(s), and 63 of them before the game began.</p>
 <table>
 <thead>
 <tr><th>#</th><th>turn</th><th>command</th><th>fires</th></tr>
@@ -153,7 +153,7 @@ ul { padding-left: 1.2rem }
 <tr><td>117</td><td>7</td><td><code>work 3 extractor 1 metal</code></td><td><code>work</code></td></tr>
 <tr><td>118</td><td>7</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
 <tr><td>119</td><td>7</td><td><code>work 3 extractor 1 energy</code></td><td><code>work</code></td></tr>
-<tr><td>120</td><td>7</td><td><code>move pioneer 2</code></td><td><code>found by land</code></td></tr>
+<tr><td>120</td><td>7</td><td><code>found by land 2</code></td><td><code>found by land</code></td></tr>
 <tr><td>121</td><td>7</td><td><code>create labor 1 2</code></td><td><code>create labor</code></td></tr>
 <tr><td>122</td><td>7</td><td><code>work 1 extractor 2 food</code></td><td><code>work</code></td></tr>
 <tr><td>123</td><td>7</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
@@ -168,10 +168,16 @@ ul { padding-left: 1.2rem }
 <tr><td>132</td><td>8</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
 <tr><td>133</td><td>8</td><td><code>build yard 1</code></td><td><code>build yard</code></td></tr>
 <tr><td>134</td><td>8</td><td><code>produce ark 1</code></td><td><code>produce ark</code></td></tr>
-<tr><td>135</td><td>8</td><td><code>launch ark</code></td><td><em>no recipe names an orbit, so nothing fires - <code>catalog.md</code> says the same of the kind</em></td></tr>
+<tr><td>135</td><td>8</td><td><code>move ark 2</code></td><td><code>move</code></td></tr>
 <tr><td>136</td><td>8</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+<tr><td>137</td><td>9</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>138</td><td>9</td><td><code>work 3 extractor 1 food</code></td><td><code>work</code></td></tr>
+<tr><td>139</td><td>9</td><td><code>create labor 1 2</code></td><td><code>create labor</code></td></tr>
+<tr><td>140</td><td>9</td><td><code>work 1 extractor 2 food</code></td><td><code>work</code></td></tr>
+<tr><td>141</td><td>9</td><td><code>launch ark</code></td><td><em>no recipe names an orbit, so nothing fires - <code>catalog.md</code> says the same of the kind</em></td></tr>
+<tr><td>142</td><td>9</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
 </tbody>
 </table>
-<p>136 row(s)</p>
+<p>142 row(s)</p>
 </body>
 </html>

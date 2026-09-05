@@ -72,8 +72,22 @@ pub enum Transition {
     },
     /// Move a unit to an adjacent territory, taking and founding it if it is not already
     /// controlled.
+    /// Move a unit onto adjacent ground that is already held.
+    ///
+    /// **`P-214`: this used to be two recipes.** Arriving on unclaimed ground founded it,
+    /// so one command fired `move` or `found by land` depending on what was there, and the
+    /// player never said which. The model decided by looking. Now the player says, and
+    /// `FoundByLand` is the other one.
     Move {
         kind: UnitKind,
+        territory: TerritoryId,
+    },
+    /// Send a pioneer onto adjacent unclaimed ground and found it there.
+    ///
+    /// The unit is not named, because the recipe names it: `found by land` consumes one
+    /// pioneer and nothing else can run it. A command binds what a recipe leaves open, and
+    /// this recipe leaves only the place open.
+    FoundByLand {
         territory: TerritoryId,
     },
     Build {

@@ -100,7 +100,31 @@ two, and a reader closing `S-22` should not have to find the second by searching
 
 ### C-21 - The scenario has never fired `move`, and a green check said it had
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-24`'s artifact, first run
+**to** spec · **status** **acted** 2026-09-05 · closed by `P-214`
+
+**Closed by building `P-214`, which is what it said the real answer was.** `move` and `found by
+land` are two commands now, `play.4x` says which it means, and the scenario fires all nine player
+recipes - `move` for the first time ever.
+
+**The exception expired rather than being deleted.** `tests/fired.rs` carried `move` in `NOT_FIRED`
+with an assertion that fails when an excepted recipe starts firing, and that assertion is what went
+red. The list is empty and its length is asserted at zero.
+
+**Three things fell out of splitting it, all of which had been invisible.**
+
+`play.4x` had **no plain `move` to convert** - every `move` it had ever run was a founding. Adding
+one meant the Ark crossing to territory 2 before it leaves, and moving exhausts a unit, so the
+launch moved to a tenth turn.
+
+**The first draft of that turn killed the planet.** A turn that only launches gathers no food, so
+both territories ended empty and unfounded. The turn works its farms first now, which is the rule
+`play.4x` already states in a comment seven turns earlier.
+
+**And `launch` said the wrong thing.** `pick` takes only a *ready* unit, so an Ark that had moved
+that turn was reported as *not on the planet* while standing on it. It says *already used this
+turn* now. Nothing had ever hit it, because nothing had ever moved a unit and then tried to use it.
+
+**What it said when it was raised**, kept because the closure above is about it.
 
 **`S-24`'s commands artifact found this on its first run, which is what a fourth artifact is
 for.** `reports/commands.md` says which recipe each command fired, read from what the model did

@@ -6,7 +6,7 @@ Every command that ran, in order, with the recipe it fired. `S-24`: the third of
 
 The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, and a `run` line is not listed - it is where the next commands are kept rather than a move in the game.
 
-136 commands over 8 turn(s), and 63 of them before the game began.
+142 commands over 9 turn(s), and 63 of them before the game began.
 
 | #   | turn   | command                      | fires                                                                                 |
 | --- | ------ | ---------------------------- | ------------------------------------------------------------------------------------- |
@@ -129,7 +129,7 @@ The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, an
 | 117 | 7      | `work 3 extractor 1 metal`   | `work`                                                                                |
 | 118 | 7      | `create labor 3 1`           | `create labor`                                                                        |
 | 119 | 7      | `work 3 extractor 1 energy`  | `work`                                                                                |
-| 120 | 7      | `move pioneer 2`             | `found by land`                                                                       |
+| 120 | 7      | `found by land 2`            | `found by land`                                                                       |
 | 121 | 7      | `create labor 1 2`           | `create labor`                                                                        |
 | 122 | 7      | `work 1 extractor 2 food`    | `work`                                                                                |
 | 123 | 7      | `end turn`                   | `upkeep`, `grow`, `perish`, `spoil`, `age`, `refresh`                                 |
@@ -144,7 +144,13 @@ The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, an
 | 132 | 8      | `create labor 1 1`           | `create labor`                                                                        |
 | 133 | 8      | `build yard 1`               | `build yard`                                                                          |
 | 134 | 8      | `produce ark 1`              | `produce ark`                                                                         |
-| 135 | 8      | `launch ark`                 | *no recipe names an orbit, so nothing fires - `catalog.md` says the same of the kind* |
+| 135 | 8      | `move ark 2`                 | `move`                                                                                |
 | 136 | 8      | `end turn`                   | `upkeep`, `grow`, `perish`, `spoil`, `age`, `refresh`                                 |
+| 137 | 9      | `create labor 3 1`           | `create labor`                                                                        |
+| 138 | 9      | `work 3 extractor 1 food`    | `work`                                                                                |
+| 139 | 9      | `create labor 1 2`           | `create labor`                                                                        |
+| 140 | 9      | `work 1 extractor 2 food`    | `work`                                                                                |
+| 141 | 9      | `launch ark`                 | *no recipe names an orbit, so nothing fires - `catalog.md` says the same of the kind* |
+| 142 | 9      | `end turn`                   | `upkeep`, `grow`, `perish`, `spoil`, `age`, `refresh`                                 |
 
-136 row(s)
+142 row(s)
