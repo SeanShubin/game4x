@@ -18,7 +18,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-39** - `b0e4347` S-38 and S-39: a turn is what ran, what changed, and what is there · still open in `docs/notes/proposals.md`
-- **S-38** - `b0e4347` S-38 and S-39: a turn is what ran, what changed, and what is there · still open in `docs/notes/proposals.md`
+- **S-38** - `d6fe407` S-38: scenario/ and reports/, and an index that links both · still open in `docs/notes/proposals.md`
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
 - **S-25** - `66cb193` S-25: one table naming every kind, and my first check for it was decoration · still open in `docs/notes/proposals.md`
 - **S-21** - `175078c` S-21: citizens and yards are things, and the expectation caught two bugs · still open in `docs/notes/proposals.md`

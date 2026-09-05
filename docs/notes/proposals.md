@@ -8,12 +8,13 @@ offered for Sean's review. A proposal becomes real only when he accepts it and i
 
 ## The files that need you
 
-**Two, because there are two things only you can do.**
+**Two things only you can do, and one page to browse from.**
 
-| To           | Read                                                                                                                                                                          |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **create**   | this file. You approve, or say what to change                                                                                                                                 |
-| **validate** | [`expected/play.4x`](../../expected/play.4x) beside [`commands/play.4x`](../../commands/play.4x) - what the scenario is expected to produce, and the commands that produce it |
+| To           | Read                                                                                                                                                                                                              |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **create**   | this file. You approve, or say what to change                                                                                                                                                                     |
+| **browse**   | [`reports/index.html`](../../reports/index.html) - every generated view, and links to the two files below                                                                                                         |
+| **validate** | [`scenario/expected/play.4x`](../../scenario/expected/play.4x) beside [`scenario/commands/play.4x`](../../scenario/commands/play.4x) - what the scenario is expected to produce, and the commands that produce it |
 
 You read [the specification](../../spec/README.md) and [the release](../../releases/first-release.md)
 while approving, rather than as separate errands.
