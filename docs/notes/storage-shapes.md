@@ -69,6 +69,53 @@ from N x M:
 **At least one of those has to be true, or the kind is a noun with no consequences.** This is the
 question to answer before writing any of it down.
 
+## If a bin is only for communicating intent, take each intent separately
+
+Sean, 2026-09-05: *if we need bins at all, it is for communicating intent to the user, not mechanics,
+but I don't want to add them if I can make the same intentions just as clear without bins.*
+
+**Four intents need communicating. Three of them are clearer without a bin.**
+
+| Intent                        | With a bin                | Without                                                                           |
+| ----------------------------- | ------------------------- | --------------------------------------------------------------------------------- |
+| this limit is **per type**    | one bin kind per resource | `metal 14/70` and `food 3/70` on their own lines - a shared pool would be one bar |
+| you are **near the limit**    | count the full bins       | `14/70`                                                                           |
+| what happens **at the limit** | -                         | a rule about the resource                                                         |
+| you can **build more**        | **build a metal store**   | *raise metal capacity* - vaguer, and it names no object                           |
+
+**Only the last one needs the noun, and it needs it for a hard reason**: a verb needs an object. **You
+cannot say *build more capacity* without naming what is built.** So the bin exists if and only if
+capacity is something the player builds.
+
+**The release today gives capacity rather than building it** - twenty each, from *What bounds a kind*
+- so **today no bin is needed at all.**
+
+## And behavioural differences do not belong on the container
+
+The other half of his question is whether different bins need different names *so the expectation is
+set properly* - a silo behaving unlike a stockpile.
+
+**Food spoils because it is food, not because of what it is in.** `keeps` is already a trait of food.
+**Putting the expectation on the container is putting the fact in the wrong place**, and it breaks
+the moment the same resource can sit in two kinds of container - a silo in a territory and a hopper
+on a transport, both holding food, both spoiling, for a reason neither name explains.
+
+**So: differences in behaviour belong to what is stored. Differences in reach belong to what stores
+it** - a vehicle's contents move because the vehicle moves, which the vehicle already says.
+
+## A third option, if capacity should grow but bins should not exist
+
+**Let capacity be a property of buildings that exist for other reasons.** A Yard raises metal
+capacity as a consequence of being a Yard. Then:
+
+- the player builds more capacity, so growth is a decision with a price
+- **there is no storage vocabulary at all** - no store, silo, hopper or bin
+- the count of nouns does not grow, which is his stated worry
+
+**The cost is that capacity stops being independent** - you cannot raise metal room without wanting
+a Yard for its own sake, and that is a real coupling rather than a free lunch. **It is the option
+that adds the least and it is not the option that adds nothing.**
+
 ## What this leaves open, which is his to settle
 
 - **Where N's bound comes from** - given by the place, upgraded, or derived from what the place
