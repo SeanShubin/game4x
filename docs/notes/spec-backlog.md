@@ -8,6 +8,20 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-05, three storage references and one principle
+
+*The per-type is really a re-statement of no building working against you, you only have to build
+more, you don't have to decide which.* - and Zelda 1, Far Cry 4 and Baldur's Gate 3 as references,
+the last as what he does not want.
+
+**His principle is `spec/logistics.md` already**: *nothing a player builds ever crowds out something
+of another kind.* [The thinking](storage-shapes.md), and the two findings worth carrying:
+
+- **All three references make capacity a property you have, not a thing you build and place.** Which
+  cuts against bins as buildable objects
+- **Keep per-type strictly and a bin in a territory is redundant**; relax it and the trade-off he
+  dislikes comes back. **Bins earn their existence in transit**, where the capacity moves
+
 ## Said 2026-09-05, on bins, and it is mostly already specified
 
 *I think it might need a type instead. A territory that can store 10 metal is acting as a bin. And we
