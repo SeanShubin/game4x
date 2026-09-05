@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-245** - A document that lists another document's contents goes stale in silence · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -22,6 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-21** - `175078c` S-21: citizens and yards are things, and the expectation caught two bugs · still open in `docs/notes/proposals.md`
 - **S-19** - `6ab76ee` S-19: control is derived from a citizen being there · still open in `docs/notes/proposals.md`
 - **S-14** - `b394c81` S-14: the entity view and the HTML, from the same rows · still open in `docs/notes/proposals.md`
+- **C-11** - `05097a6` C-11: what expires expires, and metal and energy carry · still open in `crates/outbox.md`
 
 ## What is outstanding
 

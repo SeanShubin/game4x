@@ -8,29 +8,20 @@ offered for Sean's review. A proposal becomes real only when he accepts it and i
 
 ## The files that need you
 
-**Two, because there are two things only you can do** - `docs/process.md`, which is where this is
-decided; this is a copy for convenience and that document wins.
+**Two, because there are two things only you can do.**
 
 | To           | Read                                                                                                                                                                          |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **create**   | this file. You approve, or say what to change                                                                                                                                 |
 | **validate** | [`expected/play.4x`](../../expected/play.4x) beside [`commands/play.4x`](../../commands/play.4x) - what the scenario is expected to produce, and the commands that produce it |
 
-**Two more you read while doing one of those, not instead:**
+You read [the specification](../../spec/README.md) and [the release](../../releases/first-release.md)
+while approving, rather than as separate errands.
 
-- [the specification](../../spec/README.md), especially [invariants](../../spec/invariants.md) -
-  where an approved proposal lands, so you read it while approving
-- [the release](../../releases/first-release.md) - the same, and it still holds the game's data
-  until `S-30` moves it out
-
-**And what is deliberately not yours.** `pending.md` is for the instances; the one thing it would
-tell you that this file cannot - whether a lane is blocked or idle - reaches you in a sentence
-instead. `docs/notes/` is Claude's record of how a decision came from you. `catalog.md`,
-`recipes.md`, `state.md`, `entities.md`, `turns.md` and the two HTML pages are generated views:
-open one when you want to browse, never because something needs you to.
-
-**Anything here earns its place or comes off the list**, which is what happened to `pending.md` on
-2026-09-04.
+**Why these and not others is in [`docs/process.md`](../process.md)** - *What I read, and what I do*,
+and *Outboxes and the index* for what is deliberately not yours. **That document decides it and this
+table is only the two files**, because `P-245` says a document that restates another links to it
+rather than listing it.
 
 ## How this works
 
@@ -70,43 +61,6 @@ Two limits Claude holds itself to:
 
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
-
-### P-245 - A document that lists another document's contents goes stale in silence
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
-**asks** approval - **into** `docs/README.md` -> What goes where, after the table
-
-**The quality lens put this to me in a reply and it belongs in a file, so here it is.** It asked
-whether it should build a check on its own claims about `docs/process.md`, said *a lens that starts
-building tooling for itself is a lens that has stopped reading*, and would rather you decided.
-
-**Its brief was correct when written.** Checked: at `3765aac` the *Quality instance* section had
-**exactly three bullets, and they are the three its README lists**. It went stale when you merged
-your process note and the section grew to seven. **No care at writing time would have prevented
-that**, which is what makes it a rule question rather than a mistake.
-
-**Three instances today, all the same shape:**
-
-- `lenses/quality/README.md` saying `docs/process.md` *gives this lens three jobs*
-- the reading list I put at the top of this file, restating `docs/process.md` - **I guarded it in a
-  throwaway script that dies with the session**
-- `docs/process.md`'s *Who writes what* against `CLAUDE.md`, twice, which was `P-243`
-
-> A document that restates what another document says **links to it instead of listing it**. Where
-> the list is worth having in both places, the second one is generated rather than written.
-
-**Basis: this is `P-199` one level up, and you have already promoted the data half.**
-`spec/invariants.md` says *nothing states by hand what a data file says; every other form of it is
-derived, and a derived form is generated rather than written*. **A document is not a data file and
-the failure is identical** - a copy nobody regenerates, drifting silently from a source that has no
-idea it was copied.
-
-**And it passes your own test for whether a check is worth having.** `docs/process.md`: a check earns
-its place by guarding **the repetition**. This is not a one-off - **every edit to a source document
-can strand every summary of it**, and there is no moment at which somebody would notice.
-
-**The alternative, so you have both.** Leave it, and rely on a lens re-reading its own brief - which
-is what happened, four days late, and only because it went looking for something else.
 
 ## Addressed to other perspectives
 
@@ -1535,6 +1489,7 @@ work the release exists to order.
 | P-242, blocked is observable and running is not, so a report says which                                         | `docs/process.md` -> Outboxes and the index                                                                                                  | 2026-09-05 |
 | P-243, three sentences describing arrangements that had been replaced                                           | `docs/process.md` -> Who writes what, `CLAUDE.md` -> Outboxes, Starting a new lens                                                           | 2026-09-05 |
 | P-244, quality finds and reports production support; the coding instance builds it                              | `docs/process.md` -> Quality instance                                                                                                        | 2026-09-05 |
+| P-245, a document that restates another links to it rather than listing it                                      | `docs/README.md` -> What goes where                                                                                                          | 2026-09-05 |
 
 ## Rejected
 

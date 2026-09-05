@@ -96,6 +96,9 @@ Crate READMEs cover how a crate works internally and are linked from
 | Background that would be true even if we used another language | `theory/<name>.md`                                                                  |
 | How a specific crate works internally                          | that crate's own `README.md`, linked from `architecture.md`                         |
 
+A document that restates what another document says **links to it instead of listing it**. Where
+the list is worth having in both places, the second one is generated rather than written.
+
 The split that matters most: **theory documents describe the problem space, prototype
 documents describe what we are building.** A theory document should still be correct
 and useful if this project is abandoned. A prototype document is allowed to say "we
