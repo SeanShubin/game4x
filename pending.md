@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-256** - A store shows how much is there and never what it can hold · `docs/notes/proposals.md`
 - **P-258** - No storage is inherent to a territory · `docs/notes/proposals.md`
-- **P-259** - Does disorder survive the turn? · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

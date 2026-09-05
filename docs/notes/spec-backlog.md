@@ -8,6 +8,20 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-05, disorder is lost at the turn's end
+
+*B - Disorder is lost at turn end, while A could be interesting, so could a lot of other things and I
+need a more solid foundation before such exploration.*
+
+**No text landed**: `spec/turn.md` already says *anything above the bound is lost when the turn ends*,
+and `P-258` is what changes what the bound is. A is recorded as rejected with his reason so it is not
+proposed again.
+
+**Second time today he has declined an interesting option for sequencing rather than on its merits** -
+the other was `{nature: {force: 1}}`, which went into `docs/vision.md` -> Directions because he
+expects to make that move. **This one did not**, because *could be interesting* is not the same as
+*expects*, and a Direction that records a maybe stops meaning anything.
+
 ## Corrected 2026-09-05, capacity and bins are one thing
 
 *A capacity can be thought of as a number of bins... Zelda could be thought of as having one bin with

@@ -151,37 +151,6 @@ landed an hour ago and this is its first real use.
 
 **What it leaves open is `P-259`**, and the two should be read together.
 
-### P-259 - Does disorder survive the turn?
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
-**into** `spec/turn.md` -> Order of operations
-
-**Your phrase was *inaccessible even if present*, and *even if present* is the whole question.**
-`spec/turn.md` says today: *anything above the bound is lost when the turn ends.*
-
-**Choice A - disorder persists.** Spilled metal sits in the territory unreachable, and **building a
-store later recovers it.** Storage becomes a way of collecting what you already have.
-
-**Choice B - disorder is lost at the turn's end**, as the bound works today. Storage is a way of not
-wasting what you produce.
-
-**This lane recommends B and is not confident.** **A is the more interesting rule** and it is also a
-second pile of state - every territory carrying an invisible heap that behaves unlike anything else
-and appears in no report. **B keeps one rule where A adds a second.** But *even if present* is your
-phrase and it reads like A.
-
-**What either costs the scenario, measured, and this is the part that touches your vetting.**
-Territory 1 holds **14 metal** and no store, so it could reach none of it. The scenario spends metal
-on **7 extractors and 1 yard**, and **three metal extractors at density four hold twelve between
-them** - so extractor storage does not cover a fifteen-metal yard.
-
-**So `scenario/commands/play.4x` cannot run unchanged.** It needs stores before its first `build`,
-which is more commands and a different shape of turn - **a larger change to what you are about to vet
-than `P-214` was.**
-
-**Worth settling before you vet rather than after.** If these land, vetting waits for them; if they
-wait, you vet a scenario a promoted rule will invalidate.
-
 ## Addressed to other perspectives
 
 ### S-43 - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release
@@ -1442,11 +1411,16 @@ work the release exists to order.
 | P-254, a thing's own identifier is `id`                                                                               | `spec/console.md` -> The language                                                                                                            | 2026-09-05 |
 | P-255, `founded` is dropped from the data - Sean chose B, 2026-09-05                                                  | no text landed: `control` stays declared and unprinted, and he will notice if he wants it. `S-43` does it                                    | 2026-09-05 |
 | P-257, containment is a tree: a root, a one-way leaf rule, the kind not the instance, and containing is not referring | `spec/logistics.md` -> Containment                                                                                                           | 2026-09-05 |
+| P-259, disorder is lost at the turn's end - Sean chose B, 2026-09-05                                                  | no text landed: `spec/turn.md` already says anything above the bound is lost when the turn ends, and `P-258` is what changes the bound       | 2026-09-05 |
 
 ## Rejected
 
-Nothing yet. Rejections are recorded with Sean's reason, so the same proposal is not filed
+Rejections are recorded with Sean's reason, so the same proposal is not filed
 again in a later session.
+
+| What                                                     | Why                                                                                                                                                                                                                                                         |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A, disorder persists and a store built later recovers it | Sean, 2026-09-05: *while A could be interesting, so could a lot of other things and I need a more solid foundation before such exploration.* Not rejected on its merits - deferred for sequencing, and he has now declined two interesting options this way |
 
 ## Withdrawn
 
