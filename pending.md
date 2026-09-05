@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-256** - A store shows how much is there and never what it can hold · `docs/notes/proposals.md`
+- **P-256** - Should a report show a territory's capacity for a resource, when nothing stores it? · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

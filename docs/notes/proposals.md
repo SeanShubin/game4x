@@ -63,70 +63,44 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-256 - A store shows how much is there and never what it can hold
+### P-256 - Should a report show a territory's capacity for a resource, when nothing stores it?
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
-- **into** `releases/first-release.md` -> Traits, and the dump
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
+- **asks** a decision - **into** the dump; no rule changes either way
 
-**You asked where the limit is tracked and could not find it. It is not in the report.**
+**Rewritten because both of its old choices are dead.** You asked what you are being asked to decide,
+and the honest answer was: **not what the proposal said.**
 
-**What the rules say.** There are **no bins** - `spec/logistics.md`: *every resource exists in a
-particular place; there is no general inventory*. A territory's limit is its **total capacity** for
-a kind, which is a stored trait, and *What bounds a kind* gives **a capacity of 20** to each of
-food, metal and energy - measured, three times. **How much is there is derived**, and `spec/turn.md`
-says anything above the bound is lost when the turn ends.
+**What killed them.**
 
-**So the answer to your question is: the bins do not exist, the limit is 20, and the report never
-says so.**
+- **Old choice B - *capacity lives on the territory*.** `P-258` makes that **false**: a territory
+  declares no capacity for a resource
+- **Old choice A - *the store row carries its capacity*.** `P-257` makes that **impossible**: *what a
+  kind may contain is a fact about the kind and not about any one of them*, **so a store has no
+  capacity of its own to print.** Every `metal store` holds the same amount, and printing it on each
+  row would print one constant many times
 
-**Three things make that hard to see, and two are defects.**
+**So the only question left is a different one**, and it is the one your original question was really
+about - *where is the limit*.
 
-**1. The store row carries no limit.** `{{store territory:1 resource:energy amount:20}}` is at its
-maximum and reads identically to one that is not. **You cannot tell a full store from a half-empty
-one without knowing the number from elsewhere.**
+**A territory's limit for metal is now derived**: **how many metal stores it has, times what the kind
+holds.** Both numbers exist - count the rows, look up the kind - and **neither is the number you were
+looking for.**
 
-**2. `capacity` in the data means something else.** `{{territory-resource territory:1 resource:food
-capacity:3 ...}}` is **how many extractors can be built**, not how much food can be kept. **One word,
-two limits, and the one you were looking for is the absent one.**
+**Choice 1 - the report shows the derived total.** A line per territory per resource saying what it
+can hold. **You see fullness at a glance**, which is what you were trying to do when you asked.
 
-**3. `amount` is not a declared name.** It appears **0 times** in `releases/first-release.md`,
-measured - the same shape as `founded`, and found the same way: by you reading the data and asking
-what it meant.
+**Choice 2 - the report shows neither, and you multiply.** Consistent with `P-255`, where you dropped
+`control` for being derivable and said you would notice if you wanted it.
 
-**Waiting on the storage decision, 2026-09-05, and not contradicted by `P-257`.** Both choices below
-survive it: `P-257` is about the model's shape and says nothing about what a report prints.
+**This lane recommends 1, and the reason is that you already ran the test `P-255` set.** You dropped
+`control` because you would notice if you needed it. **You noticed this one before it existed** - you
+went looking for the limit, could not find it, and asked. **That is the evidence `P-255` deferred
+to, arriving in advance.**
 
-**But `store` is a projection rather than a thing.** Fourteen metal in territory 1 is fourteen metal
-**in** the territory; the `store` row is one the report invents, and the capacity in question is the
-**territory's** capacity for metal. **So choice B is already what the model says**, and choice A is a
-presentation on top of it.
-
-**If the storage conversation makes `metal store` a kind, this question changes meaning** - the row
-would then be a real thing with its own declared capacity, and *does the row carry its capacity*
-would be a different question with a different answer. **Answering it now risks answering it twice.**
-
-**Choice A - the store row carries both.** `{{store territory:1 resource:metal amount:14
-capacity:20}}`. **You can see fullness at a glance**, which is what you were trying to do.
-
-**Choice B - the store row carries what is there, and capacity lives on the territory.** One row per
-territory per kind saying its limit, beside the rows saying its contents. **No repetition**, and it
-costs a lookup.
-
-**This lane recommends A**, on `docs/process.md`: a report is worth having when it lets you check
-that these commands produced this change. **A store at 20 of 20 is the interesting case** - it is
-where production stops mattering and things start being lost at the turn's end - **and it is exactly
-the case the current row cannot show you.**
-
-**Corrected 2026-09-05: `capacity` does not need two names, it needs the type the specification
-already gives it.** `spec/logistics.md`: *what a thing may contain is a maximum **per kind, or per
-family of kinds**. That maximum is its total capacity **for that kind**.* **So capacity is typed
-already**, and there is one concept rather than two - a territory's capacity **for extractors** and
-its capacity **for metal**.
-
-**The report is what drops the type.** It prints `capacity:3` on a `territory-resource` row and the
-reader has to know it means extractors. **A store row printing `capacity:20` beside it would be the
-same word meaning something else only because neither says what it is for.** Whatever carries a
-capacity should say what kind it is a capacity for, and then the word is unambiguous everywhere.
+**What neither choice changes.** No rule moves. A derived number shown or not shown is a report
+decision, and `P-218` already says a report may replicate what the data says as long as nothing
+treats it as the source.
 
 ## Addressed to other perspectives
 
