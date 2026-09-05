@@ -477,7 +477,9 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
             .unwrap_or_else(|| panic!("nothing here says what fires `{recipe}`"))
             .1;
         assert!(
-            scenario.lines().any(|line| line.trim().starts_with(command)),
+            scenario
+                .lines()
+                .any(|line| line.trim().starts_with(command)),
             "no command in the scenario fires `{recipe}` - looked for a line beginning \
              `{command}`"
         );
@@ -500,8 +502,7 @@ fn the_scenario_touches_every_kind_and_there_are_twelve() {
     let named: std::collections::BTreeSet<String> = dump::tables(&session.game)
         .iter()
         .flat_map(|table| {
-            std::iter::once(table.name.to_string())
-                .chain(table.rows.iter().flatten().cloned())
+            std::iter::once(table.name.to_string()).chain(table.rows.iter().flatten().cloned())
         })
         .collect();
 
