@@ -116,6 +116,52 @@ reader has to know it means extractors. **A store row printing `capacity:20` bes
 same word meaning something else only because neither says what it is for.** Whatever carries a
 capacity should say what kind it is a capacity for, and then the word is unambiguous everywhere.
 
+### P-257 - Containment is a tree, and four sentences make it one
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `spec/logistics.md` -> Containment
+
+**Three of the four properties are already promoted.** *A thing... is itself in at most one other
+thing*, *nothing contains itself, directly or through anything else*, and *what a thing may contain
+is a maximum per kind*. **What is missing is a root, and three sentences that stop the shape
+drifting.**
+
+> Every thing is in the game, directly or through what contains it. **The game is the one thing that
+> is in nothing**, so containment is a tree rather than a scattering.
+>
+> **A kind that declares no capacity contains nothing, and never can.** A kind that declares capacity
+> may contain, and may happen to be empty - so a thing holding nothing today is not thereby a thing
+> that never could.
+>
+> **What a kind may contain is a fact about the kind and not about any one of them.** Nothing becomes
+> a different sort of thing by picking something up.
+>
+> **Containing is not referring.** A thing may name another without holding it - an extractor names
+> the node it works, and the node is not inside it.
+
+**Basis, sentence by sentence.**
+
+**The root** is the only genuinely new idea and it is yours: *the whole game could be a storage
+container.* Without it *at most one other thing* permits orphans and the structure is a **forest**.
+
+**The one-way leaf rule** is the correction to *only raw materials are leaves*. A `citizen` is not a
+material and holds nothing, so under that phrasing it would have to be a branch containing nothing.
+**Stated one way it is simply true**, and it needs no term for *raw material*, which the release does
+not define - `resource` is food, metal and energy, and `labor` is outside it.
+
+**The kind, not the instance**, is what stops a citizen changing category by carrying something. It
+also settles your last question: **you never choose between a leaf and an empty branch**, you choose
+whether the kind may ever hold anything and the rest follows.
+
+**Containing is not referring** is the one that keeps the tree a tree. **A citizen working an
+extractor is in the territory**, and the extractor refers to it; if working meant containing, the
+citizen would have two parents.
+
+**What this does not add, deliberately.** No name for leaf or branch - **both are derived from what a
+kind declares**, and naming a derived thing is what `founded` was. And no rule about the cost of
+adding a child: *adding a territory rewrites its neighbours' adjacency* follows from adjacency being
+stored, and does not need saying twice.
+
 ## Addressed to other perspectives
 
 ### S-43 - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release

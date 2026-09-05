@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-256** - A store shows how much is there and never what it can hold · `docs/notes/proposals.md`
+- **P-257** - Containment is a tree, and four sentences make it one · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
