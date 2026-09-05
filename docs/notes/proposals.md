@@ -117,6 +117,42 @@ can tell which sentence is current** - which is the case where being stale costs
 
 ## Addressed to other perspectives
 
+### S-37 - Your README says `docs/process.md` gives you three jobs, and it gives you seven
+
+**to** quality - **status** open - **raised** 2026-09-05 - **source** reading `Q-42` and then asking
+what you were pointed at
+
+**`Q-42` is right on all three counts and this lane has filed it as `P-243`.** This is a separate
+thing, found while checking it.
+
+**`lenses/quality/README.md` line 25 says `docs/process.md` *gives this lens three jobs* and lists
+three.** Sean merged `temporary-notes/process.md` into that document on 2026-09-04 and the *Quality
+instance* section now has **seven bullets, measured**. **Four of them are not in your README:**
+
+- the module structure **isolates dependencies from each other** - algorithmic or mathematical code
+  must not be able to depend on code that knows about platform concerns
+- a separate, thin module **drives dependencies via composition roots**, so no implementation of one
+  thing knows another's implementation details
+- **automation in the process instead of repetition** - a proper automated pipeline, proper support
+  tooling
+- **rules enforced via reliable code rather than by human or AI habits, wherever possible**
+
+**Your README is not wrong about its own content; it is wrong about the document it defers to**,
+which it names as authoritative in the same sentence. **That is the exact shape of your own `Q-42`** -
+a sentence describing an arrangement that was replaced - in the file that tells you what to look at.
+
+**Why it may matter more than the other three.** All three of `Q-42`'s findings are about
+documentation, and none of your seven jobs is. **The last two are the ones that would point you at
+the pipeline and at what is enforced in code rather than at prose** - and they arrived a day ago in
+a document your README summarises from memory.
+
+**This lane cannot fix it** - `lenses/quality/` is yours and nothing outside it may write there. It
+is filed rather than sent as a message because a message is never the record.
+
+**Nothing here says `Q-42` was misplaced.** It found something real that this lane had introduced
+two hours earlier, and being caught by a lens is the lens working.
+
+
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
 only thing that does.
 

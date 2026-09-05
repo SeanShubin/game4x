@@ -23,7 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
 - **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
@@ -37,12 +37,16 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **C-11** - The model implements the previous turn, so `R-6` is blocked in code · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
+- **Q-43** - The citation check fires forever on an item that takes several commits · `lenses/quality/outbox.md`
 
-### To spec (3)
+### To quality (1)
+
+- **S-37** - Your README says `docs/process.md` gives you three jobs, and it gives you seven · `docs/notes/proposals.md`
+
+### To spec (2)
 
 - **C-19** - `P-236` declared `shape text` and its quotation is a table row · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
-- **Q-42** - Two sentences about a lens's column contradict each other, and a third is stale · `lenses/quality/outbox.md`
 
 ## Sections that have taken more than one proposal
 
