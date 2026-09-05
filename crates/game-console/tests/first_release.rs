@@ -287,36 +287,24 @@ fn the_costs_in_the_model_are_the_costs_in_the_release() {
     assert_eq!(cost_of("ark", "citizen"), cost::ARK_CITIZENS);
     assert_eq!(cost_of("yard", "labor"), cost::YARD_LABOR);
     assert_eq!(cost_of("yard", "metal"), cost::YARD_METAL);
-    // **Three rows for one constant, since `P-206`.** The model has one extractor cost and
-    // the release now states it three times, once per kind. Checking one row would leave the
-    // other two unchecked and would pass while they disagreed - so all three are required to
-    // match the constant, which is also the assertion that they match each other.
-    for kind in ["food extractor", "metal extractor", "energy extractor"] {
-        assert_eq!(cost_of(kind, "labor"), cost::EXTRACTOR_LABOR, "{kind}");
-        assert_eq!(cost_of(kind, "metal"), cost::EXTRACTOR_METAL, "{kind}");
-    }
+    // One row again, since `P-234` collapsed the three kinds back into one with a
+    // `resource` trait. `P-206` had split it and the release stated the same cost three
+    // times; the split lived in the definitions and nowhere else.
+    assert_eq!(cost_of("extractor", "labor"), cost::EXTRACTOR_LABOR);
+    assert_eq!(cost_of("extractor", "metal"), cost::EXTRACTOR_METAL);
     assert_eq!(cost_of("garrison", "labor"), cost::GARRISON_LABOR);
     assert_eq!(cost_of("garrison", "metal"), cost::GARRISON_METAL);
 
     // Every figure in the column, not the ones this test happened to name. It checked six
     // of eleven when the table had six; the table grew and the test did not, so a garrison
     // and an extractor gained a metal cost that nothing compared against anything.
-    let figures: usize = [
-        "citizen",
-        "garrison",
-        "food extractor",
-        "metal extractor",
-        "energy extractor",
-        "yard",
-        "ark",
-        "pioneer",
-    ]
-    .into_iter()
-    .map(|thing| released_cost(thing).len())
-    .sum();
+    let figures: usize = ["citizen", "garrison", "extractor", "yard", "ark", "pioneer"]
+        .into_iter()
+        .map(|thing| released_cost(thing).len())
+        .sum();
     assert_eq!(
-        figures, 16,
-        "sixteen figures in the Costs to produce column; this checks each one by name"
+        figures, 12,
+        "twelve figures in the Costs to produce column; this checks each one by name"
     );
 }
 

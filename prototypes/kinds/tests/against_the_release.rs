@@ -59,10 +59,10 @@ fn compare(what: &str, written: &[Vec<String>], compiled: &[Vec<String>]) {
 fn the_release_tables_are_the_ones_in_this_crate() {
     let document = release();
     let tables: [(&str, usize, Vec<Vec<String>>); 7] = [
-        ("## Kinds", 14, kinds::kinds_table()),
+        ("## Kinds", 12, kinds::kinds_table()),
         ("## Families", 3, kinds::families_table()),
         ("## Where things are", 3, kinds::capacities_table()),
-        ("## Traits", 16, kinds::traits_table()),
+        ("## Traits", 17, kinds::traits_table()),
         (
             "## What bounds a kind in a territory",
             10,
@@ -83,13 +83,13 @@ fn the_release_tables_are_the_ones_in_this_crate() {
     }
 }
 
-/// Seventeen. Twenty became sixteen by collapsing, not by cutting: `launch` was `move` with
+/// Fifteen. Twenty became sixteen by collapsing, not by cutting: `launch` was `move` with
 /// a different destination, `land` became `deploy ark`, `eat` was `upkeep` with a citizen's
 /// upkeep assumed rather than written, `depart` was `perish`, and `revert` could never fire.
 /// Then food gained a `keeps` counter, and `age` is what counts it down.
 #[test]
-fn there_are_seventeen_recipes() {
-    assert_eq!(kinds::RECIPES.len(), 17);
+fn there_are_fifteen_recipes() {
+    assert_eq!(kinds::RECIPES.len(), 15);
 }
 
 /// Every name in the recipes' `Kind` column is a kind or a family the release declares.
@@ -118,8 +118,8 @@ fn every_kind_a_recipe_names_is_declared() {
     // would leave this checking an empty set and passing.
     assert_eq!(
         used.len(),
-        18,
-        "eighteen distinct names across the recipes' Kind column, and these are {used:?}"
+        15,
+        "fifteen distinct names across the recipes' Kind column, and these are {used:?}"
     );
 }
 

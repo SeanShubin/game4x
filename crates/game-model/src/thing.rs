@@ -30,7 +30,7 @@
 
 use std::collections::BTreeMap;
 
-/// The fourteen kinds `releases/first-release.md` declares.
+/// The twelve kinds `releases/first-release.md` declares.
 ///
 /// **The list is here and every other kind-shaped decision is not.** What a kind costs, what
 /// it crosses and what it is bounded by are data the game loads, and `S-21`'s second half is
@@ -39,9 +39,7 @@ use std::collections::BTreeMap;
 pub enum Kind {
     Citizen,
     Garrison,
-    FoodExtractor,
-    MetalExtractor,
-    EnergyExtractor,
+    Extractor,
     Yard,
     Ark,
     Pioneer,
@@ -58,9 +56,7 @@ impl Kind {
         match self {
             Kind::Citizen => "citizen",
             Kind::Garrison => "garrison",
-            Kind::FoodExtractor => "food extractor",
-            Kind::MetalExtractor => "metal extractor",
-            Kind::EnergyExtractor => "energy extractor",
+            Kind::Extractor => "extractor",
             Kind::Yard => "yard",
             Kind::Ark => "ark",
             Kind::Pioneer => "pioneer",
@@ -74,12 +70,10 @@ impl Kind {
     }
 
     /// Every kind, so that a reader can name one that is nowhere.
-    pub const ALL: [Kind; 14] = [
+    pub const ALL: [Kind; 12] = [
         Kind::Citizen,
         Kind::Garrison,
-        Kind::FoodExtractor,
-        Kind::MetalExtractor,
-        Kind::EnergyExtractor,
+        Kind::Extractor,
         Kind::Yard,
         Kind::Ark,
         Kind::Pioneer,
@@ -90,19 +84,6 @@ impl Kind {
         Kind::Territory,
         Kind::Orbit,
     ];
-
-    /// The extractor kind that produces this resource.
-    ///
-    /// `P-206` split one extractor into three, and this is the only place that split needs
-    /// to be known - a resource names its extractor rather than an extractor carrying a
-    /// resource field.
-    pub fn extractor_for(resource: crate::Resource) -> Kind {
-        match resource {
-            crate::Resource::Food => Kind::FoodExtractor,
-            crate::Resource::Metal => Kind::MetalExtractor,
-            crate::Resource::Energy => Kind::EnergyExtractor,
-        }
-    }
 
     /// The kind a unit of this resource is.
     ///
@@ -133,6 +114,13 @@ impl Kind {
 /// variant here, and adding a trait is what the release's *Traits* table is for.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Trait {
+    /// Which resource an extractor is built for.
+    ///
+    /// **`P-234` put this back.** `P-206` had split the extractor into three kinds and this
+    /// trait went with it; the split existed in the definitions and nowhere else -
+    /// `commands/play.4x` has always written `build extractor 1 food`, treating the resource
+    /// as a parameter. One kind with a trait is what the command language already said.
+    Resource,
     /// Ready, as a number. Absent means ready, and zero means not.
     ///
     /// **`P-233` renamed the trait and `P-235` says why it is a number.** The release used

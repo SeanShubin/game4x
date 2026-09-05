@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-14 kinds, 5 families, 17 traits, 17 recipes.
+12 kinds, 4 families, 18 traits, 15 recipes.
 
 ## citizen
 
@@ -50,33 +50,13 @@ what holds a territory; a territory has at most one.
 - `found by land` limits 0
 - `found by land` produces 1
 
-## food extractor
+## extractor
 
-built for food, and worked to produce it.
+built for one resource, and worked to produce it.
 
-**In families** thing, extractor
+**In families** thing
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in)
-
-**Bounded by** a capacity, from *Territory resources*
-
-**As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes
-
-**In recipes**
-
-- `deploy ark` produces 1
-- `found by land` produces 1
-- `build food extractor` produces 1
-- `work` consumes 1 (as a extractor), ready
-- `work` produces 1 (as a extractor), not ready
-
-## metal extractor
-
-built for metal, and worked to produce it.
-
-**In families** thing, extractor
-
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in)
+**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `resource` (one of the resources)
 
 **Bounded by** a capacity, from *Territory resources*
 
@@ -84,29 +64,13 @@ built for metal, and worked to produce it.
 
 **In recipes**
 
-- `deploy ark` produces 1
-- `found by land` produces 1
-- `build metal extractor` produces 1
-- `work` consumes 1 (as a extractor), ready
-- `work` produces 1 (as a extractor), not ready
-
-## energy extractor
-
-built for energy, and worked to produce it.
-
-**In families** thing, extractor
-
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in)
-
-**Bounded by** a capacity, from *Territory resources*
-
-**As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes
-
-**In recipes**
-
-- `build energy extractor` produces 1
-- `work` consumes 1 (as a extractor), ready
-- `work` produces 1 (as a extractor), not ready
+- `deploy ark` produces 1, food
+- `deploy ark` produces 1, metal
+- `found by land` produces 1, food
+- `found by land` produces 1, metal
+- `build extractor` produces 1, `$resource`
+- `work` consumes 1, ready
+- `work` produces 1, not ready
 
 ## yard
 
@@ -194,9 +158,7 @@ what things are built from; conserved.
 
 **In recipes**
 
-- `build food extractor` consumes 1
-- `build metal extractor` consumes 1
-- `build energy extractor` consumes 1
+- `build extractor` consumes 1
 - `build yard` consumes 15
 - `produce pioneer` consumes 3
 - `produce ark` consumes 3
@@ -232,9 +194,7 @@ what working a machine takes; a citizen provides it each turn.
 
 **In recipes**
 
-- `build food extractor` consumes 1
-- `build metal extractor` consumes 1
-- `build energy extractor` consumes 1
+- `build extractor` consumes 1
 - `build yard` consumes 1
 - `create labor` produces 1
 - `work` consumes 1

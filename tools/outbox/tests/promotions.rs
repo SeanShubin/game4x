@@ -197,6 +197,14 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 /// so an exception that has stopped being needed is reported rather than left to rot.
 const KNOWN: &[(&str, &str)] = &[
     (
+        "P-214",
+        "dropped its quotation's emphasis, was repaired in `3fba321`, and the passage has          since been superseded - a later promotion made `$` name a trait value as well as          an ingredient. **`Repaired` is recomputed against `HEAD`, so it is not stable**:          once the destination moves on for an unrelated reason, a settled deviation starts          failing again. Judged at its own commit it deviated; judged today it cannot be          judged at all, because the approved text is no longer what the file should say.",
+    ),
+    (
+        "P-216",
+        "the same: emphasis dropped, repaired in `3fba321`, passage since superseded.",
+    ),
+    (
         "P-236",
         "declared `shape text` and its quotation is a table row - `**asks** - <value>`,          which landed as `| **asks** | <value> |` in `CLAUDE.md`'s field table. The          promotion is correct: a row landed as a row, repadded by `tools/pad-tables`, which          is exactly what `shape rows` means and is compared cell for cell. Only the label          is wrong, and a label is what this check reads. `C-19`.",
     ),

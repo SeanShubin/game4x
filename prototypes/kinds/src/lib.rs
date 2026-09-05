@@ -28,7 +28,7 @@ pub mod release;
 // Kinds
 // ---------------------------------------------------------------------------------------
 
-/// The fourteen kinds the release declares.
+/// The twelve kinds the release declares.
 ///
 /// **Ten until `P-192`.** The recipes' `Kind` column had held `territory` in four rows all
 /// along, and the Kinds table did not list it - so the release named a kind it had not
@@ -39,9 +39,7 @@ pub mod release;
 pub enum Kind {
     Citizen,
     Garrison,
-    FoodExtractor,
-    MetalExtractor,
-    EnergyExtractor,
+    Extractor,
     Yard,
     Ark,
     Pioneer,
@@ -58,9 +56,7 @@ impl Kind {
         match self {
             Kind::Citizen => "citizen",
             Kind::Garrison => "garrison",
-            Kind::FoodExtractor => "food extractor",
-            Kind::MetalExtractor => "metal extractor",
-            Kind::EnergyExtractor => "energy extractor",
+            Kind::Extractor => "extractor",
             Kind::Yard => "yard",
             Kind::Ark => "ark",
             Kind::Pioneer => "pioneer",
@@ -77,9 +73,7 @@ impl Kind {
         match self {
             Kind::Citizen => "a person: provides labor, eats, and grows on surplus",
             Kind::Garrison => "what holds a territory; a territory has at most one",
-            Kind::FoodExtractor => "built for food, and worked to produce it",
-            Kind::MetalExtractor => "built for metal, and worked to produce it",
-            Kind::EnergyExtractor => "built for energy, and worked to produce it",
+            Kind::Extractor => "built for one resource, and worked to produce it",
             Kind::Yard => "where an Ark is produced",
             Kind::Ark => "carries a landing, and can invade from orbit",
             Kind::Pioneer => "founds a territory",
@@ -109,9 +103,7 @@ impl Kind {
         Some(match self {
             Kind::Citizen => "the food produced here, through upkeep",
             Kind::Garrison => "a capacity of 1",
-            Kind::FoodExtractor | Kind::MetalExtractor | Kind::EnergyExtractor => {
-                "a capacity, from *Territory resources*"
-            }
+            Kind::Extractor => "a capacity, from *Territory resources*",
             Kind::Yard => "a capacity of 1",
             Kind::Ark => "a capacity of 2",
             Kind::Pioneer => "a capacity of 2, and the food produced here",
@@ -125,12 +117,10 @@ impl Kind {
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 14] = [
+pub const KINDS: [Kind; 12] = [
     Kind::Citizen,
     Kind::Garrison,
-    Kind::FoodExtractor,
-    Kind::MetalExtractor,
-    Kind::EnergyExtractor,
+    Kind::Extractor,
     Kind::Yard,
     Kind::Ark,
     Kind::Pioneer,
@@ -143,12 +133,10 @@ pub const KINDS: [Kind; 14] = [
 ];
 
 /// In the order the bounds table lists them, which is not the Kinds order.
-pub const BOUND_ORDER: [Kind; 12] = [
+pub const BOUND_ORDER: [Kind; 10] = [
     Kind::Citizen,
     Kind::Garrison,
-    Kind::FoodExtractor,
-    Kind::MetalExtractor,
-    Kind::EnergyExtractor,
+    Kind::Extractor,
     Kind::Yard,
     Kind::Ark,
     Kind::Pioneer,
@@ -173,7 +161,6 @@ pub enum Family {
     Unit,
     Resource,
     Place,
-    Extractor,
 }
 
 impl Family {
@@ -183,7 +170,6 @@ impl Family {
             Family::Unit => "unit",
             Family::Resource => "resource",
             Family::Place => "place",
-            Family::Extractor => "extractor",
         }
     }
 
@@ -193,11 +179,6 @@ impl Family {
             Family::Unit => vec![Kind::Ark, Kind::Pioneer],
             Family::Resource => vec![Kind::Food, Kind::Metal, Kind::Energy],
             Family::Place => vec![Kind::Territory, Kind::Orbit],
-            Family::Extractor => vec![
-                Kind::FoodExtractor,
-                Kind::MetalExtractor,
-                Kind::EnergyExtractor,
-            ],
         }
     }
 
@@ -218,13 +199,7 @@ impl Family {
     }
 }
 
-pub const FAMILIES: [Family; 5] = [
-    Family::Thing,
-    Family::Unit,
-    Family::Resource,
-    Family::Place,
-    Family::Extractor,
-];
+pub const FAMILIES: [Family; 4] = [Family::Thing, Family::Unit, Family::Resource, Family::Place];
 
 // ---------------------------------------------------------------------------------------
 // Where things are
@@ -290,7 +265,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 17] = [
+pub const TRAITS: [TraitRow; 18] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -307,6 +282,12 @@ pub const TRAITS: [TraitRow; 17] = [
         name: "ready",
         of: "whatever readies",
         values: "yes or no",
+        held: Held::Stored,
+    },
+    TraitRow {
+        name: "resource",
+        of: "an extractor",
+        values: "one of the resources",
         held: Held::Stored,
     },
     TraitRow {
@@ -653,6 +634,9 @@ const JOINED_TO_FROM: [Qualifier; 1] = [by(
     "joined to `$from` by an edge the unit crosses",
     "adjacency",
 )];
+const FOR_FOOD: [Qualifier; 1] = [by("food", "resource")];
+const FOR_METAL: [Qualifier; 1] = [by("metal", "resource")];
+const OF_RESOURCE: [Qualifier; 1] = [by("`$resource`", "resource")];
 const READY: [Qualifier; 1] = [by("ready", "ready")];
 const NOT_READY: [Qualifier; 1] = [by("not ready", "ready")];
 const SURPLUS: [Qualifier; 1] = [by("surplus", "surplus")];
@@ -668,7 +652,7 @@ const UNIT: Noun = Noun::Any(Family::Unit);
 const RESOURCE: Noun = Noun::Any(Family::Resource);
 const THING: Noun = Noun::Any(Family::Thing);
 const PLACE: Noun = Noun::Any(Family::Place);
-const EXTRACTOR: Noun = Noun::Any(Family::Extractor);
+const EXTRACTOR: Noun = Noun::Of(Kind::Extractor);
 
 /// The seventeen recipes of `releases/first-release.md`.
 pub const RECIPES: &[Recipe] = &[
@@ -681,8 +665,8 @@ pub const RECIPES: &[Recipe] = &[
             just(Limit, 0, Noun::Of(Garrison)),
             just(Produce, 1, Noun::Of(Garrison)),
             just(Produce, 2, Noun::Of(Citizen)),
-            just(Produce, 1, Noun::Of(FoodExtractor)),
-            just(Produce, 1, Noun::Of(MetalExtractor)),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
         ],
     },
     Recipe {
@@ -704,35 +688,17 @@ pub const RECIPES: &[Recipe] = &[
             just(Limit, 0, Noun::Of(Garrison)),
             just(Produce, 1, Noun::Of(Garrison)),
             just(Produce, 2, Noun::Of(Citizen)),
-            just(Produce, 1, Noun::Of(FoodExtractor)),
-            just(Produce, 1, Noun::Of(MetalExtractor)),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
+            traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
         ],
     },
     Recipe {
-        name: "build food extractor",
+        name: "build extractor",
         owner: Player,
         lines: &[
             just(Consume, 1, Noun::Of(Labor)),
             just(Consume, 1, Noun::Of(Metal)),
-            just(Produce, 1, Noun::Of(FoodExtractor)),
-        ],
-    },
-    Recipe {
-        name: "build metal extractor",
-        owner: Player,
-        lines: &[
-            just(Consume, 1, Noun::Of(Labor)),
-            just(Consume, 1, Noun::Of(Metal)),
-            just(Produce, 1, Noun::Of(MetalExtractor)),
-        ],
-    },
-    Recipe {
-        name: "build energy extractor",
-        owner: Player,
-        lines: &[
-            just(Consume, 1, Noun::Of(Labor)),
-            just(Consume, 1, Noun::Of(Metal)),
-            just(Produce, 1, Noun::Of(EnergyExtractor)),
+            traited(Produce, 1, Noun::Of(Extractor), &OF_RESOURCE),
         ],
     },
     Recipe {
@@ -930,31 +896,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         readies: false,
     },
     Producible {
-        kind: FoodExtractor,
-        force: None,
-        fuel: None,
-        a_move: None,
-        upkeep: None,
-        costs: &[(1, Labor), (1, Metal)],
-        binding: Some(1),
-        crosses: None,
-        requires: None,
-        readies: true,
-    },
-    Producible {
-        kind: MetalExtractor,
-        force: None,
-        fuel: None,
-        a_move: None,
-        upkeep: None,
-        costs: &[(1, Labor), (1, Metal)],
-        binding: Some(1),
-        crosses: None,
-        requires: None,
-        readies: true,
-    },
-    Producible {
-        kind: EnergyExtractor,
+        kind: Extractor,
         force: None,
         fuel: None,
         a_move: None,

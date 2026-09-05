@@ -6,7 +6,7 @@ Every recipe the release declares, with its own lines gathered under it. The rel
 these across seven columns, one row per line and the name written only on the first - which
 is the right shape for a table and the wrong one for answering *what does this recipe do*.
 
-17 recipes, 59 lines between them.
+15 recipes, 53 lines between them.
 
 ## deploy ark
 
@@ -17,8 +17,8 @@ Run by the **player**.
 - **limit** 0 garrison
 - **produce** 1 garrison
 - **produce** 2 citizen
-- **produce** 1 food extractor
-- **produce** 1 metal extractor
+- **produce** 1 extractor, food
+- **produce** 1 extractor, metal
 
 ## move
 
@@ -38,32 +38,16 @@ Run by the **player**.
 - **limit** 0 garrison
 - **produce** 1 garrison
 - **produce** 2 citizen
-- **produce** 1 food extractor
-- **produce** 1 metal extractor
+- **produce** 1 extractor, food
+- **produce** 1 extractor, metal
 
-## build food extractor
-
-Run by the **player**.
-
-- **consume** 1 labor
-- **consume** 1 metal
-- **produce** 1 food extractor
-
-## build metal extractor
+## build extractor
 
 Run by the **player**.
 
 - **consume** 1 labor
 - **consume** 1 metal
-- **produce** 1 metal extractor
-
-## build energy extractor
-
-Run by the **player**.
-
-- **consume** 1 labor
-- **consume** 1 metal
-- **produce** 1 energy extractor
+- **produce** 1 extractor, `$resource`
 
 ## build yard
 
