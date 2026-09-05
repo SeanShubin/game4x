@@ -8,18 +8,18 @@
 
 {game phase:play turn:10 territories:12 units:1}
 
-{territory territory:1 biome:grassland nature:1 founded:yes citizens:12 labor-spent:0 yards:1}
-{territory territory:2 biome:grassland nature:1 founded:yes citizens:6 labor-spent:0 yards:0}
-{territory territory:3 biome:grassland nature:1 founded:no citizens:0 labor-spent:0 yards:0}
-{territory territory:4 biome:mountain nature:1 founded:no citizens:0 labor-spent:0 yards:0}
-{territory territory:5 biome:mountain nature:1 founded:no citizens:0 labor-spent:0 yards:0}
-{territory territory:6 biome:jungle nature:2 founded:no citizens:0 labor-spent:0 yards:0}
-{territory territory:7 biome:jungle nature:2 founded:no citizens:0 labor-spent:0 yards:0}
-{territory territory:8 biome:grassland nature:1 founded:no citizens:0 labor-spent:0 yards:0}
-{territory territory:9 biome:mountain nature:1 founded:no citizens:0 labor-spent:0 yards:0}
-{territory territory:10 biome:desert nature:1 founded:no citizens:0 labor-spent:0 yards:0}
-{territory territory:11 biome:grassland nature:1 founded:no citizens:0 labor-spent:0 yards:0}
-{territory territory:12 biome:ice nature:1 founded:no citizens:0 labor-spent:0 yards:0}
+{territory id:1 biome:grassland nature:1 citizens:12 labor-spent:0 yards:1}
+{territory id:2 biome:grassland nature:1 citizens:6 labor-spent:0 yards:0}
+{territory id:3 biome:grassland nature:1 citizens:0 labor-spent:0 yards:0}
+{territory id:4 biome:mountain nature:1 citizens:0 labor-spent:0 yards:0}
+{territory id:5 biome:mountain nature:1 citizens:0 labor-spent:0 yards:0}
+{territory id:6 biome:jungle nature:2 citizens:0 labor-spent:0 yards:0}
+{territory id:7 biome:jungle nature:2 citizens:0 labor-spent:0 yards:0}
+{territory id:8 biome:grassland nature:1 citizens:0 labor-spent:0 yards:0}
+{territory id:9 biome:mountain nature:1 citizens:0 labor-spent:0 yards:0}
+{territory id:10 biome:desert nature:1 citizens:0 labor-spent:0 yards:0}
+{territory id:11 biome:grassland nature:1 citizens:0 labor-spent:0 yards:0}
+{territory id:12 biome:ice nature:1 citizens:0 labor-spent:0 yards:0}
 
 {territory-resource territory:1 resource:food capacity:3 density:4 built:3}
 {territory-resource territory:1 resource:metal capacity:3 density:4 built:3}
@@ -160,16 +160,16 @@
 {labor territory:11 made:0 spent:0 left:0}
 {labor territory:12 made:0 spent:0 left:0}
 
-{unit unit:1 kind:ark place:orbit fuel:1 readiness:ready}
+{unit id:1 kind:ark place:orbit fuel:1 readiness:ready}
 
-{kind kind:citizen in-play:18}
-{kind kind:labor in-play:0}
-{kind kind:food in-play:0}
-{kind kind:metal in-play:14}
-{kind kind:energy in-play:20}
-{kind kind:extractor in-play:11}
-{kind kind:garrison in-play:2}
-{kind kind:yard in-play:1}
-{kind kind:ark in-play:1}
-{kind kind:pioneer in-play:0}
-{kind kind:territory in-play:12}
+{kind id:citizen in-play:18}
+{kind id:labor in-play:0}
+{kind id:food in-play:0}
+{kind id:metal in-play:14}
+{kind id:energy in-play:20}
+{kind id:extractor in-play:11}
+{kind id:garrison in-play:2}
+{kind id:yard in-play:1}
+{kind id:ark in-play:1}
+{kind id:pioneer in-play:0}
+{kind id:territory in-play:12}

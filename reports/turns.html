@@ -39,7 +39,7 @@ end turn
 <h2>what changed</h2>
 <p><strong>gone</strong> (1)</p>
 <ul>
-<li>{unit unit:1 kind:ark place:orbit fuel:2 readiness:ready}</li>
+<li>{unit id:1 kind:ark place:orbit fuel:2 readiness:ready}</li>
 </ul>
 <p><strong>new</strong> (3)</p>
 <ul>
@@ -47,22 +47,21 @@ end turn
 <li>{extractor territory:1 node:3 resource:metal readiness:ready}</li>
 <li>{garrison territory:1 force:1}</li>
 </ul>
-<p><strong>changed</strong> (16)</p>
+<p><strong>changed</strong> (15)</p>
 <ul>
 <li>game phase:play · turn: 1 → 2</li>
 <li>game phase:play · units: 1 → 0</li>
-<li>kind kind:ark · in-play: 1 → 0</li>
-<li>kind kind:citizen · in-play: 0 → 4</li>
-<li>kind kind:extractor · in-play: 0 → 2</li>
-<li>kind kind:garrison · in-play: 0 → 1</li>
-<li>kind kind:metal · in-play: 0 → 4</li>
+<li>kind id:ark · in-play: 1 → 0</li>
+<li>kind id:citizen · in-play: 0 → 4</li>
+<li>kind id:extractor · in-play: 0 → 2</li>
+<li>kind id:garrison · in-play: 0 → 1</li>
+<li>kind id:metal · in-play: 0 → 4</li>
 <li>labor territory:1 · made: 0 → 4</li>
 <li>labor territory:1 · left: 0 → 4</li>
 <li>store territory:1 resource:metal · amount: 0 → 4</li>
 <li>structure territory:1 structure:extractor · count: 0 → 2</li>
 <li>structure territory:1 structure:garrison · count: 0 → 1</li>
-<li>territory territory:1 · founded: no → yes</li>
-<li>territory territory:1 · citizens: 0 → 4</li>
+<li>territory id:1 · citizens: 0 → 4</li>
 <li>territory-resource territory:1 resource:food · built: 0 → 1</li>
 <li>territory-resource territory:1 resource:metal · built: 0 → 1</li>
 </ul>
@@ -80,21 +79,21 @@ end turn
 <h3>territory</h3>
 <table>
 <thead>
-<tr><th>territory</th><th>biome</th><th>nature</th><th>founded</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
+<tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td>grassland</td><td>1</td><td>yes</td><td>4</td><td>0</td><td>0</td></tr>
-<tr><td>2</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>3</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>4</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>5</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>6</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>7</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>8</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>9</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>10</td><td>desert</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>11</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>12</td><td>ice</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>grassland</td><td>1</td><td>4</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>9</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>10</td><td>desert</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>11</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12</td><td>ice</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 </tbody>
 </table>
 <p>12 row(s)</p>
@@ -278,7 +277,7 @@ end turn
 <h3>unit</h3>
 <table>
 <thead>
-<tr><th>unit</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
+<tr><th>id</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
 </thead>
 <tbody>
 </tbody>
@@ -287,7 +286,7 @@ end turn
 <h3>kind</h3>
 <table>
 <thead>
-<tr><th>kind</th><th>in-play</th></tr>
+<tr><th>id</th><th>in-play</th></tr>
 </thead>
 <tbody>
 <tr><td>citizen</td><td>4</td></tr>
@@ -326,8 +325,8 @@ end turn
 <p><strong>changed</strong> (6)</p>
 <ul>
 <li>game phase:play · turn: 2 → 3</li>
-<li>kind kind:extractor · in-play: 2 → 4</li>
-<li>kind kind:metal · in-play: 4 → 6</li>
+<li>kind id:extractor · in-play: 2 → 4</li>
+<li>kind id:metal · in-play: 4 → 6</li>
 <li>store territory:1 resource:metal · amount: 4 → 6</li>
 <li>structure territory:1 structure:extractor · count: 2 → 4</li>
 <li>territory-resource territory:1 resource:food · built: 1 → 3</li>
@@ -346,21 +345,21 @@ end turn
 <h3>territory</h3>
 <table>
 <thead>
-<tr><th>territory</th><th>biome</th><th>nature</th><th>founded</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
+<tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td>grassland</td><td>1</td><td>yes</td><td>4</td><td>0</td><td>0</td></tr>
-<tr><td>2</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>3</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>4</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>5</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>6</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>7</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>8</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>9</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>10</td><td>desert</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>11</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>12</td><td>ice</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>grassland</td><td>1</td><td>4</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>9</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>10</td><td>desert</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>11</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12</td><td>ice</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 </tbody>
 </table>
 <p>12 row(s)</p>
@@ -546,7 +545,7 @@ end turn
 <h3>unit</h3>
 <table>
 <thead>
-<tr><th>unit</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
+<tr><th>id</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
 </thead>
 <tbody>
 </tbody>
@@ -555,7 +554,7 @@ end turn
 <h3>kind</h3>
 <table>
 <thead>
-<tr><th>kind</th><th>in-play</th></tr>
+<tr><th>id</th><th>in-play</th></tr>
 </thead>
 <tbody>
 <tr><td>citizen</td><td>4</td></tr>
@@ -585,12 +584,12 @@ end turn
 <p><strong>changed</strong> (7)</p>
 <ul>
 <li>game phase:play · turn: 3 → 4</li>
-<li>kind kind:citizen · in-play: 4 → 8</li>
-<li>kind kind:metal · in-play: 6 → 10</li>
+<li>kind id:citizen · in-play: 4 → 8</li>
+<li>kind id:metal · in-play: 6 → 10</li>
 <li>labor territory:1 · made: 4 → 8</li>
 <li>labor territory:1 · left: 4 → 8</li>
 <li>store territory:1 resource:metal · amount: 6 → 10</li>
-<li>territory territory:1 · citizens: 4 → 8</li>
+<li>territory id:1 · citizens: 4 → 8</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
@@ -606,21 +605,21 @@ end turn
 <h3>territory</h3>
 <table>
 <thead>
-<tr><th>territory</th><th>biome</th><th>nature</th><th>founded</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
+<tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td>grassland</td><td>1</td><td>yes</td><td>8</td><td>0</td><td>0</td></tr>
-<tr><td>2</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>3</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>4</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>5</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>6</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>7</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>8</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>9</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>10</td><td>desert</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>11</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>12</td><td>ice</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>grassland</td><td>1</td><td>8</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>9</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>10</td><td>desert</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>11</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12</td><td>ice</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 </tbody>
 </table>
 <p>12 row(s)</p>
@@ -806,7 +805,7 @@ end turn
 <h3>unit</h3>
 <table>
 <thead>
-<tr><th>unit</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
+<tr><th>id</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
 </thead>
 <tbody>
 </tbody>
@@ -815,7 +814,7 @@ end turn
 <h3>kind</h3>
 <table>
 <thead>
-<tr><th>kind</th><th>in-play</th></tr>
+<tr><th>id</th><th>in-play</th></tr>
 </thead>
 <tbody>
 <tr><td>citizen</td><td>8</td></tr>
@@ -860,12 +859,12 @@ end turn
 <p><strong>changed</strong> (9)</p>
 <ul>
 <li>game phase:play · turn: 4 → 5</li>
-<li>kind kind:citizen · in-play: 8 → 12</li>
-<li>kind kind:extractor · in-play: 4 → 8</li>
+<li>kind id:citizen · in-play: 8 → 12</li>
+<li>kind id:extractor · in-play: 4 → 8</li>
 <li>labor territory:1 · made: 8 → 12</li>
 <li>labor territory:1 · left: 8 → 12</li>
 <li>structure territory:1 structure:extractor · count: 4 → 8</li>
-<li>territory territory:1 · citizens: 8 → 12</li>
+<li>territory id:1 · citizens: 8 → 12</li>
 <li>territory-resource territory:1 resource:energy · built: 0 → 2</li>
 <li>territory-resource territory:1 resource:metal · built: 1 → 3</li>
 </ul>
@@ -883,21 +882,21 @@ end turn
 <h3>territory</h3>
 <table>
 <thead>
-<tr><th>territory</th><th>biome</th><th>nature</th><th>founded</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
+<tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td>grassland</td><td>1</td><td>yes</td><td>12</td><td>0</td><td>0</td></tr>
-<tr><td>2</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>3</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>4</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>5</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>6</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>7</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>8</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>9</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>10</td><td>desert</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>11</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>12</td><td>ice</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>grassland</td><td>1</td><td>12</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>9</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>10</td><td>desert</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>11</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12</td><td>ice</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 </tbody>
 </table>
 <p>12 row(s)</p>
@@ -1087,7 +1086,7 @@ end turn
 <h3>unit</h3>
 <table>
 <thead>
-<tr><th>unit</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
+<tr><th>id</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
 </thead>
 <tbody>
 </tbody>
@@ -1096,7 +1095,7 @@ end turn
 <h3>kind</h3>
 <table>
 <thead>
-<tr><th>kind</th><th>in-play</th></tr>
+<tr><th>id</th><th>in-play</th></tr>
 </thead>
 <tbody>
 <tr><td>citizen</td><td>12</td></tr>
@@ -1134,9 +1133,9 @@ end turn
 <p><strong>changed</strong> (8)</p>
 <ul>
 <li>game phase:play · turn: 5 → 6</li>
-<li>kind kind:energy · in-play: 0 → 8</li>
-<li>kind kind:extractor · in-play: 8 → 9</li>
-<li>kind kind:metal · in-play: 10 → 20</li>
+<li>kind id:energy · in-play: 0 → 8</li>
+<li>kind id:extractor · in-play: 8 → 9</li>
+<li>kind id:metal · in-play: 10 → 20</li>
 <li>store territory:1 resource:energy · amount: 0 → 8</li>
 <li>store territory:1 resource:metal · amount: 10 → 20</li>
 <li>structure territory:1 structure:extractor · count: 8 → 9</li>
@@ -1156,21 +1155,21 @@ end turn
 <h3>territory</h3>
 <table>
 <thead>
-<tr><th>territory</th><th>biome</th><th>nature</th><th>founded</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
+<tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td>grassland</td><td>1</td><td>yes</td><td>12</td><td>0</td><td>0</td></tr>
-<tr><td>2</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>3</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>4</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>5</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>6</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>7</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>8</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>9</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>10</td><td>desert</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>11</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>12</td><td>ice</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>grassland</td><td>1</td><td>12</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>9</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>10</td><td>desert</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>11</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12</td><td>ice</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 </tbody>
 </table>
 <p>12 row(s)</p>
@@ -1361,7 +1360,7 @@ end turn
 <h3>unit</h3>
 <table>
 <thead>
-<tr><th>unit</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
+<tr><th>id</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
 </thead>
 <tbody>
 </tbody>
@@ -1370,7 +1369,7 @@ end turn
 <h3>kind</h3>
 <table>
 <thead>
-<tr><th>kind</th><th>in-play</th></tr>
+<tr><th>id</th><th>in-play</th></tr>
 </thead>
 <tbody>
 <tr><td>citizen</td><td>12</td></tr>
@@ -1402,19 +1401,19 @@ end turn
 <h2>what changed</h2>
 <p><strong>new</strong> (1)</p>
 <ul>
-<li>{unit unit:1 kind:pioneer place:territory-1 fuel:2 readiness:ready}</li>
+<li>{unit id:1 kind:pioneer place:territory-1 fuel:2 readiness:ready}</li>
 </ul>
 <p><strong>changed</strong> (9)</p>
 <ul>
 <li>game phase:play · turn: 6 → 7</li>
 <li>game phase:play · units: 0 → 1</li>
-<li>kind kind:citizen · in-play: 12 → 11</li>
-<li>kind kind:energy · in-play: 8 → 14</li>
-<li>kind kind:pioneer · in-play: 0 → 1</li>
+<li>kind id:citizen · in-play: 12 → 11</li>
+<li>kind id:energy · in-play: 8 → 14</li>
+<li>kind id:pioneer · in-play: 0 → 1</li>
 <li>labor territory:1 · made: 12 → 11</li>
 <li>labor territory:1 · left: 12 → 11</li>
 <li>store territory:1 resource:energy · amount: 8 → 14</li>
-<li>territory territory:1 · citizens: 12 → 11</li>
+<li>territory id:1 · citizens: 12 → 11</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
@@ -1430,21 +1429,21 @@ end turn
 <h3>territory</h3>
 <table>
 <thead>
-<tr><th>territory</th><th>biome</th><th>nature</th><th>founded</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
+<tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td>grassland</td><td>1</td><td>yes</td><td>11</td><td>0</td><td>0</td></tr>
-<tr><td>2</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>3</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>4</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>5</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>6</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>7</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>8</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>9</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>10</td><td>desert</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>11</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>12</td><td>ice</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>grassland</td><td>1</td><td>11</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>9</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>10</td><td>desert</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>11</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12</td><td>ice</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 </tbody>
 </table>
 <p>12 row(s)</p>
@@ -1635,7 +1634,7 @@ end turn
 <h3>unit</h3>
 <table>
 <thead>
-<tr><th>unit</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
+<tr><th>id</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
 </thead>
 <tbody>
 <tr><td>1</td><td>pioneer</td><td>territory-1</td><td>2</td><td>ready</td></tr>
@@ -1645,7 +1644,7 @@ end turn
 <h3>kind</h3>
 <table>
 <thead>
-<tr><th>kind</th><th>in-play</th></tr>
+<tr><th>id</th><th>in-play</th></tr>
 </thead>
 <tbody>
 <tr><td>citizen</td><td>11</td></tr>
@@ -1679,7 +1678,7 @@ end turn
 <h2>what changed</h2>
 <p><strong>gone</strong> (1)</p>
 <ul>
-<li>{unit unit:1 kind:pioneer place:territory-1 fuel:2 readiness:ready}</li>
+<li>{unit id:1 kind:pioneer place:territory-1 fuel:2 readiness:ready}</li>
 </ul>
 <p><strong>new</strong> (3)</p>
 <ul>
@@ -1687,15 +1686,15 @@ end turn
 <li>{extractor territory:2 node:2 resource:metal readiness:ready}</li>
 <li>{garrison territory:2 force:1}</li>
 </ul>
-<p><strong>changed</strong> (19)</p>
+<p><strong>changed</strong> (18)</p>
 <ul>
 <li>game phase:play · turn: 7 → 8</li>
 <li>game phase:play · units: 1 → 0</li>
-<li>kind kind:citizen · in-play: 11 → 16</li>
-<li>kind kind:energy · in-play: 14 → 20</li>
-<li>kind kind:extractor · in-play: 9 → 11</li>
-<li>kind kind:garrison · in-play: 1 → 2</li>
-<li>kind kind:pioneer · in-play: 1 → 0</li>
+<li>kind id:citizen · in-play: 11 → 16</li>
+<li>kind id:energy · in-play: 14 → 20</li>
+<li>kind id:extractor · in-play: 9 → 11</li>
+<li>kind id:garrison · in-play: 1 → 2</li>
+<li>kind id:pioneer · in-play: 1 → 0</li>
 <li>labor territory:1 · made: 11 → 12</li>
 <li>labor territory:1 · left: 11 → 12</li>
 <li>labor territory:2 · made: 0 → 4</li>
@@ -1703,9 +1702,8 @@ end turn
 <li>store territory:1 resource:energy · amount: 14 → 20</li>
 <li>structure territory:2 structure:extractor · count: 0 → 2</li>
 <li>structure territory:2 structure:garrison · count: 0 → 1</li>
-<li>territory territory:1 · citizens: 11 → 12</li>
-<li>territory territory:2 · founded: no → yes</li>
-<li>territory territory:2 · citizens: 0 → 4</li>
+<li>territory id:1 · citizens: 11 → 12</li>
+<li>territory id:2 · citizens: 0 → 4</li>
 <li>territory-resource territory:2 resource:food · built: 0 → 1</li>
 <li>territory-resource territory:2 resource:metal · built: 0 → 1</li>
 </ul>
@@ -1723,21 +1721,21 @@ end turn
 <h3>territory</h3>
 <table>
 <thead>
-<tr><th>territory</th><th>biome</th><th>nature</th><th>founded</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
+<tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td>grassland</td><td>1</td><td>yes</td><td>12</td><td>0</td><td>0</td></tr>
-<tr><td>2</td><td>grassland</td><td>1</td><td>yes</td><td>4</td><td>0</td><td>0</td></tr>
-<tr><td>3</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>4</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>5</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>6</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>7</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>8</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>9</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>10</td><td>desert</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>11</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>12</td><td>ice</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>grassland</td><td>1</td><td>12</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>grassland</td><td>1</td><td>4</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>9</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>10</td><td>desert</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>11</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12</td><td>ice</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 </tbody>
 </table>
 <p>12 row(s)</p>
@@ -1931,7 +1929,7 @@ end turn
 <h3>unit</h3>
 <table>
 <thead>
-<tr><th>unit</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
+<tr><th>id</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
 </thead>
 <tbody>
 </tbody>
@@ -1940,7 +1938,7 @@ end turn
 <h3>kind</h3>
 <table>
 <thead>
-<tr><th>kind</th><th>in-play</th></tr>
+<tr><th>id</th><th>in-play</th></tr>
 </thead>
 <tbody>
 <tr><td>citizen</td><td>16</td></tr>
@@ -1977,22 +1975,22 @@ end turn
 <h2>what changed</h2>
 <p><strong>new</strong> (1)</p>
 <ul>
-<li>{unit unit:1 kind:ark place:territory-2 fuel:1 readiness:ready}</li>
+<li>{unit id:1 kind:ark place:territory-2 fuel:1 readiness:ready}</li>
 </ul>
 <p><strong>changed</strong> (12)</p>
 <ul>
 <li>game phase:play · turn: 8 → 9</li>
 <li>game phase:play · units: 0 → 1</li>
-<li>kind kind:ark · in-play: 0 → 1</li>
-<li>kind kind:citizen · in-play: 16 → 18</li>
-<li>kind kind:metal · in-play: 20 → 14</li>
-<li>kind kind:yard · in-play: 0 → 1</li>
+<li>kind id:ark · in-play: 0 → 1</li>
+<li>kind id:citizen · in-play: 16 → 18</li>
+<li>kind id:metal · in-play: 20 → 14</li>
+<li>kind id:yard · in-play: 0 → 1</li>
 <li>labor territory:2 · made: 4 → 6</li>
 <li>labor territory:2 · left: 4 → 6</li>
 <li>store territory:1 resource:metal · amount: 20 → 14</li>
 <li>structure territory:1 structure:yard · count: 0 → 1</li>
-<li>territory territory:1 · yards: 0 → 1</li>
-<li>territory territory:2 · citizens: 4 → 6</li>
+<li>territory id:1 · yards: 0 → 1</li>
+<li>territory id:2 · citizens: 4 → 6</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
@@ -2008,21 +2006,21 @@ end turn
 <h3>territory</h3>
 <table>
 <thead>
-<tr><th>territory</th><th>biome</th><th>nature</th><th>founded</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
+<tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td>grassland</td><td>1</td><td>yes</td><td>12</td><td>0</td><td>1</td></tr>
-<tr><td>2</td><td>grassland</td><td>1</td><td>yes</td><td>6</td><td>0</td><td>0</td></tr>
-<tr><td>3</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>4</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>5</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>6</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>7</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>8</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>9</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>10</td><td>desert</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>11</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>12</td><td>ice</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>grassland</td><td>1</td><td>12</td><td>0</td><td>1</td></tr>
+<tr><td>2</td><td>grassland</td><td>1</td><td>6</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>9</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>10</td><td>desert</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>11</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12</td><td>ice</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 </tbody>
 </table>
 <p>12 row(s)</p>
@@ -2216,7 +2214,7 @@ end turn
 <h3>unit</h3>
 <table>
 <thead>
-<tr><th>unit</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
+<tr><th>id</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
 </thead>
 <tbody>
 <tr><td>1</td><td>ark</td><td>territory-2</td><td>1</td><td>ready</td></tr>
@@ -2226,7 +2224,7 @@ end turn
 <h3>kind</h3>
 <table>
 <thead>
-<tr><th>kind</th><th>in-play</th></tr>
+<tr><th>id</th><th>in-play</th></tr>
 </thead>
 <tbody>
 <tr><td>citizen</td><td>18</td></tr>
@@ -2257,7 +2255,7 @@ end turn
 <p><strong>changed</strong> (2)</p>
 <ul>
 <li>game phase:play · turn: 9 → 10</li>
-<li>unit unit:1 · place: territory-2 → orbit</li>
+<li>unit id:1 · place: territory-2 → orbit</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
@@ -2273,21 +2271,21 @@ end turn
 <h3>territory</h3>
 <table>
 <thead>
-<tr><th>territory</th><th>biome</th><th>nature</th><th>founded</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
+<tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td>grassland</td><td>1</td><td>yes</td><td>12</td><td>0</td><td>1</td></tr>
-<tr><td>2</td><td>grassland</td><td>1</td><td>yes</td><td>6</td><td>0</td><td>0</td></tr>
-<tr><td>3</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>4</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>5</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>6</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>7</td><td>jungle</td><td>2</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>8</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>9</td><td>mountain</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>10</td><td>desert</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>11</td><td>grassland</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
-<tr><td>12</td><td>ice</td><td>1</td><td>no</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>grassland</td><td>1</td><td>12</td><td>0</td><td>1</td></tr>
+<tr><td>2</td><td>grassland</td><td>1</td><td>6</td><td>0</td><td>0</td></tr>
+<tr><td>3</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>6</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>7</td><td>jungle</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>8</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>9</td><td>mountain</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>10</td><td>desert</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>11</td><td>grassland</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>12</td><td>ice</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
 </tbody>
 </table>
 <p>12 row(s)</p>
@@ -2481,7 +2479,7 @@ end turn
 <h3>unit</h3>
 <table>
 <thead>
-<tr><th>unit</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
+<tr><th>id</th><th>kind</th><th>place</th><th>fuel</th><th>readiness</th></tr>
 </thead>
 <tbody>
 <tr><td>1</td><td>ark</td><td>orbit</td><td>1</td><td>ready</td></tr>
@@ -2491,7 +2489,7 @@ end turn
 <h3>kind</h3>
 <table>
 <thead>
-<tr><th>kind</th><th>in-play</th></tr>
+<tr><th>id</th><th>in-play</th></tr>
 </thead>
 <tbody>
 <tr><td>citizen</td><td>18</td></tr>

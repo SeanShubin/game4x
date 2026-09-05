@@ -64,10 +64,6 @@ impl Table {
     }
 }
 
-fn yes(value: bool) -> String {
-    if value { "yes" } else { "no" }.to_string()
-}
-
 fn readiness(exhausted: bool) -> String {
     if exhausted { "exhausted" } else { "ready" }.to_string()
 }
@@ -105,17 +101,21 @@ pub fn tables(game: &Game) -> Vec<Table> {
         game.units.len().to_string(),
     ]);
 
+    // **`P-254`: a thing's own identifier is `id`.** This said `territory`, and so did
+    // every row referring to one from somewhere else - so `territory:1` meant *in territory
+    // 1* in nine tables and *is territory 1* in this one, with only position telling them
+    // apart. Two relations under one name.
+    //
+    // **`founded` is gone and nothing replaces it** - `P-255`. It was never a trait: the
+    // release has declared `control` since it had traits at all and has never had a
+    // `founded`, which entered the report in `8f69847` because a dump takes its columns
+    // from the model while the release declares its traits somewhere else, and nothing has
+    // ever compared the two. Sean chose to drop it rather than print `control` in its
+    // place, on his own test - *if we actually need it I will notice when reviewing*.
+    // `Territory::founded()` stays; `report.rs` branches on it.
     let mut territory = Table::new(
         "territory",
-        &[
-            "territory",
-            "biome",
-            "nature",
-            "founded",
-            "citizens",
-            "labor-spent",
-            "yards",
-        ],
+        &["id", "biome", "nature", "citizens", "labor-spent", "yards"],
     );
     // **Three facts, not one.** This was a single `density` column holding count times
     // density, so territories that are 3 x 4, 2 x 6 and 6 x 2 all read 12 - one number
@@ -148,7 +148,6 @@ pub fn tables(game: &Game) -> Vec<Table> {
             place.id.0.to_string(),
             format!("{:?}", place.biome).to_lowercase(),
             place.force_of_nature.to_string(),
-            yes(place.founded()),
             place.citizens().to_string(),
             place.labor_spent().to_string(),
             place.yards().to_string(),
@@ -225,7 +224,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
         }
     }
 
-    let mut unit = Table::new("unit", &["unit", "kind", "place", "fuel", "readiness"]);
+    let mut unit = Table::new("unit", &["id", "kind", "place", "fuel", "readiness"]);
     for flying in &game.units {
         unit.push(vec![
             flying.id.0.to_string(),
@@ -251,7 +250,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
     //
     // Counts are across the whole game, because *is there one anywhere* is what a missing
     // table leaves unanswerable. Where they sit is what the other tables are for.
-    let mut kinds = Table::new("kind", &["kind", "in-play"]);
+    let mut kinds = Table::new("kind", &["id", "in-play"]);
     let total = |count: &dyn Fn(&game_model::Territory) -> u32| -> u32 {
         game.territories.iter().map(count).sum()
     };

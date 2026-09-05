@@ -37,8 +37,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 
-### To spec (5)
+### To spec (6)
 
+- **C-25** - The dump prints `capacity` where the release declares `total capacity` · `crates/outbox.md`
 - **C-24** - Nothing the release provides can take a jungle · `crates/outbox.md`
 - **C-23** - `P-215`'s enclosing command is built; the nested-command half has no case yet · `crates/outbox.md`
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`

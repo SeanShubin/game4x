@@ -22,6 +22,7 @@
 use std::collections::BTreeSet;
 use std::path::PathBuf;
 
+use game_console::dump;
 use game_model::Biome;
 use game_model::thing::Kind;
 
@@ -187,5 +188,127 @@ fn the_check_catches_a_value_missing_from_the_table_and_one_missing_from_the_mod
     assert!(
         named_under("## Kinds\n\nnothing here yet.\n", "## Kinds").is_empty(),
         "an empty table has to read as empty, or the assertion above it never fires"
+    );
+}
+
+/// Every trait the release says is *of a territory* is shown in the dump.
+///
+/// **`S-43` asked whether the dump's fields could be held to the release's traits, and the
+/// broad version of that cannot be built.** Measured: of 25 non-key columns in the dump, 8
+/// are declared traits and 17 are not - and the 17 are four unrelated kinds. Counts of
+/// things (`citizens`, `yards`, `built`, `count`), quantities (`amount`, `made`, `spent`,
+/// `left`), names that differ from the trait they show (`capacity` for *total capacity*,
+/// `readiness` for *ready*), and fields that are simply not traits (`phase`, `turn`,
+/// `in-play`). An exemption list of seventeen against a population of twenty-five is the
+/// column list written twice, and the second copy is what goes stale.
+///
+/// **The narrow version needs no exemption list, because the release supplies the
+/// discriminator itself.** The *Traits* table has an **Of** column. Four traits say *a
+/// territory*, and the question *is this one shown?* has a definite answer for each. That is
+/// the direction the bug was in: `founded` was printed and never declared, `control`
+/// declared and never printed, and nothing compared the two lists in either direction.
+///
+/// # What it finds, both carried as named exceptions rather than asserted away
+///
+/// **`control` is declared and shown nowhere.** `P-255`: Sean dropped `founded` and chose
+/// not to print `control` in its place, on his own test - *if we actually need it I will
+/// notice when reviewing*. So this is a decision, not a defect, and it is named here so that
+/// the check does not have to be weakened to accommodate it.
+///
+/// **`total capacity` is shown as `capacity`.** Not a decision - nobody chose it, and it is
+/// the same shape as `founded`: the dump naming a thing differently from the release, with
+/// nothing comparing them. `C-25`, and this lane does not rename a field Sean is reading
+/// without asking.
+#[test]
+fn every_trait_of_a_territory_is_shown_in_the_dump() {
+    /// Traits of a territory the dump does not show under that name, and why.
+    const NOT_SHOWN: [(&str, &str); 2] = [
+        (
+            "control",
+            "`P-255`: Sean dropped `founded` and declined to print `control` in its place - \
+             *if we actually need it I will notice when reviewing*. A decision, not a defect",
+        ),
+        (
+            "total capacity",
+            "shown as `capacity`, which nobody chose - the dump naming a thing differently \
+             from the release, which is `founded`'s shape exactly. `C-25`",
+        ),
+    ];
+
+    let document = release();
+    let mut of_a_territory = Vec::new();
+    let mut inside = false;
+    for line in document.lines() {
+        if line.starts_with("## ") {
+            if inside {
+                break;
+            }
+            inside = line.trim() == "## Traits";
+            continue;
+        }
+        let line = line.trim();
+        if !inside || !line.starts_with("| **") {
+            continue;
+        }
+        let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
+        let name = cells.first().unwrap_or(&"").trim_matches('*').trim();
+        let of = cells.get(1).unwrap_or(&"");
+        // *a territory*, *a territory, per resource*, *a territory, per kind*. The qualifier
+        // says how many rows it takes, not what it is a trait of.
+        if of.starts_with("a territory") {
+            of_a_territory.push(name.to_string());
+        }
+    }
+    assert_eq!(
+        of_a_territory.len(),
+        5,
+        "five traits are of a territory; the release has {} ({of_a_territory:?})",
+        of_a_territory.len()
+    );
+
+    // Every column of every table the dump produces, so a trait shown anywhere counts.
+    let game = game_model::Game::new();
+    let columns: Vec<String> = dump::tables(&game)
+        .iter()
+        .flat_map(|table| table.columns.iter().map(|c| c.to_string()))
+        .collect();
+    assert!(
+        columns.len() > 20,
+        "only {} columns in the dump, so this would agree with anything",
+        columns.len()
+    );
+
+    let mut missing = Vec::new();
+    for name in &of_a_territory {
+        if columns.iter().any(|column| column == name) {
+            continue;
+        }
+        if NOT_SHOWN.iter().any(|(named, _)| named == name) {
+            continue;
+        }
+        missing.push(name.clone());
+    }
+    assert!(
+        missing.is_empty(),
+        "the release declares these traits of a territory and the dump shows none of them: \
+         {missing:?}"
+    );
+
+    // An exception that has been repaired is a lie in the other direction, and nothing else
+    // would notice: this would go on passing while claiming a gap that had closed.
+    for (named, why) in NOT_SHOWN {
+        assert!(
+            !columns.iter().any(|column| column == named),
+            "`{named}` is shown now, so delete its exception: {why}"
+        );
+        assert!(
+            of_a_territory.iter().any(|name| name == named),
+            "`{named}` is excepted here and the release no longer declares it of a territory"
+        );
+    }
+    assert_eq!(
+        NOT_SHOWN.len(),
+        2,
+        "two are not shown, and both are findings"
     );
 }

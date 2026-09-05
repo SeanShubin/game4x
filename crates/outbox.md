@@ -33,6 +33,24 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-25 - The dump prints `capacity` where the release declares `total capacity`
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-43`, building the check it asked for
+
+**`founded`'s shape exactly, found by the check `S-43` asked whether was possible.** The release
+declares a trait *total capacity*, of *a territory, per kind*. The dump's `territory-resource`
+table prints it as **`capacity`**. Nobody chose the rename; it is the dump taking its columns from
+the model while the release declares its traits somewhere else, with nothing comparing the two - and
+that is the sentence `S-43` wrote about `founded`.
+
+**Not renamed, for two reasons.** The names in that table are ones Sean read this week and objected
+to three of; changing a fourth he did not mention is a decision rather than a tidy-up. And
+`P-252` means it would become `total-capacity`, which is a change to a data file he is about to
+vet.
+
+**Named in `tests/closed_sets.rs` rather than fixed**, alongside `control`, and the exception fails
+if it is ever repaired.
+
 ### C-24 - Nothing the release provides can take a jungle
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `S-42`, building the check it asked for

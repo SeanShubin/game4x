@@ -13,20 +13,20 @@ is in it, because the names are what this is for.
 
 ## territory
 
-| territory | biome     | nature | founded | citizens | labor-spent | yards |
-| --------- | --------- | ------ | ------- | -------- | ----------- | ----- |
-| 1         | grassland | 1      | yes     | 12       | 0           | 1     |
-| 2         | grassland | 1      | yes     | 6        | 0           | 0     |
-| 3         | grassland | 1      | no      | 0        | 0           | 0     |
-| 4         | mountain  | 1      | no      | 0        | 0           | 0     |
-| 5         | mountain  | 1      | no      | 0        | 0           | 0     |
-| 6         | jungle    | 2      | no      | 0        | 0           | 0     |
-| 7         | jungle    | 2      | no      | 0        | 0           | 0     |
-| 8         | grassland | 1      | no      | 0        | 0           | 0     |
-| 9         | mountain  | 1      | no      | 0        | 0           | 0     |
-| 10        | desert    | 1      | no      | 0        | 0           | 0     |
-| 11        | grassland | 1      | no      | 0        | 0           | 0     |
-| 12        | ice       | 1      | no      | 0        | 0           | 0     |
+| id  | biome     | nature | citizens | labor-spent | yards |
+| --- | --------- | ------ | -------- | ----------- | ----- |
+| 1   | grassland | 1      | 12       | 0           | 1     |
+| 2   | grassland | 1      | 6        | 0           | 0     |
+| 3   | grassland | 1      | 0        | 0           | 0     |
+| 4   | mountain  | 1      | 0        | 0           | 0     |
+| 5   | mountain  | 1      | 0        | 0           | 0     |
+| 6   | jungle    | 2      | 0        | 0           | 0     |
+| 7   | jungle    | 2      | 0        | 0           | 0     |
+| 8   | grassland | 1      | 0        | 0           | 0     |
+| 9   | mountain  | 1      | 0        | 0           | 0     |
+| 10  | desert    | 1      | 0        | 0           | 0     |
+| 11  | grassland | 1      | 0        | 0           | 0     |
+| 12  | ice       | 1      | 0        | 0           | 0     |
 
 12 row(s)
 
@@ -207,15 +207,15 @@ is in it, because the names are what this is for.
 
 ## unit
 
-| unit | kind | place | fuel | readiness |
-| ---- | ---- | ----- | ---- | --------- |
-| 1    | ark  | orbit | 1    | ready     |
+| id  | kind | place | fuel | readiness |
+| --- | ---- | ----- | ---- | --------- |
+| 1   | ark  | orbit | 1    | ready     |
 
 1 row(s)
 
 ## kind
 
-| kind      | in-play |
+| id        | in-play |
 | --------- | ------- |
 | citizen   | 18      |
 | labor     | 0       |
