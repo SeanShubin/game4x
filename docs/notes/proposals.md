@@ -63,28 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-251 - A proposal with two destinations carries two quotations, and `P-229` says one
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** cleanup - **shape** text - **asks**
-approval - **into** `CLAUDE.md` -> Promotion, appended to the paragraph `P-229` landed
-
-**`P-249` landed in two files and carried two quotations.** `P-229` says *a proposal asking for
-approval carries exactly one quotation*. **The rule did not anticipate two destinations**, and your
-text was right, so the rule is what needs the case rather than the proposal.
-
-> **A proposal that lands in more than one file carries one quotation for each**, in the order the
-> destinations are named. Everything else it quotes is shown some other way, as before.
-
-**Basis: the alternative is two proposals for one idea**, and `P-249` is the argument against that -
-*the main scenario is what I vet* and *`R-6` rests on it* are one decision, and splitting them would
-have put half of it in front of you without the half that gives it its point.
-
-**And my own guard did not catch it, which is the worse half.** It requires **at least** one
-quotation where the rule says **exactly** one. **A guard looser than the rule it enforces agrees
-with everything the rule forbids**, and it passed `P-249` silently. That is this lane's to fix and
-it is fixed either way; the rule is what decides whether it should be *exactly one* or *one per
-destination*.
-
 ## Addressed to other perspectives
 
 ### S-41 - `P-250`'s second half needs `tools/outbox` to list at a close
@@ -1271,6 +1249,7 @@ work the release exists to order.
 | P-248, a lane that is waiting files the hold, and the lane that finishes tells it                                  | `docs/process.md` -> All lanes                                                                                                               | 2026-09-05 |
 | P-250, a derived number names its rule, and closing an item lists who else named it                                | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-05 |
 | P-249, a main scenario I vet, and end-state scenarios that rest on it                                              | `docs/process.md` -> How I know the game is right, and `releases/first-release.md` -> `R-6`                                                  | 2026-09-05 |
+| P-251, a proposal landing in more than one file carries one quotation for each                                     | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-05 |
 
 ## Rejected
 

@@ -448,7 +448,9 @@ the words being replaced, an existing rule, a line of code - is shown some other
 asking for approval carries exactly one quotation, and a proposal asking for a decision carries none
 until it becomes the other kind. **An instruction may carry no quotation at all**, because what it
 offers is a change described rather than words that land. What it must carry instead is the check
-that says it was made.
+that says it was made. **A proposal that lands in more than one file carries one
+quotation for each**, in the order the destinations are named. Everything else it quotes is shown
+some other way, as before.
 
 **To tell which, ask what the file will say afterwards.** If it will say these words, that is text.
 If it will say them as cells in a table, that is rows. If it will say something these words only
