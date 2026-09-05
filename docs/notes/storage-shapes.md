@@ -170,6 +170,58 @@ is a property of its kind* work**, and the use case is worded ambiguously betwee
 **Worth settling deliberately**, because it is the one place where a natural-sounding feature undoes
 the organizing principle.
 
+## Is everything-is-a-tree internally consistent? Yes, with one correction
+
+Sean, 2026-09-05: *the whole game could be a storage container, so would a territory, so would a
+vehicle, and only the raw materials would be leaves. Is that internally consistent?*
+
+**The three properties a tree needs are already promoted**, which is the strongest thing that can be
+said for it:
+
+| A tree needs   | `spec/logistics.md` already says                             |
+| -------------- | ------------------------------------------------------------ |
+| **one parent** | *a thing... is itself in **at most one** other thing*        |
+| **no cycles**  | *nothing contains itself, directly or through anything else* |
+| **a root**     | his own *the whole game could be a storage container*        |
+
+Without the root it is a **forest** - *at most one* permits orphans. **Making the game the root is
+what turns it into a tree**, and that is the one piece he is adding.
+
+**And adjacency is already tree-shaped**: *a thing says which of the things in it are next to which.
+That is a fact about the container rather than about its contents.* **Siblings are adjacent, and the
+parent records it** - which is exactly how a tree carries a graph without stopping being a tree.
+
+## The correction: the implication runs one way
+
+**Not *only raw materials are leaves*. Rather: raw materials are always leaves.**
+
+Check it against the twelve kinds. Materials - `food`, `metal`, `energy`, `labor` - hold nothing and
+never can. Branches - `territory`, `orbit`, `ark`, `pioneer`, and `extractor`, which the release says
+*holds one cycle of what it makes*. **And then `citizen`.**
+
+**A citizen is not a raw material and holds nothing.** Under *only raw materials are leaves* it has to
+be a branch, and it is a branch with nothing in it - which is fine in a tree and makes the sentence
+as worded false. **The true statement is the one-way one**: a material *cannot* contain, so it is
+always a leaf; anything else *may* contain, and may happen to be empty.
+
+## Two conditions, and both are about not letting the shape drift
+
+**1. Leaf or branch is a property of the kind, not of the instance.** If it is defined by what a
+thing *does* hold, **a citizen picking something up changes its type**, and the tree's shape becomes
+a fact about the current state rather than about the rules. **Defined by what a kind *may* hold, it
+is stable** - and the constraint two sections above is already written over kinds.
+
+**2. Containment is the tree; a reference is not containment.** A citizen working an extractor is
+**in the territory**, and the extractor **refers** to it. If working meant containment the citizen
+would have two parents and the tree would break. **Nothing currently says which links are
+containment**, and this is the sentence that would need to.
+
+## So: it works, and it is less new than it looks
+
+**He is not adding an organizing principle. He is naming one the specification already has** - one
+parent, no cycles, capacity per kind, adjacency recorded by the container. **What is genuinely new is
+the root**, and the one-way phrasing of the leaf rule.
+
 ## What this leaves open, which is his to settle
 
 - **Where N's bound comes from** - given by the place, upgraded, or derived from what the place
