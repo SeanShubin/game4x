@@ -25,7 +25,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
 - **S-44** - Storage becomes a built thing, and the scenario cannot run until it is · `docs/notes/proposals.md`
 - **S-41** - `P-250`'s second half needs `tools/outbox` to list at a close · `docs/notes/proposals.md`
@@ -36,6 +36,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-24** - Four artifacts, and a human must be able to derive the fourth from the other three · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
+- **Q-48** - Two guards loop over a parsed population and assert nothing about its size · `lenses/quality/outbox.md`
 
 ### To spec (10)
 

@@ -126,6 +126,41 @@ readers - which is the guard-that-cannot-fail this repository has built twice an
 **Whether.** Worth building, and worth building carefully: match the directory rather than a string,
 or match both spellings and assert the total, so the check fails if a third spelling appears.
 
+### Q-48 - Two guards loop over a parsed population and assert nothing about its size
+
+**to** code · **status** open · **raised** 2026-09-06 · **source** the specification lane's target -
+*which of our checks would still pass if its subject were deleted* - run against every test in the
+tree
+
+**`first_release.rs` is the one that matters.** `released_table()` parses
+`releases/first-release.md` by taking every line that starts with `|`, has at least four cells, and
+whose first cell parses as an integer. It returns **twelve rows today**, ids 1 to 12 - replicated
+here against the current file. The test loops over them and **every assertion is inside the loop**,
+including `!place.nodes_of(Food).is_empty()`.
+
+**Nothing asserts that twelve came back.** Rename the heading, restructure the table, drop it below
+four columns, and the parse yields nothing, the loop runs zero times, and the test that proves the
+release is buildable goes green having checked no territory at all.
+
+That is not hypothetical for this document. The release's tables have changed repeatedly this week -
+`founded` dropped, `force-of-nature` renamed to `nature`, columns added. Each of those was a change
+to the shape this parse depends on, and none of them would have announced itself.
+
+**`poles.rs` is the same shape and trivial**: four tests loop over `arrangements()`, which is
+`goldberg::arrangements_up_to(200)`, with no floor. Included because it is one line to fix while the
+subject is open, not because the risk is comparable.
+
+**Whether.** Worth fixing, and it is one assertion each - `assert_eq!(released_table().len(), 12)`
+and a non-empty check on `arrangements()`. `quotations.rs` already does this with `checked >= 1`, so
+the habit exists in the tree and these two are where it is missing.
+
+**What this cost to find, because it bears on whether the target can be automated.** A detector for
+*loops over a computed population with no floor* flagged four files. Two were false: `fully_exploited.rs`
+floors `claimable.len()` at twelve and `quotations.rs` floors `checked`, and my pattern saw neither
+because it was looking for the population's own name. **Reading four files found two real ones; the
+pattern alone would have reported four.** The target is worth running and is not worth trusting
+unread - which is `C-28` about the instrument used to look for `C-28`.
+
 ---
 
 ## Resolved
