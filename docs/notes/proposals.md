@@ -369,48 +369,6 @@ ground. **Sean was told that cost and took it**, so the choice moves to the play
 inferred - but the `.4x` files change when it does, and `commands/play.4x` is what he is deriving by
 hand this week. **Do not change the scenario's commands under him without saying so.**
 
-### S-25 - `labor` is a kind with no table, and `create labor` is a recipe nothing fires
-
-**to** code - **status** open - **raised** 2026-09-03 - **source** preparing Sean's manual
-derivation
-
-**Found by working out what a person would do with `work 1 extractor 1 food`.** The release says
-that command's effect is two recipes - `create labor` turns a ready citizen into labor and an
-exhausted citizen, then `work` consumes the labor. **The model fires neither.**
-
-`crates/game-model/src/territory.rs` has **`labor_spent: u32`** and
-**`labor_available() = citizens - labor_spent`**. So labor is a counter derived from citizens, not a
-thing in a place - and `state.md` has **nine tables and none of them is `labor`**, while the release
-lists it as one of the fourteen kinds with a bound of its own.
-
-**A person deriving the dump by hand asks where the labor rows are and finds none.** That is the
-closure test working on its first attempt, before anybody has run it.
-
-**Three things are true at once and only one of them is wrong**, which is why this is worth an item
-rather than a line:
-
-- **The release** says labor is a kind, produced by `create labor`, bounded by the citizens that
-  make it
-- **The model** says labor is `citizens - labor_spent`, reset at the end of a turn
-- **`P-214`** now says there is one command for each recipe the player may fire, **and `create
-  labor` has no command**
-
-**Answered 2026-09-04: Sean chose A - `labor` is a kind and the model is wrong.** `S-21`
-builds it as a thing with a count; `work` keeps creating and consuming it in one step until
-`P-232` settles whether `create labor` gets a command of its own.
-
-**`P-231` puts this to Sean, 2026-09-04**, because the line below saying this lane is not
-deciding it meant nobody was.
-
-**The model's version may be the right one** - a counter that resets is exactly *one each per turn* -
-in which case the release is describing a thing that should not be a kind. **This lane is not
-deciding that**; `S-21` rewrites these shapes and this is a fourth case for it, beside `founded`,
-`stores` and the bare counts.
-
-**What is needed now is smaller than the fix**: whatever renders `state.md` should show `labor` as a
-table, empty or not, because `P-200` requires every kind to have one. **An absent table is the one
-thing a reader cannot tell from a wrong one.**
-
 ### S-24 - Four artifacts, and a human must be able to derive the fourth from the other three
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on what the reference
@@ -496,6 +454,12 @@ work outstanding has been invisible to every index. **This item is the ask.**
 > Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
 > reads the state reads it the same way whatever kind it holds.
 
+**Four of five are gone as of `6ab76ee`, and the fifth is still here.** `citizens`, `labor_spent`,
+`stores`, `yards` and `founded` are all out of `Territory`; **`garrison: Option<Garrison>` is at
+`territory.rs:80`**, and the table below names it as one of the five. `extractors: Vec<Extractor>`
+is beside it and is the same shape. **Both render as things in the dump and neither is one in the
+model**, which is the gap `P-134` names: *nothing in the state is special to a kind*.
+
 **Five shapes in `crates/game-model` say otherwise**, and every parked item lives in one of them:
 
 | Shape                                        | Where                   | What it makes impossible                         |
@@ -549,58 +513,6 @@ gives this rewrite a checklist, and one done afterwards would be checking new co
 rather than compiled - **but a rewrite that gets to *things in places* without also moving the
 kinds into data would already unblock all four items above.** If you want that split as two items,
 say so and this lane will file the second.
-
-### S-19 - Control is stored as `founded` and the specification derives it from citizens
-
-**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, reading `state.md`
-
-**He questioned the column name and the name was the small half.** *`founded` implies a historical
-fact about how the territory came to be, but what really matters to me is whether or not I have
-established control there... should my citizens abandon the area, they are ceding control.*
-
-**That rule is already promoted.** `releases/first-release.md` -> Traits: **control**, of a
-territory, *held by a player, or unclaimed*, **derived: a citizen of that player is there** -
-`P-154`. He restated his own rule without knowing it was there, which is the strongest evidence it
-is the right one.
-
-**`crates/game-model/src/game.rs:261` does something else:**
-
-```rust
-pub fn controlled(&self) -> Vec<TerritoryId> {
-    self.territories.iter().filter(|territory| territory.founded)
-```
-
-**`founded` is stored, and written in four places** - `game.rs:475`, `805`, `861`, `896` - and set
-to `false` by hand in a test at `907`. **A derived trait has no such line.** `spec/invariants.md`:
-*a trait may be derived rather than stored, computed from what is there. **Nothing can leave a
-derived trait wrong, because nothing writes one.***
-
-**So the two disagree the moment a founded territory loses its last citizen**: the model still calls
-it controlled and the specification calls it unclaimed. **`is_fully_exploited` reads `founded` too**,
-at `game.rs:367`, so the win condition rests on it.
-
-**This is a fourth divergence and `C-11` lists three.** Stores discarded, nothing bounded, and
-`is_fully_exploited` asking for a Yard everywhere - **control is not among them**, and `C-11` is the
-item a reader goes to for *where the model and the specification have parted*.
-
-**How this does not get forgotten, since Sean asked.** An item in an outbox is durable but
-passive - it sits in `pending.md` until somebody acts, and nothing forces the day. **The thing that
-would force it is a check that fails on purpose.**
-
-`crates/game-console/tests/first_release.rs` already reads the release and checks the model against
-it, figure by figure. **The same shape works for traits**: every trait the release marks *derived* is
-derived in the model rather than stored. That check **fails today** on `control`, which is the point
-- so it carries `control` as a **named exception citing this item**, and requires every exception to
-still be failing, exactly as the promotion checker does for `P-195`.
-
-**Then the day control becomes derived, the exception fails and forces its own deletion.** An item
-can be forgotten; an exception that must keep failing cannot. **That is the difference between
-recording a divergence and holding one.**
-
-**Whether to fix it now is yours**, and `C-11`'s reasoning probably applies: `P-134` rewrites the
-shapes this lives in, and `founded` is one of the bare fields it removes. **What should not wait is
-`state.md`**, which is a document Sean reads to find exactly this kind of thing: **the column should
-be `control`, derived, because that is what the specification has and what he asked for.**
 
 ### S-18 - Nothing calls the padder, and `dump.rs` is about to reimplement it
 
@@ -760,6 +672,12 @@ landed.**
 
 **to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on `../vote`'s
 documentation and on `P-193`
+
+**The scenario is extended and the count is not asserted, as of `7a7284a`.** It now reaches every
+player recipe and leaves a unit alive, which is the work. **What this item asked for was a check by
+count** - *it is checkable by count, twelve kinds and seventeen recipes* - and **nothing asserts
+either number**. Twelve kinds and fifteen recipes now, after `P-234`. Without it the coverage is
+true today and nothing notices when a kind is added.
 
 **Sean's purpose, in his words:** *something like that is the only way I am going to be able to
 actually identify the problems with names.* He is looking at column and table names laid out beside

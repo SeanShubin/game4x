@@ -20,15 +20,13 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-39** - `b0e4347` S-38 and S-39: a turn is what ran, what changed, and what is there · still open in `docs/notes/proposals.md`
 - **S-38** - `d6fe407` S-38: scenario/ and reports/, and an index that links both · still open in `docs/notes/proposals.md`
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
-- **S-25** - `66cb193` S-25: one table naming every kind, and my first check for it was decoration · still open in `docs/notes/proposals.md`
 - **S-21** - `175078c` S-21: citizens and yards are things, and the expectation caught two bugs · still open in `docs/notes/proposals.md`
-- **S-19** - `6ab76ee` S-19: control is derived from a citizen being there · still open in `docs/notes/proposals.md`
 - **S-14** - `7a7284a` S-14: the scenario reaches every player recipe, and C-11 is why it can · still open in `docs/notes/proposals.md`
 - **R-6** - `92786a9` Close C-11 and C-19, and say where R-6 actually stands · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (13)
+### To code (11)
 
 - **S-39** - The turn report is correct only if it is enough to reconstruct the next state · `docs/notes/proposals.md`
 - **S-38** - Move the reports out of the root, index them, and make the turns a transformation · `docs/notes/proposals.md`
@@ -36,10 +34,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **S-25** - `labor` is a kind with no table, and `create labor` is a recipe nothing fires · `docs/notes/proposals.md`
 - **S-24** - Four artifacts, and a human must be able to derive the fourth from the other three · `docs/notes/proposals.md`
 - **S-21** - `P-134` has been a rule since 2026-08-31 and nothing has been filed asking for it · `docs/notes/proposals.md`
-- **S-19** - Control is stored as `founded` and the specification derives it from citizens · `docs/notes/proposals.md`
 - **S-14** - A scenario that touches every kind and every recipe, and a dump of what it left · `docs/notes/proposals.md`
 - **C-9** - `is_fully_exploited` asks for a Yard everywhere, and the specification no longer does · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
