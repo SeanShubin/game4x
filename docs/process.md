@@ -34,6 +34,17 @@ small, because human attention is the most scarce resource when programming with
 So a **proposal** is a thing addressed to me. What the lanes send each other are items in an
 outbox, and there is no limit on those.
 
+**A proposal asks me one of two things, and says which. Approval** means the words are final and
+reading them is the whole of the work. **A decision** means a choice is open, and no wording can be
+final until I make it.
+
+**Answering the questions in a proposal is not promoting it**, and a proposal with a question in it
+cannot be promoted. My answer turns it into one that asks approval, which is a rewrite I read
+before I promote it.
+
+**What I approve is what ships** - text byte for byte, a table's rows cell for cell, and an
+instruction run with the check it carries. **That is what makes reading it worth my time.**
+
 ## How I know the game is right
 
 Four artifacts: the thing definitions, the recipe definitions, the commands a scenario ran, and the

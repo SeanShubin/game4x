@@ -63,39 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-267 - What a proposal asks me, and what my answer does
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind**
-contradiction - **shape** text - **asks** approval - **into** `docs/process.md` -> What I read and
-what I do, at the end
-
-**You agreed with A, B and C to move and D to stay.** Here are the words, and this is now a proposal
-you promote rather than answer.
-
-> **A proposal asks me one of two things, and says which. Approval** means the words are final and
-> reading them is the whole of the work. **A decision** means a choice is open, and no wording can be
-> final until I make it.
->
-> **Answering the questions in a proposal is not promoting it**, and a proposal with a question in it
-> cannot be promoted. My answer turns it into one that asks approval, which is a rewrite I read
-> before I promote it.
->
-> **What I approve is what ships** - text byte for byte, a table's rows cell for cell, and an
-> instruction run with the check it carries. **That is what makes reading it worth my time.**
-
-**Ordered B, A, C rather than A, B, C.** What a proposal asks comes before what answering it does,
-and the guarantee closes. **These are new sentences rather than a move**, so the order is this lane's
-and is reported rather than assumed.
-
-**D stays in `CLAUDE.md`, as you agreed** - the fifteen-proposal limit, which appears once there,
-measured.
-
-**On keeping them in both files.** `CLAUDE.md` retains its versions, which carry the operating detail
-and the failures that produced each rule. That is not `P-245`'s duplication: `CLAUDE.md` opens by
-saying **your document is the statement and it is the operating detail that must not contradict it**,
-so one states and the other operates. **If you would rather it pointed at yours instead, say so and
-that is a separate change.**
-
 ### P-269 - Two lines in your document that name this project
 
 **to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind**
@@ -1453,6 +1420,7 @@ work the release exists to order.
 | P-270, an unstored resource can be used the turn it is made and is lost when that turn ends                                  | `releases/first-release.md` -> What bounds a kind                                                                                            | 2026-09-05 |
 | P-265, a store holds 10 and the extractor's catch row goes, which P-260 asked for and did not carry                          | `releases/first-release.md` -> Where things are                                                                                              | 2026-09-05 |
 | P-268, the prompts that start the specification, code and quality instances                                                  | `docs/process.md` -> Starting the instances                                                                                                  | 2026-09-05 |
+| P-267, what a proposal asks him, what answering one does, and that what he approves is what ships                            | `docs/process.md` -> What I read and what I do                                                                                               | 2026-09-05 |
 
 ## Rejected
 
