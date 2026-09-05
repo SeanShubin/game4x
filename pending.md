@@ -33,8 +33,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 
-### To spec (3)
+### To spec (4)
 
+- **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-21** - The scenario has never fired `move`, and a green check said it had · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`

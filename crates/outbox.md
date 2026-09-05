@@ -33,6 +33,36 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-22 - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** building `S-22`
+
+**Reporting a placement, so it is a decision rather than something discovered later.**
+
+`S-22` asked for the assertion to become *every value a trait admits is a row in the table that
+lists them*, which is strictly stronger than the count `P-209` and `P-210` deleted. Its other half
+- a stated count matching a row count, and a named set naming a table that exists - is in
+`prototypes/kinds/tests/against_the_release.rs` and stays there.
+
+**The membership half cannot go beside it, and the reason is the same one `S-22` gives for wanting
+it.** `prototypes/kinds` copies the release. A membership check there compares the release with a
+transcription of itself, and two things that agree cannot notice they are both wrong - which is
+exactly how `territory` sat in neither the Kinds table nor the Families table for two days while
+the count agreed.
+
+**So it reads the model instead**, in `crates/game-console/tests/closed_sets.rs`: `Kind::ALL` and
+`Biome::ALL` against the release's *Kinds* and *Biomes* tables, both directions, eighteen values
+compared and the number asserted. The model is the independent witness because it was arrived at by
+being implemented rather than read off the document.
+
+**It found nothing, and that is worth saying rather than leaving as a green tick.** Both sets agree
+today. What it buys is the direction nothing covered: **a row the release has and the model does
+not** reads as delivered precisely because it is written in the release, and no check in the tree
+asked that question before this one.
+
+**Nothing here needs an answer.** Filed because `S-22` names one location and the work landed in
+two, and a reader closing `S-22` should not have to find the second by searching.
+
 ### C-21 - The scenario has never fired `move`, and a green check said it had
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `S-24`'s artifact, first run
