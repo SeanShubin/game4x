@@ -63,49 +63,52 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-260 - What a store holds, how many a territory takes, and the floor under its cost
+### P-260 - Storage: your three questions are one decision, and the third answers the second
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
-**into** `releases/first-release.md` -> Units and structures, and What bounds a kind
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
+- **asks** a decision - **into** `releases/first-release.md` -> Units and structures, What bounds a
+kind, and Recipes
 
-**Three numbers are needed and one of them is not free.** `P-258` left them open deliberately.
+**Cost is settled: 1 labor, 1 metal.** The rest below.
 
-**1. How many stores a territory takes. Recommended: the same as its extractors of that resource** -
-**no new number at all.** A territory that can build three metal extractors can build three metal
-stores.
+**Your second and third questions cannot be answered separately, and that is the finding.**
 
-**It makes storage scale with production, per territory, from a number already in the release**, and
-it gives the biome differences you asked for when you raised jungle to 2. **Against the biome table**:
-mountain takes 5 metal stores, desert 3, ice 2, grassland and jungle 1 each.
+**Removing storage from extractors alone is a deadlock.** A store costs 1 metal; if nothing holds
+metal until a store exists, **the first store can never be paid for.** `spec/logistics.md` closes the
+escape: *whatever pays a cost must be in the territory where the thing being paid for is built.*
 
-**2. What a store holds. Recommended: 10** - the only new number, and it keeps the old ceiling
-recognisable. Territory 1 takes 3 metal stores, so **30 metal where it used to be 20**.
+**Your third question is exactly what unblocks it.** `deploy ark` and `found by land` already produce
+a garrison, two citizens and two extractors - **food and metal.** If they also produce a food store
+and a metal store, **the territory begins able to hold, extractors need no storage of their own, and
+the bootstrap problem never arises.**
 
-**Together these decide which territories can build a Yard**, which costs **15 metal**. With a store
-at 10: **mountain, desert and ice can; grassland and jungle cannot.** That is `C-9`'s question
-answered by geography rather than by a special rule - **and it is worth checking that you want two of
-five biomes shut out**, because it is a real consequence and not a rounding.
+**So the recommendation is to take both together**: `deploy ark` and `found by land` each produce one
+food store and one metal store alongside the extractors they already produce, and **an extractor
+holds nothing** - what it makes goes to a store or it is in disorder. **Neither half works alone**:
+extractors keeping their storage makes the founding stores redundant, and founding without stores
+makes removing extractor storage fatal.
 
-**3. What a store costs, and this one has a floor you cannot go under.**
+**And that is simpler than what we have**, which is your reason for asking. It **deletes a rule** -
+*an extractor holds some of what it makes*, which `P-258` landed twenty minutes ago and which this
+would edit. **Production then has one destination instead of two**: a store, or disorder.
 
-**A store must cost no more metal than the territory can already reach without one**, or the first
-one is unbuildable and the territory is dead. **What it can reach is what its extractors hold** - one
-cycle each, which is the resource's density.
+**The two numbers, and the second is the one to look hardest at.**
 
-**Territory 1's metal density is 4**, so its first extractor holds 4 metal and **a store costing more
-than 4 could never be built there in its first turn.** `spec/logistics.md`: *whatever pays a cost must
-be in the territory where the thing being paid for is built* - so nothing can be shipped in to break
-the deadlock.
+**How many stores a territory takes - recommended: as many as it can take extractors of that
+resource.** No new number. Against the biomes: **mountain 5, desert 3, ice 2, grassland and jungle
+1.** The founding store counts toward that limit rather than being extra.
 
-**Recommended: 1 labor and 1 metal**, the same as an extractor and a garrison. **It is under every
-density in the release**, so no territory can lock itself out, and it makes the first store cheap
-enough that the interesting decision is the second and third rather than the first.
+**What a store holds - recommended: 10.** The only new number.
 
-**What this lane is not recommending, and why it is worth your eye.** A dearer store would make
-storage a real investment rather than a formality - **but every price above the lowest density in
-play creates territories that cannot bootstrap**, and which territories those are depends on the
-scenario rather than on the rules. **That is the kind of coupling that is hard to see and easy to
-ship.**
+**What those two do together, and it is a real consequence rather than a rounding.** A Yard costs
+**15 metal**, so it needs two metal stores. **Mountain, desert and ice can build one; grassland and
+jungle cannot.** `C-9`'s question answered by geography instead of a special rule - **and grassland is
+territory 1's biome**, so check that against the scenario you are about to vet.
+
+**One thing left open deliberately: energy.** Founding produces no energy extractor, so under this it
+produces no energy store either. **A territory starts unable to hold energy at all**, and an Ark
+costs 12. **That is a real early decision for the player and it may also be an oversight** - say
+which.
 
 ## Addressed to other perspectives
 
