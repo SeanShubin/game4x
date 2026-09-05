@@ -98,10 +98,20 @@ three metal extractors at density four hold twelve between them. **`scenario/com
 run unchanged** - it needs stores before its first `build`, which is more commands and a different
 shape of turn.
 
-**Two things to tell me rather than decide.** What a store holds and what it costs are numbers, and
-numbers in the release are Sean's. **And if making the scenario work requires changing what it
-demonstrates** - fewer extractors, a later yard - **that is his to see before it lands**, because it
-is the foundation he is about to vet.
+**The numbers are settled as of `c2e9266`, so nothing here waits on Sean.** A `store` is one kind
+with a `resource` trait; it costs **1 labor, 1 metal**; it holds **10**; a territory takes **as many
+as the extractors of its resource**, the founding one counted; `deploy ark` and `found by land` each
+produce a **food store and a metal store** and no energy store, which is deliberate - `P-261`.
+**Twelve kinds became thirteen and fifteen recipes became sixteen**, `build store` taking
+`$resource`.
+
+**What the scenario needs, and none of it is optional.** Territory 1 is grassland with metal capacity
+3, so **three metal stores, thirty metal, and a Yard at fifteen needs two of them** - one from
+founding and one built. **Energy is harder**: founding gives none, an Ark costs 12, so **two energy
+stores must be built before one can be produced.**
+
+**And if making it work changes what it demonstrates** - a later Yard, a different order - **that is
+Sean's to see before it lands**, because it is the foundation he is about to vet.
 
 
 ### S-43 - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release
