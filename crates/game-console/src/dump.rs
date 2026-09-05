@@ -353,7 +353,7 @@ fn padded(table: &Table) -> String {
 }
 
 /// The same, for a table whose column names were read rather than written down.
-fn padded_rows(columns: &[String], rows: &[Vec<String>]) -> String {
+pub fn padded_rows(columns: &[String], rows: &[Vec<String>]) -> String {
     let mut width: Vec<usize> = columns.iter().map(|c| c.chars().count()).collect();
     for row in rows {
         for (at, cell) in row.iter().enumerate() {

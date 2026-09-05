@@ -213,8 +213,17 @@ pub fn markdown(ran: &[Fired]) -> String {
         ran.iter().filter(|one| one.turn == 0).count()
     ));
 
-    out.push_str("| # | turn | command | fires |\n");
-    out.push_str("| - | ---- | ------- | ----- |\n");
+    // **Padded here rather than by the hook.** `hooks/pre-commit` runs `tools/pad-tables`
+    // over staged markdown, so a table written narrow is widened on the way into the commit
+    // - and then the file on disk stops being what the generator produces. The currency
+    // check fails on a difference nobody wrote, and regenerating unpads it again, so the two
+    // take turns being wrong. Every other dump pads itself for this reason; this one did
+    // not, and its first commit was red before it had finished being made.
+    let columns: Vec<String> = ["#", "turn", "command", "fires"]
+        .iter()
+        .map(|name| name.to_string())
+        .collect();
+    let mut rows: Vec<Vec<String>> = Vec::new();
     for (at, one) in ran.iter().enumerate() {
         let turn = if one.turn == 0 {
             "design".to_string()
@@ -230,12 +239,14 @@ pub fn markdown(ran: &[Fired]) -> String {
                 .collect::<Vec<_>>()
                 .join(", ")
         };
-        out.push_str(&format!(
-            "| {} | {turn} | `{}` | {fires} |\n",
-            at + 1,
-            one.command
-        ));
+        rows.push(vec![
+            (at + 1).to_string(),
+            turn,
+            format!("`{}`", one.command),
+            fires,
+        ]);
     }
+    out.push_str(&crate::dump::padded_rows(&columns, &rows));
     out.push_str(&format!("\n{} row(s)\n", ran.len()));
     out
 }
