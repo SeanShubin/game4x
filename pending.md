@@ -12,7 +12,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-267** - What of the process lives where you do not read it · `docs/notes/proposals.md`
 - **P-268** - The prompts that start the instances · `docs/notes/proposals.md`
 - **P-269** - The rest of what names this project in your document · `docs/notes/proposals.md`
-- **P-270** - Use it immediately, store it, or lose it · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -79,6 +78,7 @@ it exists to ask.
 - `docs/process.md`, a new section - P-204, P-211
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
+- `releases/first-release.md` -> What bounds a kind - P-258, P-270
 - `spec/console.md` - P-69, P-82
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
