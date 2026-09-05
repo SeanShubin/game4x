@@ -170,40 +170,6 @@ nothing in the release can take a jungle. **Under `P-275` two pioneers make 4 ag
 so the jungle is dangerous rather than closed - **it costs two units where a grassland costs one**,
 and that is the price in force this rebalance is paying for.
 
-### P-275 - A military unit is organised force, and taking uses what is brought
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `spec/control.md` -> Gaining and holding ground, at the end
-
-**Your answer, as one bullet.** It goes after *should the force in a territory fall below its force
-of nature*.
-
-> - A military unit is organised force in itself, so several brought to one place sum. Taking a
->   territory uses the organised force brought to it, and several units may take together
-
-**What was missing, measured before writing it.** `spec/control.md` already says *organised force
-**sums***, that citizens present *the highest among them rather than the total*, and that
-coordination is imposed *by a structure, such as a garrison, or by a military unit, which carries
-coordination with it rather than needing a place*. **So two of the three things you said were already
-there** - citizens not summing by default, and summing with a garrison or with a unit, which is what
-*part of an ark or pioneer* means.
-
-**The third was not, and it is the one that mattered.** Nothing said a **vehicle is itself organised
-force**, and nothing said **how the taking force is assembled** - *taking a territory takes force
-greater than the existing force* says how much and not whose. The code lane measured the gap rather
-than arguing it: two pioneers in one territory give `force_in` **5**, summed, and `found by land` on
-the jungle is still refused for *bringing 2*, because the model picks one pioneer and the second
-contributes nothing.
-
-**One placement choice, reported.** *A military unit is organised force in itself* is a fact about
-coordination and I have put it in **Gaining and holding ground**, because it exists to make the
-second sentence work and splitting them across two sections would leave each half looking arbitrary.
-**Say the word and it moves.**
-
-**This unblocks `P-274`.** Two pioneers make 4 against a jungle's 2, so **the jungle is dangerous
-rather than closed** - it costs two units where a grassland costs one, which is the price in force
-that makes rebalancing it worth doing. **`C-24` is answered and is not a defect.**
-
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
@@ -1535,6 +1501,7 @@ work the release exists to order.
 | P-269, the four artifacts said without naming this game's model                                                              | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-05 |
 | P-271, the directory list goes and every rule stays, with `CLAUDE.md` linked                                                 | `docs/process.md` -> Who writes what                                                                                                         | 2026-09-05 |
 | P-273, the coding instance's prompt points at `pending.md` instead of naming three files                                     | `docs/process.md` -> Starting the instances                                                                                                  | 2026-09-05 |
+| P-275, a military unit is organised force in itself, and taking uses the organised force brought                             | `spec/control.md` -> Gaining and holding ground                                                                                              | 2026-09-05 |
 
 ## Rejected
 

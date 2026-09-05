@@ -40,6 +40,8 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 - Holding a territory takes force equal to its force of nature
 - Should the force in a territory fall below its force of nature, nature takes it back. Its
   entire population perishes and any ark on it becomes unusable.
+- A military unit is organised force in itself, so several brought to one place sum. Taking a
+  territory uses the organised force brought to it, and several units may take together
 
 ## Winning
 

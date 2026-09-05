@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-272** - The scenario's territories do not match the release's biome table · `docs/notes/proposals.md`
 - **P-274** - Rebalancing the biomes, and the two that are dominated · `docs/notes/proposals.md`
-- **P-275** - A military unit is organised force, and taking uses what is brought · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -82,6 +81,7 @@ it exists to ask.
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
 - `spec/console.md` - P-69, P-82
+- `spec/control.md` -> Gaining and holding ground - P-62, P-275
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
 - `spec/invariants.md` -> The game is one function - P-75, P-115
