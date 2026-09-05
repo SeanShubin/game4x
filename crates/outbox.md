@@ -53,6 +53,22 @@ which is what `S-44` says it should build.
 **And *Where things are* has no row for a store**, which is the one kind whose entire purpose is
 holding. Three sorts of capacity are listed and the new one is not among them.
 
+**The two readings look symmetric in the release and are not symmetric in cost, which Sean should
+know before choosing.** The quality lens reported it and this lane verified it rather than taking
+it: `Extractor` is `{ node, exhausted }` and carries no capacity of any kind, and the only mention
+of `capacity` in `crates/game-model` that is not a comment is a test string about a territory's
+bound. **So resolving in the prose's favour - an extractor holds nothing - moves nothing in the
+model. Resolving in the table's favour is a new field, production routed into catches, and a bound
+per extractor.**
+
+**One refinement, because the lens's claim holds for the extractor and not for the whole sentence.**
+The model implements neither line as it stands: `Territory::add` pushes resources into the
+territory's own `held`, bounded by `KEEPS`, which is 20. So today a **territory** holds resources
+directly - not an extractor's catch, which is the table, and not a store, which is the prose. The
+half that costs nothing is *an extractor holds nothing*; the half that costs the same as the rest of
+`S-44` is *a store holds what it was built to hold*, and `P-258` has already deleted the bound the
+model is running on.
+
 ### C-27 - How much a store holds is in no document, and `S-44` cannot be built without it
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `S-44`
