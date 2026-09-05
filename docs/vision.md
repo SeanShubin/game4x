@@ -69,6 +69,12 @@ done - only a reason not to foreclose it.**
 I expect many of these traits to start out as a boolean then evolve into a quantity. Nothing
 should depend on a trait having only two values.
 
+### A flat trait may be a nested thing
+
+A territory has nature in it, the nature has a force, and the force is a number - `{nature: {force:
+1}}`. It is written `nature: 1` because most of that is vacuous detail right now. Sean, 2026-09-05,
+declining to build the nesting rather than deciding against it.
+
 ## The planet
 
 The surface of the world is a sphere divided into regions.
