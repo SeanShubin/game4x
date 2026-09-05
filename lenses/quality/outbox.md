@@ -135,6 +135,34 @@ should go; if they are premature, they should not be in the state yet. Right now
 distinguishes *the future* from *dead weight*, and the summary that came with the change - *state is
 things in places with traits* - describes only the half that moved.
 
+### Q-46 - The gates name the tools one by one, and the newest one is on no list
+
+**to** code · **status** open · **raised** 2026-09-05 · **source** the sweep, jobs six and seven
+
+`tools/spec` is **tested, linted and format-checked by nothing.** `hooks/pre-push` names
+`tools/outbox` and `tools/pad-tables`; `.github/workflows/pipeline.yml:125-126` names the same two.
+Neither names the third.
+
+**It is not theoretical.** `cargo clippy` in `tools/spec` reports a live warning right now - *this
+`if` statement can be collapsed* - which no gate would have caught. And the 19 tests that go unrun
+include the claim guards written this evening, among them the denominator check built from this
+lens's own error. **The tool whose tests exist to catch claims nobody verified is the one nothing
+verifies.**
+
+**Why `--workspace` does not already cover it**, which is the part worth understanding before
+fixing: each tool declares its own `[workspace]` so it stays out of `cargo tree` and
+`cargo build --workspace`, which is deliberate and right. The cost is that `cargo fmt --all`,
+`cargo clippy --workspace` and `cargo test --workspace` **cannot reach any of the three**, so the
+gates have to name them - and a name list goes stale the moment a fourth exists.
+
+**This is `Q-37` in the one place its fix could not reach.** That was solved by making coverage the
+default and omission an explicit act; the tools were left enumerated because they had to be. The
+same shape is available here without joining the workspace: iterate `tools/*/Cargo.toml` rather than
+listing, so a new tool is covered the day it appears and an exclusion is what needs justifying.
+
+**Whether.** Worth fixing, and cheap - a loop in two files. The clippy warning is trivial; that
+nothing found it is not.
+
 ---
 
 ## Resolved
