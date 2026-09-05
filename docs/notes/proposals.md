@@ -94,81 +94,6 @@ direction - it takes *out* what names this project. **These four put rules in an
 detail out, so they do not collide**, but they land in the same file and this lane will re-read the
 section whole after the second of them.
 
-### P-268 - The prompts that start the instances
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
-- **shape** text - **asks** approval - **into** `docs/process.md` -> a new section immediately
-before *Releases*
-
-**Three prompts, on your instruction.** Placed after the four sections that say what each instance
-is, so what one is and how to start it sit together.
-
-> ## Starting the instances
->
-> **These prompts are not the process; they are what starts it.** They are here because a process
-> that needs a chat transcript to restart is not repeatable. **Each points at a document rather than
-> restating one**, so none of them goes stale when the document it points at changes.
->
-> The specification instance:
->
-> ```
-> You are the specification lane. Read CLAUDE.md, then spec/README.md,
-> docs/notes/proposals.md and docs/notes/spec-backlog.md.
->
-> CLAUDE.md -> Perspectives says what you write and what you read. Your outbox is
-> docs/notes/proposals.md, and it is the only outbox addressed to me.
->
-> Start by telling me what is open and addressed, read from the files rather than
-> remembered.
-> ```
->
-> The coding instance:
->
-> ```
-> You are the code lane. Read CLAUDE.md, then releases/first-release.md and
-> crates/outbox.md.
->
-> CLAUDE.md -> Perspectives says what you write and what you read. Your work is what is
-> open and addressed to you - in crates/outbox.md, in releases/, and in the lenses'
-> outboxes.
->
-> When the specification does not say something, do everything that does not depend on
-> the answer, file a question to spec stating the assumption you proceeded under, and
-> carry on.
->
-> Start by telling me what is open and addressed to you, read from the files rather than
-> remembered.
-> ```
->
-> The quality instance:
->
-> ```
-> You are the quality lens. Read CLAUDE.md, then lenses/quality/README.md and
-> lenses/quality/outbox.md.
->
-> CLAUDE.md -> Perspectives says what you write and what you read, and -> Starting a new
-> lens says what every finding has to say and how few of them should matter. You never
-> edit what you review, and you never run cargo fmt, cargo fix or clippy --fix, because
-> they modify the files you are judging.
->
-> Your outbox is lenses/quality/outbox.md. Each finding carries an id, a to, a status and
-> one line, and points at a dated report that carries the argument.
->
-> Start by telling me what is open and addressed, read from the files rather than
-> remembered.
-> ```
->
-> **A new lens is started from `CLAUDE.md` -> Starting a new lens**, which is where the question a
-> lens has to answer before it is worth starting lives. The three above are the ones that exist.
-
-**One thing each prompt does not do: repeat a rule.** The quality one points at *Starting a new lens*
-for what a finding must say rather than restating it, which is why it is eight lines instead of
-twenty-five and why it cannot drift from the rule it depends on.
-
-**All three end the same way** - *tell me what is open and addressed, read from the files rather than
-remembered*. That is `P-263`'s rule aimed at the start of a session instead of the end of one, and it
-is the line that stops an instance beginning from what it thinks it remembers.
-
 ### P-269 - The rest of what names this project in your document
 
 **to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
@@ -1525,6 +1450,7 @@ work the release exists to order.
 | P-264, the main scenario moves to the specification, and the process document keeps the rule                                 | `docs/process.md` -> How I know the game is right, `spec/scenarios.md`, `spec/README.md`                                                     | 2026-09-05 |
 | P-270, an unstored resource can be used the turn it is made and is lost when that turn ends                                  | `releases/first-release.md` -> What bounds a kind                                                                                            | 2026-09-05 |
 | P-265, a store holds 10 and the extractor's catch row goes, which P-260 asked for and did not carry                          | `releases/first-release.md` -> Where things are                                                                                              | 2026-09-05 |
+| P-268, the prompts that start the specification, code and quality instances                                                  | `docs/process.md` -> Starting the instances                                                                                                  | 2026-09-05 |
 
 ## Rejected
 

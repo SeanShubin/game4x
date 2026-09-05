@@ -184,6 +184,64 @@ Every one of these is something the quality instance **finds and reports**. It b
 production support is the coding instance's, so quality says what is missing and the coding instance
 wires it.
 
+## Starting the instances
+
+**These prompts are not the process; they are what starts it.** They are here because a process
+that needs a chat transcript to restart is not repeatable. **Each points at a document rather than
+restating one**, so none of them goes stale when the document it points at changes.
+
+The specification instance:
+
+```
+You are the specification lane. Read CLAUDE.md, then spec/README.md,
+docs/notes/proposals.md and docs/notes/spec-backlog.md.
+
+CLAUDE.md -> Perspectives says what you write and what you read. Your outbox is
+docs/notes/proposals.md, and it is the only outbox addressed to me.
+
+Start by telling me what is open and addressed, read from the files rather than
+remembered.
+```
+
+The coding instance:
+
+```
+You are the code lane. Read CLAUDE.md, then releases/first-release.md and
+crates/outbox.md.
+
+CLAUDE.md -> Perspectives says what you write and what you read. Your work is what is
+open and addressed to you - in crates/outbox.md, in releases/, and in the lenses'
+outboxes.
+
+When the specification does not say something, do everything that does not depend on
+the answer, file a question to spec stating the assumption you proceeded under, and
+carry on.
+
+Start by telling me what is open and addressed to you, read from the files rather than
+remembered.
+```
+
+The quality instance:
+
+```
+You are the quality lens. Read CLAUDE.md, then lenses/quality/README.md and
+lenses/quality/outbox.md.
+
+CLAUDE.md -> Perspectives says what you write and what you read, and -> Starting a new
+lens says what every finding has to say and how few of them should matter. You never
+edit what you review, and you never run cargo fmt, cargo fix or clippy --fix, because
+they modify the files you are judging.
+
+Your outbox is lenses/quality/outbox.md. Each finding carries an id, a to, a status and
+one line, and points at a dated report that carries the argument.
+
+Start by telling me what is open and addressed, read from the files rather than
+remembered.
+```
+
+**A new lens is started from `CLAUDE.md` -> Starting a new lens**, which is where the question a
+lens has to answer before it is worth starting lives. The three above are the ones that exist.
+
 ## Releases
 - The specification says what the game is when it is finished. A release says what is being built now
 - A release never invents a rule. If it needs one the specification lacks, that becomes a proposal
