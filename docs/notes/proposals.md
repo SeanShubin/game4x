@@ -63,40 +63,41 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-264 - The scenario changes what it demonstrates, and the shape is yours
+### P-264 - The minimal scenario, and the one thing your principle leaves open
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** consequence - **asks** a decision -
-**into** nothing; it decides what the code lane builds
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** consequence
+- **asks** a decision - **into** nothing; it decides what the code lane builds
 **derived from** a store holds 10 and a Yard costs 15 metal - `P-265`, once it lands
 
-**Storage cannot be threaded into the scenario without changing what it shows, and it is the file
-you are about to vet.** The code lane worked the arithmetic and brought the shape back rather than
-choosing it.
+**Your principle answers both questions, and the release turns out to agree with it already.**
 
-**What forces it.** Territory 1 is grassland, capacity 3. Founding gives a food store and a metal
-store and no energy store. **A Yard costs 15 metal and a store holds 10**, so the Yard needs a second
-metal store before the metal can be held at all. **An Ark costs 12 energy from zero stores**, so two
-`build store energy` must come before a single unit of energy survives a turn. **And every extractor
-now needs somewhere to produce into** or its output is disorder and lost - seven of them across two
-territories.
+**Question 1, restructure or lengthen: restructure, to the minimum that touches every mechanic.**
 
-**So the middle turns stop being *work everything, build everything* and become *build somewhere to
-put it first*.** That is arguably the better demonstration of the game, and it is not a change this
-lane or the code lane should make on your behalf.
+**Question 2, the Ark: it is produced and deployed, and nothing is won.** **There is no `launch`
+recipe.** The sixteen are `age`, `build extractor`, `build store`, `build yard`, `create labor`,
+`deploy ark`, `found by land`, `grow`, `move`, `perish`, `produce ark`, `produce pioneer`, `refresh`,
+`spoil`, `upkeep` and `work`. Winning is `spec/control.md`'s *launching an Ark from a fully exploited
+planet*, and **exploitation is the half the main scenario drops.** `R-6` already says as much - *a
+scenario reaches a fully exploited planet and launches an Ark, on the definitions and the machinery
+of the main scenario* - **so the split you just described is the one already written.**
 
-**Question 1 - does the scenario keep its shape and get longer, or get restructured?** Threading
-stores in and adding turns is the small edit. Reordering around storage as the constraint reads
-better and moves many more lines of the file you vet.
+**Minimal is not short, and that is the part worth knowing.** `produce ark` is a mechanic, so a Yard
+is built; a Yard costs 15 metal; a store holds 10; **so two metal stores exist before the Yard
+does.** The floor is set by the most expensive mechanic, not by how much of the planet is developed.
 
-**Question 2 - does the Ark still launch in this scenario?** Two energy stores, twelve energy and a
-fifteen-metal Yard is a lot of turns. **`P-249` says this is the main scenario you vet**, and it also
-gives end-state scenarios their own place - so if the win condition lives in one of those, this one
-could stop earlier.
+**What remains open, and it is one thing.** **`perish` and `spoil` are mechanics that a well-played
+scenario never triggers.** To touch them, a territory has to run out of food and food has to sit a
+turn too long - **the scenario has to play badly on purpose**, somewhere, in the file you vet.
 
-**This lane recommends restructuring and keeping the Ark.** `P-249` made this scenario the thing
-everything else rests on, and a scenario that never reaches the win condition leaves the longest
-chain in the game unvetted. The code lane is building the model and recipes now either way, and holds
-only the scenario rewrite.
+**Three ways to go, and this lane recommends the first**: let it make the two mistakes deliberately,
+with a line saying so; or accept that two of sixteen are untouched here and say where they are
+touched instead; or drop them from *every mechanic* by deciding they are consequences rather than
+mechanics.
+
+**And I cannot tell you whether they fire today.** `reports/commands.md` lists `perish` and `spoil`
+against every `end turn` - **but that column is what the command can fire, not what fired**, which is
+the confusion `C-28` is about. The code lane's `tests/fired.rs` asks the model instead, and that is
+what would answer it.
 
 ### P-265 - `P-260` dropped its own answer, and left a contradiction where it landed
 
@@ -139,6 +140,36 @@ rather than this proposal's.
 decides whether territory 1 needs one metal store or two, and therefore what the scenario shows.
 **The gate is red until this lands** - the model cannot have a store whose capacity no document
 states.
+
+### P-266 - A proposal that asks a decision cannot be promoted
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
+**asks** approval - **into** `CLAUDE.md` -> Promotion
+
+**Your diagnosis is right, and the record is worse than you put it: you never said promote `P-260`.**
+You answered its four questions; the promotion is `c2e9266`; **your next message named `P-261` and
+`P-262` and not it.**
+
+> **A proposal that asks a decision cannot be promoted.** An answer to it is not a promotion and
+> never implies one - it turns the proposal into one that **asks approval**, which is a rewrite for
+> you to read. **So `asks` is checkable rather than descriptive**: promoting an item still marked *a
+> decision* is a defect a tool can name.
+
+**Why that is the cause rather than a coincidence.** `P-260` asked A, B, C and D and, asking a
+decision, **carried no quotation** - `P-229` forbids one. So there was **never a version of the text
+containing 10.** The promotion had nothing to copy, and its assertion checked what happened to be
+countable - thirteen kinds, sixteen recipes - and passed. **The number was not dropped from the text.
+There was no text.**
+
+**This is `CLAUDE.md`'s own rule with the loophole shut.** It already says *accepting a proposal is
+not permission to write it, and it is never inferred from the word "accepted"* - and **the failure
+never used the word.** Four answers in one message read as an instruction, and the rule as written
+did not reach them.
+
+**Your third clause is the one that makes it mechanical**, and it is what the quotation says. The
+other two are already the protocol: the table says you say what should change, this lane changes it
+and shows the result, and only then do you say *promote*. **What was missing is that nothing stopped
+a proposal from skipping the middle row.**
 
 ## Addressed to other perspectives
 
