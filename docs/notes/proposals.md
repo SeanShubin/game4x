@@ -62,6 +62,52 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-246 - Where the reports live, and what is missing from the turn-by-turn
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
+**into** `spec/interface.md` -> Surfaces, and a layout the code lane then builds
+
+**What exists.** Input is `commands/`, seven files. Expected is `expected/play.4x`. Five generated
+views sit loose in the repository root beside `README.md` and `CLAUDE.md` - `catalog.md`,
+`recipes.md`, `state.md`, `entities.md`, `turns.md` - with HTML for two of the five and **no index**.
+
+**The turn-by-turn already exists and is better than you may remember.** `turns.md` is **1804 lines**,
+one section per `end turn`, the whole state after each of eight turns.
+
+**What it is missing is the half that makes it a transformation.** **Measured: it contains no
+commands at all.** It shows eight states and never says what took you from one to the next, so it
+cannot be used to check the function - only the endpoints.
+
+**Recommended layout**
+
+- **`scenario/`** holds `commands/` and `expected/` as siblings, so the input and what it should
+  produce are one directory apart rather than two roots apart
+- **`reports/`** holds every generated view **and `index.html`**, so browsing starts in one place
+  and the repository root goes back to being documents
+- **`pending.md` stays where it is** - it is the lanes' index rather than a report of yours, and
+  moving it means changing `hooks/pre-commit`
+
+**Recommended: keep both markdown and HTML, and here is the reason rather than *why not*.** They do
+different jobs, and `P-225` is what decides it. **When you change your mind you delete the expected
+data and review the diff in version control** - and HTML diffs badly while markdown diffs
+readably. So **markdown is the surface you review a change on, HTML is the surface you browse**, both
+generated from one model, neither canonical.
+
+**The change that matters most: each turn shows what changed and what caused it.**
+
+- **the commands that ran that turn**, in order, above the state
+- **what changed since the previous turn**, rather than the whole state again
+
+**Eight full states is 1804 lines and eight deltas would be a fraction of that.** Checking a
+transformation function means checking that *these commands* produced *this change* - and a full
+dump makes you find the difference yourself, eight times. **The full state is still worth having per
+turn**; the recommendation is that the delta comes first and the full state sits under it.
+
+**One thing to decide rather than assume.** Moving the generated files changes every link that names
+them - `README.md` has five, and `docs/` has more. **That is mechanical and this lane will do it**,
+but it is your repository root that changes shape, so it is worth saying out loud rather than
+discovering.
+
 ## Addressed to other perspectives
 
 ### S-20 - The `node` table calls a total a density, and erases what the twelve territories exist to exercise

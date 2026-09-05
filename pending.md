@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-246** - Where the reports live, and what is missing from the turn-by-turn · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
