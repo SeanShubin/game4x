@@ -115,6 +115,39 @@ documents say about it.
 reading the wrong sentence. **It filed because these are the documents an instance reads before it
 can tell which sentence is current** - which is the case where being stale costs the most.
 
+### P-244 - The Quality section reads as though quality builds the pipeline
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Quality instance, appended
+
+**You caught this and this lane had not.** `P-240` settled that production support is the coding
+instance's, and the *Quality instance* section - your own words, merged on 2026-09-04 - reads like
+ownership:
+
+- *Makes sure we have automation in our process instead of repetition, which means a proper
+  automated pipeline and proper support tooling*
+- *Makes sure that where possible rules are enforced via reliable code rather than relying on human
+  or AI habits*
+
+**`CLAUDE.md` settles it and `docs/process.md` does not say so.** Production support *is the code
+lane's too. A lane that needs a check wired files it rather than wiring it.* And a lens never writes
+into a producer's directory. **So the rule exists; the section a lens reads about itself does not
+carry it.**
+
+> Every one of these is something the quality instance **finds and reports**. It builds none of
+> them: production support is the coding instance's, so quality says what is missing and the coding
+> instance wires it.
+
+**Basis: the ambiguity is doing real work already.** The quality lens's `Q-42` this evening was three
+findings about documentation and none about structure or the pipeline - and `S-37` found its README
+still says this section gives it *three jobs* when it gives seven. **A lens reading *makes sure we
+have a proper automated pipeline* has no sentence nearby telling it that means filing rather than
+building.**
+
+**It also keeps the lens honest in the way `CLAUDE.md` already wants.** *A lens is refutable, and a
+producer is the thing that refutes it* - which only works while the lens ships nothing. **The
+sentence protects quality's independence rather than restricting it.**
+
 ## Addressed to other perspectives
 
 ### S-37 - Your README says `docs/process.md` gives you three jobs, and it gives you seven

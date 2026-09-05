@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-243** - Three sentences describing arrangements that were replaced · `docs/notes/proposals.md`
+- **P-244** - The Quality section reads as though quality builds the pipeline · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
