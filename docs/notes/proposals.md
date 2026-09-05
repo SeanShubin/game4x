@@ -45,58 +45,45 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-234 - One `extractor` kind needs the first parameter that is not a place
+### P-234 - One `extractor` kind, and a `$` that may name a trait value
 
 **to** sean - **status** open - **raised** 2026-09-04 - **revised** 2026-09-04 - **kind** Sean's own
-- **asks** a decision - **into** `releases/first-release.md` -> Kinds, Families, Traits, What bounds
-a kind, Units and structures, Recipes
+- **shape** instruction - **asks** approval - **into** `spec/console.md` -> Commands **first**, then
+`releases/first-release.md` -> Kinds, Families, Traits, What bounds a kind, Units and structures,
+Recipes
 
-**This lane told you the change touched four tables and that a word from you would finish it. Both
-were wrong.** It touches six places, and the last of them is not a table edit at all. **Corrected
-before promoting rather than discovered afterwards.**
+**You chose A. One thing has to land before the rest, and it is three words.** `CLAUDE.md`: *a
+release never invents a rule; if it needs one the specification lacks, that becomes a proposal first
+and the release then refers to it.* **The release cannot use `$resource` until `spec/console.md`
+allows it.**
 
-**Five parts are mechanical and this lane will do them without asking:**
+**In `spec/console.md`, one sentence, three words added:**
 
-- **Kinds**: three rows become one, `extractor`. 14 kinds becomes 12
-- **Families**: the row `| **extractor** | food extractor, metal extractor, energy extractor |` goes.
-  **Its only job was letting `work` say *any extractor*, and `work` says `extractor` already** - so
-  those two rows do not change, they just resolve to a kind instead of a family. **5 families becomes
-  4**
-- **Traits**: a new row, `resource`, of an extractor, one of the resources, stored
-- **What bounds a kind** and **Units and structures**: three identical rows become one in each
-- **`deploy ark`** and **`found by land`** each produce a food extractor and a metal extractor;
-  those rows become `extractor` with the resource in the *Traits* column, where constraints already
-  live
+- now: *the place it acts in, and any **ingredient** it names with a `$`*
+- becomes: *the place it acts in, and any **ingredient or trait value** it names with a `$`*
 
-**The prose does not change, and this lane had that wrong too.** *Every territory has total capacity
-for at least one food extractor* is good English for an extractor whose resource is food, exactly as
-*a tiny planet* is not a kind. **The earlier assertion said those words would appear nowhere; five
-lines of prose keep them and should.**
+**Then the release, in six places, all mechanical:**
 
-**The sixth part is the decision.** Three `build` recipes become one, and it needs to say which
-resource it builds for:
+- **Kinds**: three rows become one, `extractor`. **14 kinds becomes 12**
+- **Families**: the `extractor` row goes. **5 becomes 4.** `work`'s two rows are untouched - they
+  say `extractor` already and now resolve to a kind
+- **Traits**: one new row - `resource`, of an extractor, one of the resources, stored
+- **What bounds a kind**: three identical rows become one
+- **Units and structures**: three identical rows become one. **8 rows becomes 6**
+- **Recipes**: `deploy ark` and `found by land` produce `extractor` with the resource in *Traits*;
+  the three `build` recipes become one `build extractor` producing `1 extractor` with `$resource`.
+  **17 recipes becomes 15**
 
-- today: `build food extractor` produces `1 food extractor`, and so on, three times
-- collapsed: `build extractor` produces `1 extractor` with the resource **named by a parameter**
+**The prose is untouched** - five lines say *food extractor* and keep saying it, which is good
+English for an extractor whose resource is food.
 
-**Every parameter in the recipe table today is a place** - `$where`, `$from`, `$to`, 9 uses. A
-`$resource` would be the first that is not. **`P-214` is close and does not quite cover it**: it says
-a command binds *the place it acts in, and any ingredient it names with a `$`*, and the resource is
-neither - it is a trait value.
+**Assertion**: `spec/console.md` says *ingredient or trait value*; the release names 12 kinds, 4
+families, 15 recipes; `food extractor`, `metal extractor` and `energy extractor` appear only in
+prose and in no table; `commands/play.4x` is byte-identical; and **no number in the release changes**
+- every cost, capacity and density is what it was.
 
-**So this is the first case of the thing you said we would need**: *generic or templated recipes, our
-data language is definitely going to need some form of abstractions*. **`commands/play.4x` already
-writes `build extractor 1 food`**, so the command language has assumed this all along and only the
-definitions have not.
-
-**Choice A - allow `$` to name a trait value, and take the collapse now.** One sentence extends
-`P-214`, and 14 kinds becomes 12, 17 recipes becomes 15, no number moves. **This lane recommends
-it**: the alternative is keeping three recipes that differ in one word in order to avoid writing that
-sentence.
-
-**Choice B - leave the extractors alone until the abstraction question is settled properly.** The
-release keeps three kinds and three recipes, and the collapse arrives with whatever else that
-conversation produces. **Costs nothing now and keeps a known duplication.**
+**Measured 2026-09-04**: 9 uses of `$where`, `$from` and `$to` in the release, and `$resource` will
+be the first parameter that is not a place.
 
 ### P-241 - The match-string rule is about tables and the bug is about wrapping
 
