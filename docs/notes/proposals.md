@@ -63,6 +63,59 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-254 - A thing's own identifier is `id`
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `spec/console.md` -> The language
+
+**You saw it on `territory` and it is three kinds, measured**: `{territory territory:1 ...}`,
+`{unit unit:1 ...}` and `{kind kind:... }` - twelve, one and eleven rows of the expected data.
+
+> **A thing's own identifier is `id`.** A field named for a kind is a reference to one - so
+> `{extractor territory:1}` is an extractor in territory 1, and `{territory id:1}` is the territory
+> itself.
+
+**Basis: the doubling is not only ugly, it is the one case where the existing convention is
+ambiguous.** Everywhere else `territory:1` means *in territory 1* and reads correctly.
+**`{territory territory:1}` uses the same field to mean *is* territory 1**, so one notation carries
+two relations and only position tells them apart.
+
+### P-255 - `founded` is in the data and is not a trait the release declares
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
+- **into** `releases/first-release.md` -> Traits, or nothing, depending
+
+**You asked whether we still need it. Measured, it is worse than not needed: `founded` appears **0
+times** in `releases/first-release.md`.** It is not a declared trait, and the dump renders it on
+every territory anyway.
+
+**What the release does declare is `control`** - *of a territory, held by a player or unclaimed,
+**derived: a citizen of that player is there***. Which is exactly what you just said it should be.
+**And `control` appears 0 times in the dump.** So the data shows an undeclared field and hides the
+declared one.
+
+**`S-19` closed on the model half and I did not check the data half.** `founded` is gone from
+`Territory` and control *is* derived in the model - that part is done. **What nobody checked is what
+the dump prints**, and it still prints the old name.
+
+**Choice A - the dump prints `control`, and `founded` disappears.** The release already declares it,
+so nothing changes in `spec/` or the release. **One line of the dump and the expected data
+regenerates.**
+
+**Choice B - drop it from the data entirely.** `control` is derivable from the citizens already in
+the row, so printing it is printing something the reader could compute. **Cheaper, and it makes the
+expected data smaller.**
+
+**This lane recommends A, and the reason is that you are about to check a derivation by hand.**
+`docs/process.md`: the report is worth having when it lets you check that these commands produced
+this change. **A derived value shown beside what it derives from is checkable in place**; one left
+out has to be recomputed by the reader every time. **The citizens are right there in the same row**,
+so `control` costs one field and saves you the arithmetic.
+
+**One thing neither choice fixes.** Nothing asserts that the dump only prints traits the release
+declares. **`founded` survived every check for weeks** because no check asks that question - and it
+is the same shape as the `move` gap, where a name that looked right was never held to anything.
+
 ## Addressed to other perspectives
 
 ### S-42 - The dashes rule and `nature` land in the data, and jungle's force changes with them
