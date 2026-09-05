@@ -5,7 +5,45 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 # Turn 1
 
-## game
+## commands
+
+```
+land ark 1
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+end turn
+```
+
+## what changed
+
+**gone** (1)
+
+- {unit unit:1 kind:ark place:orbit fuel:2 readiness:ready}
+
+**new** (2)
+
+- {extractor territory:1 node:3 resource:metal readiness:ready}
+- {garrison territory:1 force:1}
+
+**changed** (11)
+
+- game phase:play · turn: 1 → 2
+- game phase:play · units: 1 → 0
+- kind kind:ark · in play: 1 → 0
+- kind kind:citizen · in play: 0 → 4
+- kind kind:extractor · in play: 0 → 2
+- kind kind:garrison · in play: 0 → 1
+- kind kind:metal · in play: 0 → 4
+- labor territory:1 · made: 0 → 4
+- labor territory:1 · left: 0 → 4
+- territory territory:1 · founded: no → yes
+- territory territory:1 · citizens: 0 → 4
+
+## what is there now
+
+### game
 
 | phase | turn | territories | units |
 | ----- | ---- | ----------- | ----- |
@@ -224,7 +262,33 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 # Turn 2
 
-## game
+## commands
+
+```
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+build extractor 1 food
+create labor 1 1
+build extractor 1 food
+end turn
+```
+
+## what changed
+
+**changed** (5)
+
+- extractor territory:1 · node: 3 → 2
+- extractor territory:1 · resource: metal → food
+- game phase:play · turn: 2 → 3
+- kind kind:extractor · in play: 2 → 4
+- kind kind:metal · in play: 4 → 6
+
+## what is there now
+
+### game
 
 | phase | turn | territories | units |
 | ----- | ---- | ----------- | ----- |
@@ -445,7 +509,30 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 # Turn 3
 
-## game
+## commands
+
+```
+create labor 3 1
+work 3 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+end turn
+```
+
+## what changed
+
+**changed** (6)
+
+- game phase:play · turn: 3 → 4
+- kind kind:citizen · in play: 4 → 8
+- kind kind:metal · in play: 6 → 10
+- labor territory:1 · made: 4 → 8
+- labor territory:1 · left: 4 → 8
+- territory territory:1 · citizens: 4 → 8
+
+## what is there now
+
+### game
 
 | phase | turn | territories | units |
 | ----- | ---- | ----------- | ----- |
@@ -666,7 +753,41 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 # Turn 4
 
-## game
+## commands
+
+```
+create labor 3 1
+work 3 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+build extractor 1 metal
+create labor 1 1
+build extractor 1 metal
+create labor 1 1
+build extractor 1 energy
+create labor 1 1
+build extractor 1 energy
+end turn
+```
+
+## what changed
+
+**changed** (9)
+
+- extractor territory:1 · node: 2 → 7
+- extractor territory:1 · resource: food → energy
+- game phase:play · turn: 4 → 5
+- kind kind:citizen · in play: 8 → 12
+- kind kind:extractor · in play: 4 → 8
+- labor territory:1 · made: 8 → 12
+- labor territory:1 · left: 8 → 12
+- territory resource territory:1 · built: 0 → 2
+- territory territory:1 · citizens: 8 → 12
+
+## what is there now
+
+### game
 
 | phase | turn | territories | units |
 | ----- | ---- | ----------- | ----- |
@@ -891,7 +1012,35 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 # Turn 5
 
-## game
+## commands
+
+```
+create labor 3 1
+work 3 extractor 1 food
+create labor 3 1
+work 3 extractor 1 metal
+create labor 2 1
+work 2 extractor 1 energy
+create labor 1 1
+build extractor 1 energy
+end turn
+```
+
+## what changed
+
+**changed** (7)
+
+- extractor territory:1 · node: 7 → 8
+- game phase:play · turn: 5 → 6
+- kind kind:energy · in play: 0 → 8
+- kind kind:extractor · in play: 8 → 9
+- kind kind:metal · in play: 10 → 20
+- store territory:1 · amount: 0 → 8
+- territory resource territory:1 · built: 2 → 3
+
+## what is there now
+
+### game
 
 | phase | turn | territories | units |
 | ----- | ---- | ----------- | ----- |
@@ -1117,7 +1266,40 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 # Turn 6
 
-## game
+## commands
+
+```
+create labor 3 1
+work 3 extractor 1 food
+create labor 3 1
+work 3 extractor 1 metal
+create labor 3 1
+work 3 extractor 1 energy
+produce pioneer 1
+end turn
+```
+
+## what changed
+
+**new** (1)
+
+- {unit unit:1 kind:pioneer place:"territory 1" fuel:2 readiness:ready}
+
+**changed** (9)
+
+- game phase:play · turn: 6 → 7
+- game phase:play · units: 0 → 1
+- kind kind:citizen · in play: 12 → 11
+- kind kind:energy · in play: 8 → 14
+- kind kind:pioneer · in play: 0 → 1
+- labor territory:1 · made: 12 → 11
+- labor territory:1 · left: 12 → 11
+- store territory:1 · amount: 8 → 14
+- territory territory:1 · citizens: 12 → 11
+
+## what is there now
+
+### game
 
 | phase | turn | territories | units |
 | ----- | ---- | ----------- | ----- |
@@ -1344,7 +1526,53 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 # Turn 7
 
-## game
+## commands
+
+```
+create labor 3 1
+work 3 extractor 1 food
+create labor 3 1
+work 3 extractor 1 metal
+create labor 3 1
+work 3 extractor 1 energy
+move pioneer 2
+create labor 1 2
+work 1 extractor 2 food
+end turn
+```
+
+## what changed
+
+**gone** (1)
+
+- {unit unit:1 kind:pioneer place:"territory 1" fuel:2 readiness:ready}
+
+**new** (2)
+
+- {extractor territory:2 node:2 resource:metal readiness:ready}
+- {garrison territory:2 force:1}
+
+**changed** (15)
+
+- game phase:play · turn: 7 → 8
+- game phase:play · units: 1 → 0
+- kind kind:citizen · in play: 11 → 16
+- kind kind:energy · in play: 14 → 20
+- kind kind:extractor · in play: 9 → 11
+- kind kind:garrison · in play: 1 → 2
+- kind kind:pioneer · in play: 1 → 0
+- labor territory:1 · made: 11 → 12
+- labor territory:1 · left: 11 → 12
+- labor territory:2 · made: 0 → 4
+- labor territory:2 · left: 0 → 4
+- store territory:1 · amount: 14 → 20
+- territory territory:1 · citizens: 11 → 12
+- territory territory:2 · founded: no → yes
+- territory territory:2 · citizens: 0 → 4
+
+## what is there now
+
+### game
 
 | phase | turn | territories | units |
 | ----- | ---- | ----------- | ----- |
@@ -1573,7 +1801,47 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 # Turn 8
 
-## game
+## commands
+
+```
+create labor 3 1
+work 3 extractor 1 food
+create labor 3 1
+work 3 extractor 1 metal
+create labor 3 1
+work 3 extractor 1 energy
+create labor 1 2
+work 1 extractor 2 food
+create labor 1 1
+build yard 1
+produce ark 1
+launch ark
+end turn
+```
+
+## what changed
+
+**new** (1)
+
+- {unit unit:1 kind:ark place:orbit fuel:2 readiness:ready}
+
+**changed** (11)
+
+- game phase:play · turn: 8 → 9
+- game phase:play · units: 0 → 1
+- kind kind:ark · in play: 0 → 1
+- kind kind:citizen · in play: 16 → 18
+- kind kind:metal · in play: 20 → 14
+- kind kind:yard · in play: 0 → 1
+- labor territory:2 · made: 4 → 6
+- labor territory:2 · left: 4 → 6
+- structure territory:1 · count: 0 → 1
+- territory territory:1 · yards: 0 → 1
+- territory territory:2 · citizens: 4 → 6
+
+## what is there now
+
+### game
 
 | phase | turn | territories | units |
 | ----- | ---- | ----------- | ----- |

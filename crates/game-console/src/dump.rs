@@ -573,6 +573,13 @@ pub fn entity_sections(game: &Game) -> Vec<Section> {
         .collect()
 }
 
+/// One turn: what ran, what it changed, and what was there afterwards.
+pub struct Turn {
+    pub commands: Vec<String>,
+    pub changed: crate::expected::Disagreement,
+    pub state: String,
+}
+
 /// The five generated dump files, as names and contents.
 ///
 /// **One producer for the writer and the check.** `bin/dump-state` writes these and
@@ -603,17 +610,30 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
         .filter(|line| line.trim() == "end turn")
         .count();
 
-    let mut turns: Vec<String> = Vec::new();
+    // **A turn is what ran, what changed, and what is there** - `S-38`. This used to be the
+    // last of those alone: eight full states, eighteen hundred lines, and no command in any
+    // of them. It showed the endpoints of a transformation and never the transformation, so
+    // a reader validating the state function had to find the differences himself.
+    let mut turns: Vec<Turn> = Vec::new();
+    let mut ran: Vec<String> = Vec::new();
+    let mut before = crate::expected::rows(&session.game);
     for line in scenario.lines() {
         let line = line.trim();
         if line.is_empty() || line.starts_with('#') {
             continue;
         }
+        ran.push(line.to_string());
         session
             .run(line, commands)
             .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
         if line == "end turn" {
-            turns.push(markdown(&session.game, ""));
+            let after = crate::expected::rows(&session.game);
+            turns.push(Turn {
+                commands: std::mem::take(&mut ran),
+                changed: crate::expected::compare(&before, &after),
+                state: markdown(&session.game, ""),
+            });
+            before = after;
         }
     }
 
@@ -635,11 +655,51 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
          its comments.\n\n",
         turns.len()
     ));
-    for (at, text) in turns.iter().enumerate() {
-        per_turn.push_str(&format!("# Turn {}\n\n", at + 1));
-        match text.split_once("\n\n## ") {
-            Some((_, rest)) => per_turn.push_str(&format!("## {rest}")),
-            None => per_turn.push_str(text),
+    for (at, turn) in turns.iter().enumerate() {
+        per_turn.push_str(&format!(
+            "# Turn {}
+
+",
+            at + 1
+        ));
+
+        per_turn.push_str(
+            "## commands
+
+```
+",
+        );
+        for line in &turn.commands {
+            per_turn.push_str(&format!(
+                "{line}
+"
+            ));
+        }
+        per_turn.push_str(
+            "```
+
+",
+        );
+
+        per_turn.push_str(
+            "## what changed
+
+",
+        );
+        per_turn.push_str(&turn.changed.as_a_turn());
+
+        per_turn.push_str(
+            "## what is there now
+
+",
+        );
+        match turn.state.split_once(
+            "
+
+## ",
+        ) {
+            Some((_, rest)) => per_turn.push_str(&format!("### {rest}")),
+            None => per_turn.push_str(&turn.state),
         }
     }
 

@@ -208,15 +208,19 @@ pub fn compare(expected: &[Row], actual: &[Row]) -> Disagreement {
             Some(theirs) => {
                 for ((name, value), (_, other)) in row.fields.iter().zip(&theirs.fields) {
                     if value != other {
-                        wrong.different.push(format!(
-                            "{identity} · {name}: expected {value:?}, got {other:?}"
-                        ));
+                        // **Neutral, because two readers want opposite words.** Against a
+                        // reviewed expectation this is *expected X, got Y*; between two
+                        // turns it is *was X, now Y*, and neither is a failure. One arrow
+                        // is true for both, and the reader supplies the sentence.
+                        wrong
+                            .different
+                            .push(format!("{identity} · {name}: {value} → {other}"));
                     }
                 }
                 // Same identity, different shape: the columns moved rather than a value.
                 if row.fields.len() != theirs.fields.len() {
                     wrong.different.push(format!(
-                        "{identity} · expected {} fields, got {}",
+                        "{identity} · {} fields → {}",
                         row.fields.len(),
                         theirs.fields.len()
                     ));
@@ -288,4 +292,35 @@ fn split(text: &str) -> impl Iterator<Item = String> + use<> {
         words.push(current);
     }
     words.into_iter()
+}
+
+impl Disagreement {
+    /// The same three lists, read as a turn's changes rather than as a failure.
+    ///
+    /// **`S-38`.** `compare` was built to answer *did the scenario match what was expected*,
+    /// where every entry is something wrong. Between two turns the same three lists mean
+    /// something else entirely: `missing` is what stopped being there, `extra` is what
+    /// appeared, `different` is what moved. One computation, two readings - so the wording
+    /// belongs at the point of reading and not in the comparison.
+    pub fn as_a_turn(&self) -> String {
+        if self.total() == 0 {
+            return "*Nothing changed.*\n\n".to_string();
+        }
+        let mut out = String::new();
+        for (what, lines) in [
+            ("gone", &self.missing),
+            ("new", &self.extra),
+            ("changed", &self.different),
+        ] {
+            if lines.is_empty() {
+                continue;
+            }
+            out.push_str(&format!("**{what}** ({})\n\n", lines.len()));
+            for line in lines {
+                out.push_str(&format!("- {line}\n"));
+            }
+            out.push('\n');
+        }
+        out
+    }
 }
