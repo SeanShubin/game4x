@@ -70,8 +70,9 @@ fn commands_per_turn(report: &str) -> Vec<Vec<String>> {
 #[test]
 fn replaying_what_the_report_lists_reaches_what_the_report_shows() {
     let root = root();
-    let files = Files(root.join("commands"));
-    let report = std::fs::read_to_string(root.join("turns.md")).expect("turns.md is generated");
+    let files = Files(root.join("scenario/commands"));
+    let report =
+        std::fs::read_to_string(root.join("reports/turns.md")).expect("turns.md is generated");
     let listed = commands_per_turn(&report);
 
     assert!(
@@ -91,7 +92,7 @@ fn replaying_what_the_report_lists_reaches_what_the_report_shows() {
         played.run(line, &files).expect("the setup runs");
     }
 
-    let scenario = files.fetch("play").expect("commands/play.4x");
+    let scenario = files.fetch("play").expect("scenario/commands/play.4x");
     let mut whole: Vec<String> = scenario
         .lines()
         .map(str::trim)
@@ -166,7 +167,8 @@ fn replaying_what_the_report_lists_reaches_what_the_report_shows() {
 /// the reason is the translator, not circularity.
 #[test]
 fn the_delta_accounts_for_every_row_the_states_gained_or_lost() {
-    let report = std::fs::read_to_string(root().join("turns.md")).expect("turns.md is generated");
+    let report =
+        std::fs::read_to_string(root().join("reports/turns.md")).expect("turns.md is generated");
 
     // Rows per table, in each turn's printed state, counted from the text.
     let counts = |state: &str| -> std::collections::BTreeMap<String, usize> {

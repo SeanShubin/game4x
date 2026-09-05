@@ -14,7 +14,7 @@ use std::path::Path;
 
 #[test]
 fn the_committed_catalog_is_what_the_release_generates() {
-    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../catalog.md");
+    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../reports/catalog.md");
     let committed = std::fs::read_to_string(&at)
         .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
     let generated = kinds::catalog::catalog(&kinds::release::release());
@@ -85,7 +85,7 @@ fn a_section_gathers_what_six_tables_say_separately() {
 /// because it reads as derived and is therefore trusted harder than prose while being wrong.
 #[test]
 fn the_committed_recipes_are_what_the_release_generates() {
-    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../recipes.md");
+    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../reports/recipes.md");
     let committed = std::fs::read_to_string(&at)
         .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
     let generated = kinds::recipes::recipes(&kinds::release::release());

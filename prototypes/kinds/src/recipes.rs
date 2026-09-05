@@ -2,7 +2,7 @@
 //!
 //! **`S-23`, and Sean's split is what it is for**: context-free — what the game *is* — against
 //! context-specific — what happened in one scenario. `catalog.md` is the context-free view of
-//! the things. `commands/play.4x` looks like a view of the recipes and is not one; it is a
+//! the things. `scenario/commands/play.4x` looks like a view of the recipes and is not one; it is a
 //! scenario, and reading it tells you what one run did rather than what a recipe is.
 //!
 //! **The release states a recipe across seven columns and many rows**, one line per

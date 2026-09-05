@@ -6,7 +6,7 @@ struct Files;
 
 impl Library for Files {
     fn fetch(&self, name: &str) -> Option<String> {
-        std::fs::read_to_string(format!("../../commands/{name}.4x")).ok()
+        std::fs::read_to_string(format!("../../scenario/commands/{name}.4x")).ok()
     }
     fn names(&self) -> Vec<String> {
         vec!["setup".into(), "play".into(), "spread".into()]

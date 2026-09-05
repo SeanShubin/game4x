@@ -4,7 +4,7 @@
 //!
 //! **The scenario comes from a file and so does everything it names.** `spec/invariants.md`:
 //! *a scenario is a file too*, so what a run exercises can be changed without changing the
-//! program. This runs `commands/setup.4x` and `commands/play.4x` and writes what they left.
+//! program. This runs `scenario/commands/setup.4x` and `scenario/commands/play.4x` and writes what they left.
 //!
 //! It knows almost nothing: `dump::generated` runs the scenario and renders it, and this
 //! writes the result. The check that the committed files match uses the same function, so
@@ -28,10 +28,10 @@ impl Library for Files {
 
 fn main() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let files = Files(root.join("commands"));
+    let files = Files(root.join("scenario/commands"));
 
     for (name, text) in dump::generated(&files) {
-        let at = root.join(name);
+        let at = root.join("reports").join(name);
         std::fs::write(&at, text)
             .unwrap_or_else(|why| panic!("cannot write {}: {why}", at.display()));
         println!("wrote {name}");

@@ -84,7 +84,7 @@ fn main() {
     };
 
     // What world to draw is a question for the game, not a constant here. The console is
-    // already open on the release's planet, having built it out of `commands/setup.4x`
+    // already open on the release's planet, having built it out of `scenario/commands/setup.4x`
     // the only way a world can be built - by running commands.
     let territories = game_front::shell::territory_count().unwrap_or(UNDESIGNED);
     let spec = WorldSpec {

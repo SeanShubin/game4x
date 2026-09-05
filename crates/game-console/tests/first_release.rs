@@ -7,7 +7,7 @@
 //!
 //! The setup file and this test are the same kind of artifact. Both are a list of
 //! commands and an expectation about what they leave behind; `spec/console.md` says
-//! command files may invoke each other as subroutines, and `commands/setup.4x` does.
+//! command files may invoke each other as subroutines, and `scenario/commands/setup.4x` does.
 
 use std::collections::BTreeMap;
 use std::path::PathBuf;
@@ -21,7 +21,7 @@ struct Files(PathBuf);
 
 impl Files {
     fn commands() -> Self {
-        Self(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../commands"))
+        Self(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../scenario/commands"))
     }
 }
 
@@ -258,7 +258,7 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
 
     // -- playing -----------------------------------------------------------
     //
-    // **What the scenario leaves is in `expected/play.4x` and no longer here.** Twelve
+    // **What the scenario leaves is in `scenario/expected/play.4x` and no longer here.** Twelve
     // assertions about the end state - citizens, extractors, stores, turn, control - came
     // out when that file went in, in the same change, because keeping both would give the
     // scenario two expectations. They can disagree, and **the one that is wrong is not the
@@ -339,7 +339,7 @@ fn the_landing_site_can_send_a_pioneer_out() {
     run(&mut session, "start");
     run(&mut session, "run play");
 
-    // **What the pioneer left is in `expected/play.4x`**, not here - founded, garrison,
+    // **What the pioneer left is in `scenario/expected/play.4x`**, not here - founded, garrison,
     // citizens, extractors, the consumed unit and what is controlled. Seven assertions came
     // out with the file going in. `S-34`.
     //
@@ -608,7 +608,7 @@ fn taking_and_holding_a_territory_follow_the_force_rules() {
 ///
 /// `spec/planet.md` says no territory can be claimed whose biome is ocean, and a
 /// territory's biome is what the terrain gives it - so which territories are claimable is
-/// decided by a noise field rather than by this document. `commands/play.4x` lands on 1 and
+/// decided by a noise field rather than by this document. `scenario/commands/play.4x` lands on 1 and
 /// moves to 2. If the terrain ever puts water on either, the release stops being playable,
 /// and it should say so here rather than fail somewhere in the middle of the loop.
 #[test]
@@ -620,7 +620,7 @@ fn the_territories_the_release_plays_on_are_not_ocean() {
         assert_ne!(
             place.biome,
             Biome::Ocean,
-            "territory {id} came out as ocean, so `commands/play.4x` cannot claim it"
+            "territory {id} came out as ocean, so `scenario/commands/play.4x` cannot claim it"
         );
     }
 }

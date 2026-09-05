@@ -25,7 +25,7 @@ use game_console::expected::{self, Row};
 use game_console::{Library, Session};
 
 /// Where the reviewed expectation will live once it is derived by hand.
-const AT: &str = "expected/play.4x";
+const AT: &str = "scenario/expected/play.4x";
 
 struct Files(PathBuf);
 
@@ -44,7 +44,7 @@ fn root() -> PathBuf {
 }
 
 fn played() -> Session {
-    let files = Files(root().join("commands"));
+    let files = Files(root().join("scenario/commands"));
     let mut session = Session::new();
     for line in ["run setup", "start", "run play"] {
         session
@@ -62,7 +62,7 @@ fn played() -> Session {
 #[test]
 fn a_state_survives_being_written_and_read() {
     let session = played();
-    let written = expected::write(&session.game, "after `commands/play.4x`");
+    let written = expected::write(&session.game, "after `scenario/commands/play.4x`");
     let read = expected::read(&written).expect("what was just written must parse");
     let direct = expected::rows(&session.game);
 
@@ -158,7 +158,7 @@ fn the_comparison_finds_missing_extra_and_different() {
 /// deliberate, visible in `git status`, impossible by hand slip. This exercises that where
 /// it is safe: a temporary directory, seeded from a state, then compared with it.
 ///
-/// It is *not* run against `expected/play.4x`, and that is `P-227`.
+/// It is *not* run against `scenario/expected/play.4x`, and that is `P-227`.
 #[test]
 fn an_absent_expectation_is_seeded_and_then_compared() {
     let at = std::env::temp_dir().join("game4x-expected-seed");
@@ -209,7 +209,7 @@ fn the_reviewed_expectation_holds() {
         }
         std::fs::write(
             &file,
-            expected::write(&session.game, "after `commands/play.4x`"),
+            expected::write(&session.game, "after `scenario/commands/play.4x`"),
         )
         .unwrap_or_else(|why| panic!("cannot seed {AT}: {why}"));
         panic!(

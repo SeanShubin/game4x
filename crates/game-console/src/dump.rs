@@ -598,6 +598,128 @@ pub fn entity_sections(game: &Game) -> Vec<Section> {
         .collect()
 }
 
+/// The page that links every report and both scenario files.
+///
+/// **The two scenario files are linked as raw files, not as renderings** - `S-38`. They are
+/// canonical data: `scenario/commands/play.4x` is what ran and `scenario/expected/play.4x`
+/// is what a person reviewed. A rendering of either would be one more thing that can drift
+/// from the thing it renders, and the whole point of them is that there is nothing between
+/// the reader and the file.
+///
+/// So the page marks them apart from the generated views rather than listing them together.
+/// Everything under *Reports* is derived and regenerated; everything under *The scenario* is
+/// a source.
+pub fn index(generated: &[(&str, String)]) -> String {
+    let described = |name: &str| -> &str {
+        match name {
+            "catalog.md" => "every kind, with everything the release says about it in one place",
+            "recipes.md" => "every recipe, with its own lines gathered under it",
+            "state.md" => "the state after the scenario, one table per relation",
+            "state.html" => "the same state, as a page",
+            "entities.md" => "the same state as entities and their components",
+            "entities.html" => "the same entities, as a page",
+            "turns.md" => "every turn: the commands that ran, what changed, and what was there",
+            _ => "",
+        }
+    };
+
+    let mut out = String::from(
+        "<!doctype html>
+<html lang=\"en\">
+<head>
+",
+    );
+    out.push_str(
+        "<meta charset=\"utf-8\">
+",
+    );
+    out.push_str(
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+",
+    );
+    out.push_str(
+        "<title>game4x reports</title>
+",
+    );
+    out.push_str(
+        "<style>
+         :root { color-scheme: light dark }
+         body { font: 15px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem          auto; max-width: 48rem; padding: 0 1rem }
+         h2 { margin: 2rem 0 .25rem; font-size: 1.05rem }
+         ul { list-style: none; padding: 0 }
+         li { margin: .5rem 0 }
+         a { font-weight: 600 }
+         .what { opacity: .75 }
+         .note { opacity: .75; font-size: .9rem }
+         </style>
+</head>
+<body>
+",
+    );
+    out.push_str("<h1>game4x</h1>\n");
+    out.push_str(
+        "<p class=\"note\">Generated. Do not edit. Made from the list of reports it \
+         links, so one added or removed appears here without a second file being \
+         edited.</p>\n",
+    );
+    out.push_str(
+        "<h2>The scenario</h2>
+",
+    );
+    out.push_str(
+        "<p class=\"note\">Source, not a rendering. These are the files themselves - a view          of either would be one more thing that can drift from it.</p>
+<ul>
+",
+    );
+    for (path, what) in [
+        (
+            "../scenario/commands/play.4x",
+            "the commands that ran, in order",
+        ),
+        (
+            "../scenario/expected/play.4x",
+            "what the scenario should produce, reviewed by hand",
+        ),
+    ] {
+        out.push_str(&format!(
+            "<li><a href=\"{path}\">{path}</a> <span class=\"what\">- {what}</span></li>
+"
+        ));
+    }
+    out.push_str(
+        "</ul>
+",
+    );
+
+    out.push_str(
+        "<h2>Reports</h2>
+",
+    );
+    out.push_str(
+        "<p class=\"note\">Generated. Every one is derived from the scenario or from the          release, and regenerated rather than written.</p>
+<ul>
+",
+    );
+    let mut names: Vec<&str> = generated.iter().map(|(name, _)| *name).collect();
+    names.push("catalog.md");
+    names.push("recipes.md");
+    names.sort_unstable();
+    for name in names {
+        out.push_str(&format!(
+            "<li><a href=\"{name}\">{name}</a> <span class=\"what\">- {}</span></li>
+",
+            described(name)
+        ));
+    }
+    out.push_str(
+        "</ul>
+</body>
+</html>
+",
+    );
+    out
+}
+
 /// One turn: what ran, what it changed, and what was there afterwards.
 pub struct Turn {
     pub commands: Vec<String>,
@@ -629,7 +751,7 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
 
     let scenario = commands
         .fetch("play")
-        .unwrap_or_else(|| panic!("commands/play.4x is not there"));
+        .unwrap_or_else(|| panic!("scenario/commands/play.4x is not there"));
     let boundaries = scenario
         .lines()
         .filter(|line| line.trim() == "end turn")
@@ -666,14 +788,14 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
     assert_eq!(
         turns.len(),
         boundaries,
-        "commands/play.4x has {boundaries} `end turn` lines and {} states were taken",
+        "scenario/commands/play.4x has {boundaries} `end turn` lines and {} states were taken",
         turns.len()
     );
 
-    let state = "State after `commands/play.4x`";
-    let things = "Entities after `commands/play.4x`";
+    let state = "State after `scenario/commands/play.4x`";
+    let things = "Entities after `scenario/commands/play.4x`";
 
-    let mut per_turn = String::from("# Every turn of `commands/play.4x`\n\n");
+    let mut per_turn = String::from("# Every turn of `scenario/commands/play.4x`\n\n");
     per_turn.push_str(&format!(
         "**Generated. Do not edit.** One section per `end turn` in the scenario - {} of \
          them.\nThe turn numbers are the scenario's own boundaries, so they line up with \
@@ -726,7 +848,7 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
         }
     }
 
-    vec![
+    let mut written = vec![
         ("state.md", markdown(&session.game, state)),
         (
             "state.html",
@@ -738,5 +860,10 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
             html(&entity_sections(&session.game), things),
         ),
         ("turns.md", per_turn),
-    ]
+    ];
+    // The page that links them, made from the list it links - so a report added here appears
+    // on it, and one removed leaves it, without anybody editing a second file.
+    let page = index(&written);
+    written.push(("index.html", page));
+    written
 }

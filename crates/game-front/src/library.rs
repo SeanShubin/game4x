@@ -10,12 +10,18 @@ use game_console::Embedded;
 /// Every file the release needs, in the language `spec/console.md` describes.
 pub fn library() -> Embedded {
     Embedded::of(&[
-        ("setup", include_str!("../../../commands/setup.4x")),
-        ("world", include_str!("../../../commands/world.4x")),
-        ("nodes", include_str!("../../../commands/nodes.4x")),
-        ("forces", include_str!("../../../commands/forces.4x")),
-        ("biomes", include_str!("../../../commands/biomes.4x")),
-        ("play", include_str!("../../../commands/play.4x")),
+        ("setup", include_str!("../../../scenario/commands/setup.4x")),
+        ("world", include_str!("../../../scenario/commands/world.4x")),
+        ("nodes", include_str!("../../../scenario/commands/nodes.4x")),
+        (
+            "forces",
+            include_str!("../../../scenario/commands/forces.4x"),
+        ),
+        (
+            "biomes",
+            include_str!("../../../scenario/commands/biomes.4x"),
+        ),
+        ("play", include_str!("../../../scenario/commands/play.4x")),
     ])
 }
 
@@ -57,7 +63,7 @@ mod tests {
         let library = library();
         for name in ["setup", "nodes", "forces", "biomes", "world", "play"] {
             let path = format!(
-                "{}/../../commands/{name}.4x",
+                "{}/../../scenario/commands/{name}.4x",
                 env!("CARGO_MANIFEST_DIR").replace('\\', "/")
             );
             let disk = std::fs::read_to_string(&path)

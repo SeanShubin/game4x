@@ -10,7 +10,7 @@
 //! trusted harder while it goes stale. And it goes stale without changing, which is the same
 //! shape as a check that stops running.
 //!
-//! It matters more than usual this week. Sean is deriving `commands/play.4x` by hand against
+//! It matters more than usual this week. Sean is deriving `scenario/commands/play.4x` by hand against
 //! `state.md` and `turns.md`; a stale file would send him looking for an error in his
 //! arithmetic that is really an error in the file.
 //!
@@ -68,7 +68,7 @@ impl Library for Files {
 /// a change. Not worth it while the count holds.
 fn marked_on_disk(root: &Path) -> Vec<String> {
     let mut found = Vec::new();
-    let Ok(entries) = std::fs::read_dir(root) else {
+    let Ok(entries) = std::fs::read_dir(root.join("reports")) else {
         return found;
     };
     for entry in entries.flatten() {
@@ -116,12 +116,12 @@ fn marked_on_disk(root: &Path) -> Vec<String> {
 #[test]
 fn every_committed_dump_is_what_the_scenario_produces() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let generated = dump::generated(&Files(root.join("commands")));
+    let generated = dump::generated(&Files(root.join("scenario/commands")));
 
     assert_eq!(
         generated.len(),
-        5,
-        "five dump files are generated; `dump::generated` returned {}",
+        6,
+        "six dump files are generated; `dump::generated` returned {}",
         generated.len()
     );
 
@@ -134,7 +134,7 @@ fn every_committed_dump_is_what_the_scenario_produces() {
 
     let mut different = Vec::new();
     for (name, text) in &generated {
-        let Ok(committed) = std::fs::read_to_string(root.join(name)) else {
+        let Ok(committed) = std::fs::read_to_string(root.join("reports").join(name)) else {
             continue; // counted as missing above
         };
         if &committed == text {
@@ -178,8 +178,8 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // The set was discovered, so it can be empty for the wrong reason. This says it was not.
     assert_eq!(
         on_disk.len(),
-        5,
-        "five files carry the generated marker; found {} ({on_disk:?})",
+        6,
+        "six files carry the generated marker; found {} ({on_disk:?})",
         on_disk.len()
     );
 }
@@ -192,7 +192,7 @@ fn every_committed_dump_is_what_the_scenario_produces() {
 #[test]
 fn the_scenario_produces_tables_rather_than_empty_files() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let generated = dump::generated(&Files(root.join("commands")));
+    let generated = dump::generated(&Files(root.join("scenario/commands")));
 
     for (name, text) in &generated {
         assert!(
@@ -200,10 +200,14 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
             "{name} is {} lines, which is not a dump of anything",
             text.lines().count()
         );
-        let marker = if name.ends_with(".html") {
-            "<td>"
-        } else {
-            "| "
+        // **The index is a page of links, not of rows**, so *has it any content* is a
+        // different question for it. Asking every HTML file for a `<td>` reported it empty
+        // when it was full - a check whose one shape stopped fitting the moment a second
+        // kind of page existed.
+        let marker = match *name {
+            "index.html" => "<a href",
+            _ if name.ends_with(".html") => "<td>",
+            _ => "| ",
         };
         assert!(
             text.contains(marker),

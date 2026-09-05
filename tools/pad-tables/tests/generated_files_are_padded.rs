@@ -32,11 +32,11 @@ fn root() -> PathBuf {
 /// which is the failure this repository keeps producing. A name added here is a decision;
 /// a name missing from here fails the count below.
 const GENERATED: [&str; 5] = [
-    "catalog.md",
+    "reports/catalog.md",
     "pending.md",
-    "state.md",
-    "entities.md",
-    "turns.md",
+    "reports/state.md",
+    "reports/entities.md",
+    "reports/turns.md",
 ];
 
 #[test]

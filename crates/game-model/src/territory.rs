@@ -243,7 +243,7 @@ impl Territory {
     /// a counter beside it. Adding a kind added a field, which is what the rewrite removes.
     ///
     /// **The seam Sean approved:** `work` still creates and consumes the labor in one step,
-    /// so `commands/play.4x` does not change and `expected/play.4x` stays a check on this
+    /// so `scenario/commands/play.4x` does not change and `scenario/expected/play.4x` stays a check on this
     /// rewrite rather than something regenerated with it. `P-232` is where the labor becomes
     /// visible between the two halves, by a command or by a rule for when the world fires
     /// one; either is a small change from here, because the kind already exists.

@@ -23,9 +23,9 @@ impl Library for Files {
     }
 }
 
-/// A game played through `commands/play.4x`, which is the state the dump is written for.
+/// A game played through `scenario/commands/play.4x`, which is the state the dump is written for.
 fn played() -> Session {
-    let files = Files(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../commands"));
+    let files = Files(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../scenario/commands"));
     let mut session = Session::new();
     for command in ["run setup", "start", "run play"] {
         session
@@ -294,19 +294,20 @@ fn every_kind_the_model_knows_is_a_table_or_a_value_in_one() {
 #[test]
 fn every_turn_of_the_scenario_is_dumped() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let scenario = std::fs::read_to_string(root.join("commands/play.4x"))
-        .expect("commands/play.4x is the scenario");
+    let scenario = std::fs::read_to_string(root.join("scenario/commands/play.4x"))
+        .expect("scenario/commands/play.4x is the scenario");
     let boundaries = scenario
         .lines()
         .filter(|line| line.trim() == "end turn")
         .count();
     assert!(boundaries > 1, "a scenario of one turn tests nothing here");
 
-    let turns = std::fs::read_to_string(root.join("turns.md")).expect("turns.md is generated");
+    let turns =
+        std::fs::read_to_string(root.join("reports/turns.md")).expect("turns.md is generated");
     let sections = turns.lines().filter(|l| l.starts_with("# Turn ")).count();
     assert_eq!(
         sections, boundaries,
-        "commands/play.4x ends {boundaries} turns and turns.md has {sections} sections. \
+        "scenario/commands/play.4x ends {boundaries} turns and turns.md has {sections} sections. \
          Run `cargo run -p game-console --bin dump-state`."
     );
 
@@ -336,8 +337,8 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
     let mut checked = 0usize;
 
     for name in ["play", "spread"] {
-        let text = std::fs::read_to_string(root.join(format!("commands/{name}.4x")))
-            .unwrap_or_else(|why| panic!("commands/{name}.4x: {why}"));
+        let text = std::fs::read_to_string(root.join(format!("scenario/commands/{name}.4x")))
+            .unwrap_or_else(|why| panic!("scenario/commands/{name}.4x: {why}"));
         let lines: Vec<&str> = text
             .lines()
             .map(str::trim)
@@ -356,7 +357,7 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
             let made = before.is_some_and(|line| line.starts_with("create labor "));
             assert!(
                 made,
-                "commands/{name}.4x line {}: `{line}` spends labor and the command before it \
+                "scenario/commands/{name}.4x line {}: `{line}` spends labor and the command before it \
                  is {before:?}, which does not make any",
                 at + 1
             );
@@ -379,12 +380,15 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
             assert_eq!(
                 made,
                 wanted,
-                "commands/{name}.4x line {}: `{line}` spends {wanted} and the line before \
+                "scenario/commands/{name}.4x line {}: `{line}` spends {wanted} and the line before \
                  makes {made}",
                 at + 1
             );
         }
-        assert!(consumers > 0, "commands/{name}.4x spends no labor at all");
+        assert!(
+            consumers > 0,
+            "scenario/commands/{name}.4x spends no labor at all"
+        );
     }
 
     // Over every case, and how many there were: a scenario that stopped spending labor
