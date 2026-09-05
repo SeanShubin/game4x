@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-256** - Should a report show a territory's capacity for a resource, when nothing stores it? · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -24,8 +25,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
+- **S-44** - Storage becomes a built thing, and the scenario cannot run until it is · `docs/notes/proposals.md`
 - **S-43** - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release · `docs/notes/proposals.md`
 - **S-42** - The dashes rule and `nature` land in the data, and jungle's force changes with them · `docs/notes/proposals.md`
 - **S-41** - `P-250`'s second half needs `tools/outbox` to list at a close · `docs/notes/proposals.md`

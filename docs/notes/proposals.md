@@ -63,46 +63,46 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-256 - Should a report show a territory's capacity for a resource, when nothing stores it?
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
-- **asks** a decision - **into** the dump; no rule changes either way
-
-**Rewritten because both of its old choices are dead.** You asked what you are being asked to decide,
-and the honest answer was: **not what the proposal said.**
-
-**What killed them.**
-
-- **Old choice B - *capacity lives on the territory*.** `P-258` makes that **false**: a territory
-  declares no capacity for a resource
-- **Old choice A - *the store row carries its capacity*.** `P-257` makes that **impossible**: *what a
-  kind may contain is a fact about the kind and not about any one of them*, **so a store has no
-  capacity of its own to print.** Every `metal store` holds the same amount, and printing it on each
-  row would print one constant many times
-
-**So the only question left is a different one**, and it is the one your original question was really
-about - *where is the limit*.
-
-**A territory's limit for metal is now derived**: **how many metal stores it has, times what the kind
-holds.** Both numbers exist - count the rows, look up the kind - and **neither is the number you were
-looking for.**
-
-**Choice 1 - the report shows the derived total.** A line per territory per resource saying what it
-can hold. **You see fullness at a glance**, which is what you were trying to do when you asked.
-
-**Choice 2 - the report shows neither, and you multiply.** Consistent with `P-255`, where you dropped
-`control` for being derivable and said you would notice if you wanted it.
-
-**This lane recommends 1, and the reason is that you already ran the test `P-255` set.** You dropped
-`control` because you would notice if you needed it. **You noticed this one before it existed** - you
-went looking for the limit, could not find it, and asked. **That is the evidence `P-255` deferred
-to, arriving in advance.**
-
-**What neither choice changes.** No rule moves. A derived number shown or not shown is a report
-decision, and `P-218` already says a report may replicate what the data says as long as nothing
-treats it as the source.
-
 ## Addressed to other perspectives
+
+### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
+
+**to** code - **status** open - **raised** 2026-09-05 - **source** `P-258` promoted in `dd1d025`,
+`P-259` and `P-256` decided
+
+**This is the largest of the changes waiting on you and it is the one that rewrites the scenario.**
+Take it with `P-214`, `S-42` and `S-43` so Sean's two files move once.
+
+**1. A territory declares no capacity for a resource.** `releases/first-release.md` -> *What bounds a
+kind* now says food, metal and energy are bounded by **the things in it that hold it**, and the three
+`a capacity of 20` lines are gone. **A territory holds stores from the start and holds no metal until
+a store is built.**
+
+**2. So a store is a kind, and its capacity belongs to the kind.** `spec/logistics.md`, promoted an
+hour ago: *what a kind may contain is a fact about the kind and not about any one of them.* **Every
+`metal store` holds the same amount. No store carries a capacity of its own.** What that amount is,
+and what a store costs, are not settled - **if you need them to build, say so and they become a
+proposal rather than a guess.**
+
+**3. Disorder is lost at the turn's end.** `P-259`, choice B. `spec/turn.md` already says *anything
+above the bound is lost when the turn ends* and needed no change - **what changed is what the bound
+is.** A resource in nothing is unreachable within the turn and gone at its end.
+
+**4. The report shows a territory's capacity for a resource**, derived - how many stores times what
+the kind holds. `P-256`, decided yes. **Sean went looking for that number, could not find it, and
+asked**; it is the one report addition he has requested by hitting its absence.
+
+**What it does to the scenario, measured.** Territory 1 ends with **14 metal** and no store, so it
+could reach none of it. The scenario builds **7 extractors** and a yard costing fifteen metal, and
+three metal extractors at density four hold twelve between them. **`scenario/commands/play.4x` cannot
+run unchanged** - it needs stores before its first `build`, which is more commands and a different
+shape of turn.
+
+**Two things to tell me rather than decide.** What a store holds and what it costs are numbers, and
+numbers in the release are Sean's. **And if making the scenario work requires changing what it
+demonstrates** - fewer extractors, a later yard - **that is his to see before it lands**, because it
+is the foundation he is about to vet.
+
 
 ### S-43 - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release
 
@@ -1364,6 +1364,7 @@ work the release exists to order.
 | P-257, containment is a tree: a root, a one-way leaf rule, the kind not the instance, and containing is not referring | `spec/logistics.md` -> Containment                                                                                                           | 2026-09-05 |
 | P-259, disorder is lost at the turn's end - Sean chose B, 2026-09-05                                                  | no text landed: `spec/turn.md` already says anything above the bound is lost when the turn ends, and `P-258` is what changes the bound       | 2026-09-05 |
 | P-258, a territory declares no capacity for a resource                                                                | `releases/first-release.md` -> What bounds a kind                                                                                            | 2026-09-05 |
+| P-256, the report shows a territory's derived capacity for a resource - Sean said yes, 2026-09-05                     | no text landed: it is a report decision and no rule moves. `S-44` does it                                                                    | 2026-09-05 |
 
 ## Rejected
 
