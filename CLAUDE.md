@@ -278,6 +278,26 @@ derivations compared at every planet size rather than at one. Three checks stopp
 on 2026-09-01 and all three stayed green -
 [what happened](docs/notes/checks-outlive-examples.md).
 
+**A check whose subject is behaviour reads the outcome, not the input.** Counting what a file says
+tells you what was written and nothing about what ran. A coverage check asking whether a line of the
+scenario *begins with* each recipe's command was **satisfied for `move` by the line that founds** -
+nine of nine, green for weeks, and the recipe `move` had never once fired.
+
+**The tell is that the instrument answers a narrower question than the one asked, and returns a
+plausible number rather than an error.** A wrong number invites a question; **a right number about
+the wrong thing invites none.** It happened three times in a week and in all three lanes: that
+check; this lane counting one `move` and one `found by land` and concluding the `move` still
+founded; the quality lens counting matches in `tests/` and calling a property untested that `src/`
+covered. Only one of the three was code, which is why the rule is here.
+
+**A count over nothing is the same failure with the sign flipped.** *Zero occurrences* proves
+something only against a population that is not also zero - so a claim of zero names what it counted
+against.
+
+**Nothing mechanises either half.** No check can ask whether another check's predicate is about its
+subject - the wall `P-245` hit. What is available is the habit and the cases, which is why they are
+written down rather than asserted. Filed by the code lane as `C-28`.
+
 **Research's evidence is the answer, written where it will be found.**
 [`docs/prototypes/README.md`](docs/prototypes/README.md) already says it for prototypes - *that
 answer is the deliverable; the code is a byproduct* - and it generalises: the question is stated, the
