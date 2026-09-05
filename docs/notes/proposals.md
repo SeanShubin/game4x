@@ -235,6 +235,39 @@ name what you personally verify; a document that cannot mention its own subject 
 only vaguer. **The test that separates them from the two above is whether another project would
 delete the sentence or reword it** - it would reword these and delete a directory list.
 
+### P-270 - Use it immediately, store it, or lose it
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `releases/first-release.md` -> What bounds a kind
+
+**This replaces one sentence you approved an hour ago.** `P-258` landed *a resource that is in
+nothing is in disorder, and cannot be reached* - **the words are yours**, and this changes them.
+
+> **A resource that is in nothing can be used the turn it is made, and is lost when that turn ends -
+> use it immediately, store it, or lose it.**
+
+**The specification already agrees with the new one, and never said the old one.** `spec/turn.md`:
+*a thing created during a turn begins ready and **may be used at once***. `spec/resources.md`: *a
+thing not kept in order is lost when the turn ends.* **Neither says unreachable** - that clause was
+the release adding to the specification rather than following it.
+
+**What it changes for the scenario, arithmetic rather than impression.** Grassland yields **3 metal
+and 3 energy a turn** - `1 x 3` each in *Biomes*.
+
+- **Metal: unchanged, still two stores.** A Yard costs 15. One store holds 10, plus 3 made this turn
+  is 13, **which is short.** Two stores it is.
+- **Energy: two stores becomes one.** An Ark costs 12. One store holds 10, plus 3 made this turn is
+  **13, which covers it.**
+
+**So it saves one `build store energy` and does not shorten the game.** Fifteen metal at 3 a turn is
+five turns of production whatever the rule says - **accumulation still needs storage, and only
+same-turn spending is freed.** Worth knowing before you weigh it: this is a rule about what a turn
+feels like, not a way to make the scenario smaller.
+
+**`P-265` is unaffected.** It replaces a row in *Where things are* and says a store holds 10; this
+replaces a sentence three lines below the table. Both are still needed, and **the gate stays red
+until `P-265` lands.**
+
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is

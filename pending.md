@@ -12,6 +12,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-267** - What of the process lives where you do not read it · `docs/notes/proposals.md`
 - **P-268** - The prompts that start the instances · `docs/notes/proposals.md`
 - **P-269** - The rest of what names this project in your document · `docs/notes/proposals.md`
+- **P-270** - Use it immediately, store it, or lose it · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
