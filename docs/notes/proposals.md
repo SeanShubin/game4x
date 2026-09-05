@@ -103,6 +103,44 @@ larger one you would not.**
 rule stays in `spec/`** and the demonstration of it moves to whenever a scenario is written that
 reaches it - which nothing currently requires.
 
+### P-250 - A number goes stale when another item closes, and nothing here asks
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
+**asks** approval - **into** `CLAUDE.md` -> Promotion, after the staleness rule
+
+**The code lane hit this and its diagnosis is better than mine, so the shape below is its.**
+
+**What happened.** `C-9` said a Yard can stand where the territory's metal in one turn reaches
+fifteen. **True when written**, under the rule that stores were discarded at the end of a turn.
+`C-11` landed, stores carry, and **nothing edited `C-9`** - the sentence read exactly as before and
+was false. Implemented literally it would have been wrong about the scenario already committed.
+
+**Neither safeguard here fires, and the reason is precise.** The staleness rule is directional -
+*does landing this invalidate something else* - and it is about **promotions**. The re-read trigger
+fires when a **`spec/` section** takes a second proposal. **`C-9`'s premise moved when `C-11` was
+acted on**: one outbox item closing changed the rule another outbox item's arithmetic rested on, and
+nothing in the process asks that question when an item closes.
+
+> A number an item derives **names the rule it came from**, not the file it is in. And **when an item
+> moves to `acted`, whatever lists the outboxes lists the open items naming the same rule.**
+
+**Three things in that wording are the code lane's and each came from hitting it:**
+
+- **On the close, not only the promotion.** That is when it moved, and it is the case neither
+  existing rule covers
+- **On the number, not the item.** `C-9` stated two derived numbers from two different premises and
+  **only one moved.** An item-level source line flags both and teaches a reader to skim past it
+- **Naming the rule, not the file.** `spec/turn.md` changes constantly; *the rule that stores are
+  discarded at end of turn* is the thing that moved, and it is what a reader can match against
+
+**What this does not do, in its words: it makes the failure findable, not found.** What actually
+caught `C-9` was re-deriving the arithmetic before implementing it, **which is a habit and not a
+rule**. The honest claim is worth having; the overclaimed one gets refuted later.
+
+**And the better evidence is mine rather than its.** I corrected `R-6`'s blocked-by line **twice
+today and it was stale both times** - the first correction pointed it at `C-9` an hour before `C-9`
+landed. **No code in it at all**, which makes it the same shape with the implementation removed.
+
 ## Addressed to other perspectives
 
 ### S-20 - The `node` table calls a total a density, and erases what the twelve territories exist to exercise

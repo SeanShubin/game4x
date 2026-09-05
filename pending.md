@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-249** - `R-6` is now buildable and its evidence is about 240 commands · `docs/notes/proposals.md`
+- **P-250** - A number goes stale when another item closes, and nothing here asks · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
