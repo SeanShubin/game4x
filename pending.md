@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-269** - Two lines in your document that name this project · `docs/notes/proposals.md`
+- **P-269** - The four artifacts, said without naming this game · `docs/notes/proposals.md`
+- **P-271** - The directory list goes, and the rule stays · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

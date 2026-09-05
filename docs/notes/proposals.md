@@ -63,35 +63,54 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-269 - Two lines in your document that name this project
+### P-269 - The four artifacts, said without naming this game
 
 **to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind**
-contradiction - **asks** a decision - **into** `docs/process.md` -> How I know the game is right,
-and Who writes what
+contradiction - **shape** text - **asks** approval - **into** `docs/process.md` -> How I know the
+game is right, the opening sentence
 
-**Two yes-or-no answers, and no text is final yet** - same shape as `P-267`. Say yes to either and it
-comes back carrying the words.
+**Your A. One sentence replaces the one that opens the section**, from *Four artifacts* to *working
+as I intend*.
 
-**How they got there: the words are yours and the address was mine.** A proposal shows you the text
-and *names* the destination, and **the destination is the half you are never asked about.** Nothing
-slipped in unread.
+> Four artifacts: the definitions of the things, the definitions of the transformations over them,
+> the commands a scenario ran, and the data dump of that scenario. The first three are enough to
+> derive the fourth by hand. If I can do that, I can tell whether the game is working as I intend.
 
-**The test: would another project reword this sentence, or delete it?** Reword means it is about how
-you work and it stays. Delete means it is about this game and belongs elsewhere. `P-264` already took
-the biggest one out.
+**What changed is two words.** *The thing definitions, the recipe definitions* becomes *the
+definitions of the things, the definitions of the transformations over them*. **`recipe` then appears
+zero times in your document** - it appears once now, measured, and this is the once.
 
-|       | The line                                                                                                                                                     | This lane recommends                                                                                                                                                                                                                                                                                                                                                                                      |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **A** | *The thing definitions, the **recipe** definitions* - one of the four artifacts. `recipe` is a name for this game's data, and appears **once** now, measured | **No recommendation, which is why it is a question.** Generic would be *the definitions of the things, and of the transformations over them*. It is load-bearing either way - the four are what let you derive the fourth by hand - and whether the generic phrasing still reads as yours is not something this lane can judge                                                                            |
-| **B** | *Who writes what* lists `crates/`, `prototypes/`, `web/`, cargo, `hooks/`, `scripts/`, `tools/spec/`                                                         | **Yes.** Another project deletes a directory list rather than rewording it - **and it is also a copy** of `CLAUDE.md` -> Perspectives, which `P-245` forbids. Replace the sub-list with the rule and a pointer: *no instance writes outside its own directories, and `CLAUDE.md` says which those are*. **Every sentence under it stays** - that is the generic part, and the part that is actually yours |
+**Your B is `P-271`**, filed alongside this one. **The two are split because they land in different
+sections**, and a proposal carries one quotation per destination - so one proposal with two blocks of
+text has no way to say which is which. That is `P-251`'s rule meeting a case it did not name, and
+splitting is the answer that needs no new rule.
 
-**What this lane is not asking about.** *Win condition*, *scenario test*, *the game*. Another project
-rewords those rather than deleting them, and **a document that cannot mention its own subject is not
-more generic, only vaguer.**
+### P-271 - The directory list goes, and the rule stays
 
-**`P-267` edits the same file in the other direction.** It puts rules about you in; this takes
-project detail out. **After the second of them lands this lane re-reads the section whole**, which
-`CLAUDE.md` requires and which is the check neither proposal can do for itself.
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Who writes what, the first bullet and its
+sub-list
+
+**Your B.** These three bullets replace the first bullet and the **five** sub-bullets under it -
+measured - and **everything below them is untouched.**
+
+> - Every instance reads everything. No instance writes outside its own directories, and
+>   [`CLAUDE.md`](../CLAUDE.md) says which those are
+> - Every lane owns the tools for its own work. Production support is everything else, and it has one
+>   owner for the same reason every other file does
+> - A lane that needs a check wired files it to the coding instance rather than wiring it itself
+
+**What goes is every directory name** - `spec/`, `releases/`, `crates/`, `prototypes/`, `web/`,
+cargo, `hooks/`, `scripts/`, `tools/`. **What stays is every rule**, including the two that were
+buried in the sub-list and are now bullets of their own.
+
+**Two reasons, and either would do.** Another project deletes a directory list rather than rewording
+it, which is your test. **And it is a copy** of `CLAUDE.md` -> Perspectives, which `P-245` says
+should be a link.
+
+**What this makes stale, and it is nothing.** Nothing in `spec/` or `releases/` cites these lines.
+The sentence about the shared git index, and the one about an instance that sees a problem outside
+its own directories, are below the sub-list and stay exactly as they are.
 
 ## Addressed to other perspectives
 
