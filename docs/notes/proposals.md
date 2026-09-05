@@ -128,6 +128,60 @@ reader has to know it means extractors. **A store row printing `capacity:20` bes
 same word meaning something else only because neither says what it is for.** Whatever carries a
 capacity should say what kind it is a capacity for, and then the word is unambiguous everywhere.
 
+### P-258 - No storage is inherent to a territory
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `releases/first-release.md` -> What bounds a kind
+
+**This settles the bins question in the direction the analysis said it would be settled.** *Each
+territory should allow the player to build storage* means **capacity is built, so the noun is real**
+- a `metal store` earns being a kind because building one costs something.
+
+> No storage is inherent to a territory. An extractor holds some of what it makes; everything else a
+> territory keeps is in something the player built to keep it in. **Material that is in nothing is in
+> disorder, and cannot be reached.**
+
+**Basis: it removes the three lines that gave a territory storage for free.** *What bounds a kind*
+currently says food, metal and energy each have **a capacity of 20** - measured, three times - and
+none of them is built or paid for. **Under this, a territory starts able to keep nothing.**
+
+**It also fits the tree without an exception.** A store is a branch declaring capacity for one leaf
+kind; a territory is a branch declaring capacity for stores. **Nothing new is needed** - `P-257`
+landed an hour ago and this is its first real use.
+
+**What it leaves open is `P-259`**, and the two should be read together.
+
+### P-259 - Does disorder survive the turn?
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
+**into** `spec/turn.md` -> Order of operations
+
+**Your phrase was *inaccessible even if present*, and *even if present* is the whole question.**
+`spec/turn.md` says today: *anything above the bound is lost when the turn ends.*
+
+**Choice A - disorder persists.** Spilled metal sits in the territory unreachable, and **building a
+store later recovers it.** Storage becomes a way of collecting what you already have.
+
+**Choice B - disorder is lost at the turn's end**, as the bound works today. Storage is a way of not
+wasting what you produce.
+
+**This lane recommends B and is not confident.** **A is the more interesting rule** and it is also a
+second pile of state - every territory carrying an invisible heap that behaves unlike anything else
+and appears in no report. **B keeps one rule where A adds a second.** But *even if present* is your
+phrase and it reads like A.
+
+**What either costs the scenario, measured, and this is the part that touches your vetting.**
+Territory 1 holds **14 metal** and no store, so it could reach none of it. The scenario spends metal
+on **7 extractors and 1 yard**, and **three metal extractors at density four hold twelve between
+them** - so extractor storage does not cover a fifteen-metal yard.
+
+**So `scenario/commands/play.4x` cannot run unchanged.** It needs stores before its first `build`,
+which is more commands and a different shape of turn - **a larger change to what you are about to vet
+than `P-214` was.**
+
+**Worth settling before you vet rather than after.** If these land, vetting waits for them; if they
+wait, you vet a scenario a promoted rule will invalidate.
+
 ## Addressed to other perspectives
 
 ### S-43 - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release
