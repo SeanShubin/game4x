@@ -126,63 +126,69 @@ readers - which is the guard-that-cannot-fail this repository has built twice an
 **Whether.** Worth building, and worth building carefully: match the directory rather than a string,
 or match both spellings and assert the total, so the check fails if a third spelling appears.
 
-### Q-49 - The count guard on `released_table` makes an added row loud and leaves a colliding row silent
+### Q-50 - A run of spaces sits mid-sentence in a failure message, in eighteen places
 
-**to** code · **status** open · **raised** 2026-09-05 · **source** reading `13497da`, the fix for
-`Q-48`
+**to** code · **status** open · **raised** 2026-09-05 · **updated** 2026-09-05 after `fc4029a` ·
+**source** a scan of every non-comment string literal in `crates/`, `tools/` and `prototypes/`
 
-The fix is right and this is the half of it that is still open. `released_table` finds rows by shape
-across the **whole file** rather than under a heading - the code lane established that by renaming
-`## Territory resources` and watching nothing break - so any table that grows an integer first cell
-and four cells joins the population.
-
-`assert_eq!(table.len(), 12)` catches that when the stray row's id is new: thirteen rows, and it
-fails. **It does not catch it when the id collides.** `table.insert(id, nodes)` returns the previous
-value and the code discards it, so a stray row claiming an id in 1 to 12 **replaces** that
-territory's expected nodes and the length is still twelve. The test then checks the real territory
-against somebody else's row and says nothing about the swap.
-
-Measured against the file as it stands: twelve rows, ids 1 to 12, no duplicates, and every one of
-them from `## Scope`. **So this is prophylactic rather than live** - it is filed because the fix's
-own reasoning is that the parse holds by luck, and this is the part of the luck the new assertion
-does not convert into a failure.
-
-**Whether.** One line, and it is the assertion that says what the parse means:
-`assert!(table.insert(id, nodes).is_none(), "two rows claim territory {id}")`. Worth it or not is
-the code lane's; the count alone should not be read as covering it.
-
-### Q-50 - Twenty-two runs of spaces sit mid-sentence in failure messages, and two arrived today
-
-**to** code · **status** open · **raised** 2026-09-05 · **source** a scan of every non-comment string
-literal in `crates/`, `tools/` and `prototypes/`
-
-A message reads *"if that table          moved or changed shape"*. Eleven lines across seven files
-carry a run of four or more spaces between two words inside a string literal, twenty-two runs in
-all: `game-console/src/expected.rs`, `game-console/src/grammar.rs`,
-`game-console/tests/first_release.rs` twice, `game-model/src/territory.rs`,
-`sphere-tessellation/src/quality.rs`, `sphere-tessellation/tests/poles.rs`,
-`tools/outbox/src/lib.rs`, and `tools/outbox/tests/promotions.rs` at three lines, where the `KNOWN`
-exceptions each carry several.
-
-**Two of them are from `13497da`** - `first_release.rs:247` and `poles.rs:50`, the two messages the
-`Q-48` fix added. So this is a live rate rather than a historical residue, which is the only reason
-it is filed rather than left alone.
+A message reads *"if that table          moved or changed shape"*. **Eighteen runs over six lines in
+four files** remain after `fc4029a`: `game-console/src/grammar.rs`,
+`sphere-tessellation/src/quality.rs`, `tools/outbox/src/lib.rs`, and `tools/outbox/tests/promotions.rs`
+at three lines, where the `KNOWN` exceptions carry several each.
 
 **Why it is more than tidying, barely.** These strings are read in exactly one situation: a check has
 failed and somebody is working out why. A green run never shows them, so nothing in normal use
-applies any pressure to them at all - the same property that let `Q-48` exist.
+applies any pressure to them at all - the same property that let `Q-48` exist. Two of the five
+collapsed in `fc4029a` had arrived in `13497da` hours earlier, which is what makes this a rate rather
+than a residue.
 
-**Not asserted: the cause.** The run length tracks the literal's indentation - six spaces in a
-shallow one, twenty-two in `grammar.rs`'s nested match - which is what a wrapped line looks like
-after its continuation is joined back. That is an observation about the bytes, not a claim about
-what did it. `rustfmt` leaves string literals alone, so whatever it is, the formatter is not going to
-find it.
+**Two numbers in the first version of this item were wrong, and both were stated without being
+derived.** It said twenty-two runs across seven files; re-derived against `dc125d5` it was
+**twenty-three across eight** - and the item then listed eight files under the word *seven*. Nobody
+was misled and the item was acted on correctly, which is the point: **a wrong number that changes no
+decision is the kind that survives.** Third time this lens has passed on a figure it did not compute.
 
-**Whether.** Mechanical, and checkable: no non-comment string literal holds a run of four or more
-spaces between two word characters unless a newline escape precedes it. That exception is
-load-bearing - `dumps_are_current.rs` and `prototypes/kinds/tests/against_the_release.rs` indent
-under a newline deliberately, and I confirmed both by reading rather than by trusting the pattern.
-If it is built it needs poisoning like anything else.
+### What `fc4029a` established, which is worth more than the five lines
+
+**The code lane applied the rule as a regex across the tree and committed `C-28` doing it.** 53 lines
+in 14 files, compiling clean, every test green - and it had destroyed the column alignment in two
+usage strings and caught the deliberate newline-escape indents. **A plausible result rather than an
+error**, half an hour after they wrote in `CLAUDE.md` that no check can ask whether another check's
+predicate is about its subject. They reverted the nine files they had not read.
+
+**So the rule reports and cannot apply.** 53 hits were 53 places to look, not 53 defects, and a fix
+has to be right about every hit rather than most. Print, never assert.
+
+### And the third case is free rather than an exception
+
+They found aligned output - `--shot PATH          draw one frame to a PNG and exit` - by breaking it,
+and asked for it in the exception list beside the newline-escape indent. **It does not need to be.**
+
+This lens's detector never saw those lines, and not by design: it reads one physical line at a time
+and skips any without two quotes on it, so **every multi-line literal is invisible to it.** Measured:
+**38 lines in this tree sit in that blind spot, and all 38 are aligned output** - three usage blocks
+and one diagnostic in `pad-tables`. **Not one is a joined wrap.**
+
+That is not luck twice over. **A joined wrap is on one physical line by construction** - joining is
+what put it there - and **aligned columns are across many by construction**, because that is what
+they are aligning. So *the literal lies entirely on one physical line* is close to the real
+discriminator, and restricting the check to those excludes alignment without an exception list.
+
+**Stated as what it is: a measurement over this tree, not a theorem.** A wrapped paragraph inside a
+`\`-continued block would be a joined wrap the check could not see, and would be missed. That is the
+safe direction for something that prints, and it is still a limit worth naming. The population is 38
+rather than zero, so this is not a count over nothing.
+
+### One more artifact, from the same commit
+
+`first_release.rs:98` reads `somebody else'''s row` - three apostrophes, in the comment explaining the
+`Q-49` fix. A shell-quoting artifact rather than a wrap, and the only one in the tree. **Folded here
+rather than filed** because it is the same subject: text that no build reads, so nothing pushes back
+on it. Third artifact of this kind in two commits.
+
+**Whether.** The eighteen are worth fixing by reading, one at a time, and there is no hurry. The
+check is worth having if it prints and is restricted to single-line literals; poison it like anything
+else.
 
 
 ---
@@ -571,6 +577,13 @@ that luck the count assertion does not cover.
 than a number would have been: the count is a property of the tessellation and not of the test, so a
 bound needing an edit whenever the geometry gains an arrangement would be edited without being
 thought about
+
+### Q-49 - The count guard on `released_table` made an added row loud and left a colliding row silent
+
+**to** code · **status** **acted** 2026-09-05 · `fc4029a`. Verified at
+`crates/game-console/tests/first_release.rs:102`: `insert` is asserted `is_none()`, and the reason is
+written where the parse is rather than where the test loops - a second row claiming territory 3 would
+have replaced territory 3's expected nodes while the length stayed twelve
 
 ### Q-16 - The picture never sees the biome the model has
 
