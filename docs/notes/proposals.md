@@ -63,6 +63,82 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-272 - The scenario's territories do not match the release's biome table
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
+- **into** `releases/first-release.md` -> Biomes, or `scenario/commands/nodes.4x`
+
+**Found by checking my own arithmetic in `P-270`, which was wrong.** I told you grassland yields 3
+metal a turn and a Yard therefore needs two stores. **I read that off the Biomes table. The scenario
+does not use those numbers.**
+
+**Five territories are grassland and no two of them are alike, and none is the table's grassland.**
+Measured from `scenario/commands/biomes.4x` and `nodes.4x`:
+
+| Territory                  | Food    | Metal   | Energy  |
+| -------------------------- | ------- | ------- | ------- |
+| Grassland, per the release | `5 x 6` | `1 x 3` | `1 x 3` |
+| 1                          | `3 x 4` | `3 x 4` | `3 x 4` |
+| 2                          | `2 x 6` | `2 x 4` | `2 x 4` |
+| 3                          | `6 x 2` | `2 x 4` | `2 x 4` |
+| 8                          | `6 x 6` | `1 x 2` | `1 x 2` |
+| 11                         | `5 x 6` | `5 x 6` | `5 x 6` |
+
+**It is systematic rather than one bad row.** The mountains do the same: the table says
+`1 x 3 / 5 x 7 / 2 x 3`, territory 4 is `1 x 2 / 4 x 5 / 4 x 5` and territory 5 is
+`3 x 1 / 8 x 8 / 8 x 8`.
+
+**And the data file says it took them from that table** - `nodes.4x`, one occurrence, measured:
+*taken from the table in `releases/first-release.md`*, wrapped across two lines. **The comment is what makes this a defect
+rather than a design.** If the numbers were deliberately per-territory, nothing would claim they came
+from a table they do not match.
+
+**What it cost, immediately.** Territory 1 makes **12 metal a turn, not 3**. So under `P-270` a
+single metal store plus one turn's production is 22 against a Yard's 15 - **one store, where I told
+you two.** Energy is 12 a turn against an Ark's 12, so **it may need no energy store at all**, which
+is a far larger claim than the one I made and I am not making it here: whether the turns can be
+scheduled that way is the code lane's to answer.
+
+**Choice A - the biome table is the truth and the data is wrong.** Every grassland territory becomes
+`5 x 6 / 1 x 3 / 1 x 3`. **This changes the scenario substantially** - territory 1 goes from 12 metal
+a turn to 3.
+
+**Choice B - a biome is a floor or a flavour and a territory carries its own numbers.** Then the
+table needs to say so and the comment in `nodes.4x` is what is wrong.
+
+**No recommendation.** Whether a biome fixes a territory's yields or merely characterises it is a
+design question you have not been asked, and the answer changes the shape of the planet rather than
+the wording of a document.
+
+### P-273 - The coding instance's prompt sends it to the wrong files
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Starting the instances, the coding instance's
+prompt
+
+**The code lane found this by doing what the notice asked** - reading your document rather than my
+summary of it - **and it is my error in `P-268`.** The prompt names three places its work lives.
+Counted from `pending.md`:
+
+| Where                       | Open `to code` |
+| --------------------------- | -------------- |
+| `docs/notes/proposals.md`   | **7**          |
+| `releases/first-release.md` | 1              |
+| `lenses/quality/outbox.md`  | 1              |
+| `crates/outbox.md`          | **0**          |
+
+**It names the file holding none and omits the file holding seven.** `crates/outbox.md` is the code
+lane's *outbox* - what it addresses to others - so by construction it never holds work for it.
+
+> CLAUDE.md -> Perspectives says what you write and what you read. Your work is what is
+> open and addressed to you, and `pending.md` lists it - it is generated from every
+> outbox at every commit, so it cannot go stale the way a list in a prompt can.
+
+**Replacing the enumeration with `pending.md` rather than adding the missing file**, because the
+section opens by saying each prompt points at a document rather than restating one - **and a list of
+three files inside a prompt is exactly the restatement that went wrong.** The code lane offered both
+fixes and had no preference, since the file is yours.
+
 ## Addressed to other perspectives
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
