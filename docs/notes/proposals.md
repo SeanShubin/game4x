@@ -63,36 +63,38 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-267 - Four rules about you, kept where you do not read them
+### P-267 - What a proposal asks me, and what my answer does
 
 **to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind**
-contradiction - **asks** a decision - **into** `docs/process.md` -> What I read and what I do
+contradiction - **shape** text - **asks** approval - **into** `docs/process.md` -> What I read and
+what I do, at the end
 
-**You are answering four yes-or-no questions, and no text is final yet.** Say yes to any of them and
-this comes back carrying the words; that is `P-266` working, and it is why there is nothing quoted
-here to approve.
+**You agreed with A, B and C to move and D to stay.** Here are the words, and this is now a proposal
+you promote rather than answer.
 
-**The test each one passed to be on the list: it is a rule about what *you* do, or a guarantee you
-rely on, and it lives in `CLAUDE.md`, which is Claude's operating file and which you do not open.**
-Today's failure was exactly that - *answering is not promoting* constrained you and was written
-where you would never see it.
+> **A proposal asks me one of two things, and says which. Approval** means the words are final and
+> reading them is the whole of the work. **A decision** means a choice is open, and no wording can be
+> final until I make it.
+>
+> **Answering the questions in a proposal is not promoting it**, and a proposal with a question in it
+> cannot be promoted. My answer turns it into one that asks approval, which is a rewrite I read
+> before I promote it.
+>
+> **What I approve is what ships** - text byte for byte, a table's rows cell for cell, and an
+> instruction run with the check it carries. **That is what makes reading it worth my time.**
 
-|       | The rule                                                                                                                                 | Where it is                            | This lane recommends                                                                                              |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **A** | Answering the questions in a proposal is not promoting it, and a proposal with a question in it cannot be promoted                       | `CLAUDE.md`, promoted today as `P-266` | **Move** - it is a rule about your reply, and it failed for being in the wrong file                               |
-| **B** | A proposal asks one of two things and says which: **approval**, meaning the words are final, or **a decision**, meaning a choice is open | `CLAUDE.md`, `P-229` and `P-236`       | **Move** - it tells you what kind of reply is wanted, which is your half of A                                     |
-| **C** | The text you approve is byte-for-byte the text that ships                                                                                | `CLAUDE.md`, in the verbatim rule      | **Move the sentence, not the rule** - the three permitted exceptions are Claude's problem; the guarantee is yours |
-| **D** | The open queue stays under fifteen proposals                                                                                             | `CLAUDE.md`                            | **Leave** - a budget Claude is held to, and your document already says why it exists                              |
+**Ordered B, A, C rather than A, B, C.** What a proposal asks comes before what answering it does,
+and the guarantee closes. **These are new sentences rather than a move**, so the order is this lane's
+and is reported rather than assumed.
 
-**E is answered and is now `P-268`.** It was *nothing in the repository says how to start an
-instance* - `You are the` appears **once in the whole tree**, measured, and the three prompts existed
-only in the chat that started them. You said to put them in your document anyway, and `P-268` carries
-all three.
+**D stays in `CLAUDE.md`, as you agreed** - the fifteen-proposal limit, which appears once there,
+measured.
 
-**One thing to know before you answer.** `P-269` also edits `docs/process.md`, in the other
-direction - it takes *out* what names this project. **These four put rules in and that one takes
-detail out, so they do not collide**, but they land in the same file and this lane will re-read the
-section whole after the second of them.
+**On keeping them in both files.** `CLAUDE.md` retains its versions, which carry the operating detail
+and the failures that produced each rule. That is not `P-245`'s duplication: `CLAUDE.md` opens by
+saying **your document is the statement and it is the operating detail that must not contradict it**,
+so one states and the other operates. **If you would rather it pointed at yours instead, say so and
+that is a separate change.**
 
 ### P-269 - Two lines in your document that name this project
 
