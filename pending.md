@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-260** - Storage: your three questions are one decision, and the third answers the second · `docs/notes/proposals.md`
+- **P-261** - The three resources are supposed to feel different · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

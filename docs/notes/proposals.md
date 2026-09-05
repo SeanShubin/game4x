@@ -105,10 +105,43 @@ resource.** No new number. Against the biomes: **mountain 5, desert 3, ice 2, gr
 jungle cannot.** `C-9`'s question answered by geography instead of a special rule - **and grassland is
 territory 1's biome**, so check that against the scenario you are about to vet.
 
-**One thing left open deliberately: energy.** Founding produces no energy extractor, so under this it
-produces no energy store either. **A territory starts unable to hold energy at all**, and an Ark
-costs 12. **That is a real early decision for the player and it may also be an oversight** - say
-which.
+**Energy is settled, 2026-09-05.** Founding produces no energy extractor and therefore no energy
+store, and **a territory starts unable to hold energy at all** while an Ark costs 12. **That is
+deliberate**: *the three resources are supposed to feel different.* `P-261` records the principle.
+
+**So what is left of this proposal is the two numbers and the structure** - stores as many as
+extractors of that resource, ten each, extractors holding nothing, founding producing a food store
+and a metal store.
+
+### P-261 - The three resources are supposed to feel different
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/vision.md` -> Constraints
+
+**You said it settling a smaller question and it is bigger than that question.** Asked whether a
+territory starting unable to hold energy was an oversight in the symmetry:
+
+> The three resources are supposed to feel different. **Where food, metal and energy behave alike,
+> that is a placeholder rather than a decision** - and where they differ, the difference is the
+> point.
+
+**Basis: it has already been doing work and nothing recorded it.** `food` keeps for one turn and the
+other two do not - a real difference, in the release today. **And `20, 20, 20` was the opposite**:
+three identical numbers for three things meant to differ, which this lane flagged as reading like a
+placeholder before you had said why it was one. **`P-258` removed them.**
+
+**It also decides `P-260`'s last question without being about it.** Founding gives a food store and a
+metal store and no energy store, so **energy is the resource you must build to hold at all** - which
+is a difference of kind rather than of number, and the strongest of the three.
+
+**It belongs in *Constraints* rather than *Directions*.** A direction is a movement you expect to
+make; **this is a fixed point you are holding to**, and its use is to refuse things - a uniform
+default, a symmetric table, a rule written once and applied three times **because it was tidier**.
+
+**What it costs, which is the honest half.** Three resources behaving differently is three sets of
+rules to hold in mind, for you and for a player. **The saving is that no difference has to be
+justified twice** - once it is a fixed point, *why is energy not like metal* stops being a question
+that needs answering each time it comes up.
 
 ## Addressed to other perspectives
 
