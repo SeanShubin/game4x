@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-269** - The four artifacts, said without naming this game · `docs/notes/proposals.md`
 - **P-271** - The directory list goes, and the rule stays · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
@@ -17,7 +16,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-44** - `e65545c` File C-29: S-44 takes can_hold_yard from ten territories to eight · still open in `docs/notes/proposals.md`
+- **S-44** - `b11ec59` S-44 model half: a store is a kind, and a territory keeps what its stores hold · still open in `docs/notes/proposals.md`
 - **S-41** - `5c43696` S-41 first half: choose the `derived from` form · still open in `docs/notes/proposals.md`
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
@@ -66,10 +65,10 @@ it exists to ask.
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223
+- `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
-- `docs/process.md` -> How I know the game is right - P-219, P-225, P-228
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md` -> All lanes - P-247, P-248

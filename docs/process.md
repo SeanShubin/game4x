@@ -47,9 +47,9 @@ instruction run with the check it carries. **That is what makes reading it worth
 
 ## How I know the game is right
 
-Four artifacts: the thing definitions, the recipe definitions, the commands a scenario ran, and the
-data dump of that scenario. The first three are enough to derive the fourth by hand. If I can do
-that, I can tell whether the game is working as I intend.
+Four artifacts: the definitions of the things, the definitions of the transformations over them,
+the commands a scenario ran, and the data dump of that scenario. The first three are enough to
+derive the fourth by hand. If I can do that, I can tell whether the game is working as I intend.
 
 The scenario test reads the data files for its input, reads the data files for what is expected,
 computes what actually happens, and compares. **The input and the expected are what I review by

@@ -63,28 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-269 - The four artifacts, said without naming this game
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind**
-contradiction - **shape** text - **asks** approval - **into** `docs/process.md` -> How I know the
-game is right, the opening sentence
-
-**Your A. One sentence replaces the one that opens the section**, from *Four artifacts* to *working
-as I intend*.
-
-> Four artifacts: the definitions of the things, the definitions of the transformations over them,
-> the commands a scenario ran, and the data dump of that scenario. The first three are enough to
-> derive the fourth by hand. If I can do that, I can tell whether the game is working as I intend.
-
-**What changed is two words.** *The thing definitions, the recipe definitions* becomes *the
-definitions of the things, the definitions of the transformations over them*. **`recipe` then appears
-zero times in your document** - it appears once now, measured, and this is the once.
-
-**Your B is `P-271`**, filed alongside this one. **The two are split because they land in different
-sections**, and a proposal carries one quotation per destination - so one proposal with two blocks of
-text has no way to say which is which. That is `P-251`'s rule meeting a case it did not name, and
-splitting is the answer that needs no new rule.
-
 ### P-271 - The directory list goes, and the rule stays
 
 **to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
@@ -1440,6 +1418,7 @@ work the release exists to order.
 | P-265, a store holds 10 and the extractor's catch row goes, which P-260 asked for and did not carry                          | `releases/first-release.md` -> Where things are                                                                                              | 2026-09-05 |
 | P-268, the prompts that start the specification, code and quality instances                                                  | `docs/process.md` -> Starting the instances                                                                                                  | 2026-09-05 |
 | P-267, what a proposal asks him, what answering one does, and that what he approves is what ships                            | `docs/process.md` -> What I read and what I do                                                                                               | 2026-09-05 |
+| P-269, the four artifacts said without naming this game's model                                                              | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-05 |
 
 ## Rejected
 
