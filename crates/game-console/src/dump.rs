@@ -613,6 +613,7 @@ const STYLE: &str = "<style>\n\
 pub fn html_name(markdown: &str) -> &'static str {
     match markdown {
         "turns.md" => "turns.html",
+        "commands.md" => "commands.html",
         "catalog.md" => "catalog.html",
         "recipes.md" => "recipes.html",
         // `state` and `entities` already have a page rendered from the model rather than
@@ -872,6 +873,9 @@ pub fn index(generated: &[(&str, String)]) -> String {
             "state.md" => "the state after the scenario, one table per relation",
             "entities.md" => "the same state as entities and their components",
             "turns.md" => "every turn: the commands that ran, what changed, and what was there",
+            "commands.md" => {
+                "every command that ran, flattened out of its files, with the recipe it fired"
+            }
             other => panic!("no description for {other}"),
         }
     };
@@ -982,7 +986,7 @@ pub fn index(generated: &[(&str, String)]) -> String {
         ));
         listed += 1;
     }
-    assert_eq!(listed, 5, "five reports, each with a page and its markdown");
+    assert_eq!(listed, 6, "six reports, each with a page and its markdown");
     out.push_str(
         "</ul>
 </body>
@@ -1132,6 +1136,13 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
             html(&entity_sections(&session.game), things),
         ),
         ("turns.md", per_turn),
+        // `S-24`. Produced from its own replay rather than from the one above, because the
+        // one above starts after `run setup` and this artifact is the whole of what ran -
+        // the design included, which is where half the numbers in `state.md` come from.
+        (
+            "commands.md",
+            crate::fired::markdown(&crate::fired::ran(commands)),
+        ),
     ];
     // **Every markdown report gets a page** - `S-40`. Three of the index's links opened raw
     // markdown in a browser, `turns.md` worst of all, being the longest and the one read
@@ -1139,7 +1150,7 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
     // the model, so the two cannot say different things.
     let pages: Vec<(&str, String)> = written
         .iter()
-        .filter(|(name, _)| *name == "turns.md")
+        .filter(|(name, _)| *name == "turns.md" || *name == "commands.md")
         .map(|(name, text)| (html_name(name), page(text, name)))
         .collect();
     written.extend(pages);

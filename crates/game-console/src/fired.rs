@@ -1,0 +1,241 @@
+//! Which recipe each command fired, and the flattened list of what actually ran.
+//!
+//! **`S-24`'s fourth artifact.** Sean's acceptance test for the whole reporting effort, in
+//! his words: *I should be able to take the things, the recipes, the commands, and manually
+//! derive the data dump. If I can do that as a human, I can be pretty sure that I can detect
+//! if the game is working as I intend or not.*
+//!
+//! Three of the four exist - `catalog.md`, `recipes.md`, and `state.md` with `entities.md`.
+//! The commands were the missing one, and they are missing in two separate ways.
+//!
+//! **They are not a file you can read.** `commands/setup.4x` opens with `run world`, so the
+//! sequence is a hierarchy across several files and what executed is the flattening. Reading
+//! `play.4x` shows you 73 lines of a run that is 700.
+//!
+//! **And deriving the dump by hand needs one thing nothing states: which recipe a command
+//! fires.** `land ark 1` is `deploy ark`. `build extractor 1 metal` is `build extractor`.
+//! `spec/console.md` lists commands, the release lists recipes, and no document connects
+//! them - so a person holding all four artifacts still cannot begin. This is that
+//! connection, which makes the artifact a record of the run rather than a copy of the input.
+//!
+//! # The one command whose recipe is not in the command
+//!
+//! `move` fires `move` or `found by land` depending on what is on the ground, because the
+//! model looks rather than being told. So the recipe is read from **what happened** - the
+//! target territory gaining its first citizen - and not from the words. That is the honest
+//! derivation while it lasts: `P-214` splits the command in two so the player says which,
+//! and when it does this disambiguation becomes dead and should go rather than be kept.
+
+use game_model::{Game, StructureKind, Transition, UnitKind};
+
+/// The six recipes an `end turn` runs, in `spec/turn.md`'s order.
+///
+/// `spec/turn.md`: *everything with upkeep pays it; then a population grows on surplus food
+/// or starves for want of it*, then what expires expires, and then everything becomes ready
+/// again. The middle clause is quoted in this crate's outbox rather than here because it
+/// carries emphasis, and `quotations.rs` compares flattened text that still has the
+/// asterisks in it - so quoting it here would fail the guard for a difference in markup
+/// rather than in words. Worth knowing before trusting the guard to have read everything.
+///
+/// **The names are the release's and the order is that sentence.** `tests/fired.rs` holds
+/// the set against the release's own *Recipes* table, read at test time, so a world recipe
+/// added or renamed fails here rather than quietly dropping out of the artifact. The order
+/// is a reading of the sentence above and is not checked by anything, which is worth knowing
+/// when trusting it: the sentence names four moments and there are six recipes, so `perish`
+/// is placed with `grow` and `age` with `spoil`.
+pub const ENDING_A_TURN: [&str; 6] = ["upkeep", "grow", "perish", "spoil", "age", "refresh"];
+
+/// What one command fired, if it fired anything.
+pub struct Fired {
+    /// The command as written, after the file that held it was flattened away.
+    pub command: String,
+    /// The recipes it ran, in order. Empty for a command that is not a recipe at all.
+    pub recipes: Vec<&'static str>,
+    /// Why it is empty, for the ones that are - so a blank cell never has to be guessed at.
+    pub instead: &'static str,
+    /// Which turn it ran in. Zero is before `start`, which is the design.
+    pub turn: u32,
+}
+
+/// The recipe a transition fires, given the states either side of it.
+///
+/// **Read from the transition rather than from the words**, because the words are the
+/// player's and the recipe is the game's. `build extractor 1 metal` and a later shorthand
+/// for the same thing have to give the same answer, and only the transition is common to
+/// both.
+///
+/// The design commands and `start` fire nothing, and `spec/console.md` is why rather than
+/// this being an omission: `P-217` says the query commands and the design commands are
+/// listed *because neither is a recipe*. `launch` fires nothing either, and that one is a
+/// fact about the release rather than about the console - no recipe in it names an orbit.
+pub fn fired(
+    transition: &Transition,
+    before: &Game,
+    after: &Game,
+) -> (Vec<&'static str>, &'static str) {
+    match transition {
+        Transition::Land { kind, .. } => match kind {
+            UnitKind::Ark => (vec!["deploy ark"], ""),
+            _ => (Vec::new(), "no recipe lands one of these"),
+        },
+        Transition::Move { territory, .. } => {
+            // `found by land` is `move` that arrives somewhere nobody was. Asked of the two
+            // states rather than of the command, because the model decides by looking and
+            // the command cannot say. `P-214` ends this.
+            let was = before
+                .territories
+                .get(territory.index())
+                .is_some_and(|place| place.founded());
+            let is = after
+                .territories
+                .get(territory.index())
+                .is_some_and(|place| place.founded());
+            if !was && is {
+                (vec!["found by land"], "")
+            } else {
+                (vec!["move"], "")
+            }
+        }
+        Transition::Build { structure, .. } => match structure {
+            StructureKind::Extractor => (vec!["build extractor"], ""),
+            StructureKind::Yard => (vec!["build yard"], ""),
+            // The release has no recipe that builds one. A garrison arrives with a founding
+            // and is manned, which `found by land` and `deploy ark` already account for.
+            StructureKind::Garrison => (Vec::new(), "no recipe builds a garrison"),
+        },
+        Transition::Produce { kind, .. } => match kind {
+            UnitKind::Pioneer => (vec!["produce pioneer"], ""),
+            UnitKind::Ark => (vec!["produce ark"], ""),
+        },
+        Transition::CreateLabor { .. } => (vec!["create labor"], ""),
+        Transition::Work { .. } => (vec!["work"], ""),
+        Transition::EndTurn => (ENDING_A_TURN.to_vec(), ""),
+        Transition::Launch { .. } => (
+            Vec::new(),
+            "no recipe names an orbit, so nothing fires - `catalog.md` says the same of the kind",
+        ),
+        Transition::Start => (Vec::new(), "the game begins; `P-217`, not a recipe"),
+        Transition::CreatePlanet { .. }
+        | Transition::SetResource { .. }
+        | Transition::SetForceOfNature { .. }
+        | Transition::SetBiome { .. }
+        | Transition::AddUnitToOrbit { .. } => (Vec::new(), "design; `P-217`, not a recipe"),
+    }
+}
+
+/// Every command that actually ran, in order, with the recipe it fired.
+///
+/// **The flattening is the point.** `run setup` is followed here rather than recorded, so a
+/// hierarchy of seven files becomes one list - which is what a person deriving the dump has
+/// to work from, and what no file on disk contains.
+///
+/// A `run` line is not itself in the list. It is not a recipe and not a move in the game; it
+/// is where the next commands are kept, and keeping it would be reporting the filing system.
+pub fn ran(library: &dyn crate::Library) -> Vec<Fired> {
+    let mut session = crate::Session::new();
+    let mut out = Vec::new();
+    for line in ["run setup", "start", "run play"] {
+        walk(line, library, &mut session, &mut out, 0);
+    }
+    out
+}
+
+/// One line, and whatever it turns out to contain.
+fn walk(
+    line: &str,
+    library: &dyn crate::Library,
+    session: &mut crate::Session,
+    out: &mut Vec<Fired>,
+    depth: usize,
+) {
+    assert!(depth < 8, "`{line}` is nested deeper than any scenario is");
+    let line = line.trim();
+    if line.is_empty() || line.starts_with('#') {
+        return;
+    }
+
+    let grammar = crate::command_grammar();
+    let Some(utterance) = command_language::parse_line(&grammar, line, 1)
+        .unwrap_or_else(|why| panic!("`{line}` does not parse: {why}"))
+    else {
+        return;
+    };
+    let meaning = crate::interpret(&utterance).unwrap_or_else(|why| panic!("`{line}`: {why}"));
+
+    match meaning {
+        crate::Meaning::Run(name) => {
+            let text = library
+                .fetch(&name)
+                .unwrap_or_else(|| panic!("`{line}` names a file that is not there"));
+            for inner in text.lines() {
+                walk(inner, library, session, out, depth + 1);
+            }
+        }
+        crate::Meaning::Change(transition) => {
+            let before = session.game.clone();
+            session
+                .run(line, library)
+                .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
+            let (recipes, instead) = fired(&transition, &before, &session.game);
+            out.push(Fired {
+                command: line.to_string(),
+                recipes,
+                instead,
+                // The turn it ran *in*, so an `end turn` belongs to the turn it ended
+                // rather than to the one it started. Before, not after.
+                turn: before.turn,
+            });
+        }
+        // A query answers a question and moves nothing, so it is not part of the derivation.
+        _ => {}
+    }
+}
+
+/// The commands artifact, as markdown.
+pub fn markdown(ran: &[Fired]) -> String {
+    let mut out = String::from("# Commands\n\n");
+    out.push_str("**Generated. Do not edit.** `cargo run -p game-console --bin dump-state`.\n\n");
+    out.push_str(
+        "Every command that ran, in order, with the recipe it fired. `S-24`: the third of \
+         the four artifacts a person needs to derive the data dump by hand, the others being \
+         `catalog.md`, `recipes.md` and `state.md`.\n\n",
+    );
+    out.push_str(
+        "The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, and \
+         a `run` line is not listed - it is where the next commands are kept rather than a \
+         move in the game.\n\n",
+    );
+
+    let turns = ran.iter().map(|one| one.turn).max().unwrap_or(0);
+    out.push_str(&format!(
+        "{} commands over {turns} turn(s), and {} of them before the game began.\n\n",
+        ran.len(),
+        ran.iter().filter(|one| one.turn == 0).count()
+    ));
+
+    out.push_str("| # | turn | command | fires |\n");
+    out.push_str("| - | ---- | ------- | ----- |\n");
+    for (at, one) in ran.iter().enumerate() {
+        let turn = if one.turn == 0 {
+            "design".to_string()
+        } else {
+            one.turn.to_string()
+        };
+        let fires = if one.recipes.is_empty() {
+            format!("*{}*", one.instead)
+        } else {
+            one.recipes
+                .iter()
+                .map(|name| format!("`{name}`"))
+                .collect::<Vec<_>>()
+                .join(", ")
+        };
+        out.push_str(&format!(
+            "| {} | {turn} | `{}` | {fires} |\n",
+            at + 1,
+            one.command
+        ));
+    }
+    out.push_str(&format!("\n{} row(s)\n", ran.len()));
+    out
+}

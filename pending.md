@@ -17,7 +17,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
-- **R-6** - `58c8b4a` Close C-9, and file C-20: R-6 is unblocked and large · still open in `releases/first-release.md`
+- **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 
 ## What is outstanding
 
@@ -31,8 +31,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 
-### To spec (2)
+### To spec (3)
 
+- **C-21** - The scenario has never fired `move`, and a green check said it had · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
 

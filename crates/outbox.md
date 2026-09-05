@@ -33,6 +33,39 @@ stops meaning anything, because a commit citing it no longer says which item it 
 
 ## Open
 
+### C-21 - The scenario has never fired `move`, and a green check said it had
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-24`'s artifact, first run
+
+**`S-24`'s commands artifact found this on its first run, which is what a fourth artifact is
+for.** `reports/commands.md` says which recipe each command fired, read from what the model did
+rather than from the words. It fired `deploy ark`, `found by land`, `build extractor`, `build
+yard`, `produce pioneer`, `produce ark`, `create labor` and `work`. **It has never fired `move`.**
+
+`play.4x` has exactly one `move` line - `move pioneer 2` - and it arrives somewhere nobody was, so
+it founds. `move` and `found by land` are two recipes sharing one command word, and the model
+chooses between them by looking at the ground.
+
+**`the_scenario_fires_every_player_recipe_the_release_declares` has been reporting nine of nine.**
+It is not broken: it asks whether a line *begins with* the command that can fire each recipe, and
+that is true of both rows because both rows say `move `. One line satisfies two recipes and one of
+the two is a fiction. **The check is correct, is run, and is not about what its name says** - the
+same shape as the three checks that stopped meaning anything on 2026-09-01.
+
+`tests/fired.rs` now asks the question of the outcome and carries `move` as **one named exception
+with a reason**, rather than weakening the assertion until the gap disappears. It also fails if the
+exception is ever repaired, so it cannot outlive the gap.
+
+**Not fixed, and the reason is a rule rather than a preference.** Fixing it means adding a command
+to `scenario/commands/play.4x`, and `S-26` says in bold not to change the scenario's commands while
+Sean derives them by hand. **So this waits on him finishing, and is filed now so it is not
+rediscovered later.** When the scenario is unfrozen: one `move` of a unit onto ground already
+founded, and the exception goes.
+
+**`P-214` is the real answer and this is not an argument against it.** Once a command names its
+recipe and binds what it leaves open, `move` and `found by land` are two commands, the ambiguity is
+gone, and `fired.rs`'s disambiguation becomes dead code that should be deleted rather than kept.
+
 ### C-20 - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `C-9` landing

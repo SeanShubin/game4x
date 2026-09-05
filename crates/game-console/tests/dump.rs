@@ -428,6 +428,15 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
 
     // Which command fires which recipe. Small, and checked for completeness below - a recipe
     // the release adds and this does not name fails rather than going unnoticed.
+    // **This says a command that *can* fire each recipe is present, not that each recipe
+    // ran.** Two of the nine share a command word: `move` and `found by land` are both
+    // `move `, and the model chooses between them by looking at the ground. So one
+    // `move pioneer 2` satisfies two rows here - and it founds, which means the recipe
+    // `move` has never been fired by this scenario while this check reported nine of nine.
+    //
+    // `tests/fired.rs` asks the model what actually happened and carries that gap as one
+    // named exception. This is kept because it is the cheaper question and it fails earlier:
+    // a recipe with no command at all is a hole in the console, and that is what it is for.
     let fired_by: [(&str, &str); 9] = [
         ("deploy ark", "land ark"),
         ("move", "move "),
@@ -480,7 +489,7 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
             scenario
                 .lines()
                 .any(|line| line.trim().starts_with(command)),
-            "no command in the scenario fires `{recipe}` - looked for a line beginning \
+            "no command in the scenario could fire `{recipe}` - looked for a line beginning \
              `{command}`"
         );
     }

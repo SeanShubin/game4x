@@ -1,0 +1,177 @@
+<!doctype html>
+<!-- Generated. Do not edit. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>commands.md</title>
+<style>
+:root { color-scheme: light dark }
+body { font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem auto; max-width: 70rem; padding: 0 1rem }
+h1 { font-size: 1.3rem }
+h2 { margin: 2rem 0 .25rem; font-size: 1.1rem }
+h3 { margin: 1.25rem 0 .25rem; font-size: 1rem; opacity: .85 }
+table { border-collapse: collapse; margin: .5rem 0 }
+th, td { border: 1px solid currentColor; padding: .15rem .5rem; text-align: left }
+th { font-weight: 600 }
+pre { background: rgba(127,127,127,.12); padding: .6rem .8rem; overflow-x: auto }
+ul { padding-left: 1.2rem }
+.empty { opacity: .7; font-style: italic }
+.count, .note { opacity: .7; font-size: .85rem }
+.quiet { opacity: .55; font-size: .85rem }
+.quiet a { font-weight: 400 }
+</style>
+</head>
+<body>
+<p class="note"><a href="index.html">all reports</a></p>
+<h1>Commands</h1>
+<p><strong>Generated. Do not edit.</strong> <code>cargo run -p game-console --bin dump-state</code>.</p>
+<p>Every command that ran, in order, with the recipe it fired. <code>S-24</code>: the third of the four artifacts a person needs to derive the data dump by hand, the others being <code>catalog.md</code>, <code>recipes.md</code> and <code>state.md</code>.</p>
+<p>The hierarchy is flattened. <code>run setup</code> opens <code>setup.4x</code>, which opens others, and a <code>run</code> line is not listed - it is where the next commands are kept rather than a move in the game.</p>
+<p>136 commands over 8 turn(s), and 63 of them before the game began.</p>
+<table>
+<thead>
+<tr><th>#</th><th>turn</th><th>command</th><th>fires</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>design</td><td><code>create planet tiny</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>2</td><td>design</td><td><code>set resource 1 food 3 4</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>3</td><td>design</td><td><code>set resource 1 metal 3 4</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>4</td><td>design</td><td><code>set resource 1 energy 3 4</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>5</td><td>design</td><td><code>set resource 2 food 2 6</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>6</td><td>design</td><td><code>set resource 2 metal 2 4</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>7</td><td>design</td><td><code>set resource 2 energy 2 4</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>8</td><td>design</td><td><code>set resource 3 food 6 2</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>9</td><td>design</td><td><code>set resource 3 metal 2 4</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>10</td><td>design</td><td><code>set resource 3 energy 2 4</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>11</td><td>design</td><td><code>set resource 4 food 1 2</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>12</td><td>design</td><td><code>set resource 4 metal 4 5</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>13</td><td>design</td><td><code>set resource 4 energy 4 5</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>14</td><td>design</td><td><code>set resource 5 food 3 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>15</td><td>design</td><td><code>set resource 5 metal 8 8</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>16</td><td>design</td><td><code>set resource 5 energy 8 8</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>17</td><td>design</td><td><code>set resource 6 food 4 4</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>18</td><td>design</td><td><code>set resource 6 metal 0 0</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>19</td><td>design</td><td><code>set resource 6 energy 4 5</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>20</td><td>design</td><td><code>set resource 7 food 4 4</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>21</td><td>design</td><td><code>set resource 7 metal 4 5</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>22</td><td>design</td><td><code>set resource 7 energy 0 0</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>23</td><td>design</td><td><code>set resource 8 food 6 6</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>24</td><td>design</td><td><code>set resource 8 metal 1 2</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>25</td><td>design</td><td><code>set resource 8 energy 1 2</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>26</td><td>design</td><td><code>set resource 9 food 2 3</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>27</td><td>design</td><td><code>set resource 9 metal 6 8</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>28</td><td>design</td><td><code>set resource 9 energy 1 2</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>29</td><td>design</td><td><code>set resource 10 food 3 3</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>30</td><td>design</td><td><code>set resource 10 metal 1 3</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>31</td><td>design</td><td><code>set resource 10 energy 6 8</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>32</td><td>design</td><td><code>set resource 11 food 5 6</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>33</td><td>design</td><td><code>set resource 11 metal 5 6</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>34</td><td>design</td><td><code>set resource 11 energy 5 6</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>35</td><td>design</td><td><code>set resource 12 food 2 2</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>36</td><td>design</td><td><code>set resource 12 metal 8 8</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>37</td><td>design</td><td><code>set resource 12 energy 8 8</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>38</td><td>design</td><td><code>set force 1 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>39</td><td>design</td><td><code>set force 2 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>40</td><td>design</td><td><code>set force 3 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>41</td><td>design</td><td><code>set force 4 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>42</td><td>design</td><td><code>set force 5 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>43</td><td>design</td><td><code>set force 6 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>44</td><td>design</td><td><code>set force 7 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>45</td><td>design</td><td><code>set force 8 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>46</td><td>design</td><td><code>set force 9 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>47</td><td>design</td><td><code>set force 10 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>48</td><td>design</td><td><code>set force 11 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>49</td><td>design</td><td><code>set force 12 1</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>50</td><td>design</td><td><code>set biome 1 grassland</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>51</td><td>design</td><td><code>set biome 2 grassland</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>52</td><td>design</td><td><code>set biome 3 grassland</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>53</td><td>design</td><td><code>set biome 4 mountain</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>54</td><td>design</td><td><code>set biome 5 mountain</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>55</td><td>design</td><td><code>set biome 6 jungle</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>56</td><td>design</td><td><code>set biome 7 jungle</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>57</td><td>design</td><td><code>set biome 8 grassland</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>58</td><td>design</td><td><code>set biome 9 mountain</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>59</td><td>design</td><td><code>set biome 10 desert</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>60</td><td>design</td><td><code>set biome 11 grassland</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>61</td><td>design</td><td><code>set biome 12 ice</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>62</td><td>design</td><td><code>add ark orbit</code></td><td><em>design; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>63</td><td>design</td><td><code>start</code></td><td><em>the game begins; <code>P-217</code>, not a recipe</em></td></tr>
+<tr><td>64</td><td>1</td><td><code>land ark 1</code></td><td><code>deploy ark</code></td></tr>
+<tr><td>65</td><td>1</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>66</td><td>1</td><td><code>work 1 extractor 1 food</code></td><td><code>work</code></td></tr>
+<tr><td>67</td><td>1</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>68</td><td>1</td><td><code>work 1 extractor 1 metal</code></td><td><code>work</code></td></tr>
+<tr><td>69</td><td>1</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+<tr><td>70</td><td>2</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>71</td><td>2</td><td><code>work 1 extractor 1 food</code></td><td><code>work</code></td></tr>
+<tr><td>72</td><td>2</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>73</td><td>2</td><td><code>work 1 extractor 1 metal</code></td><td><code>work</code></td></tr>
+<tr><td>74</td><td>2</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>75</td><td>2</td><td><code>build extractor 1 food</code></td><td><code>build extractor</code></td></tr>
+<tr><td>76</td><td>2</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>77</td><td>2</td><td><code>build extractor 1 food</code></td><td><code>build extractor</code></td></tr>
+<tr><td>78</td><td>2</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+<tr><td>79</td><td>3</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>80</td><td>3</td><td><code>work 3 extractor 1 food</code></td><td><code>work</code></td></tr>
+<tr><td>81</td><td>3</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>82</td><td>3</td><td><code>work 1 extractor 1 metal</code></td><td><code>work</code></td></tr>
+<tr><td>83</td><td>3</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+<tr><td>84</td><td>4</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>85</td><td>4</td><td><code>work 3 extractor 1 food</code></td><td><code>work</code></td></tr>
+<tr><td>86</td><td>4</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>87</td><td>4</td><td><code>work 1 extractor 1 metal</code></td><td><code>work</code></td></tr>
+<tr><td>88</td><td>4</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>89</td><td>4</td><td><code>build extractor 1 metal</code></td><td><code>build extractor</code></td></tr>
+<tr><td>90</td><td>4</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>91</td><td>4</td><td><code>build extractor 1 metal</code></td><td><code>build extractor</code></td></tr>
+<tr><td>92</td><td>4</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>93</td><td>4</td><td><code>build extractor 1 energy</code></td><td><code>build extractor</code></td></tr>
+<tr><td>94</td><td>4</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>95</td><td>4</td><td><code>build extractor 1 energy</code></td><td><code>build extractor</code></td></tr>
+<tr><td>96</td><td>4</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+<tr><td>97</td><td>5</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>98</td><td>5</td><td><code>work 3 extractor 1 food</code></td><td><code>work</code></td></tr>
+<tr><td>99</td><td>5</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>100</td><td>5</td><td><code>work 3 extractor 1 metal</code></td><td><code>work</code></td></tr>
+<tr><td>101</td><td>5</td><td><code>create labor 2 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>102</td><td>5</td><td><code>work 2 extractor 1 energy</code></td><td><code>work</code></td></tr>
+<tr><td>103</td><td>5</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>104</td><td>5</td><td><code>build extractor 1 energy</code></td><td><code>build extractor</code></td></tr>
+<tr><td>105</td><td>5</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+<tr><td>106</td><td>6</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>107</td><td>6</td><td><code>work 3 extractor 1 food</code></td><td><code>work</code></td></tr>
+<tr><td>108</td><td>6</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>109</td><td>6</td><td><code>work 3 extractor 1 metal</code></td><td><code>work</code></td></tr>
+<tr><td>110</td><td>6</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>111</td><td>6</td><td><code>work 3 extractor 1 energy</code></td><td><code>work</code></td></tr>
+<tr><td>112</td><td>6</td><td><code>produce pioneer 1</code></td><td><code>produce pioneer</code></td></tr>
+<tr><td>113</td><td>6</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+<tr><td>114</td><td>7</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>115</td><td>7</td><td><code>work 3 extractor 1 food</code></td><td><code>work</code></td></tr>
+<tr><td>116</td><td>7</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>117</td><td>7</td><td><code>work 3 extractor 1 metal</code></td><td><code>work</code></td></tr>
+<tr><td>118</td><td>7</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>119</td><td>7</td><td><code>work 3 extractor 1 energy</code></td><td><code>work</code></td></tr>
+<tr><td>120</td><td>7</td><td><code>move pioneer 2</code></td><td><code>found by land</code></td></tr>
+<tr><td>121</td><td>7</td><td><code>create labor 1 2</code></td><td><code>create labor</code></td></tr>
+<tr><td>122</td><td>7</td><td><code>work 1 extractor 2 food</code></td><td><code>work</code></td></tr>
+<tr><td>123</td><td>7</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+<tr><td>124</td><td>8</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>125</td><td>8</td><td><code>work 3 extractor 1 food</code></td><td><code>work</code></td></tr>
+<tr><td>126</td><td>8</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>127</td><td>8</td><td><code>work 3 extractor 1 metal</code></td><td><code>work</code></td></tr>
+<tr><td>128</td><td>8</td><td><code>create labor 3 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>129</td><td>8</td><td><code>work 3 extractor 1 energy</code></td><td><code>work</code></td></tr>
+<tr><td>130</td><td>8</td><td><code>create labor 1 2</code></td><td><code>create labor</code></td></tr>
+<tr><td>131</td><td>8</td><td><code>work 1 extractor 2 food</code></td><td><code>work</code></td></tr>
+<tr><td>132</td><td>8</td><td><code>create labor 1 1</code></td><td><code>create labor</code></td></tr>
+<tr><td>133</td><td>8</td><td><code>build yard 1</code></td><td><code>build yard</code></td></tr>
+<tr><td>134</td><td>8</td><td><code>produce ark 1</code></td><td><code>produce ark</code></td></tr>
+<tr><td>135</td><td>8</td><td><code>launch ark</code></td><td><em>no recipe names an orbit, so nothing fires - <code>catalog.md</code> says the same of the kind</em></td></tr>
+<tr><td>136</td><td>8</td><td><code>end turn</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+</tbody>
+</table>
+<p>136 row(s)</p>
+</body>
+</html>

@@ -4,7 +4,7 @@
 //! to be current whatever generates it, and five of the seven generated files in this
 //! repository were held to nothing at all.
 //!
-//! **`S-40` made it nine.** Every markdown report now has a page beside it, and a page is a
+//! **`S-40` made it nine, and `S-24`'s commands artifact eleven.** Every markdown report now has a page beside it, and a page is a
 //! second thing that can go stale - one that is *harder* to notice, because nobody diffs
 //! rendered HTML. The two `prototypes/kinds` writes are rendered here rather than there,
 //! since nothing may depend on that crate, so their pages are held here too.
@@ -130,8 +130,8 @@ fn every_committed_dump_is_what_the_scenario_produces() {
 
     assert_eq!(
         generated.len(),
-        7,
-        "seven dump files are generated; `dump::generated` returned {}",
+        9,
+        "nine dump files are generated; `dump::generated` returned {}",
         generated.len()
     );
 
@@ -147,8 +147,8 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     }
     assert_eq!(
         generated.len(),
-        9,
-        "nine generated files, six of them pages"
+        11,
+        "eleven generated files, seven of them pages"
     );
 
     let produced: std::collections::BTreeSet<String> =
@@ -204,8 +204,8 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // The set was discovered, so it can be empty for the wrong reason. This says it was not.
     assert_eq!(
         on_disk.len(),
-        9,
-        "nine files carry the generated marker; found {} ({on_disk:?})",
+        11,
+        "eleven files carry the generated marker; found {} ({on_disk:?})",
         on_disk.len()
     );
 }
@@ -223,7 +223,7 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
         let markdown = std::fs::read_to_string(root.join("reports").join(name)).unwrap();
         generated.push((dump::html_name(name), dump::page(&markdown, name)));
     }
-    assert_eq!(generated.len(), 9, "nine generated files");
+    assert_eq!(generated.len(), 11, "eleven generated files");
 
     for (name, text) in &generated {
         assert!(
@@ -303,5 +303,5 @@ fn every_page_is_well_formed_enough_to_be_read_as_one() {
     // it would have done for the whole session the defect above was live. Six and not five:
     // `index.html` is a page as much as the five reports are, and is the one page that
     // does not go through `dump::page`, so it is the likeliest to drift from them.
-    assert_eq!(pages, 6, "six pages, and every one of them checked");
+    assert_eq!(pages, 7, "seven pages, and every one of them checked");
 }
