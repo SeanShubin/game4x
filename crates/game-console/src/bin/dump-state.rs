@@ -30,7 +30,17 @@ fn main() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let files = Files(root.join("scenario/commands"));
 
-    for (name, text) in dump::generated(&files) {
+    // The two reports `prototypes/kinds` writes get a page here, because it cannot use this
+    // renderer and nothing should depend on it. Rendered from its markdown on disk.
+    let mut elsewhere = Vec::new();
+    for name in dump::RENDERED_ELSEWHERE {
+        let at = root.join("reports").join(name);
+        let markdown = std::fs::read_to_string(&at)
+            .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
+        elsewhere.push((dump::html_name(name), dump::page(&markdown, name)));
+    }
+
+    for (name, text) in dump::generated(&files).into_iter().chain(elsewhere) {
         let at = root.join("reports").join(name);
         std::fs::write(&at, text)
             .unwrap_or_else(|why| panic!("cannot write {}: {why}", at.display()));

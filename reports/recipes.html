@@ -1,0 +1,145 @@
+<!doctype html>
+<!-- Generated. Do not edit. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>recipes.md</title>
+<style>
+:root { color-scheme: light dark }
+body { font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem auto; max-width: 70rem; padding: 0 1rem }
+h1 { font-size: 1.3rem }
+h2 { margin: 2rem 0 .25rem; font-size: 1.1rem }
+h3 { margin: 1.25rem 0 .25rem; font-size: 1rem; opacity: .85 }
+table { border-collapse: collapse; margin: .5rem 0 }
+th, td { border: 1px solid currentColor; padding: .15rem .5rem; text-align: left }
+th { font-weight: 600 }
+pre { background: rgba(127,127,127,.12); padding: .6rem .8rem; overflow-x: auto }
+ul { padding-left: 1.2rem }
+.empty { opacity: .7; font-style: italic }
+.count, .note { opacity: .7; font-size: .85rem }
+.quiet { opacity: .55; font-size: .85rem }
+.quiet a { font-weight: 400 }
+</style>
+</head>
+<body>
+<p class="note"><a href="index.html">all reports</a></p>
+<h1>Recipes</h1>
+<p><strong>Generated. Do not edit.</strong> <code>cargo run -p kinds -- recipes</code>, or <code>scripts/kinds.sh recipes</code>.</p>
+<p>Every recipe the release declares, with its own lines gathered under it. The release states these across seven columns, one row per line and the name written only on the first - which is the right shape for a table and the wrong one for answering <em>what does this recipe do</em>.</p>
+<p>15 recipes, 53 lines between them.</p>
+<h2>deploy ark</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul>
+<li><strong>require</strong> 1 territory, in <code>$where</code></li>
+<li><strong>consume</strong> 1 ark, in the orbit above <code>$where</code></li>
+<li><strong>limit</strong> 0 garrison</li>
+<li><strong>produce</strong> 1 garrison</li>
+<li><strong>produce</strong> 2 citizen</li>
+<li><strong>produce</strong> 1 extractor, food</li>
+<li><strong>produce</strong> 1 extractor, metal</li>
+</ul>
+<h2>move</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul>
+<li><strong>require</strong> 1 place, in <code>$from</code></li>
+<li><strong>require</strong> 1 place, joined to <code>$from</code> by an edge the unit crosses, in <code>$to</code></li>
+<li><strong>consume</strong> 1 unit, ready, in <code>$from</code></li>
+<li><strong>consume</strong> 1 energy, in that unit</li>
+<li><strong>produce</strong> 1 unit, not ready, in <code>$to</code></li>
+</ul>
+<h2>found by land</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul>
+<li><strong>consume</strong> 1 pioneer</li>
+<li><strong>limit</strong> 0 garrison</li>
+<li><strong>produce</strong> 1 garrison</li>
+<li><strong>produce</strong> 2 citizen</li>
+<li><strong>produce</strong> 1 extractor, food</li>
+<li><strong>produce</strong> 1 extractor, metal</li>
+</ul>
+<h2>build extractor</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul>
+<li><strong>consume</strong> 1 labor</li>
+<li><strong>consume</strong> 1 metal</li>
+<li><strong>produce</strong> 1 extractor, <code>$resource</code></li>
+</ul>
+<h2>build yard</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul>
+<li><strong>consume</strong> 1 labor</li>
+<li><strong>consume</strong> 15 metal</li>
+<li><strong>produce</strong> 1 yard</li>
+</ul>
+<h2>produce pioneer</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul>
+<li><strong>consume</strong> 3 metal</li>
+<li><strong>consume</strong> 6 energy</li>
+<li><strong>consume</strong> 2 citizen</li>
+<li><strong>produce</strong> 1 pioneer</li>
+</ul>
+<h2>produce ark</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul>
+<li><strong>consume</strong> 3 metal</li>
+<li><strong>consume</strong> 12 energy</li>
+<li><strong>consume</strong> 2 citizen</li>
+<li><strong>require</strong> 1 yard</li>
+<li><strong>produce</strong> 1 ark</li>
+</ul>
+<h2>create labor</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul>
+<li><strong>consume</strong> 1 citizen, ready</li>
+<li><strong>produce</strong> 1 citizen, not ready</li>
+<li><strong>produce</strong> 1 labor</li>
+</ul>
+<h2>work</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul>
+<li><strong>require</strong> 1 territory, in <code>$where</code></li>
+<li><strong>consume</strong> 1 labor</li>
+<li><strong>consume</strong> 1 extractor, ready</li>
+<li><strong>produce</strong> 1 extractor, not ready</li>
+<li><strong>produce</strong> resource — <code>$where</code>'s density for that resource</li>
+</ul>
+<h2>upkeep</h2>
+<p>Run by the <strong>world</strong>.</p>
+<ul>
+<li><strong>require</strong> 1 thing, with upkeep</li>
+<li><strong>consume</strong> food — the thing's upkeep</li>
+</ul>
+<h2>grow</h2>
+<p>Run by the <strong>world</strong>.</p>
+<ul>
+<li><strong>consume</strong> 1 food, surplus</li>
+<li><strong>require</strong> 1 thing, houses</li>
+<li><strong>produce</strong> 1 citizen</li>
+</ul>
+<h2>perish</h2>
+<p>Run by the <strong>world</strong>.</p>
+<ul>
+<li><strong>consume</strong> 1 thing, whose upkeep is unpaid</li>
+<li><strong>produce</strong> metal — the thing's metal</li>
+</ul>
+<h2>spoil</h2>
+<p>Run by the <strong>world</strong>.</p>
+<ul>
+<li><strong>consume</strong> 1 food, keeps 0</li>
+</ul>
+<h2>age</h2>
+<p>Run by the <strong>world</strong>.</p>
+<ul>
+<li><strong>consume</strong> 1 food, keeps at least 1</li>
+<li><strong>produce</strong> 1 food, keeps one less</li>
+</ul>
+<h2>refresh</h2>
+<p>Run by the <strong>world</strong>.</p>
+<ul>
+<li><strong>consume</strong> 1 thing, not ready</li>
+<li><strong>produce</strong> 1 thing, ready</li>
+</ul>
+</body>
+</html>

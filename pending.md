@@ -18,7 +18,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-22** - `62434d3` S-22: the counts are gone on purpose, and my general arm did not work · still open in `docs/notes/proposals.md`
-- **S-21** - `175078c` S-21: citizens and yards are things, and the expectation caught two bugs · still open in `docs/notes/proposals.md`
+- **S-21** - `13c3b5e` S-21: garrison and extractors are things, and the migration is finished · still open in `docs/notes/proposals.md`
 - **S-14** - `287ccec` Format the S-14 guards · still open in `docs/notes/proposals.md`
 - **R-6** - `92786a9` Close C-11 and C-19, and say where R-6 actually stands · still open in `releases/first-release.md`
 

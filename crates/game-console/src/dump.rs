@@ -502,23 +502,12 @@ fn escaped(text: &str) -> String {
 /// value here comes from the state that was passed in. The only literals are structural -
 /// tags, and a stylesheet that mentions no kind, no resource and no size.
 pub fn html(sections: &[Section], title: &str) -> String {
-    let mut out = String::from("<!doctype html>\n<html lang=\"en\">\n<head>\n");
-    out.push_str("<meta charset=\"utf-8\">\n");
-    out.push_str("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
-    out.push_str(&format!("<title>{}</title>\n", escaped(title)));
-    out.push_str(
-        "<style>\n\
-         :root { color-scheme: light dark }\n\
-         body { font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem auto; \
-         max-width: 70rem; padding: 0 1rem }\n\
-         h2 { margin: 2rem 0 .25rem; font-size: 1.1rem }\n\
-         table { border-collapse: collapse; margin: .5rem 0 }\n\
-         th, td { border: 1px solid currentColor; padding: .15rem .5rem; text-align: left }\n\
-         th { font-weight: 600 }\n\
-         .empty { opacity: .7; font-style: italic }\n\
-         .count { opacity: .7; font-size: .85rem }\n\
-         </style>\n</head>\n<body>\n",
-    );
+    // **One opening for every page**, because there were two and they drifted. Extracting
+    // the stylesheet out of this function took `</head><body>` with it, and both pages
+    // shipped without either tag - well formed enough to render, and unparseable by the one
+    // test that asks what is in the head. Sharing `head` means the tags cannot go missing
+    // from one page and not the other, since there is no longer a second copy to forget.
+    let mut out = head(title);
     out.push_str(&format!("<h1>{}</h1>\n", escaped(title)));
     out.push_str(
         "<p class=\"count\">Generated. Do not edit. Every table and every column is named whether or not \
@@ -598,6 +587,272 @@ pub fn entity_sections(game: &Game) -> Vec<Section> {
         .collect()
 }
 
+/// One stylesheet for every page this crate writes.
+///
+/// It names no kind, no resource and no size - `spec/invariants.md` keeps the game's data
+/// out of markup, and a rule reaching a colour by kind would be exactly that.
+const STYLE: &str = "<style>\n\
+     :root { color-scheme: light dark }\n\
+     body { font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem \
+     auto; max-width: 70rem; padding: 0 1rem }\n\
+     h1 { font-size: 1.3rem }\n\
+     h2 { margin: 2rem 0 .25rem; font-size: 1.1rem }\n\
+     h3 { margin: 1.25rem 0 .25rem; font-size: 1rem; opacity: .85 }\n\
+     table { border-collapse: collapse; margin: .5rem 0 }\n\
+     th, td { border: 1px solid currentColor; padding: .15rem .5rem; text-align: left }\n\
+     th { font-weight: 600 }\n\
+     pre { background: rgba(127,127,127,.12); padding: .6rem .8rem; overflow-x: auto }\n\
+     ul { padding-left: 1.2rem }\n\
+     .empty { opacity: .7; font-style: italic }\n\
+     .count, .note { opacity: .7; font-size: .85rem }\n\
+     .quiet { opacity: .55; font-size: .85rem }\n\
+     .quiet a { font-weight: 400 }\n\
+     </style>\n";
+
+/// The page for a markdown report: `turns.md` becomes `turns.html`.
+pub fn html_name(markdown: &str) -> &'static str {
+    match markdown {
+        "turns.md" => "turns.html",
+        "catalog.md" => "catalog.html",
+        "recipes.md" => "recipes.html",
+        // `state` and `entities` already have a page rendered from the model rather than
+        // from their markdown, which is the better derivation and stays.
+        other => panic!("no page name for {other}"),
+    }
+}
+
+/// The reports another crate generates, which this one renders.
+///
+/// **`prototypes/kinds` writes these and cannot use this renderer** - nothing depends on
+/// that crate and nothing should. So the page is made from the markdown on disk rather than
+/// from the model that produced it, which is one derivation further away and the reason the
+/// currency check has to cover both halves.
+pub const RENDERED_ELSEWHERE: [&str; 2] = ["catalog.md", "recipes.md"];
+
+/// The generated marker, on line two of every page.
+///
+/// **At a fixed line rather than wherever the prose puts it.** `tests/dumps_are_current.rs`
+/// discovers its subjects by looking for this sentence near the top of a file, and reads
+/// only the head so a file *discussing* the marker is not mistaken for one carrying it. That
+/// window has been wrong twice. At twelve lines it found the three markdown dumps and
+/// silently missed both pages; at twenty-four it missed the three pages `S-40` added, whose
+/// marker falls at line 27 under a stylesheet. Both times the file was generated, marked,
+/// and invisible - the check narrowing while looking unchanged.
+///
+/// A window measured against where the marker happens to land goes wrong whenever a page
+/// grows. On line two it is a constant.
+const MARKER: &str = "<!doctype html>\n<!-- Generated. Do not edit. -->\n";
+
+/// The opening of every page, so one stylesheet serves all of them.
+fn head(title: &str) -> String {
+    let mut out = String::from(MARKER);
+    out.push_str("<html lang=\"en\">\n<head>\n");
+    out.push_str("<meta charset=\"utf-8\">\n");
+    out.push_str("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
+    out.push_str(&format!("<title>{}</title>\n", escaped(title)));
+    out.push_str(STYLE);
+    out.push_str("</head>\n<body>\n");
+    out.push_str("<p class=\"note\"><a href=\"index.html\">all reports</a></p>\n");
+    out
+}
+
+/// A markdown report as a page.
+///
+/// **`S-40`.** Five reports had markdown and only two had HTML, so three of the index's
+/// links opened raw markdown in a browser - `turns.md` worst of all, being the longest and
+/// the one read most while checking the state function.
+///
+/// **Both exist for reasons that do not overlap**, which `P-246` settled: markdown is the
+/// surface a change is *reviewed* on, because a change is reviewed as a diff and HTML diffs
+/// badly; HTML is the surface things are *browsed* on. Neither is canonical.
+///
+/// This handles what the reports actually contain - headings, paragraphs, tables, lists and
+/// fenced blocks - rather than markdown at large. A general parser would be a large thing to
+/// own for six generated files whose shapes this crate writes itself.
+pub fn page(markdown: &str, title: &str) -> String {
+    let mut out = head(title);
+    let mut lines = markdown.lines().peekable();
+    let mut fenced = false;
+    let mut list = false;
+
+    while let Some(line) = lines.next() {
+        let trimmed = line.trim();
+
+        if trimmed.starts_with("```") {
+            out.push_str(if fenced {
+                "</pre>
+"
+            } else {
+                "<pre>
+"
+            });
+            fenced = !fenced;
+            continue;
+        }
+        if fenced {
+            out.push_str(&format!(
+                "{}
+",
+                escaped(line)
+            ));
+            continue;
+        }
+
+        if let Some(item) = trimmed.strip_prefix("- ") {
+            if !list {
+                out.push_str(
+                    "<ul>
+",
+                );
+                list = true;
+            }
+            out.push_str(&format!(
+                "<li>{}</li>
+",
+                inline(item)
+            ));
+            continue;
+        }
+        if list {
+            out.push_str(
+                "</ul>
+",
+            );
+            list = false;
+        }
+
+        if let Some(rest) = trimmed.strip_prefix("### ") {
+            out.push_str(&format!(
+                "<h3>{}</h3>
+",
+                inline(rest)
+            ));
+        } else if let Some(rest) = trimmed.strip_prefix("## ") {
+            out.push_str(&format!(
+                "<h2>{}</h2>
+",
+                inline(rest)
+            ));
+        } else if let Some(rest) = trimmed.strip_prefix("# ") {
+            out.push_str(&format!(
+                "<h1>{}</h1>
+",
+                inline(rest)
+            ));
+        } else if trimmed.starts_with('|') {
+            // A table: this row, its separator, and every row after.
+            let header = cells(trimmed);
+            let separator = lines.peek().is_some_and(|next| next.contains("---"));
+            if separator {
+                lines.next();
+            }
+            out.push_str(
+                "<table>
+<thead>
+<tr>",
+            );
+            for cell in &header {
+                out.push_str(&format!("<th>{}</th>", inline(cell)));
+            }
+            out.push_str(
+                "</tr>
+</thead>
+<tbody>
+",
+            );
+            while lines
+                .peek()
+                .is_some_and(|next| next.trim().starts_with('|'))
+            {
+                let row = lines.next().unwrap_or_default();
+                out.push_str("<tr>");
+                for cell in cells(row.trim()) {
+                    out.push_str(&format!("<td>{}</td>", inline(&cell)));
+                }
+                out.push_str(
+                    "</tr>
+",
+                );
+            }
+            out.push_str(
+                "</tbody>
+</table>
+",
+            );
+        } else if trimmed.is_empty() {
+            // Blank lines separate blocks and carry nothing of their own.
+        } else {
+            // **A paragraph runs to the blank line, not to the newline.** Markdown wraps
+            // prose at whatever column the file uses, and rendering each wrapped line as
+            // its own `<p>` broke one paragraph of `catalog.md` into four - each ending
+            // mid-sentence, and each looking deliberate. The joining is what makes the page
+            // say the same thing as the markdown, which is the whole claim the pair rests
+            // on.
+            let mut paragraph = String::from(trimmed);
+            while let Some(next) = lines.peek() {
+                let next = next.trim();
+                if next.is_empty()
+                    || next.starts_with('|')
+                    || next.starts_with("- ")
+                    || next.starts_with('#')
+                    || next.starts_with("```")
+                {
+                    break;
+                }
+                paragraph.push(' ');
+                paragraph.push_str(next);
+                lines.next();
+            }
+            out.push_str(&format!(
+                "<p>{}</p>
+",
+                inline(&paragraph)
+            ));
+        }
+    }
+    if list {
+        out.push_str(
+            "</ul>
+",
+        );
+    }
+    out.push_str(
+        "</body>
+</html>
+",
+    );
+    out
+}
+
+fn cells(row: &str) -> Vec<String> {
+    row.trim_matches('|')
+        .split('|')
+        .map(|cell| cell.trim().to_string())
+        .collect()
+}
+
+/// Bold, italic and code, which is all the reports use.
+fn inline(text: &str) -> String {
+    let mut out = escaped(text);
+    for (mark, tag) in [("**", "strong"), ("`", "code"), ("*", "em")] {
+        let mut open = true;
+        while let Some(at) = out.find(mark) {
+            let with = if open {
+                format!("<{tag}>")
+            } else {
+                format!("</{tag}>")
+            };
+            out.replace_range(at..at + mark.len(), &with);
+            open = !open;
+        }
+        if !open {
+            // An odd number of markers: the last one opened nothing, so close it.
+            out.push_str(&format!("</{tag}>"));
+        }
+    }
+    out
+}
+
 /// The page that links every report and both scenario files.
 ///
 /// **The two scenario files are linked as raw files, not as renderings** - `S-38`. They are
@@ -615,17 +870,15 @@ pub fn index(generated: &[(&str, String)]) -> String {
             "catalog.md" => "every kind, with everything the release says about it in one place",
             "recipes.md" => "every recipe, with its own lines gathered under it",
             "state.md" => "the state after the scenario, one table per relation",
-            "state.html" => "the same state, as a page",
             "entities.md" => "the same state as entities and their components",
-            "entities.html" => "the same entities, as a page",
             "turns.md" => "every turn: the commands that ran, what changed, and what was there",
-            _ => "",
+            other => panic!("no description for {other}"),
         }
     };
 
-    let mut out = String::from(
-        "<!doctype html>
-<html lang=\"en\">
+    let mut out = String::from(MARKER);
+    out.push_str(
+        "<html lang=\"en\">
 <head>
 ",
     );
@@ -651,6 +904,8 @@ pub fn index(generated: &[(&str, String)]) -> String {
          a { font-weight: 600 }
          .what { opacity: .75 }
          .note { opacity: .75; font-size: .9rem }
+         .quiet { opacity: .55; font-size: .85rem }
+         .quiet a { font-weight: 400 }
          </style>
 </head>
 <body>
@@ -691,26 +946,43 @@ pub fn index(generated: &[(&str, String)]) -> String {
 ",
     );
 
+    out.push_str("<h2>Reports</h2>\n");
     out.push_str(
-        "<h2>Reports</h2>
-",
+        "<p class=\"note\">Generated. Every one is derived from the scenario or from the \
+         release, and regenerated rather than written. <strong>The page is the link</strong>; \
+         the markdown that made it is beside the name, because a change is reviewed as a diff \
+         and a diff of HTML is not one.</p>\n<ul>\n",
     );
-    out.push_str(
-        "<p class=\"note\">Generated. Every one is derived from the scenario or from the          release, and regenerated rather than written.</p>
-<ul>
-",
-    );
+
+    // **A page is the default and its markdown is available beside it** - Sean's call, in
+    // his words: *make it visually obvious that the html links are the default but the
+    // markdown links are available*. Available, not hidden.
+    //
+    // Paired by stem rather than by a second list, so a report added to `generated` appears
+    // here with both of its links and nothing else is edited. The pairing is asserted: a
+    // markdown report with no page is a panic rather than a bare name on the page.
     let mut names: Vec<&str> = generated.iter().map(|(name, _)| *name).collect();
     names.push("catalog.md");
+    names.push("catalog.html");
     names.push("recipes.md");
+    names.push("recipes.html");
     names.sort_unstable();
-    for name in names {
+    let mut listed = 0;
+    for markdown in names.iter().filter(|name| name.ends_with(".md")) {
+        let page = format!("{}.html", markdown.trim_end_matches(".md"));
+        assert!(
+            names.contains(&page.as_str()),
+            "{markdown} has no page; every report gets both"
+        );
+        let name = markdown.trim_end_matches(".md");
         out.push_str(&format!(
-            "<li><a href=\"{name}\">{name}</a> <span class=\"what\">- {}</span></li>
-",
-            described(name)
+            "<li><a href=\"{page}\">{name}</a> <span class=\"what\">- {}</span> \
+             <span class=\"quiet\">(<a href=\"{markdown}\">markdown</a>)</span></li>\n",
+            described(markdown)
         ));
+        listed += 1;
     }
+    assert_eq!(listed, 5, "five reports, each with a page and its markdown");
     out.push_str(
         "</ul>
 </body>
@@ -861,6 +1133,17 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
         ),
         ("turns.md", per_turn),
     ];
+    // **Every markdown report gets a page** - `S-40`. Three of the index's links opened raw
+    // markdown in a browser, `turns.md` worst of all, being the longest and the one read
+    // most while checking the state function. Rendered from the markdown rather than from
+    // the model, so the two cannot say different things.
+    let pages: Vec<(&str, String)> = written
+        .iter()
+        .filter(|(name, _)| *name == "turns.md")
+        .map(|(name, text)| (html_name(name), page(text, name)))
+        .collect();
+    written.extend(pages);
+
     // The page that links them, made from the list it links - so a report added here appears
     // on it, and one removed leaves it, without anybody editing a second file.
     let page = index(&written);

@@ -4,6 +4,11 @@
 //! to be current whatever generates it, and five of the seven generated files in this
 //! repository were held to nothing at all.
 //!
+//! **`S-40` made it nine.** Every markdown report now has a page beside it, and a page is a
+//! second thing that can go stale - one that is *harder* to notice, because nobody diffs
+//! rendered HTML. The two `prototypes/kinds` writes are rendered here rather than there,
+//! since nothing may depend on that crate, so their pages are held here too.
+//!
 //! **A generated file that nobody regenerates is worse than no generated file.**
 //! `prototypes/kinds/tests/catalog_is_current.rs` says it first and it generalises: a
 //! derived file reads as more authoritative than prose *because* it is derived, so it is
@@ -90,11 +95,16 @@ fn marked_on_disk(root: &Path) -> Vec<String> {
         let Ok(text) = std::fs::read_to_string(&path) else {
             continue;
         };
-        // Only the head, so a file *discussing* the marker is not mistaken for one carrying
-        // it. Twenty-four lines because the HTML puts it below its stylesheet, at line 20 -
-        // twelve found the three markdown dumps and silently missed both pages, which is the
-        // failure this test is about, arriving inside the test itself.
-        let head: String = text.lines().take(24).collect::<Vec<_>>().join(
+        // Only the head, so a file *discussing* the marker is not mistaken for one
+        // carrying it. **Eight lines, and it is a constant now rather than a measurement.**
+        // Twelve found the three markdown dumps and silently missed both pages;
+        // twenty-four then missed the three pages `S-40` added, whose marker fell at line
+        // 27 under a stylesheet. Both times the window was tuned to where the marker
+        // happened to land, and both times a page grew past it - the check narrowing while
+        // looking unchanged, which is the failure this test exists to catch, arriving
+        // inside the test itself. `dump::MARKER` now puts it on line two of every page, so
+        // this number stops tracking anything and the class is closed.
+        let head: String = text.lines().take(8).collect::<Vec<_>>().join(
             "
 ",
         );
@@ -116,13 +126,29 @@ fn marked_on_disk(root: &Path) -> Vec<String> {
 #[test]
 fn every_committed_dump_is_what_the_scenario_produces() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let generated = dump::generated(&Files(root.join("scenario/commands")));
+    let mut generated = dump::generated(&Files(root.join("scenario/commands")));
 
     assert_eq!(
         generated.len(),
-        6,
-        "six dump files are generated; `dump::generated` returned {}",
+        7,
+        "seven dump files are generated; `dump::generated` returned {}",
         generated.len()
+    );
+
+    // **The two `prototypes/kinds` writes get their page held here**, because that crate
+    // cannot use this renderer and nothing should depend on it. `catalog.md` is held to the
+    // release by `prototypes/kinds/tests/catalog_is_current.rs`; this holds `catalog.html`
+    // to `catalog.md`. Neither half alone says the page shows what the release says.
+    for name in dump::RENDERED_ELSEWHERE {
+        let at = root.join("reports").join(name);
+        let markdown = std::fs::read_to_string(&at)
+            .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
+        generated.push((dump::html_name(name), dump::page(&markdown, name)));
+    }
+    assert_eq!(
+        generated.len(),
+        9,
+        "nine generated files, six of them pages"
     );
 
     let produced: std::collections::BTreeSet<String> =
@@ -178,8 +204,8 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // The set was discovered, so it can be empty for the wrong reason. This says it was not.
     assert_eq!(
         on_disk.len(),
-        6,
-        "six files carry the generated marker; found {} ({on_disk:?})",
+        9,
+        "nine files carry the generated marker; found {} ({on_disk:?})",
         on_disk.len()
     );
 }
@@ -192,7 +218,12 @@ fn every_committed_dump_is_what_the_scenario_produces() {
 #[test]
 fn the_scenario_produces_tables_rather_than_empty_files() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let generated = dump::generated(&Files(root.join("scenario/commands")));
+    let mut generated = dump::generated(&Files(root.join("scenario/commands")));
+    for name in dump::RENDERED_ELSEWHERE {
+        let markdown = std::fs::read_to_string(root.join("reports").join(name)).unwrap();
+        generated.push((dump::html_name(name), dump::page(&markdown, name)));
+    }
+    assert_eq!(generated.len(), 9, "nine generated files");
 
     for (name, text) in &generated {
         assert!(
@@ -204,9 +235,14 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
         // different question for it. Asking every HTML file for a `<td>` reported it empty
         // when it was full - a check whose one shape stopped fitting the moment a second
         // kind of page existed.
+        // **The index is a page of links, not of rows**, so *has it any content* is a
+        // different question for it. Asking every HTML file for a `<td>` reported it empty
+        // when it was full - a check whose one shape stopped fitting the moment a second
+        // kind of page existed. `catalog.html` is the third shape: prose and lists, and no
+        // table anywhere in it, so `<td>` would have called it empty too.
         let marker = match *name {
             "index.html" => "<a href",
-            _ if name.ends_with(".html") => "<td>",
+            _ if name.ends_with(".html") => "<h1>",
             _ => "| ",
         };
         assert!(
@@ -214,4 +250,58 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
             "{name} contains no {marker:?}, so it has no rows in it"
         );
     }
+}
+
+/// Every page is a page: one `<head>`, closed, and one `<body>`, closed.
+///
+/// **This defect shipped and no check named it.** Extracting the shared stylesheet out of
+/// `dump::html` carried `</head><body>` away with it, and `state.html` and `entities.html`
+/// were written for a whole session with neither tag. They still rendered - a browser
+/// recovers from that - so nothing looked wrong, and every content check went on passing
+/// because every row was present and correct.
+///
+/// It was caught by `dump::tests` asserting that the *head* names no territory, which read
+/// the head by splitting on `<body>`, found no `<body>`, and so compared the whole document.
+/// That is a check reporting a true failure for a reason it was not written for, which is
+/// luck rather than coverage. **A structural claim needs a structural check**, and this is
+/// it: five pages, each asked directly.
+#[test]
+fn every_page_is_well_formed_enough_to_be_read_as_one() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let mut generated = dump::generated(&Files(root.join("scenario/commands")));
+    for name in dump::RENDERED_ELSEWHERE {
+        let markdown = std::fs::read_to_string(root.join("reports").join(name)).unwrap();
+        generated.push((dump::html_name(name), dump::page(&markdown, name)));
+    }
+
+    let mut pages = 0;
+    for (name, text) in &generated {
+        if !name.ends_with(".html") {
+            continue;
+        }
+        for tag in ["<html", "<head>", "</head>", "<body>", "</body>", "</html>"] {
+            assert_eq!(
+                text.matches(tag).count(),
+                1,
+                "{name} has {} of {tag:?}, and a page has exactly one",
+                text.matches(tag).count()
+            );
+        }
+        // Order, because six present tags in the wrong sequence is not a page either.
+        let at = |tag: &str| text.find(tag).unwrap_or_default();
+        assert!(
+            at("<html") < at("<head>")
+                && at("<head>") < at("</head>")
+                && at("</head>") < at("<body>")
+                && at("<body>") < at("</body>")
+                && at("</body>") < at("</html>"),
+            "{name} has the tags of a page in an order that is not one"
+        );
+        pages += 1;
+    }
+    // Over every case, and how many cases there were - or this passes on an empty list, as
+    // it would have done for the whole session the defect above was live. Six and not five:
+    // `index.html` is a page as much as the five reports are, and is the one page that
+    // does not go through `dump::page`, so it is the likeliest to drift from them.
+    assert_eq!(pages, 6, "six pages, and every one of them checked");
 }
