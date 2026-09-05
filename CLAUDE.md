@@ -471,6 +471,16 @@ two things and never a third:
 - **Refuse the promotion**, saying what has to be decided first, or
 - **File a cleanup proposal immediately after**, so the staleness sits in the queue.
 
+**And a number goes stale without anyone editing it.** A number an item derives **names the rule it
+came from**, not the file it is in. And **when an item moves to `acted`, whatever lists the outboxes
+lists the open items naming the same rule.** `C-9` stated a figure that was true under the rule that
+stores were discarded at a turn's end; `C-11` landed, stores carried, nothing edited `C-9`, and the
+sentence went on reading exactly as before. The rule above is directional and about promotions, and
+that premise moved when an item **closed**.
+
+This makes such a failure **findable, not found**. What caught `C-9` was re-deriving its arithmetic
+before implementing it, which is a habit rather than a rule.
+
 **A promotion that leaves a question open files it before deleting the proposal that asked it.** A
 proposal is where a question gets asked and a promotion is where it stops being one - so anything the
 proposal said it did **not** settle has nowhere to go, and goes nowhere. Eleven promotions on
