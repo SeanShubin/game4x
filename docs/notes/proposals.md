@@ -71,6 +71,35 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-242 - I promised to report something I cannot observe
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Outboxes and the index, replacing the line `P-239`
+landed
+
+**`P-239` took `pending.md` off your list and this lane promised a replacement it cannot deliver.**
+The line reads *the one thing it would tell me that the queue cannot - whether a lane is blocked or
+idle - the specification instance tells me in a sentence instead*. **Hours later this lane reported
+the code lane was not idle. Its last commit was eight hours old.**
+
+> The specification instance can tell me whether a lane is **blocked**, because that is in the
+> outboxes and it can read them. **It cannot tell me whether a lane is running.** Nothing in the
+> repository records that, and the only way to find out is to send a message - which starts it. So
+> when it reports, it says which of the two it is answering.
+
+**Basis: nothing in the repository distinguishes stopped from quiet.** A lane that finished its last
+commit and exited looks exactly like a lane between commits: the log ends and the tree is clean.
+`CLAUDE.md` already says the only probe - *a message only arrives if the other instance is running* -
+and a probe that starts what it measures is not a probe you want run on your behalf.
+
+**Your own document already says why**: *an instance only runs when I start it, so I am the
+scheduler*. **Idle is the default state**, so reporting it as an exception was backwards from the
+start.
+
+**And the original line overstated `pending.md` too.** It says nothing about blocked or idle - it
+lists what is open and to whom. So dropping it lost nothing, and the sentence written to justify
+dropping it was wrong about both halves.
+
 ## Addressed to other perspectives
 
 Items this lane has sent outward. **Nothing here waits on Sean** - the open proposals above are the
