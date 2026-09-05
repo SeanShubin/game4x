@@ -182,6 +182,13 @@ arrives if the other instance is running, so it can make a handoff prompt and ca
 a decision rests on. **Write it in an outbox first, then say so in a message if the other one is
 awake.** An approval for `CLAUDE.md` is the one thing a message may not carry at all - see above.
 
+**When `docs/process.md` or `CLAUDE.md` changes, the specification lane tells every lane it binds,
+and points at the file rather than restating it.** A lane cannot know a rule moved: it read the
+document once, and nothing in a working tree announces that a paragraph is new. Sean, 2026-09-05:
+this needs no approval from him because **a lane told to go and read is not taking Claude's word for
+anything** - it verifies from his document, which is the whole reason the notice names a section
+instead of quoting one.
+
 **An item whose completion needs a person is addressed to a person.** This is the rule that was
 missing, and its absence produced exactly the state Sean said should be impossible: five of the six
 capabilities in `releases/first-release.md` are vetted by somebody *looking* - at a drawing, or at a
