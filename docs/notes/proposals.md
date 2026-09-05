@@ -110,35 +110,6 @@ table needs to say so and the comment in `nodes.4x` is what is wrong.
 design question you have not been asked, and the answer changes the shape of the planet rather than
 the wording of a document.
 
-### P-273 - The coding instance's prompt sends it to the wrong files
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **shape** text -
-**asks** approval - **into** `docs/process.md` -> Starting the instances, the coding instance's
-prompt
-
-**The code lane found this by doing what the notice asked** - reading your document rather than my
-summary of it - **and it is my error in `P-268`.** The prompt names three places its work lives.
-Counted from `pending.md`:
-
-| Where                       | Open `to code` |
-| --------------------------- | -------------- |
-| `docs/notes/proposals.md`   | **7**          |
-| `releases/first-release.md` | 1              |
-| `lenses/quality/outbox.md`  | 1              |
-| `crates/outbox.md`          | **0**          |
-
-**It names the file holding none and omits the file holding seven.** `crates/outbox.md` is the code
-lane's *outbox* - what it addresses to others - so by construction it never holds work for it.
-
-> CLAUDE.md -> Perspectives says what you write and what you read. Your work is what is
-> open and addressed to you, and `pending.md` lists it - it is generated from every
-> outbox at every commit, so it cannot go stale the way a list in a prompt can.
-
-**Replacing the enumeration with `pending.md` rather than adding the missing file**, because the
-section opens by saying each prompt points at a document rather than restating one - **and a list of
-three files inside a prompt is exactly the restatement that went wrong.** The code lane offered both
-fixes and had no preference, since the file is yours.
-
 ### P-274 - Rebalancing the biomes, and the two that are dominated
 
 **to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
@@ -1531,6 +1502,7 @@ work the release exists to order.
 | P-267, what a proposal asks him, what answering one does, and that what he approves is what ships                            | `docs/process.md` -> What I read and what I do                                                                                               | 2026-09-05 |
 | P-269, the four artifacts said without naming this game's model                                                              | `docs/process.md` -> How I know the game is right                                                                                            | 2026-09-05 |
 | P-271, the directory list goes and every rule stays, with `CLAUDE.md` linked                                                 | `docs/process.md` -> Who writes what                                                                                                         | 2026-09-05 |
+| P-273, the coding instance's prompt points at `pending.md` instead of naming three files                                     | `docs/process.md` -> Starting the instances                                                                                                  | 2026-09-05 |
 
 ## Rejected
 

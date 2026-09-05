@@ -221,8 +221,8 @@ You are the code lane. Read CLAUDE.md, then releases/first-release.md and
 crates/outbox.md.
 
 CLAUDE.md -> Perspectives says what you write and what you read. Your work is what is
-open and addressed to you - in crates/outbox.md, in releases/, and in the lenses'
-outboxes.
+open and addressed to you, and `pending.md` lists it - it is generated from every
+outbox at every commit, so it cannot go stale the way a list in a prompt can.
 
 When the specification does not say something, do everything that does not depend on
 the answer, file a question to spec stating the assumption you proceeded under, and

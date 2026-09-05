@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-272** - The scenario's territories do not match the release's biome table · `docs/notes/proposals.md`
-- **P-273** - The coding instance's prompt sends it to the wrong files · `docs/notes/proposals.md`
 - **P-274** - Rebalancing the biomes, and the two that are dominated · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
@@ -77,6 +76,7 @@ it exists to ask.
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md` -> All lanes - P-247, P-248
+- `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md`, a new section - P-204, P-211
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
