@@ -165,12 +165,44 @@ energy to 3. **The scenario gets materially longer** - an Ark's 12 energy is fou
 rather than one. If that is too slow, the lever is desert and mountain energy rather than grassland,
 because grassland leading food is what makes it the starting biome.
 
-**One thing I cannot answer and the code lane can.** `C-24` says nothing in the release can *take* a
-jungle: taking needs force **greater than** nature, jungle is 2, and an ark and a pioneer are both
-force 2. **If force sums across units in one place** - and `spec/control.md`'s *organised* suggests it
-might - two units take it and there is no defect. **If it does not sum, the jungle is unclaimable
-however good its food is**, and this rebalance is decorative. Asked, and I will bring the answer back
-with the table.
+**Answer this after `P-275`, which it depends on and which you have now settled.** `C-24` said
+nothing in the release can take a jungle. **Under `P-275` two pioneers make 4 against a jungle's 2**,
+so the jungle is dangerous rather than closed - **it costs two units where a grassland costs one**,
+and that is the price in force this rebalance is paying for.
+
+### P-275 - A military unit is organised force, and taking uses what is brought
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `spec/control.md` -> Gaining and holding ground, at the end
+
+**Your answer, as one bullet.** It goes after *should the force in a territory fall below its force
+of nature*.
+
+> - A military unit is organised force in itself, so several brought to one place sum. Taking a
+>   territory uses the organised force brought to it, and several units may take together
+
+**What was missing, measured before writing it.** `spec/control.md` already says *organised force
+**sums***, that citizens present *the highest among them rather than the total*, and that
+coordination is imposed *by a structure, such as a garrison, or by a military unit, which carries
+coordination with it rather than needing a place*. **So two of the three things you said were already
+there** - citizens not summing by default, and summing with a garrison or with a unit, which is what
+*part of an ark or pioneer* means.
+
+**The third was not, and it is the one that mattered.** Nothing said a **vehicle is itself organised
+force**, and nothing said **how the taking force is assembled** - *taking a territory takes force
+greater than the existing force* says how much and not whose. The code lane measured the gap rather
+than arguing it: two pioneers in one territory give `force_in` **5**, summed, and `found by land` on
+the jungle is still refused for *bringing 2*, because the model picks one pioneer and the second
+contributes nothing.
+
+**One placement choice, reported.** *A military unit is organised force in itself* is a fact about
+coordination and I have put it in **Gaining and holding ground**, because it exists to make the
+second sentence work and splitting them across two sections would leave each half looking arbitrary.
+**Say the word and it moves.**
+
+**This unblocks `P-274`.** Two pioneers make 4 against a jungle's 2, so **the jungle is dangerous
+rather than closed** - it costs two units where a grassland costs one, which is the price in force
+that makes rebalancing it worth doing. **`C-24` is answered and is not a defect.**
 
 ## Addressed to other perspectives
 
