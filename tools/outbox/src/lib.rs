@@ -1455,8 +1455,19 @@ Something in between.
         // fixture made visible: it yields a candidate for every entry under `lenses/`,
         // including the directory with no outbox in it and - since `read_dir` does not say
         // whether an entry is a directory - `stray.md/outbox.md`, a file walked as though it
-        // were one. `read` opens each and skips what is not there, so none of that reaches a
-        // caller. Asserted as four rather than two so the test says what the function does.
+        // were one.
+        //
+        // **A candidate that cannot be opened is not inert**, and the first version of this
+        // comment said it was. `read` pushes it onto `missing` and `main` prints that as
+        // *not present*, so a file sitting directly in `lenses/` would put a permanent false
+        // line into the output all three lanes read. Noise rather than error, and in a case
+        // nothing produces - `lenses/` holds directories, and `CLAUDE.md` puts a lens's
+        // README inside its own - so filtering on `is_dir` is not worth doing. **That is the
+        // reason, and it is not the one about harmlessness.**
+        //
+        // Asserted as four rather than two so the test says what the function does. Two was
+        // what I assumed it promised; four is what it returns, and nothing anywhere said so
+        // until a fixture ran it against a directory that exists.
         assert_eq!(
             found.len(),
             4,
