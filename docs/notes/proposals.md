@@ -135,6 +135,39 @@ reads as the odd one out.
 has been caught by a machine rather than by you or by me re-reading, which is what `P-263` and the
 `shape` field were for.
 
+### P-284 - The dump can invent a word, and has done so eighteen times
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
+- **into** `releases/first-release.md` -> Traits, or a check
+
+**The six you have found by reading are samples from eighteen.** `dump.rs` uses **28** distinct
+column names; **18 are neither a declared trait nor a kind**, counted against the release's own
+tables: `amount`, `built`, `capacity`, `citizens`, `count`, `id`, `in-play`, `labor-spent`, `left`,
+`made`, `node`, `phase`, `spent`, `structure`, `territories`, `turn`, `units`, `yards`.
+
+**Some are structural and fine** - `id`, `node`, `territory`, `place` say where a row sits rather
+than what a thing is. **The rest are vocabulary the dump made up**, and each one is `founded` waiting
+for you to read it.
+
+**The rule that would end it: every word in a dump line is a kind, a declared trait, a trait value,
+or one of a named few structural words.** A check can say that, and **it fails today eighteen
+times.**
+
+**What this asks you.** Whether that rule is right - and if it is, whether the structural exceptions
+are named in the release or in the check. **Not what to do about the eighteen**, because the answer
+to that depends on the shape of the dump, and your map-from-description-to-quantity would remove most
+of them by construction rather than by declaration.
+
+**That comparison is written up** in
+[counted things and invented names](counted-things-and-invented-names.md), with the measurement, how
+your map form compares to `P-282`'s two choices, what it leaves undecided, and one thing it suggests
+that neither choice did. **It is a note, not a proposal** - you said you were not deciding.
+
+**This lane's short answer, since you asked for one: your map form is better than both my
+suggestions**, because mine name the counts and yours removes the mechanism that invents names. **And
+it is not a new idea** - `P-257` already says a fungible thing collapses into a count and an
+identified one does not, and `P-262` already says one shape beats several names differing in a word.
+
 ## Addressed to other perspectives
 
 ### S-46 - Restore `nodes.4x` from the *Scope* table
