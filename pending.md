@@ -43,13 +43,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 - **Q-50** - A run of spaces sits mid-sentence in a failure message, in eighteen places · `lenses/quality/outbox.md`
 
-### To spec (12)
+### To spec (9)
 
-- **C-32** - The release has two tables of territory resources and they now disagree · `crates/outbox.md`
-- **C-30** - The coding instance's start prompt omits the file holding most of its work · `crates/outbox.md`
+- **C-33** - A check that has only ever passed is a claim, and belief in it decays · `crates/outbox.md`
 - **C-29** - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it · `crates/outbox.md`
-- **C-26** - The release says an extractor holds its catch and also that it holds nothing · `crates/outbox.md`
-- **C-27** - How much a store holds is in no document, and `S-44` cannot be built without it · `crates/outbox.md`
 - **C-25** - The dump prints `capacity` where the release declares `total capacity` · `crates/outbox.md`
 - **C-23** - `P-215`'s enclosing command is built; the nested-command half has no case yet · `crates/outbox.md`
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`

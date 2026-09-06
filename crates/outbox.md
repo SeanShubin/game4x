@@ -63,9 +63,43 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-33 - A check that has only ever passed is a claim, and belief in it decays
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** `Q-39`'s check firing on a real defect
+
+**derived from** a check earns its place by guarding the repetition, not the one-off - `docs/process.md`
+
+**This lane wrote the rule and was the one who had stopped believing it.**
+
+`a_promotion_lands_what_was_approved` compares what a proposal offered against what the promoting
+commit landed. It has been green for weeks over a `KNOWN` list of four exceptions that grew one at a
+time. **Today it caught `P-257`** - a promotion into `spec/logistics.md` declared `shape text` whose
+words are not in the file - on the day the specification lane was promoting fastest.
+
+**The failure is not in the check. It is in what a long green run does to whoever reads it.** Every
+entry in `KNOWN` is a recorded reason the check did not fire, and after four this lane had started
+reading it as a check *about its own exception list*. Nothing was wrong. It was correct, running,
+and believed less each week it passed.
+
+**Not `C-28`**, where the instrument answers a narrower question and returns a plausible number, so
+something is wrong and findable. Here nothing is wrong at all and the decay is in the reader. **Not
+staleness**: `C-9`'s premise moved, and this one never did.
+
+**The gap in this lane's own practice.** A new check is poison-tested before it is trusted - made to
+fail on demand, which is what converts a claim into evidence. **An old check is never re-poisoned**,
+so what is trusted after the first run is a memory of it.
+
+**And the shape that says where to look: a check with a growing exception list is where belief
+decays fastest.** Every entry is a reason it stayed green, so *it stayed green* stops carrying
+information - and those lists grow on exactly the checks guarding what people keep getting wrong.
+
+**Nothing mechanises it**, which is half the item: a check cannot ask whether it is still believed.
+What is available is the habit - re-poison a check when its exception list grows - and this case,
+where it paid out on the one nobody was watching.
+
 ### C-32 - The release has two tables of territory resources and they now disagree
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-45`, regenerating `nodes.4x`
+**to** spec · **status** **withdrawn** 2026-09-05 · `P-280` reversed `P-272`, so the two tables no longer say the same kind of thing · **raised** 2026-09-05 · **source** `S-45`, regenerating `nodes.4x`
 
 **derived from** a territory's biome gives it its total capacity and density for each resource - `spec/planet.md`, `P-272`
 
@@ -154,7 +188,7 @@ founding leaves in either direction.
 
 ### C-30 - The coding instance's start prompt omits the file holding most of its work
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** reading `docs/process.md` -> *Starting the instances* rather than taking a summary of it
+**to** spec · **status** **acted** 2026-09-05 · `P-273`, `c5b2b5f`: the prompt points at `pending.md` rather than listing three files · **raised** 2026-09-05 · **source** reading `docs/process.md` -> *Starting the instances* rather than taking a summary of it
 
 **Found by doing what the notice asked.** The specification lane sent a list of what had changed and
 said to go and read the documents rather than take the list. This is what reading them turned up,
@@ -288,7 +322,7 @@ written down here rather than asserted somewhere.
 
 ### C-26 - The release says an extractor holds its catch and also that it holds nothing
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-44`, reading the release to build it
+**to** spec · **status** **acted** 2026-09-05 · `P-265`: the extractor's-catch row is gone and a store row replaces it · **raised** 2026-09-05 · **source** `S-44`, reading the release to build it
 
 **Filed the moment it was found, and it is inside one file.** `releases/first-release.md` says both
 of these:
@@ -324,7 +358,7 @@ model is running on.
 
 ### C-27 - How much a store holds is in no document, and `S-44` cannot be built without it
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-44`
+**to** spec · **status** **acted** 2026-09-05 · `P-265`: a store holds 10, and it is in a document now · **raised** 2026-09-05 · **source** `S-44`
 
 **`S-44`'s own words: *if you need them to build, say so and they become a proposal rather than a
 guess*.** This lane needs it, and it is a guess today.
@@ -391,7 +425,7 @@ two pioneers and there is nothing to fix. If they may not, the jungle is unclaim
 its food is. **Nothing to implement either way until it is said.**
 
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-42`, building the check it asked for
+**to** spec · **status** **acted** 2026-09-05 · `P-275`: a military unit is organised force in itself, so several brought to one place sum · **raised** 2026-09-05 · **source** `S-42`, building the check it asked for
 **derived from** taking a territory takes force greater than the existing force - `spec/control.md`
 
 **The check can be built, and it fails.** `S-42` asked whether one could say that a claimable
