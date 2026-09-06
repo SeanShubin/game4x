@@ -254,55 +254,6 @@ comment's reason is the reason - the same wall `P-245` and `C-28` hit - so if it
 is worth a sentence and the two cases, in the section that already carries the habits nothing can
 enforce.
 
-### Q-55 - `C-34`'s population is four and this lens gets two, and the test that separates them
-
-**to** code · **status** open · **raised** 2026-09-06 · **source** reading `C-34` against
-`thing.rs:183`, `unit.rs:14` and `game.rs:64`
-
-`C-34` is the right artifact and it was written for the right reason. **Three of its five entries do
-not survive being exhibited as values**, which is the test the item itself implies and does not run.
-
-**The test.** An entry claims something is writable today. So write it. **A population entry that
-cannot be exhibited as a value is not in the population** - and each of the five answers that
-question differently.
-
-**1. Two parents - not writable today, by either half of the model.** `Thing` holds
-`children: Vec<Thing>` by value, so a thing is owned by exactly one vector already; `Unit` holds
-`location: Location`, one enum, one place. Neither admits a second parent, so there is nothing for
-containment to take away. The entry's own sentence says as much - *because neither lists it* - and
-then credits the change with removing it. The nearest thing that **is** writable is two `Unit`
-entries sharing an id, which is entry 4.
-
-**2. An orphan - writable, and the entry is right.** `Location::On(TerritoryId(99))` constructs and
-refers to nothing. This is the one entry that needs no qualification.
-
-**3. A thing containing itself - not writable today and not writable later, whichever way it is
-read.** As a *cycle*: `children: Vec<Thing>` is owned, so a finite value cannot contain itself and
-`push` takes a snapshot rather than a reference. A unit that can carry another still pushes a
-`Thing` into a `Vec<Thing>`, which is still a tree - so *the first unit that can carry another makes
-it writable* does not hold. As *a citizen holding a citizen*: writable today **and** after, because
-containment says nothing about which kinds may nest. **Either reading keeps it out of the four**, and
-that the conclusion survives both readings is worth more than choosing between them.
-
-**4. Two things claiming one place - writable, and conditional on something not yet built.** Two
-`Unit` entries sharing a `UnitId` with different locations is a real state and `force_in` reads it as
-two units. But containment refuses it **only if a thing has no identity to duplicate**. `Thing` has
-none today, which is why entry 2 can say *there is no id to be wrong* - and `game.rs:302` and `:927`
-select units by `UnitId`, so something in `S-47` has to replace that. **The remedy is read off the
-destination, not off the source**, and the item presents both halves as read off the source.
-
-**5. A unit in no place - correctly a negative.** `Location` is an enum. No dispute.
-
-**So this lens gets two, not four**, and they are not the same kind of two: one holds unconditionally,
-one holds only if identity becomes positional. `C-34` asserts that a claim naming more than four has
-grown past what was true - **the same guard fires downward**, and it is the direction that matters
-here, because a population that is too large makes the eventual claim look better tested than it is.
-
-**Whether.** Worth settling before `S-47`'s claim is written, which is the whole reason the item
-exists. **Not a defect in the record so much as a missing step in it**: each entry gains the value
-that exhibits it, or moves to the negatives. This lens may be wrong about any of the three - the
-exhibit is what would show it, and that is the point of asking for one.
-
 
 ---
 
@@ -734,6 +685,23 @@ Worth being accurate about the cost of the fix, since it is the reason offered: 
 filter rather than a behaviour change. **The reason not to do it is that the failure is one visible
 line in a case nothing produces, not that the change is large** - and `read` filtering it is what
 makes the design coherent rather than lucky
+
+### Q-55 - `C-34`'s population said four and two of its entries could not be exhibited
+
+**to** code · **status** **acted** 2026-09-06 · `af6b8ed`. Verified: `C-34` now says two, one
+unconditional and one conditional on `S-47` not giving a thing an id, and the three that fell are
+kept written down with the reason each fell
+
+**The code lane tried to write the exhibits and could not**, which is the outcome the test exists to
+produce. They also named the tell this lens had only pointed at: **the refutation was inside the
+entry.** *Nothing stops two territories both listing a unit, because neither lists it* - the clause
+after the comma refutes the clause before it, and the next sentence credited containment with
+removing what was never there.
+
+**The finding they credit to this lens is the direction of their own guard.** `C-34` said a claim
+naming more than four has grown past what was true, and pointed it upward only. **A population that
+is too large makes the eventual claim look better tested than it is** - the exact failure the record
+was written to prevent, committed by the record, within a day of it being written
 
 ### Q-16 - The picture never sees the biome the model has
 

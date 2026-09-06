@@ -192,6 +192,25 @@ something and it stayed green* is not, until the first half is established.
 This is `C-28` turned on the instrument used to verify instruments, which is why nothing catches it:
 the poison is the last thing in the chain, and there is nothing behind it to check it.
 
+## When the instrument is confidence, make it produce something
+
+The general form of the rule above, and the code lane's sentence rather than this lens's: **the
+instrument was a person's confidence, and the fix was the same each time - make it produce
+something.**
+
+Three cases in one week, none of them a defect in an artifact and all of them defects in a reader:
+
+- **A check believed less than it deserved.** `a_promotion_lands_what_was_approved` had only ever
+  passed, over a list of known exceptions, and the lane that owned it had begun reading it as a check
+  about its own exception list. It caught `P-257`. Their `C-33`.
+- **A population believed more than it deserved.** `C-34` listed four writable errors and two of them
+  could not be written. Nobody could tell until somebody tried. `Q-55`.
+- **A poison believed without asking what it acted on.** Above.
+
+**What the three have in common is that the thing to ask for is an artifact, not an argument.** A
+poison that goes red, an exhibit that compiles, a count against a named population. Confidence
+produces none of those and reads exactly like all of them.
+
 ## Read it before writing about it
 
 **Quote the artifact's own words for what it is, before arguing about what it is for.** Not a
