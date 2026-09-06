@@ -17,7 +17,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-45** - `1f2ded6` S-45 and S-44's scenario half: the main scenario is a typical game again · still open in `docs/notes/proposals.md`
+- **S-46** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
+- **S-45** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
 - **S-44** - `1f2ded6` S-45 and S-44's scenario half: the main scenario is a typical game again · still open in `docs/notes/proposals.md`
 - **S-41** - `5c43696` S-41 first half: choose the `derived from` form · still open in `docs/notes/proposals.md`
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`

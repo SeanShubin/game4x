@@ -636,7 +636,7 @@ impl Game {
                 kind: Kind::Store,
             });
         }
-        // Labor first, so a territory with the metal and no hands is refused for the reason
+        // Labor first, so a territory with the metal and no labor is refused for the reason
         // that is true rather than for the one asked about second - the same order `build`
         // uses below.
         self.spend_labor(territory, cost::STORE_LABOR)?;
@@ -657,7 +657,7 @@ impl Game {
         match structure {
             StructureKind::Garrison => Err(Rejection::GarrisonIsNotBuilt),
             StructureKind::Yard => {
-                // Labor first, so a territory with the metal and no hands is refused for
+                // Labor first, so a territory with the metal and no labor is refused for
                 // the reason that is true rather than for the one asked about second.
                 self.spend_labor(territory, cost::YARD_LABOR)?;
                 self.spend(territory, Resource::Metal, cost::YARD_METAL)?;
@@ -1414,7 +1414,7 @@ mod tests {
 
     #[test]
     fn labor_runs_out_before_the_citizens_do_anything_twice() {
-        // Metal in hand, so the refusal below is about hands rather than about metal. An
+        // Metal in store, so the refusal below is about labor rather than about metal. An
         // extractor costs both now, and a test that stops at the first missing thing stops
         // testing the second.
         let mut game = founded();
@@ -1422,7 +1422,7 @@ mod tests {
         assert_eq!(
             game.territory(TerritoryId(1)).unwrap().citizens(),
             2,
-            "two hands, so two builds and then a refusal"
+            "two labor, so two builds and then a refusal"
         );
         let build = |resource| Transition::Build {
             structure: StructureKind::Extractor,

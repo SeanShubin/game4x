@@ -453,9 +453,9 @@ impl Territory {
     ///
     /// **Population settles at the food the territory produces.** A citizen yields one
     /// labor and eats one food, so working the `k` densest food nodes sustains `F(k)`
-    /// citizens while costing `k` hands, leaving `F(k) - k` spare. Working only the best
-    /// one leaves `d - 1`, and a node of density one adds a hand and eats it - so a spare
-    /// hand exists for some allocation exactly when the best food node has density two or
+    /// citizens while costing `k` of them, leaving `F(k) - k` free to spend elsewhere. Working
+    /// only the best one leaves `d - 1`, and a node of density one adds a citizen and eats
+    /// what that citizen gathers - so spare labor exists exactly when the best food node is
     /// more.
     ///
     /// Territory 5's nineteen nodes are all density one, which is why it holds the one
@@ -468,14 +468,14 @@ impl Territory {
 
     /// The most of one resource this territory could produce in a single turn.
     ///
-    /// Every extractor it can build is built, and its hands are split between food, which
-    /// is what sets how many hands there are, and the resource asked for. Maximised over
+    /// Every extractor it can build is built, and its citizens are split between food, which
+    /// is what sets how many of them there are, and the resource asked for. Maximised over
     /// how many food nodes are worked, because working one more food node buys `f - 1`
-    /// spare hands and there is no reason the best split is at either end.
+    /// spare labor and there is no reason the best split is at either end.
     ///
     /// A territory with no food node has no population and so produces nothing, whatever
     /// its other nodes say. That falls out rather than being a case: `F(0)` is zero, no
-    /// hands, nothing worked.
+    /// citizens, nothing worked.
     pub fn most_in_one_turn(&self, resource: Resource) -> u32 {
         let mut food: Vec<u32> = self
             .nodes_of(Resource::Food)
@@ -502,7 +502,7 @@ impl Territory {
             }
             // Citizens are what the food sustains, and `worked` of them are holding food
             // nodes. Saturating because a territory can work more food nodes than it can
-            // sustain hands for, and that allocation simply has nothing spare.
+            // sustain citizens for, and that allocation simply has nothing spare.
             let spare = produced.saturating_sub(worked as u32) as usize;
             best = best.max(wanted.iter().take(spare).sum());
         }
@@ -536,7 +536,7 @@ impl Territory {
     pub fn can_hold_yard(&self) -> bool {
         let can_store = self.store_capacity(Resource::Metal) as u32 * HOLDS;
         let in_one_turn = self.most_in_one_turn(Resource::Metal);
-        // Nothing at all in a turn means no hands to spare, so the stores would never fill.
+        // Nothing at all in a turn means no labor to spare, so the stores would never fill.
         in_one_turn >= 1 && can_store + in_one_turn >= crate::game::cost::YARD_METAL
     }
 
@@ -783,16 +783,16 @@ mod tests {
     ///
     /// `C-9`. A citizen yields one labor and eats one food, so the `k` densest food nodes
     /// sustain `F(k)` citizens while occupying `k` of them. A density-one node adds a hand
-    /// and eats it; a density-two node adds a hand and half feeds another. So a spare hand
+    /// and eats it; a density-two node adds a citizen and half feeds another. So spare labor
     /// exists for some allocation exactly when a food node has density two.
     #[test]
     fn a_spare_hand_exists_exactly_when_a_food_node_has_density_two() {
         let cases: [(&[(Resource, u32)], bool, &str); 6] = [
-            (&[], false, "no food at all is no population and no hands"),
+            (&[], false, "no food at all is no population and no labor"),
             (
                 &[(Resource::Food, 1)],
                 false,
-                "one hand, holding its own node",
+                "one citizen, working its own node",
             ),
             (
                 &[
@@ -830,10 +830,10 @@ mod tests {
         );
     }
 
-    /// The most of a resource one turn can yield, maximised over how the hands are split.
+    /// The most of a resource one turn can yield, maximised over how the citizens are split.
     ///
     /// **The split is not at either end**, which is why this is a search rather than a
-    /// formula. Working one more food node costs a hand and buys `f` of them.
+    /// formula. Working one more food node costs one citizen and buys `f` of them.
     #[test]
     fn the_most_in_one_turn_splits_the_hands_where_it_pays_best() {
         let cases: [(&[(Resource, u32)], Resource, u32, &str); 6] = [
@@ -857,13 +857,13 @@ mod tests {
                 ],
                 Resource::Metal,
                 11,
-                "three spare hands reach both metal nodes",
+                "three citizens to spare reach both metal nodes",
             ),
             (
                 &[(Resource::Food, 1), (Resource::Metal, 9)],
                 Resource::Metal,
                 0,
-                "one hand, and it is holding the food node",
+                "one citizen, and it is working the food node",
             ),
             (
                 &[
@@ -875,13 +875,13 @@ mod tests {
                 ],
                 Resource::Metal,
                 18,
-                "working the second food node costs a hand and buys two - so two spare, not one",
+                "working the second food node costs one citizen and buys two - so two spare, not one",
             ),
             (
                 &[(Resource::Food, 4), (Resource::Food, 3)],
                 Resource::Food,
                 7,
-                "asked for food, the answer is what the hands gathered",
+                "asked for food, the answer is what the citizens gathered",
             ),
         ];
         for (nodes, resource, expected, why) in cases {
@@ -915,7 +915,7 @@ mod tests {
             (
                 &[(Resource::Food, 1), (Resource::Metal, 20)],
                 false,
-                "metal in the ground with no hand free to dig it is no metal",
+                "metal in the ground with nobody free to dig it is no metal",
             ),
             (
                 &[

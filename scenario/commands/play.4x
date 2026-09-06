@@ -35,7 +35,8 @@ create labor 1 1
 build store 1 food
 end turn
 
-# Turn 3. Two farms, and four hands to spend. The second mine has to wait a turn for them.
+# Turn 3. Two farms, and four citizens - so four labor, and four things this turn can do.
+# The second mine waits a turn for the population to pay for it.
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1

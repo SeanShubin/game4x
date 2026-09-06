@@ -572,7 +572,7 @@ launches an Ark.* Now that *fully exploited* is decidable, that state can be cou
 
 Each of those 120 buildings costs one labor, and labor is a command, so **the buildings alone are
 about 240 commands** - before a single command that gathers the 260 metal they cost, or the food
-that sustains the population that provides the hands, or an `end turn`. A realistic play-through is
+that sustains the population that provides the labor, or an `end turn`. A realistic play-through is
 several hundred commands more than that. The committed scenario is 73.
 
 This lane is not asking for the rule to change: *a player wins by launching an Ark from a fully
@@ -868,12 +868,12 @@ hold.
 
 The definition is decidable from a territory alone, which is what makes it implementable:
 
-- **An extractor** can be built on any node once the territory has ever had a spare hand. Population
-  settles at the food it produces, so working only the densest food node gives `d - 1` spare hands -
+- **An extractor** can be built on any node once the territory has ever had labor to spare. Population
+  settles at the food it produces, so working only the densest food node leaves `d - 1` citizens free -
   a territory can build iff its best food node has density two or more. Territory 5's three nodes of
   density one are why it holds one extractor of nineteen forever.
 - **A Yard** can be built where the most metal the territory can hold in one turn reaches fifteen -
-  the densest metal nodes its spare hands can work, once every extractor it can build is built.
+  the densest metal nodes its spare citizens can work, once every extractor it can build is built.
 
 Both are the arithmetic already written out in `C-7`'s table, done in the model rather than by hand.
 
