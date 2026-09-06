@@ -8,8 +8,9 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-288** - The three traits `P-284` needs, offered by the code lane · `docs/notes/proposals.md`
+- **P-288** - Two of the three traits `P-284` needs · `docs/notes/proposals.md`
 - **P-289** - What makes a check worth having · `docs/notes/proposals.md`
+- **P-290** - Capacity is per kind and its trait values, which makes `node` unnecessary · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

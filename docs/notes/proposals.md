@@ -63,32 +63,38 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-288 - The three traits `P-284` needs, offered by the code lane
+### P-288 - Two of the three traits `P-284` needs
 
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** consequence - **shape** rows -
-**asks** approval - **into** `releases/first-release.md` -> Traits
+**to** sean - **status** open - **raised** 2026-09-06 - **revised** 2026-09-06 - **kind**
+consequence - **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Traits
 
-**`P-284` says every word in a data file is a kind, a trait, or a trait value, and three words in
-the dump are none of those.** Each appears **zero** times in the release today, measured. The code
-lane wrote the rows; the table is yours.
+**`P-284` says every word in a data file is a kind, a trait, or a trait value.** `phase` and `turn`
+are neither, and each appears **zero** times in the release, measured. The code lane wrote the rows.
 
-> | **node** | an extractor | which of its territory's nodes it works | stored |
 > | **phase** | the game | before it starts, or once it has | stored |
 > | **turn** | the game | how many turns have ended | stored |
 
-**`node` is worded to be a reference and not a containment**, which is why it says *which of its
-territory's nodes* rather than *the node*. `spec/logistics.md`: *containing is not referring - an
-extractor names the node it works, and the node is not inside it.*
+**`node` was a third row and it is now `P-290`**, which argues it should not exist at all rather than
+be declared. **Offering you a row this lane is arguing against would be asking twice.**
 
-**`phase` and `turn` being traits of the game is the one place this is derived rather than read**,
-and the code lane said so rather than presenting it as settled. It follows from two things already
-promoted: the game is a thing - *the game is the one thing that is in nothing* - and traits are of
-things. **If the game is not a thing that carries traits, these two rows are wrong and nothing else
-here is.**
+**That they are traits of the game is the derived part**, and the code lane said so rather than
+presenting it as settled. It follows from the game being a thing - *the game is the one thing that is
+in nothing* - and traits being of things. **If the game is not a thing that carries traits, these two
+rows are wrong.**
 
-**`territories` and `units` are not on the list and that is not an oversight.** They are counts of
-what the game contains, and under `P-287` a count is an entry in a contents map rather than a trait.
-**Three words need declaring; the dump's other fifteen mostly stop existing.**
+**On your question about time.** They look like a different sort of thing and this lane does not
+think they are. **`turn` is not a clock reading, it is a count of turns that have ended** - a number
+the game holds now, exactly like the metal a store holds now. **`phase` is a single-valued state**,
+which is what a trait is. **Neither is a measurement of time, so neither wants a system for time.**
+
+**They are not the same shape as each other, though**, and that is the only thing your question turns
+up: a count could be an entry in the game's contents - `{turn} -> 11`, eleven ended turns the game
+contains - rather than a trait. **This lane does not recommend it.** It buys nothing `P-284` does not
+already give, and it makes a turn a thing that is contained, which is a claim about turns nobody has
+had reason to make.
+
+**`territories` and `units` are absent deliberately.** They are counts of what the game contains, and
+under `P-287` a count is an entry in a contents map rather than a trait.
 
 ### P-289 - What makes a check worth having
 
@@ -128,6 +134,41 @@ against zero. A coverage check that could not tell `move` from `found by land`. 
 least one* quotation where the rule says *exactly one*. A comparison that allowed a dropped period
 because the strict version kept failing on wrapping - **which is the second kind becoming the first,
 in one step, in this lane's own tooling.**
+
+### P-290 - Capacity is per kind and its trait values, which makes `node` unnecessary
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `spec/logistics.md` -> Containment
+
+**Your question, and the answer is yes.** A node carries exactly two things in the model - a resource
+and a density - and **across all 36 territory-resource pairs no pair has two densities**, measured
+from `nodes.4x`. **So no two nodes of one resource in one territory differ in any way**, and which
+one an extractor works is a distinction with nothing behind it.
+
+**What stopped capacity from replacing it is one clause.** Containment says a maximum is *per kind,
+or per family of kinds* - so *three extractors* is sayable and *three metal extractors* is not.
+**Nodes exist to carry a bound the capacity rule cannot express.** This sentence replaces that one.
+
+> - What a thing may contain is a maximum **per kind, per family of kinds, or per kind carrying a
+>   particular value of a trait**. That maximum is its **total capacity** for that kind, and it is
+>   stored. **Used capacity** is how many of that kind it holds, and **available capacity** is the
+>   total less the used; both are derived, so neither can disagree with what is there. A total
+>   capacity of four extractors is a maximum of four, so nothing a player builds ever crowds out
+>   something of another kind.
+
+**`P-234` is why this is small rather than new.** One `extractor` kind carrying a `resource` trait is
+already the design; **a capacity for extractors-of-metal is what that kind was collapsed to make
+sayable**, and the capacity rule was written before the collapse.
+
+**What it deletes.** The `node` trait `P-288` would have declared, `Node` in the model,
+`Territory.nodes`, and the bookkeeping that stops two extractors sharing one node - **which capacity
+does anyway.** `density` stays and becomes what it already reads as: a fact about a territory and a
+resource.
+
+**What it costs, and it is a real future.** If you ever want a territory whose metal is rich in one
+corner and thin in another, **nodes are how you say that** and this removes the ability. Nothing in
+the release wants it - all 36 pairs are uniform - and it would come back as *density per node* rather
+than as *which node*, which is a different and better shape.
 
 ## Addressed to other perspectives
 
