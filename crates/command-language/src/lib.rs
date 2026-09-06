@@ -94,11 +94,13 @@ mod tests {
         ];
 
         let mut offences = Vec::new();
+        let mut scanned = 0;
         for entry in std::fs::read_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/src")).unwrap() {
             let path = entry.unwrap().path();
             if path.extension().and_then(|e| e.to_str()) != Some("rs") {
                 continue;
             }
+            scanned += 1;
             let text = std::fs::read_to_string(&path).unwrap();
             // Tests demonstrate the crate by handing it a grammar, and a grammar is where
             // game nouns are supposed to appear - so the rule binds the code above the
@@ -126,6 +128,20 @@ mod tests {
             offences.is_empty(),
             "game nouns leaked into the parser:\n{}",
             offences.join("\n")
+        );
+        // **`Q-51`: how many files it read, because an empty scan finds nothing.**
+        //
+        // `read_dir` is not recursive, and a directory entry has no `rs` extension - so it
+        // is skipped by the same `continue` that skips a `Cargo.toml`. **A module moved into
+        // a subdirectory of `src/` would be unscanned and this would stay green**, which is
+        // the shape where a rule quietly stops binding the code it names.
+        //
+        // A floor rather than an exact count: the number is a property of how this crate is
+        // laid out, and a bound needing an edit whenever a file is added would be edited
+        // without being thought about. What it has to catch is the scan collapsing.
+        assert!(
+            scanned >= 5,
+            "only {scanned} files scanned for a game noun, which is not this crate"
         );
     }
 }

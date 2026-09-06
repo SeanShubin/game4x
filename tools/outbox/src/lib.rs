@@ -1406,6 +1406,16 @@ Something in between.
         assert!(duplicate_ids(&parse(SAMPLE, "x.md")).is_empty());
     }
     /// Every producer's outbox is looked for by name, and every lens's by walking.
+    ///
+    /// **`Q-52`: the walking half was tested against a root with no `lenses/` in it.** This
+    /// called `places(Path::new("/root"))`, where `/root/lenses` does not exist - so the
+    /// branch that walks it contributed nothing, and all three assertions below were about
+    /// the two hard-coded paths and one absence. The quality lens verified that by deleting
+    /// the eight lines that do the walking and running the suite: **identical results, so
+    /// the walk was covered by the test named for it and by nothing else.**
+    ///
+    /// It needs a fixture rather than an assertion, because no root both exists and holds a
+    /// lens except one this test makes.
     #[test]
     fn it_looks_where_every_outbox_lives() {
         let looked: Vec<String> = places(Path::new("/root"))
@@ -1421,5 +1431,39 @@ Something in between.
         // The lens has moved under `lenses/`, so the pre-move path is gone rather than
         // probed - a completed move was reading as a missing file.
         assert!(!looked.iter().any(|at| at.ends_with("/quality/outbox.md")));
+
+        // A root with lenses in it, so the walk has something to find. The assertion above
+        // proves nothing on its own - it passes against a root where every walked path is
+        // absent, which is exactly the root it uses.
+        let root = std::env::temp_dir().join("outbox-places-q52");
+        let _ = std::fs::remove_dir_all(&root);
+        for lens in ["quality", "second"] {
+            std::fs::create_dir_all(root.join("lenses").join(lens)).unwrap();
+            std::fs::write(root.join("lenses").join(lens).join("outbox.md"), "# x").unwrap();
+        }
+        // A directory with no outbox in it is not a lens, and a stray file beside them is
+        // not one either - both are ways the walk could pick up more than it should.
+        std::fs::create_dir_all(root.join("lenses").join("empty")).unwrap();
+        std::fs::write(root.join("lenses").join("stray.md"), "# x").unwrap();
+
+        let walked: Vec<String> = places(&root)
+            .iter()
+            .map(|path| path.to_string_lossy().replace('\\', "/"))
+            .collect();
+        let found: Vec<&String> = walked.iter().filter(|at| at.contains("/lenses/")).collect();
+        // **`places` offers somewhere to look, not a list of what exists**, which the
+        // fixture made visible: it yields a candidate for every entry under `lenses/`,
+        // including the directory with no outbox in it and - since `read_dir` does not say
+        // whether an entry is a directory - `stray.md/outbox.md`, a file walked as though it
+        // were one. `read` opens each and skips what is not there, so none of that reaches a
+        // caller. Asserted as four rather than two so the test says what the function does.
+        assert_eq!(
+            found.len(),
+            4,
+            "one candidate per entry under `lenses/`, existing or not: {walked:?}"
+        );
+        assert!(found.iter().any(|at| at.ends_with("quality/outbox.md")));
+        assert!(found.iter().any(|at| at.ends_with("second/outbox.md")));
+        std::fs::remove_dir_all(&root).unwrap();
     }
 }
