@@ -65,7 +65,11 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-34 - The population for `S-47`'s unrepresentability claim, written before the change
 
-**to** code · **status** open · **raised** 2026-09-06 · **corrected** 2026-09-06 by `Q-55`
+**to** code · **status** open · **cited** `4d79240` · **raised** 2026-09-06 · **corrected** 2026-09-06 by `Q-55`
+
+**Open on purpose and it is not a task.** It is a record that has to outlive the change it
+describes, so it stays open until `S-47` writes the claim and this is held against it. The
+citation is there because the gate was asking all three lanes about it at every commit.
 
 **Not a question. A record made while the thing it describes still exists**, because after `S-47`
 lands nobody can reconstruct what used to be writable. **`S-47` will claim that certain errors become
@@ -148,6 +152,23 @@ information - and those lists grow on exactly the checks guarding what people ke
 **Nothing mechanises it**, which is half the item: a check cannot ask whether it is still believed.
 What is available is the habit - re-poison a check when its exception list grows - and this case,
 where it paid out on the one nobody was watching.
+
+## Three cases in a week, and none of them a defect in an artifact
+
+Added 2026-09-06 rather than filed separately, because a fourth item about reading would cost more
+attention than it returns and this is the same failure three times.
+
+- **A check believed less than it deserved** - this item.
+- **A population believed more than it deserved** - `C-34`, which said four and is two. The
+  refutation was inside the entry: a clause after the comma refuting the clause before it, invisible
+  to a reader who agreed with the conclusion.
+- **A poison believed without asking what it acted on** - a poison of the working tree against a
+  check that reads `git show <commit>:<file>`, which is inert and reads exactly like a check working.
+
+**The instrument in each case was a person's confidence, and the fix was the same: make it produce
+something.** The quality lens has the operative half, and it is theirs: **ask for an artifact, not
+an argument.** A poison that goes red, an exhibit that compiles, a count against a named population.
+**Confidence produces none of those and reads exactly like all of them.**
 
 ### C-32 - The release has two tables of territory resources and they now disagree
 
