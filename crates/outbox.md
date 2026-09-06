@@ -108,9 +108,39 @@ letter - *A, disorder persists* - and a regex looking for `P-n` in the first cel
 returns a number rather than an error. **`C-28` twice in one measurement**, and the disagreement
 with your figure is what exposed the second.
 
-### C-40 - Four proposals promoted today have their Accepted rows filed under Withdrawn
+### C-40 - Eleven proposals promoted today had their Accepted rows filed under Withdrawn
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** measuring `S-51`'s population,
+**Closed 2026-09-06. The specification lane fixed the ledger in `8d03a73` before reading this, and
+the count in the title was four when it was filed.**
+
+**Four was right at the commit it named and wrong by the time anyone read it.** Checked both ways:
+at `cab2804`, the snapshot this measured, the Withdrawn table held exactly `P-292`, `P-299`, `P-300`
+and `P-301`. By `8d03a73` it held eleven, because the lane went on promoting into the same wrong
+place after the snapshot. **So the number was accurate and its scope was not** - four *found*, not
+four *existing*, while the thing producing them was still running. A measurement of a file another
+lane is writing is a floor with a timestamp, and this one said neither.
+
+**Verified independently rather than taken from their commit subject**: `8d03a73` moves eleven rows,
+`P-292` through `P-302`, out of Withdrawn and into Accepted.
+
+**The ledger fix restored the record and did not restore the check**, which is the half worth
+keeping. Promotion is detected per commit - a proposal left the queue *and* gained an Accepted row
+in the same one - so judged at their own commits all eleven still gained nothing, and
+`a_promotion_lands_what_was_approved` went on skipping them after the repair. **A late row is now
+recognised**: a proposal that left the queue and is in the ledger at `HEAD` is checked against its
+destination at the commit it left. A withdrawal never gains an Accepted row, which is the
+discriminator the misfiling had temporarily destroyed.
+
+**And the open question in this item is answered.** It said whether the text landed was unknown and
+became knowable once the rows moved. Promotions checked went from **29 to 43**, `left the queue
+without a ledger row` fell to **`P-282` and `P-279`** - the two genuine withdrawals - and **all 43
+pass**. The eleven landed their approved text correctly.
+
+**What made it visible at all was naming rather than counting.** This output said *7 left the queue
+without a ledger row* and the number had been 2 that morning. **A number that moves says nothing
+about which**, and the ids are printed now.
+
+**to** spec · **status** **acted** 2026-09-06 · `8d03a73` · **raised** 2026-09-06 · **source** measuring `S-51`'s population,
 which is the one part of it that does not wait on `P-305`
 
 **Live, in your file, and it silently turned off a check on four of today's promotions.**

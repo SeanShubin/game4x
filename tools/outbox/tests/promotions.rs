@@ -372,13 +372,33 @@ fn a_promotion_lands_what_was_approved() {
     )
     .unwrap_or_default();
 
+    // **The ledger as it stands now, because a row can arrive late.** Promotion is detected
+    // per commit - a proposal left the queue *and* gained an Accepted row in the same one -
+    // and `C-40` is the case that breaks: eleven promotions had their rows written into the
+    // Withdrawn table, so each was skipped, and `8d03a73` moving them restored the record
+    // without restoring the check. Judged at their own commits they still gained no row.
+    //
+    // So a proposal that left the queue and is in the ledger **today** is a promotion whose
+    // row arrived late, and is checked against its destination at the commit it left. A
+    // withdrawal is still excluded, because a withdrawal never gets an Accepted row at all -
+    // which is the discriminator the misfiling had temporarily destroyed.
+    let landed_at_head: std::collections::BTreeSet<String> =
+        git(&root, &["show", "HEAD:docs/notes/proposals.md"])
+            .map(|text| {
+                outbox::accepted(&text)
+                    .into_iter()
+                    .map(|row| row.id)
+                    .collect()
+            })
+            .unwrap_or_default();
+    let mut late_rows: Vec<String> = Vec::new();
     let mut exercised: Vec<&str> = Vec::new();
     let mut checked = 0usize;
     let mut older = 0usize;
     let mut excepted = 0usize;
     let mut repaired = 0usize;
     let mut ambiguous: Vec<String> = Vec::new();
-    let mut left_without_landing = 0usize;
+    let mut left_without_landing: Vec<String> = Vec::new();
     let mut wrong = Vec::new();
 
     for commit in log.lines() {
@@ -418,13 +438,29 @@ fn a_promotion_lands_what_was_approved() {
             .filter(|item| !after.contains(&format!("### {} ", item.id)))
             .filter(|item| {
                 let promoted = landed_now.contains(&item.id) && !landed_before.contains(&item.id);
-                if !promoted {
-                    // Withdrawn, rejected, or promoted without a ledger row. The three are
-                    // not distinguishable from here, so this counts them rather than
-                    // guessing which.
-                    left_without_landing += 1;
+                // Its row arrived in a later commit than the promotion it records.
+                let late = !promoted
+                    && !landed_before.contains(&item.id)
+                    && landed_at_head.contains(&item.id);
+                if late {
+                    late_rows.push(item.id.clone());
                 }
-                promoted
+                if !promoted && !late {
+                    // Withdrawn, rejected, or promoted without a ledger row. The three are
+                    // not distinguishable from here, so this records them rather than
+                    // guessing which.
+                    //
+                    // **Named rather than counted, because the count hid four promotions.**
+                    // `C-40`: `P-292`, `P-299`, `P-300` and `P-301` landed with their
+                    // Accepted rows written into the Withdrawn table, so each left the queue
+                    // and gained no row here, and each was skipped instead of checked. The
+                    // number went from 2 to 7 in a day and **a number that moves says
+                    // nothing about which**. Whoever reads this output can now see whether a
+                    // name in it is a withdrawal, which is fine, or a promotion, which is
+                    // the guarantee not holding.
+                    left_without_landing.push(item.id.clone());
+                }
+                promoted || late
             })
             .collect();
 
@@ -499,8 +535,10 @@ fn a_promotion_lands_what_was_approved() {
     // Said rather than asserted: zero checked and all correct are the same green, and an
     // empty queue is the good state, so a count cannot be required.
     println!(
-        "{checked} promotion(s) checked, {repaired} repaired after the fact, {excepted} excepted by name, {} unreadable ({ambiguous:?}); \n         {older} older than the shape field, {left_without_landing} left the queue without a ledger row",
-        ambiguous.len()
+        "{checked} promotion(s) checked, {repaired} repaired after the fact, {excepted} excepted by name, {} unreadable ({ambiguous:?}); \n         {older} older than the shape field, {} left the queue without a ledger row {left_without_landing:?}; \n         {} whose ledger row arrived in a later commit {late_rows:?}",
+        ambiguous.len(),
+        left_without_landing.len(),
+        late_rows.len()
     );
 
     // **The window is a cap, so it says what it dropped.** This reads the last 80 commits
