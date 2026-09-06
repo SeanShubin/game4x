@@ -173,6 +173,25 @@ worse than an honest revert.
 days that a boundary erodes by crossings too small to stop for, and then made one in order to test
 a fix for another one.
 
+## Poison the thing the check reads
+
+A poison that lands somewhere the check never looks is **inert**, and an inert poison produces a
+green run that reads exactly like a check working. So before believing a poison test, say what the
+check reads and put the poison there.
+
+Two cases in one day, both the same shape and neither an error at the time. The code lane poisoned
+the working tree to test a promotion checker that reads `git show <commit>:<file>` - history, not the
+tree - and came close to reading the green as evidence. This lens ran `cargo test --quiet <filter>`
+against a poisoned copy and got **`ok. 0 passed`** three times over, because the filter matched no
+test in those targets; *ok* over an empty set is the same bytes as *ok*.
+
+**So a poison test carries the same burden as any other check: name the population it acted on.**
+*The poison changed something the check reads, and the check went red* is evidence. *I changed
+something and it stayed green* is not, until the first half is established.
+
+This is `C-28` turned on the instrument used to verify instruments, which is why nothing catches it:
+the poison is the last thing in the chain, and there is nothing behind it to check it.
+
 ## Read it before writing about it
 
 **Quote the artifact's own words for what it is, before arguing about what it is for.** Not a
@@ -284,6 +303,9 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [What `S-47` will need looking at](2026-09-06-what-s-47-will-need-looking-at.md)
+  - 2026-09-06. Held, addressed to nobody. Why there is no sweep yet, and the four things the
+    code lane asked for a second pair of eyes on before it had built them.
 - [Sweep, 2026-09-05](2026-09-05-sweep.md)
   - Three findings, all acted the same evening, and the measurements that found nothing -
     a baseline to re-measure against rather than a memory of having looked.
