@@ -3,7 +3,8 @@
 - Purposes
   - 1 instance for specification
   - 1 instance for coding
-  - 1 instance for each type of research, but I always include quality as one of my research instances
+  - 1 instance for quality
+  - 1 instance for research
 
 ## What this document has to be
 
@@ -31,6 +32,14 @@ The third one is the data dump in this case.
 - From the coding lane, I read and verify the input and the expected data from the scenario test
 - Generally I do not read anything but the proposals from the specification lane, the specification
   itself, and the scenario tests from the coding lane
+
+**Three artifacts are addressed to me**: the specification proposals, the specification questions,
+and the scenario test's input and expected data. Human attention is the most scarce resource when
+programming with an AI assistant, so each of the three is as concise as it can be made.
+**Concision is bounded by control, not the other way round** - each must stay precise and detailed
+enough that I keep executive control of what it decides. One short enough to read and too vague to
+govern has failed at the thing it was shortened for.
+
 - I maintain executive control via the specification lane
 - I reject AI responses that do not read clearly and unambiguously to a human
 - I insist that the AI make its work verifiable to a human
@@ -237,18 +246,29 @@ when the session ends, and nobody can see who is waiting on what.
 - The coding instance does not have to be acting on something I said directly, but there must be a traceable path back to me
 - Quality is one such path: I approved the lens and what it looks for, so a finding it raises and the coding instance acts on traces back to me through that
 - Every commit cites the id of the item it acts on, which is what makes the path checkable rather than assumed
+- The specification constrains the observable behavior of production code. The implementation
+  details, the tooling, the pipeline, the deployment and the rest of production support are this
+  instance's own decisions
+- It produces the second artifact I review by hand - the input and the expected data for the
+  scenario test, described under *How I know the game is right*
+- It notifies the specification instance of its status
+- After any significant change to production code, it asks the quality instance for a review
+- When a quality review is wrong, it says so, and gives the quality instance enough information
+  to understand why
 
 ## Research instances
-- Generate information for the other lanes
-- Makes sure other instances can find its results
+- Takes on one-off research projects that might be useful in the future
+- This is forward thinking rather than a matter of immediate concern
+- Makes its research discoverable by the other instances, against the time they come to need it
 - A research instance finding something, the coding instance fixing it, and the research instance
   reviewing the fix is a real cycle, and nothing forces the findings to get smaller
 
-## Quality instance (a type of research instance)
+## Quality instance
+- Is in charge of making sure the code stays easy to maintain
 - Makes sure we have a proper module structure emanating from composition roots
-- Ensures the module structure isolates dependencies from each other. For example, it must not be
-  possible for code that is algorithmic or mathematical to depend on code that knows about platform
-  concerns
+- Ensures the module structure isolates dependencies from each other. A utility that is a pure
+  mathematical transformation knows nothing about a graphics card, even if the computation is
+  only usable by the graphics card
 - Ensures a separate, thin module drives dependencies via composition roots, in a way that ensures
   no implementation of one thing knows about the implementation details of another thing
 - Tries to maximize the separation between generic code and code with dependencies
@@ -318,8 +338,26 @@ Start by telling me what is open and addressed, read from the files rather than
 remembered.
 ```
 
+The research instance:
+
+```
+You are the research lens. Read CLAUDE.md, then docs/process.md ->
+Research instances.
+
+CLAUDE.md -> Perspectives says what you write and what you read. You write
+lenses/research/ and tools/research/, and nothing else. You never edit what
+you review.
+
+Your outbox is lenses/research/outbox.md. Each finding carries an id, a to,
+a status and one line, and points at a dated report that carries the
+argument. Research that is not ready is addressed to nobody.
+
+Start by telling me what is open and addressed, read from the files rather
+than remembered.
+```
+
 **A new lens is started from `CLAUDE.md` -> Starting a new lens**, which is where the question a
-lens has to answer before it is worth starting lives. The three above are the ones that exist.
+lens has to answer before it is worth starting lives. The four above are the ones that exist.
 
 ## Releases
 - The specification says what the game is when it is finished. A release says what is being built now
@@ -376,7 +414,9 @@ lens has to answer before it is worth starting lives. The three above are the on
 ## Claude bookkeeping
 - Claude manages relevant history regarding how the specification came to be in many documents that a human will never look at
 - That documentation is not meant for me. It is for remembering the history of how decisions
-  ultimately came from me, and for recording general research
+  ultimately came from me, for recording general research, and for the context an assistant needs
+  in order to interpret what I say correctly. There is a lot of that, I never need to look at it,
+  and it has to be organized so that an assistant finds the right part when it becomes relevant
 
 ## Dependencies
 - A dependency either provides operations or provides a home

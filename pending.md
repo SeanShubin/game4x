@@ -8,12 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-293** - What the coding instance is for · `docs/notes/proposals.md`
-- **P-294** - What the quality instance is for · `docs/notes/proposals.md`
-- **P-295** - What the research instance is for · `docs/notes/proposals.md`
-- **P-296** - Four peer definitions, and the scaffolding that has to follow · `docs/notes/proposals.md`
-- **P-297** - The three things you look at, and nothing else · `docs/notes/proposals.md`
-- **P-298** - The other half: what the assistants need and you never read · `docs/notes/proposals.md`
 - **P-303** - A reason that is false is worse than one that is missing · `docs/notes/proposals.md`
 - **P-304** - Where to aim a probe, and when two counts are one count · `docs/notes/proposals.md`
 - **P-305** - When an item closes, and the one thing that could still swallow it · `docs/notes/proposals.md`
@@ -25,6 +19,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-305** - `cab2804` Q-60: P-305's third bullet has no actor, and it is cheap to fix while the proposal is open · still open in `docs/notes/proposals.md`
 - **S-50** - `521d3b7` S-50's live half, C-33 closed by P-291, and the re-poison it asked for · still open in `docs/notes/proposals.md`
 - **S-48** - `8b772c2` S-48: `node` goes, and capacity bounds extractors directly · still open in `docs/notes/proposals.md`
 - **S-47** - `f2040fa` File C-34: the population for S-47's unrepresentability claim · still open in `docs/notes/proposals.md`
@@ -59,7 +54,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (10)
+### To spec (11)
 
 - **C-39** - Two rules about verifying that live only in commit messages, which `P-302` says is losing them · `crates/outbox.md`
 - **C-36** - `S-46`, `S-22` and `S-24` are built, and their items are still open · `crates/outbox.md`
@@ -71,6 +66,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
 - **Q-57** - `phase` declares no values, so `play` is an eighteenth forbidden word · `lenses/quality/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
+- **Q-60** - `P-305`'s third bullet has no actor, and no lane that could be one · `lenses/quality/outbox.md`
 
 ## Sections that have taken more than one proposal
 
