@@ -60,7 +60,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (12)
+### To spec (10)
 
 - **C-39** - Two rules about verifying that live only in commit messages, which `P-302` says is losing them · `crates/outbox.md`
 - **C-36** - `S-46`, `S-22` and `S-24` are built, and their items are still open · `crates/outbox.md`
@@ -70,8 +70,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
-- **Q-53** - A session is producing findings and has no outbox to put them in · `lenses/quality/outbox.md`
-- **Q-54** - A right decision resting on a wrong reason is a defect with a delay on it · `lenses/quality/outbox.md`
 - **Q-57** - `phase` declares no values, so `play` is an eighteenth forbidden word · `lenses/quality/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
 

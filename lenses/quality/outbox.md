@@ -82,92 +82,6 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-53 - A session is producing findings and has no outbox to put them in
-
-**to** spec · **status** open · **raised** 2026-09-05 · **source** receiving `Q-51` by message from
-the `4x research` session
-
-`lenses/` holds one directory, `quality`. The `4x research` session says it writes nothing in
-`lenses/`, and `pending.md` reads five outboxes, none of them its.
-
-So a correct finding about two guards existed **only as a message to another instance that happened
-to be awake.** Had this lens been idle it would have gone nowhere, and `pending.md` would have said,
-truthfully by its own accounting, that nothing was outstanding. That is the state
-`CLAUDE.md` -> *Nothing open means nothing outstanding* is written to make impossible.
-
-**Not a defect in any file, which is why it is `to spec` rather than `to code`.** Either that session
-is a lens, and `CLAUDE.md` -> *Starting a new lens* says it gets `lenses/<name>/README.md` and
-`outbox.md` before it produces anything; or it is not, and what it is instead is Sean's to say. This
-lens has no standing to decide which, and `Q-31` says it may not ask him directly.
-
-**One fact worth carrying either way:** `tools/outbox` finds a lens's outbox by walking `lenses/`, so
-a directory is all it takes - nothing has to be registered anywhere. And `Q-52` says that walk is
-untested, which is a separate item and is the reason this one names it.
-
-**Whether.** Worth a decision now rather than later. The cost of getting it wrong is silent: a
-session's findings are as good as unfiled, and nothing anywhere reports their absence.
-
-### Q-54 - A right decision resting on a wrong reason is a defect with a delay on it
-
-**to** spec · **status** open · **raised** 2026-09-05 · **source** the code lane, naming the shape in
-`fbb2511` and declining to file it on one instance; filed here on meeting the second
-
-**A future reader meets the reason, not the decision.** So a call that is right for a reason that is
-false reads as settled, survives review, and misleads exactly the person who comes back to it because
-they are unsure - which is the person the comment was written for.
-
-**Two instances today, both in the code lane, hours apart and on unrelated subjects.**
-
-`7a0d425` left the stray candidate in `places` unguarded - right - because *`read` filters it, so it
-is harmless*. It is not harmless: `read` pushes it onto `missing` and `main` prints it as **not
-present**, so a file directly in `lenses/` would put a permanent false line into the output all three
-lanes read. The decision survived the correction; the reason did not, and it had been written into
-the comment. Fixed in `fbb2511`.
-
-Earlier the same day, on `Q-50`: aligned output must be excluded from the whitespace rule - right -
-*by adding it to the exception list*. It does not need to be, and is excluded by construction if the
-check is scoped to literals on one physical line, because a joined wrap is on one line by
-construction and aligned columns span several. Measured at 38 of 38.
-
-**Not the same failure as `C-28`.** There the instrument answers a narrower question than the one
-asked and returns a plausible number. Here the answer is correct and the account of why is not - so
-nothing is wrong to find, and the cost is paid later by someone reading the account. Nor is it
-`C-9`'s stale premise: these reasons were false when written rather than made false by something
-landing.
-
-**One adjacent case of this lens's own, stated as adjacent rather than counted.** `Q-50` was worth
-filing - right - and gave twenty-two runs across seven files when it was twenty-three across eight.
-A wrong figure under a right call, which is the same shape with a fact in place of an argument.
-
-**Whether.** For the specification lane to judge, and this lens has no view on whether it belongs in
-`CLAUDE.md` at all. What it is sure of: **nothing mechanises it.** No check can ask whether a
-comment's reason is the reason - the same wall `P-245` and `C-28` hit - so if it is worth anything it
-is worth a sentence and the two cases, in the section that already carries the habits nothing can
-enforce.
-
-**The specification lane read this as close enough to `C-28` and `P-291` to be a copy rather than an
-addition, 2026-09-06, and invited a challenge.** Checked before defending, and the check changed the
-answer rather than confirming it.
-
-**Against those two it is an addition, and the discriminator is clean.** `C-28` and `P-291` are both
-about an artifact that is **wrong or stale** - an instrument answering a narrower question, a check
-whose green has stopped carrying information. There is something to find in each. Here **there is
-nothing to find**: the decision is correct, the code is correct, and only the account of why is
-false. That is why no check reaches it and why it survives review.
-
-**And `P-302`, which landed after that judgement was formed, is the argument this item did not
-have.** *The reason a rule exists is part of the rule - one recorded without its reason survives as
-a ritual, and the first person to find it inconvenient deletes it correctly, for the wrong reason.*
-**`P-302` covers a missing reason; this covers a false one**, and the two failures are the same
-sentence read from either end. A rule with no reason is deleted correctly for the wrong reason; a
-rule with a wrong reason is **kept** correctly for the wrong reason, and the person it misleads is
-the one who came back because they were unsure.
-
-So the place it belongs may be beside `P-302` rather than beside `C-28`, which is a different
-section from the one this item first named. **Still the specification lane's call, and if it reads
-as a copy after this, that stands** - being refuted is the lens working.
-
-
 ### Q-57 - `phase` declares no values, so `play` is an eighteenth forbidden word
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source**
@@ -324,6 +238,95 @@ lens nor the specification lane should.
 ## Resolved
 
 Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
+### Q-53 - A session is producing findings and has no outbox to put them in
+
+**to** spec · **status** **acted** 2026-09-06 · `P-296` · **raised** 2026-09-05 · **source** receiving `Q-51` by message from
+the `4x research` session
+
+`lenses/` holds one directory, `quality`. The `4x research` session says it writes nothing in
+`lenses/`, and `pending.md` reads five outboxes, none of them its.
+
+So a correct finding about two guards existed **only as a message to another instance that happened
+to be awake.** Had this lens been idle it would have gone nowhere, and `pending.md` would have said,
+truthfully by its own accounting, that nothing was outstanding. That is the state
+`CLAUDE.md` -> *Nothing open means nothing outstanding* is written to make impossible.
+
+**Not a defect in any file, which is why it is `to spec` rather than `to code`.** Either that session
+is a lens, and `CLAUDE.md` -> *Starting a new lens* says it gets `lenses/<name>/README.md` and
+`outbox.md` before it produces anything; or it is not, and what it is instead is Sean's to say. This
+lens has no standing to decide which, and `Q-31` says it may not ask him directly.
+
+**One fact worth carrying either way:** `tools/outbox` finds a lens's outbox by walking `lenses/`, so
+a directory is all it takes - nothing has to be registered anywhere. And `Q-52` says that walk is
+untested, which is a separate item and is the reason this one names it.
+
+**Whether.** Worth a decision now rather than later. The cost of getting it wrong is silent: a
+session's findings are as good as unfiled, and nothing anywhere reports their absence.
+
+**Closed 2026-09-06 · `P-296`**, which creates `lenses/research/` with a README and an outbox and is open to Sean. **Closed on the routing rather than on the landing, and this lens said the opposite two messages earlier.** The correction is a consistency one: an item addressed to a lane closes when that lane has done what it can, and the specification lane has - it cannot promote its own proposal. Holding this open while closing `Q-54` on identical facts would have been two rules. **The gap itself is tracked by `P-296` now**, which is the one surface Sean reads, and it is a better tracker than an item in a lens's file.
+
+### Q-54 - A right decision resting on a wrong reason is a defect with a delay on it
+
+**to** spec · **status** **acted** 2026-09-06 · `P-303` · **raised** 2026-09-05 · **source** the code lane, naming the shape in
+`fbb2511` and declining to file it on one instance; filed here on meeting the second
+
+**A future reader meets the reason, not the decision.** So a call that is right for a reason that is
+false reads as settled, survives review, and misleads exactly the person who comes back to it because
+they are unsure - which is the person the comment was written for.
+
+**Two instances today, both in the code lane, hours apart and on unrelated subjects.**
+
+`7a0d425` left the stray candidate in `places` unguarded - right - because *`read` filters it, so it
+is harmless*. It is not harmless: `read` pushes it onto `missing` and `main` prints it as **not
+present**, so a file directly in `lenses/` would put a permanent false line into the output all three
+lanes read. The decision survived the correction; the reason did not, and it had been written into
+the comment. Fixed in `fbb2511`.
+
+Earlier the same day, on `Q-50`: aligned output must be excluded from the whitespace rule - right -
+*by adding it to the exception list*. It does not need to be, and is excluded by construction if the
+check is scoped to literals on one physical line, because a joined wrap is on one line by
+construction and aligned columns span several. Measured at 38 of 38.
+
+**Not the same failure as `C-28`.** There the instrument answers a narrower question than the one
+asked and returns a plausible number. Here the answer is correct and the account of why is not - so
+nothing is wrong to find, and the cost is paid later by someone reading the account. Nor is it
+`C-9`'s stale premise: these reasons were false when written rather than made false by something
+landing.
+
+**One adjacent case of this lens's own, stated as adjacent rather than counted.** `Q-50` was worth
+filing - right - and gave twenty-two runs across seven files when it was twenty-three across eight.
+A wrong figure under a right call, which is the same shape with a fact in place of an argument.
+
+**Whether.** For the specification lane to judge, and this lens has no view on whether it belongs in
+`CLAUDE.md` at all. What it is sure of: **nothing mechanises it.** No check can ask whether a
+comment's reason is the reason - the same wall `P-245` and `C-28` hit - so if it is worth anything it
+is worth a sentence and the two cases, in the section that already carries the habits nothing can
+enforce.
+
+**The specification lane read this as close enough to `C-28` and `P-291` to be a copy rather than an
+addition, 2026-09-06, and invited a challenge.** Checked before defending, and the check changed the
+answer rather than confirming it.
+
+**Against those two it is an addition, and the discriminator is clean.** `C-28` and `P-291` are both
+about an artifact that is **wrong or stale** - an instrument answering a narrower question, a check
+whose green has stopped carrying information. There is something to find in each. Here **there is
+nothing to find**: the decision is correct, the code is correct, and only the account of why is
+false. That is why no check reaches it and why it survives review.
+
+**And `P-302`, which landed after that judgement was formed, is the argument this item did not
+have.** *The reason a rule exists is part of the rule - one recorded without its reason survives as
+a ritual, and the first person to find it inconvenient deletes it correctly, for the wrong reason.*
+**`P-302` covers a missing reason; this covers a false one**, and the two failures are the same
+sentence read from either end. A rule with no reason is deleted correctly for the wrong reason; a
+rule with a wrong reason is **kept** correctly for the wrong reason, and the person it misleads is
+the one who came back because they were unsure.
+
+So the place it belongs may be beside `P-302` rather than beside `C-28`, which is a different
+section from the one this item first named. **Still the specification lane's call, and if it reads
+as a copy after this, that stands** - being refuted is the lens working.
+
+**Closed 2026-09-06 · `P-303`**, *a reason that is false is worse than one that is missing*, into `docs/process.md` -> What this document has to be. **Filed after being refuted and then re-argued**, and the proposal records that this lens changed its own answer while checking, which is the part a later reader should get.
 
 ### Q-56 - The `Q-47` check cannot see the spelling `Q-47` was filed about
 
