@@ -63,43 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-282 - Three of the six columns on a territory row are not traits
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
-- **into** `releases/first-release.md` -> Traits, and the dump
-
-**You asked what `labor-spent` means. It means *citizens minus citizens still ready* - how many of
-them have been used this turn** - and at `citizens:8 labor-spent:0` none has been. **It is derived,
-and the release never declares it.**
-
-**`founded`'s shape a fourth time, and found the same way both times: by you reading the data.** On
-the line you are looking at, **three of six columns are not declared traits** - `citizens`,
-`labor-spent` and `yards`, each **zero** occurrences in the release, measured. Only `id`, `biome` and
-`nature` are.
-
-**And `labor-spent` is printed twice.** Line 11 says `labor-spent:0`; line 150 says
-`{{labor territory:1 made:8 spent:0 left:8}}`. **The same number, from the same source, in two
-tables** - one of them a table about labor and one of them a column on a territory.
-
-**What it is derived from is already a declared trait.** *`ready`, of whatever readies, yes or no* -
-one occurrence. **So `labor-spent` is a count of citizens whose `ready` is no**, which the model can
-compute and the release does not need to name.
-
-**Choice A - drop `labor-spent` from the territory row.** The `labor` table already says made, spent
-and left, and says it about labor rather than about a territory. **You lose nothing and the row gets
-shorter.**
-
-**Choice B - declare the three as derived traits** and keep printing them. `citizens` and `yards` are
-counts of things in the territory, so both are honestly derived; `labor-spent` would be a third name
-for a number the `labor` table already gives twice.
-
-**This lane recommends A for `labor-spent` and B for the other two.** A count of citizens and a count
-of yards are worth seeing on a territory and are named nowhere else; **labor is the one that already
-has its own table.**
-
-**Not fixed while you read.** Changing the dump changes `expected/play.4x` under you, which is the
-one thing `P-249` says must not happen without your knowing.
-
 ### P-283 - Does turning a paragraph into a bullet take the full stop with it?
 
 **to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
@@ -135,38 +98,31 @@ reads as the odd one out.
 has been caught by a machine rather than by you or by me re-reading, which is what `P-263` and the
 `shape` field were for.
 
-### P-284 - The dump can invent a word, and has done so eighteen times
+### P-284 - Every word in a data file is a kind, a trait, or a trait value
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
-- **into** `releases/first-release.md` -> Traits, or a check
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-06 - **kind**
+contradiction - **shape** text - **asks** approval - **into** `spec/console.md` -> The language
 
-**The six you have found by reading are samples from eighteen.** `dump.rs` uses **28** distinct
-column names; **18 are neither a declared trait nor a kind**, counted against the release's own
-tables: `amount`, `built`, `capacity`, `citizens`, `count`, `id`, `in-play`, `labor-spent`, `left`,
-`made`, `node`, `phase`, `spent`, `structure`, `territories`, `turn`, `units`, `yards`.
+**This asked a decision and no longer needs to.** It offered a rule with *a named few structural
+words* excepted; **under `P-287` there are none to except**, because containment is position and
+nothing has to name its container. So the rule can be stated without a hole in it.
 
-**Some are structural and fine** - `id`, `node`, `territory`, `place` say where a row sits rather
-than what a thing is. **The rest are vocabulary the dump made up**, and each one is `founded` waiting
-for you to read it.
+> **Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
+> other word is wrong about the game rather than describing it.
 
-**The rule that would end it: every word in a dump line is a kind, a declared trait, a trait value,
-or one of a named few structural words.** A check can say that, and **it fails today eighteen
-times.**
+**Why it had exceptions and no longer does.** A relational rendering needs a foreign key per row -
+`{store territory:1 ...}` - and `territory` there is neither a kind nor a trait. **Nesting makes the
+container the row's position**, so the join key disappears and with it the reason to except anything.
 
-**What this asks you.** Whether that rule is right - and if it is, whether the structural exceptions
-are named in the release or in the check. **Not what to do about the eighteen**, because the answer
-to that depends on the shape of the dump, and your map-from-description-to-quantity would remove most
-of them by construction rather than by declaration.
+**It fails today, and by how much is the point.** `dump.rs` uses **28** distinct column names and
+**18** are neither a declared trait nor a kind - measured against the release's own tables. Six of
+those you have found by reading: `founded`, `readiness`, `capacity`, `citizens`, `yards`,
+`labor-spent`. **This is the check that would have caught all eighteen.**
 
-**That comparison is written up** in
-[counted things and invented names](counted-things-and-invented-names.md), with the measurement, how
-your map form compares to `P-282`'s two choices, what it leaves undecided, and one thing it suggests
-that neither choice did. **It is a note, not a proposal** - you said you were not deciding.
-
-**This lane's short answer, since you asked for one: your map form is better than both my
-suggestions**, because mine name the counts and yours removes the mechanism that invents names. **And
-it is not a new idea** - `P-257` already says a fungible thing collapses into a count and an
-identified one does not, and `P-262` already says one shape beats several names differing in a word.
+**What it makes work rather than decisions.** `id` is declared by `P-286`. **`node`, `phase` and
+`turn` are not declared and would have to be** - a node is what an extractor works, and the phase and
+turn are traits of the game, which is a thing like any other. **Those are rows to write, not choices
+to make**, and they follow this rather than gate it.
 
 ### P-285 - A thing is not located by a trait, and one with an `id` is unique
 
@@ -218,6 +174,43 @@ things is worth knowing about before the row goes**, because a search for `place
 unit table, and every row that names its territory - `store`, `garrison`, `extractor` - is stating
 containment as a field. **Under `P-285` those become position rather than data**, which is the same
 change as the map form and should land with it rather than before it.
+
+### P-287 - Contents are a map from a description to a quantity
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `spec/console.md` -> The language, after *a thing's own identifier is
+`id`*
+
+**Your four rules and your three answers, as one paragraph.** Nothing here is a choice this lane
+made: the four are yours verbatim, and where a detail was not settled it is forced rather than
+chosen - said below.
+
+> **What a thing contains is a map from a description to a quantity.** A description is a kind and
+> **every stored trait that thing has**; a derived trait is never part of one, and **no trait may be
+> left out** - `{citizen ready:yes} -> 8` and `{citizen ready:no} -> 6`, never `{citizen} ->
+> 14`. **Each distinct description is its own entry, and an entry is never zero.** A thing carrying
+> an `id` has a description no other thing shares, so **its quantity is always one**. **Where a thing
+> is, is where it appears**; nothing states its container. **Entries are in the order their
+> descriptions sort in**, so the same state is always the same bytes.
+
+**Two things in that paragraph were not in your four rules, and both are forced.**
+
+**Order.** A tree has no order among its children and a file that is diffed must have one. **Sorting
+by the description is the only order that is derivable from the state itself**; any other is
+arbitrary and would churn `expected/play.4x`. Stated rather than chosen.
+
+**Position rather than a stated container.** That is your answer to 2, and it is what makes rule 2
+possible: **if a container were a trait it would sit in every description and the map would be flat.**
+
+**What this settles that was open.** `P-282` is withdrawn - `citizens`, `yards` and `labor-spent`
+stop existing rather than being chosen between. `P-284` loses its exceptions and becomes a rule with
+no hole. `P-285` and `P-286` are its two halves in the specification and the release.
+
+**What it costs, so it is not discovered later.** Anything that indexes a thing - `extractors[3]` -
+has nothing to index, and extractors stay distinguishable only because `node` distinguishes them,
+which `P-284` says must be declared. **And mutation becomes a transfer between entries** - one off
+`{citizen ready:yes}`, one onto `{citizen ready:no}` - which is closer to *matter is conserved
+and its arrangement is not* than changing a field, and makes conservation checkable as a sum.
 
 ## Addressed to other perspectives
 
@@ -1643,3 +1636,4 @@ again in a later session.
 | P-226, when a proposal quotes more than one passage the last is the offer             | Sean, 2026-09-04: the distinction that matters is *between proposals that are ready for me to approve, and proposals that are drawing attention to decisions I need to make*. `P-229` makes that split and dissolves this ambiguity instead of ruling on it                                                                                                 |            |
 | P-237, three collisions from merging his process note                                 | Sean answered all three on 2026-09-04. Each is now its own item, which is what he can act on: `P-238` for what a proposal is, `P-239` for `pending.md`, `P-240` for who owns production support                                                                                                                                                             |            |
 | P-279, the twelve territories collapse to five profiles                               | withdrawn: it was a consequence of `P-272`, which `P-280` reverses                                                                                                                                                                                                                                                                                          | 2026-09-05 |
+| P-282, three of six columns on a territory row are not traits | withdrawn: `P-287` removes all three names rather than choosing between them | 2026-09-06 |
