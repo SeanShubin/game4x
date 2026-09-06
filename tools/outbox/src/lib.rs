@@ -1230,7 +1230,7 @@ Only prose.
             .count();
         assert_eq!(
             by_parser, by_heading,
-            "the file has {by_heading} proposal headings and the parser found {by_parser};              a proposal it cannot see is one this test cannot check"
+            "the file has {by_heading} proposal headings and the parser found {by_parser}; a proposal it cannot see is one this test cannot check"
         );
 
         // **A proposal that asks a decision offers no text, and must not be required to.**

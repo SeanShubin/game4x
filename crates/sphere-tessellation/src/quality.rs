@@ -499,7 +499,7 @@ mod tests {
         .quality();
         assert!(
             large.odd_degrees > Quality::allowed_odd_degrees(300),
-            "if this now passes, a topological repair has been added and this test              should become an assertion that it works: {}",
+            "if this now passes, a topological repair has been added and this test should become an assertion that it works: {}",
             large.summary()
         );
         // Even so, the geometry is fine and most cells are hexagons.

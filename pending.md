@@ -17,6 +17,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-48** - `8b772c2` S-48: `node` goes, and capacity bounds extractors directly · still open in `docs/notes/proposals.md`
 - **S-47** - `f2040fa` File C-34: the population for S-47's unrepresentability claim · still open in `docs/notes/proposals.md`
 - **S-46** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
 - **S-45** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`

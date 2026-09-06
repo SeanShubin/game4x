@@ -328,7 +328,7 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 const KNOWN: &[(&str, &str)] = &[
     (
         "P-214",
-        "dropped its quotation's emphasis, was repaired in `3fba321`, and the passage has          since been superseded - a later promotion made `$` name a trait value as well as          an ingredient. **`Repaired` is recomputed against `HEAD`, so it is not stable**:          once the destination moves on for an unrelated reason, a settled deviation starts          failing again. Judged at its own commit it deviated; judged today it cannot be          judged at all, because the approved text is no longer what the file should say.",
+        "dropped its quotation's emphasis, was repaired in `3fba321`, and the passage has since been superseded - a later promotion made `$` name a trait value as well as an ingredient. **`Repaired` is recomputed against `HEAD`, so it is not stable**: once the destination moves on for an unrelated reason, a settled deviation starts failing again. Judged at its own commit it deviated; judged today it cannot be judged at all, because the approved text is no longer what the file should say.",
     ),
     (
         "P-216",
@@ -336,11 +336,11 @@ const KNOWN: &[(&str, &str)] = &[
     ),
     (
         "P-236",
-        "declared `shape text` and its quotation is a table row - `**asks** - <value>`,          which landed as `| **asks** | <value> |` in `CLAUDE.md`'s field table. The          promotion is correct: a row landed as a row, repadded by `tools/pad-tables`, which          is exactly what `shape rows` means and is compared cell for cell. Only the label          is wrong, and a label is what this check reads. `C-19`.",
+        "declared `shape text` and its quotation is a table row - `**asks** - <value>`, which landed as `| **asks** | <value> |` in `CLAUDE.md`'s field table. The promotion is correct: a row landed as a row, repadded by `tools/pad-tables`, which is exactly what `shape rows` means and is compared cell for cell. Only the label is wrong, and a label is what this check reads. `C-19`.",
     ),
     (
         "P-195",
-        "declared `shape text` and its block is an instruction - it says what four sentences in      `CLAUDE.md` become and adds a template field, and nothing in it lands verbatim. The      first proposal to carry the field mislabelled its own shape, which is what this check      found on its first run. **No repair can clear this one**: the four sentences landed      correctly, so there is nothing in the destination to fix - the wrong thing is one field      in a deleted proposal. `C-17`, answered.",
+        "declared `shape text` and its block is an instruction - it says what four sentences in `CLAUDE.md` become and adds a template field, and nothing in it lands verbatim. The first proposal to carry the field mislabelled its own shape, which is what this check found on its first run. **No repair can clear this one**: the four sentences landed correctly, so there is nothing in the destination to fix - the wrong thing is one field in a deleted proposal. `C-17`, answered.",
     ),
 ];
 

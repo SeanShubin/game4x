@@ -319,7 +319,7 @@ mod tests {
                 sharing += 1;
                 assert!(
                     !(second_is_hole(earlier) && second_is_keyword(later)),
-                    "`{}` opens with a hole and is listed before `{}`, which opens with a                      keyword on the same word - first-wins matching would read that keyword                      as a value",
+                    "`{}` opens with a hole and is listed before `{}`, which opens with a keyword on the same word - first-wins matching would read that keyword as a value",
                     earlier.name,
                     later.name
                 );
