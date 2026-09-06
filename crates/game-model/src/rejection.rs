@@ -89,11 +89,12 @@ pub enum Rejection {
         needed: u32,
     },
     /// Every node of that resource already has an extractor on it.
-    NoFreeNode {
+    /// The territory's total capacity for extractors of that resource is already used.
+    NoRoomForExtractor {
         territory: TerritoryId,
         resource: Resource,
     },
-    /// A resource has to be named to know which node an extractor works.
+    /// A resource has to be named to know what an extractor is built for.
     ResourceNotNamed(StructureKind),
     AlreadyHasGarrison(TerritoryId),
     NoGarrison(TerritoryId),
@@ -203,12 +204,12 @@ impl fmt::Display for Rejection {
                 out,
                 "territory {territory} has {held} citizens and that needs {needed}"
             ),
-            Rejection::NoFreeNode {
+            Rejection::NoRoomForExtractor {
                 territory,
                 resource,
             } => write!(
                 out,
-                "every {resource} node in territory {territory} already has an extractor"
+                "territory {territory} has no room for another {resource} extractor"
             ),
             Rejection::ResourceNotNamed(kind) => {
                 write!(out, "say which resource the {kind} works")

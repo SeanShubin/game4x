@@ -2,7 +2,7 @@
 
 use crate::identity::{Resource, StructureKind, TerritoryId, UnitId, UnitKind};
 use crate::rejection::Rejection;
-use crate::territory::{Garrison, Node, Territory, population_after};
+use crate::territory::{Deposit, Garrison, Territory, population_after};
 use crate::thing::Kind;
 use crate::transition::Transition;
 use crate::unit::{Location, Unit};
@@ -137,18 +137,18 @@ impl Game {
                 extractors,
                 density,
             } => {
-                // Room for `extractors`, each yielding `density`, held for now as that many
-                // identical nodes. The release gives one density per territory per resource,
-                // so the two are the same fact written differently - and `P-134` replaces
-                // this representation entirely, which is why it is not rebuilt here.
+                // Total capacity for `extractors`, each yielding `density`. **The two
+                // numbers are stored as the two numbers now** - they were held as that many
+                // identical `Node`s, which `P-290` removed the need for by letting capacity
+                // bound extractors of a resource directly.
                 let place = next.territory_mut(*territory)?;
-                place.nodes.retain(|node| node.resource != *resource);
-                for _ in 0..*extractors {
-                    place.nodes.push(Node {
-                        resource: *resource,
+                place.deposits.insert(
+                    *resource,
+                    Deposit {
+                        capacity: *extractors,
                         density: *density,
-                    });
-                }
+                    },
+                );
             }
             Transition::SetForceOfNature { territory, force } => {
                 next.territory_mut(*territory)?.force_of_nature = *force;
@@ -411,7 +411,7 @@ impl Game {
                 place.founded()
                     && (!place.can_hold_yard() || place.yards() > 0)
                     && (!place.can_build_extractors()
-                        || place.extractors().len() == place.nodes.len())
+                        || place.extractors().len() == place.total_extractor_capacity())
             })
     }
 
@@ -581,8 +581,8 @@ impl Game {
         place.set_garrison(Some(Garrison::from_founding_unit(force)));
         place.put(Kind::Citizen, citizens);
         for resource in leaves {
-            if let Some(node) = place.best_free_node(*resource) {
-                place.add_extractor(node);
+            if place.has_room_for_extractor(*resource) {
+                place.add_extractor(*resource);
             }
             // **`P-261`: a food store and a metal store, and no energy store.** Deliberate -
             // *the three resources are supposed to feel different*, and energy is the one a
@@ -666,15 +666,15 @@ impl Game {
             }
             StructureKind::Extractor => {
                 let resource = resource.ok_or(Rejection::ResourceNotNamed(structure))?;
-                let node = self.territory(territory)?.best_free_node(resource).ok_or(
-                    Rejection::NoFreeNode {
+                if !self.territory(territory)?.has_room_for_extractor(resource) {
+                    return Err(Rejection::NoRoomForExtractor {
                         territory,
                         resource,
-                    },
-                )?;
+                    });
+                }
                 self.spend_labor(territory, cost::EXTRACTOR_LABOR)?;
                 self.spend(territory, Resource::Metal, cost::EXTRACTOR_METAL)?;
-                self.territory_mut(territory)?.add_extractor(node);
+                self.territory_mut(territory)?.add_extractor(resource);
                 Ok(())
             }
         }
@@ -773,13 +773,15 @@ impl Game {
                     });
                 }
                 self.spend_labor(territory, count)?;
-                // Densest first, so asking for fewer than every extractor gets the best
-                // of them - and so the answer never depends on iteration order.
+                // Every extractor of one resource here yields the same, since `P-290` made
+                // density a fact about the territory and the resource. The sort is kept
+                // because it is what makes the answer independent of iteration order, and
+                // costs nothing now that the key is constant across the list.
                 let mut by_density: Vec<(u32, usize)> = ready
                     .into_iter()
                     .map(|at| {
                         let place = &self.territories[territory.index()];
-                        (place.nodes[place.extractors()[at].node].density, at)
+                        (place.density_of(place.extractors()[at].resource), at)
                     })
                     .collect();
                 by_density.sort_by_key(|(density, at)| (std::cmp::Reverse(*density), *at));
@@ -1012,8 +1014,10 @@ mod tests {
             // extractors now* and a push says *one more*, and only one of those is what
             // finishing a planet by hand means.
             place.held.retain(|thing| thing.kind != Kind::Extractor);
-            for node in 0..place.nodes.len() {
-                place.add_extractor(node);
+            for resource in Resource::ALL {
+                for _ in 0..place.capacity_for(resource) {
+                    place.add_extractor(resource);
+                }
             }
         }
         assert!(game.is_fully_exploited());
@@ -1074,8 +1078,10 @@ mod tests {
             // extractors now* and a push says *one more*, and only one of those is what
             // finishing a planet by hand means.
             place.held.retain(|thing| thing.kind != Kind::Extractor);
-            for node in 0..place.nodes.len() {
-                place.add_extractor(node);
+            for resource in Resource::ALL {
+                for _ in 0..place.capacity_for(resource) {
+                    place.add_extractor(resource);
+                }
             }
         }
         // A finished planet nobody has launched from is not a win.
@@ -1115,8 +1121,10 @@ mod tests {
             // extractors now* and a push says *one more*, and only one of those is what
             // finishing a planet by hand means.
             place.held.retain(|thing| thing.kind != Kind::Extractor);
-            for node in 0..place.nodes.len() {
-                place.add_extractor(node);
+            for resource in Resource::ALL {
+                for _ in 0..place.capacity_for(resource) {
+                    place.add_extractor(resource);
+                }
             }
         }
         // Make one of them water and take everything off it.

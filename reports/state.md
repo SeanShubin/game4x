@@ -127,19 +127,19 @@ is in it, because the names are what this is for.
 
 ## extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
-| 1         | 1    | food     | yes   |
-| 1         | 4    | metal    | yes   |
-| 1         | 2    | food     | yes   |
-| 1         | 6    | energy   | yes   |
-| 1         | 5    | metal    | yes   |
-| 1         | 7    | energy   | yes   |
-| 1         | 8    | energy   | yes   |
-| 2         | 0    | food     | yes   |
-| 2         | 2    | metal    | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | energy   | yes   |
+| 1         | metal    | yes   |
+| 1         | energy   | yes   |
+| 1         | energy   | yes   |
+| 2         | food     | yes   |
+| 2         | metal    | yes   |
 
 11 row(s)
 

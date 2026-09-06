@@ -280,7 +280,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 18] = [
+pub const TRAITS: [TraitRow; 19] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -392,6 +392,17 @@ pub const TRAITS: [TraitRow; 18] = [
         name: "houses",
         of: "a thing that contains things",
         values: "whether people live in it",
+        held: Held::Stored,
+    },
+    // **`P-288`: `phase` is a declared trait and `turn` is not.** The release grew this row
+    // and the gate went red until this list followed, which is what `P-263` says a promotion
+    // into a table the code generates from does. `turn` gets no row here and needs no rule
+    // forbidding one: `P-284` admits only kinds, traits and trait values into a data file,
+    // and `turn` is none of the three.
+    TraitRow {
+        name: "phase",
+        of: "the game",
+        values: "before it starts, or once it has",
         held: Held::Stored,
     },
 ];

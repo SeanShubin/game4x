@@ -208,44 +208,69 @@ impl Disagreement {
 
 /// Compare what was expected with what happened.
 pub fn compare(expected: &[Row], actual: &[Row]) -> Disagreement {
-    let key = |row: &Row| row.identity();
-    let by_identity = |rows: &[Row]| -> BTreeMap<String, Row> {
-        rows.iter().map(|row| (key(row), row.clone())).collect()
+    // **A description maps to a quantity, so this groups rather than replaces** - `P-287`.
+    //
+    // It was `BTreeMap<String, Row>`, built by collecting pairs, so **two rows with one
+    // description kept only the last**. Nothing noticed while every row carried something
+    // that made it unique; `S-48` deleted `node` from the extractor row, three food
+    // extractors in one territory became three identical descriptions, and a turn that built
+    // one more produced **no difference at all**. The table went from two rows to three and
+    // the delta accounted for none of it.
+    //
+    // That is the shape this repository keeps recording: the instrument answered a narrower
+    // question - *which descriptions are present* - than the one asked, and returned a
+    // plausible empty delta rather than an error.
+    let by_identity = |rows: &[Row]| -> BTreeMap<String, Vec<Row>> {
+        let mut out: BTreeMap<String, Vec<Row>> = BTreeMap::new();
+        for row in rows {
+            out.entry(row.identity()).or_default().push(row.clone());
+        }
+        out
     };
     let want = by_identity(expected);
     let got = by_identity(actual);
 
     let mut wrong = Disagreement::default();
-    for (identity, row) in &want {
-        match got.get(identity) {
-            None => wrong.missing.push(row.written()),
-            Some(theirs) if theirs == row => {}
-            Some(theirs) => {
-                for ((name, value), (_, other)) in row.fields.iter().zip(&theirs.fields) {
-                    if value != other {
-                        // **Neutral, because two readers want opposite words.** Against a
-                        // reviewed expectation this is *expected X, got Y*; between two
-                        // turns it is *was X, now Y*, and neither is a failure. One arrow
-                        // is true for both, and the reader supplies the sentence.
-                        wrong
-                            .different
-                            .push(format!("{identity} · {name}: {value} → {other}"));
-                    }
+    for (identity, mine) in &want {
+        let theirs: &[Row] = got.get(identity).map(Vec::as_slice).unwrap_or(&[]);
+        // How many there are is part of the entry, so a difference in the count is reported
+        // as the rows that have no counterpart rather than as a changed value.
+        for row in mine.iter().skip(theirs.len()) {
+            wrong.missing.push(row.written());
+        }
+        for row in theirs.iter().skip(mine.len()) {
+            wrong.extra.push(row.written());
+        }
+        for (row, other) in mine.iter().zip(theirs) {
+            if row == other {
+                continue;
+            }
+            for ((name, value), (_, alternative)) in row.fields.iter().zip(&other.fields) {
+                if value != alternative {
+                    // **Neutral, because two readers want opposite words.** Against a
+                    // reviewed expectation this is *expected X, got Y*; between two
+                    // turns it is *was X, now Y*, and neither is a failure. One arrow
+                    // is true for both, and the reader supplies the sentence.
+                    wrong
+                        .different
+                        .push(format!("{identity} · {name}: {value} → {alternative}"));
                 }
-                // Same identity, different shape: the columns moved rather than a value.
-                if row.fields.len() != theirs.fields.len() {
-                    wrong.different.push(format!(
-                        "{identity} · {} fields → {}",
-                        row.fields.len(),
-                        theirs.fields.len()
-                    ));
-                }
+            }
+            // Same identity, different shape: the columns moved rather than a value.
+            if row.fields.len() != other.fields.len() {
+                wrong.different.push(format!(
+                    "{identity} · {} fields → {}",
+                    row.fields.len(),
+                    other.fields.len()
+                ));
             }
         }
     }
-    for (identity, row) in &got {
+    for (identity, theirs) in &got {
         if !want.contains_key(identity) {
-            wrong.extra.push(row.written());
+            for row in theirs {
+                wrong.extra.push(row.written());
+            }
         }
     }
     wrong

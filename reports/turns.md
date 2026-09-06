@@ -24,8 +24,8 @@ end turn
 
 **new** (3)
 
-- {extractor territory:1 node:0 resource:food ready:yes}
-- {extractor territory:1 node:3 resource:metal ready:yes}
+- {extractor territory:1 resource:food ready:yes}
+- {extractor territory:1 resource:metal ready:yes}
 - {garrison territory:1 force:0}
 
 **changed** (15)
@@ -171,10 +171,10 @@ end turn
 
 ### extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
 
 2 row(s)
 
@@ -285,7 +285,7 @@ end turn
 
 **new** (1)
 
-- {extractor territory:1 node:1 resource:food ready:yes}
+- {extractor territory:1 resource:food ready:yes}
 
 **changed** (6)
 
@@ -421,11 +421,11 @@ end turn
 
 ### extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
-| 1         | 1    | food     | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
 
 3 row(s)
 
@@ -669,11 +669,11 @@ end turn
 
 ### extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
-| 1         | 1    | food     | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
 
 3 row(s)
 
@@ -790,9 +790,9 @@ end turn
 
 **new** (3)
 
-- {extractor territory:1 node:2 resource:food ready:yes}
-- {extractor territory:1 node:4 resource:metal ready:yes}
-- {extractor territory:1 node:6 resource:energy ready:yes}
+- {extractor territory:1 resource:food ready:yes}
+- {extractor territory:1 resource:metal ready:yes}
+- {extractor territory:1 resource:energy ready:yes}
 
 **changed** (6)
 
@@ -928,14 +928,14 @@ end turn
 
 ### extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
-| 1         | 1    | food     | yes   |
-| 1         | 4    | metal    | yes   |
-| 1         | 2    | food     | yes   |
-| 1         | 6    | energy   | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | energy   | yes   |
 
 6 row(s)
 
@@ -1054,8 +1054,8 @@ end turn
 
 **new** (2)
 
-- {extractor territory:1 node:5 resource:metal ready:yes}
-- {extractor territory:1 node:7 resource:energy ready:yes}
+- {extractor territory:1 resource:energy ready:yes}
+- {extractor territory:1 resource:metal ready:yes}
 
 **changed** (13)
 
@@ -1198,16 +1198,16 @@ end turn
 
 ### extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
-| 1         | 1    | food     | yes   |
-| 1         | 4    | metal    | yes   |
-| 1         | 2    | food     | yes   |
-| 1         | 6    | energy   | yes   |
-| 1         | 5    | metal    | yes   |
-| 1         | 7    | energy   | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | energy   | yes   |
+| 1         | metal    | yes   |
+| 1         | energy   | yes   |
 
 8 row(s)
 
@@ -1330,7 +1330,7 @@ end turn
 
 **new** (1)
 
-- {extractor territory:1 node:8 resource:energy ready:yes}
+- {extractor territory:1 resource:energy ready:yes}
 
 **changed** (8)
 
@@ -1468,17 +1468,17 @@ end turn
 
 ### extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
-| 1         | 1    | food     | yes   |
-| 1         | 4    | metal    | yes   |
-| 1         | 2    | food     | yes   |
-| 1         | 6    | energy   | yes   |
-| 1         | 5    | metal    | yes   |
-| 1         | 7    | energy   | yes   |
-| 1         | 8    | energy   | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | energy   | yes   |
+| 1         | metal    | yes   |
+| 1         | energy   | yes   |
+| 1         | energy   | yes   |
 
 9 row(s)
 
@@ -1744,17 +1744,17 @@ end turn
 
 ### extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
-| 1         | 1    | food     | yes   |
-| 1         | 4    | metal    | yes   |
-| 1         | 2    | food     | yes   |
-| 1         | 6    | energy   | yes   |
-| 1         | 5    | metal    | yes   |
-| 1         | 7    | energy   | yes   |
-| 1         | 8    | energy   | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | energy   | yes   |
+| 1         | metal    | yes   |
+| 1         | energy   | yes   |
+| 1         | energy   | yes   |
 
 9 row(s)
 
@@ -1875,8 +1875,8 @@ end turn
 
 **new** (3)
 
-- {extractor territory:2 node:0 resource:food ready:yes}
-- {extractor territory:2 node:2 resource:metal ready:yes}
+- {extractor territory:2 resource:food ready:yes}
+- {extractor territory:2 resource:metal ready:yes}
 - {garrison territory:2 force:0}
 
 **changed** (23)
@@ -2031,19 +2031,19 @@ end turn
 
 ### extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
-| 1         | 1    | food     | yes   |
-| 1         | 4    | metal    | yes   |
-| 1         | 2    | food     | yes   |
-| 1         | 6    | energy   | yes   |
-| 1         | 5    | metal    | yes   |
-| 1         | 7    | energy   | yes   |
-| 1         | 8    | energy   | yes   |
-| 2         | 0    | food     | yes   |
-| 2         | 2    | metal    | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | energy   | yes   |
+| 1         | metal    | yes   |
+| 1         | energy   | yes   |
+| 1         | energy   | yes   |
+| 2         | food     | yes   |
+| 2         | metal    | yes   |
 
 11 row(s)
 
@@ -2301,19 +2301,19 @@ end turn
 
 ### extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
-| 1         | 1    | food     | yes   |
-| 1         | 4    | metal    | yes   |
-| 1         | 2    | food     | yes   |
-| 1         | 6    | energy   | yes   |
-| 1         | 5    | metal    | yes   |
-| 1         | 7    | energy   | yes   |
-| 1         | 8    | energy   | yes   |
-| 2         | 0    | food     | yes   |
-| 2         | 2    | metal    | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | energy   | yes   |
+| 1         | metal    | yes   |
+| 1         | energy   | yes   |
+| 1         | energy   | yes   |
+| 2         | food     | yes   |
+| 2         | metal    | yes   |
 
 11 row(s)
 
@@ -2557,19 +2557,19 @@ end turn
 
 ### extractor
 
-| territory | node | resource | ready |
-| --------- | ---- | -------- | ----- |
-| 1         | 0    | food     | yes   |
-| 1         | 3    | metal    | yes   |
-| 1         | 1    | food     | yes   |
-| 1         | 4    | metal    | yes   |
-| 1         | 2    | food     | yes   |
-| 1         | 6    | energy   | yes   |
-| 1         | 5    | metal    | yes   |
-| 1         | 7    | energy   | yes   |
-| 1         | 8    | energy   | yes   |
-| 2         | 0    | food     | yes   |
-| 2         | 2    | metal    | yes   |
+| territory | resource | ready |
+| --------- | -------- | ----- |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | metal    | yes   |
+| 1         | food     | yes   |
+| 1         | energy   | yes   |
+| 1         | metal    | yes   |
+| 1         | energy   | yes   |
+| 1         | energy   | yes   |
+| 2         | food     | yes   |
+| 2         | metal    | yes   |
 
 11 row(s)
 

@@ -18,7 +18,7 @@
 //! commands. Written this way, browsing turn *n* is a loop over states; written around the
 //! final state, it is a rewrite.
 
-use game_model::{Game, Location, Node, Phase, Resource, StructureKind, UnitKind};
+use game_model::{Game, Location, Phase, Resource, StructureKind, UnitKind};
 
 /// One table: its name, its column names, and its rows.
 ///
@@ -142,7 +142,11 @@ pub fn tables(game: &Game) -> Vec<Table> {
     );
     let mut store = Table::new("store", &["territory", "resource", "amount"]);
     let mut garrison = Table::new("garrison", &["territory", "force"]);
-    let mut extractor = Table::new("extractor", &["territory", "node", "resource", "ready"]);
+    // **The `node` column goes with the nodes.** It printed which deposit an extractor sat
+    // on, and `P-290` removed the deposits by letting capacity bound extractors of a
+    // resource directly - so the number named a position in a list that no longer exists.
+    // `S-48`.
+    let mut extractor = Table::new("extractor", &["territory", "resource", "ready"]);
     let mut structure = Table::new("structure", &["territory", "structure", "count"]);
     // **`labor` is one of the fourteen kinds and had no table at all.** It existed only as a
     // `labor spent` column inside `territory`, so a reader looking for the kind found
@@ -165,34 +169,20 @@ pub fn tables(game: &Game) -> Vec<Table> {
             place.yards().to_string(),
         ]);
 
-        // Every resource, not every resource that has a node here. A territory with no
+        // Every resource, not every resource this ground offers. A territory with no
         // energy is a fact worth being able to see.
         for resource in Resource::ALL {
-            let here: Vec<&Node> = place
-                .nodes
-                .iter()
-                .filter(|n| n.resource == resource)
-                .collect();
-            // Every node of a resource is set to one density by `SetResource`, so this is
-            // one number - but it is read out rather than assumed, and a ground that ever
-            // held two would say both instead of quietly showing one.
-            let mut densities: Vec<String> = here.iter().map(|n| n.density.to_string()).collect();
-            densities.sort();
-            densities.dedup();
-            let built = place
-                .extractors()
-                .iter()
-                .filter(|e| place.nodes[e.node].resource == resource)
-                .count();
+            // **One capacity and one density, read as the two numbers they are.** This used
+            // to count a list of identical nodes and dedup their densities, hedging against
+            // a ground that held two - `P-290` says a territory has one answer per resource,
+            // so the hedge was guarding against a state nothing could produce.
+            let offered = place.deposit(resource);
+            let built = place.extractors_for(resource).len();
             node.push(vec![
                 place.id.0.to_string(),
                 resource.name().to_string(),
-                here.len().to_string(),
-                if densities.is_empty() {
-                    "0".to_string()
-                } else {
-                    densities.join(", ")
-                },
+                offered.capacity.to_string(),
+                offered.density.to_string(),
                 built.to_string(),
             ]);
             store.push(vec![
@@ -209,8 +199,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
         for built in &place.extractors() {
             extractor.push(vec![
                 place.id.0.to_string(),
-                built.node.to_string(),
-                place.nodes[built.node].resource.name().to_string(),
+                built.resource.name().to_string(),
                 ready(built.exhausted),
             ]);
         }

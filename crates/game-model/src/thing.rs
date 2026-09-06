@@ -149,8 +149,6 @@ impl Kind {
 /// with named fields, and a territory now holds only things.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Trait {
-    /// Which of a territory's nodes an extractor works.
-    Works,
     /// Which resource an extractor is built for.
     ///
     /// `P-234` collapsed three extractor kinds back into one with this trait, which is what

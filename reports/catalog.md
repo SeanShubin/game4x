@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-13 kinds, 4 families, 18 traits, 16 recipes.
+13 kinds, 4 families, 19 traits, 16 recipes.
 
 ## citizen
 

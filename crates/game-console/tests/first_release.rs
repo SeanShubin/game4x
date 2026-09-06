@@ -258,19 +258,19 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
     );
     let mut checked = 0;
 
-    // Every node the release calls for is there, and nothing else is.
+    // Every capacity the release calls for is there, and nothing else is.
     for (id, expected) in released {
         let place = session.game.territory(TerritoryId(id)).unwrap();
         for (resource, count, density) in &expected {
-            let nodes = place.nodes_of(*resource);
+            let offered = place.deposit(*resource);
             assert_eq!(
-                nodes.len(),
-                *count as usize,
-                "territory {id} should have {count} {resource} nodes"
+                offered.capacity, *count,
+                "territory {id} should have capacity for {count} {resource} extractors"
             );
-            for (_, node) in nodes {
-                assert_eq!(node.density, *density, "territory {id} {resource} density");
-            }
+            assert_eq!(
+                offered.density, *density,
+                "territory {id} {resource} density"
+            );
         }
         let total: usize = expected
             .iter()
@@ -279,13 +279,13 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
             .iter()
             .sum();
         assert_eq!(
-            place.nodes.len(),
+            place.total_extractor_capacity(),
             total,
-            "territory {id} has no extra nodes"
+            "territory {id} declares no capacity the release does not"
         );
         assert!(
-            !place.nodes_of(Resource::Food).is_empty(),
-            "every territory has at least one food node"
+            place.capacity_for(Resource::Food) > 0,
+            "every territory has capacity for at least one food extractor"
         );
         checked += 1;
     }
@@ -375,18 +375,16 @@ fn the_landing_site_can_send_a_pioneer_out() {
     let ceiling: u32 = {
         let mut session = Session::new();
         run(&mut session, "run setup");
-        session
-            .game
-            .territory(TerritoryId(1))
-            .unwrap()
-            .nodes_of(Resource::Metal)
-            .into_iter()
-            .map(|(_, node)| node.density)
-            .sum()
+        let place = session.game.territory(TerritoryId(1)).unwrap();
+        let metal = place.deposit(Resource::Metal);
+        metal.capacity * metal.density
     };
     // Territory 1's own row in *Territory resources*, which is what binds - `P-281`. The
     // *Biomes* table guides and does not, so grassland's `2 x 3` is not this number.
-    assert_eq!(ceiling, 12, "three metal nodes at density four");
+    assert_eq!(
+        ceiling, 12,
+        "capacity for three metal extractors at density four"
+    );
     assert!(
         cost_of("pioneer", "metal") <= ceiling,
         "a pioneer must be affordable within one turn's extraction"
@@ -567,9 +565,13 @@ fn the_setup_is_a_hierarchy_of_files() {
     run(&mut session, "run setup");
     assert_eq!(session.game.territories.len(), 12);
     assert_eq!(
-        session.game.territory(TerritoryId(12)).unwrap().nodes.len(),
+        session
+            .game
+            .territory(TerritoryId(12))
+            .unwrap()
+            .total_extractor_capacity(),
         2 + 8 + 8,
-        "territory 12 from the release: rich nodes, almost no workers"
+        "territory 12 from the release: rich extractors, almost no workers"
     );
 }
 

@@ -41,7 +41,7 @@ pub use identity::{Resource, StructureKind, TerritoryId, UnitId, UnitKind};
 /// `planet-terrain` and `planet-render` need it too and neither of them is the game.
 pub use planet_model::Biome;
 pub use rejection::Rejection;
-pub use territory::{Extractor, Node, Territory};
+pub use territory::{Deposit, Extractor, Territory};
 pub use transition::Transition;
 pub use unit::{Location, Unit};
 

@@ -66,7 +66,7 @@ pub fn show(game: &Game, subject: &Subject) -> String {
                     },
                     place.citizens(),
                     game.force_in(place.id),
-                    place.nodes.len()
+                    place.total_extractor_capacity()
                 ));
             }
             lines.join("\n")
@@ -128,20 +128,19 @@ fn territory(game: &Game, id: TerritoryId) -> String {
         place.force_of_nature
     ));
     for resource in Resource::ALL {
-        // Room and density, which is what a territory has of a resource. It used to read as
-        // a list of nodes at their densities; `P-149` made a node a number rather than a
-        // thing, and every extractor for a resource yields the same.
-        let room = place.nodes_of(resource);
-        let density = room.first().map(|(_, node)| node.density);
+        // Capacity and density, which is what a territory has of a resource. It used to read
+        // as a list of nodes at their densities; `P-290` made those two numbers, which is
+        // what they had always been.
+        let offered = place.deposit(resource);
         lines.push(format!(
             "  {:<7} {:>3} held, {} of {} extractors{}",
             resource.name(),
             place.store(resource),
             place.extractors_for(resource).len(),
-            room.len(),
-            match density {
-                Some(density) => format!(" yielding {density}"),
-                None => String::new(),
+            offered.capacity,
+            match offered.capacity {
+                0 => String::new(),
+                _ => format!(" yielding {}", offered.density),
             }
         ));
     }
@@ -252,18 +251,14 @@ pub fn entities(game: &Game) -> Vec<Entry> {
                 resource.name().to_string(),
                 place.store(resource).to_string(),
             ));
-            let nodes: Vec<String> = place
-                .nodes_of(resource)
-                .into_iter()
-                .map(|(_, node)| node.density.to_string())
-                .collect();
+            let offered = place.deposit(resource);
             components.push((
-                format!("{} nodes", resource.name()),
-                if nodes.is_empty() {
-                    "none".to_string()
-                } else {
-                    nodes.join(", ")
-                },
+                format!("{} capacity", resource.name()),
+                offered.capacity.to_string(),
+            ));
+            components.push((
+                format!("{} density", resource.name()),
+                offered.density.to_string(),
             ));
             components.push((
                 format!("{} extractors", resource.name()),

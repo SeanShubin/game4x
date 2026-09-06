@@ -20,27 +20,41 @@ pub const HOLDS: u32 = 10;
 use crate::Biome;
 use crate::identity::{Resource, TerritoryId};
 use crate::thing::{Kind, Thing, Trait};
+use std::collections::BTreeMap;
 
 /// What one citizen is worth in violence. `releases/first-release.md`: Citizen, force 1.
 pub const CITIZEN_FORCE: u32 = 1;
 
-/// One deposit. `spec/planet.md`: a territory has zero or more nodes for each resource,
-/// and each node has a density.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct Node {
-    pub resource: Resource,
+/// What a territory offers for one resource.
+///
+/// `spec/planet.md`: *for each resource, a territory has total capacity for some number of
+/// extractors, and a density that each of them yields.* Two numbers, which is what the
+/// release's *Territory resources* table writes as `3 x 4`.
+///
+/// **`P-290` is why this is one value rather than a list.** Capacity may be declared per
+/// kind carrying a particular value of a trait, so a territory bounds *metal extractors*
+/// directly and nothing has to model the individual deposits an extractor sits on. The
+/// predecessor was a `Node { resource, density }` per extractor slot, and since no
+/// territory-resource pair has two densities, no two nodes of one resource ever differed -
+/// the list was `capacity` copies of one fact. `S-48`.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct Deposit {
+    /// How many extractors of this resource the territory has total capacity for.
+    pub capacity: u32,
+    /// What each of them yields when worked.
     pub density: u32,
 }
 
-/// A structure working one node.
+/// A structure worked for one resource.
 ///
 /// `spec/structures.md`: once per turn it may take a unit of labor from a citizen and
-/// produce that node's density in its resource. `exhausted` is that "once per turn" - the
-/// extractor is not consumed by working, only used up until the turn ends.
+/// produce its territory's density in that resource. `exhausted` is that "once per turn" -
+/// the extractor is not consumed by working, only used up until the turn ends.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Extractor {
-    /// Which of the territory's nodes this works, by position in [`Territory::nodes`].
-    pub node: usize,
+    /// What it was built for. It was an index into a list of nodes until `P-290` removed
+    /// the need for the list.
+    pub resource: Resource,
     pub exhausted: bool,
 }
 
@@ -80,10 +94,15 @@ impl Garrison {
 pub struct Territory {
     pub id: TerritoryId,
     /// What the terrain gives this ground. `spec/planet.md` puts it under what a territory
-    /// carries, beside the id and the nodes, rather than under presentation - the realistic
-    /// drawing illustrates this fact rather than inventing one.
+    /// carries, beside the id and what it offers, rather than under presentation - the
+    /// realistic drawing illustrates this fact rather than inventing one.
     pub biome: Biome,
-    pub nodes: Vec<Node>,
+    /// What this ground offers, per resource. A resource with no entry offers nothing.
+    ///
+    /// **A map rather than `[Deposit; 3]`**, for the reason `held` records below: an array
+    /// indexed by resource cannot carry a fourth resource, and a map adds nothing when one
+    /// arrives.
+    pub deposits: BTreeMap<Resource, Deposit>,
     /// `spec/control.md`: force inherent to the territory, which nature holds it with.
     pub force_of_nature: u32,
     /// What is here now, as things rather than as fields.
@@ -110,7 +129,7 @@ impl Territory {
         Self {
             id,
             biome,
-            nodes: Vec::new(),
+            deposits: BTreeMap::new(),
             force_of_nature: 0,
 
             held: Vec::new(),
@@ -230,20 +249,19 @@ impl Territory {
             .iter()
             .filter(|thing| thing.kind == Kind::Extractor)
             .map(|thing| Extractor {
-                node: thing.trait_of(Trait::Works).unwrap_or(0) as usize,
+                resource: thing
+                    .trait_of(Trait::Resource)
+                    .and_then(|at| Resource::ALL.get(at as usize).copied())
+                    .unwrap_or(Resource::Food),
                 exhausted: !thing.is_ready(),
             })
             .collect()
     }
 
-    /// Build one, working that node.
-    pub fn add_extractor(&mut self, node: usize) {
-        let resource = self.nodes[node].resource;
-        self.held.push(
-            Thing::of(Kind::Extractor)
-                .with(Trait::Works, node as u32)
-                .with(Trait::Resource, resource.index() as u32),
-        );
+    /// Build one for a resource.
+    pub fn add_extractor(&mut self, resource: Resource) {
+        self.held
+            .push(Thing::of(Kind::Extractor).with(Trait::Resource, resource.index() as u32));
     }
 
     /// How many stores this territory has for a resource.
@@ -268,9 +286,9 @@ impl Territory {
     ///
     /// `releases/first-release.md` -> *What bounds a kind*: a store is bounded by **as many
     /// as the extractors of its resource**, the founding one counted. So the bound is the
-    /// node count, since that is what bounds the extractors.
+    /// territory's capacity for extractors of that resource.
     pub fn store_capacity(&self, resource: Resource) -> usize {
-        self.node_count(resource)
+        self.capacity_for(resource)
     }
 
     /// What this territory can keep of a resource between turns.
@@ -400,45 +418,52 @@ impl Territory {
         }
     }
 
-    /// Every node of one resource, with its position, in id order.
-    pub fn nodes_of(&self, resource: Resource) -> Vec<(usize, Node)> {
-        self.nodes
-            .iter()
-            .enumerate()
-            .filter(|(_, node)| node.resource == resource)
-            .map(|(at, node)| (at, *node))
-            .collect()
+    /// What this ground offers for one resource, which may be nothing.
+    pub fn deposit(&self, resource: Resource) -> Deposit {
+        self.deposits.get(&resource).copied().unwrap_or_default()
     }
 
-    /// How many extractors this territory could have for a resource.
+    /// What one extractor of this resource yields when worked.
+    pub fn density_of(&self, resource: Resource) -> u32 {
+        self.deposit(resource).density
+    }
+
+    /// How many extractors this territory has total capacity for, for a resource.
     ///
-    /// `spec/economy.md`: the number of nodes determines the number of extractors that
-    /// can be built for that resource there.
-    pub fn node_count(&self, resource: Resource) -> usize {
-        self.nodes_of(resource).len()
+    /// **`P-290`: capacity is per kind carrying a particular value of a trait**, so this
+    /// bounds *extractors of this resource* directly. It used to be the number of nodes,
+    /// which is the same number counted the long way round.
+    pub fn capacity_for(&self, resource: Resource) -> usize {
+        self.deposit(resource).capacity as usize
     }
 
     pub fn extractors_for(&self, resource: Resource) -> Vec<usize> {
         self.extractors()
             .iter()
             .enumerate()
-            .filter(|(_, extractor)| self.nodes[extractor.node].resource == resource)
+            .filter(|(_, extractor)| extractor.resource == resource)
             .map(|(at, _)| at)
             .collect()
     }
 
-    /// The next node of this resource with no extractor on it, densest first.
+    /// Every extractor this territory has total capacity for, across every resource.
     ///
-    /// Densest first so that building an extractor without saying which node takes the
-    /// best one left, which is what a player would mean. Ties break on node position, so
-    /// the choice never depends on iteration order.
-    pub fn best_free_node(&self, resource: Resource) -> Option<usize> {
-        let taken: Vec<usize> = self.extractors().iter().map(|e| e.node).collect();
-        self.nodes_of(resource)
-            .into_iter()
-            .filter(|(at, _)| !taken.contains(at))
-            .max_by_key(|(at, node)| (node.density, std::cmp::Reverse(*at)))
-            .map(|(at, _)| at)
+    /// What *fully exploited* is measured against: it used to be `nodes.len()`, and the
+    /// nodes were one per unit of capacity, so this is the same number stated directly.
+    pub fn total_extractor_capacity(&self) -> usize {
+        Resource::ALL
+            .iter()
+            .map(|resource| self.capacity_for(*resource))
+            .sum()
+    }
+
+    /// Whether another extractor of this resource would fit.
+    ///
+    /// **The bookkeeping that stopped two extractors sharing a node is gone with the
+    /// nodes.** Capacity is the whole of the rule now: an extractor fits while the ones
+    /// already here are fewer than the territory has total capacity for.
+    pub fn has_room_for_extractor(&self, resource: Resource) -> bool {
+        self.extractors_for(resource).len() < self.capacity_for(resource)
     }
 
     /// Whether this territory can ever build an extractor, from its nodes alone.
@@ -448,65 +473,46 @@ impl Territory {
     /// whether the player can afford it this turn, and not whether any particular game
     /// happened to reach it.*
     ///
-    /// So the question is answered from `nodes` and nothing else - not from what is
-    /// standing there, and not from how the game went.
+    /// So the question is answered from what the ground offers and nothing else - not from
+    /// what is standing there, and not from how the game went.
     ///
     /// **Population settles at the food the territory produces.** A citizen yields one
-    /// labor and eats one food, so working the `k` densest food nodes sustains `F(k)`
-    /// citizens while costing `k` of them, leaving `F(k) - k` free to spend elsewhere. Working
-    /// only the best one leaves `d - 1`, and a node of density one adds a citizen and eats
-    /// what that citizen gathers - so spare labor exists exactly when the best food node is
-    /// more.
+    /// labor and eats one food, so a food extractor sustains `density` citizens while
+    /// costing the one holding it. A density-one extractor adds a citizen and eats what
+    /// that citizen gathers; a density-two one leaves a hand over. **So spare labor exists
+    /// exactly when a food extractor yields two or more**, and there is capacity for one.
     ///
-    /// Territory 5's nineteen nodes are all density one, which is why it holds the one
-    /// extractor it was founded with and can never build a twentieth.
+    /// Territory 5 has capacity for three food extractors at density one, which is why it
+    /// holds the one it was founded with and can never build a fourth.
     pub fn can_build_extractors(&self) -> bool {
-        self.nodes_of(Resource::Food)
-            .iter()
-            .any(|(_, node)| node.density >= 2)
+        let food = self.deposit(Resource::Food);
+        food.capacity >= 1 && food.density >= 2
     }
 
     /// The most of one resource this territory could produce in a single turn.
     ///
-    /// Every extractor it can build is built, and its citizens are split between food, which
-    /// is what sets how many of them there are, and the resource asked for. Maximised over
-    /// how many food nodes are worked, because working one more food node buys `f - 1`
-    /// spare labor and there is no reason the best split is at either end.
+    /// Every extractor it has capacity for is built, and its citizens are split between
+    /// food, which is what sets how many of them there are, and the resource asked for.
     ///
-    /// A territory with no food node has no population and so produces nothing, whatever
-    /// its other nodes say. That falls out rather than being a case: `F(0)` is zero, no
-    /// citizens, nothing worked.
+    /// **The search this used to do is gone, and `P-290` is what removed it.** One density
+    /// per territory per resource means every food extractor buys the same `density - 1`
+    /// spare hands, so working one more is never worse and the best split is always at the
+    /// end. It was a maximisation over how many food extractors are worked because the
+    /// densities could in principle differ; they never could.
+    ///
+    /// A territory with no food capacity has no population and so produces nothing, whatever
+    /// else it offers. That falls out rather than being a case.
     pub fn most_in_one_turn(&self, resource: Resource) -> u32 {
-        let mut food: Vec<u32> = self
-            .nodes_of(Resource::Food)
-            .iter()
-            .map(|(_, node)| node.density)
-            .collect();
-        food.sort_unstable_by(|a, b| b.cmp(a));
-
-        let mut wanted: Vec<u32> = self
-            .nodes_of(resource)
-            .iter()
-            .map(|(_, node)| node.density)
-            .collect();
-        wanted.sort_unstable_by(|a, b| b.cmp(a));
-
-        // Food asked for is the one case where the two lists are the same list: the hands
-        // working food are already producing it, so the answer is the largest `F(k)`.
-        let mut best = 0;
-        for worked in 0..=food.len() {
-            let produced: u32 = food.iter().take(worked).sum();
-            if resource == Resource::Food {
-                best = best.max(produced);
-                continue;
-            }
-            // Citizens are what the food sustains, and `worked` of them are holding food
-            // nodes. Saturating because a territory can work more food nodes than it can
-            // sustain citizens for, and that allocation simply has nothing spare.
-            let spare = produced.saturating_sub(worked as u32) as usize;
-            best = best.max(wanted.iter().take(spare).sum());
+        let food = self.deposit(Resource::Food);
+        // Food asked for is the one case where the hands are already producing the answer.
+        if resource == Resource::Food {
+            return food.capacity * food.density;
         }
-        best
+        let wanted = self.deposit(resource);
+        // Saturating because a density-zero or density-one food extractor buys no hand at
+        // all: it feeds exactly the citizen holding it.
+        let spare = food.capacity * food.density.saturating_sub(1);
+        spare.min(wanted.capacity) * wanted.density
     }
 
     /// Whether this territory can ever hold a Yard.
@@ -620,15 +626,23 @@ pub fn population_after(citizens: u32, food: u32) -> u32 {
 mod tests {
     use super::*;
 
-    fn with_nodes(densities: &[(Resource, u32)]) -> Territory {
+    /// Ground offering, per resource, capacity for that many extractors at that density.
+    ///
+    /// **The predecessor took one density per node**, so a case could give one resource two
+    /// densities. `P-290` makes that unwriteable: a territory has one answer per resource.
+    /// Three cases below were stated in the old shape and are re-stated here rather than
+    /// translated, because there is nothing to translate them to.
+    fn offering(deposits: &[(Resource, u32, u32)]) -> Territory {
         let mut territory = Territory::empty(TerritoryId(1), Biome::Grassland);
-        territory.nodes = densities
-            .iter()
-            .map(|(resource, density)| Node {
-                resource: *resource,
-                density: *density,
-            })
-            .collect();
+        for (resource, capacity, density) in deposits {
+            territory.deposits.insert(
+                *resource,
+                Deposit {
+                    capacity: *capacity,
+                    density: *density,
+                },
+            );
+        }
         territory
     }
 
@@ -661,49 +675,57 @@ mod tests {
     }
 
     #[test]
-    fn nodes_are_counted_per_resource() {
-        let territory = with_nodes(&[
-            (Resource::Food, 4),
-            (Resource::Food, 6),
-            (Resource::Metal, 3),
-        ]);
-        assert_eq!(territory.node_count(Resource::Food), 2);
-        assert_eq!(territory.node_count(Resource::Metal), 1);
-        assert_eq!(territory.node_count(Resource::Energy), 0);
+    fn capacity_is_declared_per_resource_and_a_resource_absent_offers_nothing() {
+        let territory = offering(&[(Resource::Food, 2, 4), (Resource::Metal, 1, 3)]);
+        assert_eq!(territory.capacity_for(Resource::Food), 2);
+        assert_eq!(territory.density_of(Resource::Food), 4);
+        assert_eq!(territory.capacity_for(Resource::Metal), 1);
+        assert_eq!(territory.capacity_for(Resource::Energy), 0);
+        assert_eq!(
+            territory.density_of(Resource::Energy),
+            0,
+            "no entry is no capacity and no density, rather than a missing answer"
+        );
+        assert_eq!(territory.total_extractor_capacity(), 3);
     }
 
+    /// **Capacity is the whole of the rule, which is what `P-290` bought.**
+    ///
+    /// This replaces a test that built extractors densest-node-first and checked the order
+    /// they were taken in. There is no order left to get wrong: every extractor of one
+    /// resource here yields the same, so the only question an extractor can ask is whether
+    /// there is room. The bookkeeping that stopped two extractors sharing a node went with
+    /// the nodes.
     #[test]
-    fn building_without_naming_a_node_takes_the_densest_free_one() {
-        let mut territory = with_nodes(&[
-            (Resource::Food, 2),
-            (Resource::Food, 6),
-            (Resource::Food, 4),
-        ]);
-        assert_eq!(
-            territory.best_free_node(Resource::Food),
-            Some(1),
-            "density 6"
+    fn extractors_fit_until_the_capacity_for_that_resource_is_used() {
+        let mut territory = offering(&[(Resource::Food, 2, 6), (Resource::Metal, 1, 3)]);
+        assert!(territory.has_room_for_extractor(Resource::Food));
+        territory.add_extractor(Resource::Food);
+        assert!(
+            territory.has_room_for_extractor(Resource::Food),
+            "one of two"
         );
-        territory.add_extractor(1);
-        assert_eq!(
-            territory.best_free_node(Resource::Food),
-            Some(2),
-            "density 4"
+        territory.add_extractor(Resource::Food);
+        assert!(
+            !territory.has_room_for_extractor(Resource::Food),
+            "two of two, and the third does not fit"
         );
-        territory.add_extractor(2);
-        assert_eq!(
-            territory.best_free_node(Resource::Food),
-            Some(0),
-            "density 2"
+        assert!(
+            territory.has_room_for_extractor(Resource::Metal),
+            "a resource is bounded by its own capacity and not by another's"
         );
-        territory.add_extractor(0);
-        assert_eq!(territory.best_free_node(Resource::Food), None, "all worked");
+        assert!(
+            !territory.has_room_for_extractor(Resource::Energy),
+            "and ground that offers no energy has room for no energy extractor"
+        );
+        assert_eq!(territory.extractors_for(Resource::Food).len(), 2);
+        assert_eq!(territory.extractors_for(Resource::Metal).len(), 0);
     }
 
     /// Organised force sums; unorganised force is the highest present.
     #[test]
     fn a_garrison_lets_citizens_add_their_force_together() {
-        let mut territory = with_nodes(&[]);
+        let mut territory = offering(&[]);
         territory.set_count(Kind::Citizen, 4);
         assert_eq!(
             territory.held_force(),
@@ -740,13 +762,13 @@ mod tests {
 
     #[test]
     fn ending_a_turn_makes_everything_ready_again() {
-        let mut territory = with_nodes(&[(Resource::Food, 4)]);
+        let mut territory = offering(&[(Resource::Food, 1, 4)]);
         territory.set_count(Kind::Citizen, 2);
         territory.spend_labor(2);
         // Built, then worked - `extractors()` hands back a copy, so pushing to it changed a
         // temporary and left the territory with none. That is what made this fail with an
         // index out of bounds rather than with a wrong answer.
-        territory.add_extractor(0);
+        territory.add_extractor(Resource::Food);
         territory.exhaust_extractor(0);
         territory.set_garrison(Some(Garrison {
             force: 1,
@@ -761,13 +783,13 @@ mod tests {
 
     #[test]
     fn nature_taking_a_territory_back_leaves_nothing_of_it() {
-        let mut territory = with_nodes(&[(Resource::Food, 4)]);
+        let mut territory = offering(&[(Resource::Food, 1, 4)]);
         // Six citizens is what makes it founded now - `S-19`, control derived rather than
         // stored. Setting a flag beside them was the thing that could disagree with them.
         territory.set_count(Kind::Citizen, 6);
         assert!(territory.founded(), "citizens are what holding it means");
         territory.set_garrison(Some(Garrison::from_founding_unit(2)));
-        territory.add_extractor(0);
+        territory.add_extractor(Resource::Food);
         territory.add(Resource::Metal, 10);
 
         territory.lost_to_nature();
@@ -776,122 +798,125 @@ mod tests {
         assert!(territory.garrison().is_none());
         assert!(territory.extractors().is_empty());
         assert_eq!(territory.store(Resource::Metal), 0);
-        assert_eq!(territory.nodes.len(), 1, "the land itself remains");
+        assert_eq!(
+            territory.capacity_for(Resource::Food),
+            1,
+            "the land itself remains"
+        );
     }
 
-    /// The extractor rule, either side of its one boundary and not on an example of it.
+    /// The extractor rule, either side of its two boundaries and not on an example of one.
     ///
-    /// `C-9`. A citizen yields one labor and eats one food, so the `k` densest food nodes
-    /// sustain `F(k)` citizens while occupying `k` of them. A density-one node adds a hand
-    /// and eats it; a density-two node adds a citizen and half feeds another. So spare labor
-    /// exists for some allocation exactly when a food node has density two.
+    /// `C-9`. A citizen yields one labor and eats one food, so a food extractor sustains
+    /// `density` citizens while occupying one of them. A density-one extractor adds a hand
+    /// and eats what it gathers; a density-two one adds a citizen and half feeds another.
+    /// **So spare labor exists exactly when a food extractor yields two or more, and there
+    /// is capacity for one at all.**
+    ///
+    /// **There are two boundaries now and there used to be one.** The old rule asked only
+    /// about density, because a node was both the capacity and the density and a list of
+    /// zero nodes answered the capacity question implicitly. Splitting them makes *dense
+    /// ground with no capacity* a state that can be written, so it is a case.
     #[test]
-    fn a_spare_hand_exists_exactly_when_a_food_node_has_density_two() {
-        let cases: [(&[(Resource, u32)], bool, &str); 6] = [
+    fn a_spare_hand_exists_exactly_when_a_food_extractor_yields_two() {
+        let cases: [(&[(Resource, u32, u32)], bool, &str); 6] = [
             (&[], false, "no food at all is no population and no labor"),
             (
-                &[(Resource::Food, 1)],
+                &[(Resource::Food, 1, 1)],
                 false,
-                "one citizen, working its own node",
+                "one citizen, working the one extractor that feeds it",
             ),
             (
-                &[
-                    (Resource::Food, 1),
-                    (Resource::Food, 1),
-                    (Resource::Food, 1),
-                ],
+                &[(Resource::Food, 3, 1)],
                 false,
                 "three of them, and each still eats what it gathers - territory 5",
             ),
             (
-                &[(Resource::Food, 2)],
+                &[(Resource::Food, 1, 2)],
                 true,
-                "two fed, one node worked, one spare",
+                "two fed, one extractor worked, one hand spare",
             ),
             (
-                &[(Resource::Food, 1), (Resource::Food, 2)],
-                true,
-                "the best node is what decides, not the first or the worst",
+                &[(Resource::Food, 0, 6)],
+                false,
+                "the second boundary: dense ground with no capacity feeds nobody, and it \
+                 could not be written before capacity was a number of its own",
             ),
             (
-                &[(Resource::Metal, 9), (Resource::Food, 1)],
+                &[(Resource::Metal, 1, 9), (Resource::Food, 1, 1)],
                 false,
                 "metal it cannot reach does not feed anyone",
             ),
         ];
-        for (nodes, expected, why) in cases {
-            let territory = with_nodes(nodes);
+        for (deposits, expected, why) in cases {
+            let territory = offering(deposits);
             assert_eq!(territory.can_build_extractors(), expected, "{why}");
         }
-        assert_eq!(
-            cases.len(),
-            6,
-            "six cases, three either side of the boundary"
-        );
+        assert_eq!(cases.len(), 6, "six cases, and two boundaries between them");
     }
 
-    /// The most of a resource one turn can yield, maximised over how the citizens are split.
+    /// The most of a resource one turn can yield.
     ///
-    /// **The split is not at either end**, which is why this is a search rather than a
-    /// formula. Working one more food node costs one citizen and buys `f` of them.
+    /// **This was a search and is now a formula, and `P-290` is what collapsed it.** It
+    /// maximised over how many food extractors were worked, because with a density per node
+    /// the best split could be at neither end. One density per territory per resource means
+    /// every food extractor buys the same `density - 1` spare hands, so working one more is
+    /// never worse and the answer is always at the end: **all the food capacity worked, the
+    /// hands left over spent on the resource asked for, up to its capacity.**
+    ///
+    /// The case that used to demonstrate the interior split is kept and its numbers are
+    /// unchanged - capacity 2 at density 2 feeding three metal extractors is still 18 - but
+    /// it demonstrates the formula now rather than the search.
     #[test]
-    fn the_most_in_one_turn_splits_the_hands_where_it_pays_best() {
-        let cases: [(&[(Resource, u32)], Resource, u32, &str); 6] = [
+    fn the_most_in_one_turn_is_the_spare_hands_against_the_capacity() {
+        let cases: [(&[(Resource, u32, u32)], Resource, u32, &str); 6] = [
             (
-                &[(Resource::Food, 4)],
+                &[(Resource::Food, 1, 4)],
                 Resource::Metal,
                 0,
-                "no metal node, no metal",
+                "no metal capacity, no metal",
             ),
             (
-                &[(Resource::Food, 4), (Resource::Metal, 9)],
+                &[(Resource::Food, 1, 4), (Resource::Metal, 1, 9)],
                 Resource::Metal,
                 9,
-                "four fed, one holds food, three spare and one metal node to work",
+                "four fed, one holds food, three hands spare and room for one metal extractor",
             ),
             (
-                &[
-                    (Resource::Food, 4),
-                    (Resource::Metal, 9),
-                    (Resource::Metal, 2),
-                ],
-                Resource::Metal,
-                11,
-                "three citizens to spare reach both metal nodes",
-            ),
-            (
-                &[(Resource::Food, 1), (Resource::Metal, 9)],
-                Resource::Metal,
-                0,
-                "one citizen, and it is working the food node",
-            ),
-            (
-                &[
-                    (Resource::Food, 2),
-                    (Resource::Food, 2),
-                    (Resource::Metal, 9),
-                    (Resource::Metal, 9),
-                    (Resource::Metal, 9),
-                ],
+                &[(Resource::Food, 1, 4), (Resource::Metal, 2, 9)],
                 Resource::Metal,
                 18,
-                "working the second food node costs one citizen and buys two - so two spare, not one",
+                "three spare hands reach both metal extractors, and the third has nothing to work",
             ),
             (
-                &[(Resource::Food, 4), (Resource::Food, 3)],
+                &[(Resource::Food, 1, 1), (Resource::Metal, 1, 9)],
+                Resource::Metal,
+                0,
+                "one citizen, and it is working the food",
+            ),
+            (
+                &[(Resource::Food, 2, 2), (Resource::Metal, 3, 9)],
+                Resource::Metal,
+                18,
+                "two food extractors at density two feed four and cost two, so two spare - \
+                 the capacity for three metal is what is not reached",
+            ),
+            (
+                &[(Resource::Food, 2, 4)],
                 Resource::Food,
-                7,
+                8,
                 "asked for food, the answer is what the citizens gathered",
             ),
         ];
-        for (nodes, resource, expected, why) in cases {
-            let territory = with_nodes(nodes);
+        for (deposits, resource, expected, why) in cases {
+            let territory = offering(deposits);
             assert_eq!(territory.most_in_one_turn(resource), expected, "{why}");
         }
         assert_eq!(
             cases.len(),
             6,
-            "six splits, including one that is at neither end"
+            "six cases: two where the hands run out, two where the capacity does, one with \
+             no capacity at all and one asking for food itself"
         );
     }
 
@@ -905,41 +930,40 @@ mod tests {
     /// now **what the stores can hold, plus what one turn makes**.
     ///
     /// The last case is the one that changed answer and is why the count is eight rather
-    /// than ten: one metal node is one store is ten, and ten plus a slow turn never reaches
-    /// fifteen. A territory can produce metal every turn of the game and never afford a
-    /// Yard, which the previous rule could not express.
+    /// than ten: capacity for one metal extractor is one store is ten, and ten plus a slow
+    /// turn never reaches fifteen. A territory can produce metal every turn of the game and
+    /// never afford a Yard, which the previous rule could not express.
     #[test]
     fn a_yard_needs_metal_to_be_reachable_rather_than_reachable_at_once() {
-        let cases: [(&[(Resource, u32)], bool, &str); 5] = [
-            (&[(Resource::Food, 4)], false, "no metal node, so never"),
+        let cases: [(&[(Resource, u32, u32)], bool, &str); 5] = [
             (
-                &[(Resource::Food, 1), (Resource::Metal, 20)],
+                &[(Resource::Food, 1, 4)],
+                false,
+                "no metal capacity, so never",
+            ),
+            (
+                &[(Resource::Food, 1, 1), (Resource::Metal, 1, 20)],
                 false,
                 "metal in the ground with nobody free to dig it is no metal",
             ),
             (
-                &[
-                    (Resource::Food, 4),
-                    (Resource::Metal, 4),
-                    (Resource::Metal, 4),
-                    (Resource::Metal, 4),
-                ],
+                &[(Resource::Food, 1, 4), (Resource::Metal, 3, 4)],
                 true,
-                "three nodes, so three stores and thirty; twelve a turn on top",
+                "capacity for three, so three stores and thirty; twelve a turn on top",
             ),
             (
-                &[(Resource::Food, 4), (Resource::Metal, 5)],
+                &[(Resource::Food, 1, 4), (Resource::Metal, 1, 5)],
                 true,
                 "one store of ten and five a turn is exactly fifteen - the boundary",
             ),
             (
-                &[(Resource::Food, 4), (Resource::Metal, 4)],
+                &[(Resource::Food, 1, 4), (Resource::Metal, 1, 4)],
                 false,
                 "one store of ten and four a turn is fourteen, and it is never fifteen however long the game runs. Territories 8 and 10 are this case",
             ),
         ];
-        for (nodes, expected, why) in cases {
-            let territory = with_nodes(nodes);
+        for (deposits, expected, why) in cases {
+            let territory = offering(deposits);
             assert_eq!(territory.can_hold_yard(), expected, "{why}");
         }
         assert_eq!(

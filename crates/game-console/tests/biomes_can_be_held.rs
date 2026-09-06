@@ -365,18 +365,15 @@ fn the_scenario_gives_each_territory_the_numbers_the_release_gives_it() {
             .territory(TerritoryId(*id))
             .unwrap_or_else(|_| panic!("the release names a territory {id} the planet lacks"));
         for (resource, (capacity, density)) in Resource::ALL.iter().zip(three) {
-            let nodes = place.nodes_of(*resource);
+            let offered = place.deposit(*resource);
             assert_eq!(
-                nodes.len(),
-                *capacity as usize,
+                offered.capacity, *capacity,
                 "the release gives territory {id} {capacity} {resource} extractors"
             );
-            for (_, node) in nodes {
-                assert_eq!(
-                    node.density, *density,
-                    "the release gives territory {id} {resource} at density {density}"
-                );
-            }
+            assert_eq!(
+                offered.density, *density,
+                "the release gives territory {id} {resource} at density {density}"
+            );
             checked += 1;
         }
     }

@@ -98,17 +98,17 @@
 {garrison territory:1 force:0}
 {garrison territory:2 force:0}
 
-{extractor territory:1 node:0 resource:food ready:yes}
-{extractor territory:1 node:3 resource:metal ready:yes}
-{extractor territory:1 node:1 resource:food ready:yes}
-{extractor territory:1 node:4 resource:metal ready:yes}
-{extractor territory:1 node:2 resource:food ready:yes}
-{extractor territory:1 node:6 resource:energy ready:yes}
-{extractor territory:1 node:5 resource:metal ready:yes}
-{extractor territory:1 node:7 resource:energy ready:yes}
-{extractor territory:1 node:8 resource:energy ready:yes}
-{extractor territory:2 node:0 resource:food ready:yes}
-{extractor territory:2 node:2 resource:metal ready:yes}
+{extractor territory:1 resource:food ready:yes}
+{extractor territory:1 resource:metal ready:yes}
+{extractor territory:1 resource:food ready:yes}
+{extractor territory:1 resource:metal ready:yes}
+{extractor territory:1 resource:food ready:yes}
+{extractor territory:1 resource:energy ready:yes}
+{extractor territory:1 resource:metal ready:yes}
+{extractor territory:1 resource:energy ready:yes}
+{extractor territory:1 resource:energy ready:yes}
+{extractor territory:2 resource:food ready:yes}
+{extractor territory:2 resource:metal ready:yes}
 
 {structure territory:1 structure:extractor count:9}
 {structure territory:1 structure:garrison count:1}
