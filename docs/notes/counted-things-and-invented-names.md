@@ -72,3 +72,58 @@ history rather than state, and `spec/invariants.md` says the data is what is the
 **Every word in a dump line should be a kind, a declared trait, or a trait value.** That check would
 have caught all six he found and the twelve he has not, and it is worth having under any of the three
 shapes. Filed as `P-284`.
+
+## Testing his four restrictions, 2026-09-05
+
+He proposed trying the map form under four rules: **stored traits only**, **no omitted traits**,
+**every unique combination is its own key**, and **no zero entries**. Asked whether that stays
+internally consistent. **It does, and three things follow from it that have to be settled first.**
+
+The release declares **eighteen** traits, **fourteen stored** and four derived - `metal in it`,
+`control`, `surplus` and `unpaid`. So rule 1 is a real restriction and rule 2 is applied to those
+fourteen.
+
+### It is consistent, and rule 3 earns its place
+
+**Listed and counted stop being two things.** `P-257` says a thing that must be named individually
+carries an `id` and cannot collapse into a count. Under rule 3 that is not a separate rule: **a thing
+with an id has a unique combination, so its entry is 1, and a list is a map whose counts are all 1.**
+The two cases become one mechanism, and the line between them moves to a single question - *does this
+kind carry an id* - which is where `P-257` already put it.
+
+### Three things that have to be settled before it can be tried
+
+**1. `id` is not a declared trait.** Measured: the Traits table has no `id` row, and `P-254` made
+`id` a thing's own identifier without declaring it. **Under rule 2 a key carries every stored trait,
+so if `id` is not one, two units alike in every declared trait merge into one entry with a count of
+two - and neither can be commanded.** So the rules require `id` to be declared as stored, of the
+kinds that have one. That is inside `P-284` rather than new.
+
+**2. `place` is stored and is of every thing, so rule 2 puts it in every key.** That is consistent
+and it makes the map flat: one map for the whole game, every entry saying where it is. **The
+alternative is nesting** - the containment tree, where position states the place and the key omits
+it - **and that is rule 2 with one exception.** Flat is simpler to state and harder to read; nested
+reads like the tree the specification already describes. **A choice, not a defect.**
+
+**3. Two stored traits are not attributes.** `density` and `total capacity` are *per resource* and
+*per kind*, so they are maps themselves; `adjacency` is *which places it touches, and by which kind of
+edge*, which is a relation. **Under rule 2 all three go in a territory's key**, which makes every
+territory unique and its key long. Consistent, and it means **the map compresses nothing for
+territories** - correctly, because there are twelve of them and they differ.
+
+### Where the compression actually lands
+
+**Fungible in practice**: citizens split by `ready`, labor, food, metal and energy by place, stores
+by resource, yards, garrisons. **A player never needs to name one metal store rather than another**,
+so `{store place:1 resource:metal} -> 3` is the whole truth about them.
+
+**Never fungible**: territories, and any unit that a command must name. **Extractors are the
+interesting case** - `node` distinguishes them and `node` is not a declared trait either, so today
+they would merge and `build extractor` would have nothing to aim at.
+
+### The cost of rule 4, which is not an inconsistency
+
+**Absence means zero, uniformly, so nothing is ambiguous about the state.** What it costs is
+diffing: *went to zero* and *stopped being emitted* look identical in a diff, and the second is how a
+dump bug hides. **A count of entries in the file makes that visible again** - the same fix as
+counting the cases a check covers.
