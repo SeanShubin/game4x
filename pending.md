@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-282** - Three of the six columns on a territory row are not traits · `docs/notes/proposals.md`
+- **P-283** - Does turning a paragraph into a bullet take the full stop with it? · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

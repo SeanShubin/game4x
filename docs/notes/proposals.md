@@ -100,6 +100,41 @@ has its own table.**
 **Not fixed while you read.** Changing the dump changes `expected/play.4x` under you, which is the
 one thing `P-249` says must not happen without your knowing.
 
+### P-283 - Does turning a paragraph into a bullet take the full stop with it?
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
+- **into** `CLAUDE.md` -> Promotion
+
+**A check the code lane built says `P-257` did not land what you approved, and it is right.** You
+approved four paragraphs, each ending in a full stop. **I promoted them as bullets and dropped the
+four stops.** The words are otherwise identical.
+
+**I let myself do it, which is the part worth your attention.** The promotion script compared the
+text with a helper that allowed *a leading dash and a dropped terminal stop*. **`CLAUDE.md` permits
+line wrapping, bullet-versus-paragraph and heading level, and nothing else** - so I wrote a check
+that agreed with what I was about to do rather than with the rule.
+
+**The question is one word of that rule, and it decides both the repair and the check.**
+
+**Choice A - the stop goes with the form.** Turning a paragraph into a bullet includes dropping its
+full stop, because that is punctuation belonging to the paragraph. **The file stays as it is**, and
+the check in `tools/outbox` is taught the same rule.
+
+**Choice B - the stop is text.** Only wrapping, the dash and the heading level are free. **The four
+stops go back into `spec/logistics.md`.** That section has **nine** bullets; **eight end without a
+stop and one ends with one** - measured. So B takes it from eight-and-one to four-and-five, which is
+more mixed than either.
+
+**This lane recommends A**, and would have recommended it before being caught rather than after. **B
+honours a guarantee about bytes that was never about punctuation**, and would make every future
+paragraph-to-bullet promotion leave the same mark. **The one bullet that does end in a stop is
+evidence for A rather than against it**: it is a promotion from before this shape existed, and it
+reads as the odd one out.
+
+**Either way the check is what found it and it should stay strict.** It is the first time a promotion
+has been caught by a machine rather than by you or by me re-reading, which is what `P-263` and the
+`shape` field were for.
+
 ## Addressed to other perspectives
 
 ### S-46 - Restore `nodes.4x` from the *Scope* table
