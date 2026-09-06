@@ -2,7 +2,7 @@
 
 **2026-09-05.** Sean, reading `scenario/expected/play.4x`, asked what `labor-spent` means, then
 described what the predecessor did instead: a map from a thing's description to a quantity, so
-`[{{citizen ready:true}} -> 8, {{citizen ready:false}} -> 6]` is eight ready citizens and six
+`[{citizen ready:true} -> 8, {citizen ready:false} -> 6]` is eight ready citizens and six
 exhausted ones. He asked how it compares to the two choices in `P-282` and whether it suggests
 others. **Nothing here is decided.**
 
@@ -27,8 +27,8 @@ means the release grows a trait per count anyone wants to print - `citizens`, `y
 `stores`, `units` - **a name per query**, which is what `P-262` says not to do: many near-identical
 declarations differing in one word.
 
-**The map form removes the ability to invent a name.** `citizens:8` becomes `{{citizen ready:yes}} ->
-8`; `yards:1` becomes `{{yard}} -> 1`; `labor-spent` is `{{citizen ready:no}}` and needs no name at
+**The map form removes the ability to invent a name.** `citizens:8` becomes `{citizen ready:yes} ->
+8`; `yards:1` becomes `{yard} -> 1`; `labor-spent` is `{citizen ready:no}` and needs no name at
 all. **Every count becomes a query over vocabulary that already exists**, so the release never
 declares `citizens`, and the dump cannot invent one.
 
@@ -45,12 +45,12 @@ and one *query shape* beats several column names differing in one word for the s
 
 ## What it does not settle
 
-**Which traits form the grouping key.** `{{citizen}} -> 14` and `{{citizen ready:yes}} -> 8,
-{{citizen ready:no}} -> 6` are both true. Grouping by every *stored* trait and never by a derived one
+**Which traits form the grouping key.** `{citizen} -> 14` and `{citizen ready:yes} -> 8,
+{citizen ready:no} -> 6` are both true. Grouping by every *stored* trait and never by a derived one
 is the rule that seems to follow from the specification, but nothing says it. **This is the same
 shape as the bins question**: full freedom is unusable and the organising principle has to be chosen.
 
-**Whether a zero appears.** `{{citizen ready:no}} -> 0` present, or the row absent? Absent is quieter
+**Whether a zero appears.** `{citizen ready:no} -> 0` present, or the row absent? Absent is quieter
 to diff and makes *went to zero* indistinguishable from *the dump stopped emitting it*.
 
 **Order.** Diffing needs a total order over descriptions, or the file churns.
@@ -65,7 +65,7 @@ and `structure` stop needing tables of their own. The territory row's `citizens`
 
 **And `spent` stops existing.** The `labor` table prints `made`, `spent` and `left`; `spent` is
 history rather than state, and `spec/invariants.md` says the data is what is there. Under a map,
-`{{citizen ready:no}} -> 6` says the same thing as a fact about now.
+`{citizen ready:no} -> 6` says the same thing as a fact about now.
 
 ## The one part that holds whatever he decides
 
