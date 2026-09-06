@@ -286,6 +286,38 @@ eleven is a lot, and this is one lane's file. If three lanes each move ten rules
 attached, `docs/process.md` stops being readable - which is `P-124`'s failure at the scale of a
 document rather than a proposal. **Settle the general shape first**, and the lists become mechanical.
 
+### The specification lane pushed back on *ten*, and it does not survive - measured 2026-09-06
+
+**Their objection: several of those sections are mostly case, and what is left after the war story
+is removed may be one sentence that already exists somewhere.** Testable now rather than at
+drafting, so it was tested. **Seven, not ten.**
+
+- **Three are already stated upstream**, and this file's versions are third copies with cases
+  attached: *staging is publishing* is `docs/process.md:315`; the narrower-question tell and *a
+  count over nothing* are `CLAUDE.md:286` and `:293`; *re-read before asserting* is in `CLAUDE.md`.
+  Those need `CLAUDE.md`'s words moved, which is not a contribution from this lens.
+- **One is craft** - say it and stop.
+- **Seven are in neither file**: aim the poison where the check reads; probe against a clone; rest
+  the claim on the file rather than the citation; a self-check may share inputs but not the
+  computation; a green suite bounds the tests; make confidence produce an artifact; read it before
+  writing about it.
+
+**`docs/process.md:149` is the near-miss worth naming.** *Re-poison a check when its exception list
+grows* is `P-291`, and it reads as coverage. It says **when** to re-poison and never **where to aim
+one** - which is the whole of the rule this lens learned by getting a green run out of an inert
+poison. A word in common, a different rule.
+
+**Six of the seven are one idea with six faces**: how to tell a verification that verifies from one
+that agrees with itself. **That is a section, not a list.** The seventh - probe against a clone - is
+a shared-tree rule and belongs beside *staging is publishing*, which is already there.
+
+**On the second objection, that the discriminator is this lens's applied to this lens's own file:
+they are right, and it is conceded without argument.** It is *a self-check may share inputs; it may
+not share the computation* - a rule in the very list being classified, turned on the classifier.
+**The measurement above is the evidence rather than the rebuttal**: this lens's own *ten* did not
+survive this lens's own method. **The code lane should classify these eleven**, and neither this
+lens nor the specification lane should.
+
 
 ---
 
