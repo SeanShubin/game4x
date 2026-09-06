@@ -65,40 +65,55 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-34 - The population for `S-47`'s unrepresentability claim, written before the change
 
-**to** code · **status** open · **raised** 2026-09-06 · **source** the quality lens, asking for it before it stops existing
+**to** code · **status** open · **raised** 2026-09-06 · **corrected** 2026-09-06 by `Q-55`
 
 **Not a question. A record made while the thing it describes still exists**, because after `S-47`
-lands nobody can reconstruct what used to be writable.
+lands nobody can reconstruct what used to be writable. **`S-47` will claim that certain errors become
+unrepresentable**, which is a claim of zero - and a claim of zero proves something only against a
+population that is not also zero.
 
-**`S-47` will carry a claim of the form *these errors become unrepresentable*.** `Q-41`'s shape
-exactly: a claim of zero, which proves something only against a population that is not also zero. So
-here is the population, read off `crates/game-model/src/unit.rs:14` and `game.rs:64` as they stand
-today - `Vec<Unit>` where `Unit` carries `location: Location`.
+**It said four. It is two, and the quality lens was right.** `Q-55` asked for the test the item
+implied and did not run: **an entry claims something is writable today, so write it.** An entry that
+cannot be exhibited as a value is not in the population. Two of mine cannot be.
 
-**What a reader can write today and what `children: Vec<Thing>` refuses:**
+**The two that hold:**
 
-1. **Two parents.** Nothing stops two territories both listing a unit, because neither lists it -
-   the unit names its own container. Under containment a `Thing` is owned by exactly one `children`
-   vector and moving it is `remove` then `push`, so the second parent has nowhere to come from.
-2. **An orphan.** `Location::On(TerritoryId(99))` compiles and refers to nothing. `game.rs` guards
-   the ids it is handed, but the struct admits any number. Under containment there is no id to be
-   wrong - a thing is in the vector it is in.
-3. **A thing containing itself.** Not reachable through `Unit` today because a unit holds no units,
-   and *that is the point*: the shape is safe by accident of what has not been built yet. An orbit
-   holding units is already specified, and the first unit that can carry another makes it writable.
-4. **Two things claiming one place with different answers.** `force_in` sums `units_on(id)`, which
-   filters the flat list. Two units disagreeing about where they are is not a state anything rejects;
-   it is a state that reads as two units.
-5. **A unit in no place at all.** `Location` is an enum, so this one is *already* unrepresentable -
-   and it is here because a population needs its negative cases. **Four of the five, not five.**
+1. **An orphan.** `Location::On(TerritoryId(99))` constructs and refers to nothing. `game.rs` guards
+   the ids it is handed; the struct admits any number. Holds unconditionally.
+2. **Two units sharing an id.** `Vec<Unit>` admits two entries with one `UnitId`, and `force_in`
+   sums `units_on(id)` over the flat list, so it reads as two units rather than as an error.
+   **Conditional, and the condition is about the destination rather than the source**: containment
+   refuses it only if a thing has no identity to duplicate. `Thing` has none today, and `game.rs:302`
+   and `:927` select units by `UnitId`, so `S-47` has to replace that selection with something. If it
+   gives `Thing` an id instead, this entry does not close.
 
-**What is not in the population, and saying so is half the point.** Containment does not stop a
-territory holding more of a kind than its capacity allows, or a store holding eleven of something. It
-makes *where a thing is* unwriteable-wrong; it says nothing about *how many*. A claim that the new
-form makes the model correct would be much wider than this and false.
+**The three that fell, and why each is worth keeping written down:**
 
-**The count is four.** If `S-47`'s claim names more than four, it has grown beyond what was true when
-this was written, and the extras want the same treatment before they are believed.
+- **Two parents.** I wrote *nothing stops two territories both listing a unit, because neither lists
+  it* - and then credited the change with removing it. The sentence refutes the entry. `children` is
+  `Vec<Thing>` **by value**, with no `Rc` and no indices, so a thing is already owned by exactly one
+  vector; `Unit` holds one `location` enum, so one place. **Neither form admits a second parent, so
+  containment has nothing to take away.** A `Thing` cloned into two vectors is two things, not one
+  thing twice.
+- **A thing containing itself.** I said the first unit that can carry another makes it writable.
+  **It does not**: `push` takes a `Thing` by value into a `Vec<Thing>`, so a unit carrying another
+  still builds a tree, and a finite owned value cannot contain itself. On the other reading - a
+  citizen holding a citizen - it is writable **both before and after**, since containment says
+  nothing about which kinds may nest. Out of the population either way.
+- **A unit in no place at all** was already listed as a negative and stays one: `Location` is an
+  enum.
+
+**The guard fires downward and that is the direction that mattered.** The original said a claim
+naming more than four has grown past what was true. **A population that is too large makes the
+eventual claim look better tested than it is** - which is the failure this record exists to prevent,
+committed by the record itself within a day of being written.
+
+**And what the new form does not fix, unchanged**: containment makes *where a thing is*
+unwriteable-wrong and says nothing about *how many*. A store holding eleven is as writable after as
+before.
+
+**The count is two**, one unconditional and one conditional on identity becoming positional. A claim
+naming more wants an exhibit per entry before it is believed.
 
 ### C-33 - A check that has only ever passed is a claim, and belief in it decays
 
