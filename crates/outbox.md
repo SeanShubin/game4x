@@ -194,6 +194,29 @@ declining, and setting *I will notice when reviewing* as the test.
 trait's Values cell either names what it admits or says where they are listed - and that sentence is
 the general form of all three.
 
+**The specification lane read all nineteen rows independently and got the same split**: six name
+their values - `ready`, `surplus`, `unpaid` outright, and `kind`, `resource`, `biome` by pointing at
+a table - three describe instead, and the remaining ten are numbers or open-ended, where a Values
+cell describing a number is not the same defect. Six, three and ten.
+
+**The trigger for filing it is this lane's, and this is where it is written down.** Nothing is
+blocked while the check does not exist, and the check is inside `S-47`. **So: say so to the
+specification lane before building `P-284`'s half, and the row is filed ahead of the check rather
+than under a red gate.** A promotion arriving after the check would make the gate red on a row only
+Sean can write, which is `P-263` inverted - the code making the gate red until the release follows.
+If Sean clears his queue first it is filed anyway.
+
+**And the instrument that nearly hid all of this was mine.** The first pass at classifying the
+nineteen rows scored `phase` as *naming* its values **because the cell contains the word `or`** -
+*before it starts, or once it has*. It returned a plausible split rather than an error, on the
+instrument built to check somebody else's claim, and only reading the rows separated the three that
+describe from the six that name. **`C-28`'s shape, one level up: the thing being checked was a
+check.**
+
+**Written here because it was in a commit message and nowhere else**, which `P-302` says is the same
+as losing it - and this is that failure twice in one day from the same hand, the first being the two
+rules now filed as `C-39`.
+
 **And one thing that is not in the population, checked rather than assumed.** `unit` and `place`
 are **families**, which `P-284` as written does not admit: it says a kind, a trait, or one of a
 trait's values. The data file uses both correctly. A check built on `P-284`'s literal words would
