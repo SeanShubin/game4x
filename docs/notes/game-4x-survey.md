@@ -102,3 +102,32 @@ did not read them closely.
 `isDestroyedBy(hit) = hit >= armor`. **Whole numbers, no rolls, a unit dies when a single hit meets
 its armor.** `spec/combat.md` is still a scaffold here, and this is the smallest thing that could
 work if it ever needs filling.
+
+## Where the predecessor kept the turn, 2026-09-06
+
+Sean said the predecessor notably did not have the problem of deciding whether `turn` and `phase`
+belong in the state. **It did not, and the reason is that neither was ever in it.** Measured in
+`../game-4x`:
+
+- **`Universe(val planets: List<Planet>)`** and nothing else. **`turn` and `phase` appear zero times
+  in the whole `game` module.**
+- **`phase` appears zero times in the entire repository**, across every module and prototype.
+- **`turn` is a local variable in `CommandRunnerImpl`**, incremented by the loop that applies the
+  transition. It reaches the outside world as a **file name** - `turn-$turn.json` - and never as a
+  field inside one.
+
+**And it is load-bearing rather than incidental.** The runner ends with
+
+    while (!history.contains(current))
+
+**It stops when the state repeats.** That check only works because the state does not carry the turn:
+**a state containing its own turn number is never equal to any other state**, so the loop would never
+close and every game would run to the turn limit.
+
+**So the predecessor's answer is not *keep it outside because it feels like time*.** It is: **a
+number that increases with every transition destroys equality between states**, and equality between
+states is what lets you ask whether anything changed.
+
+`Land(val things: List<Pair<Thing, Int>>)` is the same file's other lesson - Sean's map form,
+already built, where a `Thing` is a list of name-and-attribute pairs and the pair's second element is
+the quantity. See [counted things and invented names](counted-things-and-invented-names.md).

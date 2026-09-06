@@ -63,55 +63,48 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-288 - Two of the three traits `P-284` needs
+### P-288 - Where `phase` and `turn` live, now that the predecessor has been read
 
 **to** sean - **status** open - **raised** 2026-09-06 - **revised** 2026-09-06 - **kind**
-consequence - **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Traits
+contradiction - **asks** a decision - **into** `releases/first-release.md` -> Traits
 
-**`P-284` says every word in a data file is a kind, a trait, or a trait value.** `phase` and `turn`
-are neither, and each appears **zero** times in the release, measured. The code lane wrote the rows.
+**You were right that the predecessor solved this, and reading it reverses half of what this lane
+recommended an hour ago.** `../game-4x`, measured:
 
-> | **phase** | the game | before it starts, or once it has | stored |
-> | **turn** | the game | how many turns have ended | stored |
+- **`Universe(val planets: List<Planet>)`** and nothing else. **`turn` and `phase` appear zero times
+  in its whole `game` module.** `phase` appears **zero times in the entire repository.**
+- **`turn` is a local variable in the loop that applies the transition.** It reaches the world as a
+  **file name** - `turn-$turn.json` - never as a field inside one.
 
-**`node` was a third row and it is now `P-290`**, which argues it should not exist at all rather than
-be declared. **Offering you a row this lane is arguing against would be asking twice.**
+**And it is load-bearing, which is the part that changes the argument.** That loop ends with
+`while (!history.contains(current))` - **it stops when the state repeats.** That works only because
+the state does not carry its turn: **a state containing its own turn number is never equal to any
+other state**, so the loop would never close.
 
-**That they are traits of the game is the derived part**, and the code lane said so rather than
-presenting it as settled. It follows from the game being a thing - *the game is the one thing that is
-in nothing* - and traits being of things. **If the game is not a thing that carries traits, these two
-rows are wrong.**
+**So the case for keeping `turn` out is not that it feels like time.** It is that **a number
+increasing with every transition destroys equality between states**, and equality is what lets you
+ask whether anything changed - a stalemate, a loop, a turn that did nothing.
 
-**On your question, which this lane read wrongly the first time.** You did not mean a clock. You
-meant that reality is *current state, physics, next state*, and asked whether `phase` and `turn`
-belong **in the tree or outside it**. That is a better question and it has a real argument on each
-side.
+**`turn` is also already derivable here.** `scenario/commands/play.4x` has **10** `end turn`
+commands and the expected state says **`turn:11`** - measured. **It is the input restated**, and
+restated data is data that can disagree with itself.
 
-**The case for outside.** The tree says what exists and where; **neither of these does.** `turn`
-counts how many times the transition has been applied, which is a fact about the sequence rather than
-about its contents. And **`phase` selects which physics runs at all** - `spec/console.md`: *the rules
-of the game govern the second phase; in the first, the designer is the cause of what appears.* A
-parameter of the transition function is not obviously part of the state it transforms.
+**`phase` is a different case and the predecessor does not decide it.** It never had one at all - its
+setup and its gameplay are different command sets in different tests, not a stored flag. **`phase`
+does not increase**, it changes once, so it destroys no equality. And the argument this lane made
+still stands: **`ready` is already a stored trait that gates which transitions may fire**, and
+`phase` is that shape at the root.
 
-**The case for inside, which this lane thinks wins, and the reason is `ready`.** **`ready` is already
-a trait that gates which transitions may fire** - a citizen that is exhausted cannot be worked - and
-nobody proposed moving it outside the tree. **`phase` is the same shape at the root that `ready` is
-at a citizen**: a stored fact about a thing, which the rules consult before deciding what may happen
-to it. **A trait that selects which rules apply is still a fact about the thing the rules apply to.**
+**This lane now recommends: `turn` out, `phase` in.** They looked like one question and the
+predecessor shows they are two. **Out** for `turn` means it is not a trait, not in the dump, and is
+the count of `end turn` commands - or a file name, as the predecessor had it. **In** for `phase` is one row - `phase`, of the game, *before it starts, or once it has*, stored - and it comes back as a row to approve once you have answered, because a proposal that asks a decision offers no words.
 
-**What it costs, so it is a decision and not a default.** The root then means *the run* rather than
-*the world*: `{game phase:play turn:11}` is a game in progress, and the world is what it contains.
-**If you ever want a world separable from the run that produced it** - two worlds in one session, or
-a world saved without its history - **that conflation is what you would have to undo.** Nothing in
-the release wants it.
 
-**And outside has a price that inside does not.** `P-284` says every word in a data file is a kind, a
-trait, or a trait value, and it reached that with **no exceptions** - the structural words vanished
-when containment became position. **Putting `phase` and `turn` outside the tree puts words back in
-the file that are none of the three**, and reopens the hole `P-284` just closed.
-
-**`territories` and `units` are absent deliberately.** They are counts of what the game contains, and
-under `P-287` a count is an entry in a contents map rather than a trait.
+**What *out* costs, and it is the thing to weigh against.** `P-284` reached *every word is a kind, a
+trait, or a trait value* **with no exceptions**. If `turn` is printed anywhere it becomes an
+exception; if it is printed nowhere, **the expected state no longer says which turn it is**, and you
+would count `end turn` commands to know. **The predecessor's answer to exactly that was to put it in
+the file's name**, which is a place the rule does not reach.
 
 ### P-289 - What makes a check worth having
 
