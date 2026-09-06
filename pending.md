@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-289** - What makes a check worth having · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -27,8 +28,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (14)
+### To code (15)
 
+- **S-48** - `node` goes, and the game's row loses `turn` · `docs/notes/proposals.md`
 - **S-47** - The map form, and the check that keeps it honest · `docs/notes/proposals.md`
 - **S-46** - Restore `nodes.4x` from the *Scope* table · `docs/notes/proposals.md`
 - **S-45** - The node data contradicts the biome table, and every territory is affected · `docs/notes/proposals.md`

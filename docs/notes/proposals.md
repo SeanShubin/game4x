@@ -63,46 +63,31 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-289 - What makes a check worth having
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/process.md` -> a new section immediately after *What
-verification requires*
-
-**So the next one starts with this solved.** Everything below was paid for this week, and none of it
-is about this game.
-
-> ## What makes a check worth having
->
-> A check has two ways to be worthless, and the second is how you get the first.
->
-> **It can be unable to fail.** Zero occurrences counted against a population that is also zero. A
-> coverage check that reads the commands in a file rather than what ran. A guard that permits what
-> its rule forbids, because the same hand wrote the rule, the work and the guard.
->
-> **It can fail when nothing is wrong** - a comparison broken by a line wrap, a table's padding, a
-> capital letter. **That is the more dangerous one, because the fix that comes to hand is to loosen
-> it**, and a loosened check is the first kind.
->
-> **So normalize both sides instead of loosening the comparison.** Trim, sort, reformat, parse a
-> table to its cells - whatever makes two forms of one thing identical - and then compare strictly.
-> **A check that cannot raise a false alarm is one nobody has a reason to weaken.**
->
-> **And a check written by the hand that wrote the work will agree with the work.** That is what a
-> review lane is for, and it is why an independent finding is worth more than a count of findings.
-
-**Why in your document rather than `CLAUDE.md`.** `CLAUDE.md` already carries the operating
-detail - the three failure shapes, the tooling, the cases. **This is the reason those exist**, it is
-about what you will accept as evidence, and it is the part a new project needs on its first day
-rather than its fiftieth.
-
-**Every clause has a case behind it, and they are all from the last four days.** A zero claim counted
-against zero. A coverage check that could not tell `move` from `found by land`. A guard requiring *at
-least one* quotation where the rule says *exactly one*. A comparison that allowed a dropped period
-because the strict version kept failing on wrapping - **which is the second kind becoming the first,
-in one step, in this lane's own tooling.**
-
 ## Addressed to other perspectives
+
+### S-48 - `node` goes, and the game's row loses `turn`
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** `P-288` and `P-290`, promoted
+together
+
+**`P-290`: capacity may be per kind carrying a particular value of a trait.** So a territory bounds
+*metal extractors* directly, and **`node` has nothing left to do** - it carries a resource and a
+density, and no territory-resource pair has two densities, so no two nodes of one resource differ.
+**Delete `Node`, `Territory.nodes`, and the bookkeeping that stops two extractors sharing one** -
+capacity does that now. `density` stays and becomes what it already reads as: a fact about a
+territory and a resource.
+
+**`P-288`: `phase` is a declared trait and `turn` is not.** The game's row is
+`{game phase:play turn:11 territories:12 units:1}` today. **It becomes `{game phase:play}` with the
+world inside it** - `turn` gone, `territories` and `units` becoming entries in the contents under
+`P-287`.
+
+**`turn` needs no rule forbidding it.** `P-284` admits only kinds, traits and trait values, and
+`turn` is none of them. **If the expected data needs to say which turn it is, that belongs in the
+file's name** - which is what the predecessor did, and where the rule does not reach.
+
+**Take it with `S-47`.** Both rewrite the dump and the model, and deleting nodes before the map form
+is less to rewrite than after.
 
 ### S-47 - The map form, and the check that keeps it honest
 
@@ -1527,6 +1512,7 @@ work the release exists to order.
 | P-284, every word in a data file is a kind, a trait, or a trait value                                                        | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
 | P-290, capacity may be per kind carrying a particular trait value, which makes `node` unnecessary                            | `spec/logistics.md` -> Containment                                                                                                           | 2026-09-06 |
 | P-288, `phase` is a stored trait of the game; `turn` is not in the state at all                                              | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
+| P-289, what makes a check worth having: it can be unable to fail, and loosening one that cries wolf is how it gets there     | `docs/process.md`                                                                                                                            | 2026-09-06 |
 
 ## Rejected
 

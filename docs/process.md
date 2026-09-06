@@ -111,6 +111,25 @@ game.**
 - The entire application can be run from a read-eval-print loop, using the command transport format
 - The console allows both the relational and the physical model to be inspected and filtered
 
+## What makes a check worth having
+
+A check has two ways to be worthless, and the second is how you get the first.
+
+**It can be unable to fail.** Zero occurrences counted against a population that is also zero. A
+coverage check that reads the commands in a file rather than what ran. A guard that permits what
+its rule forbids, because the same hand wrote the rule, the work and the guard.
+
+**It can fail when nothing is wrong** - a comparison broken by a line wrap, a table's padding, a
+capital letter. **That is the more dangerous one, because the fix that comes to hand is to loosen
+it**, and a loosened check is the first kind.
+
+**So normalize both sides instead of loosening the comparison.** Trim, sort, reformat, parse a
+table to its cells - whatever makes two forms of one thing identical - and then compare strictly.
+**A check that cannot raise a false alarm is one nobody has a reason to weaken.**
+
+**And a check written by the hand that wrote the work will agree with the work.** That is what a
+review lane is for, and it is why an independent finding is worth more than a count of findings.
+
 ## All lanes
 - May collaborate with each other
 - May send messages to each other
