@@ -88,8 +88,10 @@ fn the_release_tables_are_the_ones_in_this_crate() {
 /// upkeep assumed rather than written, `depart` was `perish`, and `revert` could never fire.
 /// Then food gained a `keeps` counter, and `age` is what counts it down.
 #[test]
-fn there_are_fifteen_recipes() {
-    assert_eq!(kinds::RECIPES.len(), 15);
+fn there_are_sixteen_recipes() {
+    // Fifteen until `P-260` added `build store`, which is what a territory needs before
+    // it keeps anything at all between turns.
+    assert_eq!(kinds::RECIPES.len(), 16);
 }
 
 /// Every name in the recipes' `Kind` column is a kind or a family the release declares.
@@ -118,8 +120,8 @@ fn every_kind_a_recipe_names_is_declared() {
     // would leave this checking an empty set and passing.
     assert_eq!(
         used.len(),
-        15,
-        "fifteen distinct names across the recipes' Kind column, and these are {used:?}"
+        16,
+        "sixteen distinct names across the recipes' Kind column, and these are {used:?}"
     );
 }
 

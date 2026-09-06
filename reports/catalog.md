@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-12 kinds, 4 families, 18 traits, 15 recipes.
+13 kinds, 4 families, 18 traits, 16 recipes.
 
 ## citizen
 
@@ -41,7 +41,7 @@ what holds a territory; a territory has at most one.
 
 **Bounded by** a capacity of 1
 
-**As a thing** Force: 1 · Costs to produce: 1 labor, 1 metal · Binding: 1
+**As a thing** Force: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1
 
 **In recipes**
 
@@ -89,6 +89,26 @@ where an Ark is produced.
 - `build yard` produces 1
 - `produce ark` requires 1
 
+## store
+
+built to hold one resource, and holds nothing else.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `resource` (one of the resources)
+
+**Bounded by** as many as the extractors of its resource
+
+**As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1
+
+**In recipes**
+
+- `deploy ark` produces 1, food
+- `deploy ark` produces 1, metal
+- `found by land` produces 1, food
+- `found by land` produces 1, metal
+- `build store` produces 1, `$resource`
+
 ## ark
 
 carries a landing, and can invade from orbit.
@@ -135,7 +155,7 @@ eaten by citizens; expires.
 
 **Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `keeps` (the number of turns it will last), `surplus` (yes or no)
 
-**Bounded by** a capacity of 20, and it keeps for one turn
+**Bounded by** the things in it that hold it, and it keeps for one turn
 
 **In recipes**
 
@@ -154,11 +174,12 @@ what things are built from; conserved.
 
 **Traits of it** `kind` (one of the kinds), `place` (the thing it is in)
 
-**Bounded by** a capacity of 20
+**Bounded by** the things in it that hold it
 
 **In recipes**
 
 - `build extractor` consumes 1
+- `build store` consumes 1
 - `build yard` consumes 15
 - `produce pioneer` consumes 3
 - `produce ark` consumes 3
@@ -173,7 +194,7 @@ what moves things; neither conserved nor expiring.
 
 **Traits of it** `kind` (one of the kinds), `place` (the thing it is in)
 
-**Bounded by** a capacity of 20
+**Bounded by** the things in it that hold it
 
 **In recipes**
 
@@ -195,6 +216,7 @@ what working a machine takes; a citizen provides it each turn.
 **In recipes**
 
 - `build extractor` consumes 1
+- `build store` consumes 1
 - `build yard` consumes 1
 - `create labor` produces 1
 - `work` consumes 1

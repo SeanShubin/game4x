@@ -27,7 +27,7 @@ ul { padding-left: 1.2rem }
 <h1>Catalog</h1>
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p kinds -- catalog</code>, or <code>scripts/kinds.sh catalog</code>.</p>
 <p>Every kind the release declares, with everything it says about that kind gathered in one place. <code>spec/invariants.md</code> has the release's tables be the data, and every other form of them derived and generated rather than written; this is one such form. It is a view and not a copy - each section is a join across six tables that the document does not perform anywhere.</p>
-<p>12 kinds, 4 families, 18 traits, 15 recipes.</p>
+<p>13 kinds, 4 families, 18 traits, 16 recipes.</p>
 <h2>citizen</h2>
 <p>a person: provides labor, eats, and grows on surplus.</p>
 <p><strong>In families</strong> thing</p>
@@ -49,7 +49,7 @@ ul { padding-left: 1.2rem }
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>force</code> (a number)</p>
 <p><strong>Bounded by</strong> a capacity of 1</p>
-<p><strong>As a thing</strong> Force: 1 · Costs to produce: 1 labor, 1 metal · Binding: 1</p>
+<p><strong>As a thing</strong> Force: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1</p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>deploy ark</code> limits 0</li>
@@ -84,6 +84,20 @@ ul { padding-left: 1.2rem }
 <li><code>build yard</code> produces 1</li>
 <li><code>produce ark</code> requires 1</li>
 </ul>
+<h2>store</h2>
+<p>built to hold one resource, and holds nothing else.</p>
+<p><strong>In families</strong> thing</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>resource</code> (one of the resources)</p>
+<p><strong>Bounded by</strong> as many as the extractors of its resource</p>
+<p><strong>As a thing</strong> Costs to produce: 1 labor, 1 metal · Binding: 1</p>
+<p><strong>In recipes</strong></p>
+<ul>
+<li><code>deploy ark</code> produces 1, food</li>
+<li><code>deploy ark</code> produces 1, metal</li>
+<li><code>found by land</code> produces 1, food</li>
+<li><code>found by land</code> produces 1, metal</li>
+<li><code>build store</code> produces 1, <code>$resource</code></li>
+</ul>
 <h2>ark</h2>
 <p>carries a landing, and can invade from orbit.</p>
 <p><strong>In families</strong> thing, unit</p>
@@ -114,7 +128,7 @@ ul { padding-left: 1.2rem }
 <p>eaten by citizens; expires.</p>
 <p><strong>In families</strong> thing, resource</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>keeps</code> (the number of turns it will last), <code>surplus</code> (yes or no)</p>
-<p><strong>Bounded by</strong> a capacity of 20, and it keeps for one turn</p>
+<p><strong>Bounded by</strong> the things in it that hold it, and it keeps for one turn</p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>work</code> produces <code>$where</code>'s density for that resource (as a resource)</li>
@@ -128,10 +142,11 @@ ul { padding-left: 1.2rem }
 <p>what things are built from; conserved.</p>
 <p><strong>In families</strong> thing, resource</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in)</p>
-<p><strong>Bounded by</strong> a capacity of 20</p>
+<p><strong>Bounded by</strong> the things in it that hold it</p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>build extractor</code> consumes 1</li>
+<li><code>build store</code> consumes 1</li>
 <li><code>build yard</code> consumes 15</li>
 <li><code>produce pioneer</code> consumes 3</li>
 <li><code>produce ark</code> consumes 3</li>
@@ -142,7 +157,7 @@ ul { padding-left: 1.2rem }
 <p>what moves things; neither conserved nor expiring.</p>
 <p><strong>In families</strong> thing, resource</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in)</p>
-<p><strong>Bounded by</strong> a capacity of 20</p>
+<p><strong>Bounded by</strong> the things in it that hold it</p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>move</code> consumes 1, in that unit</li>
@@ -158,6 +173,7 @@ ul { padding-left: 1.2rem }
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>build extractor</code> consumes 1</li>
+<li><code>build store</code> consumes 1</li>
 <li><code>build yard</code> consumes 1</li>
 <li><code>create labor</code> produces 1</li>
 <li><code>work</code> consumes 1</li>

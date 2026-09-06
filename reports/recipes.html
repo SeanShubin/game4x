@@ -27,7 +27,7 @@ ul { padding-left: 1.2rem }
 <h1>Recipes</h1>
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p kinds -- recipes</code>, or <code>scripts/kinds.sh recipes</code>.</p>
 <p>Every recipe the release declares, with its own lines gathered under it. The release states these across seven columns, one row per line and the name written only on the first - which is the right shape for a table and the wrong one for answering <em>what does this recipe do</em>.</p>
-<p>15 recipes, 53 lines between them.</p>
+<p>16 recipes, 60 lines between them.</p>
 <h2>deploy ark</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -38,6 +38,8 @@ ul { padding-left: 1.2rem }
 <li><strong>produce</strong> 2 citizen</li>
 <li><strong>produce</strong> 1 extractor, food</li>
 <li><strong>produce</strong> 1 extractor, metal</li>
+<li><strong>produce</strong> 1 store, food</li>
+<li><strong>produce</strong> 1 store, metal</li>
 </ul>
 <h2>move</h2>
 <p>Run by the <strong>player</strong>.</p>
@@ -57,6 +59,8 @@ ul { padding-left: 1.2rem }
 <li><strong>produce</strong> 2 citizen</li>
 <li><strong>produce</strong> 1 extractor, food</li>
 <li><strong>produce</strong> 1 extractor, metal</li>
+<li><strong>produce</strong> 1 store, food</li>
+<li><strong>produce</strong> 1 store, metal</li>
 </ul>
 <h2>build extractor</h2>
 <p>Run by the <strong>player</strong>.</p>
@@ -64,6 +68,13 @@ ul { padding-left: 1.2rem }
 <li><strong>consume</strong> 1 labor</li>
 <li><strong>consume</strong> 1 metal</li>
 <li><strong>produce</strong> 1 extractor, <code>$resource</code></li>
+</ul>
+<h2>build store</h2>
+<p>Run by the <strong>player</strong>.</p>
+<ul>
+<li><strong>consume</strong> 1 labor</li>
+<li><strong>consume</strong> 1 metal</li>
+<li><strong>produce</strong> 1 store, <code>$resource</code></li>
 </ul>
 <h2>build yard</h2>
 <p>Run by the <strong>player</strong>.</p>

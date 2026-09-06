@@ -40,6 +40,7 @@ pub enum Kind {
     Citizen,
     Garrison,
     Extractor,
+    Store,
     Yard,
     Ark,
     Pioneer,
@@ -57,6 +58,7 @@ impl Kind {
             Kind::Citizen => "citizen",
             Kind::Garrison => "garrison",
             Kind::Extractor => "extractor",
+            Kind::Store => "store",
             Kind::Yard => "yard",
             Kind::Ark => "ark",
             Kind::Pioneer => "pioneer",
@@ -74,6 +76,7 @@ impl Kind {
             Kind::Citizen => "a person: provides labor, eats, and grows on surplus",
             Kind::Garrison => "what holds a territory; a territory has at most one",
             Kind::Extractor => "built for one resource, and worked to produce it",
+            Kind::Store => "built to hold one resource, and holds nothing else",
             Kind::Yard => "where an Ark is produced",
             Kind::Ark => "carries a landing, and can invade from orbit",
             Kind::Pioneer => "founds a territory",
@@ -104,24 +107,30 @@ impl Kind {
             Kind::Citizen => "the food produced here, through upkeep",
             Kind::Garrison => "a capacity of 1",
             Kind::Extractor => "a capacity, from *Territory resources*",
+            Kind::Store => "as many as the extractors of its resource",
             Kind::Yard => "a capacity of 1",
             Kind::Ark => "a capacity of 2",
             Kind::Pioneer => "a capacity of 2, and the food produced here",
             Kind::Labor => "the citizens that make it, one each per turn",
-            Kind::Food => "a capacity of 20, and it keeps for one turn",
-            Kind::Metal => "a capacity of 20",
-            Kind::Energy => "a capacity of 20",
+            // **`P-258`: a territory declares no capacity for a resource.** It declares
+            // capacity for the things that hold them, so what it keeps is what its stores
+            // hold - and a territory that has built none keeps nothing. The flat twenty was
+            // a property of the wrong thing.
+            Kind::Food => "the things in it that hold it, and it keeps for one turn",
+            Kind::Metal => "the things in it that hold it",
+            Kind::Energy => "the things in it that hold it",
             Kind::Territory | Kind::Orbit => return None,
         })
     }
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 12] = [
+pub const KINDS: [Kind; 13] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
     Kind::Yard,
+    Kind::Store,
     Kind::Ark,
     Kind::Pioneer,
     Kind::Food,
@@ -133,10 +142,11 @@ pub const KINDS: [Kind; 12] = [
 ];
 
 /// In the order the bounds table lists them, which is not the Kinds order.
-pub const BOUND_ORDER: [Kind; 10] = [
+pub const BOUND_ORDER: [Kind; 11] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
+    Kind::Store,
     Kind::Yard,
     Kind::Ark,
     Kind::Pioneer,
@@ -223,10 +233,15 @@ pub const CAPACITIES: [Capacity; 3] = [
         holds: "that kind",
         up_to: "its total capacity for that kind",
     },
+    // **`P-260` and `P-265`.** This row said *an extractor's catch*, holding up to the
+    // territory's density - and the same document said four lines later that an extractor
+    // holds nothing. `C-26` was that contradiction; `P-265` resolved it toward the prose,
+    // because the model had never given an extractor a capacity and the other reading would
+    // have cost a field, production routed into catches, and a bound per extractor.
     Capacity {
-        what: "an extractor's catch",
+        what: "a store",
         holds: "the resource it was built for",
-        up_to: "the territory's density for it",
+        up_to: "10",
     },
     Capacity {
         what: "a unit's tank",
@@ -286,7 +301,7 @@ pub const TRAITS: [TraitRow; 18] = [
     },
     TraitRow {
         name: "resource",
-        of: "an extractor",
+        of: "an extractor or a store",
         values: "one of the resources",
         held: Held::Stored,
     },
@@ -667,6 +682,8 @@ pub const RECIPES: &[Recipe] = &[
             just(Produce, 2, Noun::Of(Citizen)),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
+            traited(Produce, 1, Noun::Of(Store), &FOR_FOOD),
+            traited(Produce, 1, Noun::Of(Store), &FOR_METAL),
         ],
     },
     Recipe {
@@ -690,6 +707,8 @@ pub const RECIPES: &[Recipe] = &[
             just(Produce, 2, Noun::Of(Citizen)),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_METAL),
+            traited(Produce, 1, Noun::Of(Store), &FOR_FOOD),
+            traited(Produce, 1, Noun::Of(Store), &FOR_METAL),
         ],
     },
     Recipe {
@@ -699,6 +718,17 @@ pub const RECIPES: &[Recipe] = &[
             just(Consume, 1, Noun::Of(Labor)),
             just(Consume, 1, Noun::Of(Metal)),
             traited(Produce, 1, Noun::Of(Extractor), &OF_RESOURCE),
+        ],
+    },
+    // **`P-260`: one recipe with a `$resource`, not three.** The same shape `build
+    // extractor` has had since `P-234`, which is what makes `store` one kind with a trait.
+    Recipe {
+        name: "build store",
+        owner: Player,
+        lines: &[
+            just(Consume, 1, Noun::Of(Labor)),
+            just(Consume, 1, Noun::Of(Metal)),
+            traited(Produce, 1, Noun::Of(Store), &OF_RESOURCE),
         ],
     },
     Recipe {
@@ -885,7 +915,10 @@ pub const PRODUCIBLE: &[Producible] = &[
     },
     Producible {
         kind: Garrison,
-        force: Some(1),
+        // **`P-277`: a garrison has no force of its own.** `P-276` says what it does
+        // instead - it lets the citizens of that territory sum their force, by existing,
+        // and nothing has to work it. Its cost is unchanged.
+        force: Some(0),
         fuel: None,
         a_move: None,
         upkeep: None,
@@ -915,6 +948,21 @@ pub const PRODUCIBLE: &[Producible] = &[
         upkeep: None,
         costs: &[(1, Labor), (15, Metal)],
         binding: Some(15),
+        crosses: None,
+        requires: None,
+        readies: false,
+    },
+    // **`P-260`: one kind with a `resource` trait, not three that differ in one word.**
+    // A store costs a labor and a metal and holds ten of what it was built for, which is
+    // in *Where things are* rather than here because it is a fact about the kind.
+    Producible {
+        kind: Store,
+        force: None,
+        fuel: None,
+        a_move: None,
+        upkeep: None,
+        costs: &[(1, Labor), (1, Metal)],
+        binding: Some(1),
         crosses: None,
         requires: None,
         readies: false,
