@@ -130,6 +130,13 @@ table to its cells - whatever makes two forms of one thing identical - and then 
 **And a check written by the hand that wrote the work will agree with the work.** That is what a
 review lane is for, and it is why an independent finding is worth more than a count of findings.
 
+**And a check can be sound and no longer believed.** A long green run is what does it, and **a
+growing list of recorded exceptions is where belief decays fastest** - every entry is a reason it
+stayed green, so *it stayed green* stops carrying information, and those lists grow on exactly the
+checks guarding what people keep getting wrong. **A new check is made to fail on demand before it
+is trusted; an old one never is**, so what is trusted after the first run is a memory of it.
+**Re-poison a check when its exception list grows.**
+
 ## All lanes
 - May collaborate with each other
 - May send messages to each other

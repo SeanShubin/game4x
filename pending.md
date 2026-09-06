@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-291** - A check can be fine and no longer believed · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -27,8 +28,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (16)
+### To code (17)
 
+- **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-48** - `node` goes, and the game's row loses `turn` · `docs/notes/proposals.md`
 - **S-47** - The map form, and the check that keeps it honest · `docs/notes/proposals.md`
 - **S-46** - Restore `nodes.4x` from the *Scope* table · `docs/notes/proposals.md`
@@ -84,6 +86,7 @@ it exists to ask.
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `spec/console.md` -> The language - P-254, P-287, P-284
 - `spec/control.md` -> Winning - P-77, P-81, P-125
+- `docs/process.md` - P-289, P-291
 - `docs/process.md` -> All lanes - P-247, P-248
 - `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md`, a new section - P-204, P-211

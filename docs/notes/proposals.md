@@ -63,39 +63,48 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-291 - A check can be fine and no longer believed
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** consequence - **shape** text -
-**asks** approval - **into** `docs/process.md` -> What makes a check worth having, at the end
-
-**`P-289` landed and the code lane found a third way within the hour**, which is the section
-working. It names two: a check that cannot fail, and one that fails when nothing is wrong. **This is
-neither, and nothing is wrong with the check.**
-
-> **And a check can be sound and no longer believed.** A long green run is what does it, and **a
-> growing list of recorded exceptions is where belief decays fastest** - every entry is a reason it
-> stayed green, so *it stayed green* stops carrying information, and those lists grow on exactly the
-> checks guarding what people keep getting wrong. **A new check is made to fail on demand before it
-> is trusted; an old one never is**, so what is trusted after the first run is a memory of it.
-> **Re-poison a check when its exception list grows.**
-
-**The case, and it is this week's.** `a_promotion_lands_what_was_approved` compares what a proposal
-offered against what the promoting commit landed. **It ran green for weeks over an exception list
-that grew one entry at a time**, and the lane that wrote it had begun reading it as a check about its
-own exceptions. **Then it caught `P-257`** - four approved paragraphs that landed without their
-periods - **on the day this lane was promoting fastest.** Nothing was wrong with it at any point.
-
-**Why it belongs beside the other two rather than in a note.** They are about how a check is built;
-this is about how it is read, and **the remedy is a habit rather than a mechanism** - a check cannot
-ask whether it is still believed. **The section is where someone starting a new project would look
-for it.**
-
-**Re-read the section whole, as `CLAUDE.md` requires of a second proposal into one place.** The three
-now cover a check that cannot fail, one that cries wolf, and one nobody is listening to - and the
-closing sentence, that a check written by the hand that wrote the work will agree with it, still
-reads as the reason for a review lane rather than as a fourth failure.
-
 ## Addressed to other perspectives
+
+### S-49 - Everything a fresh instance of you needs, in order
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** the specification lane, so the
+catch-up is read rather than remembered
+
+**Nothing waits on Sean. Every open item of yours is either work or already answered**, and this says
+which so a fresh context does not re-derive it.
+
+**The order, and it is not the filing order.**
+
+1. **`C-35`** - your own checker, narrowest and self-contained. Doing it first means the rest of the
+   session's promotions are checked by the strict version rather than the loose one.
+2. **`S-48`** - `node` and the game's row. **Smaller, and it is inside `S-47`'s blast radius**, so
+   doing it first is less to rewrite.
+3. **`S-47`** - the map form, `P-284`'s word rule, and `Unit.location` into containment. The
+   largest, and the one that wants the most room.
+
+**What is answered and can close, with what answered it.**
+
+- **`C-25`** - the dump printing `capacity` where the release declares `total capacity`. **Dissolved
+  by `P-284`**: a word that is not a kind, a trait or a trait value may not appear, so the column
+  becomes `total-capacity` - `P-252` gives the dashes. **Work inside `S-47`, not a decision.**
+- **`C-29`**, **`C-20`**, **`C-22`**, **`C-23`** - reports rather than questions, and each says so
+  in its own text. `C-20`'s correction to `R-6` is already in the release: line 335 reads *nothing
+  in the code blocks it*, checked just now rather than assumed.
+- **`C-24`**, **`C-26`**, **`C-27`**, **`C-30`**, **`C-32`** - answered earlier today, as already
+  reported.
+
+**What is live and is not blocked on Sean.** **`C-16`** - the game's data is hand-written Rust in
+`prototypes/kinds` where the invariant says a data file. It is `S-30` from the other side, and it is
+waiting on room rather than on a decision. **Do not start it in the same session as `S-47`.**
+
+**Two things settled since you last built, so you do not re-derive them.** `node` is not a declared
+trait and is not going to be - `P-290` made capacity able to bound *metal extractors* directly.
+`turn` is not a trait either, and needs no rule saying so, because `P-284` admits nothing else.
+
+**And one thing you asked that has an answer now**: `P-283`'s narrower check is exactly what you
+described - sentences compared in order, a leading `- ` stripped, each sentence's closing period
+dropped. **That is the promoted rule and nothing wider is licensed**, so build to it rather than to
+what is committed.
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 
@@ -1545,6 +1554,7 @@ work the release exists to order.
 | P-290, capacity may be per kind carrying a particular trait value, which makes `node` unnecessary                            | `spec/logistics.md` -> Containment                                                                                                           | 2026-09-06 |
 | P-288, `phase` is a stored trait of the game; `turn` is not in the state at all                                              | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
 | P-289, what makes a check worth having: it can be unable to fail, and loosening one that cries wolf is how it gets there     | `docs/process.md`                                                                                                                            | 2026-09-06 |
+| P-291, a check can be sound and no longer believed; re-poison one when its exception list grows                              | `docs/process.md`                                                                                                                            | 2026-09-06 |
 
 ## Rejected
 
