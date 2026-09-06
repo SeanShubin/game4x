@@ -4,6 +4,7 @@
 //! outbox                  every open item, grouped by addressee
 //! outbox --to code        one addressee's inbox
 //! outbox --check          exit 1 if anything is open and addressed
+//! outbox --closing        what closed since HEAD, and open items deriving from its rule
 //! outbox --count          the aggregate, against the limit
 //! ```
 //!
@@ -88,6 +89,35 @@ fn main() {
                 show(&all.items, None);
                 1
             }
+        }
+        // **`P-250`'s second half, which had no mechanism until `S-41`.** *When an item
+        // moves to `acted`, whatever lists the outboxes lists the open items naming the
+        // same rule.* Printed here rather than anywhere else because this output is read -
+        // it is what found the stale `R-6` blocker - and a listing nobody reads is worth
+        // nothing.
+        //
+        // **It makes the failure findable, not found**, which is the limit promoted with
+        // the rule. An item whose premise moved still reads correctly and only its
+        // conclusion has stopped being true, so nothing can decide that for a reader. What
+        // this does is put the two in front of each other at the moment one of them moves.
+        Some("--closing") => {
+            let closing = outbox::closing(&root, &all);
+            let sharing = outbox::sharing_a_rule(&closing, &all.items);
+            println!(
+                "{} item(s) closed since HEAD; {} of them name a rule another open item names",
+                closing.len(),
+                sharing.len()
+            );
+            for (closed, also) in &sharing {
+                for item in also {
+                    println!(
+                        "{closed} closed, and {} in {} derives from the same rule - re-derive \
+                         it or say it still holds",
+                        item.id, item.outbox
+                    );
+                }
+            }
+            0
         }
         // Only the items a commit says were dealt with, so a hook can act on them without
         // failing on every ordinary open item.

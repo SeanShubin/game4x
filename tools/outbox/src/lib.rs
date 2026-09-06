@@ -56,6 +56,14 @@ pub struct Item {
     /// things disagreeing about where a proposal's body ends would be worse than either
     /// parsing alone - so the body is cut once, here.
     pub body: String,
+    /// The rule this item's numbers were derived from, if it says.
+    ///
+    /// **`S-41`'s form, and `P-250` is the rule it serves**: *a number an item derives names
+    /// the rule it came from*, not the file it is in. So a premise that moves has something
+    /// to be found by - `C-9` stated a figure true under the rule that stores were discarded
+    /// at a turn's end, `C-11` landed and carried them, and the sentence went on reading
+    /// exactly as it had.
+    pub derived_from: Option<String>,
     /// Commits that cite this id and were read without closing it.
     ///
     /// A citation usually means the item was settled, and sometimes it means the commit
@@ -212,10 +220,102 @@ pub fn parse(text: &str, outbox: &str) -> Vec<Item> {
                 "
 ",
             ),
+            derived_from: derived_from(&lines[at..ends]),
             cited: considered(fields),
         });
     }
     items
+}
+
+/// The rule an item says its numbers came from, normalized so two spellings match.
+///
+/// A `**derived from**` line anywhere in the body. The value is the rule as prose, and the
+/// source it came from is written after it - the whole line is the key, lowercased with its
+/// whitespace collapsed, so a re-wrap does not make two items stop naming the same rule.
+fn derived_from(body: &[&str]) -> Option<String> {
+    let marker = "**derived from**";
+    let at = body
+        .iter()
+        .position(|line| line.trim_start().to_lowercase().starts_with(marker))?;
+    // **The paragraph, not the line.** A rule long enough to be worth naming is long enough
+    // to wrap, and reading only the first line made two items naming one rule stop matching
+    // at whatever column the wrap fell on. Found by the test below rather than by thinking
+    // about it, which is the same defect `P-289` describes one file over.
+    let paragraph: Vec<&str> = body[at..]
+        .iter()
+        .take_while(|line| !line.trim().is_empty())
+        .copied()
+        .collect();
+    let joined = paragraph.join(" ");
+    let from = joined.to_lowercase().find(marker)? + marker.len();
+    let rule = joined[from..]
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ");
+    (!rule.is_empty()).then(|| rule.to_lowercase())
+}
+
+/// Items that are closed in the working tree and were outstanding at `HEAD`.
+///
+/// **The trigger for `P-250`'s second half.** The rule fires *when an item moves to
+/// `acted`*, so something has to know that it moved - and the only record of the previous
+/// state is the commit this one is being made on top of. A tool that fired on every closed
+/// item would print the same list at every commit, and a signal that always fires is one
+/// nobody reads.
+pub fn closing(root: &Path, all: &Outboxes) -> Vec<Item> {
+    let mut moved = Vec::new();
+    for file in &all.files {
+        let output = std::process::Command::new("git")
+            .current_dir(root)
+            .args(["show", &format!("HEAD:{file}")])
+            .output();
+        let Ok(output) = output else {
+            continue;
+        };
+        if !output.status.success() {
+            continue;
+        }
+        let before = parse(&String::from_utf8_lossy(&output.stdout), file);
+        for was in before.iter().filter(|item| item.is_outstanding()) {
+            if let Some(now) = all.items.iter().find(|item| item.id == was.id)
+                && !now.is_outstanding()
+            {
+                moved.push(now.clone());
+            }
+        }
+    }
+    moved
+}
+
+/// Open items naming the same rule as one that has just closed.
+///
+/// **`P-250`'s second half, which had no mechanism** - `S-41`. The rule says: *when an item
+/// moves to `acted`, whatever lists the outboxes lists the open items naming the same rule.*
+/// The first half - a form for an item to name the rule it derived a number from - is the
+/// `derived from` line above.
+///
+/// **The honest limit is promoted with the rule and applies here too**: this makes the
+/// failure findable, not found. An item whose premise moved still reads correctly, its
+/// evidence is still quoted accurately, and only its conclusion has stopped being true - so
+/// nothing can decide that for a reader. What this does is put the two in front of each
+/// other at the moment one of them changes.
+pub fn sharing_a_rule<'a>(closing: &[Item], items: &'a [Item]) -> Vec<(String, Vec<&'a Item>)> {
+    let mut out = Vec::new();
+    for closed in closing {
+        let Some(rule) = &closed.derived_from else {
+            continue;
+        };
+        let also: Vec<&Item> = items
+            .iter()
+            .filter(|item| item.is_outstanding())
+            .filter(|item| item.id != closed.id)
+            .filter(|item| item.derived_from.as_ref() == Some(rule))
+            .collect();
+        if !also.is_empty() {
+            out.push((closed.id.clone(), also));
+        }
+    }
+    out
 }
 
 /// Why a proposal's text could not be read.
@@ -754,6 +854,79 @@ One line of what it is.
 **to** code · **status** withdrawn · **raised** 2026-08-29
 ";
 
+    /// `P-250`'s second half, over text written to make it fire.
+    ///
+    /// **A listing nobody has seen produce anything is a claim** - the same argument
+    /// `C-33` makes. The real outboxes name one rule twice today and would go on passing
+    /// this while the matching did nothing, so the case is written out here.
+    ///
+    /// The rule is matched after collapsing whitespace and case, because two items naming
+    /// one rule will wrap it differently - which is the failure `P-289` describes, one file
+    /// over.
+    #[test]
+    fn closing_an_item_lists_the_open_ones_deriving_from_the_same_rule() {
+        let text = "\
+### C-9 - a figure that was true under the old rule
+
+**to** spec · **status** acted 2026-09-06
+
+**derived from** stores are discarded at a turn's end - `spec/turn.md`, `P-100`
+
+### C-40 - another number resting on the same premise
+
+**to** code · **status** open · **raised** 2026-09-06
+
+**derived from** stores are discarded at a turn's
+end - `spec/turn.md`, `P-100`
+
+### C-41 - a number resting on something else
+
+**to** code · **status** open · **raised** 2026-09-06
+
+**derived from** a store holds ten - `spec/logistics.md`, `P-265`
+
+### C-42 - an item that derives nothing
+
+**to** code · **status** open · **raised** 2026-09-06
+";
+        let items = parse(text, "crates/outbox.md");
+        assert_eq!(items.len(), 4, "four items written, four read");
+        assert_eq!(
+            items[3].derived_from, None,
+            "an item with no such line names no rule, rather than naming an empty one"
+        );
+
+        let closed: Vec<Item> = items
+            .iter()
+            .filter(|item| !item.is_outstanding())
+            .cloned()
+            .collect();
+        assert_eq!(closed.len(), 1, "one item moved");
+
+        let sharing = sharing_a_rule(&closed, &items);
+        assert_eq!(sharing.len(), 1, "the closed item's rule is named again");
+        let (closed_id, also) = &sharing[0];
+        assert_eq!(closed_id, "C-9");
+        let named: Vec<&str> = also.iter().map(|item| item.id.as_str()).collect();
+        assert_eq!(
+            named,
+            ["C-40"],
+            "the item deriving from the same rule, and not the one deriving from another - \
+             and the wrap in the middle of C-40's rule is not a difference"
+        );
+    }
+
+    /// And it stays quiet when nothing moved, because a signal that always fires is unread.
+    #[test]
+    fn nothing_closing_lists_nothing() {
+        let items = parse(SAMPLE, "crates/outbox.md");
+        assert!(!items.is_empty(), "the sample parses to something");
+        assert!(
+            sharing_a_rule(&[], &items).is_empty(),
+            "no item closed, so there is nothing to re-derive"
+        );
+    }
+
     #[test]
     fn an_item_is_a_heading_and_a_field_line() {
         let items = parse(SAMPLE, "quality/outbox.md");
@@ -904,6 +1077,7 @@ One line of what it is.
             status: "open".to_string(),
             outbox: "crates/outbox.md".to_string(),
             body: String::new(),
+            derived_from: None,
             cited: cited.iter().map(|hash| hash.to_string()).collect(),
         }
     }

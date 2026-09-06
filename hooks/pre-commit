@@ -71,6 +71,22 @@ else
             echo "pre-commit: close it, or record the hash with **cited** so this stops asking"
             ;;
     esac
+
+    # P-250's second half, which had no mechanism until S-41: when an item moves to `acted`,
+    # whatever lists the outboxes lists the open items naming the same rule. A rule that
+    # moves under an open item makes it wrong without touching it - the item still reads
+    # correctly, its evidence is still quoted accurately, and only its conclusion has
+    # stopped being true.
+    #
+    # Printed beside the citation reconciliation because that output gets read: it is what
+    # found the stale R-6 blocker. It makes the failure findable rather than found, which is
+    # the limit promoted with the rule.
+    closing=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --closing 2>/dev/null | grep "derives from the same rule" || true)
+    if [ -n "$closing" ]; then
+        echo "pre-commit: an item closed, and these open items derive from its rule:"
+        echo "$closing" | sed 's/^/  /'
+        echo "pre-commit: re-derive each one, or say in it that the number still holds"
+    fi
 fi
 
 # The edition is passed explicitly because rustfmt is invoked directly rather than through
