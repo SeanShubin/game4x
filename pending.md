@@ -17,7 +17,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-44** - `b11ec59` S-44 model half: a store is a kind, and a territory keeps what its stores hold · still open in `docs/notes/proposals.md`
+- **S-45** - `1f2ded6` S-45 and S-44's scenario half: the main scenario is a typical game again · still open in `docs/notes/proposals.md`
+- **S-44** - `1f2ded6` S-45 and S-44's scenario half: the main scenario is a typical game again · still open in `docs/notes/proposals.md`
 - **S-41** - `5c43696` S-41 first half: choose the `derived from` form · still open in `docs/notes/proposals.md`
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
@@ -39,8 +40,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 - **Q-50** - A run of spaces sits mid-sentence in a failure message, in eighteen places · `lenses/quality/outbox.md`
 
-### To spec (9)
+### To spec (10)
 
+- **C-32** - The release has two tables of territory resources and they now disagree · `crates/outbox.md`
 - **C-30** - The coding instance's start prompt omits the file holding most of its work · `crates/outbox.md`
 - **C-29** - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it · `crates/outbox.md`
 - **C-26** - The release says an extractor holds its catch and also that it holds nothing · `crates/outbox.md`

@@ -63,6 +63,35 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-32 - The release has two tables of territory resources and they now disagree
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-45`, regenerating `nodes.4x`
+
+**derived from** a territory's biome gives it its total capacity and density for each resource - `spec/planet.md`, `P-272`
+
+**Filed the moment it was found, and it is inside one file.** `releases/first-release.md` has a
+per-territory table under *Scope* giving territory 1 **3 x 4 food**. Its *Biomes* table, as `P-274`
+rebalanced it, gives grassland **5 x 6 food** - and `P-272` says the biome is what gives a territory
+its numbers. **The two disagree about all twelve.**
+
+`S-45` asked for `nodes.4x` to be generated from the *Biomes* table, and it now is.
+
+**The Scope table is not merely stale; it is a second source for a fact `P-272` gave to one place.**
+Its *What it exercises* column is the half worth keeping and has no other home: *the landing site*,
+*many thin food extractors, same food total*, *no metal*, *food density 1*. Those sentences say why
+the twelve are the twelve, and deleting the table outright loses them.
+
+**And several of them stopped being true when the rebalance landed.** Territory 5 is labelled *food
+density 1* and is mountain, which `P-274` gives 1 x 3. Territory 6 is labelled *no metal* and is
+jungle, which now has 1 x 2. **The rebalance moved what those territories exercise without touching
+the column that says what they exercise** - which is the same shape as `forces.4x`'s comment going
+false without a line of it changing.
+
+**One assertion in `crates/game-console/tests/first_release.rs` is failing against this**, through
+`released_table`, which reads the Scope table. **Left failing rather than repointed at the Biomes
+table**, because which table is the truth is the question this item asks, and answering it in a test
+would be this lane deciding it.
+
 ### C-31 - A jungle can now be taken and cannot be held for a single turn
 
 **to** spec · **status** **acted** 2026-09-05 · `31dbedd`, fixed in the commit after it
