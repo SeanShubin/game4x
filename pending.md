@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-279** - The twelve territories were twelve cases, and `P-272` makes them five · `docs/notes/proposals.md`
+- **P-280** - A biome does not determine a territory's numbers · `docs/notes/proposals.md`
+- **P-281** - What the biome table is for, now that it does not bind · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
