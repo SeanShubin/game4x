@@ -106,6 +106,106 @@ fn every_crate_has_a_row_and_every_row_has_a_crate() {
     );
 }
 
+/// Nothing but a generator and a check may name `reports/`.
+///
+/// **`Q-47`, from the quality lens.** `docs/process.md` says presentations are never
+/// canonical and are generated from data. Nothing enforced either, and it is the one
+/// statement in that section whose failure is **silent**: a presentation read as a source
+/// looks exactly like a presentation until the data changes underneath it.
+///
+/// **The distinction needs no semantics, only a path.** *Reading to verify* and *reading as
+/// input* are the same operation; what tells them apart is who is doing it. A generator
+/// lives in `src/bin/`, a check lives under `tests/`, and **nothing else may name the
+/// directory**. A test reading a report is a test; production depending on one is the
+/// failure this exists to catch.
+///
+/// **The trap is the spelling, and it is why the lens filed this rather than building it.**
+/// Two are in use - `"reports/…"` and `.join("reports")` - and they interleave, so searching
+/// for either alone finds some of the readers and misses the rest. Both lanes fell into it
+/// within minutes of each other, on the same question, from opposite sides. **So this
+/// matches the path rather than a spelling**: a literal that *is* `reports` or *opens*
+/// `reports/` is a reader however it was written, and the word in a sentence - *all
+/// reports*, *six reports* - is not a path and is not one.
+///
+/// **The population is asserted because a count over nothing proves nothing.** A predicate
+/// that found no readers at all would pass this while saying nothing, which is the same
+/// green as a rule that holds.
+#[test]
+fn only_a_generator_or_a_check_reads_a_report() {
+    let root = root();
+    let mut readers: Vec<String> = Vec::new();
+    let mut trespass: Vec<String> = Vec::new();
+
+    let mut stack = vec![root.clone()];
+    while let Some(at) = stack.pop() {
+        let Ok(entries) = std::fs::read_dir(&at) else {
+            continue;
+        };
+        for entry in entries.flatten() {
+            let path = entry.path();
+            let name = entry.file_name().to_string_lossy().to_string();
+            if path.is_dir() {
+                // `target/` holds built artifacts and `.git/` is not source.
+                if !matches!(name.as_str(), "target" | ".git" | "node_modules") {
+                    stack.push(path);
+                }
+                continue;
+            }
+            if path.extension().and_then(|e| e.to_str()) != Some("rs") {
+                continue;
+            }
+            let Ok(text) = std::fs::read_to_string(&path) else {
+                continue;
+            };
+            let relative = path
+                .strip_prefix(&root)
+                .unwrap_or(&path)
+                .to_string_lossy()
+                .replace('\\', "/");
+            // **This file writes the literal it is looking for, so it finds itself.** Left
+            // in, the population below can never be empty, and a predicate that had stopped
+            // matching anything at all would still satisfy it - the count over nothing with
+            // its sign flipped.
+            if relative.ends_with("tools/outbox/tests/architecture.rs") {
+                continue;
+            }
+            // A string literal that is the directory, or a path inside it. This is the one
+            // predicate, and it sees both spellings because both write the same literal.
+            let names_it = text
+                .split('"')
+                .skip(1)
+                .step_by(2)
+                .any(|literal| literal == "reports" || literal.starts_with("reports/"));
+            if !names_it {
+                continue;
+            }
+            readers.push(relative.clone());
+            let generator = relative.contains("/src/bin/");
+            let check = relative.contains("/tests/");
+            if !generator && !check {
+                trespass.push(relative);
+            }
+        }
+    }
+
+    readers.sort();
+    assert!(
+        readers.len() >= 5,
+        "only {} file(s) name `reports/`, and the rule was written against five - {readers:?}. \
+         A predicate that finds nothing passes this while checking nothing, which is why the \
+         population is asserted rather than the absence.",
+        readers.len()
+    );
+    assert!(
+        trespass.is_empty(),
+        "a report is a presentation and is never a source - `docs/process.md`. These name \
+         `reports/` and are neither a generator in `src/bin/` nor a check under `tests/`:\
+         \n  {}\n\nAll {} reader(s): {readers:?}",
+        trespass.join("\n  "),
+        readers.len()
+    );
+}
+
 /// Rule 5: each crate's `README.md` is linked from the document. A row that links to a file
 /// that is not there satisfies the rule in form and not in fact.
 #[test]
