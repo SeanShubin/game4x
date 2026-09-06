@@ -25,6 +25,17 @@ not `"in play"`. **Nothing in a data file is quoted.**
 `{extractor territory:1}` is an extractor in territory 1, and `{territory id:1}` is the territory
 itself.
 
+**What a thing contains is a map from a description to a quantity.** A description is a kind and
+**every stored trait that thing has**; a derived trait is never part of one, and **no trait may be
+left out** - `{citizen ready:yes} -> 8` and `{citizen ready:no} -> 6`, never `{citizen} ->
+14`. **Each distinct description is its own entry, and an entry is never zero.** A thing carrying
+an `id` has a description no other thing shares, so **its quantity is always one**. **Where a thing
+is, is where it appears**; nothing states its container. **Entries are in the order their
+descriptions sort in**, so the same state is always the same bytes.
+
+**Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
+other word is wrong about the game rather than describing it.
+
 A command is a verb followed by arguments, one command to a line. A territory is named by its
 id, a structure by its kind and the territory it is in.
 

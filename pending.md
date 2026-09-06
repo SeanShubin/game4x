@@ -8,10 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-284** - Every word in a data file is a kind, a trait, or a trait value · `docs/notes/proposals.md`
-- **P-285** - A thing is not located by a trait, and one with an `id` is unique · `docs/notes/proposals.md`
-- **P-286** - The release's traits follow: `place` goes, `id` arrives · `docs/notes/proposals.md`
-- **P-287** - Contents are a map from a description to a quantity · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -29,8 +27,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-47** - The map form, and the check that keeps it honest · `docs/notes/proposals.md`
 - **S-46** - Restore `nodes.4x` from the *Scope* table · `docs/notes/proposals.md`
 - **S-45** - The node data contradicts the biome table, and every territory is affected · `docs/notes/proposals.md`
 - **S-44** - Storage becomes a built thing, and the scenario cannot run until it is · `docs/notes/proposals.md`
@@ -70,7 +69,7 @@ it exists to ask.
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
-- `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210
+- `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
@@ -79,7 +78,9 @@ it exists to ask.
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
+- `spec/console.md` -> The language - P-254, P-287, P-284
 - `spec/control.md` -> Winning - P-77, P-81, P-125
+- `spec/logistics.md` -> Containment - P-188, P-257, P-285
 - `docs/process.md` -> All lanes - P-247, P-248
 - `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md`, a new section - P-204, P-211
@@ -91,7 +92,6 @@ it exists to ask.
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
 - `spec/invariants.md` -> The game is one function - P-75, P-115
-- `spec/logistics.md` -> Containment - P-188, P-257
 - `spec/narrative.md` -> Violence and order - P-39, P-278
 - `spec/planet.md` - P-272, P-280
 - `spec/planet.md` -> Shape - P-1, P-6

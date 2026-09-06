@@ -63,121 +63,40 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-284 - Every word in a data file is a kind, a trait, or a trait value
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-06 - **kind**
-contradiction - **shape** text - **asks** approval - **into** `spec/console.md` -> The language
-
-**This asked a decision and no longer needs to.** It offered a rule with *a named few structural
-words* excepted; **under `P-287` there are none to except**, because containment is position and
-nothing has to name its container. So the rule can be stated without a hole in it.
-
-> **Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
-> other word is wrong about the game rather than describing it.
-
-**Why it had exceptions and no longer does.** A relational rendering needs a foreign key per row -
-`{store territory:1 ...}` - and `territory` there is neither a kind nor a trait. **Nesting makes the
-container the row's position**, so the join key disappears and with it the reason to except anything.
-
-**It fails today, and by how much is the point.** `dump.rs` uses **28** distinct column names and
-**18** are neither a declared trait nor a kind - measured against the release's own tables. Six of
-those you have found by reading: `founded`, `readiness`, `capacity`, `citizens`, `yards`,
-`labor-spent`. **This is the check that would have caught all eighteen.**
-
-**What it makes work rather than decisions.** `id` is declared by `P-286`. **`node`, `phase` and
-`turn` are not declared and would have to be** - a node is what an extractor works, and the phase and
-turn are traits of the game, which is a thing like any other. **Those are rows to write, not choices
-to make**, and they follow this rather than gate it.
-
-### P-285 - A thing is not located by a trait, and one with an `id` is unique
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `spec/logistics.md` -> Containment, at the end
-
-**Your answers to 1 and 2, as two bullets.** They go after *containing is not referring*.
-
-> - A thing is not located by a trait. **What holds it is what says where it is**, and nothing else
->   does
-> - A thing may carry an **`id`**, and one that does is unique. **There is never a quantity of a
->   thing with an `id`** - it is one thing, and anything that holds it holds exactly it
-
-**The second is already half-written and the specification does not say the general form.**
-`spec/planet.md` says *each territory has an id, unique within its planet* and `spec/console.md` says
-*a thing's own identifier is `id`* - one occurrence each, measured. **Neither says what an `id`
-means**, which is what makes a thing uncountable.
-
-**The first removes a duplicate rather than adding a rule.** Containment already says *a thing may
-contain things, and is itself in at most one other thing* - one occurrence. **So where a thing is, is
-already stated by what holds it**, and the release's `place` trait says it a second time in the
-opposite direction. Two statements of one fact can disagree; one cannot.
-
-**And it is what makes the map form nest.** Under *no omitted traits*, a `place` trait would sit in
-every key and the map would be flat. **With location structural instead, the key omits nothing and
-the map is the containment tree** - which is the shape `P-257` already describes.
-
-**`P-286` carries the release half**, which is one row out and one row in.
-
-### P-286 - The release's traits follow: `place` goes, `id` arrives
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** rows -
-**asks** approval - **into** `releases/first-release.md` -> Traits
-
-**One new row.** It goes where the table's order puts it, beside the other traits every kind may
-carry.
-
-> | **id** | a thing that must be named individually | a number, unique among things of its kind | stored |
-
-**And the `place` row is deleted** - `| **place** | every thing | the thing it is in | stored |`, one
-occurrence, measured. **That deletion is `P-285` being followed rather than a second decision**: once
-the specification says a thing is not located by a trait, a release that declares one contradicts it.
-
-**The `place` *family* is untouched** and should not be confused with it. `| **place** | territory,
-orbit |` says which kinds are places, one occurrence, and it stays. **One word naming two different
-things is worth knowing about before the row goes**, because a search for `place` finds both.
-
-**What this makes wrong, and it is the code lane's.** `dump.rs` prints `place` as a column on the
-unit table, and every row that names its territory - `store`, `garrison`, `extractor` - is stating
-containment as a field. **Under `P-285` those become position rather than data**, which is the same
-change as the map form and should land with it rather than before it.
-
-### P-287 - Contents are a map from a description to a quantity
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `spec/console.md` -> The language, after *a thing's own identifier is
-`id`*
-
-**Your four rules and your three answers, as one paragraph.** Nothing here is a choice this lane
-made: the four are yours verbatim, and where a detail was not settled it is forced rather than
-chosen - said below.
-
-> **What a thing contains is a map from a description to a quantity.** A description is a kind and
-> **every stored trait that thing has**; a derived trait is never part of one, and **no trait may be
-> left out** - `{citizen ready:yes} -> 8` and `{citizen ready:no} -> 6`, never `{citizen} ->
-> 14`. **Each distinct description is its own entry, and an entry is never zero.** A thing carrying
-> an `id` has a description no other thing shares, so **its quantity is always one**. **Where a thing
-> is, is where it appears**; nothing states its container. **Entries are in the order their
-> descriptions sort in**, so the same state is always the same bytes.
-
-**Two things in that paragraph were not in your four rules, and both are forced.**
-
-**Order.** A tree has no order among its children and a file that is diffed must have one. **Sorting
-by the description is the only order that is derivable from the state itself**; any other is
-arbitrary and would churn `expected/play.4x`. Stated rather than chosen.
-
-**Position rather than a stated container.** That is your answer to 2, and it is what makes rule 2
-possible: **if a container were a trait it would sit in every description and the map would be flat.**
-
-**What this settles that was open.** `P-282` is withdrawn - `citizens`, `yards` and `labor-spent`
-stop existing rather than being chosen between. `P-284` loses its exceptions and becomes a rule with
-no hole. `P-285` and `P-286` are its two halves in the specification and the release.
-
-**What it costs, so it is not discovered later.** Anything that indexes a thing - `extractors[3]` -
-has nothing to index, and extractors stay distinguishable only because `node` distinguishes them,
-which `P-284` says must be declared. **And mutation becomes a transfer between entries** - one off
-`{citizen ready:yes}`, one onto `{citizen ready:no}` - which is closer to *matter is conserved
-and its arrangement is not* than changing a field, and makes conservation checkable as a sum.
-
 ## Addressed to other perspectives
+
+### S-47 - The map form, and the check that keeps it honest
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** `P-283` through `P-287`, promoted
+together
+
+**Four promotions change what a data file says and one changes what a promotion may do.**
+
+- **`P-287`**: what a thing contains is a **map from a description to a quantity**. A description is
+  a kind and **every stored trait**, never a derived one and never with one left out; each distinct
+  description is an entry; **no entry is zero**; a thing with an `id` is always quantity one; **where
+  a thing is, is where it appears**, so nothing states its container; and **entries are in the order
+  their descriptions sort in**, so the same state is the same bytes.
+- **`P-285`**: a thing is not located by a trait, and a thing with an `id` is unique.
+- **`P-286`**: the release declares `id` and no longer declares `place`. **The `place` family -
+  territory, orbit - is untouched**, and a search for `place` finds both.
+- **`P-284`**: **every word in a data file is a kind, a trait, or one of a trait's values.** It fails
+  today: `dump.rs` uses 28 column names and 18 are neither.
+- **`P-283`**: bullet-versus-paragraph takes the closing period with it, and no other punctuation
+  moves. **`tools/outbox` has to learn the same allowance** - it is failing on `P-257`, and the
+  promotion deliberately did not change `spec/logistics.md`.
+
+**Three traits have to be declared for `P-284` to pass**, and they are rows rather than decisions:
+`node`, `phase` and `turn`. **Tell this lane the wording you want** and it lands them, because
+`releases/first-release.md` is not yours.
+
+**`Unit.location` is now a field that states something nothing may state.** `Thing` already does it
+correctly - `children: Vec<Thing>` - while `Unit` sits in a flat `Game.units` carrying a `location`.
+**That is the one place the model disagrees with the specification**, and it should move with the map
+form rather than before it.
+
+**The gate is red until `tools/outbox` learns `P-283`**, said in the same breath as the rule, which
+is what `P-263` asks for.
 
 ### S-46 - Restore `nodes.4x` from the *Scope* table
 
@@ -1563,6 +1482,10 @@ work the release exists to order.
 | P-280, a biome does not determine a territory's numbers; the two agree thematically                                          | `spec/planet.md`                                                                                                                             | 2026-09-05 |
 | P-281, the biome table guides and does not bind, and force of nature is the column that does                                 | `releases/first-release.md` -> Biomes                                                                                                        | 2026-09-05 |
 | P-283, bullet-versus-paragraph takes the closing period with it, and no other punctuation moves                              | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-06 |
+| P-285, a thing is not located by a trait, and one with an `id` is unique                                                     | `spec/logistics.md` -> Containment                                                                                                           | 2026-09-06 |
+| P-286, the release declares `id` and drops the `place` trait                                                                 | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
+| P-287, contents are a map from a description to a quantity                                                                   | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
+| P-284, every word in a data file is a kind, a trait, or a trait value                                                        | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
 
 ## Rejected
 
