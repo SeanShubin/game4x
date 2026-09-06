@@ -191,6 +191,74 @@ on it. Third artifact of this kind in two commits.
 check is worth having if it prints and is restricted to single-line literals; poison it like anything
 else.
 
+### Q-51 - Two source guards assert no offences without asserting they read anything
+
+**to** code · **status** open · **raised** 2026-09-05 · **source** the `4x research` session, relayed
+because it writes nothing in `lenses/`; verified here before filing
+
+`game-model/src/lib.rs:56` `no_floating_point_anywhere` and `command-language/src/lib.rs`'s game-noun
+guard have one shape: `read_dir` over `CARGO_MANIFEST_DIR/src`, collect offending lines, and
+`assert!(offences.is_empty())`. **Neither asserts how many files it read.** `read_dir` is not
+recursive and a directory entry has no `rs` extension, so it is skipped by the same `continue` that
+skips a `.toml` - **any `.rs` file in a subdirectory of `src/` is unscanned and the guard stays
+green.**
+
+`no_floating_point_anywhere` is not an ordinary check: its own doc comment says integer addition is
+what makes resolving territories in any order safe, so the model's confluence claim rests on it.
+
+**Prophylactic, not live.** Both trees are flat today - eight files under `game-model/src`, seven
+under `command-language/src` - so nothing is unscanned. Same standing as `Q-49`: filed because the
+guard's own reasoning does not survive a restructure that nothing forbids.
+
+**One failure mode in the report is louder than reported, and saying so matters.** A crate rename or
+a manifest path that stops resolving is **not** silent here: `read_dir(...).unwrap()` panics, and a
+panic is a failing test. The only silent path is the subdirectory. A finding that overstates how many
+ways it can fail is harder to act on than one that names the single way it can.
+
+**The adjacent pair the report named and did not claim are both clear**, checked here so they stop
+being ambiguous: `dumps_are_current.rs` asserts eleven generated files and seven pages, and
+`quotations.rs` asserts `checked >= 1`. Their `else` branches return empty on an unreadable
+directory, and those floors are what turn that into a failure.
+
+**The population, since this item is about counting against one.** Eight `read_dir` sites in
+`crates/`, `tools/` and `prototypes/`. Two are these guards. Two are the floored checks above. One is
+the `Library` impl in `first_release.rs`, cleared because its caller asserts three names are present
+and an empty listing fails. Two are `tools/outbox` - see `Q-52`. One is `pad-tables`, which pads
+rather than checks.
+
+**Whether.** Worth doing, one line each, and the count is worth more than the recursion: a guard that
+says *I read eight files and found nothing* is checkable by a reader in a way *I found nothing* never
+is.
+
+### Q-52 - The test named for walking the lens directory passes with the walk deleted
+
+**to** code · **status** open · **raised** 2026-09-05 · **source** widening the population for `Q-51`
+
+`tools/outbox/src/lib.rs:1410` `it_looks_where_every_outbox_lives`, doc comment *every producer's
+outbox is looked for by name, and every lens's by walking*. It calls `places(Path::new("/root"))`.
+`/root/lenses` does not exist, so the walking branch contributes nothing, and all three assertions
+are about the two hard-coded paths and one absence.
+
+**Poison-verified rather than argued.** Deleted the eight-line `lenses` branch from `places` in a
+copy under this lens's scratchpad, never in the tree, and ran the crate's whole suite against a
+control copy of the same commit in the same place: **24 passed and 2 failed in both.** The two
+failures are the tests that need the real repository root and are identical either way. So the walk
+is not covered by the test named for it, and not covered by anything else in the crate.
+
+Every other mention of a lens path in that crate - lines 759, 1394, 1395, 1400 - is a string handed
+to `parse` by hand. **Nothing anywhere exercises `places` finding a real lens outbox.**
+
+**What it would cost.** `places` is what `pending.md` is built from, and *nothing open means nothing
+outstanding* is a promise about every outbox including a lens's. The runtime half is honest -
+`report_what_was_found` prints how many outboxes were read and names them, deliberately, with the
+comment saying why - so a lens dropping out would be visible to someone reading the output. **The
+gate would not fail; a person would have to notice a number.**
+
+**Whether.** Small, and the fix is a fixture rather than an assertion: point `places` at a temporary
+directory holding `lenses/<name>/outbox.md` and assert it is found. The existing negative assertion -
+that the pre-move `/quality/outbox.md` path is gone - is worth keeping and is not evidence of
+anything on its own, since it passes against a root where every walked path is absent.
+
 
 ---
 

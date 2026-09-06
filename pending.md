@@ -27,7 +27,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (14)
 
 - **S-46** - Restore `nodes.4x` from the *Scope* table · `docs/notes/proposals.md`
 - **S-45** - The node data contradicts the biome table, and every territory is affected · `docs/notes/proposals.md`
@@ -41,6 +41,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 - **Q-50** - A run of spaces sits mid-sentence in a failure message, in eighteen places · `lenses/quality/outbox.md`
+- **Q-51** - Two source guards assert no offences without asserting they read anything · `lenses/quality/outbox.md`
+- **Q-52** - The test named for walking the lens directory passes with the walk deleted · `lenses/quality/outbox.md`
 
 ### To spec (10)
 
