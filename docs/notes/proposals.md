@@ -82,16 +82,33 @@ presenting it as settled. It follows from the game being a thing - *the game is 
 in nothing* - and traits being of things. **If the game is not a thing that carries traits, these two
 rows are wrong.**
 
-**On your question about time.** They look like a different sort of thing and this lane does not
-think they are. **`turn` is not a clock reading, it is a count of turns that have ended** - a number
-the game holds now, exactly like the metal a store holds now. **`phase` is a single-valued state**,
-which is what a trait is. **Neither is a measurement of time, so neither wants a system for time.**
+**On your question, which this lane read wrongly the first time.** You did not mean a clock. You
+meant that reality is *current state, physics, next state*, and asked whether `phase` and `turn`
+belong **in the tree or outside it**. That is a better question and it has a real argument on each
+side.
 
-**They are not the same shape as each other, though**, and that is the only thing your question turns
-up: a count could be an entry in the game's contents - `{turn} -> 11`, eleven ended turns the game
-contains - rather than a trait. **This lane does not recommend it.** It buys nothing `P-284` does not
-already give, and it makes a turn a thing that is contained, which is a claim about turns nobody has
-had reason to make.
+**The case for outside.** The tree says what exists and where; **neither of these does.** `turn`
+counts how many times the transition has been applied, which is a fact about the sequence rather than
+about its contents. And **`phase` selects which physics runs at all** - `spec/console.md`: *the rules
+of the game govern the second phase; in the first, the designer is the cause of what appears.* A
+parameter of the transition function is not obviously part of the state it transforms.
+
+**The case for inside, which this lane thinks wins, and the reason is `ready`.** **`ready` is already
+a trait that gates which transitions may fire** - a citizen that is exhausted cannot be worked - and
+nobody proposed moving it outside the tree. **`phase` is the same shape at the root that `ready` is
+at a citizen**: a stored fact about a thing, which the rules consult before deciding what may happen
+to it. **A trait that selects which rules apply is still a fact about the thing the rules apply to.**
+
+**What it costs, so it is a decision and not a default.** The root then means *the run* rather than
+*the world*: `{game phase:play turn:11}` is a game in progress, and the world is what it contains.
+**If you ever want a world separable from the run that produced it** - two worlds in one session, or
+a world saved without its history - **that conflation is what you would have to undo.** Nothing in
+the release wants it.
+
+**And outside has a price that inside does not.** `P-284` says every word in a data file is a kind, a
+trait, or a trait value, and it reached that with **no exceptions** - the structural words vanished
+when containment became position. **Putting `phase` and `turn` outside the tree puts words back in
+the file that are none of the three**, and reopens the hole `P-284` just closed.
 
 **`territories` and `units` are absent deliberately.** They are counts of what the game contains, and
 under `P-287` a count is an entry in a contents map rather than a trait.
