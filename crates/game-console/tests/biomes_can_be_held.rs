@@ -17,7 +17,7 @@
 //! count agreed for two days while the sets did not.
 
 use game_console::{Library, Session};
-use game_model::{Biome, TerritoryId, Transition, UnitKind};
+use game_model::{Biome, Resource, TerritoryId, Transition, UnitKind};
 use std::path::{Path, PathBuf};
 
 struct Files(PathBuf);
@@ -303,4 +303,102 @@ fn the_scenario_gives_each_territory_the_force_its_biome_carries() {
         .filter(|place| place.biome == Biome::Jungle)
         .count();
     assert_eq!(jungles, 2, "territories 6 and 7 are the jungles");
+}
+
+/// Every territory has what its biome gives it, for every resource.
+///
+/// **`S-45`.** `spec/planet.md`: *a territory's biome gives it its total capacity and density
+/// for each resource. Two territories with the same biome have the same numbers.*
+///
+/// **That rule existed only as a table heading until `P-272`, and a heading is not where a
+/// rule lives** - which is how `scenario/commands/nodes.4x` drifted from the release twice
+/// without contradicting anything. Both files were internally consistent and neither was
+/// wrong on its own terms; nothing compared them, because nothing said they had to agree.
+///
+/// `nodes.4x` is generated from the *Biomes* table now and states no number of its own. This
+/// is what says so, over all twelve territories and all three resources, with the count
+/// asserted - because a planet the parse failed to read would satisfy every assertion inside
+/// the loop by reaching none of them.
+#[test]
+fn the_scenario_gives_each_territory_what_its_biome_gives_it() {
+    let document =
+        std::fs::read_to_string(root().join("releases/first-release.md")).expect("the release");
+
+    // Each biome's three resource cells, as `capacity x density`.
+    let mut gives: Vec<(String, Vec<(u32, u32)>)> = Vec::new();
+    let mut inside = false;
+    for line in document.lines() {
+        if line.starts_with("## ") {
+            if inside {
+                break;
+            }
+            inside = line.trim() == "## Biomes";
+            continue;
+        }
+        let line = line.trim();
+        if !inside || !line.starts_with('|') || line.contains("---") {
+            continue;
+        }
+        let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
+        if cells.len() < 4 {
+            continue;
+        }
+        let name = cells[0].to_lowercase();
+        if name == "biome" {
+            continue; // the header
+        }
+        let three: Vec<(u32, u32)> = cells[1..4]
+            .iter()
+            .map(|cell| match cell.split_once('x') {
+                Some((capacity, density)) => (
+                    capacity.trim().parse().unwrap_or(0),
+                    density.trim().parse().unwrap_or(0),
+                ),
+                // Ocean carries nothing, which is what the release's dash means.
+                None => (0, 0),
+            })
+            .collect();
+        gives.push((name, three));
+    }
+    assert_eq!(
+        gives.len(),
+        6,
+        "six biomes in the release's table; the parse found {} ({:?})",
+        gives.len(),
+        gives.iter().map(|(n, _)| n).collect::<Vec<_>>()
+    );
+
+    let game = planet().game;
+    let mut checked = 0;
+    for place in &game.territories {
+        let (_, three) = gives
+            .iter()
+            .find(|(name, _)| name.eq_ignore_ascii_case(place.biome.name()))
+            .unwrap_or_else(|| panic!("the release names no biome {}", place.biome));
+        for (resource, (capacity, density)) in Resource::ALL.iter().zip(three) {
+            let nodes = place.nodes_of(*resource);
+            assert_eq!(
+                nodes.len(),
+                *capacity as usize,
+                "territory {} is {} and the release gives that biome {capacity} {resource} \
+                 extractors",
+                place.id,
+                place.biome
+            );
+            for (_, node) in nodes {
+                assert_eq!(
+                    node.density, *density,
+                    "territory {} is {} and the release gives that biome {resource} at \
+                     density {density}",
+                    place.id, place.biome
+                );
+            }
+            checked += 1;
+        }
+    }
+    assert_eq!(
+        checked,
+        12 * 3,
+        "twelve territories times three resources; {checked} were checked"
+    );
 }

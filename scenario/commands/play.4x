@@ -1,147 +1,204 @@
-# Playing the first release, from orbit to a second territory.
+# The main scenario: a typical game, from orbit to an Ark leaving a developed planet.
 #
-# `releases/first-release.md` gives the loop in eight steps. This file walks the first five:
-# no presence on the planet, land the ark and claim a territory, work the food extractor to
-# grow the population, build extractors for metal and energy, then produce a pioneer and
-# spread across the planet by land.
+# `spec/scenarios.md`: there is one main scenario and it touches everything a typical game
+# uses. It is the foundation, and it is vetted by hand. A mechanic that only appears in an
+# unusual situation belongs in a scenario of its own - so nothing here starves and nothing
+# is lost to nature, and both get scenarios of their own once this one satisfies its reader.
 #
 # Every line is a command. There is no other way for the state to move, so this file is a
-# complete account of the game it produces.
-
-# 1 and 2. The ark comes down, and landing *is* the claiming: it takes the ground and
-# becomes a garrison, two citizens, and an extractor for food and one for metal.
+# complete account of how the game got where `scenario/expected/play.4x` says it is.
 #
-# The mine is what makes the rest possible. An extractor costs a metal, so ground that
-# arrived with only a farm could never build a second thing.
+# **Storage is the constraint now** - `S-44`. A territory declares no capacity for a
+# resource; it holds what its stores hold, and a store holds ten. An extractor holds
+# nothing, so what is produced goes into a store, is spent the turn it is made, or is lost
+# when that turn ends. A founding leaves a food store and a metal store and no energy store,
+# which is why energy is the resource this game has to build for.
+
+# Turn 1. The Ark lands on territory 1 and becomes the ground: a garrison, two citizens, a
+# farm, a mine, and somewhere to put what each of them digs.
 land ark 1
-
-# Turn 1. Two citizens and two extractors, which is what a landing leaves. One holds the food,
-# one opens the mine.
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1
 work 1 extractor 1 metal
 end turn
 
-# Turn 2. Four citizens. The mine pays for two more farms, which is what turns four into twelve.
+# Turn 2. Four citizens. The food store holds ten and the farm makes six, so the second farm
+# has to wait for somewhere to put its harvest - which is the shape of every turn from here.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+build store 1 food
+create labor 1 1
+build extractor 1 food
+end turn
+
+# Turn 3. Two farms into two stores, and the mine pays for the next of each.
+create labor 1 1
+work 1 extractor 1 food
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1
 work 1 extractor 1 metal
 create labor 1 1
-build extractor 1 food
-create labor 1 1
-build extractor 1 food
+build store 1 food
 end turn
 
-# Turn 3. Three farms feed twelve, and the population is limited by hands rather than by food.
-create labor 3 1
-work 3 extractor 1 food
+# Turn 4. The last of the farms the ground has room for, and the second mine.
 create labor 1 1
-work 1 extractor 1 metal
-end turn
-
-# Turn 4. Eight citizens, four spare hands and four metal: two more mines and the first two wells.
-create labor 3 1
-work 3 extractor 1 food
+work 1 extractor 1 food
 create labor 1 1
-work 1 extractor 1 metal
+work 1 extractor 1 food
+create labor 1 1
+build extractor 1 food
 create labor 1 1
 build extractor 1 metal
 create labor 1 1
-build extractor 1 metal
-create labor 1 1
-build extractor 1 energy
-create labor 1 1
-build extractor 1 energy
+build store 1 food
 end turn
 
-# Turn 5. Twelve, and the last well. From here the territory makes twelve of each a turn.
-create labor 3 1
-work 3 extractor 1 food
-create labor 3 1
-work 3 extractor 1 metal
-create labor 2 1
-work 2 extractor 1 energy
+# Turn 5. The ground is nearly worked out. Energy is the resource this planet has to build
+# for: one node, no store from the founding, and an Ark wants twelve.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 metal
 create labor 1 1
 build extractor 1 energy
+create labor 1 1
+build store 1 energy
+create labor 1 1
+build store 1 metal
 end turn
 
-# Turn 6. Everything worked, and nothing left to build. A pioneer costs three metal, six energy
-# and two citizens.
-create labor 3 1
-work 3 extractor 1 food
-create labor 3 1
-work 3 extractor 1 metal
-create labor 3 1
-work 3 extractor 1 energy
+# Turn 6. Everything worked, and the first turn where energy has somewhere to go.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 energy
+create labor 1 1
+build extractor 1 food
+end turn
 
-# 5. The landing site can send a pioneer out.
+# Turn 7. A pioneer costs three metal and six energy, and both are in store now.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 energy
+create labor 1 1
 produce pioneer 1
 end turn
 
-# Turn 7. The farms are worked first - a population that gathers nothing this turn starves
-# at the end of it, whatever else is going on.
-create labor 3 1
-work 3 extractor 1 food
-create labor 3 1
-work 3 extractor 1 metal
-create labor 3 1
-work 3 extractor 1 energy
-
-# The pioneer crosses into a neighbouring territory. It is not held, so arriving there takes
-# it and claims it: force 2 against a force of nature of 1, and the pioneer becomes a
-# garrison, two citizens, a farm and a mine.
-#
-# `P-214`: the player says which recipe this is. Arriving on unclaimed ground used to be
-# written `move`, and the model worked out from the ground whether that meant `move` or
-# `found by land` - so one command fired either of two recipes and no file ever said which.
+# Turn 8. The pioneer crosses into territory 2 and becomes it. `P-214`: the player says which
+# recipe this is, because arriving on unclaimed ground and arriving on your own are two
+# recipes and the model no longer guesses from the ground which was meant.
 found by land 2
-
-# The new ground feeds itself on the very turn it is claimed.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 energy
 create labor 1 2
 work 1 extractor 2 food
 end turn
 
-# Turn 8. The last three recipes, and they are reachable only because `C-11` let metal
-# carry. A Yard costs fifteen and a worked turn makes twelve, so while every store was
-# discarded at each turn's end no territory could ever afford one - `build yard` and
-# everything behind it were unreachable rather than merely unused.
-#
-# The farms are worked first, as always: a population that gathers nothing this turn
-# starves at the end of it, whatever else is going on.
-create labor 3 1
-work 3 extractor 1 food
-create labor 3 1
-work 3 extractor 1 metal
-create labor 3 1
-work 3 extractor 1 energy
-create labor 1 2
-work 1 extractor 2 food
+# Turn 9. Fifteen metal is two stores' worth and change, so the Yard lands here.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 energy
 create labor 1 1
 build yard 1
-produce ark 1
+create labor 1 2
+work 1 extractor 2 food
+end turn
 
-# The Ark crosses to territory 2 before it leaves, which is the only `move` in this file.
-#
-# **It is here because the scenario is the foundation and had a hole in it.** `P-214` split
-# `move` from `found by land`, and splitting them showed that every `move` this scenario
-# had ever run was a founding - so the recipe `move` had never once fired, while a check
-# reported nine of nine player recipes covered. It could report that because both recipes
-# were spelled `move` and it was reading the command rather than what ran. `C-21`.
-#
-# Territory 2 is held, so this is a move and not a claim. Ground already yours is the whole
-# difference between the two recipes, and it is now the player who says which.
+# Turn 10. Nothing left to build. Energy is all that stands between here and an Ark, and one
+# node at density three fills its single store four turns at a time.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 energy
+create labor 1 2
+work 1 extractor 2 food
+end turn
+
+# Turn 11.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 energy
+create labor 1 2
+work 1 extractor 2 food
+end turn
+
+# Turn 12. The Ark, and it is only affordable because of `P-270`: a resource in nothing can
+# be spent the turn it is made. The store holds ten and the Ark wants twelve, so the three
+# dug this turn are the difference between leaving and never leaving.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 energy
+create labor 1 1
+produce ark 1
+create labor 1 2
+work 1 extractor 2 food
+
+# The Ark crosses to territory 2 before it leaves, which is the only `move` in this file -
+# ground already yours, which is the whole difference between the two recipes.
 move ark 2
 end turn
 
-# Turn 9. Moving exhausts a unit, so the Ark leaves on the turn after the one it crossed on.
-#
-# The farms are worked first, and here that is not a habit but the whole turn: a population
-# that gathers nothing starves at the end, and a turn spent only launching would end with
-# both territories empty and unfounded. The first draft of this turn did exactly that.
-create labor 3 1
-work 3 extractor 1 food
+# Turn 13. Moving exhausts a unit, so the Ark leaves on the turn after the one it crossed on.
+# The farms are worked first, as always: a population that gathers nothing starves at the end
+# of the turn, whatever else is going on.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
 create labor 1 2
 work 1 extractor 2 food
 launch ark

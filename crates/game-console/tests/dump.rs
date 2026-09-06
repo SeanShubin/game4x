@@ -394,8 +394,8 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
     // Over every case, and how many there were: a scenario that stopped spending labor
     // would satisfy every assertion above by having nothing to check.
     assert_eq!(
-        checked, 45,
-        "thirty-two labor consumers in play.4x and thirteen in spread.4x; found {checked}"
+        checked, 78,
+        "sixty-five labor consumers in play.4x and thirteen in spread.4x; found {checked}"
     );
 }
 

@@ -384,7 +384,8 @@ fn the_landing_site_can_send_a_pioneer_out() {
             .map(|(_, node)| node.density)
             .sum()
     };
-    assert_eq!(ceiling, 12, "three metal nodes at density four");
+    // `P-274` rebalanced grassland: two metal nodes at density three.
+    assert_eq!(ceiling, 6, "two metal nodes at density three");
     assert!(
         cost_of("pioneer", "metal") <= ceiling,
         "a pioneer must be affordable within one turn's extraction"
@@ -566,8 +567,9 @@ fn the_setup_is_a_hierarchy_of_files() {
     assert_eq!(session.game.territories.len(), 12);
     assert_eq!(
         session.game.territory(TerritoryId(12)).unwrap().nodes.len(),
-        2 + 8 + 8,
-        "territory 12 from the release: rich nodes, almost no workers"
+        // Territory 12 is ice: `P-274` gives it 1 food, 3 metal, 1 energy.
+        1 + 3 + 1,
+        "territory 12 from the release: ice, which is thin in everything"
     );
 }
 
@@ -663,8 +665,20 @@ fn taking_and_holding_a_territory_follow_the_force_rules() {
     assert!(session.game.units.is_empty(), "founding consumes the ark");
 
     let one = session.game.territory(TerritoryId(1)).unwrap();
-    assert_eq!(one.garrison().unwrap().force, 1, "one less than the unit");
-    assert_eq!(session.game.force_in(TerritoryId(1)), 1);
+    // **`P-276` and `P-277`: a garrison has no force of its own.** It does one thing - it
+    // lets the citizens of that territory sum their force - and it does that by existing.
+    // So what holds this ground is its two citizens, and the garrison is what makes them
+    // sum rather than presenting only the highest.
+    assert_eq!(
+        one.garrison().unwrap().force,
+        0,
+        "a garrison has none of its own"
+    );
+    assert_eq!(
+        session.game.force_in(TerritoryId(1)),
+        2,
+        "its two citizens, summed"
+    );
     assert_eq!(one.force_of_nature, 1);
     assert!(one.founded(), "equal force is enough to hold");
 

@@ -5,6 +5,14 @@
 //! a copy of it, so a recipe added, renamed or removed fails here instead of quietly
 //! dropping out of the file a person is deriving from.
 
+/// How long the main scenario is, and how many turns it runs for.
+///
+/// **Named rather than repeated, because `S-44` moved both and three assertions carried the
+/// old numbers.** They are asserted rather than derived: a test that counted the file and
+/// compared it with itself would agree with any scenario at all.
+const LINES: usize = 151;
+const TURNS: usize = 13;
+
 use game_console::{Library, fired};
 use std::path::{Path, PathBuf};
 
@@ -129,8 +137,8 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
         .collect();
     assert_eq!(
         players.len(),
-        9,
-        "nine player recipes when this was written; the release has {} ({players:?})",
+        10,
+        "ten player recipes when this was written; the release has {} ({players:?})",
         players.len()
     );
 
@@ -223,7 +231,10 @@ fn the_artifact_is_the_flattening_and_not_a_copy_of_the_scenario_file() {
         })
         .count();
 
-    assert_eq!(lines, 79, "play.4x is 79 commands; it is now {lines}");
+    assert_eq!(
+        lines, LINES,
+        "play.4x is {LINES} commands; it is now {lines}"
+    );
     assert!(
         ran.len() > lines,
         "the run is {} commands and play.4x is {lines}, so nothing was flattened in",
@@ -305,13 +316,13 @@ fn every_turn_the_scenario_labels_is_the_turn_it_is_on() {
     );
     assert_eq!(
         labels.len(),
-        9,
-        "nine labelled turns; found {}",
+        TURNS,
+        "{TURNS} labelled turns; found {}",
         labels.len()
     );
     assert_eq!(
         turn_of.iter().max().copied().unwrap_or(0),
-        9,
-        "and nine is the last turn a command runs in"
+        TURNS as u32,
+        "and the last turn a command runs in is the last one labelled"
     );
 }
