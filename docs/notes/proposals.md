@@ -63,6 +63,38 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-291 - A check can be fine and no longer believed
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** consequence - **shape** text -
+**asks** approval - **into** `docs/process.md` -> What makes a check worth having, at the end
+
+**`P-289` landed and the code lane found a third way within the hour**, which is the section
+working. It names two: a check that cannot fail, and one that fails when nothing is wrong. **This is
+neither, and nothing is wrong with the check.**
+
+> **And a check can be sound and no longer believed.** A long green run is what does it, and **a
+> growing list of recorded exceptions is where belief decays fastest** - every entry is a reason it
+> stayed green, so *it stayed green* stops carrying information, and those lists grow on exactly the
+> checks guarding what people keep getting wrong. **A new check is made to fail on demand before it
+> is trusted; an old one never is**, so what is trusted after the first run is a memory of it.
+> **Re-poison a check when its exception list grows.**
+
+**The case, and it is this week's.** `a_promotion_lands_what_was_approved` compares what a proposal
+offered against what the promoting commit landed. **It ran green for weeks over an exception list
+that grew one entry at a time**, and the lane that wrote it had begun reading it as a check about its
+own exceptions. **Then it caught `P-257`** - four approved paragraphs that landed without their
+periods - **on the day this lane was promoting fastest.** Nothing was wrong with it at any point.
+
+**Why it belongs beside the other two rather than in a note.** They are about how a check is built;
+this is about how it is read, and **the remedy is a habit rather than a mechanism** - a check cannot
+ask whether it is still believed. **The section is where someone starting a new project would look
+for it.**
+
+**Re-read the section whole, as `CLAUDE.md` requires of a second proposal into one place.** The three
+now cover a check that cannot fail, one that cries wolf, and one nobody is listening to - and the
+closing sentence, that a check written by the hand that wrote the work will agree with it, still
+reads as the reason for a review lane rather than as a fourth failure.
+
 ## Addressed to other perspectives
 
 ### S-48 - `node` goes, and the game's row loses `turn`
