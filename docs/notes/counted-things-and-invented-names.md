@@ -127,3 +127,79 @@ they would merge and `build extractor` would have nothing to aim at.
 diffing: *went to zero* and *stopped being emitted* look identical in a diff, and the second is how a
 dump bug hides. **A count of entries in the file makes that visible again** - the same fix as
 counting the cases a check covers.
+
+## What it implies for the physical structure, 2026-09-06
+
+He asked: this is conceptually a tree presented as a normalized relational structure - what does that
+imply for the physical one? **The short answer is that the presentation implies nothing and the tree
+implies a great deal, and the model already contains the answer once and contradicts it twice.**
+
+### The rendering constrains nothing, and that is already a rule
+
+*Specification and presentation are different concerns and do not share a format*, and **a rendering
+is generated and never canonical**. So *normalized relational* is a view. The physical structure owes
+it one thing only: the ability to produce it.
+
+### The model already has the shape, in one of three places
+
+Measured in `crates/game-model/src`:
+
+- **`Thing { kind, traits: BTreeMap<Trait, u32>, children: Vec<Thing> }`** - a tree node, with traits
+  already a map and children already nested. **This is the target, and it exists.**
+- **`Unit { id, kind, location: Location, ... }`**, held in `Game.units` beside the territories -
+  **location as a field, in a flat list.** That is exactly what `P-285` says location is not.
+- **`Territory`** - typed fields for `biome`, `nature` and `nodes`, plus `held: Vec<Thing>`. **Half
+  record, half tree.**
+
+**So the same concept has three physical forms**, and the disagreement between them is not stylistic:
+one of them can express a state the specification forbids.
+
+### The implication that matters: unrepresentable beats checked
+
+**In `children: Vec<Thing>` a thing cannot have two parents, cannot contain itself, and cannot be an
+orphan.** The structure has no way to say those things, so `P-257`'s three rules are free.
+
+**In `Game.units` with a `location` field, all three are expressible** and only a check would notice.
+Two units could claim the same id; a location could name a territory that does not exist; nothing
+would be structurally wrong.
+
+**This repository's own standard settles which is better.** *An operation that cannot fail loudly
+will fail quietly*, and a quality improvement's evidence is *a check that did not exist before*.
+**A structure that cannot express the error is stronger than a check that catches it**, because it
+needs no maintenance and cannot itself go stale - which is what half of this year's findings have
+been about.
+
+### Rust rewards the same choice
+
+Ownership in Rust is a tree. `children: Vec<Thing>` is the borrow checker enforcing containment for
+nothing; a flat arena with parent ids re-implements by hand what the language gives away. **The form
+that matches the concept is the form the language is easiest in**, which is rare enough to take.
+
+### What the relational view then needs, and why `P-284`'s exceptions are not a wart
+
+A normalized view needs a foreign key per row. **Under `P-285` there is no `place` trait to supply
+one**, so the view must synthesise the container's reference from position. **That is exactly what
+`P-284`'s *named few structural words* are for**: they are the join keys, they belong to the
+rendering, and they are the reason the rule cannot simply say *every word is a trait*.
+
+### Where the map form changes the physical structure rather than the rendering
+
+`children: Vec<Thing>` lists. His map form says identical children collapse, so a container holds
+**`BTreeMap<Description, u32>`** rather than a vector.
+
+- **Mutation becomes a transfer between keys** - one off `{citizen ready:yes}`, one onto
+  `{citizen ready:no}`. That is more faithful to *matter is conserved and its arrangement is not*
+  than mutating a field, and **it makes conservation checkable as a sum** rather than as a property
+  nobody can state.
+- **Ordering comes free.** A tree has no order among siblings and a diffable file needs one.
+  `BTreeMap` gives it; a hash map would churn `expected/play.4x` on every run. `Thing.traits` is
+  already a `BTreeMap`, so the instinct is already in the code.
+- **The cost is indexing.** Anything that says `extractors[3]` has nothing to index. Extractors are
+  distinguished by `node`, so they would carry it in their key and never collapse - which requires
+  `node` to become a declared trait, as `P-284` already says.
+
+### One thing that is true today and is worth someone's attention
+
+**`Unit` carries `location` and `Thing` does not.** The moment `P-285` lands, that field is a
+statement the specification says nothing may make. It is the code lane's, and it should move with
+the map form rather than before it.
