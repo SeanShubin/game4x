@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-276** - A garrison is coordination, and nothing has to work it · `docs/notes/proposals.md`
 - **P-277** - The release follows: a garrison has force 0 and no multiplier · `docs/notes/proposals.md`
+- **P-278** - Why dangerous ground needs more people · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

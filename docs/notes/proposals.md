@@ -114,6 +114,30 @@ nothing outside the table.
 metal*; `multiplier` appears **zero** times in `releases/first-release.md`, against the eleven other
 things that paragraph says; and *An Ark can invade land from orbit* is still present.
 
+### P-278 - Why dangerous ground needs more people
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `spec/narrative.md` -> Violence and order
+
+**The fiction under `P-276`, in the one section that exists for it.** It goes below *violence is
+inherent, coordination is imposed*, which is the only bullet there.
+
+> - More dangerous territory requires more organised citizens to keep it secure.
+
+**Two words changed and both are reported.** *To keep secure* became *to keep it secure*, which is
+grammar rather than meaning. *Organized* became *organised* to match `spec/control.md`, where
+*organised* appears **3** times and *organized* **zero**, measured.
+
+**Why it is worth stating rather than obvious.** `spec/invariants.md` requires everything in the game
+to have a cause inside the model rather than happening because the game says so, and
+`spec/narrative.md` is where those causes are told. **`P-276` makes a jungle need two citizens where a
+grassland needs one, and without this the number is a balance decision.** With it, the number is what
+the fiction already implied.
+
+**And it says the rule better than the rule does.** *Force equal to nature* is arithmetic; **more
+dangerous ground needs more people holding it together** is the reason there is arithmetic - which is
+the same relationship `P-262` describes between a principle and the rules that come out of it.
+
 ## Addressed to other perspectives
 
 ### S-45 - The node data contradicts the biome table, and every territory is affected
