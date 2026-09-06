@@ -63,6 +63,72 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-288 - The three traits `P-284` needs, offered by the code lane
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** consequence - **shape** rows -
+**asks** approval - **into** `releases/first-release.md` -> Traits
+
+**`P-284` says every word in a data file is a kind, a trait, or a trait value, and three words in
+the dump are none of those.** Each appears **zero** times in the release today, measured. The code
+lane wrote the rows; the table is yours.
+
+> | **node** | an extractor | which of its territory's nodes it works | stored |
+> | **phase** | the game | before it starts, or once it has | stored |
+> | **turn** | the game | how many turns have ended | stored |
+
+**`node` is worded to be a reference and not a containment**, which is why it says *which of its
+territory's nodes* rather than *the node*. `spec/logistics.md`: *containing is not referring - an
+extractor names the node it works, and the node is not inside it.*
+
+**`phase` and `turn` being traits of the game is the one place this is derived rather than read**,
+and the code lane said so rather than presenting it as settled. It follows from two things already
+promoted: the game is a thing - *the game is the one thing that is in nothing* - and traits are of
+things. **If the game is not a thing that carries traits, these two rows are wrong and nothing else
+here is.**
+
+**`territories` and `units` are not on the list and that is not an oversight.** They are counts of
+what the game contains, and under `P-287` a count is an entry in a contents map rather than a trait.
+**Three words need declaring; the dump's other fifteen mostly stop existing.**
+
+### P-289 - What makes a check worth having
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> a new section immediately after *What
+verification requires*
+
+**So the next one starts with this solved.** Everything below was paid for this week, and none of it
+is about this game.
+
+> ## What makes a check worth having
+>
+> A check has two ways to be worthless, and the second is how you get the first.
+>
+> **It can be unable to fail.** Zero occurrences counted against a population that is also zero. A
+> coverage check that reads the commands in a file rather than what ran. A guard that permits what
+> its rule forbids, because the same hand wrote the rule, the work and the guard.
+>
+> **It can fail when nothing is wrong** - a comparison broken by a line wrap, a table's padding, a
+> capital letter. **That is the more dangerous one, because the fix that comes to hand is to loosen
+> it**, and a loosened check is the first kind.
+>
+> **So normalize both sides instead of loosening the comparison.** Trim, sort, reformat, parse a
+> table to its cells - whatever makes two forms of one thing identical - and then compare strictly.
+> **A check that cannot raise a false alarm is one nobody has a reason to weaken.**
+>
+> **And a check written by the hand that wrote the work will agree with the work.** That is what a
+> review lane is for, and it is why an independent finding is worth more than a count of findings.
+
+**Why in your document rather than `CLAUDE.md`.** `CLAUDE.md` already carries the operating
+detail - the three failure shapes, the tooling, the cases. **This is the reason those exist**, it is
+about what you will accept as evidence, and it is the part a new project needs on its first day
+rather than its fiftieth.
+
+**Every clause has a case behind it, and they are all from the last four days.** A zero claim counted
+against zero. A coverage check that could not tell `move` from `found by land`. A guard requiring *at
+least one* quotation where the rule says *exactly one*. A comparison that allowed a dropped period
+because the strict version kept failing on wrapping - **which is the second kind becoming the first,
+in one step, in this lane's own tooling.**
+
 ## Addressed to other perspectives
 
 ### S-47 - The map form, and the check that keeps it honest
