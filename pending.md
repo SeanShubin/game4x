@@ -17,9 +17,10 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-298** - The other half: what the assistants need and you never read · `docs/notes/proposals.md`
 - **P-299** - It can tell you whether a lane is running, and the reason it could not has gone · `docs/notes/proposals.md`
 - **P-300** - Two budgets, and only one of them is a count · `docs/notes/proposals.md`
-- **P-301** - Questions you must answer, in a separate file from words you must approve · `docs/notes/proposals.md`
+- **P-301** - Two files addressed to you, and what the limit is really for · `docs/notes/proposals.md`
 - **P-303** - A reason that is false is worse than one that is missing · `docs/notes/proposals.md`
 - **P-304** - Where to aim a probe, and when two counts are one count · `docs/notes/proposals.md`
+- **P-305** - Two lanes close an item by different rules, and both are written down · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

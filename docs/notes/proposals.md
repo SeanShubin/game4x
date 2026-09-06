@@ -63,16 +63,16 @@ Two limits Claude holds itself to:
 **Approve in the order below, not the order they are filed.** Three of these constrain the wording
 of others, so taking those first means nothing has to be read twice.
 
-1. **`P-301`** - the only one asking a decision. `P-297` names the file it creates, so answering
-   this first stops that text needing a rewrite
+1. **`P-301`** - first, because `P-300` points at the section it creates rather than restating it
 2. **`P-300`** - the budget rule, which has to be in place before `P-296` removes its subject
 3. **`P-299`, then `P-292`** - the correction lands first, so the definition arrives into a section
    that already agrees with it rather than contradicting it for one commit
 4. **`P-293`, `P-294`, `P-295`** - the other three definitions, in any order
 5. **`P-296`** - the scaffolding, last, because it is the consequence of all four
-6. **`P-297`** once `P-301` is answered, and **`P-298`** whenever you like
+6. **`P-297`** once `P-301` has landed, and **`P-298`** whenever you like
 7. **`P-303`** and **`P-304`** - independent of all of the above, and of each other. Each extends a
    section of `docs/process.md` that already exists
+8. **`P-305`** - the only one asking a decision, and independent of everything above it
 
 ### P-292 - What the specification instance is for
 
@@ -293,9 +293,8 @@ own - **shape** text - **asks** approval - **into** `docs/process.md` -> All lan
 cap. You supplied the reason each budget exists and they turned out not to be the same rule, so the
 placement was the wrong question.
 
-> - **Two different limits, and only one of them is a count.** Fifteen open proposals is a reading
->   budget. It exists because my attention is scarce, each item costs one read, and I notice at once
->   when the queue has grown past what I will sit down to
+> - **Two different limits, and only one of them is a count.** Mine is a count - fifteen open
+>   proposals - and what it is actually for is under *What I read, and what I do*
 > - **What bounds an instance's own outbox is not a count**, because neither thing that makes a
 >   backlog expensive grows with the number of items. An item goes **out of date** as what it cites
 >   changes, however few of them there are, and two items **conflict** as a pair, however many
@@ -345,67 +344,41 @@ it back beside them.
 **After promotion**, `CLAUDE.md`'s own *keep the open-proposal queue under fifteen* links here rather
 than restating it, per `docs/README.md`. That is wording inside my own file and needs no approval.
 
-### P-301 - Questions you must answer, in a separate file from words you must approve
+### P-301 - Two files addressed to you, and what the limit is really for
 
 **to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
-own - **asks** a decision - **into** `docs/notes/questions.md`, a new file, and `docs/process.md` ->
-What I read, and what I do
+own - **shape** text - **asks** approval - **into** `docs/process.md` -> What I read, and what I do,
+after the surface-area paragraph
 
-**Three of the four are decided. One is open and it is not the one this item was filed about.**
+**All four questions are answered and this now asks approval.** You chose the separate file, chose
+that an item lives in one place at a time, took the recommendation that `spec/`'s own questions stay
+where they are, and agreed the limit is a tripwire rather than a bound on your reading.
 
-**Decided: the file is `docs/notes/questions.md`.** A separate file, not a section in the proposals;
-my recommendation was the section and it was not my call.
+> **Two files are addressed to me and they hold different things.** `docs/notes/questions.md` holds
+> choices only I can make; `docs/notes/proposals.md` holds words for me to approve. An item lives in
+> one at a time - it sits in the questions file while any question in it is unanswered, and moves to
+> the proposals file when the last one is answered. Questions about the specification's own content
+> stay at the bottom of the `spec/` file they concern, where the context is.
+>
+> **The limit of fifteen is a tripwire on the specification instance, not a bound on my reading.**
+> Its job is never to be reached. If it is ever reached, proposals are being filed faster than I am
+> deciding, which means guessing at design, and the remedy is to ask one question instead of filing
+> ten guesses. **So an unreached limit is the limit working, and is not evidence that it is
+> unnecessary.**
 
-**Decided: an item lives in one file at a time.** While it has an unanswered question it is in
-`questions.md`. When the last question is answered it moves to `proposals.md` as words to approve
-and is no longer in `questions.md`. So `questions.md` only ever holds live questions, and the
-*Accepted* ledger stays in `proposals.md`.
+**The last sentence is the one doing the real work**, and it is `P-302` applied to this rule: the
+reason travels with it, so the next reader to notice the limit has never fired does not conclude it
+is decorative. That reader was you, this afternoon, and the measurement is what settled it -
+[recorded with its method](queue-depth.md) so it can be re-run rather than trusted.
 
-**Decided: `spec/`'s own *Open questions* sections stay in `spec/`.** A question sits at the bottom
-of the file whose rules it is about, where the context is, and `spec/README.md` rule 5 already says
-so. Nothing moves today in any case - **sixteen `spec/` files carry that heading and every one is
-empty**, two holding only a scaffolding placeholder. If their invisibility to `pending.md` matters,
-the fix is teaching `tools/outbox` to read those sections rather than moving questions away from
-their subject.
+**The measurement does not land in the file.** 448 commits and a peak of twelve are true today and
+false next week, and a number that rots inside a normative document is worse than no number. What
+lands is the rule and the reason, which do not rot.
 
-**Open: does the limit of fifteen split across the two files, hold across both - or go?**
-
-**The measurement, which changes the question.** Across all 448 commits that touched this file, the
-open queue peaked at **twelve**, hit on 2026-08-25 and again today. **It has never once reached
-fifteen**, and it stood at zero in 135 of those commits - a little under a third of the time. So the
-limit has never stopped a proposal being filed, and *fifteen versus thirty* is a choice between two
-numbers neither of which has ever been touched.
-
-**What is actually doing the work is judgement below the number.** Today this lane held two items -
-`Q-59` and the Traits-table rule - at twelve, citing queue length. The limit did not bind; being
-aware of a budget did.
-
-**Which makes this a live case of a rule you already have.** `docs/process.md` says a check can be
-sound and no longer believed, and that a long green run is what does it. **A limit unreached in 448
-commits is that**, and the question you are asking is that rule firing on a rule rather than on a
-check.
-
-**Three ways to go.**
-
-- **Keep a number and say what it is really for.** Not a bound on your reading - it has never
-  bounded anything - but a **tripwire on this lane**: if the queue reaches fifteen, proposals are
-  being filed faster than decisions are being made, which means guessing at design. `CLAUDE.md`
-  already carries the remedy - *ask one question instead*. Its job is to never be reached, and it
-  has done that job. **My recommendation**
-- **Drop it.** It has never fired, and a rule that has never fired cannot be told from a decorative
-  one. The cost is losing the only stated backstop for the failure it names
-- **Split it**, fifteen each. Thirty total, which is a different promise than the one you have, and
-  neither half has ever been approached
-
-**Neither of your two candidate jobs for it survives intact.** A count does penalize splitting one
-decision into many proposals, weakly - but it has never had to. And it does **nothing** about
-contradictory proposals; the instrument for that is the re-read trigger on a section that has taken
-a second proposal, which fires on thirty-eight sections today. You were right that they are
-different problems.
-
-**This decision reaches back into `P-300`**, which is open and says *fifteen open proposals is a
-reading budget*. If the limit is a tripwire rather than a budget, that sentence needs editing before
-you approve it - so answer this one before `P-300` rather than after.
+**What this lane does without approval, because `docs/notes/` is its own:** creates
+`docs/notes/questions.md` with its header, moves nothing into it yet, and files to the code lane
+that `tools/outbox` must read it - until then the file is invisible to `pending.md`, and `CLAUDE.md`
+says the queue is the one outbox that must never be invisible.
 
 ### P-303 - A reason that is false is worse than one that is missing
 
@@ -470,6 +443,45 @@ different hand wrote the check, so the existing sentence does not reach it.
 `C-33` already recorded on 2026-09-05, and neither was prevented by it - **the inert poison was
 written a day later by the lane that wrote the bullet.** Filed because they otherwise live in a
 commit message and a doc comment, which is what `P-302` says is lost.
+
+### P-305 - Two lanes close an item by different rules, and both are written down
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** contradiction - **asks** a decision
+- **into** `docs/process.md` -> Outboxes and the index
+
+**Filed the moment it was found**, which is what `CLAUDE.md` requires of a contradiction. Both texts
+were read before filing rather than recalled.
+
+**The code lane's rule**, in `crates/outbox.md`, on `C-16`: *an item is closed by the thing it
+reports being fixed, not by the reply.* It has kept `C-16` open since 2026-09-02 on exactly that
+ground - the specification lane replied, the gap it reports is still there, and closing it would
+delete the one open record of something still true.
+
+**The quality lens's rule**, applied today: an item addressed to a lane closes when that lane has
+done what it can. It closed `Q-53` as `acted`, citing `P-296` - **a proposal you have not approved,
+for a directory that does not exist.** The lens had told me the opposite two messages earlier and
+corrected itself deliberately, so this is a considered position rather than a slip.
+
+**Both are defensible and they cannot both be the rule.** Under the first, `Q-53` is open until
+`lenses/research/` exists. Under the second, `C-16` should have closed in September.
+
+**What is actually at stake is what *nothing open means nothing outstanding* promises.** Under the
+first rule it means *every known broken thing is recorded somewhere*. Under the second it means
+*every known broken thing has been routed to someone*, which is weaker - a closed item can then mean
+*still broken, and being tracked elsewhere*. Today that elsewhere is the proposal queue, which is
+your surface, so nothing is lost. **If a proposal is rejected, nothing carries the gap forward** -
+the Rejected ledger records your reason, which stops it being re-proposed rather than keeping it
+open.
+
+**Two ways to settle it, and I have no recommendation because the trade is yours.**
+
+- **Closed when fixed.** The promise stays strong and outboxes stay longer. `Q-53` reopens
+- **Closed when routed**, and the item names what now tracks it, so the chain is followable. Shorter
+  outboxes, and the promise becomes about routing rather than about state
+
+**Not urgent and not ignorable.** Nothing is blocked today. But the two lanes will keep diverging
+while both rules are written down and neither is the rule, and every item closed under the second is
+one a reader of the first would still expect to find open.
 
 ## Addressed to other perspectives
 
