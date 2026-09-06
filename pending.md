@@ -43,7 +43,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 - **Q-50** - A run of spaces sits mid-sentence in a failure message, in eighteen places · `lenses/quality/outbox.md`
 
-### To spec (11)
+### To spec (12)
 
 - **C-32** - The release has two tables of territory resources and they now disagree · `crates/outbox.md`
 - **C-30** - The coding instance's start prompt omits the file holding most of its work · `crates/outbox.md`
@@ -56,6 +56,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
 - **Q-53** - A session is producing findings and has no outbox to put them in · `lenses/quality/outbox.md`
+- **Q-54** - A right decision resting on a wrong reason is a defect with a delay on it · `lenses/quality/outbox.md`
 
 ## Sections that have taken more than one proposal
 
