@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 ## What must be decided
 
 - **P-305** - When an item closes, and the one thing that could still swallow it · `docs/notes/proposals.md`
+- **P-307** - `docs/process.md` describes a process and keeps calling the subject a game · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -31,8 +32,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (17)
+### To code (19)
 
+- **S-53** - `docs/notes/questions.md` exists and `tools/outbox` cannot see it · `docs/notes/proposals.md`
+- **S-52** - `P-296` promised a research lens a directory, and it does not exist · `docs/notes/proposals.md`
 - **S-51** - A closed item citing a withdrawn proposal is a gap nobody decided to drop · `docs/notes/proposals.md`
 - **S-50** - `tools/outbox` defers a fix to `Q-32`, which closed without answering it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`

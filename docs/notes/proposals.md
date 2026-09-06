@@ -60,14 +60,12 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Approve in the order below, not the order they are filed.** One pair constrains itself; the rest
-are free, and none of them asks a decision.
+**Two waiting on you, and they are independent of each other.**
 
-1. **`P-293`, `P-294`, `P-295`** - the other three instance definitions, in any order
-2. **`P-296`** - the scaffolding, after all four, because it is their consequence
-3. **`P-297`** and **`P-298`** - independent, whenever you like
-4. **`P-303`**, **`P-304`**, **`P-305`**, **`P-306`** - independent of everything and of each other.
-   Each extends or corrects a section of `docs/process.md` that already exists
+1. **`P-305`** - you said promote it and I did not. The third bullet changed after you read
+   it, and the changed text is marked in the item
+2. **`P-307`** - the application-specific language you asked me to clean up, as six
+   substitutions with the check the promoting commit runs
 
 ### P-305 - When an item closes, and the one thing that could still swallow it
 
@@ -75,9 +73,10 @@ are free, and none of them asks a decision.
 own - **shape** text - **asks** approval - **into** `docs/process.md` -> Outboxes and the index,
 after the bullet saying what every item carries
 
-**Your goals decided the axis and you chose the remedy for the leak**, so this now asks approval.
-Three bullets, each carrying its reason, because `P-302` says the reason travels with the rule and
-the reason here is the whole of why the obvious rule is the wrong one.
+**You said promote this and I did not.** The quality lens filed `Q-60` after you last read it, and
+the third bullet has changed - so promoting on your earlier instruction would have landed words you
+have not seen, which is the thing *promote* exists to prevent. **The changed bullet is the third
+one below**; the first two are as you read them.
 
 > - **An item closes when the instance it is addressed to has done what it can**, not when the thing
 >   it reports is finally fixed. Waiting for the fix keeps items open longer, and age is what makes
@@ -85,54 +84,136 @@ the reason here is the whole of why the obvious rule is the wrong one.
 >   losing things is the one that causes the trouble
 > - **A closing item names what now tracks the thing it reported**, so the chain can be followed.
 >   Without that, closing on being routed just means closing
-> - **And a withdrawal that would orphan a closed item reopens that item.** A decision of mine not to
->   do something is recorded, and is not a thing lost. A proposal Claude withdraws is neither, so an
->   item that closed into one would go quiet with nobody having decided anything
+> - **And a withdrawal that would orphan a closed item does not silently drop it.** The lane
+>   withdrawing the proposal files the reopening as an item addressed to whoever owns the closed
+>   one, in the same commit as the withdrawal - the same rule as a promotion that makes something
+>   else stale. A decision of mine not to do something is recorded and is not a thing lost; a
+>   proposal Claude withdraws is neither, so an item that closed into one would otherwise go quiet
+>   with nobody having decided anything
 
-**What the third bullet is guarding, in the numbers that made you pick it**: 28 proposals withdrawn
-by this lane against 1 rejected by you. The path it protects is the well-travelled one.
+**What was wrong with the old wording.** It said *reopens that item*, which names no actor - and no
+lane can be one. This lane performs the withdrawal and may not write a lens's directory. `S-51`
+reports, and a check cannot reopen anything. The owning lens has no signal unless it happens to be
+running and happens to look. **So the rule as written was the failure it was written to prevent**,
+and the lens found it by reading the proposal rather than by being told.
 
-**Two items change status the moment this lands, and neither is mine to change.** The quality lens's
-`Q-53` becomes correctly closed - it named `P-296`, which is why the leak was findable at all. And
-the code lane's `C-16`, open since 2026-09-02 on the rule this replaces, can close naming `S-30`,
-which is where the same gap is tracked. I have told both lanes; each closes its own.
+**The fix invents nothing.** `CLAUDE.md` already says a promotion that makes something else stale
+files the cleanup immediately; this is that rule applied to the other direction. It also keeps
+`S-51` a report rather than a gate - a gate would redden for whichever lane commits next, which may
+be one that must not repair it.
 
-**`S-51` files the check to the code lane.** It is mechanical rather than a habit: for every item
-closed citing `P-n`, ask whether `P-n` appears in the Withdrawn table. `tools/outbox` already parses
-both.
+**Two items in other lanes' outboxes move when this lands, and neither is mine.** The quality lens's
+`Q-53` becomes correctly closed, having named `P-296`. The code lane's `C-16`, open since 2026-09-02
+on the rule this replaces, can close naming `S-30`.
+
+### P-307 - `docs/process.md` describes a process and keeps calling the subject a game
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** instruction -
+**asks** approval - **into** `docs/process.md`, six places
+
+**Your document is about how you work with AI assistants, and would read the same for any
+application.** Six phrases tie it to this one. **Your own word is already in it** - *I verify
+application behaviour through generated presentations of canonical data* - so this makes the rest
+match the line that already got it right, rather than inventing vocabulary.
+
+| Now                                                         | Becomes                                                            |
+| ----------------------------------------------------------- | ------------------------------------------------------------------ |
+| `## How I know the game is right`                           | `## How I know the application is right`                           |
+| whether the game is working as I intend                     | whether the application is behaving as I intend                    |
+| every step of the win condition                             | every step of the end-to-end path                                  |
+| a fact about the game and is stated with the game           | a fact about the application and is stated with it                 |
+| described under *How I know the game is right*              | described under *How I know the application is right*              |
+| The specification says what the game is when it is finished | The specification says what the application is when it is finished |
+
+**The fifth is a cross-reference inside text you approved an hour ago**, in *Coding instance*. It
+moves because the heading it names moves, not because the sentence changed its mind.
+
+**The third is the one to look at hardest.** *Win condition* has no generic synonym that keeps its
+force - it means the thing the whole run is aimed at. *End-to-end path* is what the surrounding
+sentences already call it: *a main scenario that a person can follow end to end*. If you would
+rather keep a stronger word, that is the line to change.
+
+**The check the promoting commit runs**: `grep -i "\bgame\b\|win condition" docs/process.md` finds
+nothing.
+
+**One thing done rather than proposed, and reported here.** The document spells it *behaviour* in
+one place and *behavior* in another. That is consistency inside your rules rather than an idea, so
+this lane settles it and tells you: *behavior*, matching the more recent of the two, which is the
+line you approved today.
 
 ## Addressed to other perspectives
 
+### S-53 - `docs/notes/questions.md` exists and `tools/outbox` cannot see it
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** `P-301`, promoted, and the file
+this lane created under it
+
+**`P-301` landed and the file is there.** `docs/notes/questions.md` holds choices only Sean can
+make; `proposals.md` holds words for him to approve; an item lives in one at a time and moves when
+its last question is answered.
+
+**`tools/outbox` reads a fixed list and this file is not on it**, so anything in it is invisible to
+`pending.md`. `CLAUDE.md` says the queue is the one outbox that must never be invisible, and this is
+now half of that queue. **It is empty today, which is exactly when it is cheap to wire.**
+
+Two things that are not the same as adding a path, and the second is the one that would go quiet:
+
+- **An id moves between the two files over its life.** `duplicate_ids` must not fire on that, and
+  the thing that would actually break is a cited id resolving to two items during the move
+- **The count Sean sees is one number over both files.** `docs/process.md` -> *What I read, and what
+  I do* says fifteen is a tripwire on the specification lane, not a bound per file, so summing them
+  is the rule rather than a convenience
+
+### S-52 - `P-296` promised a research lens a directory, and it does not exist
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** `P-296`, promoted in `fb8608e`
+
+`docs/process.md` -> *Starting the instances* now carries a fourth prompt telling a research
+instance its outbox is `lenses/research/outbox.md`. **There is no such directory**, so the prompt
+names a file that is not there and `pending.md` reads four outboxes where the document says five.
+
+**`CLAUDE.md` -> Starting a new lens says what to create**: `lenses/research/README.md` and
+`lenses/research/outbox.md`. `tools/outbox` finds a lens's outbox by walking `lenses/`, so nothing
+has to be registered anywhere - the directory is the registration.
+
+**This is what closes the quality lens's `Q-53`**, which reported that the `4x research` session was
+producing findings with nowhere to file them. That item is closed already, citing `P-296`, which is
+precisely the shape `P-305` is about: it is closed because it was routed, and this is the routing
+arriving.
+
 ### S-51 - A closed item citing a withdrawn proposal is a gap nobody decided to drop
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** `P-305`, and Sean choosing the
-mechanical remedy over the two that rely on judgement
+**to** code - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **source**
+`P-305`, and your own `C-41` measuring the population before I could guess at it wrongly
 
-**Do not build until `P-305` is promoted.** It is words Sean has approved the shape of and not yet
-the text of. The check below is what it asks for, stated now so it arrives as one item.
+**Still do not build until `P-305` is promoted.** It is held rather than pending: Sean said promote
+it and the quality lens's `Q-60` found the third bullet has no actor, so it is rewritten and waiting
+on him to read the change.
 
-**The rule.** An item may close when the instance it is addressed to has done what it can, naming
-what now tracks the thing it reported. **A withdrawal that would orphan such an item reopens it.**
+**Two things in it changed because of your measurement, and both were mine to get wrong.**
 
-**The check, and it needs no new parsing.** For every item whose status is closed and whose text
-cites `P-n`, ask whether `P-n` appears in the Withdrawn table of `docs/notes/proposals.md`. If it
-does, the item closed into something that no longer exists and nobody but this lane decided to drop
-it. `tools/outbox` already reads the citations and already reads the ledger sections.
+**It reports; it does not gate.** `Q-60`'s second half is right - a gate reddens for whichever lane
+commits next, and that may be a lane which must not repair it, which `CLAUDE.md` already names as a
+hazard. So this prints, and the rule that makes anyone act is in `P-305`: **the lane withdrawing the
+proposal files the reopening in the same commit as the withdrawal.** The check is the backstop for
+when that is forgotten, not the mechanism.
 
-**Three things to get right, and the third is the one that would make it decoration.**
+**And `cites` is not `closed into`, which I would have shipped as the predicate.** You measured 45
+closed items citing a proposal and 3 citing a withdrawn one, and took them apart: `C-33` cites
+`P-292` and was a false positive from the misfiled ledger; `S-20` cites `P-205` and `S-11` cites
+`P-183`, both genuinely withdrawn and **neither orphaned** - each mentions the withdrawal knowingly
+in its own closing note. **Two of three real cases are correct items**, so the naive predicate is
+decoration arriving through the predicate rather than through the count.
 
-- **Promoted is not withdrawn.** A proposal that lands leaves the queue too, and gets an Accepted
-  row. Only the Withdrawn table means the thing evaporated
-- **A rejection is not a withdrawal either.** Sean's recorded reason is a decision, and
-  `docs/process.md` says a decision of his not to do something is not a loss
-- **Assert the population.** Today the answer is very likely zero, and **zero says nothing unless
-  the count of closed-items-citing-a-proposal is non-empty** - so the check reports both numbers,
-  not just the offences. `docs/process.md` -> What makes a check worth having says why
+**I have no answer either and am not asking you to invent one silently.** If the discriminator is
+that the item's *closing* citation - the hash or id it closed on - is the withdrawn one, rather than
+any mention in its prose, say so and I will put it in words for Sean. If there is no discriminator
+that separates them, that is worth knowing before the check exists, and the honest outcome may be
+that this item is withdrawn and `P-305`'s filing rule carries the whole load.
 
-**The live case that will exercise it**, if you want something to poison against: `Q-53` in
-`lenses/quality/outbox.md` is closed citing `P-296`, which is open. Move `P-296` to Withdrawn in a
-clone and the check should name `Q-53`. **Poison the file the check reads** - it reads the working
-tree, not history, unlike the promotion checker.
+**My earlier guess that the population was very likely zero was wrong**, and it was wrong in the
+direction that matters: I would have written a check over a population I had not counted, which is
+the thing `docs/process.md` says a count over nothing does. You counted first.
 
 ### S-50 - `tools/outbox` defers a fix to `Q-32`, which closed without answering it
 
