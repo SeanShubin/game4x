@@ -650,7 +650,21 @@ not. Identical content, different bytes. Two habits remove the whole class:
 
 **The same thing happens to a sentence, and the cause is wrapping rather than padding.** A match
 string drafted as one sentence meets a file that broke it across two lines, and matches nothing.
-**Locate prose the way you locate a row**: by a fragment short enough to sit on one line.
+**Normalize both sides before comparing them, rather than choosing the match string carefully.**
+Sean, 2026-09-06: *I typically resolve this by normalizing things before I compare them* -
+`assertEquals(trim(expected), trim(actual))`. **A fragment short enough to sit on one line is a
+discipline, and this file already records three of them failing in one hour** - one inside the
+commit that promoted the rule about wrapping.
+
+**So collapse the whitespace on both sides and a wrap can hide nothing; parse a table to stripped
+cells and the padding can hide nothing either.** To locate rather than compare, search the
+normalized text and map the offset back - **an anchor that is in the file is then always found**,
+and one that matches twice is refused rather than silently taking the first.
+
+**And write a script to a file before running it; never assemble one inside a shell string.** Every
+quoting failure of that hour came from a `python -c` or a heredoc editing another script, one of
+them reporting *invalid escape sequence* and *anchor not found* together - two errors, one cause,
+and neither about the repository. **A file has one level of quoting.**
 
 Rebuild a table from a declared list instead, and **assert** the result: that every item is
 accounted for exactly once, and that a list of files matches what is actually on disk. A
