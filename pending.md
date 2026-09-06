@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 - **P-288** - `phase` is a trait of the game, and `turn` is not in the state at all · `docs/notes/proposals.md`
 - **P-289** - What makes a check worth having · `docs/notes/proposals.md`
-- **P-290** - Capacity is per kind and its trait values, which makes `node` unnecessary · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -79,11 +78,11 @@ it exists to ask.
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
+- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `spec/console.md` -> The language - P-254, P-287, P-284
 - `spec/control.md` -> Winning - P-77, P-81, P-125
-- `spec/logistics.md` -> Containment - P-188, P-257, P-285
 - `docs/process.md` -> All lanes - P-247, P-248
 - `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md`, a new section - P-204, P-211

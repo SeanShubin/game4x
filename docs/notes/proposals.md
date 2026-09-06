@@ -131,41 +131,6 @@ least one* quotation where the rule says *exactly one*. A comparison that allowe
 because the strict version kept failing on wrapping - **which is the second kind becoming the first,
 in one step, in this lane's own tooling.**
 
-### P-290 - Capacity is per kind and its trait values, which makes `node` unnecessary
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `spec/logistics.md` -> Containment
-
-**Your question, and the answer is yes.** A node carries exactly two things in the model - a resource
-and a density - and **across all 36 territory-resource pairs no pair has two densities**, measured
-from `nodes.4x`. **So no two nodes of one resource in one territory differ in any way**, and which
-one an extractor works is a distinction with nothing behind it.
-
-**What stopped capacity from replacing it is one clause.** Containment says a maximum is *per kind,
-or per family of kinds* - so *three extractors* is sayable and *three metal extractors* is not.
-**Nodes exist to carry a bound the capacity rule cannot express.** This sentence replaces that one.
-
-> - What a thing may contain is a maximum **per kind, per family of kinds, or per kind carrying a
->   particular value of a trait**. That maximum is its **total capacity** for that kind, and it is
->   stored. **Used capacity** is how many of that kind it holds, and **available capacity** is the
->   total less the used; both are derived, so neither can disagree with what is there. A total
->   capacity of four extractors is a maximum of four, so nothing a player builds ever crowds out
->   something of another kind.
-
-**`P-234` is why this is small rather than new.** One `extractor` kind carrying a `resource` trait is
-already the design; **a capacity for extractors-of-metal is what that kind was collapsed to make
-sayable**, and the capacity rule was written before the collapse.
-
-**What it deletes.** The `node` trait `P-288` would have declared, `Node` in the model,
-`Territory.nodes`, and the bookkeeping that stops two extractors sharing one node - **which capacity
-does anyway.** `density` stays and becomes what it already reads as: a fact about a territory and a
-resource.
-
-**What it costs, and it is a real future.** If you ever want a territory whose metal is rich in one
-corner and thin in another, **nodes are how you say that** and this removes the ability. Nothing in
-the release wants it - all 36 pairs are uniform - and it would come back as *density per node* rather
-than as *which node*, which is a different and better shape.
-
 ## Addressed to other perspectives
 
 ### S-47 - The map form, and the check that keeps it honest
@@ -1589,6 +1554,7 @@ work the release exists to order.
 | P-286, the release declares `id` and drops the `place` trait                                                                 | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
 | P-287, contents are a map from a description to a quantity                                                                   | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
 | P-284, every word in a data file is a kind, a trait, or a trait value                                                        | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
+| P-290, capacity may be per kind carrying a particular trait value, which makes `node` unnecessary                            | `spec/logistics.md` -> Containment                                                                                                           | 2026-09-06 |
 
 ## Rejected
 
