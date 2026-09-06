@@ -146,29 +146,6 @@ is worth a sentence and the two cases, in the section that already carries the h
 enforce.
 
 
-### Q-56 - The `Q-47` check cannot see the spelling `Q-47` was filed about
-
-**to** code · **status** open · **raised** 2026-09-06 · **source**
-[review of `ba9bd41..217dcba`, finding 1](2026-09-06-review-of-the-six.md)
-
-`tools/outbox/tests/architecture.rs:186` admits a literal that **is** `reports` or **starts with**
-`reports/`. Two files reach the directory as `../../reports/...` and match neither, and one of them
-- `prototypes/kinds/src/main.rs` - is a generator in `src/main.rs`, so it is **a trespass the check
-does not report**.
-
-**The population assertion confirmed the blind spot instead of catching it.** It asserts `>= 5` and
-found five, agreeing with the figure in `Q-47` - which was already stale. Two counts that share a
-computation are one count. And the poison landed inside the sighted region: a literal starting
-`reports/`, which could not have found this.
-
-**Verified in a clone, against the real check rather than a replica.** Adding
-`|| literal.contains("/reports/")` turns it red, names `prototypes/kinds/src/main.rs`, and reports
-**seven** readers.
-
-**Whether.** Worth fixing now. Whether that file is the violation or the rule is too narrow is
-yours - a generator that is a crate's only binary has no reason to sit in `src/bin/`. Raise the
-population figure with the predicate: `>= 5` tolerates losing two readers in silence.
-
 ### Q-57 - `phase` declares no values, so `play` is an eighteenth forbidden word
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source**
@@ -193,9 +170,41 @@ admit. The file uses both correctly, so a check built on its literal words would
 **Whether.** Worth a decision now. Both producers believe `phase` is settled -
 `docs/notes/proposals.md:122` already writes `{game phase:play}` as the target form.
 
+
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
+### Q-56 - The `Q-47` check cannot see the spelling `Q-47` was filed about
+
+**to** code · **status** **acted** 2026-09-06 · `a60def3` · **raised** 2026-09-06 · **source**
+[review of `ba9bd41..217dcba`, finding 1](2026-09-06-review-of-the-six.md)
+
+`tools/outbox/tests/architecture.rs:186` admits a literal that **is** `reports` or **starts with**
+`reports/`. Two files reach the directory as `../../reports/...` and match neither, and one of them
+- `prototypes/kinds/src/main.rs` - is a generator in `src/main.rs`, so it is **a trespass the check
+does not report**.
+
+**The population assertion confirmed the blind spot instead of catching it.** It asserts `>= 5` and
+found five, agreeing with the figure in `Q-47` - which was already stale. Two counts that share a
+computation are one count. And the poison landed inside the sighted region: a literal starting
+`reports/`, which could not have found this.
+
+**Verified in a clone, against the real check rather than a replica.** Adding
+`|| literal.contains("/reports/")` turns it red, names `prototypes/kinds/src/main.rs`, and reports
+**seven** readers.
+
+**Whether.** Worth fixing now. Whether that file is the violation or the rule is too narrow is
+yours - a generator that is a crate's only binary has no reason to sit in `src/bin/`. Raise the
+population figure with the predicate: `>= 5` tolerates losing two readers in silence.
+
+**Closed 2026-09-06.** The predicate matches the directory wherever it sits in the path, the population is asserted at seven, and the rule was widened rather than the file moved - `src/main.rs` is Cargo's default binary target and a crate whose only binary that is has no reason to use `src/bin/`. **Verified here rather than taken:** a probe naming `../../reports/state.md` from `crates/game-model/src/` - the spelling the old predicate could not see - is now reported by path, and the check names eight readers.
+
 ### Q-58 - A `saturating_sub` names density zero as its reason and no case has one
 
-**to** code · **status** noted · **raised** 2026-09-06 · **source**
+**to** code · **status** **acted** 2026-09-06 · `a60def3` · **raised** 2026-09-06 · **source**
 [review of `ba9bd41..217dcba`, finding 5](2026-09-06-review-of-the-six.md)
 
 `crates/game-model/src/territory.rs`, `most_in_one_turn`: the comment gives the reason as *a
@@ -204,12 +213,9 @@ density-zero or density-one food extractor buys no hand at all*. Density one is 
 
 One row, worth adding while the file is open, and recorded so it is not re-found if it is not.
 
+**Closed 2026-09-06, and the *whether* was wrong.** The code lane declined *small*, made the change, and found that `Territory::empty` has no deposits at all - `create planet` makes twelve before `set resource` fills any in, and `is_fully_exploited` asks `can_hold_yard` about them. Plain subtraction panics there. **Confirmed here by poisoning a clone: 51 passed, 1 failed, and their new test is the only one that catches it.** Their `C-38`.
 
----
-
-## Resolved
-
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+**The lesson is mine and is in [the README](README.md#a-green-suite-under-a-poison-bounds-the-tests-not-the-code).** I wrote *changing it to `density - 1` leaves every test green* as though it measured the risk. It measured the coverage.
 
 ### Q-47 - *Presentations are never canonical* is checkable, and the obvious check would be decoration
 

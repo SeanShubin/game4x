@@ -29,7 +29,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (16)
+### To code (15)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-48** - `node` goes, and the game's row loses `turn` · `docs/notes/proposals.md`
@@ -46,7 +46,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-56** - The `Q-47` check cannot see the spelling `Q-47` was filed about · `lenses/quality/outbox.md`
 
 ### To quality (1)
 

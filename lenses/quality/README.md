@@ -192,6 +192,27 @@ something and it stayed green* is not, until the first half is established.
 This is `C-28` turned on the instrument used to verify instruments, which is why nothing catches it:
 the poison is the last thing in the chain, and there is nothing behind it to check it.
 
+## A green suite under a poison bounds the tests, not the code
+
+**`Q-58`, 2026-09-06.** This lens found a `saturating_sub` whose comment gave density zero as its
+reason, observed that no case in the tree has one, and wrote: *changing it to `density - 1` leaves
+every test green.* True, and the code lane confirmed it. The item then called the finding **small**
+on the strength of it.
+
+**That sentence measured the coverage and was read as measuring the risk.** The code lane made the
+change and ran the program rather than the suite: `Territory::empty` carries no deposits, `create
+planet` makes twelve of them before `set resource` fills any in, and the reachable path panics with
+*attempt to subtract with overflow*. The branch was load-bearing and the silence was the tests'
+silence, not the code's.
+
+**So it is the poison rule with the sign flipped.** That rule says a poison landing where the check
+never looks produces a green run that reads like a check working. This is the same green read as
+*low stakes* instead of *low coverage* - and the remedy is the same one: name the population the
+poison acted on. *Every test stays green* names the test suite. It says nothing about the program.
+
+**The finding survived; the `whether` did not.** Their `C-38`, and the check exists because the item
+was filed, which is the part worth keeping.
+
 ## When the instrument is confidence, make it produce something
 
 The general form of the rule above, and the code lane's sentence rather than this lens's: **the
