@@ -287,10 +287,15 @@ pub const TRAITS: [TraitRow; 18] = [
         values: "one of the kinds",
         held: Held::Stored,
     },
+    // **`P-285` and `P-286`: a thing is not located by a trait.** `place` said *the thing it
+    // is in*, which made location something a thing carries rather than something its
+    // container says. What holds it is what says where it is - so the trait is gone and
+    // nothing replaces it. The `place` **family** - territory, orbit - is untouched, and a
+    // search for the word finds both; only one of them went.
     TraitRow {
-        name: "place",
-        of: "every thing",
-        values: "the thing it is in",
+        name: "id",
+        of: "a thing that must be named individually",
+        values: "a number, unique among things of its kind",
         held: Held::Stored,
     },
     TraitRow {

@@ -31,7 +31,7 @@ ul { padding-left: 1.2rem }
 <h2>citizen</h2>
 <p>a person: provides labor, eats, and grows on surplus.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>force</code> (a number)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
 <p><strong>Bounded by</strong> the food produced here, through upkeep</p>
 <p><strong>As a thing</strong> Force: 1 · Upkeep: 1 food per turn · Readies: yes</p>
 <p><strong>In recipes</strong></p>
@@ -47,7 +47,7 @@ ul { padding-left: 1.2rem }
 <h2>garrison</h2>
 <p>what holds a territory; a territory has at most one.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>force</code> (a number)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
 <p><strong>Bounded by</strong> a capacity of 1</p>
 <p><strong>As a thing</strong> Force: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1</p>
 <p><strong>In recipes</strong></p>
@@ -60,7 +60,7 @@ ul { padding-left: 1.2rem }
 <h2>extractor</h2>
 <p>built for one resource, and worked to produce it.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>resource</code> (one of the resources)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>resource</code> (one of the resources)</p>
 <p><strong>Bounded by</strong> a capacity, from <em>Territory resources</em></p>
 <p><strong>As a thing</strong> Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes</p>
 <p><strong>In recipes</strong></p>
@@ -76,7 +76,7 @@ ul { padding-left: 1.2rem }
 <h2>yard</h2>
 <p>where an Ark is produced.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds)</p>
 <p><strong>Bounded by</strong> a capacity of 1</p>
 <p><strong>As a thing</strong> Costs to produce: 1 labor, 15 metal · Binding: 15</p>
 <p><strong>In recipes</strong></p>
@@ -87,7 +87,7 @@ ul { padding-left: 1.2rem }
 <h2>store</h2>
 <p>built to hold one resource, and holds nothing else.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>resource</code> (one of the resources)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>resource</code> (one of the resources)</p>
 <p><strong>Bounded by</strong> as many as the extractors of its resource</p>
 <p><strong>As a thing</strong> Costs to produce: 1 labor, 1 metal · Binding: 1</p>
 <p><strong>In recipes</strong></p>
@@ -101,7 +101,7 @@ ul { padding-left: 1.2rem }
 <h2>ark</h2>
 <p>carries a landing, and can invade from orbit.</p>
 <p><strong>In families</strong> thing, unit</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>force</code> (a number)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
 <p><strong>Bounded by</strong> a capacity of 2</p>
 <p><strong>As a thing</strong> Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border, ascent · Requires: a Yard · Readies: yes</p>
 <p><strong>In recipes</strong></p>
@@ -114,7 +114,7 @@ ul { padding-left: 1.2rem }
 <h2>pioneer</h2>
 <p>founds a territory.</p>
 <p><strong>In families</strong> thing, unit</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>force</code> (a number)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
 <p><strong>Bounded by</strong> a capacity of 2, and the food produced here</p>
 <p><strong>As a thing</strong> Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes</p>
 <p><strong>In recipes</strong></p>
@@ -127,7 +127,7 @@ ul { padding-left: 1.2rem }
 <h2>food</h2>
 <p>eaten by citizens; expires.</p>
 <p><strong>In families</strong> thing, resource</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>keeps</code> (the number of turns it will last), <code>surplus</code> (yes or no)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>keeps</code> (the number of turns it will last), <code>surplus</code> (yes or no)</p>
 <p><strong>Bounded by</strong> the things in it that hold it, and it keeps for one turn</p>
 <p><strong>In recipes</strong></p>
 <ul>
@@ -141,7 +141,7 @@ ul { padding-left: 1.2rem }
 <h2>metal</h2>
 <p>what things are built from; conserved.</p>
 <p><strong>In families</strong> thing, resource</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds)</p>
 <p><strong>Bounded by</strong> the things in it that hold it</p>
 <p><strong>In recipes</strong></p>
 <ul>
@@ -156,7 +156,7 @@ ul { padding-left: 1.2rem }
 <h2>energy</h2>
 <p>what moves things; neither conserved nor expiring.</p>
 <p><strong>In families</strong> thing, resource</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds)</p>
 <p><strong>Bounded by</strong> the things in it that hold it</p>
 <p><strong>In recipes</strong></p>
 <ul>
@@ -168,7 +168,7 @@ ul { padding-left: 1.2rem }
 <h2>labor</h2>
 <p>what working a machine takes; a citizen provides it each turn.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds)</p>
 <p><strong>Bounded by</strong> the citizens that make it, one each per turn</p>
 <p><strong>In recipes</strong></p>
 <ul>
@@ -181,7 +181,7 @@ ul { padding-left: 1.2rem }
 <h2>territory</h2>
 <p>a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource.</p>
 <p><strong>In families</strong> thing, place</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in), <code>density</code> (a number), <code>total capacity</code> (a number), <code>control</code> (held by a player, or unclaimed), <code>biome</code> (one of the biomes), <code>nature</code> (a number)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>density</code> (a number), <code>total capacity</code> (a number), <code>control</code> (held by a player, or unclaimed), <code>biome</code> (one of the biomes), <code>nature</code> (a number)</p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>deploy ark</code> requires 1, in <code>$where</code></li>
@@ -192,7 +192,7 @@ ul { padding-left: 1.2rem }
 <h2>orbit</h2>
 <p>a place above one territory, which holds units and nothing else.</p>
 <p><strong>In families</strong> thing, place</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>place</code> (the thing it is in)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds)</p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>deploy ark</code> consumes 1 (as the place holding ark), in the orbit above <code>$where</code></li>

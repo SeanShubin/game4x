@@ -15,7 +15,7 @@ a person: provides labor, eats, and grows on surplus.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `force` (a number)
+**Traits of it** `kind` (one of the kinds), `force` (a number)
 
 **Bounded by** the food produced here, through upkeep
 
@@ -37,7 +37,7 @@ what holds a territory; a territory has at most one.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `force` (a number)
+**Traits of it** `kind` (one of the kinds), `force` (a number)
 
 **Bounded by** a capacity of 1
 
@@ -56,7 +56,7 @@ built for one resource, and worked to produce it.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `resource` (one of the resources)
+**Traits of it** `kind` (one of the kinds), `resource` (one of the resources)
 
 **Bounded by** a capacity, from *Territory resources*
 
@@ -78,7 +78,7 @@ where an Ark is produced.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in)
+**Traits of it** `kind` (one of the kinds)
 
 **Bounded by** a capacity of 1
 
@@ -95,7 +95,7 @@ built to hold one resource, and holds nothing else.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `resource` (one of the resources)
+**Traits of it** `kind` (one of the kinds), `resource` (one of the resources)
 
 **Bounded by** as many as the extractors of its resource
 
@@ -115,7 +115,7 @@ carries a landing, and can invade from orbit.
 
 **In families** thing, unit
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `force` (a number)
+**Traits of it** `kind` (one of the kinds), `force` (a number)
 
 **Bounded by** a capacity of 2
 
@@ -134,7 +134,7 @@ founds a territory.
 
 **In families** thing, unit
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `force` (a number)
+**Traits of it** `kind` (one of the kinds), `force` (a number)
 
 **Bounded by** a capacity of 2, and the food produced here
 
@@ -153,7 +153,7 @@ eaten by citizens; expires.
 
 **In families** thing, resource
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `keeps` (the number of turns it will last), `surplus` (yes or no)
+**Traits of it** `kind` (one of the kinds), `keeps` (the number of turns it will last), `surplus` (yes or no)
 
 **Bounded by** the things in it that hold it, and it keeps for one turn
 
@@ -172,7 +172,7 @@ what things are built from; conserved.
 
 **In families** thing, resource
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in)
+**Traits of it** `kind` (one of the kinds)
 
 **Bounded by** the things in it that hold it
 
@@ -192,7 +192,7 @@ what moves things; neither conserved nor expiring.
 
 **In families** thing, resource
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in)
+**Traits of it** `kind` (one of the kinds)
 
 **Bounded by** the things in it that hold it
 
@@ -209,7 +209,7 @@ what working a machine takes; a citizen provides it each turn.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in)
+**Traits of it** `kind` (one of the kinds)
 
 **Bounded by** the citizens that make it, one each per turn
 
@@ -227,7 +227,7 @@ a place things are in, which has a biome, a force of nature, and a density and a
 
 **In families** thing, place
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in), `density` (a number), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number)
+**Traits of it** `kind` (one of the kinds), `density` (a number), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number)
 
 **In recipes**
 
@@ -242,7 +242,7 @@ a place above one territory, which holds units and nothing else.
 
 **In families** thing, place
 
-**Traits of it** `kind` (one of the kinds), `place` (the thing it is in)
+**Traits of it** `kind` (one of the kinds)
 
 **In recipes**
 
