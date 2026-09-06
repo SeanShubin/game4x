@@ -63,30 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-283 - Bullet-versus-paragraph takes the period with it
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-06 - **kind**
-contradiction - **shape** text - **asks** approval - **into** `CLAUDE.md` -> Promotion, after
-*promotion is a pure move*
-
-**Your A, as one sentence.** It goes after *nothing else, ever - for a block of text*.
-
-> **Bullet-versus-paragraph takes the sentence's closing period with it**, because a list that omits
-> them and a paragraph that carries them are two forms of the same words. **No other punctuation may
-> move.**
-
-**What it settles.** `P-257` landed four approved paragraphs as four bullets without their periods,
-and `tools/outbox/tests/promotions.rs` has been failing on it since. **Under this sentence the file
-is right and the check is wrong**, so nothing in `spec/logistics.md` is touched.
-
-**What follows, and it is work rather than a decision.** The check compares byte for byte and has to
-learn the same allowance. **That is the code lane's**, filed when this promotes - and **the gate stays
-red until it lands**, which is worth saying in the same breath as the rule.
-
-**One thing this does not licence.** *No other punctuation may move* is in the sentence because the
-argument for the period is that it belongs to the form, and no other mark does. **A comma, a dash or
-an emphasis marker is text**, and moving one is the failure this rule exists to prevent.
-
 ### P-284 - Every word in a data file is a kind, a trait, or a trait value
 
 **to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-06 - **kind**
@@ -1586,6 +1562,7 @@ work the release exists to order.
 | P-278, more dangerous territory requires more organised citizens to keep it secure                                           | `spec/narrative.md` -> Violence and order                                                                                                    | 2026-09-05 |
 | P-280, a biome does not determine a territory's numbers; the two agree thematically                                          | `spec/planet.md`                                                                                                                             | 2026-09-05 |
 | P-281, the biome table guides and does not bind, and force of nature is the column that does                                 | `releases/first-release.md` -> Biomes                                                                                                        | 2026-09-05 |
+| P-283, bullet-versus-paragraph takes the closing period with it, and no other punctuation moves                              | `CLAUDE.md` -> Promotion                                                                                                                     | 2026-09-06 |
 
 ## Rejected
 

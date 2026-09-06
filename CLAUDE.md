@@ -440,6 +440,10 @@ wrapping, bullet-versus-paragraph, and heading level - because those depend on t
 destination file and cannot be settled in the proposal. Nothing else, ever - for a block
 of text.
 
+**Bullet-versus-paragraph takes the sentence's closing period with it**, because a list that omits
+them and a paragraph that carries them are two forms of the same words. **No other punctuation may
+move.**
+
 If Claude wants a word changed, it changes the **proposal** and says so, before Sean
 approves. Fixing phrasing during promotion would mean the text Sean reviewed and the text in
 the spec are not the same text, and he would have no reason to re-read the spec to find out.
