@@ -8,8 +8,16 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-292** - What the specification instance is for · `docs/notes/proposals.md`
+- **P-293** - What the coding instance is for · `docs/notes/proposals.md`
+- **P-294** - What the quality instance is for · `docs/notes/proposals.md`
+- **P-295** - What the research instance is for · `docs/notes/proposals.md`
+- **P-296** - Four peer definitions, and the scaffolding that has to follow · `docs/notes/proposals.md`
+- **P-297** - The three things you look at, and nothing else · `docs/notes/proposals.md`
+- **P-298** - The other half: what the assistants need and you never read · `docs/notes/proposals.md`
+- **P-299** - It can tell you whether a lane is running, and the reason it could not has gone · `docs/notes/proposals.md`
+- **P-300** - The eight-item budget loses its subject when quality stops being research · `docs/notes/proposals.md`
+- **P-301** - Questions you must answer, in a separate file from words you must approve · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -25,6 +33,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-41** - `744c6cf` S-41: P-250's second half gets the mechanism it was promoted without · still open in `docs/notes/proposals.md`
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
+- **C-38** - `890095a` Q-56 and Q-58 acted, verified rather than accepted, and the lesson from C-38 is mine · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 
 ## What is outstanding

@@ -63,6 +63,271 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-292 - What the specification instance is for
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Specification Instance, at the end
+
+The section already says you approve exact text and that nothing lands without your approval.
+**Three things you said today are not in it**: that an instruction from you is not a shortcut, that
+this instance coordinates the others, and that it can report their status.
+
+> - Telling the specification instance what to change is not a shortcut into the specification. It
+>   changes the proposal and shows me the result, and the words land only when I then approve them
+> - It is the primary coordinator between the instances. They may talk to each other directly, and
+>   it is this one's job to see that they are all on the same page
+> - It can tell me the status of every other instance, what needs to be done, and what is waiting
+>   on me
+
+**Why the first belongs here** when `CLAUDE.md` states it already: that file is the operating detail
+beneath this one, and the guarantee is yours rather than an operating rule. *Promote* means you have
+read the words, and an instruction to change them is not a promotion of them.
+
+**`P-299` is the third bullet's consequence** - *Outboxes and the index* currently says this instance
+cannot tell you whether a lane is running.
+
+### P-293 - What the coding instance is for
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Coding instance, at the end
+
+The section has the ownership and the blocked-question rule. **Five things you said today are not
+in it**, and the second is the one that surprised me: this instance produces one of the artifacts
+you review by hand, and nothing in its own section says so.
+
+> - The specification constrains the observable behavior of production code. The implementation
+>   details, the tooling, the pipeline, the deployment and the rest of production support are this
+>   instance's own decisions
+> - It produces the second artifact I review by hand - the input and the expected data for the
+>   scenario test, described under *How I know the game is right*
+> - It notifies the specification instance of its status
+> - After any significant change to production code, it asks the quality instance for a review
+> - When a quality review is wrong, it says so, and gives the quality instance enough information
+>   to understand why
+
+**The second is a symmetry the document is missing rather than a new rule.** *What I read, and what
+I do* says you read the input and the expected; *How I know the game is right* says you review them
+by hand. Neither says who makes them, so the coding instance's section describes a lane with no
+artifact of yours in it, while the specification instance's says exactly what it produces for you.
+It points at the existing section rather than restating it, per `docs/README.md`.
+
+### P-294 - What the quality instance is for
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Quality instance, replacing the first two bullets
+
+The section lists seven things this instance finds and reports, and **never says what they are
+for**. Your sentence today supplies it, and your example is sharper than the one standing.
+
+> - Is in charge of making sure the code stays easy to maintain
+> - Makes sure we have a proper module structure emanating from composition roots
+> - Ensures the module structure isolates dependencies from each other. A utility that is a pure
+>   mathematical transformation knows nothing about a graphics card, even if the computation is
+>   only usable by the graphics card
+
+**What changes and what does not.** The first bullet is new. The second is the section's current
+first bullet, unchanged, and is here only because the third replaces the current second. **That
+replacement is the point**: the standing example forbids the dependency, and yours also refuses the
+one argument anybody actually makes for it - *but this computation is only ever used by the graphics
+card*.
+
+**The other five bullets are untouched**, including automation instead of repetition and rules
+enforced by code rather than habits. You did not mention them today and I am not reading that as
+dropping them.
+
+### P-295 - What the research instance is for
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Research instances, replacing the first two bullets
+
+The section's first two bullets - *generate information for the other lanes*, *makes sure other
+instances can find its results* - describe something close to what quality does. **Your sentence
+today is narrower and forward-looking**, which is what stops the two being the same job.
+
+> - Takes on one-off research projects that might be useful in the future
+> - This is forward thinking rather than a matter of immediate concern
+> - Makes its research discoverable by the other instances, against the time they come to need it
+
+**The heading stays plural.** You named one research instance and also said to add more as they are
+needed, and changing *instances* to *instance* would decide which of those the heading means. It is
+a one-word edit whenever you want it.
+
+**The remaining four bullets are the subject of `P-300`**, which is where the eight-item budget goes
+once quality is not a kind of research instance.
+
+### P-296 - Four peer definitions, and the scaffolding that has to follow
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** cleanup - **shape** instruction -
+**asks** approval - **into** `docs/process.md` -> the purpose list, Quality instance, Starting the
+instances
+
+`P-292` to `P-295` give four sections equal detail. **Three places in the document still say there
+are three instances and a special case**, and the blocks below are what the changes install - shown
+fenced rather than quoted, because the indented quotation is reserved for an approval-shaped offer.
+
+**1. The purpose list at the head** loses the clause that makes quality an exception.
+
+```
+- Purposes
+  - 1 instance for specification
+  - 1 instance for coding
+  - 1 instance for quality
+  - 1 instance for research
+```
+
+**2. The heading `## Quality instance (a type of research instance)` becomes `## Quality
+instance`.**
+
+**3. `## Starting the instances` gains a fourth prompt**, after the quality one, and *The three
+above are the ones that exist* becomes *The four above are the ones that exist*.
+
+```
+The research instance:
+
+    You are the research lens. Read CLAUDE.md, then docs/process.md ->
+    Research instances.
+
+    CLAUDE.md -> Perspectives says what you write and what you read. You write
+    lenses/research/ and tools/research/, and nothing else. You never edit what
+    you review.
+
+    Your outbox is lenses/research/outbox.md. Each finding carries an id, a to,
+    a status and one line, and points at a dated report that carries the
+    argument. Research that is not ready is addressed to nobody.
+
+    Start by telling me what is open and addressed, read from the files rather
+    than remembered.
+```
+
+**Checks the promoting commit runs**: the purpose list names four instances and no longer contains
+*type of research*; `grep "(a type of research instance)"` finds nothing; `## Starting the
+instances` contains four fenced prompts and the word *four*.
+
+**This creates a directory that does not exist.** `lenses/research/` and its outbox are the code
+lane's to make - `tools/outbox` finds a lens's outbox by walking `lenses/`, so nothing has to be
+registered anywhere. Filing that is what closes the quality lens's `Q-53`.
+
+### P-297 - The three things you look at, and nothing else
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> What I read, and what I do, after the third bullet
+
+The section says you keep your surface area small and why. **It does not say what the surface is** -
+it says what you read from each lane, which is a different list and does not name the questions
+file at all. **Nor does it say what stops small from becoming useless**, which is the half that
+constrains the other three proposals above.
+
+> **Three artifacts are addressed to me**: the specification proposals, the specification questions,
+> and the scenario test's input and expected data. Human attention is the most scarce resource when
+> programming with an AI assistant, so each of the three is as concise as it can be made.
+> **Concision is bounded by control, not the other way round** - each must stay precise and detailed
+> enough that I keep executive control of what it decides. One short enough to read and too vague to
+> govern has failed at the thing it was shortened for.
+
+**The specification is not a fourth**, and the bullet saying you read it while approving a proposal
+rather than as a separate errand is untouched.
+
+**The middle one does not exist yet** - `P-301` is where that is decided, and this text names it
+because your second message today listed it as something you look at.
+
+### P-298 - The other half: what the assistants need and you never read
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Claude bookkeeping, replacing the second bullet
+
+*Claude bookkeeping* says this documentation is not meant for you and gives two purposes - the
+history of how decisions came from you, and general research. **You named a third today, and it is
+the one that does work every session**: the context an assistant needs to interpret what you say
+correctly.
+
+> - That documentation is not meant for me. It is for remembering the history of how decisions
+>   ultimately came from me, for recording general research, and for the context an assistant needs
+>   in order to interpret what I say correctly. There is a lot of that, I never need to look at it,
+>   and it has to be organized so that an assistant finds the right part when it becomes relevant
+
+**Why it is worth a sentence rather than being obvious.** The first two purposes are about the past,
+so a document serving them is done when it is written and accurate. The third is about retrieval, and
+a document serving it is done only when it is **found at the right moment** - which is a claim about
+organization, not about content. It is the standing justification for `docs/notes/` being large while
+your three artifacts stay small.
+
+### P-299 - It can tell you whether a lane is running, and the reason it could not has gone
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** correction - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Outboxes and the index, replacing the fifth bullet
+
+The standing bullet says the specification instance can tell you whether a lane is **blocked** but
+**cannot** tell you whether it is running, because nothing in the repository records it and the only
+way to find out is to send a message, which starts it.
+
+**`P-292` contradicts it, and its second half is now false.** This session listed both peer sessions
+- `4x code`, idle, started 19 days ago, and `4x quality`, idle, started 9 days ago - **without
+messaging either one and without starting anything.**
+
+> - The specification instance can tell me whether a lane is **blocked**, because that is in the
+>   outboxes and it can read them. It can also tell me whether a lane is **running**, because it can
+>   list the other sessions without starting them. What neither answers is what a running lane is
+>   doing between commits, so when it reports it says which of the three it is answering
+
+**The repository still records none of this**, which is why the first half is unchanged: blocked is
+read from files that persist, and running is read from the session list, which is gone when you
+close the terminal.
+
+### P-300 - The eight-item budget loses its subject when quality stops being research
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **asks** a decision -
+**into** `docs/process.md` -> Research instances, and possibly a new section
+
+Four of the six bullets under *Research instances* are not about research. They are the finding
+cycle, **the cap of eight items open to any one other instance**, the expectation that most findings
+are noted and deliberately not acted on, and the sentence that your approval bounds what reaches the
+specification while the budget bounds what reaches you.
+
+**They bind quality today only because the heading says quality is a type of research instance.**
+`P-296` removes that, and then the cap has no subject. Nothing would be edited and the rule would
+stop applying - which is the failure `CLAUDE.md` describes as a premise moving under an item that
+still reads correctly.
+
+**Three ways to place it, and the third is not the same rule.**
+
+- **A new section for the two lenses** - quality and research - holding the four bullets once. Binds
+  exactly what is bound today. My recommendation
+- **Restated in both sections.** Binds the same, and `docs/README.md` forbids the copy for the
+  reason it always gives - one of the two goes stale and nothing connects them
+- **Moved to `All lanes`**, binding all four instances. **This is a change, not a placement**: the
+  specification instance has twelve items open to code right now, so it would be in breach on the
+  day it landed
+
+**What I need from you is which**, and if it is the first, whether the heading is *All lenses* -
+`CLAUDE.md` already calls quality and research lenses and the two producers something else.
+
+### P-301 - Questions you must answer, in a separate file from words you must approve
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **asks** a decision -
+**into** `docs/notes/`, a new file, and `docs/process.md` -> What I read, and what I do
+
+You said there should be a clear difference between proposals waiting for your approval and
+decisions the specification instance needs you to make, and that perhaps it should be a separate
+file. **Your second message treated it as settled**, listing *specification questions* as one of
+three things you look at.
+
+**A field already distinguishes them and a file does not.** Every proposal carries `asks approval`
+or `asks a decision`, and `P-300` above is one of the second kind. So the difference is recorded;
+what it does not do is separate what you can dispatch in seconds from what you have to think about.
+
+**What a separate file buys, and what it costs.**
+
+- **Buys**: two queues you can read in different moods, and a question stops being buried among
+  finished words. The fifteen-item limit could then be per file, where it means something different
+- **Costs**: an answered question becomes a proposal asking approval, so it **moves between files**,
+  and every id has two possible homes. `tools/outbox` reads both, so nothing is lost - but a reader
+  chasing `P-300` has to know which file it is in today
+
+**Three questions, and the third is the one I cannot guess.** What the file is called; whether an
+answered question moves or stays and is rewritten in place; and **whether the specification's own
+open questions belong there too** - `spec/` files carry an *Open questions* section at the bottom
+today, and those are also questions only you can answer.
+
 ## Addressed to other perspectives
 
 ### S-49 - Everything a fresh instance of you needs, in order
