@@ -63,58 +63,34 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-288 - Where `phase` and `turn` live, now that the predecessor has been read
+### P-288 - `phase` is a trait of the game, and `turn` is not in the state at all
 
-**to** sean - **status** open - **raised** 2026-09-06 - **revised** 2026-09-06 - **kind**
-contradiction - **asks** a decision - **into** `releases/first-release.md` -> Traits
+**to** sean - **status** open - **raised** 2026-09-06 - **revised** 2026-09-06 - **kind** Sean's own
+- **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Traits
 
-**You were right that the predecessor solved this, and reading it reverses half of what this lane
-recommended an hour ago.** `../game-4x`, measured:
+**Turn out, phase in - decided 2026-09-06.** One row, and the other half of the decision needs no
+words because `P-284` already carries it.
 
-- **`Universe(val planets: List<Planet>)`** and nothing else. **`turn` and `phase` appear zero times
-  in its whole `game` module.** `phase` appears **zero times in the entire repository.**
-- **`turn` is a local variable in the loop that applies the transition.** It reaches the world as a
-  **file name** - `turn-$turn.json` - never as a field inside one.
+> | **phase** | the game | before it starts, or once it has | stored |
 
-**What that is evidence of, stated carefully, because this lane overstated it once.** The runner
-ends with `while (!history.contains(current))` - it stops when the state repeats - and that works
-only because the state does not carry its turn. **But you are right that this is a weak argument for
-us.** At any real complexity a game state changes in vacuous ways every turn, so equality never holds
-and nothing is detected. **The code shows where its author put the turn; it does not show that
-keeping it out bought something we would want.**
+**Why `turn` needs nothing written.** `P-284` says every word in a data file is a kind, a trait, or a
+trait value. **`turn` is none of the three and is not being declared**, so the rule already forbids
+it from appearing - and putting it back would take a proposal, which is the friction that keeps the
+decision made.
 
-**Two arguments survive, and one of them is measured.**
+**The reasoning it rests on, since the version you approved is not the version this lane first
+argued.** The state-equality argument is weak and you refuted it: at real complexity a state changes
+in vacuous ways every turn, so nothing is detected that way. **What holds is that no rule needs it,
+that it is already the input restated, and that a turn is a boundary between states rather than a
+fact inside one.** Measured: every mention of a turn in `spec/` is relative, and *turn N*, *turn
+number*, *which turn* and *nth turn* appear **zero** times across the specification and the release;
+`play.4x` has **10** `end turn` commands against an expected `turn:11`.
 
-**1. No rule in the specification needs it.** Every mention of a turn is relative - *each turn*, *per
-turn*, *at the end of the turn*, *keeps for one turn*. **Nothing anywhere in `spec/` or the release
-names an absolute turn number** - zero occurrences of any of *turn N*, *turn number*, *which turn*,
-measured across the specification and the release. **So the game's own rules never ask what turn it
-is**, and a state that carries a number no rule consults is carrying it for the reader.
-
-**2. It is already the input restated.** `scenario/commands/play.4x` has **10** `end turn` commands
-and the expected state says **`turn:11`** - measured. **Two places say one thing and they can
-disagree.**
-
-**And your own reason is better than either.** A turn is a **boundary between states**, not a fact
-inside one, and a boundary belongs to whatever is doing the separating. That is why the predecessor's
-turn is a file name: the name of a state is not part of it.
-
-**`phase` is a different case and the predecessor does not decide it.** It never had one at all - its
-setup and its gameplay are different command sets in different tests, not a stored flag. **`phase`
-does not increase**, it changes once, so it destroys no equality. And the argument this lane made
-still stands: **`ready` is already a stored trait that gates which transitions may fire**, and
-`phase` is that shape at the root.
-
-**This lane now recommends: `turn` out, `phase` in.** They looked like one question and the
-predecessor shows they are two. **Out** for `turn` means it is not a trait, not in the dump, and is
-the count of `end turn` commands - or a file name, as the predecessor had it. **In** for `phase` is one row - `phase`, of the game, *before it starts, or once it has*, stored - and it comes back as a row to approve once you have answered, because a proposal that asks a decision offers no words.
-
-
-**What *out* costs, and it is the thing to weigh against.** `P-284` reached *every word is a kind, a
-trait, or a trait value* **with no exceptions**. If `turn` is printed anywhere it becomes an
-exception; if it is printed nowhere, **the expected state no longer says which turn it is**, and you
-would count `end turn` commands to know. **The predecessor's answer to exactly that was to put it in
-the file's name**, which is a place the rule does not reach.
+**What this makes the code lane's, filed when you promote.** The game's row is
+`{game phase:play turn:11 territories:12 units:1}` today - one line, measured. **`turn` leaves it**,
+`phase` stays as the trait this declares, and `territories` and `units` become entries in the game's
+contents under `P-287` rather than columns. **The row ends up as `{game phase:play}` with the world
+inside it.**
 
 ### P-289 - What makes a check worth having
 

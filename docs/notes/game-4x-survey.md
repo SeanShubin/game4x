@@ -135,6 +135,11 @@ rather than a fact inside one. And **no rule in the specification names an absol
 every mention is relative, *each turn*, *per turn*, *keeps for one turn* - so a stored turn is
 carried for the reader rather than for the rules.
 
+**Decided 2026-09-06: turn out, phase in.** `phase` is a stored trait of the game, on the same
+footing as `ready` on a citizen - a fact the rules consult before deciding what may happen. `turn` is
+not in the state, and needs no rule saying so: `P-284` admits only kinds, traits and trait values
+into a data file, and `turn` is none of them.
+
 `Land(val things: List<Pair<Thing, Int>>)` is the same file's other lesson - Sean's map form,
 already built, where a `Thing` is a list of name-and-attribute pairs and the pair's second element is
 the quantity. See [counted things and invented names](counted-things-and-invented-names.md).

@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-288** - Where `phase` and `turn` live, now that the predecessor has been read · `docs/notes/proposals.md`
+- **P-288** - `phase` is a trait of the game, and `turn` is not in the state at all · `docs/notes/proposals.md`
 - **P-289** - What makes a check worth having · `docs/notes/proposals.md`
 - **P-290** - Capacity is per kind and its trait values, which makes `node` unnecessary · `docs/notes/proposals.md`
 
