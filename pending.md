@@ -17,7 +17,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-47** - `8219381` Record what S-47 will need looking at, and poison the thing the check reads · still open in `docs/notes/proposals.md`
+- **S-47** - `f2040fa` File C-34: the population for S-47's unrepresentability claim · still open in `docs/notes/proposals.md`
 - **S-46** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
 - **S-45** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
 - **S-44** - `08e1c13` S-44 complete: prototypes/kinds knows the store kind · still open in `docs/notes/proposals.md`
@@ -28,7 +28,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (14)
+### To code (15)
 
 - **S-47** - The map form, and the check that keeps it honest · `docs/notes/proposals.md`
 - **S-46** - Restore `nodes.4x` from the *Scope* table · `docs/notes/proposals.md`
@@ -44,6 +44,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 - **Q-50** - A run of spaces sits mid-sentence in a failure message, in eighteen places · `lenses/quality/outbox.md`
+- **Q-55** - `C-34`'s population is four and this lens gets two, and the test that separates them · `lenses/quality/outbox.md`
 
 ### To spec (9)
 
