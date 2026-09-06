@@ -76,18 +76,28 @@ recommended an hour ago.** `../game-4x`, measured:
 - **`turn` is a local variable in the loop that applies the transition.** It reaches the world as a
   **file name** - `turn-$turn.json` - never as a field inside one.
 
-**And it is load-bearing, which is the part that changes the argument.** That loop ends with
-`while (!history.contains(current))` - **it stops when the state repeats.** That works only because
-the state does not carry its turn: **a state containing its own turn number is never equal to any
-other state**, so the loop would never close.
+**What that is evidence of, stated carefully, because this lane overstated it once.** The runner
+ends with `while (!history.contains(current))` - it stops when the state repeats - and that works
+only because the state does not carry its turn. **But you are right that this is a weak argument for
+us.** At any real complexity a game state changes in vacuous ways every turn, so equality never holds
+and nothing is detected. **The code shows where its author put the turn; it does not show that
+keeping it out bought something we would want.**
 
-**So the case for keeping `turn` out is not that it feels like time.** It is that **a number
-increasing with every transition destroys equality between states**, and equality is what lets you
-ask whether anything changed - a stalemate, a loop, a turn that did nothing.
+**Two arguments survive, and one of them is measured.**
 
-**`turn` is also already derivable here.** `scenario/commands/play.4x` has **10** `end turn`
-commands and the expected state says **`turn:11`** - measured. **It is the input restated**, and
-restated data is data that can disagree with itself.
+**1. No rule in the specification needs it.** Every mention of a turn is relative - *each turn*, *per
+turn*, *at the end of the turn*, *keeps for one turn*. **Nothing anywhere in `spec/` or the release
+names an absolute turn number** - zero occurrences of any of *turn N*, *turn number*, *which turn*,
+measured across the specification and the release. **So the game's own rules never ask what turn it
+is**, and a state that carries a number no rule consults is carrying it for the reader.
+
+**2. It is already the input restated.** `scenario/commands/play.4x` has **10** `end turn` commands
+and the expected state says **`turn:11`** - measured. **Two places say one thing and they can
+disagree.**
+
+**And your own reason is better than either.** A turn is a **boundary between states**, not a fact
+inside one, and a boundary belongs to whatever is doing the separating. That is why the predecessor's
+turn is a file name: the name of a state is not part of it.
 
 **`phase` is a different case and the predecessor does not decide it.** It never had one at all - its
 setup and its gameplay are different command sets in different tests, not a stored flag. **`phase`

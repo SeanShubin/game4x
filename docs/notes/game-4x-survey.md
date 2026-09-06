@@ -124,9 +124,16 @@ belong in the state. **It did not, and the reason is that neither was ever in it
 **a state containing its own turn number is never equal to any other state**, so the loop would never
 close and every game would run to the turn limit.
 
-**So the predecessor's answer is not *keep it outside because it feels like time*.** It is: **a
-number that increases with every transition destroys equality between states**, and equality between
-states is what lets you ask whether anything changed.
+**Sean, reading this: the argument is weaker than it looks.** *We don't actually need to compare
+game states like that; detecting a stalled game is not viable in practice because once we get to
+sufficient complexity the game state can change in vacuous ways.* **He is right**, and it demotes
+this from a reason to a piece of evidence: **the code shows where its author put the turn, not that
+keeping it out bought something.**
+
+**What survives is his own reason and one measurement.** A turn is a **boundary between states**
+rather than a fact inside one. And **no rule in the specification names an absolute turn number** -
+every mention is relative, *each turn*, *per turn*, *keeps for one turn* - so a stored turn is
+carried for the reader rather than for the rules.
 
 `Land(val things: List<Pair<Thing, Int>>)` is the same file's other lesson - Sean's map form,
 already built, where a `Thing` is a list of name-and-attribute pairs and the pair's second element is
