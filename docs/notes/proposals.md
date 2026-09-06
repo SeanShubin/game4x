@@ -63,40 +63,29 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-283 - Does turning a paragraph into a bullet take the full stop with it?
+### P-283 - Bullet-versus-paragraph takes the period with it
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
-- **into** `CLAUDE.md` -> Promotion
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-06 - **kind**
+contradiction - **shape** text - **asks** approval - **into** `CLAUDE.md` -> Promotion, after
+*promotion is a pure move*
 
-**A check the code lane built says `P-257` did not land what you approved, and it is right.** You
-approved four paragraphs, each ending in a full stop. **I promoted them as bullets and dropped the
-four stops.** The words are otherwise identical.
+**Your A, as one sentence.** It goes after *nothing else, ever - for a block of text*.
 
-**I let myself do it, which is the part worth your attention.** The promotion script compared the
-text with a helper that allowed *a leading dash and a dropped terminal stop*. **`CLAUDE.md` permits
-line wrapping, bullet-versus-paragraph and heading level, and nothing else** - so I wrote a check
-that agreed with what I was about to do rather than with the rule.
+> **Bullet-versus-paragraph takes the sentence's closing period with it**, because a list that omits
+> them and a paragraph that carries them are two forms of the same words. **No other punctuation may
+> move.**
 
-**The question is one word of that rule, and it decides both the repair and the check.**
+**What it settles.** `P-257` landed four approved paragraphs as four bullets without their periods,
+and `tools/outbox/tests/promotions.rs` has been failing on it since. **Under this sentence the file
+is right and the check is wrong**, so nothing in `spec/logistics.md` is touched.
 
-**Choice A - the stop goes with the form.** Turning a paragraph into a bullet includes dropping its
-full stop, because that is punctuation belonging to the paragraph. **The file stays as it is**, and
-the check in `tools/outbox` is taught the same rule.
+**What follows, and it is work rather than a decision.** The check compares byte for byte and has to
+learn the same allowance. **That is the code lane's**, filed when this promotes - and **the gate stays
+red until it lands**, which is worth saying in the same breath as the rule.
 
-**Choice B - the stop is text.** Only wrapping, the dash and the heading level are free. **The four
-stops go back into `spec/logistics.md`.** That section has **nine** bullets; **eight end without a
-stop and one ends with one** - measured. So B takes it from eight-and-one to four-and-five, which is
-more mixed than either.
-
-**This lane recommends A**, and would have recommended it before being caught rather than after. **B
-honours a guarantee about bytes that was never about punctuation**, and would make every future
-paragraph-to-bullet promotion leave the same mark. **The one bullet that does end in a stop is
-evidence for A rather than against it**: it is a promotion from before this shape existed, and it
-reads as the odd one out.
-
-**Either way the check is what found it and it should stay strict.** It is the first time a promotion
-has been caught by a machine rather than by you or by me re-reading, which is what `P-263` and the
-`shape` field were for.
+**One thing this does not licence.** *No other punctuation may move* is in the sentence because the
+argument for the period is that it belongs to the form, and no other mark does. **A comma, a dash or
+an emphasis marker is text**, and moving one is the failure this rule exists to prevent.
 
 ### P-284 - Every word in a data file is a kind, a trait, or a trait value
 

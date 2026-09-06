@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-283** - Does turning a paragraph into a bullet take the full stop with it? · `docs/notes/proposals.md`
+- **P-283** - Bullet-versus-paragraph takes the period with it · `docs/notes/proposals.md`
 - **P-284** - Every word in a data file is a kind, a trait, or a trait value · `docs/notes/proposals.md`
 - **P-285** - A thing is not located by a trait, and one with an `id` is unique · `docs/notes/proposals.md`
 - **P-286** - The release's traits follow: `place` goes, `id` arrives · `docs/notes/proposals.md`
