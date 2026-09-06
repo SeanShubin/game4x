@@ -63,6 +63,33 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-38 - `Q-58` declined, and the check that says why is worth more than the fix would have been
+
+**to** quality · **status** open · **raised** 2026-09-06 · **source** checking `Q-58` before
+defending the code it was about
+
+**Declined, with evidence rather than with an argument.** `Q-58` read
+`most_in_one_turn`'s `density.saturating_sub(1)`, whose comment gave two reasons for
+saturating, and observed that one of them - a density-zero food extractor - has no case in the
+release's *Territory resources* table or in the case table beside it. **Both halves of that are
+true.** The two territories with a zero are `set resource 6 metal 0 0` and
+`set resource 7 energy 0 0`, and neither is food.
+
+**The conclusion does not follow, and the way to find that out was to make the change.** With
+plain subtraction the whole suite stays green, exactly as the item says. `Territory::empty` has
+no deposits at all, `create planet` makes twelve of them before `set resource` fills any in, and
+`is_fully_exploited` asks `can_hold_yard` about whatever is standing there. A probe doing that
+panics with *attempt to subtract with overflow*.
+
+**So the case is real, nothing covered it, and now something does** -
+`ground_with_no_food_at_all_produces_nothing_rather_than_underflowing`. The finding was right
+that the comment was wrong: it named two reasons as though they were one kind of thing, when
+density one is territory 5 and density zero is ground nobody has designed yet. The comment now
+says which is which.
+
+**Recorded because being refuted is the lens working, and so is this.** `Q-58` is the reason
+there is a test on that boundary at all.
+
 ### C-37 - The expected data file is generated from the presentation, which is why `P-284` fails
 
 **to** code · **status** open · **raised** 2026-09-06 · **source** measuring `P-284`'s gap before
@@ -102,6 +129,24 @@ units:1}`.
 **The count is seventeen.** `amount`, `built`, `capacity`, `citizens`, `count`, `game`, `in-play`,
 `labor-spent`, `left`, `made`, `spent`, `structure`, `territories`, `territory-resource`, `turn`,
 `units`, `yards`.
+
+**Eighteen. `Q-57` found `play`, and the cause is the one already written above.** `phase`'s
+Values cell reads *before it starts, or once it has*, which **describes** its values and names
+neither, so `play` and `design` appear nowhere in `releases/first-release.md`. A fourth instrument
+missed it for the same reason the first three missed `turn` - a trait whose values are described
+rather than named admits nothing and looks like it admits everything. `phase` is the only
+closed-set trait in that table that neither names its values nor points at a table listing them.
+
+**That is a row and the row is Sean's**, so it is `Q-57` to spec rather than work here. **The rule
+proposed below already rejects `play`** - `phase` names no closed set - so the check reports it on
+its first run and the fix is the row, not the check.
+
+**And one thing that is not in the population, checked rather than assumed.** `unit` and `place`
+are **families**, which `P-284` as written does not admit: it says a kind, a trait, or one of a
+trait's values. The data file uses both correctly. A check built on `P-284`'s literal words would
+flag them, and whoever ran it would then "fix" correct usage - so the vocabulary is kinds,
+families, traits and closed-set trait values, and the gap between that and `P-284`'s wording is
+worth a proposal rather than a silent widening.
 
 **What that says about the check `P-284` needs.** A word is admitted if it is a kind, a family, a
 trait name, or **a value of a trait that names a closed set** - not if it appears somewhere in a

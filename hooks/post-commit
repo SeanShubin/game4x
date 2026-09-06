@@ -1,0 +1,32 @@
+#!/bin/sh
+# Leave nothing of this lane's in the shared index.
+#
+# `pre-commit` regenerates pending.md and stages it, because it is derived from the outboxes
+# and a stale copy is worth less than no copy. That is right for an ordinary commit, where
+# the index is what gets committed and pending.md goes with it.
+#
+# It is wrong after a pathspec commit - `git commit -- some/path` - which commits the paths
+# named from the working tree and leaves the rest of the index alone. pending.md then sits
+# staged and uncommitted, and the next `git commit` in this tree takes it, whoever runs it
+# and whatever their commit is about. Three perspectives share this working tree, so the
+# next commit is often another lane's, and it would carry a pending.md rendered from
+# outboxes as they stood during somebody else's session - reverting findings filed since,
+# under a message about something else.
+#
+# That is the hazard CLAUDE.md states plainly: a file you stage is committed by whoever
+# commits next. It has already happened once here, with twenty-six lines landing in another
+# perspective's commit. The quality lens found this instance of it.
+#
+# Resetting is safe in both directions. After an ordinary commit the index already matches
+# HEAD for this path and this does nothing. After a pathspec commit it unstages the
+# regenerated file, which stays in the working tree - visible in `git status`, belonging to
+# whoever produced it, and picked up by the next commit's own hook run.
+#
+# Enable once per clone: git config core.hooksPath hooks
+set -e
+
+if ! git diff --cached --quiet -- pending.md 2>/dev/null; then
+    echo "post-commit: pending.md was left staged by a pathspec commit; unstaging it"
+    echo "post-commit: the regenerated file stays in the working tree - it is not lost"
+    git reset --quiet -- pending.md
+fi

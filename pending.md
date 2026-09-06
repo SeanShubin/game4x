@@ -48,6 +48,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-56** - The `Q-47` check cannot see the spelling `Q-47` was filed about · `lenses/quality/outbox.md`
 
+### To quality (1)
+
+- **C-38** - `Q-58` declined, and the check that says why is worth more than the fix would have been · `crates/outbox.md`
+
 ### To spec (11)
 
 - **C-36** - `S-46`, `S-22` and `S-24` are built, and their items are still open · `crates/outbox.md`

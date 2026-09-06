@@ -509,8 +509,17 @@ impl Territory {
             return food.capacity * food.density;
         }
         let wanted = self.deposit(resource);
-        // Saturating because a density-zero or density-one food extractor buys no hand at
-        // all: it feeds exactly the citizen holding it.
+        // **Saturating, and the two reasons are not the same reason** - `Q-58` asked whether
+        // one of them was real.
+        //
+        // A density-one food extractor feeds exactly the citizen holding it, so it buys no
+        // hand: that is territory 5, and the arithmetic gives zero without any help.
+        //
+        // **Density zero is ground with no food capacity at all**, which no territory in the
+        // release is and which the model produces anyway: `Territory::empty` is what
+        // `create planet` makes, and `set resource` fills it in afterwards. `is_fully_exploited`
+        // reaches `can_hold_yard` on whatever is there. Plain subtraction underflows on it -
+        // verified by making the change and probing it, not by reading the type.
         let spare = food.capacity * food.density.saturating_sub(1);
         spare.min(wanted.capacity) * wanted.density
     }
@@ -918,6 +927,33 @@ mod tests {
             "six cases: two where the hands run out, two where the capacity does, one with \
              no capacity at all and one asking for food itself"
         );
+    }
+
+    /// Ground with no food capacity answers zero rather than underflowing.
+    ///
+    /// **`Q-58`, declined with this.** The lens read the saturating subtraction's comment,
+    /// which gave two reasons for it, and observed that one of them - density zero - has no
+    /// case in the release's territory table or in the case table above. That is true of
+    /// both tables and the conclusion does not follow: `Territory::empty` has no deposits at
+    /// all, `create planet` makes twelve of them before `set resource` fills any in, and
+    /// `is_fully_exploited` asks `can_hold_yard` about whatever is standing there.
+    ///
+    /// **Checked by making the change rather than by arguing about it.** With plain
+    /// subtraction the whole suite stays green - the lens was right about that - and this
+    /// panics with *attempt to subtract with overflow*. So the case is real, no test covered
+    /// it, and the finding was worth more than the fix would have been.
+    #[test]
+    fn ground_with_no_food_at_all_produces_nothing_rather_than_underflowing() {
+        let bare = Territory::empty(TerritoryId(1), Biome::Grassland);
+        assert_eq!(bare.deposit(Resource::Food), Deposit::default());
+        for resource in Resource::ALL {
+            assert_eq!(
+                bare.most_in_one_turn(resource),
+                0,
+                "no food capacity is no population, so nothing is produced"
+            );
+        }
+        assert!(!bare.can_hold_yard(), "and nothing can be built on it");
     }
 
     /// A Yard needs fifteen metal to be holdable at once, which is stores plus one turn.

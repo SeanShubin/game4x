@@ -119,17 +119,24 @@ fn every_crate_has_a_row_and_every_row_has_a_crate() {
 /// directory**. A test reading a report is a test; production depending on one is the
 /// failure this exists to catch.
 ///
-/// **The trap is the spelling, and it is why the lens filed this rather than building it.**
-/// Two are in use - `"reports/…"` and `.join("reports")` - and they interleave, so searching
-/// for either alone finds some of the readers and misses the rest. Both lanes fell into it
-/// within minutes of each other, on the same question, from opposite sides. **So this
-/// matches the path rather than a spelling**: a literal that *is* `reports` or *opens*
-/// `reports/` is a reader however it was written, and the word in a sentence - *all
-/// reports*, *six reports* - is not a path and is not one.
+/// **The trap is the spelling, and it caught this check too.** `Q-47` said two were in use -
+/// `"reports/…"` and `.join("reports")` - and that searching for either alone finds some
+/// readers and misses the rest. The first version of this matched a literal that *was*
+/// `reports` or *opened* `reports/`, and **`Q-56` found a third**: `../../reports/…`, from a
+/// crate manifest's own directory, in two files that were in the tree while it was written.
+/// So the predicate matches the directory **wherever it sits in the path**, and the word in
+/// a sentence - *all reports*, *six reports* - is still not a path.
 ///
-/// **The population is asserted because a count over nothing proves nothing.** A predicate
-/// that found no readers at all would pass this while saying nothing, which is the same
-/// green as a rule that holds.
+/// **Two counts that share a computation are one count**, which is how it survived review on
+/// both sides. The population was asserted at five, five is what it found, and five was the
+/// figure in the `Q-47` report - already corrected to seven that morning. And the poison used
+/// to prove it could fail was `reports/state.md`, a spelling inside the region it already
+/// saw, so it could only ever confirm what already worked. **A failing probe has to be
+/// aimed where the check is blind**, and this one was not.
+///
+/// **The population is asserted because a count over nothing proves nothing**, and it is
+/// asserted at the real figure rather than a floor under it: `>= 5` tolerated losing two
+/// readers in silence.
 #[test]
 fn only_a_generator_or_a_check_reads_a_report() {
     let root = root();
@@ -169,18 +176,31 @@ fn only_a_generator_or_a_check_reads_a_report() {
             if relative.ends_with("tools/outbox/tests/architecture.rs") {
                 continue;
             }
-            // A string literal that is the directory, or a path inside it. This is the one
-            // predicate, and it sees both spellings because both write the same literal.
-            let names_it = text
-                .split('"')
-                .skip(1)
-                .step_by(2)
-                .any(|literal| literal == "reports" || literal.starts_with("reports/"));
+            // **The directory, wherever it appears in the path.** `Q-56`: the first version
+            // of this matched a literal that *was* `reports` or *opened* `reports/`, and two
+            // files reach it as `../../reports/…` from a crate manifest's own directory - a
+            // third spelling, in the tree at the time, in a check whose whole subject was
+            // that searching for one spelling misses readers.
+            let names_it = text.split('"').skip(1).step_by(2).any(|literal| {
+                literal == "reports"
+                    || literal.starts_with("reports/")
+                    || literal.contains("/reports/")
+            });
             if !names_it {
                 continue;
             }
             readers.push(relative.clone());
-            let generator = relative.contains("/src/bin/");
+            // **A crate's binary root counts as a generator, and that is a widening.**
+            // `prototypes/kinds/src/main.rs` writes two of the reports and is the only
+            // binary its crate has, so Cargo's default target is where it belongs -
+            // `src/bin/` exists to hold the *second* binary. Moving it to satisfy a check
+            // would be churn in the file rather than a correction in the rule.
+            //
+            // Said rather than done quietly, because it does widen what is permitted: a
+            // shipping binary's `main.rs` is now inside the sighted region too, and the path
+            // cannot tell a generator from a consumer. What holds that down is the
+            // population below.
+            let generator = relative.contains("/src/bin/") || relative.ends_with("/src/main.rs");
             let check = relative.contains("/tests/");
             if !generator && !check {
                 trespass.push(relative);
@@ -190,10 +210,11 @@ fn only_a_generator_or_a_check_reads_a_report() {
 
     readers.sort();
     assert!(
-        readers.len() >= 5,
-        "only {} file(s) name `reports/`, and the rule was written against five - {readers:?}. \
-         A predicate that finds nothing passes this while checking nothing, which is why the \
-         population is asserted rather than the absence.",
+        readers.len() >= 7,
+        "only {} file(s) name the reports directory, and there were seven - {readers:?}. \
+         A predicate that finds nothing passes while checking nothing, and one that finds \
+         most of them passes while missing the rest, which is `Q-56` exactly. If a reader \
+         was deliberately removed, lower this with it and say so.",
         readers.len()
     );
     assert!(
