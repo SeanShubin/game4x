@@ -60,7 +60,18 @@ fn main() {
                 .iter()
                 .filter(|item| item.is_outstanding())
                 .count();
-            // The count and nothing more, until `Q-32` settles what the limit counts.
+            // The count and nothing more, until it is settled what the limit counts.
+            //
+            // **This deferred to `Q-32`, which closed `acted` on 2026-08-30 having deleted a
+            // duplicate figure from `CLAUDE.md` and settled nothing about what the limit
+            // counts.** So the code waited on an item that could not answer it, and said a
+            // fix was pending against nothing pending - `S-50`.
+            //
+            // **The question is open as `P-300`**, which is words Sean has not approved. The
+            // line below stays as it is until he does: what it becomes - distinguishing his
+            // reading budget from an instance's own backlog - is one of three consequences
+            // `S-50` states and explicitly says not to build yet. Naming the live proposal
+            // rather than a closed item is the whole of the fix here.
             //
             // This used to add "past the limit: reviewing now costs as much as writing".
             // The count is true and that verdict is not: the limit's justification is
@@ -72,7 +83,7 @@ fn main() {
             // the error on whoever reads it next. So: the number, which is a fact, and no
             // judgement, which is not this tool's to make yet.
             println!("{open} open across every outbox");
-            println!("a limit is pending: {LIMIT} was written for Sean's queue,");
+            println!("a limit is pending as `P-300`: {LIMIT} was written for Sean's queue,");
             println!("and most of these are a producer's backlog");
             0
         }

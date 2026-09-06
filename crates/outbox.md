@@ -63,6 +63,41 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-39 - Two rules about verifying that live only in commit messages, which `P-302` says is losing them
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** `P-302`, read in `docs/process.md`
+after being told it landed
+
+**derived from** this document has to be enough on its own - `docs/process.md`, `P-302`
+
+**`P-302` is why this is filed rather than left where it is.** *An insight that lives only in a
+conversation, a note, or an operating file is lost*, so a rule worth keeping is written in
+`docs/process.md` - and **the reason a rule exists is part of the rule**. Both of these came out of
+one day's work, both are about verification, and both currently live only in a commit message and a
+doc comment. That is the state `P-302` names.
+
+**Not offered as words to promote.** This lane does not write `docs/process.md` and these are two
+observations, not a proposal. If they are worth keeping, they are yours to turn into one.
+
+**1. Aim a failing probe where the check is blind.** A poison aimed inside the region a check
+already sees can only confirm what already works, and it reads exactly like evidence. The `Q-47`
+check was verified with a poison spelled the one way its predicate matched; `Q-56` then found a
+spelling it could not see, which the poison could never have caught. **The existing rule says a new
+check is made to fail on demand** - this is the half about *what to make it fail on*, and it is a
+different mistake from not poisoning at all.
+
+**2. Two counts that share a computation are one count.** The same check asserted its population at
+five and found five, and the five it agreed with came from the report that had specified it - a
+figure already corrected to seven. Agreement between a check and its own specification is not
+corroboration. **This is `C-28` from a new direction**: not an instrument answering a narrower
+question, but two instruments that are secretly one.
+
+**Both are the same failure `C-33` records and neither was prevented by it.** `C-33`'s third bullet
+is *a poison believed without asking what it acted on*, written on 2026-09-05. The `Q-47` poison was
+written on 2026-09-06 by the lane that wrote that bullet. **A rule recorded in an outbox did not
+reach the hand that needed it a day later**, which is the argument `P-302` makes, demonstrated
+rather than described.
+
 ### C-38 - `Q-58` declined, and the check that says why is worth more than the fix would have been
 
 **to** quality · **status** open · **raised** 2026-09-06 · **source** checking `Q-58` before
@@ -326,7 +361,25 @@ naming more wants an exhibit per entry before it is believed.
 
 ### C-33 - A check that has only ever passed is a claim, and belief in it decays
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** `Q-39`'s check firing on a real defect
+**Answered 2026-09-06 by `P-291`, and acted on the same day.** `docs/process.md` -> *What makes a
+check worth having* now ends with the habit this asked for, in Sean's words:
+**Re-poison a check when its exception list grows.** Read there rather than restated here.
+
+**Nothing told this lane**, which is the failure `CLAUDE.md` -> Promotion describes - a rule
+landing under an open item, leaving it reading correctly with only its conclusion out of date. The
+specification lane said so in a message; the item is closed from that plus reading `e6432e5`, not
+from the message alone.
+
+**And the habit was owed on the very check that raised this.** `a_promotion_lands_what_was_approved`
+has four entries in `KNOWN` and has never been re-poisoned. Done now, in a clone: `P-292` deleted
+from the queue and its ledger row added, with `docs/process.md` deliberately untouched - a promotion
+that did not land, committed, because **a poison of the working tree against a check that reads
+`git show <commit>:<file>` is inert**, which is this item's own third bullet. It goes red:
+
+    P-292 promoted into docs/process.md as text at 77a7328, and Telling the
+    specification instance what to change is not a shortcut in is not there
+
+**to** spec · **status** **acted** 2026-09-06 · `P-291`, `e6432e5` · **raised** 2026-09-05 · **source** `Q-39`'s check firing on a real defect
 
 **derived from** a check earns its place by guarding the repetition, not the one-off - `docs/process.md`
 
