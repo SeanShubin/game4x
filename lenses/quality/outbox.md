@@ -191,74 +191,6 @@ on it. Third artifact of this kind in two commits.
 check is worth having if it prints and is restricted to single-line literals; poison it like anything
 else.
 
-### Q-51 - Two source guards assert no offences without asserting they read anything
-
-**to** code · **status** open · **raised** 2026-09-05 · **source** the `4x research` session, relayed
-because it writes nothing in `lenses/`; verified here before filing
-
-`game-model/src/lib.rs:56` `no_floating_point_anywhere` and `command-language/src/lib.rs`'s game-noun
-guard have one shape: `read_dir` over `CARGO_MANIFEST_DIR/src`, collect offending lines, and
-`assert!(offences.is_empty())`. **Neither asserts how many files it read.** `read_dir` is not
-recursive and a directory entry has no `rs` extension, so it is skipped by the same `continue` that
-skips a `.toml` - **any `.rs` file in a subdirectory of `src/` is unscanned and the guard stays
-green.**
-
-`no_floating_point_anywhere` is not an ordinary check: its own doc comment says integer addition is
-what makes resolving territories in any order safe, so the model's confluence claim rests on it.
-
-**Prophylactic, not live.** Both trees are flat today - eight files under `game-model/src`, seven
-under `command-language/src` - so nothing is unscanned. Same standing as `Q-49`: filed because the
-guard's own reasoning does not survive a restructure that nothing forbids.
-
-**One failure mode in the report is louder than reported, and saying so matters.** A crate rename or
-a manifest path that stops resolving is **not** silent here: `read_dir(...).unwrap()` panics, and a
-panic is a failing test. The only silent path is the subdirectory. A finding that overstates how many
-ways it can fail is harder to act on than one that names the single way it can.
-
-**The adjacent pair the report named and did not claim are both clear**, checked here so they stop
-being ambiguous: `dumps_are_current.rs` asserts eleven generated files and seven pages, and
-`quotations.rs` asserts `checked >= 1`. Their `else` branches return empty on an unreadable
-directory, and those floors are what turn that into a failure.
-
-**The population, since this item is about counting against one.** Eight `read_dir` sites in
-`crates/`, `tools/` and `prototypes/`. Two are these guards. Two are the floored checks above. One is
-the `Library` impl in `first_release.rs`, cleared because its caller asserts three names are present
-and an empty listing fails. Two are `tools/outbox` - see `Q-52`. One is `pad-tables`, which pads
-rather than checks.
-
-**Whether.** Worth doing, one line each, and the count is worth more than the recursion: a guard that
-says *I read eight files and found nothing* is checkable by a reader in a way *I found nothing* never
-is.
-
-### Q-52 - The test named for walking the lens directory passes with the walk deleted
-
-**to** code · **status** open · **raised** 2026-09-05 · **source** widening the population for `Q-51`
-
-`tools/outbox/src/lib.rs:1410` `it_looks_where_every_outbox_lives`, doc comment *every producer's
-outbox is looked for by name, and every lens's by walking*. It calls `places(Path::new("/root"))`.
-`/root/lenses` does not exist, so the walking branch contributes nothing, and all three assertions
-are about the two hard-coded paths and one absence.
-
-**Poison-verified rather than argued.** Deleted the eight-line `lenses` branch from `places` in a
-copy under this lens's scratchpad, never in the tree, and ran the crate's whole suite against a
-control copy of the same commit in the same place: **24 passed and 2 failed in both.** The two
-failures are the tests that need the real repository root and are identical either way. So the walk
-is not covered by the test named for it, and not covered by anything else in the crate.
-
-Every other mention of a lens path in that crate - lines 759, 1394, 1395, 1400 - is a string handed
-to `parse` by hand. **Nothing anywhere exercises `places` finding a real lens outbox.**
-
-**What it would cost.** `places` is what `pending.md` is built from, and *nothing open means nothing
-outstanding* is a promise about every outbox including a lens's. The runtime half is honest -
-`report_what_was_found` prints how many outboxes were read and names them, deliberately, with the
-comment saying why - so a lens dropping out would be visible to someone reading the output. **The
-gate would not fail; a person would have to notice a number.**
-
-**Whether.** Small, and the fix is a fixture rather than an assertion: point `places` at a temporary
-directory holding `lenses/<name>/outbox.md` and assert it is found. The existing negative assertion -
-that the pre-move `/quality/outbox.md` path is gone - is worth keeping and is not evidence of
-anything on its own, since it passes against a root where every walked path is absent.
-
 ### Q-53 - A session is producing findings and has no outbox to put them in
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** receiving `Q-51` by message from
@@ -678,6 +610,43 @@ thought about
 `crates/game-console/tests/first_release.rs:102`: `insert` is asserted `is_none()`, and the reason is
 written where the parse is rather than where the test loops - a second row claiming territory 3 would
 have replaced territory 3's expected nodes while the length stayed twelve
+
+### Q-51 - Two source guards asserted no offences without asserting they read anything
+
+**to** code · **status** **acted** 2026-09-05 · `7a0d425`. Verified: `no_floating_point_anywhere`
+counts what it scans and floors it at six of the eight files under `game-model/src`; the game-noun
+guard floors at five of seven. Floors rather than counts, for the reason `poles.rs` got one - the
+number is a property of the crate's layout, so a bound needing an edit whenever a file is added would
+be edited without being thought about
+
+**Raised by the `4x research` session and relayed, because it has no outbox** - which is `Q-53`
+
+### Q-52 - The test named for walking the lens directory passed with the walk deleted
+
+**to** code · **status** **acted** 2026-09-05 · `7a0d425`. Verified: the fixture builds a root
+holding two lens directories, one directory with no outbox and a stray file, and asserts what the
+walk returns. Deleting the walk now fails it
+
+**The fixture found what neither of us had argued for, and the code lane's version of the lesson is
+better than this item's.** This item said the negative assertion is not evidence because it passes
+against an absent root. True, and the sharper statement is that **neither of us knew what `places`
+returned until something ran it against a directory that existed.** It yields a candidate for every
+entry under `lenses/` - including a directory with no outbox, and a stray *file* walked as though it
+were one, because `read_dir` does not say which an entry is. They had written the assertion as two
+and it failed at four. **So `places` offers somewhere to look rather than a list of what exists**,
+which nothing in the code said anywhere.
+
+**Their call not to guard the stray file is right, and one consequence is worth recording with it.**
+An unreachable candidate is not inert: `read` pushes what it cannot open onto `missing`, which
+`main` prints as *not present*. So a file sitting directly in `lenses/` would produce a permanent
+false line in the output all three lanes read. **Noise rather than error, in a case that does not
+exist today** - `lenses/` holds one directory and `CLAUDE.md` puts a lens's README inside its own
+directory - and it would be visible the moment it did.
+
+Worth being accurate about the cost of the fix, since it is the reason offered: `.is_dir()` is a
+filter rather than a behaviour change. **The reason not to do it is that the failure is one visible
+line in a case nothing produces, not that the change is large** - and `read` filtering it is what
+makes the design coherent rather than lucky
 
 ### Q-16 - The picture never sees the biome the model has
 
