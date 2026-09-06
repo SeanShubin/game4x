@@ -60,86 +60,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Two waiting on you, and they are independent of each other.**
-
-1. **`P-305`** - you said promote it and I did not. The third bullet changed after you read
-   it, and the changed text is marked in the item
-2. **`P-307`** - the application-specific language you asked me to clean up, as six
-   substitutions with the check the promoting commit runs
-
-### P-305 - When an item closes, and the one thing that could still swallow it
-
-**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
-own - **shape** text - **asks** approval - **into** `docs/process.md` -> Outboxes and the index,
-after the bullet saying what every item carries
-
-**You said promote this and I did not.** The quality lens filed `Q-60` after you last read it, and
-the third bullet has changed - so promoting on your earlier instruction would have landed words you
-have not seen, which is the thing *promote* exists to prevent. **The changed bullet is the third
-one below**; the first two are as you read them.
-
-> - **An item closes when the instance it is addressed to has done what it can**, not when the thing
->   it reports is finally fixed. Waiting for the fix keeps items open longer, and age is what makes
->   one go out of date or contradict another - so the rule that looks like it protects against
->   losing things is the one that causes the trouble
-> - **A closing item names what now tracks the thing it reported**, so the chain can be followed.
->   Without that, closing on being routed just means closing
-> - **And a withdrawal that would orphan a closed item does not silently drop it.** The lane
->   withdrawing the proposal files the reopening as an item addressed to whoever owns the closed
->   one, in the same commit as the withdrawal - the same rule as a promotion that makes something
->   else stale. A decision of mine not to do something is recorded and is not a thing lost; a
->   proposal Claude withdraws is neither, so an item that closed into one would otherwise go quiet
->   with nobody having decided anything
-
-**What was wrong with the old wording.** It said *reopens that item*, which names no actor - and no
-lane can be one. This lane performs the withdrawal and may not write a lens's directory. `S-51`
-reports, and a check cannot reopen anything. The owning lens has no signal unless it happens to be
-running and happens to look. **So the rule as written was the failure it was written to prevent**,
-and the lens found it by reading the proposal rather than by being told.
-
-**The fix invents nothing.** `CLAUDE.md` already says a promotion that makes something else stale
-files the cleanup immediately; this is that rule applied to the other direction. It also keeps
-`S-51` a report rather than a gate - a gate would redden for whichever lane commits next, which may
-be one that must not repair it.
-
-**Two items in other lanes' outboxes move when this lands, and neither is mine.** The quality lens's
-`Q-53` becomes correctly closed, having named `P-296`. The code lane's `C-16`, open since 2026-09-02
-on the rule this replaces, can close naming `S-30`.
-
-### P-307 - `docs/process.md` describes a process and keeps calling the subject a game
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** instruction -
-**asks** approval - **into** `docs/process.md`, six places
-
-**Your document is about how you work with AI assistants, and would read the same for any
-application.** Six phrases tie it to this one. **Your own word is already in it** - *I verify
-application behaviour through generated presentations of canonical data* - so this makes the rest
-match the line that already got it right, rather than inventing vocabulary.
-
-| Now                                                         | Becomes                                                            |
-| ----------------------------------------------------------- | ------------------------------------------------------------------ |
-| `## How I know the game is right`                           | `## How I know the application is right`                           |
-| whether the game is working as I intend                     | whether the application is behaving as I intend                    |
-| every step of the win condition                             | every step of the end-to-end path                                  |
-| a fact about the game and is stated with the game           | a fact about the application and is stated with it                 |
-| described under *How I know the game is right*              | described under *How I know the application is right*              |
-| The specification says what the game is when it is finished | The specification says what the application is when it is finished |
-
-**The fifth is a cross-reference inside text you approved an hour ago**, in *Coding instance*. It
-moves because the heading it names moves, not because the sentence changed its mind.
-
-**The third is the one to look at hardest.** *Win condition* has no generic synonym that keeps its
-force - it means the thing the whole run is aimed at. *End-to-end path* is what the surrounding
-sentences already call it: *a main scenario that a person can follow end to end*. If you would
-rather keep a stronger word, that is the line to change.
-
-**The check the promoting commit runs**: `grep -i "\bgame\b\|win condition" docs/process.md` finds
-nothing.
-
-**One thing done rather than proposed, and reported here.** The document spells it *behaviour* in
-one place and *behavior* in another. That is consistency inside your rules rather than an idea, so
-this lane settles it and tells you: *behavior*, matching the more recent of the two, which is the
-line you approved today.
+**Nothing.** Every proposal filed today has been promoted, and no choice is waiting on
+you. Questions live in [questions.md](questions.md), which is also empty.
 
 ## Addressed to other perspectives
 
@@ -1749,6 +1671,8 @@ work the release exists to order.
 | P-303, a reason that is false is worse than one that is missing                                                              | `docs/process.md` -> What this document has to be                                                                                            | 2026-09-06 |
 | P-304, where to aim a probe, and when two counts are one count                                                               | `docs/process.md` -> What makes a check worth having                                                                                         | 2026-09-06 |
 | P-306, the sentence saying inter-lane items have no limit, corrected                                                         | `docs/process.md` -> What I read, and what I do                                                                                              | 2026-09-06 |
+| P-305, when an item closes, and the withdrawal that would otherwise swallow one                                              | `docs/process.md` -> Outboxes and the index                                                                                                  | 2026-09-06 |
+| P-307, the process document stops calling its subject a game                                                                 | `docs/process.md`, six places                                                                                                                | 2026-09-06 |
 
 ## Rejected
 

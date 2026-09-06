@@ -84,11 +84,11 @@ before I promote it.
 **What I approve is what ships** - text byte for byte, a table's rows cell for cell, and an
 instruction run with the check it carries. **That is what makes reading it worth my time.**
 
-## How I know the game is right
+## How I know the application is right
 
 Four artifacts: the definitions of the things, the definitions of the transformations over them,
 the commands a scenario ran, and the data dump of that scenario. The first three are enough to
-derive the fourth by hand. If I can do that, I can tell whether the game is working as I intend.
+derive the fourth by hand. If I can do that, I can tell whether the application is behaving as I intend.
 
 The scenario test reads the data files for its input, reads the data files for what is expected,
 computes what actually happens, and compares. **The input and the expected are what I review by
@@ -106,12 +106,11 @@ what I cannot do is remember a mundane check every time after that**, and that i
 test is for. So a check earns its place by guarding the repetition, not the one-off.
 
 There is a **main scenario** that a person can follow end to end. **That is what I vet, and it is
-the foundation.** I do not need to walk every step of the win condition by hand.
+the foundation.** I do not need to walk every step of the end-to-end path by hand.
 
 As long as that foundation is maintained, other scenarios check that particular end states are
 reachable. **Those rest on the foundation rather than on me**, and they will make heavy use of the
-automation. **What the main scenario has to cover is a fact about the game and is stated with the
-game.**
+automation. **What the main scenario has to cover is a fact about the application and is stated with it.**
 
 ## What verification requires
 
@@ -140,7 +139,7 @@ game.**
 
 ### Presentation
 - Canonical data exists in a data format, not a presentation format and not code
-- I verify application behaviour through generated presentations of canonical data, especially
+- I verify application behavior through generated presentations of canonical data, especially
   through scenarios
 - Presentations are generated from data
 - Presentations are never canonical
@@ -266,7 +265,7 @@ when the session ends, and nobody can see who is waiting on what.
   details, the tooling, the pipeline, the deployment and the rest of production support are this
   instance's own decisions
 - It produces the second artifact I review by hand - the input and the expected data for the
-  scenario test, described under *How I know the game is right*
+  scenario test, described under *How I know the application is right*
 - It notifies the specification instance of its status
 - After any significant change to production code, it asks the quality instance for a review
 - When a quality review is wrong, it says so, and gives the quality instance enough information
@@ -376,7 +375,7 @@ than remembered.
 lens has to answer before it is worth starting lives. The four above are the ones that exist.
 
 ## Releases
-- The specification says what the game is when it is finished. A release says what is being built now
+- The specification says what the application is when it is finished. A release says what is being built now
 - A release never invents a rule. If it needs one the specification lacks, that becomes a proposal
   first and the release then refers to it
 - Approving a proposal fills in the destination. It is the release that orders work, because most of
@@ -408,6 +407,18 @@ lens has to answer before it is worth starting lives. The four above are the one
   instance has to read
 - The specification instance's outbox is the proposal queue
 - Every item carries an id, who it is addressed to, a status, and one line saying what it is
+- **An item closes when the instance it is addressed to has done what it can**, not when the thing
+  it reports is finally fixed. Waiting for the fix keeps items open longer, and age is what makes
+  one go out of date or contradict another - so the rule that looks like it protects against
+  losing things is the one that causes the trouble
+- **A closing item names what now tracks the thing it reported**, so the chain can be followed.
+  Without that, closing on being routed just means closing
+- **And a withdrawal that would orphan a closed item does not silently drop it.** The lane
+  withdrawing the proposal files the reopening as an item addressed to whoever owns the closed
+  one, in the same commit as the withdrawal - the same rule as a promotion that makes something
+  else stale. A decision of mine not to do something is recorded and is not a thing lost; a
+  proposal Claude withdraws is neither, so an item that closed into one would otherwise go quiet
+  with nobody having decided anything
 - `pending.md` is for the instances rather than for me. It is generated from every outbox at every
   commit, so it is never something somebody remembered to update, and it says what must be decided
   before it says anything else
