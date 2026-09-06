@@ -176,6 +176,24 @@ closed-set trait in that table that neither names its values nor points at a tab
 proposed below already rejects `play`** - `phase` names no closed set - so the check reports it on
 its first run and the fix is the row, not the check.
 
+**`phase` is not the only row of that shape, and it is not one row to fix.** `Q-57` says it is the
+only closed-set trait in that table that neither names its values nor points at a table listing
+them. **Checked against the nineteen rows rather than relayed, and two more are the same shape:**
+
+- **`houses`** - *whether people live in it*. Describes the question, names neither answer.
+- **`control`** - *held by a player, or unclaimed*. Names one value and describes the other, and
+  **the described one is three words**, which `P-252` forbids in a data file anyway.
+
+**Neither is in the eighteen, and only because nothing prints them yet.** No `houses:` or `control:`
+appears in `scenario/expected/play.4x` and the dump writes neither. **So the count is right and the
+diagnosis was too narrow**: fixing `phase` alone leaves the same trap armed for whichever of the
+other two is printed next, and `control` is the live candidate - `S-43` records Sean considering it,
+declining, and setting *I will notice when reviewing* as the test.
+
+**Which makes it three rows or a rule, rather than a row.** Worth deciding as one thing, since a
+trait's Values cell either names what it admits or says where they are listed - and that sentence is
+the general form of all three.
+
 **And one thing that is not in the population, checked rather than assumed.** `unit` and `place`
 are **families**, which `P-284` as written does not admit: it says a kind, a trait, or one of a
 trait's values. The data file uses both correctly. A check built on `P-284`'s literal words would
