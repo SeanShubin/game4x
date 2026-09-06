@@ -352,9 +352,9 @@ lens has to answer before it is worth starting lives. The three above are the on
   commit, so it is never something somebody remembered to update, and it says what must be decided
   before it says anything else
 - The specification instance can tell me whether a lane is **blocked**, because that is in the
-  outboxes and it can read them. **It cannot tell me whether a lane is running.** Nothing in the
-  repository records that, and the only way to find out is to send a message - which starts it. So
-  when it reports, it says which of the two it is answering
+  outboxes and it can read them. It can also tell me whether a lane is **running**, because it can
+  list the other sessions without starting them. What neither answers is what a running lane is
+  doing between commits, so when it reports it says which of the three it is answering
 - `scripts/outbox.ps1` answers the same question from a terminal, and filters by who an item is
   addressed to. That is mostly for the instances rather than for me
 - If nothing anywhere is open and addressed, then nothing any instance knows to be wrong is

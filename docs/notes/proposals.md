@@ -60,17 +60,16 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Approve in the order below, not the order they are filed.** Two pairs constrain each other; the
-rest are free.
+**Approve in the order below, not the order they are filed.** One pair constrains itself; the rest
+are free, and none of them asks a decision.
 
-1. **`P-299`, then `P-292`** - the correction lands first, so the definition arrives into a section
-   that already agrees with it rather than contradicting it for one commit
+1. **`P-292`** - the specification instance. `P-299` has landed, so the section it arrives into
+   already agrees with it
 2. **`P-293`, `P-294`, `P-295`** - the other three instance definitions, in any order
 3. **`P-296`** - the scaffolding, after all four, because it is their consequence
 4. **`P-297`** and **`P-298`** - independent, whenever you like
-5. **`P-303`**, **`P-304`**, **`P-306`** - independent of everything and of each other. Each extends
-   or corrects a section of `docs/process.md` that already exists
-6. **`P-305`** - the only one asking a decision
+5. **`P-303`**, **`P-304`**, **`P-305`**, **`P-306`** - independent of everything and of each other.
+   Each extends or corrects a section of `docs/process.md` that already exists
 
 ### P-292 - What the specification instance is for
 
@@ -260,28 +259,6 @@ a document serving it is done only when it is **found at the right moment** - wh
 organization, not about content. It is the standing justification for `docs/notes/` being large while
 your three artifacts stay small.
 
-### P-299 - It can tell you whether a lane is running, and the reason it could not has gone
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** correction - **shape** text -
-**asks** approval - **into** `docs/process.md` -> Outboxes and the index, replacing the fifth bullet
-
-The standing bullet says the specification instance can tell you whether a lane is **blocked** but
-**cannot** tell you whether it is running, because nothing in the repository records it and the only
-way to find out is to send a message, which starts it.
-
-**`P-292` contradicts it, and its second half is now false.** This session listed both peer sessions
-- `4x code`, idle, started 19 days ago, and `4x quality`, idle, started 9 days ago - **without
-messaging either one and without starting anything.**
-
-> - The specification instance can tell me whether a lane is **blocked**, because that is in the
->   outboxes and it can read them. It can also tell me whether a lane is **running**, because it can
->   list the other sessions without starting them. What neither answers is what a running lane is
->   doing between commits, so when it reports it says which of the three it is answering
-
-**The repository still records none of this**, which is why the first half is unchanged: blocked is
-read from files that persist, and running is read from the session list, which is gone when you
-close the terminal.
-
 ### P-303 - A reason that is false is worse than one that is missing
 
 **to** sean - **status** open - **raised** 2026-09-06 - **kind** recovered - **shape** text -
@@ -346,47 +323,37 @@ different hand wrote the check, so the existing sentence does not reach it.
 written a day later by the lane that wrote the bullet.** Filed because they otherwise live in a
 commit message and a doc comment, which is what `P-302` says is lost.
 
-### P-305 - An item may close when it is routed, and one thing can still swallow it
+### P-305 - When an item closes, and the one thing that could still swallow it
 
 **to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
-own - **asks** a decision - **into** `docs/process.md` -> Outboxes and the index
+own - **shape** text - **asks** approval - **into** `docs/process.md` -> Outboxes and the index,
+after the bullet saying what every item carries
 
-**Your goals settle the axis this was filed about.** The two rules were *closed when the thing it
-reports is fixed* - the code lane's, holding `C-16` open since 2026-09-02 - and *closed when its
-addressee has done what it can*, which the quality lens applied to `Q-53` today.
+**Your goals decided the axis and you chose the remedy for the leak**, so this now asks approval.
+Three bullets, each carrying its reason, because `P-302` says the reason travels with the rule and
+the reason here is the whole of why the obvious rule is the wrong one.
 
-**Closed-when-fixed buys nothing-lost by keeping items open longer, which is the cost you named.**
-Age is what makes an item go out of date or contradict another, so the rule that protects against
-losing things is the rule that causes the trouble you said you care about. **Closed-when-routed
-wins**, and length stops being the thing to manage.
+> - **An item closes when the instance it is addressed to has done what it can**, not when the thing
+>   it reports is finally fixed. Waiting for the fix keeps items open longer, and age is what makes
+>   one go out of date or contradict another - so the rule that looks like it protects against
+>   losing things is the one that causes the trouble
+> - **A closing item names what now tracks the thing it reported**, so the chain can be followed.
+>   Without that, closing on being routed just means closing
+> - **And a withdrawal that would orphan a closed item reopens that item.** A decision of mine not to
+>   do something is recorded, and is not a thing lost. A proposal Claude withdraws is neither, so an
+>   item that closed into one would go quiet with nobody having decided anything
 
-**One thing still swallows an item, and it is the well-travelled path rather than the rare one.**
+**What the third bullet is guarding, in the numbers that made you pick it**: 28 proposals withdrawn
+by this lane against 1 rejected by you. The path it protects is the well-travelled one.
 
-You said a decision of yours not to do something is not a thing being lost, because it is recorded.
-**That covers your rejections. It does not cover Claude's withdrawals**, and the ledger says which
-of those actually happens: **28 proposals withdrawn by this lane, 1 rejected by you.**
+**Two items change status the moment this lands, and neither is mine to change.** The quality lens's
+`Q-53` becomes correctly closed - it named `P-296`, which is why the leak was findable at all. And
+the code lane's `C-16`, open since 2026-09-02 on the rule this replaces, can close naming `S-30`,
+which is where the same gap is tracked. I have told both lanes; each closes its own.
 
-So the leak is: an item closes as `acted`, citing a proposal - then this lane withdraws that
-proposal, and the thing the item reported is gone from every outbox with **nobody but Claude having
-decided anything.** `Q-53` is in that shape right now. It is closed, citing `P-296`, and if `P-296`
-is withdrawn - because `P-295`'s definition of the research instance moves, say - then *a session
-producing findings has nowhere to file them* is recorded in no open item anywhere.
-
-**Three ways to close it.**
-
-- **A withdrawal that would orphan a closed item reopens that item.** Mechanical, costs you nothing,
-  and it is checkable rather than a habit - `tools/outbox` already parses the citations, so it can
-  find every item closed citing a proposal that later left the queue. **My recommendation**
-- **This lane may not withdraw a proposal something closed into.** It goes to you as a rejection
-  instead, so the record is yours. Correct, and it spends your attention on proposals this lane has
-  already concluded are wrong
-- **Accept it.** The 28 withdrawals are mostly *derivable, nothing leans on it* - proposals that
-  should not have been filed rather than gaps going quiet - so the leak may never have fired
-
-**One thing I am treating as wording rather than as a question**, and will write into the promoted
-text unless you say otherwise: **a routed close names what now tracks it.** `Q-53` cites `P-296`,
-which is why this was findable at all; without that the chain cannot be followed and *closed when
-routed* means *closed*.
+**`S-51` files the check to the code lane.** It is mechanical rather than a habit: for every item
+closed citing `P-n`, ask whether `P-n` appears in the Withdrawn table. `tools/outbox` already parses
+both.
 
 ### P-306 - `P-300` landed beside a sentence saying the thing it limits has no limit
 
@@ -423,6 +390,37 @@ mechanism has failed* - a justification your promotion just replaced, in a file 
 contradict yours. It now names the number and points at the section that says what it is for.
 
 ## Addressed to other perspectives
+
+### S-51 - A closed item citing a withdrawn proposal is a gap nobody decided to drop
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** `P-305`, and Sean choosing the
+mechanical remedy over the two that rely on judgement
+
+**Do not build until `P-305` is promoted.** It is words Sean has approved the shape of and not yet
+the text of. The check below is what it asks for, stated now so it arrives as one item.
+
+**The rule.** An item may close when the instance it is addressed to has done what it can, naming
+what now tracks the thing it reported. **A withdrawal that would orphan such an item reopens it.**
+
+**The check, and it needs no new parsing.** For every item whose status is closed and whose text
+cites `P-n`, ask whether `P-n` appears in the Withdrawn table of `docs/notes/proposals.md`. If it
+does, the item closed into something that no longer exists and nobody but this lane decided to drop
+it. `tools/outbox` already reads the citations and already reads the ledger sections.
+
+**Three things to get right, and the third is the one that would make it decoration.**
+
+- **Promoted is not withdrawn.** A proposal that lands leaves the queue too, and gets an Accepted
+  row. Only the Withdrawn table means the thing evaporated
+- **A rejection is not a withdrawal either.** Sean's recorded reason is a decision, and
+  `docs/process.md` says a decision of his not to do something is not a loss
+- **Assert the population.** Today the answer is very likely zero, and **zero says nothing unless
+  the count of closed-items-citing-a-proposal is non-empty** - so the check reports both numbers,
+  not just the offences. `docs/process.md` -> What makes a check worth having says why
+
+**The live case that will exercise it**, if you want something to poison against: `Q-53` in
+`lenses/quality/outbox.md` is closed citing `P-296`, which is open. Move `P-296` to Withdrawn in a
+clone and the check should name `Q-53`. **Poison the file the check reads** - it reads the working
+tree, not history, unlike the promotion checker.
 
 ### S-50 - `tools/outbox` defers a fix to `Q-32`, which closed without answering it
 
@@ -1986,3 +1984,4 @@ again in a later session.
 | P-282, three of six columns on a territory row are not traits | withdrawn: `P-287` removes all three names rather than choosing between them | 2026-09-06 || P-302, this document has to be enough on its own, with every transcript and CLAUDE.md gone | `docs/process.md` -> What this document has to be | 2026-09-06 |
 | P-300, two budgets, and only one of them is a count | `docs/process.md` -> All lanes, Research instances | 2026-09-06 |
 | P-301, two files are addressed to me, and the limit of fifteen is a tripwire | `docs/process.md` -> What I read, and what I do | 2026-09-06 |
+| P-299, it can tell me whether a lane is running, and what neither answer covers | `docs/process.md` -> Outboxes and the index | 2026-09-06 |

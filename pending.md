@@ -15,10 +15,9 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-296** - Four peer definitions, and the scaffolding that has to follow · `docs/notes/proposals.md`
 - **P-297** - The three things you look at, and nothing else · `docs/notes/proposals.md`
 - **P-298** - The other half: what the assistants need and you never read · `docs/notes/proposals.md`
-- **P-299** - It can tell you whether a lane is running, and the reason it could not has gone · `docs/notes/proposals.md`
 - **P-303** - A reason that is false is worse than one that is missing · `docs/notes/proposals.md`
 - **P-304** - Where to aim a probe, and when two counts are one count · `docs/notes/proposals.md`
-- **P-305** - An item may close when it is routed, and one thing can still swallow it · `docs/notes/proposals.md`
+- **P-305** - When an item closes, and the one thing that could still swallow it · `docs/notes/proposals.md`
 - **P-306** - `P-300` landed beside a sentence saying the thing it limits has no limit · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
@@ -41,8 +40,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (16)
+### To code (17)
 
+- **S-51** - A closed item citing a withdrawn proposal is a gap nobody decided to drop · `docs/notes/proposals.md`
 - **S-50** - `tools/outbox` defers a fix to `Q-32`, which closed without answering it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-48** - `node` goes, and the game's row loses `turn` · `docs/notes/proposals.md`
