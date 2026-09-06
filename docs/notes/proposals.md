@@ -63,47 +63,56 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-276 - A garrison is coordination and nothing else
+### P-276 - A garrison is coordination, and nothing has to work it
 
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
-**into** `spec/control.md` -> Force, and `releases/first-release.md` -> Units and structures
+**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
+- **shape** text - **asks** approval - **into** `spec/control.md` -> Force
 
-**Two of your three clauses are unambiguous and the third is not, so this asks one thing.**
+**Your clarification answers the question this asked, and rejects the reading I recommended.** Not
+`A` or `B`: **the build cost stays 1 labor and 1 metal**, and what goes is the per-turn operating
+cost. **This bullet replaces *A garrison does two things* and the two sentences under it**, one
+occurrence, measured.
 
-**Settled: a garrison provides no force.** Its row gives it force **1** today, measured. It becomes
-0, and a garrison is then the thing that lets citizens sum and is nothing else.
+> - A garrison has no force of its own. It does one thing: it lets the citizens of that territory
+>   sum their force instead of presenting only the highest among them. **It does this by existing,
+>   and nothing has to work it.**
 
-**Settled: its presence is what allows the summing.** `spec/control.md` already says that -
-*it lets the citizens of that territory sum their force instead of presenting only the highest among
-them* - so that half needs no change.
+**Why the multiplier goes with it, rather than being a second decision.** You said a citizen spent a
+labor at the garrison each turn *to get the force and the effect*. **The force was the multiplier** -
+*a citizen working there produces that much force* - and with a garrison at force 0 there is no
+garrison force left to gain. **So removing the labor removes the only thing the multiplier did.**
+A citizen still contributes its own force by the bullet above this one, *coordinated or not*.
 
-**The question is what *not require labor* means**, and the two readings are different changes.
+**You are right that it was underspecified.** The per-turn labor was never written anywhere - I
+looked. **So nothing is being deleted except the multiplier**; the rest of what you described existed
+only as intent, and this is the first time the rule says what it does.
 
-**Reading A - the force no longer depends on a citizen working.** `spec/control.md` says a garrison
-*has a multiplier, so that a citizen working there produces that much force*, and the release says
-*a garrison's multiplier is 1* - one occurrence each, measured. **Under A both sentences go**, and a
-citizen contributes its own force whether it works or not, which is what the bullet above already
-says: *a citizen has a force of its own, coordinated or not*. **A garrison then does exactly one
-thing.**
+**`P-277` carries the release half**, which is the force cell and the one sentence that names the
+multiplier. Two files, so two proposals.
 
-**Reading B - building one costs no labor.** Its cost is *1 labor, 1 metal*; under B it is 1 metal.
-**This changes the economy and not the force rule**, and leaves the multiplier where it is.
+**What it settles.** After a founding, garrison 0 plus two citizens summing is **2**, against a
+jungle's nature of 2, and holding takes force *equal to* nature - **so a jungle holds, exactly**, and
+falls the moment it drops to one citizen. That answers `C-31` without touching a biome number.
 
-**This lane reads it as A**, because your three clauses together describe what a garrison *does*
-rather than what it costs, and *require labor* matches *a citizen **working** there* exactly.
-**A and B are not exclusive** - say both if you meant both.
+### P-277 - The release follows: a garrison has force 0 and no multiplier
 
-**What A does, and it is the answer to `C-31`.** After a founding: garrison **0**, two citizens
-**1** each, summing because the garrison is there. **Force 2 against a jungle's nature of 2, and
-holding takes force *equal to* nature - so it holds, exactly.**
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** instruction
+- **asks** approval - **into** `releases/first-release.md` -> Units and structures
 
-**And it makes the jungle's danger permanent rather than a toll at the gate.** Force 2 is two
-citizens. **A jungle that drops to one citizen falls to nature and its population perishes** - so
-the jungle is a place you must keep two people in, for as long as you hold it. Grassland at nature 1
-survives on one.
+**`P-276`'s release half, as an instruction because it is two changes of different kinds in one
+file.**
 
-**What it does not fix.** The model reports `force_in` of **1** where these rules say 3 today and 2
-under A - it is dropping the citizens entirely, which is a defect either way and is the code lane's.
+**Change 1.** In *Units and structures*, the **garrison** row's **Force** cell becomes **0**. It is
+`1` today. **Its *Costs to produce* cell is untouched** and stays *1 labor, 1 metal*, which is what
+you said.
+
+**Change 2.** The sentence *A garrison's multiplier is 1.* is deleted from the paragraph below that
+table. **The two sentences after it stay** - *an Ark can invade land from orbit*, and the one about
+nothing outside the table.
+
+**Assertion**. The garrison row's Force cell reads `0`; its Costs cell still reads *1 labor, 1
+metal*; `multiplier` appears **zero** times in `releases/first-release.md`, against the eleven other
+things that paragraph says; and *An Ark can invade land from orbit* is still present.
 
 ## Addressed to other perspectives
 
