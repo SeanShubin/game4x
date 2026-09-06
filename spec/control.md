@@ -21,9 +21,9 @@ How a territory is claimed and held. Weapons and their ranges are in [combat](co
 - A territory has at most one garrison, because it represents the organisation of the whole
   territory rather than a presence in one part of it.
 - A citizen has a force of its own, coordinated or not
-- A garrison does two things. It lets the citizens of that territory sum their force instead of
-  presenting only the highest among them. And it has a multiplier, so that a citizen working
-  there produces that much force.
+- A garrison has no force of its own. It does one thing: it lets the citizens of that territory
+  sum their force instead of presenting only the highest among them. **It does this by existing,
+  and nothing has to work it.**
 
 ## Coordination
 

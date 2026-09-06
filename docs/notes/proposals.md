@@ -63,37 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-276 - A garrison is coordination, and nothing has to work it
-
-**to** sean - **status** open - **raised** 2026-09-05 - **revised** 2026-09-05 - **kind** Sean's own
-- **shape** text - **asks** approval - **into** `spec/control.md` -> Force
-
-**Your clarification answers the question this asked, and rejects the reading I recommended.** Not
-`A` or `B`: **the build cost stays 1 labor and 1 metal**, and what goes is the per-turn operating
-cost. **This bullet replaces *A garrison does two things* and the two sentences under it**, one
-occurrence, measured.
-
-> - A garrison has no force of its own. It does one thing: it lets the citizens of that territory
->   sum their force instead of presenting only the highest among them. **It does this by existing,
->   and nothing has to work it.**
-
-**Why the multiplier goes with it, rather than being a second decision.** You said a citizen spent a
-labor at the garrison each turn *to get the force and the effect*. **The force was the multiplier** -
-*a citizen working there produces that much force* - and with a garrison at force 0 there is no
-garrison force left to gain. **So removing the labor removes the only thing the multiplier did.**
-A citizen still contributes its own force by the bullet above this one, *coordinated or not*.
-
-**You are right that it was underspecified.** The per-turn labor was never written anywhere - I
-looked. **So nothing is being deleted except the multiplier**; the rest of what you described existed
-only as intent, and this is the first time the rule says what it does.
-
-**`P-277` carries the release half**, which is the force cell and the one sentence that names the
-multiplier. Two files, so two proposals.
-
-**What it settles.** After a founding, garrison 0 plus two citizens summing is **2**, against a
-jungle's nature of 2, and holding takes force *equal to* nature - **so a jungle holds, exactly**, and
-falls the moment it drops to one citizen. That answers `C-31` without touching a biome number.
-
 ### P-277 - The release follows: a garrison has force 0 and no multiplier
 
 **to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** instruction
@@ -1492,6 +1461,7 @@ work the release exists to order.
 | P-275, a military unit is organised force in itself, and taking uses the organised force brought                             | `spec/control.md` -> Gaining and holding ground                                                                                              | 2026-09-05 |
 | P-272, a biome gives a territory its total capacity and density for each resource                                            | `spec/planet.md`                                                                                                                             | 2026-09-05 |
 | P-274, the rebalanced biome table: jungle food, ice metal and grassland metal                                                | `releases/first-release.md` -> Biomes                                                                                                        | 2026-09-05 |
+| P-276, a garrison has no force and does one thing, by existing                                                               | `spec/control.md` -> Force                                                                                                                   | 2026-09-05 |
 
 ## Rejected
 
