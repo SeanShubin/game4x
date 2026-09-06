@@ -346,44 +346,47 @@ different hand wrote the check, so the existing sentence does not reach it.
 written a day later by the lane that wrote the bullet.** Filed because they otherwise live in a
 commit message and a doc comment, which is what `P-302` says is lost.
 
-### P-305 - Two lanes close an item by different rules, and both are written down
+### P-305 - An item may close when it is routed, and one thing can still swallow it
 
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** contradiction - **asks** a decision
-- **into** `docs/process.md` -> Outboxes and the index
+**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
+own - **asks** a decision - **into** `docs/process.md` -> Outboxes and the index
 
-**Filed the moment it was found**, which is what `CLAUDE.md` requires of a contradiction. Both texts
-were read before filing rather than recalled.
+**Your goals settle the axis this was filed about.** The two rules were *closed when the thing it
+reports is fixed* - the code lane's, holding `C-16` open since 2026-09-02 - and *closed when its
+addressee has done what it can*, which the quality lens applied to `Q-53` today.
 
-**The code lane's rule**, in `crates/outbox.md`, on `C-16`: *an item is closed by the thing it
-reports being fixed, not by the reply.* It has kept `C-16` open since 2026-09-02 on exactly that
-ground - the specification lane replied, the gap it reports is still there, and closing it would
-delete the one open record of something still true.
+**Closed-when-fixed buys nothing-lost by keeping items open longer, which is the cost you named.**
+Age is what makes an item go out of date or contradict another, so the rule that protects against
+losing things is the rule that causes the trouble you said you care about. **Closed-when-routed
+wins**, and length stops being the thing to manage.
 
-**The quality lens's rule**, applied today: an item addressed to a lane closes when that lane has
-done what it can. It closed `Q-53` as `acted`, citing `P-296` - **a proposal you have not approved,
-for a directory that does not exist.** The lens had told me the opposite two messages earlier and
-corrected itself deliberately, so this is a considered position rather than a slip.
+**One thing still swallows an item, and it is the well-travelled path rather than the rare one.**
 
-**Both are defensible and they cannot both be the rule.** Under the first, `Q-53` is open until
-`lenses/research/` exists. Under the second, `C-16` should have closed in September.
+You said a decision of yours not to do something is not a thing being lost, because it is recorded.
+**That covers your rejections. It does not cover Claude's withdrawals**, and the ledger says which
+of those actually happens: **28 proposals withdrawn by this lane, 1 rejected by you.**
 
-**What is actually at stake is what *nothing open means nothing outstanding* promises.** Under the
-first rule it means *every known broken thing is recorded somewhere*. Under the second it means
-*every known broken thing has been routed to someone*, which is weaker - a closed item can then mean
-*still broken, and being tracked elsewhere*. Today that elsewhere is the proposal queue, which is
-your surface, so nothing is lost. **If a proposal is rejected, nothing carries the gap forward** -
-the Rejected ledger records your reason, which stops it being re-proposed rather than keeping it
-open.
+So the leak is: an item closes as `acted`, citing a proposal - then this lane withdraws that
+proposal, and the thing the item reported is gone from every outbox with **nobody but Claude having
+decided anything.** `Q-53` is in that shape right now. It is closed, citing `P-296`, and if `P-296`
+is withdrawn - because `P-295`'s definition of the research instance moves, say - then *a session
+producing findings has nowhere to file them* is recorded in no open item anywhere.
 
-**Two ways to settle it, and I have no recommendation because the trade is yours.**
+**Three ways to close it.**
 
-- **Closed when fixed.** The promise stays strong and outboxes stay longer. `Q-53` reopens
-- **Closed when routed**, and the item names what now tracks it, so the chain is followable. Shorter
-  outboxes, and the promise becomes about routing rather than about state
+- **A withdrawal that would orphan a closed item reopens that item.** Mechanical, costs you nothing,
+  and it is checkable rather than a habit - `tools/outbox` already parses the citations, so it can
+  find every item closed citing a proposal that later left the queue. **My recommendation**
+- **This lane may not withdraw a proposal something closed into.** It goes to you as a rejection
+  instead, so the record is yours. Correct, and it spends your attention on proposals this lane has
+  already concluded are wrong
+- **Accept it.** The 28 withdrawals are mostly *derivable, nothing leans on it* - proposals that
+  should not have been filed rather than gaps going quiet - so the leak may never have fired
 
-**Not urgent and not ignorable.** Nothing is blocked today. But the two lanes will keep diverging
-while both rules are written down and neither is the rule, and every item closed under the second is
-one a reader of the first would still expect to find open.
+**One thing I am treating as wording rather than as a question**, and will write into the promoted
+text unless you say otherwise: **a routed close names what now tracks it.** `Q-53` cites `P-296`,
+which is why this was findable at all; without that the chain cannot be followed and *closed when
+routed* means *closed*.
 
 ### P-306 - `P-300` landed beside a sentence saying the thing it limits has no limit
 
