@@ -145,6 +145,28 @@ comment's reason is the reason - the same wall `P-245` and `C-28` hit - so if it
 is worth a sentence and the two cases, in the section that already carries the habits nothing can
 enforce.
 
+**The specification lane read this as close enough to `C-28` and `P-291` to be a copy rather than an
+addition, 2026-09-06, and invited a challenge.** Checked before defending, and the check changed the
+answer rather than confirming it.
+
+**Against those two it is an addition, and the discriminator is clean.** `C-28` and `P-291` are both
+about an artifact that is **wrong or stale** - an instrument answering a narrower question, a check
+whose green has stopped carrying information. There is something to find in each. Here **there is
+nothing to find**: the decision is correct, the code is correct, and only the account of why is
+false. That is why no check reaches it and why it survives review.
+
+**And `P-302`, which landed after that judgement was formed, is the argument this item did not
+have.** *The reason a rule exists is part of the rule - one recorded without its reason survives as
+a ritual, and the first person to find it inconvenient deletes it correctly, for the wrong reason.*
+**`P-302` covers a missing reason; this covers a false one**, and the two failures are the same
+sentence read from either end. A rule with no reason is deleted correctly for the wrong reason; a
+rule with a wrong reason is **kept** correctly for the wrong reason, and the person it misleads is
+the one who came back because they were unsure.
+
+So the place it belongs may be beside `P-302` rather than beside `C-28`, which is a different
+section from the one this item first named. **Still the specification lane's call, and if it reads
+as a copy after this, that stands** - being refuted is the lens working.
+
 
 ### Q-57 - `phase` declares no values, so `play` is an eighteenth forbidden word
 
@@ -169,6 +191,38 @@ admit. The file uses both correctly, so a check built on its literal words would
 
 **Whether.** Worth a decision now. Both producers believe `phase` is settled -
 `docs/notes/proposals.md:122` already writes `{game phase:play}` as the target form.
+
+
+### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` →
+[What this document has to be](../../docs/process.md#what-this-document-has-to-be) at the
+specification lane's pointing
+
+**`P-302`:** *an insight that lives only in a conversation, a note, or an operating file is lost, so
+a rule worth keeping is written here* - and what is in `docs/process.md` has to be enough to rebuild
+the process with every `CLAUDE.md` and every note gone.
+
+**[`README.md`](README.md) is an operating file and it carries rules of exactly that kind.** Poison
+the thing the check reads; a count of zero says nothing unless the population is non-empty; probe
+against a clone rather than the shared tree; commit by pathspec because staging is publishing; a
+green suite under a poison bounds the tests and not the code. **None of them is a finding about the
+game.** They are how the process is run, they were each learned by getting something wrong, and
+`P-302` says the reason is part of the rule - which is the half this file is actually good at
+keeping.
+
+**What makes this a finding rather than a chore is who can act on it.** `docs/` is the specification
+lane's column, so this lens can neither move them nor propose the wording. It can only say that the
+rule landed and that the file it binds is one this lens owns and cannot fix.
+
+**The scope needs deciding rather than assuming, which is why nothing is drafted here.** Some of
+these are craft local to a lens and some are process. `docs/process.md` already defines what a
+quality instance is, so what is at stake is the accumulated habit rather than the definition.
+
+**Whether.** Worth doing eventually, not now. Sean has eleven proposals open, nothing is blocked on
+it, and the cost of leaving it is that a rediscovery is expensive rather than that anything is
+wrong. Filed rather than mentioned because a consequence of a promotion noted in a reply is one
+nobody reads - which is `P-302`'s own point turned on this item.
 
 
 ---

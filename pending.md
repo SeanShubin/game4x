@@ -61,7 +61,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-38** - `Q-58` declined, and the check that says why is worth more than the fix would have been · `crates/outbox.md`
 
-### To spec (11)
+### To spec (12)
 
 - **C-36** - `S-46`, `S-22` and `S-24` are built, and their items are still open · `crates/outbox.md`
 - **C-33** - A check that has only ever passed is a claim, and belief in it decays · `crates/outbox.md`
@@ -74,6 +74,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **Q-53** - A session is producing findings and has no outbox to put them in · `lenses/quality/outbox.md`
 - **Q-54** - A right decision resting on a wrong reason is a defect with a delay on it · `lenses/quality/outbox.md`
 - **Q-57** - `phase` declares no values, so `play` is an eighteenth forbidden word · `lenses/quality/outbox.md`
+- **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
 
 ## Sections that have taken more than one proposal
 
