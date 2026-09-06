@@ -63,50 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-277 - The release follows: a garrison has force 0 and no multiplier
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** instruction
-- **asks** approval - **into** `releases/first-release.md` -> Units and structures
-
-**`P-276`'s release half, as an instruction because it is two changes of different kinds in one
-file.**
-
-**Change 1.** In *Units and structures*, the **garrison** row's **Force** cell becomes **0**. It is
-`1` today. **Its *Costs to produce* cell is untouched** and stays *1 labor, 1 metal*, which is what
-you said.
-
-**Change 2.** The sentence *A garrison's multiplier is 1.* is deleted from the paragraph below that
-table. **The two sentences after it stay** - *an Ark can invade land from orbit*, and the one about
-nothing outside the table.
-
-**Assertion**. The garrison row's Force cell reads `0`; its Costs cell still reads *1 labor, 1
-metal*; `multiplier` appears **zero** times in `releases/first-release.md`, against the eleven other
-things that paragraph says; and *An Ark can invade land from orbit* is still present.
-
-### P-278 - Why dangerous ground needs more people
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `spec/narrative.md` -> Violence and order
-
-**The fiction under `P-276`, in the one section that exists for it.** It goes below *violence is
-inherent, coordination is imposed*, which is the only bullet there.
-
-> - More dangerous territory requires more organised citizens to keep it secure.
-
-**Two words changed and both are reported.** *To keep secure* became *to keep it secure*, which is
-grammar rather than meaning. *Organized* became *organised* to match `spec/control.md`, where
-*organised* appears **3** times and *organized* **zero**, measured.
-
-**Why it is worth stating rather than obvious.** `spec/invariants.md` requires everything in the game
-to have a cause inside the model rather than happening because the game says so, and
-`spec/narrative.md` is where those causes are told. **`P-276` makes a jungle need two citizens where a
-grassland needs one, and without this the number is a balance decision.** With it, the number is what
-the fiction already implied.
-
-**And it says the rule better than the rule does.** *Force equal to nature* is arithmetic; **more
-dangerous ground needs more people holding it together** is the reason there is arithmetic - which is
-the same relationship `P-262` describes between a principle and the rules that come out of it.
-
 ## Addressed to other perspectives
 
 ### S-45 - The node data contradicts the biome table, and every territory is affected
@@ -1462,6 +1418,8 @@ work the release exists to order.
 | P-272, a biome gives a territory its total capacity and density for each resource                                            | `spec/planet.md`                                                                                                                             | 2026-09-05 |
 | P-274, the rebalanced biome table: jungle food, ice metal and grassland metal                                                | `releases/first-release.md` -> Biomes                                                                                                        | 2026-09-05 |
 | P-276, a garrison has no force and does one thing, by existing                                                               | `spec/control.md` -> Force                                                                                                                   | 2026-09-05 |
+| P-277, the garrison row's force becomes 0 and the multiplier sentence goes                                                   | `releases/first-release.md` -> Units and structures                                                                                          | 2026-09-05 |
+| P-278, more dangerous territory requires more organised citizens to keep it secure                                           | `spec/narrative.md` -> Violence and order                                                                                                    | 2026-09-05 |
 
 ## Rejected
 

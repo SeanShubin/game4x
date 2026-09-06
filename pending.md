@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-277** - The release follows: a garrison has force 0 and no multiplier · `docs/notes/proposals.md`
-- **P-278** - Why dangerous ground needs more people · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -62,9 +62,9 @@ it exists to ask.
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
+- `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
-- `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223
@@ -87,6 +87,7 @@ it exists to ask.
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
 - `spec/invariants.md` -> The game is one function - P-75, P-115
 - `spec/logistics.md` -> Containment - P-188, P-257
+- `spec/narrative.md` -> Violence and order - P-39, P-278
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28
 - `spec/resources.md` -> The list - P-49, P-65
