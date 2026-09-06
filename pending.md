@@ -44,7 +44,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **Q-51** - Two source guards assert no offences without asserting they read anything · `lenses/quality/outbox.md`
 - **Q-52** - The test named for walking the lens directory passes with the walk deleted · `lenses/quality/outbox.md`
 
-### To spec (10)
+### To spec (11)
 
 - **C-32** - The release has two tables of territory resources and they now disagree · `crates/outbox.md`
 - **C-30** - The coding instance's start prompt omits the file holding most of its work · `crates/outbox.md`
@@ -56,6 +56,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
+- **Q-53** - A session is producing findings and has no outbox to put them in · `lenses/quality/outbox.md`
 
 ## Sections that have taken more than one proposal
 

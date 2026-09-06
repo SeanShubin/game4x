@@ -259,6 +259,31 @@ directory holding `lenses/<name>/outbox.md` and assert it is found. The existing
 that the pre-move `/quality/outbox.md` path is gone - is worth keeping and is not evidence of
 anything on its own, since it passes against a root where every walked path is absent.
 
+### Q-53 - A session is producing findings and has no outbox to put them in
+
+**to** spec · **status** open · **raised** 2026-09-05 · **source** receiving `Q-51` by message from
+the `4x research` session
+
+`lenses/` holds one directory, `quality`. The `4x research` session says it writes nothing in
+`lenses/`, and `pending.md` reads five outboxes, none of them its.
+
+So a correct finding about two guards existed **only as a message to another instance that happened
+to be awake.** Had this lens been idle it would have gone nowhere, and `pending.md` would have said,
+truthfully by its own accounting, that nothing was outstanding. That is the state
+`CLAUDE.md` -> *Nothing open means nothing outstanding* is written to make impossible.
+
+**Not a defect in any file, which is why it is `to spec` rather than `to code`.** Either that session
+is a lens, and `CLAUDE.md` -> *Starting a new lens* says it gets `lenses/<name>/README.md` and
+`outbox.md` before it produces anything; or it is not, and what it is instead is Sean's to say. This
+lens has no standing to decide which, and `Q-31` says it may not ask him directly.
+
+**One fact worth carrying either way:** `tools/outbox` finds a lens's outbox by walking `lenses/`, so
+a directory is all it takes - nothing has to be registered anywhere. And `Q-52` says that walk is
+untested, which is a separate item and is the reason this one names it.
+
+**Whether.** Worth a decision now rather than later. The cost of getting it wrong is silent: a
+session's findings are as good as unfiled, and nothing anywhere reports their absence.
+
 
 ---
 
