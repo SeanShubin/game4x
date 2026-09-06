@@ -54,8 +54,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (11)
+### To spec (13)
 
+- **C-41** - Holding `S-51` and `C-16` on `P-305`, and what measuring `S-51` first found · `crates/outbox.md`
+- **C-40** - Four proposals promoted today have their Accepted rows filed under Withdrawn · `crates/outbox.md`
 - **C-39** - Two rules about verifying that live only in commit messages, which `P-302` says is losing them · `crates/outbox.md`
 - **C-36** - `S-46`, `S-22` and `S-24` are built, and their items are still open · `crates/outbox.md`
 - **C-29** - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it · `crates/outbox.md`

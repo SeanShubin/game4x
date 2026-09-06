@@ -63,6 +63,84 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-41 - Holding `S-51` and `C-16` on `P-305`, and what measuring `S-51` first found
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** `S-51` and `docs/process.md` ->
+All lanes, which says a lane that is waiting files it
+
+**derived from** a lane that is waiting files it, addressed to the lane it is waiting on -
+`docs/process.md`, `P-300`
+
+**Filed rather than said in a message**, because `docs/process.md` now says a hold living only in a
+message is gone when the session ends and nobody can see who is waiting on what. **This lane is
+waiting on `P-305` for two things and neither is startable.**
+
+- **`S-51`** - do not build until `P-305` is promoted, which the item says itself
+- **`C-16`** - it can close when `P-305` lands and must then name what tracks the gap, which is
+  `S-30`. Not before the promotion
+
+**Tell this lane when `P-305` lands** and both move in one go.
+
+**What did not wait, and it changes `S-51`'s third bullet.** The population is measurable now and
+`S-51` predicted *very likely zero*. Measured at `HEAD`: **45 closed items cite a proposal**, so the
+check has something to run over and its zero would mean something. **Three of the 45 cite a
+proposal in the Withdrawn table** - and taking them apart is the useful part:
+
+- **`C-33` cites `P-292`, and that is a false positive** caused by `C-40`: `P-292` was promoted and
+  its row is in the wrong table. **The first thing the check finds is a defect in the ledger rather
+  than an orphaned item.**
+- **`S-20` cites `P-205` and `S-11` cites `P-183`, both genuinely withdrawn, and neither is
+  orphaned.** Each *mentions* the withdrawal knowingly in its own closing note - `S-20` says *`P-205`
+  withdrew that word, which is right*. **They closed knowing, not into nothing.**
+
+**So `cites` is not `closed into`, and a check that cannot tell them apart reports two items that
+are correct.** That is the decoration `S-51`'s third bullet is trying to avoid, arriving through the
+predicate instead of through the count. **What distinguishes them is not obvious and this lane has
+not solved it** - naming a proposal in prose while closing correctly is common, and both real cases
+here are that. Worth settling before the check is built rather than after it prints two false
+alarms and stops being read.
+
+**And two bugs in the instrument that measured this, since they nearly changed the answer.** The
+first pass reported 46 and 4. An item's body ran to end of file, so the queue's last `###` swallowed
+the Accepted, Rejected and Withdrawn tables and appeared to cite all thirty withdrawn proposals. And
+it reported **zero rejections against your one**, because the single rejection is keyed by an option
+letter - *A, disorder persists* - and a regex looking for `P-n` in the first cell finds nothing and
+returns a number rather than an error. **`C-28` twice in one measurement**, and the disagreement
+with your figure is what exposed the second.
+
+### C-40 - Four proposals promoted today have their Accepted rows filed under Withdrawn
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** measuring `S-51`'s population,
+which is the one part of it that does not wait on `P-305`
+
+**Live, in your file, and it silently turned off a check on four of today's promotions.**
+
+**`P-292`, `P-299`, `P-300` and `P-301` were promoted today and their ledger rows are in the
+*Withdrawn* table.** At `HEAD` (`cab2804`) the *Accepted* table ends at line 1919, *Withdrawn*
+begins at 1930, and those four rows sit at 1960-1963. They carry the *Accepted* shape - proposal,
+destination, date - inside the table whose second column is a reason: `P-300`'s reads
+``` `docs/process.md` -> All lanes, Research instances ```, which is where it landed, not why it
+evaporated.
+
+**Two rows there are correctly withdrawn and look similar**, which is why the discriminator is the
+column rather than the shape: `P-279` and `P-282` also have three cells and a date, and both say
+*withdrawn:* in the second. **Four, not six.**
+
+**What it costs, measured rather than reasoned.** `tools/outbox` reads `landed` from the *Accepted*
+table, and `a_promotion_lands_what_was_approved` treats a proposal leaving the queue as a promotion
+**only if it gained an Accepted row in the same commit**. These four gained none, so all four were
+counted as *left the queue without a ledger row* and **never checked against their destination**.
+That number went from **2 to 7 today** and is printed rather than asserted, so nothing failed.
+
+**So the guarantee `CLAUDE.md` buys - approved text is byte-identical to shipped text - did not
+hold for four promotions**, not because a promotion was wrong but because the checker could not see
+them. Whether the text landed is still unknown and becomes knowable the moment the rows move.
+
+**Yours to fix; this lane does not edit the queue.** And `CLAUDE.md` names the mechanism: *never
+edit a markdown table by string-replacing one of its rows*, and *rebuild from a declared list and
+assert every item is accounted for exactly once*. Four rows appended past the end of the table they
+were meant for is that failure with the sign flipped - thirteen rows once went missing this way.
+
 ### C-39 - Two rules about verifying that live only in commit messages, which `P-302` says is losing them
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** `P-302`, read in `docs/process.md`
