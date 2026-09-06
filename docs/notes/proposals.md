@@ -60,19 +60,17 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Approve in the order below, not the order they are filed.** Three of these constrain the wording
-of others, so taking those first means nothing has to be read twice.
+**Approve in the order below, not the order they are filed.** Two pairs constrain each other; the
+rest are free.
 
-1. **`P-301`** - first, because `P-300` points at the section it creates rather than restating it
-2. **`P-300`** - the budget rule, which has to be in place before `P-296` removes its subject
-3. **`P-299`, then `P-292`** - the correction lands first, so the definition arrives into a section
+1. **`P-299`, then `P-292`** - the correction lands first, so the definition arrives into a section
    that already agrees with it rather than contradicting it for one commit
-4. **`P-293`, `P-294`, `P-295`** - the other three definitions, in any order
-5. **`P-296`** - the scaffolding, last, because it is the consequence of all four
-6. **`P-297`** once `P-301` has landed, and **`P-298`** whenever you like
-7. **`P-303`** and **`P-304`** - independent of all of the above, and of each other. Each extends a
-   section of `docs/process.md` that already exists
-8. **`P-305`** - the only one asking a decision, and independent of everything above it
+2. **`P-293`, `P-294`, `P-295`** - the other three instance definitions, in any order
+3. **`P-296`** - the scaffolding, after all four, because it is their consequence
+4. **`P-297`** and **`P-298`** - independent, whenever you like
+5. **`P-303`**, **`P-304`**, **`P-306`** - independent of everything and of each other. Each extends
+   or corrects a section of `docs/process.md` that already exists
+6. **`P-305`** - the only one asking a decision
 
 ### P-292 - What the specification instance is for
 
@@ -284,102 +282,6 @@ messaging either one and without starting anything.**
 read from files that persist, and running is read from the session list, which is gone when you
 close the terminal.
 
-### P-300 - Two budgets, and only one of them is a count
-
-**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
-own - **shape** text - **asks** approval - **into** `docs/process.md` -> All lanes, at the end
-
-**Rewritten from a decision to an approval.** The first version asked where to put the eight-item
-cap. You supplied the reason each budget exists and they turned out not to be the same rule, so the
-placement was the wrong question.
-
-> - **Two different limits, and only one of them is a count.** Mine is a count - fifteen open
->   proposals - and what it is actually for is under *What I read, and what I do*
-> - **What bounds an instance's own outbox is not a count**, because neither thing that makes a
->   backlog expensive grows with the number of items. An item goes **out of date** as what it cites
->   changes, however few of them there are, and two items **conflict** as a pair, however many
->   others sit beside them. A count is a proxy for both and a good measure of neither
-> - **Counting the two together has already misfired**, in the direction that costs most: a lane
->   reported my queue at fifteen against a limit of fifteen while it was empty, because most of what
->   was open was a producer's backlog and one number could not tell them apart
-> - So an instance may not file a new item while one of its own is open and cited by a commit saying
->   it is done. It closes that one, or records the hash to say it looked and the item is still open.
->   That is the same forcing function a cap gives - close something before filing something -
->   attached to the cost that is actually there
-> - An item whose cited file has taken a promotion since it was raised is re-read before it is
->   relied on. The ground moving under an item is what makes it wrong without anybody touching it
-> - Eight items open to any one instance stays, as a backstop rather than as the rule. An outbox
->   nobody reads through is a real cost, only a second one. An instance is still expected to record
->   most of what it notices as noted and deliberately not acted on
-
-**Why a count is the wrong instrument, in one line**: it is a proxy for both costs and a good measure
-of neither, which is the shape `docs/process.md` already names - an instrument answering a narrower
-question than the one asked and returning a plausible number rather than an error.
-
-**It has already misfired.** `tools/outbox/src/main.rs` prints the open count with no verdict, and
-records why: saying *past the limit* alongside it *"led one lane to tell him he was at fifteen
-against a limit of fifteen while his queue was empty."* The comment defers the fix to `Q-32`, which
-closed on 2026-08-30 having only deleted the duplicate number - so this question has been unowned
-since. That is `S-50`, filed to the code lane.
-
-**And the cost it does not catch has been paid repeatedly.** `C-9`'s figure went false when `C-11`
-landed and nothing edited it. `P-126` and `P-138` withdrew two of the code lane's open findings and
-nobody said so. Filing the ten proposals above, the commit hook printed **ten open items cited by
-commits saying they are done**, eight of them this lane's - an outbox inside its cap the whole time.
-
-**Three things this does to the rest of the queue.** It removes the objection I raised against a rule
-binding all four instances: this lane holding twelve items open to code is **not** a breach under a
-freshness obligation, while eight cited-but-open and unacknowledged is, and that is the true
-statement about this lane today. It makes `P-295`'s orphaned bullets a non-problem. And it needs no
-new section, so the *All lenses* naming question disappears.
-
-**What moves, exactly.** Bullets four, five and six of *Research instances* are replaced by the text
-above, in *All lanes*. The third bullet - the finding-and-fixing cycle - stays where it is.
-
-**One thing to check rather than skim.** The sixth bullet, *My approval bounds what reaches the
-specification. The budget bounds what reaches me*, does not survive verbatim: the first new bullet
-carries its claim in different words. If you want the original sentence kept, say so and I will put
-it back beside them.
-
-**After promotion**, `CLAUDE.md`'s own *keep the open-proposal queue under fifteen* links here rather
-than restating it, per `docs/README.md`. That is wording inside my own file and needs no approval.
-
-### P-301 - Two files addressed to you, and what the limit is really for
-
-**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
-own - **shape** text - **asks** approval - **into** `docs/process.md` -> What I read, and what I do,
-after the surface-area paragraph
-
-**All four questions are answered and this now asks approval.** You chose the separate file, chose
-that an item lives in one place at a time, took the recommendation that `spec/`'s own questions stay
-where they are, and agreed the limit is a tripwire rather than a bound on your reading.
-
-> **Two files are addressed to me and they hold different things.** `docs/notes/questions.md` holds
-> choices only I can make; `docs/notes/proposals.md` holds words for me to approve. An item lives in
-> one at a time - it sits in the questions file while any question in it is unanswered, and moves to
-> the proposals file when the last one is answered. Questions about the specification's own content
-> stay at the bottom of the `spec/` file they concern, where the context is.
->
-> **The limit of fifteen is a tripwire on the specification instance, not a bound on my reading.**
-> Its job is never to be reached. If it is ever reached, proposals are being filed faster than I am
-> deciding, which means guessing at design, and the remedy is to ask one question instead of filing
-> ten guesses. **So an unreached limit is the limit working, and is not evidence that it is
-> unnecessary.**
-
-**The last sentence is the one doing the real work**, and it is `P-302` applied to this rule: the
-reason travels with it, so the next reader to notice the limit has never fired does not conclude it
-is decorative. That reader was you, this afternoon, and the measurement is what settled it -
-[recorded with its method](queue-depth.md) so it can be re-run rather than trusted.
-
-**The measurement does not land in the file.** 448 commits and a peak of twelve are true today and
-false next week, and a number that rots inside a normative document is worse than no number. What
-lands is the rule and the reason, which do not rot.
-
-**What this lane does without approval, because `docs/notes/` is its own:** creates
-`docs/notes/questions.md` with its header, moves nothing into it yet, and files to the code lane
-that `tools/outbox` must read it - until then the file is invisible to `pending.md`, and `CLAUDE.md`
-says the queue is the one outbox that must never be invisible.
-
 ### P-303 - A reason that is false is worse than one that is missing
 
 **to** sean - **status** open - **raised** 2026-09-06 - **kind** recovered - **shape** text -
@@ -482,6 +384,40 @@ open.
 **Not urgent and not ignorable.** Nothing is blocked today. But the two lanes will keep diverging
 while both rules are written down and neither is the rule, and every item closed under the second is
 one a reader of the first would still expect to find open.
+
+### P-306 - `P-300` landed beside a sentence saying the thing it limits has no limit
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** cleanup - **shape** text -
+**asks** approval - **into** `docs/process.md` -> What I read, and what I do, the second paragraph
+after the two new ones
+
+**Found by re-reading the section whole before promoting into it**, which is the trigger doing its
+job. `docs/process.md` line 58 says:
+
+*So a proposal is a thing addressed to me. What the lanes send each other are items in an outbox,
+and there is no limit on those.*
+
+**`P-300` put an explicit limit on exactly those, forty lines later** - *eight items open to any one
+instance stays, as a backstop rather than as the rule*. The two cannot both be read literally.
+
+> So a **proposal** is a thing addressed to me. What the lanes send each other are items in an
+> outbox, and **there is no limit of my kind on those** - my fifteen is about my reading, and what
+> bounds theirs is under *All lanes*, where it is not a count.
+
+**The contradiction is older than today.** *Research instances* has carried the eight-item cap since
+before this queue existed, so line 58 has been overstated for a week. `P-300` did not create it; it
+moved the cap into *All lanes*, where it binds every instance and the collision stops being
+arguable.
+
+**The choice here was forced rather than made.** Either the sentence yields or the backstop does,
+and you approved the backstop an hour ago - so only the wording was left, and wording inside your
+rules is mine to settle and report. If I have read the sentence's intent wrongly, the answer is
+different words rather than the other direction.
+
+**One thing this lane did without asking, reported rather than proposed.** `CLAUDE.md` said *keep
+the open-proposal queue under fifteen. Past that, reviewing costs as much as writing and the
+mechanism has failed* - a justification your promotion just replaced, in a file that must not
+contradict yours. It now names the number and points at the section that says what it is for.
 
 ## Addressed to other perspectives
 
@@ -2045,3 +1981,5 @@ again in a later session.
 | P-237, three collisions from merging his process note                                 | Sean answered all three on 2026-09-04. Each is now its own item, which is what he can act on: `P-238` for what a proposal is, `P-239` for `pending.md`, `P-240` for who owns production support                                                                                                                                                             |            |
 | P-279, the twelve territories collapse to five profiles                               | withdrawn: it was a consequence of `P-272`, which `P-280` reverses                                                                                                                                                                                                                                                                                          | 2026-09-05 |
 | P-282, three of six columns on a territory row are not traits | withdrawn: `P-287` removes all three names rather than choosing between them | 2026-09-06 || P-302, this document has to be enough on its own, with every transcript and CLAUDE.md gone | `docs/process.md` -> What this document has to be | 2026-09-06 |
+| P-300, two budgets, and only one of them is a count | `docs/process.md` -> All lanes, Research instances | 2026-09-06 |
+| P-301, two files are addressed to me, and the limit of fifteen is a tripwire | `docs/process.md` -> What I read, and what I do | 2026-09-06 |

@@ -601,9 +601,9 @@ before choosing what to do next. Eight is about two days of a producer's through
 2026-08-30, when the code lane closed five of thirteen in a day - loose enough that nothing urgent
 is blocked, tight enough that a lens has to close something before it can file something.
 
-Keep the open-proposal queue under fifteen. Past that, reviewing costs as much as writing and
-the mechanism has failed. If a lot of proposals would be guesses at design, ask one question
-instead.
+Keep the open-proposal queue under fifteen. **What that limit is for is in
+[`docs/process.md`](docs/process.md) -> What I read, and what I do**, which this file does not
+restate.
 
 A consequence of something already written belongs in the spec only when **another rule leans
 on it**. Everything is derivable from something; derivability is not the test.

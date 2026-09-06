@@ -42,6 +42,18 @@ talk to each other and only need me sometimes, because **my primary mechanism of
 the specification instance**. The other instances are details. **I need to keep my surface area
 small, because human attention is the most scarce resource when programming with an AI assistant.**
 
+**Two files are addressed to me and they hold different things.** `docs/notes/questions.md` holds
+choices only I can make; `docs/notes/proposals.md` holds words for me to approve. An item lives in
+one at a time - it sits in the questions file while any question in it is unanswered, and moves to
+the proposals file when the last one is answered. Questions about the specification's own content
+stay at the bottom of the `spec/` file they concern, where the context is.
+
+**The limit of fifteen is a tripwire on the specification instance, not a bound on my reading.**
+Its job is never to be reached. If it is ever reached, proposals are being filed faster than I am
+deciding, which means guessing at design, and the remedy is to ask one question instead of filing
+ten guesses. **So an unreached limit is the limit working, and is not evidence that it is
+unnecessary.**
+
 So a **proposal** is a thing addressed to me. What the lanes send each other are items in an
 outbox, and there is no limit on those.
 
@@ -167,6 +179,25 @@ A lane that is waiting **files it**, addressed to the lane it is waiting on, say
 waiting for. The lane that finishes that thing tells it. A hold that lives only in a message is gone
 when the session ends, and nobody can see who is waiting on what.
 
+- **Two different limits, and only one of them is a count.** Mine is a count - fifteen open
+  proposals - and what it is actually for is under *What I read, and what I do*
+- **What bounds an instance's own outbox is not a count**, because neither thing that makes a
+  backlog expensive grows with the number of items. An item goes **out of date** as what it cites
+  changes, however few of them there are, and two items **conflict** as a pair, however many
+  others sit beside them. A count is a proxy for both and a good measure of neither
+- **Counting the two together has already misfired**, in the direction that costs most: a lane
+  reported my queue at fifteen against a limit of fifteen while it was empty, because most of what
+  was open was a producer's backlog and one number could not tell them apart
+- So an instance may not file a new item while one of its own is open and cited by a commit saying
+  it is done. It closes that one, or records the hash to say it looked and the item is still open.
+  That is the same forcing function a cap gives - close something before filing something -
+  attached to the cost that is actually there
+- An item whose cited file has taken a promotion since it was raised is re-read before it is
+  relied on. The ground moving under an item is what makes it wrong without anybody touching it
+- Eight items open to any one instance stays, as a backstop rather than as the rule. An outbox
+  nobody reads through is a real cost, only a second one. An instance is still expected to record
+  most of what it notices as noted and deliberately not acted on
+
 ## Specification Instance
 - I have Claude generate proposals for changes to the specification
 - I work with claude to make sure I approve the exact text of the proposals
@@ -206,12 +237,6 @@ when the session ends, and nobody can see who is waiting on what.
 - Makes sure other instances can find its results
 - A research instance finding something, the coding instance fixing it, and the research instance
   reviewing the fix is a real cycle, and nothing forces the findings to get smaller
-- What bounds it is a budget on the research instance rather than on the cycle: it may have at most
-  eight items open to any one other instance, and closes or withdraws before filing a ninth
-- That puts the limit where the judgement already is. A research instance is expected to record most
-  of what it notices as noted and deliberately not acted on, and a cap is what makes that
-  expectation cost something rather than being a good intention
-- My approval bounds what reaches the specification. The budget bounds what reaches me
 
 ## Quality instance (a type of research instance)
 - Makes sure we have a proper module structure emanating from composition roots
