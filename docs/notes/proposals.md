@@ -63,36 +63,11 @@ Two limits Claude holds itself to:
 **Approve in the order below, not the order they are filed.** One pair constrains itself; the rest
 are free, and none of them asks a decision.
 
-1. **`P-292`** - the specification instance. `P-299` has landed, so the section it arrives into
-   already agrees with it
-2. **`P-293`, `P-294`, `P-295`** - the other three instance definitions, in any order
-3. **`P-296`** - the scaffolding, after all four, because it is their consequence
-4. **`P-297`** and **`P-298`** - independent, whenever you like
-5. **`P-303`**, **`P-304`**, **`P-305`**, **`P-306`** - independent of everything and of each other.
+1. **`P-293`, `P-294`, `P-295`** - the other three instance definitions, in any order
+2. **`P-296`** - the scaffolding, after all four, because it is their consequence
+3. **`P-297`** and **`P-298`** - independent, whenever you like
+4. **`P-303`**, **`P-304`**, **`P-305`**, **`P-306`** - independent of everything and of each other.
    Each extends or corrects a section of `docs/process.md` that already exists
-
-### P-292 - What the specification instance is for
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/process.md` -> Specification Instance, at the end
-
-The section already says you approve exact text and that nothing lands without your approval.
-**Three things you said today are not in it**: that an instruction from you is not a shortcut, that
-this instance coordinates the others, and that it can report their status.
-
-> - Telling the specification instance what to change is not a shortcut into the specification. It
->   changes the proposal and shows me the result, and the words land only when I then approve them
-> - It is the primary coordinator between the instances. They may talk to each other directly, and
->   it is this one's job to see that they are all on the same page
-> - It can tell me the status of every other instance, what needs to be done, and what is waiting
->   on me
-
-**Why the first belongs here** when `CLAUDE.md` states it already: that file is the operating detail
-beneath this one, and the guarantee is yours rather than an operating rule. *Promote* means you have
-read the words, and an instruction to change them is not a promotion of them.
-
-**`P-299` is the third bullet's consequence** - *Outboxes and the index* currently says this instance
-cannot tell you whether a lane is running.
 
 ### P-293 - What the coding instance is for
 
@@ -1985,3 +1960,4 @@ again in a later session.
 | P-300, two budgets, and only one of them is a count | `docs/process.md` -> All lanes, Research instances | 2026-09-06 |
 | P-301, two files are addressed to me, and the limit of fifteen is a tripwire | `docs/process.md` -> What I read, and what I do | 2026-09-06 |
 | P-299, it can tell me whether a lane is running, and what neither answer covers | `docs/process.md` -> Outboxes and the index | 2026-09-06 |
+| P-292, an instruction is not a shortcut; the specification instance coordinates and reports status | `docs/process.md` -> Specification Instance | 2026-09-06 |

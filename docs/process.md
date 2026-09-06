@@ -219,6 +219,12 @@ when the session ends, and nobody can see who is waiting on what.
 - I have no preference between one commit per proposal and several proposals in one commit
 - The specification instance is the only one that writes a proposal. Other instances raise things by addressing them to it, and it decides what becomes a proposal and what does not. That keeps my queue to one author and one length, which is what makes it reviewable.
 - It also writes proposals addressed to the other lanes
+- Telling the specification instance what to change is not a shortcut into the specification. It
+  changes the proposal and shows me the result, and the words land only when I then approve them
+- It is the primary coordinator between the instances. They may talk to each other directly, and
+  it is this one's job to see that they are all on the same page
+- It can tell me the status of every other instance, what needs to be done, and what is waiting
+  on me
 
 ## Coding instance
 - Implements what the specification requires, and what a research instance proposes

@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-292** - What the specification instance is for · `docs/notes/proposals.md`
 - **P-293** - What the coding instance is for · `docs/notes/proposals.md`
 - **P-294** - What the quality instance is for · `docs/notes/proposals.md`
 - **P-295** - What the research instance is for · `docs/notes/proposals.md`
