@@ -111,6 +111,7 @@ There are twelve territories and twelve orbits. An orbit holds units and nothing
 | **surplus**        | food                                    | yes or no                                          | derived: left after every upkeep was paid        |
 | **unpaid**         | a thing with upkeep                     | yes or no                                          | derived: its upkeep was not met                  |
 | **houses**         | a thing that contains things            | whether people live in it                          | stored                                           |
+| **phase**          | the game                                | before it starts, or once it has                   | stored                                           |
 
 Food is made with `keeps` 1. The force nature holds a territory with.
 

@@ -63,35 +63,6 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-288 - `phase` is a trait of the game, and `turn` is not in the state at all
-
-**to** sean - **status** open - **raised** 2026-09-06 - **revised** 2026-09-06 - **kind** Sean's own
-- **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Traits
-
-**Turn out, phase in - decided 2026-09-06.** One row, and the other half of the decision needs no
-words because `P-284` already carries it.
-
-> | **phase** | the game | before it starts, or once it has | stored |
-
-**Why `turn` needs nothing written.** `P-284` says every word in a data file is a kind, a trait, or a
-trait value. **`turn` is none of the three and is not being declared**, so the rule already forbids
-it from appearing - and putting it back would take a proposal, which is the friction that keeps the
-decision made.
-
-**The reasoning it rests on, since the version you approved is not the version this lane first
-argued.** The state-equality argument is weak and you refuted it: at real complexity a state changes
-in vacuous ways every turn, so nothing is detected that way. **What holds is that no rule needs it,
-that it is already the input restated, and that a turn is a boundary between states rather than a
-fact inside one.** Measured: every mention of a turn in `spec/` is relative, and *turn N*, *turn
-number*, *which turn* and *nth turn* appear **zero** times across the specification and the release;
-`play.4x` has **10** `end turn` commands against an expected `turn:11`.
-
-**What this makes the code lane's, filed when you promote.** The game's row is
-`{game phase:play turn:11 territories:12 units:1}` today - one line, measured. **`turn` leaves it**,
-`phase` stays as the trait this declares, and `territories` and `units` become entries in the game's
-contents under `P-287` rather than columns. **The row ends up as `{game phase:play}` with the world
-inside it.**
-
 ### P-289 - What makes a check worth having
 
 **to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
@@ -1555,6 +1526,7 @@ work the release exists to order.
 | P-287, contents are a map from a description to a quantity                                                                   | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
 | P-284, every word in a data file is a kind, a trait, or a trait value                                                        | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
 | P-290, capacity may be per kind carrying a particular trait value, which makes `node` unnecessary                            | `spec/logistics.md` -> Containment                                                                                                           | 2026-09-06 |
+| P-288, `phase` is a stored trait of the game; `turn` is not in the state at all                                              | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
 
 ## Rejected
 
