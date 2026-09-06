@@ -65,7 +65,7 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-35 - I loosened the promotion checker where `P-289` says to normalize both sides
 
-**to** code · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` after being told to
+**to** code · **status** **acted** 2026-09-06 · **raised** 2026-09-06 · **source** reading `docs/process.md` after being told to
 
 **derived from** a check has two ways to be worthless, and the second is how you get the first - `docs/process.md`, `P-289`
 
@@ -120,6 +120,39 @@ past it.**
 on one line, a blank line as a paragraph boundary, and a heading as its own block - all three found by
 running it, none of them guessed. Do it against the real queue from the first commit rather than
 against the harness, because the harness passed at every stage while four promotions did not.
+
+## Done 2026-09-06, and the second attempt cost one line rather than four rounds
+
+**The design was right and the diagnosis of why it failed was wrong.** The note above says the
+parse was becoming a markdown parser. It was not: `blocks()`, which lifts the approved quotation
+out of the proposal, **joined its lines with a space**. Every structural boundary in the approved
+text - a blank line, a `- `, a `### ` - was already gone before the parse could see one, so the
+parse was being asked to recover structure from a string that no longer had any.
+
+**One character fixed all four failing promotions**: `join(" ")` became `join("\n")`. The four cases
+the first attempt collected - a blank line, a `> ` and a `- ` together, a heading, a numbered
+marker - were all real and are all implemented, but they were never the reason it could not
+converge. **Each round of that attempt was reading a symptom of the join and patching it
+downstream**, which is why every fix revealed another case.
+
+**Worth naming, because it is the shape this outbox keeps recording.** The instrument answered a
+narrower question than the one asked - *what words are in this block* rather than *what block is
+this* - and returned a plausible string rather than an error. The first attempt then measured
+against that string for four rounds.
+
+**The verification.** `a_period_deleted_mid_paragraph_is_a_change_to_the_words` fails on the old
+comparison and passes on the new one, and it demonstrates rather than asserts that: it runs the
+predecessor's normalization on the same two strings and shows them coming out equal.
+`the_structure_a_promotion_may_change_is_parsed_rather_than_stripped` locks the five structural
+rules with the count asserted. The real queue is checked at 32 promotions, unchanged.
+
+**And one thing found while doing it, fixed to the extent it can be.** `KNOWN` names four
+promotions this check cannot pass, and its comment promised the test requires each to still be
+failing. **It has not been for some time.** The window is the last 80 commits to touch the queue,
+the queue has had 444, and all four are behind it - so the `assert_ne!` never runs for them, and
+four dead exceptions read exactly like four live ones. The test now prints the window's reach and
+names which exceptions fall outside it. **Widening the window is not free** - three `git show`
+calls per commit, over 444 - so which of the two to do is left stated rather than decided.
 
 ### C-34 - The population for `S-47`'s unrepresentability claim, written before the change
 

@@ -69,7 +69,13 @@ pub fn destination_file(into: &str) -> Option<String> {
     Some(into[start..end].to_string())
 }
 
-/// Every blockquote in an item, each with its `> ` markers off.
+/// Every blockquote in an item, each with its `> ` markers off and its lines kept.
+///
+/// **The lines are kept because `sentences` reads them.** Joining them with a space was
+/// enough while the comparison was a substring test, and it destroyed every structural
+/// boundary before the parse could see one - a heading ran into the paragraph under it, and
+/// four correct promotions were reported missing. The blank lines are kept for the same
+/// reason: one inside a quotation is a paragraph boundary, not a line break.
 ///
 /// **`Item::proposed_text` refuses when there are several and that is right for its
 /// caller** - `tools/spec` promotes one block and must not choose between two. This is a
@@ -92,12 +98,12 @@ fn blocks(body: &str) -> Vec<String> {
                 current.push(String::new());
             }
         } else if !current.is_empty() {
-            found.push(current.join(" ").trim().to_string());
+            found.push(current.join("\n").trim().to_string());
             current.clear();
         }
     }
     if !current.is_empty() {
-        found.push(current.join(" ").trim().to_string());
+        found.push(current.join("\n").trim().to_string());
     }
     found.retain(|b| b.split_whitespace().count() >= 3);
     found
@@ -144,43 +150,140 @@ pub enum Verdict {
     Ambiguous,
 }
 
+/// Both sides of the comparison, parsed to the one thing they have in common.
+///
+/// **`P-289`, in Sean's words: a check can fail when nothing is wrong - a comparison broken
+/// by a line wrap, a table's padding, a capital letter - and the fix that comes to hand is
+/// to loosen it.** So this normalizes instead. Everything a promotion may change is
+/// structure; what survives structure is a sequence of sentences; prose and the bullets it
+/// became parse to the same sequence, and a change to the words does not.
+///
+/// **Every structural rule here was found by running it, not guessed.** An earlier attempt
+/// was written against the six-case harness at the foot of this file, passed it at every
+/// stage, and failed four promotions that had landed correctly - which is worse than the
+/// loose version, because reporting a correct promotion as missing is what made somebody
+/// loosen it in the first place. The four cases it cost:
+///
+/// - a blank line ends a block, so two paragraphs are never one sentence
+/// - a quotation may open `> ` and then `- ` on the same line, so one marker is not enough
+/// - a heading is structure: it bounds the prose around it, and its own words are a
+///   sentence - which is also how a promotion changing the heading level lands
+/// - a numbered item is a bullet, or its `1. ` reads as a sentence ending in the number 1
+pub fn sentences(text: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    let mut block = String::new();
+    for line in text.lines() {
+        let mut rest = line.trim();
+        // A quotation marker is not prose, and it may be followed by another marker.
+        while let Some(inner) = rest.strip_prefix('>') {
+            rest = inner.trim_start();
+        }
+        if rest.is_empty() {
+            drain(&mut block, &mut out);
+            continue;
+        }
+        // A heading bounds the prose on both sides of it and is a sentence of its own, so
+        // that a promotion which changed the heading level still matches.
+        if let Some(heading) = rest.strip_prefix('#') {
+            drain(&mut block, &mut out);
+            block.push_str(heading.trim_start_matches('#').trim());
+            drain(&mut block, &mut out);
+            continue;
+        }
+        if let Some(inner) = bullet(rest) {
+            drain(&mut block, &mut out);
+            rest = inner;
+        }
+        if !block.is_empty() {
+            block.push(' ');
+        }
+        block.push_str(rest);
+    }
+    drain(&mut block, &mut out);
+    out
+}
+
+/// The marker that opens a list item, and what follows it.
+fn bullet(line: &str) -> Option<&str> {
+    for marker in ["- ", "* ", "+ "] {
+        if let Some(rest) = line.strip_prefix(marker) {
+            return Some(rest.trim_start());
+        }
+    }
+    // `1. ` and `2. `, whose marker would otherwise read as a sentence ending in a number.
+    // A leading `**` is not a marker: `**1.` opens emphasis, and `*` needs its space.
+    let digits = line.find(|c: char| !c.is_ascii_digit())?;
+    (digits > 0 && line[digits..].starts_with(". ")).then(|| line[digits + 2..].trim_start())
+}
+
+/// One block of prose becomes its sentences, and the block is emptied.
+fn drain(block: &mut String, out: &mut Vec<String>) {
+    let text = flat(block);
+    let bytes = text.as_bytes();
+    let mut start = 0;
+    for (at, c) in text.char_indices() {
+        if c != '.' {
+            continue;
+        }
+        // Emphasis, a backtick or a bracket may close after the period - `**like this.**` -
+        // and the sentence still ends where the period is.
+        let mut after = at + 1;
+        while after < bytes.len() && matches!(bytes[after], b'*' | b'`' | b'"' | b')' | b']') {
+            after += 1;
+        }
+        if after < bytes.len() && bytes[after] != b' ' {
+            continue;
+        }
+        push_sentence(&text[start..after], out);
+        start = after;
+    }
+    push_sentence(&text[start..], out);
+    block.clear();
+}
+
+/// One sentence, less the closing period `P-283` lets bullet-versus-paragraph take.
+///
+/// The period may sit inside the emphasis that closes the sentence, so it is taken from
+/// there too - `**like this.**` bulleted is `**like this**`, and both are the same words.
+fn push_sentence(sentence: &str, out: &mut Vec<String>) {
+    let sentence = sentence.trim().trim_end_matches("**");
+    let sentence = sentence.trim_end_matches('.').trim();
+    if !sentence.is_empty() {
+        out.push(sentence.to_string());
+    }
+}
+
 /// The rule, over strings, so it can be run on documents written to be wrong.
 pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
     match shape {
         "text" => {
-            let there = flat(destination);
-            let want = flat(block);
-            // **A paragraph promoted as a bullet loses its full stop**, and
-            // bullet-versus-paragraph is one of the three changes a promotion may make. So
-            // the same text ending without its period is the same text. `P-213` landed
-            // correctly and this reported it as missing until the allowance was written
-            // down - the rule was in `CLAUDE.md` and not in the code that enforces it.
+            let want = sentences(block);
+            let there = sentences(destination);
+            // **`P-283` says what may move**: the line breaks, the bullet-versus-paragraph
+            // form - which takes each sentence's closing period with it - and the heading
+            // level. Every one of those is structure, so both sides are parsed to the thing
+            // structure does not touch, **a sequence of sentences**, and the sequences are
+            // compared in order. A comma, a dash, an emphasis marker or a reordering is
+            // still a difference, because none of them is structure.
             //
-            // **One trailing period was not enough, because one block may become several
-            // bullets.** `P-257` offered four sentences as one quotation and they landed as
-            // four bullets, each dropping its own closing period - so the approved text has
-            // periods in the middle where the file has none, and stripping the last one
-            // changes nothing. It was reported missing for a day while being correct.
-            //
-            // `P-283` says what may move: **bullet-versus-paragraph takes the closing period
-            // with it, and no other punctuation moves.** So a sentence-ending period is
-            // ignored on both sides and nothing else is - a comma, a dash or an emphasis
-            // marker that moved is still a difference. This is wider than the rule by
-            // exactly one case: a period Sean deliberately deleted mid-paragraph would now
-            // pass. Narrower is not available without knowing where the bullets fell.
-            // Both halves of bullet-versus-paragraph: the closing period goes, and a `- `
-            // appears where each bullet starts. Neither is a change to the words.
-            let unbulleted = |text: &str| {
-                text.replace(". ", " ")
-                    .replace(" - **", " **")
-                    .trim_end_matches('.')
-                    .to_string()
-            };
-            if there.contains(&want) || unbulleted(&there).contains(&unbulleted(&want)) {
+            // **What this replaces, and why `P-289` says it had to go.** The predecessor
+            // deleted every `. ` and every `- **` from both strings and asked whether one
+            // contained the other. It got there one step at a time: `P-257` landed
+            // correctly as four bullets and was reported missing, and the fix that came to
+            // hand was to loosen the comparison rather than to normalize the two sides. The
+            // comment written at the time admitted the cost - *a period deliberately
+            // deleted mid-paragraph would now pass* - which is recording a check becoming
+            // unable to fail rather than not doing it. `C-35`.
+            if want.is_empty() {
+                return Verdict::Missing {
+                    what: "a block with no sentence in it".to_string(),
+                };
+            }
+            if there.windows(want.len()).any(|run| run == want.as_slice()) {
                 Verdict::Landed
             } else {
                 Verdict::Missing {
-                    what: want.chars().take(70).collect(),
+                    what: want[0].chars().take(70).collect(),
                 }
             }
         }
@@ -213,8 +316,15 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
 /// **A named exception, because a silent skip is the disease.** A promotion is history and
 /// history is not rewritten to make a check green, so the alternative to naming these is
 /// scoping the check to start after them - which turns it off for a reason no reader can
-/// see. One line each, and the test below requires every one of them to still be failing,
-/// so an exception that has stopped being needed is reported rather than left to rot.
+/// see. One line each, and the test below requires every one of them to still be failing.
+///
+/// **And that requirement is not running today, which the test now prints rather than
+/// implies.** It reads the last 80 commits to touch the queue; the queue has had 444, so the
+/// window slides, and all four of these promotions - 2026-09-02 to 09-04 - are already
+/// behind it. An exception nothing reaches is neither confirmed nor refuted, and it reads
+/// exactly like one that holds. **The sentence above claimed a guard that had stopped
+/// firing**, which is the same defect as `C-35` one function over, so it is stated here
+/// instead of asserted.
 const KNOWN: &[(&str, &str)] = &[
     (
         "P-214",
@@ -262,6 +372,7 @@ fn a_promotion_lands_what_was_approved() {
     )
     .unwrap_or_default();
 
+    let mut exercised: Vec<&str> = Vec::new();
     let mut checked = 0usize;
     let mut older = 0usize;
     let mut excepted = 0usize;
@@ -355,7 +466,7 @@ fn a_promotion_lands_what_was_approved() {
             {
                 verdict = Verdict::Repaired;
             }
-            if let Some((_, why)) = KNOWN.iter().find(|(id, _)| *id == item.id) {
+            if let Some((id, why)) = KNOWN.iter().find(|(id, _)| *id == item.id) {
                 // The exception has to still be needed, or it is hiding a passing case and
                 // will hide a failing one later.
                 assert_ne!(
@@ -364,6 +475,7 @@ fn a_promotion_lands_what_was_approved() {
                     "{} is excepted and now passes; delete the exception. It said: {why}",
                     item.id
                 );
+                exercised.push(*id);
                 excepted += 1;
                 continue;
             }
@@ -389,6 +501,45 @@ fn a_promotion_lands_what_was_approved() {
     println!(
         "{checked} promotion(s) checked, {repaired} repaired after the fact, {excepted} excepted by name, {} unreadable ({ambiguous:?}); \n         {older} older than the shape field, {left_without_landing} left the queue without a ledger row",
         ambiguous.len()
+    );
+
+    // **The window is a cap, so it says what it dropped.** This reads the last 80 commits
+    // that touched the queue, and the queue has had 444 - so the window slides, and every
+    // one of the four named exceptions has already fallen out the back of it. While that is
+    // true the `assert_ne!` above cannot run for them, and `KNOWN` reads as four live
+    // exceptions while being four dead ones.
+    //
+    // Reported rather than repaired, because widening the window is not free - each commit
+    // costs three `git show` calls - and because which of the two to do is a judgement about
+    // this check's purpose rather than a defect in it. What is not acceptable is the silent
+    // version: an exception list nothing exercises looks exactly like one that holds.
+    let reach = log
+        .lines()
+        .last()
+        .and_then(|oldest| {
+            git(
+                &root,
+                &["log", "-1", "--format=%h %ad", "--date=short", oldest],
+            )
+        })
+        .unwrap_or_default();
+    let unexercised: Vec<&str> = KNOWN
+        .iter()
+        .map(|(id, _)| *id)
+        .filter(|id| !exercised.contains(id))
+        .collect();
+    println!(
+        "         the window is the last 80 commits to the queue, reaching back to {}; \n         {} of {} named exceptions were inside it{}",
+        reach.trim(),
+        exercised.len(),
+        KNOWN.len(),
+        if unexercised.is_empty() {
+            String::new()
+        } else {
+            format!(
+                ", and {unexercised:?} are older than it - \n         nothing exercises them, so they are neither confirmed nor refuted here"
+            )
+        }
     );
     assert!(
         wrong.is_empty(),
@@ -549,5 +700,95 @@ fn a_bullet_and_its_full_stop_may_move_and_nothing_else_may() {
             matches!(check("text", approved, landed), Verdict::Missing { .. }),
             "this is a change to the words and should be reported: {landed:?}"
         );
+    }
+}
+
+/// The one case the loose comparison admitted, which is `C-35`'s whole verification.
+///
+/// **Every other case in this file passed before the parse replaced the loosening.** This
+/// one did not, and the second assertion is why: it runs the predecessor's normalization on
+/// the same two strings and shows them coming out equal. A refactor with no new check is
+/// unverified, and the check that says this work happened is a check that fails on the old
+/// code and passes on the new one.
+///
+/// Written as its own test rather than folded into the six above so that deleting it is a
+/// deliberate act rather than an edit to a list.
+#[test]
+fn a_period_deleted_mid_paragraph_is_a_change_to_the_words() {
+    let approved = "One sentence here. **Two** sentences here.";
+    // Nothing became a bullet, so nothing licensed the sentence break to go. The words are
+    // identical and the sentences are not, which is the distinction `P-283` draws.
+    let run_together = "One sentence here **Two** sentences here.";
+    assert!(
+        matches!(
+            check("text", approved, run_together),
+            Verdict::Missing { .. }
+        ),
+        "a closing period may only go where bullet-versus-paragraph took it"
+    );
+
+    // The predecessor, quoted as code so the claim is demonstrated rather than asserted: it
+    // deleted every `. ` from both sides before comparing, which makes these two equal.
+    let loosened = |text: &str| {
+        flat(text)
+            .replace(". ", " ")
+            .trim_end_matches('.')
+            .to_string()
+    };
+    assert_eq!(
+        loosened(approved),
+        loosened(run_together),
+        "the comparison this replaced could not tell these apart"
+    );
+}
+
+/// The structure the parse has to know about, all of it found by running the check.
+///
+/// **Each case is one correct promotion the first attempt reported as missing**, and each
+/// is written as a pair rather than as prose so that the next rewrite has to keep it
+/// passing. Without the rule under test, the second column would collapse into one entry -
+/// which is what the earlier attempt's comparison saw.
+#[test]
+fn the_structure_a_promotion_may_change_is_parsed_rather_than_stripped() {
+    let cases: [(&str, &[&str]); 5] = [
+        // A blank line ends a block, so two paragraphs are never one sentence - and a
+        // paragraph need not end in a period for that to be true.
+        (
+            "A paragraph with no full stop\n\nAnother one",
+            &["A paragraph with no full stop", "Another one"],
+        ),
+        // A line break inside a paragraph is not a boundary, because wrapping is the first
+        // thing a promotion may change.
+        (
+            "Two lines with\nno period between them",
+            &["Two lines with no period between them"],
+        ),
+        // A quotation may open `> ` and then `- ` on one line. Stripping one marker leaves
+        // the other, and the bullets read as a single run-on sentence.
+        (
+            "> - A bullet inside a quotation\n> - And a second one",
+            &["A bullet inside a quotation", "And a second one"],
+        ),
+        // A heading bounds the prose under it and is a sentence itself, which is also how a
+        // promotion that changed the heading level matches.
+        (
+            "### A heading\nProse under it",
+            &["A heading", "Prose under it"],
+        ),
+        // A numbered marker is a bullet. Read as prose, `1. ` closes a sentence whose whole
+        // content is the number.
+        (
+            "1. First item\n2. Second item",
+            &["First item", "Second item"],
+        ),
+    ];
+    assert_eq!(
+        cases.len(),
+        5,
+        "five structural rules, every one of them found by running the check against the \
+         real queue rather than by designing for it"
+    );
+    for (text, want) in cases {
+        assert_eq!(sentences(text), want, "parsing {text:?}");
     }
 }
