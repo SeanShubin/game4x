@@ -99,6 +99,28 @@ because the loose version is green and correct on every promotion in the tree to
 not mistaken for finished.** The test that drives both sides - three landings that should pass and
 three that should not - is the harness a stricter version has to satisfy, and it already exists.
 
+## Attempted and reverted, 2026-09-06
+
+**The design is right and the attempt was made at the wrong time.** Normalizing to a sequence of
+sentences works on the six-case harness immediately. Run against the real queue it failed four
+promotions that had landed correctly, and each fix revealed another case: a blank line ends a block;
+a quotation may open with `> ` and then a `- `, so one marker is not enough; a heading is structure
+rather than prose. **Four rounds in and it was becoming a markdown parser.**
+
+**That is the shape `P-289` warns about arriving from the other side.** A comparison strict enough to
+be worth having fails when nothing is wrong until the normalization is complete, and an incomplete
+normalization is *worse* than the loose version - it reports correct promotions as missing, which is
+the state that made someone loosen it in the first place.
+
+**Reverted rather than pushed through**, and this note is here because this item already said the
+work wanted room and I started it anyway an hour later. **The instruction was in the item and I read
+past it.**
+
+**What the next attempt should know**: the parse has to handle a `> ` quote marker and a `- ` bullet
+on one line, a blank line as a paragraph boundary, and a heading as its own block - all three found by
+running it, none of them guessed. Do it against the real queue from the first commit rather than
+against the harness, because the harness passed at every stage while four promotions did not.
+
 ### C-34 - The population for `S-47`'s unrepresentability claim, written before the change
 
 **to** code · **status** open · **cited** `4d79240` · **raised** 2026-09-06 · **corrected** 2026-09-06 by `Q-55`
