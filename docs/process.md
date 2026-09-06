@@ -17,6 +17,12 @@ a conversation, a note, or an operating file is lost**, so a rule worth keeping 
 And **the reason a rule exists is part of the rule** - one recorded without its reason survives as
 a ritual, and the first person to find it inconvenient deletes it correctly, for the wrong reason.
 
+**And a reason that is false is worse than one that is missing.** A rule with no reason survives
+as a ritual; a rule with a wrong reason is kept for something that will not hold, and nothing
+looks wrong from outside. The decision is right and the code is right - only the account of why is
+false, so no check reaches it, and the person it misleads is the one who came back because they
+were unsure.
+
 ## Three rules for using AI assistants
 
 - Never let AI make a decision
@@ -64,7 +70,8 @@ ten guesses. **So an unreached limit is the limit working, and is not evidence t
 unnecessary.**
 
 So a **proposal** is a thing addressed to me. What the lanes send each other are items in an
-outbox, and there is no limit on those.
+outbox, and **there is no limit of my kind on those** - my fifteen is about my reading, and what
+bounds theirs is under *All lanes*, where it is not a count.
 
 **A proposal asks me one of two things, and says which. Approval** means the words are final and
 reading them is the whole of the work. **A decision** means a choice is open, and no wording can be
@@ -168,6 +175,15 @@ stayed green, so *it stayed green* stops carrying information, and those lists g
 checks guarding what people keep getting wrong. **A new check is made to fail on demand before it
 is trusted; an old one never is**, so what is trusted after the first run is a memory of it.
 **Re-poison a check when its exception list grows.**
+
+**And a probe aimed where a check already looks can only confirm what already works.** Making a
+new check fail on demand is the first half; the second is choosing what to make it fail on. A
+poison inside the region the predicate already sees goes red for the right reason and says nothing
+about the region it does not - and it reads exactly like evidence.
+
+**Two counts that share a computation are one count.** A check that asserts its population and
+finds the number its own specification supplied has corroborated nothing. That is the check
+written by the hand that wrote the work, arriving by a different route.
 
 ## All lanes
 - May collaborate with each other

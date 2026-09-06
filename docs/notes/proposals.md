@@ -69,70 +69,6 @@ are free, and none of them asks a decision.
 4. **`P-303`**, **`P-304`**, **`P-305`**, **`P-306`** - independent of everything and of each other.
    Each extends or corrects a section of `docs/process.md` that already exists
 
-### P-303 - A reason that is false is worse than one that is missing
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** recovered - **shape** text -
-**asks** approval - **into** `docs/process.md` -> What this document has to be, at the end
-
-**`P-302` covers a missing reason. This is the same sentence from the other end.**
-
-> **And a reason that is false is worse than one that is missing.** A rule with no reason survives
-> as a ritual; a rule with a wrong reason is kept for something that will not hold, and nothing
-> looks wrong from outside. The decision is right and the code is right - only the account of why is
-> false, so no check reaches it, and the person it misleads is the one who came back because they
-> were unsure.
-
-**Filed after being refuted, which is the part worth knowing.** This is the quality lens's `Q-54`. I
-declined to file it this morning, reading it as close enough to `C-28` and to `P-291` to be a copy.
-**That judgement was formed against the wrong neighbours** - both of those describe an artifact that
-is wrong or stale, where there is something to find. Here there is nothing to find, which is exactly
-why no check reaches it.
-
-**`P-302` is the neighbour, and it landed after my judgement.** A rule with no reason is deleted
-correctly for the wrong reason; a rule with a wrong reason is kept correctly for the wrong reason.
-The lens made that argument, checked before defending, and changed its own answer in the process.
-
-**Two cases, both the code lane's, hours apart on unrelated subjects.** `7a0d425` left a stray
-candidate unguarded - the right call - because *`read` filters it, so it is harmless*. It is not: it
-would have put a permanent false line into output all three lanes read. And `Q-50`'s exception list
-was unnecessary, because scoping the check to literals on one physical line excludes aligned output
-by construction, at 38 of 38. **The decisions survived; the accounts of them did not**, and both
-accounts were written into comments.
-
-**Nothing mechanises it**, which is why it belongs in this section rather than beside the checks. No
-check can ask whether a comment's reason is the reason - the wall `P-245` and `C-28` both hit.
-
-### P-304 - Where to aim a probe, and when two counts are one count
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** recovered - **shape** text -
-**asks** approval - **into** `docs/process.md` -> What makes a check worth having, at the end
-
-The section says **a new check is made to fail on demand before it is trusted**. It does not say
-what to make it fail *on*, and that is where both of today's failures happened.
-
-> **And a probe aimed where a check already looks can only confirm what already works.** Making a
-> new check fail on demand is the first half; the second is choosing what to make it fail on. A
-> poison inside the region the predicate already sees goes red for the right reason and says nothing
-> about the region it does not - and it reads exactly like evidence.
->
-> **Two counts that share a computation are one count.** A check that asserts its population and
-> finds the number its own specification supplied has corroborated nothing. That is the check
-> written by the hand that wrote the work, arriving by a different route.
-
-**The code lane's `C-39`, and both halves are from one check built today.** It verified the `Q-47`
-guard with a poison spelled the one way the predicate already matched; the quality lens then found a
-third spelling the guard could not see. The same check asserted its population at five and found
-five - **and the five came from the report that specified it**, already corrected to seven.
-
-**Why it is not covered by what is there.** *A check written by the hand that wrote the work will
-agree with the work* is about authorship. This is about a **number**, and it passes even when a
-different hand wrote the check, so the existing sentence does not reach it.
-
-**The part that argues for writing it down rather than remembering it.** Both are the failure
-`C-33` already recorded on 2026-09-05, and neither was prevented by it - **the inert poison was
-written a day later by the lane that wrote the bullet.** Filed because they otherwise live in a
-commit message and a doc comment, which is what `P-302` says is lost.
-
 ### P-305 - When an item closes, and the one thing that could still swallow it
 
 **to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
@@ -164,40 +100,6 @@ which is where the same gap is tracked. I have told both lanes; each closes its 
 **`S-51` files the check to the code lane.** It is mechanical rather than a habit: for every item
 closed citing `P-n`, ask whether `P-n` appears in the Withdrawn table. `tools/outbox` already parses
 both.
-
-### P-306 - `P-300` landed beside a sentence saying the thing it limits has no limit
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** cleanup - **shape** text -
-**asks** approval - **into** `docs/process.md` -> What I read, and what I do, the second paragraph
-after the two new ones
-
-**Found by re-reading the section whole before promoting into it**, which is the trigger doing its
-job. `docs/process.md` line 58 says:
-
-*So a proposal is a thing addressed to me. What the lanes send each other are items in an outbox,
-and there is no limit on those.*
-
-**`P-300` put an explicit limit on exactly those, forty lines later** - *eight items open to any one
-instance stays, as a backstop rather than as the rule*. The two cannot both be read literally.
-
-> So a **proposal** is a thing addressed to me. What the lanes send each other are items in an
-> outbox, and **there is no limit of my kind on those** - my fifteen is about my reading, and what
-> bounds theirs is under *All lanes*, where it is not a count.
-
-**The contradiction is older than today.** *Research instances* has carried the eight-item cap since
-before this queue existed, so line 58 has been overstated for a week. `P-300` did not create it; it
-moved the cap into *All lanes*, where it binds every instance and the collision stops being
-arguable.
-
-**The choice here was forced rather than made.** Either the sentence yields or the backstop does,
-and you approved the backstop an hour ago - so only the wording was left, and wording inside your
-rules is mine to settle and report. If I have read the sentence's intent wrongly, the answer is
-different words rather than the other direction.
-
-**One thing this lane did without asking, reported rather than proposed.** `CLAUDE.md` said *keep
-the open-proposal queue under fifteen. Past that, reviewing costs as much as writing and the
-mechanism has failed* - a justification your promotion just replaced, in a file that must not
-contradict yours. It now names the number and points at the section that says what it is for.
 
 ## Addressed to other perspectives
 
@@ -1763,6 +1665,9 @@ work the release exists to order.
 | P-300, two budgets, and only one of them is a count                                                                          | `docs/process.md` -> All lanes, Research instances                                                                                           | 2026-09-06 |
 | P-301, two files are addressed to me, and the limit of fifteen is a tripwire                                                 | `docs/process.md` -> What I read, and what I do                                                                                              | 2026-09-06 |
 | P-302, this document has to be enough on its own, with every transcript and CLAUDE.md gone                                   | `docs/process.md` -> What this document has to be                                                                                            | 2026-09-06 |
+| P-303, a reason that is false is worse than one that is missing                                                              | `docs/process.md` -> What this document has to be                                                                                            | 2026-09-06 |
+| P-304, where to aim a probe, and when two counts are one count                                                               | `docs/process.md` -> What makes a check worth having                                                                                         | 2026-09-06 |
+| P-306, the sentence saying inter-lane items have no limit, corrected                                                         | `docs/process.md` -> What I read, and what I do                                                                                              | 2026-09-06 |
 
 ## Rejected
 

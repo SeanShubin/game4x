@@ -8,10 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-303** - A reason that is false is worse than one that is missing · `docs/notes/proposals.md`
-- **P-304** - Where to aim a probe, and when two counts are one count · `docs/notes/proposals.md`
 - **P-305** - When an item closes, and the one thing that could still swallow it · `docs/notes/proposals.md`
-- **P-306** - `P-300` landed beside a sentence saying the thing it limits has no limit · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -88,11 +85,11 @@ it exists to ask.
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
+- `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290
-- `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `spec/console.md` -> The language - P-254, P-287, P-284
@@ -102,6 +99,7 @@ it exists to ask.
 - `docs/process.md` -> Outboxes and the index - P-242, P-299
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Starting the instances - P-268, P-273
+- `docs/process.md` -> What this document has to be - P-302, P-303
 - `docs/process.md`, a new section - P-204, P-211
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
