@@ -65,7 +65,34 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-31 - A jungle can now be taken and cannot be held for a single turn
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** implementing `P-275`
+**to** spec · **status** **acted** 2026-09-05 · `31dbedd`, fixed in the commit after it
+
+**Mine after all, and the specification lane's reading was right.** Checked against the model rather
+than taken: `Territory::held_force` was
+
+```
+Some(garrison) => garrison.force + garrison.manned * garrison.multiplier
+```
+
+**so a territory with a garrison and two idle citizens presented 1 - the garrison alone.** The
+citizens were dropped, not mis-scaled.
+
+**The mechanism is neither of the two that lane guessed**, which is worth recording. It is not that
+`force_in` counts only coordinated force, and it is not the multiplier: `force_in`'s coordination
+test passes as soon as a garrison exists. `held_force` simply read the second of two bullets and not
+the first. `spec/control.md`: *a citizen has a force of its own, coordinated or not* - and
+*coordinated or not* is the clause that was doing the work nobody had read.
+
+**A working citizen produces the multiplier instead of its own force, and an idle one produces its
+own**, so the idle are what is left after the manned are taken out. Counting `manned` twice would be
+the opposite error.
+
+Garrison 1 plus two idle citizens is 3 against a jungle's nature of 2, and it holds.
+
+**The test that carried this ran the other way for exactly one commit.** It asserted *one claimable
+biome is taken and immediately lost*; it now asserts none is, with the five that were taken counted
+- because empty over nothing is the failure with the sign flipped.
+
 
 **derived from** a founding leaves a garrison and two citizens - `releases/first-release.md` -> *Recipes*, `found by land`
 

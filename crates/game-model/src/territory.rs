@@ -541,7 +541,26 @@ impl Territory {
     /// highest among them rather than the total.
     pub fn held_force(&self) -> u32 {
         match self.garrison() {
-            Some(garrison) => garrison.force + garrison.manned * garrison.multiplier,
+            // **`C-31`: the citizens were being dropped entirely.** This was
+            // `garrison.force + manned * multiplier`, so a territory with a garrison and two
+            // idle citizens presented 1 - the garrison alone - and a jungle taken by two
+            // pioneers was handed straight back to nature on the turn it fell.
+            //
+            // `spec/control.md` has two bullets and this used only the second. *A citizen
+            // has a force of its own, coordinated or not* - so an idle citizen counts, and
+            // *coordinated or not* is what says so. *A garrison does two things. It lets the
+            // citizens of that territory sum their force instead of presenting only the
+            // highest among them. And it has a multiplier, so that a citizen working there
+            // produces that much force.*
+            //
+            // So a working citizen produces the multiplier **instead of** its own force, and
+            // an idle one still produces its own. Counting `manned` twice would be the
+            // opposite error, which is why the idle ones are what is left after the manned
+            // are taken out.
+            Some(garrison) => {
+                let idle = self.citizens().saturating_sub(garrison.manned);
+                garrison.force + idle * CITIZEN_FORCE + garrison.manned * garrison.multiplier
+            }
             // Citizens are capable of violence but not of coordination, so what they
             // present is the highest among them rather than the total - and a citizen is
             // force 1, so however many there are the answer is one.

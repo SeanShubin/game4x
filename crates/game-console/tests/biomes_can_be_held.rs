@@ -202,13 +202,23 @@ fn every_claimable_biome_can_be_taken_by_something_the_release_provides() {
     );
     assert_eq!(CANNOT.len(), 0, "two pioneers take every claimable biome");
 
-    // **One biome is taken and then lost, and it is the jungle** - `C-31`. A number
-    // rather than a pass, so it fails when the release changes what a founding leaves,
-    // in either direction.
+    // **Every biome that can be taken can be held by what taking it leaves** - `C-31`,
+    // and this assertion ran the other way for one commit. `P-275` made a jungle takeable
+    // and it was then handed straight back to nature, because `held_force` counted the
+    // garrison and dropped the citizens: `spec/control.md` says *a citizen has a force of
+    // its own, coordinated or not*, and only the garrison's multiplier was being read.
+    //
+    // Asserted empty rather than counted at zero, with the population named below, because
+    // zero over nothing is the failure with the sign flipped.
+    assert!(
+        lost.is_empty(),
+        "these are taken and nature takes them straight back: {lost:?}"
+    );
     assert_eq!(
-        lost.len(),
-        1,
-        "one biome is taken and nature takes it straight back; got {lost:?}"
+        taken.len(),
+        5,
+        "five claimable biomes were taken and held; {} were",
+        taken.len()
     );
 }
 
