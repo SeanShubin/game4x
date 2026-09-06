@@ -63,6 +63,48 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-276 - A garrison is coordination and nothing else
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **asks** a decision -
+**into** `spec/control.md` -> Force, and `releases/first-release.md` -> Units and structures
+
+**Two of your three clauses are unambiguous and the third is not, so this asks one thing.**
+
+**Settled: a garrison provides no force.** Its row gives it force **1** today, measured. It becomes
+0, and a garrison is then the thing that lets citizens sum and is nothing else.
+
+**Settled: its presence is what allows the summing.** `spec/control.md` already says that -
+*it lets the citizens of that territory sum their force instead of presenting only the highest among
+them* - so that half needs no change.
+
+**The question is what *not require labor* means**, and the two readings are different changes.
+
+**Reading A - the force no longer depends on a citizen working.** `spec/control.md` says a garrison
+*has a multiplier, so that a citizen working there produces that much force*, and the release says
+*a garrison's multiplier is 1* - one occurrence each, measured. **Under A both sentences go**, and a
+citizen contributes its own force whether it works or not, which is what the bullet above already
+says: *a citizen has a force of its own, coordinated or not*. **A garrison then does exactly one
+thing.**
+
+**Reading B - building one costs no labor.** Its cost is *1 labor, 1 metal*; under B it is 1 metal.
+**This changes the economy and not the force rule**, and leaves the multiplier where it is.
+
+**This lane reads it as A**, because your three clauses together describe what a garrison *does*
+rather than what it costs, and *require labor* matches *a citizen **working** there* exactly.
+**A and B are not exclusive** - say both if you meant both.
+
+**What A does, and it is the answer to `C-31`.** After a founding: garrison **0**, two citizens
+**1** each, summing because the garrison is there. **Force 2 against a jungle's nature of 2, and
+holding takes force *equal to* nature - so it holds, exactly.**
+
+**And it makes the jungle's danger permanent rather than a toll at the gate.** Force 2 is two
+citizens. **A jungle that drops to one citizen falls to nature and its population perishes** - so
+the jungle is a place you must keep two people in, for as long as you hold it. Grassland at nature 1
+survives on one.
+
+**What it does not fix.** The model reports `force_in` of **1** where these rules say 3 today and 2
+under A - it is dropping the citizens entirely, which is a defect either way and is the code lane's.
+
 ## Addressed to other perspectives
 
 ### S-45 - The node data contradicts the biome table, and every territory is affected
