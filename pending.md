@@ -18,6 +18,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-299** - It can tell you whether a lane is running, and the reason it could not has gone · `docs/notes/proposals.md`
 - **P-300** - Two budgets, and only one of them is a count · `docs/notes/proposals.md`
 - **P-301** - Questions you must answer, in a separate file from words you must approve · `docs/notes/proposals.md`
+- **P-303** - A reason that is false is worse than one that is missing · `docs/notes/proposals.md`
+- **P-304** - Where to aim a probe, and when two counts are one count · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -25,6 +27,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-50** - `521d3b7` S-50's live half, C-33 closed by P-291, and the re-poison it asked for · still open in `docs/notes/proposals.md`
 - **S-48** - `8b772c2` S-48: `node` goes, and capacity bounds extractors directly · still open in `docs/notes/proposals.md`
 - **S-47** - `f2040fa` File C-34: the population for S-47's unrepresentability claim · still open in `docs/notes/proposals.md`
 - **S-46** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`

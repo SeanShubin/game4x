@@ -60,19 +60,19 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Filed in numeric order; approve in the order below.** Three of these constrain the wording of
-others, so taking those first means nothing has to be read twice.
+**Approve in the order below, not the order they are filed.** Three of these constrain the wording
+of others, so taking those first means nothing has to be read twice.
 
-1. **`P-302`** - what this document has to be. It is why the rest carry their reasoning into the
-   file rather than leaving it in a proposal you will not keep
-2. **`P-301`** - the only one still asking a decision. `P-297` names the file it would create, so
-   answering this first stops that text needing a rewrite
-3. **`P-300`** - the budget rule, which has to be in place before `P-296` removes its subject
-4. **`P-299`, then `P-292`** - the correction lands first, so the definition arrives into a section
+1. **`P-301`** - the only one asking a decision. `P-297` names the file it creates, so answering
+   this first stops that text needing a rewrite
+2. **`P-300`** - the budget rule, which has to be in place before `P-296` removes its subject
+3. **`P-299`, then `P-292`** - the correction lands first, so the definition arrives into a section
    that already agrees with it rather than contradicting it for one commit
-5. **`P-293`, `P-294`, `P-295`** - the other three definitions, in any order
-6. **`P-296`** - the scaffolding, last, because it is the consequence of all four
-7. **`P-297`** once `P-301` is answered, and **`P-298`** whenever you like
+4. **`P-293`, `P-294`, `P-295`** - the other three definitions, in any order
+5. **`P-296`** - the scaffolding, last, because it is the consequence of all four
+6. **`P-297`** once `P-301` is answered, and **`P-298`** whenever you like
+7. **`P-303`** and **`P-304`** - independent of all of the above, and of each other. Each extends a
+   section of `docs/process.md` that already exists
 
 ### P-292 - What the specification instance is for
 
@@ -347,30 +347,114 @@ than restating it, per `docs/README.md`. That is wording inside my own file and 
 
 ### P-301 - Questions you must answer, in a separate file from words you must approve
 
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **asks** a decision -
-**into** `docs/notes/`, a new file, and `docs/process.md` -> What I read, and what I do
+**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
+own - **asks** a decision - **into** `docs/notes/questions.md`, a new file, and `docs/process.md` ->
+What I read, and what I do
 
-You said there should be a clear difference between proposals waiting for your approval and
-decisions the specification instance needs you to make, and that perhaps it should be a separate
-file. **Your second message treated it as settled**, listing *specification questions* as one of
-three things you look at.
+**Decided 2026-09-06: the file is `docs/notes/questions.md`.** You chose a separate file over a
+section in `proposals.md`; my recommendation was the section and it was not my call.
 
-**A field already distinguishes them and a file does not.** Every proposal carries `asks approval`
-or `asks a decision`, and `P-300` above is one of the second kind. So the difference is recorded;
-what it does not do is separate what you can dispatch in seconds from what you have to think about.
+**Three left. Two were in this item already and the third only exists because you chose a file.**
 
-**What a separate file buys, and what it costs.**
+**1. When you answer a question, does it move to `proposals.md`, or stay here and get rewritten in
+place?** Your answer turns a question into words to approve - a different artifact - so it has to go
+somewhere.
 
-- **Buys**: two queues you can read in different moods, and a question stops being buried among
-  finished words. The fifteen-item limit could then be per file, where it means something different
-- **Costs**: an answered question becomes a proposal asking approval, so it **moves between files**,
-  and every id has two possible homes. `tools/outbox` reads both, so nothing is lost - but a reader
-  chasing `P-300` has to know which file it is in today
+- **Move.** `questions.md` then only ever holds live questions and stays at the length that makes it
+  worth opening. The cost is that an id has two possible homes over its life. **My recommendation**
+- **Stay and be rewritten.** An id never moves, and `questions.md` accumulates approval-ready
+  proposals - which is `proposals.md` again, under a second name
 
-**Three questions, and the third is the one I cannot guess.** What the file is called; whether an
-answered question moves or stays and is rewritten in place; and **whether the specification's own
-open questions belong there too** - `spec/` files carry an *Open questions* section at the bottom
-today, and those are also questions only you can answer.
+**2. Do `spec/`'s own *Open questions* sections belong in this file?** Measured just now, and the
+number changes the question: **sixteen `spec/` files carry that heading and every one of them is
+empty.** Two contain a scaffolding placeholder and nothing else. So nothing moves today whichever
+way you go, and what you are deciding is the rule for the first real one.
+
+- **They stay in `spec/`.** A question sits at the bottom of the file whose rules it is about, where
+  the context is, and `spec/README.md` rule 5 already says so. **My recommendation.** If their being
+  invisible to `pending.md` matters, the fix is to have `tools/outbox` read those sections - not to
+  move the questions away from their subject
+- **They move here**, and `spec/README.md` rule 5 goes
+
+**3. Does the limit of fifteen split, or hold across both files?** `P-300` says your limit is a
+reading budget and each item costs you one read.
+
+- **Fifteen across both.** Your attention does not care which file an item is in. **My
+  recommendation**
+- **Fifteen each**, which is thirty, and is a different promise than the one you have now
+
+**Two things that follow and are not yours to decide.** `tools/outbox` reads a fixed list of five
+outboxes, so `questions.md` is invisible to `pending.md` until the code lane adds it - and
+`CLAUDE.md` says the queue is the one outbox that must never be invisible. I file that to code once
+the shape is settled. And the *Accepted* ledger stays in `proposals.md`, which follows from
+question 1 either way.
+
+**Answer these three and this becomes a proposal asking approval**, carrying the text for
+`docs/process.md` and the new file's header together.
+
+### P-303 - A reason that is false is worse than one that is missing
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** recovered - **shape** text -
+**asks** approval - **into** `docs/process.md` -> What this document has to be, at the end
+
+**`P-302` covers a missing reason. This is the same sentence from the other end.**
+
+> **And a reason that is false is worse than one that is missing.** A rule with no reason survives
+> as a ritual; a rule with a wrong reason is kept for something that will not hold, and nothing
+> looks wrong from outside. The decision is right and the code is right - only the account of why is
+> false, so no check reaches it, and the person it misleads is the one who came back because they
+> were unsure.
+
+**Filed after being refuted, which is the part worth knowing.** This is the quality lens's `Q-54`. I
+declined to file it this morning, reading it as close enough to `C-28` and to `P-291` to be a copy.
+**That judgement was formed against the wrong neighbours** - both of those describe an artifact that
+is wrong or stale, where there is something to find. Here there is nothing to find, which is exactly
+why no check reaches it.
+
+**`P-302` is the neighbour, and it landed after my judgement.** A rule with no reason is deleted
+correctly for the wrong reason; a rule with a wrong reason is kept correctly for the wrong reason.
+The lens made that argument, checked before defending, and changed its own answer in the process.
+
+**Two cases, both the code lane's, hours apart on unrelated subjects.** `7a0d425` left a stray
+candidate unguarded - the right call - because *`read` filters it, so it is harmless*. It is not: it
+would have put a permanent false line into output all three lanes read. And `Q-50`'s exception list
+was unnecessary, because scoping the check to literals on one physical line excludes aligned output
+by construction, at 38 of 38. **The decisions survived; the accounts of them did not**, and both
+accounts were written into comments.
+
+**Nothing mechanises it**, which is why it belongs in this section rather than beside the checks. No
+check can ask whether a comment's reason is the reason - the wall `P-245` and `C-28` both hit.
+
+### P-304 - Where to aim a probe, and when two counts are one count
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** recovered - **shape** text -
+**asks** approval - **into** `docs/process.md` -> What makes a check worth having, at the end
+
+The section says **a new check is made to fail on demand before it is trusted**. It does not say
+what to make it fail *on*, and that is where both of today's failures happened.
+
+> **And a probe aimed where a check already looks can only confirm what already works.** Making a
+> new check fail on demand is the first half; the second is choosing what to make it fail on. A
+> poison inside the region the predicate already sees goes red for the right reason and says nothing
+> about the region it does not - and it reads exactly like evidence.
+>
+> **Two counts that share a computation are one count.** A check that asserts its population and
+> finds the number its own specification supplied has corroborated nothing. That is the check
+> written by the hand that wrote the work, arriving by a different route.
+
+**The code lane's `C-39`, and both halves are from one check built today.** It verified the `Q-47`
+guard with a poison spelled the one way the predicate already matched; the quality lens then found a
+third spelling the guard could not see. The same check asserted its population at five and found
+five - **and the five came from the report that specified it**, already corrected to seven.
+
+**Why it is not covered by what is there.** *A check written by the hand that wrote the work will
+agree with the work* is about authorship. This is about a **number**, and it passes even when a
+different hand wrote the check, so the existing sentence does not reach it.
+
+**The part that argues for writing it down rather than remembering it.** Both are the failure
+`C-33` already recorded on 2026-09-05, and neither was prevented by it - **the inert poison was
+written a day later by the lane that wrote the bullet.** Filed because they otherwise live in a
+commit message and a doc comment, which is what `P-302` says is lost.
 
 ## Addressed to other perspectives
 
