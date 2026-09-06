@@ -192,6 +192,22 @@ admit. The file uses both correctly, so a check built on its literal words would
 **Whether.** Worth a decision now. Both producers believe `phase` is settled -
 `docs/notes/proposals.md:122` already writes `{game phase:play}` as the target form.
 
+**Corrected by the code lane 2026-09-06, `52eb1b7`, and the correction is right.** `phase` is **not
+the only one**. Of the nine closed-set traits, three point at a table - `kind`, `resource`, `biome` -
+three name their values - `ready`, `surplus`, `unpaid` - and **three do not**: `houses` describes the
+question and names neither answer, `phase` describes both, and `control` names one value and
+describes the other.
+
+**The count of eighteen is unaffected, and I checked why rather than assuming it.** Neither `houses`
+nor `control` appears in `scenario/expected/play.4x` or in `dump.rs` - zero occurrences in each, and
+neither is among the 49 words this item classified. **They do not bite because nothing prints them
+yet**, which is `founded`'s history read from the other end.
+
+**It changes the fix rather than the finding.** Repairing `phase` alone leaves the trap armed for
+whichever of the other two is printed next. **And no existing guard catches it**: `one_word` in
+`expected.rs` guards the *form* - one word, unquoted - and not the *vocabulary*. An undeclared
+**single** word passes it, which is exactly how `play` got there.
+
 
 ### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
 
