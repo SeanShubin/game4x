@@ -63,6 +63,43 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-34 - The population for `S-47`'s unrepresentability claim, written before the change
+
+**to** code · **status** open · **raised** 2026-09-06 · **source** the quality lens, asking for it before it stops existing
+
+**Not a question. A record made while the thing it describes still exists**, because after `S-47`
+lands nobody can reconstruct what used to be writable.
+
+**`S-47` will carry a claim of the form *these errors become unrepresentable*.** `Q-41`'s shape
+exactly: a claim of zero, which proves something only against a population that is not also zero. So
+here is the population, read off `crates/game-model/src/unit.rs:14` and `game.rs:64` as they stand
+today - `Vec<Unit>` where `Unit` carries `location: Location`.
+
+**What a reader can write today and what `children: Vec<Thing>` refuses:**
+
+1. **Two parents.** Nothing stops two territories both listing a unit, because neither lists it -
+   the unit names its own container. Under containment a `Thing` is owned by exactly one `children`
+   vector and moving it is `remove` then `push`, so the second parent has nowhere to come from.
+2. **An orphan.** `Location::On(TerritoryId(99))` compiles and refers to nothing. `game.rs` guards
+   the ids it is handed, but the struct admits any number. Under containment there is no id to be
+   wrong - a thing is in the vector it is in.
+3. **A thing containing itself.** Not reachable through `Unit` today because a unit holds no units,
+   and *that is the point*: the shape is safe by accident of what has not been built yet. An orbit
+   holding units is already specified, and the first unit that can carry another makes it writable.
+4. **Two things claiming one place with different answers.** `force_in` sums `units_on(id)`, which
+   filters the flat list. Two units disagreeing about where they are is not a state anything rejects;
+   it is a state that reads as two units.
+5. **A unit in no place at all.** `Location` is an enum, so this one is *already* unrepresentable -
+   and it is here because a population needs its negative cases. **Four of the five, not five.**
+
+**What is not in the population, and saying so is half the point.** Containment does not stop a
+territory holding more of a kind than its capacity allows, or a store holding eleven of something. It
+makes *where a thing is* unwriteable-wrong; it says nothing about *how many*. A claim that the new
+form makes the model correct would be much wider than this and false.
+
+**The count is four.** If `S-47`'s claim names more than four, it has grown beyond what was true when
+this was written, and the extras want the same treatment before they are believed.
+
 ### C-33 - A check that has only ever passed is a claim, and belief in it decays
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `Q-39`'s check firing on a real defect
