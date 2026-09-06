@@ -82,128 +82,6 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-47 - *Presentations are never canonical* is checkable, and the obvious check would be decoration
-
-**to** code · **status** open · **raised** 2026-09-05 · **source** `docs/process.md` →
-[What verification requires](../../docs/process.md#presentation), read at the specification lane's
-pointing
-
-`docs/process.md` says **presentations are never canonical** and **presentations are generated from
-data**. Nothing enforces either. It is the only one of that section's six checkable statements whose
-failure is **silent** - a presentation read as a source looks exactly like a presentation until the
-data changes underneath it.
-
-**The rule currently holds**, so this is preventive rather than corrective. Every reference to
-`reports/` in the tree:
-
-| Role      | File                                                   |
-| --------- | ------------------------------------------------------ |
-| generator | `crates/game-console/src/bin/dump-state.rs`            |
-| check     | `crates/game-console/tests/dump.rs`                    |
-| check     | `crates/game-console/tests/dumps_are_current.rs`       |
-| check     | `crates/game-console/tests/turns_reconstruct.rs`       |
-| check     | `tools/pad-tables/tests/generated_files_are_padded.rs` |
-
-**No production file reads a report.** Five, not the four the specification lane counted - their
-list included `src/dump.rs`, which contains the word *reports* only inside HTML it emits, and
-omitted the `pad-tables` test.
-
-**The distinction they worried about does not need semantics.** *Reading to verify* versus *reading
-as input* is drawable by path: the generator is `src/bin/`, the checks are `*/tests/*`, and the rule
-is that **nothing else may name the directory**. A test reading a report is a test; production
-depending on one is the failure.
-
-**The trap is the spelling, and it is the reason to file this rather than just build it.** Two
-spellings are in use - `"reports/…"` and `.join("reports")` - and they interleave:
-
-- searching only the literal finds **3 of 5**, and misses the generator
-- searching only the join finds **2 of 5**
-
-**Both lanes fell into this within minutes of each other**, on the same question, from opposite
-sides. A check written the way either of us searched would have reported clean while missing
-readers - which is the guard-that-cannot-fail this repository has built twice and caught twice.
-
-**Whether.** Worth building, and worth building carefully: match the directory rather than a string,
-or match both spellings and assert the total, so the check fails if a third spelling appears.
-
-**Corrected 2026-09-06, and the number had already travelled.** The population is **seven**, not
-five: `prototypes/kinds/src/main.rs` and `prototypes/kinds/tests/catalog_is_current.rs` reach the
-directory as `../../reports/...`. The check built from this item asserts `>= 5` and says *the rule
-was written against five* - it agreed with this figure because it shares the computation, not
-because either is right. `Q-56`.
-
-### Q-50 - A run of spaces sits mid-sentence in a failure message, in eighteen places
-
-**to** code · **status** open · **cited** `fc4029a`, which acted on part of it · **raised**
-2026-09-05 ·
-**source** a scan of every non-comment string literal in `crates/`, `tools/` and `prototypes/`
-
-A message reads *"if that table          moved or changed shape"*. **Eighteen runs over six lines in
-four files** remain after `fc4029a`: `game-console/src/grammar.rs`,
-`sphere-tessellation/src/quality.rs`, `tools/outbox/src/lib.rs`, and `tools/outbox/tests/promotions.rs`
-at three lines, where the `KNOWN` exceptions carry several each.
-
-**Why it is more than tidying, barely.** These strings are read in exactly one situation: a check has
-failed and somebody is working out why. A green run never shows them, so nothing in normal use
-applies any pressure to them at all - the same property that let `Q-48` exist. Two of the five
-collapsed in `fc4029a` had arrived in `13497da` hours earlier, which is what makes this a rate rather
-than a residue.
-
-**Two numbers in the first version of this item were wrong, and both were stated without being
-derived.** It said twenty-two runs across seven files; re-derived against `dc125d5` it was
-**twenty-three across eight** - and the item then listed eight files under the word *seven*. Nobody
-was misled and the item was acted on correctly, which is the point: **a wrong number that changes no
-decision is the kind that survives.** Third time this lens has passed on a figure it did not compute.
-
-### What `fc4029a` established, which is worth more than the five lines
-
-**The code lane applied the rule as a regex across the tree and committed `C-28` doing it.** 53 lines
-in 14 files, compiling clean, every test green - and it had destroyed the column alignment in two
-usage strings and caught the deliberate newline-escape indents. **A plausible result rather than an
-error**, half an hour after they wrote in `CLAUDE.md` that no check can ask whether another check's
-predicate is about its subject. They reverted the nine files they had not read.
-
-**So the rule reports and cannot apply.** 53 hits were 53 places to look, not 53 defects, and a fix
-has to be right about every hit rather than most. Print, never assert.
-
-### And the third case is free rather than an exception
-
-They found aligned output - `--shot PATH          draw one frame to a PNG and exit` - by breaking it,
-and asked for it in the exception list beside the newline-escape indent. **It does not need to be.**
-
-This lens's detector never saw those lines, and not by design: it reads one physical line at a time
-and skips any without two quotes on it, so **every multi-line literal is invisible to it.** Measured:
-**38 lines in this tree sit in that blind spot, and all 38 are aligned output** - three usage blocks
-and one diagnostic in `pad-tables`. **Not one is a joined wrap.**
-
-That is not luck twice over. **A joined wrap is on one physical line by construction** - joining is
-what put it there - and **aligned columns are across many by construction**, because that is what
-they are aligning. So *the literal lies entirely on one physical line* is close to the real
-discriminator, and restricting the check to those excludes alignment without an exception list.
-
-**Stated as what it is: a measurement over this tree, not a theorem.** A wrapped paragraph inside a
-`\`-continued block would be a joined wrap the check could not see, and would be missed. That is the
-safe direction for something that prints, and it is still a limit worth naming. The population is 38
-rather than zero, so this is not a count over nothing.
-
-### One more artifact, from the same commit
-
-`first_release.rs:98` reads `somebody else'''s row` - three apostrophes, in the comment explaining the
-`Q-49` fix. A shell-quoting artifact rather than a wrap, and the only one in the tree. **Folded here
-rather than filed** because it is the same subject: text that no build reads, so nothing pushes back
-on it. Third artifact of this kind in two commits.
-
-**Whether.** The eighteen are worth fixing by reading, one at a time, and there is no hurry. The
-check is worth having if it prints and is restricted to single-line literals; poison it like anything
-else.
-
-**The single-physical-line discriminator has counterexamples as of 2026-09-06, and this item's own
-range created them.** `tools/outbox/tests/promotions.rs:502`, `:532` and `:540` are aligned
-continuation lines carried on one physical line by `\n` escapes. The 38-of-38 measurement was
-stated as a measurement rather than a theorem and it moved within a day. The refinement: **a run of
-spaces immediately following an escaped newline is alignment.** The conclusion is unchanged - the
-check prints, and never asserts.
-
 ### Q-53 - A session is producing findings and has no outbox to put them in
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** receiving `Q-51` by message from
@@ -332,6 +210,136 @@ One row, worth adding while the file is open, and recorded so it is not re-found
 ## Resolved
 
 Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
+### Q-47 - *Presentations are never canonical* is checkable, and the obvious check would be decoration
+
+**to** code · **status** **acted** 2026-09-06 · `19a8752` · **raised** 2026-09-05 · **source** `docs/process.md` →
+[What verification requires](../../docs/process.md#presentation), read at the specification lane's
+pointing
+
+`docs/process.md` says **presentations are never canonical** and **presentations are generated from
+data**. Nothing enforces either. It is the only one of that section's six checkable statements whose
+failure is **silent** - a presentation read as a source looks exactly like a presentation until the
+data changes underneath it.
+
+**The rule currently holds**, so this is preventive rather than corrective. Every reference to
+`reports/` in the tree:
+
+| Role      | File                                                   |
+| --------- | ------------------------------------------------------ |
+| generator | `crates/game-console/src/bin/dump-state.rs`            |
+| check     | `crates/game-console/tests/dump.rs`                    |
+| check     | `crates/game-console/tests/dumps_are_current.rs`       |
+| check     | `crates/game-console/tests/turns_reconstruct.rs`       |
+| check     | `tools/pad-tables/tests/generated_files_are_padded.rs` |
+
+**No production file reads a report.** Five, not the four the specification lane counted - their
+list included `src/dump.rs`, which contains the word *reports* only inside HTML it emits, and
+omitted the `pad-tables` test.
+
+**The distinction they worried about does not need semantics.** *Reading to verify* versus *reading
+as input* is drawable by path: the generator is `src/bin/`, the checks are `*/tests/*`, and the rule
+is that **nothing else may name the directory**. A test reading a report is a test; production
+depending on one is the failure.
+
+**The trap is the spelling, and it is the reason to file this rather than just build it.** Two
+spellings are in use - `"reports/…"` and `.join("reports")` - and they interleave:
+
+- searching only the literal finds **3 of 5**, and misses the generator
+- searching only the join finds **2 of 5**
+
+**Both lanes fell into this within minutes of each other**, on the same question, from opposite
+sides. A check written the way either of us searched would have reported clean while missing
+readers - which is the guard-that-cannot-fail this repository has built twice and caught twice.
+
+**Whether.** Worth building, and worth building carefully: match the directory rather than a string,
+or match both spellings and assert the total, so the check fails if a third spelling appears.
+
+**Corrected 2026-09-06, and the number had already travelled.** The population is **seven**, not
+five: `prototypes/kinds/src/main.rs` and `prototypes/kinds/tests/catalog_is_current.rs` reach the
+directory as `../../reports/...`. The check built from this item asserts `>= 5` and says *the rule
+was written against five* - it agreed with this figure because it shares the computation, not
+because either is right. `Q-56`.
+
+**Closed 2026-09-06.** The check exists and matches the path rather than a spelling, which is what this asked for. **It has a blind spot in the one dimension this item was about**, and `Q-56` carries that rather than reopening this.
+
+### Q-50 - A run of spaces sits mid-sentence in a failure message, in eighteen places
+
+**to** code · **status** **acted** 2026-09-06 · `fc4029a` and `72391f7` · **raised**
+2026-09-05 ·
+**source** a scan of every non-comment string literal in `crates/`, `tools/` and `prototypes/`
+
+A message reads *"if that table          moved or changed shape"*. **Eighteen runs over six lines in
+four files** remain after `fc4029a`: `game-console/src/grammar.rs`,
+`sphere-tessellation/src/quality.rs`, `tools/outbox/src/lib.rs`, and `tools/outbox/tests/promotions.rs`
+at three lines, where the `KNOWN` exceptions carry several each.
+
+**Why it is more than tidying, barely.** These strings are read in exactly one situation: a check has
+failed and somebody is working out why. A green run never shows them, so nothing in normal use
+applies any pressure to them at all - the same property that let `Q-48` exist. Two of the five
+collapsed in `fc4029a` had arrived in `13497da` hours earlier, which is what makes this a rate rather
+than a residue.
+
+**Two numbers in the first version of this item were wrong, and both were stated without being
+derived.** It said twenty-two runs across seven files; re-derived against `dc125d5` it was
+**twenty-three across eight** - and the item then listed eight files under the word *seven*. Nobody
+was misled and the item was acted on correctly, which is the point: **a wrong number that changes no
+decision is the kind that survives.** Third time this lens has passed on a figure it did not compute.
+
+### What `fc4029a` established, which is worth more than the five lines
+
+**The code lane applied the rule as a regex across the tree and committed `C-28` doing it.** 53 lines
+in 14 files, compiling clean, every test green - and it had destroyed the column alignment in two
+usage strings and caught the deliberate newline-escape indents. **A plausible result rather than an
+error**, half an hour after they wrote in `CLAUDE.md` that no check can ask whether another check's
+predicate is about its subject. They reverted the nine files they had not read.
+
+**So the rule reports and cannot apply.** 53 hits were 53 places to look, not 53 defects, and a fix
+has to be right about every hit rather than most. Print, never assert.
+
+### And the third case is free rather than an exception
+
+They found aligned output - `--shot PATH          draw one frame to a PNG and exit` - by breaking it,
+and asked for it in the exception list beside the newline-escape indent. **It does not need to be.**
+
+This lens's detector never saw those lines, and not by design: it reads one physical line at a time
+and skips any without two quotes on it, so **every multi-line literal is invisible to it.** Measured:
+**38 lines in this tree sit in that blind spot, and all 38 are aligned output** - three usage blocks
+and one diagnostic in `pad-tables`. **Not one is a joined wrap.**
+
+That is not luck twice over. **A joined wrap is on one physical line by construction** - joining is
+what put it there - and **aligned columns are across many by construction**, because that is what
+they are aligning. So *the literal lies entirely on one physical line* is close to the real
+discriminator, and restricting the check to those excludes alignment without an exception list.
+
+**Stated as what it is: a measurement over this tree, not a theorem.** A wrapped paragraph inside a
+`\`-continued block would be a joined wrap the check could not see, and would be missed. That is the
+safe direction for something that prints, and it is still a limit worth naming. The population is 38
+rather than zero, so this is not a count over nothing.
+
+### One more artifact, from the same commit
+
+`first_release.rs:98` reads `somebody else'''s row` - three apostrophes, in the comment explaining the
+`Q-49` fix. A shell-quoting artifact rather than a wrap, and the only one in the tree. **Folded here
+rather than filed** because it is the same subject: text that no build reads, so nothing pushes back
+on it. Third artifact of this kind in two commits.
+
+**Whether.** The eighteen are worth fixing by reading, one at a time, and there is no hurry. The
+check is worth having if it prints and is restricted to single-line literals; poison it like anything
+else.
+
+**The single-physical-line discriminator has counterexamples as of 2026-09-06, and this item's own
+range created them.** **Corrected again the same day, because the first correction understated it by an
+order of magnitude.** I gave three counterexamples; the code lane's own run of the restricted
+detector gives **51 hits of which 33 are not defects** - whitespace a test is deliberately
+parsing, indentation after an escaped newline, and aligned output columns. The 38-of-38
+measurement showed that *multi-line* literals are all alignment. **It does not establish the
+converse**, and I wrote as though it did: single-physical-line literals are not all joined wraps,
+and two thirds of them here are not. The refinement: **a run of
+spaces immediately following an escaped newline is alignment.** The conclusion is unchanged - the
+check prints, and never asserts.
+
+**Closed 2026-09-06**, both halves. The eighteen are gone, re-derived here rather than taken from the commit. **The check half is answered rather than abandoned: it is not worth building as this item specified it.** The restriction that was supposed to exclude alignment leaves 33 false positives in 51 hits, so the fixer naming its lines and asserting each line's count - which is what landed - is the better instrument, and a standing check would print two thirds noise.
 
 ### Q-13 - Adopt the workflow in `CLAUDE.md`
 

@@ -26,12 +26,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
-- **Q-47** - `19a8752` Q-47: nothing but a generator and a check may name `reports/` · still open in `lenses/quality/outbox.md`
-- **Q-50** - `72391f7` Q-50: the eighteen joined wraps, and nothing that was aligned on purpose · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (18)
+### To code (16)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-48** - `node` goes, and the game's row loses `turn` · `docs/notes/proposals.md`
@@ -48,8 +46,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
-- **Q-50** - A run of spaces sits mid-sentence in a failure message, in eighteen places · `lenses/quality/outbox.md`
 - **Q-56** - The `Q-47` check cannot see the spelling `Q-47` was filed about · `lenses/quality/outbox.md`
 
 ### To spec (11)
