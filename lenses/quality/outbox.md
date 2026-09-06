@@ -233,6 +233,45 @@ survive this lens's own method. **The code lane should classify these eleven**, 
 lens nor the specification lane should.
 
 
+### Q-60 - `P-305`'s third bullet has no actor, and no lane that could be one
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` at
+`65f2627` at the specification lane's pointing, and following it to `P-305`, which is still open
+
+**The bullet:** *a withdrawal that would orphan a closed item reopens that item.* **Reopens is
+passive and names nobody**, and the two candidates cannot do it.
+
+- The **specification lane** performs the withdrawal, and `Q-53` lives in
+  `lenses/quality/outbox.md`. `CLAUDE.md`: *a producer never writes into a lens's directory.*
+- The **code lane**'s `S-51` check reports. A check can name an orphaned item and cannot reopen one.
+- Which leaves the **owning lens**, which has no signal that a proposal was withdrawn unless it
+  happens to be running and happens to look.
+
+**The proposal already contains the observation, one paragraph below the bullet**: *two items change
+status the moment this lands, and neither is mine to change.* That is the same boundary, noticed for
+the landing and not for the withdrawal it is proposing.
+
+**So the rule as worded is the failure it was written to prevent.** An orphaned item goes quiet with
+nobody having decided anything - which is the third bullet's own reason - because the step that
+un-quiets it has no owner.
+
+**And the check inherits the problem rather than solving it.** If `S-51` only prints, nothing makes
+anyone act. If it asserts, the gate goes red for whichever lane commits next, and that lane may be
+one that **may not** fix it - `CLAUDE.md` already names this shape, where a lane is gated on
+something it did not write and must not repair.
+
+**A shape that avoids both, offered as a shape and not as words.** Withdrawal is already covered by
+a pattern this repository has: *a promotion that makes something else stale files the cleanup
+immediately*. The same lane, in the same commit, **files the reopening as an item addressed to the
+owner**. Nothing new is invented, the actor is named, and `S-51` stays a report rather than becoming
+a gate.
+
+**Whether.** Worth a clause now rather than a cleanup proposal later. **`P-305` is open**, so the
+words can still change and this costs one line; after promotion it costs a proposal, and the rule
+would be unbuildable in between. This lens is also the live case - `Q-53` is `S-51`'s poison
+target - so it is the item that would go quiet.
+
+
 ---
 
 ## Resolved
