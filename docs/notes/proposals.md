@@ -351,46 +351,61 @@ than restating it, per `docs/README.md`. That is wording inside my own file and 
 own - **asks** a decision - **into** `docs/notes/questions.md`, a new file, and `docs/process.md` ->
 What I read, and what I do
 
-**Decided 2026-09-06: the file is `docs/notes/questions.md`.** You chose a separate file over a
-section in `proposals.md`; my recommendation was the section and it was not my call.
+**Three of the four are decided. One is open and it is not the one this item was filed about.**
 
-**Three left. Two were in this item already and the third only exists because you chose a file.**
+**Decided: the file is `docs/notes/questions.md`.** A separate file, not a section in the proposals;
+my recommendation was the section and it was not my call.
 
-**1. When you answer a question, does it move to `proposals.md`, or stay here and get rewritten in
-place?** Your answer turns a question into words to approve - a different artifact - so it has to go
-somewhere.
+**Decided: an item lives in one file at a time.** While it has an unanswered question it is in
+`questions.md`. When the last question is answered it moves to `proposals.md` as words to approve
+and is no longer in `questions.md`. So `questions.md` only ever holds live questions, and the
+*Accepted* ledger stays in `proposals.md`.
 
-- **Move.** `questions.md` then only ever holds live questions and stays at the length that makes it
-  worth opening. The cost is that an id has two possible homes over its life. **My recommendation**
-- **Stay and be rewritten.** An id never moves, and `questions.md` accumulates approval-ready
-  proposals - which is `proposals.md` again, under a second name
+**Decided: `spec/`'s own *Open questions* sections stay in `spec/`.** A question sits at the bottom
+of the file whose rules it is about, where the context is, and `spec/README.md` rule 5 already says
+so. Nothing moves today in any case - **sixteen `spec/` files carry that heading and every one is
+empty**, two holding only a scaffolding placeholder. If their invisibility to `pending.md` matters,
+the fix is teaching `tools/outbox` to read those sections rather than moving questions away from
+their subject.
 
-**2. Do `spec/`'s own *Open questions* sections belong in this file?** Measured just now, and the
-number changes the question: **sixteen `spec/` files carry that heading and every one of them is
-empty.** Two contain a scaffolding placeholder and nothing else. So nothing moves today whichever
-way you go, and what you are deciding is the rule for the first real one.
+**Open: does the limit of fifteen split across the two files, hold across both - or go?**
 
-- **They stay in `spec/`.** A question sits at the bottom of the file whose rules it is about, where
-  the context is, and `spec/README.md` rule 5 already says so. **My recommendation.** If their being
-  invisible to `pending.md` matters, the fix is to have `tools/outbox` read those sections - not to
-  move the questions away from their subject
-- **They move here**, and `spec/README.md` rule 5 goes
+**The measurement, which changes the question.** Across all 448 commits that touched this file, the
+open queue peaked at **twelve**, hit on 2026-08-25 and again today. **It has never once reached
+fifteen**, and it stood at zero in 135 of those commits - a little under a third of the time. So the
+limit has never stopped a proposal being filed, and *fifteen versus thirty* is a choice between two
+numbers neither of which has ever been touched.
 
-**3. Does the limit of fifteen split, or hold across both files?** `P-300` says your limit is a
-reading budget and each item costs you one read.
+**What is actually doing the work is judgement below the number.** Today this lane held two items -
+`Q-59` and the Traits-table rule - at twelve, citing queue length. The limit did not bind; being
+aware of a budget did.
 
-- **Fifteen across both.** Your attention does not care which file an item is in. **My
-  recommendation**
-- **Fifteen each**, which is thirty, and is a different promise than the one you have now
+**Which makes this a live case of a rule you already have.** `docs/process.md` says a check can be
+sound and no longer believed, and that a long green run is what does it. **A limit unreached in 448
+commits is that**, and the question you are asking is that rule firing on a rule rather than on a
+check.
 
-**Two things that follow and are not yours to decide.** `tools/outbox` reads a fixed list of five
-outboxes, so `questions.md` is invisible to `pending.md` until the code lane adds it - and
-`CLAUDE.md` says the queue is the one outbox that must never be invisible. I file that to code once
-the shape is settled. And the *Accepted* ledger stays in `proposals.md`, which follows from
-question 1 either way.
+**Three ways to go.**
 
-**Answer these three and this becomes a proposal asking approval**, carrying the text for
-`docs/process.md` and the new file's header together.
+- **Keep a number and say what it is really for.** Not a bound on your reading - it has never
+  bounded anything - but a **tripwire on this lane**: if the queue reaches fifteen, proposals are
+  being filed faster than decisions are being made, which means guessing at design. `CLAUDE.md`
+  already carries the remedy - *ask one question instead*. Its job is to never be reached, and it
+  has done that job. **My recommendation**
+- **Drop it.** It has never fired, and a rule that has never fired cannot be told from a decorative
+  one. The cost is losing the only stated backstop for the failure it names
+- **Split it**, fifteen each. Thirty total, which is a different promise than the one you have, and
+  neither half has ever been approached
+
+**Neither of your two candidate jobs for it survives intact.** A count does penalize splitting one
+decision into many proposals, weakly - but it has never had to. And it does **nothing** about
+contradictory proposals; the instrument for that is the re-read trigger on a section that has taken
+a second proposal, which fires on thirty-eight sections today. You were right that they are
+different problems.
+
+**This decision reaches back into `P-300`**, which is open and says *fifteen open proposals is a
+reading budget*. If the limit is a tripwire rather than a budget, that sentence needs editing before
+you approve it - so answer this one before `P-300` rather than after.
 
 ### P-303 - A reason that is false is worse than one that is missing
 
