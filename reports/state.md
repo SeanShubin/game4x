@@ -120,8 +120,8 @@ is in it, because the names are what this is for.
 
 | territory | force |
 | --------- | ----- |
-| 1         | 1     |
-| 2         | 1     |
+| 1         | 0     |
+| 2         | 0     |
 
 2 row(s)
 

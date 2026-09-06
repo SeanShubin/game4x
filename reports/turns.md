@@ -26,7 +26,7 @@ end turn
 
 - {extractor territory:1 node:0 resource:food ready:yes}
 - {extractor territory:1 node:3 resource:metal ready:yes}
-- {garrison territory:1 force:1}
+- {garrison territory:1 force:0}
 
 **changed** (15)
 
@@ -165,7 +165,7 @@ end turn
 
 | territory | force |
 | --------- | ----- |
-| 1         | 1     |
+| 1         | 0     |
 
 1 row(s)
 
@@ -416,7 +416,7 @@ end turn
 
 | territory | force |
 | --------- | ----- |
-| 1         | 1     |
+| 1         | 0     |
 
 1 row(s)
 
@@ -661,7 +661,7 @@ end turn
 
 | territory | force |
 | --------- | ----- |
-| 1         | 1     |
+| 1         | 0     |
 
 1 row(s)
 
@@ -923,7 +923,7 @@ end turn
 
 | territory | force |
 | --------- | ----- |
-| 1         | 1     |
+| 1         | 0     |
 
 1 row(s)
 
@@ -1177,7 +1177,7 @@ end turn
 
 | territory | force |
 | --------- | ----- |
-| 1         | 1     |
+| 1         | 0     |
 
 1 row(s)
 
@@ -1434,7 +1434,7 @@ end turn
 
 | territory | force |
 | --------- | ----- |
-| 1         | 1     |
+| 1         | 0     |
 
 1 row(s)
 
@@ -1569,7 +1569,7 @@ end turn
 
 - {extractor territory:2 node:0 resource:food ready:yes}
 - {extractor territory:2 node:2 resource:metal ready:yes}
-- {garrison territory:2 force:1}
+- {garrison territory:2 force:0}
 
 **changed** (16)
 
@@ -1709,8 +1709,8 @@ end turn
 
 | territory | force |
 | --------- | ----- |
-| 1         | 1     |
-| 2         | 1     |
+| 1         | 0     |
+| 2         | 0     |
 
 2 row(s)
 
@@ -1979,8 +1979,8 @@ end turn
 
 | territory | force |
 | --------- | ----- |
-| 1         | 1     |
-| 2         | 1     |
+| 1         | 0     |
+| 2         | 0     |
 
 2 row(s)
 
@@ -2229,8 +2229,8 @@ end turn
 
 | territory | force |
 | --------- | ----- |
-| 1         | 1     |
-| 2         | 1     |
+| 1         | 0     |
+| 2         | 0     |
 
 2 row(s)
 

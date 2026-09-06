@@ -47,21 +47,30 @@ pub struct Extractor {
 /// `spec/control.md`: the structure through which the citizens of a territory apply force.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Garrison {
-    /// Force of its own. A founding unit becomes a structure with one less force than the
-    /// unit, and both founding units in this release are force 2.
+    /// Force of its own, which is **zero** since `P-277`.
+    ///
+    /// It was *one less force than the founding unit*. `spec/control.md` now says a
+    /// garrison has none, and the release's *Units and structures* row says 0 - the field
+    /// stays because a garrison is a thing with traits like any other and the release still
+    /// gives it a Force cell, which happens to hold zero.
     pub force: u32,
     /// What a citizen working here produces in force.
-    pub multiplier: u32,
     /// Citizens working here this turn.
     pub manned: u32,
 }
 
 impl Garrison {
     /// The garrison a founding unit of this force becomes.
-    pub fn from_founding_unit(unit_force: u32) -> Self {
+    /// **`P-276` and `P-277`: a garrison has no force of its own.** It was *one less force
+    /// than the founding unit*, which is 1 for both units that found; the release's *Units
+    /// and structures* row now says **0**, and `spec/control.md` says it outright.
+    ///
+    /// The unit's force is still the argument because the caller has it and because a
+    /// founding still turns a unit into this - what changed is what the result presents, not
+    /// where it came from.
+    pub fn from_founding_unit(_unit_force: u32) -> Self {
         Self {
-            force: unit_force.saturating_sub(1),
-            multiplier: 1,
+            force: 0,
             manned: 0,
         }
     }
@@ -185,7 +194,6 @@ impl Territory {
             .find(|thing| thing.kind == Kind::Garrison)
             .map(|thing| Garrison {
                 force: thing.trait_of(Trait::Force).unwrap_or(0),
-                multiplier: thing.trait_of(Trait::Multiplier).unwrap_or(1),
                 manned: thing.trait_of(Trait::Manned).unwrap_or(0),
             })
     }
@@ -196,7 +204,6 @@ impl Territory {
             self.held.push(
                 Thing::of(Kind::Garrison)
                     .with(Trait::Force, garrison.force)
-                    .with(Trait::Multiplier, garrison.multiplier)
                     .with(Trait::Manned, garrison.manned),
             );
         }
@@ -541,26 +548,21 @@ impl Territory {
     /// highest among them rather than the total.
     pub fn held_force(&self) -> u32 {
         match self.garrison() {
-            // **`C-31`: the citizens were being dropped entirely.** This was
-            // `garrison.force + manned * multiplier`, so a territory with a garrison and two
-            // idle citizens presented 1 - the garrison alone - and a jungle taken by two
-            // pioneers was handed straight back to nature on the turn it fell.
+            // **`P-276`: a garrison has no force of its own and nothing has to work it.**
+            // *It does one thing: it lets the citizens of that territory sum their force
+            // instead of presenting only the highest among them. It does this by existing.*
             //
-            // `spec/control.md` has two bullets and this used only the second. *A citizen
-            // has a force of its own, coordinated or not* - so an idle citizen counts, and
-            // *coordinated or not* is what says so. *A garrison does two things. It lets the
-            // citizens of that territory sum their force instead of presenting only the
-            // highest among them. And it has a multiplier, so that a citizen working there
-            // produces that much force.*
+            // Two rules ago this read `garrison.force + manned * multiplier`, which dropped
+            // idle citizens and left a taken jungle to nature - `C-31`. One rule ago it
+            // added the idle ones back at their own force. Sean then changed the rule rather
+            // than the number: the multiplier is gone from both documents and the garrison's
+            // own force is zero, so what a founding leaves is exactly its two citizens.
             //
-            // So a working citizen produces the multiplier **instead of** its own force, and
-            // an idle one still produces its own. Counting `manned` twice would be the
-            // opposite error, which is why the idle ones are what is left after the manned
-            // are taken out.
-            Some(garrison) => {
-                let idle = self.citizens().saturating_sub(garrison.manned);
-                garrison.force + idle * CITIZEN_FORCE + garrison.manned * garrison.multiplier
-            }
+            // **Two against a jungle's nature of two, and holding takes force equal to
+            // nature - so it holds exactly, and falls the moment it drops to one citizen.**
+            // `spec/narrative.md` is why that is the point rather than a rounding artefact:
+            // *more dangerous territory requires more organised citizens to keep it secure.*
+            Some(garrison) => garrison.force + self.citizens() * CITIZEN_FORCE,
             // Citizens are capable of violence but not of coordination, so what they
             // present is the highest among them rather than the total - and a citizen is
             // force 1, so however many there are the answer is one.
@@ -711,7 +713,6 @@ mod tests {
 
         territory.set_garrison(Some(Garrison {
             force: 1,
-            multiplier: 1,
             manned: 0,
         }));
         assert_eq!(territory.held_force(), 1, "the garrison's own force");
@@ -727,7 +728,6 @@ mod tests {
     #[test]
     fn a_founding_unit_becomes_a_garrison_one_weaker_than_itself() {
         assert_eq!(Garrison::from_founding_unit(2).force, 1);
-        assert_eq!(Garrison::from_founding_unit(2).multiplier, 1);
     }
 
     #[test]
@@ -742,7 +742,6 @@ mod tests {
         territory.exhaust_extractor(0);
         territory.set_garrison(Some(Garrison {
             force: 1,
-            multiplier: 1,
             manned: 2,
         }));
 

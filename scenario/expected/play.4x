@@ -59,8 +59,8 @@
 {territory-resource territory:12 resource:energy capacity:8 density:8 built:0}
 
 {store territory:1 resource:food amount:0}
-{store territory:1 resource:metal amount:14}
-{store territory:1 resource:energy amount:20}
+{store territory:1 resource:metal amount:4}
+{store territory:1 resource:energy amount:0}
 {store territory:2 resource:food amount:0}
 {store territory:2 resource:metal amount:0}
 {store territory:2 resource:energy amount:0}
@@ -95,8 +95,8 @@
 {store territory:12 resource:metal amount:0}
 {store territory:12 resource:energy amount:0}
 
-{garrison territory:1 force:1}
-{garrison territory:2 force:1}
+{garrison territory:1 force:0}
+{garrison territory:2 force:0}
 
 {extractor territory:1 node:0 resource:food ready:yes}
 {extractor territory:1 node:3 resource:metal ready:yes}
@@ -165,8 +165,8 @@
 {kind id:citizen in-play:18}
 {kind id:labor in-play:0}
 {kind id:food in-play:0}
-{kind id:metal in-play:14}
-{kind id:energy in-play:20}
+{kind id:metal in-play:4}
+{kind id:energy in-play:0}
 {kind id:extractor in-play:11}
 {kind id:garrison in-play:2}
 {kind id:yard in-play:1}
