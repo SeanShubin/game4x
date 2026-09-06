@@ -19,7 +19,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-305** - `cab2804` Q-60: P-305's third bullet has no actor, and it is cheap to fix while the proposal is open · still open in `docs/notes/proposals.md`
+- **P-305** - `c80469d` File C-40 and C-41: a ledger defect that turned off a check, and the hold on P-305 · still open in `docs/notes/proposals.md`
 - **S-50** - `521d3b7` S-50's live half, C-33 closed by P-291, and the re-poison it asked for · still open in `docs/notes/proposals.md`
 - **S-48** - `8b772c2` S-48: `node` goes, and capacity bounds extractors directly · still open in `docs/notes/proposals.md`
 - **S-47** - `f2040fa` File C-34: the population for S-47's unrepresentability claim · still open in `docs/notes/proposals.md`
@@ -92,12 +92,15 @@ it exists to ask.
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290
+- `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `spec/console.md` -> The language - P-254, P-287, P-284
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> All lanes - P-247, P-248
+- `docs/process.md` -> Outboxes and the index - P-242, P-299
+- `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md`, a new section - P-204, P-211
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
