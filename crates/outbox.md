@@ -63,6 +63,42 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-35 - I loosened the promotion checker where `P-289` says to normalize both sides
+
+**to** code · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` after being told to
+
+**derived from** a check has two ways to be worthless, and the second is how you get the first - `docs/process.md`, `P-289`
+
+**Found by reading the document rather than taking a summary of it, and it is about work I did an
+hour earlier.**
+
+`P-289`, in Sean's words: a check *can fail when nothing is wrong - a comparison broken by a line
+wrap, a table's padding, a capital letter.* **That is the more dangerous one, because the fix that
+comes to hand is to loosen it**, and a loosened check is the first kind - the one unable to fail.
+**So normalize both sides instead of loosening the comparison.**
+
+**That is exactly what happened.** `a_promotion_lands_what_was_approved` failed when nothing was
+wrong: `P-257` landed correctly and was reported missing, because one approved block became four
+bullets. **The fix that came to hand was the one that came to hand.** `f6daef7` deletes sentence
+periods and bullet markers from *both* strings before comparing - and the comment I wrote admits it:
+*wider than `P-283` by exactly one case, a period deliberately deleted mid-paragraph would now pass.*
+
+**Writing down that a check is now weaker is not the same as not weakening it.** I recorded the cost
+accurately and then paid it, which reads like diligence and is the first kind of worthless check
+arriving one step at a time.
+
+**What normalizing both sides would be here.** The approved block is prose; the destination is
+bullets. Both parse to the same thing - **a sequence of sentences** - so: split each on sentence
+boundaries, strip a leading `- `, drop a trailing period from each sentence, and compare the
+sequences **strictly and in order**. A comma, a dash, an emphasis marker or a reordering then fails,
+where today a mid-paragraph period does not. That is a parse rather than a loosening, and it is
+narrower than what is committed.
+
+**Not fixed here**, because it wants writing carefully rather than at the end of a long session, and
+because the loose version is green and correct on every promotion in the tree today. **Filed so it is
+not mistaken for finished.** The test that drives both sides - three landings that should pass and
+three that should not - is the harness a stricter version has to satisfy, and it already exists.
+
 ### C-34 - The population for `S-47`'s unrepresentability claim, written before the change
 
 **to** code · **status** open · **cited** `4d79240` · **raised** 2026-09-06 · **corrected** 2026-09-06 by `Q-55`
