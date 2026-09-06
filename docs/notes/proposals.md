@@ -63,6 +63,57 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-279 - The twelve territories were twelve cases, and `P-272` makes them five
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
+- **into** `releases/first-release.md` -> Scope, *Territory resources*
+
+**This is a consequence of `P-272` that I did not put in front of you when you decided it, and it is
+the largest one.** The code lane found it regenerating the node data and filed `C-32`.
+
+**The release has a second table of territory resources**, under *Scope*, with twelve rows - measured
+- and a column saying **what each territory exercises**: *the landing site*, *many thin food
+extractors, same food total*, *no metal*, *no energy*, *food density 1*, *the minimum a territory can
+be*. **That column is the reason the twelve are the twelve.**
+
+**Under `P-272` a biome gives a territory its numbers, and there are five biomes.** Five grasslands,
+three mountains, two jungles, one desert, one ice - counted. **So twelve territories now have five
+distinct profiles**, and territories 1, 2, 3, 8 and 11 are identical.
+
+**Cases that stop existing entirely, not merely stop being labelled:**
+
+- **No metal** - territory 6 is jungle, and jungle has `1 x 2` metal. **No biome has none of
+  anything**, so no territory can
+- **No energy** - territory 7, the same way
+- **Food density 1** - territory 5 is mountain at `1 x 3`. **No biome has density 1 for anything**
+- **The minimum a territory can be** - territory 4 is mountain, which is not minimal
+- **Few dense against many thin, same total** - territories 2 and 3 were the pair that showed it, and
+  both are grassland now
+
+**Choice A - accept it.** The twelve stop being twelve cases and become a planet. The *What it
+exercises* column is deleted with the numbers, and the edge cases are tested somewhere other than the
+main scenario - which is what `spec/scenarios.md` already says unusual situations are for.
+
+**Choice B - re-choose the twelve biomes so the cases come back**, as far as five biomes allow. Some
+never can: nothing gives *no metal* or *density 1* without a new biome.
+
+**Choice C - add biomes.** A barren one with no metal, a poor one at density 1. **This is the only
+choice that keeps all twelve cases**, and it makes the planet's vocabulary larger than the game needs
+it to be.
+
+**Choice D - reverse `P-272`.** A biome characterises a territory and does not fix its numbers, which
+is the option you turned down four hours ago and which had exactly this cost hidden in it.
+
+**This lane recommends A**, and says so knowing it is the one that loses most. `spec/scenarios.md`
+says a mechanic that only appears in an unusual situation belongs in a scenario of its own -
+**a territory with no metal is an unusual situation**, and the same reasoning that moved `perish` and
+`spoil` out of the main scenario moves these. **The twelve should be a planet; the edge cases should
+be their own tests.**
+
+**What is failing meanwhile.** One assertion in `crates/game-console/tests/first_release.rs` reads
+the Scope table and disagrees with the Biomes table. The code lane left it failing rather than
+repointing it, **because which table is the truth is what this asks.**
+
 ## Addressed to other perspectives
 
 ### S-45 - The node data contradicts the biome table, and every territory is affected
