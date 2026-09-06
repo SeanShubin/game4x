@@ -16,8 +16,9 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-297** - The three things you look at, and nothing else · `docs/notes/proposals.md`
 - **P-298** - The other half: what the assistants need and you never read · `docs/notes/proposals.md`
 - **P-299** - It can tell you whether a lane is running, and the reason it could not has gone · `docs/notes/proposals.md`
-- **P-300** - The eight-item budget loses its subject when quality stops being research · `docs/notes/proposals.md`
+- **P-300** - Two budgets, and only one of them is a count · `docs/notes/proposals.md`
 - **P-301** - Questions you must answer, in a separate file from words you must approve · `docs/notes/proposals.md`
+- **P-302** - This document has to be enough on its own · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -38,8 +39,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (15)
+### To code (16)
 
+- **S-50** - `tools/outbox` defers a fix to `Q-32`, which closed without answering it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-48** - `node` goes, and the game's row loses `turn` · `docs/notes/proposals.md`
 - **S-47** - The map form, and the check that keeps it honest · `docs/notes/proposals.md`

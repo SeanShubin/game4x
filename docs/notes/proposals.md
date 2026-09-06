@@ -60,8 +60,19 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**In review order.** Each depends only on what is above it, so reading top to bottom never needs a
-decision that has not been made yet. Two at the end are waiting on something and say so.
+**Filed in numeric order; approve in the order below.** Three of these constrain the wording of
+others, so taking those first means nothing has to be read twice.
+
+1. **`P-302`** - what this document has to be. It is why the rest carry their reasoning into the
+   file rather than leaving it in a proposal you will not keep
+2. **`P-301`** - the only one still asking a decision. `P-297` names the file it would create, so
+   answering this first stops that text needing a rewrite
+3. **`P-300`** - the budget rule, which has to be in place before `P-296` removes its subject
+4. **`P-299`, then `P-292`** - the correction lands first, so the definition arrives into a section
+   that already agrees with it rather than contradicting it for one commit
+5. **`P-293`, `P-294`, `P-295`** - the other three definitions, in any order
+6. **`P-296`** - the scaffolding, last, because it is the consequence of all four
+7. **`P-297`** once `P-301` is answered, and **`P-298`** whenever you like
 
 ### P-292 - What the specification instance is for
 
@@ -273,33 +284,66 @@ messaging either one and without starting anything.**
 read from files that persist, and running is read from the session list, which is gone when you
 close the terminal.
 
-### P-300 - The eight-item budget loses its subject when quality stops being research
+### P-300 - Two budgets, and only one of them is a count
 
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **asks** a decision -
-**into** `docs/process.md` -> Research instances, and possibly a new section
+**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
+own - **shape** text - **asks** approval - **into** `docs/process.md` -> All lanes, at the end
 
-Four of the six bullets under *Research instances* are not about research. They are the finding
-cycle, **the cap of eight items open to any one other instance**, the expectation that most findings
-are noted and deliberately not acted on, and the sentence that your approval bounds what reaches the
-specification while the budget bounds what reaches you.
+**Rewritten from a decision to an approval.** The first version asked where to put the eight-item
+cap. You supplied the reason each budget exists and they turned out not to be the same rule, so the
+placement was the wrong question.
 
-**They bind quality today only because the heading says quality is a type of research instance.**
-`P-296` removes that, and then the cap has no subject. Nothing would be edited and the rule would
-stop applying - which is the failure `CLAUDE.md` describes as a premise moving under an item that
-still reads correctly.
+> - **Two different limits, and only one of them is a count.** Fifteen open proposals is a reading
+>   budget. It exists because my attention is scarce, each item costs one read, and I notice at once
+>   when the queue has grown past what I will sit down to
+> - **What bounds an instance's own outbox is not a count**, because neither thing that makes a
+>   backlog expensive grows with the number of items. An item goes **out of date** as what it cites
+>   changes, however few of them there are, and two items **conflict** as a pair, however many
+>   others sit beside them. A count is a proxy for both and a good measure of neither
+> - **Counting the two together has already misfired**, in the direction that costs most: a lane
+>   reported my queue at fifteen against a limit of fifteen while it was empty, because most of what
+>   was open was a producer's backlog and one number could not tell them apart
+> - So an instance may not file a new item while one of its own is open and cited by a commit saying
+>   it is done. It closes that one, or records the hash to say it looked and the item is still open.
+>   That is the same forcing function a cap gives - close something before filing something -
+>   attached to the cost that is actually there
+> - An item whose cited file has taken a promotion since it was raised is re-read before it is
+>   relied on. The ground moving under an item is what makes it wrong without anybody touching it
+> - Eight items open to any one instance stays, as a backstop rather than as the rule. An outbox
+>   nobody reads through is a real cost, only a second one. An instance is still expected to record
+>   most of what it notices as noted and deliberately not acted on
 
-**Three ways to place it, and the third is not the same rule.**
+**Why a count is the wrong instrument, in one line**: it is a proxy for both costs and a good measure
+of neither, which is the shape `docs/process.md` already names - an instrument answering a narrower
+question than the one asked and returning a plausible number rather than an error.
 
-- **A new section for the two lenses** - quality and research - holding the four bullets once. Binds
-  exactly what is bound today. My recommendation
-- **Restated in both sections.** Binds the same, and `docs/README.md` forbids the copy for the
-  reason it always gives - one of the two goes stale and nothing connects them
-- **Moved to `All lanes`**, binding all four instances. **This is a change, not a placement**: the
-  specification instance has twelve items open to code right now, so it would be in breach on the
-  day it landed
+**It has already misfired.** `tools/outbox/src/main.rs` prints the open count with no verdict, and
+records why: saying *past the limit* alongside it *"led one lane to tell him he was at fifteen
+against a limit of fifteen while his queue was empty."* The comment defers the fix to `Q-32`, which
+closed on 2026-08-30 having only deleted the duplicate number - so this question has been unowned
+since. That is `S-50`, filed to the code lane.
 
-**What I need from you is which**, and if it is the first, whether the heading is *All lenses* -
-`CLAUDE.md` already calls quality and research lenses and the two producers something else.
+**And the cost it does not catch has been paid repeatedly.** `C-9`'s figure went false when `C-11`
+landed and nothing edited it. `P-126` and `P-138` withdrew two of the code lane's open findings and
+nobody said so. Filing the ten proposals above, the commit hook printed **ten open items cited by
+commits saying they are done**, eight of them this lane's - an outbox inside its cap the whole time.
+
+**Three things this does to the rest of the queue.** It removes the objection I raised against a rule
+binding all four instances: this lane holding twelve items open to code is **not** a breach under a
+freshness obligation, while eight cited-but-open and unacknowledged is, and that is the true
+statement about this lane today. It makes `P-295`'s orphaned bullets a non-problem. And it needs no
+new section, so the *All lenses* naming question disappears.
+
+**What moves, exactly.** Bullets four, five and six of *Research instances* are replaced by the text
+above, in *All lanes*. The third bullet - the finding-and-fixing cycle - stays where it is.
+
+**One thing to check rather than skim.** The sixth bullet, *My approval bounds what reaches the
+specification. The budget bounds what reaches me*, does not survive verbatim: the first new bullet
+carries its claim in different words. If you want the original sentence kept, say so and I will put
+it back beside them.
+
+**After promotion**, `CLAUDE.md`'s own *keep the open-proposal queue under fifteen* links here rather
+than restating it, per `docs/README.md`. That is wording inside my own file and needs no approval.
 
 ### P-301 - Questions you must answer, in a separate file from words you must approve
 
@@ -328,7 +372,68 @@ answered question moves or stays and is rewritten in place; and **whether the sp
 open questions belong there too** - `spec/` files carry an *Open questions* section at the bottom
 today, and those are also questions only you can answer.
 
+### P-302 - This document has to be enough on its own
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> a new section after the purpose list, before
+*Three rules for using AI assistants*
+
+*Starting the instances* already says a process that needs a chat transcript to restart is not
+repeatable, and scopes it to the prompts. **You stated it today about the whole document**, and it
+is the requirement that makes every other proposal in this queue carry its reasoning rather than
+only its rule.
+
+> ## What this document has to be
+>
+> This document has to be enough on its own. If I lose every transcript, every note, and every
+> `CLAUDE.md` in the repository, what is here has to be enough to rebuild the process and start the
+> instances again.
+>
+> Two things follow, and the second is the one that gets forgotten. **An insight that lives only in
+> a conversation, a note, or an operating file is lost**, so a rule worth keeping is written here.
+> And **the reason a rule exists is part of the rule** - one recorded without its reason survives as
+> a ritual, and the first person to find it inconvenient deletes it correctly, for the wrong reason.
+
+**Why the second sentence earns its place** rather than being obvious: this queue contains a live
+case of it. The eight-item cap was written with a reason - a producer's reading time - that turned
+out not to be the cost it was paying. Nobody could see that from the rule, because the rule is what
+survived and the reason had thinned to *because eight*. `P-300` replaces it, and the replacement
+carries its own reasoning into the file for exactly this reason.
+
+**What this does not license.** It is not an argument for length. The three artifacts addressed to
+you stay as concise as they can be made - `P-297` - and this document is not one of them.
+
 ## Addressed to other perspectives
+
+### S-50 - `tools/outbox` defers a fix to `Q-32`, which closed without answering it
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** reading the tool while answering
+Sean on what the limit counts
+
+**The stale half is live today and does not wait on anything.** `tools/outbox/src/main.rs` carries a
+comment on the open-count output - *"The count and nothing more, until `Q-32` settles what the limit
+counts"* - and prints *a limit is pending*. **`Q-32` closed `acted` on 2026-08-30**, and it only
+deleted the duplicate fifteen from `CLAUDE.md`; it never settled what the limit counts. So the code
+defers to an item that cannot answer it, and says a fix is pending with nothing pending.
+
+**Everything the comment says about the harm is correct and worth keeping** - printing *past the
+limit* beside the count is what led a lane to report Sean's queue at fifteen while it was empty. It
+is only the deferral that is wrong.
+
+**The rest waits on `P-300`**, which is open to Sean and would answer the question the comment is
+waiting for. Stated now so it is one item rather than two, and so you can see it coming:
+
+- The printed line stops saying a limit is pending, and distinguishes **Sean's reading budget** from
+  **each instance's own backlog**, which is what the count conflates today
+- The cited-but-open reconciliation the pre-commit hook prints stops being advice and becomes the
+  instance-side rule - it already computes exactly the right thing
+- One check does not exist yet: **an open item whose cited file has taken a promotion since the item
+  was raised.** `same_section` runs over `landed` only, and this is the open-item half. Everything it
+  needs is already parsed - the `raised` date, the destination, and the landed ledger
+
+**Do not build the three bullets yet.** `P-300` is words Sean has not approved, and this lane has
+been wrong before about which of its proposals survive contact. The first paragraph is the part that
+is true regardless.
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
