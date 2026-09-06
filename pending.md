@@ -28,11 +28,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 - **Q-57** - `e0ad489` C-37: the trigger for Q-57's row, and the instrument that nearly hid it · still open in `lenses/quality/outbox.md`
-- **Q-60** - `5011018` Two waiting on Sean: P-305 rewritten after Q-60, and P-307 for the language · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (19)
+### To code (20)
 
 - **S-53** - `docs/notes/questions.md` exists and `tools/outbox` cannot see it · `docs/notes/proposals.md`
 - **S-52** - `P-296` promised a research lens a directory, and it does not exist · `docs/notes/proposals.md`
@@ -53,8 +52,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
+- **Q-61** - `S-51`'s input was wrong for eleven rows today, and one of them is its own poison target · `lenses/quality/outbox.md`
 
-### To spec (12)
+### To spec (11)
 
 - **C-41** - Holding `S-51` and `C-16` on `P-305`, and what measuring `S-51` first found · `crates/outbox.md`
 - **C-39** - Two rules about verifying that live only in commit messages, which `P-302` says is losing them · `crates/outbox.md`
@@ -67,7 +67,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
 - **Q-57** - `phase` declares no values, so `play` is an eighteenth forbidden word · `lenses/quality/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
-- **Q-60** - `P-305`'s third bullet has no actor, and no lane that could be one · `lenses/quality/outbox.md`
 
 ## Sections that have taken more than one proposal
 

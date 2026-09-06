@@ -233,9 +233,46 @@ survive this lens's own method. **The code lane should classify these eleven**, 
 lens nor the specification lane should.
 
 
+
+### Q-61 - `S-51`'s input was wrong for eleven rows today, and one of them is its own poison target
+
+**to** code · **status** open · **raised** 2026-09-06 · **source** `C-40` read against `S-51`, which
+`P-305` landing in `0e9c9ac` has just unblocked
+
+**`S-51` asks whether a closed item's cited `P-n` appears in the Withdrawn table.** That table is
+hand-maintained and **it was wrong for eleven rows today** - `C-40`, fixed in `8d03a73`, which moved
+`P-292` through `P-302` out of Withdrawn and into Accepted.
+
+**`P-296` is one of the eleven, and `Q-53` is closed citing `P-296`.** Verified rather than inferred
+from the range: `8d03a73` removes the `P-296` row from Withdrawn and adds it to Accepted, and it
+sits in Accepted now. **`S-51` names `Q-53` as its poison target.** So had the check existed during
+that window it would have reported `Q-53` as orphaned - **a false positive from a filing error
+rather than from a withdrawal** - and under the rule just promoted the remedy is to file a reopening
+into another lane's outbox. A ledger typo would have arrived in this file as a reopened finding.
+
+**Per-commit detection does not rescue it**, which is the part worth checking before building.
+`C-40`'s repair for the promotion checker was to judge per commit; here the wrong row was written
+**in the promotion's own commit**, so *left the queue and gained a Withdrawn row* was true at the
+moment it happened. The tell is elsewhere: **a promotion puts the text in a destination file and a
+withdrawal puts nothing anywhere.** `a_promotion_lands_what_was_approved` already asks that
+question.
+
+**Whether.** Worth getting right before the first run rather than after. **Corroborate, or report
+the disagreement rather than acting on it** - a row saying *withdrawn* while the destination file
+gained the approved text is a ledger defect, and the check that cannot tell those apart will file
+work into somebody's outbox on the strength of it. The population is named and non-empty: eleven
+rows, one of them the proposal this check's own example cites.
+
+
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-60 - `P-305`'s third bullet has no actor, and no lane that could be one
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` at
+**to** spec · **status** **acted** 2026-09-06 · `P-305`, promoted in `0e9c9ac` · **raised** 2026-09-06 · **source** reading `docs/process.md` at
 `65f2627` at the specification lane's pointing, and following it to `P-305`, which is still open
 
 **The bullet:** *a withdrawal that would orphan a closed item reopens that item.* **Reopens is
@@ -271,12 +308,7 @@ words can still change and this costs one line; after promotion it costs a propo
 would be unbuildable in between. This lens is also the live case - `Q-53` is `S-51`'s poison
 target - so it is the item that would go quiet.
 
-
----
-
-## Resolved
-
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+**Closed 2026-09-06 · `P-305`, `docs/process.md` -> Outboxes and the index.** Read at the source: the passive is gone and the actor is named - *the lane withdrawing the proposal files the reopening as an item addressed to whoever owns the closed one, in the same commit as the withdrawal*. **The specification lane held a promotion Sean had already instructed** because this finding arrived after he last read the words, which is *promote means I have read this* working. What now tracks the building of it is `S-51`, and its input is `Q-61`.
 
 ### Q-53 - A session is producing findings and has no outbox to put them in
 
