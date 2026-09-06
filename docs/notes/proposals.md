@@ -168,6 +168,57 @@ suggestions**, because mine name the counts and yours removes the mechanism that
 it is not a new idea** - `P-257` already says a fungible thing collapses into a count and an
 identified one does not, and `P-262` already says one shape beats several names differing in a word.
 
+### P-285 - A thing is not located by a trait, and one with an `id` is unique
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `spec/logistics.md` -> Containment, at the end
+
+**Your answers to 1 and 2, as two bullets.** They go after *containing is not referring*.
+
+> - A thing is not located by a trait. **What holds it is what says where it is**, and nothing else
+>   does
+> - A thing may carry an **`id`**, and one that does is unique. **There is never a quantity of a
+>   thing with an `id`** - it is one thing, and anything that holds it holds exactly it
+
+**The second is already half-written and the specification does not say the general form.**
+`spec/planet.md` says *each territory has an id, unique within its planet* and `spec/console.md` says
+*a thing's own identifier is `id`* - one occurrence each, measured. **Neither says what an `id`
+means**, which is what makes a thing uncountable.
+
+**The first removes a duplicate rather than adding a rule.** Containment already says *a thing may
+contain things, and is itself in at most one other thing* - one occurrence. **So where a thing is, is
+already stated by what holds it**, and the release's `place` trait says it a second time in the
+opposite direction. Two statements of one fact can disagree; one cannot.
+
+**And it is what makes the map form nest.** Under *no omitted traits*, a `place` trait would sit in
+every key and the map would be flat. **With location structural instead, the key omits nothing and
+the map is the containment tree** - which is the shape `P-257` already describes.
+
+**`P-286` carries the release half**, which is one row out and one row in.
+
+### P-286 - The release's traits follow: `place` goes, `id` arrives
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** rows -
+**asks** approval - **into** `releases/first-release.md` -> Traits
+
+**One new row.** It goes where the table's order puts it, beside the other traits every kind may
+carry.
+
+> | **id** | a thing that must be named individually | a number, unique among things of its kind | stored |
+
+**And the `place` row is deleted** - `| **place** | every thing | the thing it is in | stored |`, one
+occurrence, measured. **That deletion is `P-285` being followed rather than a second decision**: once
+the specification says a thing is not located by a trait, a release that declares one contradicts it.
+
+**The `place` *family* is untouched** and should not be confused with it. `| **place** | territory,
+orbit |` says which kinds are places, one occurrence, and it stays. **One word naming two different
+things is worth knowing about before the row goes**, because a search for `place` finds both.
+
+**What this makes wrong, and it is the code lane's.** `dump.rs` prints `place` as a column on the
+unit table, and every row that names its territory - `store`, `garrison`, `extractor` - is stating
+containment as a field. **Under `P-285` those become position rather than data**, which is the same
+change as the map form and should land with it rather than before it.
+
 ## Addressed to other perspectives
 
 ### S-46 - Restore `nodes.4x` from the *Scope* table
