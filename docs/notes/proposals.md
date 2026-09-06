@@ -372,37 +372,6 @@ answered question moves or stays and is rewritten in place; and **whether the sp
 open questions belong there too** - `spec/` files carry an *Open questions* section at the bottom
 today, and those are also questions only you can answer.
 
-### P-302 - This document has to be enough on its own
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/process.md` -> a new section after the purpose list, before
-*Three rules for using AI assistants*
-
-*Starting the instances* already says a process that needs a chat transcript to restart is not
-repeatable, and scopes it to the prompts. **You stated it today about the whole document**, and it
-is the requirement that makes every other proposal in this queue carry its reasoning rather than
-only its rule.
-
-> ## What this document has to be
->
-> This document has to be enough on its own. If I lose every transcript, every note, and every
-> `CLAUDE.md` in the repository, what is here has to be enough to rebuild the process and start the
-> instances again.
->
-> Two things follow, and the second is the one that gets forgotten. **An insight that lives only in
-> a conversation, a note, or an operating file is lost**, so a rule worth keeping is written here.
-> And **the reason a rule exists is part of the rule** - one recorded without its reason survives as
-> a ritual, and the first person to find it inconvenient deletes it correctly, for the wrong reason.
-
-**Why the second sentence earns its place** rather than being obvious: this queue contains a live
-case of it. The eight-item cap was written with a reason - a producer's reading time - that turned
-out not to be the cost it was paying. Nobody could see that from the rule, because the rule is what
-survived and the reason had thinned to *because eight*. `P-300` replaces it, and the replacement
-carries its own reasoning into the file for exactly this reason.
-
-**What this does not license.** It is not an argument for length. The three artifacts addressed to
-you stay as concise as they can be made - `P-297` - and this document is not one of them.
-
 ## Addressed to other perspectives
 
 ### S-50 - `tools/outbox` defers a fix to `Q-32`, which closed without answering it
@@ -1964,4 +1933,4 @@ again in a later session.
 | P-226, when a proposal quotes more than one passage the last is the offer             | Sean, 2026-09-04: the distinction that matters is *between proposals that are ready for me to approve, and proposals that are drawing attention to decisions I need to make*. `P-229` makes that split and dissolves this ambiguity instead of ruling on it                                                                                                 |            |
 | P-237, three collisions from merging his process note                                 | Sean answered all three on 2026-09-04. Each is now its own item, which is what he can act on: `P-238` for what a proposal is, `P-239` for `pending.md`, `P-240` for who owns production support                                                                                                                                                             |            |
 | P-279, the twelve territories collapse to five profiles                               | withdrawn: it was a consequence of `P-272`, which `P-280` reverses                                                                                                                                                                                                                                                                                          | 2026-09-05 |
-| P-282, three of six columns on a territory row are not traits | withdrawn: `P-287` removes all three names rather than choosing between them | 2026-09-06 |
+| P-282, three of six columns on a territory row are not traits | withdrawn: `P-287` removes all three names rather than choosing between them | 2026-09-06 || P-302, this document has to be enough on its own, with every transcript and CLAUDE.md gone | `docs/process.md` -> What this document has to be | 2026-09-06 |

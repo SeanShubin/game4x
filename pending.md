@@ -18,7 +18,6 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 - **P-299** - It can tell you whether a lane is running, and the reason it could not has gone · `docs/notes/proposals.md`
 - **P-300** - Two budgets, and only one of them is a count · `docs/notes/proposals.md`
 - **P-301** - Questions you must answer, in a separate file from words you must approve · `docs/notes/proposals.md`
-- **P-302** - This document has to be enough on its own · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

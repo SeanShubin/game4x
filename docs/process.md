@@ -5,6 +5,17 @@
   - 1 instance for coding
   - 1 instance for each type of research, but I always include quality as one of my research instances
 
+## What this document has to be
+
+This document has to be enough on its own. If I lose every transcript, every note, and every
+`CLAUDE.md` in the repository, what is here has to be enough to rebuild the process and start the
+instances again.
+
+Two things follow, and the second is the one that gets forgotten. **An insight that lives only in
+a conversation, a note, or an operating file is lost**, so a rule worth keeping is written here.
+And **the reason a rule exists is part of the rule** - one recorded without its reason survives as
+a ritual, and the first person to find it inconvenient deletes it correctly, for the wrong reason.
+
 ## Three rules for using AI assistants
 
 - Never let AI make a decision
