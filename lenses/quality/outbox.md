@@ -224,6 +224,52 @@ it, and the cost of leaving it is that a rediscovery is expensive rather than th
 wrong. Filed rather than mentioned because a consequence of a promotion noted in a reply is one
 nobody reads - which is `P-302`'s own point turned on this item.
 
+### The scope split, supplied 2026-09-06 because the specification lane asked for it
+
+**The discriminator, which is the part worth keeping if the list is wrong.** A rule is **process**
+if losing it produces a **wrong result that survives review**; it is **craft** if losing it produces
+a **worse result somebody notices**. Silent failure is what has to be written down, because nothing
+else will report it. A loud one reports itself.
+
+**Counted over the file rather than over the six that were listed.** `README.md` has **eleven**
+rule sections. Ten are process by that test and one is craft.
+
+| Rule                                                         | Losing it costs                                                      | Which       |
+| ------------------------------------------------------------ | -------------------------------------------------------------------- | ----------- |
+| A pattern is a claim about the bytes as they are now         | a `str.replace` no-op, silent, already cost thirteen rows            | **process** |
+| Cite the commit, rest the claim on the file                  | a closure resting on a citation that is not evidence                 | **process** |
+| Commit by pathspec, not by staging                           | another lane's work published under your message - it has happened   | **process** |
+| Probe against a copy, not the shared tree                    | a foreign file in a tree three sessions commit to - it has happened  | **process** |
+| Poison the thing the check reads                             | a green run that reads exactly like a check working                  | **process** |
+| A green suite under a poison bounds the tests                | a live defect filed as small - `Q-58`, this week                     | **process** |
+| When the instrument is confidence, make it produce something | the parent of the four above                                         | **process** |
+| Read it before writing about it                              | confident prose about an artifact nobody opened - two lanes, one day | **process** |
+| A self-check may share inputs, not the computation           | circular verification read as verification - `Q-56`, this week       | **process** |
+| Re-read the source, not the summary                          | a stale copy that reads correctly                                    | **process** |
+| Say it and stop                                              | a longer report, and a reader who says so                            | **craft**   |
+
+**Where this disagrees with the first pass.** **Probe against a clone is process, not craft**, and
+for the same reason as committing by pathspec: both exist because three instances share one working
+tree, which is a fact about the process and not a preference of this lens. Its failure is
+cross-lane and silent in the same way. **Say it and stop is craft**, agreeing with the first pass
+and now with a reason - Sean read a sixty-line proposal and said so, which is a failure that
+reports itself.
+
+***Already in `CLAUDE.md`* is not a reason to leave one out.** `P-302` names `CLAUDE.md` among the
+files that may be lost, so a rule sitting only there is exactly what it is about. Four of the ten
+are partly there today, and that would quietly halve the list.
+
+**The split that matters is not which rules move.** It is that **the rule moves and the case stays**.
+`P-302` says the reason is part of the rule - and a reason is not a war story. `docs/process.md`
+needs *a poison that lands where the check never looks produces a green run that reads exactly like
+a check working*. It does not need which lane did it on which day. **The instances are what makes a
+lens's file worth keeping, and they are correctly local.**
+
+**One caution, and it is why this should wait for `P-304` rather than land beside it.** Ten of
+eleven is a lot, and this is one lane's file. If three lanes each move ten rules with their cases
+attached, `docs/process.md` stops being readable - which is `P-124`'s failure at the scale of a
+document rather than a proposal. **Settle the general shape first**, and the lists become mechanical.
+
 
 ---
 
