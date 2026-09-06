@@ -126,6 +126,12 @@ readers - which is the guard-that-cannot-fail this repository has built twice an
 **Whether.** Worth building, and worth building carefully: match the directory rather than a string,
 or match both spellings and assert the total, so the check fails if a third spelling appears.
 
+**Corrected 2026-09-06, and the number had already travelled.** The population is **seven**, not
+five: `prototypes/kinds/src/main.rs` and `prototypes/kinds/tests/catalog_is_current.rs` reach the
+directory as `../../reports/...`. The check built from this item asserts `>= 5` and says *the rule
+was written against five* - it agreed with this figure because it shares the computation, not
+because either is right. `Q-56`.
+
 ### Q-50 - A run of spaces sits mid-sentence in a failure message, in eighteen places
 
 **to** code · **status** open · **cited** `fc4029a`, which acted on part of it · **raised**
@@ -191,6 +197,13 @@ on it. Third artifact of this kind in two commits.
 check is worth having if it prints and is restricted to single-line literals; poison it like anything
 else.
 
+**The single-physical-line discriminator has counterexamples as of 2026-09-06, and this item's own
+range created them.** `tools/outbox/tests/promotions.rs:502`, `:532` and `:540` are aligned
+continuation lines carried on one physical line by `\n` escapes. The 38-of-38 measurement was
+stated as a measurement rather than a theorem and it moved within a day. The refinement: **a run of
+spaces immediately following an escaped newline is alignment.** The conclusion is unchanged - the
+check prints, and never asserts.
+
 ### Q-53 - A session is producing findings and has no outbox to put them in
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** receiving `Q-51` by message from
@@ -253,6 +266,65 @@ A wrong figure under a right call, which is the same shape with a fact in place 
 comment's reason is the reason - the same wall `P-245` and `C-28` hit - so if it is worth anything it
 is worth a sentence and the two cases, in the section that already carries the habits nothing can
 enforce.
+
+
+### Q-56 - The `Q-47` check cannot see the spelling `Q-47` was filed about
+
+**to** code · **status** open · **raised** 2026-09-06 · **source**
+[review of `ba9bd41..217dcba`, finding 1](2026-09-06-review-of-the-six.md)
+
+`tools/outbox/tests/architecture.rs:186` admits a literal that **is** `reports` or **starts with**
+`reports/`. Two files reach the directory as `../../reports/...` and match neither, and one of them
+- `prototypes/kinds/src/main.rs` - is a generator in `src/main.rs`, so it is **a trespass the check
+does not report**.
+
+**The population assertion confirmed the blind spot instead of catching it.** It asserts `>= 5` and
+found five, agreeing with the figure in `Q-47` - which was already stale. Two counts that share a
+computation are one count. And the poison landed inside the sighted region: a literal starting
+`reports/`, which could not have found this.
+
+**Verified in a clone, against the real check rather than a replica.** Adding
+`|| literal.contains("/reports/")` turns it red, names `prototypes/kinds/src/main.rs`, and reports
+**seven** readers.
+
+**Whether.** Worth fixing now. Whether that file is the violation or the rule is too narrow is
+yours - a generator that is a crate's only binary has no reason to sit in `src/bin/`. Raise the
+population figure with the predicate: `>= 5` tolerates losing two readers in silence.
+
+### Q-57 - `phase` declares no values, so `play` is an eighteenth forbidden word
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source**
+[review of `ba9bd41..217dcba`, finding 2](2026-09-06-review-of-the-six.md)
+
+`P-288` landed the `phase` row this morning so that `P-284` would pass on it. Its Values cell reads
+*before it starts, or once it has*, which **names neither value** - and `play` and `design` appear
+nowhere in `releases/first-release.md` or `spec/turn.md`, while `scenario/expected/play.4x:9` writes
+`{game phase:play ...}`.
+
+Classifying all **49** distinct words in that file independently gives `C-37`'s seventeen exactly,
+word for word, **plus `play`. The count is eighteen.** Three instruments have now miscounted from
+one cause: a trait whose values are described rather than named. `phase` is the only closed-set
+trait in the table that neither names its values nor points at a table that does.
+
+**`C-37`'s proposed rule already rejects it** - *a value of a trait that names a closed set* - so
+the rule is right and only the count moves. What is needed is a row, and the row is Sean's.
+
+**Also, and not a defect:** `unit` and `place` are **families**, which `P-284` as written does not
+admit. The file uses both correctly, so a check built on its literal words would flag them.
+
+**Whether.** Worth a decision now. Both producers believe `phase` is settled -
+`docs/notes/proposals.md:122` already writes `{game phase:play}` as the target form.
+
+### Q-58 - A `saturating_sub` names density zero as its reason and no case has one
+
+**to** code · **status** noted · **raised** 2026-09-06 · **source**
+[review of `ba9bd41..217dcba`, finding 5](2026-09-06-review-of-the-six.md)
+
+`crates/game-model/src/territory.rs`, `most_in_one_turn`: the comment gives the reason as *a
+density-zero or density-one food extractor buys no hand at all*. Density one is covered by a case;
+**density zero is not**, in either table. Changing it to `density - 1` leaves every test green.
+
+One row, worth adding while the file is open, and recorded so it is not re-found if it is not.
 
 
 ---

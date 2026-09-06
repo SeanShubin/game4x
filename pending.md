@@ -31,7 +31,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (17)
+### To code (18)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-48** - `node` goes, and the game's row loses `turn` · `docs/notes/proposals.md`
@@ -50,8 +50,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 - **Q-50** - A run of spaces sits mid-sentence in a failure message, in eighteen places · `lenses/quality/outbox.md`
+- **Q-56** - The `Q-47` check cannot see the spelling `Q-47` was filed about · `lenses/quality/outbox.md`
 
-### To spec (10)
+### To spec (11)
 
 - **C-36** - `S-46`, `S-22` and `S-24` are built, and their items are still open · `crates/outbox.md`
 - **C-33** - A check that has only ever passed is a claim, and belief in it decays · `crates/outbox.md`
@@ -63,6 +64,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
 - **Q-53** - A session is producing findings and has no outbox to put them in · `lenses/quality/outbox.md`
 - **Q-54** - A right decision resting on a wrong reason is a defect with a delay on it · `lenses/quality/outbox.md`
+- **Q-57** - `phase` declares no values, so `play` is an eighteenth forbidden word · `lenses/quality/outbox.md`
 
 ## Sections that have taken more than one proposal
 

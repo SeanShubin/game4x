@@ -322,6 +322,10 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [Review of `ba9bd41..217dcba`](2026-09-06-review-of-the-six.md)
+  - 2026-09-06. Requested by the code lane. The `Q-47` check cannot see the spelling `Q-47`
+    was filed about, `phase` declares no values so the forbidden count is eighteen, and two
+    corrections to this lens's own open items.
 - [What `S-47` will need looking at](2026-09-06-what-s-47-will-need-looking-at.md)
   - 2026-09-06. Held, addressed to nobody. Why there is no sweep yet, and the four things the
     code lane asked for a second pair of eyes on before it had built them.
