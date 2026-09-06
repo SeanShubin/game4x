@@ -63,6 +63,43 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
+### P-282 - Three of the six columns on a territory row are not traits
+
+**to** sean - **status** open - **raised** 2026-09-05 - **kind** contradiction - **asks** a decision
+- **into** `releases/first-release.md` -> Traits, and the dump
+
+**You asked what `labor-spent` means. It means *citizens minus citizens still ready* - how many of
+them have been used this turn** - and at `citizens:8 labor-spent:0` none has been. **It is derived,
+and the release never declares it.**
+
+**`founded`'s shape a fourth time, and found the same way both times: by you reading the data.** On
+the line you are looking at, **three of six columns are not declared traits** - `citizens`,
+`labor-spent` and `yards`, each **zero** occurrences in the release, measured. Only `id`, `biome` and
+`nature` are.
+
+**And `labor-spent` is printed twice.** Line 11 says `labor-spent:0`; line 150 says
+`{{labor territory:1 made:8 spent:0 left:8}}`. **The same number, from the same source, in two
+tables** - one of them a table about labor and one of them a column on a territory.
+
+**What it is derived from is already a declared trait.** *`ready`, of whatever readies, yes or no* -
+one occurrence. **So `labor-spent` is a count of citizens whose `ready` is no**, which the model can
+compute and the release does not need to name.
+
+**Choice A - drop `labor-spent` from the territory row.** The `labor` table already says made, spent
+and left, and says it about labor rather than about a territory. **You lose nothing and the row gets
+shorter.**
+
+**Choice B - declare the three as derived traits** and keep printing them. `citizens` and `yards` are
+counts of things in the territory, so both are honestly derived; `labor-spent` would be a third name
+for a number the `labor` table already gives twice.
+
+**This lane recommends A for `labor-spent` and B for the other two.** A count of citizens and a count
+of yards are worth seeing on a territory and are named nowhere else; **labor is the one that already
+has its own table.**
+
+**Not fixed while you read.** Changing the dump changes `expected/play.4x` under you, which is the
+one thing `P-249` says must not happen without your knowing.
+
 ## Addressed to other perspectives
 
 ### S-46 - Restore `nodes.4x` from the *Scope* table

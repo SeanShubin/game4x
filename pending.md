@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-282** - Three of the six columns on a territory row are not traits · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -19,7 +18,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-46** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
 - **S-45** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
-- **S-44** - `1f2ded6` S-45 and S-44's scenario half: the main scenario is a typical game again · still open in `docs/notes/proposals.md`
+- **S-44** - `08e1c13` S-44 complete: prototypes/kinds knows the store kind · still open in `docs/notes/proposals.md`
 - **S-41** - `5c43696` S-41 first half: choose the `derived from` form · still open in `docs/notes/proposals.md`
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
