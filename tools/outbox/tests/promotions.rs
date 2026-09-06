@@ -155,8 +155,28 @@ pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
             // the same text ending without its period is the same text. `P-213` landed
             // correctly and this reported it as missing until the allowance was written
             // down - the rule was in `CLAUDE.md` and not in the code that enforces it.
-            let without = want.trim_end_matches('.').to_string();
-            if there.contains(&want) || there.contains(&without) {
+            //
+            // **One trailing period was not enough, because one block may become several
+            // bullets.** `P-257` offered four sentences as one quotation and they landed as
+            // four bullets, each dropping its own closing period - so the approved text has
+            // periods in the middle where the file has none, and stripping the last one
+            // changes nothing. It was reported missing for a day while being correct.
+            //
+            // `P-283` says what may move: **bullet-versus-paragraph takes the closing period
+            // with it, and no other punctuation moves.** So a sentence-ending period is
+            // ignored on both sides and nothing else is - a comma, a dash or an emphasis
+            // marker that moved is still a difference. This is wider than the rule by
+            // exactly one case: a period Sean deliberately deleted mid-paragraph would now
+            // pass. Narrower is not available without knowing where the bullets fell.
+            // Both halves of bullet-versus-paragraph: the closing period goes, and a `- `
+            // appears where each bullet starts. Neither is a change to the words.
+            let unbulleted = |text: &str| {
+                text.replace(". ", " ")
+                    .replace(" - **", " **")
+                    .trim_end_matches('.')
+                    .to_string()
+            };
+            if there.contains(&want) || unbulleted(&there).contains(&unbulleted(&want)) {
                 Verdict::Landed
             } else {
                 Verdict::Missing {
@@ -493,4 +513,41 @@ fn a_capability_that_is_built_is_still_waiting_on_somebody() {
         built.to, "sean",
         "and it waits on a person, not on the code lane"
     );
+}
+
+/// The bullet allowance permits a bullet and a full stop, and nothing else.
+///
+/// **`P-257` was reported missing for a day while being correct**, because one approved
+/// block became four bullets and the checker stripped only the last period. Widening it
+/// risks the opposite failure - an allowance that swallows a real difference - so this
+/// drives both sides of it rather than trusting that the real case passing means anything.
+#[test]
+fn a_bullet_and_its_full_stop_may_move_and_nothing_else_may() {
+    let approved = "One sentence here. **Two** sentences here.";
+
+    // The same words as one paragraph, as two bullets, and wrapped: all the same text.
+    for landed in [
+        "One sentence here. **Two** sentences here.",
+        "- One sentence here\n- **Two** sentences here",
+        "- One sentence here\n  wrapped oddly\n- **Two** sentences here",
+    ] {
+        let landed = landed.replace("wrapped oddly", "");
+        assert_eq!(
+            check("text", approved, &landed),
+            Verdict::Landed,
+            "bullet-versus-paragraph and wrapping are what a promotion may change: {landed:?}"
+        );
+    }
+
+    // And what it may not: a word, a comma, or emphasis moving.
+    for landed in [
+        "- One sentence there\n- **Two** sentences here",
+        "- One sentence, here\n- **Two** sentences here",
+        "- One sentence here\n- Two **sentences** here",
+    ] {
+        assert!(
+            matches!(check("text", approved, landed), Verdict::Missing { .. }),
+            "this is a change to the words and should be reported: {landed:?}"
+        );
+    }
 }
