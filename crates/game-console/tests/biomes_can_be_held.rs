@@ -305,48 +305,39 @@ fn the_scenario_gives_each_territory_the_force_its_biome_carries() {
     assert_eq!(jungles, 2, "territories 6 and 7 are the jungles");
 }
 
-/// Every territory has what its biome gives it, for every resource.
+/// Every territory has the numbers its own row in the release gives it.
 ///
-/// **`S-45`.** `spec/planet.md`: *a territory's biome gives it its total capacity and density
-/// for each resource. Two territories with the same biome have the same numbers.*
+/// **`S-46`, undoing `S-45`.** For one commit this read the *Biomes* table, on `P-272`'s rule
+/// that a biome determined a territory's numbers. `P-280` reversed it: *a territory's biome
+/// does not determine its numbers. The two are chosen to agree thematically, and a territory
+/// is free to differ where that shows something the others do not.* `P-281` says the same
+/// from the other side - the biome table's numbers **guide and do not bind**, and force of
+/// nature is the one column that does.
 ///
-/// **That rule existed only as a table heading until `P-272`, and a heading is not where a
-/// rule lives** - which is how `scenario/commands/nodes.4x` drifted from the release twice
-/// without contradicting anything. Both files were internally consistent and neither was
-/// wrong on its own terms; nothing compared them, because nothing said they had to agree.
-///
-/// `nodes.4x` is generated from the *Biomes* table now and states no number of its own. This
-/// is what says so, over all twelve territories and all three resources, with the count
-/// asserted - because a planet the parse failed to read would satisfy every assertion inside
-/// the loop by reaching none of them.
+/// **The check survives the reversal and is worth more after it.** Before `P-281` there were
+/// two tables of territory resources and no statement of which the data had to match, which
+/// is exactly how nobody noticed there were two. Now there is one, and this is what holds
+/// `nodes.4x` to it - over all twelve territories and all three resources, counted, because
+/// a parse that read nothing would satisfy every assertion inside the loop by reaching none.
 #[test]
-fn the_scenario_gives_each_territory_what_its_biome_gives_it() {
+fn the_scenario_gives_each_territory_the_numbers_the_release_gives_it() {
     let document =
         std::fs::read_to_string(root().join("releases/first-release.md")).expect("the release");
 
-    // Each biome's three resource cells, as `capacity x density`.
-    let mut gives: Vec<(String, Vec<(u32, u32)>)> = Vec::new();
-    let mut inside = false;
+    // The per-territory table: an integer first cell and `capacity x density` after it.
+    let mut rows: Vec<(u32, Vec<(u32, u32)>)> = Vec::new();
     for line in document.lines() {
-        if line.starts_with("## ") {
-            if inside {
-                break;
-            }
-            inside = line.trim() == "## Biomes";
-            continue;
-        }
         let line = line.trim();
-        if !inside || !line.starts_with('|') || line.contains("---") {
+        if !line.starts_with('|') {
             continue;
         }
         let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
         if cells.len() < 4 {
             continue;
         }
-        let name = cells[0].to_lowercase();
-        if name == "biome" {
-            continue; // the header
-        }
+        let Ok(id) = cells[0].parse::<u32>() else {
+            continue;
+        };
         let three: Vec<(u32, u32)> = cells[1..4]
             .iter()
             .map(|cell| match cell.split_once('x') {
@@ -354,43 +345,36 @@ fn the_scenario_gives_each_territory_what_its_biome_gives_it() {
                     capacity.trim().parse().unwrap_or(0),
                     density.trim().parse().unwrap_or(0),
                 ),
-                // Ocean carries nothing, which is what the release's dash means.
+                // `none` is what the release writes where a territory has no such node.
                 None => (0, 0),
             })
             .collect();
-        gives.push((name, three));
+        rows.push((id, three));
     }
     assert_eq!(
-        gives.len(),
-        6,
-        "six biomes in the release's table; the parse found {} ({:?})",
-        gives.len(),
-        gives.iter().map(|(n, _)| n).collect::<Vec<_>>()
+        rows.len(),
+        12,
+        "twelve territories in the release's own table; the parse found {}",
+        rows.len()
     );
 
     let game = planet().game;
     let mut checked = 0;
-    for place in &game.territories {
-        let (_, three) = gives
-            .iter()
-            .find(|(name, _)| name.eq_ignore_ascii_case(place.biome.name()))
-            .unwrap_or_else(|| panic!("the release names no biome {}", place.biome));
+    for (id, three) in &rows {
+        let place = game
+            .territory(TerritoryId(*id))
+            .unwrap_or_else(|_| panic!("the release names a territory {id} the planet lacks"));
         for (resource, (capacity, density)) in Resource::ALL.iter().zip(three) {
             let nodes = place.nodes_of(*resource);
             assert_eq!(
                 nodes.len(),
                 *capacity as usize,
-                "territory {} is {} and the release gives that biome {capacity} {resource} \
-                 extractors",
-                place.id,
-                place.biome
+                "the release gives territory {id} {capacity} {resource} extractors"
             );
             for (_, node) in nodes {
                 assert_eq!(
                     node.density, *density,
-                    "territory {} is {} and the release gives that biome {resource} at \
-                     density {density}",
-                    place.id, place.biome
+                    "the release gives territory {id} {resource} at density {density}"
                 );
             }
             checked += 1;

@@ -711,23 +711,31 @@ mod tests {
             "uncoordinated, the highest present"
         );
 
+        // **`P-276` and `P-277`.** A garrison has no force of its own and does one thing:
+        // it lets the citizens sum instead of presenting only the highest. It does that by
+        // existing, so manning it changes nothing.
         territory.set_garrison(Some(Garrison {
-            force: 1,
+            force: 0,
             manned: 0,
         }));
-        assert_eq!(territory.held_force(), 1, "the garrison's own force");
+        assert_eq!(territory.held_force(), 4, "four citizens, summed");
         territory.man_garrison(3);
         assert_eq!(
             territory.held_force(),
             4,
-            "one of its own plus three manning it"
+            "still four - nothing has to work it"
         );
     }
 
-    /// `spec/unit-types.md`: the structure a founding unit becomes has one less force.
+    /// `spec/control.md` and the release: **a garrison has no force of its own.**
+    ///
+    /// It was *one less force than the founding unit*, which is 1 for both units that found.
+    /// `P-277` made the *Units and structures* row 0 and `P-276` says it in prose, so what
+    /// holds newly taken ground is its citizens rather than the structure that organises
+    /// them.
     #[test]
-    fn a_founding_unit_becomes_a_garrison_one_weaker_than_itself() {
-        assert_eq!(Garrison::from_founding_unit(2).force, 1);
+    fn a_founding_unit_becomes_a_garrison_with_no_force_of_its_own() {
+        assert_eq!(Garrison::from_founding_unit(2).force, 0);
     }
 
     #[test]

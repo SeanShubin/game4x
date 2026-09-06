@@ -10,8 +10,8 @@
 /// **Named rather than repeated, because `S-44` moved both and three assertions carried the
 /// old numbers.** They are asserted rather than derived: a test that counted the file and
 /// compared it with itself would agree with any scenario at all.
-const LINES: usize = 151;
-const TURNS: usize = 13;
+const LINES: usize = 136;
+const TURNS: usize = 10;
 
 use game_console::{Library, fired};
 use std::path::{Path, PathBuf};

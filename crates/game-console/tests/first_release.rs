@@ -384,8 +384,9 @@ fn the_landing_site_can_send_a_pioneer_out() {
             .map(|(_, node)| node.density)
             .sum()
     };
-    // `P-274` rebalanced grassland: two metal nodes at density three.
-    assert_eq!(ceiling, 6, "two metal nodes at density three");
+    // Territory 1's own row in *Territory resources*, which is what binds - `P-281`. The
+    // *Biomes* table guides and does not, so grassland's `2 x 3` is not this number.
+    assert_eq!(ceiling, 12, "three metal nodes at density four");
     assert!(
         cost_of("pioneer", "metal") <= ceiling,
         "a pioneer must be affordable within one turn's extraction"
@@ -567,9 +568,8 @@ fn the_setup_is_a_hierarchy_of_files() {
     assert_eq!(session.game.territories.len(), 12);
     assert_eq!(
         session.game.territory(TerritoryId(12)).unwrap().nodes.len(),
-        // Territory 12 is ice: `P-274` gives it 1 food, 3 metal, 1 energy.
-        1 + 3 + 1,
-        "territory 12 from the release: ice, which is thin in everything"
+        2 + 8 + 8,
+        "territory 12 from the release: rich nodes, almost no workers"
     );
 }
 

@@ -23,63 +23,31 @@ create labor 1 1
 work 1 extractor 1 metal
 end turn
 
-# Turn 2. Four citizens. The food store holds ten and the farm makes six, so the second farm
-# has to wait for somewhere to put its harvest - which is the shape of every turn from here.
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-build store 1 food
-create labor 1 1
-build extractor 1 food
-end turn
-
-# Turn 3. Two farms into two stores, and the mine pays for the next of each.
-create labor 1 1
-work 1 extractor 1 food
+# Turn 2. Four citizens. The farm makes four and the store holds ten, so the second farm can
+# wait; the mine pays for a second store first, because metal with nowhere to go is lost.
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1
 work 1 extractor 1 metal
-create labor 1 1
-build store 1 food
-end turn
-
-# Turn 4. The last of the farms the ground has room for, and the second mine.
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
 create labor 1 1
 build extractor 1 food
 create labor 1 1
-build extractor 1 metal
-create labor 1 1
 build store 1 food
 end turn
 
-# Turn 5. The ground is nearly worked out. Energy is the resource this planet has to build
-# for: one node, no store from the founding, and an Ark wants twelve.
-create labor 1 1
-work 1 extractor 1 food
+# Turn 3. Two farms, and four hands to spend. The second mine has to wait a turn for them.
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1
 work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-build extractor 1 energy
-create labor 1 1
-build store 1 energy
 create labor 1 1
 build store 1 metal
 end turn
 
-# Turn 6. Everything worked, and the first turn where energy has somewhere to go.
-create labor 1 1
-work 1 extractor 1 food
+# Turn 4. The last farm and the first well. Energy has nowhere to go until it has a store,
+# which is the shape `S-44` gave the middle of this game.
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1
@@ -87,16 +55,16 @@ work 1 extractor 1 food
 create labor 1 1
 work 1 extractor 1 metal
 create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 energy
+build extractor 1 metal
 create labor 1 1
 build extractor 1 food
+create labor 1 1
+build extractor 1 energy
+create labor 1 1
+build store 1 energy
 end turn
 
-# Turn 7. A pioneer costs three metal and six energy, and both are in store now.
-create labor 1 1
-work 1 extractor 1 food
+# Turn 5. Everything the ground has room for is built, bar the last mine and the last wells.
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1
@@ -109,29 +77,66 @@ create labor 1 1
 work 1 extractor 1 metal
 create labor 1 1
 work 1 extractor 1 energy
+create labor 1 1
+build extractor 1 metal
+create labor 1 1
+build extractor 1 energy
+end turn
+
+# Turn 6. Twelve of each a turn, and a pioneer costs three metal and six energy.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 energy
+create labor 1 1
+work 1 extractor 1 energy
+create labor 1 1
+build extractor 1 energy
+create labor 1 1
+build store 1 energy
+end turn
+
+# Turn 7. The pioneer, and the last stores this territory will need.
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 food
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 metal
+create labor 1 1
+work 1 extractor 1 energy
+create labor 1 1
+work 1 extractor 1 energy
+create labor 1 1
+work 1 extractor 1 energy
+create labor 1 1
+build store 1 metal
 create labor 1 1
 produce pioneer 1
 end turn
 
 # Turn 8. The pioneer crosses into territory 2 and becomes it. `P-214`: the player says which
 # recipe this is, because arriving on unclaimed ground and arriving on your own are two
-# recipes and the model no longer guesses from the ground which was meant.
+# recipes, and the model no longer works out from the ground which was meant.
 found by land 2
 create labor 1 1
 work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 2
-work 1 extractor 2 food
-end turn
-
-# Turn 9. Fifteen metal is two stores' worth and change, so the Yard lands here.
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1
@@ -144,42 +149,14 @@ create labor 1 2
 work 1 extractor 2 food
 end turn
 
-# Turn 10. Nothing left to build. Energy is all that stands between here and an Ark, and one
-# node at density three fills its single store four turns at a time.
+# Turn 9. The Ark. Three metal and twelve energy against a Yard, and the new ground feeds
+# itself on the turn after the one it was claimed.
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 2
-work 1 extractor 2 food
-end turn
-
-# Turn 11.
-create labor 1 1
 work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 2
-work 1 extractor 2 food
-end turn
-
-# Turn 12. The Ark, and it is only affordable because of `P-270`: a resource in nothing can
-# be spent the turn it is made. The store holds ten and the Ark wants twelve, so the three
-# dug this turn are the difference between leaving and never leaving.
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 metal
 create labor 1 1
 work 1 extractor 1 energy
 create labor 1 1
@@ -192,9 +169,9 @@ work 1 extractor 2 food
 move ark 2
 end turn
 
-# Turn 13. Moving exhausts a unit, so the Ark leaves on the turn after the one it crossed on.
-# The farms are worked first, as always: a population that gathers nothing starves at the end
-# of the turn, whatever else is going on.
+# Turn 10. Moving exhausts a unit, so the Ark leaves on the turn after the one it crossed on.
+# The farms are worked first, as always: a population that gathers nothing this turn starves
+# at the end of it, whatever else is going on.
 create labor 1 1
 work 1 extractor 1 food
 create labor 1 1

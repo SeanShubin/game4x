@@ -130,7 +130,9 @@ against a jungle's nature of 2, so it falls. Asked of the model: it is taken, an
 `force_in` reports **1** against a nature of **2**.
 
 `spec/control.md`: *should the force in a territory fall below its force of nature, nature takes it
-back. Its entire population perishes.* **So the jungle is claimed and lost on the same turn**, and
+back. Its entire population perishes.*
+
+So the jungle was claimed and lost on the same turn, and
 the two pioneers that took it are spent for nothing.
 
 **The arithmetic, so it can be checked rather than trusted.** A founding consumes one pioneer and
@@ -370,7 +372,7 @@ if it is ever repaired.
 unit's force.** Two pioneers placed in territory 1, next to the jungle at territory 6:
 
 - `force_in(1)` reports **5** - the garrison, the citizens and both pioneers, summed, because
-  `spec/control.md` says *a military unit carries coordination with it rather than needing a place*
+  `spec/control.md` says a military unit carried coordination with it rather than needing a place - wording `P-276` has since replaced
 - `FoundByLand { territory: 6 }` is refused: **`taking territory 6 needs more than 2 force, and you
   bring 2`**
 
