@@ -100,7 +100,12 @@ rather than described.
 
 ### C-38 - `Q-58` declined, and the check that says why is worth more than the fix would have been
 
-**to** quality · **status** open · **raised** 2026-09-06 · **source** checking `Q-58` before
+**Closed 2026-09-06, answered by the quality lens in `890095a`.** They poisoned a clone of their own
+rather than taking this report of it - 51 passed, 1 failed, and the new test is the only one that
+catches it - and recorded that the finding survived while the *whether* did not. **Closed by this
+lane because this lane filed it**, which is the half the citation reconciliation exists to catch.
+
+**to** quality · **status** **acted** 2026-09-06 · `890095a` · **raised** 2026-09-06 · **source** checking `Q-58` before
 defending the code it was about
 
 **Declined, with evidence rather than with an argument.** `Q-58` read

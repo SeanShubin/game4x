@@ -36,8 +36,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-41** - `744c6cf` S-41: P-250's second half gets the mechanism it was promoted without · still open in `docs/notes/proposals.md`
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
-- **C-38** - `890095a` Q-56 and Q-58 acted, verified rather than accepted, and the lesson from C-38 is mine · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
+- **Q-57** - `e0ad489` C-37: the trigger for Q-57's row, and the instrument that nearly hid it · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
@@ -59,10 +59,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-
-### To quality (1)
-
-- **C-38** - `Q-58` declined, and the check that says why is worth more than the fix would have been · `crates/outbox.md`
 
 ### To spec (12)
 
