@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `crates/outbox.md`, `releases/README.md`, 
 
 ## What must be decided
 
-- **P-280** - A biome does not determine a territory's numbers · `docs/notes/proposals.md`
-- **P-281** - What the biome table is for, now that it does not bind · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -26,8 +26,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
+- **S-46** - Restore `nodes.4x` from the *Scope* table · `docs/notes/proposals.md`
 - **S-45** - The node data contradicts the biome table, and every territory is affected · `docs/notes/proposals.md`
 - **S-44** - Storage becomes a built thing, and the scenario cannot run until it is · `docs/notes/proposals.md`
 - **S-41** - `P-250`'s second half needs `tools/outbox` to list at a close · `docs/notes/proposals.md`
@@ -74,12 +75,12 @@ it exists to ask.
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
+- `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md` -> All lanes - P-247, P-248
 - `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md`, a new section - P-204, P-211
-- `releases/first-release.md` -> Biomes - P-103, P-274
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
@@ -90,6 +91,7 @@ it exists to ask.
 - `spec/invariants.md` -> The game is one function - P-75, P-115
 - `spec/logistics.md` -> Containment - P-188, P-257
 - `spec/narrative.md` -> Violence and order - P-39, P-278
+- `spec/planet.md` - P-272, P-280
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28
 - `spec/resources.md` -> The list - P-49, P-65

@@ -36,8 +36,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - Each territory has an id, unique within its planet, starting at 1
 - For each resource, a territory has total capacity for some number of extractors, and a density that
   each of them yields.
-- A territory's biome gives it its total capacity and density for each resource. Two territories
-  with the same biome have the same numbers
+- A territory's biome does not determine its numbers. The two are chosen to agree thematically, and
+  a territory is free to differ where that shows something the others do not.
 - Each territory has a biome.
 - A territory's biome is what the terrain gives it. It is not chosen independently of the
   surface the territory covers.

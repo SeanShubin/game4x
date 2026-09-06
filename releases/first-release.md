@@ -245,7 +245,9 @@ below are in that order.
 
 ## Biomes
 
-What each biome gives a territory. Ocean is not claimable and carries nothing.
+What a biome is like, so that a territory's numbers can be chosen to suit it. **The numbers here
+guide and do not bind; a territory's own are in *Territory resources*. Force of nature is the one
+column that binds.** Ocean is not claimable and carries nothing.
 
 | Biome     | Food  | Metal | Energy | Force of nature |
 | --------- | ----- | ----- | ------ | --------------- |

@@ -63,67 +63,33 @@ Two limits Claude holds itself to:
 **In review order.** Each depends only on what is above it, so reading top to bottom never needs a
 decision that has not been made yet. Two at the end are waiting on something and say so.
 
-### P-280 - A biome does not determine a territory's numbers
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `spec/planet.md`, replacing the bullet `P-272` landed
-
-**Your choice, and it reverses `P-272` four hours after I proposed it.** The bullet there now reads
-*a territory's biome gives it its total capacity and density for each resource; two territories with
-the same biome have the same numbers* - one occurrence, measured. **This replaces it.**
-
-> - A territory's biome does not determine its numbers. The two are chosen to agree thematically, and
->   a territory is free to differ where that shows something the others do not.
-
-**And you should know `P-272` was wrong on its own terms, not merely superseded.** I reported that
-`nodes.4x` contradicted the release. **It did not.** The release has **two** tables of territory
-resources - one under *Biomes* and one under *Scope* - and `nodes.4x` matched the *Scope* table for
-**twelve of twelve** territories, measured against the file as it stood before this afternoon.
-**I compared it to the wrong table because I did not know there were two**, and the comment I quoted
-as damning - *taken from the table* - was true.
-
-**So the contradiction I filed did not exist, and promoting the fix created one.** `nodes.4x` now
-matches *Scope* for **zero of twelve**. That is the whole of `C-32` and `P-279`, and both dissolve
-here.
-
-**What survives, and it is worth keeping.** `P-274`'s rebalance stands as guidance rather than as a
-rule: the jungle was strictly worse than grassland on all three resources and ice strictly worse than
-desert, and that stays worth knowing when numbers are chosen. **`P-275`, `P-276`, `P-277` and `P-278`
-are untouched** - force, the garrison and its fiction have nothing to do with where numbers come
-from.
-
-**Nothing here removes a biome or weakens one.** A biome is still what the terrain gives a territory
-- `spec/planet.md`, unchanged - and it is still **what the realistic drawing is drawn from**, which is
-the thing it exists for. It still fixes **force of nature**, which `P-278` makes a fact about the
-biome rather than about the ground. **What it stops doing is one thing: fixing how many extractors fit
-and what each yields.**
-
-**`P-281` carries the release half.** **`P-279` is withdrawn** in the same commit, and a restoration
-of `nodes.4x` from the *Scope* table is filed to the code lane.
-
-### P-281 - What the biome table is for, now that it does not bind
-
-**to** sean - **status** open - **raised** 2026-09-05 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `releases/first-release.md` -> Biomes, replacing *What each biome gives
-a territory. Ocean is not claimable and carries nothing.*
-
-**`P-280` leaves this table saying something it no longer does.** Its heading sentence claims the
-biome gives a territory its numbers, and `P-281` is one sentence in its place.
-
-> What a biome is like, so that a territory's numbers can be chosen to suit it. **The numbers here
-> guide and do not bind; a territory's own are in *Territory resources*. Force of nature is the one
-> column that binds.** Ocean is not claimable and carries nothing.
-
-**Why force of nature is different, and it is not an exception made for convenience.** A biome's
-danger is a fact about the biome - `P-278` says *more dangerous territory requires more organised
-citizens to keep it secure* - and nothing in `Territory resources` states it. **Jungle is 2 because
-it is jungle**, which is exactly what the resource columns have stopped claiming.
-
-**This is the table's honest job.** You said the numbers coincide with the biome thematically and are
-free to make exceptions to test more situations. **A table of what a biome is like is what that
-sentence needs to exist**; a table of what a biome *gives* is what it just stopped being.
-
 ## Addressed to other perspectives
+
+### S-46 - Restore `nodes.4x` from the *Scope* table
+
+**to** code - **status** open - **raised** 2026-09-05 - **source** `P-280` and `P-281`, which
+reverse `P-272`
+
+**`S-45` was wrong and this undoes it.** I told you to generate `nodes.4x` from the *Biomes* table.
+**The release has two tables of territory resources** - *Biomes*, and *Territory resources* under
+*Scope* - and `nodes.4x` already matched the *Scope* one for **twelve of twelve** territories. I
+compared it against the wrong table.
+
+**So the values you had before `1f2ded6` were right.** `git show 1f2ded6~1:scenario/commands/nodes.4x`
+is the content, and `P-280` is the rule that now says so: **a biome does not determine a territory's
+numbers.**
+
+**What to keep from what you built.** The check `S-45` asked for is still worth having, **pointed at
+the other table**: every territory's three lines agree with its row in *Territory resources*. That is
+a real invariant now and was not one before, because before there was no single table it had to
+match.
+
+**And `C-32` dissolves.** The two tables no longer say the same kind of thing, so they cannot
+disagree: *Biomes* guides, *Territory resources* binds. The failing assertion in `first_release.rs`
+should read *Territory resources* and pass.
+
+**`C-24` can close too** - `P-275` answered it - and `C-26`, `C-27` and `C-30` were answered by
+`P-265`, `P-265` and `P-273`.
 
 ### S-45 - The node data contradicts the biome table, and every territory is affected
 
@@ -1480,6 +1446,8 @@ work the release exists to order.
 | P-276, a garrison has no force and does one thing, by existing                                                               | `spec/control.md` -> Force                                                                                                                   | 2026-09-05 |
 | P-277, the garrison row's force becomes 0 and the multiplier sentence goes                                                   | `releases/first-release.md` -> Units and structures                                                                                          | 2026-09-05 |
 | P-278, more dangerous territory requires more organised citizens to keep it secure                                           | `spec/narrative.md` -> Violence and order                                                                                                    | 2026-09-05 |
+| P-280, a biome does not determine a territory's numbers; the two agree thematically                                          | `spec/planet.md`                                                                                                                             | 2026-09-05 |
+| P-281, the biome table guides and does not bind, and force of nature is the column that does                                 | `releases/first-release.md` -> Biomes                                                                                                        | 2026-09-05 |
 
 ## Rejected
 
