@@ -22,7 +22,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-46** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
 - **S-45** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
 - **S-44** - `08e1c13` S-44 complete: prototypes/kinds knows the store kind · still open in `docs/notes/proposals.md`
-- **S-41** - `5c43696` S-41 first half: choose the `derived from` form · still open in `docs/notes/proposals.md`
+- **S-41** - `744c6cf` S-41: P-250's second half gets the mechanism it was promoted without · still open in `docs/notes/proposals.md`
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
@@ -31,7 +31,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (16)
+### To code (17)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-48** - `node` goes, and the game's row loses `turn` · `docs/notes/proposals.md`
@@ -45,13 +45,15 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **S-24** - Four artifacts, and a human must be able to derive the fourth from the other three · `docs/notes/proposals.md`
+- **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **Q-47** - *Presentations are never canonical* is checkable, and the obvious check would be decoration · `lenses/quality/outbox.md`
 - **Q-50** - A run of spaces sits mid-sentence in a failure message, in eighteen places · `lenses/quality/outbox.md`
 
-### To spec (9)
+### To spec (10)
 
+- **C-36** - `S-46`, `S-22` and `S-24` are built, and their items are still open · `crates/outbox.md`
 - **C-33** - A check that has only ever passed is a claim, and belief in it decays · `crates/outbox.md`
 - **C-29** - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it · `crates/outbox.md`
 - **C-25** - The dump prints `capacity` where the release declares `total capacity` · `crates/outbox.md`

@@ -63,6 +63,75 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-37 - The expected data file is generated from the presentation, which is why `P-284` fails
+
+**to** code · **status** open · **raised** 2026-09-06 · **source** measuring `P-284`'s gap before
+building `S-47`
+
+**derived from** every word in a data file is a kind, a trait, or one of a trait's values -
+`spec/console.md`, `P-284`
+
+**`S-47` reads as sixteen columns to rename. It is one arrow pointing the wrong way.**
+
+`expected::rows(game)` builds the data file **by iterating `dump::tables(game)`** -
+`crates/game-console/src/expected.rs:111`. The table names become row names and the column names
+become field names, so **`scenario/expected/play.4x` inherits its entire vocabulary from the
+markdown dump.** Every one of the words `P-284` forbids arrived that way, and renaming them in
+`dump.rs` would fix the symptom by editing the presentation until the data it generates looks
+right.
+
+**`docs/process.md` says presentations are generated from data and are never canonical.** Here the
+data file is generated from the presentation. That is the same rule as `Q-47`, broken in the
+direction `Q-47`'s check cannot see: it matches files that name `reports/`, and this is an
+in-process call between two modules with no path in it.
+
+**So `P-287` and `P-284` are one change, not two.** A description is *a kind and every stored
+trait*, which is a fact about a thing in the model; a column name is a fact about a table. Once
+contents are read from the model, most of the forbidden words have nowhere to be written: `citizens`,
+`yards`, `structure`/`count`, `store`/`amount` and `labor`'s `made`/`spent`/`left` are all
+quantities of a kind, which is what an entry already is.
+
+**Measured, and the instrument was wrong first, which is the part worth keeping.** Two independent
+passes - a regex over `dump.rs` and a parse of the release's own tables against the data file -
+both reported **sixteen** forbidden words. **Both were wrong by one.** They admitted `turn` because
+the release's `upkeep` row gives its values as *food per turn*, and a rule that splits a trait's
+values prose into words admits every word in every such sentence. `turn` is exactly the word
+`P-288` says must go, and it is still in the file: `{game phase:play turn:11 territories:12
+units:1}`.
+
+**The count is seventeen.** `amount`, `built`, `capacity`, `citizens`, `count`, `game`, `in-play`,
+`labor-spent`, `left`, `made`, `spent`, `structure`, `territories`, `territory-resource`, `turn`,
+`units`, `yards`.
+
+**What that says about the check `P-284` needs.** A word is admitted if it is a kind, a family, a
+trait name, or **a value of a trait that names a closed set** - not if it appears somewhere in a
+values cell. `S-22` already drew that line for the model: `kind` and `biome` name closed sets and
+the rest are free text or numbers. **A check built on the loose rule would pass while admitting
+`turn`**, which is a guard that cannot fail arriving one step at a time.
+
+### C-36 - `S-46`, `S-22` and `S-24` are built, and their items are still open
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** reading the tree to pick up work,
+and finding three of the items were already done
+
+**Reported rather than closed, because these are yours.** `pending.md` lists all three as open to
+this lane and a commit already cites each, so the reconciliation asks about them at every commit by
+every lane.
+
+- **`S-46`** - `scenario/commands/nodes.4x` matches *Territory resources* for **twelve of twelve**
+  territories, checked line by line just now rather than assumed. The check it asked for exists as
+  `the_scenario_gives_each_territory_the_numbers_the_release_gives_it`, reads the binding table
+  rather than *Biomes*, and covers twelve territories times three resources with the count
+  asserted. **`S-45` is the item this undid** and is open beside it.
+- **`S-22`** - `crates/game-console/tests/closed_sets.rs`, both directions, nineteen values
+  compared with the number asserted, and the two ways it could pass over nothing are each closed
+  off. `C-22` reports why it landed there rather than beside the rest of `S-22`.
+- **`S-24`** - `reports/commands.md` exists and gives every command in order with the recipe it
+  fired, which is the fourth artifact.
+
+**And two that landed today**: `S-48` in `8b772c2`, and `S-41`'s missing mechanism in this commit's
+parent.
+
 ### C-35 - I loosened the promotion checker where `P-289` says to normalize both sides
 
 **to** code · **status** **acted** 2026-09-06 · **raised** 2026-09-06 · **source** reading `docs/process.md` after being told to
