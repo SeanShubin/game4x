@@ -23,6 +23,12 @@ looks wrong from outside. The decision is right and the code is right - only the
 false, so no check reaches it, and the person it misleads is the one who came back because they
 were unsure.
 
+**State the kind of failure and why it happens; do not narrate the occasion.** *This misfires, and
+here is what makes it misfire* keeps working. *This misfired on Tuesday, to a lane, at fifteen*
+is a fact about a moment - a reader cannot check it, does not need it, and is reading a document
+that is supposed to be true whenever it is opened. **The reason is part of the rule and the
+anecdote is not.**
+
 ## Three rules for using AI assistants
 
 - Never let AI make a decision
@@ -224,9 +230,9 @@ when the session ends, and nobody can see who is waiting on what.
   backlog expensive grows with the number of items. An item goes **out of date** as what it cites
   changes, however few of them there are, and two items **conflict** as a pair, however many
   others sit beside them. A count is a proxy for both and a good measure of neither
-- **Counting the two together has already misfired**, in the direction that costs most: a lane
-  reported my queue at fifteen against a limit of fifteen while it was empty, because most of what
-  was open was a producer's backlog and one number could not tell them apart
+- **Counting the two together misfires**, in the direction that costs most: one number cannot tell
+  a reading budget from a producer's backlog, so a queue of mine that is empty can be reported as
+  full
 - So an instance may not file a new item while one of its own is open and cited by a commit saying
   it is done. **It closes the item the commit cites**, or records the hash to say it looked and it
   is still open. That is the same forcing function a cap gives - close something before filing
@@ -428,10 +434,10 @@ lens has to answer before it is worth starting lives. The four above are the one
 - The specification instance's outbox is the proposal queue
 - Every item carries an id, who it is addressed to, a status, and one line saying what it is
 - **An item that cannot be acted on yet says what it waits on in a field, never in prose** -
-  `**waits on** P-323`. **When that id is no longer open the wait is over**, and whatever lists
-  the outboxes says so. A hold written into a paragraph is invisible to every tool and to every
-  reader who does not re-read the whole item, which is how an item goes on telling a lane not to
-  start work that was unblocked an hour ago.
+  `**waits on** P-n`. **When that id is no longer open the wait is over**, and whatever lists the
+  outboxes says so. A hold written into a paragraph is invisible to every tool and to every reader
+  who does not re-read the whole item, so an item goes on telling a lane not to start work that is
+  no longer blocked.
 - **An item closes when the instance it is addressed to has done what it can**, not when the thing
   it reports is finally fixed. Waiting for the fix keeps items open longer, and age is what makes
   one go out of date or contradict another - so the rule that looks like it protects against

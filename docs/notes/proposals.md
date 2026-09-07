@@ -60,55 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**One**, and the survey it rests on found three defects in the whole document.
-
-### P-326 - State the kind of failure, not the occasion, and the three places that do not
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/process.md` -> What this document has to be, then two corrections
-
-**The survey first, because it changes what this proposal needs to be.** I searched
-`docs/process.md` for temporal words, dates, item ids, embedded measurements and narrated
-incidents. **Three hits in 459 lines, and all three are mine from today.** The document you have been
-writing for two weeks is already almost entirely principle.
-
-**1. The rule**, at the end of *What this document has to be*, beside the two that already say what
-survives:
-
-> **State the kind of failure and why it happens; do not narrate the occasion.** *This misfires, and
-> here is what makes it misfire* keeps working. *This misfired on Tuesday, to a lane, at fifteen*
-> is a fact about a moment - a reader cannot check it, does not need it, and is reading a document
-> that is supposed to be true whenever it is opened. **The reason is part of the rule and the
-> anecdote is not.**
-
-**2. `Outboxes and the index` says *an hour ago*.** In the bullet promoted a few minutes ago as
-`P-325`. The sentence becomes:
-
-> `**waits on** P-n`. **When that id is no longer open the wait is over**, and whatever lists the
-> outboxes says so. A hold written into a paragraph is invisible to every tool and to every reader
-> who does not re-read the whole item, so an item goes on telling a lane not to start work that is
-> no longer blocked.
-
-**Two things change and both are the rule above.** *An hour ago* becomes nothing - the failure is
-that the hold outlives its reason, and how long it takes is not the point. And `P-323` becomes
-`P-n`, which is the placeholder `CLAUDE.md` already uses three times; **as written, a reader who
-looks up `P-323` finds a promoted proposal rather than a wait.**
-
-**3. `All lanes` narrates the fifteen-against-fifteen incident.** The bullet becomes:
-
-> - **Counting the two together misfires**, in the direction that costs most: one number cannot tell
->   a reading budget from a producer's backlog, so a queue of mine that is empty can be reported as
->   full
-
-**What is lost and what is kept.** The occasion goes; the mechanism - *one number cannot tell the
-two apart* - stays and is the part that made you promote it. **The failure it warns about is
-unchanged and now readable a year from now.**
-
-**Where I think the line is, since you asked what the document really needs.** A principle, and a
-declaration that a kind of thing happens, both stay - the second is often what makes the first
-believable. **What goes is the occasion**: the date, the lane, the number, the id. Everything I
-found falls on one side or the other and nothing was hard to place, which is some evidence the line
-is real rather than mine.
+**Nothing.** [decisions.md](decisions.md) is empty too.
 
 ## Addressed to other perspectives
 
@@ -2122,6 +2074,7 @@ work the release exists to order.
 | P-323, a field is named for the kind it refers to; a command is named for its recipe and may repeat                          | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
 | P-324, being blocked on one thing is not being blocked, and it applies to every lane                                         | `docs/process.md` -> All lanes                                                                                                               | 2026-09-06 |
 | P-325, an item that waits says so in a field, so something can notice when the wait is over                                  | `docs/process.md` -> Outboxes and the index                                                                                                  | 2026-09-06 |
+| P-326, state the kind of failure and not the occasion, and the three places that did not                                     | `docs/process.md` -> What this document has to be, Outboxes and the index, All lanes                                                         | 2026-09-06 |
 
 ## Rejected
 
