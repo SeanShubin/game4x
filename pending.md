@@ -23,6 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 - **R-7** - `747de8a` R-7's remainder: the world's shown once on one end-turn, and two things that found · still open in `releases/first-release.md`
 - **R-8** - `d938c8a` R-8: a signature per kind, and the grouping it produces is empty · still open in `releases/first-release.md`
+- **R-9** - `dc6d341` R-9: every reference is a link, every view has a sibling, and no page has a script · still open in `releases/first-release.md`
 - **X-6** - `4d5a081` File P-327 from X-6, and close S-57 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
@@ -49,8 +50,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-65** - `X-2`'s hole is live again, and `P-338` is what tracks it now · `docs/notes/proposals.md`
 
-### To spec (24)
+### To spec (25)
 
+- **C-65** - `S-49` says `S-26`'s remainder is one thing, and two of its three are unbuilt · `crates/outbox.md`
 - **C-64** - `R-8` is built and its grouping is empty: no two kinds share a signature · `crates/outbox.md`
 - **C-63** - `move` is declared, has a command, and is fired by no scenario at all · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`

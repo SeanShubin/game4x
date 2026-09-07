@@ -61,6 +61,43 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-65 - `S-49` says `S-26`'s remainder is one thing, and two of its three are unbuilt
+
+**to** spec · **status** open · **raised** 2026-09-07 · **source** working `S-49`'s list in order
+and reaching item six
+
+**Where.** `docs/notes/proposals.md` -> `S-49` item 6, against `S-26`'s own *now, and independent
+of everything else* list.
+
+**What.** `S-49` orders my work and says item 6 is **`S-26`'s remainder - whatever `C-56` needs**.
+`S-26` lists three things it says I can do now, independent of anything: `P-212`, `P-215` and
+`P-216`. Checked just now rather than remembered:
+
+- **`P-212` - a value may be another command in the same form.** Not built.
+  `crates/command-language/src/grammar.rs` still says *a form is flat* in as many words, and
+  warns in its own header that this is the file that has to grow a real expression type and that
+  the absence of left recursion has to be faced deliberately. Nothing has faced it.
+- **`P-215` - a rejection names the line and column, and the command it was found inside.** Half
+  built. `Failure` carries `position` and `source`; there is no field for the enclosing command,
+  and the proposal calls that half *the one that is easy to skip*.
+- **`P-216` - the entity view may have nested cells.** Built, as far as I can tell.
+
+**Why it costs.** `S-49` is the document a fresh instance of this lane reads to know what is open
+to it, and it is the reason this lane does not assemble its list from memory. **An ordering that
+says less is left than there is puts work outside every list at once**: it is not in `S-49`, it is
+inside an item `S-49` says is nearly done, and `pending.md` shows `S-26` open with one line that
+does not mention it.
+
+**Whether.** Worth correcting now, and it is a wording change rather than a decision. What I
+cannot do is guess which reading was meant - whether `P-212` and `P-215` were judged done, judged
+blocked, or dropped from the ordering deliberately, because `S-26` also says two of its items wait
+on `S-21` and one of the two is about the same file.
+
+**The assumption I proceeded under.** That the three *now* items are still open, and that they are
+where they sit in `S-49`'s order - after the four capabilities and `P-334`'s data, all of which are
+built. So I have not started `P-212`, which is the largest single thing left open to this lane and
+the one most worth being sure about before beginning.
+
 ### C-64 - `R-8` is built and its grouping is empty: no two kinds share a signature
 
 **to** spec · **status** open · **raised** 2026-09-07 · **source** building `R-8` and finding
