@@ -496,9 +496,25 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
     }
 }
 
-/// The scenario touches every kind the model knows, counted.
+/// Every kind is named in the dump, and only two of those namings depend on the scenario.
+///
+/// **`Q-65`, and the population is the finding.** This was called
+/// *the_scenario_touches_every_kind*, and it does not check that. `dump.rs` builds the `kind`
+/// table by unconditional pushes - one row per kind whatever the state, deliberately,
+/// because *an absent table is the one thing that cannot be told from a wrong one* - and the
+/// set read below takes every cell. So **eleven of the thirteen are named by construction,
+/// with nothing played at all**, and the check can only ever fail for `store` and `orbit`.
+///
+/// **Its one real catch was `orbit`**, when `S-55` changed how a unit's place is written. That
+/// is inside the two, so it says nothing about the other eleven - a catch inside the sighted
+/// region is the same shape as a poison aimed there.
+///
+/// **The fix is the population rather than the predicate**, which is the rule this repository
+/// already has for every other count. The eleven are not a defect: the `kind` table naming
+/// every kind is what a reader wants, and removing it to make this check bite would break the
+/// thing it was built for. What was wrong was a name claiming thirteen over a reach of two.
 #[test]
-fn the_scenario_touches_every_kind_and_there_are_twelve() {
+fn every_kind_is_named_and_only_two_namings_depend_on_the_scenario() {
     use game_model::thing::Kind;
 
     assert_eq!(
@@ -532,6 +548,32 @@ fn the_scenario_touches_every_kind_and_there_are_twelve() {
         .collect();
     assert!(
         missing.is_empty(),
-        "the scenario never names {missing:?}, so a reader looking for one finds nothing"
+        "the dump never names {missing:?}, so a reader looking for one finds nothing"
+    );
+
+    // **What this can fail on, asserted** - `Q-65`. Everything the `kind` table enumerates is
+    // named whatever happens, so the live population is the kinds that are not, and it is two.
+    // A change that made it one would be this check quietly covering less, which is precisely
+    // what it did for weeks while its name said thirteen.
+    let fresh = game_model::Game::new();
+    let by_construction: std::collections::BTreeSet<String> = dump::tables(&fresh)
+        .iter()
+        .flat_map(|table| {
+            let heading = (!table.rows.is_empty()).then(|| table.name.to_string());
+            heading
+                .into_iter()
+                .chain(table.rows.iter().flatten().cloned())
+        })
+        .collect();
+    let live: Vec<&str> = Kind::ALL
+        .iter()
+        .map(|kind| kind.name())
+        .filter(|name| !by_construction.contains(*name))
+        .collect();
+    assert_eq!(
+        live,
+        ["store", "orbit"],
+        "eleven kinds are named with nothing played, so only these depend on the scenario \
+         having reached them; if this list shrinks the check covers less than it did"
     );
 }
