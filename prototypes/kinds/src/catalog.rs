@@ -166,6 +166,26 @@ fn rows_with_recipe(document: &str) -> Vec<(String, Vec<String>)> {
     out
 }
 
+/// Whether `phrase` names `name`.
+///
+/// **A dash is part of a name and not a separator.** `spec/console.md`: *A name is one word.
+/// Where it needs more than one, the words are joined with dashes.* So a hyphenated name is
+/// one word here, and splitting on the dash would find neither it nor its halves.
+///
+/// **One implementation because it is one rule**, which is `Q-70`: this file asked *does this
+/// phrase name this thing* in three places and answered it two different ways, and the two
+/// that split on the dash outvoted the one that did not. The failure was silent in the
+/// direction that matters, and this is measured against the code as it was rather than
+/// argued: hyphenating all fifteen kinds merged `deposit` and `adjacency` onto one key, so
+/// `R-8` reported two unrelated kinds as behaving alike because a matcher failed on both.
+/// **Only kinds with no recipe pairs merged** - the family match below is an exact string
+/// compare and survives a rename - so the cost was one false group rather than all of them.
+fn names_it(phrase: &str, name: &str) -> bool {
+    phrase
+        .split(|c: char| !c.is_alphanumeric() && c != '-')
+        .any(|word| word == name)
+}
+
 /// What each row of *Where things are* is about, and how much it holds.
 ///
 /// **`S-58`, and Sean hit its absence rather than reading about it.** He asked whether
@@ -208,12 +228,6 @@ fn containers(document: &str) -> Vec<(String, Vec<String>)> {
         !kinds.is_empty() && !families.is_empty(),
         "the release lists no kinds or no families, so every row below would match nothing"
     );
-
-    let names_it = |phrase: &str, name: &str| {
-        phrase
-            .split(|c: char| !c.is_alphanumeric() && c != '-')
-            .any(|word| word == name)
-    };
 
     let mut out = Vec::new();
     for row in body_under(document, "## Where things are") {
@@ -281,9 +295,7 @@ fn recipe_rows(document: &str, kind: &str) -> Vec<(String, Vec<String>, Reach)> 
     for (recipe, row) in rows_with_recipe(document) {
         let named = row.get(4).map(|c| plain(c)).unwrap_or_default();
         let place = row.get(6).cloned().unwrap_or_default();
-        let in_where = place
-            .split(|c: char| !c.is_alphanumeric())
-            .any(|w| w == kind);
+        let in_where = names_it(&place, kind);
         let of_mine = families_of.iter().any(|f| f == &named);
         if !of_mine && !in_where {
             continue;
@@ -527,6 +539,5 @@ fn mentions(of: &str, kind: &str) -> bool {
     if of.trim() == "every thing" {
         return true;
     }
-    of.split(|c: char| !c.is_alphanumeric())
-        .any(|word| word == kind)
+    names_it(of, kind)
 }
