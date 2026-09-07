@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-319** - A rule for backreferences, and the three places it already fires · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -17,6 +18,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-56** - `eb33c24` Close C-16 and C-41 under P-305, and file C-44: S-56 was already done · still open in `docs/notes/proposals.md`
+- **S-55** - `f3dcc1e` S-55: an orbit is above a territory, and an Ark lands beneath itself · still open in `docs/notes/proposals.md`
 - **S-53** - `6f1a229` S-53: decisions.md, and the misfiling check that a person caught first · still open in `docs/notes/proposals.md`
 - **S-51** - `38b2cbe` S-51 on a measured predicate, Q-61 built in, and four items that were invisible · still open in `docs/notes/proposals.md`
 - **S-50** - `521d3b7` S-50's live half, C-33 closed by P-291, and the re-poison it asked for · still open in `docs/notes/proposals.md`

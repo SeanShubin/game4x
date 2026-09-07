@@ -46,6 +46,12 @@ programming with an AI assistant, so each of the three is as concise as it can b
 enough that I keep executive control of what it decides. One short enough to read and too vague to
 govern has failed at the thing it was shortened for.
 
+**Say what you are referring to, not where it was.** *The fourth*, *the first three*, *the
+former*, *the latter*, *the above* - an assistant resolves these without effort and I cannot
+resolve them at all on one read, which is why they get written and never noticed. **The test is
+whether resolving the reference needs counting or remembering an order.** A pronoun for the thing
+just named needs neither and is fine; anything that does gets the thing's name instead.
+
 - I maintain executive control via the specification lane
 - I reject AI responses that do not read clearly and unambiguously to a human
 - I insist that the AI make its work verifiable to a human
@@ -87,8 +93,9 @@ instruction run with the check it carries. **That is what makes reading it worth
 ## How I know the application is right
 
 Four artifacts: the definitions of the things, the definitions of the transformations over them,
-the commands a scenario ran, and the data dump of that scenario. The first three are enough to
-derive the fourth by hand. If I can do that, I can tell whether the application is behaving as I intend.
+the commands a scenario ran, and the data dump of that scenario. **The definitions and the
+commands are enough to derive the data dump by hand.** If I can do that, I can tell whether the
+application is behaving as I intend.
 
 **The transformation reads the state and the commands and nothing else** - no clock, no
 randomness, nothing about the machine it runs on. That is what makes the data dump derivable from
@@ -219,9 +226,9 @@ when the session ends, and nobody can see who is waiting on what.
   reported my queue at fifteen against a limit of fifteen while it was empty, because most of what
   was open was a producer's backlog and one number could not tell them apart
 - So an instance may not file a new item while one of its own is open and cited by a commit saying
-  it is done. It closes that one, or records the hash to say it looked and the item is still open.
-  That is the same forcing function a cap gives - close something before filing something -
-  attached to the cost that is actually there
+  it is done. **It closes the item the commit cites**, or records the hash to say it looked and it
+  is still open. That is the same forcing function a cap gives - close something before filing
+  something - attached to the cost that is actually there
 - An item whose cited file has taken a promotion since it was raised is re-read before it is
   relied on. The ground moving under an item is what makes it wrong without anybody touching it
 - Eight items open to any one instance stays, as a backstop rather than as the rule. An outbox
