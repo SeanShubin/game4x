@@ -60,7 +60,47 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+**One.** `P-321` came from [decisions.md](decisions.md) with its question answered, which is
+the second time that path has been used.
+
+### P-321 - The command form is `{name field:value ...}`, and the positional statement goes
+
+**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
+own - **shape** instruction - **asks** approval - **into** `spec/console.md` -> The language, the
+paragraph at line 41 and the fenced block that follows it
+
+**You chose the named form.** This removes the statement that contradicts it, so `spec/console.md`
+states one form rather than two.
+
+**The instruction.** Delete the paragraph *A command is a verb followed by arguments, one command to
+a line. A territory is named by its id, a structure by its kind and the territory it is in.* and the
+fenced block of eight examples that follows it. **Line 60 then stands as the only statement of the
+form**: *A command is written `{name field:value ...}`. Its name is the words that open it and its
+arguments are named.*
+
+**The check the promoting commit runs**: `spec/console.md` contains no *verb followed by arguments*,
+and the eight positional examples are gone.
+
+**A correction of my own first version.** It said the positional statement was at line 18. **It is at
+line 41** - I took the number from the code lane's `C-48` without opening the file, in a proposal
+about a contradiction, on the day this is being researched. The statements are otherwise exactly as
+`C-48` reported them and I have now read both.
+
+**What this deliberately does not do: replace the examples.** Eight worked examples are worth having
+and **every one of them encodes a choice you have not made.** `land ark 1` could become `{land ark
+territory:1}`, taking *land ark* as the name because line 60 says the name is the words that open
+it - or `{land kind:ark territory:1}`, or something else. `work 4 extractor 3 metal` has a count, a
+place and a resource and no rule says what any of them is called. **Filing my guesses as approved
+text is the thing a proposal asking approval may not contain**, so the examples come back as their
+own item once the field names are settled.
+
+**What it costs until then.** `spec/console.md` states the form and shows no example of it, which is
+thinner than it was. **The scenario is unaffected either way** - `scenario/commands/play.4x` is 199
+positional commands and rewriting it is `S-26`, not this.
+
+**One thing that follows and is not in scope.** The named form is the same shape as a description -
+a name and named fields - so a command and a thing become one form. That is worth stating on
+purpose rather than leaving to be noticed, and it is a separate proposal.
 
 ## Addressed to other perspectives
 

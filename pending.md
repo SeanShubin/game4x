@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-321** - `spec/console.md` states two incompatible forms for a command, nineteen lines apart · `docs/notes/decisions.md`
+- **P-321** - The command form is `{name field:value ...}`, and the positional statement goes · `docs/notes/proposals.md`
+- **P-322** - The round-trip check cannot hold, because two traits have nowhere to be written · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
 
