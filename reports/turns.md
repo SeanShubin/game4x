@@ -233,6 +233,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 *(empty) 0 rows*
 
+### adjacency
+
+| from | to  |
+| ---- | --- |
+| 1    | 2   |
+| 1    | 3   |
+| 1    | 4   |
+| 1    | 5   |
+| 1    | 6   |
+| 2    | 3   |
+| 2    | 4   |
+| 2    | 7   |
+| 2    | 8   |
+| 3    | 5   |
+| 3    | 7   |
+| 3    | 9   |
+| 4    | 6   |
+| 4    | 8   |
+| 4    | 10  |
+| 5    | 6   |
+| 5    | 9   |
+| 5    | 12  |
+| 6    | 10  |
+| 6    | 12  |
+| 7    | 8   |
+| 7    | 9   |
+| 7    | 11  |
+| 8    | 10  |
+| 8    | 11  |
+| 9    | 11  |
+| 9    | 12  |
+| 10   | 11  |
+| 10   | 12  |
+| 11   | 12  |
+
+30 row(s)
+
 ### kind
 
 | id        | in-play |
@@ -248,9 +285,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| adjacency | 30      |
 | deposit   | 34      |
 
-12 row(s)
+13 row(s)
 
 # Turn 2
 
@@ -478,6 +516,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 *(empty) 0 rows*
 
+### adjacency
+
+| from | to  |
+| ---- | --- |
+| 1    | 2   |
+| 1    | 3   |
+| 1    | 4   |
+| 1    | 5   |
+| 1    | 6   |
+| 2    | 3   |
+| 2    | 4   |
+| 2    | 7   |
+| 2    | 8   |
+| 3    | 5   |
+| 3    | 7   |
+| 3    | 9   |
+| 4    | 6   |
+| 4    | 8   |
+| 4    | 10  |
+| 5    | 6   |
+| 5    | 9   |
+| 5    | 12  |
+| 6    | 10  |
+| 6    | 12  |
+| 7    | 8   |
+| 7    | 9   |
+| 7    | 11  |
+| 8    | 10  |
+| 8    | 11  |
+| 9    | 11  |
+| 9    | 12  |
+| 10   | 11  |
+| 10   | 12  |
+| 11   | 12  |
+
+30 row(s)
+
 ### kind
 
 | id        | in-play |
@@ -493,9 +568,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| adjacency | 30      |
 | deposit   | 34      |
 
-12 row(s)
+13 row(s)
 
 # Turn 3
 
@@ -723,6 +799,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 *(empty) 0 rows*
 
+### adjacency
+
+| from | to  |
+| ---- | --- |
+| 1    | 2   |
+| 1    | 3   |
+| 1    | 4   |
+| 1    | 5   |
+| 1    | 6   |
+| 2    | 3   |
+| 2    | 4   |
+| 2    | 7   |
+| 2    | 8   |
+| 3    | 5   |
+| 3    | 7   |
+| 3    | 9   |
+| 4    | 6   |
+| 4    | 8   |
+| 4    | 10  |
+| 5    | 6   |
+| 5    | 9   |
+| 5    | 12  |
+| 6    | 10  |
+| 6    | 12  |
+| 7    | 8   |
+| 7    | 9   |
+| 7    | 11  |
+| 8    | 10  |
+| 8    | 11  |
+| 9    | 11  |
+| 9    | 12  |
+| 10   | 11  |
+| 10   | 12  |
+| 11   | 12  |
+
+30 row(s)
+
 ### kind
 
 | id        | in-play |
@@ -738,9 +851,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| adjacency | 30      |
 | deposit   | 34      |
 
-12 row(s)
+13 row(s)
 
 # Turn 4
 
@@ -981,6 +1095,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 *(empty) 0 rows*
 
+### adjacency
+
+| from | to  |
+| ---- | --- |
+| 1    | 2   |
+| 1    | 3   |
+| 1    | 4   |
+| 1    | 5   |
+| 1    | 6   |
+| 2    | 3   |
+| 2    | 4   |
+| 2    | 7   |
+| 2    | 8   |
+| 3    | 5   |
+| 3    | 7   |
+| 3    | 9   |
+| 4    | 6   |
+| 4    | 8   |
+| 4    | 10  |
+| 5    | 6   |
+| 5    | 9   |
+| 5    | 12  |
+| 6    | 10  |
+| 6    | 12  |
+| 7    | 8   |
+| 7    | 9   |
+| 7    | 11  |
+| 8    | 10  |
+| 8    | 11  |
+| 9    | 11  |
+| 9    | 12  |
+| 10   | 11  |
+| 10   | 12  |
+| 11   | 12  |
+
+30 row(s)
+
 ### kind
 
 | id        | in-play |
@@ -996,9 +1147,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| adjacency | 30      |
 | deposit   | 34      |
 
-12 row(s)
+13 row(s)
 
 # Turn 5
 
@@ -1244,6 +1396,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 *(empty) 0 rows*
 
+### adjacency
+
+| from | to  |
+| ---- | --- |
+| 1    | 2   |
+| 1    | 3   |
+| 1    | 4   |
+| 1    | 5   |
+| 1    | 6   |
+| 2    | 3   |
+| 2    | 4   |
+| 2    | 7   |
+| 2    | 8   |
+| 3    | 5   |
+| 3    | 7   |
+| 3    | 9   |
+| 4    | 6   |
+| 4    | 8   |
+| 4    | 10  |
+| 5    | 6   |
+| 5    | 9   |
+| 5    | 12  |
+| 6    | 10  |
+| 6    | 12  |
+| 7    | 8   |
+| 7    | 9   |
+| 7    | 11  |
+| 8    | 10  |
+| 8    | 11  |
+| 9    | 11  |
+| 9    | 12  |
+| 10   | 11  |
+| 10   | 12  |
+| 11   | 12  |
+
+30 row(s)
+
 ### kind
 
 | id        | in-play |
@@ -1259,9 +1448,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| adjacency | 30      |
 | deposit   | 34      |
 
-12 row(s)
+13 row(s)
 
 # Turn 6
 
@@ -1508,6 +1698,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 *(empty) 0 rows*
 
+### adjacency
+
+| from | to  |
+| ---- | --- |
+| 1    | 2   |
+| 1    | 3   |
+| 1    | 4   |
+| 1    | 5   |
+| 1    | 6   |
+| 2    | 3   |
+| 2    | 4   |
+| 2    | 7   |
+| 2    | 8   |
+| 3    | 5   |
+| 3    | 7   |
+| 3    | 9   |
+| 4    | 6   |
+| 4    | 8   |
+| 4    | 10  |
+| 5    | 6   |
+| 5    | 9   |
+| 5    | 12  |
+| 6    | 10  |
+| 6    | 12  |
+| 7    | 8   |
+| 7    | 9   |
+| 7    | 11  |
+| 8    | 10  |
+| 8    | 11  |
+| 9    | 11  |
+| 9    | 12  |
+| 10   | 11  |
+| 10   | 12  |
+| 11   | 12  |
+
+30 row(s)
+
 ### kind
 
 | id        | in-play |
@@ -1523,9 +1750,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| adjacency | 30      |
 | deposit   | 34      |
 
-12 row(s)
+13 row(s)
 
 # Turn 7
 
@@ -1779,6 +2007,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 1 row(s)
 
+### adjacency
+
+| from | to  |
+| ---- | --- |
+| 1    | 2   |
+| 1    | 3   |
+| 1    | 4   |
+| 1    | 5   |
+| 1    | 6   |
+| 2    | 3   |
+| 2    | 4   |
+| 2    | 7   |
+| 2    | 8   |
+| 3    | 5   |
+| 3    | 7   |
+| 3    | 9   |
+| 4    | 6   |
+| 4    | 8   |
+| 4    | 10  |
+| 5    | 6   |
+| 5    | 9   |
+| 5    | 12  |
+| 6    | 10  |
+| 6    | 12  |
+| 7    | 8   |
+| 7    | 9   |
+| 7    | 11  |
+| 8    | 10  |
+| 8    | 11  |
+| 9    | 11  |
+| 9    | 12  |
+| 10   | 11  |
+| 10   | 12  |
+| 11   | 12  |
+
+30 row(s)
+
 ### kind
 
 | id        | in-play |
@@ -1794,9 +2059,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | ark       | 0       |
 | pioneer   | 1       |
 | territory | 12      |
+| adjacency | 30      |
 | deposit   | 34      |
 
-12 row(s)
+13 row(s)
 
 # Turn 8
 
@@ -2052,6 +2318,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 *(empty) 0 rows*
 
+### adjacency
+
+| from | to  |
+| ---- | --- |
+| 1    | 2   |
+| 1    | 3   |
+| 1    | 4   |
+| 1    | 5   |
+| 1    | 6   |
+| 2    | 3   |
+| 2    | 4   |
+| 2    | 7   |
+| 2    | 8   |
+| 3    | 5   |
+| 3    | 7   |
+| 3    | 9   |
+| 4    | 6   |
+| 4    | 8   |
+| 4    | 10  |
+| 5    | 6   |
+| 5    | 9   |
+| 5    | 12  |
+| 6    | 10  |
+| 6    | 12  |
+| 7    | 8   |
+| 7    | 9   |
+| 7    | 11  |
+| 8    | 10  |
+| 8    | 11  |
+| 9    | 11  |
+| 9    | 12  |
+| 10   | 11  |
+| 10   | 12  |
+| 11   | 12  |
+
+30 row(s)
+
 ### kind
 
 | id        | in-play |
@@ -2067,9 +2370,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| adjacency | 30      |
 | deposit   | 34      |
 
-12 row(s)
+13 row(s)
 
 # Turn 9
 
@@ -2316,6 +2620,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 1 row(s)
 
+### adjacency
+
+| from | to  |
+| ---- | --- |
+| 1    | 2   |
+| 1    | 3   |
+| 1    | 4   |
+| 1    | 5   |
+| 1    | 6   |
+| 2    | 3   |
+| 2    | 4   |
+| 2    | 7   |
+| 2    | 8   |
+| 3    | 5   |
+| 3    | 7   |
+| 3    | 9   |
+| 4    | 6   |
+| 4    | 8   |
+| 4    | 10  |
+| 5    | 6   |
+| 5    | 9   |
+| 5    | 12  |
+| 6    | 10  |
+| 6    | 12  |
+| 7    | 8   |
+| 7    | 9   |
+| 7    | 11  |
+| 8    | 10  |
+| 8    | 11  |
+| 9    | 11  |
+| 9    | 12  |
+| 10   | 11  |
+| 10   | 12  |
+| 11   | 12  |
+
+30 row(s)
+
 ### kind
 
 | id        | in-play |
@@ -2331,9 +2672,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | ark       | 1       |
 | pioneer   | 0       |
 | territory | 12      |
+| adjacency | 30      |
 | deposit   | 34      |
 
-12 row(s)
+13 row(s)
 
 # Turn 10
 
@@ -2576,6 +2918,43 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 1 row(s)
 
+### adjacency
+
+| from | to  |
+| ---- | --- |
+| 1    | 2   |
+| 1    | 3   |
+| 1    | 4   |
+| 1    | 5   |
+| 1    | 6   |
+| 2    | 3   |
+| 2    | 4   |
+| 2    | 7   |
+| 2    | 8   |
+| 3    | 5   |
+| 3    | 7   |
+| 3    | 9   |
+| 4    | 6   |
+| 4    | 8   |
+| 4    | 10  |
+| 5    | 6   |
+| 5    | 9   |
+| 5    | 12  |
+| 6    | 10  |
+| 6    | 12  |
+| 7    | 8   |
+| 7    | 9   |
+| 7    | 11  |
+| 8    | 10  |
+| 8    | 11  |
+| 9    | 11  |
+| 9    | 12  |
+| 10   | 11  |
+| 10   | 12  |
+| 11   | 12  |
+
+30 row(s)
+
 ### kind
 
 | id        | in-play |
@@ -2591,7 +2970,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | ark       | 1       |
 | pioneer   | 0       |
 | territory | 12      |
+| adjacency | 30      |
 | deposit   | 34      |
 
-12 row(s)
+13 row(s)
 

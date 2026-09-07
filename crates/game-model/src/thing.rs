@@ -65,6 +65,14 @@ pub enum Kind {
     /// `capacity` copies of one fact, since no territory-resource pair has two densities.
     /// This is one per resource, which is the shape `Territory::deposits` already had.
     Deposit,
+    /// **`P-334`: two places that share an edge, held by the thing that holds them.**
+    ///
+    /// It was a trait - `adjacency`, of *a thing that holds places* - and a description is a
+    /// flat map while an adjacency is a pair, which is the problem `density` had and the same
+    /// answer. `spec/logistics.md` puts it on the container rather than on either place: *a
+    /// thing says which of the things in it are next to which. That is a fact about the
+    /// container rather than about its contents.*
+    Adjacency,
 }
 
 impl Kind {
@@ -84,11 +92,12 @@ impl Kind {
             Kind::Territory => "territory",
             Kind::Orbit => "orbit",
             Kind::Deposit => "deposit",
+            Kind::Adjacency => "adjacency",
         }
     }
 
     /// Every kind, so that a reader can name one that is nowhere.
-    pub const ALL: [Kind; 14] = [
+    pub const ALL: [Kind; 15] = [
         Kind::Citizen,
         Kind::Garrison,
         Kind::Extractor,
@@ -103,6 +112,7 @@ impl Kind {
         Kind::Territory,
         Kind::Orbit,
         Kind::Deposit,
+        Kind::Adjacency,
     ];
 
     /// The kind a unit of this resource is.
@@ -174,6 +184,13 @@ pub enum Trait {
     Multiplier,
     /// Citizens working here this turn.
     Manned,
+    /// Which place an adjacency runs from. `P-334`.
+    From,
+    /// Which place an adjacency runs to.
+    ///
+    /// **The lower id is `from`**, so a symmetric fact is written once - thirty entries for a
+    /// tiny planet rather than sixty - and the same state is the same bytes.
+    To,
     /// How many extractors this deposit has room for.
     ///
     /// **`P-331` put it beside `density`.** It read *a territory, per kind*, which a

@@ -61,6 +61,42 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-60 - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind
+
+**to** spec · **status** open · **raised** 2026-09-07 · **source** building `P-334`'s data and
+finding the one place a recipe still reads as though adjacency were a property of a place
+
+**derived from** `adjacency` stops being a trait and becomes two, `from` and `to` -
+`releases/first-release.md`, `P-334`
+
+**`P-334` is built and the round trip is closed** - `{adjacency from:1 to:2} -> 1`, thirty
+entries for a tiny planet, the lower id first. One thing it left behind.
+
+**The `move` recipe distinguishes its destination by a phrase that named a trait.** The
+release's *Recipes* table: *require 1 place, joined to `$from` by an edge the unit crosses*.
+`prototypes/kinds` maps each such phrase to the trait it distinguishes by, and
+`every_qualifier_names_a_declared_trait` holds the Recipes table against the Traits table -
+which is how `control`, `force of nature` and `unpaid` were each caught being removed from
+under a recipe still using them. **It caught this one too**, on the first run after the
+promotion.
+
+**The reading proceeded under, and it is a reading rather than a rule.** The phrase now means
+*there is an adjacency whose `from` is `$from` and whose `to` is this place*, so **`to` is the
+trait that expresses it** and that is what the qualifier points at. The check is meaningful
+again and nothing is silently exempted.
+
+**Why it is still worth your attention.** The release's wording is unchanged and still reads as
+though adjacency were a property of a place - *joined to `$from`* is a sentence about the
+destination. **After `P-334` it is a sentence about a third thing**, and a reader deriving the
+recipe by hand has to know that to find what to look for. Whether the row should say so is
+yours; the code does not depend on the answer.
+
+**And one thing that is not a defect and is worth knowing.** `every_qualifier_names_a_declared_trait`
+is blind to a trait no recipe distinguishes by, and says so in its own words. `from` is now such
+a trait: nothing distinguishes by it, so the check would not notice if it disappeared. That is
+the check's stated limit rather than a new gap, and it is the reason the *Traits*-to-crate
+comparison exists beside it.
+
 ### C-59 - `R-7` asks for the command that fires each recipe, and the world's six share one
 
 **to** spec · **status** open · **raised** 2026-09-07 · **source** building `R-7` and finding

@@ -134,14 +134,15 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
 
     // Over every case, and how many cases there were. Twelve kinds and six biomes; a run
     // that compared two empty sets twice would satisfy everything above it.
-    // Fourteen since `P-322` added `deposit`, which is where `density` went when a
-    // description turned out to be unable to hold three of them - `C-46`. This count is what
-    // catches a kind arriving: the release declares it, the model does not have it, and the
-    // gate is red for every lane until the model follows. It did that twice now, for `store`
-    // and for `deposit`.
+    // Fifteen, and the last three all arrived the same way. `store` in `P-260`, `deposit` in
+    // `P-322` where `density` went, and `adjacency` in `P-334` where a pair went - each time
+    // because a description is a flat map and the thing being written was not one value.
+    // **This count is what catches a kind arriving**: the release declares it, the model does
+    // not have it, and the gate is red for every lane until the model follows. It has done
+    // that three times.
     assert_eq!(
-        compared, 20,
-        "fourteen kinds and six biomes were compared when this was written; {compared} were"
+        compared, 21,
+        "fifteen kinds and six biomes were compared when this was written; {compared} were"
     );
 }
 

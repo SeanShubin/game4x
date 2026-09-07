@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-14 kinds, 4 families, 18 traits, 16 recipes.
+15 kinds, 4 families, 19 traits, 16 recipes.
 
 ## citizen
 
@@ -265,6 +265,16 @@ what a territory's ground offers of one resource, and how richly.
 **In families** thing
 
 **Traits of it** `kind` (one of the kinds), `density` (a number), `total capacity` (a number)
+
+**In recipes** none name it.
+
+## adjacency
+
+two places that share an edge, held by the thing that holds them.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the kinds), `from` (a place), `to` (a place)
 
 **In recipes** none name it.
 

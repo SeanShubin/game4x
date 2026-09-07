@@ -10,6 +10,36 @@
 # `{description} -> quantity`, and the description is the kind and every stored trait.
 
 {game phase:play}
+  {adjacency from:1 to:2} -> 1
+  {adjacency from:1 to:3} -> 1
+  {adjacency from:1 to:4} -> 1
+  {adjacency from:1 to:5} -> 1
+  {adjacency from:1 to:6} -> 1
+  {adjacency from:10 to:11} -> 1
+  {adjacency from:10 to:12} -> 1
+  {adjacency from:11 to:12} -> 1
+  {adjacency from:2 to:3} -> 1
+  {adjacency from:2 to:4} -> 1
+  {adjacency from:2 to:7} -> 1
+  {adjacency from:2 to:8} -> 1
+  {adjacency from:3 to:5} -> 1
+  {adjacency from:3 to:7} -> 1
+  {adjacency from:3 to:9} -> 1
+  {adjacency from:4 to:10} -> 1
+  {adjacency from:4 to:6} -> 1
+  {adjacency from:4 to:8} -> 1
+  {adjacency from:5 to:12} -> 1
+  {adjacency from:5 to:6} -> 1
+  {adjacency from:5 to:9} -> 1
+  {adjacency from:6 to:10} -> 1
+  {adjacency from:6 to:12} -> 1
+  {adjacency from:7 to:11} -> 1
+  {adjacency from:7 to:8} -> 1
+  {adjacency from:7 to:9} -> 1
+  {adjacency from:8 to:10} -> 1
+  {adjacency from:8 to:11} -> 1
+  {adjacency from:9 to:11} -> 1
+  {adjacency from:9 to:12} -> 1
   {orbit id:10} -> 1
   {orbit id:11} -> 1
   {orbit id:12} -> 1

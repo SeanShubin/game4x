@@ -51,6 +51,7 @@ pub enum Kind {
     Territory,
     Orbit,
     Deposit,
+    Adjacency,
 }
 
 impl Kind {
@@ -70,6 +71,7 @@ impl Kind {
             Kind::Territory => "territory",
             Kind::Orbit => "orbit",
             Kind::Deposit => "deposit",
+            Kind::Adjacency => "adjacency",
         }
     }
 
@@ -92,6 +94,7 @@ impl Kind {
             ),
             Kind::Orbit => "a place above one territory, which holds units and nothing else",
             Kind::Deposit => "what a territory's ground offers of one resource, and how richly",
+            Kind::Adjacency => "two places that share an edge, held by the thing that holds them",
         }
     }
 
@@ -127,13 +130,13 @@ impl Kind {
             // ground *is* rather than something built on it, so there is no capacity for it.
             // The two places are `None` for the same reason: the table is about things in a
             // territory.
-            Kind::Territory | Kind::Orbit | Kind::Deposit => return None,
+            Kind::Territory | Kind::Orbit | Kind::Deposit | Kind::Adjacency => return None,
         })
     }
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 14] = [
+pub const KINDS: [Kind; 15] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -148,6 +151,7 @@ pub const KINDS: [Kind; 14] = [
     Kind::Territory,
     Kind::Orbit,
     Kind::Deposit,
+    Kind::Adjacency,
 ];
 
 /// In the order the bounds table lists them, which is not the Kinds order.
@@ -289,7 +293,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 18] = [
+pub const TRAITS: [TraitRow; 19] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -377,9 +381,15 @@ pub const TRAITS: [TraitRow; 18] = [
         // **`P-311`/`P-314`: adjacency is a fact the container holds, not one a place carries.**
         // It read *a place / which places it touches*, which put the relation on each end of
         // it - so the same edge was stated twice and could disagree with itself.
-        name: "adjacency",
-        of: "a thing that holds places",
-        values: "which of the places it holds are next to which, and by which kind of edge",
+        name: "from",
+        of: "an adjacency",
+        values: "a place",
+        held: Held::Stored,
+    },
+    TraitRow {
+        name: "to",
+        of: "an adjacency",
+        values: "a place",
         held: Held::Stored,
     },
     TraitRow {
@@ -689,10 +699,12 @@ use Owner::{Player, World};
 use Quantity::OfATrait;
 use Role::{Consume, Limit, Produce, Require};
 
-const JOINED_TO_FROM: [Qualifier; 1] = [by(
-    "joined to `$from` by an edge the unit crosses",
-    "adjacency",
-)];
+// **`P-334` turned `adjacency` from a trait into a kind, and this is what it left behind.**
+// The phrase distinguishes a place by there being an adjacency whose `from` is `$from` and
+// whose `to` is this place - so `to` is the trait that expresses it, and `adjacency` is no
+// longer a trait at all. **A reading rather than a rule**, filed as `C-60`: the release still
+// words it as though adjacency were a property of a place.
+const JOINED_TO_FROM: [Qualifier; 1] = [by("joined to `$from` by an edge the unit crosses", "to")];
 const FOR_FOOD: [Qualifier; 1] = [by("food", "resource")];
 const FOR_METAL: [Qualifier; 1] = [by("metal", "resource")];
 const OF_RESOURCE: [Qualifier; 1] = [by("`$resource`", "resource")];

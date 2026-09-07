@@ -249,6 +249,22 @@ pub fn tables(game: &Game) -> Vec<Table> {
     //
     // Counts are across the whole game, because *is there one anywhere* is what a missing
     // table leaves unanswerable. Where they sit is what the other tables are for.
+    // **`P-334`: an adjacency is a thing, so it is a relation like every other.** It was a
+    // trait of a territory and appeared in no artifact at all - stored, and invisible to
+    // everything Sean reads, which is `C-53`'s shape.
+    //
+    // **One row per edge, the lower id first.** Adjacency is symmetric, so writing both
+    // directions would be one fact twice and two rows that can disagree.
+    let mut adjacency = Table::new("adjacency", &["from", "to"]);
+    for (at, near) in game.adjacency.iter().enumerate() {
+        let from = game_model::TerritoryId::from_index(at);
+        for to in near {
+            if from.0 < to.0 {
+                adjacency.push(vec![from.0.to_string(), to.0.to_string()]);
+            }
+        }
+    }
+
     let mut kinds = Table::new("kind", &["id", "in-play"]);
     let total = |count: &dyn Fn(&game_model::Territory) -> u32| -> u32 {
         game.territories.iter().map(count).sum()
@@ -285,6 +301,7 @@ pub fn tables(game: &Game) -> Vec<Table> {
         kinds.push(vec![kind.name().to_string(), count.to_string()]);
     }
     kinds.push(vec!["territory".into(), game.territories.len().to_string()]);
+    kinds.push(vec!["adjacency".into(), adjacency.rows.len().to_string()]);
     // **A deposit per resource a territory's ground offers**, which is what the `deposit`
     // table above lists one row of. Counted the same way every other kind here is counted, so
     // adding the kind added no case - `spec/invariants.md`.
@@ -306,7 +323,8 @@ pub fn tables(game: &Game) -> Vec<Table> {
     ]);
 
     vec![
-        summary, territory, node, store, garrison, extractor, structure, labor, unit, kinds,
+        summary, territory, node, store, garrison, extractor, structure, labor, unit, adjacency,
+        kinds,
     ]
 }
 

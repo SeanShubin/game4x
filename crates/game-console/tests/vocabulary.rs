@@ -225,8 +225,8 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // that is the direction guarded here.
     assert_eq!(
         kinds.len(),
-        14,
-        "fourteen kinds; the release lists {kinds:?}"
+        15,
+        "fifteen kinds; the release lists {kinds:?}"
     );
     assert_eq!(
         families.len(),
@@ -235,8 +235,8 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     );
     assert_eq!(
         traits.len(),
-        18,
-        "eighteen traits; the release lists {:?}",
+        19,
+        "nineteen traits; the release lists {:?}",
         traits.keys().collect::<Vec<_>>()
     );
     let closed = traits

@@ -289,6 +289,8 @@ pub fn trait_name(name: Trait) -> &'static str {
         // printing `capacity` where the release declared `total capacity`, and there is one
         // name spelled one way now.
         Trait::TotalCapacity => "total-capacity",
+        Trait::From => "from",
+        Trait::To => "to",
     }
 }
 
@@ -412,6 +414,32 @@ pub fn tree(game: &Game) -> Entry {
                 .collect(),
         );
         children.push(above);
+    }
+
+    // **`P-334`: the game holds the adjacencies, beside its places rather than inside them.**
+    // `spec/logistics.md`: *a thing says which of the things in it are next to which. That is
+    // a fact about the container rather than about its contents.*
+    //
+    // **Written once.** Adjacency is symmetric - `Game.adjacency` says so in its own comment -
+    // so `{adjacency from:1 to:2}` and `{adjacency from:2 to:1}` are one fact, and the lower
+    // id is `from`. Thirty entries for a tiny planet rather than sixty, and the same state is
+    // the same bytes.
+    //
+    // **Orbital adjacency is not here**, because the release derives it: *an orbit is next to
+    // its territory and to the orbits above that territory's neighbours, so stating it would
+    // be a second copy that can disagree.*
+    for (at, near) in game.adjacency.iter().enumerate() {
+        let from = crate::TerritoryId::from_index(at);
+        for to in near {
+            if from.0 >= to.0 {
+                continue;
+            }
+            children.push(Entry::leaf(
+                Description::of(Kind::Adjacency)
+                    .with("from", from)
+                    .with("to", *to),
+            ));
+        }
     }
 
     root.contents = group(children);

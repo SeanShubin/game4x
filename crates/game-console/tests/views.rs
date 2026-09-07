@@ -120,8 +120,8 @@ fn the_normalized_view_has_no_nested_cells() {
         cells.iter().map(|(table, _, _)| table).collect();
     assert_eq!(
         tables.len(),
-        10,
-        "ten tables in state.md; {} were read ({tables:?})",
+        11,
+        "eleven tables in state.md; {} were read ({tables:?})",
         tables.len()
     );
 }
