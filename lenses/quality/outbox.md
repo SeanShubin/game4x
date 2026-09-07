@@ -198,6 +198,50 @@ lens nor the specification lane should.
 
 
 
+### Q-67 - One notation, two readers, and one of them never learned the comment rule
+
+**to** code · **status** open · **raised** 2026-09-06 · **source**
+[one notation, two readers](2026-09-06-one-notation-two-readers.md), from Sean's brief on
+duplication and parsing isolation
+
+**`spec/console.md:21`, unqualified, in the section covering the language:** *A `#` begins a
+comment. The rest of the line is ignored.* `command_language::tokenize` honours it anywhere in a
+line. `crates/game-console/src/state.rs:119` skips a line only when it **starts with** `#`, so a
+trailing comment is a parse error.
+
+**Demonstrated, both readers over the same text:**
+
+| Text                                     | Data reader                            | Tokenizer                          |
+| ---------------------------------------- | -------------------------------------- | ---------------------------------- |
+| `{game phase:play}`                      | accept                                 | `["{", "game", "phase:play", "}"]` |
+| `{game phase:play} # a trailing comment` | **reject** - *follows the description* | `["{", "game", "phase:play", "}"]` |
+
+**Why it exists, which is the part worth having.** `S-59` made every command
+`{name field:value ...}` - the notation data files already used. **Before it there were two
+notations and two readers, which was right; after it there is one notation and two readers.** Nobody
+wrote a divergence: **one reader simply never learned a rule the other one has**, and each kept
+passing its own tests.
+
+**The parsers themselves are not duplicates and must not be merged.** `parse_line` is
+grammar-directed; `state::read` is shape-only and is written not to resolve kinds. **What is written
+twice is the lexical layer** - braces as their own tokens, splitting a field on the first `:`,
+whitespace, and comments.
+
+**`command_language::tokenize` is the piece that already exists**: public, grammar-free, brace-aware,
+comment-stripping, and every token carries a line and column - which is what `state.rs` needs for
+indentation depth. `game-console` already depends on `command-language`, so using it adds no
+dependency and no coupling.
+
+**Whether.** Worth fixing, and the fix is the remedy rather than a patch: one implementation of the
+lexical rules cannot diverge from itself. **If instead the rule is meant to be line-start-only in a
+data file, that is a change to `spec/console.md`** and belongs in the queue - but it cannot stay as
+it is, because the document says one thing and the two readers do different ones.
+
+**And the isolation Sean asked about is sound**, checked three ways and recorded in the report:
+`command-language` has no dependencies, names no game type outside its own test fixtures, and is
+handed its grammar by `game-console` one layer up.
+
+
 ---
 
 ## Resolved

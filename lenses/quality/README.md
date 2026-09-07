@@ -373,6 +373,10 @@ Newest first.
   - 2026-09-06. Requested by the code lane. The `Q-47` check cannot see the spelling `Q-47`
     was filed about, `phase` declares no values so the forbidden count is eighteen, and two
     corrections to this lens's own open items.
+- [One notation, two readers](2026-09-06-one-notation-two-readers.md)
+  - 2026-09-06. Sean asking about duplication and parsing isolation. The isolation is
+    clean; the tokenizer is written twice, and the two readers already disagree about
+    where a comment may start.
 - [Review of the map form](2026-09-06-review-of-the-map-form.md)
   - 2026-09-06. `S-47` landed and `Q-64` closed - the forbidden vocabulary went from
     nineteen words to two. One false reason sitting next to the assertion it explains, and
