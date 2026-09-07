@@ -24,6 +24,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-65** - `524ff31` P-347 and P-348 from the code lane, and C-65 corrects my own ordering · still open in `crates/outbox.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
+- **Q-70** - `85adfc0` Q-70: one rule about what a name is, and now one implementation of it · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
