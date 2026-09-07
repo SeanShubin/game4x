@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-324** - The rule that keeps a lane moving is written for one lane, and the rule binding all of them says stop · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
