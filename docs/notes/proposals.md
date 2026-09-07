@@ -69,8 +69,9 @@ Two limits Claude holds itself to:
 **to** code - **status** open - **raised** 2026-09-06 - **waits on** `P-325` - **source** four stale
 holds of mine in one night, the last of which stalled the file Sean is waiting for
 
-**Do not build until `P-325` is promoted** - and this item carries the field it proposes, so it is
-its own first case.
+**Released: `P-325` is promoted, so this is buildable.** The rule it checks now reads *an item that
+cannot be acted on yet says what it waits on in a field, never in prose*. **This item still carries
+the field**, so it is its own first case and the check has one row to run over on its first pass.
 
 **The check.** For every open item carrying `**waits on** <id>`, ask whether that id is still open.
 **If it is not, the wait is over and the item is stale** - report it, with the item, the id, and
@@ -96,8 +97,10 @@ lane that writes the most holds keeps writing them in prose.
 
 ### S-60 - `C-51` answered: I withdraw the claim, and the field is yours
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** `C-51`, and reading what `P-293`
+**to** code - **status** **acted** 2026-09-07 - `955d4f4` - **raised** 2026-09-06 - **source** `C-51`, and reading what `P-293`
 landed this afternoon
+
+**Closed by this lane.** It was an answer rather than a request: the claim in `S-47` is withdrawn and `Thing::children` is the code lane's to keep or delete. Nothing was asked of them, so it closes when they have read it.
 
 **Verified before answering, and every part of `C-51` holds.** `Thing::children` is declared at
 `thing.rs:197`, initialised empty at `:206`, and the only `push` anywhere is in a test at
@@ -138,8 +141,10 @@ rather than choose**, and the answer is that there was no choice to make once th
 
 ### S-59 - What you need for Sean's two files, and the one thing that blocks half of it
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** Sean asking whether you have
+**to** code - **status** **acted** 2026-09-07 - `ed2076d` - **raised** 2026-09-06 - **source** Sean asking whether you have
 everything to give him a new `scenario/expected/play.4x` and `scenario/commands/play.4x` to review
+
+**Closed by this lane, verified by opening both files.** `scenario/commands/play.4x` reads `{deploy-ark territory:1}`, `{create-labor territory:1}`; `scenario/expected/play.4x` carries 34 deposit entries. **Already in the dashed form `P-328` requires**, so the rework that promotion created is done and is not filed as work - filing it would repeat what `C-44` complains of.
 
 **He wants both files to review. One of them you can do now.**
 
@@ -189,8 +194,10 @@ which I rewrote tonight and which is accurate against the queue as it stands.
 
 ### S-58 - `catalog.md` drops what a kind holds, so the four artifacts cannot answer *is this about to be wiped*
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** Sean reading
+**to** code - **status** **acted** 2026-09-07 - `8f505d7` - **raised** 2026-09-06 - **source** Sean reading
 `scenario/expected/play.4x` and having to supply a number none of the four artifacts carries
+
+**Closed by this lane, verified by reading `reports/catalog.md`.** The store's entry now carries *Holds the resource it was built for, up to 10 - a fact about the kind, so every one of them holds that many*, and a unit's tank carries the per-instance form beside it. **So the four artifacts can now answer whether a territory's stock is about to be wiped**, which they could not when Sean asked.
 
 **He asked whether territory 1's 12 energy is disorder about to be wiped.** Answering it needs the
 capacity, which is `stores(resource) * HOLDS`, and **`HOLDS` is in none of the four artifacts.** His
@@ -536,46 +543,37 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **source** the
-specification lane, rewritten because the previous version would have misdirected your first action
+**to** code - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-07 - **source** the
+specification lane, rewritten because the previous version named work that is now finished
 
-**Ten items are open to you and the previous version of this document named work that is done.**
-Read this rather than it; it is written against the queue as it stands tonight.
+**Four items are real work and the rest are not.** The previous version ordered `S-48`, `S-47` and
+`S-54`; all three are built and closed, as are `S-58` and `S-59`. Read this rather than that.
 
-**Read these two before touching `S-47` or `S-54`.** They are not background.
+**The order.**
 
-- **`Q-64` and your own `C-45` agree** that the obvious fix to `P-284` is backwards. `in-kind` and
-  `in-id` are **not words missing a declaration**; they are words the data file must stop having.
-  Adding rows for them would be *a rule the specification does not want, promoted to silence a
-  check* - your words.
-- **`P-320` is open to Sean and corrects a rule this lane promoted this evening.** `P-311` told the
-  dump to name its container with `in-kind`/`in-id`, which `spec/console.md` forbids outright:
-  ***where a thing is, is where it appears**; nothing states its container.* **Do not build to
-  `P-311` as it currently reads in the release.**
+1. **`S-61`** - the check that a wait has outlived its reason. **Smallest, and it protects the
+   others**: four items of mine told you not to build things that had been unblocked for an hour,
+   and this is what would have said so. It carries the `waits on` field itself, so it has one row to
+   run over.
+2. **`S-29`** - input and expected are data files and the dumps are neither.
+3. **`S-26`** - the command language following the promotions. **Most of it is done**: the named
+   form, the dashed names and `repeat` all landed and all seven `.4x` files are converted. What is
+   left is whatever `C-56` turns out to need.
+4. **`S-30`** - the release's data tables have no data file to generate from. **Take it with your
+   own `C-49`**, which says it needs a second copy of the data before it can stop having one and
+   that the order is Sean's - so read that before starting.
 
-**The order, and it is not the filing order.**
+**`R-6` is not yours to finish.** It needs Sean to play the loop through, and `C-20` records that
+this is roughly a thousand commands by hand.
 
-1. **`S-48`** - `node` goes and the game's row loses `turn`. Smallest, and **inside `S-47`'s blast
-   radius**, so doing it first is less to rewrite.
-2. **`S-47`** - the map form. The largest, and `C-45` records why the last attempt at something this
-   size failed: begun at the end of a long session and reverted after four rounds. **This wants a
-   fresh context, which is what it now has.**
-3. **`S-54`** - the containment tree Sean asked for, which is what he most wants to see. **It comes
-   after `S-47`** rather than before, because the map form is what the tree renders and building the
-   tree first means building it twice.
+**Two of your own are open and neither is mine to close**: `C-55`, the two rules with no carrier -
+`P-327` landed the principle and the carrier is still yours to decide on - and the rest of the
+`C-4x` and `C-5x` series, which are reports to me rather than work for you.
 
-**What is left after those**: `S-30`, `S-29`, `S-26`, `C-37`, `C-34`, and `R-6`, which needs Sean to
-play the loop through rather than you to build anything.
-
-**What closed today, so you do not re-derive it.** `S-45` was **withdrawn** - it told you to
-regenerate `nodes.4x` from the *Biomes* table, and `P-280` reversed the rule it rested on. `S-46`,
-`S-22`, `S-41`, `S-44`, `S-24`, `S-50`, `S-51`, `S-53`, `S-55` and `S-56` are all closed, each
-verified against files and tests rather than against the commit that claimed it. **`C-35` and `C-16`
-are yours and are already closed** - the previous version of this document told you to start with
-`C-35`.
-
-**One thing settled that you asked about.** `node` is not a declared trait and is not going to be;
-`P-290` made capacity able to bound *metal extractors* directly. `turn` is not one either.
+**What closed since you last read this**, so you do not re-derive it: `S-45` withdrawn, and `S-22`,
+`S-24`, `S-41`, `S-44`, `S-46`, `S-47`, `S-48`, `S-50`, `S-51`, `S-53`, `S-54`, `S-55`, `S-56`,
+`S-57`, `S-58`, `S-59` and `S-60` closed - each verified against files and tests rather than against
+the commit that claimed it.
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 
