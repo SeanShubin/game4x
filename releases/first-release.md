@@ -46,8 +46,7 @@ Every territory has total capacity for at least one food extractor.
 4. Build extractors for metal and energy
 5. Produce pioneers and spread across the planet by land
 6. Build a Yard
-7. Produce an Ark
-8. Launch the Ark into orbit
+7. Build and launch an Ark, which is one act
 
 ## Kinds
 
@@ -154,15 +153,15 @@ use it immediately, store it, or lose it.**
 
 ## Units and structures
 
-| Thing         | Force | Fuel | A move | Upkeep          | Costs to produce               | Binding | Crosses              | Requires | Readies |
-| ------------- | ----- | ---- | ------ | --------------- | ------------------------------ | ------- | -------------------- | -------- | ------- |
-| **citizen**   | 1     |      |        | 1 food per turn |                                |         |                      |          | yes     |
-| **garrison**  | 0     |      |        |                 | 1 labor, 1 metal               | 1       |                      |          |         |
-| **extractor** |       |      |        |                 | 1 labor, 1 metal               | 1       |                      |          | yes     |
-| **yard**      |       |      |        |                 | 1 labor, 15 metal              | 15      |                      |          |         |
-| **store**     |       |      |        |                 | 1 labor, 1 metal               | 1       |                      |          |         |
-| **ark**       | 2     | 2    | 1 fuel |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border, ascent | a Yard   | yes     |
-| **pioneer**   | 2     | 2    | 1 fuel |                 | 3 metal, 6 energy, 2 citizens  | 3       | border               |          | yes     |
+| Thing         | Force | Fuel | A move | Upkeep          | Costs to produce               | Binding | Crosses      | Requires | Readies |
+| ------------- | ----- | ---- | ------ | --------------- | ------------------------------ | ------- | ------------ | -------- | ------- |
+| **citizen**   | 1     |      |        | 1 food per turn |                                |         |              |          | yes     |
+| **garrison**  | 0     |      |        |                 | 1 labor, 1 metal               | 1       |              |          |         |
+| **extractor** |       |      |        |                 | 1 labor, 1 metal               | 1       |              |          | yes     |
+| **yard**      |       |      |        |                 | 1 labor, 15 metal              | 15      |              |          |         |
+| **store**     |       |      |        |                 | 1 labor, 1 metal               | 1       |              |          |         |
+| **ark**       | 2     | 2    | 1 fuel |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border | a Yard   | yes     |
+| **pioneer**   | 2     | 2    | 1 fuel |                 | 3 metal, 6 energy, 2 citizens  | 3       | border       |          | yes     |
 
 An Ark can invade land from orbit. Nothing outside this table
 readies.

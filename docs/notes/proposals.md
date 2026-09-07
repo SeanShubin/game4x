@@ -60,46 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-344 - What one act leaves stale: the Ark's `ascent`, and two steps that are one
-
-**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** the
-cleanup `P-341` promised - **asks** approval - **shape** an instruction - **into**
-`releases/first-release.md` -> the playthrough list, and *Units and structures*
-
-**`P-345` is settled and `orbit border` survives it**, which I had wrong twice. `P-71` defines the
-three edge kinds and I found it only on the second search: **`border` between territories, `orbit
-border` between *orbits*, `ascent` between the ground and the orbit above it.** So `orbit border` was
-never about leaving orbit, and the Ark that arrives still uses it to reach the orbit above its
-landing zone - which is your *move about in orbit, choose a landing zone*.
-
-**`ascent` is what dies.** `P-71` describes the Ark's life as *produced on the ground, ascends once,
-moves in orbit to choose a site*. Under one act **no Ark is produced on the ground**, so nothing
-ascends. One cell:
-
-| Thing   | Crosses now            | Crosses after  |
-| ------- | ---------------------- | -------------- |
-| **ark** | `orbit border, ascent` | `orbit border` |
-
-**And the playthrough says the old life in two steps.** The release opens with a numbered account
-that still ends:
-
-7\. Produce an Ark
-8\. Launch the Ark into orbit
-
-**Both are wrong now** - producing and launching are one act, and launching puts nothing into orbit.
-They become one step:
-
-7\. Build and launch an Ark, which is one act
-
-**How to tell it was carried out**: no line of `releases/first-release.md` contains `ascent`; the
-ark's Crosses cell reads exactly `orbit border`; the numbered list ends at 7 and no item mentions
-launching into orbit.
-
-**One thing worth your knowing rather than deciding.** Removing that line from `spec/orbit.md`
-**partly reverses `P-163`**, which landed *an orbit sits beside its territory, and launching is a
-move*. The first half stands and is what makes orbital movement work at all; only *launching is a
-move* goes. **The ledger keeps `P-163` as landed**, because it did land - this is a later decision,
-not a correction of the record.
+**Nothing.** [decisions.md](decisions.md) is empty too.
 
 ## Addressed to other perspectives
 
@@ -2325,6 +2286,7 @@ work the release exists to order.
 | P-342, `produce ark` becomes `launch ark`, and stops producing anything                                                      | `releases/first-release.md` -> Recipes                                                                                                                                                                   |            |
 | P-343, the `Expires` column becomes `Lasts`, three kinds widen, and `age` fires before `spoil`                               | `spec/resources.md` -> The list; `releases/first-release.md` -> Traits, Recipes                                                                                                                          |            |
 | P-345, `spec/orbit.md` said launching is a move and `P-341` said it is a Yard's act                                          | `spec/orbit.md` -> Crossing between layers. Sean: the line is removed - determining costs is the domain of individual recipes, not invariants. Partly reverses `P-163`; the adjacency half of it stands. |            |
+| P-344, one act leaves the Ark no `ascent`, and the playthrough's last two steps are one                                      | `releases/first-release.md` -> the playthrough list, *Units and structures*. Partly reverses `P-71`, whose third edge kind now has no user; `border` and `orbit border` stand.                           |            |
 
 ## Rejected
 
