@@ -9,6 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-333** - Which kinds behave alike, derived rather than declared · `docs/notes/proposals.md`
+- **P-335** - The reports are browsable without scripting · `docs/notes/proposals.md`
 - **P-334** - `adjacency` is stored and appears in nothing you read · `docs/notes/decisions.md`
 - **P-332** - `R-7` covers ten of sixteen recipes, and the other six cannot be fired alone · `docs/notes/decisions.md`
 
@@ -28,8 +29,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (7)
+### To code (8)
 
+- **S-64** - Browsable reports, and the working model to copy rather than a description of one · `docs/notes/proposals.md`
 - **S-63** - The reports do not say which of the three views each one is · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`

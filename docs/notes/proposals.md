@@ -96,7 +96,85 @@ a proof.**
 **Both halves already exist as data.** `catalog.md` already prints *Traits of it* and *In recipes*
 per kind; what it does not do is treat the pair as a key and group by it.
 
+### P-335 - The reports are browsable without scripting
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `releases/first-release.md` -> Capabilities, as `R-9`
+
+**Taken from `vote/generated/code-structure`, which solves this already**, and narrowed to what a
+reader who arrives to **vet** needs rather than one who arrives with a question.
+
+> ### R-9 - I can browse the reports without a script running
+>
+> **to** code - **status** open
+>
+> - **In** - `docs/process.md`, *presentations are generated from data*, and *I insist that the AI
+>   make its work verifiable to a human*
+> - **Vetted when** - every reference in a report is a link I can follow to the thing it names;
+>   every generated view has a **diffable sibling** beside it, as `graph.html` has `graph.txt`; and
+>   **no page needs JavaScript to be read** - a view that filters is a page that was generated, so
+>   the filter is a URL rather than a click
+
+**Why no script, when I was going to propose a hundred lines of one.** `code-structure` replaces
+sorting and faceting with **more pages**, and the pages are better: inspectable in `view-source`,
+diffable, linkable, immune to a script breaking, and a filtered view is something you can paste into
+a proposal. **A facet is a URL, not a click.**
+
+**Why the links are free here rather than clever.** `spec/console.md` says a field that refers to a
+thing is named for that thing's kind - so the generator **knows** `territory:1` is a reference and
+does not have to guess. `P-323` bought this without either of us noticing it would.
+
+**What I am deliberately not copying.** `code-structure` has 133 pages, which suits arriving with a
+question. **You arrive at these to vet**, and needing to know you have seen everything is the
+opposite motion - so the report count stays small and a filtered page is generated only where a
+population is genuinely unreadable. Today that is `turns.html` at a hundred tables and nothing else.
+
+**On graphviz, in your words: fine if we need it, and not if we can do better ourselves.** I think we
+need it **once** and should not make a habit of it. `code-structure`'s subject is a graph;
+almost nothing here is. **Containment is a tree and `<details>` beats a drawing for a tree** -
+collapsible, searchable, diffable. Recipes are a table.
+
+**The exception is adjacency**, which is the one thing in the game that is genuinely graph-shaped and
+which you currently cannot see anywhere. **It is downstream of `P-334`**: if adjacency stays out of
+the data file, a drawing is the only way it would ever be visible, which argues for putting it in the
+file rather than for drawing it. **So this capability does not ask for a drawing**, and if `P-334`
+goes the other way I will file one then.
+
 ## Addressed to other perspectives
+
+### S-64 - Browsable reports, and the working model to copy rather than a description of one
+
+**to** code - **status** open - **raised** 2026-09-07 - **waits on** `P-335` - **source** Sean
+pointing at `vote/generated/code-structure` after asking what the status of the HTML reports is
+
+**Do not build until `P-335` is promoted.** The shape below is his and is recorded so it arrives as
+one item.
+
+**Read `D:/keep/github/sean/vote/generated/code-structure/browse/` rather than this description.** It
+is Kotlin and graphviz and neither of those transfers; **the shape does.** A page there is
+`reset.css`, one stylesheet, a breadcrumb of plain links, inline SVG, and a table. No script.
+
+**Four things to take.**
+
+1. **Every reference is a link.** `spec/console.md` says a field naming a kind is a reference to one,
+   so this is generated rather than inferred. **A page per identified thing** - twelve territories -
+   rather than fragments, so each is something Sean can point at.
+2. **A diffable sibling for every view.** `graph.html` has `graph.txt` there;
+   `containment.html` has no `containment.md` here, and `S-54` argued for one and did not get it.
+   **This is that argument settled by his own precedent rather than by me repeating it.**
+3. **Two stylesheets, shared** - a reset and one file. No tokens invented.
+4. **No JavaScript anywhere.** A filtered view is a generated page. **Only where a population is
+   unreadable**, which today is `turns.html` at a hundred tables.
+
+**And `S-63` is the half of this that does not wait**: the index does not say which of the three
+views each report is, and labelling what exists is what made the missing physical view visible.
+
+**On graphviz.** `dot` 14.1.2 is installed and nothing here uses it. **Sean's rule: fine if we need
+it, and not if we can do better ourselves.** Under his dependency test it is an operation rather
+than a home - it never appears in his types - so it needs no boundary crate. **But do not reach for
+it yet**: the only genuinely graph-shaped thing in the game is adjacency, and whether that is drawn
+at all depends on `P-334`. **A tree is better served by `<details>` than by a drawing**, and that is
+most of what is here.
 
 ### S-63 - The reports do not say which of the three views each one is
 
