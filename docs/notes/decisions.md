@@ -21,6 +21,40 @@ here without first becoming a proposal.
 
 ## Open
 
+### P-349 - Every move is constrained by adjacency, and `spec/` is the one place that does not say so
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** recovered, from your own sentence -
+**asks** a decision - **into** `spec/units.md` -> a bullet, or `spec/planet.md`
+
+**You said it today and it never got written.** `docs/notes/spec-backlog.md:23` carries *moves have
+an adjacency constraint*, said while removing the cost line from `spec/orbit.md`. The removal
+landed; the constraint did not.
+
+**Everything else already enforces it.** The release's `move` requires `$to` to be *joined to
+`$from` by an edge the unit crosses*; `crates/game-model` rejects a landing on ground an Ark is not
+above. **`spec/` states the adjacency facts and never says a move is bound by them** - that two
+territories sharing an edge are adjacent, and that an orbit is next to the territory below it, and
+then nothing that reads either.
+
+**This is how the quality lens found it, and its own conclusion was too weak.** Re-deriving `S-67`
+it said the specification *leaves landing undecided*. Landing is not undecided and is not a move:
+`deploy ark` is its own recipe and takes the ark from *the orbit above `$where`*, which is what
+fixes where an Ark lands. **What is undecided is the general rule**, which is why this is one item
+and not the one they were looking at.
+
+**Why it is a decision and not words to approve.** Your sentence says *adjacency*; the release says
+adjacency **and** that the unit crosses that edge, which is strictly more. I cannot tell which you
+meant, and they differ for any unit that cannot cross some edges.
+
+- **Adjacency alone** - the invariant says places must be adjacent, and what a given unit can cross
+  stays a recipe's business. Consistent with removing the cost line for the same reason
+- **Adjacency and crossability** - the invariant carries both, and the release's qualifier is
+  reading it rather than adding to it
+
+**Nothing is blocked and nothing changes in the game either way** - the code already behaves as the
+release says. What it buys is that the rule is in the place that outranks both, so the next lane
+that needs it reads `spec/` rather than a table.
+
 ### P-348 - `R-8` is built and no two kinds behave alike, which may be the answer or the defect
 
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** the code lane's `C-64` - **asks**

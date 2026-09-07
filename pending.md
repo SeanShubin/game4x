@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-349** - Every move is constrained by adjacency, and `spec/` is the one place that does not say so · `docs/notes/decisions.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`
 - **P-346** - Three statements fix what a move costs, and only one of them is a mechanism · `docs/notes/decisions.md`
@@ -20,7 +21,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-67** - `0603443` Q-69 closed and Q-70 filed, and S-67's marker on the sweep · still open in `docs/notes/proposals.md`
 - **S-49** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
 - **S-26** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
 - **P-346** - `0361e25` Q-68 acted by P-346, and their remedy is better than the one my item implied · still open in `docs/notes/decisions.md`
@@ -43,14 +43,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **Q-70** - One rule about what a name is, three implementations, and one of them differs · `lenses/quality/outbox.md`
-
-### To quality (1)
-
-- **S-67** - Your 2026-09-06 sweep quotes a line that is no longer in the specification · `docs/notes/proposals.md`
-
-### To research (1)
-
-- **S-65** - `X-2`'s hole is live again, and `P-338` is what tracks it now · `docs/notes/proposals.md`
 
 ### To spec (24)
 
