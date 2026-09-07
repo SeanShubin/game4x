@@ -199,8 +199,10 @@ until now nothing said it should be.
 
 ### S-54 - The containment tree Sean asked to see, and the scenario it is generated from
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** Sean, wanting to see the
+**to** code - **status** **acted** 2026-09-06 - **raised** 2026-09-06 - **source** Sean, wanting to see the
 containers and capacities and how everything fits together
+
+**Closed by this lane, verified by opening the artifact.** `reports/containment.html` exists with 30 `<details>` nodes and is linked from `reports/index.html`. **One thing differs from what this item asked**: there is no `containment.md`, and this item argued the markdown earns its place by diffing, which the HTML cannot do. Asked rather than assumed - `C-47` may explain it.
 
 **Released 2026-09-06: `P-311` is promoted and this is buildable.** It asked how a container is
 referenced; the answer is `in-kind` and `in-id`, and the reason it stopped being a judgement call is
@@ -414,8 +416,10 @@ are yours and are already closed** - the previous version of this document told 
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 
-**to** code - **status** open - **cited** `8b772c2`, `3f0e634` - **raised** 2026-09-06 - **source** `P-288` and `P-290`, promoted
+**to** code - **status** **acted** 2026-09-06 - **cited** `8b772c2`, `3f0e634` - **raised** 2026-09-06 - **source** `P-288` and `P-290`, promoted
 together
+
+**Closed by this lane, verified against the tree.** `node` has 0 occurrences in `releases/first-release.md`, and the four left in `crates/game-model/src/territory.rs` are comments recording what `P-290` removed. The game's row no longer carries `turn`.
 
 **`P-290`: capacity may be per kind carrying a particular value of a trait.** So a territory bounds
 *metal extractors* directly, and **`node` has nothing left to do** - it carries a resource and a
@@ -438,8 +442,10 @@ is less to rewrite than after.
 
 ### S-47 - The map form, and the check that keeps it honest
 
-**to** code - **status** open - **cited** `f2040fa`, `e0ad489` - **raised** 2026-09-06 - **source** `P-283` through `P-287`, promoted
+**to** code - **status** **acted** 2026-09-06 - **cited** `f2040fa`, `e0ad489` - **raised** 2026-09-06 - **source** `P-283` through `P-287`, promoted
 together
+
+**Closed by this lane, verified against the tree rather than from `C-50`.** `scenario/expected/play.4x` is in the map form - `{game phase:play}` with `{orbit id:10} -> 1` beneath it - and the file's own header states the rule it is written to. `node` appears nowhere in the release, and `turn` is gone from the game's description because a description is a kind and its stored traits.
 
 **Four promotions change what a data file says and one changes what a promotion may do.**
 
