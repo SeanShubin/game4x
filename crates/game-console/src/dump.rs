@@ -888,6 +888,33 @@ fn inline(text: &str) -> String {
 /// So the page marks them apart from the generated views rather than listing them together.
 /// Everything under *Reports* is derived and regenerated; everything under *The scenario* is
 /// a source.
+/// Which of the views a report is, read from the report rather than declared.
+///
+/// **`S-63`.** Sean asked what the status of the reports was and had to be told, because
+/// nothing on the page he browses from says which of them is which. `docs/process.md` names
+/// the views he expects - *data is presented to me in both the relational and the physical
+/// model* - and a tree is the third thing the reports actually contain.
+///
+/// **Derived rather than declared, and that is the whole of it.** A table of names against
+/// shapes would be a second copy of what the reports are, and the second copy is what rots -
+/// `S-63` itself counted them rather than remembering, which is the same act one level up. A
+/// page that stopped being a table would keep its label under a declaration and lose it here.
+///
+/// **The order of the arms is the rule.** A tree is checked first because a page can hold
+/// both, and `containment.html` will grow a table the day capacity gets one - at which point
+/// it is still a tree with a table in it rather than a table.
+pub fn view_of(text: &str) -> &'static str {
+    if text.contains("<details") {
+        "a tree"
+    } else if text.contains("<table") || text.contains("\n| ") {
+        "relational"
+    } else if text.contains("<a href") && !text.contains("<h2>") {
+        "the page you browse from"
+    } else {
+        "prose"
+    }
+}
+
 pub fn index(generated: &[(&str, String)]) -> String {
     let described = |name: &str| -> &str {
         match name {
@@ -934,7 +961,8 @@ pub fn index(generated: &[(&str, String)]) -> String {
          ul { list-style: none; padding: 0 }
          li { margin: .5rem 0 }
          a { font-weight: 600 }
-         .what { opacity: .75 }
+                  .what { opacity: .75 }
+         .view { font-size: .8rem; padding: 0 .35rem; border-radius: .2rem; background: rgba(127,127,127,.18) }
          .note { opacity: .75; font-size: .9rem }
          .quiet { opacity: .55; font-size: .85rem }
          .quiet a { font-weight: 400 }
@@ -979,6 +1007,18 @@ pub fn index(generated: &[(&str, String)]) -> String {
     );
 
     out.push_str("<h2>Reports</h2>\n");
+    // **`S-63`: which view each report is, and which view is missing.** The label under each
+    // name is read from the report itself; the sentence below is the one thing a label cannot
+    // say, because an absence has no page to be read from.
+    out.push_str(
+        "<p class=\"note\"><strong>Two of the three views he asks for are here.</strong> \
+         `docs/process.md`: <em>data is presented to me in both the relational and the \
+         physical model</em>, and <em>the console allows both to be inspected and \
+         filtered</em>. Every report below says which it is, read from the report rather \
+         than from a list beside it. <strong>There is no physical view at all</strong> - the \
+         game's state is plain Rust rather than an ECS, so what a physical view of it should \
+         show is a decision rather than a build.</p>\n",
+    );
     out.push_str(
         "<p class=\"note\">Generated. Every one is derived from the scenario or from the \
          release, and regenerated rather than written. <strong>The page is the link</strong>; \
@@ -993,12 +1033,17 @@ pub fn index(generated: &[(&str, String)]) -> String {
     // Paired by stem rather than by a second list, so a report added to `generated` appears
     // here with both of its links and nothing else is edited. The pairing is asserted: a
     // markdown report with no page is a panic rather than a bare name on the page.
+    // **`RENDERED_ELSEWHERE` rather than a list**, so a report that moves between crates
+    // moves in one place. `recipes.md` was named here and in `generated` after `R-7` moved it,
+    // and the index listed it twice - which I made a test accept by raising a count instead of
+    // asking why it had moved. The duplicate is what `S-63`'s labels made visible.
     let mut names: Vec<&str> = generated.iter().map(|(name, _)| *name).collect();
-    names.push("catalog.md");
-    names.push("catalog.html");
-    names.push("recipes.md");
-    names.push("recipes.html");
+    for elsewhere in RENDERED_ELSEWHERE {
+        names.push(elsewhere);
+        names.push(html_name(elsewhere));
+    }
     names.sort_unstable();
+    names.dedup();
 
     // **Every page, paired with its markdown where it has one.** It used to walk the
     // markdown and demand a page for each, which is the direction that was failing when
@@ -1024,8 +1069,15 @@ pub fn index(generated: &[(&str, String)]) -> String {
                  readable)</span>",
             )
         };
+        let content = generated
+            .iter()
+            .find(|(named, _)| named == page)
+            .map(|(_, text)| text.as_str())
+            .unwrap_or("");
         out.push_str(&format!(
-            "<li><a href=\"{page}\">{name}</a> <span class=\"what\">- {}</span>{beside}</li>\n",
+            "<li><a href=\"{page}\">{name}</a> <span class=\"view\">{}</span> \
+             <span class=\"what\">- {}</span>{beside}</li>\n",
+            view_of(content),
             described(if names.contains(&markdown.as_str()) {
                 &markdown
             } else {
@@ -1034,11 +1086,14 @@ pub fn index(generated: &[(&str, String)]) -> String {
         ));
         listed += 1;
     }
-    assert_eq!(listed, 8, "eight pages are linked");
+    // **Seven, and it read eight while one was listed twice.** The duplicate came in when
+    // `R-7` moved `recipes.md` into `generated` while it was still named by hand below, and
+    // this count accommodated it instead of catching it - which is the thing a count is for.
+    assert_eq!(listed, 7, "seven pages are linked");
     assert_eq!(
-        paired, 7,
-        "seven of them have their markdown beside them, and `containment` is the one \
-         that does not"
+        paired, 6,
+        "six of them have their markdown beside them, and `containment` is the one that \
+         does not"
     );
     // **The other direction, which the pairing above cannot see.** A markdown report that
     // lost its page would simply stop being listed, and the count would still be seven if a
