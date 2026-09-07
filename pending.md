@@ -20,7 +20,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-68** - `4e20df0` S-68: the promotions check refused a spelling its own rules use, and read a move as a promotion · still open in `docs/notes/proposals.md`
 - **S-49** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
 - **S-26** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
 - **P-346** - `0361e25` Q-68 acted by P-346, and their remedy is better than the one my item implied · still open in `docs/notes/decisions.md`
@@ -29,22 +28,21 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 - **R-7** - `747de8a` R-7's remainder: the world's shown once on one end-turn, and two things that found · still open in `releases/first-release.md`
-- **R-8** - `d938c8a` R-8: a signature per kind, and the grouping it produces is empty · still open in `releases/first-release.md`
+- **R-8** - `79d8f1d` Q-69: the equality half of R-8's equivalence had no case, and now has one · still open in `releases/first-release.md`
 - **R-9** - `dc6d341` R-9: every reference is a link, every view has a sibling, and no page has a script · still open in `releases/first-release.md`
 - **X-6** - `4d5a081` File P-327 from X-6, and close S-57 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (8)
+### To code (7)
 
-- **S-68** - The promotions check is red on four of mine, and the word is `an` · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
-- **Q-69** - A signature that can never collide passes every check, and `R-8` would be vacuous · `lenses/quality/outbox.md`
+- **Q-70** - One rule about what a name is, three implementations, and one of them differs · `lenses/quality/outbox.md`
 
 ### To quality (1)
 

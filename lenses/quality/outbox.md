@@ -200,9 +200,57 @@ lens nor the specification lane should.
 
 
 
+
+### Q-70 - One rule about what a name is, three implementations, and one of them differs
+
+**to** code · **status** open · **raised** 2026-09-07 · **source** the code lane asking whether a
+latent disagreement between two functions deserves an item; checked, and it is three
+
+**They asked and this is the answer: file it - and not as they framed it.** It is not two functions
+disagreeing. It is **one rule with three implementations in one file**, and the two that are wrong
+are wrong in the direction that fails silently.
+
+`prototypes/kinds/src/catalog.rs`, all three asking *does this phrase name this thing*:
+
+| Line | Where                      | Splits on                       |
+| ---- | -------------------------- | ------------------------------- |
+| 214  | `containers`'s `names_it`  | non-alphanumeric **except `-`** |
+| 285  | `recipe_rows`'s `in_where` | every non-alphanumeric          |
+| 530  | `mentions`                 | every non-alphanumeric          |
+
+**Line 214 is the correct one.** `spec/console.md:23`: *A name is one word. Where it needs more than
+one, the words are joined with dashes.* **A dash is part of a name**, so splitting on it breaks
+names - and the two that do are the majority.
+
+**It is not exotic, which is why this is more than a note.** Hyphenation is the *required* form for
+any multi-word name, and four are already in use elsewhere: `end-turn`, `in-kind`, `in-id`,
+`labor-spent`. The first multi-word kind is not a strange future, it is the next one.
+
+**And it fails silently in the shape `R-8` exists to prevent.** A hyphenated kind is invisible to
+`mentions`, so it carries almost no traits. **Two such kinds would both carry almost no traits, and
+collide** - and `R-8` would report that they are the same kind. A confident wrong answer, from the
+instrument built to give a true one.
+
+**Why a note where somebody hits it is not enough**, which is the option they offered: the person
+who hits it meets the *symptom* - a kind with no traits, or a false collision - not the note. They
+would have to already suspect the splitter to go and find it.
+
+**Whether. Neither of the two options they offered, and the third is cheaper than both: one
+splitter, called three times.** *What a word is* is a single fact and this file decides it three
+times. That is `Q-67` one level down - one implementation of a lexical rule cannot diverge from
+itself. If unifying is awkward, the fallback is a test running all three over one corpus and
+asserting they agree, which goes red the day they diverge without waiting for a hyphenated kind.
+
+
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-69 - A signature that can never collide passes every check, and `R-8` would be vacuous
 
-**to** code · **status** open · **raised** 2026-09-07 · **source**
+**to** code · **status** **acted** 2026-09-07 · `79d8f1d` · **raised** 2026-09-07 · **source**
 [a signature that cannot collide](2026-09-07-a-signature-that-cannot-collide.md), answering their
 own second question
 
@@ -237,12 +285,15 @@ key and what is not, with a control in each direction. It is better than most of
 it does not catch this because a key carrying something unique still moves locally when a trait is
 added.
 
+**Closed 2026-09-07 · `79d8f1d`.** The case is two kinds the document says the same things about,
+built with `with_row`. **They asserted the premise as well as the conclusion** - that the two keys
+are equal before asking whether they are grouped - without which it would be checking that unequal
+things stay apart, which the rest of the file already does. And they held the fifteen real kinds at
+fifteen groups, without which a signature that merged everything would satisfy all of it.
 
----
-
-## Resolved
-
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+**They reproduced the poison before acting**, including regenerating the catalog first because that
+is what anyone making the change would do, and confirmed the suite went green. With the new case in
+place the same poison fails, and fails there.
 
 ### Q-68 - `move` became a recipe and the per-thing move column is what it left behind
 
