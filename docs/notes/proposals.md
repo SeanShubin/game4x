@@ -60,70 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Two, and neither asks a decision.** `P-311` came from `decisions.md` having had its last
-question answered, which is the first time that path has been used.
-
-### P-311 - The dump carries the containment tree, completely and exactly once
-
-**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
-own - **shape** text - **asks** approval - **into** `releases/first-release.md` -> Where things are,
-at the end
-
-**Everything this asked has been decided**, so it moves from `decisions.md` to here. What it asked -
-how a container is referenced - was overtaken: **only `kind`, `territory` and `unit` carry ids**, so
-the only thing whose container kind varies is a unit, which is in a territory or in the orbit above
-one. That made the choice concrete rather than a matter of taste.
-
-> **The dump carries containment as a tree.** The game is the one thing in nothing; every other
-> thing names what holds it with `in-kind` and `in-id`. **Every stored trait appears exactly once**,
-> so the dump reads back into the state it came from. That round trip is the check; a count of
-> fields is not, because a plausible subset passes it.
->
-> - **Territory adjacency is stated once, and orbital adjacency is derived from it** - an orbit is
->   next to its territory and to the orbits above that territory's neighbours, so stating it would
->   be a second copy that can disagree
-> - **Which store holds which unit of a resource is not recorded in this release**, so a territory's
->   amount of a resource is stated against the sum of its stores' capacities
-> - **A derived trait may be shown as a convenience and is never a second copy.** Fourteen traits
->   are stored and four are derived
-
-**Your reason for the third bullet, because it is better than the one I had.** The distribution
-across stores is inconsequential *and cannot become consequential until a store can be told from
-another store*, which is not this release. It is not a lossy view of a richer model: `Territory.held`
-is one `Thing` per unit of resource and **a `Thing` has no store**, so there is no distribution to
-lose. When stores gain identity the edge appears then, and nothing has to be reconstructed.
-
-**What completeness costs, so it is chosen knowingly.** Adjacency is stored and per-territory, and
-would swamp a territory's line - so it sits in its own group beside the territories rather than
-inside each of them. It is still in the tree, still exactly once.
-
-**What this does not settle, and neither is a decision.** The release already says *there are twelve
-territories and twelve orbits*, and `spec/orbit.md` gives the orbital adjacency in full - **the code
-is what is behind**, and that is `S-55`. And the *Traits* table gives `adjacency` an **Of** of *a
-place* where `spec/logistics.md` calls it a fact about the container; that is `P-314`.
-
-### P-314 - `adjacency` is a fact about the container, and the release says it is a fact about a place
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** contradiction - **shape** rows -
-**asks** approval - **into** `releases/first-release.md` -> Traits, the `adjacency` row
-
-**Found by you sketching the tree**, which is the second thing that sketch turned up.
-
-`spec/logistics.md`: *A thing says which of the things in it are next to which. **That is a fact
-about the container rather than about its contents.*** The release's *Traits* table gives the same
-trait an **Of** of *a place*, which is the contents.
-
-**The code sides with the specification.** `crates/game-model/src/game.rs` carries `pub adjacency` on
-`Game`, not on `Territory`. So the release is the only one of the three that says otherwise.
-
-| Trait         | Of                        | Values                                                                    | Stored or derived |
-| ------------- | ------------------------- | ------------------------------------------------------------------------- | ----------------- |
-| **adjacency** | a thing that holds places | which of the places it holds are next to which, and by which kind of edge | stored            |
-
-**Why it is worth correcting rather than leaving.** It is the difference between one fact stated once
-about the planet and twelve facts stated about twelve territories, each of which mentions the others.
-**`P-311` rests on it**: the tree hoists adjacency to its own group precisely because it belongs to
-the container, and under the release's current wording it would belong inside each territory.
+**Nothing.** [decisions.md](decisions.md) is empty too.
 
 ## Addressed to other perspectives
 
@@ -1827,6 +1764,8 @@ work the release exists to order.
 | P-310, grow loses the houses requirement and gains the cap the specification states                                          | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-06 |
 | P-312, `houses` is deleted: no recipe uses it and no kind carries it                                                         | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
 | P-313, the file is `decisions.md`                                                                                            | `docs/process.md` -> What I read, and what I do                                                                                              | 2026-09-06 |
+| P-311, the dump carries the containment tree, completely and exactly once                                                    | `releases/first-release.md` -> Where things are                                                                                              | 2026-09-06 |
+| P-314, `adjacency` is a fact about the container, not about a place                                                          | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
 
 ## Rejected
 
