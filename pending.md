@@ -35,7 +35,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (12)
+### To spec (13)
 
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
 - **C-44** - `S-56` was already done when it was filed, and so was the adjacency row after it · `crates/outbox.md`
@@ -47,6 +47,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
+- **Q-64** - The data file moved away from `P-284` today, and the obvious fix is the wrong one · `lenses/quality/outbox.md`
 - **X-1** - what makes the game checkable by hand is never stated · `lenses/research/outbox.md`
 - **X-2** - the default in `layers.md` does not satisfy the rule in `turn.md` · `lenses/research/outbox.md`
 

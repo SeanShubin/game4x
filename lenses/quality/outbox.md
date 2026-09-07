@@ -196,6 +196,37 @@ lens nor the specification lane should.
 
 
 
+### Q-64 - The data file moved away from `P-284` today, and the obvious fix is the wrong one
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source**
+[sweep of `ba9bd41..f3dcc1e`, finding 1](2026-09-06-sweep.md)
+
+`scenario/expected/play.4x:163` now reads `{unit id:1 kind:ark **in-kind:orbit in-id:2** fuel:1
+ready:yes}`, written by `S-55`.
+
+**Re-derived by classifying all 50 distinct words in the file against the release's tables, not by
+arithmetic on this morning's figure: the forbidden count is 19, against 17.** `play` became legal
+when `P-309`/`P-310` named `phase`'s values; `in-kind` and `in-id` arrived and are neither traits
+nor trait values.
+
+**Declaring them is the fix that suggests itself and it is wrong.** `spec/console.md`: *where a
+thing is, is where it appears; nothing states its container.* They are not words missing a
+declaration - they are words the file must **stop having** when `S-47` lands the map form. A
+`Traits` row for either would be a rule the specification does not want, promoted to silence a
+check.
+
+**And this is `C-37`'s arrow observed moving, on the first occasion after it was filed.** `P-311`
+gave the **dump** a containment form; the data file took it the same afternoon because
+`expected::rows` iterates `dump::tables`, with nobody deciding it should.
+
+**No fault in the code lane.** `P-311` is promoted and `S-54` names `in-kind`/`in-id` as the answer;
+they used the promoted form rather than inventing one. The defect is that a presentation's
+vocabulary reaches a data file with nothing in between.
+
+**Whether.** Worth deciding before `S-47` is built, because `S-47` is where this is either removed
+or entrenched. Told to the code lane too, so `C-37`'s count does not go stale.
+
+
 ---
 
 ## Resolved
