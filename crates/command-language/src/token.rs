@@ -120,8 +120,8 @@ mod tests {
     #[test]
     fn a_line_splits_into_words() {
         assert_eq!(
-            words("{deploy ark territory:1}"),
-            ["{", "deploy", "ark", "territory:1", "}"]
+            words("{deploy-ark territory:1}"),
+            ["{", "deploy-ark", "territory:1", "}"]
         );
     }
 
@@ -134,7 +134,7 @@ mod tests {
     fn a_brace_is_its_own_word_however_it_is_written() {
         assert_eq!(words("{start}"), ["{", "start", "}"]);
         assert_eq!(words("{ start }"), ["{", "start", "}"]);
-        assert_eq!(words("{end turn}"), ["{", "end", "turn", "}"]);
+        assert_eq!(words("{end-turn}"), ["{", "end-turn", "}"]);
     }
 
     #[test]
@@ -160,14 +160,14 @@ mod tests {
     /// Columns are what a failure message quotes, so they have to be right.
     #[test]
     fn every_word_knows_where_it_started() {
-        let tokens = tokenize("{deploy ark territory:12}", 4);
+        let tokens = tokenize("{deploy-ark territory:12}", 4);
         let starts: Vec<(usize, usize)> = tokens
             .iter()
             .map(|t| (t.span.from.line, t.span.from.column))
             .collect();
-        // `{` `deploy` `ark` `territory:12` `}` - five words, and the brace is one of them.
-        assert_eq!(starts, [(4, 1), (4, 2), (4, 9), (4, 13), (4, 25)]);
-        assert_eq!(tokens[3].span.to.column, 25, "just past the last character");
+        // `{` `deploy-ark` `territory:12` `}` - four words, and the brace is one of them.
+        assert_eq!(starts, [(4, 1), (4, 2), (4, 13), (4, 25)]);
+        assert_eq!(tokens[2].span.to.column, 25, "just past the last character");
     }
 
     #[test]

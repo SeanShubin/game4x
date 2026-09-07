@@ -301,14 +301,14 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
     // in is part of its state, so both go through the same function and both are refused
     // by the same rule.
     assert!(matches!(
-        refuse(&mut session, "{deploy ark territory:1}"),
+        refuse(&mut session, "{deploy-ark territory:1}"),
         Problem::Rule(game_model::Rejection::WrongPhase { .. })
     ));
     run(&mut session, "{start}");
     assert_eq!(session.game.phase, Phase::Play);
     assert_eq!(session.game.turn, 1);
     assert!(matches!(
-        refuse(&mut session, "{add ark orbit territory:1}"),
+        refuse(&mut session, "{add-ark-orbit territory:1}"),
         Problem::Rule(game_model::Rejection::WrongPhase { .. })
     ));
 
@@ -506,11 +506,11 @@ fn no_question_ever_changes_the_game() {
 
     let before = session.game.clone();
     for question in [
-        "{show territory id:5}",
-        "{show planet}",
-        "{show orbit}",
-        "{show units}",
-        "{show turn}",
+        "{show-territory id:5}",
+        "{show-planet}",
+        "{show-orbit}",
+        "{show-units}",
+        "{show-turn}",
         "{help}",
         "{help command:move}",
         "{history}",
@@ -545,7 +545,7 @@ fn the_data_browser_names_things_by_their_model_id() {
     }
 
     // What the browser calls territory 1 is what `show territory 1` answers to.
-    let Outcome::Said(said) = run(&mut session, "{show territory id:1}") else {
+    let Outcome::Said(said) = run(&mut session, "{show-territory id:1}") else {
         panic!()
     };
     assert!(said.starts_with("territory 1"), "{said}");
@@ -584,7 +584,7 @@ fn a_player_is_told_what_went_wrong_and_where() {
     run(&mut session, "{start}");
 
     // The parser: says where, and what it wanted instead.
-    match refuse(&mut session, "{deploy ark territory:somewhere}") {
+    match refuse(&mut session, "{deploy-ark territory:somewhere}") {
         Problem::Parse(failure) => {
             // At the value, which is what has to change: the field opens at 13 and
             // `somewhere` at 23.
@@ -603,7 +603,7 @@ fn a_player_is_told_what_went_wrong_and_where() {
     // structure is a word of the command's name now, so `{build refinery ...}` is refused
     // before the binding sees it. A resource is still a value, so this is where the binding's
     // own kind of failure still lives.
-    match refuse(&mut session, "{build extractor territory:1 resource:gold}") {
+    match refuse(&mut session, "{build-extractor territory:1 resource:gold}") {
         Problem::Misread(misread) => {
             assert_eq!(misread.to_string(), "there is no resource called gold")
         }
@@ -611,14 +611,14 @@ fn a_player_is_told_what_went_wrong_and_where() {
     }
 
     // The rules: understood perfectly, and refused for a reason about the game.
-    match refuse(&mut session, "{deploy ark territory:99}") {
+    match refuse(&mut session, "{deploy-ark territory:99}") {
         Problem::Rule(rejection) => {
             assert_eq!(rejection.to_string(), "there is no territory 99")
         }
         other => panic!("expected a rejection, got {other}"),
     }
     assert!(
-        refuse(&mut session, "{move pioneer territory:2}")
+        refuse(&mut session, "{move unit:pioneer territory:2}")
             .to_string()
             .contains("no pioneer"),
         "a unit that does not exist"
@@ -628,7 +628,7 @@ fn a_player_is_told_what_went_wrong_and_where() {
     // A rejection said what was wrong about the game and nothing about which of seven files
     // it was in, so a failure five lines into `world.4x` reached by `setup.4x` reached by
     // the console read as a bare sentence.
-    let (found, _) = refused_at(&mut session, "{deploy ark territory:99}");
+    let (found, _) = refused_at(&mut session, "{deploy-ark territory:99}");
     assert_eq!(
         found.line, 1,
         "typed at the console, so line one of nothing"
@@ -673,7 +673,7 @@ fn taking_and_holding_a_territory_follow_the_force_rules() {
     // An ark is force 2 against a force of nature of 1: greater, so it takes the ground -
     // and taking it *is* founding it, so what stands there afterwards is the garrison the
     // ark became rather than the ark itself.
-    run(&mut session, "{deploy ark territory:1}");
+    run(&mut session, "{deploy-ark territory:1}");
     assert!(session.game.territory(TerritoryId(1)).unwrap().founded());
     assert!(session.game.units.is_empty(), "founding consumes the ark");
 
@@ -706,7 +706,7 @@ fn taking_and_holding_a_territory_follow_the_force_rules() {
     //
     // So what the force rules give you is ground you can hold, not ground that holds itself.
     for _ in 0..5 {
-        run(&mut session, "{end turn}");
+        run(&mut session, "{end-turn}");
     }
     let one = session.game.territory(TerritoryId(1)).unwrap();
     assert_eq!(
@@ -830,9 +830,9 @@ fn every_way_the_state_can_change_is_a_command() {
 
     // **Every transition has a command and every command makes one, and it is no longer one
     // for one.** `P-323` names a command for the recipe it fires, so the kind moved out of a
-    // positional hole and into the name: `Transition::Move` is reached by `{move ark ...}` and
-    // by `{move pioneer ...}`, and `Transition::Build` by `{build extractor ...}` and
-    // `{build yard ...}`. Six commands share three transitions that way, which is why this
+    // positional hole and into the name: `Transition::Move` is reached by `{move unit:ark ...}` and
+    // by `{move unit:pioneer ...}`, and `Transition::Build` by `{build-extractor ...}` and
+    // `{build-yard ...}`. Six commands share three transitions that way, which is why this
     // counts the mapping rather than the two lists.
     //
     // **The direction that matters is still checked**: a transition no command reaches is a
@@ -841,16 +841,16 @@ fn every_way_the_state_can_change_is_a_command() {
     // the grammar in its own test, so a form with no arm fails there.
     assert_eq!(
         commands_that_change.len(),
-        20,
-        "twenty commands change the state; the grammar has {} ({commands_that_change:?})",
+        19,
+        "nineteen commands change the state; the grammar has {} ({commands_that_change:?})",
         commands_that_change.len()
     );
     // **Four pairs, named rather than counted.** `move`, `build`, `produce` and
     // `add unit to orbit` are each reached by two commands, because the kind is in the name.
     let shared = commands_that_change.len() - changing.len();
     assert_eq!(
-        shared, 4,
-        "four transitions are reached by two commands each - move, build, produce, and \
-         adding a unit to orbit"
+        shared, 3,
+        "three transitions are reached by two commands each - build, produce, and adding \
+         a unit to orbit. `move` stopped being one when `P-328` made a name one word"
     );
 }

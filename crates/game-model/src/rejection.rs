@@ -163,7 +163,7 @@ impl fmt::Display for Rejection {
             Rejection::NotFoundedYet { territory } => write!(
                 out,
                 "nobody holds territory {territory}, so moving there is \
-                 `{{found by land territory:{territory}}}`"
+                 `{{found-by-land territory:{territory}}}`"
             ),
             Rejection::AlreadyFounded { territory } => write!(
                 out,

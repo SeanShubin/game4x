@@ -331,11 +331,11 @@ mod tests {
 
     fn tiny() -> Session {
         played(&[
-            "{create planet size:tiny}",
-            "{set resource territory:1 resource:food extractors:1 density:4}",
-            "{set resource territory:1 resource:metal extractors:1 density:4}",
-            "{set force territory:1 force:1}",
-            "{add ark orbit territory:1}",
+            "{create-planet size:tiny}",
+            "{set-resource territory:1 resource:food extractors:1 density:4}",
+            "{set-resource territory:1 resource:metal extractors:1 density:4}",
+            "{set-force territory:1 force:1}",
+            "{add-ark-orbit territory:1}",
             "{start}",
         ])
     }
@@ -347,9 +347,9 @@ mod tests {
             panic!("help said nothing");
         };
         for expected in [
-            "{deploy ark territory:<value> [repeat:<value>]}",
-            "{end turn}",
-            "{show territory id:<value>}",
+            "{deploy-ark territory:<value> [repeat:<value>]}",
+            "{end-turn}",
+            "{show-territory id:<value>}",
         ] {
             assert!(
                 text.contains(expected),
@@ -364,19 +364,15 @@ mod tests {
         let Outcome::Said(text) = session.run("{help command:move}", &NoLibrary).unwrap() else {
             panic!();
         };
-        // **Both, because `move` is two commands now.** `P-323`: one command per recipe and
-        // each named for it, so a player asking about `move` is shown the ark's and the
-        // pioneer's rather than one form with the unit left as a hole.
+        // **One, and it was two between `P-323` and `P-328`.** A command is named for its
+        // recipe and a name is one word, so `move` is the whole name and which unit moves is
+        // a field.
         assert!(
-            text.contains("{move ark territory:<value> [repeat:<value>]}"),
+            text.contains("{move unit:<value> territory:<value> [repeat:<value>]}"),
             "{text}"
         );
         assert!(
-            text.contains("{move pioneer territory:<value> [repeat:<value>]}"),
-            "{text}"
-        );
-        assert!(
-            !text.contains("{end turn}"),
+            !text.contains("{end-turn}"),
             "only the one asked for:\n{text}"
         );
     }
@@ -393,7 +389,7 @@ mod tests {
     #[test]
     fn showing_a_territory_reports_what_is_there() {
         let mut session = tiny();
-        let Outcome::Said(text) = session.run("{show territory id:1}", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{show-territory id:1}", &NoLibrary).unwrap() else {
             panic!();
         };
         assert!(text.contains("territory 1"), "{text}");
@@ -404,7 +400,7 @@ mod tests {
     #[test]
     fn showing_a_territory_that_is_not_there_says_so_in_the_games_terms() {
         let mut session = tiny();
-        let Outcome::Said(text) = session.run("{show territory id:99}", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{show-territory id:99}", &NoLibrary).unwrap() else {
             panic!();
         };
         assert_eq!(text, "there is no territory 99");
@@ -413,7 +409,7 @@ mod tests {
     #[test]
     fn showing_orbit_reports_what_is_up_there() {
         let mut session = tiny();
-        let Outcome::Said(text) = session.run("{show orbit}", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{show-orbit}", &NoLibrary).unwrap() else {
             panic!();
         };
         assert!(text.contains("ark"), "{text}");
@@ -433,7 +429,7 @@ mod tests {
 
         // And that is the same id `show territory 5` answers to.
         let mut session = session;
-        let Outcome::Said(text) = session.run("{show territory id:5}", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{show-territory id:5}", &NoLibrary).unwrap() else {
             panic!();
         };
         assert!(text.starts_with("territory 5"), "{text}");
@@ -455,7 +451,7 @@ mod tests {
             panic!();
         };
         let lines: Vec<&str> = text.lines().collect();
-        assert!(lines[0].contains("{create planet size:tiny}"), "{text}");
+        assert!(lines[0].contains("{create-planet size:tiny}"), "{text}");
         assert!(lines.last().unwrap().contains("{start}"), "{text}");
     }
 

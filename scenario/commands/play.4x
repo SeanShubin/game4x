@@ -16,168 +16,168 @@
 
 # Turn 1. The Ark lands on territory 1 and becomes the ground: a garrison, two citizens, a
 # farm, a mine, and somewhere to put what each of them digs.
-{deploy ark territory:1}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{end turn}
+{deploy-ark territory:1}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{end-turn}
 
 # Turn 2. Four citizens. The farm makes four and the store holds ten, so the second farm can
 # wait; the mine pays for a second store first, because metal with nowhere to go is lost.
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{build extractor territory:1 resource:food}
-{create labor territory:1}
-{build store territory:1 resource:food}
-{end turn}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{build-extractor territory:1 resource:food}
+{create-labor territory:1}
+{build-store territory:1 resource:food}
+{end-turn}
 
 # Turn 3. Two farms, and four citizens - so four labor, and four things this turn can do.
 # The second mine waits a turn for the population to pay for it.
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{build store territory:1 resource:metal}
-{end turn}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{build-store territory:1 resource:metal}
+{end-turn}
 
 # Turn 4. The last farm and the first well. Energy has nowhere to go until it has a store,
 # which is the shape `S-44` gave the middle of this game.
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{build extractor territory:1 resource:metal}
-{create labor territory:1}
-{build extractor territory:1 resource:food}
-{create labor territory:1}
-{build extractor territory:1 resource:energy}
-{create labor territory:1}
-{build store territory:1 resource:energy}
-{end turn}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{build-extractor territory:1 resource:metal}
+{create-labor territory:1}
+{build-extractor territory:1 resource:food}
+{create-labor territory:1}
+{build-extractor territory:1 resource:energy}
+{create-labor territory:1}
+{build-store territory:1 resource:energy}
+{end-turn}
 
 # Turn 5. Everything the ground has room for is built, bar the last mine and the last wells.
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{work extractor territory:1 resource:energy}
-{create labor territory:1}
-{build extractor territory:1 resource:metal}
-{create labor territory:1}
-{build extractor territory:1 resource:energy}
-{end turn}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{work territory:1 resource:energy}
+{create-labor territory:1}
+{build-extractor territory:1 resource:metal}
+{create-labor territory:1}
+{build-extractor territory:1 resource:energy}
+{end-turn}
 
 # Turn 6. Twelve of each a turn, and a pioneer costs three metal and six energy.
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{work extractor territory:1 resource:energy}
-{create labor territory:1}
-{work extractor territory:1 resource:energy}
-{create labor territory:1}
-{build extractor territory:1 resource:energy}
-{create labor territory:1}
-{build store territory:1 resource:energy}
-{end turn}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{work territory:1 resource:energy}
+{create-labor territory:1}
+{work territory:1 resource:energy}
+{create-labor territory:1}
+{build-extractor territory:1 resource:energy}
+{create-labor territory:1}
+{build-store territory:1 resource:energy}
+{end-turn}
 
 # Turn 7. The pioneer, and the last stores this territory will need.
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{work extractor territory:1 resource:metal}
-{create labor territory:1}
-{work extractor territory:1 resource:energy}
-{create labor territory:1}
-{work extractor territory:1 resource:energy}
-{create labor territory:1}
-{work extractor territory:1 resource:energy}
-{create labor territory:1}
-{build store territory:1 resource:metal}
-{create labor territory:1}
-{produce pioneer territory:1}
-{end turn}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{work territory:1 resource:metal}
+{create-labor territory:1}
+{work territory:1 resource:energy}
+{create-labor territory:1}
+{work territory:1 resource:energy}
+{create-labor territory:1}
+{work territory:1 resource:energy}
+{create-labor territory:1}
+{build-store territory:1 resource:metal}
+{create-labor territory:1}
+{produce-pioneer territory:1}
+{end-turn}
 
 # Turn 8. The pioneer crosses into territory 2 and becomes it. `P-214`: the player says which
 # recipe this is, because arriving on unclaimed ground and arriving on your own are two
 # recipes, and the model no longer works out from the ground which was meant.
-{found by land territory:2}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:energy}
-{create labor territory:1}
-{build yard territory:1}
-{create labor territory:2}
-{work extractor territory:2 resource:food}
-{end turn}
+{found-by-land territory:2}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:energy}
+{create-labor territory:1}
+{build-yard territory:1}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{end-turn}
 
 # Turn 9. The Ark. Three metal and twelve energy against a Yard, and the new ground feeds
 # itself on the turn after the one it was claimed.
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:energy}
-{create labor territory:1}
-{produce ark territory:1}
-{create labor territory:2}
-{work extractor territory:2 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:energy}
+{create-labor territory:1}
+{produce-ark territory:1}
+{create-labor territory:2}
+{work territory:2 resource:food}
 
 # The Ark crosses to territory 2 before it leaves, which is the only `move` in this file -
 # ground already yours, which is the whole difference between the two recipes.
-{move ark territory:2}
-{end turn}
+{move unit:ark territory:2}
+{end-turn}
 
 # Turn 10. Moving exhausts a unit, so the Ark leaves on the turn after the one it crossed on.
 # The farms are worked first, as always: a population that gathers nothing this turn starves
 # at the end of it, whatever else is going on.
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:1}
-{work extractor territory:1 resource:food}
-{create labor territory:2}
-{work extractor territory:2 resource:food}
-{launch ark}
-{end turn}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:1}
+{work territory:1 resource:food}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{launch-ark}
+{end-turn}

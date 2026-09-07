@@ -182,8 +182,8 @@ mod tests {
             assert_eq!(generation(), before, "reading the browser moved the game");
 
             // Running does move it, and both views of the transcript are of the one console.
-            let shown = submit("{end turn}");
-            assert!(shown.contains("> {end turn}"), "{shown}");
+            let shown = submit("{end-turn}");
+            assert!(shown.contains("> {end-turn}"), "{shown}");
             assert!(generation() > before, "the state moved and nobody noticed");
             assert_eq!(transcript(), shown, "two views of one transcript disagreed");
             assert_eq!(reached(), None, "a command is not a surface");

@@ -63,6 +63,49 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-56 - `move` needs a field for its unit and `P-323`'s rule points at one the model cannot use
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** `P-328` making a name one
+word, which left `move` and `work` with a word that had nowhere to go
+
+**derived from** a field that refers to a thing is named for that thing's kind -
+`spec/console.md`, `P-323`
+
+**`P-328` is built and nineteen commands are dashed.** Two of them lost a word rather than
+gaining a dash, because their recipe's name is already one word.
+
+- **`work`.** `{work extractor territory:1 resource:food}` became
+  `{work territory:1 resource:food}`. **No question here** - the recipe consumes an extractor
+  and there is nothing else labour can be spent at, so the resource picks which one and the
+  kind was never carrying information.
+- **`move`.** `{move ark territory:2}` became **`{move unit:ark territory:2}`**, and that is
+  an assumption rather than something found.
+
+**Why it is an assumption.** `P-323` says a field that refers to a thing is named for that
+thing's **kind**, and gives `where:1` against `territory:1` as the reason. `unit` is a
+**family**, so `unit:ark` is not what that sentence describes. **What it does describe is
+`{move ark:1 territory:2}`** - a field named for the kind, whose value names one particular
+ark by its `id`.
+
+**And that form is not free.** The model selects the lowest-numbered *ready* unit of a kind;
+selecting by id would change what a move means, change every rejection that reads *there is no
+ark on the planet* or *no cells*, and change the one line in the repository that moves
+anything. **A rename should not quietly become a rule change**, so this lane took the form
+that preserves behaviour and filed the one that follows the rule.
+
+**One line is affected**, `scenario/commands/play.4x:170`. Whichever you choose costs a single
+edit there.
+
+**Two things this made better, recorded because they cost nothing to keep.**
+
+- **Ordered choice now decides nothing.** No two command names share a token, so the
+  first-wins order that used to be load-bearing settles nothing at all. The check that used to
+  compare pairs asserts the property that replaced it - every name is one word and no two are
+  the same - which is what makes the order irrelevant rather than merely unexercised.
+- **`move` is one command again**, which is what `P-323` required and `P-328` delivered.
+  Between the two promotions this lane had `move-ark` and `move-pioneer`, two commands for one
+  recipe.
+
 ### C-55 - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence
 
 **to** code · **status** open · **raised** 2026-09-06 · **source** breaking both of them while

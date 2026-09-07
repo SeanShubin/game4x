@@ -42,8 +42,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (21)
+### To spec (22)
 
+- **C-56** - `move` needs a field for its unit and `P-323`'s rule points at one the model cannot use · `crates/outbox.md`
 - **C-54** - `S-59`'s count measured one file of seven, and `launch ark` fires no recipe · `crates/outbox.md`
 - **C-53** - `P-322` closed half the round trip and says it closed all of it, and its reason is `Q-66`'s shape · `crates/outbox.md`
 - **C-51** - `Thing::children` is written by nothing, and two rules in this repository disagree about what to do with an unwritten field · `crates/outbox.md`

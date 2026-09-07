@@ -1757,7 +1757,7 @@ mod tests {
             })
             .expect_err("moving onto unclaimed ground is `found by land`");
         assert!(
-            refused.to_string().contains("{found by land territory:2}"),
+            refused.to_string().contains("{found-by-land territory:2}"),
             "the refusal names the command that does work: {refused}"
         );
         let refused = game

@@ -38,22 +38,21 @@
 //! let grammar = Grammar::new(vec![Form::new(
 //!     "deploy-ark",
 //!     vec![
-//!         Term::Keyword("deploy"),
-//!         Term::Keyword("ark"),
+//!         Term::Keyword("deploy-ark"),
 //!         Term::required("territory", Kind::Number),
 //!     ],
 //!     "bring an ark down from orbit",
 //! )]);
 //!
-//! let command = parse_line(&grammar, "{deploy ark territory:1}", 1).unwrap().unwrap();
+//! let command = parse_line(&grammar, "{deploy-ark territory:1}", 1).unwrap().unwrap();
 //! assert_eq!(command.form, "deploy-ark");
 //! assert_eq!(command.number("territory").unwrap(), 1);
 //!
 //! // The fields carry their own names, so their order is not part of the command.
-//! let same = parse_line(&grammar, "{deploy ark territory:1}", 1).unwrap().unwrap();
+//! let same = parse_line(&grammar, "{deploy-ark territory:1}", 1).unwrap().unwrap();
 //! assert_eq!(same.number("territory").unwrap(), 1);
 //!
-//! let failure = parse_line(&grammar, "{deploy ark territory:orbit}", 1).unwrap_err();
+//! let failure = parse_line(&grammar, "{deploy-ark territory:orbit}", 1).unwrap_err();
 //! assert_eq!(failure.to_string(), "line 1 column 23: expected a number, found `orbit`");
 //! ```
 

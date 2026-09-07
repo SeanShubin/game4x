@@ -149,7 +149,7 @@ mod tests {
         Utterance::new(
             "land",
             span(),
-            "{deploy ark territory:1}".to_string(),
+            "{deploy-ark territory:1}".to_string(),
             arguments,
         )
     }

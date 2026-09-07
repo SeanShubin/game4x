@@ -6,15 +6,15 @@
 # when only the data has a check on it. `the_forces_are_the_ones_the_release_gives_each
 # _biome` reads the release now, so the next one fails here rather than reading wrongly.
 
-{set force territory:1 force:1}
-{set force territory:2 force:1}
-{set force territory:3 force:1}
-{set force territory:4 force:1}
-{set force territory:5 force:1}
-{set force territory:6 force:2}
-{set force territory:7 force:2}
-{set force territory:8 force:1}
-{set force territory:9 force:1}
-{set force territory:10 force:1}
-{set force territory:11 force:1}
-{set force territory:12 force:1}
+{set-force territory:1 force:1}
+{set-force territory:2 force:1}
+{set-force territory:3 force:1}
+{set-force territory:4 force:1}
+{set-force territory:5 force:1}
+{set-force territory:6 force:2}
+{set-force territory:7 force:2}
+{set-force territory:8 force:1}
+{set-force territory:9 force:1}
+{set-force territory:10 force:1}
+{set-force territory:11 force:1}
+{set-force territory:12 force:1}

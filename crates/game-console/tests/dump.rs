@@ -298,7 +298,7 @@ fn every_turn_of_the_scenario_is_dumped() {
         .expect("scenario/commands/play.4x is the scenario");
     let boundaries = scenario
         .lines()
-        .filter(|line| line.trim() == "{end turn}")
+        .filter(|line| line.trim() == "{end-turn}")
         .count();
     assert!(boundaries > 1, "a scenario of one turn tests nothing here");
 
@@ -347,14 +347,14 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
 
         let mut consumers = 0usize;
         for (at, line) in lines.iter().enumerate() {
-            let wants = line.starts_with("{work ") || line.starts_with("{build ");
+            let wants = line.starts_with("{work ") || line.starts_with("{build-");
             if !wants {
                 continue;
             }
             consumers += 1;
             checked += 1;
             let before = at.checked_sub(1).and_then(|n| lines.get(n)).copied();
-            let made = before.is_some_and(|line| line.starts_with("{create labor "));
+            let made = before.is_some_and(|line| line.starts_with("{create-labor "));
             assert!(
                 made,
                 "scenario/commands/{name}.4x line {}: `{line}` spends labor and the command before it \
@@ -438,16 +438,19 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
     // both matched by the prefix `move `, so one `move pioneer 2` satisfied two rows and the
     // recipe `move` had never fired while the check read nine of nine - `C-21`. A command is
     // named for its recipe now, so each prefix reaches exactly one of them.
+    // **The command is the recipe's name with the spaces joined** - `P-328`. So this table
+    // is a dashing rather than a mapping, and a recipe the release adds fails here by having
+    // no row rather than by being unreachable.
     let fired_by: [(&str, &str); 10] = [
-        ("deploy ark", "{deploy ark"),
-        ("build store", "{build store"),
+        ("deploy ark", "{deploy-ark"),
+        ("build store", "{build-store"),
         ("move", "{move "),
-        ("found by land", "{found by land"),
-        ("build extractor", "{build extractor"),
-        ("build yard", "{build yard"),
-        ("produce pioneer", "{produce pioneer"),
-        ("produce ark", "{produce ark"),
-        ("create labor", "{create labor"),
+        ("found by land", "{found-by-land"),
+        ("build extractor", "{build-extractor"),
+        ("build yard", "{build-yard"),
+        ("produce pioneer", "{produce-pioneer"),
+        ("produce ark", "{produce-ark"),
+        ("create labor", "{create-labor"),
         ("work", "{work "),
     ];
 

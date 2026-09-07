@@ -22,18 +22,17 @@ pub mod form {
     // **One id per recipe, because a command is named for the recipe it fires** - `P-323`.
     // `BUILD` and `PRODUCE` each covered several, choosing between them by reading a word the
     // player had put in a positional hole; the word is part of the name now.
-    pub const DEPLOY_ARK: &str = "deploy ark";
-    pub const LAUNCH_ARK: &str = "launch ark";
-    pub const MOVE_ARK: &str = "move ark";
-    pub const MOVE_PIONEER: &str = "move pioneer";
-    pub const FOUND_BY_LAND: &str = "found by land";
-    pub const BUILD_STORE: &str = "build store";
-    pub const BUILD_EXTRACTOR: &str = "build extractor";
-    pub const BUILD_YARD: &str = "build yard";
-    pub const PRODUCE_PIONEER: &str = "produce pioneer";
-    pub const PRODUCE_ARK: &str = "produce ark";
-    pub const CREATE_LABOR: &str = "create labor";
-    pub const WORK_EXTRACTOR: &str = "work extractor";
+    pub const DEPLOY_ARK: &str = "deploy-ark";
+    pub const LAUNCH_ARK: &str = "launch-ark";
+    pub const MOVE: &str = "move";
+    pub const FOUND_BY_LAND: &str = "found-by-land";
+    pub const BUILD_STORE: &str = "build-store";
+    pub const BUILD_EXTRACTOR: &str = "build-extractor";
+    pub const BUILD_YARD: &str = "build-yard";
+    pub const PRODUCE_PIONEER: &str = "produce-pioneer";
+    pub const PRODUCE_ARK: &str = "produce-ark";
+    pub const CREATE_LABOR: &str = "create-labor";
+    pub const WORK: &str = "work";
     pub const END_TURN: &str = "end-turn";
 
     pub const SHOW_TERRITORY: &str = "show-territory";
@@ -74,15 +73,14 @@ pub mod form {
 ///   own form, and `move ark` and `move pioneer` are two.
 /// - **A hole can no longer swallow a keyword**, which is what `P-321` retired. A field
 ///   carries its own name, so a word with no `name:` before it can only ever be part of a
-///   name - and `{show planet}` reaches the keyword form whichever way the two are listed.
+///   name - and `{show-planet}` reaches the keyword form whichever way the two are listed.
 pub fn grammar() -> Grammar {
     Grammar::new(vec![
         // -- designing the world, before `start` --------------------------
         Form::new(
             form::CREATE_PLANET,
             vec![
-                Term::Keyword("create"),
-                Term::Keyword("planet"),
+                Term::Keyword("create-planet"),
                 Term::required("size", Kind::Name),
             ],
             "make a planet and its territories",
@@ -90,8 +88,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::SET_RESOURCE,
             vec![
-                Term::Keyword("set"),
-                Term::Keyword("resource"),
+                Term::Keyword("set-resource"),
                 Term::required("territory", Kind::Number),
                 Term::required("resource", Kind::Name),
                 Term::required("extractors", Kind::Number),
@@ -102,8 +99,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::SET_FORCE,
             vec![
-                Term::Keyword("set"),
-                Term::Keyword("force"),
+                Term::Keyword("set-force"),
                 Term::required("territory", Kind::Number),
                 Term::required("force", Kind::Number),
             ],
@@ -112,8 +108,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::SET_BIOME,
             vec![
-                Term::Keyword("set"),
-                Term::Keyword("biome"),
+                Term::Keyword("set-biome"),
                 Term::required("territory", Kind::Number),
                 Term::required("biome", Kind::Name),
             ],
@@ -124,9 +119,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::ADD_ARK,
             vec![
-                Term::Keyword("add"),
-                Term::Keyword("ark"),
-                Term::Keyword("orbit"),
+                Term::Keyword("add-ark-orbit"),
                 Term::required("territory", Kind::Number),
             ],
             "place an ark in the orbit above a territory before play begins",
@@ -134,9 +127,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::ADD_PIONEER,
             vec![
-                Term::Keyword("add"),
-                Term::Keyword("pioneer"),
-                Term::Keyword("orbit"),
+                Term::Keyword("add-pioneer-orbit"),
                 Term::required("territory", Kind::Number),
             ],
             "place a pioneer in the orbit above a territory before play begins",
@@ -150,8 +141,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::DEPLOY_ARK,
             vec![
-                Term::Keyword("deploy"),
-                Term::Keyword("ark"),
+                Term::Keyword("deploy-ark"),
                 Term::required("territory", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
@@ -160,38 +150,31 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::LAUNCH_ARK,
             vec![
-                Term::Keyword("launch"),
-                Term::Keyword("ark"),
+                Term::Keyword("launch-ark"),
                 Term::optional("repeat", Kind::Number),
             ],
             "send an ark from the territory it is in up to orbit",
         ),
+        // **One `move`, because the recipe is one recipe** - `P-323` - and its name is one
+        // word - `P-328`. So which unit moves is a field, and **`unit:ark` is an assumption
+        // this lane made rather than found.** `spec/console.md` says a field that refers to a
+        // thing is named for that thing's kind, and `unit` is a family rather than a kind; the
+        // form that sentence actually suggests is `ark:<id>`, naming one particular ark, which
+        // the model does not select by and which would change what a move means. `C-56`.
         Form::new(
-            form::MOVE_ARK,
+            form::MOVE,
             vec![
                 Term::Keyword("move"),
-                Term::Keyword("ark"),
+                Term::required("unit", Kind::Name),
                 Term::required("territory", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
-            "move an ark to an adjacent territory that is already yours",
-        ),
-        Form::new(
-            form::MOVE_PIONEER,
-            vec![
-                Term::Keyword("move"),
-                Term::Keyword("pioneer"),
-                Term::required("territory", Kind::Number),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "move a pioneer to an adjacent territory that is already yours",
+            "move a unit to an adjacent territory that is already yours",
         ),
         Form::new(
             form::FOUND_BY_LAND,
             vec![
-                Term::Keyword("found"),
-                Term::Keyword("by"),
-                Term::Keyword("land"),
+                Term::Keyword("found-by-land"),
                 Term::required("territory", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
@@ -200,8 +183,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::BUILD_STORE,
             vec![
-                Term::Keyword("build"),
-                Term::Keyword("store"),
+                Term::Keyword("build-store"),
                 Term::required("territory", Kind::Number),
                 Term::required("resource", Kind::Name),
                 Term::optional("repeat", Kind::Number),
@@ -211,8 +193,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::BUILD_EXTRACTOR,
             vec![
-                Term::Keyword("build"),
-                Term::Keyword("extractor"),
+                Term::Keyword("build-extractor"),
                 Term::required("territory", Kind::Number),
                 Term::required("resource", Kind::Name),
                 Term::optional("repeat", Kind::Number),
@@ -222,8 +203,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::BUILD_YARD,
             vec![
-                Term::Keyword("build"),
-                Term::Keyword("yard"),
+                Term::Keyword("build-yard"),
                 Term::required("territory", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
@@ -232,8 +212,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::PRODUCE_PIONEER,
             vec![
-                Term::Keyword("produce"),
-                Term::Keyword("pioneer"),
+                Term::Keyword("produce-pioneer"),
                 Term::required("territory", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
@@ -242,8 +221,7 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::PRODUCE_ARK,
             vec![
-                Term::Keyword("produce"),
-                Term::Keyword("ark"),
+                Term::Keyword("produce-ark"),
                 Term::required("territory", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
@@ -252,18 +230,20 @@ pub fn grammar() -> Grammar {
         Form::new(
             form::CREATE_LABOR,
             vec![
-                Term::Keyword("create"),
-                Term::Keyword("labor"),
+                Term::Keyword("create-labor"),
                 Term::required("territory", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
             "turn a ready citizen into labor",
         ),
+        // **`work`, not `work-extractor`**: the recipe is `work` and `P-328` makes a name one
+        // word, so the kind cannot ride along in it. Nothing else is worked - the recipe
+        // consumes an extractor and there is no second thing labour can be spent at - so the
+        // resource is what picks which one.
         Form::new(
-            form::WORK_EXTRACTOR,
+            form::WORK,
             vec![
                 Term::Keyword("work"),
-                Term::Keyword("extractor"),
                 Term::required("territory", Kind::Number),
                 Term::required("resource", Kind::Name),
                 Term::optional("repeat", Kind::Number),
@@ -272,37 +252,36 @@ pub fn grammar() -> Grammar {
         ),
         Form::new(
             form::END_TURN,
-            vec![Term::Keyword("end"), Term::Keyword("turn")],
+            vec![Term::Keyword("end-turn")],
             "consume, transform, and unspend everything",
         ),
         // -- asking, which changes nothing --------------------------------
         Form::new(
             form::SHOW_TERRITORY,
             vec![
-                Term::Keyword("show"),
-                Term::Keyword("territory"),
+                Term::Keyword("show-territory"),
                 Term::required("id", Kind::Number),
             ],
             "what is in a territory, and what can be done there",
         ),
         Form::new(
             form::SHOW_PLANET,
-            vec![Term::Keyword("show"), Term::Keyword("planet")],
+            vec![Term::Keyword("show-planet")],
             "every territory at a glance",
         ),
         Form::new(
             form::SHOW_ORBIT,
-            vec![Term::Keyword("show"), Term::Keyword("orbit")],
+            vec![Term::Keyword("show-orbit")],
             "what is in orbit",
         ),
         Form::new(
             form::SHOW_UNITS,
-            vec![Term::Keyword("show"), Term::Keyword("units")],
+            vec![Term::Keyword("show-units")],
             "every unit and where it is",
         ),
         Form::new(
             form::SHOW_TURN,
-            vec![Term::Keyword("show"), Term::Keyword("turn")],
+            vec![Term::Keyword("show-turn")],
             "which turn it is",
         ),
         Form::new(
@@ -337,19 +316,16 @@ mod tests {
     #[test]
     fn every_example_in_the_specification_parses() {
         let examples = [
-            ("{deploy ark territory:1}", form::DEPLOY_ARK),
-            ("{move pioneer territory:7}", form::MOVE_PIONEER),
+            ("{deploy-ark territory:1}", form::DEPLOY_ARK),
+            ("{move unit:pioneer territory:7}", form::MOVE),
             (
-                "{build extractor territory:3 resource:metal}",
+                "{build-extractor territory:3 resource:metal}",
                 form::BUILD_EXTRACTOR,
             ),
-            ("{produce pioneer territory:11}", form::PRODUCE_PIONEER),
-            (
-                "{work extractor territory:3 resource:metal}",
-                form::WORK_EXTRACTOR,
-            ),
-            ("{end turn}", form::END_TURN),
-            ("{show territory id:5}", form::SHOW_TERRITORY),
+            ("{produce-pioneer territory:11}", form::PRODUCE_PIONEER),
+            ("{work territory:3 resource:metal}", form::WORK),
+            ("{end-turn}", form::END_TURN),
+            ("{show-territory id:5}", form::SHOW_TERRITORY),
             ("{help command:move}", form::HELP),
         ];
         for (line, expected) in examples {
@@ -363,14 +339,14 @@ mod tests {
     #[test]
     fn every_design_command_in_the_specification_parses() {
         let examples = [
-            ("{create planet size:tiny}", form::CREATE_PLANET),
+            ("{create-planet size:tiny}", form::CREATE_PLANET),
             (
-                "{set resource territory:1 resource:food extractors:3 density:4}",
+                "{set-resource territory:1 resource:food extractors:3 density:4}",
                 form::SET_RESOURCE,
             ),
-            ("{set force territory:1 force:1}", form::SET_FORCE),
-            ("{set biome territory:1 biome:grassland}", form::SET_BIOME),
-            ("{add ark orbit territory:1}", form::ADD_ARK),
+            ("{set-force territory:1 force:1}", form::SET_FORCE),
+            ("{set-biome territory:1 biome:grassland}", form::SET_BIOME),
+            ("{add-ark-orbit territory:1}", form::ADD_ARK),
             ("{start}", form::START),
         ];
         for (line, expected) in examples {
@@ -388,14 +364,14 @@ mod tests {
     fn two_fields_mean_the_same_thing_in_either_order() {
         let one = parse_line(
             &grammar(),
-            "{build extractor territory:3 resource:metal}",
+            "{build-extractor territory:3 resource:metal}",
             1,
         )
         .unwrap()
         .unwrap();
         let other = parse_line(
             &grammar(),
-            "{build extractor resource:metal territory:3}",
+            "{build-extractor resource:metal territory:3}",
             1,
         )
         .unwrap()
@@ -413,7 +389,7 @@ mod tests {
     /// because the thing that was wrong had never had a name - which is what `P-321` changes.
     #[test]
     fn a_field_a_command_does_not_take_says_which_field_it_is() {
-        let failure = parse_line(&grammar(), "{build yard territory:3 resource:metal}", 1)
+        let failure = parse_line(&grammar(), "{build-yard territory:3 resource:metal}", 1)
             .expect_err("a yard is not built for a resource");
         let said = failure.to_string();
         assert!(
@@ -439,10 +415,14 @@ mod tests {
             })
             .map(|form| form.name)
             .collect();
+        // **Eleven, and it was twelve until `P-328`.** `move ark` and `move pioneer` were two
+        // commands for one recipe; a name is one word now, so they are the one command
+        // `P-323` always required. The tenth and eleventh are `launch-ark`, which fires no
+        // declared recipe - `C-54`.
         assert_eq!(
             takes_repeat.len(),
-            12,
-            "twelve player recipes have a command; these take a repeat: {takes_repeat:?}"
+            11,
+            "eleven commands take a repeat: {takes_repeat:?}"
         );
         for named in [
             form::END_TURN,
@@ -455,11 +435,11 @@ mod tests {
                 "`{named}` fires no recipe of the player's and must not take a repeat"
             );
         }
-        let parsed = parse_line(&grammar(), "{create labor territory:1 repeat:2}", 1)
+        let parsed = parse_line(&grammar(), "{create-labor territory:1 repeat:2}", 1)
             .unwrap()
             .unwrap();
         assert_eq!(parsed.optional_number("repeat"), Some(2));
-        let once = parse_line(&grammar(), "{create labor territory:1}", 1)
+        let once = parse_line(&grammar(), "{create-labor territory:1}", 1)
             .unwrap()
             .unwrap();
         assert_eq!(
@@ -469,95 +449,70 @@ mod tests {
         );
     }
 
-    /// The ordering rule, checked over the whole grammar rather than shown by one pair.
+    /// No two commands share an opening word, so ordered choice decides nothing.
     ///
-    /// It used to be shown by `add node` against `add <unit> orbit`: two forms opening on
-    /// the same word, one continuing with a keyword and the other with a hole, where only
-    /// the keyword form's position kept `node` from being read as a unit's name. `P-149`
-    /// deleted `add node`, and **no pair in the grammar collides today** - so an example
-    /// would have been a test that demonstrates nothing while still passing.
+    /// **This used to be the ordering rule and `P-328` retired it.** A command's name is one
+    /// word, dashed where it needs more, so `build-store` and `build-extractor` share no
+    /// token at all - and the first-wins order that used to be load-bearing now settles
+    /// nothing, because at most one form can match any name.
     ///
-    /// The rule outlives its example, so this checks the rule. For every pair of forms
-    /// sharing an opening word, if one continues with a keyword and the other with a hole,
-    /// the keyword one must come first. Adding a form that breaks it fails here, which is
-    /// what the example could no longer do.
+    /// **The rule outlived two examples and now outlives its own population.** It was shown
+    /// by `add node` against `add <unit> orbit` until `P-149` deleted `add node`; it was
+    /// checked over every pair after that; and the pairs are gone. So this asserts the
+    /// property that replaced it - **every name is distinct and every name is one word** -
+    /// which is what makes the order irrelevant rather than merely unexercised.
     #[test]
-    fn a_keyword_form_comes_before_a_hole_that_would_swallow_it() {
-        let grammar = grammar();
-        let opens_with = |form: &Form| match form.terms.first() {
-            Some(Term::Keyword(word)) => Some(*word),
-            _ => None,
-        };
-        let second_is_keyword = |form: &Form| matches!(form.terms.get(1), Some(Term::Keyword(_)));
-        let second_is_hole = |form: &Form| matches!(form.terms.get(1), Some(Term::Hole { .. }));
-
-        let forms = grammar.forms();
-        let mut sharing = 0usize;
-        for (at, earlier) in forms.iter().enumerate() {
-            for later in forms.iter().skip(at + 1) {
-                if opens_with(earlier).is_none() || opens_with(earlier) != opens_with(later) {
-                    continue;
-                }
-                sharing += 1;
-                assert!(
-                    !(second_is_hole(earlier) && second_is_keyword(later)),
-                    "`{}` opens with a hole and is listed before `{}`, which opens with a keyword on the same word - first-wins matching would read that keyword as a value",
-                    earlier.name,
-                    later.name
-                );
-            }
-        }
-        // A grammar where no two forms share an opening word would pass without looking at
-        // anything, which is the failure mode of every scanner.
-        assert!(sharing >= 5, "only {sharing} pairs share an opening word");
-
-        // **And the hazard the rule exists for is gone, which is worth showing rather than
-        // asserting.** A hole used to swallow a keyword because a value was whatever word sat
-        // in that position; `P-321` makes a field carry its own name, so `planet` in
-        // `{show planet}` can only ever be a word of a name. Listed either way round, the
-        // keyword form is the only one that matches.
-        let general = Form::new(
-            "general",
-            vec![Term::Keyword("show"), Term::required("subject", Kind::Name)],
-            "show something",
-        );
-        let specific = Form::new(
-            "specific",
-            vec![Term::Keyword("show"), Term::Keyword("planet")],
-            "show the planet",
-        );
-
-        for order in [
-            vec![general.clone(), specific.clone()],
-            vec![specific.clone(), general.clone()],
-        ] {
-            let parsed = parse_line(&Grammar::new(order), "{show planet}", 1)
-                .unwrap()
-                .unwrap();
+    fn every_command_name_is_one_word_and_no_two_are_the_same() {
+        let all = grammar();
+        let mut names: Vec<String> = Vec::new();
+        for form in all.forms() {
+            let opening: Vec<&str> = form
+                .terms
+                .iter()
+                .map_while(|term| match term {
+                    Term::Keyword(word) => Some(*word),
+                    Term::Hole { .. } => None,
+                })
+                .collect();
             assert_eq!(
-                parsed.form, "specific",
-                "a field is named, so nothing reads `planet` as a value"
+                opening.len(),
+                1,
+                "`{}` opens with {} words and a name is one - `P-328`",
+                form.name,
+                opening.len()
             );
+            let name = opening[0];
+            assert!(
+                !name.contains(' '),
+                "`{name}` has a space in it, and a name that needs more than one word joins \
+                 them with dashes"
+            );
+            names.push(name.to_string());
         }
-
-        // The general form is still reachable, by writing the field it takes.
-        let either = Grammar::new(vec![general, specific]);
-        let parsed = parse_line(&either, "{show subject:planet}", 1)
-            .unwrap()
-            .unwrap();
-        assert_eq!(parsed.form, "general");
-        assert_eq!(parsed.name("subject").unwrap(), "planet");
+        assert!(
+            names.len() > 20,
+            "only {} forms, so this agrees with almost anything",
+            names.len()
+        );
+        let mut unique = names.clone();
+        unique.sort();
+        unique.dedup();
+        assert_eq!(
+            unique.len(),
+            names.len(),
+            "two commands share a name, so one of them is unreachable whatever the order"
+        );
     }
 
     #[test]
     fn an_optional_resource_may_be_left_off() {
-        let parsed = parse_line(&grammar(), "{build yard territory:11}", 1)
+        let parsed = parse_line(&grammar(), "{build-yard territory:11}", 1)
             .unwrap()
             .unwrap();
         assert_eq!(parsed.optional_name("resource"), None);
         // A repeat is the optional field every player command carries, and one left off
         // means the command fires once.
-        let parsed = parse_line(&grammar(), "{create labor territory:1 repeat:2}", 1)
+        let parsed = parse_line(&grammar(), "{create-labor territory:1 repeat:2}", 1)
             .unwrap()
             .unwrap();
         assert_eq!(parsed.optional_number("repeat"), Some(2));
@@ -565,7 +520,7 @@ mod tests {
 
     #[test]
     fn a_mistyped_command_is_told_what_was_expected_and_where() {
-        let failure = parse_line(&grammar(), "{deploy ark territory:somewhere}", 1).unwrap_err();
+        let failure = parse_line(&grammar(), "{deploy-ark territory:somewhere}", 1).unwrap_err();
         assert!(
             failure.expected.contains(&"a number".to_string()),
             "{failure}"

@@ -13,4 +13,4 @@
 {run file:biomes}
 
 # One ark, waiting above the planet. Nothing is on the planet yet.
-{add ark orbit territory:1}
+{add-ark-orbit territory:1}

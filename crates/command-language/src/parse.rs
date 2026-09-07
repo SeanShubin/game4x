@@ -62,15 +62,19 @@ pub fn parse_script(grammar: &Grammar, text: &str) -> Result<Vec<Utterance>, Fai
 
 /// A command is `{name field:value ...}`, so a form is its name words and its named fields.
 ///
-/// **`P-321` and `P-323`.** `spec/console.md`: *A command is written `{name field:value ...}`.
-/// Its name is the words that open it and its arguments are named.* The predecessor read a
-/// form as a flat sequence - keywords and holes, in order - so `land ark 1` bound `1` to
-/// `territory` by counting, and the same three words in another order meant nothing.
+/// **`P-321`, `P-323` and `P-328`.** `spec/console.md`:
 ///
-/// **The name is still matched in order and the fields are not.** A name is words, so `found
-/// by land` is three of them and their order is the name; a field carries its own name, so
-/// `{build extractor territory:1 resource:metal}` and the same two fields swapped are one
-/// command.
+/// > A command is written `{name field:value ...}`. **Its name is one word**, dashed where
+/// > it needs more, and its arguments are named.
+///
+/// The predecessor read a form as a flat sequence - keywords and holes, in order - so
+/// `land ark 1` bound `1` to `territory` by counting, and the same three words in another
+/// order meant nothing.
+///
+/// **The name is one token and the fields carry their own names**, so
+/// `{build-extractor territory:1 resource:metal}` and the same two fields swapped are one
+/// command. A form is still a list of keywords followed by holes, and every form in the
+/// console's grammar now has exactly one keyword.
 ///
 /// **A `Term::Keyword` is a word of the name and a `Term::Hole` is a field.** That is a
 /// reinterpretation of the existing grammar rather than a new one, which keeps every failure
@@ -235,8 +239,7 @@ mod tests {
             Form::new(
                 "land",
                 vec![
-                    Term::Keyword("deploy"),
-                    Term::Keyword("ark"),
+                    Term::Keyword("deploy-ark"),
                     Term::required("territory", Kind::Number),
                 ],
                 "bring an ark down from orbit",
@@ -244,18 +247,13 @@ mod tests {
             Form::new(
                 "build",
                 vec![
-                    Term::Keyword("build"),
-                    Term::Keyword("extractor"),
+                    Term::Keyword("build-extractor"),
                     Term::required("territory", Kind::Number),
                     Term::optional("resource", Kind::Name),
                 ],
                 "build an extractor",
             ),
-            Form::new(
-                "end-turn",
-                vec![Term::Keyword("end"), Term::Keyword("turn")],
-                "end the turn",
-            ),
+            Form::new("end-turn", vec![Term::Keyword("end-turn")], "end the turn"),
         ])
     }
 
@@ -265,7 +263,7 @@ mod tests {
 
     #[test]
     fn a_command_parses_into_named_arguments() {
-        let utterance = parse("{deploy ark territory:1}").unwrap().unwrap();
+        let utterance = parse("{deploy-ark territory:1}").unwrap().unwrap();
         assert_eq!(utterance.form, "land");
         assert_eq!(utterance.number("territory").unwrap(), 1);
         // **`ark` is a word of the name and not an argument**, so asking for it as one says
@@ -275,9 +273,9 @@ mod tests {
 
     #[test]
     fn an_optional_argument_may_be_left_out_or_supplied() {
-        let without = parse("{build extractor territory:3}").unwrap().unwrap();
+        let without = parse("{build-extractor territory:3}").unwrap().unwrap();
         assert_eq!(without.optional_name("resource"), None);
-        let with = parse("{build extractor territory:3 resource:metal}")
+        let with = parse("{build-extractor territory:3 resource:metal}")
             .unwrap()
             .unwrap();
         assert_eq!(with.optional_name("resource"), Some("metal"));
@@ -285,7 +283,7 @@ mod tests {
 
     #[test]
     fn a_form_may_be_all_keywords() {
-        assert_eq!(parse("{end turn}").unwrap().unwrap().form, "end-turn");
+        assert_eq!(parse("{end-turn}").unwrap().unwrap().form, "end-turn");
     }
 
     #[test]
@@ -298,7 +296,7 @@ mod tests {
     /// The whole point of carrying positions: a failure says where and what was wanted.
     #[test]
     fn a_wrong_argument_says_where_it_is_and_what_was_expected() {
-        let failure = parse("{deploy ark territory:orbit}").unwrap_err();
+        let failure = parse("{deploy-ark territory:orbit}").unwrap_err();
         // **At the value and not at the field that carried it.** `territory:` opens at
         // column 13 and `orbit` at column 23, and the one a reader has to change is the
         // value - so the position points past the name rather than at the start of the pair.
@@ -312,7 +310,7 @@ mod tests {
 
     #[test]
     fn a_missing_argument_is_reported_at_the_end_of_the_line() {
-        let failure = parse("{deploy ark}").unwrap_err();
+        let failure = parse("{deploy-ark}").unwrap_err();
         // **The field is named, which a positional grammar could not do.** It could say a
         // number was wanted and never which of the numbers, because the thing missing had no
         // name until `P-321` gave every argument one.
@@ -327,7 +325,7 @@ mod tests {
 
     #[test]
     fn a_surplus_word_is_reported_rather_than_ignored() {
-        let failure = parse("{end turn} now").unwrap_err();
+        let failure = parse("{end-turn} now").unwrap_err();
         assert!(
             failure.expected.contains(&"end of line".to_string()),
             "{failure}"
@@ -343,7 +341,7 @@ mod tests {
         // Column 2, which is the first word of the name: column 1 is the brace, and every
         // form got that far.
         assert_eq!(failure.position, Position::new(1, 2));
-        for expected in ["deploy", "build", "end"] {
+        for expected in ["deploy-ark", "build-extractor", "end-turn"] {
             assert!(
                 failure.expected.contains(&expected.to_string()),
                 "{failure} should offer {expected}"
@@ -355,7 +353,7 @@ mod tests {
     /// an argument is reported there rather than at the start of the line.
     #[test]
     fn the_report_comes_from_whichever_form_read_furthest() {
-        let failure = parse("{build extractor territory:three}").unwrap_err();
+        let failure = parse("{build-extractor territory:three}").unwrap_err();
         assert_eq!(failure.position, Position::new(1, 28));
         assert!(
             failure.expected.contains(&"a number".to_string()),
@@ -365,7 +363,7 @@ mod tests {
 
     #[test]
     fn a_script_parses_every_line_in_order() {
-        let script = "{deploy ark territory:1}\n\n# a note\n{end turn}\n";
+        let script = "{deploy-ark territory:1}\n\n# a note\n{end-turn}\n";
         let commands = parse_script(&grammar(), script).unwrap();
         assert_eq!(commands.len(), 2);
         assert_eq!(commands[0].form, "land");
@@ -374,14 +372,14 @@ mod tests {
 
     #[test]
     fn a_script_stops_at_the_first_line_that_fails_and_says_which() {
-        let script = "{deploy ark territory:1}\n{deploy ark territory:orbit}\n{end turn}\n";
+        let script = "{deploy-ark territory:1}\n{deploy-ark territory:orbit}\n{end-turn}\n";
         let failure = parse_script(&grammar(), script).unwrap_err();
         assert_eq!(failure.position.line, 2);
     }
 
     #[test]
     fn a_command_remembers_how_it_was_written() {
-        let utterance = parse("  {deploy ark territory:1}  ").unwrap().unwrap();
-        assert_eq!(utterance.source, "{deploy ark territory:1}");
+        let utterance = parse("  {deploy-ark territory:1}  ").unwrap().unwrap();
+        assert_eq!(utterance.source, "{deploy-ark territory:1}");
     }
 }

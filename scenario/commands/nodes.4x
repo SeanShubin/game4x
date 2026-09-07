@@ -12,61 +12,61 @@
 # running them produces.
 
 # 1: the landing site. Everything works
-{set resource territory:1 resource:food extractors:3 density:4}
-{set resource territory:1 resource:metal extractors:3 density:4}
-{set resource territory:1 resource:energy extractors:3 density:4}
+{set-resource territory:1 resource:food extractors:3 density:4}
+{set-resource territory:1 resource:metal extractors:3 density:4}
+{set-resource territory:1 resource:energy extractors:3 density:4}
 
 # 2: few dense food extractors
-{set resource territory:2 resource:food extractors:2 density:6}
-{set resource territory:2 resource:metal extractors:2 density:4}
-{set resource territory:2 resource:energy extractors:2 density:4}
+{set-resource territory:2 resource:food extractors:2 density:6}
+{set-resource territory:2 resource:metal extractors:2 density:4}
+{set-resource territory:2 resource:energy extractors:2 density:4}
 
 # 3: many thin food extractors, same food total
-{set resource territory:3 resource:food extractors:6 density:2}
-{set resource territory:3 resource:metal extractors:2 density:4}
-{set resource territory:3 resource:energy extractors:2 density:4}
+{set-resource territory:3 resource:food extractors:6 density:2}
+{set-resource territory:3 resource:metal extractors:2 density:4}
+{set-resource territory:3 resource:energy extractors:2 density:4}
 
 # 4: the minimum a territory can be
-{set resource territory:4 resource:food extractors:1 density:2}
-{set resource territory:4 resource:metal extractors:4 density:5}
-{set resource territory:4 resource:energy extractors:4 density:5}
+{set-resource territory:4 resource:food extractors:1 density:2}
+{set-resource territory:4 resource:metal extractors:4 density:5}
+{set-resource territory:4 resource:energy extractors:4 density:5}
 
 # 5: food density 1
-{set resource territory:5 resource:food extractors:3 density:1}
-{set resource territory:5 resource:metal extractors:8 density:8}
-{set resource territory:5 resource:energy extractors:8 density:8}
+{set-resource territory:5 resource:food extractors:3 density:1}
+{set-resource territory:5 resource:metal extractors:8 density:8}
+{set-resource territory:5 resource:energy extractors:8 density:8}
 
 # 6: no metal
-{set resource territory:6 resource:food extractors:4 density:4}
-{set resource territory:6 resource:metal extractors:0 density:0}
-{set resource territory:6 resource:energy extractors:4 density:5}
+{set-resource territory:6 resource:food extractors:4 density:4}
+{set-resource territory:6 resource:metal extractors:0 density:0}
+{set-resource territory:6 resource:energy extractors:4 density:5}
 
 # 7: no energy
-{set resource territory:7 resource:food extractors:4 density:4}
-{set resource territory:7 resource:metal extractors:4 density:5}
-{set resource territory:7 resource:energy extractors:0 density:0}
+{set-resource territory:7 resource:food extractors:4 density:4}
+{set-resource territory:7 resource:metal extractors:4 density:5}
+{set-resource territory:7 resource:energy extractors:0 density:0}
 
 # 8: population without industry
-{set resource territory:8 resource:food extractors:6 density:6}
-{set resource territory:8 resource:metal extractors:1 density:2}
-{set resource territory:8 resource:energy extractors:1 density:2}
+{set-resource territory:8 resource:food extractors:6 density:6}
+{set-resource territory:8 resource:metal extractors:1 density:2}
+{set-resource territory:8 resource:energy extractors:1 density:2}
 
 # 9: rich metal, too few hands to work it
-{set resource territory:9 resource:food extractors:2 density:3}
-{set resource territory:9 resource:metal extractors:6 density:8}
-{set resource territory:9 resource:energy extractors:1 density:2}
+{set-resource territory:9 resource:food extractors:2 density:3}
+{set-resource territory:9 resource:metal extractors:6 density:8}
+{set-resource territory:9 resource:energy extractors:1 density:2}
 
 # 10: an energy depot
-{set resource territory:10 resource:food extractors:3 density:3}
-{set resource territory:10 resource:metal extractors:1 density:3}
-{set resource territory:10 resource:energy extractors:6 density:8}
+{set-resource territory:10 resource:food extractors:3 density:3}
+{set-resource territory:10 resource:metal extractors:1 density:3}
+{set-resource territory:10 resource:energy extractors:6 density:8}
 
 # 11: the prize
-{set resource territory:11 resource:food extractors:5 density:6}
-{set resource territory:11 resource:metal extractors:5 density:6}
-{set resource territory:11 resource:energy extractors:5 density:6}
+{set-resource territory:11 resource:food extractors:5 density:6}
+{set-resource territory:11 resource:metal extractors:5 density:6}
+{set-resource territory:11 resource:energy extractors:5 density:6}
 
 # 12: rich extractors, almost no workers
-{set resource territory:12 resource:food extractors:2 density:2}
-{set resource territory:12 resource:metal extractors:8 density:8}
-{set resource territory:12 resource:energy extractors:8 density:8}
+{set-resource territory:12 resource:food extractors:2 density:2}
+{set-resource territory:12 resource:metal extractors:8 density:8}
+{set-resource territory:12 resource:energy extractors:8 density:8}

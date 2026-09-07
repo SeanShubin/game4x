@@ -179,13 +179,13 @@ mod tests {
     #[test]
     fn lines_to_run_keep_their_order() {
         let options = read(
-            ["--run", "{deploy ark territory:1}", "--run", "{end turn}"]
+            ["--run", "{deploy-ark territory:1}", "--run", "{end-turn}"]
                 .into_iter()
                 .map(str::to_string),
         )
         .unwrap()
         .unwrap();
-        assert_eq!(options.run, ["{deploy ark territory:1}", "{end turn}"]);
+        assert_eq!(options.run, ["{deploy-ark territory:1}", "{end-turn}"]);
     }
 
     #[test]

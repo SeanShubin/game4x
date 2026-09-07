@@ -219,8 +219,7 @@ mod tests {
             Form::new(
                 "land",
                 vec![
-                    Term::Keyword("deploy"),
-                    Term::Keyword("ark"),
+                    Term::Keyword("deploy-ark"),
                     Term::required("territory", Kind::Number),
                 ],
                 "bring an ark down from orbit",
@@ -228,18 +227,13 @@ mod tests {
             Form::new(
                 "build",
                 vec![
-                    Term::Keyword("build"),
-                    Term::Keyword("extractor"),
+                    Term::Keyword("build-extractor"),
                     Term::required("territory", Kind::Number),
                     Term::optional("resource", Kind::Name),
                 ],
                 "build a structure",
             ),
-            Form::new(
-                "end-turn",
-                vec![Term::Keyword("end"), Term::Keyword("turn")],
-                "end the turn",
-            ),
+            Form::new("end-turn", vec![Term::Keyword("end-turn")], "end the turn"),
         ])
     }
 
@@ -247,13 +241,13 @@ mod tests {
     fn a_form_writes_itself_the_way_it_is_typed() {
         assert_eq!(
             grammar().form("land").unwrap().syntax(),
-            "{deploy ark territory:<value>}"
+            "{deploy-ark territory:<value>}"
         );
         assert_eq!(
             grammar().form("build").unwrap().syntax(),
-            "{build extractor territory:<value> [resource:<value>]}"
+            "{build-extractor territory:<value> [resource:<value>]}"
         );
-        assert_eq!(grammar().form("end-turn").unwrap().syntax(), "{end turn}");
+        assert_eq!(grammar().form("end-turn").unwrap().syntax(), "{end-turn}");
     }
 
     #[test]
@@ -272,8 +266,8 @@ mod tests {
 
     #[test]
     fn forms_can_be_found_by_the_word_that_opens_them() {
-        assert_eq!(grammar().forms_beginning("deploy").len(), 1);
-        assert_eq!(grammar().forms_beginning("end").len(), 1);
+        assert_eq!(grammar().forms_beginning("deploy-ark").len(), 1);
+        assert_eq!(grammar().forms_beginning("end-turn").len(), 1);
         assert!(grammar().forms_beginning("fly").is_empty());
     }
 

@@ -12,40 +12,40 @@
 
 # Turn 10. Territory 1 is complete and pays for itself. Territory 2 has one farm at density
 # six, so its single citizen becomes two.
-{create labor territory:1 repeat:2}
-{work extractor territory:1 resource:food repeat:2}
-{create labor territory:2}
-{work extractor territory:2 resource:food}
-{end turn}
+{create-labor territory:1 repeat:2}
+{work territory:1 resource:food repeat:2}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{end-turn}
 
 # Turn 11. Two citizens in territory 2: one holds the food, one has nothing to spend metal
 # on yet - a second farm needs a metal that territory 2 cannot make, having no mine and no
 # way to build one until it has metal. That is the same bootstrap the landing site was
 # spared by arriving with three extractors, and a pioneer does not carry them.
-{create labor territory:1 repeat:2}
-{work extractor territory:1 resource:food repeat:2}
-{create labor territory:1 repeat:2}
-{work extractor territory:1 resource:metal repeat:2}
-{create labor territory:1 repeat:2}
-{work extractor territory:1 resource:energy repeat:2}
-{create labor territory:2}
-{work extractor territory:2 resource:food}
+{create-labor territory:1 repeat:2}
+{work territory:1 resource:food repeat:2}
+{create-labor territory:1 repeat:2}
+{work territory:1 resource:metal repeat:2}
+{create-labor territory:1 repeat:2}
+{work territory:1 resource:energy repeat:2}
+{create-labor territory:2}
+{work territory:2 resource:food}
 
 # The landing site can afford another pioneer every turn: two metal and six energy against
 # twelve of each.
-{produce pioneer territory:1}
-{end turn}
+{produce-pioneer territory:1}
+{end-turn}
 
 # Turn 12. The second pioneer crosses to territory 3.
-{create labor territory:1 repeat:2}
-{work extractor territory:1 resource:food repeat:2}
-{create labor territory:1 repeat:2}
-{work extractor territory:1 resource:metal repeat:2}
-{create labor territory:1 repeat:2}
-{work extractor territory:1 resource:energy repeat:2}
-{create labor territory:2}
-{work extractor territory:2 resource:food}
-{found by land territory:3}
-{create labor territory:3}
-{work extractor territory:3 resource:food}
-{end turn}
+{create-labor territory:1 repeat:2}
+{work territory:1 resource:food repeat:2}
+{create-labor territory:1 repeat:2}
+{work territory:1 resource:metal repeat:2}
+{create-labor territory:1 repeat:2}
+{work territory:1 resource:energy repeat:2}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{found-by-land territory:3}
+{create-labor territory:3}
+{work territory:3 resource:food}
+{end-turn}
