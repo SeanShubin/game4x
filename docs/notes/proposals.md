@@ -60,7 +60,49 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+**One**, and it is the three places your backreference rule fires.
+
+### P-319 - Three backreferences in `docs/process.md`, said plainly instead
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> How I know the application is right, then All lanes
+
+**Your rule, applied to the only three places it fires.** *An ai assistant can remember
+backreferences but a human can't.* I measured `docs/process.md`, every file in `spec/`, and
+`releases/first-release.md` for *the fourth*, *the other three*, *the first three*, *the former*,
+*the latter*, *the above* and *that one*. **Three hits, all in `docs/process.md`; `spec/` and the
+release are clean.**
+
+**First, in *How I know the application is right*.** The second sentence of the four-artifacts
+paragraph becomes:
+
+> Four artifacts: the definitions of the things, the definitions of the transformations over them,
+> the commands a scenario ran, and the data dump of that scenario. **The definitions and the
+> commands are enough to derive the data dump by hand.** If I can do that, I can tell whether the
+> application is behaving as I intend.
+
+**Second, in *All lanes*.** The bullet about a cited item becomes:
+
+> - So an instance may not file a new item while one of its own is open and cited by a commit saying
+>   it is done. **It closes the item the commit cites**, or records the hash to say it looked and it
+>   is still open. That is the same forcing function a cap gives - close something before filing
+>   something - attached to the cost that is actually there
+
+**Why the first one is worth your time rather than merely tidy.** `P-317` landed directly beneath
+it, saying the same thing in named terms, so **the plain version and the vague version are currently
+adjacent** - two sentences apart, one derivable by a reader and one not.
+
+**What changes and what does not.** Two sentences. No claim moves: *the first three* and *the
+definitions and the commands* name the same three artifacts, and *that one* and *the item the commit
+cites* are the same item. **If either substitution reads as a change of meaning rather than of
+wording, that is the thing to say** - I have read them as identical and that is a judgement.
+
+**The check the promoting commit runs**: none of the seven phrases appears in `docs/process.md`.
+
+**Not proposed here: a rule.** Your sentence about backreferences is recorded in
+`docs/notes/spec-backlog.md` and is not offered as text, because a standing rule in your document is
+a different decision from three edits and you asked for the edits. **Say when you want the rule and
+it is one sentence** - and it is what would make a future sweep yours rather than mine.
 
 ## Addressed to other perspectives
 
