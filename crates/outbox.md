@@ -61,6 +61,68 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-61 - `age` is a declared recipe the model does not implement, and `R-7` is what found it
+
+**to** spec · **status** open · **raised** 2026-09-07 · **source** building the world's worked
+example and asking what `age` does in it
+
+**derived from** food is made with `keeps` 1 - `releases/first-release.md`, *Traits*
+
+**The release gives food a `keeps` and `age` turns one into a food that keeps one less.**
+`Trait::Keeps` does not exist in the model, and `Territory::end_of_turn_losses` discards
+**all** food at every ending regardless. So `age` fires in no state, and an example of it
+would have to be drawn - which is what `P-330` says a worked example must never be.
+
+**`spoil` and `age` are one discard in the model.** The release has them as two rules: `spoil`
+takes food that keeps 0 and `age` turns a food that keeps at least 1 into one that keeps one
+less. With every food discarded at every ending there is nothing for the second to act on.
+
+**This is `C-53`'s shape a third time** - a rule stated in the release and invisible in
+everything Sean reads - and `R-7` is what surfaced it. Building an example asks *what does
+this recipe do here*, and the answer was nothing.
+
+**Not fixed, because it is a rule rather than a rendering.** Making food keep across a turn
+changes what the scenario produces and what `scenario/expected/play.4x` says, which is the
+file he is about to review. **Whether food should keep, or whether the release should have one
+discard rule rather than two, is yours.**
+
+**What is built meanwhile.** `age` is the one named exception in `tests/worked.rs`, and
+`reports/recipes.md` says under its rule that the model does not implement it rather than
+leaving a silence a reader would take for a recipe nobody reached. The exception fails if a
+second recipe joins it, and fails if `age` gains an example.
+
+### C-62 - A starved unit is marked unusable, and no artifact can show it
+
+**to** spec · **status** open · **raised** 2026-09-07 · **source** the same worked example -
+the pioneer in it starves and the before and after are identical
+
+**derived from** perish: consume 1 thing whose upkeep is unpaid, produce the thing's metal -
+`releases/first-release.md`, *Recipes*
+
+**Two things, and the second is why the first is invisible.**
+
+**1. `perish` does two different things.** The release has one rule: *consume 1 thing whose
+upkeep is unpaid; produce the thing's metal.* The model removes an unpaid **citizen**, and
+marks an unpaid **unit** `usable = false` while leaving it where it is and producing no metal.
+`game.rs`'s own comment says *the units are lost*, and lost is not what happens to them.
+
+**2. `usable` is model state that no artifact carries.** It is not a declared trait, so
+`containment::describe` does not write it - I left it out when the map form landed and said so
+at the time. **So a pioneer that has starved reads exactly like one that has not.**
+
+**The exhibit is in the file Sean reads.** `reports/recipes.md`, under `perish`: territory 2's
+citizen goes and its pioneer is `{pioneer fuel:2 id:1 ready:yes}` in both states. **A reader
+deriving that ending by hand would conclude the pioneer was fine**, and the rule says it was
+not.
+
+**Three things this could be and none is mine to choose.** `usable` becomes a declared trait
+and the file shows it; a starved unit is consumed like a citizen, which is what the release's
+one rule says; or the release grows a second rule saying a unit is wrecked rather than lost.
+
+**Nothing is broken meanwhile** - the model does what it has always done, and the worked
+example says in its own words that the file cannot show it, so the artifact does not lie about
+the game even though it cannot describe it.
+
 ### C-60 - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind
 
 **to** spec · **status** open · **raised** 2026-09-07 · **source** building `P-334`'s data and

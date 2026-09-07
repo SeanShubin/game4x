@@ -35,6 +35,13 @@ use game_model::{Game, Resource, TerritoryId};
 pub struct Example {
     /// The recipe, spelled as `releases/first-release.md` spells it.
     pub recipe: &'static str,
+    /// The other recipes this same firing shows, spelled the same way.
+    ///
+    /// **`R-7`, as `P-332` settled it**: *the world's recipes are shown once, together, on
+    /// `{end-turn}`, because no command fires one of them alone and four of them cannot act
+    /// alone at all.* So one example belongs under six headings, and this is the list the
+    /// report and the coverage check both read.
+    pub also: &'static [&'static str],
     /// The command that fires it, as a player would type it.
     pub command: &'static str,
     /// Which case this is, for a recipe whose quantity is an expression.
@@ -49,6 +56,7 @@ pub struct Example {
 /// A state, the command, and the state after - the three things `R-7` asks for.
 pub struct Run {
     pub recipe: &'static str,
+    pub also: &'static [&'static str],
     pub case: Option<&'static str>,
     pub command: &'static str,
     pub before: String,
@@ -78,6 +86,7 @@ pub fn run(example: &Example) -> Run {
     let touched = changed(&before, &after);
     Run {
         recipe: example.recipe,
+        also: example.also,
         case: example.case,
         command: example.command,
         before: restricted(&before, &touched),
@@ -178,6 +187,7 @@ pub fn examples() -> Vec<Example> {
     use game_model::thing::Kind;
     vec![
         Example {
+            also: &[],
             recipe: "deploy ark",
             command: "{deploy-ark territory:1}",
             case: None,
@@ -192,12 +202,14 @@ pub fn examples() -> Vec<Example> {
             },
         },
         Example {
+            also: &[],
             recipe: "create labor",
             command: "{create-labor territory:1}",
             case: None,
             before: || founded(&[], &[(Kind::Citizen, 1)]),
         },
         Example {
+            also: &[],
             recipe: "work",
             command: "{work territory:1 resource:food}",
             case: Some("the density is what one extractor yields, so four food from a `3 x 4`"),
@@ -209,6 +221,7 @@ pub fn examples() -> Vec<Example> {
             },
         },
         Example {
+            also: &[],
             recipe: "build extractor",
             command: "{build-extractor territory:1 resource:metal}",
             case: None,
@@ -220,6 +233,7 @@ pub fn examples() -> Vec<Example> {
             },
         },
         Example {
+            also: &[],
             recipe: "build store",
             command: "{build-store territory:1 resource:metal}",
             case: None,
@@ -233,12 +247,14 @@ pub fn examples() -> Vec<Example> {
             },
         },
         Example {
+            also: &[],
             recipe: "build yard",
             command: "{build-yard territory:1}",
             case: None,
             before: || founded(&[], &[(Kind::Labor, 1), (Kind::Metal, 15)]),
         },
         Example {
+            also: &[],
             recipe: "produce pioneer",
             command: "{produce-pioneer territory:1}",
             case: None,
@@ -250,6 +266,7 @@ pub fn examples() -> Vec<Example> {
             },
         },
         Example {
+            also: &[],
             recipe: "move",
             command: "{move unit:pioneer territory:2}",
             case: Some("moving spends one fuel and leaves the unit not ready"),
@@ -266,6 +283,7 @@ pub fn examples() -> Vec<Example> {
             },
         },
         Example {
+            also: &[],
             recipe: "found by land",
             command: "{found-by-land territory:2}",
             case: Some("the pioneer is consumed and the ground it takes is furnished"),
@@ -295,7 +313,65 @@ pub fn examples() -> Vec<Example> {
                 game
             },
         },
+        // **The world's, shown once on one `{end-turn}`** - `R-7`, as `P-332` settled it.
+        //
+        // **Two territories, because `grow` and `perish` cannot both fire in one.** Both are
+        // decided from the same food: growing needs a surplus after upkeep and perishing
+        // needs upkeep to have gone unpaid, and one territory's food cannot be both. Upkeep
+        // is per territory, so a planet can do both in one ending and a territory cannot.
+        //
+        // **`age` is not here and cannot be** - `C-61`. The release gives food a `keeps` and
+        // has `age` turn one into a food that keeps one less; the model has no such trait and
+        // discards all food at every ending, so no state makes `age` do anything.
         Example {
+            also: &["grow", "perish", "spoil", "refresh"],
+            recipe: "upkeep",
+            command: "{end-turn}",
+            case: Some(
+                "five of the world's six in one ending, in the release's order. \
+                 Territory 1 has four food for two citizens, so both eat and the two \
+                 left over grow two more; territory 2 has none, so its citizen goes \
+                 unpaid and perishes. What food is left is discarded and the worked \
+                 extractor is ready again. **The pioneer in territory 2 starved too and \
+                 the file cannot show it** - the model marks it unusable rather than \
+                 consuming it, and `usable` is a trait the release does not declare, so \
+                 it reads unchanged. `C-62`",
+            ),
+            before: || {
+                let mut game = founded(&[(Resource::Food, 3, 4)], &[(Kind::Citizen, 2)]);
+                {
+                    let place = &mut game.territories[0];
+                    place.add_store(Resource::Food);
+                    // Two eat, one is left over, and one citizen grows on it.
+                    place.add(Resource::Food, 4);
+                    // A worked extractor, so `refresh` has something to make ready again.
+                    place.add_extractor(Resource::Food);
+                    place.exhaust_extractor(0);
+                }
+
+                // A second territory with a pioneer and nothing to feed it.
+                let mut hungry =
+                    game_model::Territory::empty(TerritoryId(2), game_model::Biome::Grassland);
+                hungry.set_garrison(Some(game_model::territory::Garrison {
+                    force: 0,
+                    manned: 0,
+                }));
+                hungry.put(Kind::Citizen, 1);
+                game.territories.push(hungry);
+                game.adjacency = vec![vec![TerritoryId(2)], vec![TerritoryId(1)]];
+
+                let mut starving = game_model::Unit::new(
+                    game_model::UnitId(1),
+                    game_model::UnitKind::Pioneer,
+                    TerritoryId(2),
+                );
+                starving.location = game_model::Location::On(TerritoryId(2));
+                game.units.push(starving);
+                game
+            },
+        },
+        Example {
+            also: &[],
             recipe: "produce ark",
             command: "{produce-ark territory:1}",
             case: None,

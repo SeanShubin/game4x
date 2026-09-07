@@ -41,8 +41,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
-### To spec (23)
+### To spec (25)
 
+- **C-61** - `age` is a declared recipe the model does not implement, and `R-7` is what found it · `crates/outbox.md`
+- **C-62** - A starved unit is marked unusable, and no artifact can show it · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
 - **C-59** - `R-7` asks for the command that fires each recipe, and the world's six share one · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`

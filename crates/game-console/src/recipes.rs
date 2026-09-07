@@ -60,22 +60,42 @@ pub fn recipes(document: &str) -> String {
             out.push_str(&format!("- **{role}** {said}\n"));
         }
 
+        // **An example belongs to a recipe or is shared with others** - `R-7`, as `P-332`
+        // settled it: the world's six are shown once, together, on `{end-turn}`, because no
+        // command fires one of them alone and four cannot act alone at all.
         let mine: Vec<&worked::Run> = runs
             .iter()
-            .filter(|run| run.recipe == recipe.name)
+            .filter(|run| run.recipe == recipe.name || run.also.contains(&recipe.name.as_str()))
             .collect();
         if mine.is_empty() {
-            // **Said rather than left blank.** A recipe with no example under it, in a file
-            // where every other one has several, reads as one nobody reached. The world's six
-            // fire together on `{end-turn}` and four of them cannot be shown alone at all.
+            // **Said rather than left blank, and it says which kind of absence it is.** A
+            // heading with no example under it, in a file where every other has one, reads as
+            // one nobody reached. `age` is not unreached: the model has no `keeps` and
+            // discards all food at every ending, so nothing ages and an example would have to
+            // be drawn. `C-61`, and `tests/worked.rs` fails if a *second* recipe joins it.
             out.push_str(
-                "\n*No worked example: this is the world's, and the world's six all fire on \
-                 `{end-turn}`. `C-59`.*\n",
+                "\n*No worked example, because the model does not implement this: it has no \
+                 `keeps`, and discards all food at every ending, so nothing ages. Found by \
+                 building the others - `C-61`.*\n",
             );
             continue;
         }
         for run in mine {
             out.push_str("\n### An example\n\n");
+            let shared: Vec<&str> = std::iter::once(run.recipe)
+                .chain(run.also.iter().copied())
+                .filter(|named| *named != recipe.name)
+                .collect();
+            if !shared.is_empty() {
+                // **Said, because one firing under six headings is a fact about the game.**
+                // A reader meeting the same before and after under `spoil` and under `age`
+                // should be told they are one ending rather than left to notice.
+                out.push_str(&format!(
+                    "**One ending, six recipes.** This same firing is the example for {} as \
+                     well - no command fires one of the world's alone.\n\n",
+                    shared.join(", ")
+                ));
+            }
             if let Some(case) = run.case {
                 out.push_str(&format!("{case}.\n\n"));
             }

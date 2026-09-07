@@ -28,7 +28,7 @@ ul { padding-left: 1.2rem }
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p game-console --bin dump-state</code>, or <code>scripts/dump-state.sh</code>.</p>
 <p>Every recipe the release declares, with its own lines gathered under it. The release states these across seven columns, one row per line and the name written only on the first - which is the right shape for a table and the wrong one for answering <em>what does this recipe do</em>.</p>
 <p><strong>Beside each rule is a worked example</strong> - a state, the command that fires the recipe, and the state after - in the notation <code>scenario/expected/play.4x</code> uses, holding only what that recipe touched. Every one is a real command run against a real state: <code>R-7</code>.</p>
-<p>16 recipes, 59 lines between them, 10 worked examples.</p>
+<p>16 recipes, 59 lines between them, 11 worked examples.</p>
 <h2>deploy ark</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -346,40 +346,195 @@ ul { padding-left: 1.2rem }
 <li><strong>require</strong> 1 thing, with upkeep</li>
 <li><strong>consume</strong> food — the thing's upkeep</li>
 </ul>
-<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
+<h3>An example</h3>
+<p><strong>One ending, six recipes.</strong> This same firing is the example for grow, perish, spoil, refresh as well - no command fires one of the world's alone.</p>
+<p>five of the world's six in one ending, in the release's order. Territory 1 has four food for two citizens, so both eat and the two left over grow two more; territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. <strong>The pioneer in territory 2 starved too and the file cannot show it</strong> - the model marks it unusable rather than consuming it, and <code>usable</code> is a trait the release does not declare, so it reads unchanged. <code>C-62</code>.</p>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 2
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:no resource:food} -&gt; 1
+    {food} -&gt; 4
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
+<p><code>{end-turn}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 4
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:food} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
 <h2>grow</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>consume</strong> food — the lesser of the surplus food and the citizens here, surplus</li>
 <li><strong>produce</strong> citizen — the lesser of the surplus food and the citizens here</li>
 </ul>
-<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
+<h3>An example</h3>
+<p><strong>One ending, six recipes.</strong> This same firing is the example for upkeep, perish, spoil, refresh as well - no command fires one of the world's alone.</p>
+<p>five of the world's six in one ending, in the release's order. Territory 1 has four food for two citizens, so both eat and the two left over grow two more; territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. <strong>The pioneer in territory 2 starved too and the file cannot show it</strong> - the model marks it unusable rather than consuming it, and <code>usable</code> is a trait the release does not declare, so it reads unchanged. <code>C-62</code>.</p>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 2
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:no resource:food} -&gt; 1
+    {food} -&gt; 4
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
+<p><code>{end-turn}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 4
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:food} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
 <h2>perish</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>consume</strong> 1 thing, whose upkeep is unpaid</li>
 <li><strong>produce</strong> metal — the thing's metal</li>
 </ul>
-<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
+<h3>An example</h3>
+<p><strong>One ending, six recipes.</strong> This same firing is the example for upkeep, grow, spoil, refresh as well - no command fires one of the world's alone.</p>
+<p>five of the world's six in one ending, in the release's order. Territory 1 has four food for two citizens, so both eat and the two left over grow two more; territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. <strong>The pioneer in territory 2 starved too and the file cannot show it</strong> - the model marks it unusable rather than consuming it, and <code>usable</code> is a trait the release does not declare, so it reads unchanged. <code>C-62</code>.</p>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 2
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:no resource:food} -&gt; 1
+    {food} -&gt; 4
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
+<p><code>{end-turn}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 4
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:food} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
 <h2>spoil</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>consume</strong> 1 food, keeps 0</li>
 </ul>
-<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
+<h3>An example</h3>
+<p><strong>One ending, six recipes.</strong> This same firing is the example for upkeep, grow, perish, refresh as well - no command fires one of the world's alone.</p>
+<p>five of the world's six in one ending, in the release's order. Territory 1 has four food for two citizens, so both eat and the two left over grow two more; territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. <strong>The pioneer in territory 2 starved too and the file cannot show it</strong> - the model marks it unusable rather than consuming it, and <code>usable</code> is a trait the release does not declare, so it reads unchanged. <code>C-62</code>.</p>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 2
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:no resource:food} -&gt; 1
+    {food} -&gt; 4
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
+<p><code>{end-turn}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 4
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:food} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
 <h2>age</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>consume</strong> 1 food, keeps at least 1</li>
 <li><strong>produce</strong> 1 food, keeps one less</li>
 </ul>
-<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
+<p><em>No worked example, because the model does not implement this: it has no <code>keeps</code>, and discards all food at every ending, so nothing ages. Found by building the others - <code>C-61</code>.</em></p>
 <h2>refresh</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>consume</strong> 1 thing, not ready</li>
 <li><strong>produce</strong> 1 thing, ready</li>
 </ul>
-<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
+<h3>An example</h3>
+<p><strong>One ending, six recipes.</strong> This same firing is the example for upkeep, grow, perish, spoil as well - no command fires one of the world's alone.</p>
+<p>five of the world's six in one ending, in the release's order. Territory 1 has four food for two citizens, so both eat and the two left over grow two more; territory 2 has none, so its citizen goes unpaid and perishes. What food is left is discarded and the worked extractor is ready again. <strong>The pioneer in territory 2 starved too and the file cannot show it</strong> - the model marks it unusable rather than consuming it, and <code>usable</code> is a trait the release does not declare, so it reads unchanged. <code>C-62</code>.</p>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 2
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:no resource:food} -&gt; 1
+    {food} -&gt; 4
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
+<p><code>{end-turn}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 4
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:food} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
 </body>
 </html>
