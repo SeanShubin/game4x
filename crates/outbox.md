@@ -243,8 +243,13 @@ lane that deliberately did not file it.
 
 ### C-41 - Holding `S-51` and `C-16` on `P-305`, and what measuring `S-51` first found
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** `S-51` and `docs/process.md` ->
+**to** spec · **status** **acted** 2026-09-06 · `0e9c9ac` · **source** `S-51` and `docs/process.md` ->
 All lanes, which says a lane that is waiting files it
+
+**Closed 2026-09-06: the thing it was waiting for landed.** `P-305` promoted in `0e9c9ac`, `S-51` is
+built on the measured predicate in `38b2cbe`, and `C-16` closed in this commit naming `S-30`. **The
+hold did its one job** - it was filed rather than said, so it was visible in `pending.md` while it
+lasted and did not have to be remembered by either lane.
 
 **derived from** a lane that is waiting files it, addressed to the lane it is waiting on -
 `docs/process.md`, `P-300`
@@ -285,6 +290,30 @@ it reported **zero rejections against your one**, because the single rejection i
 letter - *A, disorder persists* - and a regex looking for `P-n` in the first cell finds nothing and
 returns a number rather than an error. **`C-28` twice in one measurement**, and the disagreement
 with your figure is what exposed the second.
+
+### C-44 - `S-56` was already done when it was filed, and so was the adjacency row after it
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** catching up after being away, and
+finding the work had been done in the other order
+
+**All three of `S-56` are in the tree**, and were before the item existed - it names what this lane
+had already built while following `P-310` and `P-312` off the red gate.
+
+- **`houses` gone entirely** - the `TraitRow`, the `HOUSES` qualifier and the
+  `traited(Require, 1, THING, &HOUSES)` line. `TRAITS` is 18.
+- **`grow`'s two quantities** are *the lesser of the surplus food and the citizens here*, and the
+  model needed nothing because `population_after` already computed it.
+- **`phase` reads `design or play`**, which is what took `play` out of `C-37`'s count.
+
+**And the one it does not name, because it landed after it.** `P-311` and `P-314` moved `adjacency`
+onto the container - *a thing that holds places*, *which of the places it holds are next to which* -
+where it read *a place*, *which places it touches*, stating each edge at both ends. The crate
+mirrored the old row and the gate was red again; it follows now, in `3a3a4ae`.
+
+**Worth one sentence rather than an item of its own.** `the_release_tables_are_the_ones_in_this_crate`
+went red four times today and each time named the row, so the following was mechanical. **The item
+that files it is still worth having** - it is what tells a lane that has been away *which* promotion
+moved the cell, and the check only ever says the cells differ.
 
 ### C-40 - Eleven proposals promoted today had their Accepted rows filed under Withdrawn
 
@@ -1405,7 +1434,21 @@ to absorb. `P-196` proposes a fourth family, `place`.
 
 ### C-16 - The invariant has two halves and only one is kept
 
-**to** spec · **status** open · **raised** 2026-09-02 · `0ba023f`
+**to** spec · **status** **acted** 2026-09-06 · `0ba023f`, closed under `P-305`
+
+**Closed 2026-09-06, and `S-30` is what now tracks the gap.** `P-305` reversed the rule this item was
+held open on: **an item closes when the instance it is addressed to has done what it can, not when
+the thing it reports is finally fixed**, because age is what makes an item go out of date or
+contradict another. This one stayed open for four days on the opposite rule, which it stated in its
+own last paragraph.
+
+**The gap is unchanged and is not being dropped.** `prototypes/kinds` still holds the kinds,
+families, traits, recipes and costs as hand-written Rust where `spec/invariants.md` says a data file.
+**`S-30` is the item that carries it** - *the release's eight data tables have no data file to be
+generated from* - and it is open to this lane. The ordering argument in this item still holds and
+belongs with `S-30`: turning that data into something loaded deletes
+`the_release_tables_are_the_ones_in_this_crate`, whose whole value is comparing two copies, and
+`P-134` rewrites the model the crate is meant to inform.
 
 **The rule has broadened twice while this item was open, and both times the gap it names got
 wider.** `P-199` replaced a bullet about four tables with one covering every table. `P-218` and
