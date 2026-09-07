@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-353** - A command may carry a tree, and nothing in the game asks for one · `docs/notes/decisions.md`
 - **P-352** - `CLAUDE.md` names the staging hazard correctly and gives an instruction that cannot close it · `docs/notes/decisions.md`
 - **P-351** - Two words in the data file that the release does not declare, and the exception list is full · `docs/notes/decisions.md`
 - **P-350** - Filing this study as an item is what makes it unrunnable, and that is the finding · `docs/notes/decisions.md`
