@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-324** - The rule that keeps a lane moving is written for one lane, and the rule binding all of them says stop · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -88,13 +89,13 @@ it exists to ask.
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290
+- `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md` - P-289, P-291
-- `docs/process.md` -> All lanes - P-247, P-248
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md` -> What this document has to be - P-302, P-303

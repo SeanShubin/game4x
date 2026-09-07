@@ -60,52 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**One**, and it is the research lane's `X-4`, which you flagged.
-
-### P-324 - The rule that keeps a lane moving is written for one lane, and the rule binding all of them says stop
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** text -
-**asks** approval - **into** `docs/process.md` -> All lanes, replacing the sentence about ending a
-turn
-
-**The research lane's `X-4`, verified in the file rather than taken.** Two rules, and a lane reading
-only what binds it will stop early and be right to.
-
-**`docs/process.md` -> Coding instance:** *Files a question when it needs human input on technical
-details, addressed to the specification instance, and **carries on with everything that does not
-depend on the answer***.
-
-**`docs/process.md` -> All lanes:** *An instance ends its turn when it is **blocked**, when it is
-holding for a stated reason, or when nothing is open to it.*
-
-**The first is stated once, about code, and nowhere in general.** `carries on` appears exactly once
-in the document, at line 273. The coding instance's own starting prompt says *carry on* a second
-time. **Everyone else has the opposite default.**
-
-> An instance ends its turn when **everything left waits on somebody else**, when it is holding for
-> a stated reason, or when nothing is open to it. **Being blocked on one thing is not being
-> blocked**: it files the question where its reader will find it, says what it assumed in order to
-> continue, and goes on to everything that does not depend on the answer. **Never merely because it
-> has just reported** - reporting is something done on the way past, not a place to stop.
-
-**Nothing here is new, and that is the argument for it.** The general form is the *Coding instance*
-rule with the word *coding* removed, and the sentence it replaces keeps its other two conditions and
-its closing clause word for word. **What changes is scope.**
-
-**It fired on both other lanes the day it was found.** The research lane ended a turn asking you
-whether to run a study rather than filing it and continuing - correct under *All lanes*, wrong under
-the rule that binds only code. And this lane spent much of today stopping to report rather than
-carrying on, which you corrected by hand more than once.
-
-**One correction to `X-4` itself**, recorded because it is an item about a count: it says *carries
-on* occurs twice in `docs/process.md`. It occurs once; the second is *carry on*, inside the prompt.
-**It does not change the finding.**
-
-**And one thing I did not take on trust.** `X-4` reports that you described the general model in
-their session - a lane working its backlog to the end and stopping only for a decision that blocks
-the remainder. **I have not heard you say it and a relayed statement of your intent is not
-evidence**, so the words above are derived from your document rather than from the report. If the
-report is right, this should read as what you already meant.
+**Nothing.** [decisions.md](decisions.md) is empty too.
 
 ## Addressed to other perspectives
 
@@ -2031,6 +1986,7 @@ work the release exists to order.
 | P-321, a command is written `{name field:value ...}`, and the positional form goes                                           | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
 | P-322, a deposit is a thing, so a territory's density has somewhere to be written                                            | `releases/first-release.md` -> Kinds, Traits                                                                                                 | 2026-09-06 |
 | P-323, a field is named for the kind it refers to; a command is named for its recipe and may repeat                          | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
+| P-324, being blocked on one thing is not being blocked, and it applies to every lane                                         | `docs/process.md` -> All lanes                                                                                                               | 2026-09-06 |
 
 ## Rejected
 

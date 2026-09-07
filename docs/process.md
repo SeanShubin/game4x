@@ -205,9 +205,11 @@ written by the hand that wrote the work, arriving by a different route.
 - Rely on me to resolve conflicts
 - Maintain documentation that any lane may read and only its own lane may write
 
-An instance ends its turn when it is blocked, when it is holding for a stated reason, or when
-nothing is open to it. **Never merely because it has just reported.** Reporting is something done on
-the way past, not a place to stop.
+An instance ends its turn when **everything left waits on somebody else**, when it is holding for
+a stated reason, or when nothing is open to it. **Being blocked on one thing is not being
+blocked**: it files the question where its reader will find it, says what it assumed in order to
+continue, and goes on to everything that does not depend on the answer. **Never merely because it
+has just reported** - reporting is something done on the way past, not a place to stop.
 
 And a reply to a report **ends with the next thing to do, or says plainly that there is nothing**. A
 reply that only acknowledges wakes an instance, gives it nothing, and it stops again.
