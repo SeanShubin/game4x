@@ -62,47 +62,60 @@ Two limits Claude holds itself to:
 
 **One**, and it is the three places your backreference rule fires.
 
-### P-319 - Three backreferences in `docs/process.md`, said plainly instead
+### P-319 - A rule for backreferences, and the three places it already fires
 
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/process.md` -> How I know the application is right, then All lanes
+**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
+own - **shape** text - **asks** approval - **into** `docs/process.md` -> What I read, and what I do,
+then How I know the application is right, then All lanes
 
-**Your rule, applied to the only three places it fires.** *An ai assistant can remember
-backreferences but a human can't.* I measured `docs/process.md`, every file in `spec/`, and
-`releases/first-release.md` for *the fourth*, *the other three*, *the first three*, *the former*,
-*the latter*, *the above* and *that one*. **Three hits, all in `docs/process.md`; `spec/` and the
-release are clean.**
+**The rule first, then the two sentences it condemns.** Three quotations, in the order the
+destinations are named.
 
-**First, in *How I know the application is right*.** The second sentence of the four-artifacts
-paragraph becomes:
+**1. The rule**, at the end of *What I read, and what I do*, beside the other thing that says what
+makes a document readable by you.
+
+> **Say what you are referring to, not where it was.** *The fourth*, *the first three*, *the
+> former*, *the latter*, *the above* - an assistant resolves these without effort and I cannot
+> resolve them at all on one read, which is why they get written and never noticed. **The test is
+> whether resolving the reference needs counting or remembering an order.** A pronoun for the thing
+> just named needs neither and is fine; anything that does gets the thing's name instead.
+
+**Why that phrasing rather than *avoid vague references*.** The middle sentence is the executable
+part: **needs counting or remembering an order** is a question with an answer, so an assistant
+applies it the same way twice and you get the same sweep whoever runs it. *Vague* is taste, and a
+sweep against my taste is what you said you did not want. The named examples are illustrations
+rather than the rule, so the rule does not go stale when a sixth form turns up.
+
+**And the last sentence is the bound that stops it eating the prose.** Without it the rule forbids
+*it* and *that*, which no document survives. A pronoun for the thing just named needs no counting,
+so it passes the test as written.
+
+**2. In *How I know the application is right*.**
 
 > Four artifacts: the definitions of the things, the definitions of the transformations over them,
 > the commands a scenario ran, and the data dump of that scenario. **The definitions and the
 > commands are enough to derive the data dump by hand.** If I can do that, I can tell whether the
 > application is behaving as I intend.
 
-**Second, in *All lanes*.** The bullet about a cited item becomes:
+**3. In *All lanes*.**
 
 > - So an instance may not file a new item while one of its own is open and cited by a commit saying
 >   it is done. **It closes the item the commit cites**, or records the hash to say it looked and it
 >   is still open. That is the same forcing function a cap gives - close something before filing
 >   something - attached to the cost that is actually there
 
-**Why the first one is worth your time rather than merely tidy.** `P-317` landed directly beneath
-it, saying the same thing in named terms, so **the plain version and the vague version are currently
-adjacent** - two sentences apart, one derivable by a reader and one not.
+**The measurement, against a named population.** Seven forms searched over `docs/process.md`, every
+file in `spec/`, and `releases/first-release.md`: **three hits, all in `docs/process.md`**, and both
+other populations clean. The first is two sentences above `P-317`, which landed this afternoon saying
+the same thing in named terms - so the plain version and the vague version are currently adjacent.
 
-**What changes and what does not.** Two sentences. No claim moves: *the first three* and *the
-definitions and the commands* name the same three artifacts, and *that one* and *the item the commit
-cites* are the same item. **If either substitution reads as a change of meaning rather than of
-wording, that is the thing to say** - I have read them as identical and that is a judgement.
+**What changes and what does not.** Two sentences, and no claim moves: *the first three* and *the
+definitions and the commands* name the same three artifacts, *that one* and *the item the commit
+cites* are the same item. **That reading is a judgement** - if either is a change of meaning rather
+than of wording, that is the thing to say.
 
-**The check the promoting commit runs**: none of the seven phrases appears in `docs/process.md`.
-
-**Not proposed here: a rule.** Your sentence about backreferences is recorded in
-`docs/notes/spec-backlog.md` and is not offered as text, because a standing rule in your document is
-a different decision from three edits and you asked for the edits. **Say when you want the rule and
-it is one sentence** - and it is what would make a future sweep yours rather than mine.
+**The check the promoting commit runs**: the rule is present, and none of the seven forms appears in
+`docs/process.md`.
 
 ## Addressed to other perspectives
 

@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-319** - Three backreferences in `docs/process.md`, said plainly instead · `docs/notes/proposals.md`
+- **P-319** - A rule for backreferences, and the three places it already fires · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
