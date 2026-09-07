@@ -122,9 +122,11 @@ until now nothing said it should be.
 **to** code - **status** open - **raised** 2026-09-06 - **source** Sean, wanting to see the
 containers and capacities and how everything fits together
 
-**Do not build until `P-311` is promoted.** It asks a decision - how a container is referenced,
-given ids are unique per kind rather than globally - and the relation's shape depends on the answer.
-Filed now so it arrives as one item and so you can say if any of it is wrong before it is decided.
+**Released 2026-09-06: `P-311` is promoted and this is buildable.** It asked how a container is
+referenced; the answer is `in-kind` and `in-id`, and the reason it stopped being a judgement call is
+that **only `kind`, `territory` and `unit` carry ids** - so a unit, in a territory or in the orbit
+above one, is the only thing whose container kind varies. Read the rule at
+`releases/first-release.md` -> *Where things are*, not this summary of it.
 
 **Three pieces, and the third is the one with a trap in it.**
 
@@ -220,9 +222,10 @@ arriving.
 **to** code - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **source**
 `P-305`, and your own `C-41` measuring the population before I could guess at it wrongly
 
-**Still do not build until `P-305` is promoted.** It is held rather than pending: Sean said promote
-it and the quality lens's `Q-60` found the third bullet has no actor, so it is rewritten and waiting
-on him to read the change.
+**Released 2026-09-06: `P-305` is promoted and this is buildable.** `Q-60` was right that the third
+bullet had no actor, and the promoted version names one - **the lane withdrawing a proposal files
+the reopening in the same commit**. So the filing rule is the mechanism and this check is the
+backstop for when it is forgotten. `C-16` can close in the same pass, naming `S-30`.
 
 **Two things in it changed because of your measurement, and both were mine to get wrong.**
 
@@ -275,9 +278,10 @@ waiting for. Stated now so it is one item rather than two, and so you can see it
   was raised.** `same_section` runs over `landed` only, and this is the open-item half. Everything it
   needs is already parsed - the `raised` date, the destination, and the landed ledger
 
-**Do not build the three bullets yet.** `P-300` is words Sean has not approved, and this lane has
-been wrong before about which of its proposals survive contact. The first paragraph is the part that
-is true regardless.
+**Released 2026-09-06: `P-300` is promoted and all of it is buildable.** Sean's limit is a **tripwire
+on the specification lane rather than a bound on his reading** - it has never been reached in 448
+commits and its job is never to be reached. What bounds an instance's own outbox is not a count at
+all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rather than this.
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
