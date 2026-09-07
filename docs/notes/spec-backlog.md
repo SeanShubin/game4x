@@ -8,6 +8,27 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on what the ark can do and what the pioneer need not
+
+*The ark has the ability to scan a planet, move about in orbit, choose a landing zone, and deploy the
+initial set up. It does not have the ability to launch into space again. The pioneer is different, it
+doesn't need to launch into space, it just needs to be able to move, so it doesn't have the same need
+to deploy on move.*
+
+**Said deciding `P-340`, and three of the four clauses were already built.** `deploy ark` consumes an
+ark *in the orbit above `$where`*, so arriving is not deploying. And the pioneer half he had already
+decided: `P-214` promoted *arriving on unclaimed ground and arriving on your own are two recipes*.
+The specification's *taken apart on arriving* predates that and never caught up.
+
+**The fourth clause is the one that needs reading carefully.** *It does not have the ability to launch
+into space again* is true of the ark that deployed - it was consumed - and false of the ark as a
+kind, because `spec/control.md` makes *launching an Ark from a fully exploited planet* the win
+condition, the Units table lets an ark cross *ascent*, and the scenario ends `{launch-ark}`.
+
+**The reading that keeps everything**: the ark that brought you is spent getting you there, and the
+one you launch to win is built on the planet. `P-340` offers the bullet without that clause and says
+why.
+
 ## Said 2026-09-07, on how far a single-planet design may look ahead
 
 *For P-339, the focus is on what we need for only a single planet, but it is ok for the design to be

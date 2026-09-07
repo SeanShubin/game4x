@@ -21,52 +21,6 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-340 - `spec/unit-types.md` takes a unit apart on arriving, and both recipes only do it where nobody holds
-
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** contradiction, found while drafting
-`P-339` - **asks** a decision - **into** `spec/unit-types.md` -> *Units that become structures*
-
-**The specification is unconditional.** `spec/unit-types.md:16`:
-
-- *An Ark is taken apart on arriving from orbit. A Pioneer is taken apart on arriving from an
-  adjacent territory*
-
-**Both recipes are gated.** `deploy ark` and `found by land` each carry `limit 0 garrison`, so
-neither fires where a garrison already stands. **Arriving in a territory you hold takes nothing
-apart.**
-
-**Which means a pioneer can be moved through your own ground, and the sentence says it cannot.** Read
-literally, a pioneer that steps into a territory you hold is consumed there - so it could never cross
-one to reach a frontier, and with 12 territories and 30 edges most frontiers are not adjacent to
-where a pioneer is built.
-
-**This is not something `P-339` creates.** Both halves are already in the tree; deleting the bullet
-about starving neither causes nor hides it. I found it drafting the bullet's replacement, and stopped
-because **writing the condition into the release would have been me deciding this.**
-
-**Your rule picks an answer, and I am not applying it for you.** *Nothing we don't need, but don't
-make a design choice that is going to be troublesome later.* **Unconditional is the troublesome
-one** - it forbids traversal now, and forbids it harder when there are many planets and a pioneer
-built on one is carried toward another. The gated reading is also **what is built and what the
-scenario exercises**, so choosing it changes no code.
-
-**Three ways, and the middle is what the code does today.**
-
-1. **Unconditional stays** - and `deploy ark` and `found by land` lose their `limit 0 garrison`, so
-   arriving anywhere consumes the unit. Simplest sentence, and it makes a pioneer unable to travel
-2. **The sentence gains the condition** - *taken apart on arriving where nobody holds the ground*.
-   Matches both recipes, matches the scenario, changes nothing built
-3. **The player chooses** - arriving is arriving, and taking a unit apart is a separate command.
-   **More than we need**, but it is the version that never has to be revisited, because a unit that
-   can arrive without being consumed is already what a seeder would need
-
-**I recommend 2**, and note that 3 is where 1 and 2 both end up if a unit ever needs to arrive and
-stay.
-
-**Whichever you pick, the release needs nothing.** The recipes already encode 2. This is the
-specification catching up with what was built, which is the direction that is usually wrong - so it
-is worth your eye rather than mine.
-
 ### P-336 - `age` is declared, fires in no state, and `keeps` is not implemented
 
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** contradiction - **asks** a decision

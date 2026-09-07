@@ -60,6 +60,53 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-340 - A unit is taken apart when it deploys, not when it arrives
+
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
+own, from a contradiction found drafting `P-339` - **asks** approval - **shape** text - **into**
+`spec/unit-types.md` -> *Units that become structures*, replacing the second bullet
+
+**Your decision.** *The ark has the ability to scan a planet, move about in orbit, choose a landing
+zone, and deploy the initial set up. The pioneer is different - it just needs to be able to move, so
+it doesn't have the same need to deploy on move.*
+
+**No chaos, and three of your four clauses are already built.** The bullet it replaces reads *An Ark
+is taken apart on arriving from orbit. A Pioneer is taken apart on arriving from an adjacent
+territory* - and that sentence is the only thing in the tree that disagrees with you.
+
+- **The ark chooses.** `deploy ark` consumes an ark *in the orbit above `$where`*, so it moves in
+  orbit and deploys where it likes. Arriving is not deploying, exactly as you describe
+- **The pioneer moves.** **You already decided this**, and `P-214` promoted it: *arriving on
+  unclaimed ground and arriving on your own are two recipes*, `move` and `found by land`, and the
+  player says which. The scenario's own comment at line 135 says so
+- **So the specification is stale rather than contested.** It predates `P-214` and never caught up
+
+**The replacement bullet:**
+
+> - An Ark is taken apart when it deploys, having chosen its landing zone from orbit. A Pioneer is
+>   taken apart when it founds; moving is not founding, and it may cross ground its player already
+>   holds
+
+**One clause of yours I did not write, and this is the chaos you asked me to look for.** *It does not
+have the ability to launch into space again* is **true of the ark that deployed and false of the ark
+as a kind**, and only the first is safe to write:
+
+- **Of the one that deployed** - it was consumed, so it cannot do anything again. The sentence would
+  be true and say nothing
+- **Of the kind** - it collides with the win condition. `spec/control.md`: *a player wins by
+  launching an Ark from a fully exploited planet*. The Units table lets an ark cross *ascent*, and
+  `scenario/commands/play.4x` ends `{launch-ark}` at line 182, with an ark produced at 164 and moved
+  at 170
+
+**So the game is won by launching an ark that was built on the planet**, while the ark that brought
+you there is spent getting you there. **That reading keeps everything**, and I think it is what you
+meant - but if you meant no ark ever leaves, that is a different game and `R-9` is the capability it
+would delete.
+
+**One known gap, already tracked, and not yours to act on.** `{launch-ark}` fires no recipe -
+`crates/game-console/src/fired.rs:70`, *no recipe in it names an orbit*. It is the win condition's
+command, and `R-9` is open against it.
+
 ### P-339 - An ark and a pioneer print life rather than eating, so neither has upkeep
 
 **to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
