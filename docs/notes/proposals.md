@@ -90,8 +90,10 @@ a release Sean approved today, and the third is the one that was blocking a coun
 
 ### S-55 - An orbit is above nowhere, and an Ark lands anywhere
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** Sean sketching the containment
+**to** code - **status** **acted** 2026-09-06 - `f3dcc1e` - **raised** 2026-09-06 - **source** Sean sketching the containment
 tree, and reading `spec/orbit.md` against the model
+
+**Closed by this lane 2026-09-06, verified against the tree rather than from the commit message.** `Location::Orbit(TerritoryId)` carries its territory, so no unit is above nowhere. `land` picks only a unit whose location is the orbit above the named territory, and tells *no such unit* apart from *not above that one* with a distinct `NotAboveThatTerritory` rejection. **The check that did not exist now does**: a test asserts an Ark above territory 1 is refused on territory 3, naming both. 53 model tests pass.
 
 **Nothing here needs a decision.** `spec/orbit.md` gives the orbital layer in full and
 `releases/first-release.md` -> *Where things are* already says *there are twelve territories and
@@ -326,7 +328,7 @@ what is committed.
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** `P-288` and `P-290`, promoted
+**to** code - **status** open - **cited** `8b772c2`, `3f0e634` - **raised** 2026-09-06 - **source** `P-288` and `P-290`, promoted
 together
 
 **`P-290`: capacity may be per kind carrying a particular value of a trait.** So a territory bounds
@@ -350,7 +352,7 @@ is less to rewrite than after.
 
 ### S-47 - The map form, and the check that keeps it honest
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** `P-283` through `P-287`, promoted
+**to** code - **status** open - **cited** `f2040fa`, `e0ad489` - **raised** 2026-09-06 - **source** `P-283` through `P-287`, promoted
 together
 
 **Four promotions change what a data file says and one changes what a promotion may do.**
@@ -383,8 +385,10 @@ is what `P-263` asks for.
 
 ### S-46 - Restore `nodes.4x` from the *Scope* table
 
-**to** code - **status** open - **raised** 2026-09-05 - **source** `P-280` and `P-281`, which
+**to** code - **status** **acted** 2026-09-06 - **raised** 2026-09-05 - **source** `P-280` and `P-281`, which
 reverse `P-272`
+
+**Closed by this lane, verified against the tree rather than reported.** `scenario/commands/nodes.4x` is byte-identical to `git show 1f2ded6~1:scenario/commands/nodes.4x`, and `crates/game-console/tests/first_release.rs` cites *Territory resources* and `P-281`. All three things this asked for are there.
 
 **`S-45` was wrong and this undoes it.** I told you to generate `nodes.4x` from the *Biomes* table.
 **The release has two tables of territory resources** - *Biomes*, and *Territory resources* under
@@ -409,8 +413,10 @@ should read *Territory resources* and pass.
 
 ### S-45 - The node data contradicts the biome table, and every territory is affected
 
-**to** code - **status** open - **raised** 2026-09-05 - **source** `P-272` and `P-274`, promoted
+**to** code - **status** **withdrawn** 2026-09-06 - **raised** 2026-09-05 - **source** `P-272` and `P-274`, promoted
 together
+
+**Withdrawn: its premise was reversed.** It told the code lane to generate `nodes.4x` from the *Biomes* table, resting on `P-272`. **`P-280` reversed `P-272`** and `S-46` exists to undo this - a biome does not determine a territory's numbers. `S-46` carries everything worth keeping, including the check pointed at *Territory resources*. Left open, it would have sent the code lane to rebuild data that is already correct.
 
 **`P-272` makes a biome give a territory its numbers, and `P-274` changes what three biomes give.**
 `scenario/commands/nodes.4x` follows neither. Five territories are grassland and carry five different
@@ -429,8 +435,10 @@ what that scenario rests on.
 
 ### S-44 - Storage becomes a built thing, and the scenario cannot run until it is
 
-**to** code - **status** open - **raised** 2026-09-05 - **source** `P-258` promoted in `dd1d025`,
+**to** code - **status** **acted** 2026-09-06 - **raised** 2026-09-05 - **source** `P-258` promoted in `dd1d025`,
 `P-259` and `P-256` decided
+
+**Closed by this lane, verified against the tree.** The three *a capacity of 20* lines are gone from `releases/first-release.md`, and `store` is a kind in `prototypes/kinds`. **The report half is `P-311`'s now** - a territory's capacity for a resource is stated against the sum of its stores' capacities, which is a rule rather than this item's request.
 
 **This is the largest of the changes waiting on you and it is the one that rewrites the scenario.**
 Take it with `P-214`, `S-42` and `S-43` so Sean's two files move once.
@@ -554,7 +562,9 @@ half.
 
 ### S-41 - `P-250`'s second half needs `tools/outbox` to list at a close
 
-**to** code - **status** open - **raised** 2026-09-05 - **source** `P-250`, promoted in `ff6bf6a`
+**to** code - **status** **acted** 2026-09-06 - **raised** 2026-09-05 - **source** `P-250`, promoted in `ff6bf6a`
+
+**Closed by this lane, verified against the tree.** `tools/outbox` parses a `**derived from**` line, and `main.rs` prints *closed, and N in M derives from the same rule* where the citation check already prints - which is where this item argued it should go, because that output is read.
 
 **The rule landed and the mechanism does not exist.** `CLAUDE.md` now says: *when an item moves to
 `acted`, whatever lists the outboxes lists the open items naming the same rule.* **Nothing does
@@ -611,8 +621,10 @@ The table is `territory resource` now, with **capacity, density and built**. Ter
 
 ### S-22 - `P-209` and `P-210` deleted the counts your new check was built to compare
 
-**to** code - **status** open - **raised** 2026-09-03 - **source** `P-209` and `P-210`, promoted in
+**to** code - **status** **acted** 2026-09-06 - **raised** 2026-09-03 - **source** `P-209` and `P-210`, promoted in
 `0c0ab21` and `c738e95`
+
+**Closed by this lane, verified against the tree.** `every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them` exists in `crates/game-console/tests/closed_sets.rs`. It answers both ways of being vacuous that this item named: the traits examined are written out and their count asserted, and each side is asserted non-empty before the comparison.
 
 **Two rows of *Traits* moved and two checks are red.** `the_release_tables_are_the_ones_in_this_crate`
 reports rows 1 and 11: the `kind` trait now says **one of the kinds** and `biome` says **one of the
@@ -780,8 +792,10 @@ hand this week. **Do not change the scenario's commands under him without saying
 
 ### S-24 - Four artifacts, and a human must be able to derive the fourth from the other three
 
-**to** code - **status** open - **raised** 2026-09-03 - **source** Sean, on what the reference
+**to** code - **status** **acted** 2026-09-06 - **raised** 2026-09-03 - **source** Sean, on what the reference
 material is for
+
+**Closed by this lane, verified against the tree.** All four artifacts exist in `reports/`: `catalog.md`, `recipes.md`, `commands.md` and `state.md`. `commands.md` carries the recipe each command fired, which is the half this item added and the half nothing else supplied.
 
 **This is the acceptance test for the whole reporting effort, in his words:** *I should be able to
 take the things, the recipes, the commands, and manually derive the data dump. If I can do that as a

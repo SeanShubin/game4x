@@ -18,26 +18,17 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-56** - `eb33c24` Close C-16 and C-41 under P-305, and file C-44: S-56 was already done · still open in `docs/notes/proposals.md`
-- **S-55** - `f3dcc1e` S-55: an orbit is above a territory, and an Ark lands beneath itself · still open in `docs/notes/proposals.md`
 - **S-53** - `6f1a229` S-53: decisions.md, and the misfiling check that a person caught first · still open in `docs/notes/proposals.md`
 - **S-51** - `38b2cbe` S-51 on a measured predicate, Q-61 built in, and four items that were invisible · still open in `docs/notes/proposals.md`
 - **S-50** - `521d3b7` S-50's live half, C-33 closed by P-291, and the re-poison it asked for · still open in `docs/notes/proposals.md`
-- **S-48** - `8b772c2` S-48: `node` goes, and capacity bounds extractors directly · still open in `docs/notes/proposals.md`
-- **S-47** - `f2040fa` File C-34: the population for S-47's unrepresentability claim · still open in `docs/notes/proposals.md`
-- **S-46** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
-- **S-45** - `d08874f` S-46: undo S-45, and rebuild the scenario on the numbers that bind · still open in `docs/notes/proposals.md`
-- **S-44** - `08e1c13` S-44 complete: prototypes/kinds knows the store kind · still open in `docs/notes/proposals.md`
-- **S-41** - `744c6cf` S-41: P-250's second half gets the mechanism it was promoted without · still open in `docs/notes/proposals.md`
-- **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
-- **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
+- **S-47** - `8219381` Record what S-47 will need looking at, and poison the thing the check reads · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (21)
+### To code (14)
 
 - **S-56** - Four promotions today moved the release's tables and `prototypes/kinds` still has the old cells · `docs/notes/proposals.md`
-- **S-55** - An orbit is above nowhere, and an Ark lands anywhere · `docs/notes/proposals.md`
 - **S-54** - The containment tree Sean asked to see, and the scenario it is generated from · `docs/notes/proposals.md`
 - **S-53** - `docs/notes/decisions.md` is a file `tools/outbox` names by its old path · `docs/notes/proposals.md`
 - **S-51** - A closed item citing a withdrawn proposal is a gap nobody decided to drop · `docs/notes/proposals.md`
@@ -45,15 +36,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-48** - `node` goes, and the game's row loses `turn` · `docs/notes/proposals.md`
 - **S-47** - The map form, and the check that keeps it honest · `docs/notes/proposals.md`
-- **S-46** - Restore `nodes.4x` from the *Scope* table · `docs/notes/proposals.md`
-- **S-45** - The node data contradicts the biome table, and every territory is affected · `docs/notes/proposals.md`
-- **S-44** - Storage becomes a built thing, and the scenario cannot run until it is · `docs/notes/proposals.md`
-- **S-41** - `P-250`'s second half needs `tools/outbox` to list at a close · `docs/notes/proposals.md`
-- **S-22** - `P-209` and `P-210` deleted the counts your new check was built to compare · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **S-24** - Four artifacts, and a human must be able to derive the fourth from the other three · `docs/notes/proposals.md`
 - **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
