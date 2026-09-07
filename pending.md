@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-316** - A promotion that creates work files it, and this document never says so · `docs/notes/proposals.md`
 - **P-315** - Nobody may create a lens's directory, and one is now promised in the process document · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
@@ -103,6 +102,7 @@ it exists to ask.
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Starting the instances - P-268, P-273
 - `docs/process.md` -> What this document has to be - P-302, P-303
+- `docs/process.md` -> Who writes what - P-271, P-316
 - `docs/process.md`, a new section - P-204, P-211
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186

@@ -60,45 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**One.** `P-316` is the answer to your question about this document. The other thing waiting on
-you is a choice, in [decisions.md](decisions.md).
-
-### P-316 - A promotion that creates work files it, and this document never says so
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** text -
-**asks** approval - **into** `docs/process.md` -> Who writes what, at the end
-
-**You asked whether this document needs changing so a defect one instance finds in another gets
-fixed. It does, and the sentence already exists in `CLAUDE.md`** - which is precisely what `P-302`
-says is a rule about to be lost.
-
-> - A promotion either files what it creates as an item addressed to the lane that must do it, or
->   records that it is not work for that lane. **Never silence**, because silence and *nobody has
->   looked yet* are the same bytes
-> - It files it **before the proposal is deleted**. A promotion removes the document that named the
->   work, so a promise to file later goes with it and nothing is left to notice
-
-**The second bullet is the one that failed today, twice, in this lane.** `P-310` said *what this
-leaves for the code lane, and I file it when this lands*. `P-312` said it again. Both landed, neither
-was filed, and the proposals that carried the promise were deleted at promotion. **Nothing caught
-it** - not a check, not another lane. You did, by asking this question.
-
-**What this document has today, and why it is not enough.** *Who writes what* says an instance that
-sees a problem outside its own directories **writes it down where its owner will find it, and
-stops** - which is the cross-lane half, and it worked all day. The quality lens filed `Q-60` against
-my wording, the code lane filed `C-40` against my ledger, and both were fixed within the hour. **The
-half that is missing is the one where the finder and the writer are the same lane**, and the finding
-is a consequence of its own promotion.
-
-**Nothing mechanises the second bullet, and one thing nearly does.** A promoting commit could be
-required to cite a new item or say *not work* - `tools/outbox` already parses citations. That is the
-code lane's to judge and I have not filed it, because a check that fires on every promotion and is
-satisfied by the words *not work* may cost more than it catches.
-
-**Why it belongs here rather than only in `CLAUDE.md`.** `CLAUDE.md` -> Promotion has both bullets in
-substance and this document has neither. `P-302`: *an insight that lives only in a conversation, a
-note, or an operating file is lost.* This is that, found by you rather than by me, on the day it
-landed.
+**Nothing.** One choice is waiting on you, in [decisions.md](decisions.md).
 
 ## Addressed to other perspectives
 
@@ -1832,6 +1794,7 @@ work the release exists to order.
 | P-313, the file is `decisions.md`                                                                                            | `docs/process.md` -> What I read, and what I do                                                                                              | 2026-09-06 |
 | P-311, the dump carries the containment tree, completely and exactly once                                                    | `releases/first-release.md` -> Where things are                                                                                              | 2026-09-06 |
 | P-314, `adjacency` is a fact about the container, not about a place                                                          | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
+| P-316, a promotion files what it creates, before the proposal is deleted                                                     | `docs/process.md` -> Who writes what                                                                                                         | 2026-09-06 |
 
 ## Rejected
 

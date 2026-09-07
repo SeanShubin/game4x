@@ -401,6 +401,11 @@ lens has to answer before it is worth starting lives. The four above are the one
   everything
 - An instance that sees a problem outside its own directories writes it down where its owner will
   find it, and stops. It never fixes it, even when the fix is obvious
+- A promotion either files what it creates as an item addressed to the lane that must do it, or
+  records that it is not work for that lane. **Never silence**, because silence and *nobody has
+  looked yet* are the same bytes
+- It files it **before the proposal is deleted**. A promotion removes the document that named the
+  work, so a promise to file later goes with it and nothing is left to notice
 
 ## Outboxes and the index
 - Every instance keeps one outbox in its own directory, and that outbox is the only thing another
