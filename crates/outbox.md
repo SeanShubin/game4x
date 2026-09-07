@@ -489,7 +489,31 @@ units:1}`.
 `labor-spent`, `left`, `made`, `spent`, `structure`, `territories`, `territory-resource`, `turn`,
 `units`, `yards`.
 
-**Seventeen again as of `336f13f`.** `P-308` named `phase`'s values - the cell reads *design or
+**Nineteen as of `f3dcc1e`, and the file moved away from `P-284` today rather than toward it.**
+`Q-64`, re-derived here against the release's tables rather than by arithmetic on the earlier
+figure. `play` became legal and `in-kind` and `in-id` arrived, which is a net gain of two.
+
+**This is the arrow in this item's title, observed moving, on the first occasion after it was
+filed.** `P-311` gave the dump a containment form and **the data file took it the same afternoon**,
+because `expected::rows` iterates `dump::tables`. Nothing in that change was wrong - `P-311` is
+promoted, `S-54` names `in-kind`/`in-id` as the answer, and this lane used the promoted form rather
+than inventing one. **The point is that nobody chose for the data file**, which is what having one
+source rather than two would fix.
+
+**And declaring them is the fix that suggests itself and is wrong** - the lens's, and it is the part
+worth having before `S-47`. `spec/console.md` says *where a thing is, is where it appears*, and
+nothing states its container. So `in-kind` and `in-id` are not words missing a declaration; **they
+are words the file must stop having when the map form lands.** A Traits row for either would be a
+rule the specification does not want, promoted to silence a check.
+
+**One correction to this lane's own instrument, which had been run twice knowing it was wrong.** The
+script split every trait's Values cell into words, so `turn` was admitted because `upkeep` reads
+*food per turn* - the flaw this item recorded this morning and named the fix for. It now admits a
+word only if it is a value of a trait that **names a closed set**, either listing its values or
+pointing at a table. Four such values exist: `design`, `play`, `yes`, `no`. With that rule the count
+is nineteen and matches the lens's, arrived at independently.
+
+**Seventeen was the figure before `336f13f`.** `P-308` named `phase`'s values - the cell reads *design or
 play* - so `play` is declared and leaves the list. **`turn` does not**: still in the data file and
 still undeclared, which `P-288` decided and `S-48` has not carried through. Of the three cells that
 described rather than named, `houses` is gone entirely - `P-310` and `P-312` - and `phase` is named;

@@ -512,7 +512,16 @@ fn the_scenario_touches_every_kind_and_there_are_twelve() {
     let named: std::collections::BTreeSet<String> = dump::tables(&session.game)
         .iter()
         .flat_map(|table| {
-            std::iter::once(table.name.to_string()).chain(table.rows.iter().flatten().cloned())
+            // **A table name is not the scenario touching a kind** - the quality lens, in the
+            // sweep of `ba9bd41..f3dcc1e`. `dump.rs` prints every table whether or not
+            // anything is in it, deliberately, so a kind named only by its own empty heading
+            // satisfied a check whose name says the scenario reached it. Not live when it was
+            // noticed - nothing was empty - and it becomes live the first time a kind's table
+            // is. So the name is only counted when the table has a row under it.
+            let heading = (!table.rows.is_empty()).then(|| table.name.to_string());
+            heading
+                .into_iter()
+                .chain(table.rows.iter().flatten().cloned())
         })
         .collect();
 
