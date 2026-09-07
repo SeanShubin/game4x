@@ -5,22 +5,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>catalog.md</title>
-<style>
-:root { color-scheme: light dark }
-body { font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem auto; max-width: 70rem; padding: 0 1rem }
-h1 { font-size: 1.3rem }
-h2 { margin: 2rem 0 .25rem; font-size: 1.1rem }
-h3 { margin: 1.25rem 0 .25rem; font-size: 1rem; opacity: .85 }
-table { border-collapse: collapse; margin: .5rem 0 }
-th, td { border: 1px solid currentColor; padding: .15rem .5rem; text-align: left }
-th { font-weight: 600 }
-pre { background: rgba(127,127,127,.12); padding: .6rem .8rem; overflow-x: auto }
-ul { padding-left: 1.2rem }
-.empty { opacity: .7; font-style: italic }
-.count, .note { opacity: .7; font-size: .85rem }
-.quiet { opacity: .55; font-size: .85rem }
-.quiet a { font-weight: 400 }
-</style>
+<link rel="stylesheet" href="reset.css">
+<link rel="stylesheet" href="report.css">
 </head>
 <body>
 <p class="note"><a href="index.html">all reports</a></p>
@@ -28,56 +14,56 @@ ul { padding-left: 1.2rem }
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p kinds -- catalog</code>, or <code>scripts/kinds.sh catalog</code>.</p>
 <p>Every kind the release declares, with everything it says about that kind gathered in one place. <code>spec/invariants.md</code> has the release's tables be the data, and every other form of them derived and generated rather than written; this is one such form. It is a view and not a copy - each section is a join across six tables that the document does not perform anywhere.</p>
 <p>15 kinds, 4 families, 19 traits, 16 recipes.</p>
-<h2>Signatures</h2>
+<h2 id="signatures">Signatures</h2>
 <p><strong>A kind's signature is the traits it carries and every <em>(recipe, role)</em> pair that names it.</strong> Computed from the tables above rather than written by anyone, so two kinds share one exactly when the release says the same things about them. Quantities are not part of it: two kinds that are produced in different numbers by the same recipe still behave alike. <strong>Being named through a family counts</strong>, because a family is how the release addresses several kinds at once.</p>
 <p>15 kinds fall into 15 signatures, and 0 of those hold more than one kind.</p>
 <p><strong>Nothing is shown together, and that is the finding.</strong> No two kinds share a signature, so every group below holds one kind. <strong>The traits alone do collide</strong> - 11 of the kinds carry exactly the traits another one carries - and every such pair is then separated by the recipes that name it. So the release has no two kinds it says <em>the same things</em> about, and whether that is what was wanted is a decision rather than a build: <code>C-64</code>.</p>
-<h3><code>s-1</code> - citizen</h3>
+<h3 id="s-1-citizen"><code>s-1</code> - citizen</h3>
 <p><strong>Traits</strong> <code>force</code>, <code>kind</code></p>
 <p><strong>Named by</strong> <code>create labor consume</code>, <code>create labor produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>grow produce</code>, <code>launch ark consume</code>, <code>produce pioneer consume</code></p>
-<h3><code>s-2</code> - garrison</h3>
+<h3 id="s-2-garrison"><code>s-2</code> - garrison</h3>
 <p><strong>Traits</strong> <code>force</code>, <code>kind</code></p>
 <p><strong>Named by</strong> <code>deploy ark limit</code>, <code>deploy ark produce</code>, <code>found by land limit</code>, <code>found by land produce</code></p>
-<h3><code>s-3</code> - extractor</h3>
+<h3 id="s-3-extractor"><code>s-3</code> - extractor</h3>
 <p><strong>Traits</strong> <code>kind</code>, <code>resource</code></p>
 <p><strong>Named by</strong> <code>build extractor produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>work consume</code>, <code>work produce</code></p>
-<h3><code>s-4</code> - yard</h3>
+<h3 id="s-4-yard"><code>s-4</code> - yard</h3>
 <p><strong>Traits</strong> <code>kind</code></p>
 <p><strong>Named by</strong> <code>build yard produce</code>, <code>launch ark require</code></p>
-<h3><code>s-5</code> - store</h3>
+<h3 id="s-5-store"><code>s-5</code> - store</h3>
 <p><strong>Traits</strong> <code>kind</code>, <code>resource</code></p>
 <p><strong>Named by</strong> <code>build store produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code></p>
-<h3><code>s-6</code> - ark</h3>
+<h3 id="s-6-ark"><code>s-6</code> - ark</h3>
 <p><strong>Traits</strong> <code>force</code>, <code>kind</code></p>
 <p><strong>Named by</strong> <code>deploy ark consume</code>, <code>move consume</code>, <code>move produce</code></p>
-<h3><code>s-7</code> - pioneer</h3>
+<h3 id="s-7-pioneer"><code>s-7</code> - pioneer</h3>
 <p><strong>Traits</strong> <code>force</code>, <code>kind</code></p>
 <p><strong>Named by</strong> <code>found by land consume</code>, <code>move consume</code>, <code>move produce</code>, <code>produce pioneer produce</code></p>
-<h3><code>s-8</code> - food</h3>
+<h3 id="s-8-food"><code>s-8</code> - food</h3>
 <p><strong>Traits</strong> <code>kind</code>, <code>surplus</code></p>
 <p><strong>Named by</strong> <code>grow consume</code>, <code>upkeep consume</code>, <code>work produce</code></p>
-<h3><code>s-9</code> - metal</h3>
+<h3 id="s-9-metal"><code>s-9</code> - metal</h3>
 <p><strong>Traits</strong> <code>kind</code></p>
 <p><strong>Named by</strong> <code>build extractor consume</code>, <code>build store consume</code>, <code>build yard consume</code>, <code>launch ark consume</code>, <code>perish produce</code>, <code>produce pioneer consume</code>, <code>work produce</code></p>
-<h3><code>s-10</code> - energy</h3>
+<h3 id="s-10-energy"><code>s-10</code> - energy</h3>
 <p><strong>Traits</strong> <code>kind</code></p>
 <p><strong>Named by</strong> <code>launch ark consume</code>, <code>move consume</code>, <code>produce pioneer consume</code>, <code>work produce</code></p>
-<h3><code>s-11</code> - labor</h3>
+<h3 id="s-11-labor"><code>s-11</code> - labor</h3>
 <p><strong>Traits</strong> <code>kind</code></p>
 <p><strong>Named by</strong> <code>build extractor consume</code>, <code>build store consume</code>, <code>build yard consume</code>, <code>create labor produce</code>, <code>work consume</code></p>
-<h3><code>s-12</code> - territory</h3>
+<h3 id="s-12-territory"><code>s-12</code> - territory</h3>
 <p><strong>Traits</strong> <code>biome</code>, <code>control</code>, <code>kind</code>, <code>nature</code></p>
 <p><strong>Named by</strong> <code>deploy ark require</code>, <code>move require</code>, <code>work require</code></p>
-<h3><code>s-13</code> - orbit</h3>
+<h3 id="s-13-orbit"><code>s-13</code> - orbit</h3>
 <p><strong>Traits</strong> <code>kind</code></p>
 <p><strong>Named by</strong> <code>deploy ark consume</code>, <code>move require</code></p>
-<h3><code>s-14</code> - deposit</h3>
+<h3 id="s-14-deposit"><code>s-14</code> - deposit</h3>
 <p><strong>Traits</strong> <code>density</code>, <code>kind</code>, <code>total capacity</code></p>
 <p><strong>Named by</strong> no recipe at all.</p>
-<h3><code>s-15</code> - adjacency</h3>
+<h3 id="s-15-adjacency"><code>s-15</code> - adjacency</h3>
 <p><strong>Traits</strong> <code>from</code>, <code>kind</code>, <code>to</code></p>
 <p><strong>Named by</strong> no recipe at all.</p>
-<h2>citizen</h2>
+<h2 id="citizen">citizen</h2>
 <p>a person: provides labor, eats, and grows on surplus.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
@@ -85,7 +71,7 @@ ul { padding-left: 1.2rem }
 <p><strong>Bounded by</strong> the food produced here, through upkeep</p>
 <p><strong>As a thing</strong> Force: 1 · Upkeep: 1 food per turn · Readies: yes</p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>deploy ark</code> produces 2</li>
 <li><code>found by land</code> produces 2</li>
 <li><code>produce pioneer</code> consumes 2</li>
@@ -94,7 +80,7 @@ ul { padding-left: 1.2rem }
 <li><code>create labor</code> produces 1, not ready</li>
 <li><code>grow</code> produces the lesser of the surplus food and the citizens here</li>
 </ul>
-<h2>garrison</h2>
+<h2 id="garrison">garrison</h2>
 <p>what holds a territory; a territory has at most one.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
@@ -102,13 +88,13 @@ ul { padding-left: 1.2rem }
 <p><strong>Bounded by</strong> a capacity of 1</p>
 <p><strong>As a thing</strong> Force: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1</p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>deploy ark</code> limits 0</li>
 <li><code>deploy ark</code> produces 1</li>
 <li><code>found by land</code> limits 0</li>
 <li><code>found by land</code> produces 1</li>
 </ul>
-<h2>extractor</h2>
+<h2 id="extractor">extractor</h2>
 <p>built for one resource, and worked to produce it.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>resource</code> (one of the resources)</p>
@@ -116,7 +102,7 @@ ul { padding-left: 1.2rem }
 <p><strong>Bounded by</strong> a capacity, from <em>Territory resources</em></p>
 <p><strong>As a thing</strong> Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes</p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>deploy ark</code> produces 1, food</li>
 <li><code>deploy ark</code> produces 1, metal</li>
 <li><code>found by land</code> produces 1, food</li>
@@ -125,7 +111,7 @@ ul { padding-left: 1.2rem }
 <li><code>work</code> consumes 1, ready</li>
 <li><code>work</code> produces 1, not ready</li>
 </ul>
-<h2>yard</h2>
+<h2 id="yard">yard</h2>
 <p>where an Ark is produced.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds)</p>
@@ -133,11 +119,11 @@ ul { padding-left: 1.2rem }
 <p><strong>Bounded by</strong> a capacity of 1</p>
 <p><strong>As a thing</strong> Costs to produce: 1 labor, 15 metal · Binding: 15</p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>build yard</code> produces 1</li>
 <li><code>launch ark</code> requires 1</li>
 </ul>
-<h2>store</h2>
+<h2 id="store">store</h2>
 <p>built to hold one resource, and holds nothing else.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>resource</code> (one of the resources)</p>
@@ -146,14 +132,14 @@ ul { padding-left: 1.2rem }
 <p><strong>As a thing</strong> Costs to produce: 1 labor, 1 metal · Binding: 1</p>
 <p><strong>Holds</strong> the resource it was built for, up to 10 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>deploy ark</code> produces 1, food</li>
 <li><code>deploy ark</code> produces 1, metal</li>
 <li><code>found by land</code> produces 1, food</li>
 <li><code>found by land</code> produces 1, metal</li>
 <li><code>build store</code> produces 1, <code>$resource</code></li>
 </ul>
-<h2>ark</h2>
+<h2 id="ark">ark</h2>
 <p>carries a landing, and can invade from orbit.</p>
 <p><strong>In families</strong> thing, unit</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
@@ -162,12 +148,12 @@ ul { padding-left: 1.2rem }
 <p><strong>As a thing</strong> Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: yes</p>
 <p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>deploy ark</code> consumes 1, in the orbit above <code>$where</code></li>
 <li><code>move</code> consumes 1 (as a unit), ready, in <code>$from</code></li>
 <li><code>move</code> produces 1 (as a unit), not ready, in <code>$to</code></li>
 </ul>
-<h2>pioneer</h2>
+<h2 id="pioneer">pioneer</h2>
 <p>founds a territory.</p>
 <p><strong>In families</strong> thing, unit</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
@@ -176,32 +162,32 @@ ul { padding-left: 1.2rem }
 <p><strong>As a thing</strong> Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes</p>
 <p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>move</code> consumes 1 (as a unit), ready, in <code>$from</code></li>
 <li><code>move</code> produces 1 (as a unit), not ready, in <code>$to</code></li>
 <li><code>found by land</code> consumes 1</li>
 <li><code>produce pioneer</code> produces 1</li>
 </ul>
-<h2>food</h2>
+<h2 id="food">food</h2>
 <p>eaten by citizens; expires.</p>
 <p><strong>In families</strong> thing, resource</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>surplus</code> (yes or no)</p>
 <p><strong>Signature</strong> <code>s-8</code></p>
 <p><strong>Bounded by</strong> the things in it that hold it, and it keeps for one turn</p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>work</code> produces <code>$where</code>'s density for that resource (as a resource)</li>
 <li><code>upkeep</code> consumes the thing's upkeep</li>
 <li><code>grow</code> consumes the lesser of the surplus food and the citizens here, surplus</li>
 </ul>
-<h2>metal</h2>
+<h2 id="metal">metal</h2>
 <p>what things are built from; conserved.</p>
 <p><strong>In families</strong> thing, resource</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds)</p>
 <p><strong>Signature</strong> <code>s-9</code></p>
 <p><strong>Bounded by</strong> the things in it that hold it</p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>build extractor</code> consumes 1</li>
 <li><code>build store</code> consumes 1</li>
 <li><code>build yard</code> consumes 15</li>
@@ -210,64 +196,64 @@ ul { padding-left: 1.2rem }
 <li><code>work</code> produces <code>$where</code>'s density for that resource (as a resource)</li>
 <li><code>perish</code> produces the thing's metal</li>
 </ul>
-<h2>energy</h2>
+<h2 id="energy">energy</h2>
 <p>what moves things; neither conserved nor expiring.</p>
 <p><strong>In families</strong> thing, resource</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds)</p>
 <p><strong>Signature</strong> <code>s-10</code></p>
 <p><strong>Bounded by</strong> the things in it that hold it</p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>move</code> consumes 1, in that unit</li>
 <li><code>produce pioneer</code> consumes 6</li>
 <li><code>launch ark</code> consumes 12</li>
 <li><code>work</code> produces <code>$where</code>'s density for that resource (as a resource)</li>
 </ul>
-<h2>labor</h2>
+<h2 id="labor">labor</h2>
 <p>what working a machine takes; a citizen provides it each turn.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds)</p>
 <p><strong>Signature</strong> <code>s-11</code></p>
 <p><strong>Bounded by</strong> the citizens that make it, one each per turn</p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>build extractor</code> consumes 1</li>
 <li><code>build store</code> consumes 1</li>
 <li><code>build yard</code> consumes 1</li>
 <li><code>create labor</code> produces 1</li>
 <li><code>work</code> consumes 1</li>
 </ul>
-<h2>territory</h2>
+<h2 id="territory">territory</h2>
 <p>a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource.</p>
 <p><strong>In families</strong> thing, place</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>control</code> (held by a player, or unclaimed), <code>biome</code> (one of the biomes), <code>nature</code> (a number)</p>
 <p><strong>Signature</strong> <code>s-12</code></p>
 <p><strong>Holds</strong> that kind, up to its total capacity for that kind - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>deploy ark</code> requires 1, in <code>$where</code></li>
 <li><code>move</code> requires 1 (as a place), in <code>$from</code></li>
 <li><code>move</code> requires 1 (as a place), joined to <code>$from</code> by an edge the unit crosses, in <code>$to</code></li>
 <li><code>work</code> requires 1, in <code>$where</code></li>
 </ul>
-<h2>orbit</h2>
+<h2 id="orbit">orbit</h2>
 <p>a place above one territory, which holds units and nothing else.</p>
 <p><strong>In families</strong> thing, place</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds)</p>
 <p><strong>Signature</strong> <code>s-13</code></p>
 <p><strong>In recipes</strong></p>
-<ul>
+<ul class="bullets">
 <li><code>deploy ark</code> consumes 1 (as the place holding ark), in the orbit above <code>$where</code></li>
 <li><code>move</code> requires 1 (as a place), in <code>$from</code></li>
 <li><code>move</code> requires 1 (as a place), joined to <code>$from</code> by an edge the unit crosses, in <code>$to</code></li>
 </ul>
-<h2>deposit</h2>
+<h2 id="deposit">deposit</h2>
 <p>what a territory's ground offers of one resource, and how richly.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>density</code> (a number), <code>total capacity</code> (a number)</p>
 <p><strong>Signature</strong> <code>s-14</code></p>
 <p><strong>In recipes</strong> none name it.</p>
-<h2>adjacency</h2>
+<h2 id="adjacency">adjacency</h2>
 <p>two places that share an edge, held by the thing that holds them.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>from</code> (a place), <code>to</code> (a place)</p>

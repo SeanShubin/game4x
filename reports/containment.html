@@ -5,40 +5,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>containment</title>
-<style>
-:root { color-scheme: light dark }
-body { font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem auto; max-width: 70rem; padding: 0 1rem }
-h1 { font-size: 1.3rem }
-h2 { margin: 2rem 0 .25rem; font-size: 1.1rem }
-h3 { margin: 1.25rem 0 .25rem; font-size: 1rem; opacity: .85 }
-table { border-collapse: collapse; margin: .5rem 0 }
-th, td { border: 1px solid currentColor; padding: .15rem .5rem; text-align: left }
-th { font-weight: 600 }
-pre { background: rgba(127,127,127,.12); padding: .6rem .8rem; overflow-x: auto }
-ul { padding-left: 1.2rem }
-.empty { opacity: .7; font-style: italic }
-.count, .note { opacity: .7; font-size: .85rem }
-.quiet { opacity: .55; font-size: .85rem }
-.quiet a { font-weight: 400 }
-</style>
+<link rel="stylesheet" href="reset.css">
+<link rel="stylesheet" href="report.css">
 </head>
 <body>
 <p class="note"><a href="index.html">all reports</a></p>
 <h1>containment</h1>
 <p class="note">Generated. Do not edit. Every thing is inside what holds it, and nothing states its container - <code>spec/console.md</code>. A number after a description is how many there are; <code>used/total</code> after a container is what it holds against what it may.</p>
 <p class="note">A territory's <strong>density</strong> is not here. It is a stored trait per resource and this shows containment, which density is not part of - see <code>state.md</code>'s <code>territory-resource</code> table, and <code>C-46</code> for why it is in neither this nor the data file.</p>
-<style>
-ul.tree, ul.tree ul { list-style: none; padding-left: 1.1rem; margin: .1rem 0 }
-ul.tree > li { margin: .1rem 0 }
-summary { cursor: pointer }
-summary::marker { opacity: .5 }
-li.leaf { opacity: .9 }
-.many { font-weight: 600 }
-.bounds { font-size: .82rem; opacity: .8 }
-.bound { display: inline-block; padding: 0 .3rem; border-radius: .2rem; background: rgba(127,127,127,.14) }
-.bound.full { background: rgba(200,120,0,.28) }
-.empty { margin: .1rem 0 .1rem 1.1rem; opacity: .55; font-size: .85rem }
-</style>
 <ul class="tree">
 <li><details open><summary>{game phase:play}</summary>
 <ul>
@@ -73,40 +47,40 @@ li.leaf { opacity: .9 }
 <li class="leaf">{adjacency from:9 to:11}</li>
 <li class="leaf">{adjacency from:9 to:12}</li>
 <li><details><summary>{orbit id:10}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:11}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:12}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:1}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:2}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:3}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:4}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:5}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:6}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:7}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:8}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{orbit id:9}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{territory biome:desert id:10 nature:1} <span class="bounds"><span class="bound">garrison&nbsp;0/1</span> <span class="bound">yard&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:food&nbsp;0/3</span> <span class="bound">store&nbsp;resource:food&nbsp;0/3</span> <span class="bound">extractor&nbsp;resource:metal&nbsp;0/1</span> <span class="bound">store&nbsp;resource:metal&nbsp;0/1</span> <span class="bound">extractor&nbsp;resource:energy&nbsp;0/6</span> <span class="bound">store&nbsp;resource:energy&nbsp;0/6</span></span></summary>
 <ul>
@@ -128,13 +102,13 @@ li.leaf { opacity: .9 }
 <li class="leaf">{garrison force:0 manned:0}</li>
 <li class="leaf">{metal} <span class="many">&times; 10</span></li>
 <li><details><summary>{store resource:energy} <span class="many">&times; 2</span></summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{store resource:food} <span class="many">&times; 2</span></summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{store resource:metal} <span class="many">&times; 3</span></summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li class="leaf">{yard}</li>
 </ul>
@@ -156,10 +130,10 @@ li.leaf { opacity: .9 }
 <li class="leaf">{extractor ready:yes resource:metal}</li>
 <li class="leaf">{garrison force:0 manned:0}</li>
 <li><details><summary>{store resource:food}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 <li><details><summary>{store resource:metal}</summary>
-<p class="empty">nothing in it</p>
+<p class="nothing">nothing in it</p>
 </details></li>
 </ul>
 </details></li>

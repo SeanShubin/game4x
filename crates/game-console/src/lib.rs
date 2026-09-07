@@ -16,12 +16,14 @@
 //! because the type it produces has no way to say otherwise.
 
 pub mod binding;
+pub mod browse;
 pub mod dump;
 pub mod fired;
 pub mod grammar;
 pub mod recipes;
 pub mod report;
 pub mod state;
+pub mod style;
 pub mod tree;
 pub mod worked;
 

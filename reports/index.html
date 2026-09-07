@@ -5,40 +5,45 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>game4x reports</title>
-<style>
-         :root { color-scheme: light dark }
-         body { font: 15px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem auto; max-width: 48rem; padding: 0 1rem }
-         h2 { margin: 2rem 0 .25rem; font-size: 1.05rem }
-         ul { list-style: none; padding: 0 }
-         li { margin: .5rem 0 }
-         a { font-weight: 600 }
-                  .what { opacity: .75 }
-         .view { font-size: .8rem; padding: 0 .35rem; border-radius: .2rem; background: rgba(127,127,127,.18) }
-         .note { opacity: .75; font-size: .9rem }
-         .quiet { opacity: .55; font-size: .85rem }
-         .quiet a { font-weight: 400 }
-         </style>
+<link rel="stylesheet" href="reset.css">
+<link rel="stylesheet" href="report.css">
 </head>
 <body>
 <h1>game4x</h1>
 <p class="note">Generated. Do not edit. Made from the list of reports it links, so one added or removed appears here without a second file being edited.</p>
 <h2>The scenario</h2>
 <p class="note">Source, not a rendering. These are the files themselves - a view of either would be one more thing that can drift from it.</p>
-<ul>
+<ul class="reports">
 <li><a href="../scenario/commands/play.4x">../scenario/commands/play.4x</a> <span class="what">- the commands that ran, in order</span></li>
 <li><a href="../scenario/expected/play.4x">../scenario/expected/play.4x</a> <span class="what">- what the scenario should produce, reviewed by hand</span></li>
 </ul>
 <h2>Reports</h2>
 <p class="note"><strong>Two of the three views he asks for are here.</strong> `docs/process.md`: <em>data is presented to me in both the relational and the physical model</em>, and <em>the console allows both to be inspected and filtered</em>. Every report below says which it is, read from the report rather than from a list beside it. <strong>There is no physical view at all</strong> - the game's state is plain Rust rather than an ECS, so what a physical view of it should show is a decision rather than a build.</p>
 <p class="note">Generated. Every one is derived from the scenario or from the release, and regenerated rather than written. <strong>The page is the link</strong>; the markdown that made it is beside the name, because a change is reviewed as a diff and a diff of HTML is not one.</p>
-<ul>
+<ul class="reports">
 <li><a href="catalog.html">catalog</a> <span class="view">prose</span> <span class="what">- every kind, with everything the release says about it in one place</span> <span class="quiet">(<a href="catalog.md">markdown</a>)</span></li>
 <li><a href="commands.html">commands</a> <span class="view">relational</span> <span class="what">- every command that ran, flattened out of its files, with the recipe it fired</span> <span class="quiet">(<a href="commands.md">markdown</a>)</span></li>
-<li><a href="containment.html">containment</a> <span class="view">a tree</span> <span class="what">- what holds what, collapsible, with used against total on every container</span> <span class="quiet">(no markdown - it is the collapsing that makes it readable)</span></li>
+<li><a href="containment.html">containment</a> <span class="view">a tree</span> <span class="what">- what holds what, collapsible, with used against total on every container</span> <span class="quiet">(<a href="containment.md">markdown</a>)</span></li>
 <li><a href="entities.html">entities</a> <span class="view">relational</span> <span class="what">- the same state as entities and their components</span> <span class="quiet">(<a href="entities.md">markdown</a>)</span></li>
-<li><a href="recipes.html">recipes</a> <span class="view">prose</span> <span class="what">- every recipe, with its own lines gathered under it and a worked example beside</span> <span class="quiet">(<a href="recipes.md">markdown</a>)</span></li>
+<li><a href="recipes.html">recipes</a> <span class="view">the page you browse from</span> <span class="what">- every recipe, with its own lines gathered under it and a worked example beside</span> <span class="quiet">(<a href="recipes.md">markdown</a>)</span></li>
 <li><a href="state.html">state</a> <span class="view">relational</span> <span class="what">- the state after the scenario, one table per relation</span> <span class="quiet">(<a href="state.md">markdown</a>)</span></li>
 <li><a href="turns.html">turns</a> <span class="view">relational</span> <span class="what">- every turn: the commands that ran, what changed, and what was there</span> <span class="quiet">(<a href="turns.md">markdown</a>)</span></li>
+</ul>
+<h2>Things</h2>
+<p class="note">One page per identified thing, so that each is something to point at rather than an anchor inside a report that grows. Every row of every table that names it, gathered - a join no report performs.</p>
+<ul class="reports">
+<li><a href="territory-1.html">territory 1</a> <span class="quiet">(<a href="territory-1.md">markdown</a>)</span></li>
+<li><a href="territory-2.html">territory 2</a> <span class="quiet">(<a href="territory-2.md">markdown</a>)</span></li>
+<li><a href="territory-3.html">territory 3</a> <span class="quiet">(<a href="territory-3.md">markdown</a>)</span></li>
+<li><a href="territory-4.html">territory 4</a> <span class="quiet">(<a href="territory-4.md">markdown</a>)</span></li>
+<li><a href="territory-5.html">territory 5</a> <span class="quiet">(<a href="territory-5.md">markdown</a>)</span></li>
+<li><a href="territory-6.html">territory 6</a> <span class="quiet">(<a href="territory-6.md">markdown</a>)</span></li>
+<li><a href="territory-7.html">territory 7</a> <span class="quiet">(<a href="territory-7.md">markdown</a>)</span></li>
+<li><a href="territory-8.html">territory 8</a> <span class="quiet">(<a href="territory-8.md">markdown</a>)</span></li>
+<li><a href="territory-9.html">territory 9</a> <span class="quiet">(<a href="territory-9.md">markdown</a>)</span></li>
+<li><a href="territory-10.html">territory 10</a> <span class="quiet">(<a href="territory-10.md">markdown</a>)</span></li>
+<li><a href="territory-11.html">territory 11</a> <span class="quiet">(<a href="territory-11.md">markdown</a>)</span></li>
+<li><a href="territory-12.html">territory 12</a> <span class="quiet">(<a href="territory-12.md">markdown</a>)</span></li>
 </ul>
 </body>
 </html>

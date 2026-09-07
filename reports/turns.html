@@ -5,29 +5,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>turns.md</title>
-<style>
-:root { color-scheme: light dark }
-body { font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem auto; max-width: 70rem; padding: 0 1rem }
-h1 { font-size: 1.3rem }
-h2 { margin: 2rem 0 .25rem; font-size: 1.1rem }
-h3 { margin: 1.25rem 0 .25rem; font-size: 1rem; opacity: .85 }
-table { border-collapse: collapse; margin: .5rem 0 }
-th, td { border: 1px solid currentColor; padding: .15rem .5rem; text-align: left }
-th { font-weight: 600 }
-pre { background: rgba(127,127,127,.12); padding: .6rem .8rem; overflow-x: auto }
-ul { padding-left: 1.2rem }
-.empty { opacity: .7; font-style: italic }
-.count, .note { opacity: .7; font-size: .85rem }
-.quiet { opacity: .55; font-size: .85rem }
-.quiet a { font-weight: 400 }
-</style>
+<link rel="stylesheet" href="reset.css">
+<link rel="stylesheet" href="report.css">
 </head>
 <body>
 <p class="note"><a href="index.html">all reports</a></p>
 <h1>Every turn of <code>scenario/commands/play.4x</code></h1>
 <p><strong>Generated. Do not edit.</strong> One section per <code>end turn</code> in the scenario - 10 of them. The turn numbers are the scenario's own boundaries, so they line up with its comments.</p>
 <h1>Turn 1</h1>
-<h2>commands</h2>
+<h2 id="commands">commands</h2>
 <pre>
 {deploy-ark territory:1}
 {create-labor territory:1}
@@ -36,13 +22,13 @@ ul { padding-left: 1.2rem }
 {work territory:1 resource:metal}
 {end-turn}
 </pre>
-<h2>what changed</h2>
+<h2 id="what-changed">what changed</h2>
 <p><strong>gone</strong> (1)</p>
-<ul>
+<ul class="bullets">
 <li>{orbit id:1} {ark fuel:2 id:1 ready:yes} -&gt; 1</li>
 </ul>
 <p><strong>new</strong> (7)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} -&gt; 4</li>
 <li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} -&gt; 1</li>
 <li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} -&gt; 1</li>
@@ -51,8 +37,8 @@ ul { padding-left: 1.2rem }
 <li>{territory biome:grassland id:1 nature:1} {store resource:food} -&gt; 1</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:metal} -&gt; 1</li>
 </ul>
-<h2>what is there now</h2>
-<h3>game</h3>
+<h2 id="what-is-there-now">what is there now</h2>
+<h3 id="game">game</h3>
 <table>
 <thead>
 <tr><th>phase</th><th>territories</th><th>units</th></tr>
@@ -62,7 +48,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>territory</h3>
+<h3 id="territory">territory</h3>
 <table>
 <thead>
 <tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
@@ -83,7 +69,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>deposit</h3>
+<h3 id="deposit">deposit</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
@@ -128,7 +114,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>store</h3>
+<h3 id="store">store</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>amount</th></tr>
@@ -173,7 +159,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>garrison</h3>
+<h3 id="garrison">garrison</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>force</th></tr>
@@ -183,7 +169,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>extractor</h3>
+<h3 id="extractor">extractor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>ready</th></tr>
@@ -194,7 +180,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>2 row(s)</p>
-<h3>structure</h3>
+<h3 id="structure">structure</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>structure</th><th>count</th></tr>
@@ -239,7 +225,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>labor</h3>
+<h3 id="labor">labor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>made</th><th>spent</th><th>left</th></tr>
@@ -260,7 +246,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>unit</h3>
+<h3 id="unit">unit</h3>
 <table>
 <thead>
 <tr><th>id</th><th>kind</th><th>in-kind</th><th>in-id</th><th>fuel</th><th>ready</th></tr>
@@ -269,7 +255,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p><em>(empty) 0 rows</em></p>
-<h3>adjacency</h3>
+<h3 id="adjacency">adjacency</h3>
 <table>
 <thead>
 <tr><th>from</th><th>to</th></tr>
@@ -308,7 +294,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>30 row(s)</p>
-<h3>kind</h3>
+<h3 id="kind">kind</h3>
 <table>
 <thead>
 <tr><th>id</th><th>in-play</th></tr>
@@ -332,7 +318,7 @@ ul { padding-left: 1.2rem }
 </table>
 <p>14 row(s)</p>
 <h1>Turn 2</h1>
-<h2>commands</h2>
+<h2 id="commands">commands</h2>
 <pre>
 {create-labor territory:1}
 {work territory:1 resource:food}
@@ -344,15 +330,15 @@ ul { padding-left: 1.2rem }
 {build-store territory:1 resource:food}
 {end-turn}
 </pre>
-<h2>what changed</h2>
+<h2 id="what-changed">what changed</h2>
 <p><strong>changed</strong> (3)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} · 1 → 2</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 4 → 6</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:food} · 1 → 2</li>
 </ul>
-<h2>what is there now</h2>
-<h3>game</h3>
+<h2 id="what-is-there-now">what is there now</h2>
+<h3 id="game">game</h3>
 <table>
 <thead>
 <tr><th>phase</th><th>territories</th><th>units</th></tr>
@@ -362,7 +348,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>territory</h3>
+<h3 id="territory">territory</h3>
 <table>
 <thead>
 <tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
@@ -383,7 +369,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>deposit</h3>
+<h3 id="deposit">deposit</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
@@ -428,7 +414,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>store</h3>
+<h3 id="store">store</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>amount</th></tr>
@@ -473,7 +459,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>garrison</h3>
+<h3 id="garrison">garrison</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>force</th></tr>
@@ -483,7 +469,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>extractor</h3>
+<h3 id="extractor">extractor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>ready</th></tr>
@@ -495,7 +481,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>3 row(s)</p>
-<h3>structure</h3>
+<h3 id="structure">structure</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>structure</th><th>count</th></tr>
@@ -540,7 +526,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>labor</h3>
+<h3 id="labor">labor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>made</th><th>spent</th><th>left</th></tr>
@@ -561,7 +547,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>unit</h3>
+<h3 id="unit">unit</h3>
 <table>
 <thead>
 <tr><th>id</th><th>kind</th><th>in-kind</th><th>in-id</th><th>fuel</th><th>ready</th></tr>
@@ -570,7 +556,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p><em>(empty) 0 rows</em></p>
-<h3>adjacency</h3>
+<h3 id="adjacency">adjacency</h3>
 <table>
 <thead>
 <tr><th>from</th><th>to</th></tr>
@@ -609,7 +595,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>30 row(s)</p>
-<h3>kind</h3>
+<h3 id="kind">kind</h3>
 <table>
 <thead>
 <tr><th>id</th><th>in-play</th></tr>
@@ -633,7 +619,7 @@ ul { padding-left: 1.2rem }
 </table>
 <p>14 row(s)</p>
 <h1>Turn 3</h1>
-<h2>commands</h2>
+<h2 id="commands">commands</h2>
 <pre>
 {create-labor territory:1}
 {work territory:1 resource:food}
@@ -645,15 +631,15 @@ ul { padding-left: 1.2rem }
 {build-store territory:1 resource:metal}
 {end-turn}
 </pre>
-<h2>what changed</h2>
+<h2 id="what-changed">what changed</h2>
 <p><strong>changed</strong> (3)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 4 → 8</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 6 → 9</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:metal} · 1 → 2</li>
 </ul>
-<h2>what is there now</h2>
-<h3>game</h3>
+<h2 id="what-is-there-now">what is there now</h2>
+<h3 id="game">game</h3>
 <table>
 <thead>
 <tr><th>phase</th><th>territories</th><th>units</th></tr>
@@ -663,7 +649,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>territory</h3>
+<h3 id="territory">territory</h3>
 <table>
 <thead>
 <tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
@@ -684,7 +670,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>deposit</h3>
+<h3 id="deposit">deposit</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
@@ -729,7 +715,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>store</h3>
+<h3 id="store">store</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>amount</th></tr>
@@ -774,7 +760,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>garrison</h3>
+<h3 id="garrison">garrison</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>force</th></tr>
@@ -784,7 +770,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>extractor</h3>
+<h3 id="extractor">extractor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>ready</th></tr>
@@ -796,7 +782,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>3 row(s)</p>
-<h3>structure</h3>
+<h3 id="structure">structure</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>structure</th><th>count</th></tr>
@@ -841,7 +827,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>labor</h3>
+<h3 id="labor">labor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>made</th><th>spent</th><th>left</th></tr>
@@ -862,7 +848,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>unit</h3>
+<h3 id="unit">unit</h3>
 <table>
 <thead>
 <tr><th>id</th><th>kind</th><th>in-kind</th><th>in-id</th><th>fuel</th><th>ready</th></tr>
@@ -871,7 +857,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p><em>(empty) 0 rows</em></p>
-<h3>adjacency</h3>
+<h3 id="adjacency">adjacency</h3>
 <table>
 <thead>
 <tr><th>from</th><th>to</th></tr>
@@ -910,7 +896,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>30 row(s)</p>
-<h3>kind</h3>
+<h3 id="kind">kind</h3>
 <table>
 <thead>
 <tr><th>id</th><th>in-play</th></tr>
@@ -934,7 +920,7 @@ ul { padding-left: 1.2rem }
 </table>
 <p>14 row(s)</p>
 <h1>Turn 4</h1>
-<h2>commands</h2>
+<h2 id="commands">commands</h2>
 <pre>
 {create-labor territory:1}
 {work territory:1 resource:food}
@@ -952,19 +938,19 @@ ul { padding-left: 1.2rem }
 {build-store territory:1 resource:energy}
 {end-turn}
 </pre>
-<h2>what changed</h2>
+<h2 id="what-changed">what changed</h2>
 <p><strong>new</strong> (2)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} -&gt; 1</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:energy} -&gt; 1</li>
 </ul>
 <p><strong>changed</strong> (2)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} · 2 → 3</li>
 <li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} · 1 → 2</li>
 </ul>
-<h2>what is there now</h2>
-<h3>game</h3>
+<h2 id="what-is-there-now">what is there now</h2>
+<h3 id="game">game</h3>
 <table>
 <thead>
 <tr><th>phase</th><th>territories</th><th>units</th></tr>
@@ -974,7 +960,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>territory</h3>
+<h3 id="territory">territory</h3>
 <table>
 <thead>
 <tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
@@ -995,7 +981,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>deposit</h3>
+<h3 id="deposit">deposit</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
@@ -1040,7 +1026,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>store</h3>
+<h3 id="store">store</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>amount</th></tr>
@@ -1085,7 +1071,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>garrison</h3>
+<h3 id="garrison">garrison</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>force</th></tr>
@@ -1095,7 +1081,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>extractor</h3>
+<h3 id="extractor">extractor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>ready</th></tr>
@@ -1110,7 +1096,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>6 row(s)</p>
-<h3>structure</h3>
+<h3 id="structure">structure</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>structure</th><th>count</th></tr>
@@ -1155,7 +1141,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>labor</h3>
+<h3 id="labor">labor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>made</th><th>spent</th><th>left</th></tr>
@@ -1176,7 +1162,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>unit</h3>
+<h3 id="unit">unit</h3>
 <table>
 <thead>
 <tr><th>id</th><th>kind</th><th>in-kind</th><th>in-id</th><th>fuel</th><th>ready</th></tr>
@@ -1185,7 +1171,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p><em>(empty) 0 rows</em></p>
-<h3>adjacency</h3>
+<h3 id="adjacency">adjacency</h3>
 <table>
 <thead>
 <tr><th>from</th><th>to</th></tr>
@@ -1224,7 +1210,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>30 row(s)</p>
-<h3>kind</h3>
+<h3 id="kind">kind</h3>
 <table>
 <thead>
 <tr><th>id</th><th>in-play</th></tr>
@@ -1248,7 +1234,7 @@ ul { padding-left: 1.2rem }
 </table>
 <p>14 row(s)</p>
 <h1>Turn 5</h1>
-<h2>commands</h2>
+<h2 id="commands">commands</h2>
 <pre>
 {create-labor territory:1}
 {work territory:1 resource:food}
@@ -1268,20 +1254,20 @@ ul { padding-left: 1.2rem }
 {build-extractor territory:1 resource:energy}
 {end-turn}
 </pre>
-<h2>what changed</h2>
+<h2 id="what-changed">what changed</h2>
 <p><strong>new</strong> (1)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {energy} -&gt; 4</li>
 </ul>
 <p><strong>changed</strong> (4)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 8 → 12</li>
 <li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} · 1 → 2</li>
 <li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} · 2 → 3</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 9 → 15</li>
 </ul>
-<h2>what is there now</h2>
-<h3>game</h3>
+<h2 id="what-is-there-now">what is there now</h2>
+<h3 id="game">game</h3>
 <table>
 <thead>
 <tr><th>phase</th><th>territories</th><th>units</th></tr>
@@ -1291,7 +1277,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>territory</h3>
+<h3 id="territory">territory</h3>
 <table>
 <thead>
 <tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
@@ -1312,7 +1298,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>deposit</h3>
+<h3 id="deposit">deposit</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
@@ -1357,7 +1343,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>store</h3>
+<h3 id="store">store</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>amount</th></tr>
@@ -1402,7 +1388,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>garrison</h3>
+<h3 id="garrison">garrison</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>force</th></tr>
@@ -1412,7 +1398,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>extractor</h3>
+<h3 id="extractor">extractor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>ready</th></tr>
@@ -1429,7 +1415,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>8 row(s)</p>
-<h3>structure</h3>
+<h3 id="structure">structure</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>structure</th><th>count</th></tr>
@@ -1474,7 +1460,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>labor</h3>
+<h3 id="labor">labor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>made</th><th>spent</th><th>left</th></tr>
@@ -1495,7 +1481,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>unit</h3>
+<h3 id="unit">unit</h3>
 <table>
 <thead>
 <tr><th>id</th><th>kind</th><th>in-kind</th><th>in-id</th><th>fuel</th><th>ready</th></tr>
@@ -1504,7 +1490,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p><em>(empty) 0 rows</em></p>
-<h3>adjacency</h3>
+<h3 id="adjacency">adjacency</h3>
 <table>
 <thead>
 <tr><th>from</th><th>to</th></tr>
@@ -1543,7 +1529,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>30 row(s)</p>
-<h3>kind</h3>
+<h3 id="kind">kind</h3>
 <table>
 <thead>
 <tr><th>id</th><th>in-play</th></tr>
@@ -1567,7 +1553,7 @@ ul { padding-left: 1.2rem }
 </table>
 <p>14 row(s)</p>
 <h1>Turn 6</h1>
-<h2>commands</h2>
+<h2 id="commands">commands</h2>
 <pre>
 {create-labor territory:1}
 {work territory:1 resource:food}
@@ -1591,16 +1577,16 @@ ul { padding-left: 1.2rem }
 {build-store territory:1 resource:energy}
 {end-turn}
 </pre>
-<h2>what changed</h2>
+<h2 id="what-changed">what changed</h2>
 <p><strong>changed</strong> (4)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {energy} · 4 → 12</li>
 <li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} · 2 → 3</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 15 → 20</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:energy} · 1 → 2</li>
 </ul>
-<h2>what is there now</h2>
-<h3>game</h3>
+<h2 id="what-is-there-now">what is there now</h2>
+<h3 id="game">game</h3>
 <table>
 <thead>
 <tr><th>phase</th><th>territories</th><th>units</th></tr>
@@ -1610,7 +1596,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>territory</h3>
+<h3 id="territory">territory</h3>
 <table>
 <thead>
 <tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
@@ -1631,7 +1617,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>deposit</h3>
+<h3 id="deposit">deposit</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
@@ -1676,7 +1662,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>store</h3>
+<h3 id="store">store</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>amount</th></tr>
@@ -1721,7 +1707,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>garrison</h3>
+<h3 id="garrison">garrison</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>force</th></tr>
@@ -1731,7 +1717,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>extractor</h3>
+<h3 id="extractor">extractor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>ready</th></tr>
@@ -1749,7 +1735,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>9 row(s)</p>
-<h3>structure</h3>
+<h3 id="structure">structure</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>structure</th><th>count</th></tr>
@@ -1794,7 +1780,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>labor</h3>
+<h3 id="labor">labor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>made</th><th>spent</th><th>left</th></tr>
@@ -1815,7 +1801,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>unit</h3>
+<h3 id="unit">unit</h3>
 <table>
 <thead>
 <tr><th>id</th><th>kind</th><th>in-kind</th><th>in-id</th><th>fuel</th><th>ready</th></tr>
@@ -1824,7 +1810,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p><em>(empty) 0 rows</em></p>
-<h3>adjacency</h3>
+<h3 id="adjacency">adjacency</h3>
 <table>
 <thead>
 <tr><th>from</th><th>to</th></tr>
@@ -1863,7 +1849,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>30 row(s)</p>
-<h3>kind</h3>
+<h3 id="kind">kind</h3>
 <table>
 <thead>
 <tr><th>id</th><th>in-play</th></tr>
@@ -1887,7 +1873,7 @@ ul { padding-left: 1.2rem }
 </table>
 <p>14 row(s)</p>
 <h1>Turn 7</h1>
-<h2>commands</h2>
+<h2 id="commands">commands</h2>
 <pre>
 {create-labor territory:1}
 {work territory:1 resource:food}
@@ -1913,19 +1899,19 @@ ul { padding-left: 1.2rem }
 {produce-pioneer territory:1}
 {end-turn}
 </pre>
-<h2>what changed</h2>
+<h2 id="what-changed">what changed</h2>
 <p><strong>new</strong> (1)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1 ready:yes} -&gt; 1</li>
 </ul>
 <p><strong>changed</strong> (3)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {energy} · 12 → 18</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 20 → 28</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:metal} · 2 → 3</li>
 </ul>
-<h2>what is there now</h2>
-<h3>game</h3>
+<h2 id="what-is-there-now">what is there now</h2>
+<h3 id="game">game</h3>
 <table>
 <thead>
 <tr><th>phase</th><th>territories</th><th>units</th></tr>
@@ -1935,7 +1921,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>territory</h3>
+<h3 id="territory">territory</h3>
 <table>
 <thead>
 <tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
@@ -1956,7 +1942,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>deposit</h3>
+<h3 id="deposit">deposit</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
@@ -2001,7 +1987,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>store</h3>
+<h3 id="store">store</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>amount</th></tr>
@@ -2046,7 +2032,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>garrison</h3>
+<h3 id="garrison">garrison</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>force</th></tr>
@@ -2056,7 +2042,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>extractor</h3>
+<h3 id="extractor">extractor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>ready</th></tr>
@@ -2074,7 +2060,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>9 row(s)</p>
-<h3>structure</h3>
+<h3 id="structure">structure</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>structure</th><th>count</th></tr>
@@ -2119,7 +2105,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>labor</h3>
+<h3 id="labor">labor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>made</th><th>spent</th><th>left</th></tr>
@@ -2140,7 +2126,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>unit</h3>
+<h3 id="unit">unit</h3>
 <table>
 <thead>
 <tr><th>id</th><th>kind</th><th>in-kind</th><th>in-id</th><th>fuel</th><th>ready</th></tr>
@@ -2150,7 +2136,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>adjacency</h3>
+<h3 id="adjacency">adjacency</h3>
 <table>
 <thead>
 <tr><th>from</th><th>to</th></tr>
@@ -2189,7 +2175,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>30 row(s)</p>
-<h3>kind</h3>
+<h3 id="kind">kind</h3>
 <table>
 <thead>
 <tr><th>id</th><th>in-play</th></tr>
@@ -2213,7 +2199,7 @@ ul { padding-left: 1.2rem }
 </table>
 <p>14 row(s)</p>
 <h1>Turn 8</h1>
-<h2>commands</h2>
+<h2 id="commands">commands</h2>
 <pre>
 {found-by-land territory:2}
 {create-labor territory:1}
@@ -2230,13 +2216,13 @@ ul { padding-left: 1.2rem }
 {work territory:2 resource:food}
 {end-turn}
 </pre>
-<h2>what changed</h2>
+<h2 id="what-changed">what changed</h2>
 <p><strong>gone</strong> (1)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1 ready:yes} -&gt; 1</li>
 </ul>
 <p><strong>new</strong> (7)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {yard} -&gt; 1</li>
 <li>{territory biome:grassland id:2 nature:1} {citizen ready:yes} -&gt; 4</li>
 <li>{territory biome:grassland id:2 nature:1} {extractor ready:yes resource:food} -&gt; 1</li>
@@ -2246,12 +2232,12 @@ ul { padding-left: 1.2rem }
 <li>{territory biome:grassland id:2 nature:1} {store resource:metal} -&gt; 1</li>
 </ul>
 <p><strong>changed</strong> (2)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {energy} · 18 → 20</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 28 → 13</li>
 </ul>
-<h2>what is there now</h2>
-<h3>game</h3>
+<h2 id="what-is-there-now">what is there now</h2>
+<h3 id="game">game</h3>
 <table>
 <thead>
 <tr><th>phase</th><th>territories</th><th>units</th></tr>
@@ -2261,7 +2247,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>territory</h3>
+<h3 id="territory">territory</h3>
 <table>
 <thead>
 <tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
@@ -2282,7 +2268,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>deposit</h3>
+<h3 id="deposit">deposit</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
@@ -2327,7 +2313,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>store</h3>
+<h3 id="store">store</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>amount</th></tr>
@@ -2372,7 +2358,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>garrison</h3>
+<h3 id="garrison">garrison</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>force</th></tr>
@@ -2383,7 +2369,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>2 row(s)</p>
-<h3>extractor</h3>
+<h3 id="extractor">extractor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>ready</th></tr>
@@ -2403,7 +2389,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>11 row(s)</p>
-<h3>structure</h3>
+<h3 id="structure">structure</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>structure</th><th>count</th></tr>
@@ -2448,7 +2434,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>labor</h3>
+<h3 id="labor">labor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>made</th><th>spent</th><th>left</th></tr>
@@ -2469,7 +2455,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>unit</h3>
+<h3 id="unit">unit</h3>
 <table>
 <thead>
 <tr><th>id</th><th>kind</th><th>in-kind</th><th>in-id</th><th>fuel</th><th>ready</th></tr>
@@ -2478,7 +2464,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p><em>(empty) 0 rows</em></p>
-<h3>adjacency</h3>
+<h3 id="adjacency">adjacency</h3>
 <table>
 <thead>
 <tr><th>from</th><th>to</th></tr>
@@ -2517,7 +2503,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>30 row(s)</p>
-<h3>kind</h3>
+<h3 id="kind">kind</h3>
 <table>
 <thead>
 <tr><th>id</th><th>in-play</th></tr>
@@ -2541,7 +2527,7 @@ ul { padding-left: 1.2rem }
 </table>
 <p>14 row(s)</p>
 <h1>Turn 9</h1>
-<h2>commands</h2>
+<h2 id="commands">commands</h2>
 <pre>
 {create-labor territory:1}
 {work territory:1 resource:food}
@@ -2557,15 +2543,15 @@ ul { padding-left: 1.2rem }
 {work territory:2 resource:food}
 {end-turn}
 </pre>
-<h2>what changed</h2>
+<h2 id="what-changed">what changed</h2>
 <p><strong>changed</strong> (3)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {energy} · 20 → 12</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 13 → 10</li>
 <li>{territory biome:grassland id:2 nature:1} {citizen ready:yes} · 4 → 6</li>
 </ul>
-<h2>what is there now</h2>
-<h3>game</h3>
+<h2 id="what-is-there-now">what is there now</h2>
+<h3 id="game">game</h3>
 <table>
 <thead>
 <tr><th>phase</th><th>territories</th><th>units</th></tr>
@@ -2575,7 +2561,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>territory</h3>
+<h3 id="territory">territory</h3>
 <table>
 <thead>
 <tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
@@ -2596,7 +2582,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>deposit</h3>
+<h3 id="deposit">deposit</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
@@ -2641,7 +2627,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>store</h3>
+<h3 id="store">store</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>amount</th></tr>
@@ -2686,7 +2672,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>garrison</h3>
+<h3 id="garrison">garrison</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>force</th></tr>
@@ -2697,7 +2683,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>2 row(s)</p>
-<h3>extractor</h3>
+<h3 id="extractor">extractor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>ready</th></tr>
@@ -2717,7 +2703,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>11 row(s)</p>
-<h3>structure</h3>
+<h3 id="structure">structure</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>structure</th><th>count</th></tr>
@@ -2762,7 +2748,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>labor</h3>
+<h3 id="labor">labor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>made</th><th>spent</th><th>left</th></tr>
@@ -2783,7 +2769,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>unit</h3>
+<h3 id="unit">unit</h3>
 <table>
 <thead>
 <tr><th>id</th><th>kind</th><th>in-kind</th><th>in-id</th><th>fuel</th><th>ready</th></tr>
@@ -2792,7 +2778,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p><em>(empty) 0 rows</em></p>
-<h3>adjacency</h3>
+<h3 id="adjacency">adjacency</h3>
 <table>
 <thead>
 <tr><th>from</th><th>to</th></tr>
@@ -2831,7 +2817,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>30 row(s)</p>
-<h3>kind</h3>
+<h3 id="kind">kind</h3>
 <table>
 <thead>
 <tr><th>id</th><th>in-play</th></tr>
@@ -2855,7 +2841,7 @@ ul { padding-left: 1.2rem }
 </table>
 <p>14 row(s)</p>
 <h1>Turn 10</h1>
-<h2>commands</h2>
+<h2 id="commands">commands</h2>
 <pre>
 {create-labor territory:1}
 {work territory:1 resource:food}
@@ -2865,13 +2851,13 @@ ul { padding-left: 1.2rem }
 {work territory:2 resource:food}
 {end-turn}
 </pre>
-<h2>what changed</h2>
+<h2 id="what-changed">what changed</h2>
 <p><strong>changed</strong> (1)</p>
-<ul>
+<ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 12 → 8</li>
 </ul>
-<h2>what is there now</h2>
-<h3>game</h3>
+<h2 id="what-is-there-now">what is there now</h2>
+<h3 id="game">game</h3>
 <table>
 <thead>
 <tr><th>phase</th><th>territories</th><th>units</th></tr>
@@ -2881,7 +2867,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>1 row(s)</p>
-<h3>territory</h3>
+<h3 id="territory">territory</h3>
 <table>
 <thead>
 <tr><th>id</th><th>biome</th><th>nature</th><th>citizens</th><th>labor-spent</th><th>yards</th></tr>
@@ -2902,7 +2888,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>deposit</h3>
+<h3 id="deposit">deposit</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>capacity</th><th>density</th><th>built</th></tr>
@@ -2947,7 +2933,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>store</h3>
+<h3 id="store">store</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>amount</th></tr>
@@ -2992,7 +2978,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>garrison</h3>
+<h3 id="garrison">garrison</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>force</th></tr>
@@ -3003,7 +2989,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>2 row(s)</p>
-<h3>extractor</h3>
+<h3 id="extractor">extractor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>resource</th><th>ready</th></tr>
@@ -3023,7 +3009,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>11 row(s)</p>
-<h3>structure</h3>
+<h3 id="structure">structure</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>structure</th><th>count</th></tr>
@@ -3068,7 +3054,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>36 row(s)</p>
-<h3>labor</h3>
+<h3 id="labor">labor</h3>
 <table>
 <thead>
 <tr><th>territory</th><th>made</th><th>spent</th><th>left</th></tr>
@@ -3089,7 +3075,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>12 row(s)</p>
-<h3>unit</h3>
+<h3 id="unit">unit</h3>
 <table>
 <thead>
 <tr><th>id</th><th>kind</th><th>in-kind</th><th>in-id</th><th>fuel</th><th>ready</th></tr>
@@ -3098,7 +3084,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p><em>(empty) 0 rows</em></p>
-<h3>adjacency</h3>
+<h3 id="adjacency">adjacency</h3>
 <table>
 <thead>
 <tr><th>from</th><th>to</th></tr>
@@ -3137,7 +3123,7 @@ ul { padding-left: 1.2rem }
 </tbody>
 </table>
 <p>30 row(s)</p>
-<h3>kind</h3>
+<h3 id="kind">kind</h3>
 <table>
 <thead>
 <tr><th>id</th><th>in-play</th></tr>

@@ -130,13 +130,19 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let mut generated = dump::generated(&Files(root.join("scenario/commands")));
 
-    // Twelve since `R-7` moved `recipes.md` here from `prototypes/kinds` and gave it a page.
-    // `containment.html` is still the one page with no markdown beside it - `crate::tree`
-    // says why.
+    // **Thirty-nine, and the number moved for three reasons at once** - all of them `R-9`.
+    // `containment.md` arrived, because every view has a diffable sibling now and that was
+    // the one that did not. The twelve territories each got a page and a sibling, which is
+    // twenty-four. And two stylesheets are generated files like any other, so that a stale
+    // one fails the way a stale report does.
+    //
+    // **Stated as a sum rather than as a number**, because thirty-nine on its own says
+    // nothing about which of the three moved when it next changes.
     assert_eq!(
         generated.len(),
-        12,
-        "twelve dump files are generated; `dump::generated` returned {}",
+        13 + 2 + 12 * 2,
+        "twelve report files and the index, two stylesheets, and a page and a sibling for \
+         each of the twelve territories; `dump::generated` returned {}",
         generated.len()
     );
 
@@ -148,12 +154,15 @@ fn every_committed_dump_is_what_the_scenario_produces() {
         let at = root.join("reports").join(name);
         let markdown = std::fs::read_to_string(&at)
             .unwrap_or_else(|why| panic!("cannot read {}: {why}", at.display()));
-        generated.push((dump::html_name(name), dump::page(&markdown, name)));
+        generated.push((
+            dump::html_name(name).to_string(),
+            dump::page(&markdown, name),
+        ));
     }
     assert_eq!(
         generated.len(),
-        13,
-        "thirteen generated files, nine of them pages"
+        13 + 2 + 12 * 2 + 1,
+        "one more with `catalog.html`, which `prototypes/kinds` writes the markdown for"
     );
 
     let produced: std::collections::BTreeSet<String> =
@@ -209,8 +218,10 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // The set was discovered, so it can be empty for the wrong reason. This says it was not.
     assert_eq!(
         on_disk.len(),
-        13,
-        "thirteen files carry the generated marker; found {} ({on_disk:?})",
+        13 + 2 + 12 * 2 + 1,
+        "the same population again, counted from the directory rather than from the \
+         program - `catalog.md` is the one file excluded, and it is `prototypes/kinds`'. \
+         Found {} ({on_disk:?})",
         on_disk.len()
     );
 }
@@ -226,13 +237,32 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
     let mut generated = dump::generated(&Files(root.join("scenario/commands")));
     for name in dump::RENDERED_ELSEWHERE {
         let markdown = std::fs::read_to_string(root.join("reports").join(name)).unwrap();
-        generated.push((dump::html_name(name), dump::page(&markdown, name)));
+        generated.push((
+            dump::html_name(name).to_string(),
+            dump::page(&markdown, name),
+        ));
     }
-    assert_eq!(generated.len(), 13, "thirteen generated files");
+    assert_eq!(
+        generated.len(),
+        13 + 2 + 12 * 2 + 1,
+        "the same population as the currency check above, and it is worth restating rather \
+         than sharing: a helper that both read would make one number, and two checks over \
+         one number is one check"
+    );
 
     for (name, text) in &generated {
+        // **Two shapes are short and both are correct.** A territory with nothing on it
+        // carries a head, a heading, its neighbours and one table; and the reset is five
+        // rules, because a reset that normalises everything is a dependency in disguise.
+        // **A floor per shape rather than one lowered to fit**, which would stop the number
+        // saying anything about the twenty files it was written for.
+        let floor = match name.as_str() {
+            "reset.css" => 4,
+            other if other.starts_with("territory-") => 12,
+            _ => 20,
+        };
         assert!(
-            text.lines().count() > 20,
+            text.lines().count() > floor,
             "{name} is {} lines, which is not a dump of anything",
             text.lines().count()
         );
@@ -248,10 +278,15 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
         // `recipes.md` is the fourth shape and arrived with `R-7`: bullets for the rule and
         // fenced blocks for the worked example, and no table anywhere. What says it has
         // content is a heading per recipe.
-        let marker = match *name {
+        // **A stylesheet is a fifth shape** and has neither rows nor headings. What says
+        // it has content is that it declares something.
+        let marker = match name.as_str() {
             "index.html" => "<a href",
             "recipes.md" => "## ",
+            "containment.md" => "- ",
+            _ if name.ends_with(".css") => " { ",
             _ if name.ends_with(".html") => "<h1>",
+            _ if name.starts_with("territory-") => "## ",
             _ => "| ",
         };
         assert!(
@@ -280,7 +315,10 @@ fn every_page_is_well_formed_enough_to_be_read_as_one() {
     let mut generated = dump::generated(&Files(root.join("scenario/commands")));
     for name in dump::RENDERED_ELSEWHERE {
         let markdown = std::fs::read_to_string(root.join("reports").join(name)).unwrap();
-        generated.push((dump::html_name(name), dump::page(&markdown, name)));
+        generated.push((
+            dump::html_name(name).to_string(),
+            dump::page(&markdown, name),
+        ));
     }
 
     let mut pages = 0;
@@ -313,5 +351,9 @@ fn every_page_is_well_formed_enough_to_be_read_as_one() {
     // page as much as the reports are, and it is one of the two that do not go through
     // `dump::page` - `containment.html` is the other, since `S-54` - so both are the
     // likeliest to drift from the rest.
-    assert_eq!(pages, 8, "eight pages, and every one of them checked");
+    assert_eq!(
+        pages,
+        8 + 12,
+        "eight pages and one per territory, and every one of them checked"
+    );
 }

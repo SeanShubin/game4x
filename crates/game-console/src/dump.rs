@@ -561,9 +561,16 @@ pub fn html(sections: &[Section], title: &str) -> String {
         rows,
     } in sections
     {
-        out.push_str(&format!("<h2>{}</h2>\n", escaped(name)));
+        // **An anchor, because a reference to a kind has to land somewhere** - `R-9`. The
+        // slug is `crate::browse`'s, so the side that writes the id and the side that
+        // writes the link cannot disagree about what a heading is called.
+        out.push_str(&format!(
+            "<h2 id=\"{}\">{}</h2>\n",
+            crate::browse::slug(name),
+            escaped(name)
+        ));
         if columns.is_empty() {
-            out.push_str("<p class=\"empty\">(empty) 0 rows, and no columns to name</p>\n");
+            out.push_str("<p class=\"blank\">(empty) 0 rows, and no columns to name</p>\n");
             continue;
         }
         out.push_str("<table>\n<thead>\n<tr>");
@@ -573,14 +580,18 @@ pub fn html(sections: &[Section], title: &str) -> String {
         out.push_str("</tr>\n</thead>\n<tbody>\n");
         if rows.is_empty() {
             out.push_str(&format!(
-                "<tr><td class=\"empty\" colspan=\"{}\">(empty) 0 rows</td></tr>\n",
+                "<tr><td class=\"blank\" colspan=\"{}\">(empty) 0 rows</td></tr>\n",
                 columns.len()
             ));
         }
         for row in rows {
             out.push_str("<tr>");
-            for cell in row {
-                out.push_str(&format!("<td>{}</td>", escaped(cell)));
+            for (at, text) in row.iter().enumerate() {
+                let column = columns.get(at).cloned().unwrap_or_default();
+                out.push_str(&format!(
+                    "<td>{}</td>",
+                    crate::browse::cell(name, &column, text)
+                ));
             }
             out.push_str("</tr>\n");
         }
@@ -628,27 +639,11 @@ pub fn entity_sections(game: &Game) -> Vec<Section> {
         .collect()
 }
 
-/// One stylesheet for every page this crate writes.
-///
-/// It names no kind, no resource and no size - `spec/invariants.md` keeps the game's data
-/// out of markup, and a rule reaching a colour by kind would be exactly that.
-const STYLE: &str = "<style>\n\
-     :root { color-scheme: light dark }\n\
-     body { font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem \
-     auto; max-width: 70rem; padding: 0 1rem }\n\
-     h1 { font-size: 1.3rem }\n\
-     h2 { margin: 2rem 0 .25rem; font-size: 1.1rem }\n\
-     h3 { margin: 1.25rem 0 .25rem; font-size: 1rem; opacity: .85 }\n\
-     table { border-collapse: collapse; margin: .5rem 0 }\n\
-     th, td { border: 1px solid currentColor; padding: .15rem .5rem; text-align: left }\n\
-     th { font-weight: 600 }\n\
-     pre { background: rgba(127,127,127,.12); padding: .6rem .8rem; overflow-x: auto }\n\
-     ul { padding-left: 1.2rem }\n\
-     .empty { opacity: .7; font-style: italic }\n\
-     .count, .note { opacity: .7; font-size: .85rem }\n\
-     .quiet { opacity: .55; font-size: .85rem }\n\
-     .quiet a { font-weight: 400 }\n\
-     </style>\n";
+// **The look of every page lives in `crate::style` now** - `R-9`. This was three inline
+// `<style>` blocks; that module says why they are two files and what the copies had already
+// cost. The invariant they carried moved with them: a stylesheet names no kind, no resource
+// and no size, because `spec/invariants.md` keeps the game's data out of markup and a rule
+// reaching a colour by kind would be exactly that.
 
 /// The page for a markdown report: `turns.md` becomes `turns.html`.
 pub fn html_name(markdown: &str) -> &'static str {
@@ -698,7 +693,7 @@ pub fn head(title: &str) -> String {
     out.push_str("<meta charset=\"utf-8\">\n");
     out.push_str("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
     out.push_str(&format!("<title>{}</title>\n", escaped(title)));
-    out.push_str(STYLE);
+    out.push_str(&crate::style::links());
     out.push_str("</head>\n<body>\n");
     out.push_str("<p class=\"note\"><a href=\"index.html\">all reports</a></p>\n");
     out
@@ -748,10 +743,10 @@ pub fn page(markdown: &str, title: &str) -> String {
 
         if let Some(item) = trimmed.strip_prefix("- ") {
             if !list {
-                out.push_str(
-                    "<ul>
-",
-                );
+                // **`ul.bullets`, because the reset turns markers off for every list.**
+                // A list that came from `- ` in markdown is prose and wants its bullets
+                // back; the index's list of reports and the containment tree are neither.
+                out.push_str("<ul class=\"bullets\">\n");
                 list = true;
             }
             out.push_str(&format!(
@@ -771,15 +766,17 @@ pub fn page(markdown: &str, title: &str) -> String {
 
         if let Some(rest) = trimmed.strip_prefix("### ") {
             out.push_str(&format!(
-                "<h3>{}</h3>
+                "<h3 id=\"{1}\">{0}</h3>
 ",
-                inline(rest)
+                inline(rest),
+                crate::browse::slug(rest)
             ));
         } else if let Some(rest) = trimmed.strip_prefix("## ") {
             out.push_str(&format!(
-                "<h2>{}</h2>
+                "<h2 id=\"{1}\">{0}</h2>
 ",
-                inline(rest)
+                inline(rest),
+                crate::browse::slug(rest)
             ));
         } else if let Some(rest) = trimmed.strip_prefix("# ") {
             out.push_str(&format!(
@@ -939,7 +936,7 @@ pub fn view_of(text: &str) -> &'static str {
     }
 }
 
-pub fn index(generated: &[(&str, String)]) -> String {
+pub fn index(generated: &[(String, String)]) -> String {
     let described = |name: &str| -> &str {
         match name {
             "catalog.md" => "every kind, with everything the release says about it in one place",
@@ -952,7 +949,7 @@ pub fn index(generated: &[(&str, String)]) -> String {
             "commands.md" => {
                 "every command that ran, flattened out of its files, with the recipe it fired"
             }
-            "containment.html" => {
+            "containment.md" => {
                 "what holds what, collapsible, with used against total on every container"
             }
             other => panic!("no description for {other}"),
@@ -977,24 +974,12 @@ pub fn index(generated: &[(&str, String)]) -> String {
         "<title>game4x reports</title>
 ",
     );
-    out.push_str(
-        "<style>
-         :root { color-scheme: light dark }
-         body { font: 15px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 2rem auto; max-width: 48rem; padding: 0 1rem }
-         h2 { margin: 2rem 0 .25rem; font-size: 1.05rem }
-         ul { list-style: none; padding: 0 }
-         li { margin: .5rem 0 }
-         a { font-weight: 600 }
-                  .what { opacity: .75 }
-         .view { font-size: .8rem; padding: 0 .35rem; border-radius: .2rem; background: rgba(127,127,127,.18) }
-         .note { opacity: .75; font-size: .9rem }
-         .quiet { opacity: .55; font-size: .85rem }
-         .quiet a { font-weight: 400 }
-         </style>
-</head>
-<body>
-",
-    );
+    // **The same two sheets as every other page** - `R-9`. This block used to be a third
+    // copy of the first, minus the rules the index does not use and plus two it invented;
+    // `crate::style` carries what that cost. The index is not built with `head` because it
+    // is the page every other page links back to and carries no *all reports* line itself.
+    out.push_str(&crate::style::links());
+    out.push_str("</head>\n<body>\n");
     out.push_str("<h1>game4x</h1>\n");
     out.push_str(
         "<p class=\"note\">Generated. Do not edit. Made from the list of reports it \
@@ -1006,10 +991,10 @@ pub fn index(generated: &[(&str, String)]) -> String {
 ",
     );
     out.push_str(
-        "<p class=\"note\">Source, not a rendering. These are the files themselves - a view of either would be one more thing that can drift from it.</p>
-<ul>
-",
+        "<p class=\"note\">Source, not a rendering. These are the files themselves - a view \
+         of either would be one more thing that can drift from it.</p>\n",
     );
+    out.push_str("<ul class=\"reports\">\n");
     for (path, what) in [
         (
             "../scenario/commands/play.4x",
@@ -1047,8 +1032,9 @@ pub fn index(generated: &[(&str, String)]) -> String {
         "<p class=\"note\">Generated. Every one is derived from the scenario or from the \
          release, and regenerated rather than written. <strong>The page is the link</strong>; \
          the markdown that made it is beside the name, because a change is reviewed as a diff \
-         and a diff of HTML is not one.</p>\n<ul>\n",
+         and a diff of HTML is not one.</p>\n",
     );
+    out.push_str("<ul class=\"reports\">\n");
 
     // **A page is the default and its markdown is available beside it** - Sean's call, in
     // his words: *make it visually obvious that the html links are the default but the
@@ -1061,10 +1047,18 @@ pub fn index(generated: &[(&str, String)]) -> String {
     // moves in one place. `recipes.md` was named here and in `generated` after `R-7` moved it,
     // and the index listed it twice - which I made a test accept by raising a count instead of
     // asking why it had moved. The duplicate is what `S-63`'s labels made visible.
-    let mut names: Vec<&str> = generated.iter().map(|(name, _)| *name).collect();
+    // **A stylesheet is not a report and is not listed.** It is generated and it is in the
+    // directory, and neither of those makes it something to browse to - the pages link it
+    // themselves. Filtered here rather than at the source, so that the currency check still
+    // sees it as generated.
+    let mut names: Vec<String> = generated
+        .iter()
+        .map(|(name, _)| name.clone())
+        .filter(|name| !name.ends_with(".css"))
+        .collect();
     for elsewhere in RENDERED_ELSEWHERE {
-        names.push(elsewhere);
-        names.push(html_name(elsewhere));
+        names.push(elsewhere.to_string());
+        names.push(html_name(elsewhere).to_string());
     }
     names.sort_unstable();
     names.dedup();
@@ -1075,24 +1069,27 @@ pub fn index(generated: &[(&str, String)]) -> String {
     // is what lets one exist without the pairing assertion becoming a list of exceptions.
     let mut listed = 0;
     let mut paired = 0;
+    // **A territory's page is a thing, not a report**, and they are listed apart below. The
+    // difference is what each is a view *of*: a report is a view of the whole state, and
+    // twelve of them in one list would bury the seven. `S-64`'s model separates them the same
+    // way - the code units are their own section under the table of contents.
+    let thing = |name: &str| name.starts_with("territory-");
+
     for page in names
         .iter()
-        .filter(|name| name.ends_with(".html") && **name != "index.html")
+        .filter(|name| name.ends_with(".html") && *name != "index.html" && !thing(name))
     {
         let name = page.trim_end_matches(".html");
         let markdown = format!("{name}.md");
-        let beside = if names.contains(&markdown.as_str()) {
-            paired += 1;
-            format!(" <span class=\"quiet\">(<a href=\"{markdown}\">markdown</a>)</span>")
-        } else {
-            // **Said rather than left blank.** A missing markdown link on one row of a list
-            // where every other row has one reads as an oversight, and this one is a
-            // decision - `crate::tree` carries the reason.
-            String::from(
-                " <span class=\"quiet\">(no markdown - it is the collapsing that makes it \
-                 readable)</span>",
-            )
-        };
+        if !names.contains(&markdown) {
+            // **A panic rather than a parenthesis.** `R-9` requires a diffable sibling for
+            // every view; this used to write *(no markdown - it is the collapsing that makes
+            // it readable)* beside `containment`, which was a decision then and would be a
+            // gap now.
+            panic!("{page} has no markdown sibling, which `R-9` requires of every view");
+        }
+        paired += 1;
+        let beside = format!(" <span class=\"quiet\">(<a href=\"{markdown}\">markdown</a>)</span>");
         let content = generated
             .iter()
             .find(|(named, _)| named == page)
@@ -1102,30 +1099,63 @@ pub fn index(generated: &[(&str, String)]) -> String {
             "<li><a href=\"{page}\">{name}</a> <span class=\"view\">{}</span> \
              <span class=\"what\">- {}</span>{beside}</li>\n",
             view_of(content),
-            described(if names.contains(&markdown.as_str()) {
-                &markdown
-            } else {
-                page
-            })
+            described(&markdown)
         ));
         listed += 1;
     }
     // **Seven, and it read eight while one was listed twice.** The duplicate came in when
     // `R-7` moved `recipes.md` into `generated` while it was still named by hand below, and
     // this count accommodated it instead of catching it - which is the thing a count is for.
-    assert_eq!(listed, 7, "seven pages are linked");
+    assert_eq!(listed, 7, "seven reports are linked");
     assert_eq!(
-        paired, 6,
-        "six of them have their markdown beside them, and `containment` is the one that \
-         does not"
+        paired, listed,
+        "every report has its markdown beside it. `containment` was the one that did not, \
+         until `R-9` gave it the diffable sibling `S-64` settled it should have"
     );
-    // **The other direction, which the pairing above cannot see.** A markdown report that
-    // lost its page would simply stop being listed, and the count would still be seven if a
-    // page had been added elsewhere.
+
+    // **The things, each with a page of its own** - `R-9`. Ordered by number rather than by
+    // name, because a list running 1, 10, 11, 12, 2 is sorted and unusable.
+    let mut things: Vec<&String> = names
+        .iter()
+        .filter(|name| thing(name) && name.ends_with(".html"))
+        .collect();
+    things.sort_by_key(|name| {
+        name.trim_start_matches("territory-")
+            .trim_end_matches(".html")
+            .parse::<u32>()
+            .unwrap_or(u32::MAX)
+    });
+    out.push_str("</ul>\n<h2>Things</h2>\n");
+    out.push_str(
+        "<p class=\"note\">One page per identified thing, so that each is something to point \
+         at rather than an anchor inside a report that grows. Every row of every table that \
+         names it, gathered - a join no report performs.</p>\n",
+    );
+    out.push_str("<ul class=\"reports\">\n");
+    let mut pointed = 0;
+    for page in &things {
+        let name = page.trim_end_matches(".html");
+        let markdown = format!("{name}.md");
+        assert!(
+            names.contains(&markdown),
+            "{page} has no markdown sibling, which `R-9` requires of every view"
+        );
+        out.push_str(&format!(
+            "<li><a href=\"{page}\">{}</a> \
+             <span class=\"quiet\">(<a href=\"{markdown}\">markdown</a>)</span></li>\n",
+            name.replace('-', " ")
+        ));
+        pointed += 1;
+    }
+    assert_eq!(
+        pointed, 12,
+        "the release has twelve territories and each has a page; {pointed} were listed"
+    );
+
     for markdown in names.iter().filter(|name| name.ends_with(".md")) {
         let page = format!("{}.html", markdown.trim_end_matches(".md"));
         assert!(
-            names.contains(&page.as_str()),
+            names.contains(&page),
             "{markdown} has no page, so nothing on the index links it"
         );
     }
@@ -1159,7 +1189,7 @@ pub struct Turn {
 /// somebody's half-written finding. A test requiring it to be current would fail on a
 /// correct refusal, and the fix for that would be making the hook unconditional, which is
 /// the wrong direction.
-pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
+pub fn generated(commands: &dyn crate::Library) -> Vec<(String, String)> {
     let mut session = crate::Session::new();
     for line in ["{run file:setup}", "{start}"] {
         session
@@ -1266,7 +1296,7 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
         }
     }
 
-    let mut written = vec![
+    let mut written: Vec<(String, String)> = vec![
         ("state.md", markdown(&session.game, state)),
         (
             "state.html",
@@ -1285,7 +1315,10 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
             "commands.md",
             crate::fired::markdown(&crate::fired::ran(commands)),
         ),
-    ];
+    ]
+    .into_iter()
+    .map(|(name, text): (&str, String)| (name.to_string(), text))
+    .collect();
     // **`R-7`: the recipes, with a worked example beside each rule.** Generated here rather
     // than in `prototypes/kinds` because an example is a real command run against a real
     // state, and that crate depends on nothing.
@@ -1293,16 +1326,19 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../releases/first-release.md"),
     )
     .expect("the release document");
-    written.push(("recipes.md", crate::recipes::recipes(&release)));
+    written.push((
+        String::from("recipes.md"),
+        crate::recipes::recipes(&release),
+    ));
 
     // **Every markdown report gets a page** - `S-40`. Three of the index's links opened raw
     // markdown in a browser, `turns.md` worst of all, being the longest and the one read
     // most while checking the state function. Rendered from the markdown rather than from
     // the model, so the two cannot say different things.
-    let pages: Vec<(&str, String)> = written
+    let pages: Vec<(String, String)> = written
         .iter()
-        .filter(|(name, _)| *name == "turns.md" || *name == "commands.md" || *name == "recipes.md")
-        .map(|(name, text)| (html_name(name), page(text, name)))
+        .filter(|(name, _)| name == "turns.md" || name == "commands.md" || name == "recipes.md")
+        .map(|(name, text)| (html_name(name).to_string(), page(text, name)))
         .collect();
     written.extend(pages);
 
@@ -1311,13 +1347,32 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
     // always open, so a twin would be the same information in the form that made it
     // unreadable. `crate::tree` says so at more length.
     written.push((
-        "containment.html",
+        String::from("containment.html"),
         crate::tree::page(&session.game, "containment"),
     ));
+    // **And it has one now** - `R-9` and `S-64`, which settled `S-54`'s refusal with Sean's
+    // own precedent: `graph.html` has `graph.txt` beside it. A sibling is not a second way
+    // to read the tree, it is how a change to the tree becomes a diff.
+    written.push((
+        String::from("containment.md"),
+        crate::tree::markdown(&session.game, "containment"),
+    ));
+
+    // **A page per identified thing** - `R-9`, and `S-64` for the shape: a page is something
+    // Sean can point at, and an anchor inside a growing report is not. Twelve territories,
+    // each with the diffable sibling every view here has.
+    written.extend(crate::browse::pages(&session.game));
+
+    // **The two stylesheets, generated like everything else.** They carry the marker in a
+    // CSS comment, so the currency check discovers them the same way it discovers a page,
+    // and a stale stylesheet fails exactly as a stale report does.
+    for (name, text) in crate::style::sheets() {
+        written.push((name.to_string(), text));
+    }
 
     // The page that links them, made from the list it links - so a report added here appears
     // on it, and one removed leaves it, without anybody editing a second file.
     let page = index(&written);
-    written.push(("index.html", page));
+    written.push((String::from("index.html"), page));
     written
 }

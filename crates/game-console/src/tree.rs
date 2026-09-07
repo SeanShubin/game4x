@@ -46,11 +46,69 @@ pub fn page(game: &game_model::Game, title: &str) -> String {
          <code>state.md</code>'s <code>territory-resource</code> table, and <code>C-46</code> \
          for why it is in neither this nor the data file.</p>\n",
     );
-    out.push_str(STYLE);
     out.push_str("<ul class=\"tree\">\n");
     node(&mut out, &tree_root(game), 0);
     out.push_str("</ul>\n</body>\n</html>\n");
     out
+}
+
+/// The same tree, as an indented list - `R-9`'s diffable sibling.
+///
+/// **`S-54` argued for this and was refused, and `S-64` settles it with a precedent rather
+/// than an argument.** The refusal reasoned that collapsing is what makes the tree readable
+/// and a markdown file is always open, so a twin would be the same information in the form
+/// that made it unreadable. That is true of *reading* it and beside the point of what this
+/// is for: `graph.html` has `graph.txt` beside it in the model Sean pointed at, and a `.txt`
+/// is not there to be read - it is there so that a change to a generated view shows up as a
+/// diff. **A page is browsed and a sibling is diffed**, and no file does both.
+///
+/// So this is deliberately the flat form: every node, at its depth, always open. What made
+/// it a bad page is exactly what makes it a good diff - one line moves when one thing moves.
+pub fn markdown(game: &game_model::Game, title: &str) -> String {
+    let mut out = format!("# {title}\n\n");
+    out.push_str(
+        "**Generated. Do not edit.** The diffable sibling of `containment.html`, which is the \
+         one to read -\nthis is the same tree with nothing collapsed, so that a change to it \
+         is one line of a diff.\n\n",
+    );
+    let mut lines = 0;
+    walk(&mut out, &tree_root(game), 0, &mut lines);
+    out.push_str(&format!(
+        "\n{lines} things, counting every container and everything in one.\n"
+    ));
+    out
+}
+
+fn walk(out: &mut String, entry: &Entry, depth: usize, lines: &mut usize) {
+    let quantity = if entry.quantity == 1 {
+        String::new()
+    } else {
+        format!(" x {}", entry.quantity)
+    };
+    let bounds = summary_of(&entry.capacity);
+    // The page marks what is full with a colour, which a diff cannot carry, so the sibling
+    // says it in words. **Not a second rendering of the same fact** - `summary_of` produces
+    // the text and the page adds the colour to it.
+    let bounds = if bounds.is_empty() {
+        String::new()
+    } else {
+        format!(
+            " - {}",
+            bounds
+                .replace("<span class=\"bound full\">", "")
+                .replace("<span class=\"bound\">", "")
+                .replace("</span>", "")
+        )
+    };
+    out.push_str(&format!(
+        "{}- {}{quantity}{bounds}\n",
+        "  ".repeat(depth),
+        entry.description.written()
+    ));
+    *lines += 1;
+    for held in &entry.contents {
+        walk(out, held, depth + 1, lines);
+    }
 }
 
 fn tree_root(game: &game_model::Game) -> Entry {
@@ -102,7 +160,7 @@ fn node(out: &mut String, entry: &Entry, depth: usize) {
     out.push_str("</summary>\n");
 
     if entry.contents.is_empty() {
-        out.push_str("<p class=\"empty\">nothing in it</p>\n");
+        out.push_str("<p class=\"nothing\">nothing in it</p>\n");
     } else {
         out.push_str("<ul>\n");
         for held in &entry.contents {
@@ -142,19 +200,9 @@ fn summary_of(capacity: &[Capacity]) -> String {
     parts.join(" ")
 }
 
-const STYLE: &str = "<style>
-ul.tree, ul.tree ul { list-style: none; padding-left: 1.1rem; margin: .1rem 0 }
-ul.tree > li { margin: .1rem 0 }
-summary { cursor: pointer }
-summary::marker { opacity: .5 }
-li.leaf { opacity: .9 }
-.many { font-weight: 600 }
-.bounds { font-size: .82rem; opacity: .8 }
-.bound { display: inline-block; padding: 0 .3rem; border-radius: .2rem; background: rgba(127,127,127,.14) }
-.bound.full { background: rgba(200,120,0,.28) }
-.empty { margin: .1rem 0 .1rem 1.1rem; opacity: .55; font-size: .85rem }
-</style>
-";
+// The tree's rules live in `crate::style` with everything else - `R-9`. They were here
+// because this page was the only one that used them, which is exactly the argument that put
+// `.empty` in two stylesheets meaning two different things.
 
 #[cfg(test)]
 mod tests {
