@@ -60,12 +60,17 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [The cold-instance study, designed and not run](2026-09-07-the-cold-instance-study.md)
+  - 2026-09-07. Prepares `X-5`. Four of the seven cases are runnable against a cold instance and
+    three are not; the cheap design measures findability rather than finding; the predictions are
+    written before the run so it can refute `X-3` rather than confirm it.
 - [When a rule is known and still not applied](2026-09-06-when-a-known-rule-is-not-applied.md)
   - 2026-09-06. Answers `S-57`'s fourth question. Some rules fire at a moment of doubt and survive
     as habits; the ones that fire at a moment of confidence need a carrier, not a clearer sentence.
 - [Answering from memory, and why the instance cannot tell](2026-09-06-answering-from-memory.md)
-  - 2026-09-06. Answers `S-57`. The seven cases are four phenomena; only one is memory, and
-    clearing context fixes that one while making two of the others worse.
+  - 2026-09-06. Answers `S-57`. The seven cases are six phenomena - corrected twice, once by the
+    specification lane; only one is memory, and clearing context fixes that one while making two of
+    the others worse.
 - [What the theory already settles](2026-09-06-what-the-theory-already-settles.md)
   - 2026-09-06. From a conversation with Sean about the state function. The transformation is a
     Mealy machine and the list form is derived rather than new; `exec(environment)` is

@@ -1009,6 +1009,27 @@ reads *how much energy its tank holds*, which names no closed set - so the rule 
 number, and `fuel:1` is a number. Seven traits name a closed set and eleven do not, arrived at
 by reading the rows; `C-37` measured six before `P-308` named `phase`, and the two counts agree.
 
+**Point 3 is answered and built, and this lane said the opposite on 2026-09-07.** `ac0a3ff`'s
+message says `P-322` *is still in the queue waiting on Sean*. It is not: `P-322` landed on the
+6th and `P-331` on the 7th, both in the Accepted ledger at `docs/notes/proposals.md:2395` and
+`:2404`. The specification lane caught it.
+
+**The error is this file's own recurring one.** The check was `grep -c 'P-322'`, which returned
+3, and `grep '^### P-322 '`, which returned nothing. **The absent heading was the answer and the
+count was not**, and the count is what got read - a plausible number answering a narrower
+question than the one asked. Recorded here rather than only in a reply, because the wrong claim
+is in a commit message and that is not a place anything gets corrected.
+
+**What the two promotions did is exactly what this point asked for.** A deposit is a thing and
+carries one `density` and one `total capacity` each, so the repeated trait a flat description
+could not hold no longer exists. **The assumption is therefore retired rather than kept**: both
+numbers are in the data file, at `scenario/expected/play.4x:56` -
+`{deposit density:3 resource:food total-capacity:3} -> 1` - so the round trip is text against
+the game rather than text against tree, which is the cost this item recorded itself as paying.
+
+**Still open, and on the two words rather than on any of the four points.** Whether `game` is a
+kind, and whether `manned` is a row or a deletion. Those are Sean's and have not been put to him.
+
 ### C-45 - Holding `S-47` for room, and the trigger this lane recorded may have dissolved
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** finishing everything else and

@@ -11,6 +11,23 @@ unverified. **Nothing here was measured on a fresh instance**, because this lane
 the answer to the third question is derived from the classification rather than observed, and that
 limit is load-bearing on how much it is worth.
 
+**Corrected 2026-09-07, by the specification lane, and it is the lens working.** That lane checked
+all four of its own cases from the record and refused one: **`P-315` is not a case of the
+information being there unread.** Its withdrawal says the sentence *was* read and misparsed - an
+imperative with no subject, from which a deadlock was inferred - and reading it again is not what
+fixes a wrong inference. Verified here rather than taken: `b1d12c9`, the commit that withdrew
+`P-315`, **also rewrote the sentence**, from *To start one, create `lenses/<name>/README.md` and
+`lenses/<name>/outbox.md`, and tell it:* to today's *`lenses/<name>/` is its own column, so **it
+creates** ... itself if they are not there*. So `P-315` leaves the second row for one of its own,
+and **the table below is five phenomena over seven cases and should read six.** `C-35` and `C-34`
+were checked the same way and both hold - `C-35`'s *the instruction was in the item and I read past
+it* is in the item, several paragraphs below a title that is about something else, and this lane
+briefly concluded otherwise from the title alone. **And three of the four cases this report marks unverified below are
+now verified**, by that lane from the record rather than by this one: `P-320` against
+`spec/console.md`, `S-56` against the tree and the code lane's `C-44`, and `P-310` with `P-312`
+against `P-316`, the rule they produced. **Not re-checked here**, and taken as a claim from a lane
+reporting on its own record - which is the weakest kind and is why it is written as one.
+
 ## The finding: the question names one phenomenon and the cases are four
 
 `S-57` asks why a long-running instance answers from memory. Sorted by what actually failed, the

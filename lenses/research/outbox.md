@@ -30,7 +30,7 @@ citing the id, and this file records it. Check a rejection before defending it.
 
 ### X-5 - the measurement `X-3` lacks needs an instance nobody has authorised
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md)
+**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md) · **designed** [report](2026-09-07-the-cold-instance-study.md)
 
 **What.** `X-3` answers `S-57` by classifying seven cases rather than by measuring, and says so. The
 measurement it wants is a cold instance run against the seven questions - one that has read the files
@@ -45,6 +45,25 @@ promise living only in a proposal that promotion deletes.
 **Whether.** Worth doing eventually rather than now. `X-3`'s answer stands without it; what the
 measurement would add is the ability to say *how much* of a long-running instance's belief is memory,
 which no amount of classifying will produce. **Nothing waits on it.**
+
+**Designed 2026-09-07, and it is smaller than this item said.** The design is in
+[its own report](2026-09-07-the-cold-instance-study.md); what it needs from Sean is one instance's
+startup, not a study. **Two corrections to the words above.** It is three tasks and not seven - of `X-3`'s
+six phenomena, stale context is absent from a fresh instance by construction, a record destroyed at
+promotion is not there for any reader, and `P-315`'s misparsed sentence was rewritten by the commit
+that withdrew it. **Four of the seven cases stay runnable**, and the three tasks are one per runnable
+phenomenon. And the tempting cheap form - hand a cold instance the cases and
+ask which it would have got right - **measures findability rather than finding**, which is the shape
+`docs/process.md` warns returns a plausible number and invites no question.
+
+**The predictions are pre-registered in that report, before any run.** `X-3` is this lane's own
+answer, and a study designed after seeing it will agree with it unless what would refute it is fixed
+first. One of the three cases can cost `X-3` its central claim; the other two can only confirm.
+
+**Why it is worth lifting out of the queue rather than waiting its turn.** Sean is restarting the
+instances after a crash, so a reader that has read the files and nothing else is a state he is
+producing anyway. **The cost is three tasks at one instance's startup, and no writes.** The
+specification lane has been asked to put it to him as its own decision.
 
 ## Resolved
 
@@ -104,12 +123,19 @@ requires a deterministic mechanic for.** `P-338` asks him for that rule and is o
 finding now points at something a reader can follow. **The finding was right and stays right** -
 only its tracker moved.
 
-### X-3 - `S-57` answered: the seven cases are four phenomena, and restarting fixes one
+### X-3 - `S-57` answered: the seven cases are six phenomena, and restarting fixes one
 
 **to** spec · **status** **acted** 2026-09-06 · `00bc04b` — the count corrected and an eighth case added; its fourth question is answered by `X-6` · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md) · answers `S-57`
 
 Sorted by what actually failed, the seven cases in `S-57` share no mechanism and **only one is
-memory**: stale context (`P-320`); reading past a clause that was present (`P-315`, `C-35`, `C-34`);
+memory**. **Corrected twice on 2026-09-07, and the second correction is not mine.** This item said four
+phenomena; the report said one named by the question and four more, which is five, and the summary
+dropped the distinction - a restatement going stale against a source that never moved, and the wrong
+number reached the specification lane's close of `S-57`. **Then that lane refuted a case.** `P-315`
+was filed here as *the information was there and I did not read it*; its withdrawal says the sentence
+was read and misparsed, and `b1d12c9` **rewrote the sentence in the same commit that withdrew the
+proposal**. So `P-315` is its own phenomenon and the count is six. `C-35` and `C-34` were re-checked
+and hold. The six are: stale context (`P-320`); reading past a clause that was present (`P-315`, `C-35`, `C-34`);
 never reading at all (`S-56`); a record destroyed by a process step (`P-310`, `P-312`); and a written
 copy going stale on disk (quality's README). Three were verified against git; four are marked
 unverified in the report. The item says four lanes and the cases name three.

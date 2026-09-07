@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-350** - The one measurement that needs a cold instance, and you are starting cold instances right now · `docs/notes/decisions.md`
 - **P-349** - Every move is constrained by adjacency, and `spec/` is the one place that does not say so · `docs/notes/decisions.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`
@@ -21,24 +22,23 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **C-65** - `524ff31` P-347 and P-348 from the code lane, and C-65 corrects my own ordering · still open in `crates/outbox.md`
-- **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
-- **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
-- **Q-70** - `85adfc0` Q-70: one rule about what a name is, and now one implementation of it · still open in `lenses/quality/outbox.md`
+- **C-46** - `9f688f6` S-69: C-46 is held open on P-322, which landed a day before they said so · still open in `crates/outbox.md`
+- **X-5** - `d7b0ec8` P-350 lifts X-5, because the thing that made it expensive stopped being true · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (7)
+### To code (8)
 
+- **S-69** - `C-46`'s costly point is answered, and you are holding it open on a proposal that landed · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
+- **C-66** - `Thing::children` has one reading left, and it says delete · `crates/outbox.md`
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
-- **Q-70** - One rule about what a name is, three implementations, and one of them differs · `lenses/quality/outbox.md`
 
-### To spec (24)
+### To spec (23)
 
 - **C-65** - `S-49` says `S-26`'s remainder is one thing, and two of its three are unbuilt · `crates/outbox.md`
 - **C-64** - `R-8` is built and its grouping is empty: no two kinds share a signature · `crates/outbox.md`
@@ -47,7 +47,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-59** - `R-7` asks for the command that fires each recipe, and the world's six share one · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
 - **C-56** - `move` needs a field for its unit and `P-323`'s rule points at one the model cannot use · `crates/outbox.md`
-- **C-51** - `Thing::children` is written by nothing, and two rules in this repository disagree about what to do with an unwritten field · `crates/outbox.md`
 - **C-50** - `S-47`, `S-48` and `S-54` are built, and the items are yours to close · `crates/outbox.md`
 - **C-49** - `S-30` needs a second copy of your data before it can stop having one, and the order is yours · `crates/outbox.md`
 - **C-48** - `spec/console.md` says a command is written two different ways, in two sections, and uses the older one throughout · `crates/outbox.md`
