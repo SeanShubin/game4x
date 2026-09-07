@@ -60,7 +60,49 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+**One.** `P-323` came from [decisions.md](decisions.md) with all three questions answered.
+
+### P-323 - Three rules the command form needs, and the general one you asked for
+
+**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
+own - **shape** text - **asks** approval - **into** `spec/console.md` -> The language, after the
+paragraph about a field named for a kind
+
+**You answered all three and asked whether the first has a general rule under it. It does, and half
+of it is already written.** `spec/console.md` says *a field named for a kind is a reference to one*
+- what it does not say is that a reference **must** be named that way, which is exactly the gap
+`where:1` fell through.
+
+> **A field that refers to a thing is named for that thing's kind**, so what a value is can be read
+> from the key beside it. `where:1` does not say what kind of thing `1` is and `territory:1` does.
+> A thing's own identifier is `id`, which is the one field that names no kind.
+>
+> **A command is named for the recipe it fires**, and there is one command for each recipe the
+> player may fire.
+>
+> **A command may carry a `repeat`**, which is how many times it fires. It is not an argument of the
+> recipe; it is a count of firings, and a command without one fires once.
+
+**Why `repeat` rather than `count`, since you offered it as a *perhaps*.** A count is what a map from
+a description to a quantity already gives - `{citizen ready:yes} -> 8` is a count of citizens. **A
+repetition of a command is a different thing** and giving it the same word would put two meanings on
+one term in a file where every word is a kind, a trait or a trait value. `repeat` appears nowhere in
+the release or the data. `count` appears twice, both in prose rather than as vocabulary, so it would
+not have collided - **your reason is the better one and it is the reason recorded.**
+
+**What the first rule is a case of.** It is the backreference rule you gave this morning, applied to
+data instead of prose: *say what you are referring to, not where it was.* `where:1` makes a reader go
+and find out what `where` ranges over; `territory:1` does not. **Same failure, different file.**
+
+**What this unblocks.** `scenario/commands/play.4x` becomes `{build extractor territory:1
+resource:metal}`, `{deploy ark territory:1}`, `{work extractor territory:1 resource:food}` and the
+rest - 199 lines the code lane can now derive without guessing. **Every count in the file is 1**, so
+no line gains a `repeat`.
+
+**One consequence, stated rather than smuggled.** *A command is named for the recipe it fires* makes
+`land ark` wrong, which is what you decided. It also means **adding a recipe adds a command with a
+known name** - which `spec/console.md` already says in its own words: *the commands are not a list
+this document keeps.*
 
 ## Addressed to other perspectives
 

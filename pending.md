@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-323** - Three names the code lane needs before it can rewrite the commands file · `docs/notes/decisions.md`
+- **P-323** - Three rules the command form needs, and the general one you asked for · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
