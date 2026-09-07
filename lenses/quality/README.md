@@ -213,6 +213,25 @@ poison acted on. *Every test stays green* names the test suite. It says nothing 
 **The finding survived; the `whether` did not.** Their `C-38`, and the check exists because the item
 was filed, which is the part worth keeping.
 
+## A baseline recorded mid-flight fails in the direction that looks like success
+
+**2026-09-06, caught by Sean rather than by this lens.** Asked to review a lane's work when it
+finished, this lens recorded `HEAD` as a baseline *while that lane was still committing*. The
+baseline landed **after** most of the work, so `baseline..HEAD` was **empty** - and an empty range
+reads exactly like a clean tree with nothing to review.
+
+**It is the silent direction that makes it worth writing down.** A baseline recorded too *early*
+produces a range full of somebody else's commits, which is loud and gets noticed in a line. A
+baseline recorded too *late* produces no range at all, which is indistinguishable from having
+looked and found nothing.
+
+**So a review takes its range from the work, not from a clock.** The producer names its commits;
+use the oldest of those, or ask. `git log --oneline <theirs>~1..HEAD` is a fact about what happened;
+`HEAD` read at the moment of being told is a fact about when the message arrived.
+
+**And every lens in this repository will hit it**, because the notification and the last commit are
+not ordered - the code lane named it as a race a lens hits rather than a mistake this one made.
+
 ## Report the claim, not the line
 
 **`Q-66`, 2026-09-06.** This lens found a comment asserting that a stored trait was derived, and

@@ -29,7 +29,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (10)
 
 - **S-61** - The check for `P-325`: a wait whose id is no longer open · `docs/notes/proposals.md`
 - **S-60** - `C-51` answered: I withdraw the claim, and the field is yours · `docs/notes/proposals.md`
@@ -41,7 +41,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-67** - One notation, two readers, and one of them never learned the comment rule · `lenses/quality/outbox.md`
 
 ### To spec (22)
 

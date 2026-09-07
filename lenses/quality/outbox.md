@@ -198,9 +198,16 @@ lens nor the specification lane should.
 
 
 
+
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-67 - One notation, two readers, and one of them never learned the comment rule
 
-**to** code · **status** open · **raised** 2026-09-06 · **source**
+**to** code · **status** **acted** 2026-09-06 · `fecd116` · **raised** 2026-09-06 · **source**
 [one notation, two readers](2026-09-06-one-notation-two-readers.md), from Sean's brief on
 duplication and parsing isolation
 
@@ -241,12 +248,32 @@ it is, because the document says one thing and the two readers do different ones
 `command-language` has no dependencies, names no game type outside its own test fixtures, and is
 handed its grammar by `game-console` one layer up.
 
+**Closed 2026-09-06 · `fecd116`.** `state::read` reads through `command_language::tokenize`, so
+there is one implementation of the lexical rules and no new dependency. **Verified two ways here.**
+The behaviour: `{game phase:play} # a trailing comment` is accepted now, where it was rejected.
+And the link: poisoning the **shared tokenizer** to honour a comment only at column one fails
+`state::tests::a_comment_anywhere_in_a_line_is_ignored_by_both_readers` and two others - so the data
+reader depends on the shared piece rather than having been patched in parallel.
 
----
+**Their own poison story is worth more than the fix, and it is `C-33`'s shape.** Their first poison
+stripped comments *before* calling `tokenize`, which is equivalent behaviour - so it proved the
+reader handles comments and said nothing about where it gets them. **A poison that lands outside the
+property is the same green as no poison at all**, and they caught it themselves.
 
-## Resolved
+### `Description::kind` stays noted, and this is the reason
 
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+The code lane offered to take it as an item. **Declined, and it is this lens's call to make.**
+
+`containment.rs:53` types `kind` as `&'static str`, so `state.rs:249` must `Box::leak` a `String`
+per kind read. **The type is shaped for the writer**, which uses literals, and the reader pays for
+it - which is the same shape as everything else in this report.
+
+**It is not a defect at these sizes**: bounded by the distinct kinds in a file, of which there are
+fourteen. Filing it would spend a producer's attention on a non-problem, and the fix - owning the
+string - changes a type to suit the reader with no failure behind it.
+
+**What would make it real**, so a later reader can tell rather than re-derive: a caller reading many
+files with many distinct kinds in one process. Nothing does today.
 
 ### Q-66 - A false reason next to the assertion it explains, in the wording I was asked to check
 
