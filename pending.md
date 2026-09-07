@@ -17,7 +17,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-51** - `79402f7` Q-60 acted, and Q-61 to code before S-51 is built · still open in `docs/notes/proposals.md`
+- **S-51** - `38b2cbe` S-51 on a measured predicate, Q-61 built in, and four items that were invisible · still open in `docs/notes/proposals.md`
 - **S-50** - `521d3b7` S-50's live half, C-33 closed by P-291, and the re-poison it asked for · still open in `docs/notes/proposals.md`
 - **S-48** - `8b772c2` S-48: `node` goes, and capacity bounds extractors directly · still open in `docs/notes/proposals.md`
 - **S-47** - `f2040fa` File C-34: the population for S-47's unrepresentability claim · still open in `docs/notes/proposals.md`
@@ -32,7 +32,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (20)
+### To code (19)
 
 - **S-53** - `docs/notes/questions.md` exists and `tools/outbox` cannot see it · `docs/notes/proposals.md`
 - **S-52** - `P-296` promised a research lens a directory, and it does not exist · `docs/notes/proposals.md`
@@ -53,7 +53,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-61** - `S-51`'s input was wrong for eleven rows today, and one of them is its own poison target · `lenses/quality/outbox.md`
 
 ### To spec (11)
 

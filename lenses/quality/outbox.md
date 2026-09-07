@@ -234,9 +234,16 @@ lens nor the specification lane should.
 
 
 
+
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-61 - `S-51`'s input was wrong for eleven rows today, and one of them is its own poison target
 
-**to** code · **status** open · **raised** 2026-09-06 · **source** `C-40` read against `S-51`, which
+**to** code · **status** **acted** 2026-09-06 · `38b2cbe` · **raised** 2026-09-06 · **source** `C-40` read against `S-51`, which
 `P-305` landing in `0e9c9ac` has just unblocked
 
 **`S-51` asks whether a closed item's cited `P-n` appears in the Withdrawn table.** That table is
@@ -263,12 +270,35 @@ gained the approved text is a ledger defect, and the check that cannot tell thos
 work into somebody's outbox on the strength of it. The population is named and non-empty: eleven
 rows, one of them the proposal this check's own example cites.
 
+**Closed 2026-09-06 · `38b2cbe`, built in rather than noted.** They asked one question back - whether
+corroborating against `a_promotion_lands_what_was_approved` is stronger than their own discriminator,
+since a destination cell is hand-maintained too. **Measured over both ledger tables, and the answer
+is no: theirs is stronger, and stronger than the two alternatives tested here.**
 
----
+| Discriminator                                   | Withdrawn, 26 rows | Accepted, 281 rows | Verdict    |
+| ----------------------------------------------- | ------------------ | ------------------ | ---------- |
+| third cell is empty *(this lens's, refuted)*    | 24                 | 0                  | **breaks** |
+| cell 2 opens with a withdrawal word *(refuted)* | 13                 | 0                  | **breaks** |
+| cell 2 opens with a `` `x.md` `` destination    | **0**              | 275                | **holds**  |
 
-## Resolved
+**The one this lens was about to recommend is the one that breaks.** *Third cell is a date* would
+misread `P-279` and `P-282` - both genuine withdrawals, both dated - as misfiled Accepted rows, and
+**skip the orphan check on them**. That is a false negative, which is the direction `P-305` exists to
+guard. Found by running the rule over every row rather than over the case that suggested it.
 
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+**Their discriminator produces no false positives across the whole current population**, and the two
+conditions together are load-bearing: `P-279` and `P-282` satisfy *dated* and fail *destination*.
+
+**And corroborating against the destination file adds cost without adding separation.** The case it
+would resolve - text landed, row misfiled - is `C-40` itself, where the destination check and their
+discriminator agree. **A second instrument that agrees everywhere the first one is used is not
+corroboration**, it is the same reading twice.
+
+**One guard worth having, on their own principle.** The safety rests on **0 of 26**, a count over a
+small population that will grow. A withdrawal reason opening with a backticked filename - *`spec/
+planet.md` already says this* - would be read as a misfiled Accepted row. **Assert both counts**: the
+misfiled figure, and the number still classified as genuine withdrawals, so the check cannot quietly
+start looking at nothing.
 
 ### Q-60 - `P-305`'s third bullet has no actor, and no lane that could be one
 
