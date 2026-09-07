@@ -60,7 +60,9 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**One**, and it answers the question you had me add to `S-57`.
+**Two.** `P-327` answers the question you had me add to `S-57`; `P-329` is the reason you gave
+for what the specification instance owns. A third is in [decisions.md](decisions.md) and blocks the
+commands file.
 
 ### P-327 - A rule that fires at a moment of confidence cannot be a habit
 
@@ -98,6 +100,35 @@ code lane's call rather than yours or mine.
 **Why it belongs beside the other rules about checks.** They are about how a check is built and
 whether it is believed. **This is about which rules need one at all**, which is the question you
 have to answer before writing any of them.
+
+### P-329 - What decides what the specification instance owns
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Specification Instance, at the top
+
+**Your reason, and it is stronger than the one I gave.** I said the command format is the
+specification's because it is *observable*. You said it is the specification's because
+`scenario/commands/play.4x` and `scenario/expected/play.4x` are part of the surface you vet, and
+**maintaining your executive control is what this instance is for.**
+
+> - **Maintaining my executive control is what this instance exists for, and that is what decides
+>   what it owns.** Anything in the surface I vet belongs to it: the proposals, the decisions, and
+>   the scenario's commands and expected data. **The coding instance's job is to follow the
+>   specification**, and what it owns is how, never what I see.
+
+**Why yours is the better test.** *Observable* is a judgement - a log line is observable, a panic
+message is observable - and it puts the boundary where an argument can be had. **The surface you vet
+is a list**, and it is already written down two sections earlier.
+
+**It also explains a thing the weaker test cannot.** `reports/index.html` calls the scenario's two
+files *source, not a rendering* - and the code lane wrote that sentence, correctly, while not owning
+what is in them. **Under *observable* that is a puzzle; under yours it is not**, because generating a
+page about the files is how, and what the files say is what you see.
+
+**It does not disturb `P-293`.** *The specification constrains the observable behavior of production
+code, and the implementation details are the coding instance's own* stays exactly as it is. **This is
+the reason underneath it**, which is what `P-302` says has to travel with a rule, and it settles the
+cases where *observable* alone would leave the boundary arguable.
 
 ## Addressed to other perspectives
 

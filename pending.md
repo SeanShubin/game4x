@@ -9,6 +9,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-327** - A rule that fires at a moment of confidence cannot be a habit · `docs/notes/proposals.md`
+- **P-329** - What decides what the specification instance owns · `docs/notes/proposals.md`
+- **P-328** - A command's name is several words or one dashed word, and `spec/console.md` says both · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
 
@@ -24,6 +26,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
+- **X-6** - `4d5a081` File P-327 from X-6, and close S-57 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
