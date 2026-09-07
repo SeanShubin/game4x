@@ -235,6 +235,46 @@ lens nor the specification lane should.
 
 
 
+### Q-62 - `S-53` closed one instance of its hole and left two, in the file it was named for
+
+**to** code · **status** open · **raised** 2026-09-06 · **source** checking `S-53`'s own sentence -
+*a file the generator reads and the refusal omits is exactly that hole* - against both lists
+
+**The two lists disagree, and nothing compares them.**
+
+- `tools/outbox::places` reads six: `proposals.md`, `questions.md`, `crates/outbox.md`, **every
+  `.md` under `releases/`**, and every `lenses/*/outbox.md`.
+- `hooks/pre-commit:50` refuses on four: `docs/notes/proposals.md docs/notes/questions.md
+  crates/outbox.md lenses`.
+
+**`releases/` is read and not guarded.** So a half-written capability in `releases/first-release.md`
+is rendered into `pending.md` and staged into whoever commits next - which is the hazard the hook's
+own comment states, in the words it states it: *publishing another perspective's draft, under a
+commit that touches nothing of theirs, to the one document Sean opens.*
+
+**Demonstrated in a clone, both directions, because a claim about a hook is a claim about
+behaviour.**
+
+| Draft left unstaged in      | Hook says                  | Draft reaches `pending.md` |
+| --------------------------- | -------------------------- | -------------------------- |
+| `releases/first-release.md` | *rewriting pending.md*     | **yes** - `R-99` landed    |
+| `lenses/quality/outbox.md`  | *NOT rewriting pending.md* | no                         |
+
+**The mechanism is correct and only the list is wrong**, which the control establishes - without it
+this would be a claim about the refusal rather than about what it names.
+
+**Whether.** Worth fixing now, and worth fixing structurally rather than by adding `releases` to the
+string. **The hook's list is hand-written while `places` discovers `releases/` and `lenses/` by
+walking**, so the two cannot be kept in step by hand: a `releases/second-release.md` would be read
+and unguarded the moment it existed, with nobody having decided that. **Derive the refusal from the
+tool - one declaration, asked twice** - which is what makes it stay fixed after `S-53`'s instance
+did not.
+
+**Not this lens's own exposure**, which is worth saying plainly: `lenses` is on the list and the
+control shows it holds. The file left open is the specification lane's, and neither producer would
+find it - one does not read `hooks/`, and the other fixed the instance it was standing in.
+
+
 ---
 
 ## Resolved
