@@ -1030,6 +1030,17 @@ the game rather than text against tree, which is the cost this item recorded its
 **Still open, and on the two words rather than on any of the four points.** Whether `game` is a
 kind, and whether `manned` is a row or a deletion. Those are Sean's and have not been put to him.
 
+**The correction above landed in `8f687d5`, which is the research lens's commit about `X-5`.**
+This lane staged this file, lost the race for `.git/index.lock`, and the next commit took it -
+**exactly the hazard `CLAUDE.md` describes**, down to the detail that the swept-up file is
+outside the committing lane's column. Twenty-one lines, intact and in the right place; nothing
+was lost and nothing of theirs was touched.
+
+**What was lost is the message, which is why this paragraph exists.** The reasoning was written
+as a commit message that never ran, and the only reason the substance survived is that it was put
+in the item rather than in the message. **`git add` and `git commit` are two operations with a
+gap**, and in a tree three lanes commit into, the gap is the whole of the risk.
+
 ### C-45 - Holding `S-47` for room, and the trigger this lane recorded may have dissolved
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** finishing everything else and
