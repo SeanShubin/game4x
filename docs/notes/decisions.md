@@ -23,8 +23,9 @@ here without first becoming a proposal.
 
 ### P-338 - A thing may last a number of turns, and having no number is what durable means
 
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** Sean's own - **asks** a decision -
-**into** `spec/resources.md` -> the expires rule, or `spec/invariants.md`
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
+own - **asks** a decision - **into** `spec/resources.md` -> the expires rule, or
+`spec/invariants.md`; and `releases/first-release.md` -> Recipes
 
 **Your idea, and it explains why `P-336` exists.** The specification has a **boolean** and the
 release has a **number**, and neither the model nor the two documents ever met.
@@ -35,33 +36,42 @@ release has a **number**, and neither the model nor the two documents ever met.
   which turns one food into a food that keeps one less
 - **The model implements the boolean**: `end_of_turn_losses` discards all food at every ending
 
-**So the release already made the move you are describing and nothing followed it.** That is `P-336`,
-and this is the rule underneath it.
-
 **The rule, in your terms**: a thing may carry a number of turns it lasts. **It decrements at each
 turn's end, and at zero the thing is gone. Having no number is what durable means.**
 
-**Three things I am not deciding, and they are why this asks rather than offers.**
+**It needs no language construct, and the mechanism is already used four times.** You asked whether
+this wants generics, and whether an inheritance hierarchy is the shape. **It is neither** - the
+recipe language already dispatches on **a family and a trait**.
 
-**1. What it is called.** `keeps` is declared and used - *food keeps for one turn* - so generalising
-it costs no new word. But you said *things*, not resources, and `keeps` reads oddly on a unit.
-**Nothing else in the release wants the name**, so it is free either way.
+A recipe's **Kind** column takes *the kind or the family alone*, `thing` is the family meaning *every
+kind above*, and **Traits** constrains it. So `upkeep` is already **require 1 `thing`, with upkeep**,
+and `perish`, `refresh` and `move` name families too. **`upkeep` is your pattern working today**: it
+acts on anything carrying the trait and does nothing to anything that lacks it.
 
-**2. Where it lives.** The boolean is in `spec/resources.md` and would be replaced there. **But a
-rule about any thing does not belong in the resources file**, and moving it to `spec/invariants.md`
-makes it something every other document obeys. **The second is a bigger claim than you may have
-meant.**
+**So *do nothing if it is not present* needs no rule.** A recipe constrained on a trait does not
+match a thing without it. That falls out rather than being handled.
 
-**3. Whether it answers `P-337`.** You said the two seem related and I can see the shape - a starved
-unit is *on its way out* the way expiring food is - but **a countdown on a disabled unit is a game
-rule I would be inventing.** If a starved unit is meant to be recoverable, a number is the wrong
-tool; if it is meant to decay, this is exactly the tool. **That is yours and I have not assumed it
-either way.**
+**And `age` becomes a one-cell change.** `| age | world | consume | 1 | **food** | keeps at least 1 |`
+becomes `thing`. `spoil` - *consume 1 food, keeps 0* - becomes `thing` as well. **Two cells, and the
+whole mechanism is expressed.**
 
-**What it would cost, so the size is visible.** The `expires` column in `spec/resources.md` becomes a
-number or goes; `keeps` widens from *food* to *a thing*; `age` becomes implementable and `R-7` can
-show it; and the model gains a per-thing counter where it has a blanket discard. **`spec/turn.md`'s
-*what expires expires* still reads correctly** and needs nothing.
+**Why there is no word for the category, which is what you were reaching for.** An inheritance
+hierarchy would need a `Perishable` above `Food`. **A trait needs no category** - a kind gains the
+behaviour by gaining the trait, and *durable* is then a statement about an absence rather than a
+type. So the word you could not find is one the design does not need.
+
+**Two things I am still not deciding.**
+
+**1. What the trait is called.** `keeps` is declared and free, but you said *things* rather than
+resources and `keeps` reads oddly on a unit.
+
+**2. Where the rule lives.** Replacing the boolean puts it in `spec/resources.md`; **a rule about any
+thing does not belong in the resources file**, and moving it to `spec/invariants.md` makes it
+something every other document obeys, which is a bigger claim than you may have meant.
+
+**`P-337` is a third concept and is not folded in here.** *Durable while upkeep is met* is a
+condition rather than a count, and whether it should become a count is the question that item now
+carries.
 
 ### P-336 - `age` is declared, fires in no state, and `keeps` is not implemented
 
