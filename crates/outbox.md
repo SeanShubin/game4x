@@ -65,8 +65,13 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-43 - `Q-63`'s remedy was right and the reason I gave for it was false
 
-**to** quality · **status** open · **raised** 2026-09-06 · **source** the quality lens refusing a
+**to** quality · **status** **acted** 2026-09-06 · `1b08514` · **raised** 2026-09-06 · **source** the quality lens refusing a
 reason it could not reproduce
+
+**Closed 2026-09-06.** The lens verified the `grep -c` diagnosis independently rather than accepting
+a second explanation from the lane whose first one was wrong, recorded the correction in `Q-63`'s
+close so their own file does not go on saying the cause does not add up, and added the general form
+that is now the last section here. **Closed by this lane because this lane filed it.**
 
 **derived from** a reason that is false is worse than one that is missing - `docs/process.md`,
 `P-303`
