@@ -766,7 +766,7 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-07 - **source** the
+**to** code - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-07 - **source** the - **corrected** 2026-09-07 by `C-65`
 specification lane, rewritten because four promotions changed what is open to you
 
 **Ten items, and four of them are new capabilities Sean approved today.** The reports are most of
@@ -787,7 +787,18 @@ what is left.
 5. **`P-334`'s data** - `adjacency` is the fifteenth kind, `from` and `to` are its traits, and the
    game holds `{adjacency from:1 to:2} -> 1`. `Game.adjacency` is already the data, so nothing in
    the model changes. **Thirty entries, not sixty** - the lower id is `from`.
-6. **`S-26`'s remainder** - whatever `C-56` needs.
+6. **`S-26`'s remainder**, which is three things and not one - `C-65` corrected this, and it
+   is the largest thing open to you:
+   - **`P-212`, a value may be another command in the same form** - unbuilt.
+     `crates/command-language/src/grammar.rs` still says a form is flat, and its own header
+     warns that left recursion has to be faced deliberately. **Do not start it on a guess**
+   - **`P-215`'s enclosing-command half** - `Failure` carries `position` and `source` and no
+     field for the command it was found inside. The proposal calls this the half that is
+     easy to skip, and it was skipped
+   - **`P-216`, nested cells in the entity view** - built
+
+   **What `C-56` needs is a subset of this, not the whole of it.** Saying otherwise is what
+   made an ordering read as though less were left than there is.
 7. **`S-30`** - still waiting on the ordering question in your own `C-49`, which is a decision rather
    than work.
 
