@@ -43,7 +43,11 @@ fi
 # Refusing is the safe direction. A stale pending.md that says so is recoverable by the next
 # commit; a published draft is not recoverable at all, because the lane that wrote it does
 # not know it went out.
-outboxes="docs/notes/proposals.md crates/outbox.md lenses"
+# questions.md is here for the same reason proposals.md is - S-53 put it in the index, and
+# the refusal below exists so that a half-written item is never rendered into pending.md and
+# staged into somebody else's commit. A file the generator reads and this list omits is
+# exactly that hole.
+outboxes="docs/notes/proposals.md docs/notes/questions.md crates/outbox.md lenses"
 unstaged=$(git diff --name-only -- $outboxes)
 if [ -n "$unstaged" ]; then
     echo "pre-commit: NOT rewriting pending.md - an outbox has unstaged changes:"

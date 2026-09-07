@@ -162,6 +162,16 @@ pub const LIMIT: usize = 15;
 pub fn places(root: &Path) -> Vec<PathBuf> {
     let mut found = vec![
         root.join("docs/notes/proposals.md"),
+        // **`S-53`: half of Sean's queue was invisible.** `docs/process.md` -> What I read,
+        // and what I do: *two files are addressed to me and they hold different things*.
+        // `questions.md` holds choices only he can make, `proposals.md` holds words for him
+        // to approve, and **an item lives in one at a time** - it sits in the questions file
+        // while any question in it is unanswered and moves across when the last one is
+        // answered. Reading only the second meant `pending.md` could report nothing waiting
+        // on him while a decision sat there.
+        //
+        // Cheapest to fix while the file is empty, which it is today.
+        root.join("docs/notes/questions.md"),
         root.join("crates/outbox.md"),
     ];
     // A release is an outbox too. Each capability carries an id, a `**to** code` line and
@@ -1026,6 +1036,20 @@ One line of what it is.
     /// naming a proposal, the naive *cites anywhere* reading flagged three, and two of them
     /// were correct items mentioning a withdrawal knowingly. The field line is what an item
     /// closed **on**; the body is prose.
+    ///
+    /// **And it has been poisoned in both directions, by the lens whose item it is** - which
+    /// is the half this lane cannot supply for its own check, and `C-33` is why it matters
+    /// that somebody did. In a clone, with `Q-53` closed citing `P-296`:
+    ///
+    /// - `P-296` moved into Withdrawn wearing a withdrawal's shape - a reason, no backtick,
+    ///   no date. **26 genuine becomes 27, orphans 0 becomes 1**, and `Q-53` is named.
+    /// - `P-296` moved into Withdrawn wearing an Accepted row's shape, which is the `C-40`
+    ///   defect exactly. **Misfiled 0 becomes 1 and orphans stay 0**, so a ledger typo is
+    ///   named as a typo and the lens's item is not reopened on the strength of it.
+    ///
+    /// **Both counts move under both poisons**, which is what makes the population assertion
+    /// evidence rather than decoration: a predicate that had stopped matching anything would
+    /// have left one of the four numbers still.
     #[test]
     fn an_item_that_closed_on_a_withdrawn_proposal_is_told_from_one_that_mentions_it() {
         let queue = "\
@@ -1107,6 +1131,50 @@ Not closed, so not orphaned.
             "C-71 mentions the withdrawal in prose and closed on a commit; C-72 closed on a \
              misfiled row, which `Q-61` says is a ledger defect and not a withdrawal; C-73 \
              is not closed at all"
+        );
+    }
+
+    /// An id that is in both of Sean's files during a move is reported.
+    ///
+    /// **`S-53`'s hazard, checked rather than assumed covered.** `docs/process.md` says an
+    /// item lives in one of his two files at a time: it sits in `questions.md` while any
+    /// question in it is unanswered and moves to `proposals.md` when the last one is. **The
+    /// move is two edits**, and between them the id is in both - at which point a commit
+    /// citing it no longer says which item it closed, which is the failure `CLAUDE.md` names
+    /// for a duplicated id.
+    ///
+    /// Reading `questions.md` at all is the other half, and it is what made this reachable:
+    /// while the file was unread, an id could sit in both and `duplicate_ids` would see one.
+    #[test]
+    fn an_id_in_both_of_the_files_addressed_to_sean_is_a_duplicate() {
+        let mid_move = "\
+### Q-99 - a question being answered right now
+
+**to** sean · **status** open · **asks** a decision
+";
+        let mut items = parse(mid_move, "docs/notes/questions.md");
+        items.extend(parse(mid_move, "docs/notes/proposals.md"));
+        assert_eq!(items.len(), 2, "one id, written into both files");
+
+        let doubled = duplicate_ids(&items);
+        assert_eq!(
+            doubled.get("Q-99").map(Vec::as_slice),
+            Some(
+                [
+                    "docs/notes/questions.md".to_string(),
+                    "docs/notes/proposals.md".to_string()
+                ]
+                .as_slice()
+            ),
+            "both homes are named, because saying an id is doubled without saying where \
+             leaves the reader to search two files for it"
+        );
+
+        // And the ordinary case stays quiet, or the guard is noise during every move.
+        let settled = parse(mid_move, "docs/notes/proposals.md");
+        assert!(
+            duplicate_ids(&settled).is_empty(),
+            "one id in one file is not a duplicate"
         );
     }
 
