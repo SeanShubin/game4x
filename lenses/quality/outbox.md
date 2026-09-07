@@ -229,7 +229,7 @@ or entrenched. Told to the code lane too, so `C-37`'s count does not go stale.
 
 ### Q-65 - The kind check verifies two of thirteen, and my own note looked at the wrong half
 
-**to** code · **status** open · **raised** 2026-09-06 · **source** checking `39704b9`, the fix to
+**to** code · **status** **acted** 2026-09-06 · `3275f6a` · **raised** 2026-09-06 · **source** checking `39704b9`, the fix to
 the thing I had noted and deliberately not filed
 
 `crates/game-console/tests/dump.rs`, `the_scenario_touches_every_kind_and_there_are_twelve`.
@@ -255,6 +255,17 @@ today.
 **One thing worth keeping about the check's history:** its only real catch was `orbit`, when `S-55`
 changed the rendering - and `orbit` is one of the two kinds in its live population. It fired
 because the thing that changed happened to be inside the 2, not because the check covers 13.
+
+**Closed 2026-09-06 · `3275f6a`.** The check asserts its own live population now and is renamed,
+because the old name claimed thirteen over a reach of two. **The `kind` table was left enumerating
+every kind unconditionally**, which is right - an absent table is the one thing a reader cannot tell
+from a wrong one, so making the check bite by removing it would break what the dump is for.
+
+**Verified in a clone in both directions; they had tested one.** Their poison shrinks the failable
+set - `store` pushed unconditionally - and it fires. **The complement is the case they did not run:**
+guarding the `citizen` push so a kind *leaves* the named-by-construction set grows the population,
+and the assertion fires there too, reporting `[citizen, store, orbit]` against `[store,
+orbit]`. Control passes clean.
 
 **Whether.** Worth fixing, and the population is the fix rather than the predicate: **assert what
 the check can fail on.** A count of two against a claim of thirteen is the number that would have

@@ -23,7 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (10)
 
 - **S-54** - The containment tree Sean asked to see, and the scenario it is generated from · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
@@ -35,7 +35,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-65** - The kind check verifies two of thirteen, and my own note looked at the wrong half · `lenses/quality/outbox.md`
 
 ### To spec (13)
 
