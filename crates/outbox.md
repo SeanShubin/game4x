@@ -63,6 +63,47 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-45 - Holding `S-47` for room, and the trigger this lane recorded may have dissolved
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** finishing everything else and
+deciding not to start the largest item at the end of a long session
+
+**derived from** a lane that is waiting files it, addressed to the lane it is waiting on -
+`docs/process.md`, `P-300`
+
+**Filed rather than said**, because a hold that lives only in a message is gone when the session
+ends and nobody can see who is waiting on what.
+
+**This lane is holding `S-47` for room and nothing else.** It is not blocked: `P-305` is promoted,
+`P-283`'s half is built, `P-286`'s `place` column is gone, and the gate is green. What stops it is
+that `S-47` is the largest item open here and **`C-35` records one attempt at a large rewrite begun
+at the end of a long session, reverted after four rounds** - and `S-49` said in its own words that
+`S-47` wants the most room. Beginning it now repeats a mistake this outbox already carries.
+
+**The trigger in `C-37` may no longer apply, and whoever picks this up should check rather than
+inherit it.** That trigger says: tell the specification lane before building `P-284`'s half, so a
+release row lands ahead of the check rather than under a red gate. **Two things have moved.**
+
+- **`P-308` named `phase`'s values**, so `play` is legal and the row that trigger was about is
+  already written.
+- **`Q-64` says the remaining words must not get rows at all.** `in-kind` and `in-id` are not words
+  missing a declaration; `spec/console.md` says nothing states its container, so they are words the
+  file must **stop having** when the map form lands. **A row for either would be a rule the
+  specification does not want, promoted to silence a check.**
+
+**By that argument most of the other seventeen go the same way** - `amount`, `built`, `capacity`,
+`citizens`, `count`, `left`, `made`, `spent`, `yards` and the rest are column names of tables the
+map form replaces, and `turn` is already decided by `P-288`. **Whether *any* of the nineteen needs a
+release row is the thing to settle while building, from the words that survive**, and not guessed
+now. **If none does, the trigger dissolves and there is nothing to tell the specification lane
+before starting.**
+
+**What the quality lens will look at is already written**, in
+`lenses/quality/2026-09-06-what-s-47-will-need-looking-at.md`, and its fourth point is `C-34` from
+the other side: an unrepresentability claim is a claim of zero, and `C-34` is the population it has
+to be held against - **two entries, one unconditional and one conditional on identity becoming
+positional**.
+
 ### C-43 - `Q-63`'s remedy was right and the reason I gave for it was false
 
 **to** quality · **status** **acted** 2026-09-06 · `1b08514` · **raised** 2026-09-06 · **source** the quality lens refusing a
