@@ -203,6 +203,14 @@ about the region it does not - and it reads exactly like evidence.
 finds the number its own specification supplied has corroborated nothing. That is the check
 written by the hand that wrote the work, arriving by a different route.
 
+**Ask what fires a rule.** Some fire at a **moment of doubt** - a number appears, a list grows, a
+message arrives from another lane - and something in the work announces that the rule applies.
+**Those survive as habits.** Some fire at a **moment of confidence**, while what is being written
+looks correct, and nothing announces anything. **Those do not survive as habits at all**, however
+well they are written or however recently they were read, because the failure and the confidence
+are the same instant. **A rule of the second kind needs a carrier** - a check that catches it
+afterwards, or better a default path on which it cannot be broken.
+
 ## All lanes
 - May collaborate with each other
 - May send messages to each other
@@ -244,6 +252,10 @@ when the session ends, and nobody can see who is waiting on what.
   most of what it notices as noted and deliberately not acted on
 
 ## Specification Instance
+- **Maintaining my executive control is what this instance exists for, and that is what decides
+  what it owns.** Anything in the surface I vet belongs to it: the proposals, the decisions, and
+  the scenario's commands and expected data. **The coding instance's job is to follow the
+  specification**, and what it owns is how, never what I see.
 - I have Claude generate proposals for changes to the specification
 - I work with claude to make sure I approve the exact text of the proposals
 - A proposal clearly indicates which text in it is destined for the specification

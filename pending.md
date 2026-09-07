@@ -8,9 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-327** - A rule that fires at a moment of confidence cannot be a habit · `docs/notes/proposals.md`
-- **P-329** - What decides what the specification instance owns · `docs/notes/proposals.md`
-- **P-328** - A name is one word, and a command's name is no exception · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -82,8 +81,8 @@ it exists to ask.
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
+- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-323, P-328
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313
-- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-323
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
@@ -99,7 +98,9 @@ it exists to ask.
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> Quality instance - P-244, P-294
+- `docs/process.md` -> Specification Instance - P-292, P-329
 - `docs/process.md` -> Starting the instances - P-268, P-273
+- `docs/process.md` -> What makes a check worth having - P-304, P-327
 - `docs/process.md` -> What this document has to be - P-302, P-303
 - `docs/process.md` -> Who writes what - P-271, P-316
 - `docs/process.md`, a new section - P-204, P-211

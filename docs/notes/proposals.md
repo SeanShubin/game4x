@@ -60,122 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Two.** `P-327` answers the question you had me add to `S-57`; `P-329` is the reason you gave
-for what the specification instance owns. A third is in [decisions.md](decisions.md) and blocks the
-commands file.
-
-### P-327 - A rule that fires at a moment of confidence cannot be a habit
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** text -
-**asks** approval - **into** `docs/process.md` -> What makes a check worth having, at the end
-
-**The research lane's `X-6`, and it answers the question you had me add.** *When a rule is known and
-still not applied, what kind of remedy works?* The answer is not a better sentence.
-
-> **Ask what fires a rule.** Some fire at a **moment of doubt** - a number appears, a list grows, a
-> message arrives from another lane - and something in the work announces that the rule applies.
-> **Those survive as habits.** Some fire at a **moment of confidence**, while what is being written
-> looks correct, and nothing announces anything. **Those do not survive as habits at all**, however
-> well they are written or however recently they were read, because the failure and the confidence
-> are the same instant. **A rule of the second kind needs a carrier** - a check that catches it
-> afterwards, or better a default path on which it cannot be broken.
-
-**The test is checkable against rules you already have rather than a prediction.** *Name the
-population*, *re-poison a check when its exception list grows*, *do not take another lane's message
-as true* - each names an event that fires it, and each has held. *Normalize both sides* and *write a
-script to a file rather than assembling one in a shell string* name no event, and both were broken
-repeatedly by two lanes within hours of being written, once by the lane that wrote the rule.
-
-**Why a check is the weaker carrier here, which I would have got wrong.** *Normalize both sides*
-governs how a comparison is written, and a check is a comparison - so a check written to enforce it
-can break it. **A default path is stronger and is sometimes free**: the shell-quoting failures stop
-existing when the work goes through a tool whose quoting is one level by construction, which makes
-the rule unnecessary rather than better remembered.
-
-**What this does not say.** It does not say which carrier, and it does not say every rule of the
-second kind is worth one. **`tools/` has no shared normalizing comparison today.** Checked over all three tools rather than
-guessed: seven places collapse whitespace, and **exactly one does it to make two things compare** -
-`tools/outbox/src/lib.rs:286`, for matching the rule an item derives from. The rest truncate for
-display or assert about table rows. **So the carrier for the clearest case does not exist**, and
-building it is the code lane's call rather than yours or mine.
-
-**Why it belongs beside the other rules about checks.** They are about how a check is built and
-whether it is believed. **This is about which rules need one at all**, which is the question you
-have to answer before writing any of them.
-
-### P-329 - What decides what the specification instance owns
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/process.md` -> Specification Instance, at the top
-
-**Your reason, and it is stronger than the one I gave.** I said the command format is the
-specification's because it is *observable*. You said it is the specification's because
-`scenario/commands/play.4x` and `scenario/expected/play.4x` are part of the surface you vet, and
-**maintaining your executive control is what this instance is for.**
-
-> - **Maintaining my executive control is what this instance exists for, and that is what decides
->   what it owns.** Anything in the surface I vet belongs to it: the proposals, the decisions, and
->   the scenario's commands and expected data. **The coding instance's job is to follow the
->   specification**, and what it owns is how, never what I see.
-
-**Why yours is the better test.** *Observable* is a judgement - a log line is observable, a panic
-message is observable - and it puts the boundary where an argument can be had. **The surface you vet
-is a list**, and it is already written down two sections earlier.
-
-**It also explains a thing the weaker test cannot.** `reports/index.html` calls the scenario's two
-files *source, not a rendering* - and the code lane wrote that sentence, correctly, while not owning
-what is in them. **Under *observable* that is a puzzle; under yours it is not**, because generating a
-page about the files is how, and what the files say is what you see.
-
-**It does not disturb `P-293`.** *The specification constrains the observable behavior of production
-code, and the implementation details are the coding instance's own* stays exactly as it is. **This is
-the reason underneath it**, which is what `P-302` says has to travel with a rule, and it settles the
-cases where *observable* alone would leave the boundary arguable.
-
-### P-328 - A name is one word, and a command's name is no exception
-
-**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
-own - **shape** text - **asks** approval - **into** `spec/console.md` -> The language, replacing the
-sentence about a command's name
-
-**You chose dashed.** The sentence that said otherwise is the one that goes, so line 23's rule -
-*a name is one word, and where it needs more than one the words are joined with dashes* - governs a
-command's name like every other name.
-
-> A command is written `{name field:value ...}`. **Its name is one word**, dashed where it needs
-> more, and its arguments are named. **A value is a word, a number, or another command in the same
-> form**, so a command may carry a tree.
-
-**What changes is four words.** *Its name is the words that open it* becomes *its name is one word,
-dashed where it needs more*. The rest of the sentence, and the tree-carrying half, are untouched.
-
-**Corrected before you read it: the first version folded in *it is the name of the recipe it fires*,
-which `spec/console.md` already says nineteen lines earlier** - `P-323` landed it as its own
-sentence. Promoting that version would have stated it twice. **The naming half is untouched here**
-and the dashing half is the whole of what this changes.
-
-**The ten player commands then are**: `build-extractor`, `build-store`, `build-yard`, `create-labor`,
-`deploy-ark`, `found-by-land`, `move`, `produce-ark`, `produce-pioneer`, `work`. **So
-`{deploy-ark territory:1}` and `{found-by-land territory:2}`** - one token before the first field,
-with nothing to parse around.
-
-**On shortening them, which you said you did not feel strongly about: I checked all ten and none
-shortens without losing something.** The obvious candidate is not one.
-
-**`found-by-land` looks like it could be `found`, and it cannot.** `deploy-ark` produces a garrison,
-citizens, extractors and stores - **the same things `found-by-land` produces**. So there are two
-ways to found a territory, from orbit and by land, and ***by land* is exactly what distinguishes
-them.** Checked in the recipe rows rather than assumed from the names.
-
-**The others lose their subject.** `build-extractor`, `build-store` and `build-yard` differ only in
-what is built; `produce-ark` and `produce-pioneer` only in what is produced. Dropping the second word
-leaves `build` and `produce` meaning nothing in particular.
-
-**There is a real simplification here and it is not a shortening**, so I am not folding it in: those
-five could be two recipes taking a kind - `{build kind:extractor territory:1 resource:metal}`. **That
-merges rows in the recipe table rather than renaming them**, their costs would have to be shown to
-match first, and it is a change to the game's data rather than to how a name is spelled. Say if you
-want it looked at and it becomes its own item.
+**Nothing.** [decisions.md](decisions.md) is empty too.
 
 ## Addressed to other perspectives
 
@@ -2192,6 +2077,9 @@ work the release exists to order.
 | P-324, being blocked on one thing is not being blocked, and it applies to every lane                                         | `docs/process.md` -> All lanes                                                                                                               | 2026-09-06 |
 | P-325, an item that waits says so in a field, so something can notice when the wait is over                                  | `docs/process.md` -> Outboxes and the index                                                                                                  | 2026-09-06 |
 | P-326, state the kind of failure and not the occasion, and the three places that did not                                     | `docs/process.md` -> What this document has to be, Outboxes and the index, All lanes                                                         | 2026-09-06 |
+| P-327, a rule that fires at a moment of confidence needs a carrier, not a better sentence                                    | `docs/process.md` -> What makes a check worth having                                                                                         | 2026-09-06 |
+| P-328, a command's name is one word, dashed where it needs more                                                              | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
+| P-329, maintaining my executive control is what decides what the specification instance owns                                 | `docs/process.md` -> Specification Instance                                                                                                  | 2026-09-06 |
 
 ## Rejected
 

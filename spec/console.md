@@ -53,9 +53,9 @@ other word is wrong about the game rather than describing it.
 - Commands to query the game state are available
 - A sequence of commands may be run one at a time interactively, or run in full as a test
 
-A command is written `{name field:value ...}`. Its name is the words that open it and its
-arguments are named. **A value is a word, a number, or another command in the same form**, so a
-command may carry a tree.
+A command is written `{name field:value ...}`. **Its name is one word**, dashed where it needs
+more, and its arguments are named. **A value is a word, a number, or another command in the same
+form**, so a command may carry a tree.
 
 **A command names a recipe and binds what that recipe leaves open**: the place it acts in, and any
 ingredient or trait value it names with a `$`. **There is one command for each recipe the player may fire**, and
