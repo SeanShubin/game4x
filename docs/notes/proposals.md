@@ -60,6 +60,53 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-343 - What `P-338` makes stale, and an ordering defect it exposes
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** consequence of `P-338`, plus a
+defect found checking it - **asks** approval - **shape** an instruction - **waits on** `P-338` -
+**into** `spec/resources.md` -> The list, and `releases/first-release.md` -> Traits and Recipes
+
+**`P-338` replaces a sentence and orphans a column.** `spec/resources.md` states *a resource that
+expires is lost when the turn ends* **and** carries a table whose third column is `Expires`, yes for
+Food and no for the others. Replace only the sentence and the column is left with nothing defining
+it. The column becomes the number:
+
+| Resource | Conserved | Lasts |
+| -------- | --------- | ----- |
+| Food     | no        | 1     |
+| Metal    | yes       |       |
+| Energy   | no        |       |
+
+**Blank is durable**, which is `P-338`'s *having no number is what durable means* rather than a new
+convention.
+
+**Three cells in the release widen from `food` to `thing`**, which `P-338` describes and does not
+carry: the `keeps` trait's **Of** cell, and the **Kind** cell of `spoil` and of `age` - `age` in both
+its rows.
+
+**And checking that found a defect that is not `P-338`'s.** The release fires the world's recipes
+*`upkeep`, then `grow` and `perish`, then `spoil`, then `age`, then `refresh`* - **`spoil` before
+`age`**. Food is made with `keeps` 1, so at the first turn's end `spoil` finds nothing at 0 and `age`
+takes it to 0; **it is removed at the *second* turn's end.**
+
+**Three statements say that is wrong**, so the order is the thing to fix rather than any of them:
+
+- `spec/turn.md` - *what expires expires* is one step of one turn's ending
+- `releases/first-release.md` - *food ... keeps for one turn*
+- `crates/game-model` - `end_of_turn_losses` discards all food at every ending
+
+**So the order becomes `upkeep`, then `grow` and `perish`, then `age`, then `spoil`, then
+`refresh`**, and the recipe rows move with the sentence, which says they are in that order.
+
+**How to tell it was carried out**: `spec/resources.md`'s table has a `Lasts` column reading 1,
+blank, blank; no line of that file says *a resource that expires*; the release's `keeps`, `spoil` and
+`age` rows name `thing` and not `food`; the ordering sentence names `age` before `spoil`; and the
+recipe rows appear in the order the sentence gives.
+
+**It is a defect of the release and not of the model.** The code discards food at every ending, which
+is what all three statements want - so this makes the release agree with what is built rather than
+asking for a change to it.
+
 ### P-342 - `produce ark` becomes `launch ark`, and stops producing anything
 
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** follows from `P-341` - **asks**
@@ -96,6 +143,8 @@ Recipes table is unchanged at sixteen, because this is a rename rather than an a
 
 **This is the whole of the release's part.** Everything else `P-341` settles, and the two land
 together or not at all.
+
+**It answers the second half of `C-54`**, *`launch ark` fires no recipe*. The first half, `S-59`'s count measuring one file of seven, is untouched and stays open.
 
 ### P-341 - Building an Ark and launching it are one act
 
@@ -221,11 +270,12 @@ border*, so it is found rather than remembered.
 `unpaid` still read on any thing and bite exactly one kind. Worth saying, because a rule with one
 user is easy to fit to that user.
 
+**It answers `C-62`**, *a starved unit is marked unusable, and no artifact can show it*. With no unit taking upkeep there is no starved unit, so the marking has nothing left to mark.
+
 ### P-338 - A thing lasts a number of turns, paying its upkeep resets it, and having no number is durable
 
 **to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
-own - **asks** approval - **shape** text - **into** `spec/resources.md` -> replacing the *expires*
-rule
+own - **asks** approval - **shape** text - **waits on** `P-339` - **into** `spec/resources.md` -> replacing the *expires* rule
 
 **The rule.**
 
@@ -266,8 +316,7 @@ release.
 | n       | n down to 1                  | a stored counter                               | n                |
 
 **At 1 it is a constant, not a boolean.** A thing at 0 does not exist, so every living thing of a
-kind shows the same number - which makes it a fact about the kind, exactly like the `expires` column
-it replaces. **So nothing new is stored, no description gains a trait, and `{citizen ready:yes}`
+kind shows the same number - which makes it a fact about the kind, exactly like the `expires` column beside it. **That column is left defined by nothing and `P-343` carries it**, along with three release cells this describes and does not land. **So nothing new is stored, no description gains a trait, and `{citizen ready:yes}`
 stays exactly as it reads today.**
 
 **Which answers the question this proposal used to ask.** *Which citizens eat when there is not
@@ -290,6 +339,8 @@ a claim every document obeys**, which is larger than this needs. `spec/resources
 a second kind of thing ever needs it.
 
 ## Addressed to other perspectives
+
+**It answers `C-61`**, the code lane's *`age` is a declared recipe the model does not implement*. Same finding as `P-336` from the other side, and this is what closes both.
 
 ### S-65 - `X-2`'s hole is live again, and `P-338` is what tracks it now
 

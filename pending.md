@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-343** - What `P-338` makes stale, and an ordering defect it exposes · `docs/notes/proposals.md`
 - **P-342** - `produce ark` becomes `launch ark`, and stops producing anything · `docs/notes/proposals.md`
 - **P-341** - Building an Ark and launching it are one act · `docs/notes/proposals.md`
 - **P-340** - A unit is taken apart when it deploys, not when it arrives · `docs/notes/proposals.md`
