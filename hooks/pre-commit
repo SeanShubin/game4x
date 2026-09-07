@@ -85,7 +85,10 @@ else
     # commits next, and that may be one which must not repair it. P-305's filing rule is the
     # mechanism; this catches the case where it was forgotten. Q-61 is why a row that reads
     # like a promotion is reported rather than believed.
-    orphans=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --orphans 2>/dev/null | grep -E "closed on|wrong table" || true)
+    # Only the lines that name something wrong. The summary line carries the words "wrong
+    # table" whether the count is zero or not, and matching it printed an alarming heading
+    # over a clean result - which is how a check stops being read.
+    orphans=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --orphans 2>/dev/null | grep -E "closed on .* which is withdrawn|^  misfiled:" || true)
     if [ -n "$orphans" ]; then
         echo "pre-commit: the withdrawn ledger and the closed items disagree:"
         echo "$orphans" | sed 's/^/  /'
