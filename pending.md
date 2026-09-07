@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-327** - A rule that fires at a moment of confidence cannot be a habit · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -19,7 +18,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-59** - `ee9e386` S-59 first half: a deposit is a thing, so density is in the data file · still open in `docs/notes/proposals.md`
 - **S-58** - `8f505d7` S-58: the catalog reads Where things are, and a container that names no kind is loud · still open in `docs/notes/proposals.md`
-- **S-57** - `f2ab5f3` X-3 answers S-57: four phenomena, and restarting fixes one of them · still open in `docs/notes/proposals.md`
 - **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-29** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-26** - `d1d0e3e` S-26: P-216 checked, turn out of the entity view, and the contradiction that stops P-212 · still open in `docs/notes/proposals.md`
@@ -40,10 +38,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-
-### To research (1)
-
-- **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
 ### To spec (20)
 

@@ -60,7 +60,44 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+**One**, and it answers the question you had me add to `S-57`.
+
+### P-327 - A rule that fires at a moment of confidence cannot be a habit
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** text -
+**asks** approval - **into** `docs/process.md` -> What makes a check worth having, at the end
+
+**The research lane's `X-6`, and it answers the question you had me add.** *When a rule is known and
+still not applied, what kind of remedy works?* The answer is not a better sentence.
+
+> **Ask what fires a rule.** Some fire at a **moment of doubt** - a number appears, a list grows, a
+> message arrives from another lane - and something in the work announces that the rule applies.
+> **Those survive as habits.** Some fire at a **moment of confidence**, while what is being written
+> looks correct, and nothing announces anything. **Those do not survive as habits at all**, however
+> well they are written or however recently they were read, because the failure and the confidence
+> are the same instant. **A rule of the second kind needs a carrier** - a check that catches it
+> afterwards, or better a default path on which it cannot be broken.
+
+**The test is checkable against rules you already have rather than a prediction.** *Name the
+population*, *re-poison a check when its exception list grows*, *do not take another lane's message
+as true* - each names an event that fires it, and each has held. *Normalize both sides* and *write a
+script to a file rather than assembling one in a shell string* name no event, and both were broken
+repeatedly by two lanes within hours of being written, once by the lane that wrote the rule.
+
+**Why a check is the weaker carrier here, which I would have got wrong.** *Normalize both sides*
+governs how a comparison is written, and a check is a comparison - so a check written to enforce it
+can break it. **A default path is stronger and is sometimes free**: the shell-quoting failures stop
+existing when the work goes through a tool whose quoting is one level by construction, which makes
+the rule unnecessary rather than better remembered.
+
+**What this does not say.** It does not say which carrier, and it does not say every rule of the
+second kind is worth one. **`tools/` has no general normalizing comparison today** - one incidental
+use and nothing shared - so the carrier for the clearest case does not exist and building it is the
+code lane's call rather than yours or mine.
+
+**Why it belongs beside the other rules about checks.** They are about how a check is built and
+whether it is believed. **This is about which rules need one at all**, which is the question you
+have to answer before writing any of them.
 
 ## Addressed to other perspectives
 
@@ -227,8 +264,10 @@ false.
 
 ### S-57 - Why a long-running instance answers from memory, and cannot tell that it is
 
-**to** research - **status** open - **raised** 2026-09-06 - **source** Sean, asking for this to be
+**to** research - **status** **acted** 2026-09-06 - `2b38f3f` - **raised** 2026-09-06 - **source** Sean, asking for this to be
 researched after a promotion of mine went wrong for exactly this reason
+
+**Closed 2026-09-06, answered by the research lane as `X-3` and `X-6`.** The first three questions are `X-3`: the seven cases are four phenomena, only one is memory, and clearing context fixes that one while making two worse - a fresh instance has no memory to contradict a stale file with. The fourth is `X-6`, filed as `P-327`: a rule firing at a moment of doubt survives as a habit and one firing at a moment of confidence does not, so the second kind needs a carrier rather than a better sentence. **Verified in the destination files rather than from their commits**, including that `tools/` has one incidental normalizing comparison and no general one.
 
 **The question, in his words**: why does *a long-running instance answer from memory instead of from
 files, and it can't tell which it's doing?* **Forward-looking rather than blocking** - nothing waits
