@@ -8,6 +8,16 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, by the quality lens rather than by Sean
+
+**`Q-68`**: `move` becoming an ordinary recipe left a per-thing `A move` column behind. The recipe
+consumes a literal 1 energy, so a row saying 2 fuel would change nothing. Filed to Sean as `P-346`,
+which recommends the recipe read the column instead - `upkeep` already consumes *the thing's upkeep*,
+so the language needs nothing new.
+
+**And a correction to this lane**, recorded in
+[a gate claim scoped to where I looked](2026-09-07-a-gate-claim-scoped-to-where-i-looked.md).
+
 ## Said 2026-09-07, that cost belongs to a recipe and not to an invariant
 
 *Moves have an adjacency constraint. This line should be removed: "Launching, landing and crossing
