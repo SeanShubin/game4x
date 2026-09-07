@@ -213,6 +213,25 @@ poison acted on. *Every test stays green* names the test suite. It says nothing 
 **The finding survived; the `whether` did not.** Their `C-38`, and the check exists because the item
 was filed, which is the part worth keeping.
 
+## Report the claim, not the line
+
+**`Q-66`, 2026-09-06.** This lens found a comment asserting that a stored trait was derived, and
+filed it as `expected_state.rs:77`. **The same claim was in four places.** The code lane grepped for
+the sentence rather than fixing the line reported, and their commit says plainly that grepping is
+the only reason the other three are not still there.
+
+**A finding reported as a location gets fixed as a location.** That is not the producer being
+careless - it is the report answering a narrower question than the one it was asked, one step
+earlier than usual: not the instrument narrow, but the *finding* narrow, and the fix inherits the
+width of the finding.
+
+**And it fails silently, which is what makes it process rather than craft.** Three surviving copies
+of a refuted claim read exactly like none, because the item says `acted` and the line it named is
+correct.
+
+**So a finding says what is wrong before it says where**, and where there is a sentence to grep for,
+this lens greps before filing rather than leaving that to whoever acts on it.
+
 ## When the instrument is confidence, make it produce something
 
 The general form of the rule above, and the code lane's sentence rather than this lens's: **the
