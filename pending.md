@@ -44,8 +44,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
-### To spec (19)
+### To spec (20)
 
+- **C-51** - `Thing::children` is written by nothing, and two rules in this repository disagree about what to do with an unwritten field · `crates/outbox.md`
 - **C-50** - `S-47`, `S-48` and `S-54` are built, and the items are yours to close · `crates/outbox.md`
 - **C-49** - `S-30` needs a second copy of your data before it can stop having one, and the order is yours · `crates/outbox.md`
 - **C-48** - `spec/console.md` says a command is written two different ways, in two sections, and uses the older one throughout · `crates/outbox.md`

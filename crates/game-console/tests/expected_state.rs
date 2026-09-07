@@ -74,9 +74,15 @@ fn a_state_survives_being_written_and_read() {
     let read = state::read(&written).expect("what was just written must parse");
 
     assert_eq!(size(&read), size(&direct), "every entry survived");
-    // **Against the containment alone**, because capacity is derived and a derived trait is
-    // never part of a description - so a tree read back from a file has none. Naming that
-    // here is the difference between a comparison that forgives it and one that hides it.
+    // **Against the containment alone, and that is a concession rather than a rule.**
+    // `Q-66`: this said *capacity is derived*, which is true of `used` and false of `total` -
+    // the release stores `total capacity`, and the derived trait in that neighbourhood is
+    // `metal in it`. So the sentence next to the assertion made the omission sound
+    // legitimate while the doc comment above called it a limitation, and only the false one
+    // was where a reader would meet it.
+    //
+    // What is actually conceded: a territory's stored `total capacity` is not in the file,
+    // because a description is a flat map and a territory has one per kind. `C-46`.
     assert_eq!(read, direct.contained(), "and each is the entry it was");
     assert_eq!(
         state::written(&read),

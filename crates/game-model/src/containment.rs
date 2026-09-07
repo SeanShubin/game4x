@@ -108,10 +108,19 @@ impl Description {
 /// > **available capacity** is the total less the used; both are derived, so neither can
 /// > disagree with what is there.
 ///
-/// **`used` is derived and is therefore not in the data file.** `spec/console.md`: *a
-/// derived trait is never part of one.* It is here because `S-54` asks for `used/total` on a
-/// collapsed summary line, and a container that cannot say whether it is full defeats the
-/// reason for collapsing it.
+/// **Neither field is in the data file, and they are absent for different reasons.** Saying
+/// so is `Q-66`: one account made the omission sound like a rule being obeyed, and the other
+/// half of it - the half that is a limitation - is the one a reader has to know.
+///
+/// - **`used` is derived**, so `spec/console.md` keeps it out: *a derived trait is never part
+///   of one*. That is the rule working.
+/// - **`total` is stored** - `releases/first-release.md` -> *Traits*, and the quotation
+///   above says it outright - **so nothing excuses its absence.** It is out because a
+///   description is a flat map and a territory has a total capacity per kind, which the map
+///   form has no way to write. `C-46`, and it is a gap rather than a simplification.
+///
+/// Both are here because `S-54` asks for `used/total` on a collapsed summary line, and a
+/// container that cannot say whether it is full defeats the reason for collapsing it.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Capacity {
     /// The kind, or the kind carrying a trait value, that is bounded.
@@ -138,7 +147,8 @@ pub struct Entry {
     /// Never zero. `spec/console.md`: *an entry is never zero.*
     pub quantity: u32,
     pub contents: Vec<Entry>,
-    /// Derived, and not part of the data file. See [`Capacity`].
+    /// Not in the data file. `used` is derived and `total` is stored - see [`Capacity`] for
+    /// why each is absent, because the reasons are not the same one.
     pub capacity: Vec<Capacity>,
 }
 
@@ -208,6 +218,28 @@ fn ready(is: bool) -> &'static str {
 /// rather than a decision - `tests/descriptions.rs` names every one of them and fails when
 /// one is repaired or another appears.
 fn describe(thing: &Thing) -> Description {
+    // **`Thing::children` is not read here, and this is what stops that being silent.**
+    //
+    // The quality lens went looking for what the tree drops - `Q-66`'s review - and this is
+    // the one path it found. `Entry::leaf` builds an entry with no contents, so a `Thing`
+    // that held something would appear in the file as a thing holding nothing: **a state
+    // written down wrongly rather than a state refused**, which is the failure `C-34` records
+    // twice already.
+    //
+    // **It is dead rather than latent today**: `children` is declared, initialised empty by
+    // `Thing::of`, and written by nothing in the repository. So this asserts rather than
+    // recursing - recursing would be code written against a future, which `thing.rs` forbids
+    // in its own words about five traits it deleted for exactly that. **Whether the field
+    // should exist at all is `C-51`**, because `S-47` names it as the shape containment
+    // should take and `thing.rs` names an unwritten field as the thing to delete, and those
+    // two cannot both be acted on by whoever happens to be here.
+    assert!(
+        thing.children.is_empty(),
+        "a {} holds {} things and the map form is being written from its traits alone, \
+         which would lose them - `C-51`",
+        thing.kind.name(),
+        thing.children.len()
+    );
     let mut description = Description::of(thing.kind);
     for (name, value) in &thing.traits {
         let written = match name {
@@ -401,11 +433,14 @@ impl Entry {
 
     /// The same tree with every capacity dropped.
     ///
-    /// **Capacity is derived and is not in the data file**, so a tree read back from one has
-    /// none - `spec/console.md`: *a derived trait is never part of one*. A round trip is
-    /// therefore compared against this rather than against the tree the model built, and the
-    /// difference is exactly what a reader is told is missing rather than something the
-    /// comparison quietly forgives.
+    /// **A tree read back from a data file has no capacity**, because the file states none -
+    /// `used` by the rule that keeps derived traits out, and `total` because the map form
+    /// cannot hold a stored trait a thing has one of per kind. See [`Capacity`].
+    ///
+    /// So a round trip is compared against this rather than against the tree the model built,
+    /// **and what that concedes is the second of those two.** The comparison is text against
+    /// tree, not text against the game: reading the file back cannot rebuild a territory's
+    /// numbers, because they were never written. `C-46`.
     pub fn contained(&self) -> Entry {
         Entry {
             description: self.description.clone(),
@@ -710,6 +745,22 @@ mod tests {
                 TerritoryId(1),
             ));
         }
+        tree(&game);
+    }
+
+    /// A thing whose `children` hold something stops the tree rather than losing them.
+    ///
+    /// **The assertion is not a claim, because this exhibits the state it refuses.** `Q-66`'s
+    /// review found `describe` reading a thing's traits and not its children; the field is
+    /// written by nothing today, so the only way to know the refusal works is to write one
+    /// here and watch it fire.
+    #[test]
+    #[should_panic(expected = "which would lose them")]
+    fn a_thing_holding_something_the_description_cannot_carry_is_refused() {
+        let mut game = a_world();
+        let mut store = Thing::of(Kind::Store);
+        store.children.push(Thing::of(Kind::Food));
+        game.territories[0].held.push(store);
         tree(&game);
     }
 

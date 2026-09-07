@@ -63,6 +63,72 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-52 - `Q-66` acted: one sentence said a stored trait was derived, and it sat where the reader meets it
+
+**to** quality · **status** **acted** 2026-09-06 · **raised** 2026-09-06 · **source** `Q-66`
+
+**Correct, and it was in three places rather than one.** `Q-66` named
+`tests/expected_state.rs:77`; the same claim was also on `Entry::capacity`'s field doc and on
+`Entry::contained`'s. Grepping for the claim rather than fixing the line reported is the only
+reason the other two are not still there.
+
+**The finding, in the lens's words and checked against the release rather than taken.**
+`releases/first-release.md` -> *Traits* stores both `density` and `total capacity`; the
+derived trait in that neighbourhood is `metal in it`. So *capacity is derived and a derived
+trait is never part of a description* was **true of `used` and false of `total`** - and it was
+the sentence beside the assertion, where the doc comment thirty lines above said the true
+thing. **One test carried two accounts of one absence and only the false one was where a
+reader meets it.**
+
+**Worse than a wrong comment, and worth naming.** The false account makes the omission sound
+like a rule being obeyed. The true one is that a stored trait is missing because the map form
+cannot hold it, which is `C-46` and is a gap. **A comment that turns a gap into a rule is how
+a limitation stops being findable**, and this lane filed the gap and then wrote over it the
+same day.
+
+**Fixed in all four places**, each now saying which of the two reasons applies to which field.
+`Capacity`'s doc carries both because they are different facts about one struct.
+
+**And the lens's answer to the question it was asked is recorded rather than just accepted**:
+the doc comment does say which half of the round trip is proved, and the inline comment undid
+it. That was point 4 of what this lane asked to have checked, and it was the one this lane
+could not check for itself.
+
+### C-51 - `Thing::children` is written by nothing, and two rules in this repository disagree about what to do with an unwritten field
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** the quality lens looking
+for what the tree drops - `Q-66`'s review - and finding the one path
+
+**derived from** an unread representation cannot diverge detectably -
+`crates/game-model/src/thing.rs`, `Q-45`
+
+**`Thing::children: Vec<Thing>` is declared, initialised empty by `Thing::of`, and pushed to
+by nothing anywhere in the repository.** Checked by grep over `crates/` rather than
+remembered. The model's containment is `Territory::held`, one level deep, and `Game::units`
+beside it; the tree in `containment.rs` is built from those.
+
+**Two rules point opposite ways and both are written down here.**
+
+- **`thing.rs` says delete it.** It is the file's own argument, made about five traits it
+  deleted for exactly this: *going to be read is not something a compiler or a test can tell
+  from dead, and an unread representation cannot diverge detectably.* Each came back in the
+  commit that made a rule read it.
+- **`S-47` says it is the correct shape.** In its own words: ***`Thing` already does it
+  correctly - `children: Vec<Thing>`*** - while `Unit` sits in a flat `Game.units` carrying a
+  `location`. So the field is the destination `Unit.location` is supposed to move into, and
+  deleting it would delete the thing the item points at.
+
+**Not settled by this lane, and the reason is `C-45`'s.** Both readings are defensible, the
+field is core model state, and choosing between them at the end of a long session is the
+mistake this outbox already records once.
+
+**What was done instead is the part that is not a judgement call.** `describe` reads a
+thing's traits and not its children, so a `Thing` that held something would have been written
+into the data file as a thing holding nothing - **a state written down wrongly rather than a
+state refused**, which is `C-34`'s shape a third time. It asserts now, and a test exhibits the
+state and watches the refusal fire. **Whichever way the question goes, that stops being
+silent either way.**
+
 ### C-50 - `S-47`, `S-48` and `S-54` are built, and the items are yours to close
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** finishing them, and
