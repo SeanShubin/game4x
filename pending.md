@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-311** - Containment is a tree in the specification and a column in the data · `docs/notes/decisions.md`
+- **P-311** - The dump carries the containment tree, completely and exactly once · `docs/notes/proposals.md`
+- **P-314** - `adjacency` is a fact about the container, and the release says it is a fact about a place · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -27,13 +28,13 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-41** - `744c6cf` S-41: P-250's second half gets the mechanism it was promoted without · still open in `docs/notes/proposals.md`
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
-- **P-311** - `26ccf43` Promote P-312, and move P-311 to questions.md where the rule I promoted says it belongs · still open in `docs/notes/decisions.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (20)
+### To code (21)
 
+- **S-55** - An orbit is above nowhere, and an Ark lands anywhere · `docs/notes/proposals.md`
 - **S-54** - The containment tree Sean asked to see, and the scenario it is generated from · `docs/notes/proposals.md`
 - **S-53** - `docs/notes/decisions.md` is a file `tools/outbox` names by its old path · `docs/notes/proposals.md`
 - **S-52** - `P-296` promised a research lens a directory, and it does not exist · `docs/notes/proposals.md`
