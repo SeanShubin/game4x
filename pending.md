@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-317** - The thing that makes the fourth artifact derivable is never stated · `docs/notes/proposals.md`
+- **P-317** - The thing that makes the data dump derivable is never stated · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 

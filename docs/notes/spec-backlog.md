@@ -8,6 +8,19 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-06, on backreferences and who is reading
+
+*An ai assistant can remember backreferences but a human can't. I am probably going to want
+to run a sweep at some point to make sure we don't have references where we could plainly
+say what we are referring to.*
+
+**Said while reviewing `P-317`**, whose first version wrote *the fourth artifact* and *the
+other three*. He asked what the fourth was, which is the evidence: the phrase resolved for
+me and not for him, and I could not tell the difference from inside.
+
+**The sweep needs the rule first**, or it is a sweep against my taste rather than his. The
+rule is one sentence and is his to write; the sweep is mechanical once it exists.
+
 ## Deferred 2026-09-06, what settles competing effects
 
 *I understand the need to fill the hole, but not now.*
