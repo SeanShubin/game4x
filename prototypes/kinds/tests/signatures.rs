@@ -244,3 +244,131 @@ fn the_key_moves_with_the_traits_and_with_nothing_else() {
         "a role is part of a signature, so turning every consume into a produce moves a key"
     );
 }
+
+/// Two kinds the release says the same things about land in one group.
+///
+/// **`Q-69`, and the quality lens is right about why the other checks could not catch this.**
+/// `a_pair_shares_a_group_exactly_when_it_shares_a_signature` compares the grouping against
+/// `key()` equality - and `signatures()` builds the groups *by* `key()` equality, so it is one
+/// reading checked against itself. A self-check may share inputs; it may not share the
+/// computation. What was doing the work there was `agreeing == 0`, and that is one-sided: a
+/// key that merged everything fails loudly, and **a key that separates everything passes**.
+///
+/// Over-separation is the direction `R-8` exists to guard, because the point of a signature is
+/// to find the kinds that are the same. The lens demonstrated it rather than arguing it: make a
+/// kind's own name part of its signature - after which no two kinds can ever agree - and one
+/// test fails, the committed-catalog comparison, which regenerating turns green. A signature
+/// that cannot collide was reachable with the whole suite passing.
+///
+/// **So the equality half needs a case where equality must hold**, and the release has none -
+/// which is `C-64`, and is a fact about the release rather than something to fix here. This
+/// builds one: two kinds nothing else in the document distinguishes.
+#[test]
+fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
+    let document = release();
+    let before = every_kind(&document).len();
+
+    // Two kinds, one trait covering both, and one recipe naming each in the same role. The
+    // recipe rows go in last-first, because each insert goes directly under the separator -
+    // so `alpha` ends up above `beta`, and `alpha` carries the recipe's name while `beta`
+    // inherits it, which is how the table says two rows belong to one recipe.
+    //
+    // **No hyphen in either name, and it is not arbitrary.** `catalog::mentions` splits the
+    // Traits table's *Of* column on every non-alphanumeric character, so a kind called
+    // `alpha` is two words there and matches nothing - while `catalog::containers` splits
+    // the same way but keeps `-`, so the two disagree about what a name is. No kind in the
+    // release has a hyphen, so nothing is wrong today; the first one to have a hyphen would
+    // silently carry no traits. Found by trying to name a kind `alpha` here.
+    let mut poisoned = with_row(&document, "## Kinds", &["**alpha**", "one of a pair"]);
+    poisoned = with_row(&poisoned, "## Kinds", &["**beta**", "the other"]);
+    poisoned = with_row(
+        &poisoned,
+        "## Traits",
+        &["**pairing**", "alpha, beta", "a number", "stored"],
+    );
+    poisoned = with_row(
+        &poisoned,
+        "## Recipes",
+        &["", "player", "produce", "1", "beta", "", ""],
+    );
+    poisoned = with_row(
+        &poisoned,
+        "## Recipes",
+        &["**pair up**", "player", "produce", "1", "alpha", "", ""],
+    );
+
+    let kinds = every_kind(&poisoned);
+    assert_eq!(
+        kinds.len(),
+        before + 2,
+        "the two kinds are in the document; without them nothing below is about anything"
+    );
+
+    // **The premise, stated rather than assumed.** If the two were not equal here, the
+    // assertion after it would be checking that unequal things are apart - which is what the
+    // rest of this file already does, and not what this test is for.
+    let a = signature(&poisoned, "alpha");
+    let b = signature(&poisoned, "beta");
+    assert_eq!(
+        a.key(),
+        b.key(),
+        "the document says the same things about both, so their keys are equal"
+    );
+    assert_eq!(
+        a.traits,
+        vec![String::from("kind"), String::from("pairing")]
+    );
+    assert_eq!(a.pairs, vec![String::from("pair up produce")]);
+
+    let found = signatures(&poisoned);
+    let group_of = |kind: &str| -> String {
+        found
+            .iter()
+            .find(|(_, _, members)| members.iter().any(|member| member == kind))
+            .map(|(name, _, _)| name.clone())
+            .unwrap_or_else(|| panic!("`{kind}` is in no group"))
+    };
+    assert_eq!(
+        group_of("alpha"),
+        group_of("beta"),
+        "two kinds with one signature are shown together, which is what `R-8` asks for"
+    );
+
+    let together: Vec<&Vec<String>> = found
+        .iter()
+        .filter(|(_, _, members)| members.len() > 1)
+        .map(|(_, _, members)| members)
+        .collect();
+    assert_eq!(
+        together.len(),
+        1,
+        "exactly one group holds more than one kind, and it is the pair this built: {together:?}"
+    );
+    // Sorted, because a group keeps the order the Kinds table gives - and `with_row` inserts
+    // at the top, so the second insert is the first row. That order is a fact about the
+    // fixture rather than about the grouping, and asserting it here would make this test
+    // fail for a reason it is not about.
+    let mut held = together[0].clone();
+    held.sort();
+    assert_eq!(
+        held,
+        vec![String::from("alpha"), String::from("beta")],
+        "and the group holds both of them and nothing else"
+    );
+
+    // **The rest of the document is untouched by the pair.** Without this, a signature that
+    // merged everything would satisfy every assertion above.
+    let real: Vec<String> = every_kind(&document)
+        .iter()
+        .map(|kind| group_of(kind))
+        .collect();
+    let mut distinct = real.clone();
+    distinct.sort();
+    distinct.dedup();
+    assert_eq!(
+        distinct.len(),
+        real.len(),
+        "the fifteen real kinds are still in fifteen groups, so the pair grouping is the \
+         signature agreeing rather than the signature collapsing"
+    );
+}

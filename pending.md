@@ -20,6 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-68** - `4e20df0` S-68: the promotions check refused a spelling its own rules use, and read a move as a promotion · still open in `docs/notes/proposals.md`
 - **S-49** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
 - **S-26** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
 - **P-346** - `0361e25` Q-68 acted by P-346, and their remedy is better than the one my item implied · still open in `docs/notes/decisions.md`
