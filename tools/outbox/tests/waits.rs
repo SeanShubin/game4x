@@ -196,21 +196,56 @@ fn no_waits_and_no_stale_waits_are_told_apart_by_the_population() {
     );
 }
 
-/// The real tree, so the check runs over something rather than only over fixtures.
+/// The reader agrees with a plain scan of the real tree about which items carry the field.
 ///
-/// **`S-61` is its own first case** and says so: it carries the field, so the check has one
-/// row to run over on its first pass. This asserts the population is not zero rather than
-/// asserting what it finds - what it finds is a fact about today, and the item that is its
-/// first case will close.
+/// **This replaces a test that asserted the population was not zero, and that test was wrong
+/// in a way worth recording.** `S-61` carried the `waits on` field and said it was its own
+/// first case; the moment the specification lane closed it - correctly, and partly because
+/// this check reported it - the field went and the population became zero. **A test asserting
+/// a fact that a correct action falsifies is a test that punishes the action.**
+///
+/// **So this compares two derivations rather than a number.** The tool reads the field with
+/// `field`, which was where the bug was on the first run; this counts open items whose field
+/// line merely *contains* the words. The two share the item parse and nothing else, so a
+/// reader that stopped finding the field fails here whatever today's population happens to be.
+///
+/// **Zero on both sides is a real answer**, and it says the repository is holding nothing -
+/// which is what it should say when nobody is waiting.
 #[test]
-fn the_repository_has_at_least_one_item_that_says_what_it_waits_on() {
+fn the_field_reader_and_a_plain_scan_agree_about_the_real_tree() {
     let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
     let all = outbox::read(&root);
     let queue = std::fs::read_to_string(root.join("docs/notes/proposals.md")).unwrap_or_default();
-    let (population, _) = waiting(&all.items, &queue);
-    assert!(
-        population > 0,
-        "no open item in the tree says what it waits on, so this check runs over nothing - \
-         which is the failure `S-61` names first"
+    let (population, over) = waiting(&all.items, &queue);
+
+    let by_scan: Vec<&str> = all
+        .items
+        .iter()
+        .filter(|item| item.is_outstanding())
+        .filter(|item| item.fields.contains("**waits on**"))
+        .map(|item| item.id.as_str())
+        .collect();
+    assert_eq!(
+        population,
+        by_scan.len(),
+        "the field reader found {population} holds and a plain scan found {} ({by_scan:?})",
+        by_scan.len()
     );
+
+    // And the items it read the tree from are really there, so the agreement above is not
+    // two empty walks agreeing.
+    assert!(
+        all.items.len() > 20,
+        "only {} items read from the tree",
+        all.items.len()
+    );
+    // Every reported hold is one the scan also saw, which is the direction a wrong field
+    // reader would break: reading a wait out of an item that has none.
+    for held in &over {
+        assert!(
+            by_scan.contains(&held.item.as_str()),
+            "{} was reported as holding and its field line does not say so",
+            held.item
+        );
+    }
 }

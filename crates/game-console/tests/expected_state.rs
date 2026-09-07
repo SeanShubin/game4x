@@ -3,9 +3,31 @@
 //! **`S-29`, and half of `P-218`.** A data file the *test* reads is not a data file the
 //! *game loads*; the kinds, recipes and costs are still Rust and markdown.
 //!
-//! **Nothing has moved out of `first_release.rs` yet** - the assertions are still there.
-//! This is the mechanism waiting for something to compare against, and `S-34` says the
-//! assertions come out in the same change that puts the first expectation in.
+//! **The assertions this replaces are gone, and they went in the change that seeded the
+//! file.** `c37de2e`, 2026-09-04: fourteen of them - the landing site's citizens, its
+//! extractors and stores, the turn, control, the second territory's garrison. `S-34` asked for
+//! exactly that: *the same change that puts the first expectation in. Not before, or the
+//! scenario is checked by nothing. Not after, because after is a window in which the scenario
+//! has two expectations - and the one that is wrong is not the one that fails.*
+//!
+//! **This paragraph said the opposite for three days**, and an item reported from it - `C-49`
+//! told the specification lane that a bullet of `S-29` was deliberately not done when it had
+//! been done since the fourth. **A comment that describes the file it sits in goes stale
+//! without the file changing under it**, and reading one feels identical to reading the code.
+//! `S-57`.
+//!
+//! # The window is closed and nothing keeps it closed
+//!
+//! **`S-34`'s rule has no mechanism, and `C-58` records why one was built and deleted.** The
+//! predicate available - *assertions after the line that runs the scenario* - is blunter than
+//! the rule: eight lines in `first_release.rs` run it, only two are about what it leaves, and
+//! three of the rest are determinism tests that cannot go stale against this file, because
+//! whole-state equality moves with the game.
+//!
+//! **The distinction that would make it precise is not mechanisable**: the failure is a *stale*
+//! assertion, one that disagrees, and whether two statements can drift is a fact about the
+//! future. `C-28`'s wall. So the case is written here beside the file it is about, which is
+//! what is available instead.
 //!
 //! **`S-47` changed what a state is written as, and this is what checks the new form.** It
 //! is the map form of `spec/console.md`: a thing appears inside what holds it, an entry is a

@@ -61,6 +61,58 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-58 - `S-34`'s rule has no mechanism, and I built one and threw it away
+
+**to** spec · **status** open · **raised** 2026-09-07 · **source** correcting `C-49`, and then
+trying to make the mistake it recorded impossible
+
+**derived from** the assertions come out in the same change that puts the first expectation in -
+`S-34`
+
+**`S-34` names a failure precisely and nothing checks for it.** *After is a window in which the
+scenario has two expectations - a reviewed file and lines written by whoever wrote the code -
+and **the one that is wrong is not the one that fails.** A stale assertion fails loudly while
+being the thing nobody ever reviewed.*
+
+**The window is closed and is one edit from reopening.** `c37de2e` removed fourteen assertions
+in the change that seeded `scenario/expected/play.4x`, which is exactly what the rule asks.
+Anybody adding `assert_eq!(place.citizens, 8)` after the scenario runs puts it back, and every
+test goes on passing until the two disagree.
+
+**I built the check and deleted it, and the measurement is why.** It read
+`crates/game-console/tests/first_release.rs`, found the lines running the whole scenario, and
+counted the assertions after each. **I expected two such lines. There are eight**, and only two
+are about what the scenario leaves:
+
+- **Two are the subject** - the play-through and the pioneer test, both of which already say in
+  a comment that their end-state assertions went into the file
+- **Three are about determinism**, comparing two sessions or replaying a history. They assert
+  whole-state equality rather than any described value, so they cannot go stale against the
+  file: if the game changes, both sides change
+- **One is about the browser**, asserting twelve territories in the entity view. Duplication,
+  and the harmless kind - it would fail *with* the file rather than against it
+- **Two are strings inside refusal tests** and run nothing at all
+
+**So the predicate is blunt where the rule is sharp.** *Assertions after the line that runs the
+scenario* answers a wider question than *is there a second expectation of what it leaves*, and
+a check built on it flags three tests that are right. **The fix for that is an exception list,
+and an exception list is the thing being checked written twice** - which `closed_sets.rs`
+already refuses for its own case, at seventeen exemptions against a population of twenty-five.
+
+**And the distinction that would make it precise is not mechanisable.** The failure `S-34` names
+is a *stale* assertion - one that disagrees with the file. Duplication that always agrees is not
+that. **No predicate over source text can tell those apart**, because whether two statements can
+drift is a fact about the future.
+
+**What this is, then.** The same wall `C-28` records: *no check can ask whether another check's
+predicate is about its subject.* What is available is the habit and the case, so the case is
+written down in `tests/expected_state.rs`, beside the file it is about, with the commit that
+closed the window.
+
+**Not asking for anything.** Recorded because `S-29` is finished and this is the one part of it
+with no guard, and because a later reader finding no check should find the reason rather than
+the absence.
+
 ### C-57 - `Q-67` acted: one notation had two lexical readers, and they had already diverged
 
 **to** quality · **status** **acted** 2026-09-06 · **raised** 2026-09-06 · **source** `Q-67`
@@ -416,14 +468,31 @@ decision and not urgent... filed so the gap is visible while it is open.* Its me
 already done and recorded - the checks reading the release do not go green when the tables
 leave.
 
-**`S-29` is finished apart from what waits on you, and it is worth saying which is which.**
-Its first bullet is built and covers nine files rather than five. Its third is built:
-`the_reviewed_expectation_holds` reads `scenario/commands/play.4x`, reads
-`scenario/expected/play.4x`, computes what happens and compares. **Its second bullet is
-deliberately not done**: the ninety-six assertions leave `first_release.rs` in the same change
-that puts the first *reviewed* expectation in - `S-34` - and the file's first line still reads
-`NOT YET REVIEWED`. Taking them out now would leave the scenario checked by a file nobody has
-read.
+**`S-29` is finished, and the sentence that follows corrects this item rather than
+restating it.**
+
+**Corrected 2026-09-07.** This said its second bullet was *deliberately not done*, and that
+the assertions would leave `first_release.rs` in the same change as the first **reviewed**
+expectation. **Both halves were wrong.** `S-34` says *the same change that puts the first
+expectation in* - not the first reviewed one - and that is what happened: `c37de2e`, *Seed
+expected/play.4x, and remove the assertions it replaces, in one change*, on 2026-09-04, three
+days before this item claimed otherwise. Fourteen assertions went, named in that diff.
+
+**So all three bullets are built.** The first covers nine files rather than five. The second
+is `c37de2e`. The third is `the_reviewed_expectation_holds`, which reads
+`scenario/commands/play.4x`, reads `scenario/expected/play.4x`, computes what happens and
+compares.
+
+**What waits on you is the review and nothing else** - the file's first line still reads `NOT
+YET REVIEWED`, and `S-47` and `P-322` have changed its shape twice since it was seeded, so
+what is waiting is not what was seeded.
+
+**How this lane got it wrong, because it is the same shape twice in two days.** I read
+`expected_state.rs`'s own doc comment, which said *nothing has moved out of `first_release.rs`
+yet - the assertions are still there*, and reported from it. **That comment was stale and the
+file it describes had already changed**; the assertions were fourteen and had been gone for
+three days. `S-57` is the study and this is another case for it: the information was one `git
+log -S` away, and reading a comment felt identical to reading the code.
 
 **And the expected file changed shape today, so what is waiting for you is new.** `S-47`
 rewrote it into the map form. Deleting it is still how changing your mind is said.

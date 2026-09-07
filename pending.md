@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-331** - `total capacity` is stored and is written nowhere, so the round trip cannot close · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
 
@@ -28,9 +27,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (7)
 
-- **S-61** - The check for `P-325`: a wait whose id is no longer open · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
@@ -39,8 +37,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 
-### To spec (22)
+### To spec (23)
 
+- **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
 - **C-56** - `move` needs a field for its unit and `P-323`'s rule points at one the model cannot use · `crates/outbox.md`
 - **C-54** - `S-59`'s count measured one file of seven, and `launch ark` fires no recipe · `crates/outbox.md`
 - **C-53** - `P-322` closed half the round trip and says it closed all of it, and its reason is `Q-66`'s shape · `crates/outbox.md`
