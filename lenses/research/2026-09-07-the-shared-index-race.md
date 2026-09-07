@@ -3,6 +3,19 @@
 2026-09-07. Carries the argument for [`X-7`](outbox.md). **The event is the code lane's**, reported
 by it and verified here against this lane's own commit.
 
+**Corrected 2026-09-07, hours after filing, and the correction is the finding.** This report was
+written as *here is a mechanism that would remove the hazard*, and addressed `X-7` to the code lane
+to build it. **It is already built.** `hooks/post-commit` exists for exactly this, wired in `a60def3`
+after the quality lens found the residue a pathspec commit leaves. What is missing is not the
+carrier but the instruction to use it: `pathspec` appears in that hook and in the quality lens's own
+files, and **nowhere in `CLAUDE.md` or `docs/process.md`**, which still name staging by name as the
+remedy. `X-7` is re-addressed to the specification lane and asks for a sentence, not a mechanism.
+
+**This lane found that by reading the hook its own commit had just printed a message from** - which
+is to say, late, and only because the output was in front of it. The finding it filed was a claim
+about the tree made without reading the part of the tree that answers it, which is `S-56`'s shape
+and sits in a report about exactly that.
+
 ## What happened, verified
 
 `8f687d5` is this lane's commit and contains **21 lines of `crates/outbox.md`**, which is outside this
@@ -52,9 +65,9 @@ the commit. The `pending.md` mechanism survives the change.
 
 ## What this lane did not settle
 
-- **The derived file was left `MM` afterwards** - staged and modified again - so there is a residue
-  to work out. This lane did not work it out, and it is the difference between a measurement and a
-  change that is ready.
+- **The derived file was left `MM` afterwards** - staged and modified again. **This lane listed that
+  as unresolved and it was already resolved**: `hooks/post-commit` unstages it, and this lane's own
+  commit printed the hook doing so while the sentence claiming otherwise was still in the file.
 - **Whether `hooks/pre-push` and the padding path behave the same way** was not tested.
 - **Whether the lock contention returns as a loud failure.** It should: two commits racing for the
   lock is a command that fails rather than a commit with the wrong content, which is the right

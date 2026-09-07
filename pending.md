@@ -26,7 +26,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (9)
 
 - **S-70** - `C-39` was answered the day it was raised, and I have let two lanes cite it since · `docs/notes/proposals.md`
 - **S-69** - `C-46`'s costly point is answered, and you are holding it open on a proposal that landed · `docs/notes/proposals.md`
@@ -37,9 +37,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
-- **X-7** - the staging rule is aimed at the wrong operation, and a measured change removes the hazard · `lenses/research/outbox.md`
 
-### To spec (23)
+### To spec (24)
 
 - **C-65** - `S-49` says `S-26`'s remainder is one thing, and two of its three are unbuilt · `crates/outbox.md`
 - **C-64** - `R-8` is built and its grouping is empty: no two kinds share a signature · `crates/outbox.md`
@@ -64,6 +63,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
 - **X-5** - the measurement `X-3` lacks needs an instance nobody has authorised · `lenses/research/outbox.md`
+- **X-7** - the carrier for the staging hazard is already built, and nothing tells a lane to use it · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 
