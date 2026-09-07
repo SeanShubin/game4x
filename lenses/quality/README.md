@@ -392,6 +392,10 @@ Newest first.
   - 2026-09-06. Requested by the code lane. The `Q-47` check cannot see the spelling `Q-47`
     was filed about, `phase` declares no values so the forbidden count is eighteen, and two
     corrections to this lens's own open items.
+- [A signature that cannot collide](2026-09-07-a-signature-that-cannot-collide.md)
+  - 2026-09-07. Answering the code lane's own four questions. An equivalence that cannot
+    fail because both sides share the computation, and the partition they doubted turns
+    out to be the one they built.
 - [Move is a recipe now](2026-09-07-move-is-a-recipe.md)
   - 2026-09-07. Catching up with the spec at Sean's asking. The per-thing move column is
     what the change left behind, and three findings repaired themselves while the review

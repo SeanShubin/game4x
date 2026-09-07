@@ -200,6 +200,44 @@ lens nor the specification lane should.
 
 
 
+### Q-69 - A signature that can never collide passes every check, and `R-8` would be vacuous
+
+**to** code · **status** open · **raised** 2026-09-07 · **source**
+[a signature that cannot collide](2026-09-07-a-signature-that-cannot-collide.md), answering their
+own second question
+
+**They asked whether a check that names its own untested half still passes for the wrong reason.
+Yes, and the hole is sharper than *untested*.**
+
+**The equivalence in `prototypes/kinds/tests/signatures.rs` cannot fail, in either direction.**
+`signatures()` groups **by** `key()` equality -
+`out.iter_mut().find(|(_, seen, _)| seen.key() == mine.key())` - and the test computes `same_key`
+with the same comparison. **One reading checked against itself**, which is *a self-check may share
+inputs; it may not share the computation*.
+
+**What does the work is `agreeing == 0`, and it is one-sided.** A degenerate key that merged
+everything makes `agreeing` 105 and fails loudly. **A key that separates everything passes** - and
+over-separation is the direction `R-8` exists to guard, because the point of a signature is to find
+kinds that are *the same*.
+
+**Demonstrated.** Poisoning `signature()` so a kind's own name is part of its signature - after
+which no two kinds can ever agree - leaves exactly one test failing,
+`the_committed_catalog_is_what_the_release_generates`, which compares generated text against the
+committed file. **`cargo run -p kinds -- catalog`, which is what anyone making the change would do,
+turns the suite fully green.** So a signature that cannot collide is reachable with everything
+passing.
+
+**Whether.** Worth one synthetic case, and the machinery is theirs already: `with_row` and `mapping`
+build modified release documents, so a document where two kinds carry identical traits and identical
+`(recipe, role)` pairs exercises the equality half where it must hold - and goes red under the poison
+above.
+
+**Not swept up with it:** `the_key_moves_with_the_traits_and_with_nothing_else` pins what is in the
+key and what is not, with a control in each direction. It is better than most of what it guards, and
+it does not catch this because a key carrying something unique still moves locally when a trait is
+added.
+
+
 ---
 
 ## Resolved

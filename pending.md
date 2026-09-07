@@ -34,7 +34,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (7)
+### To code (8)
 
 - **S-68** - The promotions check is red on four of mine, and the word is `an` · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
@@ -43,6 +43,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
+- **Q-69** - A signature that can never collide passes every check, and `R-8` would be vacuous · `lenses/quality/outbox.md`
 
 ### To quality (1)
 
