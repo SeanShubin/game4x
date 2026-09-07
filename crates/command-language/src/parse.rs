@@ -25,24 +25,17 @@ pub fn parse_line(
         return Ok(None);
     }
 
-    let mut worst: Option<Failure> = None;
-    for form in grammar.forms() {
-        match match_form(form, &tokens, line_number, line) {
-            Ok(utterance) => return Ok(Some(utterance)),
-            Err(failure) => {
-                worst = Some(match worst {
-                    Some(previous) => previous.or_further(failure),
-                    None => failure,
-                });
-            }
-        }
-    }
+    let (utterance, at) = match_any(grammar, &tokens, 0, line_number, line)?;
 
-    Err(worst.unwrap_or_else(|| {
-        // A grammar with no forms at all accepts nothing, and should say so rather than
-        // reporting an empty expectation.
-        Failure::new(tokens[0].span.from, ["a command".to_string()]).found(tokens[0].text.clone())
-    }))
+    // **Surplus is checked here rather than inside the match**, because a nested command ends
+    // where its `}` is and the tokens after it belong to whatever holds it. Only the outermost
+    // command owns the end of the line - `P-212`.
+    if at < tokens.len() {
+        let surplus = &tokens[at];
+        return Err(Failure::new(surplus.span.from, ["end of line".to_string()])
+            .found(surplus.text.clone()));
+    }
+    Ok(Some(utterance))
 }
 
 /// Parses every line of a script, stopping at the first that fails.
@@ -81,12 +74,15 @@ pub fn parse_script(grammar: &Grammar, text: &str) -> Result<Vec<Utterance>, Fai
 /// this crate already reports - the position, the expectation, and the command a rejection was
 /// found inside.
 fn match_form(
+    grammar: &Grammar,
     form: &Form,
     tokens: &[Token],
+    at: usize,
     line_number: usize,
     line: &str,
-) -> Result<Utterance, Failure> {
-    let mut at = 0usize;
+) -> Result<(Utterance, usize), Failure> {
+    let opened_at = at;
+    let mut at = at;
 
     let open = tokens
         .get(at)
@@ -156,14 +152,27 @@ fn match_form(
             ),
             token.span.to,
         );
-        let read_as = Token {
-            text: value.to_string(),
-            span: value_at,
-        };
-        let Some(argument) = read(&read_as, kind) else {
-            return Err(
-                Failure::new(value_at.from, [kind.describe().to_string()]).found(value.to_string())
-            );
+        // **`P-212`: a value may be another command.** It is written `field:{...}`, and
+        // `P-321` made the brace its own token - so the field token is `field:` with an empty
+        // value and the command begins at the next token. **One token of lookahead decides
+        // it**, which is why this needs no expression type and nothing here is left-recursive.
+        let (argument, next) = if kind == Kind::Command {
+            if !value.is_empty() {
+                return Err(Failure::new(value_at.from, ["{".to_string()]).found(value.to_string()));
+            }
+            let (inner, after) = match_any(grammar, tokens, at + 1, line_number, line)?;
+            let span = inner.span;
+            (Argument::Command(Box::new(inner), span), after)
+        } else {
+            let read_as = Token {
+                text: value.to_string(),
+                span: value_at,
+            };
+            let Some(argument) = read(&read_as, kind) else {
+                return Err(Failure::new(value_at.from, [kind.describe().to_string()])
+                    .found(value.to_string()));
+            };
+            (argument, at + 1)
         };
         if arguments.insert(held, argument).is_some() {
             return Err(
@@ -171,7 +180,7 @@ fn match_form(
                     .found(format!("{name}: twice")),
             );
         }
-        at += 1;
+        at = next;
     }
 
     for term in &form.terms {
@@ -197,25 +206,63 @@ fn match_form(
     }
     at += 1;
 
-    if at < tokens.len() {
-        let surplus = &tokens[at];
-        return Err(Failure::new(surplus.span.from, ["end of line".to_string()])
-            .found(surplus.text.clone()));
-    }
-
-    let span = Span::new(
-        tokens
-            .first()
-            .map(|first| first.span.from)
-            .unwrap_or(Position::new(line_number, 1)),
-        end_of(tokens, line_number),
-    );
-    Ok(Utterance::new(
-        form.name,
-        span,
-        line.trim().to_string(),
-        arguments,
+    // **The span is this command's own braces**, not the line's, so a nested command reports
+    // against itself. `opened_at` is where its `{` was and `at - 1` is its `}`.
+    let span = Span::new(tokens[opened_at].span.from, tokens[at - 1].span.to);
+    Ok((
+        Utterance::new(form.name, span, written(line, span), arguments),
+        at,
     ))
+}
+
+/// The command at `at`, whichever form matches - the same choice `parse_line` makes.
+///
+/// **Extracted so a nested command is chosen exactly as a top-level one is.** `P-212` says a
+/// value may be another command *in the same form*, which is every form the grammar has rather
+/// than a special nested subset.
+fn match_any(
+    grammar: &Grammar,
+    tokens: &[Token],
+    at: usize,
+    line_number: usize,
+    line: &str,
+) -> Result<(Utterance, usize), Failure> {
+    let mut worst: Option<Failure> = None;
+    for form in grammar.forms() {
+        match match_form(grammar, form, tokens, at, line_number, line) {
+            Ok(found) => return Ok(found),
+            Err(failure) => {
+                worst = Some(match worst {
+                    Some(previous) => previous.or_further(failure),
+                    None => failure,
+                });
+            }
+        }
+    }
+    Err(worst.unwrap_or_else(|| {
+        // A grammar with no forms at all accepts nothing, and should say so rather than
+        // reporting an empty expectation.
+        match tokens.get(at) {
+            Some(token) => {
+                Failure::new(token.span.from, ["a command".to_string()]).found(token.text.clone())
+            }
+            None => Failure::new(end_of(tokens, line_number), ["a command".to_string()]),
+        }
+    }))
+}
+
+/// The text a span covers, which is what `Utterance::source` holds.
+///
+/// **Sliced by column rather than rebuilt from the tokens**, so a command is remembered as it
+/// was written - `history` repeats it exactly, and rejoining tokens would normalise the
+/// spacing away. Columns count characters, as `tokenize` does.
+fn written(line: &str, span: Span) -> String {
+    let from = span.from.column.saturating_sub(1);
+    let to = span.to.column.saturating_sub(1);
+    line.chars()
+        .skip(from)
+        .take(to.saturating_sub(from))
+        .collect()
 }
 
 fn read(token: &Token, kind: Kind) -> Option<Argument> {
@@ -225,7 +272,16 @@ fn read(token: &Token, kind: Kind) -> Option<Argument> {
             .map(|value| Argument::Number(value, token.span)),
         // A number is a perfectly good name where a name is wanted - a territory can be
         // called `5`. Rejecting it here would make `show 5` unparseable for no gain.
+        //
+        // **An empty one is not a name, and `P-212` is what made that matter.** `field:` used
+        // to parse as a name of no characters, silently. It is now how a nested command opens,
+        // so a `field:` whose hole is not a command has to be refused rather than bound to
+        // nothing.
+        Kind::Name if token.text.is_empty() => None,
         Kind::Name => Some(Argument::Name(token.text.clone(), token.span)),
+        // **Never read from a single token.** A command spans from its `{` to its `}`, so
+        // `match_form` recurses at the value position and this is unreachable by construction.
+        Kind::Command => None,
     }
 }
 
@@ -381,5 +437,161 @@ mod tests {
     fn a_command_remembers_how_it_was_written() {
         let utterance = parse("  {deploy-ark territory:1}  ").unwrap().unwrap();
         assert_eq!(utterance.source, "{deploy-ark territory:1}");
+    }
+
+    /// A grammar with a hole that takes a command, so nesting has something to nest into.
+    ///
+    /// **`repeat` is not a game command and does not want to be.** This crate carries no game
+    /// nouns - `grammar.rs` says so in its first line - so `P-212` is exercised by a form that
+    /// exists here and nowhere else. What the console does with a command-valued hole is the
+    /// console's question, and there is no such form there yet.
+    fn nesting_grammar() -> Grammar {
+        Grammar::new(vec![
+            Form::new(
+                "land",
+                vec![
+                    Term::Keyword("deploy-ark"),
+                    Term::required("territory", Kind::Number),
+                ],
+                "bring an ark down from orbit",
+            ),
+            Form::new(
+                "repeat",
+                vec![
+                    Term::Keyword("repeat"),
+                    Term::required("times", Kind::Number),
+                    Term::required("what", Kind::Command),
+                ],
+                "do something more than once",
+            ),
+            Form::new("end-turn", vec![Term::Keyword("end-turn")], "end the turn"),
+        ])
+    }
+
+    fn nested(line: &str) -> Result<Option<Utterance>, Failure> {
+        parse_line(&nesting_grammar(), line, 1)
+    }
+
+    /// A command carries another command, and the inner one is read exactly like any command.
+    #[test]
+    fn a_value_may_be_another_command() {
+        let outer = nested("{repeat times:3 what:{deploy-ark territory:7}}")
+            .unwrap()
+            .expect("a command");
+        assert_eq!(outer.form, "repeat");
+        assert_eq!(outer.number("times").unwrap(), 3);
+
+        let inner = outer.command("what").unwrap();
+        assert_eq!(inner.form, "land");
+        assert_eq!(inner.number("territory").unwrap(), 7);
+    }
+
+    /// The tree goes as deep as it is written, and each level is the same kind of thing.
+    ///
+    /// **Three levels rather than two.** Two would be satisfied by a parser that special-cased
+    /// one nested command; three can only be satisfied by recursion, which is the claim.
+    #[test]
+    fn the_tree_is_as_deep_as_it_is_written() {
+        let outer = nested("{repeat times:2 what:{repeat times:3 what:{deploy-ark territory:1}}}")
+            .unwrap()
+            .expect("a command");
+        let middle = outer.command("what").unwrap();
+        let inner = middle.command("what").unwrap();
+        assert_eq!(
+            (
+                outer.number("times").unwrap(),
+                middle.number("times").unwrap()
+            ),
+            (2, 3)
+        );
+        assert_eq!(inner.form, "land");
+        assert_eq!(inner.number("territory").unwrap(), 1);
+    }
+
+    /// A nested command remembers its own text, not the line that held it.
+    ///
+    /// **`source` is what `history` repeats**, so an inner command that reported the whole line
+    /// would repeat its parent. The span it is sliced by is the inner braces.
+    #[test]
+    fn a_nested_command_remembers_only_itself() {
+        let outer = nested("{repeat times:3 what:{deploy-ark territory:7}}")
+            .unwrap()
+            .expect("a command");
+        assert_eq!(
+            outer.source,
+            "{repeat times:3 what:{deploy-ark territory:7}}"
+        );
+        let inner = outer.command("what").unwrap();
+        assert_eq!(inner.source, "{deploy-ark territory:7}");
+        assert_eq!(inner.span.from.column, 22);
+    }
+
+    /// A failure inside a nested command points inside it, not at the command that holds it.
+    ///
+    /// **This is `P-215`'s second half arriving with `P-212`.** `P-215` asks that a rejection
+    /// name the command it was found inside, and its argument is that this is what makes a
+    /// nested command debuggable. There was nothing to point at until now.
+    #[test]
+    fn a_failure_inside_a_nested_command_points_inside_it() {
+        let failure = nested("{repeat times:3 what:{deploy-ark territory:x}}").unwrap_err();
+        // `territory:x` begins at column 34, so its value sits at 44.
+        assert_eq!(failure.position.column, 44, "{failure}");
+        assert!(
+            failure.expected.iter().any(|what| what == "a number"),
+            "{failure}"
+        );
+    }
+
+    /// A nested command may be any form the grammar has, chosen the way a top-level one is.
+    ///
+    /// **Checked over every form rather than one.** A parser that only recursed into the first
+    /// form would pass a single-case test, and the count is asserted so this cannot pass by
+    /// nesting nothing.
+    #[test]
+    fn a_nested_command_may_be_any_form() {
+        let cases = [
+            ("{deploy-ark territory:4}", "land"),
+            ("{repeat times:1 what:{end-turn}}", "repeat"),
+            ("{end-turn}", "end-turn"),
+        ];
+        assert_eq!(
+            cases.len(),
+            nesting_grammar().forms().len(),
+            "every form should appear nested exactly once, or this checks less than it says"
+        );
+        for (written, expected) in cases {
+            let line = format!("{{repeat times:1 what:{written}}}");
+            let outer = nested(&line).unwrap().expect("a command");
+            let inner = outer.command("what").unwrap();
+            assert_eq!(inner.form, expected, "nesting `{written}`");
+        }
+    }
+
+    /// A field with no value is refused where the hole is not a command.
+    ///
+    /// **It used to parse as a name of no characters.** `field:` is now how a nested command
+    /// opens, so the empty value has a meaning and cannot also be a silent empty name.
+    #[test]
+    fn a_field_with_no_value_is_refused() {
+        let failure = parse("{build-extractor territory:1 resource:}").unwrap_err();
+        assert_eq!(failure.position.column, 39, "{failure}");
+        assert!(
+            failure.expected.iter().any(|what| what == "a name"),
+            "{failure}"
+        );
+    }
+
+    /// A command-valued field that is not followed by a brace says so.
+    #[test]
+    fn a_command_field_given_a_word_is_refused() {
+        let failure = nested("{repeat times:3 what:end-turn}").unwrap_err();
+        assert!(failure.expected.iter().any(|what| what == "{"), "{failure}");
+    }
+
+    /// A nested command that is never closed is reported rather than accepted.
+    #[test]
+    fn an_unclosed_nested_command_is_refused() {
+        let failure = nested("{repeat times:3 what:{deploy-ark territory:7}").unwrap_err();
+        assert!(failure.expected.iter().any(|what| what == "}"), "{failure}");
     }
 }

@@ -17,12 +17,19 @@ use crate::grammar::Kind;
 pub enum Argument {
     Name(String, Span),
     Number(i64, Span),
+    /// Another command, carried as a value.
+    ///
+    /// **`P-212`: a command may carry a tree.** Boxed because [`Utterance`] holds a map of
+    /// these, so an unboxed variant would make the type infinitely sized.
+    Command(Box<Utterance>, Span),
 }
 
 impl Argument {
     pub fn span(&self) -> Span {
         match self {
-            Argument::Name(_, span) | Argument::Number(_, span) => *span,
+            Argument::Name(_, span) | Argument::Number(_, span) | Argument::Command(_, span) => {
+                *span
+            }
         }
     }
 
@@ -30,6 +37,7 @@ impl Argument {
         match self {
             Argument::Name(..) => Kind::Name,
             Argument::Number(..) => Kind::Number,
+            Argument::Command(..) => Kind::Command,
         }
     }
 
@@ -38,6 +46,9 @@ impl Argument {
         match self {
             Argument::Name(name, _) => name.clone(),
             Argument::Number(value, _) => value.to_string(),
+            // **The nested command's own source, not a rendering of it.** `Utterance::source`
+            // is the words as typed, which is what every other arm returns too.
+            Argument::Command(inner, _) => inner.source.clone(),
         }
     }
 }
@@ -97,6 +108,26 @@ impl Utterance {
             Some(Argument::Number(value, _)) => Ok(*value),
             Some(other) => Err(self.wrong_kind(hole, Kind::Number, other)),
             None => Err(self.missing(hole)),
+        }
+    }
+
+    /// The command at this hole.
+    ///
+    /// **`P-212`: a value may be another command.** A handler reads it exactly as it reads a
+    /// name or a number, and gets an [`Utterance`] it can ask by name in turn.
+    pub fn command(&self, hole: &str) -> Result<&Utterance, Failure> {
+        match self.arguments.get(hole) {
+            Some(Argument::Command(inner, _)) => Ok(inner),
+            Some(other) => Err(self.wrong_kind(hole, Kind::Command, other)),
+            None => Err(self.missing(hole)),
+        }
+    }
+
+    /// The command at an optional hole, if it was supplied.
+    pub fn optional_command(&self, hole: &str) -> Option<&Utterance> {
+        match self.arguments.get(hole) {
+            Some(Argument::Command(inner, _)) => Some(inner),
+            _ => None,
         }
     }
 

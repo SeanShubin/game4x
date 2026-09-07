@@ -5,11 +5,18 @@
 //! one part of the predecessor's design worth keeping intact, and keeping it means the
 //! grammar can be handed in from outside as data.
 //!
-//! A form is flat: keywords and holes, in order. That is enough for a language of one
-//! command to a line, and choice between commands is choice between forms rather than a
-//! construct inside one. If the language ever grows nesting or arithmetic, this is the
-//! file that has to grow a real expression type, and the absence of left recursion will
-//! have to be faced deliberately rather than inherited by accident.
+//! A form is flat: keywords and holes, in order. Choice between commands is choice between
+//! forms rather than a construct inside one.
+//!
+//! **The language has grown nesting, and the left recursion this file was told to face
+//! deliberately does not exist.** `P-212` makes a value *a word, a number, or another command
+//! in the same form*. `P-321` made braces their own tokens, so `{a b:{c d:1}}` is
+//! `{` `a` `b:` `{` `c` `d:1` `}` `}` - **the recursive case is introduced by a terminal**, and
+//! one token of lookahead separates it from a word. That is LL(1), and no expression type is
+//! needed: a hole is [`Kind::Command`] and the parser calls itself at that position.
+//!
+//! **Arithmetic would be the other question**, and it is not asked. If it ever is, it is
+//! infix and this paragraph stops applying.
 
 use std::fmt;
 
@@ -20,6 +27,13 @@ pub enum Kind {
     Name,
     /// A whole number: a count, a density, a territory's id.
     Number,
+    /// Another command, in the same form.
+    ///
+    /// **`P-212`**, `spec/console.md`: *A value is a word, a number, or another command in the
+    /// same form* - so a command may carry a tree. The value is written `field:{...}`,
+    /// which tokenizes as `field:` and then `{` - so the brace introduces it and one token
+    /// of lookahead is enough to tell it from a word.
+    Command,
 }
 
 impl Kind {
@@ -28,6 +42,7 @@ impl Kind {
         match self {
             Kind::Name => "a name",
             Kind::Number => "a number",
+            Kind::Command => "a command",
         }
     }
 }
