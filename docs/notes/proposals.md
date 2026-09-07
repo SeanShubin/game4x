@@ -60,9 +60,76 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+**One**, and it answers what you asked: a mechanic rather than a habit.
+
+### P-325 - An item that waits says so in a field, so something can notice when the wait is over
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Outboxes and the index, after the bullet saying
+what every item carries
+
+**You asked whether we need to confirm rather than trust, or a mechanic that makes trust safe.** It
+should be the mechanic, and the reason is that **the habit already failed while I was practising
+it**: I lifted three stale holds by hand tonight and then shipped a fourth an hour later.
+
+> - **An item that cannot be acted on yet says what it waits on in a field, never in prose** -
+>   `**waits on** P-323`. **When that id is no longer open the wait is over**, and whatever lists
+>   the outboxes says so. A hold written into a paragraph is invisible to every tool and to every
+>   reader who does not re-read the whole item, which is how an item goes on telling a lane not to
+>   start work that was unblocked an hour ago.
+
+**The four, all mine, all in one night.** `S-54` waited on `P-311`, `S-51` on `P-305`, `S-50` on
+`P-300`, `S-59` on `P-323`. **Every one of those proposals was promoted while its item still said
+do not build.** Three I caught because you asked whether the code lane had what it needed; the
+fourth stalled the file you are waiting for, and the code lane did the other half of the item and
+moved on - correctly, because the item told it to.
+
+**Why not confirming.** Confirming is what `P-316` already asks for from the other side - a promotion
+files what it creates. **I promoted `P-316` today and then failed its mirror four times**, which is
+the eighth case in `S-57`: the rule was known and not applied. A fifth repetition of *be careful*
+buys nothing.
+
+**Why a field rather than reading the prose.** `tools/outbox` already parses `cited`, `derived from`,
+`to` and `status` through one generic reader, and already knows which proposals have landed. **A
+field makes the check exact**; prose makes it the guessing game the code lane and I already fought
+through on `S-51`, where citing a proposal and closing into one turned out to need the field line to
+tell them apart.
+
+**What it does not do.** It does not stop a hold being wrong when written, and it does not decide
+whether a wait is on a proposal, an item, or a decision of yours. **It only stops a correct hold
+outliving its reason**, which is the failure that has actually happened, four times, today.
 
 ## Addressed to other perspectives
+
+### S-61 - The check for `P-325`: a wait whose id is no longer open
+
+**to** code - **status** open - **raised** 2026-09-06 - **waits on** `P-325` - **source** four stale
+holds of mine in one night, the last of which stalled the file Sean is waiting for
+
+**Do not build until `P-325` is promoted** - and this item carries the field it proposes, so it is
+its own first case.
+
+**The check.** For every open item carrying `**waits on** <id>`, ask whether that id is still open.
+**If it is not, the wait is over and the item is stale** - report it, with the item, the id, and
+what became of the id.
+
+**It needs no new parsing.** `whole_field` already reads `cited` and `derived from` generically;
+`landed` already carries the Accepted ledger; the Withdrawn table is already read. **A wait ends
+three ways** and all three are visible: the proposal is promoted, the proposal is withdrawn, or the
+item it waits on closes.
+
+**Three things that would make it decoration.**
+
+- **Report the population, not only the offences.** *No stale waits* means nothing unless the count
+  of items carrying a wait is non-zero, which today is one - this item
+- **A wait on an id that does not exist is a defect, not a satisfied wait.** `S-51` records the
+  shape: a predicate that cannot tell *resolved* from *never was* reports both as fine
+- **This reports; it does not gate.** `Q-60` settled that for `S-51` and the reasoning carries: a
+  gate reddens for whichever lane commits next, and that may be a lane which must not repair it
+
+**What I will do on my side when it lands**, so you are not waiting on me: every hold I write gets
+the field, and the four that have already been lifted stay lifted. The field is worth nothing if the
+lane that writes the most holds keeps writing them in prose.
 
 ### S-60 - `C-51` answered: I withdraw the claim, and the field is yours
 

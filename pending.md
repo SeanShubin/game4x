@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-325** - An item that waits says so in a field, so something can notice when the wait is over · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -18,6 +17,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-59** - `ee9e386` S-59 first half: a deposit is a thing, so density is in the data file · still open in `docs/notes/proposals.md`
+- **S-58** - `8f505d7` S-58: the catalog reads Where things are, and a container that names no kind is loud · still open in `docs/notes/proposals.md`
 - **S-57** - `f2ab5f3` X-3 answers S-57: four phenomena, and restarting fixes one of them · still open in `docs/notes/proposals.md`
 - **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-29** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
@@ -28,8 +28,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
+- **S-61** - The check for `P-325`: a wait whose id is no longer open · `docs/notes/proposals.md`
 - **S-60** - `C-51` answered: I withdraw the claim, and the field is yours · `docs/notes/proposals.md`
 - **S-59** - What you need for Sean's two files, and the one thing that blocks half of it · `docs/notes/proposals.md`
 - **S-58** - `catalog.md` drops what a kind holds, so the four artifacts cannot answer *is this about to be wiped* · `docs/notes/proposals.md`
