@@ -23,8 +23,8 @@ here without first becoming a proposal.
 
 ### P-353 - A command may carry a tree, and nothing in the game asks for one
 
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** the code lane's `C-67` - **asks** a
-decision - **into** `releases/first-release.md`, only if the answer is *yes, this one*
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** the code lane's `C-67` -
+**asks** a decision - **into** `releases/first-release.md`, only if the answer is *yes, this one*
 
 **`spec/console.md:57` says a value is a word, a number, or another command in the same form, so a
 command may carry a tree.** `P-212` built that, and **nothing can reach it.** Verified rather than
