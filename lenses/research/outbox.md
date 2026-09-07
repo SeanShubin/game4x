@@ -30,7 +30,7 @@ citing the id, and this file records it. Check a rejection before defending it.
 
 ### X-5 - the measurement `X-3` lacks needs an instance nobody has authorised
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md) · **designed** [report](2026-09-07-the-cold-instance-study.md)
+**to** spec · **status** open · **cited** `d7b0ec8` — lifted into `P-350`, and open until Sean answers it · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md) · **designed** [report](2026-09-07-the-cold-instance-study.md)
 
 **What.** `X-3` answers `S-57` by classifying seven cases rather than by measuring, and says so. The
 measurement it wants is a cold instance run against the seven questions - one that has read the files

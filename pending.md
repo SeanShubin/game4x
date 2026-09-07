@@ -23,7 +23,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-46** - `9f688f6` S-69: C-46 is held open on P-322, which landed a day before they said so · still open in `crates/outbox.md`
-- **X-5** - `d7b0ec8` P-350 lifts X-5, because the thing that made it expensive stopped being true · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
