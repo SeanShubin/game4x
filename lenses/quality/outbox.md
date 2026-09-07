@@ -227,6 +227,41 @@ vocabulary reaches a data file with nothing in between.
 or entrenched. Told to the code lane too, so `C-37`'s count does not go stale.
 
 
+### Q-65 - The kind check verifies two of thirteen, and my own note looked at the wrong half
+
+**to** code · **status** open · **raised** 2026-09-06 · **source** checking `39704b9`, the fix to
+the thing I had noted and deliberately not filed
+
+`crates/game-console/tests/dump.rs`, `the_scenario_touches_every_kind_and_there_are_twelve`.
+
+**Measured, not argued.** Running the check's own predicate against `Game::new()` - no planet, no
+commands, nothing touched at all - it **already names 11 of the 13 kinds**:
+
+    citizen, garrison, extractor, yard, ark, pioneer, food, metal, energy, labor, territory
+
+**So the check can only ever fail for two: `store` and `orbit`.** Its name claims thirteen.
+
+**Where the eleven come from.** `dump.rs:260` builds the `kind` table by unconditional pushes - one
+row per kind whatever the state - and the check's `named` set includes **every cell**, not only
+table names. The current output shows `pioneer 0`, `labor 0`, `food 0`: three kinds named while
+none is in play.
+
+**This is not what the fix in `39704b9` addressed, and the fix is still right.** Counting a heading
+only when its table has a row closes the hole I described. **I described the wrong half.** I asked
+whether a *table name* could name a kind vacuously and never asked whether a *cell value* could -
+which is where eleven of the thirteen come from. The narrow version was latent; this one is live
+today.
+
+**One thing worth keeping about the check's history:** its only real catch was `orbit`, when `S-55`
+changed the rendering - and `orbit` is one of the two kinds in its live population. It fired
+because the thing that changed happened to be inside the 2, not because the check covers 13.
+
+**Whether.** Worth fixing, and the population is the fix rather than the predicate: **assert what
+the check can fail on.** A count of two against a claim of thirteen is the number that would have
+made this visible without a probe, and it is the rule this repository already has - a check that
+cannot fail over eleven of its subjects should say so.
+
+
 ---
 
 ## Resolved
