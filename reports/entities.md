@@ -34,7 +34,7 @@ These are the rows the F3 browser shows, from the same function.
 
 | id  | kind | location | cells | force | exhausted | usable |
 | --- | ---- | -------- | ----- | ----- | --------- | ------ |
-| 1   | ark  | orbit    | 1     | 2     | false     | true   |
+| 1   | ark  | orbit-2  | 1     | 2     | false     | true   |
 
 1 row(s)
 

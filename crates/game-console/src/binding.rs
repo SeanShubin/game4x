@@ -147,6 +147,7 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
         }),
         form::ADD_UNIT => Meaning::Change(Transition::AddUnitToOrbit {
             kind: unit("unit")?,
+            above: territory("territory")?,
         }),
         form::START => Meaning::Change(Transition::Start),
 

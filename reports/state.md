@@ -207,9 +207,9 @@ is in it, because the names are what this is for.
 
 ## unit
 
-| id  | kind | place | fuel | ready |
-| --- | ---- | ----- | ---- | ----- |
-| 1   | ark  | orbit | 1    | yes   |
+| id  | kind | in-kind | in-id | fuel | ready |
+| --- | ---- | ------- | ----- | ---- | ----- |
+| 1   | ark  | orbit   | 2     | 1    | yes   |
 
 1 row(s)
 

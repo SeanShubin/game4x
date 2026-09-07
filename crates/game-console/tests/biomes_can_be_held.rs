@@ -146,7 +146,7 @@ fn every_claimable_biome_can_be_taken_by_something_the_release_provides() {
         // a defect in the model: nothing had said how an attacking force is assembled.
         for n in 0..2 {
             let id = game_model::UnitId(session.game.units.len() as u32 + 1 + n);
-            let mut pioneer = game_model::Unit::new(id, UnitKind::Pioneer);
+            let mut pioneer = game_model::Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
             pioneer.location = game_model::Location::On(TerritoryId(1));
             session.game.units.push(pioneer);
         }

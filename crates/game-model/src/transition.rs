@@ -57,6 +57,9 @@ pub enum Transition {
     /// Place a unit in orbit before play begins.
     AddUnitToOrbit {
         kind: UnitKind,
+        /// Which orbit. `S-55`: there are twelve, one above each territory, and a unit put
+        /// into orbit without saying which was above nowhere.
+        above: TerritoryId,
     },
     /// End the design phase and begin play.
     Start,
@@ -177,6 +180,7 @@ mod tests {
             },
             Transition::AddUnitToOrbit {
                 kind: UnitKind::Ark,
+                above: TerritoryId(1),
             },
             Transition::Start,
         ];

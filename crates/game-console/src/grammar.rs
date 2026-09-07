@@ -97,6 +97,9 @@ pub fn grammar() -> Grammar {
                 Term::Keyword("add"),
                 Term::required("unit", Kind::Name),
                 Term::Keyword("orbit"),
+                // **Which orbit** - `S-55`. There are twelve, one above each territory, and
+                // `add ark orbit` put a unit above nowhere.
+                Term::required("territory", Kind::Number),
             ],
             "place a unit in orbit before play begins",
         ),
@@ -278,7 +281,7 @@ mod tests {
             ("set resource 1 food 3 4", form::SET_RESOURCE),
             ("set force 1 1", form::SET_FORCE),
             ("set biome 1 grassland", form::SET_BIOME),
-            ("add ark orbit", form::ADD_UNIT),
+            ("add ark orbit 1", form::ADD_UNIT),
             ("start", form::START),
         ];
         for (line, expected) in examples {

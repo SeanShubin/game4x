@@ -20,7 +20,7 @@ end turn
 
 **gone** (1)
 
-- {unit id:1 kind:ark place:orbit fuel:2 ready:yes}
+- {unit id:1 kind:ark in-kind:orbit in-id:1 fuel:2 ready:yes}
 
 **new** (3)
 
@@ -242,8 +242,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | ready |
-| --- | ---- | ----- | ---- | ----- |
+| id  | kind | in-kind | in-id | fuel | ready |
+| --- | ---- | ------- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -493,8 +493,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | ready |
-| --- | ---- | ----- | ---- | ----- |
+| id  | kind | in-kind | in-id | fuel | ready |
+| --- | ---- | ------- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -741,8 +741,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | ready |
-| --- | ---- | ----- | ---- | ----- |
+| id  | kind | in-kind | in-id | fuel | ready |
+| --- | ---- | ------- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -1003,8 +1003,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | ready |
-| --- | ---- | ----- | ---- | ----- |
+| id  | kind | in-kind | in-id | fuel | ready |
+| --- | ---- | ------- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -1275,8 +1275,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | ready |
-| --- | ---- | ----- | ---- | ----- |
+| id  | kind | in-kind | in-id | fuel | ready |
+| --- | ---- | ------- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -1546,8 +1546,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | ready |
-| --- | ---- | ----- | ---- | ----- |
+| id  | kind | in-kind | in-id | fuel | ready |
+| --- | ---- | ------- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -1603,7 +1603,7 @@ end turn
 
 **new** (1)
 
-- {unit id:1 kind:pioneer place:territory-1 fuel:2 ready:yes}
+- {unit id:1 kind:pioneer in-kind:territory in-id:1 fuel:2 ready:yes}
 
 **changed** (11)
 
@@ -1822,9 +1822,9 @@ end turn
 
 ### unit
 
-| id  | kind    | place       | fuel | ready |
-| --- | ------- | ----------- | ---- | ----- |
-| 1   | pioneer | territory-1 | 2    | yes   |
+| id  | kind    | in-kind   | in-id | fuel | ready |
+| --- | ------- | --------- | ----- | ---- | ----- |
+| 1   | pioneer | territory | 1     | 2    | yes   |
 
 1 row(s)
 
@@ -1871,7 +1871,7 @@ end turn
 
 **gone** (1)
 
-- {unit id:1 kind:pioneer place:territory-1 fuel:2 ready:yes}
+- {unit id:1 kind:pioneer in-kind:territory in-id:1 fuel:2 ready:yes}
 
 **new** (3)
 
@@ -2111,8 +2111,8 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | ready |
-| --- | ---- | ----- | ---- | ----- |
+| id  | kind | in-kind | in-id | fuel | ready |
+| --- | ---- | ------- | ----- | ---- | ----- |
 
 *(empty) 0 rows*
 
@@ -2159,7 +2159,7 @@ end turn
 
 **new** (1)
 
-- {unit id:1 kind:ark place:territory-2 fuel:1 ready:yes}
+- {unit id:1 kind:ark in-kind:territory in-id:2 fuel:1 ready:yes}
 
 **changed** (11)
 
@@ -2381,9 +2381,9 @@ end turn
 
 ### unit
 
-| id  | kind | place       | fuel | ready |
-| --- | ---- | ----------- | ---- | ----- |
-| 1   | ark  | territory-2 | 1    | yes   |
+| id  | kind | in-kind   | in-id | fuel | ready |
+| --- | ---- | --------- | ----- | ---- | ----- |
+| 1   | ark  | territory | 2     | 1    | yes   |
 
 1 row(s)
 
@@ -2429,7 +2429,7 @@ end turn
 - labor territory:1 · made: 12 → 8
 - labor territory:1 · left: 12 → 8
 - territory id:1 · citizens: 12 → 8
-- unit id:1 · place: territory-2 → orbit
+- unit id:1 · in-kind: territory → orbit
 
 ## what is there now
 
@@ -2637,9 +2637,9 @@ end turn
 
 ### unit
 
-| id  | kind | place | fuel | ready |
-| --- | ---- | ----- | ---- | ----- |
-| 1   | ark  | orbit | 1    | yes   |
+| id  | kind | in-kind | in-id | fuel | ready |
+| --- | ---- | ------- | ----- | ---- | ----- |
+| 1   | ark  | orbit   | 2     | 1    | yes   |
 
 1 row(s)
 

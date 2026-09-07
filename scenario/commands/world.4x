@@ -13,4 +13,4 @@ run forces
 run biomes
 
 # One ark, waiting above the planet. Nothing is on the planet yet.
-add ark orbit
+add ark orbit 1

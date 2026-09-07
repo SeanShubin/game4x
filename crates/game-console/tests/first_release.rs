@@ -308,7 +308,7 @@ fn the_first_release_plays_from_a_designed_world_through_to_a_working_territory(
     assert_eq!(session.game.phase, Phase::Play);
     assert_eq!(session.game.turn, 1);
     assert!(matches!(
-        refuse(&mut session, "add ark orbit"),
+        refuse(&mut session, "add ark orbit 1"),
         Problem::Rule(game_model::Rejection::WrongPhase { .. })
     ));
 
@@ -759,6 +759,7 @@ fn every_way_the_state_can_change_is_a_command() {
         },
         Transition::AddUnitToOrbit {
             kind: UnitKind::Ark,
+            above: TerritoryId(1),
         },
         Transition::Start,
         Transition::Land {

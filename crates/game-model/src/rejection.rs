@@ -89,6 +89,15 @@ pub enum Rejection {
         needed: u32,
     },
     /// Every node of that resource already has an extractor on it.
+    /// A unit is in orbit, and not above the territory it was told to land on.
+    ///
+    /// **`S-55`.** An orbit is above one territory, and landing is a move between adjacent
+    /// places, so the ground an Ark can reach is the ground beneath it.
+    NotAboveThatTerritory {
+        kind: UnitKind,
+        above: TerritoryId,
+        asked: TerritoryId,
+    },
     /// The territory's total capacity for extractors of that resource is already used.
     NoRoomForExtractor {
         territory: TerritoryId,
@@ -203,6 +212,10 @@ impl fmt::Display for Rejection {
             } => write!(
                 out,
                 "territory {territory} has {held} citizens and that needs {needed}"
+            ),
+            Rejection::NotAboveThatTerritory { kind, above, asked } => write!(
+                out,
+                "that {kind} is above territory {above}, so it cannot land on territory {asked}"
             ),
             Rejection::NoRoomForExtractor {
                 territory,

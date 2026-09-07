@@ -160,7 +160,7 @@
 {labor territory:11 made:0 spent:0 left:0}
 {labor territory:12 made:0 spent:0 left:0}
 
-{unit id:1 kind:ark place:orbit fuel:1 ready:yes}
+{unit id:1 kind:ark in-kind:orbit in-id:2 fuel:1 ready:yes}
 
 {kind id:citizen in-play:14}
 {kind id:labor in-play:0}

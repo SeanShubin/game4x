@@ -71,7 +71,7 @@ The hierarchy is flattened. `run setup` opens `setup.4x`, which opens others, an
 | 59  | design | `set biome 10 desert`        | *design; `P-217`, not a recipe*                                                       |
 | 60  | design | `set biome 11 grassland`     | *design; `P-217`, not a recipe*                                                       |
 | 61  | design | `set biome 12 ice`           | *design; `P-217`, not a recipe*                                                       |
-| 62  | design | `add ark orbit`              | *design; `P-217`, not a recipe*                                                       |
+| 62  | design | `add ark orbit 1`            | *design; `P-217`, not a recipe*                                                       |
 | 63  | design | `start`                      | *the game begins; `P-217`, not a recipe*                                              |
 | 64  | 1      | `land ark 1`                 | `deploy ark`                                                                          |
 | 65  | 1      | `create labor 1 1`           | `create labor`                                                                        |

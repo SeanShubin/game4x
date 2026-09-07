@@ -156,9 +156,12 @@ impl Game {
             Transition::SetBiome { territory, biome } => {
                 next.territory_mut(*territory)?.biome = *biome;
             }
-            Transition::AddUnitToOrbit { kind } => {
+            Transition::AddUnitToOrbit { kind, above } => {
+                // **`S-55`: which orbit.** There are twelve, one above each territory, and
+                // a unit put into "orbit" without saying which was above nowhere.
+                next.territory(*above)?;
                 let id = UnitId(next.units.len() as u32 + 1);
-                next.units.push(Unit::new(id, *kind));
+                next.units.push(Unit::new(id, *kind, *above));
             }
             Transition::Start => {
                 next.phase = Phase::Play;
@@ -316,11 +319,25 @@ impl Game {
             return Err(Rejection::CannotLand(kind));
         }
         self.territory(territory)?;
+        // **An Ark comes down where it was, and this was unconstrained** - `S-55`. It took
+        // any unit in orbit and put it on any territory named, because a bare `Orbit` carried
+        // no territory for the two to be compared against. `spec/orbit.md` makes landing a
+        // move and a move is between adjacent places, so the only ground an Ark can reach is
+        // the territory its orbit is above.
         let at = self
-            .pick(kind, |unit| unit.in_orbit())
-            .ok_or(Rejection::NoUnitAvailable {
-                kind,
-                where_from: "in orbit",
+            .pick(kind, |unit| unit.location == Location::Orbit(territory))
+            .ok_or_else(|| match self.pick(kind, |unit| unit.in_orbit()) {
+                // Told apart before the message is chosen, because a player who is given the
+                // wrong reason looks in the wrong place - the same distinction `launch` draws.
+                Some(elsewhere) => Rejection::NotAboveThatTerritory {
+                    kind,
+                    above: self.units[elsewhere].location.territory(),
+                    asked: territory,
+                },
+                None => Rejection::NoUnitAvailable {
+                    kind,
+                    where_from: "in orbit",
+                },
             })?;
 
         // Landing takes the territory and takes the Ark apart, in one action.
@@ -364,7 +381,11 @@ impl Game {
         if kind == UnitKind::Ark && self.is_fully_exploited() {
             self.won = true;
         }
-        self.units[at].location = Location::Orbit;
+        // **Into the orbit above where it launched from** - `spec/orbit.md` makes launching a
+        // move, and a move is between adjacent places. The orbit above a territory is the one
+        // place adjacent to it that is not another territory.
+        let from = self.units[at].location.territory();
+        self.units[at].location = Location::Orbit(from);
         self.units[at].exhausted = true;
         Ok(())
     }
@@ -426,7 +447,7 @@ impl Game {
                 Location::On(from) => {
                     unit.cells >= cost::MOVE_CELLS && self.are_adjacent(from, territory)
                 }
-                Location::Orbit => false,
+                Location::Orbit(_) => false,
             })
             .ok_or_else(|| match anywhere {
                 Some(other) => match self.units[other].location {
@@ -479,7 +500,7 @@ impl Game {
                 Location::On(from) => {
                     unit.cells >= cost::MOVE_CELLS && self.are_adjacent(from, territory)
                 }
-                Location::Orbit => false,
+                Location::Orbit(_) => false,
             })
             .ok_or_else(|| match anywhere {
                 Some(other) => match self.units[other].location {
@@ -541,7 +562,7 @@ impl Game {
                 }
                 // An Ark invades from orbit, which `spec/unit-types.md` allows and is how
                 // the first territory of a game is ever taken.
-                Location::Orbit => true,
+                Location::Orbit(_) => true,
             })
             .map(|unit| unit.kind.force())
             .sum()
@@ -720,7 +741,8 @@ impl Game {
             }
         }
         let id = UnitId(self.units.len() as u32 + 1);
-        let mut unit = Unit::new(id, kind);
+        // Produced on the ground, so the orbit it is given is the one it would launch into.
+        let mut unit = Unit::new(id, kind, territory);
         unit.location = Location::On(territory);
         self.units.push(unit);
         Ok(())
@@ -1170,6 +1192,7 @@ mod tests {
         }
         game.after(&Transition::AddUnitToOrbit {
             kind: UnitKind::Ark,
+            above: TerritoryId(1),
         })
         .unwrap()
     }
@@ -1243,6 +1266,7 @@ mod tests {
             },
             Transition::AddUnitToOrbit {
                 kind: UnitKind::Ark,
+                above: TerritoryId(1),
             },
             Transition::Start,
             Transition::Land {
@@ -1261,6 +1285,7 @@ mod tests {
         let rejected = started()
             .after(&Transition::AddUnitToOrbit {
                 kind: UnitKind::Ark,
+                above: TerritoryId(1),
             })
             .unwrap_err();
         assert!(matches!(rejected, Rejection::WrongPhase { .. }));
@@ -1275,6 +1300,52 @@ mod tests {
             })
             .unwrap_err();
         assert!(matches!(rejected, Rejection::WrongPhase { .. }));
+    }
+
+    #[test]
+    fn an_ark_lands_only_on_the_territory_its_orbit_is_above() {
+        // **`S-55`, and the check it says does not exist.** `land` took any unit for which
+        // `in_orbit()` held and put it on any territory named - there was no relation between
+        // the two to compare, because `Location::Orbit` carried nothing. `spec/orbit.md`:
+        // *nothing orbits a planet without being above a particular territory*, and landing is
+        // a move, so the only ground an Ark can reach is the ground beneath it.
+        // `designed` puts the one Ark in the orbit above territory 1.
+        let game = started();
+        let refused = game.clone().after(&Transition::Land {
+            kind: UnitKind::Ark,
+            territory: TerritoryId(3),
+        });
+        assert!(
+            matches!(
+                refused,
+                Err(Rejection::NotAboveThatTerritory {
+                    above: TerritoryId(1),
+                    asked: TerritoryId(3),
+                    ..
+                })
+            ),
+            "an Ark above territory 1 cannot come down on 3; got {refused:?}"
+        );
+
+        // **And the message is the right one, which is the half that is easy to lose.** With
+        // no unit in orbit at all the answer is `NoUnitAvailable`, and a player told the wrong
+        // reason looks in the wrong place - the same distinction `launch` already draws.
+        let mut empty = started();
+        empty.units.clear();
+        assert!(matches!(
+            empty.after(&Transition::Land {
+                kind: UnitKind::Ark,
+                territory: TerritoryId(3),
+            }),
+            Err(Rejection::NoUnitAvailable { .. })
+        ));
+
+        // The ground beneath it is still reachable, or the rule would forbid every landing.
+        let landed = game.after(&Transition::Land {
+            kind: UnitKind::Ark,
+            territory: TerritoryId(1),
+        });
+        assert!(landed.is_ok(), "it comes down where it was: {landed:?}");
     }
 
     #[test]
@@ -1307,6 +1378,7 @@ mod tests {
             .unwrap()
             .after(&Transition::AddUnitToOrbit {
                 kind: UnitKind::Ark,
+                above: TerritoryId(1),
             })
             .unwrap()
             .after(&Transition::Start)
@@ -1608,7 +1680,7 @@ mod tests {
         let mut game = founded();
         // Produce a pioneer by hand: put one on territory 1 with cells.
         let id = UnitId(game.units.len() as u32 + 1);
-        let mut pioneer = Unit::new(id, UnitKind::Pioneer);
+        let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
         pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
 
@@ -1645,7 +1717,7 @@ mod tests {
         game.territories[1].set_garrison(Some(Garrison::from_founding_unit(2)));
         game.territories[1].put(Kind::Citizen, 1);
         let id = UnitId(game.units.len() as u32 + 1);
-        let mut pioneer = Unit::new(id, UnitKind::Pioneer);
+        let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
         pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
 
@@ -1671,7 +1743,7 @@ mod tests {
     fn founding_by_land_takes_the_ground_and_consumes_the_unit() {
         let mut game = founded();
         let id = UnitId(game.units.len() as u32 + 1);
-        let mut pioneer = Unit::new(id, UnitKind::Pioneer);
+        let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
         pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
 
@@ -1726,7 +1798,7 @@ mod tests {
     fn a_pioneer_that_is_not_fed_is_lost() {
         let mut game = founded();
         let id = UnitId(game.units.len() as u32 + 1);
-        let mut pioneer = Unit::new(id, UnitKind::Pioneer);
+        let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
         pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
         // Nothing was gathered, so there is no food to pay it with. **The resources

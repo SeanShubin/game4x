@@ -90,7 +90,7 @@ pub fn show(game: &Game, subject: &Subject) -> String {
                 .iter()
                 .map(|unit| {
                     let place = match unit.location {
-                        Location::Orbit => "in orbit".to_string(),
+                        Location::Orbit(id) => format!("in orbit above territory {id}"),
                         Location::On(id) => format!("on territory {id}"),
                     };
                     format!(
@@ -291,7 +291,7 @@ pub fn entities(game: &Game) -> Vec<Entry> {
                 (
                     "location".to_string(),
                     match unit.location {
-                        Location::Orbit => "orbit".to_string(),
+                        Location::Orbit(id) => format!("orbit-{id}"),
                         Location::On(id) => format!("territory-{id}"),
                     },
                 ),
@@ -326,7 +326,7 @@ mod tests {
             "set resource 1 food 1 4",
             "set resource 1 metal 1 4",
             "set force 1 1",
-            "add ark orbit",
+            "add ark orbit 1",
             "start",
         ])
     }

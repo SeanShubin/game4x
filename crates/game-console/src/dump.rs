@@ -225,15 +225,21 @@ pub fn tables(game: &Game) -> Vec<Table> {
         }
     }
 
-    let mut unit = Table::new("unit", &["id", "kind", "place", "fuel", "ready"]);
+    // **`P-311`: every thing names what holds it with `in-kind` and `in-id`.** The column was
+    // `place`, which `P-286` stopped declaring, and it held one word that had to be either a
+    // territory or an orbit - so `orbit-1` said which orbit only by convention and `orbit`
+    // stopped being a word the dump contains. Two columns say it in the promoted form and
+    // name both kinds.
+    let mut unit = Table::new("unit", &["id", "kind", "in-kind", "in-id", "fuel", "ready"]);
     for flying in &game.units {
         unit.push(vec![
             flying.id.0.to_string(),
             flying.kind.name().to_string(),
             match flying.location {
-                Location::Orbit => "orbit".to_string(),
-                Location::On(at) => format!("territory-{}", at.0),
+                Location::Orbit(_) => "orbit".to_string(),
+                Location::On(_) => "territory".to_string(),
             },
+            flying.location.territory().0.to_string(),
             flying.cells.to_string(),
             ready(flying.exhausted),
         ]);
