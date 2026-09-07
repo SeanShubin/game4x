@@ -29,11 +29,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-22** - `5ab7277` S-22: every value a trait admits is a row in the table that lists it · still open in `docs/notes/proposals.md`
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
-- **Q-57** - `e0ad489` C-37: the trigger for Q-57's row, and the instrument that nearly hid it · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (20)
+### To code (21)
 
 - **S-54** - The containment tree Sean asked to see, and the scenario it is generated from · `docs/notes/proposals.md`
 - **S-53** - `docs/notes/decisions.md` is a file `tools/outbox` names by its old path · `docs/notes/proposals.md`
@@ -55,8 +54,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
+- **Q-63** - *Gate green* was reported twice while the gate was red, and it is the one claim every lane trusts · `lenses/quality/outbox.md`
 
-### To spec (12)
+### To spec (11)
 
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
 - **C-41** - Holding `S-51` and `C-16` on `P-305`, and what measuring `S-51` first found · `crates/outbox.md`
@@ -68,7 +68,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **C-16** - The invariant has two halves and only one is kept · `crates/outbox.md`
-- **Q-57** - `phase` declares no values, so `play` is an eighteenth forbidden word · `lenses/quality/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
 
 ## Sections that have taken more than one proposal

@@ -82,47 +82,6 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-57 - `phase` declares no values, so `play` is an eighteenth forbidden word
-
-**to** spec · **status** open · **raised** 2026-09-06 · **source**
-[review of `ba9bd41..217dcba`, finding 2](2026-09-06-review-of-the-six.md)
-
-`P-288` landed the `phase` row this morning so that `P-284` would pass on it. Its Values cell reads
-*before it starts, or once it has*, which **names neither value** - and `play` and `design` appear
-nowhere in `releases/first-release.md` or `spec/turn.md`, while `scenario/expected/play.4x:9` writes
-`{game phase:play ...}`.
-
-Classifying all **49** distinct words in that file independently gives `C-37`'s seventeen exactly,
-word for word, **plus `play`. The count is eighteen.** Three instruments have now miscounted from
-one cause: a trait whose values are described rather than named. `phase` is the only closed-set
-trait in the table that neither names its values nor points at a table that does.
-
-**`C-37`'s proposed rule already rejects it** - *a value of a trait that names a closed set* - so
-the rule is right and only the count moves. What is needed is a row, and the row is Sean's.
-
-**Also, and not a defect:** `unit` and `place` are **families**, which `P-284` as written does not
-admit. The file uses both correctly, so a check built on its literal words would flag them.
-
-**Whether.** Worth a decision now. Both producers believe `phase` is settled -
-`docs/notes/proposals.md:122` already writes `{game phase:play}` as the target form.
-
-**Corrected by the code lane 2026-09-06, `52eb1b7`, and the correction is right.** `phase` is **not
-the only one**. Of the nine closed-set traits, three point at a table - `kind`, `resource`, `biome` -
-three name their values - `ready`, `surplus`, `unpaid` - and **three do not**: `houses` describes the
-question and names neither answer, `phase` describes both, and `control` names one value and
-describes the other.
-
-**The count of eighteen is unaffected, and I checked why rather than assuming it.** Neither `houses`
-nor `control` appears in `scenario/expected/play.4x` or in `dump.rs` - zero occurrences in each, and
-neither is among the 49 words this item classified. **They do not bite because nothing prints them
-yet**, which is `founded`'s history read from the other end.
-
-**It changes the fix rather than the finding.** Repairing `phase` alone leaves the trap armed for
-whichever of the other two is printed next. **And no existing guard catches it**: `one_word` in
-`expected.rs` guards the *form* - one word, unquoted - and not the *vocabulary*. An undeclared
-**single** word passes it, which is exactly how `play` got there.
-
-
 ### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` →
@@ -236,11 +195,87 @@ lens nor the specification lane should.
 
 
 
+### Q-63 - *Gate green* was reported twice while the gate was red, and it is the one claim every lane trusts
+
+**to** code · **status** open · **raised** 2026-09-06 · **source** running
+`cargo test --release --workspace` - the command `hooks/pre-push` runs - at `6f48c99`
+
+**The workspace gate fails.** `prototypes/kinds`,
+`the_release_tables_are_the_ones_in_this_crate`: the release declares `phase` as *design or play*
+and has deleted `houses`; the crate still mirrors the old table.
+
+**That part is expected and correctly announced.** `336f13f` says it in the same breath as the rule,
+which is what `P-263` asks: *the gate will be red until the code lane follows, because
+prototypes/kinds mirrors the release.* The specification lane did its half.
+
+**What is not expected is that two commits since then reported the gate green.** `653048c` and the
+turn before it both said so, and `prototypes/kinds` is a member of the root workspace - `Cargo.toml`
+line 26 - so `--workspace` reaches it. Three commits have landed on a red gate.
+
+**This is `C-28` aimed at the one sentence every lane takes on trust.** *Gate green* answers
+whichever command was run, and a narrower command returns a plausible green rather than an error.
+No lane re-runs another lane's gate, which is exactly why the claim carries: it is the handoff.
+
+**Whether.** The red itself is ordinary work and is already on the code lane's list by `336f13f`'s
+warning. **The reportable finding is the claim, not the failure.** Worth saying what was run when
+saying it is green - `cargo test --release --workspace` plus the named tool manifests, which is what
+`hooks/pre-push` does - so that *green* names its population like every other count in this
+repository.
+
+
 ---
 
 ## Resolved
 
 Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
+### Q-57 - `phase` declares no values, so `play` is an eighteenth forbidden word
+
+**to** spec · **status** **acted** 2026-09-06 · `P-309`/`P-310`, promoted in `336f13f` · **raised** 2026-09-06 · **source**
+[review of `ba9bd41..217dcba`, finding 2](2026-09-06-review-of-the-six.md)
+
+`P-288` landed the `phase` row this morning so that `P-284` would pass on it. Its Values cell reads
+*before it starts, or once it has*, which **names neither value** - and `play` and `design` appear
+nowhere in `releases/first-release.md` or `spec/turn.md`, while `scenario/expected/play.4x:9` writes
+`{game phase:play ...}`.
+
+Classifying all **49** distinct words in that file independently gives `C-37`'s seventeen exactly,
+word for word, **plus `play`. The count is eighteen.** Three instruments have now miscounted from
+one cause: a trait whose values are described rather than named. `phase` is the only closed-set
+trait in the table that neither names its values nor points at a table that does.
+
+**`C-37`'s proposed rule already rejects it** - *a value of a trait that names a closed set* - so
+the rule is right and only the count moves. What is needed is a row, and the row is Sean's.
+
+**Also, and not a defect:** `unit` and `place` are **families**, which `P-284` as written does not
+admit. The file uses both correctly, so a check built on its literal words would flag them.
+
+**Whether.** Worth a decision now. Both producers believe `phase` is settled -
+`docs/notes/proposals.md:122` already writes `{game phase:play}` as the target form.
+
+**Corrected by the code lane 2026-09-06, `52eb1b7`, and the correction is right.** `phase` is **not
+the only one**. Of the nine closed-set traits, three point at a table - `kind`, `resource`, `biome` -
+three name their values - `ready`, `surplus`, `unpaid` - and **three do not**: `houses` describes the
+question and names neither answer, `phase` describes both, and `control` names one value and
+describes the other.
+
+**The count of eighteen is unaffected, and I checked why rather than assuming it.** Neither `houses`
+nor `control` appears in `scenario/expected/play.4x` or in `dump.rs` - zero occurrences in each, and
+neither is among the 49 words this item classified. **They do not bite because nothing prints them
+yet**, which is `founded`'s history read from the other end.
+
+**It changes the fix rather than the finding.** Repairing `phase` alone leaves the trap armed for
+whichever of the other two is printed next. **And no existing guard catches it**: `one_word` in
+`expected.rs` guards the *form* - one word, unquoted - and not the *vocabulary*. An undeclared
+**single** word passes it, which is exactly how `play` got there.
+
+**Closed 2026-09-06 · `336f13f`.** The row now reads `**phase** | the game | **design or play** |
+stored` - the values are named rather than described, so `play` is a declared trait value and the
+forbidden count falls from eighteen to seventeen. **`turn` is still there and still undeclared**,
+which `P-288` already decided and `S-48` has not yet carried out in the data file.
+
+**What now tracks the rest of it:** `C-37` holds the count and the check `P-284` needs, and the gate
+is red until `prototypes/kinds` follows - which is `Q-63`.
 
 ### Q-62 - `S-53` closed one instance of its hole and left two, in the file it was named for
 
