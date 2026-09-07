@@ -113,7 +113,6 @@ are listed.
 | **keeps**          | food                                    | the number of turns it will last                   | stored                                           |
 | **surplus**        | food                                    | yes or no                                          | derived: left after every upkeep was paid        |
 | **unpaid**         | a thing with upkeep                     | yes or no                                          | derived: its upkeep was not met                  |
-| **houses**         | a thing that contains things            | whether people live in it                          | stored                                           |
 | **phase**          | the game                                | design or play                                     | stored                                           |
 
 Food is made with `keeps` 1. The force nature holds a territory with.

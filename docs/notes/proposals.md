@@ -60,110 +60,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Two, and both came out of your reading of the expected data rather than out of a
-review.** They are independent of each other.
-
-### P-311 - Containment is a tree in the specification and a column in the data
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **asks** a decision -
-**into** `releases/first-release.md` -> the dump's relations
-
-**`spec/logistics.md` -> Containment is precise and none of it is visible in what you read.** Every
-thing is in at most one other; **the game is the one thing that is in nothing, so containment is a
-tree**; capacity is per kind with a stored **total**, a derived **used** and a derived **available**.
-
-**What the dump has instead.** Eight per-kind relations where the container is a column:
-`{store territory:1 resource:food amount:5}`, `{structure territory:1 structure:extractor count:3}`.
-Three consequences, and the third is why you cannot see what you asked to see:
-
-- **Things inside containers are counted, not named.** `structure` gives a count, so no individual
-  store or extractor has an identity - you cannot point at one and ask what is in it
-- **There is no *thing is in thing* relation at all**, so the tree exists in the specification and
-  nowhere in the data
-- **Capacity is printed for exactly one case.** `{territory-resource territory:1 resource:food
-  capacity:3 density:4 built:3}` is a territory's capacity for extractors of a resource. **No store
-  prints a capacity, and used and available are printed nowhere**, though the specification says both
-  are derived and cannot disagree with what is there
-
-**Two relations would carry it, and the shape of the first is the decision.** Ids are unique among
-things of a kind rather than globally - the *Traits* table says so - so a container reference needs
-both a kind and a number, and there are two ways to write one.
-
-**A. A uniform column, so the relation is one shape.**
-
-```
-{thing kind:game     id:1}
-{thing kind:territory id:1 in-kind:game      in-id:1}
-{thing kind:store     id:1 in-kind:territory in-id:1}
-```
-
-The tree is readable by one rule and a cycle is checkable by one pass. The cost is two new trait
-names, and `in-kind`/`in-id` appear nowhere in the game today.
-
-**B. The container's kind is the column, which is what the dump does now.**
-
-```
-{thing kind:store id:1 territory:1}
-```
-
-Nothing new is introduced and it matches `{store territory:1 ...}`. The cost is that the relation
-has a different column per container kind, so it is not one relation - and reading the tree means
-knowing every kind that can contain.
-
-**My recommendation is A**, because the tree is the thing you want to see and B cannot be walked
-without already knowing the answer. But it adds vocabulary to a release that `P-284` deliberately
-keeps closed, so it is yours.
-
-**The second relation follows the first and is not a separate decision.** Capacity per container,
-per kind, with the trait value where there is one:
-
-```
-{capacity of-kind:territory of-id:1 for:extractor by:resource value:metal total:3 used:3}
-{capacity of-kind:territory of-id:1 for:store                            total:6 used:2}
-```
-
-`available` is deliberately absent: the specification says it is the total less the used, and
-`P-245` says a document that restates another links to it rather than listing it. **Say if you want
-it printed anyway** - a number you can check by subtracting is different from one you must.
-
-**What this is for.** An HTML tree in `reports/`, collapsible with `<details>`, generated from these
-two relations - so a collapsed container still reads `3/3 extractors` and you can see at a glance
-what is full. `S-54` is the build and waits on this.
-
-### P-312 - `houses` is now a trait no recipe uses and no kind carries
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** cleanup - **shape** instruction -
-**asks** approval - **into** `releases/first-release.md` -> Traits, the `houses` row
-
-**Filed immediately after the promotion that made it stale**, which is what the protocol requires
-rather than widening that promotion to cover it.
-
-**`P-310`'s destination was the three `grow` rows and nothing else**, so the *Traits* table still
-declares `houses` at line 116 - *a thing that contains things · whether people live in it · stored*.
-The recipe that referenced it is gone, no kind carries it, and `game-model` never read it. **It is
-now declared and referenced nowhere at all**, which is worse than when it was merely fictional: a
-reader has no remaining clue that it does nothing.
-
-**The instruction:** delete the `houses` row from *Traits*.
-
-**The check the promoting commit runs**: `grep -n houses releases/first-release.md` finds nothing,
-and the *Traits* table has eighteen rows where it had nineteen.
-
-**Why this is a separate item rather than a wider `P-310`.** A promotion may change only line
-wrapping, bullet-versus-paragraph and heading level, so a promotion that quietly took a second table
-with it would be the thing the protocol exists to prevent - and I told you `P-310` deleted `houses`
-when its destination line says the recipe rows. That sentence in `P-308` was ahead of what `P-310`
-actually offered.
-
-**What follows for the code lane**, filed when this lands: `prototypes/kinds` mirrors the release
-cell for cell, so its `houses` trait row, the `HOUSES` qualifier and the `traited(Require, 1, THING,
-&HOUSES)` line go with it, and `reports/recipes.md` regenerates. The gate is red until they do -
-`the_release_tables_are_the_ones_in_this_crate` compares the two copies, which is exactly the check
-doing its job.
-
-**Still deliberately not settled**: whether population should ever be housing-limited. You said *not
-to say we can't put them in later*, so this is scoping and `houses` should not come back as a new
-idea.
+**Nothing.** Every proposal has been promoted. One choice is waiting on you and it is in
+[questions.md](questions.md), which is where a decision lives until it is made.
 
 ## Addressed to other perspectives
 
@@ -224,6 +122,17 @@ Two things that are not the same as adding a path, and the second is the one tha
 - **The count Sean sees is one number over both files.** `docs/process.md` -> *What I read, and what
   I do* says fifteen is a tripwire on the specification lane, not a bound per file, so summing them
   is the rule rather than a convenience
+
+**And one more, added 2026-09-06 because it fired the day the rule landed.** `P-311` was filed into
+`proposals.md` while asking a decision, and **Sean caught it, not a check** - two hours after the
+rule promoted. `CLAUDE.md` already says `asks` is checkable rather than descriptive, and this is the
+other half of that:
+
+- **An item in `proposals.md` whose `asks` is *a decision* is misfiled**, and one in `questions.md`
+  whose `asks` is *approval* is misfiled the other way. Both are one comparison against the field
+  the tool already parses
+- **Report both counts**, not only the offences. Today the answer is zero of one and zero of one,
+  and zero says nothing against an empty population
 
 ### S-52 - `P-296` promised a research lens a directory, and it does not exist
 
@@ -1815,6 +1724,7 @@ work the release exists to order.
 | P-308, the phase cell names its values, and closed sets say where they are listed                                            | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
 | P-309, a command of one phase is refused in the other                                                                        | `spec/console.md` -> Phases                                                                                                                  | 2026-09-06 |
 | P-310, grow loses the houses requirement and gains the cap the specification states                                          | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-06 |
+| P-312, `houses` is deleted: no recipe uses it and no kind carries it                                                         | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
 
 ## Rejected
 
