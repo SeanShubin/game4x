@@ -21,5 +21,36 @@ here without first becoming a proposal.
 
 ## Open
 
-Nothing. Every choice put to Sean has been answered, and the item that carried the last one
-has moved to [`proposals.md`](proposals.md) as words to approve.
+### P-315 - Nobody may create a lens's directory, and one is now promised in the process document
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** governance - **asks** a decision -
+**into** `CLAUDE.md` -> Starting a new lens
+
+**The code lane declined `S-52` and was right to.** I asked it to create `lenses/research/README.md`
+and `lenses/research/outbox.md`. `CLAUDE.md` -> Perspectives says **a producer never writes into a
+lens's directory**, and that rule is absolute rather than scoped to findings. **The same forbids
+me**: this lane is the other producer.
+
+**So the answer to *who creates it* is currently nobody**, and `docs/process.md` -> *Starting the
+instances* now names `lenses/research/outbox.md` in a prompt, which makes it a file the document
+promises and the rules forbid anyone to make.
+
+**`CLAUDE.md` -> Starting a new lens says what to create and never says who.** *To start one, create
+`lenses/<name>/README.md` and `lenses/<name>/outbox.md`, and tell it:* - an imperative with no
+subject.
+
+**Two answers, and this is a change to who may write where, so it is yours and only yours.**
+
+- **The lens creates its own.** You start the instance, it reads its prompt, and its first act is to
+  make the directory it is told is its own. Nothing is relaxed - a lens writing `lenses/<name>/` is
+  exactly its column. **My recommendation**, and it needs only a subject added to that sentence
+- **You create it**, which is what the sentence reads as today, and which is one more thing that
+  needs you before anything can start
+
+**Why it is filed rather than settled.** `CLAUDE.md` says an approval for that file comes from you
+directly, and this is squarely what it means: the columns and who may write in them. **A relayed
+approval cannot be told from an invented one**, so this lane will not act on anything but your own
+words here.
+
+**`S-52` is withdrawn in the same commit**, naming this item as what now carries the gap - which is
+`P-305`'s rule, promoted this afternoon, used for the first time.

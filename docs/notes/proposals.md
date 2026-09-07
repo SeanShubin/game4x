@@ -60,9 +60,71 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+**One.** `P-316` is the answer to your question about this document. The other thing waiting on
+you is a choice, in [decisions.md](decisions.md).
+
+### P-316 - A promotion that creates work files it, and this document never says so
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** text -
+**asks** approval - **into** `docs/process.md` -> Who writes what, at the end
+
+**You asked whether this document needs changing so a defect one instance finds in another gets
+fixed. It does, and the sentence already exists in `CLAUDE.md`** - which is precisely what `P-302`
+says is a rule about to be lost.
+
+> - A promotion either files what it creates as an item addressed to the lane that must do it, or
+>   records that it is not work for that lane. **Never silence**, because silence and *nobody has
+>   looked yet* are the same bytes
+> - It files it **before the proposal is deleted**. A promotion removes the document that named the
+>   work, so a promise to file later goes with it and nothing is left to notice
+
+**The second bullet is the one that failed today, twice, in this lane.** `P-310` said *what this
+leaves for the code lane, and I file it when this lands*. `P-312` said it again. Both landed, neither
+was filed, and the proposals that carried the promise were deleted at promotion. **Nothing caught
+it** - not a check, not another lane. You did, by asking this question.
+
+**What this document has today, and why it is not enough.** *Who writes what* says an instance that
+sees a problem outside its own directories **writes it down where its owner will find it, and
+stops** - which is the cross-lane half, and it worked all day. The quality lens filed `Q-60` against
+my wording, the code lane filed `C-40` against my ledger, and both were fixed within the hour. **The
+half that is missing is the one where the finder and the writer are the same lane**, and the finding
+is a consequence of its own promotion.
+
+**Nothing mechanises the second bullet, and one thing nearly does.** A promoting commit could be
+required to cite a new item or say *not work* - `tools/outbox` already parses citations. That is the
+code lane's to judge and I have not filed it, because a check that fires on every promotion and is
+satisfied by the words *not work* may cost more than it catches.
+
+**Why it belongs here rather than only in `CLAUDE.md`.** `CLAUDE.md` -> Promotion has both bullets in
+substance and this document has neither. `P-302`: *an insight that lives only in a conversation, a
+note, or an operating file is lost.* This is that, found by you rather than by me, on the day it
+landed.
 
 ## Addressed to other perspectives
+
+### S-56 - Four promotions today moved the release's tables and `prototypes/kinds` still has the old cells
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** `P-308`, `P-310` and `P-312`,
+promoted today, and my own promise to file this twice without doing it
+
+**The gate is red now, not later.** `the_release_tables_are_the_ones_in_this_crate` compares two
+copies and the release copy moved. **This item exists because I said in `P-310` and again in `P-312`
+that I would file it when they landed, and then did not** - Sean asked whether anything from this
+session would be missed, which is how it was found.
+
+**Three changes, all in the tables `prototypes/kinds` mirrors.**
+
+1. **`houses` is gone entirely.** `P-310` removed the `require 1 thing, houses` row from `grow`;
+   `P-312` removed the trait row. So the `houses` `TraitRow`, the `HOUSES` qualifier and the
+   `traited(Require, 1, THING, &HOUSES)` line all go. `reports/recipes.md` regenerates
+2. **`grow`'s two quantities are no longer `1`.** Both the consumption and the production are *the
+   lesser of the surplus food and the citizens here*. **The model needs no change** -
+   `population_after` already computes `min(food, 2 x citizens)`, which is the same rule
+3. **`phase`'s Values cell is now `design or play`** rather than *before it starts, or once it has*.
+   That should take `play` out of `P-284`'s forbidden words, which is `C-37`'s count
+
+**Nothing here is a decision and none of it is new behaviour.** All three make the crate's copy match
+a release Sean approved today, and the third is the one that was blocking a count you were carrying.
 
 ### S-55 - An orbit is above nowhere, and an Ark lands anywhere
 
@@ -114,10 +176,12 @@ natively - **no JavaScript and no library**, which is what makes it readable fro
 diffable. **Put `used/total` on the summary line**, because a collapsed container that cannot say
 whether it is full defeats the reason he wants it collapsible.
 
-**3. A small scenario to generate it from, and it is not the main one.** Two territories, not
-twelve, arranged so every containment relationship appears and **at least one capacity sits at its
-bound** - he asked to see how things fit together, and *full* is the case that shows it. The main
-scenario is 199 commands and cannot be held in the head.
+**3. Generate it from the main scenario, and keep the small one as a fixture.** I first told you
+two territories because twelve could not be held in the head. **That reason is gone**: collapsed by
+default the main scenario is about fifteen lines, so Sean observes the real game rather than a
+miniature of it, which is what completeness is for. The small scenario is still worth having as the
+**round-trip fixture** - arranged so every containment relationship and at least one capacity at its
+bound appear - which is a test asset rather than something he reads.
 
 **The trap, and it is why the scenario is generated rather than written.** A hand-authored tree can
 show a structure the code cannot produce. **That failed three times today in this repository** -
@@ -174,7 +238,7 @@ which is exactly the check two bullets up.
 
 ### S-52 - `P-296` promised a research lens a directory, and it does not exist
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** `P-296`, promoted in `fb8608e`
+**to** code - **status** **withdrawn** 2026-09-06 - `P-315` carries the gap: the code lane declined this correctly, because a producer never writes into a lens's directory and this lane is the other producer - **raised** 2026-09-06 - **source** `P-296`, promoted in `fb8608e`
 
 `docs/process.md` -> *Starting the instances* now carries a fourth prompt telling a research
 instance its outbox is `lenses/research/outbox.md`. **There is no such directory**, so the prompt
@@ -450,10 +514,11 @@ Sean's to see before it lands**, because it is the foundation he is about to vet
 
 ### S-43 - A thing's identifier is `id`, `founded` goes, and nothing checks a column against the release
 
-**Closed 2026-09-05, verified by this lane rather than reported.** No doubled names and `founded` gone, both measured at zero.
-
 **to** code - **status** acted - **raised** 2026-09-05 - **source** `P-254` promoted, and `P-255`
 decided choice B
+
+**Closed 2026-09-05, verified by this lane rather than reported.** No doubled names and `founded` gone, both measured at zero.
+
 
 **Both change `scenario/expected/play.4x`, so they belong with `P-214` and `S-42`.** One pass, one
 regeneration.
@@ -490,10 +555,11 @@ exemption list nobody maintains.
 
 ### S-42 - The dashes rule and `nature` land in the data, and jungle's force changes with them
 
-**Closed 2026-09-05, verified by this lane rather than reported.** No quoted names, no `force of nature`, `nature:` present, and jungle at 2 in `forces.4x` and the release. **`ready:yes` twelve times and `readiness:` none** - the last piece, which the code lane found was `founded`'s shape a third time: the release declared `ready` with values *yes or no* and the dump printed a column `readiness` with values `ready`/`exhausted`, matching neither the name nor the values.
-
 **to** code - **status** acted - **raised** 2026-09-05 - **source** `P-252` and `P-253`, promoted in
 `acaf914`
+
+**Closed 2026-09-05, verified by this lane rather than reported.** No quoted names, no `force of nature`, `nature:` present, and jungle at 2 in `forces.4x` and the release. **`ready:yes` twelve times and `readiness:` none** - the last piece, which the code lane found was `founded`'s shape a third time: the release declared `ready` with values *yes or no* and the dump printed a column `readiness` with values `ready`/`exhausted`, matching neither the name nor the values.
+
 
 **Three changes, and all of them move `scenario/expected/play.4x`, which is what Sean is about to
 vet.** Do them with `P-214` rather than after it, so his files settle once.

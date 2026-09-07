@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-316** - A promotion that creates work files it, and this document never says so · `docs/notes/proposals.md`
+- **P-315** - Nobody may create a lens's directory, and one is now promised in the process document · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
 
@@ -34,10 +34,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ### To code (21)
 
+- **S-56** - Four promotions today moved the release's tables and `prototypes/kinds` still has the old cells · `docs/notes/proposals.md`
 - **S-55** - An orbit is above nowhere, and an Ark lands anywhere · `docs/notes/proposals.md`
 - **S-54** - The containment tree Sean asked to see, and the scenario it is generated from · `docs/notes/proposals.md`
 - **S-53** - `docs/notes/decisions.md` is a file `tools/outbox` names by its old path · `docs/notes/proposals.md`
-- **S-52** - `P-296` promised a research lens a directory, and it does not exist · `docs/notes/proposals.md`
 - **S-51** - A closed item citing a withdrawn proposal is a gap nobody decided to drop · `docs/notes/proposals.md`
 - **S-50** - `tools/outbox` defers a fix to `Q-32`, which closed without answering it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
