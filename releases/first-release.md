@@ -119,7 +119,7 @@ are listed.
 | **upkeep**         | a thing with upkeep                     | food per turn                                                             | stored                                           |
 | **metal in it**    | whatever is built                       | a number                                                                  | derived: its binding plus the metal in its parts |
 | **density**        | a deposit                               | a number                                                                  | stored                                           |
-| **total capacity** | a territory, per kind                   | a number                                                                  | stored                                           |
+| **total capacity** | a deposit                               | a number                                                                  | stored                                           |
 | **control**        | a territory                             | held by a player, or unclaimed                                            | derived: a citizen of that player is there       |
 | **biome**          | a territory                             | one of the biomes                                                         | stored                                           |
 | **nature**         | a territory                             | a number                                                                  | stored                                           |
