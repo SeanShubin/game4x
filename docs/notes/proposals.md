@@ -78,7 +78,10 @@ and cheap** - one tool call away, often in the very file being quoted. The failu
 and not fatigue. **Reading costs a tool call and remembering costs nothing, and the two feel
 identical from inside**, which is why no amount of care prevents it.
 
-**Seven cases from one day, four lanes, all verifiable.**
+**Eight cases from one day, three lanes, all verifiable.** Seven are one shape and the
+eighth is not; it is below the list. **Three lanes rather than four, corrected by the research
+lane in `X-3`** - specification, code and quality, and the miscount is worth recording in an item
+about unchecked counts.
 
 - **`P-320`, and it is the one Sean asked to have added.** This lane promoted `P-311`, telling the
   dump to name its container with `in-kind`/`in-id`, when `spec/console.md` says *nothing states its
@@ -97,6 +100,29 @@ identical from inside**, which is why no amount of care prevents it.
   clause inside the entry itself**.
 - **The quality lens's README** said `docs/process.md` gave it three jobs. True on 2026-08-30, wrong
   by 2026-09-05, and the four it lost were the ones aiming it at structure and at the pipeline.
+
+**And an eighth that is a different shape, added at Sean's instruction.** The seven above are all
+*the information was there and I did not read it*. This one is not.
+
+**The rule was known, promoted by me the same day, and broken five times anyway.**
+`docs/process.md`: *normalize both sides instead of loosening the comparison* - which I proposed,
+he approved, and I promoted. Then five assertions I wrote that afternoon each failed by looking for
+a phrase that spans a line wrap, including four in the single commit that corrected `P-311`. **And
+the first attempt to fix those four used a heredoc, which mangled the backslashes** - the other rule
+in the same paragraph of `CLAUDE.md`.
+
+**So this is not a memory failure and it matters that it is not.** Nothing needed re-reading; I could
+have recited the rule. What did not happen is applying it at the moment of writing a comparison, and
+**the comparison looked correct while being written** - a fragment short enough to sit on one line in
+my head, meeting a file that wrapped it.
+
+**Which makes a fourth question**, and it may be the one that decides whether any of this is
+tractable:
+
+4. **When a rule is known and still not applied, what kind of remedy works?** This repository's
+   answer so far is a check - `P-289`'s own rule was written after a check caught the loosening. If
+   the remedy for a known-but-unapplied rule is always a mechanism, then the habits in
+   `docs/process.md` are doing something else, and it is worth knowing what.
 
 **Three questions worth more than a general answer.**
 
