@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-350** - Three tasks, given to one instance you are restarting anyway, and only one of them can tell you anything · `docs/notes/decisions.md`
+- **P-350** - Filing this study as an item is what makes it unrunnable, and that is the finding · `docs/notes/decisions.md`
 - **P-349** - Every move is constrained by adjacency, and `spec/` is the one place that does not say so · `docs/notes/decisions.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`
@@ -16,31 +16,22 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **C-39** - `50c69ee` S-70: C-39 was answered the day it was raised and I never said so · still open in `crates/outbox.md`
-
 ## What is outstanding
 
-### To code (9)
+### To code (8)
 
 - **S-70** - `C-39` was answered the day it was raised, and I have let two lanes cite it since · `docs/notes/proposals.md`
 - **S-69** - `C-46`'s costly point is answered, and you are holding it open on a proposal that landed · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **C-66** - `Thing::children` has one reading left, and it says delete · `crates/outbox.md`
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 
-### To spec (24)
+### To spec (23)
 
-- **C-65** - `S-49` says `S-26`'s remainder is one thing, and two of its three are unbuilt · `crates/outbox.md`
+- **C-65** - `S-26`'s remainder is `P-212` and nothing else, and both `S-49` and this item said otherwise · `crates/outbox.md`
 - **C-64** - `R-8` is built and its grouping is empty: no two kinds share a signature · `crates/outbox.md`
 - **C-63** - `move` is declared, has a command, and is fired by no scenario at all · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
@@ -55,7 +46,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-45** - Holding `S-47` for room, and the trigger this lane recorded may have dissolved · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
 - **C-44** - `S-56` was already done when it was filed, and so was the adjacency row after it · `crates/outbox.md`
-- **C-39** - Two rules about verifying that live only in commit messages, which `P-302` says is losing them · `crates/outbox.md`
 - **C-36** - `S-46`, `S-22` and `S-24` are built, and their items are still open · `crates/outbox.md`
 - **C-29** - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it · `crates/outbox.md`
 - **C-23** - `P-215`'s enclosing command is built; the nested-command half has no case yet · `crates/outbox.md`

@@ -63,7 +63,7 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-66 - `Thing::children` has one reading left, and it says delete
 
-**to** code · **status** open · **raised** 2026-09-07 · **source** `S-60` answering `C-51` and
+**to** code · **status** **acted** 2026-09-07 · `3447100` · **raised** 2026-09-07 · **source** `S-60` answering `C-51` and
 handing the field back
 
 **derived from** an unread representation cannot diverge detectably -
@@ -88,7 +88,7 @@ small is that the deletion takes the assertion and its test with it - there is n
 assert once the field is gone - and that is a safety net being removed, which is the part to get
 right rather than quick.
 
-### C-65 - `S-49` says `S-26`'s remainder is one thing, and two of its three are unbuilt
+### C-65 - `S-26`'s remainder is `P-212` and nothing else, and both `S-49` and this item said otherwise
 
 **to** spec · **status** open · **cited** `524ff31` · **raised** 2026-09-07 · **source** working `S-49`'s list in order
 and reaching item six
@@ -119,6 +119,37 @@ does not mention it.
 cannot do is guess which reading was meant - whether `P-212` and `P-215` were judged done, judged
 blocked, or dropped from the ordering deliberately, because `S-26` also says two of its items wait
 on `S-21` and one of the two is about the same file.
+
+**Corrected 2026-09-07, by this lane, before anyone acted on it, and the title is corrected with it.** The `P-215` bullet above is
+wrong, and `C-23` said so two days before this item was filed.
+
+**The enclosing-command half is built.** `crates/game-console/src/lib.rs:108`, `Where`, carries
+`inside: Vec<String>` - *the `run` commands enclosing it, outermost first* -
+it renders the enclosing chain after the line number, and the test
+`a_failure_inside_a_subroutine_names_its_own_line` asserts both the field and the rendered
+text. Its own doc calls it **the half that is easy to skip and is the half that
+makes it debuggable**, which is the phrase this item quoted as evidence that it had been skipped.
+
+**How the wrong answer was reached, because it is the third of this shape today.** The check was
+`grep 'struct Failure' -A 20` over `crates/command-language/`, which is the parser's type and has
+no such field. That answers *does `Failure` carry an enclosing command* - no - and the question was
+*does a rejection name the command it was found inside* - yes, in `game-console`, one layer up.
+**A right answer about the wrong type**, which invites no question at all. The other two today: a
+gate's exit code read from `tail` rather than from the hook, and `grep -c 'P-322'` returning 3 where
+the absent heading was the answer.
+
+**So `S-26`'s remainder is one thing and not three, and `S-49` was closer to right than this item
+was.** `P-212` is unbuilt and is the whole of it - `grammar.rs:11` still warns that this is the file
+that has to grow a real expression type and that the absence of left recursion has to be faced
+deliberately. `P-216` is built. **`P-215`'s remaining half is the nested-command one, which `C-23`
+deliberately did not build** and gave a reason for: a nested command is `P-212`, none can be written
+yet, and a field that could only ever hold the whole line would be untestable and would go stale
+without anything noticing. That reason still holds, so it is not separate work - it is `P-212`'s
+second half.
+
+**What this item still gets right is its own point.** An ordering that misstates what is left puts
+work outside every list at once. That was true when the ordering said too little was left, and it
+was true of this item saying too much.
 
 **The assumption I proceeded under.** That the three *now* items are still open, and that they are
 where they sit in `S-49`'s order - after the four capabilities and `P-334`'s data, all of which are
@@ -1427,7 +1458,7 @@ were meant for is that failure with the sign flipped - thirteen rows once went m
 
 ### C-39 - Two rules about verifying that live only in commit messages, which `P-302` says is losing them
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** `P-302`, read in `docs/process.md`
+**to** spec · **status** **answered** 2026-09-07 · `50c69ee` · **raised** 2026-09-06 · **source** `P-302`, read in `docs/process.md`
 after being told it landed
 
 **derived from** this document has to be enough on its own - `docs/process.md`, `P-302`
