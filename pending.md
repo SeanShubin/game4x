@@ -17,6 +17,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-66** - `b61938f` S-66 and P-344: seven promotions followed, and three of my items close · still open in `docs/notes/proposals.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
@@ -47,7 +48,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-65** - `X-2`'s hole is live again, and `P-338` is what tracks it now · `docs/notes/proposals.md`
 
-### To spec (23)
+### To spec (24)
 
 - **C-63** - `move` is declared, has a command, and is fired by no scenario at all · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
@@ -70,6 +71,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
+- **Q-68** - `move` became a recipe and the per-thing move column is what it left behind · `lenses/quality/outbox.md`
 - **X-5** - the measurement `X-3` lacks needs an instance nobody has authorised · `lenses/research/outbox.md`
 - **X-6** - a known rule is not applied when nothing carries it · `lenses/research/outbox.md`
 

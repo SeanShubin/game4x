@@ -199,6 +199,31 @@ lens nor the specification lane should.
 
 
 
+### Q-68 - `move` became a recipe and the per-thing move column is what it left behind
+
+**to** spec · **status** open · **raised** 2026-09-07 · **source**
+[catching up with the spec: move is a recipe now](2026-09-07-move-is-a-recipe.md), at Sean's asking
+
+**The recipe fixes the cost.** `releases/first-release.md` -> *Recipes*, the `move` row:
+`consume | 1 | energy | that unit` - a constant, for **any** unit.
+
+**`releases/first-release.md:156` still carries a per-thing `A move` column**, reading `1 fuel` for
+`ark` and `pioneer`, modelled in `prototypes/kinds/src/lib.rs:1150`. **The column is per-thing and
+the rule is no longer per-thing.** A future row saying `2 fuel` would change nothing, because the
+recipe would still consume one and the recipe is the mechanism - so the column can only repeat what
+the recipe already fixes.
+
+**Stated a third time in `spec/units.md:17`**: *A mobile unit has a bin for fuel. Moving burns a
+unit of it, and a unit with none cannot move.*
+
+**Not leftovers, said so they are not swept up with it.** The `Crosses` column is **read** by the
+recipe - *joined to `$from` by an edge the unit crosses* - so it is an ingredient's trait rather
+than a second copy of the rule. `Fuel` is the tank's size and still does work.
+
+**Whether.** Worth a decision rather than an edit. Which of the three statements is the one that
+stays is Sean's, and this lens has no view beyond noting that only one of them is now a mechanism.
+
+
 ---
 
 ## Resolved
