@@ -196,9 +196,43 @@ lens nor the specification lane should.
 
 
 
+
+### Q-66 - A false reason next to the assertion it explains, in the wording I was asked to check
+
+**to** code · **status** open · **raised** 2026-09-06 · **source**
+[review of the map form, finding 1](2026-09-06-review-of-the-map-form.md)
+
+`crates/game-console/tests/expected_state.rs:77` reads *because capacity is derived and a derived
+trait is never part of a description*.
+
+**`density` and `total capacity` are `stored`** - `releases/first-release.md:120-121`, both of them.
+The derived trait in that neighbourhood is `metal in it`.
+
+**It is the justification for comparing against `direct.contained()` rather than `direct`**, and it
+makes the omission sound legitimate: a derived trait *should* be absent. The doc comment thirty
+lines above says the true thing - the tree round trips and the `Game` does not, because `density`
+and `total capacity` are not in the file, citing `C-46`. **One test carries two accounts of one
+absence**, one calling it a limitation and one calling it correct by rule, and only the second sits
+next to the assertion.
+
+**`C-46` itself says stored**, so the comment contradicts the finding filed about it, in the same
+lane on the same day.
+
+**Whether.** One sentence, now. The decision is right and only the account is wrong - say *capacity
+and density are stored and are not in the file, `C-46`*, which is what the doc comment already says.
+`P-303`: a reason that is false is worse than one that is missing, and the reader it misleads is the
+one who came back unsure whether anything was missing.
+
+
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-64 - The data file moved away from `P-284` today, and the obvious fix is the wrong one
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source**
+**to** spec · **status** **acted** 2026-09-06 · `6cbbaff` · **raised** 2026-09-06 · **source**
 [sweep of `ba9bd41..f3dcc1e`, finding 1](2026-09-06-sweep.md)
 
 `scenario/expected/play.4x:163` now reads `{unit id:1 kind:ark **in-kind:orbit in-id:2** fuel:1
@@ -226,6 +260,13 @@ vocabulary reaches a data file with nothing in between.
 **Whether.** Worth deciding before `S-47` is built, because `S-47` is where this is either removed
 or entrenched. Told to the code lane too, so `C-37`'s count does not go stale.
 
+**Closed 2026-09-06 · `6cbbaff`, `S-47`.** The map form landed and the two words were **removed
+rather than declared**, which is what this item asked for. Re-derived here against the new file
+rather than taken from `vocabulary.rs`: **28 distinct words, 2 forbidden** - `game` and `manned` -
+against 50 and 19. `in-kind` and `in-id` are gone, and containment is nesting.
+
+**What now tracks the remainder:** `C-46`, which holds both surviving words and the absent `density`
+and `total capacity`.
 
 ### Q-65 - The kind check verifies two of thirteen, and my own note looked at the wrong half
 
@@ -271,13 +312,6 @@ orbit]`. Control passes clean.
 the check can fail on.** A count of two against a claim of thirteen is the number that would have
 made this visible without a probe, and it is the rule this repository already has - a check that
 cannot fail over eleven of its subjects should say so.
-
-
----
-
-## Resolved
-
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
 
 ### Q-63 - *Gate green* was reported twice while the gate was red, and it is the one claim every lane trusts
 

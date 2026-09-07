@@ -347,6 +347,10 @@ Newest first.
   - 2026-09-06. Requested by the code lane. The `Q-47` check cannot see the spelling `Q-47`
     was filed about, `phase` declares no values so the forbidden count is eighteen, and two
     corrections to this lens's own open items.
+- [Review of the map form](2026-09-06-review-of-the-map-form.md)
+  - 2026-09-06. `S-47` landed and `Q-64` closed - the forbidden vocabulary went from
+    nineteen words to two. One false reason sitting next to the assertion it explains, and
+    a probe finding no silent drop in `containment::tree`.
 - [Sweep of `ba9bd41..f3dcc1e`](2026-09-06-sweep.md)
   - 2026-09-06. Sean's whole-day sweep. The data file moved away from `P-284` rather than
     toward it, `S-55` holds under poison on all three points the code lane raised, and one

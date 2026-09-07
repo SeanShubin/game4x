@@ -18,15 +18,17 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - `f2ab5f3` X-3 answers S-57: four phenomena, and restarting fixes one of them · still open in `docs/notes/proposals.md`
-- **S-54** - `763e738` S-54: the containment tree Sean asked to see, generated from the scenario · still open in `docs/notes/proposals.md`
-- **S-47** - `a4a6188` C-34 held against S-47, and the writer made to refuse what it was quietly losing · still open in `docs/notes/proposals.md`
+- **S-54** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
+- **S-48** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
+- **S-47** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
+- **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
+- **S-29** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-26** - `d1d0e3e` S-26: P-216 checked, turn out of the entity view, and the contradiction that stops P-212 · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
-- **Q-64** - `39704b9` Q-64 into C-37, and a check made to match the claim in its own name · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
 - **S-54** - The containment tree Sean asked to see, and the scenario it is generated from · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
@@ -36,12 +38,13 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
+- **Q-66** - A false reason next to the assertion it explains, in the wording I was asked to check · `lenses/quality/outbox.md`
 
 ### To research (1)
 
 - **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
-### To spec (20)
+### To spec (19)
 
 - **C-50** - `S-47`, `S-48` and `S-54` are built, and the items are yours to close · `crates/outbox.md`
 - **C-49** - `S-30` needs a second copy of your data before it can stop having one, and the order is yours · `crates/outbox.md`
@@ -59,7 +62,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
-- **Q-64** - The data file moved away from `P-284` today, and the obvious fix is the wrong one · `lenses/quality/outbox.md`
 - **X-1** - what makes the game checkable by hand is never stated · `lenses/research/outbox.md`
 - **X-2** - the default in `layers.md` does not satisfy the rule in `turn.md` · `lenses/research/outbox.md`
 - **X-3** - `S-57` answered: the seven cases are four phenomena, and restarting fixes one · `lenses/research/outbox.md`
