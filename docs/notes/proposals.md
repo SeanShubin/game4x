@@ -93,9 +93,11 @@ existing when the work goes through a tool whose quoting is one level by constru
 the rule unnecessary rather than better remembered.
 
 **What this does not say.** It does not say which carrier, and it does not say every rule of the
-second kind is worth one. **`tools/` has no general normalizing comparison today** - one incidental
-use and nothing shared - so the carrier for the clearest case does not exist and building it is the
-code lane's call rather than yours or mine.
+second kind is worth one. **`tools/` has no shared normalizing comparison today.** Checked over all three tools rather than
+guessed: seven places collapse whitespace, and **exactly one does it to make two things compare** -
+`tools/outbox/src/lib.rs:286`, for matching the rule an item derives from. The rest truncate for
+display or assert about table rows. **So the carrier for the clearest case does not exist**, and
+building it is the code lane's call rather than yours or mine.
 
 **Why it belongs beside the other rules about checks.** They are about how a check is built and
 whether it is believed. **This is about which rules need one at all**, which is the question you
@@ -141,11 +143,16 @@ sentence about a command's name
 command's name like every other name.
 
 > A command is written `{name field:value ...}`. **Its name is one word**, dashed where it needs
-> more, and **it is the name of the recipe it fires**; its arguments are named. **A value is a word,
-> a number, or another command in the same form**, so a command may carry a tree.
+> more, and its arguments are named. **A value is a word, a number, or another command in the same
+> form**, so a command may carry a tree.
 
 **What changes is four words.** *Its name is the words that open it* becomes *its name is one word,
 dashed where it needs more*. The rest of the sentence, and the tree-carrying half, are untouched.
+
+**Corrected before you read it: the first version folded in *it is the name of the recipe it fires*,
+which `spec/console.md` already says nineteen lines earlier** - `P-323` landed it as its own
+sentence. Promoting that version would have stated it twice. **The naming half is untouched here**
+and the dashing half is the whole of what this changes.
 
 **The ten player commands then are**: `build-extractor`, `build-store`, `build-yard`, `create-labor`,
 `deploy-ark`, `found-by-land`, `move`, `produce-ark`, `produce-pioneer`, `work`. **So
