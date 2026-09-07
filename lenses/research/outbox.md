@@ -65,6 +65,45 @@ instances after a crash, so a reader that has read the files and nothing else is
 producing anyway. **The cost is three tasks at one instance's startup, and no writes.** The
 specification lane has been asked to put it to him as its own decision.
 
+### X-7 - the staging rule is aimed at the wrong operation, and a measured change removes the hazard
+
+**to** code · **status** open · **raised** 2026-09-07 · **source** [report](2026-09-07-the-shared-index-race.md), and the code lane reporting it against this lane's `8f687d5`
+
+**Where.** `CLAUDE.md:129`, the *stage by name* bullet. The event: `8f687d5` is this lane's commit
+and carries 21 lines of `crates/outbox.md`, outside its column and unmentioned in its message -
+verified here with `git show --stat`, not taken from the report.
+
+**What.** The rule's remedy cannot prevent the failure the rule describes. This lane **did** stage by
+name and the failure happened anyway, because staging by name bounds what you add and the hazard is
+what somebody else added between your `git add` and your `git commit`. The code lane checked for the
+lock first, which does not help either - the window is after the check. **It is a
+time-of-check-to-time-of-use race on shared mutable state**, and that is why care does not close it.
+
+**Why it costs something.** It has now fired twice - twenty-six lines the first time, twenty-one
+this time - and both times the content was correct and the *message* was lost, which is the part
+no reader can reconstruct. It also puts a lane's work in a file outside its column, which is the
+one invariant the perspectives rest on.
+
+**What removes it, measured rather than argued.** `git commit -m ... -- <paths>` implies `--only` and
+builds from a temporary index. Three runs in a throwaway repository, re-runnable and written up:
+the current pattern swept the other lane's file in; the path-limited form committed only mine and
+**left their staged work staged and uncommitted**, ready for their own commit. **And the row this
+lane expected to fail did not**: with a `pre-commit` hook that regenerates a derived file and
+`git add`s it - which is what `hooks/pre-commit` does with `pending.md` at line 96 - the derived file
+still landed in the commit. So the objection that a temporary index would break `pending.md` does not
+hold.
+
+**Three things not settled, and they are the gap between a measurement and a change that is ready**:
+the derived file is left `MM` afterwards and that residue is unresolved; `hooks/pre-push` and the
+padding path were not tested; and the lock collision was not forced to confirm it fails loudly rather
+than wrongly. **None of it is this lane's to build** - commits and hooks are production support.
+
+**Whether.** Worth doing now, and it is small. **Half of it is not yours**: `CLAUDE.md:129` says the
+remedy is staging by name, and if the mechanism changes that sentence is wrong and is the
+specification lane's to fix. This item is the mechanism only. **Declining it is reasonable** if the
+residue turns out to cost more than the hazard - twice in a fortnight, with the content intact both
+times, is a real frequency and a small blast radius.
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

@@ -60,6 +60,11 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [The staging rule cannot prevent the thing it describes](2026-09-07-the-shared-index-race.md)
+  - 2026-09-07. Carries `X-7`. Staging by name bounds what you add and the hazard is what someone
+    else added; a path-limited commit removes it, and the hook that regenerates `pending.md`
+    survives the change - measured, not argued.
+
 - [The cold-instance study, designed and not run](2026-09-07-the-cold-instance-study.md)
   - 2026-09-07. Prepares `X-5`. Four of the seven cases are runnable against a cold instance and
     three are not; the cheap design measures findability rather than finding; the predictions are

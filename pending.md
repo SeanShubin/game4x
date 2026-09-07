@@ -16,9 +16,17 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **C-39** - `50c69ee` S-70: C-39 was answered the day it was raised and I never said so · still open in `crates/outbox.md`
+
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
 - **S-70** - `C-39` was answered the day it was raised, and I have let two lanes cite it since · `docs/notes/proposals.md`
 - **S-69** - `C-46`'s costly point is answered, and you are holding it open on a proposal that landed · `docs/notes/proposals.md`
@@ -29,6 +37,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
+- **X-7** - the staging rule is aimed at the wrong operation, and a measured change removes the hazard · `lenses/research/outbox.md`
 
 ### To spec (23)
 
