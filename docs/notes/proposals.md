@@ -60,8 +60,80 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** Every proposal filed today has been promoted, and no choice is waiting on
-you. Questions live in [questions.md](questions.md), which is also empty.
+**Two, and both came out of your reading of the expected data rather than out of a
+review.** They are independent of each other.
+
+### P-308 - Two Values cells describe what a trait admits instead of naming it
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** rows -
+**asks** approval - **into** `releases/first-release.md` -> Traits, and one sentence above the table
+
+**You asked what values `phase` can have and the release could not tell you.** I read
+`crates/game-model/src/game.rs` to answer, which is the release failing at the one thing it is for.
+
+**Two rows change.** The rule above the table, first, then the rows.
+
+> Where a trait admits a closed set of values, its **Values** cell names them, or says where they
+> are listed.
+
+| Trait      | Of                           | Values         | Stored or derived |
+| ---------- | ---------------------------- | -------------- | ----------------- |
+| **houses** | a thing that contains things | yes or no      | stored            |
+| **phase**  | the game                     | design or play | stored            |
+
+**`phase` is the live one.** `design` and `play` are the two variants of `Phase` in
+`game-model`, and `play` is printed in `scenario/expected/play.4x`. Under `P-284` a word that is not
+a kind, a trait or a trait value may not appear - so `play` is a forbidden word today purely because
+this cell never names it. That is the eighteenth, and it is `Q-57` from the quality lens and `C-37`
+from the code lane.
+
+**`houses` is the same shape and is not urgent.** *Whether people live in it* states the question
+rather than the answers. Its three siblings - `ready`, `surplus`, `unpaid` - all say *yes or no*, and
+it is used as a requirement at line 237 exactly as they are.
+
+**`control` was examined and is deliberately not changed**, which is where the code lane's reading
+and mine part. Its cell reads *held by a player, or unclaimed*, and a player is a reference rather
+than a member of a closed set - there is no table of players to point at. So it does not fail the
+rule above, which is scoped to closed sets on purpose. It is also **not printed**: `dump.rs` records
+that you chose to drop `control` rather than print it, so nothing about it is live.
+
+**Two counts, both against a named population.** Nineteen rows in *Traits*: six name their values -
+`ready`, `surplus`, `unpaid` literally, and `kind`, `resource`, `biome` by pointing at a table - ten
+are numbers or free text, and **three describe.** Of those three, two change here and `control` is
+the one argued above. Six plus ten plus three is nineteen; I read every row rather than grepping,
+because the code lane's first classifier scored `phase` as naming its values on the strength of the
+word *or*.
+
+### P-309 - The phase gate is two-way and the specification states one way
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** text -
+**asks** approval - **into** `spec/console.md` -> Phases, after the `start` bullet
+
+**A correction first, because I told you the wrong thing.** I said nothing states which commands
+belong to which phase. `spec/console.md` does - *Available only before `start`* lists the six, and
+*Phases* already says a game has two and that `start` ends the first. **What is missing is smaller
+and is the other direction.**
+
+> - A command of one phase is refused in the other. The five design commands are refused once
+>   `start` has run, and every other command is refused before it.
+
+**What the code does, which is symmetric.** `Game::after` checks both ways before anything else
+happens and returns `WrongPhase` either way. Nothing is partially available: the partition is total,
+and `start` is the only crossing.
+
+**Why *available only before `start`* does not already say it.** It says where the six may run. It
+does not say that `land ark 1` is **refused** before `start` rather than merely unlisted - and that
+is the half a person deriving the dump by hand would get wrong, because the design half of the
+scenario is 63 commands long and every play command is unavailable throughout it.
+
+**The evidence exists and predates this proposal**, which is why this is a gap in the writing rather
+than in the build. `crates/game-console/tests/first_release.rs` asserts both directions at the
+boundary - `land ark 1` refused before `start`, `add ark orbit` refused after it - and
+`crates/game-model/src/game.rs` carries two more.
+
+**Five and not six.** The list under *Available only before `start`* has six entries, but `start`
+itself is the crossing rather than a design command, so the sentence says five. If you would rather
+it counted `start` among them, that is the word to change.
 
 ## Addressed to other perspectives
 
