@@ -61,7 +61,7 @@ end turn
 
 12 row(s)
 
-### territory-resource
+### deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -248,8 +248,9 @@ end turn
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 
 # Turn 2
 
@@ -304,7 +305,7 @@ end turn
 
 12 row(s)
 
-### territory-resource
+### deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -492,8 +493,9 @@ end turn
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 
 # Turn 3
 
@@ -548,7 +550,7 @@ end turn
 
 12 row(s)
 
-### territory-resource
+### deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -736,8 +738,9 @@ end turn
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 
 # Turn 4
 
@@ -802,7 +805,7 @@ end turn
 
 12 row(s)
 
-### territory-resource
+### deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -993,8 +996,9 @@ end turn
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 
 # Turn 5
 
@@ -1062,7 +1066,7 @@ end turn
 
 12 row(s)
 
-### territory-resource
+### deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1255,8 +1259,9 @@ end turn
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 
 # Turn 6
 
@@ -1324,7 +1329,7 @@ end turn
 
 12 row(s)
 
-### territory-resource
+### deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1518,8 +1523,9 @@ end turn
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 
 # Turn 7
 
@@ -1593,7 +1599,7 @@ end turn
 
 12 row(s)
 
-### territory-resource
+### deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -1788,8 +1794,9 @@ end turn
 | ark       | 0       |
 | pioneer   | 1       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 
 # Turn 8
 
@@ -1863,7 +1870,7 @@ end turn
 
 12 row(s)
 
-### territory-resource
+### deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -2060,8 +2067,9 @@ end turn
 | ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 
 # Turn 9
 
@@ -2125,7 +2133,7 @@ end turn
 
 12 row(s)
 
-### territory-resource
+### deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -2323,8 +2331,9 @@ end turn
 | ark       | 1       |
 | pioneer   | 0       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 
 # Turn 10
 
@@ -2384,7 +2393,7 @@ end turn
 
 12 row(s)
 
-### territory-resource
+### deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -2582,6 +2591,7 @@ end turn
 | ark       | 1       |
 | pioneer   | 0       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 

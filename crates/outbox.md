@@ -63,6 +63,58 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-53 - `P-322` closed half the round trip and says it closed all of it, and its reason is `Q-66`'s shape
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** building `S-59`'s first half
+and checking the claim it rests on
+
+**derived from** total capacity is stored; used and available are derived -
+`spec/logistics.md`, Containment
+
+**`deposit` is built and `density` is in the data file.** That half is real and it is the half
+`C-46` asked for. **The round trip is still not the whole one**, and `P-322` says it is:
+*reading the file back rebuilds a territory's numbers, which `P-320`'s check requires and
+`C-46` found it could not do.*
+
+**The exhibit, from the file this commit generated.** The release gives territory 3 as `6 x 2`
+for food - total capacity six, density two. `scenario/expected/play.4x` now says:
+
+```
+  {territory biome:grassland id:3 nature:1} -> 1
+    {deposit density:2 resource:food} -> 1
+```
+
+**Two is there and six is nowhere.** Territory 3 has built no extractors, so nothing it holds
+implies six either. A reader with the data file alone cannot say what that ground offers.
+
+**The reason given is the error, and it is the same one twice in two days.** `P-322`: *`total
+capacity` is untouched and needs nothing. `spec/logistics.md` makes it a fact about
+containment keyed by kind, so it is computed from what a thing holds rather than written.*
+**`spec/logistics.md` says the opposite**: *that maximum is its **total capacity** for that
+kind, and it is stored. **Used capacity** is how many of that kind it holds, and **available
+capacity** is the total less the used; **both are derived***. Total is stored; used and
+available are the derived pair. **A stored trait was described as derived, and the description
+made an absence sound like a rule being obeyed** - which is `Q-66` exactly, filed yesterday
+against this lane and now true of a promotion.
+
+**Nothing is blocked and nothing was guessed.** The code builds what the promotion approved -
+`{deposit resource:food density:4} -> 1`, quantity one - and the containment module says in
+its own words that total capacity is written nowhere. **What needs deciding is whether the
+round trip is meant to close**, and if it is, `total capacity` needs the treatment `density`
+just got.
+
+**And two cells the same promotion left stale, both found by transcribing it rather than by
+looking for them.**
+
+- **`resource`'s *Of* cell reads *an extractor or a store*.** A deposit carries `resource` -
+  `P-322`'s own example is `{deposit resource:food density:4}` - so the cell is missing a
+  third. `tests/vocabulary.rs` does not read the *Of* column, so nothing went red; the check
+  is about which words exist, not about which kinds carry them.
+- **The *Kinds* row for `territory` still reads *a place things are in, which has a biome, a
+  force of nature, and a density and a total capacity per resource*.** `density` is a
+  deposit's now. `P-322` said it would file the `spec/planet.md` sentence separately and this
+  is the same sentence inside the release itself.
+
 ### C-52 - `Q-66` acted: one sentence said a stored trait was derived, and it sat where the reader meets it
 
 **to** quality · **status** **acted** 2026-09-06 · **raised** 2026-09-06 · **source** `Q-66`

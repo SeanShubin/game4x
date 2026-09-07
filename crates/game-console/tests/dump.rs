@@ -519,8 +519,8 @@ fn every_kind_is_named_and_only_two_namings_depend_on_the_scenario() {
 
     assert_eq!(
         Kind::ALL.len(),
-        13,
-        "thirteen kinds: twelve after `P-234` collapsed the extractors, and `store` from `P-260`; the model has {}",
+        14,
+        "fourteen kinds: `store` from `P-260` and `deposit` from `P-322`; the model has {}",
         Kind::ALL.len()
     );
 

@@ -50,6 +50,7 @@ pub enum Kind {
     Labor,
     Territory,
     Orbit,
+    Deposit,
 }
 
 impl Kind {
@@ -68,6 +69,7 @@ impl Kind {
             Kind::Labor => "labor",
             Kind::Territory => "territory",
             Kind::Orbit => "orbit",
+            Kind::Deposit => "deposit",
         }
     }
 
@@ -89,6 +91,7 @@ impl Kind {
                 "and a density and a total capacity per resource"
             ),
             Kind::Orbit => "a place above one territory, which holds units and nothing else",
+            Kind::Deposit => "what a territory's ground offers of one resource, and how richly",
         }
     }
 
@@ -119,13 +122,18 @@ impl Kind {
             Kind::Food => "the things in it that hold it, and it keeps for one turn",
             Kind::Metal => "the things in it that hold it",
             Kind::Energy => "the things in it that hold it",
-            Kind::Territory | Kind::Orbit => return None,
+            // **`deposit` is bounded by nothing the release states.** *What bounds a kind
+            // in a territory* has eleven rows and none of them is a deposit - it is what the
+            // ground *is* rather than something built on it, so there is no capacity for it.
+            // The two places are `None` for the same reason: the table is about things in a
+            // territory.
+            Kind::Territory | Kind::Orbit | Kind::Deposit => return None,
         })
     }
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 13] = [
+pub const KINDS: [Kind; 14] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -139,6 +147,7 @@ pub const KINDS: [Kind; 13] = [
     Kind::Labor,
     Kind::Territory,
     Kind::Orbit,
+    Kind::Deposit,
 ];
 
 /// In the order the bounds table lists them, which is not the Kinds order.
@@ -336,7 +345,7 @@ pub const TRAITS: [TraitRow; 18] = [
     },
     TraitRow {
         name: "density",
-        of: "a territory, per resource",
+        of: "a deposit",
         values: "a number",
         held: Held::Stored,
     },

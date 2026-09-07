@@ -118,8 +118,18 @@ pub fn tables(game: &Game) -> Vec<Table> {
     // `P-206` is what makes the split honest rather than invented: three extractor kinds
     // means the capacity is per kind, so *how many the ground has room for*, *what each
     // yields* and *how many are built* are each a fact the release already states.
+    // **`P-322` gave this table's rows a kind, so the table takes its name.** It was
+    // `territory-resource`, which named a relation rather than a thing - and `C-37` listed
+    // that word among the nineteen the data file used and the release did not declare. A
+    // deposit is *what a territory's ground offers of one resource, and how richly*, which
+    // is `capacity` and `density`; `built` is beside them because a reader comparing what
+    // the ground offers with what stands on it should not have to join two tables.
+    //
+    // **`built` is derived and stays**, because this is the presentation. The data file
+    // carries `{deposit resource:food density:4} -> 1` and nothing else, since `capacity` is
+    // a `total capacity` and `built` is a used one - `C-53`.
     let mut node = Table::new(
-        "territory-resource",
+        "deposit",
         &["territory", "resource", "capacity", "density", "built"],
     );
     let mut store = Table::new("store", &["territory", "resource", "amount"]);
@@ -275,6 +285,25 @@ pub fn tables(game: &Game) -> Vec<Table> {
         kinds.push(vec![kind.name().to_string(), count.to_string()]);
     }
     kinds.push(vec!["territory".into(), game.territories.len().to_string()]);
+    // **A deposit per resource a territory's ground offers**, which is what the `deposit`
+    // table above lists one row of. Counted the same way every other kind here is counted, so
+    // adding the kind added no case - `spec/invariants.md`.
+    kinds.push(vec![
+        "deposit".into(),
+        game.territories
+            .iter()
+            .map(|place| {
+                Resource::ALL
+                    .into_iter()
+                    .filter(|resource| {
+                        let offered = place.deposit(*resource);
+                        offered.capacity > 0 || offered.density > 0
+                    })
+                    .count() as u32
+            })
+            .sum::<u32>()
+            .to_string(),
+    ]);
 
     vec![
         summary, territory, node, store, garrison, extractor, structure, labor, unit, kinds,

@@ -21,6 +21,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-29** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-26** - `d1d0e3e` S-26: P-216 checked, turn out of the entity view, and the contradiction that stops P-212 · still open in `docs/notes/proposals.md`
+- **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 
@@ -41,8 +42,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
-### To spec (22)
+### To spec (23)
 
+- **C-53** - `P-322` closed half the round trip and says it closed all of it, and its reason is `Q-66`'s shape · `crates/outbox.md`
 - **C-51** - `Thing::children` is written by nothing, and two rules in this repository disagree about what to do with an unwritten field · `crates/outbox.md`
 - **C-50** - `S-47`, `S-48` and `S-54` are built, and the items are yours to close · `crates/outbox.md`
 - **C-49** - `S-30` needs a second copy of your data before it can stop having one, and the order is yours · `crates/outbox.md`

@@ -30,7 +30,7 @@ is in it, because the names are what this is for.
 
 12 row(s)
 
-## territory-resource
+## deposit
 
 | territory | resource | capacity | density | built |
 | --------- | -------- | -------- | ------- | ----- |
@@ -228,6 +228,7 @@ is in it, because the names are what this is for.
 | ark       | 1       |
 | pioneer   | 0       |
 | territory | 12      |
+| deposit   | 34      |
 
-11 row(s)
+12 row(s)
 

@@ -22,18 +22,18 @@
 //! So the tree is built here, from the state itself, and both the data file and the report
 //! render *it*. Neither renders the other, and neither can quietly rename the other's words.
 //!
-//! # What this does not carry, and it is a gap rather than a simplification
+//! # Density arrived, and total capacity did not
 //!
-//! A territory's **`density`** is a stored trait *per resource* and its **`total capacity`**
-//! is a stored trait *per kind* - so a territory has three of the first and several of the
-//! second. **A description is a flat map from a trait name to one value and cannot hold
-//! three densities**, and no rule says how a repeated trait is written. Total capacity has a
-//! home regardless, because `spec/logistics.md` makes it a fact about containment keyed by
-//! kind - which is [`Capacity`] below. Density has none.
+//! **`C-46` reported both as homeless and `P-322` housed one of them.** A description is a
+//! flat map from a trait name to one value, and a territory had a `density` per resource and
+//! a `total capacity` per kind - so neither could be a trait of a territory *and* be written.
 //!
-//! **The assumption proceeded under**: neither is written into the data file, so what the
-//! file states is what things contain. The markdown dump keeps showing both, being a
-//! presentation and free to. Filed as `C-46`.
+//! **`density` is a trait of a `deposit` now**, and a deposit is a thing, so a territory
+//! contains `{deposit resource:food density:4} -> 1` and the number is in the file.
+//!
+//! **`total capacity` is still not**, so the round trip is still not the whole one. It is
+//! [`Capacity`] below - computed, shown, and written nowhere. Territory 3 offers six food
+//! extractors and has built none, so nothing in its data file says six. `C-53`.
 
 use std::collections::BTreeMap;
 
@@ -278,6 +278,7 @@ pub fn trait_name(name: Trait) -> &'static str {
         Trait::Multiplier => "multiplier",
         Trait::Manned => "manned",
         Trait::Ready => "ready",
+        Trait::Density => "density",
     }
 }
 
@@ -355,6 +356,24 @@ pub fn tree(game: &Game) -> Entry {
             .iter()
             .map(|t| Entry::leaf(describe(t)))
             .collect();
+        // **`P-322`: a deposit is a thing, so a territory contains one per resource its
+        // ground offers.** `{deposit resource:food density:4} -> 1`, which is where `density`
+        // lives now that it is a trait of a deposit rather than of a territory.
+        //
+        // **Only where the ground offers something.** A resource with no deposit is a
+        // territory that has none of it, and an entry is never zero - `spec/console.md`. The
+        // release says territory 6 has no metal, and the file says so by not mentioning it.
+        for resource in Resource::ALL {
+            let offered = place.deposit(resource);
+            if offered.capacity == 0 && offered.density == 0 {
+                continue;
+            }
+            held.push(Entry::leaf(
+                Description::of(Kind::Deposit)
+                    .with("resource", resource.name())
+                    .with("density", offered.density),
+            ));
+        }
         held.extend(
             game.units_on(place.id)
                 .into_iter()

@@ -30,7 +30,7 @@
 
 use std::collections::BTreeMap;
 
-/// The twelve kinds `releases/first-release.md` declares.
+/// The kinds `releases/first-release.md` declares.
 ///
 /// **The list is here and every other kind-shaped decision is not.** What a kind costs, what
 /// it crosses and what it is bounded by are data the game loads, and `S-21`'s second half is
@@ -54,6 +54,17 @@ pub enum Kind {
     Labor,
     Territory,
     Orbit,
+    /// **`P-322`: what a territory's ground offers of one resource, and how richly.**
+    ///
+    /// It is a kind because `density` had nowhere else to be written. A description is a flat
+    /// map from a trait name to one value and a territory has a density per resource, so
+    /// `density` could not be a trait of a territory *and* be written down - `C-46`. As a
+    /// thing it can: a territory contains `{deposit resource:food density:4} -> 1`.
+    ///
+    /// **It is not `Node` coming back.** `S-48` deleted a deposit *per unit of capacity* -
+    /// `capacity` copies of one fact, since no territory-resource pair has two densities.
+    /// This is one per resource, which is the shape `Territory::deposits` already had.
+    Deposit,
 }
 
 impl Kind {
@@ -72,11 +83,12 @@ impl Kind {
             Kind::Labor => "labor",
             Kind::Territory => "territory",
             Kind::Orbit => "orbit",
+            Kind::Deposit => "deposit",
         }
     }
 
     /// Every kind, so that a reader can name one that is nowhere.
-    pub const ALL: [Kind; 13] = [
+    pub const ALL: [Kind; 14] = [
         Kind::Citizen,
         Kind::Garrison,
         Kind::Extractor,
@@ -90,6 +102,7 @@ impl Kind {
         Kind::Labor,
         Kind::Territory,
         Kind::Orbit,
+        Kind::Deposit,
     ];
 
     /// The kind a unit of this resource is.
@@ -161,6 +174,12 @@ pub enum Trait {
     Multiplier,
     /// Citizens working here this turn.
     Manned,
+    /// How much one extractor working this deposit yields.
+    ///
+    /// **`P-322` moved it here from the territory**, and it is read by
+    /// `containment::describe` - a trait arrives in the commit that makes a rule read it,
+    /// which is what the note above this enum is about.
+    Density,
     /// Ready, as a number. Absent means ready, and zero means not.
     ///
     /// **`P-233` renamed the trait and `P-235` says why it is a number.** The release used

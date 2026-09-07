@@ -134,13 +134,14 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
 
     // Over every case, and how many cases there were. Twelve kinds and six biomes; a run
     // that compared two empty sets twice would satisfy everything above it.
-    // Thirteen since `P-260` added `store` - one kind with a `resource` trait rather than
-    // three differing in one word. This count is what caught the kind arriving: the release
-    // declared it, the model did not have it, and the gate was red for every lane until the
-    // model followed.
+    // Fourteen since `P-322` added `deposit`, which is where `density` went when a
+    // description turned out to be unable to hold three of them - `C-46`. This count is what
+    // catches a kind arriving: the release declares it, the model does not have it, and the
+    // gate is red for every lane until the model follows. It did that twice now, for `store`
+    // and for `deposit`.
     assert_eq!(
-        compared, 19,
-        "thirteen kinds and six biomes were compared when this was written; {compared} were"
+        compared, 20,
+        "fourteen kinds and six biomes were compared when this was written; {compared} were"
     );
 }
 
@@ -271,10 +272,14 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
             of_a_territory.push(name.to_string());
         }
     }
+    // **Four since `P-322`, and the one that left is the point of that promotion.**
+    // `density` read *a territory, per resource* and now reads *a deposit*, because a
+    // description cannot hold three densities and a thing can carry one. So this count
+    // going down is the rule moving rather than a trait being lost.
     assert_eq!(
         of_a_territory.len(),
-        5,
-        "five traits are of a territory; the release has {} ({of_a_territory:?})",
+        4,
+        "four traits are of a territory; the release has {} ({of_a_territory:?})",
         of_a_territory.len()
     );
 

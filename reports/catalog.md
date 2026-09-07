@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-13 kinds, 4 families, 18 traits, 16 recipes.
+14 kinds, 4 families, 18 traits, 16 recipes.
 
 ## citizen
 
@@ -227,7 +227,7 @@ a place things are in, which has a biome, a force of nature, and a density and a
 
 **In families** thing, place
 
-**Traits of it** `kind` (one of the kinds), `density` (a number), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number)
+**Traits of it** `kind` (one of the kinds), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number)
 
 **In recipes**
 
@@ -249,4 +249,14 @@ a place above one territory, which holds units and nothing else.
 - `deploy ark` consumes 1 (as the place holding ark), in the orbit above `$where`
 - `move` requires 1 (as a place), in `$from`
 - `move` requires 1 (as a place), joined to `$from` by an edge the unit crosses, in `$to`
+
+## deposit
+
+what a territory's ground offers of one resource, and how richly.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the kinds), `density` (a number)
+
+**In recipes** none name it.
 

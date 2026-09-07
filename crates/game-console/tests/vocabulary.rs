@@ -215,8 +215,8 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // that is the direction guarded here.
     assert_eq!(
         kinds.len(),
-        13,
-        "thirteen kinds; the release lists {kinds:?}"
+        14,
+        "fourteen kinds; the release lists {kinds:?}"
     );
     assert_eq!(
         families.len(),
