@@ -60,170 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**One**, and it is the grouping you asked for, derived rather than declared.
-
-### P-333 - Which kinds behave alike, derived rather than declared
-
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `releases/first-release.md` -> Capabilities, as `R-8`
-
-**Your words: prose does not prove what the code does, and an enum of behaviours would at least let
-you tell which things behave the same and then look the code up.** This is that, with one change -
-**derived instead of declared**, because a declared enum is a second copy and this repository has
-spent a week finding second copies that drifted.
-
-> ### R-8 - I can see which kinds behave alike
->
-> **to** code - **status** open
->
-> - **In** - `docs/process.md`, *I insist that the AI make its work verifiable to a human*, applied
->   to a kind's behaviour rather than to a scenario's outcome
-> - **Vetted when** - `reports/catalog.md` gives each kind a **signature**: the traits it carries and
->   every *(recipe, role)* pair that names it. **Kinds with the same signature are shown together**,
->   and the signature is computed from the release's tables rather than written by anyone. I can scan
->   the groups, see that two kinds behave alike, and have a name to grep for when I want the detail
-
-**Why a signature and not an enum.** An enum is a fact somebody maintains; a signature is a fact
-about the tables. **If `store` and `yard` stop behaving alike, the grouping changes without anyone
-remembering to change it** - which is the one property that would have prevented `houses`, where a
-requirement sat in the recipe table for weeks with no kind able to satisfy it.
-
-**What it does not claim.** A signature says two kinds are treated alike **by the rules as written**.
-It cannot say the code treats them alike - only the code says that, and you said an intermediate is
-acceptable so long as it is honest about being one. **The signature is a place to start reading, not
-a proof.**
-
-**Both halves already exist as data.** `catalog.md` already prints *Traits of it* and *In recipes*
-per kind; what it does not do is treat the pair as a key and group by it.
-
-### P-335 - The reports are browsable without scripting
-
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `releases/first-release.md` -> Capabilities, as `R-9`
-
-**Taken from `vote/generated/code-structure`, which solves this already**, and narrowed to what a
-reader who arrives to **vet** needs rather than one who arrives with a question.
-
-> ### R-9 - I can browse the reports without a script running
->
-> **to** code - **status** open
->
-> - **In** - `docs/process.md`, *presentations are generated from data*, and *I insist that the AI
->   make its work verifiable to a human*
-> - **Vetted when** - every reference in a report is a link I can follow to the thing it names;
->   every generated view has a **diffable sibling** beside it, as `graph.html` has `graph.txt`; and
->   **no page needs JavaScript to be read** - a view that filters is a page that was generated, so
->   the filter is a URL rather than a click
-
-**Why no script, when I was going to propose a hundred lines of one.** `code-structure` replaces
-sorting and faceting with **more pages**, and the pages are better: inspectable in `view-source`,
-diffable, linkable, immune to a script breaking, and a filtered view is something you can paste into
-a proposal. **A facet is a URL, not a click.**
-
-**Why the links are free here rather than clever.** `spec/console.md` says a field that refers to a
-thing is named for that thing's kind - so the generator **knows** `territory:1` is a reference and
-does not have to guess. `P-323` bought this without either of us noticing it would.
-
-**What I am deliberately not copying.** `code-structure` has 133 pages, which suits arriving with a
-question. **You arrive at these to vet**, and needing to know you have seen everything is the
-opposite motion - so the report count stays small and a filtered page is generated only where a
-population is genuinely unreadable. Today that is `turns.html` at a hundred tables and nothing else.
-
-**On graphviz, in your words: fine if we need it, and not if we can do better ourselves.** I think we
-need it **once** and should not make a habit of it. `code-structure`'s subject is a graph;
-almost nothing here is. **Containment is a tree and `<details>` beats a drawing for a tree** -
-collapsible, searchable, diffable. Recipes are a table.
-
-**The exception is adjacency**, which is the one thing in the game that is genuinely graph-shaped and
-which you currently cannot see anywhere. **It is downstream of `P-334`**: if adjacency stays out of
-the data file, a drawing is the only way it would ever be visible, which argues for putting it in the
-file rather than for drawing it. **So this capability does not ask for a drawing**, and if `P-334`
-goes the other way I will file one then.
-
-### P-334 - An adjacency is a thing, held by the game rather than by a territory
-
-**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
-own - **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Kinds, then Traits
-
-**You rejected the narrowing** - *the commands creating the adjacencies is not enough* - so the round
-trip closes rather than being scoped down. **And you said where it goes**: not inside a territory,
-because adjacency operates at a different level.
-
-**That is what `spec/logistics.md` already says**, and what `P-314` corrected the release to: *a thing
-says which of the things in it are next to which; **that is a fact about the container** rather than
-about its contents.* So it is held by the game, which is what holds the territories.
-
-**A description is a flat map, and an adjacency is a pair - which is the problem `density` had.** It
-was solved by making a deposit a thing, and the same answer works here.
-
-One row into *Kinds*:
-
-| Kind          | What it is                                                       |
-| ------------- | ---------------------------------------------------------------- |
-| **adjacency** | two places that share an edge, held by the thing that holds them |
-
-Then *Traits*, where `adjacency` stops being a trait and becomes two:
-
-| Trait    | Of           | Values  | Stored or derived |
-| -------- | ------------ | ------- | ----------------- |
-| **from** | an adjacency | a place | stored            |
-| **to**   | an adjacency | a place | stored            |
-
-**So the game contains `{adjacency from:1 to:2} -> 1`**, beside its territories rather than inside
-them - which is the shape you drew: territories in one group and adjacencies in another.
-
-**Written once, not twice.** Adjacency is symmetric - the model says so in its own comment - so
-`{adjacency from:1 to:2}` and `{adjacency from:2 to:1}` are one fact. **The lower id is `from`**, so
-the same state is the same bytes, which is what `spec/console.md` requires of entries anyway. Twelve
-territories at five neighbours each is **thirty entries**, not sixty.
-
-**What this does not settle, and I am not folding it in.** The release's old wording said *and by
-which kind of edge*; **the model carries no edge kind** and only one kind is stored today -
-territory to territory. `spec/orbit.md` derives the orbital edges from these, so the second and third
-kinds are computed rather than written. **If you want the kind named when a second stored one
-arrives, that is a later row** and this proposal drops the phrase rather than inventing a value for
-it.
-
-**What follows for the code lane, filed when this lands**: `prototypes/kinds` mirrors both tables,
-`Game.adjacency` is already the data so nothing in the model changes, and the round trip gains
-thirty entries it can check.
-
-### P-332 - The world's six are shown working together, because that is how they work
-
-**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
-own - **shape** text - **asks** approval - **into** `releases/first-release.md` -> Capabilities,
-`R-7`, replacing the *Vetted when* line
-
-**You chose one example per turn ending.** `R-7` asks for *the command that fires it*, and the
-world's six all fire on `{end-turn}` - so the line that asks for a command per recipe is the line
-that changes.
-
-> - **Vetted when** - `reports/recipes.md` shows, beside each recipe's rule, a state before it fires,
->   the command that fires it, and the state after - **in the same notation as the scenario's
->   expected data**, holding only what that recipe touches, and generated by running it. I can derive
->   the after from the rule and the before by hand, and a recipe whose quantity is an expression
->   shows one example for each way the expression turns out. **The world's recipes are shown once,
->   together, on `{end-turn}`**, because no command fires one of them alone and four of them cannot
->   act alone at all
-
-**Why *cannot* rather than *do not*.** `grow` never fires without `upkeep` having run first - a
-citizen has upkeep, so there is no state with citizens and surplus food where `upkeep` does nothing.
-`perish` is that coupling from the other side, and `age` and `spoil` are two halves of one rule about
-food. **Six separate examples would have to invent states the game cannot reach.**
-
-**What the one example gives you that six would not.** The order is `spec/turn.md`'s, and the
-couplings are the thing that makes a turn's end hard to derive by hand. **An example showing them
-resolve together is closer to what you would actually compute** than six that pretend they are
-separable.
-
-**What it gives up, plainly.** *Which recipe did which part* is no longer shown per recipe. The rules
-are still listed per recipe above the shared example, so the attribution is derivable - **but you
-would be deriving it rather than reading it.**
-
-**Ten player recipes keep their own examples** and are unaffected. The six currently say, each under
-its own rule, *No worked example: this is the world's, and the world's six all fire on `{end-turn}`*
-- and **those notices go when the shared example arrives**, which is the check the promoting commit
-should run.
+**Nothing.** [decisions.md](decisions.md) is empty too.
 
 ## Addressed to other perspectives
 
@@ -2335,6 +2172,10 @@ work the release exists to order.
 | P-329, maintaining my executive control is what decides what the specification instance owns                                 | `docs/process.md` -> Specification Instance                                                                                                  | 2026-09-06 |
 | P-330, `R-7`: a worked example beside every recipe, generated by running it                                                  | `releases/first-release.md` -> Capabilities                                                                                                  | 2026-09-07 |
 | P-331, a deposit carries the capacity as well as the density, so the round trip closes                                       | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-07 |
+| P-332, the world's six recipes are shown together on `{end-turn}`                                                            | `releases/first-release.md` -> Capabilities, `R-7`                                                                                           | 2026-09-07 |
+| P-333, `R-8`: which kinds behave alike, derived from the tables rather than declared                                         | `releases/first-release.md` -> Capabilities                                                                                                  | 2026-09-07 |
+| P-334, an adjacency is a thing, held by the game rather than by a territory                                                  | `releases/first-release.md` -> Kinds, Traits                                                                                                 | 2026-09-07 |
+| P-335, `R-9`: the reports are browsable without a script running                                                             | `releases/first-release.md` -> Capabilities                                                                                                  | 2026-09-07 |
 
 ## Rejected
 

@@ -68,6 +68,7 @@ Every territory has total capacity for at least one food extractor.
 | **territory** | a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource |
 | **orbit**     | a place above one territory, which holds units and nothing else                                              |
 | **deposit**   | what a territory's ground offers of one resource, and how richly                                             |
+| **adjacency** | two places that share an edge, held by the thing that holds them                                             |
 
 ## Families
 
@@ -108,26 +109,27 @@ because a plausible subset passes it.
 Where a trait admits a closed set of values, its **Values** cell names them, or says where they
 are listed.
 
-| Trait              | Of                                      | Values                                                                    | Stored or derived                                |
-| ------------------ | --------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------ |
-| **kind**           | every thing                             | one of the kinds                                                          | stored                                           |
-| **id**             | a thing that must be named individually | a number, unique among things of its kind                                 | stored                                           |
-| **ready**          | whatever readies                        | yes or no                                                                 | stored                                           |
-| **resource**       | an extractor or a store                 | one of the resources                                                      | stored                                           |
-| **force**          | citizen, garrison, ark, pioneer         | a number                                                                  | stored                                           |
-| **fuel**           | a unit                                  | how much energy its tank holds                                            | stored                                           |
-| **upkeep**         | a thing with upkeep                     | food per turn                                                             | stored                                           |
-| **metal in it**    | whatever is built                       | a number                                                                  | derived: its binding plus the metal in its parts |
-| **density**        | a deposit                               | a number                                                                  | stored                                           |
-| **total capacity** | a deposit                               | a number                                                                  | stored                                           |
-| **control**        | a territory                             | held by a player, or unclaimed                                            | derived: a citizen of that player is there       |
-| **biome**          | a territory                             | one of the biomes                                                         | stored                                           |
-| **nature**         | a territory                             | a number                                                                  | stored                                           |
-| **adjacency**      | a thing that holds places               | which of the places it holds are next to which, and by which kind of edge | stored                                           |
-| **keeps**          | food                                    | the number of turns it will last                                          | stored                                           |
-| **surplus**        | food                                    | yes or no                                                                 | derived: left after every upkeep was paid        |
-| **unpaid**         | a thing with upkeep                     | yes or no                                                                 | derived: its upkeep was not met                  |
-| **phase**          | the game                                | design or play                                                            | stored                                           |
+| Trait              | Of                                      | Values                                    | Stored or derived                                |
+| ------------------ | --------------------------------------- | ----------------------------------------- | ------------------------------------------------ |
+| **kind**           | every thing                             | one of the kinds                          | stored                                           |
+| **id**             | a thing that must be named individually | a number, unique among things of its kind | stored                                           |
+| **ready**          | whatever readies                        | yes or no                                 | stored                                           |
+| **resource**       | an extractor or a store                 | one of the resources                      | stored                                           |
+| **force**          | citizen, garrison, ark, pioneer         | a number                                  | stored                                           |
+| **fuel**           | a unit                                  | how much energy its tank holds            | stored                                           |
+| **upkeep**         | a thing with upkeep                     | food per turn                             | stored                                           |
+| **metal in it**    | whatever is built                       | a number                                  | derived: its binding plus the metal in its parts |
+| **density**        | a deposit                               | a number                                  | stored                                           |
+| **total capacity** | a deposit                               | a number                                  | stored                                           |
+| **control**        | a territory                             | held by a player, or unclaimed            | derived: a citizen of that player is there       |
+| **biome**          | a territory                             | one of the biomes                         | stored                                           |
+| **nature**         | a territory                             | a number                                  | stored                                           |
+| **from**           | an adjacency                            | a place                                   | stored                                           |
+| **to**             | an adjacency                            | a place                                   | stored                                           |
+| **keeps**          | food                                    | the number of turns it will last          | stored                                           |
+| **surplus**        | food                                    | yes or no                                 | derived: left after every upkeep was paid        |
+| **unpaid**         | a thing with upkeep                     | yes or no                                 | derived: its upkeep was not met                  |
+| **phase**          | the game                                | design or play                            | stored                                           |
 
 Food is made with `keeps` 1. The force nature holds a territory with.
 
@@ -366,5 +368,30 @@ only one who can move them.
   the command that fires it, and the state after - **in the same notation as the scenario's
   expected data**, holding only what that recipe touches, and generated by running it. I can derive
   the after from the rule and the before by hand, and a recipe whose quantity is an expression
-  shows one example for each way the expression turns out
+  shows one example for each way the expression turns out. **The world's recipes are shown once,
+  together, on `{end-turn}`**, because no command fires one of them alone and four of them cannot
+  act alone at all
+
+
+### R-8 - I can see which kinds behave alike
+
+**to** code - **status** open
+
+- **In** - `docs/process.md`, *I insist that the AI make its work verifiable to a human*, applied
+  to a kind's behaviour rather than to a scenario's outcome
+- **Vetted when** - `reports/catalog.md` gives each kind a **signature**: the traits it carries and
+  every *(recipe, role)* pair that names it. **Kinds with the same signature are shown together**,
+  and the signature is computed from the release's tables rather than written by anyone. I can scan
+  the groups, see that two kinds behave alike, and have a name to grep for when I want the detail
+
+### R-9 - I can browse the reports without a script running
+
+**to** code - **status** open
+
+- **In** - `docs/process.md`, *presentations are generated from data*, and *I insist that the AI
+  make its work verifiable to a human*
+- **Vetted when** - every reference in a report is a link I can follow to the thing it names;
+  every generated view has a **diffable sibling** beside it, as `graph.html` has `graph.txt`; and
+  **no page needs JavaScript to be read** - a view that filters is a page that was generated, so
+  the filter is a URL rather than a click
 ## Open questions

@@ -8,10 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-333** - Which kinds behave alike, derived rather than declared · `docs/notes/proposals.md`
-- **P-335** - The reports are browsable without scripting · `docs/notes/proposals.md`
-- **P-334** - An adjacency is a thing, held by the game rather than by a territory · `docs/notes/proposals.md`
-- **P-332** - The world's six are shown working together, because that is how they work · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -19,7 +17,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-334** - `96b68b1` File P-334: adjacency is stored and appears in nothing he reads · still open in `docs/notes/proposals.md`
 - **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-26** - `d1d0e3e` S-26: P-216 checked, turn out of the entity view, and the contradiction that stops P-212 · still open in `docs/notes/proposals.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
@@ -30,7 +27,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (10)
 
 - **S-64** - Browsable reports, and the working model to copy rather than a description of one · `docs/notes/proposals.md`
 - **S-63** - The reports do not say which of the three views each one is · `docs/notes/proposals.md`
@@ -40,6 +37,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
+- **R-8** - I can see which kinds behave alike · `releases/first-release.md`
+- **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
 ### To spec (22)
 
@@ -78,12 +77,12 @@ it exists to ask.
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
+- `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-323, P-328
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313
-- `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
@@ -93,6 +92,7 @@ it exists to ask.
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
+- `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320
 - `spec/control.md` -> Winning - P-77, P-81, P-125
@@ -104,7 +104,6 @@ it exists to ask.
 - `docs/process.md` -> What this document has to be - P-302, P-303
 - `docs/process.md` -> Who writes what - P-271, P-316
 - `docs/process.md`, a new section - P-204, P-211
-- `releases/first-release.md` -> Kinds, Traits - P-192, P-322
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
