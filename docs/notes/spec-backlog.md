@@ -8,6 +8,32 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on the ark's sequence, and what the spec already had
+
+*Thematically, the ark shows up to the planet, scans it, figures out the blueprint for life,
+internally manufactures a seeder, secures a territory, then pioneers have to be manufactured along
+with their seeders after that, but they don't need to scan the planet, the ark already did that so
+the pioneers already have the blueprint.*
+
+**Most of this is already in `spec/`, which this lane should have checked before filing.**
+`spec/narrative.md` has the AI designing life suited to a particular planet and an Ark printing the
+founding population; `spec/unit-types.md` has a unit *taken apart into what a territory needs to
+sustain itself*, and both an Ark and a Pioneer taken apart **on arriving**.
+
+**Two claims filed an hour earlier were wrong because of it.** There is no loitering hole - arriving
+is being taken apart, so the food upkeep was enforcing a rule the spec states outright. And the two
+citizens do not teleport - the unit's own body is the materials, so `produce pioneer` and `found by
+land` are one object built and unbuilt rather than a gap.
+
+**What is new is the order**: scan, manufacture a seeder, secure a territory - three steps where the
+spec has one. **And what would make a seeder load-bearing is a second planet**, because a blueprint
+tuned to one environment is wrong on another and the seeder is the only place that difference can
+sit. With one planet a seeder is created with its pioneer and consumed with it, so its count is
+always 1 and it changes no decision.
+
+**Recorded in `P-339`**, which recommends taking the upkeep change now and deferring the seeder to
+whenever a second environment exists.
+
 ## Said 2026-09-07, on printers, seeders, and what crosses a border
 
 *Lets make both arks and pioneers take no food upkeep. For now, thematically, pioneers have the same
