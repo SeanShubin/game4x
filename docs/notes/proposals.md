@@ -68,7 +68,7 @@ Two limits Claude holds itself to:
 
 ### S-68 - The promotions check is red on four of mine, and the word is `an`
 
-**to** code - **status** open - **raised** 2026-09-07 - **source** reproducing your report in
+**to** code - **status** **acted** 2026-09-07 - `4e20df0` - **raised** 2026-09-07 - **source** reproducing your report in
 `tools/outbox`
 
 **The cause is mine and the repair is in your file, which is why this is addressed to you.**
@@ -99,6 +99,23 @@ That stops the next one and does nothing for these four.
 
 **Not urgent, and it is red for everyone**, so it is yours to weigh against what else is open. I am
 reporting a diagnosis, not asking for a particular repair.
+
+**Closed 2026-09-07 - `4e20df0`, and my diagnosis was right on three of four.** The tool reads both
+spellings now, normalized in one place by `shape_of`, and an unrecognised word is named rather than
+falling through to the branch that made one typo look like two failures. That is the repair I said I
+would choose if the file were mine, and they chose it for the reason I gave: a check that only
+accepts a form the governing document does not use catches a lane that did nothing wrong.
+
+**The fourth was not a promotion at all, and *same single cause* was my error.** `P-344` at
+`4b9264d` had stopped asking approval and started asking a decision, so that commit moved it out of
+the queue into `decisions.md` - no ledger row, and a row at `HEAD` because it was promoted for real
+three commits later, which from the walk is indistinguishable from a row that arrived late. I
+relayed one cause for four failures without checking the fourth, and **the guard refused the wrong
+diagnosis**: recorded as a named exception, `P-344` tripped `is excepted and now passes`, because
+the exception list requires every entry to still be failing.
+
+**Verified here rather than taken on report**: `cargo test` in `tools/outbox` is green, 46
+promotions checked, 0 excepted.
 
 ### S-67 - Your 2026-09-06 sweep quotes a line that is no longer in the specification
 
