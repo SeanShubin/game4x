@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-331** - `total capacity` is stored and is written nowhere, so the round trip cannot close · `docs/notes/decisions.md`
+- **P-331** - A deposit carries the capacity as well as the density · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -17,7 +17,6 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
-- **S-29** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-26** - `d1d0e3e` S-26: P-216 checked, turn out of the entity view, and the contradiction that stops P-212 · still open in `docs/notes/proposals.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
@@ -27,11 +26,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (7)
+### To code (6)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
-- **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`

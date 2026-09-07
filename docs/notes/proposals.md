@@ -60,7 +60,48 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+**One**, from [decisions.md](decisions.md) with its question answered.
+
+### P-331 - A deposit carries the capacity as well as the density
+
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
+own - **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Traits
+
+**You chose the deposit, and your reason retires the caveat I attached to it.** I said it was not the
+general case `spec/logistics.md` describes and that choosing it meant meeting the rule where the game
+stands. **You said it is the same thing nested one level lower**, and checking the release shows that
+is not a compromise - it is the whole of the case.
+
+| Trait              | Of        | Values   | Stored or derived |
+| ------------------ | --------- | -------- | ----------------- |
+| **total capacity** | a deposit | a number | stored            |
+
+**Every capacity in the game is one of three things and only one of them is stored per territory.**
+Read out of *What bounds a kind in a territory*, all eleven rows:
+
+- **A constant of the kind** - garrison 1, yard 1, ark 2, pioneer 2. **Not stored per territory**,
+  so it belongs in the catalog beside what a store holds, which is where `S-58` just put that one
+- **Derived from what is there** - a store from the extractors of its resource, labor from the
+  citizens, food, metal and energy from the things that hold them, citizens through upkeep
+- **Stored per territory** - **the extractor capacity, and nothing else.** *A capacity, from
+  Territory resources*, which is per resource
+
+**So there is no capacity your choice cannot hold.** The one stored per-territory capacity is keyed
+by resource already, and a deposit is the thing keyed by resource. **Nesting it one level lower loses
+nothing**, which is what you said and what the table confirms.
+
+**What a territory then contains** is `{deposit resource:food density:2 total-capacity:6} -> 1`, and
+**the round trip closes**: territory 3 is `6 x 2` in the release, and both numbers are in the file
+rather than one.
+
+**`total-capacity` is dashed** because `spec/console.md` says a name is one word and joins with
+dashes where it needs more - the same rule `P-328` applied to commands. **`C-25` dissolves with it**:
+it reported the dump printing `capacity` where the release declares `total capacity`, and the dashed
+form is the one name spelled the one way.
+
+**What this leaves for the code lane, filed when it lands** rather than promised here:
+`prototypes/kinds` mirrors *Traits* cell for cell, the deposit gains a second trait, and
+`scenario/expected/play.4x` regenerates with a number that has never been in it.
 
 ## Addressed to other perspectives
 
@@ -553,15 +594,10 @@ specification lane, rewritten because the previous version named work that is no
 
 **The order.**
 
-1. **`S-61`** - the check that a wait has outlived its reason. **Smallest, and it protects the
-   others**: four items of mine told you not to build things that had been unblocked for an hour,
-   and this is what would have said so. It carries the `waits on` field itself, so it has one row to
-   run over.
-2. **`S-29`** - input and expected are data files and the dumps are neither.
-3. **`S-26`** - the command language following the promotions. **Most of it is done**: the named
+1. **`S-26`** - the command language following the promotions. **Most of it is done**: the named
    form, the dashed names and `repeat` all landed and all seven `.4x` files are converted. What is
    left is whatever `C-56` turns out to need.
-4. **`S-30`** - the release's data tables have no data file to generate from. **Take it with your
+2. **`S-30`** - the release's data tables have no data file to generate from. **Take it with your
    own `C-49`**, which says it needs a second copy of the data before it can stop having one and
    that the order is Sean's - so read that before starting.
 
@@ -943,8 +979,10 @@ discovered when somebody edits a table by hand and nothing objects.
 
 ### S-29 - Input and expected are data files; the dumps are neither
 
-**to** code - **status** open - **raised** 2026-09-03 - **revised** 2026-09-04 - **source** Sean, on
+**to** code - **status** **acted** 2026-09-07 - `c37de2e` - **raised** 2026-09-03 - **revised** 2026-09-04 - **source** Sean, on
 what he should be able to read
+
+**Closed by this lane 2026-09-07, verified against git rather than from their report or from `C-49`.** `c37de2e`, 2026-09-04, seeded `scenario/expected/play.4x` and cut `first_release.rs` by 77 lines in the same change - which is what `S-34` asks: the same change that puts the first expectation in, not the first **reviewed** one. **`C-49` said this half was deliberately not done and was wrong**, having read a doc comment in `expected_state.rs` that had gone stale against the file it sits in. **What is left is Sean's review**, which is not work for a lane: the file still opens *NOT YET REVIEWED*, and it has changed shape twice since it was seeded - `S-47`'s map form and `P-322`'s deposits - so what waits for him is not what he would have read then.
 
 **Revised, and the second half of it changed.** The first version asked for the scenario's expected
 values to move into the committed markdown dumps. **Sean has since ruled that out** - the data that
