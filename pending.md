@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-320** - `P-311` contradicts `spec/console.md`, and most of the rest of it restates that file · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -17,7 +16,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-47** - `8219381` Record what S-47 will need looking at, and poison the thing the check reads · still open in `docs/notes/proposals.md`
+- **S-47** - `de9cc27` File C-45: the hold on S-47, and a trigger that may have dissolved · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 - **Q-64** - `39704b9` Q-64 into C-37, and a check made to match the claim in its own name · still open in `lenses/quality/outbox.md`
 
@@ -35,6 +34,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
+
+### To research (1)
+
+- **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
 ### To spec (14)
 

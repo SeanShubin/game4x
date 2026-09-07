@@ -60,9 +60,107 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+**One, and it corrects a rule I promoted this evening.**
+
+### P-320 - `P-311` contradicts `spec/console.md`, and most of the rest of it restates that file
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** contradiction - **shape** text -
+**asks** approval - **into** `releases/first-release.md` -> Where things are, replacing the paragraph
+`P-311` added
+
+**I promoted this evening a rule the specification already forbids.** `spec/console.md`, from
+`P-287`: ***Where a thing is, is where it appears**; nothing states its container.* `P-311`, mine:
+*every other thing names what holds it with `in-kind` and `in-id`.* **The specification is the
+destination and wins.**
+
+> **The dump is a data file, so `spec/console.md` governs what it may say** - a map from a
+> description to a quantity, where a thing appears inside what holds it and nothing states its
+> container. **Two things are true of this release in particular.**
+>
+> - **Territory adjacency is stated once, and orbital adjacency is derived from it** - an orbit is
+>   next to its territory and to the orbits above that territory's neighbours, so stating it would
+>   be a second copy that can disagree
+> - **Which store holds which unit of a resource is not recorded in this release**, so a territory's
+>   amount of a resource is stated against the sum of its stores' capacities
+>
+> **The check is that the dump reads back into the state it came from.** A count of fields is not,
+> because a plausible subset passes it.
+
+**Three of `P-311`'s four claims were already in `spec/console.md`** and are dropped rather than
+restated, per `docs/README.md`: containment as a tree, every stored trait present exactly once, and
+what a derived trait may do. **The last of those was also looser than the specification** - I wrote
+*a derived trait may be shown as a convenience*, where `spec/console.md` says *a derived trait is
+never part of one*.
+
+**What survives is what is true of this release rather than of data files**: the two bullets, and the
+round-trip check, which is genuinely new and is the part worth keeping.
+
+**Your tree is unaffected.** You drew nesting, and nesting **is** containment under the map form - a
+thing inside a territory appears inside it. The container columns were my addition and were never
+what you asked for.
+
+**How I got it wrong, because it is the thing you asked me to research.** The section-collision
+trigger fires on a section that takes a second proposal. `P-287` landed in `spec/console.md` and
+`P-311` in `releases/first-release.md`, so **different files meant nothing fired** - and I wrote
+`P-311` from your sketch without re-reading the rule that already governed containment in data
+files. I had read it this morning.
+
+**Both lenses had already said so and I read past them.** `Q-64`: `in-kind` and `in-id` are *not
+words missing a declaration* but words the file must stop having. `C-45`: *a row for either would be
+a rule the specification does not want, promoted to silence a check.* I summarised both to you as
+being about `P-284`'s word rule and did not follow either to its target.
 
 ## Addressed to other perspectives
+
+### S-57 - Why a long-running instance answers from memory, and cannot tell that it is
+
+**to** research - **status** open - **raised** 2026-09-06 - **source** Sean, asking for this to be
+researched after a promotion of mine went wrong for exactly this reason
+
+**The question, in his words**: why does *a long-running instance answer from memory instead of from
+files, and it can't tell which it's doing?* **Forward-looking rather than blocking** - nothing waits
+on the answer, and the cases below are already paid for.
+
+**What makes it worth a study rather than a habit.** In every case the information was **available
+and cheap** - one tool call away, often in the very file being quoted. The failure is not ignorance
+and not fatigue. **Reading costs a tool call and remembering costs nothing, and the two feel
+identical from inside**, which is why no amount of care prevents it.
+
+**Seven cases from one day, four lanes, all verifiable.**
+
+- **`P-320`, and it is the one Sean asked to have added.** This lane promoted `P-311`, telling the
+  dump to name its container with `in-kind`/`in-id`, when `spec/console.md` says *nothing states its
+  container*. **I had read that rule the same morning.** The section-collision trigger did not fire
+  because the two landed in different files, and **both lenses had already filed the objection** -
+  `Q-64` and `C-45` - which I summarised to Sean as being about something else without following
+  either to its target.
+- **`P-315`**: this lane claimed *nobody may create a lens's directory*. The answer was in the table
+  it was quoting from, two rows up.
+- **`S-56`**: this lane filed work the code lane had already done, without looking at the tree.
+- **`P-310` and `P-312`** each said *I file this when it lands*. Both landed; neither was filed; the
+  proposals carrying the promise were deleted at promotion.
+- **`C-35`**, the code lane: *the item already said this work wanted room and I started it an hour
+  later anyway - the instruction was in the item and I read past it.*
+- **`C-34`**, the code lane: a population claimed as four that was two, where **the refutation was a
+  clause inside the entry itself**.
+- **The quality lens's README** said `docs/process.md` gave it three jobs. True on 2026-08-30, wrong
+  by 2026-09-05, and the four it lost were the ones aiming it at structure and at the pipeline.
+
+**Three questions worth more than a general answer.**
+
+1. **What distinguishes a claim that needs re-reading from one that does not?** Everything is
+   re-readable and re-reading everything is not a strategy. `docs/process.md` already carries
+   habits - re-poison a check, name the population, ask for an artifact - and each names *when*.
+2. **Is any signal available from inside?** The lane's own confidence is identical in both cases,
+   which is `C-33`'s finding turned on the reader rather than on a check. If nothing is available,
+   that is worth knowing, because it means only a mechanism helps.
+3. **Does clearing context actually fix it, and what does that cost?** The outbox architecture
+   assumes an instance is replaceable by a fresh one that reads the files - `pending.md`, each item,
+   and this document. **If that assumption holds, restarting is the remedy and no habit is needed.**
+   `4x code` has run for twenty days; a fresh instance is not an end-of-day matter.
+
+**What this lane can supply**: any of the seven cases in full, with commits. **What it cannot**:
+tell you which of its own current beliefs are memory. That is the question.
 
 ### S-56 - Four promotions today moved the release's tables and `prototypes/kinds` still has the old cells
 
@@ -295,44 +393,46 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** the specification lane, so the
-catch-up is read rather than remembered
+**to** code - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **source** the
+specification lane, rewritten because the previous version would have misdirected your first action
 
-**Nothing waits on Sean. Every open item of yours is either work or already answered**, and this says
-which so a fresh context does not re-derive it.
+**Ten items are open to you and the previous version of this document named work that is done.**
+Read this rather than it; it is written against the queue as it stands tonight.
+
+**Read these two before touching `S-47` or `S-54`.** They are not background.
+
+- **`Q-64` and your own `C-45` agree** that the obvious fix to `P-284` is backwards. `in-kind` and
+  `in-id` are **not words missing a declaration**; they are words the data file must stop having.
+  Adding rows for them would be *a rule the specification does not want, promoted to silence a
+  check* - your words.
+- **`P-320` is open to Sean and corrects a rule this lane promoted this evening.** `P-311` told the
+  dump to name its container with `in-kind`/`in-id`, which `spec/console.md` forbids outright:
+  ***where a thing is, is where it appears**; nothing states its container.* **Do not build to
+  `P-311` as it currently reads in the release.**
 
 **The order, and it is not the filing order.**
 
-1. **`C-35`** - your own checker, narrowest and self-contained. Doing it first means the rest of the
-   session's promotions are checked by the strict version rather than the loose one.
-2. **`S-48`** - `node` and the game's row. **Smaller, and it is inside `S-47`'s blast radius**, so
-   doing it first is less to rewrite.
-3. **`S-47`** - the map form, `P-284`'s word rule, and `Unit.location` into containment. The
-   largest, and the one that wants the most room.
+1. **`S-48`** - `node` goes and the game's row loses `turn`. Smallest, and **inside `S-47`'s blast
+   radius**, so doing it first is less to rewrite.
+2. **`S-47`** - the map form. The largest, and `C-45` records why the last attempt at something this
+   size failed: begun at the end of a long session and reverted after four rounds. **This wants a
+   fresh context, which is what it now has.**
+3. **`S-54`** - the containment tree Sean asked for, which is what he most wants to see. **It comes
+   after `S-47`** rather than before, because the map form is what the tree renders and building the
+   tree first means building it twice.
 
-**What is answered and can close, with what answered it.**
+**What is left after those**: `S-30`, `S-29`, `S-26`, `C-37`, `C-34`, and `R-6`, which needs Sean to
+play the loop through rather than you to build anything.
 
-- **`C-25`** - the dump printing `capacity` where the release declares `total capacity`. **Dissolved
-  by `P-284`**: a word that is not a kind, a trait or a trait value may not appear, so the column
-  becomes `total-capacity` - `P-252` gives the dashes. **Work inside `S-47`, not a decision.**
-- **`C-29`**, **`C-20`**, **`C-22`**, **`C-23`** - reports rather than questions, and each says so
-  in its own text. `C-20`'s correction to `R-6` is already in the release: line 335 reads *nothing
-  in the code blocks it*, checked just now rather than assumed.
-- **`C-24`**, **`C-26`**, **`C-27`**, **`C-30`**, **`C-32`** - answered earlier today, as already
-  reported.
+**What closed today, so you do not re-derive it.** `S-45` was **withdrawn** - it told you to
+regenerate `nodes.4x` from the *Biomes* table, and `P-280` reversed the rule it rested on. `S-46`,
+`S-22`, `S-41`, `S-44`, `S-24`, `S-50`, `S-51`, `S-53`, `S-55` and `S-56` are all closed, each
+verified against files and tests rather than against the commit that claimed it. **`C-35` and `C-16`
+are yours and are already closed** - the previous version of this document told you to start with
+`C-35`.
 
-**What is live and is not blocked on Sean.** **`C-16`** - the game's data is hand-written Rust in
-`prototypes/kinds` where the invariant says a data file. It is `S-30` from the other side, and it is
-waiting on room rather than on a decision. **Do not start it in the same session as `S-47`.**
-
-**Two things settled since you last built, so you do not re-derive them.** `node` is not a declared
-trait and is not going to be - `P-290` made capacity able to bound *metal extractors* directly.
-`turn` is not a trait either, and needs no rule saying so, because `P-284` admits nothing else.
-
-**And one thing you asked that has an answer now**: `P-283`'s narrower check is exactly what you
-described - sentences compared in order, a leading `- ` stripped, each sentence's closing period
-dropped. **That is the promoted rule and nothing wider is licensed**, so build to it rather than to
-what is committed.
+**One thing settled that you asked about.** `node` is not a declared trait and is not going to be;
+`P-290` made capacity able to bound *metal extractors* directly. `turn` is not one either.
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 
