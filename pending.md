@@ -16,7 +16,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-53** - `a68bb0e` Q-62: S-53 closed one instance of its own hole and left two · still open in `docs/notes/proposals.md`
+- **S-53** - `6f1a229` S-53: decisions.md, and the misfiling check that a person caught first · still open in `docs/notes/proposals.md`
 - **S-51** - `38b2cbe` S-51 on a measured predicate, Q-61 built in, and four items that were invisible · still open in `docs/notes/proposals.md`
 - **S-50** - `521d3b7` S-50's live half, C-33 closed by P-291, and the re-poison it asked for · still open in `docs/notes/proposals.md`
 - **S-48** - `8b772c2` S-48: `node` goes, and capacity bounds extractors directly · still open in `docs/notes/proposals.md`

@@ -355,7 +355,13 @@ units:1}`.
 `labor-spent`, `left`, `made`, `spent`, `structure`, `territories`, `territory-resource`, `turn`,
 `units`, `yards`.
 
-**Eighteen. `Q-57` found `play`, and the cause is the one already written above.** `phase`'s
+**Seventeen again as of `336f13f`.** `P-308` named `phase`'s values - the cell reads *design or
+play* - so `play` is declared and leaves the list. **`turn` does not**: still in the data file and
+still undeclared, which `P-288` decided and `S-48` has not carried through. Of the three cells that
+described rather than named, `houses` is gone entirely - `P-310` and `P-312` - and `phase` is named;
+**`control` remains**, declared, never printed, and still three words.
+
+**Eighteen, as it stood. `Q-57` found `play`, and the cause is the one already written above.** `phase`'s
 Values cell reads *before it starts, or once it has*, which **describes** its values and names
 neither, so `play` and `design` appear nowhere in `releases/first-release.md`. A fourth instrument
 missed it for the same reason the first three missed `turn` - a trait whose values are described
