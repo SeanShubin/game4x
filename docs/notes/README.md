@@ -11,7 +11,7 @@ disagree, the spec is right and the note needs a superseded marker.
 
 | Note                                                                         | What it records                                                                                                     | Date       |
 | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------- |
-| [Questions](questions.md)                                                    | Choices only Sean can make, held where he will find them; empty when nothing is open                                | 2026-09-06 |
+| [Decisions](decisions.md)                                                    | Choices only Sean can make, held where he will find them; empty when nothing is open                                | 2026-09-06 |
 | [What the proposal limit has actually done](queue-depth.md)                  | Every open-queue depth in this repository's history, and what the limit has never done                              | 2026-09-06 |
 | [Counted things and invented names](counted-things-and-invented-names.md)    | Sean's map from a thing's description to a quantity, weighed against naming each count                              | 2026-09-05 |
 | [Expressive cells](expressive-cells.md)                                      | When a table cell should hold a node, and why the two views already answer it differently                           | 2026-09-03 |

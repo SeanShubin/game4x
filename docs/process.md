@@ -57,9 +57,9 @@ talk to each other and only need me sometimes, because **my primary mechanism of
 the specification instance**. The other instances are details. **I need to keep my surface area
 small, because human attention is the most scarce resource when programming with an AI assistant.**
 
-**Two files are addressed to me and they hold different things.** `docs/notes/questions.md` holds
+**Two files are addressed to me and they hold different things.** `docs/notes/decisions.md` holds
 choices only I can make; `docs/notes/proposals.md` holds words for me to approve. An item lives in
-one at a time - it sits in the questions file while any question in it is unanswered, and moves to
+one at a time - it sits in the decisions file while any question in it is unanswered, and moves to
 the proposals file when the last one is answered. Questions about the specification's own content
 stay at the bottom of the `spec/` file they concern, where the context is.
 

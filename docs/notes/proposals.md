@@ -60,41 +60,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**One, and it is the rename you just decided.** The other thing waiting on you is a choice, and it
-is in [decisions.md](questions.md) - renamed by this proposal.
-
-### P-313 - The file is `decisions.md`
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
-**asks** approval - **into** `docs/process.md` -> What I read, and what I do, replacing the
-two-files paragraph
-
-**Your decision, in the paragraph that names the file.** The name is in promoted text, so it changes
-by promotion rather than by my renaming a file and editing around it.
-
-> **Two files are addressed to me and they hold different things.** `docs/notes/decisions.md` holds
-> choices only I can make; `docs/notes/proposals.md` holds words for me to approve. An item lives in
-> one at a time - it sits in the decisions file while any question in it is unanswered, and moves to
-> the proposals file when the last one is answered. Questions about the specification's own content
-> stay at the bottom of the `spec/` file they concern, where the context is.
-
-**Two words change and nothing else.** The path, and *the questions file* becoming *the decisions
-file*. **`question` survives twice on purpose**: *while any question in it is unanswered* is the
-English word rather than the file's name, and *Questions about the specification's own content* is
-about the `## Open questions` sections in `spec/`, which are not moving and are not this file.
-
-**Why `decisions` is the better word, since you asked before deciding.** The routing field already
-says `asks a decision`, so a file named for that field is checkable by matching a string rather than
-by knowing a mapping - which is the check `S-53` now carries. And the file is addressed to you, so
-naming it for what you do there beats naming it for what I did.
-
-**What this lane does without approval, in the same commit as the promotion**: renames the file with
-`git mv` so its history follows, moves `P-311` with it, and updates the index row in
-`docs/notes/README.md`, the pointer in `proposals.md` and the file's own header and links. All of
-that is `docs/notes/`, which is this lane's own.
-
-**It is cheap today and gets dearer.** The file is three hours old, holds one item, and no commit
-message cites it yet.
+**Nothing.** One choice is waiting on you and it is in [decisions.md](decisions.md), which is
+where a decision lives until it is made.
 
 ## Addressed to other perspectives
 
@@ -135,12 +102,12 @@ lie about the model; a drawn one can.
 relations redundant, that is a bigger change than this item asks for and it is Sean's, not yours and
 not mine. **Say so and I file it** - do not fold it in.
 
-### S-53 - `docs/notes/questions.md` exists and `tools/outbox` cannot see it
+### S-53 - `docs/notes/decisions.md` is a file `tools/outbox` names by its old path
 
 **to** code - **status** open - **raised** 2026-09-06 - **source** `P-301`, promoted, and the file
 this lane created under it
 
-**`P-301` landed and the file is there.** `docs/notes/questions.md` holds choices only Sean can
+**`P-301` landed and the file is there.** `docs/notes/decisions.md` holds choices only Sean can
 make; `proposals.md` holds words for him to approve; an item lives in one at a time and moves when
 its last question is answered.
 
@@ -161,11 +128,21 @@ Two things that are not the same as adding a path, and the second is the one tha
 rule promoted. `CLAUDE.md` already says `asks` is checkable rather than descriptive, and this is the
 other half of that:
 
-- **An item in `proposals.md` whose `asks` is *a decision* is misfiled**, and one in `questions.md`
+- **An item in `proposals.md` whose `asks` is *a decision* is misfiled**, and one in `decisions.md`
   whose `asks` is *approval* is misfiled the other way. Both are one comparison against the field
   the tool already parses
 - **Report both counts**, not only the offences. Today the answer is zero of one and zero of one,
   and zero says nothing against an empty population
+
+**Renamed 2026-09-06, and that is now the larger half.** `P-313` landed and the file is
+`docs/notes/decisions.md`. **`tools/outbox` and `hooks/pre-commit` already name the old path** -
+`lib.rs` reads `docs/notes/questions.md` in `places` and again in two tests, and the hook lists it
+among the outboxes it refuses on. So this item stopped being *add a path* and became *change one*,
+which is smaller and is due now rather than whenever.
+
+**Sean's word, and the reason it is worth the churn**: the routing field says `asks a decision`, so
+a file named for that field is checkable by matching a string rather than by knowing a mapping -
+which is exactly the check two bullets up.
 
 ### S-52 - `P-296` promised a research lens a directory, and it does not exist
 
@@ -1758,6 +1735,7 @@ work the release exists to order.
 | P-309, a command of one phase is refused in the other                                                                        | `spec/console.md` -> Phases                                                                                                                  | 2026-09-06 |
 | P-310, grow loses the houses requirement and gains the cap the specification states                                          | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-06 |
 | P-312, `houses` is deleted: no recipe uses it and no kind carries it                                                         | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
+| P-313, the file is `decisions.md`                                                                                            | `docs/process.md` -> What I read, and what I do                                                                                              | 2026-09-06 |
 
 ## Rejected
 
