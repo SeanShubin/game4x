@@ -21,6 +21,73 @@ here without first becoming a proposal.
 
 ## Open
 
+### P-339 - An ark and a pioneer print life rather than eating, and a seeder is what they carry
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** Sean's own - **asks** a decision -
+**shape** an instruction - **into** `releases/first-release.md` -> the opening list, *What bounds a
+kind in a territory*, *Units*, and *Recipes*
+
+**Your change.** *Lets make both arks and pioneers take no food upkeep. Thematically, pioneers have
+the same 3d-printer that an ark has to create new life. The ark has to do more work initially to tune
+the life to the planet; the pioneer just copies the blueprint the ark made.*
+
+**Three places say otherwise today**, and the ark's own row already says what a pioneer's should.
+
+| Where                             | Now                                                                                             | After                |
+| --------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------- |
+| *Units*, pioneer's **Upkeep**     | `1 food per turn`                                                                               | empty, as the ark is |
+| *What bounds a kind*, **pioneer** | `a capacity of 2, and the food produced here`                                                   | `a capacity of 2`    |
+| the opening list                  | *A Pioneer that enters a territory nobody holds must found it, or it perishes for want of food* | deleted              |
+
+**How to tell it was carried out**: the pioneer's Upkeep cell is empty, its bound is exactly
+`a capacity of 2`, no line contains *perishes for want of food*, and `UnitKind::Pioneer.upkeep()`
+returns 0 - the last being the code lane's, filed on promotion.
+
+**It answers `P-338`'s first question rather than adding one.** No upkeep means nothing can ever
+reset a number, so **a pioneer must have no number at all** - the same argument that made the ark
+durable, since a number on either would be a countdown to certain death. `P-337`, a starved pioneer
+marked unusable, **dissolves outright** rather than being held: a pioneer can no longer starve.
+
+**But that bullet was doing design work**, and this is what I need decided. It is what forces a
+pioneer to found rather than sit. Remove the upkeep and **a pioneer can wait in an unheld territory
+forever at no cost**, which the release currently forbids.
+
+**Your seeder is a better answer than a timer, and it fixes something separate.** *Something like a
+seeder that has the materials and blueprints to create two citizens, designed by ark and carried by
+pioneer.*
+
+**Two citizens already vanish and reappear, and nothing represents them in between.** `produce
+pioneer` consumes 2 citizens; `found by land` produces 2 citizens. Same number, different territory,
+**no thing carrying them across** - which is the one thing `spec/console.md` says never happens:
+*where a thing is, is where it appears.* Today a pioneer is the only unit whose cost teleports.
+
+**A seeder makes that transit a thing.** It is what is spent to found, so a pioneer without one
+cannot found and loitering costs the seeder rather than costing nothing. **The pressure becomes a
+carried resource instead of hunger**, which is what your theme wanted in the first place.
+
+**Three things it needs before it can be written, and none is mine to settle.**
+
+1. **Who makes it.** *Designed by ark* suggests the ark, which would also be the *more work initially
+   to tune the life to the planet* - and would move the 2-citizen cost off `produce pioneer` onto
+   whatever the ark does. **Or a yard makes it and the ark only designs the blueprint.**
+2. **Whether a unit can hold a thing.** A seeder carried by a pioneer appears *in* the pioneer, and
+   nothing in the release has a unit as a container - a unit has `fuel` and that is all. **This is
+   the real cost of the idea**, and it is a genuinely new capability rather than a row.
+3. **What a spent pioneer is.** After founding it has no seeder. Gone, as today, or an empty unit
+   that something can load again.
+
+**If you would rather not pay for 2 yet**, the alternative is to let a pioneer wait: a printer does
+not starve, and loitering already costs a unit that could be founding elsewhere. **That needs no new
+kind**, and the seeder stays available for when a unit holding a thing is worth building.
+
+**One consequence either way**: a citizen becomes **the only thing in the release with upkeep**. So
+`perish` and `unpaid` still read on any thing and now bite exactly one kind, and `P-338`'s reset half
+has a single user. Worth saying, because a rule with one user is easy to fit to that user.
+
+**And it points where you are going.** Militias from one planet invading another whose life is better
+suited to it - **a blueprint tuned to a planet is a trait of what the seeder carries**, not of the
+unit carrying it. Same shape as a number per thing per condition. Neither needs deciding now.
+
 ### P-338 - A thing lasts a number of turns, paying its upkeep resets that, and having no number is durable
 
 **to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
@@ -46,6 +113,7 @@ spends it. Same trait, same decrement, same recipes; `age` and `spoil` each wide
 | **food**    | 1      | already declared - made this turn, gone at this turn's end                              |
 | **citizen** | 2      | fed resets to 2; one unfed turn leaves 1 and it lives; a second leaves 0 and it is gone |
 | **ark**     | none   | upkeep 0, so nothing could ever reset it - it must be durable                           |
+| **pioneer** | none   | upkeep 0 under `P-339`, for the same reason                                             |
 
 **Two is what gives your one turn.** *Citizens get a turn before they starve, so we can expand
 without logistics as long as we set up a farm this turn.* With a maximum of 1, an unfed citizen
@@ -69,10 +137,13 @@ three reset and two decrement - **and which two is a competing effect.** `spec/t
 records that nothing supplies one. **You deferred it saying the first real collision is when to
 decide. This is that collision.**
 
-**Two things I need, and neither has a default.**
+**One thing I need, and it has no default.**
 
-1. **The pioneer's number.** Upkeep 1 food, like a citizen. **2 by the same reasoning, or 1?**
-2. **Which citizens eat when there is not enough.** The predecessor fed those who worked before the
+**`P-339` answered the other.** An ark and a pioneer take no food upkeep, so nothing could ever
+reset a number on either and **both are durable** - the pioneer's row below is settled rather than
+open.
+
+**Which citizens eat when there is not enough.** The predecessor fed those who worked before the
    idle, so the idle starved out - that is a rule a person wrote and a player could change, and it
    is recorded in `docs/notes/game-4x-predecessor.md`. **Whether it is yours is your call**, and
    without an answer the split above is undefined.
@@ -123,7 +194,7 @@ expires* without saying whether food ages first.
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** contradiction - **asks** a decision
 - **into** `releases/first-release.md` -> Recipes, and Traits
 
-**Held under `P-338`, 2026-09-07.** Your thematic model - a thing lasts a number of turns, and paying its upkeep resets that - makes this one case of a single rule rather than a question of its own. **It dissolves if `P-338` lands** and comes back only if it does not.
+**Dissolved by `P-339`, 2026-09-07.** A pioneer takes no food upkeep, so it cannot starve and there is no state for `usable` to mark. **It returns only if `P-339` does not land.** Formerly held under `P-338`: Your thematic model - a thing lasts a number of turns, and paying its upkeep resets that - makes this one case of a single rule rather than a question of its own. **It dissolves if `P-338` lands** and comes back only if it does not.
 
 **The code lane's `C-62`, from the same attempt to build an example.** Verified.
 

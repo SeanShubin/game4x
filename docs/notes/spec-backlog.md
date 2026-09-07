@@ -8,6 +8,30 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on printers, seeders, and what crosses a border
+
+*Lets make both arks and pioneers take no food upkeep. For now, thematically, pioneers have the same
+3d-printer that an ark has to create new life. The ark has to do more work initially to tune the life
+to the planet, the pioneer just copies the blueprint the ark made. For future, we are going have many
+ways to deal with militias on one planet invading another with different environment that the life
+there is better suited to.*
+
+*We may need something like a seeder that has the materials and blueprints to create two citizens,
+designed by ark and carried by pioneer.*
+
+**The seeder is not only a theme.** `produce pioneer` consumes 2 citizens and `found by land`
+produces 2 citizens, and **nothing carries them across** - the one thing `spec/console.md` forbids,
+since where a thing is is where it appears. A pioneer is the only unit whose cost teleports, and a
+seeder is the object that would stop it doing so.
+
+**It also replaces what the upkeep was quietly doing.** *Found or perish for want of food* is what
+forces a pioneer to act; with no upkeep it could loiter free. A carried thing that founding spends
+is that pressure without hunger.
+
+**What it costs is a unit holding a thing**, which the release has never needed - a unit has `fuel`
+and nothing else. Filed as `P-339`, which asks him that, who makes the seeder, and what a spent
+pioneer is.
+
 ## Said 2026-09-07, on the numbers and on wearing down
 
 *It actually makes sense for future designs, a territory might have such harsh weather that units and

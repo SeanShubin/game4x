@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-339** - An ark and a pioneer print life rather than eating, and a seeder is what they carry · `docs/notes/decisions.md`
 - **P-338** - A thing lasts a number of turns, paying its upkeep resets that, and having no number is durable · `docs/notes/decisions.md`
 - **P-336** - `age` is declared, fires in no state, and `keeps` is not implemented · `docs/notes/decisions.md`
 - **P-337** - `perish` says a thing is consumed and its metal produced, and the model does neither · `docs/notes/decisions.md`
