@@ -20,8 +20,6 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 - An orbit is next to the territory below it, and next to the orbits above that territory's
   neighbours
-- Launching, landing and crossing from one orbit to another are moves, and cost what any other
-  move costs
 
 ## Open questions
 

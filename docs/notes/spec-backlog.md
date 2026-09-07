@@ -8,6 +8,23 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, that cost belongs to a recipe and not to an invariant
+
+*Moves have an adjacency constraint. This line should be removed: "Launching, landing and crossing
+from one orbit to another are moves, and cost what any other move costs". Determining costs is the
+domain of individual recipes, not invariants.*
+
+**Removed from `spec/orbit.md`.** The adjacency bullet above it stands, and is what a move's
+constraint reads. `P-345` is answered by the removal.
+
+**The principle is the reusable part**: an invariant says what is next to what; what a thing costs is
+a recipe's own business. That is why the sentence was carrying two claims and only one of them
+belonged in that file.
+
+**Removing it partly reverses `P-163`** - *an orbit sits beside its territory, and launching is a
+move*. The first half stands; only the second goes. The ledger keeps `P-163` as landed, because it
+did.
+
 ## Said 2026-09-07, that move may not be special either
 
 *The ark is constrained in that it can only deploy to the territory it is in orbit above.*

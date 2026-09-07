@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-345** - `spec/orbit.md` says launching is a move, and `P-341` says it is a Yard's act · `docs/notes/decisions.md`
-- **P-344** - What an Ark crosses, now that nothing it does is a move · `docs/notes/decisions.md`
+- **P-344** - What one act leaves stale: the Ark's `ascent`, and two steps that are one · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -17,7 +16,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-344** - `ed8ffda` P-344 and S-66: the cleanup P-341 promised, and the code lane's work order · still open in `docs/notes/decisions.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
@@ -39,6 +37,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
+
+### To quality (1)
+
+- **S-67** - Your 2026-09-06 sweep quotes a line that is no longer in the specification · `docs/notes/proposals.md`
 
 ### To research (1)
 
