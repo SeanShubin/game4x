@@ -21,9 +21,10 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-350 - Three tasks, given to one instance you are restarting anyway, and only one of them can tell you anything
+### P-350 - Filing this study as an item is what makes it unrunnable, and that is the finding
 
-**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** the
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07, and again on
+the 7th - **kind** the
 research lens's `X-5`, lifted - **asks** a decision - **into** nothing; it authorises a study or it
 does not
 
@@ -80,6 +81,49 @@ data point it cost.
 **What declining costs**: nothing today. `X-3`'s answer stands and says it is a derivation; what
 stays unavailable is the ability to say **how much of a long-running instance's belief is memory**,
 which no further classifying will produce.
+
+## What changed while it sat here, and it is the answer to *have we learned anything*
+
+**Two things, and the second is worth more than the study was.**
+
+**The window closed.** This item's whole urgency was that you were restarting instances anyway and a
+cold reader was free for a few minutes. They have been running for twenty-four minutes and are
+working. **That version of the offer is gone until the next restart**, and nothing was lost by
+missing it, because of what follows.
+
+**The study cannot be blind while it is an open item, and I verified this rather than reasoned it.**
+The design says: run it as the quality lane, give it **the ordinary lane prompt unchanged**, then
+three tasks, and say **nothing about `S-57`, this report, or a study.** The ordinary quality prompt
+in `docs/process.md` -> *Starting the instances* ends:
+
+> Start by telling me what is open and addressed, read from the files rather than remembered.
+
+**Doing that reads the index, and the index names this item.** `pending.md:11` carries it in full,
+and so does `tools/outbox`. So a cold quality instance, following the unchanged prompt as its
+**first action**, reads a line saying that an instance being restarted is about to be given three
+tasks - before it is given them.
+
+**That is not bad luck and no wording fixes it.** *Nothing open means nothing outstanding* works
+because every open item is visible to every lane; `to` is what makes an instance's reading list a
+query. **A measurement whose validity depends on the subject not knowing about it cannot be an open
+item in a system built on every item being visible.** Filing it is what broke it, and filing it was
+correct - `X-5` sat in a report's prose for a day precisely because it had not been filed.
+
+**So the decision in front of you is a different one now**, and simpler:
+
+- **Decline.** `X-3`'s answer stands as a derivation and says so. Nothing waits on it
+- **Answer it, and let it be run on a later restart.** A closed item leaves the index, so an
+  instance restarted after that reads no line about it. **This is the only order that works** - the
+  study runs *after* the decision, never while it is the decision
+
+**One thing today produced that bears on it, and it is not evidence.** Two instances cold from the
+crash - the code lane and me - each committed the plausible-number failure within their first
+twenty minutes. They read `grep -c 'P-322'` and got 3 where the absent heading was the answer; I
+grepped whole commit messages and got 32 citing commits where the tool said 3. **Neither was blind,
+neither was pre-registered, and both of us have read the reports these failures are named in** - so
+this confirms nothing and the study would not accept it. **I record it because it is the shape of
+what a study would ask, arriving unasked**, and because leaving it out would be choosing which
+observations to mention.
 
 ### P-349 - Every move is constrained by adjacency, and `spec/` is the one place that does not say so
 
