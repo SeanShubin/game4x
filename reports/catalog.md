@@ -233,7 +233,7 @@ a place things are in, which has a biome, a force of nature, and a density and a
 
 **In families** thing, place
 
-**Traits of it** `kind` (one of the kinds), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number)
+**Traits of it** `kind` (one of the kinds), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number)
 
 **Holds** that kind, up to its total capacity for that kind - *a fact about each one rather than about the kind*
 
@@ -264,7 +264,7 @@ what a territory's ground offers of one resource, and how richly.
 
 **In families** thing
 
-**Traits of it** `kind` (one of the kinds), `density` (a number)
+**Traits of it** `kind` (one of the kinds), `density` (a number), `total capacity` (a number)
 
 **In recipes** none name it.
 

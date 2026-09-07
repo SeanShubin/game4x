@@ -235,18 +235,16 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
     // an exemption list of seventeen against a population of twenty-five is not a check,
     // it is a second copy of the thing being checked, and the second copy is what rots.
     // If a third is wanted here, that is the signal to fix the rule rather than the list.
-    const NOT_SHOWN: [(&str, &str); 2] = [
-        (
-            "control",
-            "`P-255`: Sean dropped `founded` and declined to print `control` in its place - \
-             *if we actually need it I will notice when reviewing*. A decision, not a defect",
-        ),
-        (
-            "total capacity",
-            "shown as `capacity`, which nobody chose - the dump naming a thing differently \
-             from the release, which is `founded`'s shape exactly. `C-25`",
-        ),
-    ];
+    // **One since `P-331`, and the one that went is the pattern working.** `total capacity`
+    // was excepted because the dump printed it as `capacity` - the dump naming a thing
+    // differently from the release, which is `founded`'s shape. The row moved to the deposit
+    // and the name is `total-capacity` in one place now, so the exception is gone rather than
+    // repaired: `C-25` dissolved with the row it was about.
+    const NOT_SHOWN: [(&str, &str); 1] = [(
+        "control",
+        "`P-255`: Sean dropped `founded` and declined to print `control` in its place - \
+         *if we actually need it I will notice when reviewing*. A decision, not a defect",
+    )];
 
     let document = release();
     let mut of_a_territory = Vec::new();
@@ -272,14 +270,15 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
             of_a_territory.push(name.to_string());
         }
     }
-    // **Four since `P-322`, and the one that left is the point of that promotion.**
-    // `density` read *a territory, per resource* and now reads *a deposit*, because a
-    // description cannot hold three densities and a thing can carry one. So this count
-    // going down is the rule moving rather than a trait being lost.
+    // **Three, and both that left went to the deposit.** `density` moved in `P-322` and
+    // `total capacity` in `P-331`, because a description is a flat map and a territory had
+    // one of each per resource and per kind. So this count going down twice is the rule
+    // moving rather than traits being lost, and what is left - `control`, `biome`,
+    // `nature` - is one value each.
     assert_eq!(
         of_a_territory.len(),
-        4,
-        "four traits are of a territory; the release has {} ({of_a_territory:?})",
+        3,
+        "three traits are of a territory; the release has {} ({of_a_territory:?})",
         of_a_territory.len()
     );
 
@@ -325,7 +324,7 @@ fn every_trait_of_a_territory_is_shown_in_the_dump() {
     }
     assert_eq!(
         NOT_SHOWN.len(),
-        2,
-        "two are not shown, and both are findings"
+        1,
+        "one is not shown, and it is a decision rather than a finding"
     );
 }

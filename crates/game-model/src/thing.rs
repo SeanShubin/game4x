@@ -174,6 +174,13 @@ pub enum Trait {
     Multiplier,
     /// Citizens working here this turn.
     Manned,
+    /// How many extractors this deposit has room for.
+    ///
+    /// **`P-331` put it beside `density`.** It read *a territory, per kind*, which a
+    /// description could not hold - a territory has one per kind and a description is a flat
+    /// map. On the deposit there is one of each per deposit, and `C-53`'s half-closed round
+    /// trip closes: the release's `6 x 2` is both numbers and the file now carries both.
+    TotalCapacity,
     /// How much one extractor working this deposit yields.
     ///
     /// **`P-322` moved it here from the territory**, and it is read by

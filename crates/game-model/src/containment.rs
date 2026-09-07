@@ -22,18 +22,22 @@
 //! So the tree is built here, from the state itself, and both the data file and the report
 //! render *it*. Neither renders the other, and neither can quietly rename the other's words.
 //!
-//! # Density arrived, and total capacity did not
+//! # Both of a territory's numbers are on the deposit
 //!
-//! **`C-46` reported both as homeless and `P-322` housed one of them.** A description is a
-//! flat map from a trait name to one value, and a territory had a `density` per resource and
-//! a `total capacity` per kind - so neither could be a trait of a territory *and* be written.
+//! **`C-46` reported both as homeless, `P-322` housed one and `P-331` housed the other.** A
+//! description is a flat map from a trait name to one value, and a territory had a `density`
+//! per resource and a `total capacity` per kind - so neither could be a trait of a territory
+//! *and* be written.
 //!
-//! **`density` is a trait of a `deposit` now**, and a deposit is a thing, so a territory
-//! contains `{deposit resource:food density:4} -> 1` and the number is in the file.
+//! **A deposit carries both now**, so a territory contains
+//! `{deposit resource:food density:2 total-capacity:6} -> 1` and the release's `6 x 2` is in
+//! the file as the two numbers it always meant.
 //!
-//! **`total capacity` is still not**, so the round trip is still not the whole one. It is
-//! [`Capacity`] below - computed, shown, and written nowhere. Territory 3 offers six food
-//! extractors and has built none, so nothing in its data file says six. `C-53`.
+//! **That is what `C-53` was about and it is answered.** Territory 3 offered six food
+//! extractors and had built none, so nothing in its file said six; both numbers are there
+//! now. [`Capacity`] below is still computed rather than written, and is now a *derived* view
+//! of what a deposit states plus what the territory holds - which is what
+//! `spec/logistics.md` calls used and available.
 
 use std::collections::BTreeMap;
 
@@ -279,6 +283,12 @@ pub fn trait_name(name: Trait) -> &'static str {
         Trait::Manned => "manned",
         Trait::Ready => "ready",
         Trait::Density => "density",
+        // **Dashed, because a name is one word.** `spec/console.md` joins the words of a
+        // name that needs more than one, which is the rule `P-328` applied to commands and
+        // this applies to a trait. **`C-25` dissolves with it** - it reported the dump
+        // printing `capacity` where the release declared `total capacity`, and there is one
+        // name spelled one way now.
+        Trait::TotalCapacity => "total-capacity",
     }
 }
 
@@ -371,7 +381,8 @@ pub fn tree(game: &Game) -> Entry {
             held.push(Entry::leaf(
                 Description::of(Kind::Deposit)
                     .with("resource", resource.name())
-                    .with("density", offered.density),
+                    .with("density", offered.density)
+                    .with("total-capacity", offered.capacity),
             ));
         }
         held.extend(

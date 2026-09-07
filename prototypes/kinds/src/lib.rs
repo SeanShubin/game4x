@@ -351,7 +351,7 @@ pub const TRAITS: [TraitRow; 18] = [
     },
     TraitRow {
         name: "total capacity",
-        of: "a territory, per kind",
+        of: "a deposit",
         values: "a number",
         held: Held::Stored,
     },

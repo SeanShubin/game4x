@@ -265,6 +265,119 @@ fn the_comparison_finds_missing_extra_and_different() {
     );
 }
 
+/// A territory's own numbers are rebuilt from the file and compared with the model.
+///
+/// **This is the claim `S-62` asked to be tested rather than stated**, and it is the one
+/// `C-53` said was half true. `releases/first-release.md` -> *Where things are*: **the check
+/// is that the dump reads back into the state it came from.** Territory 3 is `6 x 2` for
+/// food; before `P-331` the file said `density:2` and six was nowhere, so a reader with the
+/// file alone could not say what that ground offered.
+///
+/// **Both numbers are on the deposit now**, so this rebuilds every territory's id, biome,
+/// force of nature and per-resource pair out of the text and holds them against the model.
+///
+/// # What this does not claim, and what poisoning it taught
+///
+/// **It is the territories, not the whole state**, and saying which is the whole of `S-29`'s
+/// warning about reporting half a rule as met. What a territory *holds* round trips as
+/// entries and is checked by `a_state_survives_being_written_and_read`.
+///
+/// **And it cannot catch a wrong number.** The first poison added one to every capacity, the
+/// file was regenerated from the poisoned model, and this passed - correctly. A round trip
+/// compares a file with the state it was written from, so a value that is wrong in both is
+/// wrong consistently. **What catches a wrong number is the release**, in
+/// `first_release.rs::released_table`, which reads `6 x 2` out of Sean's own table.
+///
+/// **The poison that reaches this one is asymmetric**: stop the writer stating
+/// `total-capacity`, reseed, and it fails naming the territory and the resource. Two poisons,
+/// and only the second is about the property - which is `C-57`'s lesson arriving a day later
+/// in a different test.
+#[test]
+fn every_territorys_own_numbers_survive_the_round_trip() {
+    let session = played();
+    let text = std::fs::read_to_string(root().join(AT)).expect("the expected state");
+    let read = state::read(&text).unwrap_or_else(|why| panic!("{AT} does not parse: {why}"));
+
+    let mut checked = 0;
+    for place in &session.game.territories {
+        let described = read
+            .contents
+            .iter()
+            .find(|entry| {
+                entry.description.kind == "territory"
+                    && entry.description.traits.get("id") == Some(&place.id.0.to_string())
+            })
+            .unwrap_or_else(|| panic!("territory {} is not in the file", place.id));
+
+        let says = |name: &str| -> String {
+            described
+                .description
+                .traits
+                .get(name)
+                .cloned()
+                .unwrap_or_else(|| panic!("territory {} states no {name}", place.id))
+        };
+        assert_eq!(says("biome"), place.biome.name(), "territory {}", place.id);
+        assert_eq!(
+            says("nature"),
+            place.force_of_nature.to_string(),
+            "territory {}",
+            place.id
+        );
+
+        for resource in game_model::Resource::ALL {
+            let offered = place.deposit(resource);
+            let deposit = described.contents.iter().find(|entry| {
+                entry.description.kind == "deposit"
+                    && entry.description.traits.get("resource")
+                        == Some(&resource.name().to_string())
+            });
+            match deposit {
+                // **A ground that offers nothing has no deposit, and an entry is never
+                // zero** - `spec/console.md`. So absence has to mean nothing offered, and
+                // this is the arm that says so rather than skipping.
+                None => assert_eq!(
+                    (offered.capacity, offered.density),
+                    (0, 0),
+                    "territory {} offers {resource} and the file has no deposit for it",
+                    place.id
+                ),
+                Some(entry) => {
+                    let has = |name: &str| -> u32 {
+                        entry
+                            .description
+                            .traits
+                            .get(name)
+                            .and_then(|value| value.parse().ok())
+                            .unwrap_or_else(|| {
+                                panic!("territory {}'s {resource} states no {name}", place.id)
+                            })
+                    };
+                    assert_eq!(
+                        (has("total-capacity"), has("density")),
+                        (offered.capacity, offered.density),
+                        "territory {}'s {resource}, which the release writes `{} x {}`",
+                        place.id,
+                        offered.capacity,
+                        offered.density
+                    );
+                    checked += 1;
+                }
+            }
+        }
+    }
+
+    // **Over every case, and how many.** Twelve territories and three resources, less the
+    // ground that offers nothing - territory 6 has no metal and territory 7 no energy, which
+    // the release's own table says. A run that compared nothing would satisfy every assertion
+    // above it.
+    assert_eq!(
+        checked, 34,
+        "twelve territories times three resources, less the two that offer none; {checked} \
+         pairs were compared"
+    );
+}
+
 /// The seeding branch, over a directory of its own.
 ///
 /// **`P-225`: absence means acceptance**, so an update is a deletion rather than an edit -

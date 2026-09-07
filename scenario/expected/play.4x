@@ -24,14 +24,14 @@
   {orbit id:8} -> 1
   {orbit id:9} -> 1
   {territory biome:desert id:10 nature:1} -> 1
-    {deposit density:3 resource:food} -> 1
-    {deposit density:3 resource:metal} -> 1
-    {deposit density:8 resource:energy} -> 1
+    {deposit density:3 resource:food total-capacity:3} -> 1
+    {deposit density:3 resource:metal total-capacity:1} -> 1
+    {deposit density:8 resource:energy total-capacity:6} -> 1
   {territory biome:grassland id:1 nature:1} -> 1
     {citizen ready:yes} -> 8
-    {deposit density:4 resource:energy} -> 1
-    {deposit density:4 resource:food} -> 1
-    {deposit density:4 resource:metal} -> 1
+    {deposit density:4 resource:energy total-capacity:3} -> 1
+    {deposit density:4 resource:food total-capacity:3} -> 1
+    {deposit density:4 resource:metal total-capacity:3} -> 1
     {energy} -> 12
     {extractor ready:yes resource:energy} -> 3
     {extractor ready:yes resource:food} -> 3
@@ -43,46 +43,46 @@
     {store resource:metal} -> 3
     {yard} -> 1
   {territory biome:grassland id:11 nature:1} -> 1
-    {deposit density:6 resource:energy} -> 1
-    {deposit density:6 resource:food} -> 1
-    {deposit density:6 resource:metal} -> 1
+    {deposit density:6 resource:energy total-capacity:5} -> 1
+    {deposit density:6 resource:food total-capacity:5} -> 1
+    {deposit density:6 resource:metal total-capacity:5} -> 1
   {territory biome:grassland id:2 nature:1} -> 1
     {citizen ready:yes} -> 6
-    {deposit density:4 resource:energy} -> 1
-    {deposit density:4 resource:metal} -> 1
-    {deposit density:6 resource:food} -> 1
+    {deposit density:4 resource:energy total-capacity:2} -> 1
+    {deposit density:4 resource:metal total-capacity:2} -> 1
+    {deposit density:6 resource:food total-capacity:2} -> 1
     {extractor ready:yes resource:food} -> 1
     {extractor ready:yes resource:metal} -> 1
     {garrison force:0 manned:0} -> 1
     {store resource:food} -> 1
     {store resource:metal} -> 1
   {territory biome:grassland id:3 nature:1} -> 1
-    {deposit density:2 resource:food} -> 1
-    {deposit density:4 resource:energy} -> 1
-    {deposit density:4 resource:metal} -> 1
+    {deposit density:2 resource:food total-capacity:6} -> 1
+    {deposit density:4 resource:energy total-capacity:2} -> 1
+    {deposit density:4 resource:metal total-capacity:2} -> 1
   {territory biome:grassland id:8 nature:1} -> 1
-    {deposit density:2 resource:energy} -> 1
-    {deposit density:2 resource:metal} -> 1
-    {deposit density:6 resource:food} -> 1
+    {deposit density:2 resource:energy total-capacity:1} -> 1
+    {deposit density:2 resource:metal total-capacity:1} -> 1
+    {deposit density:6 resource:food total-capacity:6} -> 1
   {territory biome:ice id:12 nature:1} -> 1
-    {deposit density:2 resource:food} -> 1
-    {deposit density:8 resource:energy} -> 1
-    {deposit density:8 resource:metal} -> 1
+    {deposit density:2 resource:food total-capacity:2} -> 1
+    {deposit density:8 resource:energy total-capacity:8} -> 1
+    {deposit density:8 resource:metal total-capacity:8} -> 1
   {territory biome:jungle id:6 nature:2} -> 1
-    {deposit density:4 resource:food} -> 1
-    {deposit density:5 resource:energy} -> 1
+    {deposit density:4 resource:food total-capacity:4} -> 1
+    {deposit density:5 resource:energy total-capacity:4} -> 1
   {territory biome:jungle id:7 nature:2} -> 1
-    {deposit density:4 resource:food} -> 1
-    {deposit density:5 resource:metal} -> 1
+    {deposit density:4 resource:food total-capacity:4} -> 1
+    {deposit density:5 resource:metal total-capacity:4} -> 1
   {territory biome:mountain id:4 nature:1} -> 1
-    {deposit density:2 resource:food} -> 1
-    {deposit density:5 resource:energy} -> 1
-    {deposit density:5 resource:metal} -> 1
+    {deposit density:2 resource:food total-capacity:1} -> 1
+    {deposit density:5 resource:energy total-capacity:4} -> 1
+    {deposit density:5 resource:metal total-capacity:4} -> 1
   {territory biome:mountain id:5 nature:1} -> 1
-    {deposit density:1 resource:food} -> 1
-    {deposit density:8 resource:energy} -> 1
-    {deposit density:8 resource:metal} -> 1
+    {deposit density:1 resource:food total-capacity:3} -> 1
+    {deposit density:8 resource:energy total-capacity:8} -> 1
+    {deposit density:8 resource:metal total-capacity:8} -> 1
   {territory biome:mountain id:9 nature:1} -> 1
-    {deposit density:2 resource:energy} -> 1
-    {deposit density:3 resource:food} -> 1
-    {deposit density:8 resource:metal} -> 1
+    {deposit density:2 resource:energy total-capacity:1} -> 1
+    {deposit density:3 resource:food total-capacity:2} -> 1
+    {deposit density:8 resource:metal total-capacity:6} -> 1

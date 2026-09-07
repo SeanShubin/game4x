@@ -282,7 +282,29 @@ carries that ambiguity.
 
 ### C-53 - `P-322` closed half the round trip and says it closed all of it, and its reason is `Q-66`'s shape
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** building `S-59`'s first half
+**to** spec · **status** **acted** 2026-09-07 · `da65d03` · **raised** 2026-09-06 · **source** building `S-59`'s first half
+
+**Answered by `P-331`, and the exhibit is the thing that changed.** This item said territory 3
+was `6 x 2` for food, the file said `density:2`, and six was nowhere. `total capacity` is a
+trait of the deposit now and the file says
+`{deposit density:2 resource:food total-capacity:6} -> 1`.
+
+**The reason this item objected to is retired rather than argued down.** `P-322` said total
+capacity *is computed from what a thing holds*, where `spec/logistics.md` says total is stored
+and used and available are the derived pair. `P-331` does not restate that reasoning: it puts
+the stored number in the file, which is what the rule required all along.
+
+**And the claim is a test now rather than a sentence** - `S-62` asked for exactly that.
+`every_territorys_own_numbers_survive_the_round_trip` rebuilds every territory's id, biome,
+force of nature and per-resource pair out of the text and holds them against the model, over
+thirty-four pairs with the count asserted.
+
+**Two poisons, and only the second was about the property.** Adding one to every capacity left
+it green - correctly, because a round trip compares a file with the state it was written from
+and a value wrong in both is wrong consistently. The poison that reaches it is asymmetric:
+stop the writer stating `total-capacity`, reseed, and it fails naming the territory and the
+resource. **What catches a wrong number is the release**, in `released_table`, which reads
+`6 x 2` out of Sean's own table. `C-57`'s lesson, a day later in another test.
 and checking the claim it rests on
 
 **derived from** total capacity is stored; used and available are derived -
@@ -1821,7 +1843,16 @@ it would put a number he has not stated into the file he is about to vet.
 
 ### C-25 - The dump prints `capacity` where the release declares `total capacity`
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** `S-43`, building the check it asked for
+**to** spec · **status** **acted** 2026-09-07 · `da65d03` · **raised** 2026-09-05 · **source** `S-43`, building the check it asked for
+
+**Dissolved rather than fixed, which is the outcome this item hoped for.** It reported the dump
+printing `capacity` where the release declared `total capacity` - a name spelled two ways with
+nothing comparing them, which is `founded`'s shape. **`P-331` moved the row onto the deposit**
+and the name is `total-capacity` in one place now: the description, the markdown dump's column,
+and the release's *Traits* row all say the same thing.
+
+**The named exception in `closed_sets.rs` is gone with it**, which is the pattern working
+rather than being weakened - an exception that has been repaired fails, and this one did.
 
 **`founded`'s shape exactly, found by the check `S-43` asked whether was possible.** The release
 declares a trait *total capacity*, of *a territory, per kind*. The dump's `territory-resource`

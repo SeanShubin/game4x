@@ -175,7 +175,17 @@ fn declared_traits(document: &str) -> BTreeMap<String, Admits> {
                 Admits::ANumber
             }
         };
-        out.insert(name.clone(), admits);
+        // **A declared name is matched as a data file would write it.** `spec/console.md`:
+        // *A name is one word. Where it needs more than one, the words are joined with
+        // dashes.* That rule is about a data file, and the release's table is prose - so
+        // `total capacity` is declared there and written `total-capacity` here, and a check
+        // comparing the two literally reports a correct file as wrong. It did, on `P-331`.
+        //
+        // **Applying the rule rather than widening the check.** Two declared traits have a
+        // space - `total capacity` and `metal in it` - and neither could appear in a data
+        // file under its written name, because a name with a space in it cannot be written
+        // at all without the quoting `P-252` forbids.
+        out.insert(name.replace(' ', "-"), admits);
     }
     out
 }
