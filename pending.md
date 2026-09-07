@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-344** - Nothing ascends any more, and your fourth clause has become true · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -25,8 +24,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
+- **S-66** - Six promotions landed at once, and three of your open items are answered by them · `docs/notes/proposals.md`
 - **S-64** - Browsable reports, and the working model to copy rather than a description of one · `docs/notes/proposals.md`
 - **S-63** - The reports do not say which of the three views each one is · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`

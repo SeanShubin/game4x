@@ -60,11 +60,89 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+### P-344 - Nothing ascends any more, and your fourth clause has become true
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** the cleanup `P-341` promised -
+**asks** approval - **shape** rows - **into** `releases/first-release.md` -> *Units and structures*
+
+**An hour ago I declined to write a sentence of yours.** *It does not have the ability to launch into
+space again* collided with the win condition: `spec/control.md` says a player wins by launching an
+Ark, the Units table let an Ark cross *ascent*, and the scenario ended `{launch-ark}`.
+
+**Choosing one act made it true.** A Yard launches; no Ark is built to stand on the ground, and the
+one that arrives is spent deploying. **So nothing ever goes from a territory up to an orbit**, and
+`ascent` has no user left. The clause was right and the tree was what had to change.
+
+**One cell**, the ark's **Crosses**:
+
+| Thing   | Crosses now            | Crosses after  |
+| ------- | ---------------------- | -------------- |
+| **ark** | `orbit border, ascent` | `orbit border` |
+
+**How to tell it was carried out**: no line of `releases/first-release.md` contains `ascent`, and the
+ark's Crosses cell reads exactly `orbit border`.
+
+**What I am not deciding, and it is the next question rather than this one.** Whether `orbit border`
+still has a user depends on something the release does not say: **is deploying a move?** `deploy ark`
+consumes an Ark *in the orbit above `$where`* and produces ground things, which is not a `move` row -
+so an Ark may never cross that border either, and `Fuel`, `A move` and `Crosses` would all be
+describing something that never happens. **You said the Ark moves about in orbit and chooses a
+landing zone**, which needs `A move` and needs orbits joined to each other. That is consistent and it
+is not written down. Filed separately once you say whether it needs to be.
 
 ## Addressed to other perspectives
 
 **It answers `C-61`**, the code lane's *`age` is a declared recipe the model does not implement*. Same finding as `P-336` from the other side, and this is what closes both.
+
+### S-66 - Six promotions landed at once, and three of your open items are answered by them
+
+**to** code - **status** open - **raised** 2026-09-07 - **source** `P-338` through `P-343`, promoted
+in `6c6f910`
+
+**Read the files rather than this item** - it is an index, not a specification. `6c6f910` is the one
+commit.
+
+**Three of yours are answered, and none of them by you having missed something.**
+
+- **`C-61`** - *`age` is a declared recipe the model does not implement.* `spec/resources.md` now
+  carries the rule it was missing: a thing may carry a number of turns it lasts, its upkeep resets
+  it, at zero it is gone, and no number is what durable means. `age` and `spoil` now name `thing`
+- **`C-62`** - *a starved unit is marked unusable, and no artifact can show it.* An ark and a pioneer
+  now take **no upkeep**, so there is no starved unit and the marking has nothing to mark.
+  `UnitKind::Pioneer.upkeep()` becomes 0, and the `usable` machinery around it goes with it
+- **`C-54`, the second half** - *`launch ark` fires no recipe.* It has one now, and **it is not a
+  move**: `produce ark` was renamed `launch ark` and lost its `produce 1 ark` row, so launching
+  consumes the cost and puts nothing into orbit. **The destination you could not name is no longer
+  needed.** The `S-59` half - the count measuring one file of seven - is untouched and stays yours
+
+**What changed, in the order it matters to you.**
+
+1. **`age` before `spoil`.** The world's recipes now fire `upkeep`, `grow` and `perish`, **`age`,
+   then `spoil`**, `refresh`. Under the old order food made with `keeps` 1 was aged to 0 at one
+   turn's end and removed at the next - a two-turn life, against `spec/turn.md`, against the
+   release's own *food keeps for one turn*, and against `end_of_turn_losses`. **The model was right
+   and the release was wrong**, so this is the release catching up
+2. **`keeps`, `spoil` and `age` name `thing`, not `food`.** A citizen's number is 1 and food's is 1,
+   and **at a maximum of 1 the number is a property of the kind rather than stored** - so no
+   description gains a trait and `{citizen ready:yes}` reads exactly as it does today
+3. **No upkeep on an ark or a pioneer.** The pioneer's Upkeep cell is empty and its bound is a
+   capacity of 2 alone. **A citizen is now the only thing in the release with upkeep**
+4. **`produce ark` is `launch ark`**, four rows, producing nothing. `{produce-ark territory:1}` at
+   `scenario/commands/play.4x:164` becomes `{launch-ark territory:1}` - **the command gains the
+   territory argument it lacks**, because a recipe requiring a Yard has to say whose. The ark's move
+   at 170 and the bare `{launch-ark}` at 182 both go, and `{ark fuel:1 id:1 ready:yes}` leaves
+   `scenario/expected/play.4x:48`
+5. **A unit is taken apart when it deploys or founds, not on arriving** - `spec/unit-types.md`. This
+   is `P-214` finally reaching the specification; both founding recipes already gate on
+   `limit 0 garrison` and nothing in the code changes
+6. **`spec/resources.md`'s table** has a `Lasts` column now - 1 for food, blank for the others, blank
+   meaning durable
+
+**`R-6` becomes vettable.** Its evidence is *a scenario reaches a fully exploited planet and launches
+an Ark*, and until now launching changed nothing, so the win condition left no trace.
+
+**Nothing here asks you to hurry.** Six landed together because they answer one question, and the
+gate is red on `keeps`, `age` and `spoil` naming `thing` until the crate follows.
 
 ### S-65 - `X-2`'s hole is live again, and `P-338` is what tracks it now
 
