@@ -216,9 +216,16 @@ was filed, which is the part worth keeping.
 ## Report the claim, not the line
 
 **`Q-66`, 2026-09-06.** This lens found a comment asserting that a stored trait was derived, and
-filed it as `expected_state.rs:77`. **The same claim was in four places.** The code lane grepped for
-the sentence rather than fixing the line reported, and their commit says plainly that grepping is
-the only reason the other three are not still there.
+filed it as `expected_state.rs:77`. **The same claim was in three places, and a fourth doc seeded
+them.** The code lane grepped for the sentence rather than fixing the line reported, and their
+commit says plainly that grepping is the only reason the other two are not still there.
+
+**Their correction, which is the sharper form: one imprecise sentence seeded three false copies, and
+the imprecise one was the least wrong of the four.** `Capacity`'s struct doc said *`used` is
+derived* - true, and silent about `total` - and the three that were flatly false read `capacity is
+derived` downstream of it. **So the copies were not independent mistakes.** That is the better
+reason grepping beats fixing a location: the same true-as-far-as-it-goes sentence is what a reader
+generalises from, and it generalises wrong every time.
 
 **A finding reported as a location gets fixed as a location.** That is not the producer being
 careless - it is the report answering a narrower question than the one it was asked, one step

@@ -25,11 +25,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-29** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-26** - `d1d0e3e` S-26: P-216 checked, turn out of the entity view, and the contradiction that stops P-212 · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
-- **Q-66** - `9733fb8` Q-66 acted, in three places rather than the one reported, and C-51 filed · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (9)
+### To code (8)
 
 - **S-54** - The containment tree Sean asked to see, and the scenario it is generated from · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
@@ -39,7 +38,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-66** - A false reason next to the assertion it explains, in the wording I was asked to check · `lenses/quality/outbox.md`
 
 ### To research (1)
 

@@ -197,9 +197,16 @@ lens nor the specification lane should.
 
 
 
+
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-66 - A false reason next to the assertion it explains, in the wording I was asked to check
 
-**to** code · **status** open · **raised** 2026-09-06 · **source**
+**to** code · **status** **acted** 2026-09-06 · `9733fb8` · **raised** 2026-09-06 · **source**
 [review of the map form, finding 1](2026-09-06-review-of-the-map-form.md)
 
 `crates/game-console/tests/expected_state.rs:77` reads *because capacity is derived and a derived
@@ -223,12 +230,15 @@ and density are stored and are not in the file, `C-46`*, which is what the doc c
 `P-303`: a reason that is false is worse than one that is missing, and the reader it misleads is the
 one who came back unsure whether anything was missing.
 
+**Closed 2026-09-06 · `9733fb8`.** Verified rather than accepted: the false claim is gone from every
+site, `used` is out by the rule and `total` because the map form cannot hold it, and poisoning the
+new `children` guard so it cannot fire fails exactly one `should_panic` test that exhibits the state,
+with 62 passing.
 
----
-
-## Resolved
-
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+**This item was filed as a line and the claim was in three places, with a fourth doc seeding them.**
+The lesson is this lens's and is in [the README](README.md#report-the-claim-not-the-line). The count
+in it was four until the code lane re-derived it - three refuted, one widened - which is `C-9`'s
+shape caught before it was cited rather than after.
 
 ### Q-64 - The data file moved away from `P-284` today, and the obvious fix is the wrong one
 
