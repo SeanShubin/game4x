@@ -237,6 +237,32 @@ of it.
 **Both halves hold and they are not in tension.** No check can ask whether you applied a rule; a
 tool can make the unapplied path impossible or loud, and that is where the effort goes.
 
+## Who caught each of the five, counted
+
+**Nobody caught their own.** Zero of five, which is the number that says what the arrangement is
+for:
+
+- **`S-51`'s gating** - a mechanism. The hook refused the commit; this lane did not notice and then
+  investigate, it was stopped.
+- **`S-53`'s unapplied sentence** - the quality lens, as `Q-62`.
+- **The lens's one-case discriminator** - this lane, running it over 26 rows.
+- **The match string against a rewrapped line** - a mechanism. The replacement helper refused.
+- **The wedged shell** - Sean, after this lane had told him it was idle.
+
+**Two by a tool, two by another lane, one by Sean.** The four instances with a live rule and no
+tool were all caught by somebody who had not written the thing.
+
+**And the lens declined the credit for the two it looks like it self-corrected**, which is the
+observation worth keeping. Both times it refused its own conclusion, another lane had made it run
+the rule: the specification lane asked whether *ten* would survive, and this lane fixed a narrow
+note, which is the only reason it asked what the fix reached. **Neither was self-correction. What
+produced them was another lane pushing** - a property of three lanes rather than of any instance.
+
+**So the third answer sits beside the other two, and it is the one that covers what no tool does.**
+A tool where the unapplied path can be made impossible or loud; a habit where it cannot; and
+**another lane running the rule over your work**, which is the only thing that caught four of these
+five and the only thing available for the case that resists.
+
 **Not offered as words to promote.** This lane does not write `docs/process.md`. Filed because
 `P-302` says an insight living only in a message is lost, and this one arrived in a message from a
 lane that deliberately did not file it.
