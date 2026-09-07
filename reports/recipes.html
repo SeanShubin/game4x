@@ -25,9 +25,10 @@ ul { padding-left: 1.2rem }
 <body>
 <p class="note"><a href="index.html">all reports</a></p>
 <h1>Recipes</h1>
-<p><strong>Generated. Do not edit.</strong> <code>cargo run -p kinds -- recipes</code>, or <code>scripts/kinds.sh recipes</code>.</p>
+<p><strong>Generated. Do not edit.</strong> <code>cargo run -p game-console --bin dump-state</code>, or <code>scripts/dump-state.sh</code>.</p>
 <p>Every recipe the release declares, with its own lines gathered under it. The release states these across seven columns, one row per line and the name written only on the first - which is the right shape for a table and the wrong one for answering <em>what does this recipe do</em>.</p>
-<p>16 recipes, 59 lines between them.</p>
+<p><strong>Beside each rule is a worked example</strong> - a state, the command that fires the recipe, and the state after - in the notation <code>scenario/expected/play.4x</code> uses, holding only what that recipe touched. Every one is a real command run against a real state: <code>R-7</code>.</p>
+<p>16 recipes, 59 lines between them, 10 worked examples.</p>
 <h2>deploy ark</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -41,6 +42,31 @@ ul { padding-left: 1.2rem }
 <li><strong>produce</strong> 1 store, food</li>
 <li><strong>produce</strong> 1 store, metal</li>
 </ul>
+<h3>An example</h3>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {orbit id:1} -&gt; 1
+    {ark fuel:2 id:1 ready:yes} -&gt; 1
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {deposit density:4 resource:metal total-capacity:3} -&gt; 1
+</pre>
+<p><code>{deploy-ark territory:1}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {orbit id:1} -&gt; 1
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 2
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {deposit density:4 resource:metal total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:food} -&gt; 1
+    {extractor ready:yes resource:metal} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+    {store resource:metal} -&gt; 1
+</pre>
 <h2>move</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -50,6 +76,31 @@ ul { padding-left: 1.2rem }
 <li><strong>consume</strong> 1 energy, in that unit</li>
 <li><strong>produce</strong> 1 unit, not ready, in <code>$to</code></li>
 </ul>
+<h3>An example</h3>
+<p>moving spends one fuel and leaves the unit not ready.</p>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+</pre>
+<p><code>{move unit:pioneer territory:2}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:1 id:1 ready:no} -&gt; 1
+</pre>
 <h2>found by land</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -62,6 +113,36 @@ ul { padding-left: 1.2rem }
 <li><strong>produce</strong> 1 store, food</li>
 <li><strong>produce</strong> 1 store, metal</li>
 </ul>
+<h3>An example</h3>
+<p>the pioneer is consumed and the ground it takes is furnished.</p>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {deposit density:4 resource:metal total-capacity:3} -&gt; 1
+</pre>
+<p><code>{found-by-land territory:2}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+  {territory biome:grassland id:2 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 2
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {deposit density:4 resource:metal total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:food} -&gt; 1
+    {extractor ready:yes resource:metal} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+    {store resource:metal} -&gt; 1
+</pre>
 <h2>build extractor</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -69,6 +150,27 @@ ul { padding-left: 1.2rem }
 <li><strong>consume</strong> 1 metal</li>
 <li><strong>produce</strong> 1 extractor, <code>$resource</code></li>
 </ul>
+<h3>An example</h3>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {deposit density:4 resource:metal total-capacity:3} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {labor} -&gt; 1
+    {metal} -&gt; 1
+</pre>
+<p><code>{build-extractor territory:1 resource:metal}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {deposit density:4 resource:metal total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:metal} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+</pre>
 <h2>build store</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -76,6 +178,29 @@ ul { padding-left: 1.2rem }
 <li><strong>consume</strong> 1 metal</li>
 <li><strong>produce</strong> 1 store, <code>$resource</code></li>
 </ul>
+<h3>An example</h3>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {deposit density:4 resource:metal total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:metal} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {labor} -&gt; 1
+    {metal} -&gt; 1
+</pre>
+<p><code>{build-store territory:1 resource:metal}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {deposit density:4 resource:metal total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:metal} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:metal} -&gt; 1
+</pre>
 <h2>build yard</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -83,6 +208,25 @@ ul { padding-left: 1.2rem }
 <li><strong>consume</strong> 15 metal</li>
 <li><strong>produce</strong> 1 yard</li>
 </ul>
+<h3>An example</h3>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {labor} -&gt; 1
+    {metal} -&gt; 15
+</pre>
+<p><code>{build-yard territory:1}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {yard} -&gt; 1
+</pre>
 <h2>produce pioneer</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -91,6 +235,24 @@ ul { padding-left: 1.2rem }
 <li><strong>consume</strong> 2 citizen</li>
 <li><strong>produce</strong> 1 pioneer</li>
 </ul>
+<h3>An example</h3>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 2
+    {energy} -&gt; 6
+    {garrison force:0 manned:0} -&gt; 1
+    {metal} -&gt; 3
+</pre>
+<p><code>{produce-pioneer territory:1}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
+</pre>
 <h2>produce ark</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -100,6 +262,26 @@ ul { padding-left: 1.2rem }
 <li><strong>require</strong> 1 yard</li>
 <li><strong>produce</strong> 1 ark</li>
 </ul>
+<h3>An example</h3>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 2
+    {energy} -&gt; 12
+    {garrison force:0 manned:0} -&gt; 1
+    {metal} -&gt; 3
+    {yard} -&gt; 1
+</pre>
+<p><code>{produce-ark territory:1}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {ark fuel:2 id:1 ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {yard} -&gt; 1
+</pre>
 <h2>create labor</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -107,6 +289,23 @@ ul { padding-left: 1.2rem }
 <li><strong>produce</strong> 1 citizen, not ready</li>
 <li><strong>produce</strong> 1 labor</li>
 </ul>
+<h3>An example</h3>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+</pre>
+<p><code>{create-labor territory:1}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:no} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {labor} -&gt; 1
+</pre>
 <h2>work</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -116,40 +315,71 @@ ul { padding-left: 1.2rem }
 <li><strong>produce</strong> 1 extractor, not ready</li>
 <li><strong>produce</strong> resource — <code>$where</code>'s density for that resource</li>
 </ul>
+<h3>An example</h3>
+<p>the density is what one extractor yields, so four food from a <code>3 x 4</code>.</p>
+<p>Before:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:yes resource:food} -&gt; 1
+    {garrison force:0 manned:0} -&gt; 1
+    {labor} -&gt; 1
+    {store resource:food} -&gt; 1
+</pre>
+<p><code>{work territory:1 resource:food}</code></p>
+<p>After:</p>
+<pre>
+{game phase:play}
+  {territory biome:grassland id:1 nature:0} -&gt; 1
+    {citizen ready:yes} -&gt; 1
+    {deposit density:4 resource:food total-capacity:3} -&gt; 1
+    {extractor ready:no resource:food} -&gt; 1
+    {food} -&gt; 4
+    {garrison force:0 manned:0} -&gt; 1
+    {store resource:food} -&gt; 1
+</pre>
 <h2>upkeep</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>require</strong> 1 thing, with upkeep</li>
 <li><strong>consume</strong> food — the thing's upkeep</li>
 </ul>
+<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
 <h2>grow</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>consume</strong> food — the lesser of the surplus food and the citizens here, surplus</li>
 <li><strong>produce</strong> citizen — the lesser of the surplus food and the citizens here</li>
 </ul>
+<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
 <h2>perish</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>consume</strong> 1 thing, whose upkeep is unpaid</li>
 <li><strong>produce</strong> metal — the thing's metal</li>
 </ul>
+<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
 <h2>spoil</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>consume</strong> 1 food, keeps 0</li>
 </ul>
+<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
 <h2>age</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>consume</strong> 1 food, keeps at least 1</li>
 <li><strong>produce</strong> 1 food, keeps one less</li>
 </ul>
+<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
 <h2>refresh</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
 <li><strong>consume</strong> 1 thing, not ready</li>
 <li><strong>produce</strong> 1 thing, ready</li>
 </ul>
+<p><em>No worked example: this is the world's, and the world's six all fire on <code>{end-turn}</code>. <code>C-59</code>.</em></p>
 </body>
 </html>

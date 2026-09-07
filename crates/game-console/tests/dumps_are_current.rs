@@ -86,10 +86,12 @@ fn marked_on_disk(root: &Path) -> Vec<String> {
             .unwrap_or_default()
             .to_string_lossy()
             .to_string();
-        // `prototypes/kinds` produces these and holds each to being current itself. They
-        // are excluded here rather than added, because this test is about the dumps and a
-        // file belongs to whatever generates it.
-        if name == "catalog.md" || name == "recipes.md" {
+        // `prototypes/kinds` produces `catalog.md` and holds it to being current itself. It
+        // is excluded here rather than added, because this test is about the dumps and a file
+        // belongs to whatever generates it. **`recipes.md` left this list with `R-7`**: it
+        // carries a worked example under each rule now, which is a real command run against a
+        // real state, so it is generated here and held here.
+        if name == "catalog.md" {
             continue;
         }
         let Ok(text) = std::fs::read_to_string(&path) else {
@@ -128,12 +130,13 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let mut generated = dump::generated(&Files(root.join("scenario/commands")));
 
-    // Ten since `S-54` added `containment.html`, which is the one page with no markdown
-    // beside it - `crate::tree` says why.
+    // Twelve since `R-7` moved `recipes.md` here from `prototypes/kinds` and gave it a page.
+    // `containment.html` is still the one page with no markdown beside it - `crate::tree`
+    // says why.
     assert_eq!(
         generated.len(),
-        10,
-        "ten dump files are generated; `dump::generated` returned {}",
+        12,
+        "twelve dump files are generated; `dump::generated` returned {}",
         generated.len()
     );
 
@@ -149,8 +152,8 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     }
     assert_eq!(
         generated.len(),
-        12,
-        "twelve generated files, eight of them pages"
+        13,
+        "thirteen generated files, nine of them pages"
     );
 
     let produced: std::collections::BTreeSet<String> =
@@ -206,8 +209,8 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // The set was discovered, so it can be empty for the wrong reason. This says it was not.
     assert_eq!(
         on_disk.len(),
-        12,
-        "twelve files carry the generated marker; found {} ({on_disk:?})",
+        13,
+        "thirteen files carry the generated marker; found {} ({on_disk:?})",
         on_disk.len()
     );
 }
@@ -225,7 +228,7 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
         let markdown = std::fs::read_to_string(root.join("reports").join(name)).unwrap();
         generated.push((dump::html_name(name), dump::page(&markdown, name)));
     }
-    assert_eq!(generated.len(), 12, "twelve generated files");
+    assert_eq!(generated.len(), 13, "thirteen generated files");
 
     for (name, text) in &generated {
         assert!(
@@ -242,8 +245,12 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
         // when it was full - a check whose one shape stopped fitting the moment a second
         // kind of page existed. `catalog.html` is the third shape: prose and lists, and no
         // table anywhere in it, so `<td>` would have called it empty too.
+        // `recipes.md` is the fourth shape and arrived with `R-7`: bullets for the rule and
+        // fenced blocks for the worked example, and no table anywhere. What says it has
+        // content is a heading per recipe.
         let marker = match *name {
             "index.html" => "<a href",
+            "recipes.md" => "## ",
             _ if name.ends_with(".html") => "<h1>",
             _ => "| ",
         };

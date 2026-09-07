@@ -19,6 +19,7 @@ pub mod binding;
 pub mod dump;
 pub mod fired;
 pub mod grammar;
+pub mod recipes;
 pub mod report;
 pub mod state;
 pub mod tree;
