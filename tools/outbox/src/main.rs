@@ -5,6 +5,7 @@
 //! outbox --to code        one addressee's inbox
 //! outbox --check          exit 1 if anything is open and addressed
 //! outbox --closing        what closed since HEAD, and open items deriving from its rule
+//! outbox --orphans        closed items whose closing line names a withdrawn proposal
 //! outbox --count          the aggregate, against the limit
 //! ```
 //!
@@ -32,6 +33,24 @@ fn main() {
     // directories should say how many it found, so a missing one is visible rather than
     // silently excluded from a count somebody trusts.
     report_what_was_found(&all);
+
+    // **Said and never gated**, which is the distinction between this and `complain`: a
+    // complaint exits 2, `hooks/pre-commit` runs under `set -e`, and three lanes share this
+    // tree - so a complaint about one lane's file stops every other lane committing.
+    //
+    // **Learned by doing it.** This began as a complaint, and the two headings it names are
+    // in the proposal queue, which this lane may not edit. It blocked its own commit and
+    // would have blocked the specification lane's next one, on a file only they can repair.
+    // `Q-60` says exactly that about `S-51`, in the change that introduced it.
+    if !all.unparsed.is_empty() {
+        eprintln!(
+            "{} heading(s) name an item that does not parse as one, so they are invisible to \
+             this index: {}\n  the first non-blank line under a heading must be its `**to**` \
+             line - a note written above it removes the item silently",
+            all.unparsed.len(),
+            all.unparsed.join(", ")
+        );
+    }
 
     let complaints = complain(&all);
     for complaint in &complaints {
@@ -111,6 +130,38 @@ fn main() {
         // the rule. An item whose premise moved still reads correctly and only its
         // conclusion has stopped being true, so nothing can decide that for a reader. What
         // this does is put the two in front of each other at the moment one of them moves.
+        // `S-51`. Reports and does not gate - `Q-60`: a gate reddens for whichever lane
+        // commits next, and that may be one which must not repair it. `P-305`'s filing rule
+        // is the mechanism; this is the backstop for when it is forgotten.
+        Some("--orphans") => {
+            let queue =
+                std::fs::read_to_string(root.join("docs/notes/proposals.md")).unwrap_or_default();
+            let (population, orphans, misfiled) = outbox::closed_on_withdrawn(&all.items, &queue);
+            // **Reported, never treated as a withdrawal** - `Q-61`. Acting on one would file
+            // work into another lane's outbox because of a typo in a table.
+            if !misfiled.is_empty() {
+                println!(
+                    "{} row(s) under Withdrawn name a destination and a date, which is an \
+                     Accepted row in the wrong table: {misfiled:?}",
+                    misfiled.len()
+                );
+            }
+            // **Both numbers, because zero says nothing on its own.** A predicate that had
+            // stopped matching anything would report no orphans and look identical to a
+            // queue with none - `docs/process.md` -> What makes a check worth having.
+            println!(
+                "{} closed item(s) whose closing line names a proposal; {} name a withdrawn one",
+                population,
+                orphans.len()
+            );
+            for (item, outbox, proposal) in &orphans {
+                println!(
+                    "{item} in {outbox} closed on {proposal}, which is withdrawn - it closed \
+                     into something nobody decided to drop"
+                );
+            }
+            0
+        }
         Some("--closing") => {
             let closing = outbox::closing(&root, &all);
             let sharing = outbox::sharing_a_rule(&closing, &all.items);

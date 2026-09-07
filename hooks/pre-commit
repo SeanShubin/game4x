@@ -81,6 +81,16 @@ else
     # Printed beside the citation reconciliation because that output gets read: it is what
     # found the stale R-6 blocker. It makes the failure findable rather than found, which is
     # the limit promoted with the rule.
+    # S-51's backstop. Reports and never gates - Q-60: a gate reddens for whichever lane
+    # commits next, and that may be one which must not repair it. P-305's filing rule is the
+    # mechanism; this catches the case where it was forgotten. Q-61 is why a row that reads
+    # like a promotion is reported rather than believed.
+    orphans=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --orphans 2>/dev/null | grep -E "closed on|wrong table" || true)
+    if [ -n "$orphans" ]; then
+        echo "pre-commit: the withdrawn ledger and the closed items disagree:"
+        echo "$orphans" | sed 's/^/  /'
+    fi
+
     closing=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --closing 2>/dev/null | grep "derives from the same rule" || true)
     if [ -n "$closing" ]; then
         echo "pre-commit: an item closed, and these open items derive from its rule:"

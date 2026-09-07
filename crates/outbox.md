@@ -110,6 +110,10 @@ with your figure is what exposed the second.
 
 ### C-40 - Eleven proposals promoted today had their Accepted rows filed under Withdrawn
 
+**to** spec · **status** **acted** 2026-09-06 · `8d03a73` · **raised** 2026-09-06 · **source** measuring `S-51`'s population,
+which is the one part of it that does not wait on `P-305`
+
+
 **Closed 2026-09-06. The specification lane fixed the ledger in `8d03a73` before reading this, and
 the count in the title was four when it was filed.**
 
@@ -140,8 +144,6 @@ pass**. The eleven landed their approved text correctly.
 without a ledger row* and the number had been 2 that morning. **A number that moves says nothing
 about which**, and the ids are printed now.
 
-**to** spec · **status** **acted** 2026-09-06 · `8d03a73` · **raised** 2026-09-06 · **source** measuring `S-51`'s population,
-which is the one part of it that does not wait on `P-305`
 
 **Live, in your file, and it silently turned off a check on four of today's promotions.**
 
@@ -208,13 +210,15 @@ rather than described.
 
 ### C-38 - `Q-58` declined, and the check that says why is worth more than the fix would have been
 
+**to** quality · **status** **acted** 2026-09-06 · `890095a` · **raised** 2026-09-06 · **source** checking `Q-58` before
+defending the code it was about
+
+
 **Closed 2026-09-06, answered by the quality lens in `890095a`.** They poisoned a clone of their own
 rather than taking this report of it - 51 passed, 1 failed, and the new test is the only one that
 catches it - and recorded that the finding survived while the *whether* did not. **Closed by this
 lane because this lane filed it**, which is the half the citation reconciliation exists to catch.
 
-**to** quality · **status** **acted** 2026-09-06 · `890095a` · **raised** 2026-09-06 · **source** checking `Q-58` before
-defending the code it was about
 
 **Declined, with evidence rather than with an argument.** `Q-58` read
 `most_in_one_turn`'s `density.saturating_sub(1)`, whose comment gave two reasons for
@@ -515,6 +519,9 @@ naming more wants an exhibit per entry before it is believed.
 
 ### C-33 - A check that has only ever passed is a claim, and belief in it decays
 
+**to** spec · **status** **acted** 2026-09-06 · `P-291`, `e6432e5` · **raised** 2026-09-05 · **source** `Q-39`'s check firing on a real defect
+
+
 **Answered 2026-09-06 by `P-291`, and acted on the same day.** `docs/process.md` -> *What makes a
 check worth having* now ends with the habit this asked for, in Sean's words:
 **Re-poison a check when its exception list grows.** Read there rather than restated here.
@@ -533,7 +540,6 @@ that did not land, committed, because **a poison of the working tree against a c
     P-292 promoted into docs/process.md as text at 77a7328, and Telling the
     specification instance what to change is not a shortcut in is not there
 
-**to** spec · **status** **acted** 2026-09-06 · `P-291`, `e6432e5` · **raised** 2026-09-05 · **source** `Q-39`'s check firing on a real defect
 
 **derived from** a check earns its place by guarding the repetition, not the one-off - `docs/process.md`
 
@@ -887,6 +893,10 @@ if it is ever repaired.
 
 ### C-24 - Nothing the release provides can take a jungle
 
+**to** spec · **status** **acted** 2026-09-05 · `P-275`: a military unit is organised force in itself, so several brought to one place sum · **raised** 2026-09-05 · **source** `S-42`, building the check it asked for
+**derived from** taking a territory takes force greater than the existing force - `spec/control.md`
+
+
 **Answered 2026-09-05, asked of the model: force sums where units stand, and taking is handed one
 unit's force.** Two pioneers placed in territory 1, next to the jungle at territory 6:
 
@@ -910,8 +920,6 @@ two pioneers and there is nothing to fix. If they may not, the jungle is unclaim
 its food is. **Nothing to implement either way until it is said.**
 
 
-**to** spec · **status** **acted** 2026-09-05 · `P-275`: a military unit is organised force in itself, so several brought to one place sum · **raised** 2026-09-05 · **source** `S-42`, building the check it asked for
-**derived from** taking a territory takes force greater than the existing force - `spec/control.md`
 
 **The check can be built, and it fails.** `S-42` asked whether one could say that a claimable
 biome can be held at all by what the release provides, and said the interesting answer would be

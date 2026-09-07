@@ -56,6 +56,12 @@ pub struct Item {
     /// things disagreeing about where a proposal's body ends would be worse than either
     /// parsing alone - so the body is cut once, here.
     pub body: String,
+    /// The `**to** ... **status** ...` line, kept apart from the prose under it.
+    ///
+    /// **`S-51` needs the distinction and nothing else did.** What an item closed *on* is on
+    /// this line - a status, a hash, a proposal id. What it *mentions* is in the body. Read
+    /// together they cannot be told apart, and the naive predicate reports correct items.
+    pub fields: String,
     /// The rule this item's numbers were derived from, if it says.
     ///
     /// **`S-41`'s form, and `P-250` is the rule it serves**: *a number an item derives names
@@ -109,6 +115,44 @@ pub struct Outboxes {
     /// Every place looked at that held no outbox. Reported rather than skipped in silence,
     /// because a missing outbox and an empty one are very different facts.
     pub missing: Vec<String>,
+    /// Headings that name an item and do not parse as one, with where they are.
+    ///
+    /// **The one failure `parse` is documented as having and nothing watched for.** An item
+    /// whose first non-blank line is not `**to**` is skipped entirely - deliberately, because
+    /// an item without an address is not an item - and the comment there warns that a file
+    /// parsing to nothing and a file holding nothing look identical. **A closing note written
+    /// above the field line does exactly that**, and it had removed four items from this
+    /// index without anything saying so.
+    pub unparsed: Vec<String>,
+}
+
+/// Headings shaped like an item that `parse` will not return.
+///
+/// **The shape is the discriminator, and it has to be**, because an outbox legitimately uses
+/// `### ` for prose - the quality lens has five such headings and none of them is an item.
+/// An id is `C-40`, `S-51`, `Q-61`: letters, a dash, digits. A sentence is not.
+fn unparsed(text: &str, outbox: &str) -> Vec<String> {
+    let seen: Vec<String> = parse(text, outbox)
+        .into_iter()
+        .map(|item| item.id)
+        .collect();
+    let mut missing = Vec::new();
+    for line in text.lines() {
+        let Some(heading) = line.strip_prefix("### ") else {
+            continue;
+        };
+        let id = heading.split(" - ").next().unwrap_or("").trim();
+        let shaped = id.split_once('-').is_some_and(|(letters, digits)| {
+            !letters.is_empty()
+                && letters.chars().all(|c| c.is_ascii_uppercase())
+                && !digits.is_empty()
+                && digits.chars().all(|c| c.is_ascii_digit())
+        });
+        if shaped && !seen.iter().any(|found| found == id) {
+            missing.push(format!("{id} in {outbox}"));
+        }
+    }
+    missing
 }
 
 /// How many open items the workflow tolerates before reviewing costs as much as writing.
@@ -151,6 +195,7 @@ pub fn read(root: &Path) -> Outboxes {
         let shown = shorten(root, &path);
         match std::fs::read_to_string(&path) {
             Ok(text) => {
+                all.unparsed.extend(unparsed(&text, &shown));
                 all.items.extend(parse(&text, &shown));
                 if shown.ends_with("proposals.md") {
                     all.landed.extend(accepted(&text));
@@ -220,6 +265,7 @@ pub fn parse(text: &str, outbox: &str) -> Vec<Item> {
                 "
 ",
             ),
+            fields: (*fields).to_string(),
             derived_from: derived_from(&lines[at..ends]),
             cited: considered(fields),
         });
@@ -253,6 +299,111 @@ fn derived_from(body: &[&str]) -> Option<String> {
         .collect::<Vec<_>>()
         .join(" ");
     (!rule.is_empty()).then(|| rule.to_lowercase())
+}
+
+/// Every proposal the queue records as withdrawn.
+///
+/// **Withdrawn is not promoted and is not rejected.** A proposal that lands leaves the queue
+/// too and gets an Accepted row; a rejection is Sean's recorded decision, and
+/// `docs/process.md` says a decision of his not to do something is not a thing lost. Only a
+/// withdrawal means the thing evaporated with nobody having decided anything - `S-51`.
+pub fn withdrawn(text: &str) -> (Vec<String>, Vec<String>) {
+    let mut found = Vec::new();
+    let mut misfiled = Vec::new();
+    let mut inside = false;
+    for line in text.lines() {
+        if let Some(heading) = line.strip_prefix("## ") {
+            inside = heading.trim() == "Withdrawn";
+            continue;
+        }
+        if !inside || !line.trim_start().starts_with('|') {
+            continue;
+        }
+        let cells: Vec<&str> = line.trim().trim_matches('|').split('|').collect();
+        let id = cells
+            .first()
+            .and_then(|first| first.split(',').next())
+            .unwrap_or("")
+            .trim();
+        if !id.starts_with("P-") {
+            continue;
+        }
+        // **A row here is trusted only if it reads like a withdrawal** - `Q-61`. This table
+        // is hand-maintained and was wrong for eleven rows on 2026-09-06: `P-292` through
+        // `P-302` were promoted and their Accepted rows were written here, so for that window
+        // the ledger said eleven landed proposals had evaporated. `Q-53` is closed citing
+        // `P-296`, one of the eleven, and a check reading this table naively would have
+        // reported it orphaned - after which `P-305`'s rule files a reopening into the
+        // quality lens's outbox on the strength of a filing error.
+        //
+        // **A withdrawal says why; a promotion says where and when.** So a row whose second
+        // cell names a destination and whose third is a date is an Accepted row in the wrong
+        // table. It is not read as a withdrawal, and is reported instead.
+        let destination = cells.get(1).map(|c| c.trim()).unwrap_or("");
+        let date = cells.get(2).map(|c| c.trim()).unwrap_or("");
+        let dated = date.len() == 10 && date.starts_with("20") && date.matches('-').count() == 2;
+        if dated && destination.contains('`') && !destination.starts_with("withdrawn") {
+            misfiled.push(id.to_string());
+            continue;
+        }
+        found.push(id.to_string());
+    }
+    (found, misfiled)
+}
+
+/// Closed items whose **closing citation** names a withdrawn proposal.
+///
+/// **`S-51`, and the predicate is the part that took measuring.** The obvious reading -
+/// *a closed item whose text cites `P-n`* - is decoration: 45 closed items name a proposal
+/// somewhere, and the ones naming a withdrawn one are almost all correct. `S-20` says
+/// *`P-205` withdrew that word, which is right*; `C-40` names the two rows that were
+/// genuinely withdrawn while reporting nine that were not. **Those items mention a
+/// withdrawal knowingly, which is the opposite of closing into one.**
+///
+/// **What separates them is where the id sits.** An item's field line carries what it closed
+/// on - a status, a hash, a proposal - and its body is prose. Measured over every closed item
+/// in every outbox: **23 name a proposal on the field line and 4 name a withdrawn one only in
+/// prose**, and all four of the second group are correct. So the field line is the predicate,
+/// and the population is 23 rather than nothing.
+///
+/// **It reports and does not gate**, which is `Q-60`'s point: a gate reddens for whichever
+/// lane commits next, and that may be a lane which must not repair it. The rule that makes
+/// somebody act is `P-305` - the lane withdrawing a proposal files the reopening in the same
+/// commit. This is the backstop for when that is forgotten.
+pub fn closed_on_withdrawn(
+    items: &[Item],
+    queue: &str,
+) -> (usize, Vec<(String, String, String)>, Vec<String>) {
+    let (gone, misfiled) = withdrawn(queue);
+    let mut population = 0;
+    let mut orphans = Vec::new();
+    for item in items.iter().filter(|item| !item.is_outstanding()) {
+        let named: Vec<&String> = gone
+            .iter()
+            .filter(|id| mentions(&item.fields, id))
+            .collect();
+        if item.fields.contains("P-") {
+            population += 1;
+        }
+        for id in named {
+            orphans.push((item.id.clone(), item.outbox.clone(), id.clone()));
+        }
+    }
+    (population, orphans, misfiled)
+}
+
+/// Whether a line names an id, without matching `P-30` inside `P-300`.
+fn mentions(text: &str, id: &str) -> bool {
+    let mut from = 0;
+    while let Some(at) = text[from..].find(id) {
+        let at = from + at;
+        let after = text[at + id.len()..].chars().next();
+        if !after.is_some_and(|c| c.is_ascii_digit()) {
+            return true;
+        }
+        from = at + id.len();
+    }
+    false
 }
 
 /// Items that are closed in the working tree and were outstanding at `HEAD`.
@@ -854,6 +1005,116 @@ One line of what it is.
 **to** code · **status** withdrawn · **raised** 2026-08-29
 ";
 
+    /// `S-51`, over the three cases that separate a real orphan from a correct item.
+    ///
+    /// **The predicate was measured before it was written** - `C-41`. Of 45 closed items
+    /// naming a proposal, the naive *cites anywhere* reading flagged three, and two of them
+    /// were correct items mentioning a withdrawal knowingly. The field line is what an item
+    /// closed **on**; the body is prose.
+    #[test]
+    fn an_item_that_closed_on_a_withdrawn_proposal_is_told_from_one_that_mentions_it() {
+        let queue = "\
+## Withdrawn
+
+| Proposal                                 | Why                                  |    |
+| ---------------------------------------- | ------------------------------------ | -- |
+| P-77, a rule nobody needed               | Superseded by P-80.                  |    |
+| P-292, a promotion filed in the wrong table | `docs/process.md` -> Somewhere    | 2026-09-06 |
+";
+        let (gone, misfiled) = withdrawn(queue);
+        assert_eq!(gone, ["P-77"], "a withdrawal says why");
+        assert_eq!(
+            misfiled,
+            ["P-292"],
+            "a row naming a destination and a date is an Accepted row in the wrong table, \
+             and `Q-61` is that it must not be read as a withdrawal - eleven were, and one \
+             of them is cited by a closed item"
+        );
+
+        let items = parse(
+            "\
+### C-70 - closed on the proposal that evaporated
+
+**to** spec · **status** acted · `P-77`
+
+Nothing else.
+
+### C-71 - closed correctly, and says so
+
+**to** spec · **status** acted · `9abc123`
+
+Answered by `P-80`, which replaced `P-77`. Knowing that is why this closed.
+
+### C-72 - closed on a proposal the ledger has misfiled
+
+**to** spec · **status** acted · `P-292`
+
+The row says withdrawn and the proposal was promoted.
+
+### C-73 - still open, and names it too
+
+**to** code · **status** open · `P-77`
+
+Not closed, so not orphaned.
+",
+            "crates/outbox.md",
+        );
+        assert_eq!(items.len(), 4, "four written, four parsed");
+
+        let (population, orphans, also_misfiled) = closed_on_withdrawn(&items, queue);
+        assert_eq!(also_misfiled, ["P-292"]);
+        assert_eq!(
+            population, 2,
+            "two closed items name a proposal on their closing line - `C-71` closed on a \
+             commit and is not in the denominator, which is right. Zero orphans would say \
+             nothing against a population of nothing"
+        );
+        let named: Vec<&str> = orphans.iter().map(|(id, _, _)| id.as_str()).collect();
+        assert_eq!(
+            named,
+            ["C-70"],
+            "C-71 mentions the withdrawal in prose and closed on a commit; C-72 closed on a \
+             misfiled row, which `Q-61` says is a ledger defect and not a withdrawal; C-73 \
+             is not closed at all"
+        );
+    }
+
+    /// A heading that names an item and does not parse as one is reported, not dropped.
+    ///
+    /// **Four items were invisible to this index and nothing said so.** `parse` skips a
+    /// heading whose first non-blank line is not `**to**`, which is right, and its own
+    /// comment warns the failure is silent. A closing note written above the field line does
+    /// exactly that. The shape is the discriminator because an outbox legitimately uses
+    /// `### ` for prose.
+    #[test]
+    fn a_heading_that_names_an_item_and_does_not_parse_is_reported() {
+        let text = "\
+### C-80 - written the usual way
+
+**to** code · **status** open
+
+### C-81 - a closing note above the field line
+
+**Closed today**, which is the line that hides it.
+
+**to** code · **status** acted
+
+### Three cases in a week, and none of them a defect
+
+Prose, and legitimately not an item.
+";
+        assert_eq!(
+            parse(text, "crates/outbox.md").len(),
+            1,
+            "only the first parses, which is the behaviour that hid four items"
+        );
+        assert_eq!(
+            unparsed(text, "crates/outbox.md"),
+            ["C-81 in crates/outbox.md"],
+            "the id-shaped heading is named and the prose heading is not"
+        );
+    }
+
     /// `P-250`'s second half, over text written to make it fire.
     ///
     /// **A listing nobody has seen produce anything is a claim** - the same argument
@@ -1077,6 +1338,7 @@ end - `spec/turn.md`, `P-100`
             status: "open".to_string(),
             outbox: "crates/outbox.md".to_string(),
             body: String::new(),
+            fields: String::new(),
             derived_from: None,
             cited: cited.iter().map(|hash| hash.to_string()).collect(),
         }
