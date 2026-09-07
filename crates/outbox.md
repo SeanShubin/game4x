@@ -102,15 +102,35 @@ than the one asked and returning a plausible number; here the instrument is corr
 picked up at all**. The failure is not in the rule and not in the check - it is that neither was
 applied to the work stating it.
 
-**One thing that worked, and it is the only mechanical defence any of the four had.** The fourth was
-caught immediately, because the replacement helper **refuses when its anchor does not match exactly
-once** rather than reporting a no-op. `CLAUDE.md` already says why - *`str.replace` with no match is
-a no-op rather than an error*. **The other three were caught by a person**: two by the lens, one by
-this lane running the rule over a population rather than an example.
+**Three of the four have a mechanical defence, and one resists.** The first version of this item
+said one did, and drew the wrong conclusion from it. **The quality lens refuted that by applying
+this item's own standard to its own instances**, which is the shape the item is about, arriving on
+the item itself.
 
-**So this is worth stating and probably not worth automating**, which is the same limit `C-28` and
-`P-245` reached: no check can ask whether another rule was applied to the change that wrote it. What
-is available is the habit, and the four cases.
+The standard is not *does a tool detect that the rule went unapplied* - nothing does that. It is
+**does a tool make the unapplied path impossible or loud**:
+
+- **The fourth had one and it fired.** The replacement helper refuses when its anchor does not match
+  exactly once, so a match string that missed a rewrapped line was loud rather than a silent no-op.
+  `CLAUDE.md` already says why: *`str.replace` with no match is a no-op rather than an error*.
+- **The second has one now** - `outbox --places`, built the same afternoon. It does not detect that
+  `S-53`'s sentence went unapplied; it removes the possibility of the two lists drifting at all,
+  which is the stronger form.
+- **The first has one now, and building it is what this correction bought.** `main.rs` had a single
+  channel: a note was a string, and `main` exited 2 if there were any - so **gating was the default
+  and not gating was something to remember**. A note now says which channel it is on, and
+  `exit_code` is a function an advisory note cannot change, with a test that says so.
+- **The third resists and is the lens's own.** A discriminator proposed from the single case that
+  suggested it. A convention requiring a population is a habit, not a tool.
+
+**So the conclusion is the opposite of what this item first drew.** *No check can ask whether a rule
+was applied* is true and is the wrong question to leave a reader with, because it reads as *nothing
+can be done*. **The answerable question is what tool would have refused**, and three of these four
+now have an answer - two of them built today, in response to the instance rather than in advance
+of it.
+
+**Both halves hold and they are not in tension.** No check can ask whether you applied a rule; a
+tool can make the unapplied path impossible or loud, and that is where the effort goes.
 
 **Not offered as words to promote.** This lane does not write `docs/process.md`. Filed because
 `P-302` says an insight living only in a message is lost, and this one arrived in a message from a

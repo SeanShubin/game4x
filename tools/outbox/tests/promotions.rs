@@ -109,6 +109,37 @@ fn blocks(body: &str) -> Vec<String> {
     found
 }
 
+/// Every bare markdown table in an item, each as its own block.
+///
+/// **A `shape rows` proposal may offer its rows as a table rather than as a quotation, and
+/// both forms are in use.** `P-286` and `P-288` wrote `> | … |`; `P-274` and `P-310` wrote
+/// the table plainly. Reading only blockquotes made the second form *no block to land* -
+/// which is not a promotion that failed, it is this check answering a narrower question than
+/// the one asked and returning a confident verdict about it. `C-28`, in the instrument.
+///
+/// Only the rows arm asks for these, because a table appearing beside a text proposal is
+/// context rather than the thing offered.
+fn tables(body: &str) -> Vec<String> {
+    let mut found = Vec::new();
+    let mut current: Vec<String> = Vec::new();
+    for line in body.lines() {
+        let trimmed = line.trim();
+        // A quoted table belongs to `blocks`, which already reads it.
+        if trimmed.starts_with('|') && !line.trim_start().starts_with('>') {
+            current.push(trimmed.to_string());
+        } else if !current.is_empty() {
+            found.push(current.join("\n"));
+            current.clear();
+        }
+    }
+    if !current.is_empty() {
+        found.push(current.join("\n"));
+    }
+    // A table is a header, its rule, and at least one row. Fewer is a fragment quoted inline.
+    found.retain(|table| table.lines().count() >= 3);
+    found
+}
+
 /// Whitespace collapsed, so that re-wrapping a paragraph is not a difference.
 ///
 /// Wrapping is one of the three things `CLAUDE.md` allows a promotion to change, so a
@@ -477,7 +508,10 @@ fn a_promotion_lands_what_was_approved() {
             // `P-222` had none and `P-220` had a before and an after. The destination check
             // below already declines to ask anything of an instruction; requiring a block
             // first meant refusing to read the ones that were correct.
-            let quoted = blocks(&item.body);
+            let mut quoted = blocks(&item.body);
+            if shape == "rows" && quoted.is_empty() {
+                quoted = tables(&item.body);
+            }
             if shape != "instruction" && quoted.is_empty() {
                 wrong.push(format!("{}: shape {shape} and no block to land", item.id));
                 continue;

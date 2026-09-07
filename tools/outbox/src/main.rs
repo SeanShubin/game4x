@@ -53,19 +53,9 @@ fn main() {
     // in the proposal queue, which this lane may not edit. It blocked its own commit and
     // would have blocked the specification lane's next one, on a file only they can repair.
     // `Q-60` says exactly that about `S-51`, in the change that introduced it.
-    if !all.unparsed.is_empty() {
-        eprintln!(
-            "{} heading(s) name an item that does not parse as one, so they are invisible to \
-             this index: {}\n  the first non-blank line under a heading must be its `**to**` \
-             line - a note written above it removes the item silently",
-            all.unparsed.len(),
-            all.unparsed.join(", ")
-        );
-    }
-
     let complaints = complain(&all);
     for complaint in &complaints {
-        eprintln!("{complaint}");
+        eprintln!("{}", complaint.text());
     }
 
     let code = match arguments.first().map(String::as_str) {
@@ -261,7 +251,7 @@ fn main() {
 
     // A malformed outbox is worse than a failing check, because it makes every count a
     // guess. It fails whatever was asked for.
-    std::process::exit(if complaints.is_empty() { code } else { 2 });
+    std::process::exit(exit_code(&complaints, code));
 }
 
 fn usage() -> &'static str {
@@ -300,18 +290,115 @@ fn report_what_was_found(all: &Outboxes) {
 }
 
 /// What is wrong with the outboxes themselves, rather than with what they say.
-fn complain(all: &Outboxes) -> Vec<String> {
-    let mut complaints = Vec::new();
-    if all.files.is_empty() {
-        complaints.push("no outbox anywhere; nothing could be read".to_string());
+/// Something the tool has to say, and whether it may stop the caller.
+///
+/// **Two channels, because one made *reports and does not gate* a thing to remember.**
+/// `complain` returned strings and `main` exited 2 if there were any, so every future note
+/// gated by default and the only way not to was to remember an `eprintln!` somewhere else.
+/// `S-51` said in its own words that it reports and does not gate, and the change that built
+/// it pushed onto this list - blocking its own commit, and the specification lane's next one,
+/// over headings in a file this lane may not edit.
+///
+/// **The quality lens is why this exists rather than the rule being restated.** `C-42` first
+/// concluded that the shape could only be stated and not automated. That is the answer to
+/// *can a check ask whether a rule was applied* - which is no, and is the wrong question. The
+/// answerable one is **what tool would have refused**, and here it is: a note now says which
+/// channel it is on, and an advisory one cannot reach the exit code at all.
+enum Note {
+    /// Stops the caller. Only for something no lane can commit past.
+    Blocking(String),
+    /// Never stops the caller. **Three lanes share this tree**, so a note about one lane's
+    /// file must not stop another lane committing - especially when the lane that must
+    /// repair it is barred from editing that file.
+    Advisory(String),
+}
+
+impl Note {
+    fn text(&self) -> &str {
+        match self {
+            Note::Blocking(said) | Note::Advisory(said) => said,
+        }
     }
-    for (id, wheres) in duplicate_ids(&all.items) {
-        complaints.push(format!(
-            "the id {id} is used in {} - a cited id must resolve to one item",
-            wheres.join(" and ")
+
+    fn blocks(&self) -> bool {
+        matches!(self, Note::Blocking(_))
+    }
+}
+
+/// The exit code, which only a blocking note may change.
+///
+/// Separated from the printing so it can be tested, which is what makes the rule mechanical
+/// rather than a comment: an advisory note that started gating would fail here.
+fn exit_code(notes: &[Note], code: i32) -> i32 {
+    if notes.iter().any(Note::blocks) {
+        2
+    } else {
+        code
+    }
+}
+
+fn complain(all: &Outboxes) -> Vec<Note> {
+    let mut notes = Vec::new();
+    if all.files.is_empty() {
+        notes.push(Note::Blocking(
+            "no outbox anywhere; nothing could be read".to_string(),
         ));
     }
-    complaints
+    for (id, wheres) in duplicate_ids(&all.items) {
+        notes.push(Note::Blocking(format!(
+            "the id {id} is used in {} - a cited id must resolve to one item",
+            wheres.join(" and ")
+        )));
+    }
+    // Advisory, and named as such rather than kept out of the list. The two headings it
+    // reports today are in the proposal queue, which this lane may not edit.
+    if !all.unparsed.is_empty() {
+        notes.push(Note::Advisory(format!(
+            "{} heading(s) name an item that does not parse as one, so they are invisible to \
+             this index: {}\n  the first non-blank line under a heading must be its `**to**` \
+             line - a note written above it removes the item silently",
+            all.unparsed.len(),
+            all.unparsed.join(", ")
+        )));
+    }
+    notes
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// An advisory note cannot reach the exit code, and a blocking one always does.
+    ///
+    /// **This is the check `C-42` said was unavailable.** It cannot ask whether somebody
+    /// applied a rule; it can make the unapplied path unreachable, which is what the quality
+    /// lens pointed out was the answerable question.
+    #[test]
+    fn only_a_blocking_note_can_stop_the_caller() {
+        let advisory = vec![
+            Note::Advisory("a heading does not parse".to_string()),
+            Note::Advisory("and another".to_string()),
+        ];
+        assert_eq!(
+            exit_code(&advisory, 0),
+            0,
+            "two advisory notes, and the caller is not stopped - three lanes share this tree"
+        );
+        assert_eq!(
+            exit_code(&advisory, 1),
+            1,
+            "nor is a caller's own code overridden"
+        );
+
+        let mut mixed = advisory;
+        mixed.push(Note::Blocking("a duplicated id".to_string()));
+        assert_eq!(
+            exit_code(&mixed, 0),
+            2,
+            "one blocking note among advisory ones still stops the caller"
+        );
+        assert_eq!(exit_code(&[], 0), 0, "and nothing to say changes nothing");
+    }
 }
 
 /// Sections that have taken more than one proposal.
