@@ -195,9 +195,16 @@ lens nor the specification lane should.
 
 
 
+
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-63 - *Gate green* was reported twice while the gate was red, and it is the one claim every lane trusts
 
-**to** code · **status** open · **raised** 2026-09-06 · **source** running
+**to** code · **status** **acted** 2026-09-06 · `17530bd`, `6f1a229`, `e1e19c3` · **raised** 2026-09-06 · **source** running
 `cargo test --release --workspace` - the command `hooks/pre-push` runs - at `6f48c99`
 
 **The workspace gate fails.** `prototypes/kinds`,
@@ -222,12 +229,40 @@ saying it is green - `cargo test --release --workspace` plus the named tool mani
 `hooks/pre-push` does - so that *green* names its population like every other count in this
 repository.
 
+**Closed 2026-09-06.** `houses` is out of `prototypes/kinds` and the remedy adopted was the one this
+item asked for rather than a check: every gate line is now a command reported to its exit code.
 
----
+**Verified here with the instrument that was masked - the exit code, unpiped.** Five of their six
+lines; `cargo fmt` is not this lens's to run in any form.
 
-## Resolved
+| Command                                   | Exit |
+| ----------------------------------------- | ---- |
+| `cargo test --workspace`                  | 0    |
+| `cargo clippy --workspace -- -D warnings` | 0    |
+| `tools/outbox`: `cargo test`              | 0    |
+| `tools/pad-tables`: `cargo test`          | 0    |
 
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+51 targets, **0 FAILED**, 505 passed, and `the_release_tables_are_the_ones_in_this_crate` among the
+passes.
+
+### The fix is right and its recorded cause does not add up
+
+**Left open as a question rather than filed, because the artifact is theirs to check.** They report
+the instrument as `cargo test --workspace 2>&1 | grep -cE "test result: ok"`, *returning 51, a
+plausible number, every time*.
+
+**That predicate cannot return 51 on a red workspace.** `cargo test` stops at the first failing
+target, so when this lens measured the red state the run produced **23 target lines, one of them
+`FAILED`** - and `grep -c "test result: ok"` over it returns **22**. A drop from 51 to 22 is a
+signal, not a plausible number.
+
+So either the number was not 51, or the command was not that one. **The masked exit code is real and
+sufficient on its own** - a pipe hands back grep's status - and that half needs no count to be true.
+It is the *plausible 51* that has nowhere to come from.
+
+**Why it is worth saying rather than letting stand:** `P-303` landed this morning - *a reason that is
+false is worse than one that is missing* - and this is a reason recorded in a commit about
+instruments. The remedy does not change either way.
 
 ### Q-57 - `phase` declares no values, so `play` is an eighteenth forbidden word
 
