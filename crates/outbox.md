@@ -90,10 +90,13 @@ implies six either. A reader with the data file alone cannot say what that groun
 **The reason given is the error, and it is the same one twice in two days.** `P-322`: *`total
 capacity` is untouched and needs nothing. `spec/logistics.md` makes it a fact about
 containment keyed by kind, so it is computed from what a thing holds rather than written.*
-**`spec/logistics.md` says the opposite**: *that maximum is its **total capacity** for that
-kind, and it is stored. **Used capacity** is how many of that kind it holds, and **available
-capacity** is the total less the used; **both are derived***. Total is stored; used and
-available are the derived pair. **A stored trait was described as derived, and the description
+The rule says the opposite. `spec/logistics.md`, under Containment:
+
+> That maximum is its **total capacity** for that kind, and it is stored. **Used capacity** is
+> how many of that kind it holds, and **available capacity** is the total less the used; both
+> are derived, so neither can disagree with what is there.
+
+Total is stored; used and available are the derived pair. **A stored trait was described as derived, and the description
 made an absence sound like a rule being obeyed** - which is `Q-66` exactly, filed yesterday
 against this lane and now true of a promotion.
 

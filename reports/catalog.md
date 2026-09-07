@@ -101,6 +101,8 @@ built to hold one resource, and holds nothing else.
 
 **As a thing** Costs to produce: 1 labor, 1 metal · Binding: 1
 
+**Holds** the resource it was built for, up to 10 - *a fact about the kind, so every one of them holds that many*
+
 **In recipes**
 
 - `deploy ark` produces 1, food
@@ -121,6 +123,8 @@ carries a landing, and can invade from orbit.
 
 **As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border, ascent · Requires: a Yard · Readies: yes
 
+**Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
+
 **In recipes**
 
 - `deploy ark` consumes 1, in the orbit above `$where`
@@ -139,6 +143,8 @@ founds a territory.
 **Bounded by** a capacity of 2, and the food produced here
 
 **As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes
+
+**Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
 **In recipes**
 
@@ -228,6 +234,8 @@ a place things are in, which has a biome, a force of nature, and a density and a
 **In families** thing, place
 
 **Traits of it** `kind` (one of the kinds), `total capacity` (a number), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number)
+
+**Holds** that kind, up to its total capacity for that kind - *a fact about each one rather than about the kind*
 
 **In recipes**
 

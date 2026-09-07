@@ -90,6 +90,7 @@ ul { padding-left: 1.2rem }
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>resource</code> (one of the resources)</p>
 <p><strong>Bounded by</strong> as many as the extractors of its resource</p>
 <p><strong>As a thing</strong> Costs to produce: 1 labor, 1 metal · Binding: 1</p>
+<p><strong>Holds</strong> the resource it was built for, up to 10 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>deploy ark</code> produces 1, food</li>
@@ -104,6 +105,7 @@ ul { padding-left: 1.2rem }
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
 <p><strong>Bounded by</strong> a capacity of 2</p>
 <p><strong>As a thing</strong> Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border, ascent · Requires: a Yard · Readies: yes</p>
+<p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>deploy ark</code> consumes 1, in the orbit above <code>$where</code></li>
@@ -117,6 +119,7 @@ ul { padding-left: 1.2rem }
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
 <p><strong>Bounded by</strong> a capacity of 2, and the food produced here</p>
 <p><strong>As a thing</strong> Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes</p>
+<p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>move</code> consumes 1 (as a unit), ready, in <code>$from</code></li>
@@ -182,6 +185,7 @@ ul { padding-left: 1.2rem }
 <p>a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource.</p>
 <p><strong>In families</strong> thing, place</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>total capacity</code> (a number), <code>control</code> (held by a player, or unclaimed), <code>biome</code> (one of the biomes), <code>nature</code> (a number)</p>
+<p><strong>Holds</strong> that kind, up to its total capacity for that kind - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>deploy ark</code> requires 1, in <code>$where</code></li>

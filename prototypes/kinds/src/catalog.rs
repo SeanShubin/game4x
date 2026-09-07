@@ -72,6 +72,88 @@ fn rows_with_recipe(document: &str) -> Vec<(String, Vec<String>)> {
     out
 }
 
+/// What each row of *Where things are* is about, and how much it holds.
+///
+/// **`S-58`, and Sean hit its absence rather than reading about it.** He asked whether
+/// territory 1's twelve energy was disorder about to be wiped. Answering it needs the
+/// capacity, which is the stores times what a store holds, and **ten was in none of the four
+/// artifacts** - in his words, *it isn't necessarily 10, it just happened to be 10, which
+/// means I needed that information explicitly.* The release states it;
+/// `releases/first-release.md` -> *Where things are*, `| a store | the resource it was built
+/// for | 10 |`. This function is why it was not being read.
+///
+/// # The first column is a container, not a kind
+///
+/// It reads *a store*, *a unit's tank*, *a territory's total capacity for a kind* - so the
+/// `plain(&row[0]) == kind` matcher every other heading uses matches none of them. **A phrase
+/// naming a kind or a family is what relates a row to a section**, and a family carries the
+/// row to each of its members, so *a unit's tank* is found under `ark` and under `pioneer`.
+///
+/// **It panics when a row names neither.** `S-58` asks for that in as many words, and the
+/// reason is what happened here: a matcher that finds nothing contributes no line, and a
+/// missing line reads exactly like a kind that holds nothing. **A row that stops matching has
+/// to be loud**, because the quiet version of this is the defect being fixed.
+fn containers(document: &str) -> Vec<(String, Vec<String>)> {
+    let kinds: Vec<String> = body_under(document, "## Kinds")
+        .iter()
+        .map(|row| plain(&row[0]))
+        .collect();
+    let families: Vec<(String, Vec<String>)> = body_under(document, "## Families")
+        .iter()
+        .map(|row| {
+            let members = row.get(1).map(String::as_str).unwrap_or_default();
+            let members = if members == "every kind above" {
+                kinds.clone()
+            } else {
+                members.split(',').map(|m| m.trim().to_string()).collect()
+            };
+            (plain(&row[0]), members)
+        })
+        .collect();
+    assert!(
+        !kinds.is_empty() && !families.is_empty(),
+        "the release lists no kinds or no families, so every row below would match nothing"
+    );
+
+    let names_it = |phrase: &str, name: &str| {
+        phrase
+            .split(|c: char| !c.is_alphanumeric() && c != '-')
+            .any(|word| word == name)
+    };
+
+    let mut out = Vec::new();
+    for row in body_under(document, "## Where things are") {
+        let phrase = plain(&row[0]);
+        let mut covers: Vec<String> = kinds
+            .iter()
+            .filter(|kind| names_it(&phrase, kind))
+            .cloned()
+            .collect();
+        for (family, members) in &families {
+            if names_it(&phrase, family) {
+                covers.extend(members.iter().cloned());
+            }
+        }
+        covers.sort();
+        covers.dedup();
+        assert!(
+            !covers.is_empty(),
+            "`{phrase}` in *Where things are* names no kind and no family, so this row \
+             contributes nothing to any section - which is exactly how `10` went missing. \
+             Relate it to a kind or say here why it has none."
+        );
+        for kind in covers {
+            out.push((kind, row.clone()));
+        }
+    }
+    assert!(
+        !out.is_empty(),
+        "*Where things are* yielded no rows at all, so every section below would be silently \
+         short one line"
+    );
+    out
+}
+
 fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
     let mut out = format!("## {kind}\n\n");
     if let Some(said) = what_it_is {
@@ -135,6 +217,25 @@ fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
                 out.push_str(&format!("**{label}** {}\n\n", said.join(" · ")));
             }
         }
+    }
+
+    // **What it holds, and whether the number is a fact about the kind.** `S-58`: two of the
+    // three rows are not per-kind constants - a unit's tank is *the unit's fuel*, which is a
+    // trait of each unit, and a territory's is its total capacity for that kind. **Only the
+    // store's is a fact about the kind**, which is what `S-44` settled, so one label for all
+    // three would be honest about one row and misleading about two.
+    //
+    // The discriminator is the *Up to* cell itself: a number is a constant of the kind and
+    // anything else is a phrase pointing at the thing.
+    for (_, row) in containers(document).iter().filter(|(it, _)| it == kind) {
+        let holds = row.get(1).cloned().unwrap_or_default();
+        let up_to = row.get(2).cloned().unwrap_or_default();
+        let about = if up_to.parse::<u32>().is_ok() {
+            "a fact about the kind, so every one of them holds that many"
+        } else {
+            "a fact about each one rather than about the kind"
+        };
+        out.push_str(&format!("**Holds** {holds}, up to {up_to} - *{about}*\n\n"));
     }
 
     // Which families name this kind, so a recipe taking `place` is found under `orbit`.

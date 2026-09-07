@@ -17,6 +17,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-59** - `ee9e386` S-59 first half: a deposit is a thing, so density is in the data file · still open in `docs/notes/proposals.md`
 - **S-57** - `f2ab5f3` X-3 answers S-57: four phenomena, and restarting fixes one of them · still open in `docs/notes/proposals.md`
 - **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-29** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
