@@ -60,8 +60,8 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**One.** `P-321` came from [decisions.md](decisions.md) with its question answered, which is
-the second time that path has been used.
+**Two, and both came from [decisions.md](decisions.md) with their questions answered.** `P-321`
+is the command form and `P-322` is where a territory's density lives.
 
 ### P-321 - The command form is `{name field:value ...}`, and the positional statement goes
 
@@ -102,7 +102,84 @@ positional commands and rewriting it is `S-26`, not this.
 a name and named fields - so a command and a thing become one form. That is worth stating on
 purpose rather than leaving to be noticed, and it is a separate proposal.
 
+### P-322 - A deposit is a thing, so a territory's density has somewhere to be written
+
+**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
+own - **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Kinds, then Traits
+
+**You chose it, so this moves from `decisions.md` and asks approval.** A description is a flat map
+from a trait name to one value; a territory has a density per resource; so `density` cannot be a
+trait of a territory and be written. **As a thing it can.**
+
+One row into *Kinds*:
+
+| Kind        | What it is                                                       |
+| ----------- | ---------------------------------------------------------------- |
+| **deposit** | what a territory's ground offers of one resource, and how richly |
+
+Then *Traits*, where `density` stops being a fact about a territory:
+
+| Trait       | Of        | Values   | Stored or derived |
+| ----------- | --------- | -------- | ----------------- |
+| **density** | a deposit | a number | stored            |
+
+**What a territory then contains** is `{deposit resource:food density:4} -> 1` beside everything
+else it holds, and **the round trip closes**: reading the file back rebuilds a territory's numbers,
+which `P-320`'s check requires and `C-46` found it could not do.
+
+**Why this and not the other two, in your words rather than mine.** It needs no change to what a
+description is, and `Territory.deposits` is already a `BTreeMap` keyed by resource - **the model
+reached this shape independently**, which is the argument that made you pick it.
+
+**`total capacity` is untouched and needs nothing.** `spec/logistics.md` makes it a fact about
+containment keyed by kind, so it is computed from what a thing holds rather than written. Only
+`density` was homeless.
+
+**What this makes stale, filed rather than left.** `spec/planet.md` says a territory carries a
+density per resource; if a deposit is the thing that carries it, that sentence describes the same
+fact through a thing that now exists. **I have not changed it and it is not part of this** - I will
+read that section whole and file separately, because rewording a rule of yours while landing another
+is the thing the protocol forbids.
+
 ## Addressed to other perspectives
+
+### S-58 - `catalog.md` drops what a kind holds, so the four artifacts cannot answer *is this about to be wiped*
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** Sean reading
+`scenario/expected/play.4x` and having to supply a number none of the four artifacts carries
+
+**He asked whether territory 1's 12 energy is disorder about to be wiped.** Answering it needs the
+capacity, which is `stores(resource) * HOLDS`, and **`HOLDS` is in none of the four artifacts.** His
+words: *it isn't necessarily 10, it just happened to be 10, which means I needed that information
+explicitly.*
+
+**Nothing here needs a decision. The specification already states it** -
+`releases/first-release.md` -> *Where things are*: `| a store | the resource it was built for | 10
+|`. **The generator does not read that section.**
+
+`prototypes/kinds/src/catalog.rs` pulls from two headings - *What bounds a kind in a territory* and
+*Units and structures*. Adding *Where things are* is the fix, and **two things make it more than a
+one-line change.**
+
+- **The first column is a container rather than a kind.** It reads *a store*, *a unit's tank*, *a
+  territory's total capacity for a kind*, and the matcher is `plain(&row[0]) == kind`. Whatever you
+  use to relate a row to a kind, **make it fail loudly when a row matches nothing** rather than
+  quietly contributing no line - that is how this went missing in the first place.
+- **Two of the three rows are not per-kind constants.** A unit's tank is *the unit's fuel*, a
+  per-instance trait, and a territory's is derived from what it holds. **Only the store's is a fact
+  about the kind**, which is what `S-44` settled - so a label like *Holds* is honest for one row and
+  misleading for the others.
+
+**What this is really about, and it is worth stating because more of it is coming.** The catalog's
+*Traits of it* line lists traits of **instances**. `HOLDS` is a fact about a **kind**, and the
+catalog has no place for one. **A unit's tank and a territory's capacity per kind are the same
+shape**, so this is the first of a class rather than one missing number.
+
+**The check that would have caught it does not exist.** Nothing asserts the four artifacts are
+sufficient to derive the dump - `docs/process.md` says they are, and that claim has never been run
+over anything. **I am not asking you to build that**; it is a large thing and probably Sean's to
+scope. Recorded because this item is an instance of it and the sufficiency claim is now known to be
+false.
 
 ### S-57 - Why a long-running instance answers from memory, and cannot tell that it is
 

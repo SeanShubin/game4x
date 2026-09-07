@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-321** - The command form is `{name field:value ...}`, and the positional statement goes · `docs/notes/proposals.md`
-- **P-322** - The round-trip check cannot hold, because two traits have nowhere to be written · `docs/notes/decisions.md`
+- **P-322** - A deposit is a thing, so a territory's density has somewhere to be written · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -21,12 +21,14 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-29** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-26** - `d1d0e3e` S-26: P-216 checked, turn out of the entity view, and the contradiction that stops P-212 · still open in `docs/notes/proposals.md`
+- **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (5)
+### To code (6)
 
+- **S-58** - `catalog.md` drops what a kind holds, so the four artifacts cannot answer *is this about to be wiped* · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
