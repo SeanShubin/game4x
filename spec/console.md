@@ -27,6 +27,16 @@ not `"in play"`. **Nothing in a data file is quoted.**
 `{extractor territory:1}` is an extractor in territory 1, and `{territory id:1}` is the territory
 itself.
 
+**A field that refers to a thing is named for that thing's kind**, so what a value is can be read
+from the key beside it. `where:1` does not say what kind of thing `1` is and `territory:1` does.
+A thing's own identifier is `id`, which is the one field that names no kind.
+
+**A command is named for the recipe it fires**, and there is one command for each recipe the
+player may fire.
+
+**A command may carry a `repeat`**, which is how many times it fires. It is not an argument of the
+recipe; it is a count of firings, and a command without one fires once.
+
 **What a thing contains is a map from a description to a quantity.** A description is a kind and
 **every stored trait that thing has**; a derived trait is never part of one, and **no trait may be
 left out** - `{citizen ready:yes} -> 8` and `{citizen ready:no} -> 6`, never `{citizen} ->
