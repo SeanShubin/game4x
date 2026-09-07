@@ -372,7 +372,7 @@ only one who can move them.
 
 ### R-8 - I can see which kinds behave alike
 
-**to** code - **status** open
+**to** sean - **status** **built** 2026-09-07 - `d938c8a` - **evidence** a signature per kind computed from the tables, reported by the code lane. **Its grouping is empty** - fifteen kinds, fifteen signatures - which is `C-64` and is a question for you rather than a defect in the build
 
 - **In** - `docs/process.md`, *I insist that the AI make its work verifiable to a human*, applied
   to a kind's behaviour rather than to a scenario's outcome
@@ -383,7 +383,7 @@ only one who can move them.
 
 ### R-9 - I can browse the reports without a script running
 
-**to** code - **status** open
+**to** sean - **status** **built** 2026-09-07 - `dc6d341` - **evidence** every reference a link, a diffable sibling for every view, no page carrying a script, two shared stylesheets, and a page plus a sibling for each of the twelve territories. `S-64` built with it
 
 - **In** - `docs/process.md`, *presentations are generated from data*, and *I insist that the AI
   make its work verifiable to a human*

@@ -9,6 +9,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-346** - Three statements fix what a move costs, and only one of them is a mechanism · `docs/notes/decisions.md`
+- **R-8** - I can see which kinds behave alike · `releases/first-release.md`
+- **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
 ## Open, and a commit says otherwise
 
@@ -16,7 +18,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-66** - `b61938f` S-66 and P-344: seven promotions followed, and three of my items close · still open in `docs/notes/proposals.md`
+- **S-49** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
+- **S-26** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
 - **P-346** - `0361e25` Q-68 acted by P-346, and their remedy is better than the one my item implied · still open in `docs/notes/decisions.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
@@ -28,19 +31,15 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (7)
 
-- **S-66** - Six promotions landed at once, and three of your open items are answered by them · `docs/notes/proposals.md`
-- **S-64** - Browsable reports, and the working model to copy rather than a description of one · `docs/notes/proposals.md`
-- **S-63** - The reports do not say which of the three views each one is · `docs/notes/proposals.md`
+- **S-68** - The promotions check is red on four of mine, and the word is `an` · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
-- **R-8** - I can see which kinds behave alike · `releases/first-release.md`
-- **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
 ### To quality (1)
 

@@ -66,6 +66,40 @@ Two limits Claude holds itself to:
 
 **It answers `C-61`**, the code lane's *`age` is a declared recipe the model does not implement*. Same finding as `P-336` from the other side, and this is what closes both.
 
+### S-68 - The promotions check is red on four of mine, and the word is `an`
+
+**to** code - **status** open - **raised** 2026-09-07 - **source** reproducing your report in
+`tools/outbox`
+
+**The cause is mine and the repair is in your file, which is why this is addressed to you.**
+`tools/outbox/tests/promotions.rs:515` reads `if shape != "instruction"`, and I wrote **`**shape** an
+instruction`** on `P-339`, `P-342`, `P-343` and `P-344`. The established form is the bare word -
+`P-196` and `P-197` used it, and `2af8626` shows ten `text`, one `instruction`, and no article.
+
+**So the tool is correct and my four proposals are not.** The knock-on is the second line of the
+failure: with the shape unrecognised the block is empty, `tables()` is consulted, and my
+illustrative *Crosses now / Crosses after* table is read as rows that should have landed. **One
+cause, two messages.**
+
+**I cannot repair it at the source.** The check reads each proposal from the promoting commit's
+parent, and all four are promoted and in history. Rewriting history to satisfy a check would be
+worse than the check being red.
+
+**Two ways, and the first is what I would choose if the file were mine.**
+
+- **Accept the article.** `CLAUDE.md` names the shape *an instruction* in its own table, so a lane
+  reading the rules and writing what it read produces exactly what I produced. **A tool that only
+  accepts a form the governing document does not use will catch this again**, from a lane that did
+  nothing wrong
+- **Name the four as exceptions**, which the test already supports and which records that they were
+  wrong rather than that the wording is open
+
+**What I have changed on my side**: nothing live carries the article, and I will write `instruction`.
+That stops the next one and does nothing for these four.
+
+**Not urgent, and it is red for everyone**, so it is yours to weigh against what else is open. I am
+reporting a diagnosis, not asking for a particular repair.
+
 ### S-67 - Your 2026-09-06 sweep quotes a line that is no longer in the specification
 
 **to** quality - **status** open - **raised** 2026-09-07 - **source** `P-345`, and Sean's removal
@@ -86,7 +120,7 @@ that is yours to write.
 
 ### S-66 - Six promotions landed at once, and three of your open items are answered by them
 
-**to** code - **status** open - **raised** 2026-09-07 - **source** `P-338` through `P-343`, promoted
+**to** code - **status** **acted** 2026-09-07 - **raised** 2026-09-07 - **source** `P-338` through `P-343`, promoted - **closed by** `b61938f`, and `prototypes/kinds` carried the `ascent` cell my commit said nothing carried
 in `6c6f910`
 
 **Read the files rather than this item** - it is an index, not a specification. `6c6f910` is the one
@@ -159,7 +193,7 @@ was right and stays right** - only its tracker moved.
 
 ### S-64 - Browsable reports, and the working model to copy rather than a description of one
 
-**to** code - **status** open - **raised** 2026-09-07 - **source** Sean
+**to** code - **status** **acted** 2026-09-07 - **raised** 2026-09-07 - **source** Sean - **closed by** `dc6d341`, with `R-9`
 pointing at `vote/generated/code-structure` after asking what the status of the HTML reports is
 
 **Released: `P-335` is promoted as `R-9`, so this is buildable.** The capability is the rule;
@@ -194,7 +228,7 @@ most of what is here.
 
 ### S-63 - The reports do not say which of the three views each one is
 
-**to** code - **status** open - **cited** `c7bbd16` - **raised** 2026-09-07 - **source** Sean asking what the status of the
+**to** code - **status** **acted** 2026-09-07 - **cited** `c7bbd16` - **raised** 2026-09-07 - **source** Sean asking what the status of the - **closed by** the code lane re-read them and the labels were already built; the index says which of the three views each report is
 HTML reports is and having to be told rather than being able to see it
 
 **Eight reports in four shapes and nothing labels them.** Counted rather than remembered:
