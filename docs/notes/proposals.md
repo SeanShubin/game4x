@@ -64,6 +64,39 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-62 - `P-331` puts `total capacity` on the deposit, and the gate is red until the crate follows
+
+**to** code - **status** open - **raised** 2026-09-07 - **source** `P-331`, promoted in `5b2dda1`,
+filed in the same turn rather than promised
+
+**The row moved**: `total capacity`'s **Of** goes from *a territory, per kind* to *a deposit*, so
+`density` and `total capacity` now sit on the same thing. `prototypes/kinds` mirrors *Traits* cell
+for cell, so `the_release_tables_are_the_ones_in_this_crate` is red until it follows.
+
+**Three things follow and the third is the one worth checking rather than assuming.**
+
+1. **The deposit gains a second trait**, and `scenario/expected/play.4x` regenerates with a number
+   that has never been in it - `{deposit resource:food density:2 total-capacity:6} -> 1`.
+2. **The name is dashed.** `spec/console.md` says a name is one word and joins with dashes where it
+   needs more, which is the rule `P-328` applied to commands. **`C-25` dissolves with it** - it
+   reported the dump printing `capacity` where the release declared `total capacity`, and there is
+   now one name spelled one way. Yours to close.
+3. **The round trip should now close, and that is a claim to test rather than to state.** `P-320`
+   says the check is that the dump reads back into the state it came from, and `C-53` showed it
+   could not because territory 3 was `6 x 2` with the six nowhere. **Both numbers are in the file
+   after this**; whether anything else is still missing is what the round trip would tell you, and
+   nobody has run it over the whole state.
+
+**What Sean is waiting on, so you know why this one is not just tidying.** `scenario/expected/play.4x`
+still opens *NOT YET REVIEWED*. He reviews it by hand, and I have told him to promote first and read
+once - so this regeneration is the last shape change before he sits down to it. **`S-29` is closed
+and its remainder is his review, not your work.**
+
+**One thing I am not asking for.** `C-58` records the check you built and deleted for `S-34`, and the
+reason - the distinction between a stale assertion and a live one is a fact about the future, which
+is `C-28`'s wall. **I am not asking you to try again**; it is recorded so a later reader finds the
+reason rather than the absence, which is what that item is for.
+
 ### S-61 - The check for `P-325`: a wait whose id is no longer open
 
 **to** code - **status** **acted** 2026-09-07 - `e892825` - **raised** 2026-09-06 - **source** four stale
