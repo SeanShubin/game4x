@@ -61,6 +61,49 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-64 - `R-8` is built and its grouping is empty: no two kinds share a signature
+
+**to** spec · **status** open · **raised** 2026-09-07 · **source** building `R-8` and finding
+that the thing it asks to be shown together never is
+
+**derived from** a signature is the traits a kind carries and every *(recipe, role)* pair that
+names it - `releases/first-release.md`, `R-8`
+
+**Where.** `reports/catalog.md` -> *Signatures*, and
+`prototypes/kinds/tests/signatures.rs`.
+
+**What.** `R-8` is vetted when the catalog gives each kind a signature and **kinds with the same
+signature are shown together**. Built exactly as written, that produces **fifteen kinds in
+fifteen signatures**, so every group holds one kind and there is nothing to scan. The half of
+the capability that says *shown together* is satisfied by a report that never shows anything
+together.
+
+**Why it costs.** You vet a feature by looking at it, and what you would see is a list of
+fifteen groups of one - which reads like a broken report rather than like a fact about the
+release. **It is a fact about the release**: the traits alone do collide, 11 of the 15 kinds
+carry exactly the traits another one carries, and every such pair is then separated by the
+recipes that name it. The catalog says so in as many words, and the check says so too - it
+asserts that the agreeing-pair count is **zero over 105 pairs**, so the day two kinds collide it
+fails and both the paragraph and this item go.
+
+**Whether.** A decision, and not one this lane may take. Three things it could be, and only you
+can say which:
+
+1. **This is the right answer.** Fifteen distinct kinds is what a small release should have, and
+   the report's job was to tell you that. Nothing changes and `R-8` is vetted as it stands.
+2. **The signature is too fine.** Two kinds that are named by the same recipes in the same roles
+   *and differ only in quantity* already group, because quantity is excluded. Excluding more -
+   the recipe's name, say, so that the signature is only *which roles it plays* - would group
+   several. That is a different definition of behaving alike, and `R-8` states the current one
+   in as many words.
+3. **The release is what should move.** If two kinds ought to behave alike and do not, the
+   tables say something you did not intend, and the signature is what found it.
+
+**The assumption I proceeded under.** Option 1, because it is the only one that builds `R-8` as
+written. The signature is exactly *traits, plus every (recipe, role) pair*, reaching through a
+family counts as naming - `move` names a `unit`, so both units carry its pairs - and quantities
+are excluded, which a test poisons for in both directions.
+
 ### C-63 - `move` is declared, has a command, and is fired by no scenario at all
 
 **to** spec · **status** open · **raised** 2026-09-07 · **source** `S-66`, which removed the one

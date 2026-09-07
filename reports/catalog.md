@@ -9,6 +9,112 @@ section is a join across six tables that the document does not perform anywhere.
 
 15 kinds, 4 families, 19 traits, 16 recipes.
 
+## Signatures
+
+**A kind's signature is the traits it carries and every *(recipe, role)* pair that names it.**
+Computed from the tables above rather than written by anyone, so two kinds share one exactly
+when the release says the same things about them. Quantities are not part of it: two kinds that
+are produced in different numbers by the same recipe still behave alike. **Being named through a
+family counts**, because a family is how the release addresses several kinds at once.
+
+15 kinds fall into 15 signatures, and 0 of those hold more than one kind.
+
+**Nothing is shown together, and that is the finding.** No two kinds share a signature, so
+every group below holds one kind. **The traits alone do collide** - 11 of the kinds carry
+exactly the traits another one carries - and every such pair is then separated by the recipes
+that name it. So the release has no two kinds it says *the same things* about, and whether that
+is what was wanted is a decision rather than a build: `C-64`.
+
+### `s-1` - citizen
+
+**Traits** `force`, `kind`
+
+**Named by** `create labor consume`, `create labor produce`, `deploy ark produce`, `found by land produce`, `grow produce`, `launch ark consume`, `produce pioneer consume`
+
+### `s-2` - garrison
+
+**Traits** `force`, `kind`
+
+**Named by** `deploy ark limit`, `deploy ark produce`, `found by land limit`, `found by land produce`
+
+### `s-3` - extractor
+
+**Traits** `kind`, `resource`
+
+**Named by** `build extractor produce`, `deploy ark produce`, `found by land produce`, `work consume`, `work produce`
+
+### `s-4` - yard
+
+**Traits** `kind`
+
+**Named by** `build yard produce`, `launch ark require`
+
+### `s-5` - store
+
+**Traits** `kind`, `resource`
+
+**Named by** `build store produce`, `deploy ark produce`, `found by land produce`
+
+### `s-6` - ark
+
+**Traits** `force`, `kind`
+
+**Named by** `deploy ark consume`, `move consume`, `move produce`
+
+### `s-7` - pioneer
+
+**Traits** `force`, `kind`
+
+**Named by** `found by land consume`, `move consume`, `move produce`, `produce pioneer produce`
+
+### `s-8` - food
+
+**Traits** `kind`, `surplus`
+
+**Named by** `grow consume`, `upkeep consume`, `work produce`
+
+### `s-9` - metal
+
+**Traits** `kind`
+
+**Named by** `build extractor consume`, `build store consume`, `build yard consume`, `launch ark consume`, `perish produce`, `produce pioneer consume`, `work produce`
+
+### `s-10` - energy
+
+**Traits** `kind`
+
+**Named by** `launch ark consume`, `move consume`, `produce pioneer consume`, `work produce`
+
+### `s-11` - labor
+
+**Traits** `kind`
+
+**Named by** `build extractor consume`, `build store consume`, `build yard consume`, `create labor produce`, `work consume`
+
+### `s-12` - territory
+
+**Traits** `biome`, `control`, `kind`, `nature`
+
+**Named by** `deploy ark require`, `move require`, `work require`
+
+### `s-13` - orbit
+
+**Traits** `kind`
+
+**Named by** `deploy ark consume`, `move require`
+
+### `s-14` - deposit
+
+**Traits** `density`, `kind`, `total capacity`
+
+**Named by** no recipe at all.
+
+### `s-15` - adjacency
+
+**Traits** `from`, `kind`, `to`
+
+**Named by** no recipe at all.
+
 ## citizen
 
 a person: provides labor, eats, and grows on surplus.
@@ -16,6 +122,8 @@ a person: provides labor, eats, and grows on surplus.
 **In families** thing
 
 **Traits of it** `kind` (one of the kinds), `force` (a number)
+
+**Signature** `s-1`
 
 **Bounded by** the food produced here, through upkeep
 
@@ -39,6 +147,8 @@ what holds a territory; a territory has at most one.
 
 **Traits of it** `kind` (one of the kinds), `force` (a number)
 
+**Signature** `s-2`
+
 **Bounded by** a capacity of 1
 
 **As a thing** Force: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1
@@ -57,6 +167,8 @@ built for one resource, and worked to produce it.
 **In families** thing
 
 **Traits of it** `kind` (one of the kinds), `resource` (one of the resources)
+
+**Signature** `s-3`
 
 **Bounded by** a capacity, from *Territory resources*
 
@@ -80,6 +192,8 @@ where an Ark is produced.
 
 **Traits of it** `kind` (one of the kinds)
 
+**Signature** `s-4`
+
 **Bounded by** a capacity of 1
 
 **As a thing** Costs to produce: 1 labor, 15 metal · Binding: 15
@@ -96,6 +210,8 @@ built to hold one resource, and holds nothing else.
 **In families** thing
 
 **Traits of it** `kind` (one of the kinds), `resource` (one of the resources)
+
+**Signature** `s-5`
 
 **Bounded by** as many as the extractors of its resource
 
@@ -119,6 +235,8 @@ carries a landing, and can invade from orbit.
 
 **Traits of it** `kind` (one of the kinds), `force` (a number)
 
+**Signature** `s-6`
+
 **Bounded by** a capacity of 2
 
 **As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: yes
@@ -138,6 +256,8 @@ founds a territory.
 **In families** thing, unit
 
 **Traits of it** `kind` (one of the kinds), `force` (a number)
+
+**Signature** `s-7`
 
 **Bounded by** a capacity of 2
 
@@ -160,6 +280,8 @@ eaten by citizens; expires.
 
 **Traits of it** `kind` (one of the kinds), `surplus` (yes or no)
 
+**Signature** `s-8`
+
 **Bounded by** the things in it that hold it, and it keeps for one turn
 
 **In recipes**
@@ -175,6 +297,8 @@ what things are built from; conserved.
 **In families** thing, resource
 
 **Traits of it** `kind` (one of the kinds)
+
+**Signature** `s-9`
 
 **Bounded by** the things in it that hold it
 
@@ -196,6 +320,8 @@ what moves things; neither conserved nor expiring.
 
 **Traits of it** `kind` (one of the kinds)
 
+**Signature** `s-10`
+
 **Bounded by** the things in it that hold it
 
 **In recipes**
@@ -212,6 +338,8 @@ what working a machine takes; a citizen provides it each turn.
 **In families** thing
 
 **Traits of it** `kind` (one of the kinds)
+
+**Signature** `s-11`
 
 **Bounded by** the citizens that make it, one each per turn
 
@@ -231,6 +359,8 @@ a place things are in, which has a biome, a force of nature, and a density and a
 
 **Traits of it** `kind` (one of the kinds), `control` (held by a player, or unclaimed), `biome` (one of the biomes), `nature` (a number)
 
+**Signature** `s-12`
+
 **Holds** that kind, up to its total capacity for that kind - *a fact about each one rather than about the kind*
 
 **In recipes**
@@ -248,6 +378,8 @@ a place above one territory, which holds units and nothing else.
 
 **Traits of it** `kind` (one of the kinds)
 
+**Signature** `s-13`
+
 **In recipes**
 
 - `deploy ark` consumes 1 (as the place holding ark), in the orbit above `$where`
@@ -262,6 +394,8 @@ what a territory's ground offers of one resource, and how richly.
 
 **Traits of it** `kind` (one of the kinds), `density` (a number), `total capacity` (a number)
 
+**Signature** `s-14`
+
 **In recipes** none name it.
 
 ## adjacency
@@ -271,6 +405,8 @@ two places that share an edge, held by the thing that holds them.
 **In families** thing
 
 **Traits of it** `kind` (one of the kinds), `from` (a place), `to` (a place)
+
+**Signature** `s-15`
 
 **In recipes** none name it.
 

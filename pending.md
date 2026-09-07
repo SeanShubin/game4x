@@ -17,11 +17,11 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-66** - `b61938f` S-66 and P-344: seven promotions followed, and three of my items close · still open in `docs/notes/proposals.md`
+- **P-346** - `0361e25` Q-68 acted by P-346, and their remedy is better than the one my item implied · still open in `docs/notes/decisions.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 - **R-7** - `747de8a` R-7's remainder: the world's shown once on one end-turn, and two things that found · still open in `releases/first-release.md`
-- **Q-68** - `7f8059e` P-346 from the quality lens's Q-68, and a note on a claim I scoped wrong · still open in `lenses/quality/outbox.md`
 - **X-6** - `4d5a081` File P-327 from X-6, and close S-57 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
@@ -50,6 +50,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ### To spec (24)
 
+- **C-64** - `R-8` is built and its grouping is empty: no two kinds share a signature · `crates/outbox.md`
 - **C-63** - `move` is declared, has a command, and is fired by no scenario at all · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
 - **C-59** - `R-7` asks for the command that fires each recipe, and the world's six share one · `crates/outbox.md`
@@ -71,7 +72,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
-- **Q-68** - `move` became a recipe and the per-thing move column is what it left behind · `lenses/quality/outbox.md`
 - **X-5** - the measurement `X-3` lacks needs an instance nobody has authorised · `lenses/research/outbox.md`
 - **X-6** - a known rule is not applied when nothing carries it · `lenses/research/outbox.md`
 

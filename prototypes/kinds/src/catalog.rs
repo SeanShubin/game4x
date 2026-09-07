@@ -39,9 +39,103 @@ pub fn catalog(document: &str) -> String {
         recipe_names(document).len()
     ));
 
+    out.push_str(&groups(document));
+
     for row in &kinds {
         let name = plain(&row[0]);
         out.push_str(&section(document, &name, row.get(1).map(String::as_str)));
+    }
+    out
+}
+
+/// The kinds that behave alike, shown together - `R-8`.
+///
+/// **What a signature is for is the comparison, so the comparison is the section.** Each
+/// kind's own section names its signature, which is the thing to grep for; this is where two
+/// kinds sharing one becomes visible without reading fifteen sections and holding them in
+/// mind.
+///
+/// **A group of one is listed too.** A page that showed only the collisions would answer
+/// *which kinds behave alike* and leave *does this one behave like anything* unanswered, and
+/// the second question is the one asked while reading a single kind.
+fn groups(document: &str) -> String {
+    let found = signatures(document);
+    let together = found.iter().filter(|(_, _, kinds)| kinds.len() > 1).count();
+    let mut out = String::from("## Signatures\n\n");
+    out.push_str(
+        "**A kind's signature is the traits it carries and every *(recipe, role)* pair that \
+         names it.**\nComputed from the tables above rather than written by anyone, so two \
+         kinds share one exactly\nwhen the release says the same things about them. \
+         Quantities are not part of it: two kinds that\nare produced in different numbers by \
+         the same recipe still behave alike. **Being named through a\nfamily counts**, \
+         because a family is how the release addresses several kinds at once.\n\n",
+    );
+    out.push_str(&format!(
+        "{} kinds fall into {} signatures, and {} of those hold more than one kind.\n\n",
+        found.iter().map(|(_, _, kinds)| kinds.len()).sum::<usize>(),
+        found.len(),
+        together
+    ));
+
+    // **A zero here is a finding, and a zero on its own reads as a statistic.** `R-8` is
+    // vetted by scanning the groups and seeing that two kinds behave alike - and today there
+    // is nothing to scan, because the signature separates all fifteen. That is a fact about
+    // the release rather than a defect in this view, and the person vetting it has to be told
+    // before he looks rather than left to conclude the report is broken. `C-64`.
+    //
+    // **Written as a condition rather than a paragraph**, so it disappears by itself the day
+    // two kinds collide, and nothing has to remember to delete it.
+    if together == 0 {
+        // **The number here is computed, not counted by eye.** It was written by hand first
+        // - *four kinds carry `force` and `kind`* - which is a derived number in generated
+        // prose, and this file is full of reasons that goes stale without anyone editing it.
+        let sharing = found
+            .iter()
+            .filter(|(_, mine, _)| {
+                found
+                    .iter()
+                    .any(|(_, other, _)| !std::ptr::eq(mine, other) && other.traits == mine.traits)
+            })
+            .count();
+        out.push_str(&format!(
+            "**Nothing is shown together, and that is the finding.** No two kinds share a \
+             signature, so\nevery group below holds one kind. **The traits alone do \
+             collide** - {sharing} of the kinds carry\nexactly the traits another one \
+             carries - and every such pair is then separated by the recipes\nthat name it. \
+             So the release has no two kinds it says *the same things* about, and whether \
+             that\nis what was wanted is a decision rather than a build: `C-64`.\n\n"
+        ));
+    }
+
+    for (name, signature, kinds) in &found {
+        out.push_str(&format!("### `{name}` - {}\n\n", kinds.join(", ")));
+        let traits = if signature.traits.is_empty() {
+            String::from("none")
+        } else {
+            signature
+                .traits
+                .iter()
+                .map(|it| format!("`{it}`"))
+                .collect::<Vec<String>>()
+                .join(", ")
+        };
+        out.push_str(&format!("**Traits** {traits}\n\n"));
+        if signature.pairs.is_empty() {
+            // A kind no recipe names cannot be made, used or destroyed, and two such kinds
+            // share a signature by having nothing rather than by behaving alike. Worth
+            // saying where it happens rather than leaving an empty line to be read as a bug.
+            out.push_str("**Named by** no recipe at all.\n\n");
+        } else {
+            out.push_str(&format!(
+                "**Named by** {}\n\n",
+                signature
+                    .pairs
+                    .iter()
+                    .map(|pair| format!("`{pair}`"))
+                    .collect::<Vec<String>>()
+                    .join(", ")
+            ));
+        }
     }
     out
 }
@@ -154,6 +248,142 @@ fn containers(document: &str) -> Vec<(String, Vec<String>)> {
     out
 }
 
+/// How a Recipes row reaches a kind, which is the only part `section` phrases differently.
+#[derive(Clone, PartialEq, Eq)]
+enum Reach {
+    /// The Kind cell is the kind itself.
+    Directly,
+    /// The Kind cell is a family the kind belongs to - `move` takes a `unit`.
+    ViaFamily(String),
+    /// The Where cell names the kind as the place something else is in - `deploy ark`
+    /// takes its Ark from *the orbit above `$where`*.
+    AsPlace(String),
+}
+
+/// Every Recipes row that names this kind, with the recipe it belongs to and how it got there.
+///
+/// **Extracted so that `signature` and `section` cannot disagree.** They are the same join
+/// asked two questions - *what does this say* and *what shape is it* - and two copies of a
+/// matcher this fiddly would drift on the first family that changed. `R-8` is what made the
+/// second caller exist.
+fn recipe_rows(document: &str, kind: &str) -> Vec<(String, Vec<String>, Reach)> {
+    let mut families_of: Vec<String> = body_under(document, "## Families")
+        .iter()
+        .filter(|row| {
+            let members = row.get(1).map(String::as_str).unwrap_or_default();
+            members.split(',').any(|m| m.trim() == kind)
+        })
+        .map(|row| plain(&row[0]))
+        .collect();
+    families_of.push(kind.to_string());
+
+    let mut out = Vec::new();
+    for (recipe, row) in rows_with_recipe(document) {
+        let named = row.get(4).map(|c| plain(c)).unwrap_or_default();
+        let place = row.get(6).cloned().unwrap_or_default();
+        let in_where = place
+            .split(|c: char| !c.is_alphanumeric())
+            .any(|w| w == kind);
+        let of_mine = families_of.iter().any(|f| f == &named);
+        if !of_mine && !in_where {
+            continue;
+        }
+        let reach = if named == kind {
+            Reach::Directly
+        } else if in_where && !of_mine {
+            Reach::AsPlace(named)
+        } else {
+            Reach::ViaFamily(named)
+        };
+        out.push((recipe, row, reach));
+    }
+    out
+}
+
+/// The Traits rows whose *Of* column covers this kind.
+fn trait_rows(document: &str, kind: &str) -> Vec<Vec<String>> {
+    body_under(document, "## Traits")
+        .iter()
+        .filter(|row| mentions(row.get(1).map(String::as_str).unwrap_or_default(), kind))
+        .cloned()
+        .collect()
+}
+
+/// What a kind carries and what names it, in the one form two kinds can be compared by.
+///
+/// **`R-8`.** The traits it carries, and every *(recipe, role)* pair that names it. Nothing
+/// else: not the quantities, which differ between two kinds that behave alike, and not the
+/// prose, which is a rendering. **Reaching through a family counts as naming**, because a
+/// family is how the release addresses several kinds at once - `move` names a `unit`, and an
+/// ark and a pioneer are both moved by it whether or not either word appears in the row.
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct Signature {
+    /// The names of the traits, sorted.
+    pub traits: Vec<String>,
+    /// `recipe role`, sorted and deduplicated.
+    pub pairs: Vec<String>,
+}
+
+impl Signature {
+    /// The one string two kinds are equal by, which is also what the test compares.
+    pub fn key(&self) -> String {
+        format!("{} | {}", self.traits.join(", "), self.pairs.join(", "))
+    }
+}
+
+/// One kind's signature, computed from the release's tables and written by nobody.
+pub fn signature(document: &str, kind: &str) -> Signature {
+    let mut traits: Vec<String> = trait_rows(document, kind)
+        .iter()
+        .map(|row| plain(&row[0]))
+        .collect();
+    traits.sort();
+    traits.dedup();
+
+    let mut pairs: Vec<String> = recipe_rows(document, kind)
+        .iter()
+        .map(|(recipe, row, _)| {
+            let role = row.get(2).cloned().unwrap_or_default();
+            format!("{recipe} {role}")
+        })
+        .collect();
+    pairs.sort();
+    pairs.dedup();
+
+    Signature { traits, pairs }
+}
+
+/// Every signature the release produces, each with the kinds that share it.
+///
+/// **Grouped in order of first appearance**, so the name of a signature is stable as long as
+/// the Kinds table is - and it is generated from that table rather than chosen, which is what
+/// `R-8` asks for. A group of one is a kind that behaves like nothing else and is listed
+/// exactly like a group of several, because *it is alone* is a finding too.
+pub fn signatures(document: &str) -> Vec<(String, Signature, Vec<String>)> {
+    let mut out: Vec<(String, Signature, Vec<String>)> = Vec::new();
+    for row in body_under(document, "## Kinds") {
+        let kind = plain(&row[0]);
+        let mine = signature(document, &kind);
+        match out.iter_mut().find(|(_, seen, _)| seen.key() == mine.key()) {
+            Some((_, _, kinds)) => kinds.push(kind),
+            None => {
+                let name = format!("s-{}", out.len() + 1);
+                out.push((name, mine, vec![kind]));
+            }
+        }
+    }
+    out
+}
+
+/// The name of the signature a kind is in, which is the thing to grep for.
+fn signature_of(document: &str, kind: &str) -> String {
+    signatures(document)
+        .into_iter()
+        .find(|(_, _, kinds)| kinds.iter().any(|k| k == kind))
+        .map(|(name, _, _)| name)
+        .unwrap_or_else(|| panic!("`{kind}` is in the Kinds table and in no signature"))
+}
+
 fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
     let mut out = format!("## {kind}\n\n");
     if let Some(said) = what_it_is {
@@ -172,9 +402,8 @@ fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
         out.push_str(&format!("**In families** {}\n\n", families.join(", ")));
     }
 
-    let traits: Vec<String> = body_under(document, "## Traits")
+    let traits: Vec<String> = trait_rows(document, kind)
         .iter()
-        .filter(|row| mentions(row.get(1).map(String::as_str).unwrap_or_default(), kind))
         .map(|row| {
             format!(
                 "`{}` ({})",
@@ -186,6 +415,13 @@ fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
     if !traits.is_empty() {
         out.push_str(&format!("**Traits of it** {}\n\n", traits.join(", ")));
     }
+
+    // **`R-8`: the name to grep for.** One word, in every section, so that finding the kinds
+    // that behave like this one is a search rather than a comparison by eye.
+    out.push_str(&format!(
+        "**Signature** `{}`\n\n",
+        signature_of(document, kind)
+    ));
 
     for (heading, label) in [
         ("## What bounds a kind in a territory", "Bounded by"),
@@ -246,34 +482,13 @@ fn section(document: &str, kind: &str, what_it_is: Option<&str>) -> String {
     // Kind cell literally would have gone on reporting *none name it* after the thing it
     // reported had been fixed. A view that stays wrong once the world moves is worse than
     // no view.
-    let mut families_of: Vec<String> = body_under(document, "## Families")
-        .iter()
-        .filter(|row| {
-            let members = row.get(1).map(String::as_str).unwrap_or_default();
-            members.split(',').any(|m| m.trim() == kind)
-        })
-        .map(|row| plain(&row[0]))
-        .collect();
-    families_of.push(kind.to_string());
-
     let mut lines: Vec<String> = Vec::new();
-    for (recipe, row) in rows_with_recipe(document) {
-        let named = row.get(4).map(|c| plain(c)).unwrap_or_default();
+    for (recipe, row, reach) in recipe_rows(document, kind) {
         let place = row.get(6).cloned().unwrap_or_default();
-        // The Where column names a place too: `deploy ark` takes its Ark from *the orbit
-        // above `$where`*, which is the only line in the table that reaches an orbit.
-        let in_where = place
-            .split(|c: char| !c.is_alphanumeric())
-            .any(|w| w == kind);
-        if !families_of.iter().any(|f| f == &named) && !in_where {
-            continue;
-        }
-        let via = if named == kind {
-            String::new()
-        } else if in_where && !families_of.iter().any(|f| f == &named) {
-            format!(" (as the place holding {named})")
-        } else {
-            format!(" (as a {named})")
+        let via = match &reach {
+            Reach::Directly => String::new(),
+            Reach::AsPlace(named) => format!(" (as the place holding {named})"),
+            Reach::ViaFamily(named) => format!(" (as a {named})"),
         };
         let role = row.get(2).cloned().unwrap_or_default();
         let qty = row.get(3).cloned().unwrap_or_default();
