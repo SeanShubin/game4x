@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-345** - `spec/orbit.md` says launching is a move, and `P-341` says it is a Yard's act · `docs/notes/decisions.md`
 - **P-344** - What an Ark crosses, now that nothing it does is a move · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise

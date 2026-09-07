@@ -8,6 +8,30 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, that move may not be special either
+
+*The ark is constrained in that it can only deploy to the territory it is in orbit above.*
+
+*Regarding "a recipe makes a thing cease to be here and come to be there", that is one thing a recipe
+can be, but there are recipes that are not that.*
+
+*I am not sure if move has to be special at all. It could simply be a recipe with certain constraints
+and certain parameters that need to be chosen.*
+
+**The second correction withdraws an offer this lane made.** `create labor` and `work` consume and
+produce in one place, and `launch ark` produces nothing anywhere - so the sentence was too wide, and
+what is true is narrower and about `move` rather than about recipes.
+
+**The third is the one that explains a contradiction rather than repairing it.** `spec/orbit.md` says
+launching, landing and crossing from one orbit to another *are moves* - a taxonomy - and the class is
+what made the Yard's act look like a violation of it. If `move` is one recipe among sixteen rather
+than a kind of thing a recipe can be, the sentence never had anything to say about launching.
+
+**What the sentence carries is worth keeping either way**: what is next to what, and that these
+traversals cost fuel. Neither needs the word *moves*.
+
+**Filed as `P-345`**, which this lane created by promoting `P-341` without reading `spec/orbit.md`.
+
 ## Said 2026-09-07, that a move is only a recipe with a symmetry
 
 *Why does it matter whether or not deploy is a move. There are recipes that cause things to disappear
