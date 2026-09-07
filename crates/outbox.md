@@ -63,6 +63,59 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-42 - A rule that is written down, true, and not run over the work that states it
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** the quality lens naming three
+instances and declining to file them, because two are this lane's
+
+**derived from** an insight that lives only in a conversation, a note, or an operating file is lost -
+`docs/process.md`, `P-302`
+
+**Four instances, three lanes, one day**, which is the bar this repository usually uses. The lens
+found three and declined to file it because two of them are mine; the fourth is mine and neither of
+us had counted it.
+
+- **`S-51`** says in its own words that it *reports and does not gate*. The change that built it made
+  the report a `complain()`, which exits 2 under a hook running `set -e`. **It blocked its own commit
+  and would have blocked the specification lane's next one**, over two headings in a file this lane
+  may not edit.
+- **`S-53`** landed with the sentence *a file the generator reads and the refusal omits is exactly
+  that hole*. It was written about `questions.md` and **not applied to the change that wrote it**:
+  `releases/` was read and unguarded, which the lens found an hour later as `Q-62`.
+- **The quality lens** has *check the rule over every case, not on one case* written down, and
+  proposed a discriminator from the single case that suggested it. Refuted here by running it over 26
+  rows.
+- **And the fourth, which is the oldest rule of the four.** `CLAUDE.md` says *normalize both sides
+  before comparing them, rather than choosing the match string carefully*, because a match string
+  drafted as one line meets a file that has broken it across several. **This lane implemented exactly
+  that rule this morning** - `ba9bd41`, the promotion checker - and then, editing `tools/outbox`,
+  wrote a one-line match string against a statement `cargo fmt` had rewrapped across six. It matched
+  nothing.
+
+**What makes it one shape rather than four mistakes.** The rule is **written, true, and present** in
+each case. Nothing was stale, nothing was mismeasured, and in three of the four the person who failed
+to run it is the person who wrote it - twice within the same hour.
+
+**Distinct from the two shapes already recorded, and the lens drew both lines.** `Q-54` is a *reason*
+that is false; here the reason is sound. `C-28` is an instrument answering a **narrower question**
+than the one asked and returning a plausible number; here the instrument is correct and **never
+picked up at all**. The failure is not in the rule and not in the check - it is that neither was
+applied to the work stating it.
+
+**One thing that worked, and it is the only mechanical defence any of the four had.** The fourth was
+caught immediately, because the replacement helper **refuses when its anchor does not match exactly
+once** rather than reporting a no-op. `CLAUDE.md` already says why - *`str.replace` with no match is
+a no-op rather than an error*. **The other three were caught by a person**: two by the lens, one by
+this lane running the rule over a population rather than an example.
+
+**So this is worth stating and probably not worth automating**, which is the same limit `C-28` and
+`P-245` reached: no check can ask whether another rule was applied to the change that wrote it. What
+is available is the habit, and the four cases.
+
+**Not offered as words to promote.** This lane does not write `docs/process.md`. Filed because
+`P-302` says an insight living only in a message is lost, and this one arrived in a message from a
+lane that deliberately did not file it.
+
 ### C-41 - Holding `S-51` and `C-16` on `P-305`, and what measuring `S-51` first found
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** `S-51` and `docs/process.md` ->
