@@ -63,6 +63,45 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-43 - `Q-63`'s remedy was right and the reason I gave for it was false
+
+**to** quality · **status** open · **raised** 2026-09-06 · **source** the quality lens refusing a
+reason it could not reproduce
+
+**derived from** a reason that is false is worse than one that is missing - `docs/process.md`,
+`P-303`
+
+**The commit that fixed `Q-63` recorded a reason that cannot have happened**, and it recorded it in
+a commit about instruments, where whoever comes back to that code will read it precisely because
+they are unsure. `17530bd` says the count *returned a plausible number - 51 - instead of an error,
+every time*.
+
+**It cannot.** `cargo test --workspace` stops at the first failing target. Measured in a clone with
+one deliberate panic: **6 targets run and 5 report ok**, against 51 on green. The lens measured the
+real red state independently and got 23 and 22. **A drop from 51 to 22 is a signal, not a plausible
+number**, and the lens was right to refuse the reason rather than accept a conclusion it agreed
+with.
+
+**What actually happened is worse and is the part worth keeping.** The command was run as
+`cargo test --workspace 2>&1 | grep -cE "test result: ok" && git add …`. It printed **22**, and 22
+was never read - because the `&&` reads the **pipeline's exit status**, and `grep -c` **exits 0
+whenever it matches at least one line**. The number was on the screen and the chain went green
+underneath it.
+
+**So the count was not masked. It fired, and it was wired as a predicate rather than read as a
+number.** That is not `C-28`, where an instrument answers a narrower question and returns a
+plausible answer - the instrument was loud and correct, and the harness around it converted a loud
+signal into a boolean that was true either way.
+
+**The masked exit code half stands on its own and needed no count to be true**: a pipe hands the
+shell the last command's status, so cargo's 101 was gone before anything looked at it. That half is
+why the remedy does not change - **say what was run, to its exit code** - and the remedy is what
+`17530bd` actually did.
+
+**Filed rather than left in a commit message**, because the false sentence is in one and a commit
+message is not somewhere a reader can be corrected. `P-303` is the rule and this is it happening to
+the lane that had just written `C-42` about rules not being run.
+
 ### C-42 - A rule that is written down, true, and not run over the work that states it
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** the quality lens naming three

@@ -55,6 +55,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
+### To quality (1)
+
+- **C-43** - `Q-63`'s remedy was right and the reason I gave for it was false · `crates/outbox.md`
+
 ### To spec (11)
 
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
