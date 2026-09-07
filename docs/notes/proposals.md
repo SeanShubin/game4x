@@ -60,55 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**One, and it corrects a rule I promoted this evening.**
-
-### P-320 - `P-311` contradicts `spec/console.md`, and most of the rest of it restates that file
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** contradiction - **shape** text -
-**asks** approval - **into** `releases/first-release.md` -> Where things are, replacing the paragraph
-`P-311` added
-
-**I promoted this evening a rule the specification already forbids.** `spec/console.md`, from
-`P-287`: ***Where a thing is, is where it appears**; nothing states its container.* `P-311`, mine:
-*every other thing names what holds it with `in-kind` and `in-id`.* **The specification is the
-destination and wins.**
-
-> **The dump is a data file, so `spec/console.md` governs what it may say** - a map from a
-> description to a quantity, where a thing appears inside what holds it and nothing states its
-> container. **Two things are true of this release in particular.**
->
-> - **Territory adjacency is stated once, and orbital adjacency is derived from it** - an orbit is
->   next to its territory and to the orbits above that territory's neighbours, so stating it would
->   be a second copy that can disagree
-> - **Which store holds which unit of a resource is not recorded in this release**, so a territory's
->   amount of a resource is stated against the sum of its stores' capacities
->
-> **The check is that the dump reads back into the state it came from.** A count of fields is not,
-> because a plausible subset passes it.
-
-**Three of `P-311`'s four claims were already in `spec/console.md`** and are dropped rather than
-restated, per `docs/README.md`: containment as a tree, every stored trait present exactly once, and
-what a derived trait may do. **The last of those was also looser than the specification** - I wrote
-*a derived trait may be shown as a convenience*, where `spec/console.md` says *a derived trait is
-never part of one*.
-
-**What survives is what is true of this release rather than of data files**: the two bullets, and the
-round-trip check, which is genuinely new and is the part worth keeping.
-
-**Your tree is unaffected.** You drew nesting, and nesting **is** containment under the map form - a
-thing inside a territory appears inside it. The container columns were my addition and were never
-what you asked for.
-
-**How I got it wrong, because it is the thing you asked me to research.** The section-collision
-trigger fires on a section that takes a second proposal. `P-287` landed in `spec/console.md` and
-`P-311` in `releases/first-release.md`, so **different files meant nothing fired** - and I wrote
-`P-311` from your sketch without re-reading the rule that already governed containment in data
-files. I had read it this morning.
-
-**Both lenses had already said so and I read past them.** `Q-64`: `in-kind` and `in-id` are *not
-words missing a declaration* but words the file must stop having. `C-45`: *a row for either would be
-a rule the specification does not want, promoted to silence a check.* I summarised both to you as
-being about `P-284`'s word rule and did not follow either to its target.
+**Nothing.** [decisions.md](decisions.md) is empty too.
 
 ## Addressed to other perspectives
 
@@ -1923,6 +1875,7 @@ work the release exists to order.
 | P-316, a promotion files what it creates, before the proposal is deleted                                                     | `docs/process.md` -> Who writes what                                                                                                         | 2026-09-06 |
 | P-317, the transformation reads the state and the commands and nothing else                                                  | `docs/process.md` -> How I know the application is right                                                                                     | 2026-09-06 |
 | P-319, say what you are referring to rather than where it was, and the three places it fired                                 | `docs/process.md` -> What I read and what I do, How I know the application is right, All lanes                                               | 2026-09-06 |
+| P-320, the dump is a data file and `spec/console.md` governs it; `P-311`'s container columns go                              | `releases/first-release.md` -> Where things are                                                                                              | 2026-09-06 |
 
 ## Rejected
 

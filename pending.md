@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-320** - `P-311` contradicts `spec/console.md`, and most of the rest of it restates that file · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -82,6 +83,7 @@ it exists to ask.
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
+- `releases/first-release.md` -> Where things are - P-265, P-311, P-320
 - `spec/console.md` -> The language - P-254, P-287, P-284
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md` - P-289, P-291
@@ -94,7 +96,6 @@ it exists to ask.
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
-- `releases/first-release.md` -> Where things are - P-265, P-311
 - `spec/console.md` - P-69, P-82
 - `spec/console.md` -> Phases - P-74, P-309
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275

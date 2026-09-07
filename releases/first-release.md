@@ -89,18 +89,18 @@ Every thing is in another thing, and this release has three sorts of capacity.
 
 There are twelve territories and twelve orbits. An orbit holds units and nothing else.
 
-**The dump carries containment as a tree.** The game is the one thing in nothing; every other
-thing names what holds it with `in-kind` and `in-id`. **Every stored trait appears exactly once**,
-so the dump reads back into the state it came from. That round trip is the check; a count of
-fields is not, because a plausible subset passes it.
+**The dump is a data file, so `spec/console.md` governs what it may say** - a map from a
+description to a quantity, where a thing appears inside what holds it and nothing states its
+container. **Two things are true of this release in particular.**
 
 - **Territory adjacency is stated once, and orbital adjacency is derived from it** - an orbit is
   next to its territory and to the orbits above that territory's neighbours, so stating it would
   be a second copy that can disagree
 - **Which store holds which unit of a resource is not recorded in this release**, so a territory's
   amount of a resource is stated against the sum of its stores' capacities
-- **A derived trait may be shown as a convenience and is never a second copy.** Fourteen traits
-  are stored and four are derived
+
+**The check is that the dump reads back into the state it came from.** A count of fields is not,
+because a plausible subset passes it.
 
 ## Traits
 
