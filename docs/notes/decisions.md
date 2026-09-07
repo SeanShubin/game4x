@@ -27,9 +27,12 @@ here without first becoming a proposal.
 own - **asks** a decision - **into** `spec/resources.md` or `spec/invariants.md`, and
 `releases/first-release.md` -> Traits and Recipes
 
-**The rule.** A thing may carry a number of turns it lasts. **It decrements at each turn's end.
-Paying its upkeep resets it to its maximum. At zero the thing is gone. Having no number is what
-durable means.**
+**The rule.** A thing may carry a number of turns it lasts. **At each turn's end it resets to its maximum if its upkeep was paid, and decrements if it was not. At zero the thing is gone. Having no number is what durable means.**
+
+**The order matters and the first wording did not fix it.** *It decrements at each turn's end,
+paying its upkeep resets it* can be read as reset **then** decrement, which leaves every fed citizen
+sitting at 1 and kills an unfed one in a single turn - **no slack at any maximum.** Reset **instead
+of** decrement is what gives your farm-building turn, so the rule says which.
 
 **One rule, not two.** Food carries a number and has **no upkeep**, so nothing resets it - the number
 is a pure lifetime. A citizen carries a number **and** an upkeep, so eating resets it and not eating
