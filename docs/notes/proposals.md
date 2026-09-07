@@ -60,44 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**One**, and it answers what you asked: a mechanic rather than a habit.
-
-### P-325 - An item that waits says so in a field, so something can notice when the wait is over
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** text -
-**asks** approval - **into** `docs/process.md` -> Outboxes and the index, after the bullet saying
-what every item carries
-
-**You asked whether we need to confirm rather than trust, or a mechanic that makes trust safe.** It
-should be the mechanic, and the reason is that **the habit already failed while I was practising
-it**: I lifted three stale holds by hand tonight and then shipped a fourth an hour later.
-
-> - **An item that cannot be acted on yet says what it waits on in a field, never in prose** -
->   `**waits on** P-323`. **When that id is no longer open the wait is over**, and whatever lists
->   the outboxes says so. A hold written into a paragraph is invisible to every tool and to every
->   reader who does not re-read the whole item, which is how an item goes on telling a lane not to
->   start work that was unblocked an hour ago.
-
-**The four, all mine, all in one night.** `S-54` waited on `P-311`, `S-51` on `P-305`, `S-50` on
-`P-300`, `S-59` on `P-323`. **Every one of those proposals was promoted while its item still said
-do not build.** Three I caught because you asked whether the code lane had what it needed; the
-fourth stalled the file you are waiting for, and the code lane did the other half of the item and
-moved on - correctly, because the item told it to.
-
-**Why not confirming.** Confirming is what `P-316` already asks for from the other side - a promotion
-files what it creates. **I promoted `P-316` today and then failed its mirror four times**, which is
-the eighth case in `S-57`: the rule was known and not applied. A fifth repetition of *be careful*
-buys nothing.
-
-**Why a field rather than reading the prose.** `tools/outbox` already parses `cited`, `derived from`,
-`to` and `status` through one generic reader, and already knows which proposals have landed. **A
-field makes the check exact**; prose makes it the guessing game the code lane and I already fought
-through on `S-51`, where citing a proposal and closing into one turned out to need the field line to
-tell them apart.
-
-**What it does not do.** It does not stop a hold being wrong when written, and it does not decide
-whether a wait is on a proposal, an item, or a decision of yours. **It only stops a correct hold
-outliving its reason**, which is the failure that has actually happened, four times, today.
+**Nothing.** [decisions.md](decisions.md) is empty too.
 
 ## Addressed to other perspectives
 
@@ -2110,6 +2073,7 @@ work the release exists to order.
 | P-322, a deposit is a thing, so a territory's density has somewhere to be written                                            | `releases/first-release.md` -> Kinds, Traits                                                                                                 | 2026-09-06 |
 | P-323, a field is named for the kind it refers to; a command is named for its recipe and may repeat                          | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
 | P-324, being blocked on one thing is not being blocked, and it applies to every lane                                         | `docs/process.md` -> All lanes                                                                                                               | 2026-09-06 |
+| P-325, an item that waits says so in a field, so something can notice when the wait is over                                  | `docs/process.md` -> Outboxes and the index                                                                                                  | 2026-09-06 |
 
 ## Rejected
 

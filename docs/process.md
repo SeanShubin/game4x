@@ -427,6 +427,11 @@ lens has to answer before it is worth starting lives. The four above are the one
   instance has to read
 - The specification instance's outbox is the proposal queue
 - Every item carries an id, who it is addressed to, a status, and one line saying what it is
+- **An item that cannot be acted on yet says what it waits on in a field, never in prose** -
+  `**waits on** P-323`. **When that id is no longer open the wait is over**, and whatever lists
+  the outboxes says so. A hold written into a paragraph is invisible to every tool and to every
+  reader who does not re-read the whole item, which is how an item goes on telling a lane not to
+  start work that was unblocked an hour ago.
 - **An item closes when the instance it is addressed to has done what it can**, not when the thing
   it reports is finally fixed. Waiting for the fix keeps items open longer, and age is what makes
   one go out of date or contradict another - so the rule that looks like it protects against
