@@ -14,15 +14,17 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 Every resource has two properties, and they are independent of each other:
 
-| Resource | Conserved | Expires |
-| -------- | --------- | ------- |
-| Food     | no        | yes     |
-| Metal    | yes       | no      |
-| Energy   | no        | no      |
+| Resource | Conserved | Lasts |
+| -------- | --------- | ----- |
+| Food     | no        | 1     |
+| Metal    | yes       |       |
+| Energy   | no        |       |
 
 - A **conserved** resource is not destroyed by being used. It changes form, and what it was made
   into can be taken apart to get it back
-- A resource that **expires** is lost when the turn ends, whether it was used or not
+- A thing may carry a number of turns it lasts. At each turn's end it resets to its maximum if its
+  upkeep was paid, and decrements if it was not. At zero the thing is gone. Having no number is
+  what durable means
 
 - Matter is conserved and its arrangement is not. Order is lost for nothing and restored only by
   work

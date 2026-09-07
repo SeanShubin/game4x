@@ -14,7 +14,6 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - A mobile unit may move across a boundary, usually to conquer and start another self-contained
   territory
 - The rule editor is not in this release
-- A Pioneer that enters a territory nobody holds must found it, or it perishes for want of food
 
 ### Territory resources
 
@@ -126,7 +125,7 @@ are listed.
 | **nature**         | a territory                             | a number                                  | stored                                           |
 | **from**           | an adjacency                            | a place                                   | stored                                           |
 | **to**             | an adjacency                            | a place                                   | stored                                           |
-| **keeps**          | food                                    | the number of turns it will last          | stored                                           |
+| **keeps**          | thing                                   | the number of turns it will last          | stored                                           |
 | **surplus**        | food                                    | yes or no                                 | derived: left after every upkeep was paid        |
 | **unpaid**         | a thing with upkeep                     | yes or no                                 | derived: its upkeep was not met                  |
 | **phase**          | the game                                | design or play                            | stored                                           |
@@ -143,7 +142,7 @@ Food is made with `keeps` 1. The force nature holds a territory with.
 | **store**     | as many as the extractors of its resource                |
 | **yard**      | a capacity of 1                                          |
 | **ark**       | a capacity of 2                                          |
-| **pioneer**   | a capacity of 2, and the food produced here              |
+| **pioneer**   | a capacity of 2                                          |
 | **labor**     | the citizens that make it, one each per turn             |
 | **food**      | the things in it that hold it, and it keeps for one turn |
 | **metal**     | the things in it that hold it                            |
@@ -163,7 +162,7 @@ use it immediately, store it, or lose it.**
 | **yard**      |       |      |        |                 | 1 labor, 15 metal              | 15      |                      |          |         |
 | **store**     |       |      |        |                 | 1 labor, 1 metal               | 1       |                      |          |         |
 | **ark**       | 2     | 2    | 1 fuel |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border, ascent | a Yard   | yes     |
-| **pioneer**   | 2     | 2    | 1 fuel | 1 food per turn | 3 metal, 6 energy, 2 citizens  | 3       | border               |          | yes     |
+| **pioneer**   | 2     | 2    | 1 fuel |                 | 3 metal, 6 energy, 2 citizens  | 3       | border               |          | yes     |
 
 An Ark can invade land from orbit. Nothing outside this table
 readies.
@@ -196,8 +195,8 @@ on surplus food or starves for want of it; what expires expires, and what was no
 is lost; and everything becomes ready again*.
 
 The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
-that order: `upkeep`, then `grow` and `perish`, then `spoil`, then `age`, then `refresh`. The rows
-below are in that order.
+that order: `upkeep`, then `grow` and `perish`, then `age`, then `spoil`, then `refresh`. The
+rows below are in that order.
 
 | Recipe              | Owner  | Role    | Qty                                                  | Kind      | Traits                                        | Where                    |
 | ------------------- | ------ | ------- | ---------------------------------------------------- | --------- | --------------------------------------------- | ------------------------ |
@@ -236,11 +235,10 @@ below are in that order.
 |                     |        | consume | 6                                                    | energy    |                                               |                          |
 |                     |        | consume | 2                                                    | citizen   |                                               |                          |
 |                     |        | produce | 1                                                    | pioneer   |                                               |                          |
-| **produce ark**     | player | consume | 3                                                    | metal     |                                               |                          |
+| **launch ark**      | player | consume | 3                                                    | metal     |                                               |                          |
 |                     |        | consume | 12                                                   | energy    |                                               |                          |
 |                     |        | consume | 2                                                    | citizen   |                                               |                          |
 |                     |        | require | 1                                                    | yard      |                                               |                          |
-|                     |        | produce | 1                                                    | ark       |                                               |                          |
 | **create labor**    | player | consume | 1                                                    | citizen   | ready                                         |                          |
 |                     |        | produce | 1                                                    | citizen   | not ready                                     |                          |
 |                     |        | produce | 1                                                    | labor     |                                               |                          |
@@ -255,9 +253,9 @@ below are in that order.
 |                     |        | produce | the lesser of the surplus food and the citizens here | citizen   |                                               |                          |
 | **perish**          | world  | consume | 1                                                    | thing     | whose upkeep is unpaid                        |                          |
 |                     |        | produce | the thing's metal                                    | metal     |                                               |                          |
-| **spoil**           | world  | consume | 1                                                    | food      | keeps 0                                       |                          |
-| **age**             | world  | consume | 1                                                    | food      | keeps at least 1                              |                          |
-|                     |        | produce | 1                                                    | food      | keeps one less                                |                          |
+| **age**             | world  | consume | 1                                                    | thing     | keeps at least 1                              |                          |
+|                     |        | produce | 1                                                    | thing     | keeps one less                                |                          |
+| **spoil**           | world  | consume | 1                                                    | thing     | keeps 0                                       |                          |
 | **refresh**         | world  | consume | 1                                                    | thing     | not ready                                     |                          |
 |                     |        | produce | 1                                                    | thing     | ready                                         |                          |
 

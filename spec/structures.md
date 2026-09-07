@@ -21,5 +21,7 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 ### Yard
 
 - A Yard produces Arks.
+- Building an Ark and launching it are one act. An Ark a Yard builds never stands on the
+  planet
 
 ## Open questions

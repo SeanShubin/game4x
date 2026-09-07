@@ -8,14 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-343** - What `P-338` makes stale, and an ordering defect it exposes · `docs/notes/proposals.md`
-- **P-342** - `produce ark` becomes `launch ark`, and stops producing anything · `docs/notes/proposals.md`
-- **P-341** - Building an Ark and launching it are one act · `docs/notes/proposals.md`
-- **P-340** - A unit is taken apart when it deploys, not when it arrives · `docs/notes/proposals.md`
-- **P-339** - An ark and a pioneer print life rather than eating, so neither has upkeep · `docs/notes/proposals.md`
-- **P-338** - A thing lasts a number of turns, paying its upkeep resets it, and having no number is durable · `docs/notes/proposals.md`
-- **P-336** - `age` is declared, fires in no state, and `keeps` is not implemented · `docs/notes/decisions.md`
-- **P-337** - `perish` says a thing is consumed and its metal produced, and the model does neither · `docs/notes/decisions.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -23,8 +17,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-339** - `d602189` P-339 rewritten: the spec already had the theme, and it corrects two claims · still open in `docs/notes/proposals.md`
-- **P-338** - `a481860` P-338: reset instead of decrement, because the other reading costs the turn · still open in `docs/notes/proposals.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
@@ -84,7 +76,7 @@ Not a defect list. Several proposals in one section is what working on one topic
 like; what this cannot tell you is whether they all still hold together, which is the question
 it exists to ask.
 
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
@@ -109,6 +101,7 @@ it exists to ask.
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320
 - `spec/control.md` -> Winning - P-77, P-81, P-125
+- `spec/resources.md` -> The list - P-49, P-65, P-338
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Specification Instance - P-292, P-329
@@ -130,5 +123,4 @@ it exists to ask.
 - `spec/planet.md` - P-272, P-280
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28
-- `spec/resources.md` -> The list - P-49, P-65
 - `spec/resources.md` -> The list, `spec/turn.md` -> Order of operations - P-126, P-138
