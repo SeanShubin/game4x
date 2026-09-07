@@ -6,6 +6,7 @@
 //! outbox --check          exit 1 if anything is open and addressed
 //! outbox --closing        what closed since HEAD, and open items deriving from its rule
 //! outbox --orphans        closed items whose closing line names a withdrawn proposal
+//! outbox --places         the outboxes it reads, one per line, for a caller that guards them
 //! outbox --count          the aggregate, against the limit
 //! ```
 //!
@@ -27,6 +28,16 @@ fn main() {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
     let root = root();
     let all = read(&root);
+
+    // **`--places` prints the list and nothing else**, because a caller parsing it is a
+    // shell. Everything below writes to stdout, so the banner is skipped for that one mode
+    // rather than made conditional everywhere.
+    if arguments.first().is_some_and(|first| first == "--places") {
+        for file in &all.files {
+            println!("{file}");
+        }
+        return;
+    }
 
     // Said before anything else, and always. `tools/pad-tables` exists because thirteen
     // rows went missing from a hand-edited table and nothing noticed; a tool that walks

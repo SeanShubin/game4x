@@ -43,12 +43,21 @@ fi
 # Refusing is the safe direction. A stale pending.md that says so is recoverable by the next
 # commit; a published draft is not recoverable at all, because the lane that wrote it does
 # not know it went out.
-# questions.md is here for the same reason proposals.md is - S-53 put it in the index, and
-# the refusal below exists so that a half-written item is never rendered into pending.md and
-# staged into somebody else's commit. A file the generator reads and this list omits is
-# exactly that hole.
-outboxes="docs/notes/proposals.md docs/notes/questions.md crates/outbox.md lenses"
-unstaged=$(git diff --name-only -- $outboxes)
+# The list is asked for rather than written here, which is Q-62. It used to be a string, and
+# the generator discovers releases/ and lenses/ by walking - so the two could not be kept in
+# step by hand, and were not: releases/ was read and unguarded, which the quality lens
+# demonstrated by putting a draft capability in releases/first-release.md and watching it
+# land in pending.md inside an unrelated commit. The control was the same draft in
+# lenses/quality/outbox.md, where the refusal fired, so the mechanism was right and only the
+# list was wrong.
+#
+# One declaration, asked twice. A releases/second-release.md is guarded the moment it exists,
+# with nobody having to remember.
+#
+# Untracked as well as unstaged: the generator reads the working tree, so a brand-new outbox
+# nobody has added yet is read like any other, and `git diff` cannot see it.
+outboxes=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --places)
+unstaged=$(git diff --name-only -- $outboxes; git ls-files --others --exclude-standard -- $outboxes)
 if [ -n "$unstaged" ]; then
     echo "pre-commit: NOT rewriting pending.md - an outbox has unstaged changes:"
     echo "$unstaged" | sed 's/^/  /'
