@@ -23,8 +23,8 @@ here without first becoming a proposal.
 
 ### P-348 - `R-8` is built and no two kinds behave alike, which may be the answer or the defect
 
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** the code lane's `C-64` - **asks** a
-decision - **into** `releases/first-release.md` -> `R-8`
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** the code lane's `C-64` - **asks**
+a decision - **into** `releases/first-release.md` -> `R-8`
 
 **`R-8` is built as written and its grouping is empty**: fifteen kinds, fifteen signatures, every
 group holding one. The half of the capability that says *kinds with the same signature are shown
@@ -53,8 +53,8 @@ answer.
 
 ### P-347 - No scenario fires `move`, and `P-340` just made the missing case explicit
 
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** the code lane's `C-63` - **asks** a
-decision - **into** `releases/first-release.md` -> Scenarios, if the answer is yes
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** the code lane's `C-63` - **asks**
+a decision - **into** `releases/first-release.md` -> Scenarios, if the answer is yes
 
 **Checked rather than taken on report**: seven files in `scenario/commands/` and **not one `{move`
 among them.** The Ark crossing to territory 2 was the only one in the repository, and `P-342`
