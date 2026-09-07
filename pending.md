@@ -17,22 +17,14 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-56** - `eb33c24` Close C-16 and C-41 under P-305, and file C-44: S-56 was already done · still open in `docs/notes/proposals.md`
-- **S-53** - `6f1a229` S-53: decisions.md, and the misfiling check that a person caught first · still open in `docs/notes/proposals.md`
-- **S-51** - `38b2cbe` S-51 on a measured predicate, Q-61 built in, and four items that were invisible · still open in `docs/notes/proposals.md`
-- **S-50** - `521d3b7` S-50's live half, C-33 closed by P-291, and the re-poison it asked for · still open in `docs/notes/proposals.md`
 - **S-47** - `8219381` Record what S-47 will need looking at, and poison the thing the check reads · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (14)
+### To code (10)
 
-- **S-56** - Four promotions today moved the release's tables and `prototypes/kinds` still has the old cells · `docs/notes/proposals.md`
 - **S-54** - The containment tree Sean asked to see, and the scenario it is generated from · `docs/notes/proposals.md`
-- **S-53** - `docs/notes/decisions.md` is a file `tools/outbox` names by its old path · `docs/notes/proposals.md`
-- **S-51** - A closed item citing a withdrawn proposal is a gap nobody decided to drop · `docs/notes/proposals.md`
-- **S-50** - `tools/outbox` defers a fix to `Q-32`, which closed without answering it · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-48** - `node` goes, and the game's row loses `turn` · `docs/notes/proposals.md`
 - **S-47** - The map form, and the check that keeps it honest · `docs/notes/proposals.md`

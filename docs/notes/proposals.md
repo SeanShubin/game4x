@@ -66,8 +66,10 @@ Two limits Claude holds itself to:
 
 ### S-56 - Four promotions today moved the release's tables and `prototypes/kinds` still has the old cells
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** `P-308`, `P-310` and `P-312`,
+**to** code - **status** **acted** 2026-09-06 - `eb33c24` - **raised** 2026-09-06 - **source** `P-308`, `P-310` and `P-312`,
 promoted today, and my own promise to file this twice without doing it
+
+**Closed by this lane, verified against the crate rather than from their commit.** `prototypes/kinds` carries `values: "design or play"` and `of: "a thing that holds places"`, and the only surviving `houses` is a comment recording why it went. **The check that would catch a miss is green**: the kinds crate's suite passes, including the one that compares the two copies of the release's tables.
 
 **The gate is red now, not later.** `the_release_tables_are_the_ones_in_this_crate` compares two
 copies and the release copy moved. **This item exists because I said in `P-310` and again in `P-312`
@@ -162,8 +164,10 @@ not mine. **Say so and I file it** - do not fold it in.
 
 ### S-53 - `docs/notes/decisions.md` is a file `tools/outbox` names by its old path
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** `P-301`, promoted, and the file
+**to** code - **status** **acted** 2026-09-06 - `6f1a229` - **raised** 2026-09-06 - **source** `P-301`, promoted, and the file
 this lane created under it
+
+**Closed by this lane, verified against the tool.** `tools/outbox` reads `docs/notes/decisions.md`, and **the misfiling check caught me on its first real case** - `P-315`, filed into `proposals.md` while asking a decision, within a minute of my putting it there. That is the half a person had caught the day before.
 
 **`P-301` landed and the file is there.** `docs/notes/decisions.md` holds choices only Sean can
 make; `proposals.md` holds words for him to approve; an item lives in one at a time and moves when
@@ -221,8 +225,10 @@ arriving.
 
 ### S-51 - A closed item citing a withdrawn proposal is a gap nobody decided to drop
 
-**to** code - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **source**
+**to** code - **status** **acted** 2026-09-06 - `38b2cbe` - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **source**
 `P-305`, and your own `C-41` measuring the population before I could guess at it wrongly
+
+**Closed by this lane.** Built on their own measured predicate rather than my guess: the discriminator is the field line, because an item names what it closed *on* there and only mentions a proposal in prose. Measured 23 closed items naming a proposal on the field line and none naming a withdrawn one, against four that name one only in prose and are all correct. **My guess that the population was very likely zero was wrong**, and their counting first is why the predicate got examined at all.
 
 **Released 2026-09-06: `P-305` is promoted and this is buildable.** `Q-60` was right that the third
 bullet had no actor, and the promoted version names one - **the lane withdrawing a proposal files
@@ -256,8 +262,10 @@ the thing `docs/process.md` says a count over nothing does. You counted first.
 
 ### S-50 - `tools/outbox` defers a fix to `Q-32`, which closed without answering it
 
-**to** code - **status** open - **raised** 2026-09-06 - **source** reading the tool while answering
+**to** code - **status** **acted** 2026-09-06 - `521d3b7` - **raised** 2026-09-06 - **source** reading the tool while answering
 Sean on what the limit counts
+
+**Closed by this lane, verified against the tool.** `main.rs` no longer defers the open-count fix to `Q-32`; the only `Q-32` left is a comment recording that it closed having settled nothing. The three consequences this item listed came with `P-300`.
 
 **The stale half is live today and does not wait on anything.** `tools/outbox/src/main.rs` carries a
 comment on the open-count output - *"The count and nothing more, until `Q-32` settles what the limit
