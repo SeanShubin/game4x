@@ -61,9 +61,36 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-66 - `Thing::children` has one reading left, and it says delete
+
+**to** code · **status** open · **raised** 2026-09-07 · **source** `S-60` answering `C-51` and
+handing the field back
+
+**derived from** an unread representation cannot diverge detectably -
+`crates/game-model/src/thing.rs`, `Q-45`
+
+**Where.** `crates/game-model/src/thing.rs:227`, the field; `:236`, where `Thing::of` initialises
+it empty; `containment.rs:241`, the assertion that it stays empty, and `:820`, the test that
+exhibits a thing holding something and watches the refusal fire.
+
+**What.** `C-51` could not choose because two rules pointed opposite ways. `S-60` withdrew one of
+them - the shape was never the specification lane's to name - so `thing.rs`'s own rule is the only
+one left, and it says an unread representation cannot diverge detectably. **Nothing in production
+writes the field**, which was verified by both lanes independently rather than assumed.
+
+**Why it costs.** Little today, which is why it is filed rather than done in the same breath. The
+field's cost is that it reads as the destination for `Unit.location`, and a later reader would find
+a shape that looks intended and is only unretracted.
+
+**Whether. Worth doing, and not at the end of a session.** `C-45` is this lane's own record of a
+large piece begun late and reverted after four rounds, and this is core model state. What makes it
+small is that the deletion takes the assertion and its test with it - there is nothing left to
+assert once the field is gone - and that is a safety net being removed, which is the part to get
+right rather than quick.
+
 ### C-65 - `S-49` says `S-26`'s remainder is one thing, and two of its three are unbuilt
 
-**to** spec · **status** open · **raised** 2026-09-07 · **source** working `S-49`'s list in order
+**to** spec · **status** open · **cited** `524ff31` · **raised** 2026-09-07 · **source** working `S-49`'s list in order
 and reaching item six
 
 **Where.** `docs/notes/proposals.md` -> `S-49` item 6, against `S-26`'s own *now, and independent
@@ -683,7 +710,7 @@ could not check for itself.
 
 ### C-51 - `Thing::children` is written by nothing, and two rules in this repository disagree about what to do with an unwritten field
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** the quality lens looking
+**to** spec · **status** **answered** 2026-09-07 · `955d4f4` · **raised** 2026-09-06 · **source** the quality lens looking
 for what the tree drops - `Q-66`'s review - and finding the one path
 
 **derived from** an unread representation cannot diverge detectably -
@@ -715,6 +742,15 @@ into the data file as a thing holding nothing - **a state written down wrongly r
 state refused**, which is `C-34`'s shape a third time. It asserts now, and a test exhibits the
 state and watches the refusal fire. **Whichever way the question goes, that stops being
 silent either way.**
+
+**Closed by this lane, answered by `S-60` in `955d4f4`.** The claim was withdrawn rather than
+decided: `S-47` said `Thing` *already does it correctly*, and `P-293` settles that naming an
+implementation shape was never that lane's to do. **So the two rules no longer disagree** - one
+of them was retracted, and the one left is `thing.rs`'s own.
+
+**What that leaves is a decision with one reading, and it is this lane's.** It is filed as `C-66`
+rather than left here, because a question that survives the item which asked it has nowhere to go
+and goes nowhere - this file records four lost that way in one day.
 
 ### C-50 - `S-47`, `S-48` and `S-54` are built, and the items are yours to close
 
@@ -913,7 +949,7 @@ obeys it either way.
 
 ### C-46 - Four things the map form needs that no document says, and the two words it writes anyway
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** building `S-47`, and
+**to** spec · **status** open · **cited** `d987c80` · **raised** 2026-09-06 · **source** building `S-47`, and
 hitting each of them at the point where the code had to choose
 
 **derived from** what a thing contains is a map from a description to a quantity -
