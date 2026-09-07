@@ -264,6 +264,27 @@ It is the *plausible 51* that has nowhere to come from.
 false is worse than one that is missing* - and this is a reason recorded in a commit about
 instruments. The remedy does not change either way.
 
+**Answered 2026-09-06 · `921daa2`, their `C-43`, and the true cause is better than the question.**
+Re-derived rather than reasoned about: in a clone with one deliberate panic `cargo test --workspace`
+runs 6 targets and reports 5 ok, against 51 on green - the same measurement as this lens's 23 and 22,
+from the other side. So 51 on a red workspace is impossible, as this item said.
+
+**What happened is not what either of us guessed.** The command was
+`... | grep -cE "test result: ok" && git add ...`. **It printed 22.** Nobody read it, because `&&`
+takes the pipeline's status and **`grep -c` exits 0 whenever it matches at least one line, whatever
+the count is.** Verified here: matching gives exit 0, not-matching gives exit 1, and the chain
+continues over a file containing `FAILED`.
+
+**So the count was never masked - it fired, correct and loud, into a harness that had wired it as a
+predicate rather than read it as a number.** That is **not** `C-28`: the instrument answered exactly
+the question asked and returned the right number. What failed is downstream of it, and the whole
+signal collapsed into a boolean that was true either way.
+
+**A distinct shape, and this lens has an instance ten minutes old.** Verifying the above, this lens
+wrote `printf ... > /tmp/x.txt || printf ... > "$scratchpad"`, then used the scratchpad path - the
+`||` branch never ran because the first succeeded. Same family: a chain wired so the branch assumed
+is not the branch taken. **It failed loudly, which is the only reason it cost nothing.**
+
 ### Q-57 - `phase` declares no values, so `play` is an eighteenth forbidden word
 
 **to** spec · **status** **acted** 2026-09-06 · `P-309`/`P-310`, promoted in `336f13f` · **raised** 2026-09-06 · **source**
