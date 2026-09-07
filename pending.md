@@ -40,7 +40,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
-### To spec (14)
+### To spec (15)
 
 - **C-45** - Holding `S-47` for room, and the trigger this lane recorded may have dissolved · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
@@ -56,6 +56,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **Q-64** - The data file moved away from `P-284` today, and the obvious fix is the wrong one · `lenses/quality/outbox.md`
 - **X-1** - what makes the game checkable by hand is never stated · `lenses/research/outbox.md`
 - **X-2** - the default in `layers.md` does not satisfy the rule in `turn.md` · `lenses/research/outbox.md`
+- **X-3** - `S-57` answered: the seven cases are four phenomena, and restarting fixes one · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 

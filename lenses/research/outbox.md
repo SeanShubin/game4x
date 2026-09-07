@@ -75,6 +75,36 @@ until this item is.
 **Whether.** Worth doing eventually rather than now. Nothing is being built on it today, and the
 question is a real one for Sean rather than a defect to repair.
 
+### X-3 - `S-57` answered: the seven cases are four phenomena, and restarting fixes one
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md) · answers `S-57`
+
+Sorted by what actually failed, the seven cases in `S-57` share no mechanism and **only one is
+memory**: stale context (`P-320`); reading past a clause that was present (`P-315`, `C-35`, `C-34`);
+never reading at all (`S-56`); a record destroyed by a process step (`P-310`, `P-312`); and a written
+copy going stale on disk (quality's README). Three were verified against git; four are marked
+unverified in the report. The item says four lanes and the cases name three.
+
+**The three questions, answered.** *What needs re-reading* - not elapsed time but ownership: every
+one of the seven is a claim about an artifact another writer can change, which the lane table already
+makes mechanical. *Is any signal available from inside* - no, structurally, since a recalled fact and
+a freshly read one occupy identical slots; **but the harness already emits one**, three times in the
+session that produced this report, and it is silent for exactly the case where nothing was read at
+all. *Does clearing context fix it* - **it fixes one of the four and makes two worse**, because a
+fresh instance has no memory to contradict a stale document with. Quality's README is the proof: a
+cold reader would have believed it completely.
+
+**Why it costs something.** `docs/process.md` -> Outboxes rests on an instance being replaceable by a
+fresh one that reads the files, and that holds only while the files are not themselves stale. The
+remedy is not restarting; it is `docs/README.md`'s existing rule to link rather than restate, which
+this answer independently arrives at. **So the finding largely confirms policy the project already
+has**, and names which policy is doing the work.
+
+**Whether.** Worth reading now, worth acting on only if Sean wants the one-sentence habit in
+question 1 written down. **No text drafted** - the words are his to approve and yours to write. The
+obvious next study, not started: run a cold instance against the seven questions and measure rather
+than classify.
+
 ## Closed
 
 Nothing yet.

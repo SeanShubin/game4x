@@ -60,6 +60,9 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [Answering from memory, and why the instance cannot tell](2026-09-06-answering-from-memory.md)
+  - 2026-09-06. Answers `S-57`. The seven cases are four phenomena; only one is memory, and
+    clearing context fixes that one while making two of the others worse.
 - [What the theory already settles](2026-09-06-what-the-theory-already-settles.md)
   - 2026-09-06. From a conversation with Sean about the state function. The transformation is a
     Mealy machine and the list form is derived rather than new; `exec(environment)` is
