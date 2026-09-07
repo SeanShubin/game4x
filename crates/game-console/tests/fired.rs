@@ -10,7 +10,9 @@
 /// **Named rather than repeated, because `S-44` moved both and three assertions carried the
 /// old numbers.** They are asserted rather than derived: a test that counted the file and
 /// compared it with itself would agree with any scenario at all.
-const LINES: usize = 136;
+// 134 since `S-66`: the Ark's move and the bare launch both went, because `P-342` made
+// launching one recipe that is not a move.
+const LINES: usize = 134;
 const TURNS: usize = 10;
 
 use game_console::{Library, fired};
@@ -128,7 +130,10 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
     // an exemption list of seventeen against a population of twenty-five is not a check,
     // it is a second copy of the thing being checked, and the second copy is what rots.
     // If a third is wanted here, that is the signal to fix the rule rather than the list.
-    const NOT_FIRED: [(&str, &str); 0] = [];
+    const NOT_FIRED: [(&str, &str); 1] = [(
+        "move",
+        "S-66 removed the Ark move because P-342 made launching not a move, and it was the          only one in the repository. Declared, commanded, and fired by nothing - C-63.          Putting one back is Sean's, because he is about to derive this file by hand",
+    )];
 
     let players: Vec<String> = declared()
         .into_iter()
@@ -176,8 +181,8 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
     }
     assert_eq!(
         NOT_FIRED.len(),
-        0,
-        "no exceptions: all nine player recipes fire"
+        1,
+        "one exception: `move` is declared, commanded, and fired by no scenario - `C-63`"
     );
 }
 

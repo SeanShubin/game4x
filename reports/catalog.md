@@ -26,7 +26,7 @@ a person: provides labor, eats, and grows on surplus.
 - `deploy ark` produces 2
 - `found by land` produces 2
 - `produce pioneer` consumes 2
-- `produce ark` consumes 2
+- `launch ark` consumes 2
 - `create labor` consumes 1, ready
 - `create labor` produces 1, not ready
 - `grow` produces the lesser of the surplus food and the citizens here
@@ -87,7 +87,7 @@ where an Ark is produced.
 **In recipes**
 
 - `build yard` produces 1
-- `produce ark` requires 1
+- `launch ark` requires 1
 
 ## store
 
@@ -121,7 +121,7 @@ carries a landing, and can invade from orbit.
 
 **Bounded by** a capacity of 2
 
-**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border, ascent · Requires: a Yard · Readies: yes
+**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: yes
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
@@ -130,7 +130,6 @@ carries a landing, and can invade from orbit.
 - `deploy ark` consumes 1, in the orbit above `$where`
 - `move` consumes 1 (as a unit), ready, in `$from`
 - `move` produces 1 (as a unit), not ready, in `$to`
-- `produce ark` produces 1
 
 ## pioneer
 
@@ -140,9 +139,9 @@ founds a territory.
 
 **Traits of it** `kind` (one of the kinds), `force` (a number)
 
-**Bounded by** a capacity of 2, and the food produced here
+**Bounded by** a capacity of 2
 
-**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes
+**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
@@ -159,7 +158,7 @@ eaten by citizens; expires.
 
 **In families** thing, resource
 
-**Traits of it** `kind` (one of the kinds), `keeps` (the number of turns it will last), `surplus` (yes or no)
+**Traits of it** `kind` (one of the kinds), `surplus` (yes or no)
 
 **Bounded by** the things in it that hold it, and it keeps for one turn
 
@@ -168,9 +167,6 @@ eaten by citizens; expires.
 - `work` produces `$where`'s density for that resource (as a resource)
 - `upkeep` consumes the thing's upkeep
 - `grow` consumes the lesser of the surplus food and the citizens here, surplus
-- `spoil` consumes 1, keeps 0
-- `age` consumes 1, keeps at least 1
-- `age` produces 1, keeps one less
 
 ## metal
 
@@ -188,7 +184,7 @@ what things are built from; conserved.
 - `build store` consumes 1
 - `build yard` consumes 15
 - `produce pioneer` consumes 3
-- `produce ark` consumes 3
+- `launch ark` consumes 3
 - `work` produces `$where`'s density for that resource (as a resource)
 - `perish` produces the thing's metal
 
@@ -206,7 +202,7 @@ what moves things; neither conserved nor expiring.
 
 - `move` consumes 1, in that unit
 - `produce pioneer` consumes 6
-- `produce ark` consumes 12
+- `launch ark` consumes 12
 - `work` produces `$where`'s density for that resource (as a resource)
 
 ## labor

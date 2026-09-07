@@ -120,8 +120,10 @@ fn the_normalized_view_has_no_nested_cells() {
         cells.iter().map(|(table, _, _)| table).collect();
     assert_eq!(
         tables.len(),
-        11,
-        "eleven tables in state.md; {} were read ({tables:?})",
+        10,
+        "ten tables in state.md with rows under them; {} were read ({tables:?}). \
+         `unit` is the eleventh and is empty - the ark deploys and `P-342` made launching \
+         put nothing into orbit, so the scenario ends with no unit at all",
         tables.len()
     );
 }

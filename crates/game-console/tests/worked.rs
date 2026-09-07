@@ -52,26 +52,14 @@ fn declared(document: &str) -> Vec<String> {
     names
 }
 
-/// The one recipe that can have no example, and why it is not a gap in the report.
+/// Every recipe the release declares has a worked example. No exceptions.
 ///
-/// **`age` is declared and the model does not implement it** - `C-61`. The release gives food
-/// a `keeps` and has `age` turn one into a food that keeps one less; `Trait::Keeps` does not
-/// exist, and `Territory::end_of_turn_losses` discards **all** food at every ending. So no
-/// state makes `age` do anything, and an example of it would have to be drawn - which is
-/// exactly what `P-330` says a worked example must never be.
-///
-/// **Found by `R-7` rather than by reading the model.** Building the world's example is what
-/// asked *what does this recipe do here*, and the answer was nothing.
-const NOT_IMPLEMENTED: [(&str, &str); 1] = [(
-    "age",
-    "the model has no `keeps` and discards all food at every ending, so nothing ages - `C-61`",
-)];
-
-/// Every recipe the release declares has a worked example, or is the one that cannot.
-///
-/// **Five of the six excuses went with `P-332`.** The world's used to be excused as a group
-/// because no command fires one alone; Sean chose one example shown under all of them over a
-/// command each, so the excuses went and the notices in the report went with them.
+/// **There have been two sets and both expired on schedule rather than being deleted.** The
+/// world's six were excused as a group because no command fires one alone, until `P-332` chose
+/// one example shown under all of them. Then `age` alone, because the model discarded all food
+/// at every ending and nothing could age - until `P-340` put `age` before `spoil` and made the
+/// release's order the model's. **The exception failed the moment `age` gained an example**,
+/// which is what a named exception is for: `C-61`.
 #[test]
 fn every_recipe_the_release_declares_has_a_worked_example() {
     let declared = declared(&release());
@@ -87,38 +75,23 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
         .flat_map(|example| std::iter::once(example.recipe).chain(example.also.iter().copied()))
         .collect();
 
-    let unbuilt: BTreeSet<&str> = NOT_IMPLEMENTED.iter().map(|(name, _)| *name).collect();
     let missing: Vec<&String> = declared
         .iter()
-        .filter(|name| !covered.contains(name.as_str()) && !unbuilt.contains(name.as_str()))
+        .filter(|name| !covered.contains(name.as_str()))
         .collect();
     assert!(
         missing.is_empty(),
         "these recipes are declared and have no worked example: {missing:?}"
     );
 
-    // **An exception that has been repaired is a lie in the other direction**, and nothing
-    // else would notice: this would go on passing while claiming a gap that had closed.
-    for (name, why) in NOT_IMPLEMENTED {
-        assert!(
-            !covered.contains(name),
-            "`{name}` has an example now, so it is implemented and this goes: {why}"
-        );
-        assert!(
-            declared.iter().any(|declared| declared == name),
-            "`{name}` is excepted here and the release no longer declares it"
-        );
-    }
-
     // **Every recipe, and one example carries six of them.** `P-332`: the world's are shown
     // once, together, on `{end-turn}`. So the two counts differ and the difference is the
     // point - eleven examples for sixteen recipes.
     assert_eq!(
-        covered.len() + unbuilt.len(),
-        declared.len(),
-        "every declared recipe is covered or named unbuilt; {} covered, {} unbuilt, {} declared",
         covered.len(),
-        unbuilt.len(),
+        declared.len(),
+        "every declared recipe has an example; {} covered and {} declared",
+        covered.len(),
         declared.len()
     );
     let shared: usize = worked::examples()
@@ -126,9 +99,8 @@ fn every_recipe_the_release_declares_has_a_worked_example() {
         .map(|example| example.also.len())
         .sum();
     assert_eq!(
-        shared, 4,
-        "one example carries four recipes besides its own - the world's six less `age`, \
-         which the model does not implement"
+        shared, 5,
+        "one example carries five recipes besides its own, which is the world's six"
     );
 }
 

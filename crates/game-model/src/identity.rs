@@ -111,12 +111,20 @@ impl UnitKind {
         }
     }
 
-    /// Food eaten each turn, or nothing. An Ark has no maintenance listed; a Pioneer eats
-    /// one food per turn and is lost if it is not paid.
+    /// What a unit eats each turn, which is nothing.
+    ///
+    /// **`P-339`: neither an ark nor a pioneer takes upkeep**, and a citizen is now the only
+    /// thing in the release that does. It answers `C-62`: the model marked an unpaid unit
+    /// `usable = false` rather than consuming it, and `usable` was a trait the release did not
+    /// declare - so a pioneer that had starved read exactly like one that had not, in the file
+    /// Sean derives by hand. **There is no starved unit now**, so the marking has nothing to
+    /// mark.
+    ///
+    /// **Kept as a method rather than deleted**, because upkeep is a column of *Units and
+    /// structures* and a kind that gains one gains it here. The two cells are empty today.
     pub fn upkeep(self) -> u32 {
         match self {
-            UnitKind::Ark => 0,
-            UnitKind::Pioneer => 1,
+            UnitKind::Ark | UnitKind::Pioneer => 0,
         }
     }
 
@@ -201,7 +209,11 @@ mod tests {
         assert_eq!(UnitKind::Ark.upkeep(), 0);
         assert_eq!(UnitKind::Pioneer.force(), 2);
         assert_eq!(UnitKind::Pioneer.cells(), 2);
-        assert_eq!(UnitKind::Pioneer.upkeep(), 1, "one food per turn");
+        assert_eq!(
+            UnitKind::Pioneer.upkeep(),
+            0,
+            "`P-339`: a pioneer's Upkeep cell is empty"
+        );
         assert!(UnitKind::Ark.lands_from_orbit());
         assert!(
             !UnitKind::Pioneer.lands_from_orbit(),

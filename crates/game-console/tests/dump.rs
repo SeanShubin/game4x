@@ -150,15 +150,22 @@ fn the_entity_view_names_every_kind_and_admits_what_it_cannot_name() {
     let kinds: Vec<&str> = tables.iter().map(|t| t.kind.as_str()).collect();
     assert_eq!(kinds, ["game", "territory", "unit"]);
 
-    // **The scenario leaves a unit alive now**, since `S-14` extended it through `produce
-    // ark` and `launch`. It used to leave none, and this asserted the empty case here -
-    // which made the demonstration depend on the scenario reaching nothing rather than on
-    // the renderer. `an_empty_table_is_named_rather_than_omitted` shows it against a fresh
-    // game, where emptiness is a property of the state and not an accident of coverage.
+    // **The scenario leaves no unit, and the table is there anyway** - which is the whole
+    // point of the renderer naming what is empty.
+    //
+    // It has been both. It left none, then `S-14` extended it through `produce ark` and
+    // `launch` and it left one, and `P-342` made launching produce nothing so it leaves none
+    // again. **What is asserted here is the table rather than the count**, because the count
+    // is a fact about how far the scenario goes and the table is a fact about the renderer -
+    // and `an_empty_table_is_named_rather_than_omitted` shows the renderer against a fresh
+    // game, where emptiness is not an accident of coverage.
     let unit = tables.iter().find(|t| t.kind == "unit").expect("listed");
-    assert!(!unit.rows.is_empty(), "the launched ark is still a unit");
+    assert!(
+        unit.rows.is_empty(),
+        "the ark deployed and nothing was launched into orbit after it"
+    );
     let text = dump::entities_markdown(&session.game, "after");
-    assert!(text.contains("## unit"), "and it has a table");
+    assert!(text.contains("## unit"), "and it has a table regardless");
 
     // Every row is as wide as the columns, including entities that carry only some of them.
     for table in &tables {
@@ -449,10 +456,25 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
         ("build extractor", "{build-extractor"),
         ("build yard", "{build-yard"),
         ("produce pioneer", "{produce-pioneer"),
-        ("produce ark", "{produce-ark"),
+        ("launch ark", "{launch-ark"),
         ("create labor", "{create-labor"),
         ("work", "{work "),
     ];
+
+    // **The scenario stopped moving anything, and this says so rather than passing.**
+    // `S-66` removed the Ark's move: launching is not a move since `P-342`, so the one
+    // `{move ...}` in the repository went with it. **`move` is still a declared player recipe
+    // with a command**, and `spec/scenarios.md` wants the main scenario to touch everything a
+    // typical game uses - so this is a hole rather than a rule that stopped applying.
+    //
+    // **Named rather than dropped from the list**, so it fails the moment a move comes back
+    // and cannot be forgotten while it is out. `C-63`, and putting one in is Sean's: he is
+    // about to derive this file by hand and a command he has not been told about is a change
+    // under him.
+    const NOT_IN_THE_SCENARIO: [(&str, &str); 1] = [(
+        "move",
+        "`S-66` removed the Ark's move with `P-342`, and it was the only one - `C-63`",
+    )];
 
     let mut declared: Vec<String> = Vec::new();
     let mut inside = false;
@@ -490,6 +512,19 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
             .find(|(name, _)| name == recipe)
             .unwrap_or_else(|| panic!("nothing here says what fires `{recipe}`"))
             .1;
+        if let Some((_, why)) = NOT_IN_THE_SCENARIO
+            .iter()
+            .find(|(named, _)| named == recipe)
+        {
+            // **An exception that has been repaired is a lie in the other direction.**
+            assert!(
+                !scenario
+                    .lines()
+                    .any(|line| line.trim().starts_with(command)),
+                "`{recipe}` is in the scenario now, so delete its exception: {why}"
+            );
+            continue;
+        }
         assert!(
             scenario
                 .lines()
@@ -576,8 +611,11 @@ fn every_kind_is_named_and_only_two_namings_depend_on_the_scenario() {
         .collect();
     assert_eq!(
         live,
-        ["store", "orbit"],
-        "eleven kinds are named with nothing played, so only these depend on the scenario \
-         having reached them; if this list shrinks the check covers less than it did"
+        ["store"],
+        "fourteen kinds are named with nothing played, so only this one depends on the \
+         scenario having reached it. **The list shrinking is coverage growing** - `orbit` \
+         left it when the `kind` table gained a row for it, which is a fact about the \
+         planet rather than about one run. A list that *grows* is the check covering \
+         less than it did",
     );
 }

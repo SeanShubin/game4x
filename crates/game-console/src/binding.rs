@@ -158,7 +158,7 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
             territory: territory("territory")?,
         }),
         form::LAUNCH_ARK => Meaning::Change(Transition::Launch {
-            kind: UnitKind::Ark,
+            territory: territory("territory")?,
         }),
         // **The one lookup that came back.** `P-328` makes a command's name one word, and
         // `move` is the recipe's whole name - so the kind cannot ride in it the way it does in
@@ -189,10 +189,6 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
         }),
         form::PRODUCE_PIONEER => Meaning::Change(Transition::Produce {
             kind: UnitKind::Pioneer,
-            territory: territory("territory")?,
-        }),
-        form::PRODUCE_ARK => Meaning::Change(Transition::Produce {
-            kind: UnitKind::Ark,
             territory: territory("territory")?,
         }),
         // **The count is `repeat` now, and one firing makes one labor.** `P-323`: a repeat
@@ -250,7 +246,6 @@ pub fn handled() -> Vec<&'static str> {
         form::BUILD_EXTRACTOR,
         form::BUILD_YARD,
         form::PRODUCE_PIONEER,
-        form::PRODUCE_ARK,
         form::CREATE_LABOR,
         form::WORK,
         form::END_TURN,

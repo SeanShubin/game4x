@@ -778,7 +778,7 @@ fn every_way_the_state_can_change_is_a_command() {
             territory: TerritoryId(1),
         },
         Transition::Launch {
-            kind: UnitKind::Ark,
+            territory: TerritoryId(1),
         },
         Transition::Move {
             kind: UnitKind::Pioneer,
@@ -841,16 +841,16 @@ fn every_way_the_state_can_change_is_a_command() {
     // the grammar in its own test, so a form with no arm fails there.
     assert_eq!(
         commands_that_change.len(),
-        19,
-        "nineteen commands change the state; the grammar has {} ({commands_that_change:?})",
+        18,
+        "eighteen commands change the state; the grammar has {} ({commands_that_change:?})",
         commands_that_change.len()
     );
     // **Four pairs, named rather than counted.** `move`, `build`, `produce` and
     // `add unit to orbit` are each reached by two commands, because the kind is in the name.
     let shared = commands_that_change.len() - changing.len();
     assert_eq!(
-        shared, 3,
-        "three transitions are reached by two commands each - build, produce, and adding \
-         a unit to orbit. `move` stopped being one when `P-328` made a name one word"
+        shared, 2,
+        "two transitions are reached by two commands each - build and adding a unit to \
+         orbit. `produce` stopped being one when `P-342` made `produce ark` into `launch ark`"
     );
 }

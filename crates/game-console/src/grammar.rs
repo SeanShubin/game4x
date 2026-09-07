@@ -30,7 +30,7 @@ pub mod form {
     pub const BUILD_EXTRACTOR: &str = "build-extractor";
     pub const BUILD_YARD: &str = "build-yard";
     pub const PRODUCE_PIONEER: &str = "produce-pioneer";
-    pub const PRODUCE_ARK: &str = "produce-ark";
+
     pub const CREATE_LABOR: &str = "create-labor";
     pub const WORK: &str = "work";
     pub const END_TURN: &str = "end-turn";
@@ -147,20 +147,18 @@ pub fn grammar() -> Grammar {
             ],
             "bring an ark down from the orbit above a territory; it founds the territory",
         ),
+        // **`P-342`: one recipe, and it takes a territory.** `produce ark` and `launch` were
+        // two commands for one thing and only one of them fired a recipe - `C-54`. This is the
+        // recipe's own name and it requires a Yard, so it has to say whose.
         Form::new(
             form::LAUNCH_ARK,
             vec![
                 Term::Keyword("launch-ark"),
+                Term::required("territory", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
-            "send an ark from the territory it is in up to orbit",
+            "pay an ark's cost at a yard and send it up; nothing comes back",
         ),
-        // **One `move`, because the recipe is one recipe** - `P-323` - and its name is one
-        // word - `P-328`. So which unit moves is a field, and **`unit:ark` is an assumption
-        // this lane made rather than found.** `spec/console.md` says a field that refers to a
-        // thing is named for that thing's kind, and `unit` is a family rather than a kind; the
-        // form that sentence actually suggests is `ark:<id>`, naming one particular ark, which
-        // the model does not select by and which would change what a move means. `C-56`.
         Form::new(
             form::MOVE,
             vec![
@@ -217,15 +215,6 @@ pub fn grammar() -> Grammar {
                 Term::optional("repeat", Kind::Number),
             ],
             "produce a pioneer, paying its cost there",
-        ),
-        Form::new(
-            form::PRODUCE_ARK,
-            vec![
-                Term::Keyword("produce-ark"),
-                Term::required("territory", Kind::Number),
-                Term::optional("repeat", Kind::Number),
-            ],
-            "produce an ark at a yard",
         ),
         Form::new(
             form::CREATE_LABOR,
@@ -415,14 +404,15 @@ mod tests {
             })
             .map(|form| form.name)
             .collect();
-        // **Eleven, and it was twelve until `P-328`.** `move ark` and `move pioneer` were two
-        // commands for one recipe; a name is one word now, so they are the one command
-        // `P-323` always required. The tenth and eleventh are `launch-ark`, which fires no
-        // declared recipe - `C-54`.
+        // **Ten, and each drop was a promotion rather than a deletion.** Twelve until
+        // `P-328` made a name one word and `move ark`/`move pioneer` became one `move`;
+        // eleven until `P-342` made `produce ark` into `launch ark` and there was one command
+        // where there had been two. **Ten player recipes, ten commands** - which is what
+        // `P-214` asked for and is true for the first time.
         assert_eq!(
             takes_repeat.len(),
-            11,
-            "eleven commands take a repeat: {takes_repeat:?}"
+            10,
+            "ten commands take a repeat: {takes_repeat:?}"
         );
         for named in [
             form::END_TURN,

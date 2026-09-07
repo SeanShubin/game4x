@@ -87,15 +87,23 @@ pub fn fired(transition: &Transition) -> (Vec<&'static str>, &'static str) {
         },
         Transition::Produce { kind, .. } => match kind {
             UnitKind::Pioneer => (vec!["produce pioneer"], ""),
-            UnitKind::Ark => (vec!["produce ark"], ""),
+            // An ark is produced by no recipe since `P-342`: `produce ark` became
+            // `launch ark` and lost its `produce 1 ark` row. The only ark in a game is the
+            // one design put in orbit.
+            UnitKind::Ark => (
+                Vec::new(),
+                "no recipe produces an ark since `P-342` - `launch ark` consumes the cost \
+                 and puts nothing into orbit",
+            ),
         },
         Transition::CreateLabor { .. } => (vec!["create labor"], ""),
         Transition::Work { .. } => (vec!["work"], ""),
         Transition::EndTurn => (ENDING_A_TURN.to_vec(), ""),
-        Transition::Launch { .. } => (
-            Vec::new(),
-            "no recipe names an orbit, so nothing fires - `catalog.md` says the same of the kind",
-        ),
+        // **`P-342` gave launching a recipe, which answers the second half of `C-54`.** It
+        // used to fire nothing the release declared - `produce ark` built the Ark and this
+        // moved it, and no recipe named an orbit. There is one recipe now and it produces
+        // nothing, so launching is not a move and nothing needs to name where it went.
+        Transition::Launch { .. } => (vec!["launch ark"], ""),
         Transition::Start => (Vec::new(), "the game begins; `P-217`, not a recipe"),
         Transition::CreatePlanet { .. }
         | Transition::SetResource { .. }

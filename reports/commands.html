@@ -28,7 +28,7 @@ ul { padding-left: 1.2rem }
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p game-console --bin dump-state</code>.</p>
 <p>Every command that ran, in order, with the recipe it fired. <code>S-24</code>: the third of the four artifacts a person needs to derive the data dump by hand, the others being <code>catalog.md</code>, <code>recipes.md</code> and <code>state.md</code>.</p>
 <p>The hierarchy is flattened. <code>run setup</code> opens <code>setup.4x</code>, which opens others, and a <code>run</code> line is not listed - it is where the next commands are kept rather than a move in the game.</p>
-<p>199 commands over 10 turn(s), and 63 of them before the game began.</p>
+<p>197 commands over 10 turn(s), and 63 of them before the game began.</p>
 <table>
 <thead>
 <tr><th>#</th><th>turn</th><th>command</th><th>fires</th></tr>
@@ -220,21 +220,19 @@ ul { padding-left: 1.2rem }
 <tr><td>184</td><td>9</td><td><code>{create-labor territory:1}</code></td><td><code>create labor</code></td></tr>
 <tr><td>185</td><td>9</td><td><code>{work territory:1 resource:energy}</code></td><td><code>work</code></td></tr>
 <tr><td>186</td><td>9</td><td><code>{create-labor territory:1}</code></td><td><code>create labor</code></td></tr>
-<tr><td>187</td><td>9</td><td><code>{produce-ark territory:1}</code></td><td><code>produce ark</code></td></tr>
+<tr><td>187</td><td>9</td><td><code>{launch-ark territory:1}</code></td><td><code>launch ark</code></td></tr>
 <tr><td>188</td><td>9</td><td><code>{create-labor territory:2}</code></td><td><code>create labor</code></td></tr>
 <tr><td>189</td><td>9</td><td><code>{work territory:2 resource:food}</code></td><td><code>work</code></td></tr>
-<tr><td>190</td><td>9</td><td><code>{move unit:ark territory:2}</code></td><td><code>move</code></td></tr>
-<tr><td>191</td><td>9</td><td><code>{end-turn}</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
-<tr><td>192</td><td>10</td><td><code>{create-labor territory:1}</code></td><td><code>create labor</code></td></tr>
-<tr><td>193</td><td>10</td><td><code>{work territory:1 resource:food}</code></td><td><code>work</code></td></tr>
-<tr><td>194</td><td>10</td><td><code>{create-labor territory:1}</code></td><td><code>create labor</code></td></tr>
-<tr><td>195</td><td>10</td><td><code>{work territory:1 resource:food}</code></td><td><code>work</code></td></tr>
-<tr><td>196</td><td>10</td><td><code>{create-labor territory:2}</code></td><td><code>create labor</code></td></tr>
-<tr><td>197</td><td>10</td><td><code>{work territory:2 resource:food}</code></td><td><code>work</code></td></tr>
-<tr><td>198</td><td>10</td><td><code>{launch-ark}</code></td><td><em>no recipe names an orbit, so nothing fires - <code>catalog.md</code> says the same of the kind</em></td></tr>
-<tr><td>199</td><td>10</td><td><code>{end-turn}</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+<tr><td>190</td><td>9</td><td><code>{end-turn}</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
+<tr><td>191</td><td>10</td><td><code>{create-labor territory:1}</code></td><td><code>create labor</code></td></tr>
+<tr><td>192</td><td>10</td><td><code>{work territory:1 resource:food}</code></td><td><code>work</code></td></tr>
+<tr><td>193</td><td>10</td><td><code>{create-labor territory:1}</code></td><td><code>create labor</code></td></tr>
+<tr><td>194</td><td>10</td><td><code>{work territory:1 resource:food}</code></td><td><code>work</code></td></tr>
+<tr><td>195</td><td>10</td><td><code>{create-labor territory:2}</code></td><td><code>create labor</code></td></tr>
+<tr><td>196</td><td>10</td><td><code>{work territory:2 resource:food}</code></td><td><code>work</code></td></tr>
+<tr><td>197</td><td>10</td><td><code>{end-turn}</code></td><td><code>upkeep</code>, <code>grow</code>, <code>perish</code>, <code>spoil</code>, <code>age</code>, <code>refresh</code></td></tr>
 </tbody>
 </table>
-<p>199 row(s)</p>
+<p>197 row(s)</p>
 </body>
 </html>

@@ -70,8 +70,17 @@ pub enum Transition {
         territory: TerritoryId,
     },
     /// Send a unit from the territory it is in up to orbit.
+    /// `launch ark`: pay an Ark's cost at a Yard and send it up. Nothing comes back.
+    ///
+    /// **`P-342` made this one recipe where there were two.** `produce ark` built an Ark and
+    /// `launch` moved it to orbit, so winning took two commands and the second was a move
+    /// with no recipe behind it - `C-54`. **Launching is not a move**: it consumes the cost
+    /// and puts nothing into orbit, which is why the destination this lane could not name is
+    /// no longer needed.
+    ///
+    /// It carries a territory because a recipe requiring a Yard has to say whose.
     Launch {
-        kind: UnitKind,
+        territory: TerritoryId,
     },
     /// Move a unit to an adjacent territory, taking and founding it if it is not already
     /// controlled.

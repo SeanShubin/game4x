@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-344** - What one act leaves stale: the Ark's `ascent`, and two steps that are one · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -46,15 +47,13 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-65** - `X-2`'s hole is live again, and `P-338` is what tracks it now · `docs/notes/proposals.md`
 
-### To spec (25)
+### To spec (23)
 
-- **C-61** - `age` is a declared recipe the model does not implement, and `R-7` is what found it · `crates/outbox.md`
-- **C-62** - A starved unit is marked unusable, and no artifact can show it · `crates/outbox.md`
+- **C-63** - `move` is declared, has a command, and is fired by no scenario at all · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
 - **C-59** - `R-7` asks for the command that fires each recipe, and the world's six share one · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
 - **C-56** - `move` needs a field for its unit and `P-323`'s rule points at one the model cannot use · `crates/outbox.md`
-- **C-54** - `S-59`'s count measured one file of seven, and `launch ark` fires no recipe · `crates/outbox.md`
 - **C-51** - `Thing::children` is written by nothing, and two rules in this repository disagree about what to do with an unwritten field · `crates/outbox.md`
 - **C-50** - `S-47`, `S-48` and `S-54` are built, and the items are yours to close · `crates/outbox.md`
 - **C-49** - `S-30` needs a second copy of your data before it can stop having one, and the order is yours · `crates/outbox.md`

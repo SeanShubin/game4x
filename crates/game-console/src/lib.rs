@@ -397,7 +397,6 @@ mod tests {
             "build-extractor",
             "build-store",
             "build-yard",
-            "produce-ark",
             "produce-pioneer",
             "work",
             "end-turn",

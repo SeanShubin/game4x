@@ -286,9 +286,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 
 # Turn 2
 
@@ -569,9 +570,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 
 # Turn 3
 
@@ -852,9 +854,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 
 # Turn 4
 
@@ -1148,9 +1151,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 
 # Turn 5
 
@@ -1449,9 +1453,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 
 # Turn 6
 
@@ -1751,9 +1756,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 
 # Turn 7
 
@@ -1791,9 +1797,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 - {territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1 ready:yes} -> 1
 
-**changed** (4)
+**changed** (3)
 
-- {territory biome:grassland id:1 nature:1} {citizen ready:yes} · 12 → 11
 - {territory biome:grassland id:1 nature:1} {energy} · 12 → 18
 - {territory biome:grassland id:1 nature:1} {metal} · 20 → 28
 - {territory biome:grassland id:1 nature:1} {store resource:metal} · 2 → 3
@@ -1812,7 +1817,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | id  | biome     | nature | citizens | labor-spent | yards |
 | --- | --------- | ------ | -------- | ----------- | ----- |
-| 1   | grassland | 1      | 11       | 0           | 0     |
+| 1   | grassland | 1      | 12       | 0           | 0     |
 | 2   | grassland | 1      | 0        | 0           | 0     |
 | 3   | grassland | 1      | 0        | 0           | 0     |
 | 4   | mountain  | 1      | 0        | 0           | 0     |
@@ -1984,7 +1989,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | territory | made | spent | left |
 | --------- | ---- | ----- | ---- |
-| 1         | 11   | 0     | 11   |
+| 1         | 12   | 0     | 12   |
 | 2         | 0    | 0     | 0    |
 | 3         | 0    | 0     | 0    |
 | 4         | 0    | 0     | 0    |
@@ -2048,7 +2053,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | id        | in-play |
 | --------- | ------- |
-| citizen   | 11      |
+| citizen   | 12      |
 | labor     | 0       |
 | food      | 0       |
 | metal     | 28      |
@@ -2060,9 +2065,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | pioneer   | 1       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 
 # Turn 8
 
@@ -2101,9 +2107,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 - {territory biome:grassland id:2 nature:1} {store resource:food} -> 1
 - {territory biome:grassland id:2 nature:1} {store resource:metal} -> 1
 
-**changed** (3)
+**changed** (2)
 
-- {territory biome:grassland id:1 nature:1} {citizen ready:yes} · 11 → 12
 - {territory biome:grassland id:1 nature:1} {energy} · 18 → 20
 - {territory biome:grassland id:1 nature:1} {metal} · 28 → 13
 
@@ -2371,9 +2376,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 
 # Turn 9
 
@@ -2389,18 +2395,13 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 {create-labor territory:1}
 {work territory:1 resource:energy}
 {create-labor territory:1}
-{produce-ark territory:1}
+{launch-ark territory:1}
 {create-labor territory:2}
 {work territory:2 resource:food}
-{move unit:ark territory:2}
 {end-turn}
 ```
 
 ## what changed
-
-**new** (1)
-
-- {territory biome:grassland id:2 nature:1} {ark fuel:1 id:1 ready:yes} -> 1
 
 **changed** (3)
 
@@ -2414,7 +2415,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | phase | territories | units |
 | ----- | ----------- | ----- |
-| play  | 12          | 1     |
+| play  | 12          | 0     |
 
 1 row(s)
 
@@ -2614,11 +2615,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 ### unit
 
-| id  | kind | in-kind   | in-id | fuel | ready |
-| --- | ---- | --------- | ----- | ---- | ----- |
-| 1   | ark  | territory | 2     | 1    | yes   |
+| id  | kind | in-kind | in-id | fuel | ready |
+| --- | ---- | ------- | ----- | ---- | ----- |
 
-1 row(s)
+*(empty) 0 rows*
 
 ### adjacency
 
@@ -2669,13 +2669,14 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 1       |
-| ark       | 1       |
+| ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 
 # Turn 10
 
@@ -2688,19 +2689,10 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 {work territory:1 resource:food}
 {create-labor territory:2}
 {work territory:2 resource:food}
-{launch-ark}
 {end-turn}
 ```
 
 ## what changed
-
-**gone** (1)
-
-- {territory biome:grassland id:2 nature:1} {ark fuel:1 id:1 ready:yes} -> 1
-
-**new** (1)
-
-- {orbit id:2} {ark fuel:1 id:1 ready:yes} -> 1
 
 **changed** (1)
 
@@ -2712,7 +2704,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | phase | territories | units |
 | ----- | ----------- | ----- |
-| play  | 12          | 1     |
+| play  | 12          | 0     |
 
 1 row(s)
 
@@ -2914,9 +2906,8 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 
 | id  | kind | in-kind | in-id | fuel | ready |
 | --- | ---- | ------- | ----- | ---- | ----- |
-| 1   | ark  | orbit   | 2     | 1    | yes   |
 
-1 row(s)
+*(empty) 0 rows*
 
 ### adjacency
 
@@ -2967,11 +2958,12 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 1       |
-| ark       | 1       |
+| ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 

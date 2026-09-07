@@ -324,7 +324,7 @@ pub fn examples() -> Vec<Example> {
         // has `age` turn one into a food that keeps one less; the model has no such trait and
         // discards all food at every ending, so no state makes `age` do anything.
         Example {
-            also: &["grow", "perish", "spoil", "refresh"],
+            also: &["grow", "perish", "age", "spoil", "refresh"],
             recipe: "upkeep",
             command: "{end-turn}",
             case: Some(
@@ -372,8 +372,8 @@ pub fn examples() -> Vec<Example> {
         },
         Example {
             also: &[],
-            recipe: "produce ark",
-            command: "{produce-ark territory:1}",
+            recipe: "launch ark",
+            command: "{launch-ark territory:1}",
             case: None,
             before: || {
                 founded(

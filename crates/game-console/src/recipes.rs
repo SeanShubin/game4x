@@ -67,19 +67,15 @@ pub fn recipes(document: &str) -> String {
             .iter()
             .filter(|run| run.recipe == recipe.name || run.also.contains(&recipe.name.as_str()))
             .collect();
-        if mine.is_empty() {
-            // **Said rather than left blank, and it says which kind of absence it is.** A
-            // heading with no example under it, in a file where every other has one, reads as
-            // one nobody reached. `age` is not unreached: the model has no `keeps` and
-            // discards all food at every ending, so nothing ages and an example would have to
-            // be drawn. `C-61`, and `tests/worked.rs` fails if a *second* recipe joins it.
-            out.push_str(
-                "\n*No worked example, because the model does not implement this: it has no \
-                 `keeps`, and discards all food at every ending, so nothing ages. Found by \
-                 building the others - `C-61`.*\n",
-            );
-            continue;
-        }
+        // **Every declared recipe has one**, and `tests/worked.rs` is what says so first.
+        // This asserts rather than writing a notice, because there is no longer a recipe that
+        // can honestly carry one - `C-61` closed when `P-340` put `age` before `spoil`.
+        assert!(
+            !mine.is_empty(),
+            "`{}` is declared and has no worked example - `tests/worked.rs` should have said \
+             so first",
+            recipe.name
+        );
         for run in mine {
             out.push_str("\n### An example\n\n");
             let shared: Vec<&str> = std::iter::once(run.recipe)

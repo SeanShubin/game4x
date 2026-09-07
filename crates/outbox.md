@@ -61,9 +61,55 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-63 - `move` is declared, has a command, and is fired by no scenario at all
+
+**to** spec · **status** open · **raised** 2026-09-07 · **source** `S-66`, which removed the one
+firing there was and left the recipe behind
+
+**derived from** the release's player recipes, of which `move` is one -
+`releases/first-release.md`, and `P-342`, which made launching not a move
+
+**Where.** `scenario/commands/play.4x`, which no longer contains a `move`, and
+`crates/game-console/tests/fired.rs`, which now names one exception where it had none.
+
+**What.** The Ark crossed to territory 2 before it left, and that was the only `move` in the
+repository. `P-342` made launching pay an Ark's cost at a Yard and put nothing into orbit, so
+there is no Ark to move, and `S-66` deleted the crossing along with it. `move` is still a recipe
+the release declares and `commands/` still has a command that fires it. **Nothing fires it.**
+
+**Why it costs.** `R-7` gives `move` a worked example, and that example is a `Game` the test
+builds - so the recipe is exercised, but only by a case written to exercise it. **The scenario is
+the one artifact where the rules meet each other**, and a recipe that appears in no playthrough is
+a rule whose interaction with the rest is unobserved. `C-54` is the same shape from the other
+side: a coverage check went green for weeks while `move` had never fired, because it read what the
+file said rather than what ran.
+
+**Whether.** Worth deciding, not worth guessing. Putting a move back means choosing what moves -
+a pioneer crossing to the ground it founds on is the obvious candidate, and it changes what the
+scenario's story is, which is the release's to say rather than this lane's.
+
+**The assumption I proceeded under.** None, in the code: `fired.rs` names `move` as its one
+exception and asserts the list is exactly `["move"]`, so **a second unfired recipe fails, and so
+does putting the move back without deleting the exception**. The scenario is unchanged apart from
+the two comments that described the crossing, which are now about its absence.
+
 ### C-61 - `age` is a declared recipe the model does not implement, and `R-7` is what found it
 
-**to** spec · **status** open · **raised** 2026-09-07 · **source** building the world's worked
+**to** spec · **status** **acted** 2026-09-07 · `6c6f910` · **raised** 2026-09-07 · **source** building the world's worked
+
+**Answered by `P-338` and `P-340`, and the exception it left failed on being repaired.**
+`spec/resources.md` carries the durability rule now, and the world's recipes fire `age` before
+`spoil` rather than after - so a food made with `keeps` 1 ages to 0 and spoils in the same
+ending, which is one turn's life and is what the model always did.
+
+**The release was wrong and the model was right**, which is worth recording because this lane
+reported it the other way round: `C-61` said *a declared recipe the model does not implement*.
+The behaviour was implemented; what was missing was the order that made it correct.
+
+**`age` has a worked example now** - it is one of the five the world's ending shows - and
+`tests/worked.rs` had `age` as its one named exception. **That exception failed the moment the
+example arrived**, which is what a named exception is for, and it is deleted rather than
+adjusted.
 example and asking what `age` does in it
 
 **derived from** food is made with `keeps` 1 - `releases/first-release.md`, *Traits*
@@ -93,7 +139,18 @@ second recipe joins it, and fails if `age` gains an example.
 
 ### C-62 - A starved unit is marked unusable, and no artifact can show it
 
-**to** spec · **status** open · **raised** 2026-09-07 · **source** the same worked example -
+**to** spec · **status** **acted** 2026-09-07 · `6c6f910` · **raised** 2026-09-07 · **source** the same worked example -
+
+**Answered by `P-339`: an ark and a pioneer take no upkeep**, so there is no unpaid unit and
+nothing to mark. `UnitKind::Pioneer.upkeep()` is 0, and the twenty lines in `settle` that
+shared food out among units are gone rather than made unreachable.
+
+**A citizen is the only thing in the release with upkeep now**, and a citizen that goes unpaid
+is removed - which is what the release's one `perish` rule says. So the two behaviours this
+item reported are one behaviour.
+
+**`usable` stays**, because nature retaking a territory still wrecks what is standing on it and
+that is a different rule. It is still in no artifact, and now nothing routine produces it.
 the pioneer in it starves and the before and after are identical
 
 **derived from** perish: consume 1 thing whose upkeep is unpaid, produce the thing's metal -
@@ -379,7 +436,22 @@ about the matching itself.
 
 ### C-54 - `S-59`'s count measured one file of seven, and `launch ark` fires no recipe
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** converting all seven command
+**to** spec · **status** **acted** 2026-09-07 · `6c6f910` · **raised** 2026-09-06 · **source** converting all seven command
+
+**The `launch ark` half is answered by `P-342`, and the `S-59` half stays open below.**
+`produce ark` was renamed `launch ark` and lost its `produce 1 ark` row, so there is one recipe
+where there were two and the command fires it. **Launching is not a move**, so the orbit
+destination this item could not name is no longer needed - `C-15`'s *no recipe names an orbit*
+dissolves with it rather than being answered.
+
+**And the third section below has gone stale in the way this file warns about.** It says the
+command puts an Ark into the orbit above its territory, *across what Units and structures calls
+an* **ascent** - and `P-344` has since taken `ascent` out of that table, because there is no Ark
+on the ground to ascend. Nothing edited the words; the rule under them moved. **Left standing
+and marked rather than rewritten**, because what an item said when it was open is the record.
+
+**The count that measured one file of seven is untouched and is still this item's.** It is the
+first section above.
 files and finding the second one disagreed with the item
 
 **derived from** every count in the scenario is 1 - `S-59`, from `P-323`'s measurement

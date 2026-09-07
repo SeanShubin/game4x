@@ -39,7 +39,7 @@ ul { padding-left: 1.2rem }
 <li><code>deploy ark</code> produces 2</li>
 <li><code>found by land</code> produces 2</li>
 <li><code>produce pioneer</code> consumes 2</li>
-<li><code>produce ark</code> consumes 2</li>
+<li><code>launch ark</code> consumes 2</li>
 <li><code>create labor</code> consumes 1, ready</li>
 <li><code>create labor</code> produces 1, not ready</li>
 <li><code>grow</code> produces the lesser of the surplus food and the citizens here</li>
@@ -82,7 +82,7 @@ ul { padding-left: 1.2rem }
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>build yard</code> produces 1</li>
-<li><code>produce ark</code> requires 1</li>
+<li><code>launch ark</code> requires 1</li>
 </ul>
 <h2>store</h2>
 <p>built to hold one resource, and holds nothing else.</p>
@@ -104,21 +104,20 @@ ul { padding-left: 1.2rem }
 <p><strong>In families</strong> thing, unit</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
 <p><strong>Bounded by</strong> a capacity of 2</p>
-<p><strong>As a thing</strong> Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border, ascent · Requires: a Yard · Readies: yes</p>
+<p><strong>As a thing</strong> Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: yes</p>
 <p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>deploy ark</code> consumes 1, in the orbit above <code>$where</code></li>
 <li><code>move</code> consumes 1 (as a unit), ready, in <code>$from</code></li>
 <li><code>move</code> produces 1 (as a unit), not ready, in <code>$to</code></li>
-<li><code>produce ark</code> produces 1</li>
 </ul>
 <h2>pioneer</h2>
 <p>founds a territory.</p>
 <p><strong>In families</strong> thing, unit</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number)</p>
-<p><strong>Bounded by</strong> a capacity of 2, and the food produced here</p>
-<p><strong>As a thing</strong> Force: 2 · Fuel: 2 · A move: 1 fuel · Upkeep: 1 food per turn · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes</p>
+<p><strong>Bounded by</strong> a capacity of 2</p>
+<p><strong>As a thing</strong> Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes</p>
 <p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
 <p><strong>In recipes</strong></p>
 <ul>
@@ -130,16 +129,13 @@ ul { padding-left: 1.2rem }
 <h2>food</h2>
 <p>eaten by citizens; expires.</p>
 <p><strong>In families</strong> thing, resource</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>keeps</code> (the number of turns it will last), <code>surplus</code> (yes or no)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>surplus</code> (yes or no)</p>
 <p><strong>Bounded by</strong> the things in it that hold it, and it keeps for one turn</p>
 <p><strong>In recipes</strong></p>
 <ul>
 <li><code>work</code> produces <code>$where</code>'s density for that resource (as a resource)</li>
 <li><code>upkeep</code> consumes the thing's upkeep</li>
 <li><code>grow</code> consumes the lesser of the surplus food and the citizens here, surplus</li>
-<li><code>spoil</code> consumes 1, keeps 0</li>
-<li><code>age</code> consumes 1, keeps at least 1</li>
-<li><code>age</code> produces 1, keeps one less</li>
 </ul>
 <h2>metal</h2>
 <p>what things are built from; conserved.</p>
@@ -152,7 +148,7 @@ ul { padding-left: 1.2rem }
 <li><code>build store</code> consumes 1</li>
 <li><code>build yard</code> consumes 15</li>
 <li><code>produce pioneer</code> consumes 3</li>
-<li><code>produce ark</code> consumes 3</li>
+<li><code>launch ark</code> consumes 3</li>
 <li><code>work</code> produces <code>$where</code>'s density for that resource (as a resource)</li>
 <li><code>perish</code> produces the thing's metal</li>
 </ul>
@@ -165,7 +161,7 @@ ul { padding-left: 1.2rem }
 <ul>
 <li><code>move</code> consumes 1, in that unit</li>
 <li><code>produce pioneer</code> consumes 6</li>
-<li><code>produce ark</code> consumes 12</li>
+<li><code>launch ark</code> consumes 12</li>
 <li><code>work</code> produces <code>$where</code>'s density for that resource (as a resource)</li>
 </ul>
 <h2>labor</h2>

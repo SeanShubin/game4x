@@ -7,7 +7,7 @@ is in it, because the names are what this is for.
 
 | phase | territories | units |
 | ----- | ----------- | ----- |
-| play  | 12          | 1     |
+| play  | 12          | 0     |
 
 1 row(s)
 
@@ -209,9 +209,8 @@ is in it, because the names are what this is for.
 
 | id  | kind | in-kind | in-id | fuel | ready |
 | --- | ---- | ------- | ----- | ---- | ----- |
-| 1   | ark  | orbit   | 2     | 1    | yes   |
 
-1 row(s)
+*(empty) 0 rows*
 
 ## adjacency
 
@@ -262,11 +261,12 @@ is in it, because the names are what this is for.
 | extractor | 11      |
 | garrison  | 2       |
 | yard      | 1       |
-| ark       | 1       |
+| ark       | 0       |
 | pioneer   | 0       |
 | territory | 12      |
 | adjacency | 30      |
+| orbit     | 12      |
 | deposit   | 34      |
 
-13 row(s)
+14 row(s)
 

@@ -116,7 +116,7 @@ impl Kind {
             Kind::Store => "as many as the extractors of its resource",
             Kind::Yard => "a capacity of 1",
             Kind::Ark => "a capacity of 2",
-            Kind::Pioneer => "a capacity of 2, and the food produced here",
+            Kind::Pioneer => "a capacity of 2",
             Kind::Labor => "the citizens that make it, one each per turn",
             // **`P-258`: a territory declares no capacity for a resource.** It declares
             // capacity for the things that hold them, so what it keeps is what its stores
@@ -394,7 +394,7 @@ pub const TRAITS: [TraitRow; 19] = [
     },
     TraitRow {
         name: "keeps",
-        of: "food",
+        of: "thing",
         values: "the number of turns it will last",
         held: Held::Stored,
     },
@@ -806,14 +806,15 @@ pub const RECIPES: &[Recipe] = &[
         ],
     },
     Recipe {
-        name: "produce ark",
+        // P-342: one recipe where there were two, and it produces nothing. Launching is
+        // not a move - the cost is paid at a Yard and nothing comes back.
+        name: "launch ark",
         owner: Player,
         lines: &[
             just(Consume, 3, Noun::Of(Metal)),
             just(Consume, 12, Noun::Of(Energy)),
             just(Consume, 2, Noun::Of(Citizen)),
             just(Require, 1, Noun::Of(Yard)),
-            just(Produce, 1, Noun::Of(Ark)),
         ],
     },
     Recipe {
@@ -880,17 +881,22 @@ pub const RECIPES: &[Recipe] = &[
         ],
     },
     Recipe {
-        name: "spoil",
-        owner: World,
-        lines: &[traited(Consume, 1, Noun::Of(Food), &KEEPS_NONE)],
-    },
-    Recipe {
+        // **`P-340`: `age` fires before `spoil`, and both name `thing`.** Under the old
+        // order a food made with `keeps` 1 was aged to 0 at one turn's end and removed at the
+        // next - a two-turn life, against `spec/turn.md` and against the release's own *food
+        // keeps for one turn*. The model discarded it at the first ending and was right; this
+        // is the release catching up.
         name: "age",
         owner: World,
         lines: &[
-            traited(Consume, 1, Noun::Of(Food), &KEEPS_SOME),
-            traited(Produce, 1, Noun::Of(Food), &KEEPS_LESS),
+            traited(Consume, 1, THING, &KEEPS_SOME),
+            traited(Produce, 1, THING, &KEEPS_LESS),
         ],
+    },
+    Recipe {
+        name: "spoil",
+        owner: World,
+        lines: &[traited(Consume, 1, THING, &KEEPS_NONE)],
     },
     Recipe {
         name: "refresh",
@@ -918,10 +924,16 @@ pub struct Producible {
     pub binding: Option<u32>,
     /// Which kinds of edge it may move along, which is what decides where it can ever be.
     ///
-    /// **An Ark's life has no land-to-land move in it**: it crosses `orbit border` and
-    /// `ascent` and not `border`, so it is produced on the ground, ascends once, moves in
-    /// orbit to choose a site, and deploys. Sean's rule that an Ark cannot move between two
-    /// territories is now a consequence of this column rather than something merely obeyed.
+    /// **An Ark crosses one kind of edge and it is not `border`**: `orbit border`, between
+    /// two orbits, which is what an arriving Ark uses to reach the orbit above its landing
+    /// zone. Sean's rule that an Ark cannot move between two territories is a consequence of
+    /// this column rather than something merely obeyed.
+    ///
+    /// **`P-344` took `ascent` out of this cell and left `P-71`'s third edge kind with no
+    /// user.** An ascent is between the ground and the orbit above it, and there is no Ark on
+    /// the ground to make one: `P-342` made producing and launching a single act that pays an
+    /// Ark's cost at a Yard and puts nothing into orbit. So the edge kind still exists and
+    /// nothing crosses it.
     pub crosses: Option<&'static str>,
     pub requires: Option<&'static str>,
     pub readies: bool,
@@ -1044,7 +1056,7 @@ pub const PRODUCIBLE: &[Producible] = &[
         upkeep: None,
         costs: &[(3, Metal), (12, Energy), (2, Citizen)],
         binding: Some(3),
-        crosses: Some("orbit border, ascent"),
+        crosses: Some("orbit border"),
         requires: Some("a Yard"),
         readies: true,
     },
@@ -1053,7 +1065,9 @@ pub const PRODUCIBLE: &[Producible] = &[
         force: Some(2),
         fuel: Some(2),
         a_move: Some(1),
-        upkeep: Some((1, Food)),
+        // `P-339`: a pioneer's Upkeep cell is empty, and a citizen is the only thing in
+        // the release with one.
+        upkeep: None,
         costs: &[(3, Metal), (6, Energy), (2, Citizen)],
         binding: Some(3),
         crosses: Some("border"),

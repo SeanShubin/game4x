@@ -161,16 +161,15 @@
 {create-labor territory:1}
 {work territory:1 resource:energy}
 {create-labor territory:1}
-{produce-ark territory:1}
+{launch-ark territory:1}
 {create-labor territory:2}
 {work territory:2 resource:food}
 
-# The Ark crosses to territory 2 before it leaves, which is the only `move` in this file -
-# ground already yours, which is the whole difference between the two recipes.
-{move unit:ark territory:2}
 {end-turn}
 
-# Turn 10. Moving exhausts a unit, so the Ark leaves on the turn after the one it crossed on.
+# Turn 10. Nothing crosses any more: `P-342` made launching one recipe that pays an Ark's
+# cost at a Yard and puts nothing into orbit, so there is no Ark to move and no move in this
+# file at all. `move` is a declared recipe this scenario no longer exercises - `C-63`.
 # The farms are worked first, as always: a population that gathers nothing this turn starves
 # at the end of it, whatever else is going on.
 {create-labor territory:1}
@@ -179,5 +178,4 @@
 {work territory:1 resource:food}
 {create-labor territory:2}
 {work territory:2 resource:food}
-{launch-ark}
 {end-turn}

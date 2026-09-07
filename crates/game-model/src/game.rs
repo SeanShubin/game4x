@@ -169,7 +169,7 @@ impl Game {
             }
 
             Transition::Land { kind, territory } => next.land(*kind, *territory)?,
-            Transition::Launch { kind } => next.launch(*kind)?,
+            Transition::Launch { territory } => next.launch(*territory)?,
             Transition::Move { kind, territory } => next.move_unit(*kind, *territory)?,
             Transition::FoundByLand { territory } => next.found_by_land(*territory)?,
             Transition::BuildStore {
@@ -358,35 +358,33 @@ impl Game {
         )
     }
 
-    fn launch(&mut self, kind: UnitKind) -> Result<(), Rejection> {
-        // **`pick` takes only a ready unit**, so an exhausted one is no unit at all as far
-        // as it is concerned - and this said *not on the planet* about an Ark standing on
-        // the planet, having moved there that turn. The two are told apart before the
-        // message is chosen, because a player who is told the wrong reason looks in the
-        // wrong place. Found by `P-214`: splitting `move` out put a real move into the
-        // scenario for the first time, and the very next line hit this.
-        let at = self.pick(kind, |unit| !unit.in_orbit()).ok_or_else(|| {
-            let exhausted = self
-                .units
-                .iter()
-                .any(|unit| unit.kind == kind && !unit.ready() && !unit.in_orbit());
-            match exhausted {
-                true => Rejection::AlreadyUsed(kind),
-                false => Rejection::NotOnThePlanet(kind),
-            }
-        })?;
-        // `spec/control.md`: *a player wins by launching an Ark from a fully exploited
-        // planet.* Asked before the Ark leaves, because it is the planet it left that has
-        // to have been finished.
-        if kind == UnitKind::Ark && self.is_fully_exploited() {
-            self.won = true;
+    /// `launch ark`: an Ark's cost is paid at a Yard, and nothing comes back.
+    ///
+    /// **`P-342`, and it answers the second half of `C-54`.** There were two recipes and one
+    /// of them was not a recipe: `produce ark` built an Ark, and `launch` moved it to orbit
+    /// while firing nothing the release declared. **Launching is not a move now** - the cost
+    /// is consumed, the Yard is required, and nothing is put anywhere.
+    ///
+    /// `spec/control.md`: *a player wins by launching an Ark from a fully exploited planet.*
+    /// Asked before the cost is paid, because it is the planet as it stands that has to have
+    /// been finished - and paying first would take two citizens off it.
+    fn launch(&mut self, territory: TerritoryId) -> Result<(), Rejection> {
+        let place = self.territory(territory)?;
+        if place.yards() == 0 {
+            return Err(Rejection::NoYard(territory));
         }
-        // **Into the orbit above where it launched from** - `spec/orbit.md` makes launching a
-        // move, and a move is between adjacent places. The orbit above a territory is the one
-        // place adjacent to it that is not another territory.
-        let from = self.units[at].location.territory();
-        self.units[at].location = Location::Orbit(from);
-        self.units[at].exhausted = true;
+        if place.citizens() < cost::ARK_CITIZENS {
+            return Err(Rejection::NotEnoughCitizens {
+                territory,
+                held: place.citizens(),
+                needed: cost::ARK_CITIZENS,
+            });
+        }
+        let won = self.is_fully_exploited();
+        self.spend(territory, Resource::Metal, cost::ARK_METAL)?;
+        self.spend(territory, Resource::Energy, cost::ARK_ENERGY)?;
+        self.territories[territory.index()].remove(Kind::Citizen, cost::ARK_CITIZENS);
+        self.won = won;
         Ok(())
     }
 
@@ -929,44 +927,15 @@ impl Game {
 
     /// One territory's end of turn.
     fn settle(&mut self, id: TerritoryId) {
-        // Everything that eats, eats. A unit that is not paid is lost.
+        // **Nothing but a citizen eats** - `P-339`, and it answers `C-62`. A unit that went
+        // unpaid used to be marked `usable = false` and left where it was: not consumed, no
+        // metal given back, and `usable` a trait the release does not declare - so a pioneer
+        // that had starved read exactly like one that had not in the file Sean derives by
+        // hand. **An ark and a pioneer take no upkeep now**, so there is no unpaid unit and
+        // the twenty lines that shared the food out are gone rather than made unreachable.
         //
-        let mut starved: Vec<UnitId> = Vec::new();
-        let mut owed = 0;
-        for unit in self
-            .units
-            .iter()
-            .filter(|unit| unit.is_on(id) && unit.usable)
-        {
-            owed += unit.kind.upkeep();
-        }
-        if owed > 0 {
-            let food = self.territories[id.index()].store(Resource::Food);
-            if food >= owed {
-                self.territories[id.index()].take(Resource::Food, owed);
-            } else {
-                // Not enough to go round: the units are lost, lowest id last, and what
-                // food there is goes with them.
-                self.territories[id.index()].take(Resource::Food, food);
-                let mut by_id: Vec<(UnitId, usize)> = self
-                    .units
-                    .iter()
-                    .enumerate()
-                    .filter(|(_, unit)| unit.is_on(id) && unit.usable && unit.kind.upkeep() > 0)
-                    .map(|(at, unit)| (unit.id, at))
-                    .collect();
-                by_id.sort_by_key(|(unit_id, _)| std::cmp::Reverse(*unit_id));
-                let mut short = owed - food;
-                for (unit_id, at) in by_id {
-                    if short == 0 {
-                        break;
-                    }
-                    short = short.saturating_sub(self.units[at].kind.upkeep());
-                    self.units[at].usable = false;
-                    starved.push(unit_id);
-                }
-            }
-        }
+        // `usable` itself stays: nature retaking a territory still wrecks what is standing on
+        // it, which is `spec/control.md` and is a different rule.
 
         // Then a population grows on surplus food, or starves for want of it.
         let food = self.territories[id.index()].store(Resource::Food);
@@ -1046,17 +1015,19 @@ mod tests {
         assert!(!game.has_won(), "nobody has launched anything yet");
 
         // An Ark has to be on the planet to leave it.
-        game.units.push(Unit {
-            id: UnitId(99),
-            kind: UnitKind::Ark,
-            location: Location::On(TerritoryId(1)),
-            cells: 2,
-            exhausted: false,
-            usable: true,
-        });
+        // **What a launch costs, where an Ark used to be pushed.** `P-342` made launching one
+        // recipe: the cost is paid at a Yard and nothing comes back, so what has to be there
+        // is the cost rather than a unit.
+        {
+            let place = &mut game.territories[0];
+            place.set_count(Kind::Yard, 1);
+            place.set_count(Kind::Citizen, 2);
+            place.add(Resource::Metal, cost::ARK_METAL);
+            place.add(Resource::Energy, cost::ARK_ENERGY);
+        }
         let won = game
             .after(&Transition::Launch {
-                kind: UnitKind::Ark,
+                territory: TerritoryId(1),
             })
             .unwrap();
         assert!(won.has_won(), "the planet was finished and an Ark left it");
@@ -1066,17 +1037,19 @@ mod tests {
     #[test]
     fn launching_from_an_unfinished_planet_wins_nothing() {
         let mut game = designed().after(&Transition::Start).unwrap();
-        game.units.push(Unit {
-            id: UnitId(99),
-            kind: UnitKind::Ark,
-            location: Location::On(TerritoryId(1)),
-            cells: 2,
-            exhausted: false,
-            usable: true,
-        });
+        // **What a launch costs, where an Ark used to be pushed.** `P-342` made launching one
+        // recipe: the cost is paid at a Yard and nothing comes back, so what has to be there
+        // is the cost rather than a unit.
+        {
+            let place = &mut game.territories[0];
+            place.set_count(Kind::Yard, 1);
+            place.set_count(Kind::Citizen, 2);
+            place.add(Resource::Metal, cost::ARK_METAL);
+            place.add(Resource::Energy, cost::ARK_ENERGY);
+        }
         let after = game
             .after(&Transition::Launch {
-                kind: UnitKind::Ark,
+                territory: TerritoryId(1),
             })
             .unwrap();
         assert!(!after.has_won());
@@ -1110,21 +1083,36 @@ mod tests {
         assert!(game.is_fully_exploited());
         assert!(!game.has_won());
 
-        // And a Pioneer leaving it is not one either.
-        game.units.push(Unit {
-            id: UnitId(98),
-            kind: UnitKind::Pioneer,
-            location: Location::On(TerritoryId(1)),
-            cells: 2,
-            exhausted: false,
-            usable: true,
-        });
+        // **And it stays a win once it is one, however the planet changes afterwards.**
+        //
+        // This used to check the other half - that a *Pioneer* leaving wins nothing - and
+        // `P-342` took that case away rather than answering it: there is one launch recipe and
+        // it is `launch ark`, so a pioneer launching is a state the language cannot express.
+        // The half that survives is the one the name is about.
+        {
+            let place = &mut game.territories[0];
+            place.set_count(Kind::Yard, 1);
+            place.set_count(Kind::Citizen, 2);
+            place.add(Resource::Metal, cost::ARK_METAL);
+            place.add(Resource::Energy, cost::ARK_ENERGY);
+        }
         let after = game
             .after(&Transition::Launch {
-                kind: UnitKind::Pioneer,
+                territory: TerritoryId(1),
             })
             .unwrap();
-        assert!(!after.has_won(), "only an Ark wins");
+        assert!(after.has_won(), "an Ark left a finished planet");
+
+        // Take the planet apart underneath it: the win has already happened.
+        let mut later = after.clone();
+        later.territories[0]
+            .held
+            .retain(|thing| thing.kind != Kind::Extractor);
+        assert!(!later.is_fully_exploited(), "the planet is unfinished now");
+        assert!(
+            later.has_won(),
+            "and it was won when the Ark left, which is a moment"
+        );
     }
 
     /// An ocean cannot be taken, so it cannot be what stops a planet being finished.
@@ -1794,23 +1782,33 @@ mod tests {
         assert_eq!(rejected, Rejection::NoSuchTerritory(TerritoryId(99)));
     }
 
+    /// A unit eats nothing, so an empty territory does not cost it anything.
+    ///
+    /// **This asserted the opposite until `P-339`** - *a pioneer that is not fed is lost* -
+    /// and what it actually observed was `usable = false`, a mark no artifact could show.
+    /// `C-62`. **A citizen is the only thing in the release with upkeep now**, so this is the
+    /// same fixture asserting the rule that replaced it.
     #[test]
-    fn a_pioneer_that_is_not_fed_is_lost() {
+    fn a_unit_takes_no_upkeep_and_is_not_lost_to_an_empty_territory() {
         let mut game = founded();
         let id = UnitId(game.units.len() as u32 + 1);
         let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
         pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
-        // Nothing was gathered, so there is no food to pay it with. **The resources
-        // only** - `held.clear()` would take the citizens too now that they are things in
-        // the same list, and the fixture would be testing starvation with nobody to starve.
+        // Nothing was gathered, so there is no food at all. **The resources only** -
+        // `held.clear()` would take the citizens too, and the fixture would be about a
+        // territory with nobody in it.
         game.territories[0].end_of_turn_losses();
 
         let after = game.after(&Transition::EndTurn).unwrap();
-        let pioneer = after.units.iter().find(|u| u.kind == UnitKind::Pioneer);
+        let pioneer = after
+            .units
+            .iter()
+            .find(|unit| unit.kind == UnitKind::Pioneer)
+            .expect("the pioneer is still there");
         assert!(
-            pioneer.map(|unit| !unit.usable).unwrap_or(true),
-            "with no food it is lost"
+            pioneer.usable,
+            "a unit eats nothing, so it cannot go unpaid"
         );
     }
 }

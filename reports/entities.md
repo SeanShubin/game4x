@@ -7,7 +7,7 @@ These are the rows the F3 browser shows, from the same function.
 
 | id       | phase | territories | units |
 | -------- | ----- | ----------- | ----- |
-| the game | play  | 12          | 1     |
+| the game | play  | 12          | 0     |
 
 1 row(s)
 
@@ -32,9 +32,6 @@ These are the rows the F3 browser shows, from the same function.
 
 ## unit
 
-| id  | kind | location | cells | force | exhausted | usable |
-| --- | ---- | -------- | ----- | ----- | --------- | ------ |
-| 1   | ark  | orbit-2  | 1     | 2     | false     | true   |
-
-1 row(s)
+*(empty) 0 rows* - and no columns either, because a component name lives on an entity
+and there is none of this kind to read one from.
 
