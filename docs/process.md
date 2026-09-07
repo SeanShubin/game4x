@@ -90,6 +90,12 @@ Four artifacts: the definitions of the things, the definitions of the transforma
 the commands a scenario ran, and the data dump of that scenario. The first three are enough to
 derive the fourth by hand. If I can do that, I can tell whether the application is behaving as I intend.
 
+**The transformation reads the state and the commands and nothing else** - no clock, no
+randomness, nothing about the machine it runs on. That is what makes the data dump derivable from
+the definitions of the things, the definitions of the transformations, and the commands a scenario
+ran. **It fails silently if it stops holding**: every test still passes, and the diff I review by
+hand becomes noise I cannot tell from a real change.
+
 The scenario test reads the data files for its input, reads the data files for what is expected,
 computes what actually happens, and compares. **The input and the expected are what I review by
 hand for correctness.** Once I have confirmed them, the test locks them in place - **not so that

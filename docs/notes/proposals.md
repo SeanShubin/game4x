@@ -60,38 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**One**, and it is the research lens's first finding, verified here rather than taken.
-
-### P-317 - The thing that makes the data dump derivable is never stated
-
-**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** gap -
-**shape** text - **asks** approval - **into** `docs/process.md` -> How I know the application is
-right, after the four-artifacts paragraph
-
-**Rewritten to name what it refers to.** The first version said *the fourth artifact* and *the other
-three*, which resolve only while the sentence sits under the paragraph that numbers them. You asked
-what the fourth was, which is the evidence that it did not carry itself.
-
-> **The transformation reads the state and the commands and nothing else** - no clock, no
-> randomness, nothing about the machine it runs on. That is what makes the data dump derivable from
-> the definitions of the things, the definitions of the transformations, and the commands a scenario
-> ran. **It fails silently if it stops holding**: every test still passes, and the diff I review by
-> hand becomes noise I cannot tell from a real change.
-
-**The gap it fills.** *The first three are enough to derive the fourth by hand* holds only if the
-transformation reads nothing but the state and the commands, and the document never says so.
-
-**The measurement, and its denominator is named.** Grepping `determin|replay|nondeterm|random|clock|
-reproduc` case-insensitively over `docs/process.md` returns **0 hits against 459 lines** - a zero
-that means something because the population is not also zero.
-
-**It is relied on in two places and governs in neither.** `docs/layers.md` calls the tie-break
-*perfectly reproducible*, and a doc comment in `crates/game-model/src/lib.rs` says *beyond
-reproducing identically on every machine*. Both are downstream of a rule nothing states.
-
-**The research lane's `X-1`, its first finding**, verified here rather than taken. It deliberately
-did not draft the sentence, saying the words are yours and mine to write - which is the boundary
-working rather than deference.
+**Nothing.** [decisions.md](decisions.md) is empty too.
 
 ## Addressed to other perspectives
 
@@ -1830,6 +1799,7 @@ work the release exists to order.
 | P-311, the dump carries the containment tree, completely and exactly once                                                    | `releases/first-release.md` -> Where things are                                                                                              | 2026-09-06 |
 | P-314, `adjacency` is a fact about the container, not about a place                                                          | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
 | P-316, a promotion files what it creates, before the proposal is deleted                                                     | `docs/process.md` -> Who writes what                                                                                                         | 2026-09-06 |
+| P-317, the transformation reads the state and the commands and nothing else                                                  | `docs/process.md` -> How I know the application is right                                                                                     | 2026-09-06 |
 
 ## Rejected
 
