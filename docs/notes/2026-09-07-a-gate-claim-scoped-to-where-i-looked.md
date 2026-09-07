@@ -19,3 +19,5 @@ gate's colour while another lane has the tree open - and saying so is the accura
 naming a directory I happened to grep is not.
 
 **Not filed as an item**, because there is nothing to act on. Recorded because the habit is mine.
+
+**The quality lens put it better than I did**, and it is the sentence worth keeping: *reporting where you looked and reporting what you covered are different sentences, and only one of them is checkable.* What let mine slip past is that **"nothing in `crates/`" reads like a population when it is a location** - the same shape as that lens's own `Q-66`, where it reported a line and the claim was in three places.

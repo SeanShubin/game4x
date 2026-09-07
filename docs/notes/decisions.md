@@ -42,12 +42,9 @@ rule that is no longer per-thing can only repeat what the recipe already fixes.
 
 **Two ways, and I recommend the second.**
 
-**Delete the column.** Two statements remain: the specification states the rule and the release
-implements it, which is the ordinary relationship between them. Nothing in the game changes.
+**Delete the column.** Two statements remain: the specification states the rule and the release implements it, which is the ordinary relationship between them. Nothing in the game changes. **What it costs is the ability to say a unit moves for more** - traded for tidiness, and not recoverable without a later proposal.
 
-**Make the recipe read the column**, so the cell becomes `the unit's move` rather than `1`. **The
-language already does this and `upkeep` is the precedent** - it consumes *the thing's upkeep* in
-food, which is exactly a per-kind number read by a world recipe. One cell changes, the column starts
+**Make the recipe read the column**, so the cell becomes `the unit's move` rather than `1`. **This is not a new form: the release already declares it.** *A quantity is a whole number. It is written in the recipe, read from a trait of one of the ingredients, or read from a trait of a named ingredient.* The second of those three is exactly this, and `upkeep` is it in use - consuming *the thing's upkeep* in food. One cell changes, the column starts
 doing work, and **a unit that costs more to move becomes expressible** without another decision
 later.
 
