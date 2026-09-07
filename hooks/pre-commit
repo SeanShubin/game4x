@@ -13,6 +13,34 @@
 # Enable once per clone: git config core.hooksPath hooks
 set -e
 
+# Run the outbox tool and say so if it could not run.
+#
+# **Three checks below were wired `... 2>/dev/null | grep … || true`.** If the tool failed -
+# a compile error, a panic, a moved manifest - stderr went to the void, grep matched nothing,
+# `|| true` succeeded, and the check reported nothing. **An empty answer from a tool that did
+# not run reads exactly like an empty answer from a tool that found nothing**, and the hook
+# went on to say the tree was clean.
+#
+# That is the shape C-43 records, found by the quality lens in my reporting and then by me in
+# this file: a whole signal collapsed into a boolean that was true either way. **This class
+# is survivable exactly to the degree that the wrong branch is loud**, so this one says which
+# it took.
+#
+# **The tool's own codes are data and only the rest are failures.** 0 is clean, 1 is `--settled`
+# and `--check` saying they found something, 2 is a blocking note. A panic or a cargo build
+# failure is 101. Written the wrong way round first, and the control caught it: on a healthy
+# tree `--settled` exits 1 because it had something to say, and this cried wolf over it.
+outbox_says() {
+    out=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- "$@" 2>/dev/null)
+    status=$?
+    if [ "$status" -gt 2 ]; then
+        echo "pre-commit: \`outbox $*\` exited $status, so the check below reported nothing" >&2
+        echo "pre-commit: that is the tool failing, not the tree being clean" >&2
+        return 1
+    fi
+    printf '%s\n' "$out"
+}
+
 staged() {
     git diff --cached --name-only --diff-filter=ACMR -- "$1"
 }
@@ -75,7 +103,7 @@ else
     # Printed rather than refused. Every lane commits in this tree, and failing one lane's
     # commit because another lane has not closed an item would be the wrong perspective
     # paying. It is in pending.md as well, which is the copy that lasts.
-    settled=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --settled 2>/dev/null | grep -v "outboxes read" | grep -v "^$" || true)
+    settled=$(outbox_says --settled | grep -v "outboxes read" | grep -v "^$" || true)
     case "$settled" in
         ""|"nothing open"*) ;;
         *)
@@ -101,13 +129,13 @@ else
     # Only the lines that name something wrong. The summary line carries the words "wrong
     # table" whether the count is zero or not, and matching it printed an alarming heading
     # over a clean result - which is how a check stops being read.
-    orphans=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --orphans 2>/dev/null | grep -E "closed on .* which is withdrawn|^  misfiled:" || true)
+    orphans=$(outbox_says --orphans | grep -E "closed on .* which is withdrawn|^  misfiled:" || true)
     if [ -n "$orphans" ]; then
         echo "pre-commit: the withdrawn ledger and the closed items disagree:"
         echo "$orphans" | sed 's/^/  /'
     fi
 
-    closing=$(cargo run --quiet --manifest-path tools/outbox/Cargo.toml -- --closing 2>/dev/null | grep "derives from the same rule" || true)
+    closing=$(outbox_says --closing | grep "derives from the same rule" || true)
     if [ -n "$closing" ]; then
         echo "pre-commit: an item closed, and these open items derive from its rule:"
         echo "$closing" | sed 's/^/  /'

@@ -102,6 +102,31 @@ why the remedy does not change - **say what was run, to its exit code** - and th
 message is not somewhere a reader can be corrected. `P-303` is the rule and this is it happening to
 the lane that had just written `C-42` about rules not being run.
 
+## What decides whether this class costs anything
+
+**The quality lens's addition, and it is the general form.** Nobody can check the wiring of a chain
+by looking at it. What is checkable is **which branch is loud when the assumption is wrong**: a
+chain whose failure mode is a missing file is safe, and one whose failure mode is a satisfied
+predicate is not. Their own instance, ten minutes old, cost nothing for exactly that reason - a
+`||` branch that never ran, caught immediately because the next command said *no such file*. Mine
+was silent because `grep -c` had something to match.
+
+**Run over this lane's own work, which is the half `C-42` says never happens.** `hooks/pre-commit`
+had three checks wired
+`$(cargo run … 2>/dev/null | grep … || true)`. A tool that failed to build, panicked or lost its
+manifest sent stderr to the void, matched nothing, succeeded, and **the hook reported a clean tree**.
+
+They go through one runner that says which branch it took. Verified in a clone, both ways:
+
+- **healthy** - quiet, and the checks run. This is the case that caught the first version, which
+  treated every non-zero code as failure: `--settled` **exits 1 when it has something to say**, so
+  it cried wolf on a good tree. The tool's own codes are data; only 101 is a failure.
+- **one mode panicking while the rest work** - `outbox --settled exited 101, so the check below
+  reported nothing`, and *that is the tool failing, not the tree being clean*. The commit still
+  lands, because this reports and does not gate.
+- **the tool wholly broken** - the commit is refused before any of them, because `--places` runs
+  under `set -e`. Loud in the other direction, and the safe one.
+
 ### C-42 - A rule that is written down, true, and not run over the work that states it
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** the quality lens naming three
