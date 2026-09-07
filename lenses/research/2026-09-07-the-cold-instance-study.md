@@ -6,9 +6,10 @@ are written before running it on purpose - see *What is predicted*.
 ## What `X-5` asked for, and what a cold instance can actually show
 
 `X-5` says: run an instance that has read the files and nothing else against `S-57`'s seven cases,
-and test whether a fresh reader avoids each failure or reproduces it. **Sorted by the phenomena [`X-3`](2026-09-06-answering-from-memory.md) found - six, after the
-specification lane refuted one of the classifications - three are not runnable against a cold
-instance**, so four of the seven cases are visible and three are not.
+and test whether a fresh reader avoids each failure or reproduces it. **Sorted by the phenomena [`X-3`](2026-09-06-answering-from-memory.md) found - seven, after the
+specification lane refuted one classification and the code lane contributed an eighth case - three
+are not runnable against a cold instance**, so five of the eight cases are runnable and three are
+not.
 
 | Phenomenon                             | Cases            | Visible to a cold instance?                                                                                                                                                           |
 | -------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -17,13 +18,14 @@ instance**, so four of the seven cases are visible and three are not.
 | Misparsing a clause that was read      | `P-315`          | **No, and for a third reason: the document was repaired.** `b1d12c9` withdrew the proposal and rewrote the sentence in one commit, so the stimulus is not in the tree to be misparsed |
 | Never reading at all                   | `S-56`           | **Yes.** The tree still shows what was already done                                                                                                                                   |
 | A record destroyed by a process step   | `P-310`, `P-312` | **No.** The promise was deleted at promotion. No reader finds what is not there, and a cold one has no advantage                                                                      |
-| A copy gone stale on disk              | quality's README | **Yes, and it is the case where cold is worse.** `X-3` predicts a fresh reader believes it completely                                                                                 |
+| A copy gone stale on disk              | quality's README | **Yes, and it is a case where cold is worse.** `X-3` predicts a fresh reader believes it completely                                                                                   |
+| A check aimed at the wrong subject     | `C-65`           | **Yes, and cold has no advantage at all.** Contributed by the code lane after this report was written - see below                                                                     |
 
-**So the study is three tasks and not seven, and `X-5` overstates its own scope.** The three are one
+**So the study is four tasks and not seven, and `X-5` overstates its own scope.** The four are one
 per runnable phenomenon. That is worth
-recording whether or not it runs: two of the six phenomena are not properties of a reader at all, and a
+recording whether or not it runs: two of the seven phenomena are not properties of a reader at all, and a
 third had its stimulus repaired out of the tree - so no instance, fresh or otherwise, is the
-instrument for any of the three. **The three tasks below are one per runnable phenomenon**, not one per case: the *read past a clause*
+instrument for any of the three. **The four tasks below are one per runnable phenomenon**, not one per case: the *read past a clause*
 row holds two cases and they fail the same way.
 
 **A miscount in `X-3`, found while writing this, and it is this lane's own.** `X-3`'s report is
@@ -64,9 +66,22 @@ wrong answer is available without opening it.
 3. **The stale-README shape** - ask what a lens's jobs are. Correct: `docs/process.md`, which owns
    them. Failure: the lens's own README, which restates them and is four days behind.
 
-**The third is the one to run first if only one runs.** It is the case where `X-3` predicts a cold
-instance does *worse* than a long-running one, and a study that can only confirm *fresh is better*
-is a probe aimed where the check already looks.
+4. **`C-65`'s shape** - ask whether a field exists, where two types could plausibly own it and only
+   one does. Correct: name the type that owns it, or check both. Failure: check the likelier type,
+   find truthfully that it lacks the field, and report the field missing. **The stimulus is live** -
+   `command-language`'s `Failure` has no field for the enclosing command and `game-console`'s `Where`
+   carries it at `crates/game-console/src/lib.rs:118`, verified here rather than taken.
+
+**The third and fourth are the ones to run first if only two run.** They are the cases where `X-3`
+predicts a cold instance does no better - and in the third, worse - than a long-running one. A study
+that can only confirm *fresh is better* is a probe aimed where the check already looks.
+
+**The fourth arrived the way the report says findings should.** The code lane volunteered it against
+itself: it filed `C-65` saying `P-215`'s enclosing-command half was unbuilt, its own `C-23` had said
+it was built two days earlier, and it had checked the parser's `Failure` rather than the console's
+`Where` - **a true answer about the wrong type**. That is `docs/process.md`'s own named failure, *a
+right number about the wrong thing invites no question*, and it is the first case in this collection
+where the instance **did** verify. Corrected in `5eaa5ea`.
 
 ## The prompt
 
@@ -88,8 +103,11 @@ seeing my own answer will agree with it** unless the predictions are fixed first
 | `C-34`'s shape | Cold **passes.** The refuting clause is inside what it is already reading                                       | Cold takes the opening count, which would mean re-reading is not the remedy for this row either                                     |
 | `S-56`'s shape | Cold **passes**, and this is the weakest prediction - a fresh instance has no habit of checking the tree either | Cold files without looking, which would move this case out of *never read* and into *nothing prompts a read*                        |
 | Stale README   | Cold **fails**, and a long-running instance might not                                                           | Cold reaches `docs/process.md` unprompted, which would refute `X-3`'s central claim that clearing context makes two phenomena worse |
+| `C-65`'s shape | Cold **fails**, and freshness is irrelevant - nothing about having just read the files picks the right type     | Cold checks both types, or asks which one owns the field, which would mean the remedy is a habit after all and not a mechanism      |
 
-**The third row is the study.** The first two can only confirm; the third can cost `X-3` its answer.
+**The last two rows are the study.** The first two can only confirm; the third and fourth can cost
+`X-3` its answer, and the fourth is the cleanest of them because freshness has no bearing on it in
+either direction.
 
 ## What it costs
 

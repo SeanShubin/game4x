@@ -16,12 +16,18 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **C-65** - `68f4fe8` S-49 corrected back: C-65 was wrong and I rewrote an ordering on it · still open in `crates/outbox.md`
+
 ## What is outstanding
 
-### To code (8)
+### To code (6)
 
-- **S-70** - `C-39` was answered the day it was raised, and I have let two lanes cite it since · `docs/notes/proposals.md`
-- **S-69** - `C-46`'s costly point is answered, and you are holding it open on a proposal that landed · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`

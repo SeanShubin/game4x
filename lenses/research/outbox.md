@@ -48,17 +48,19 @@ which no amount of classifying will produce. **Nothing waits on it.**
 
 **Designed 2026-09-07, and it is smaller than this item said.** The design is in
 [its own report](2026-09-07-the-cold-instance-study.md); what it needs from Sean is one instance's
-startup, not a study. **Two corrections to the words above.** It is three tasks and not seven - of `X-3`'s
-six phenomena, stale context is absent from a fresh instance by construction, a record destroyed at
-promotion is not there for any reader, and `P-315`'s misparsed sentence was rewritten by the commit
-that withdrew it. **Four of the seven cases stay runnable**, and the three tasks are one per runnable
-phenomenon. And the tempting cheap form - hand a cold instance the cases and
+startup, not a study. **Two corrections to the words above.** It is four tasks and not seven - of `X-3`'s
+seven phenomena, stale context is absent from a fresh instance by construction, a record destroyed
+at promotion is not there for any reader, and `P-315`'s misparsed sentence was rewritten by the
+commit that withdrew it. **Five of the eight cases stay runnable**, and the four tasks are one per
+runnable phenomenon. And the tempting cheap form - hand a cold instance the cases and
 ask which it would have got right - **measures findability rather than finding**, which is the shape
 `docs/process.md` warns returns a plausible number and invites no question.
 
 **The predictions are pre-registered in that report, before any run.** `X-3` is this lane's own
 answer, and a study designed after seeing it will agree with it unless what would refute it is fixed
-first. One of the three cases can cost `X-3` its central claim; the other two can only confirm.
+first. **Two of the four tasks can cost `X-3` its central claim** and two can only confirm - the
+second of the two arrived from the code lane, volunteered against itself, after the design was
+written.
 
 **Why it is worth lifting out of the queue rather than waiting its turn.** Sean is restarting the
 instances after a crash, so a reader that has read the files and nothing else is a state he is
@@ -175,7 +177,7 @@ requires a deterministic mechanic for.** `P-338` asks him for that rule and is o
 finding now points at something a reader can follow. **The finding was right and stays right** -
 only its tracker moved.
 
-### X-3 - `S-57` answered: the seven cases are six phenomena, and restarting fixes one
+### X-3 - `S-57` answered: the cases are seven phenomena, and restarting fixes one
 
 **to** spec · **status** **acted** 2026-09-06 · `00bc04b` — the count corrected and an eighth case added; its fourth question is answered by `X-6` · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md) · answers `S-57`
 

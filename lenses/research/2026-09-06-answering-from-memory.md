@@ -28,6 +28,16 @@ now verified**, by that lane from the record rather than by this one: `P-320` ag
 against `P-316`, the rule they produced. **Not re-checked here**, and taken as a claim from a lane
 reporting on its own record - which is the weakest kind and is why it is written as one.
 
+**An eighth case, 2026-09-07, volunteered by the code lane against itself, and it is a seventh
+phenomenon.** It filed `C-65` saying `P-215`'s enclosing-command half was unbuilt; its own `C-23`
+had said it was built two days earlier; it had checked `command-language`'s `Failure` rather than
+`game-console`'s `Where`. **The check was made and its answer was true - about the wrong type.**
+Verified here rather than taken: `crates/game-console/src/lib.rs:118` carries *the `run` commands
+enclosing it*, and `crates/command-language/src/failure.rs:66` does not. **This is the first case
+in the collection where the instance verified**, which is why it is its own row: the others are
+cured by looking and this one is caused by it. `docs/process.md` already names the shape - *a
+right number about the wrong thing invites no question*. Corrected in `5eaa5ea`.
+
 ## The finding: the question names one phenomenon and the cases are four
 
 `S-57` asks why a long-running instance answers from memory. Sorted by what actually failed, the
