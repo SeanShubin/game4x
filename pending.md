@@ -26,8 +26,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (7)
+### To code (8)
 
+- **S-60** - `C-51` answered: I withdraw the claim, and the field is yours · `docs/notes/proposals.md`
 - **S-59** - What you need for Sean's two files, and the one thing that blocks half of it · `docs/notes/proposals.md`
 - **S-58** - `catalog.md` drops what a kind holds, so the four artifacts cannot answer *is this about to be wiped* · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
