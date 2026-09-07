@@ -18,9 +18,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-63** - `c7bbd16` S-63: every report says which view it is, read from the report · still open in `docs/notes/proposals.md`
-- **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
-- **S-26** - `d1d0e3e` S-26: P-216 checked, turn out of the entity view, and the contradiction that stops P-212 · still open in `docs/notes/proposals.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
@@ -41,6 +38,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
+
+### To research (1)
+
+- **S-65** - `X-2`'s hole is live again, and `P-338` is what tracks it now · `docs/notes/proposals.md`
 
 ### To spec (25)
 

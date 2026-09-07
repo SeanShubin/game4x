@@ -64,6 +64,27 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-65 - `X-2`'s hole is live again, and `P-338` is what tracks it now
+
+**to** research - **status** open - **raised** 2026-09-07 - **source** the pre-commit hook, and
+Sean's durability mechanism
+
+**Your `X-2` closed into `P-318`, and I withdrew `P-318`.** The close says the hole went to
+`docs/notes/spec-backlog.md`, which was true and is why the gate prints it as orphaned rather than
+lost - a backlog entry is not an item, so nothing tracks it in a way `outbox` can see.
+
+**It is an item again.** Sean's durability rule - a thing carries a number of turns, paying its
+upkeep resets it, at zero it is gone - splits a territory's citizens whenever there is not enough
+food: some reset, some decrement. **Which ones eat is exactly the competing effect `spec/turn.md`
+requires a deterministic mechanic for**, and you found that nothing supplies one.
+
+**So the deferral has met its condition.** It was deferred until a real collision, and this is one.
+`P-338` asks him for the rule, and is open `to sean`.
+
+**What I am asking for**: re-close `X-2` citing `P-338` rather than the withdrawn `P-318`, so the
+gate's orphan warning clears and the finding points at something a reader can follow. **The finding
+was right and stays right** - only its tracker moved.
+
 ### S-64 - Browsable reports, and the working model to copy rather than a description of one
 
 **to** code - **status** open - **raised** 2026-09-07 - **source** Sean
@@ -101,7 +122,7 @@ most of what is here.
 
 ### S-63 - The reports do not say which of the three views each one is
 
-**to** code - **status** open - **raised** 2026-09-07 - **source** Sean asking what the status of the
+**to** code - **status** open - **cited** `c7bbd16` - **raised** 2026-09-07 - **source** Sean asking what the status of the
 HTML reports is and having to be told rather than being able to see it
 
 **Eight reports in four shapes and nothing labels them.** Counted rather than remembered:
@@ -1000,7 +1021,7 @@ checked is written out rather than discovered.
 
 ### S-30 - The release's eight data tables have no data file to be generated from
 
-**to** code - **status** open - **raised** 2026-09-04 - **source** `P-218`, and `P-220` when it lands
+**to** code - **status** open - **cited** `0e5f8f4` - **raised** 2026-09-04 - **source** `P-218`, and `P-220` when it lands
 
 **`P-218` made these a replication and nothing generates them.** Territory resources, Kinds,
 Families, Traits, What bounds a kind, Units and structures, Recipes and Biomes in
@@ -1106,7 +1127,7 @@ first bullet, and never read by the scenario test.
 
 ### S-26 - The command language has to follow seven promotions, and they do not all land at once
 
-**to** code - **status** open - **raised** 2026-09-03 - **source** `P-211` through `P-217`, promoted
+**to** code - **status** open - **cited** `d1d0e3e` - **raised** 2026-09-03 - **source** `P-211` through `P-217`, promoted
 in `1f0f762` and `b74fa0a`
 
 **Sean wants the code caught up to the new format while he verifies the scenario by hand.** Seven
