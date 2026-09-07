@@ -8,8 +8,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-339** - An ark and a pioneer print life rather than eating, so neither has upkeep · `docs/notes/proposals.md`
 - **P-338** - A thing lasts a number of turns, paying its upkeep resets it, and having no number is durable · `docs/notes/proposals.md`
-- **P-339** - An ark and a pioneer print life rather than eating, and the spec already says what they are made of · `docs/notes/decisions.md`
+- **P-340** - `spec/unit-types.md` takes a unit apart on arriving, and both recipes only do it where nobody holds · `docs/notes/decisions.md`
 - **P-336** - `age` is declared, fires in no state, and `keeps` is not implemented · `docs/notes/decisions.md`
 - **P-337** - `perish` says a thing is consumed and its metal produced, and the model does neither · `docs/notes/decisions.md`
 
@@ -19,6 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-339** - `d602189` P-339 rewritten: the spec already had the theme, and it corrects two claims · still open in `docs/notes/proposals.md`
 - **P-338** - `a481860` P-338: reset instead of decrement, because the other reading costs the turn · still open in `docs/notes/proposals.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`

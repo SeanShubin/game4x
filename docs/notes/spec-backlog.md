@@ -8,6 +8,26 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on how far a single-planet design may look ahead
+
+*For P-339, the focus is on what we need for only a single planet, but it is ok for the design to be
+influenced by the fact that we know we are going to have many planets later. So nothing we don't
+need, but don't make a design choice that is going to be troublesome later.*
+
+**Two tests, not one.** *Do we need it* rejects the seeder for this release. *Is it troublesome
+later* is a separate question asked of what remains, and it is the one that has to be checked rather
+than assumed - it rejected nothing here, because the blueprint is already planet-wide in
+`spec/narrative.md` and a unit's own body is already the materials in `spec/unit-types.md`, so a
+seeder is additive whenever it arrives.
+
+**It also decided `P-340` before `P-340` was filed.** An unconditional *taken apart on arriving*
+forbids a pioneer from crossing ground you hold - troublesome now, worse with many planets - and the
+gated reading is what both recipes already do.
+
+**And his sequence turned out to be built.** `deploy ark` produces two extractors and two stores;
+`found by land` produces one extractor and none. *The ark has to do more work initially* is in the
+release already.
+
 ## Said 2026-09-07, on pulling the citizen's number down to 1
 
 *Given our recent changes we may be able to pull the citizen survival one lower. That would obviate

@@ -21,83 +21,51 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-339 - An ark and a pioneer print life rather than eating, and the spec already says what they are made of
+### P-340 - `spec/unit-types.md` takes a unit apart on arriving, and both recipes only do it where nobody holds
 
-**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
-own - **asks** a decision - **shape** an instruction - **into** `releases/first-release.md` -> the
-opening list, *What bounds a kind in a territory*, and *Units*
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** contradiction, found while drafting
+`P-339` - **asks** a decision - **into** `spec/unit-types.md` -> *Units that become structures*
 
-**Your change.** *Lets make both arks and pioneers take no food upkeep. Thematically, pioneers have
-the same 3d-printer that an ark has to create new life. The ark has to do more work initially to tune
-the life to the planet; the pioneer just copies the blueprint the ark made.*
+**The specification is unconditional.** `spec/unit-types.md:16`:
 
-**Three places say otherwise today**, and the ark's own row already shows what a pioneer's should be.
+- *An Ark is taken apart on arriving from orbit. A Pioneer is taken apart on arriving from an
+  adjacent territory*
 
-| Where                             | Now                                                                                             | After                |
-| --------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------- |
-| *Units*, pioneer's **Upkeep**     | `1 food per turn`                                                                               | empty, as the ark is |
-| *What bounds a kind*, **pioneer** | `a capacity of 2, and the food produced here`                                                   | `a capacity of 2`    |
-| the opening list                  | *A Pioneer that enters a territory nobody holds must found it, or it perishes for want of food* | replaced, below      |
+**Both recipes are gated.** `deploy ark` and `found by land` each carry `limit 0 garrison`, so
+neither fires where a garrison already stands. **Arriving in a territory you hold takes nothing
+apart.**
 
-**How to tell it was carried out**: the pioneer's Upkeep cell is empty, its bound is exactly
-`a capacity of 2`, no line contains *perishes for want of food*, and `UnitKind::Pioneer.upkeep()`
-returns 0 - the last being the code lane's, filed on promotion.
+**Which means a pioneer can be moved through your own ground, and the sentence says it cannot.** Read
+literally, a pioneer that steps into a territory you hold is consumed there - so it could never cross
+one to reach a frontier, and with 12 territories and 30 edges most frontiers are not adjacent to
+where a pioneer is built.
 
-**It answers `P-338`'s first question rather than adding one.** No upkeep means nothing can ever
-reset a number, so **a pioneer must have no number at all** - the argument that already made the ark
-durable. `P-337`, a starved pioneer marked unusable, **dissolves outright**: a pioneer cannot starve.
+**This is not something `P-339` creates.** Both halves are already in the tree; deleting the bullet
+about starving neither causes nor hides it. I found it drafting the bullet's replacement, and stopped
+because **writing the condition into the release would have been me deciding this.**
 
-**Two things I told you last turn were wrong, and the spec is what corrects them.**
+**Your rule picks an answer, and I am not applying it for you.** *Nothing we don't need, but don't
+make a design choice that is going to be troublesome later.* **Unconditional is the troublesome
+one** - it forbids traversal now, and forbids it harder when there are many planets and a pioneer
+built on one is carried toward another. The gated reading is also **what is built and what the
+scenario exercises**, so choosing it changes no code.
 
-**There is no loitering hole.** I said removing the upkeep lets a pioneer wait forever.
-`spec/unit-types.md` says *An Ark is taken apart on arriving from orbit. A Pioneer is taken apart on
-arriving from an adjacent territory.* **Arriving is being taken apart**, so nothing waits. The hunger
-was the release's *enforcement* of a rule the specification states outright - so deleting it costs
-nothing, and the bullet is replaced by what the spec already says rather than by a new rule:
+**Three ways, and the middle is what the code does today.**
 
-> A Pioneer is taken apart on arriving in a territory nobody holds, as an Ark is on arriving from
-> orbit
+1. **Unconditional stays** - and `deploy ark` and `found by land` lose their `limit 0 garrison`, so
+   arriving anywhere consumes the unit. Simplest sentence, and it makes a pioneer unable to travel
+2. **The sentence gains the condition** - *taken apart on arriving where nobody holds the ground*.
+   Matches both recipes, matches the scenario, changes nothing built
+3. **The player chooses** - arriving is arriving, and taking a unit apart is a separate command.
+   **More than we need**, but it is the version that never has to be revisited, because a unit that
+   can arrive without being consumed is already what a seeder would need
 
-**And the seeder may already be there under another name.** `spec/unit-types.md`: *A unit may be
-taken apart into what a territory needs to sustain itself: a structure that holds the ground, a
-citizen, and a food extractor.* **The unit's own body is the materials.** So the two citizens do not
-teleport after all - the pioneer is what carries them, and I read `produce pioneer` and `found by
-land` as a gap when they are the two ends of one object being built and unbuilt.
+**I recommend 2**, and note that 3 is where 1 and 2 both end up if a unit ever needs to arrive and
+stay.
 
-**The blueprint is there too, and it is not carried.** `spec/narrative.md`: *The AI designs life
-generally suited to a particular planet*, and *an Ark prints a planet's founding population, with
-enough genetic variability for it to be viable.* **Planet-wide and the AI's** - which is exactly your
-*the pioneers already have the blueprint, the ark already did that*.
-
-**What is genuinely new in your sequence** is the order: the ark **scans**, then **manufactures a
-seeder**, then **secures a territory** - three steps where the spec has one, *taken apart on
-arriving*. And a pioneer is manufactured **along with its seeder**, which is one recipe producing
-two things rather than a separate build.
-
-**So the decision is whether a seeder is a thing yet, and I recommend not yet.**
-
-**Against, for this release**: a seeder created with its pioneer and consumed with it has **no degree
-of freedom**. Every pioneer has exactly one, always, so it can found whenever it likes and the seeder
-changes no decision a player makes. It is a kind, a trait, two recipe rows and a container
-relationship - a unit holding a thing, which nothing in the release needs - **to model a number that
-is always 1.**
-
-**For, and this is when it becomes load-bearing**: *militias on one planet invading another with a
-different environment that the life there is better suited to.* **A blueprint tuned to planet X is
-wrong on planet Y**, and the seeder is where that tuning lives. With one planet there is one
-blueprint and nothing to tell apart. **With two, the seeder is the only place the difference can
-sit.**
-
-**My recommendation**: take the upkeep change now, replace the bullet with the spec's own sentence,
-and record the seeder as what the second planet needs. **It costs nothing to defer** - the thing that
-would carry it, a unit holding a thing, is the same capability whenever it is built.
-
-**What I need from you**: whether that is right, or whether the ark's scan and the seeder should be
-distinct steps in this release even with one planet to tune for.
-
-**One consequence either way**: a citizen becomes **the only thing in the release with upkeep**, so
-`perish` and `unpaid` still read on any thing and now bite exactly one kind, and `P-338`'s reset half
-has a single user. Worth saying, because a rule with one user is easy to fit to that user.
+**Whichever you pick, the release needs nothing.** The recipes already encode 2. This is the
+specification catching up with what was built, which is the direction that is usually wrong - so it
+is worth your eye rather than mine.
 
 ### P-336 - `age` is declared, fires in no state, and `keeps` is not implemented
 

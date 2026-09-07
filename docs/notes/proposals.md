@@ -60,6 +60,59 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-339 - An ark and a pioneer print life rather than eating, so neither has upkeep
+
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
+own - **asks** approval - **shape** an instruction - **into** `releases/first-release.md` -> the
+opening list, *What bounds a kind in a territory*, and *Units and structures*
+
+**Your change.** *Lets make both arks and pioneers take no food upkeep. Thematically, pioneers have
+the same 3d-printer that an ark has to create new life.*
+
+**Three places say otherwise**, and the ark's own row already shows what a pioneer's should be.
+
+| Where                                        | Now                                                                                             | After                                |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------ |
+| *Units and structures*, pioneer's **Upkeep** | `1 food per turn`                                                                               | empty, as the ark is                 |
+| *What bounds a kind*, **pioneer**            | `a capacity of 2, and the food produced here`                                                   | `a capacity of 2`                    |
+| the opening list                             | *A Pioneer that enters a territory nobody holds must found it, or it perishes for want of food* | **deleted, and nothing replaces it** |
+
+**Nothing replaces the bullet, because a recipe already says it.** `found by land` consumes the
+pioneer and `limit`s the garrison to 0, so a pioneer arriving where nobody holds is taken apart and
+that is the whole of the rule. The bullet was prose restating a recipe, and its *for want of food*
+clause was the enforcement rather than the rule. **A fact a recipe already asserts does not need
+prose too.**
+
+**How to tell it was carried out**: the pioneer's Upkeep cell is empty, its bound is exactly
+`a capacity of 2`, no line of `releases/first-release.md` contains *perishes for want of food*, and
+`UnitKind::Pioneer.upkeep()` returns 0 - the last being the code lane's, filed on promotion.
+
+**It answers `P-338`'s pioneer row rather than opening one.** No upkeep means nothing can reset a
+number, so **both units are durable** - the argument that already made the ark durable. `P-337`, a
+starved pioneer marked unusable, **dissolves**: a pioneer cannot starve.
+
+**The seeder is not built, per your answer.** *Nothing we don't need, but don't make a design choice
+that is going to be troublesome later.* **Nothing here is troublesome later**, and I checked rather
+than assumed:
+
+- **The blueprint is already planet-wide and the AI's** - `spec/narrative.md`, *the AI designs life
+  generally suited to a particular planet*. A second planet gets a second blueprint with nothing to
+  undo
+- **A unit's own body is already the materials** - `spec/unit-types.md`, *taken apart into what a
+  territory needs*. A seeder is **additive** when it arrives: the thing a unit carries, holding the
+  tuning for the planet it was made on
+- **Your sequence is already built.** `deploy ark` produces two extractors and two stores;
+  `found by land` produces one extractor and none. **The ark does more work initially**, exactly as
+  you described, and a pioneer copies the cheaper result
+
+**What a second planet will need** is a unit that can hold a thing, which nothing in the release
+needs today. Recorded in `docs/notes/spec-backlog.md` under *on printers, seeders, and what crosses a
+border*, so it is found rather than remembered.
+
+**One consequence**: a citizen becomes **the only thing in the release with upkeep**, so `perish` and
+`unpaid` still read on any thing and bite exactly one kind. Worth saying, because a rule with one
+user is easy to fit to that user.
+
 ### P-338 - A thing lasts a number of turns, paying its upkeep resets it, and having no number is durable
 
 **to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
