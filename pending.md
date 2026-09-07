@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/questions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-313** - The file is `decisions.md` · `docs/notes/proposals.md`
 - **P-311** - Containment is a tree in the specification and a column in the data · `docs/notes/questions.md`
 
 ## Open, and a commit says otherwise

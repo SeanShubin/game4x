@@ -60,8 +60,41 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** Every proposal has been promoted. One choice is waiting on you and it is in
-[questions.md](questions.md), which is where a decision lives until it is made.
+**One, and it is the rename you just decided.** The other thing waiting on you is a choice, and it
+is in [decisions.md](questions.md) - renamed by this proposal.
+
+### P-313 - The file is `decisions.md`
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `docs/process.md` -> What I read, and what I do, replacing the
+two-files paragraph
+
+**Your decision, in the paragraph that names the file.** The name is in promoted text, so it changes
+by promotion rather than by my renaming a file and editing around it.
+
+> **Two files are addressed to me and they hold different things.** `docs/notes/decisions.md` holds
+> choices only I can make; `docs/notes/proposals.md` holds words for me to approve. An item lives in
+> one at a time - it sits in the decisions file while any question in it is unanswered, and moves to
+> the proposals file when the last one is answered. Questions about the specification's own content
+> stay at the bottom of the `spec/` file they concern, where the context is.
+
+**Two words change and nothing else.** The path, and *the questions file* becoming *the decisions
+file*. **`question` survives twice on purpose**: *while any question in it is unanswered* is the
+English word rather than the file's name, and *Questions about the specification's own content* is
+about the `## Open questions` sections in `spec/`, which are not moving and are not this file.
+
+**Why `decisions` is the better word, since you asked before deciding.** The routing field already
+says `asks a decision`, so a file named for that field is checkable by matching a string rather than
+by knowing a mapping - which is the check `S-53` now carries. And the file is addressed to you, so
+naming it for what you do there beats naming it for what I did.
+
+**What this lane does without approval, in the same commit as the promotion**: renames the file with
+`git mv` so its history follows, moves `P-311` with it, and updates the index row in
+`docs/notes/README.md`, the pointer in `proposals.md` and the file's own header and links. All of
+that is `docs/notes/`, which is this lane's own.
+
+**It is cheap today and gets dearer.** The file is three hours old, holds one item, and no commit
+message cites it yet.
 
 ## Addressed to other perspectives
 
