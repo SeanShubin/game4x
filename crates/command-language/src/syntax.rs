@@ -146,7 +146,12 @@ mod tests {
         let mut arguments = BTreeMap::new();
         arguments.insert("unit", Argument::Name("ark".to_string(), span()));
         arguments.insert("territory", Argument::Number(1, span()));
-        Utterance::new("land", span(), "land ark 1".to_string(), arguments)
+        Utterance::new(
+            "land",
+            span(),
+            "{deploy ark territory:1}".to_string(),
+            arguments,
+        )
     }
 
     #[test]

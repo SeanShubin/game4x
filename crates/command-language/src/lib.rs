@@ -36,22 +36,25 @@
 //! use command_language::{Form, Grammar, Kind, Term, parse_line};
 //!
 //! let grammar = Grammar::new(vec![Form::new(
-//!     "land",
+//!     "deploy-ark",
 //!     vec![
-//!         Term::Keyword("land"),
-//!         Term::required("unit", Kind::Name),
+//!         Term::Keyword("deploy"),
+//!         Term::Keyword("ark"),
 //!         Term::required("territory", Kind::Number),
 //!     ],
-//!     "bring a unit down from orbit",
+//!     "bring an ark down from orbit",
 //! )]);
 //!
-//! let command = parse_line(&grammar, "land ark 1", 1).unwrap().unwrap();
-//! assert_eq!(command.form, "land");
-//! assert_eq!(command.name("unit").unwrap(), "ark");
+//! let command = parse_line(&grammar, "{deploy ark territory:1}", 1).unwrap().unwrap();
+//! assert_eq!(command.form, "deploy-ark");
 //! assert_eq!(command.number("territory").unwrap(), 1);
 //!
-//! let failure = parse_line(&grammar, "land ark orbit", 1).unwrap_err();
-//! assert_eq!(failure.to_string(), "line 1 column 10: expected a number, found `orbit`");
+//! // The fields carry their own names, so their order is not part of the command.
+//! let same = parse_line(&grammar, "{deploy ark territory:1}", 1).unwrap().unwrap();
+//! assert_eq!(same.number("territory").unwrap(), 1);
+//!
+//! let failure = parse_line(&grammar, "{deploy ark territory:orbit}", 1).unwrap_err();
+//! assert_eq!(failure.to_string(), "line 1 column 23: expected a number, found `orbit`");
 //! ```
 
 pub mod agreement;

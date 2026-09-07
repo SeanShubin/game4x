@@ -41,11 +41,11 @@ mod tests {
         // The hierarchy, one level at a time: setup says which planet and defers the
         // rest, and `world` is the part `/new <size>` reuses on a planet of any size.
         assert!(
-            library.fetch("setup").unwrap().contains("run world"),
+            library.fetch("setup").unwrap().contains("{run file:world}"),
             "setup should call its subroutines"
         );
         assert!(
-            library.fetch("world").unwrap().contains("run nodes"),
+            library.fetch("world").unwrap().contains("{run file:nodes}"),
             "world should call its subroutines"
         );
         assert!(

@@ -173,7 +173,8 @@ impl Console {
             session: Session::new(),
             transcript: vec![
                 "game4x.".to_string(),
-                "`help` lists every command. `run setup` builds the world of the first release."
+                "`{help}` lists every command. `{run file:setup}` builds the world of the first \
+                 release."
                     .to_string(),
             ],
             generation: 0,
@@ -182,7 +183,7 @@ impl Console {
             resets: 0,
             changes_of_drawing: 0,
         };
-        for line in ["run setup", "start"] {
+        for line in ["{run file:setup}", "{start}"] {
             console.submit(line);
         }
         console
@@ -271,9 +272,9 @@ impl Console {
     fn begin(&mut self, size: &str) -> Vec<String> {
         let mut fresh = Session::new();
         for line in [
-            format!("create planet {size}"),
-            "run world".to_string(),
-            "start".to_string(),
+            format!("{{create planet size:{size}}}"),
+            "{run file:world}".to_string(),
+            "{start}".to_string(),
         ] {
             if let Err(problem) = fresh.run(&line, &library()) {
                 return vec![
@@ -410,7 +411,7 @@ mod tests {
             console
                 .session
                 .history()
-                .contains(&"create planet tiny".to_string()),
+                .contains(&"{create planet size:tiny}".to_string()),
             "{:?}",
             console.session.history()
         );
@@ -419,9 +420,9 @@ mod tests {
     #[test]
     fn typing_a_command_records_what_it_said() {
         let mut console = Console::new();
-        console.submit("show territory 1");
+        console.submit("{show territory id:1}");
         let tail = console.tail(12);
-        assert!(tail.contains("> show territory 1"), "{tail}");
+        assert!(tail.contains("> {show territory id:1}"), "{tail}");
         assert!(tail.contains("territory 1"), "{tail}");
     }
 
@@ -430,14 +431,14 @@ mod tests {
     #[test]
     fn a_refused_command_is_shown_to_the_player() {
         let mut console = Console::new();
-        console.submit("land ark somewhere");
+        console.submit("{deploy ark territory:somewhere}");
         assert!(
             console.tail(3).contains("expected a number"),
             "{}",
             console.tail(3)
         );
 
-        console.submit("land ark 99");
+        console.submit("{deploy ark territory:99}");
         assert!(
             console.tail(3).contains("no territory 99"),
             "{}",
@@ -549,7 +550,7 @@ mod tests {
     #[test]
     fn a_games_history_begins_when_the_game_does() {
         let mut console = Console::new();
-        console.submit("end turn");
+        console.submit("{end turn}");
         let before = console.session.history().len();
         assert!(before > 0);
 
@@ -557,12 +558,12 @@ mod tests {
 
         let after = console.session.history();
         assert!(
-            !after.contains(&"end turn".to_string()),
+            !after.contains(&"{end turn}".to_string()),
             "the old fold survived into the new one: {after:?}"
         );
         // The new fold's history is exactly what built it, and replays to the same game.
         assert!(
-            after.contains(&"create planet small".to_string()),
+            after.contains(&"{create planet size:small}".to_string()),
             "{after:?}"
         );
         let mut replayed = game_console::Session::new();
@@ -578,7 +579,7 @@ mod tests {
     fn starting_over_on_tiny_is_the_world_the_release_opens_with() {
         let opened = Console::new();
         let mut restarted = Console::new();
-        restarted.submit("end turn");
+        restarted.submit("{end turn}");
         restarted.submit("/new tiny");
         assert_eq!(restarted.session.game, opened.session.game);
     }
@@ -598,7 +599,7 @@ mod tests {
     #[test]
     fn a_size_that_names_no_planet_leaves_the_game_alone() {
         let mut console = Console::new();
-        console.submit("end turn");
+        console.submit("{end turn}");
         let before = console.session.game.clone();
         let history = console.session.history().to_vec();
 
@@ -618,8 +619,8 @@ mod tests {
     #[test]
     fn what_is_saved_replays_into_the_same_game() {
         let mut console = Console::new();
-        console.submit("land ark 1");
-        console.submit("end turn");
+        console.submit("{deploy ark territory:1}");
+        console.submit("{end turn}");
 
         let said = spoke(&mut console, "/save mygame");
         assert!(said.contains("mygame"), "{said}");
@@ -655,7 +656,7 @@ mod tests {
         let mut console = Console::new();
         console.submit("/save mygame");
         assert_eq!(console.saved_as(), Some("mygame"));
-        console.submit("show turn");
+        console.submit("{show turn}");
         assert_eq!(console.saved_as(), None);
     }
 
@@ -700,7 +701,7 @@ mod tests {
         // And it is still a rejection: the bare word is not a command and does not become
         // one by being close to something.
         let said = spoke(&mut console, "browser");
-        assert!(said.contains("expected create"), "{said}");
+        assert!(said.contains("expected {"), "{said}");
     }
 
     /// The suggestion is for near misses only. A command that fails for its own reasons
@@ -708,7 +709,7 @@ mod tests {
     #[test]
     fn an_ordinary_failure_is_not_given_advice_about_surfaces() {
         let mut console = Console::new();
-        let said = spoke(&mut console, "land ark 99");
+        let said = spoke(&mut console, "{deploy ark territory:99}");
         assert!(!said.contains('/'), "{said}");
     }
 
@@ -723,10 +724,10 @@ mod tests {
         assert!(opened > 0, "building the world was a change");
 
         for question in [
-            "show turn",
-            "show planet",
-            "help",
-            "history",
+            "{show turn}",
+            "{show planet}",
+            "{help}",
+            "{history}",
             "",
             "/browser",
         ] {
@@ -734,7 +735,7 @@ mod tests {
         }
         assert_eq!(console.generation(), opened, "a question moved nothing");
 
-        console.submit("end turn");
+        console.submit("{end turn}");
         assert_eq!(console.generation(), opened + 1);
     }
 
@@ -743,7 +744,7 @@ mod tests {
     fn a_refused_command_does_not_move_the_generation() {
         let mut console = Console::new();
         let before = console.generation();
-        console.submit("land ark 99");
+        console.submit("{deploy ark territory:99}");
         assert_eq!(console.generation(), before);
     }
 
@@ -753,7 +754,7 @@ mod tests {
         let mut console = Console::new();
         console.submit("/browser");
         assert_eq!(console.reached(), Some(Surface::Browser));
-        console.submit("show turn");
+        console.submit("{show turn}");
         assert_eq!(console.reached(), None);
     }
 
@@ -815,7 +816,7 @@ mod tests {
     fn the_transcript_stops_growing() {
         let mut console = Console::new();
         for _ in 0..KEPT * 2 {
-            console.submit("show turn");
+            console.submit("{show turn}");
         }
         assert!(
             console.transcript().lines().count() <= KEPT,

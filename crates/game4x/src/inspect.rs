@@ -144,7 +144,7 @@ fn describe(drawn: planet_bevy::globe::Drawn) -> String {
         game_front::shell::with(|console| {
             console
                 .session
-                .run("show planet", &game_front::library())
+                .run("{show planet}", &game_front::library())
                 .map(|outcome| match outcome {
                     game_console::Outcome::Said(said) => said,
                     other => format!("{other:?}"),

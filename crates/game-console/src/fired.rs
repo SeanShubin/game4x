@@ -116,7 +116,7 @@ pub fn fired(transition: &Transition) -> (Vec<&'static str>, &'static str) {
 pub fn ran(library: &dyn crate::Library) -> Vec<Fired> {
     let mut session = crate::Session::new();
     let mut out = Vec::new();
-    for line in ["run setup", "start", "run play"] {
+    for line in ["{run file:setup}", "{start}", "{run file:play}"] {
         walk(line, library, &mut session, &mut out, 0);
     }
     out

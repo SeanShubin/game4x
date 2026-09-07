@@ -71,12 +71,12 @@ impl fmt::Display for Term {
                 name,
                 required: true,
                 ..
-            } => write!(out, "<{name}>"),
+            } => write!(out, "{name}:<value>"),
             Term::Hole {
                 name,
                 required: false,
                 ..
-            } => write!(out, "[<{name}>]"),
+            } => write!(out, "[{name}:<value>]"),
         }
     }
 }
@@ -102,11 +102,16 @@ impl Form {
 
     /// The form written out the way a player would type it.
     pub fn syntax(&self) -> String {
-        self.terms
-            .iter()
-            .map(|term| term.to_string())
-            .collect::<Vec<_>>()
-            .join(" ")
+        // **In the braces, because that is how it is typed** - `P-321`. `help` prints this,
+        // and a syntax line a reader cannot copy is worse than none.
+        format!(
+            "{{{}}}",
+            self.terms
+                .iter()
+                .map(|term| term.to_string())
+                .collect::<Vec<_>>()
+                .join(" ")
+        )
     }
 
     /// The words that must open this form, for reporting what was expected at the start
@@ -214,17 +219,17 @@ mod tests {
             Form::new(
                 "land",
                 vec![
-                    Term::Keyword("land"),
-                    Term::required("unit", Kind::Name),
+                    Term::Keyword("deploy"),
+                    Term::Keyword("ark"),
                     Term::required("territory", Kind::Number),
                 ],
-                "bring a unit down from orbit",
+                "bring an ark down from orbit",
             ),
             Form::new(
                 "build",
                 vec![
                     Term::Keyword("build"),
-                    Term::required("structure", Kind::Name),
+                    Term::Keyword("extractor"),
                     Term::required("territory", Kind::Number),
                     Term::optional("resource", Kind::Name),
                 ],
@@ -242,13 +247,13 @@ mod tests {
     fn a_form_writes_itself_the_way_it_is_typed() {
         assert_eq!(
             grammar().form("land").unwrap().syntax(),
-            "land <unit> <territory>"
+            "{deploy ark territory:<value>}"
         );
         assert_eq!(
             grammar().form("build").unwrap().syntax(),
-            "build <structure> <territory> [<resource>]"
+            "{build extractor territory:<value> [resource:<value>]}"
         );
-        assert_eq!(grammar().form("end-turn").unwrap().syntax(), "end turn");
+        assert_eq!(grammar().form("end-turn").unwrap().syntax(), "{end turn}");
     }
 
     #[test]
@@ -259,7 +264,6 @@ mod tests {
         assert_eq!(
             holes,
             [
-                ("structure", Kind::Name, true),
                 ("territory", Kind::Number, true),
                 ("resource", Kind::Name, false),
             ]
@@ -268,7 +272,7 @@ mod tests {
 
     #[test]
     fn forms_can_be_found_by_the_word_that_opens_them() {
-        assert_eq!(grammar().forms_beginning("land").len(), 1);
+        assert_eq!(grammar().forms_beginning("deploy").len(), 1);
         assert_eq!(grammar().forms_beginning("end").len(), 1);
         assert!(grammar().forms_beginning("fly").is_empty());
     }

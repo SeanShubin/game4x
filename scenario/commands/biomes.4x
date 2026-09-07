@@ -18,26 +18,26 @@
 # across the whole planet.
 
 # 1: the landing site; everything works
-set biome 1 grassland
+{set biome territory:1 biome:grassland}
 # 2: few dense food nodes - the first territory a pioneer reaches
-set biome 2 grassland
+{set biome territory:2 biome:grassland}
 # 3: many thin food nodes
-set biome 3 grassland
+{set biome territory:3 biome:grassland}
 # 4: the minimum a territory can be
-set biome 4 mountain
+{set biome territory:4 biome:mountain}
 # 5: food density 1, so it can never build
-set biome 5 mountain
+{set biome territory:5 biome:mountain}
 # 6: no metal
-set biome 6 jungle
+{set biome territory:6 biome:jungle}
 # 7: no energy
-set biome 7 jungle
+{set biome territory:7 biome:jungle}
 # 8: population without industry
-set biome 8 grassland
+{set biome territory:8 biome:grassland}
 # 9: rich metal, too few hands to work it
-set biome 9 mountain
+{set biome territory:9 biome:mountain}
 # 10: an energy depot
-set biome 10 desert
+{set biome territory:10 biome:desert}
 # 11: the prize
-set biome 11 grassland
+{set biome territory:11 biome:grassland}
 # 12: rich nodes, almost no workers
-set biome 12 ice
+{set biome territory:12 biome:ice}

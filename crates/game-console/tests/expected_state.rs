@@ -43,7 +43,7 @@ fn root() -> PathBuf {
 fn played() -> Session {
     let files = Files(root().join("scenario/commands"));
     let mut session = Session::new();
-    for line in ["run setup", "start", "run play"] {
+    for line in ["{run file:setup}", "{start}", "{run file:play}"] {
         session
             .run(line, &files)
             .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));

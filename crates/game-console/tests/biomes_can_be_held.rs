@@ -68,7 +68,7 @@ fn nature_of() -> Vec<(String, u32)> {
 fn planet() -> Session {
     let files = Files(root().join("scenario/commands"));
     let mut session = Session::new();
-    for line in ["run setup", "start"] {
+    for line in ["{run file:setup}", "{start}"] {
         session
             .run(line, &files)
             .unwrap_or_else(|why| panic!("{line}: {why}"));
@@ -133,7 +133,7 @@ fn every_claimable_biome_can_be_taken_by_something_the_release_provides() {
         let mut session = planet();
         session.game.territories[1].biome = *kind;
         session.game.territories[1].force_of_nature = *nature;
-        for line in ["land ark 1", "create labor 1 1"] {
+        for line in ["{deploy ark territory:1}", "{create labor territory:1}"] {
             session
                 .run(line, &Files(root().join("scenario/commands")))
                 .unwrap_or_else(|why| panic!("{biome}: `{line}` failed: {why}"));

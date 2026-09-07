@@ -331,25 +331,25 @@ mod tests {
 
     fn tiny() -> Session {
         played(&[
-            "create planet tiny",
-            "set resource 1 food 1 4",
-            "set resource 1 metal 1 4",
-            "set force 1 1",
-            "add ark orbit 1",
-            "start",
+            "{create planet size:tiny}",
+            "{set resource territory:1 resource:food extractors:1 density:4}",
+            "{set resource territory:1 resource:metal extractors:1 density:4}",
+            "{set force territory:1 force:1}",
+            "{add ark orbit territory:1}",
+            "{start}",
         ])
     }
 
     #[test]
     fn help_lists_every_command_with_its_syntax() {
         let mut session = Session::new();
-        let Outcome::Said(text) = session.run("help", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{help}", &NoLibrary).unwrap() else {
             panic!("help said nothing");
         };
         for expected in [
-            "land <unit> <territory>",
-            "end turn",
-            "show territory <territory>",
+            "{deploy ark territory:<value> [repeat:<value>]}",
+            "{end turn}",
+            "{show territory id:<value>}",
         ] {
             assert!(
                 text.contains(expected),
@@ -361,12 +361,22 @@ mod tests {
     #[test]
     fn help_for_one_command_gives_that_commands_syntax() {
         let mut session = Session::new();
-        let Outcome::Said(text) = session.run("help move", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{help command:move}", &NoLibrary).unwrap() else {
             panic!();
         };
-        assert!(text.contains("move <unit> <territory>"), "{text}");
+        // **Both, because `move` is two commands now.** `P-323`: one command per recipe and
+        // each named for it, so a player asking about `move` is shown the ark's and the
+        // pioneer's rather than one form with the unit left as a hole.
         assert!(
-            !text.contains("end turn"),
+            text.contains("{move ark territory:<value> [repeat:<value>]}"),
+            "{text}"
+        );
+        assert!(
+            text.contains("{move pioneer territory:<value> [repeat:<value>]}"),
+            "{text}"
+        );
+        assert!(
+            !text.contains("{end turn}"),
             "only the one asked for:\n{text}"
         );
     }
@@ -374,7 +384,7 @@ mod tests {
     #[test]
     fn help_for_something_that_is_not_a_command_says_so() {
         let mut session = Session::new();
-        let Outcome::Said(text) = session.run("help fly", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{help command:fly}", &NoLibrary).unwrap() else {
             panic!();
         };
         assert!(text.contains("no command called fly"), "{text}");
@@ -383,7 +393,7 @@ mod tests {
     #[test]
     fn showing_a_territory_reports_what_is_there() {
         let mut session = tiny();
-        let Outcome::Said(text) = session.run("show territory 1", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{show territory id:1}", &NoLibrary).unwrap() else {
             panic!();
         };
         assert!(text.contains("territory 1"), "{text}");
@@ -394,7 +404,7 @@ mod tests {
     #[test]
     fn showing_a_territory_that_is_not_there_says_so_in_the_games_terms() {
         let mut session = tiny();
-        let Outcome::Said(text) = session.run("show territory 99", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{show territory id:99}", &NoLibrary).unwrap() else {
             panic!();
         };
         assert_eq!(text, "there is no territory 99");
@@ -403,7 +413,7 @@ mod tests {
     #[test]
     fn showing_orbit_reports_what_is_up_there() {
         let mut session = tiny();
-        let Outcome::Said(text) = session.run("show orbit", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{show orbit}", &NoLibrary).unwrap() else {
             panic!();
         };
         assert!(text.contains("ark"), "{text}");
@@ -423,7 +433,7 @@ mod tests {
 
         // And that is the same id `show territory 5` answers to.
         let mut session = session;
-        let Outcome::Said(text) = session.run("show territory 5", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{show territory id:5}", &NoLibrary).unwrap() else {
             panic!();
         };
         assert!(text.starts_with("territory 5"), "{text}");
@@ -441,12 +451,12 @@ mod tests {
     #[test]
     fn history_is_numbered_and_in_order() {
         let mut session = tiny();
-        let Outcome::Said(text) = session.run("history", &NoLibrary).unwrap() else {
+        let Outcome::Said(text) = session.run("{history}", &NoLibrary).unwrap() else {
             panic!();
         };
         let lines: Vec<&str> = text.lines().collect();
-        assert!(lines[0].contains("create planet tiny"), "{text}");
-        assert!(lines.last().unwrap().contains("start"), "{text}");
+        assert!(lines[0].contains("{create planet size:tiny}"), "{text}");
+        assert!(lines.last().unwrap().contains("{start}"), "{text}");
     }
 
     #[test]

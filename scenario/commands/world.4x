@@ -8,9 +8,9 @@
 # has twelve - so this runs on any of them. A larger planet gets the release's twelve and
 # bare ground beyond.
 
-run nodes
-run forces
-run biomes
+{run file:nodes}
+{run file:forces}
+{run file:biomes}
 
 # One ark, waiting above the planet. Nothing is on the planet yet.
-add ark orbit 1
+{add ark orbit territory:1}

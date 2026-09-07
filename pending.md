@@ -42,8 +42,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (20)
+### To spec (21)
 
+- **C-54** - `S-59`'s count measured one file of seven, and `launch ark` fires no recipe · `crates/outbox.md`
 - **C-53** - `P-322` closed half the round trip and says it closed all of it, and its reason is `Q-66`'s shape · `crates/outbox.md`
 - **C-51** - `Thing::children` is written by nothing, and two rules in this repository disagree about what to do with an unwritten field · `crates/outbox.md`
 - **C-50** - `S-47`, `S-48` and `S-54` are built, and the items are yours to close · `crates/outbox.md`

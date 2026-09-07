@@ -24,7 +24,7 @@ pub mod state;
 pub mod tree;
 
 use command_language::{Failure, Grammar, parse_line};
-use game_model::{Game, Rejection, Transition};
+use game_model::{Game, Rejection};
 
 pub use binding::{Meaning, Misreading, Subject, interpret};
 pub use grammar::grammar as command_grammar;
@@ -298,7 +298,30 @@ impl Session {
 
         match meaning {
             Meaning::Change(transition) => {
-                self.apply(&transition).map_err(|why| locate(why, None))?;
+                // **`P-323`: a command may carry a `repeat`, and one without it fires once.**
+                // A count of firings rather than an argument of the recipe, so this loops over
+                // the same transition rather than handing a number to it.
+                //
+                // **All of them or none.** `spec/invariants.md` says a command that cannot be
+                // run changes nothing, and a repeat that fails on its third firing would
+                // otherwise leave two behind - a command half executed, which is a state no
+                // history could reproduce. So the firings are applied to a copy and the copy
+                // replaces the game only once every one of them has succeeded.
+                // **A negative repeat cannot be written**: `Kind::Number` reads digits
+                // only, deliberately, because every quantity in this language is a count, a
+                // density or an identifier and none of those is ever negative.
+                //
+                // **A repeat of zero fires nothing and is accepted**, because no rule says it
+                // may not, and refusing it would be a rule this lane invented rather than
+                // one it was given. `C-54`.
+                let repeat = utterance.optional_number("repeat").unwrap_or(1);
+                let mut next = self.game.clone();
+                for _ in 0..repeat {
+                    next = next
+                        .after(&transition)
+                        .map_err(|why| locate(Problem::Rule(why), None))?;
+                }
+                self.game = next;
                 self.history.push(utterance.source.clone());
                 Ok(Outcome::Changed)
             }
@@ -331,12 +354,6 @@ impl Session {
                 Ok(Outcome::Changed)
             }
         }
-    }
-
-    /// The one function, reached from here and from nowhere else.
-    fn apply(&mut self, transition: &Transition) -> Result<(), Problem> {
-        self.game = self.game.after(transition).map_err(Problem::Rule)?;
-        Ok(())
     }
 
     /// Every entity in the game and its components, named by model id.
@@ -372,8 +389,8 @@ mod tests {
     fn every_command_the_specification_lists_can_be_typed() {
         let grammar = grammar::grammar();
         let verbs = [
-            "land", "launch", "move", "build", "produce", "work", "end", "show", "help", "history",
-            "create", "add", "set", "start",
+            "deploy", "launch", "move", "build", "produce", "work", "end", "show", "help",
+            "history", "create", "add", "set", "start",
         ];
         for verb in verbs {
             assert!(
@@ -443,7 +460,7 @@ mod tests {
     #[test]
     fn every_planet_size_can_be_created() {
         for size in planet_model::PlanetSize::ALL {
-            let line = format!("create planet {}", size.name());
+            let line = format!("{{create planet size:{}}}", size.name());
             let mut session = Session::new();
             let outcome = session
                 .run(&line, &NoLibrary)
@@ -471,8 +488,8 @@ mod tests {
     #[test]
     fn a_command_that_changes_nothing_is_not_recorded_as_history() {
         let mut session = Session::new();
-        session.run("help", &NoLibrary).unwrap();
-        session.run("show turn", &NoLibrary).unwrap();
+        session.run("{help}", &NoLibrary).unwrap();
+        session.run("{show turn}", &NoLibrary).unwrap();
         assert!(
             session.history().is_empty(),
             "asking is not doing: {:?}",
@@ -483,9 +500,19 @@ mod tests {
     #[test]
     fn history_lists_what_was_done_in_order() {
         let mut session = Session::new();
-        session.run("create planet tiny", &NoLibrary).unwrap();
-        session.run("set force 1 1", &NoLibrary).unwrap();
-        assert_eq!(session.history(), ["create planet tiny", "set force 1 1"]);
+        session
+            .run("{create planet size:tiny}", &NoLibrary)
+            .unwrap();
+        session
+            .run("{set force territory:1 force:1}", &NoLibrary)
+            .unwrap();
+        assert_eq!(
+            session.history(),
+            [
+                "{create planet size:tiny}",
+                "{set force territory:1 force:1}"
+            ]
+        );
     }
 
     /// A history is the flat list of what changed the game, not an account of which file
@@ -494,13 +521,19 @@ mod tests {
     fn history_records_what_a_subroutine_did_rather_than_the_call_to_it() {
         let library = Embedded::of(&[(
             "world",
-            "create planet tiny
-set force 1 1
+            "{create planet size:tiny}
+{set force territory:1 force:1}
 ",
         )]);
         let mut session = Session::new();
-        session.run("run world", &library).unwrap();
-        assert_eq!(session.history(), ["create planet tiny", "set force 1 1"]);
+        session.run("{run file:world}", &library).unwrap();
+        assert_eq!(
+            session.history(),
+            [
+                "{create planet size:tiny}",
+                "{set force territory:1 force:1}"
+            ]
+        );
 
         let mut rebuilt = Session::new();
         rebuilt
@@ -529,7 +562,9 @@ set force 1 1
             other => panic!("every problem carries where it was found; got {other}"),
         };
 
-        let parse = session.run("land ark somewhere", &NoLibrary).unwrap_err();
+        let parse = session
+            .run("{deploy ark territory:somewhere}", &NoLibrary)
+            .unwrap_err();
         assert!(matches!(at(&parse), Problem::Parse(_)), "{parse}");
         // And it says its position once rather than twice: the parser already knew the
         // column, so the wrapper adds only what the parser could not know.
@@ -537,13 +572,17 @@ set force 1 1
         assert!(parse.to_string().contains("expected a number"), "{parse}");
 
         let misread = session
-            .run("create planet enormous", &NoLibrary)
+            .run("{create planet size:enormous}", &NoLibrary)
             .unwrap_err();
         assert!(matches!(at(&misread), Problem::Misread(_)), "{misread}");
 
-        session.run("create planet tiny", &NoLibrary).unwrap();
-        session.run("start", &NoLibrary).unwrap();
-        let rule = session.run("land ark 1", &NoLibrary).unwrap_err();
+        session
+            .run("{create planet size:tiny}", &NoLibrary)
+            .unwrap();
+        session.run("{start}", &NoLibrary).unwrap();
+        let rule = session
+            .run("{deploy ark territory:1}", &NoLibrary)
+            .unwrap_err();
         assert!(matches!(at(&rule), Problem::Rule(_)), "{rule}");
         assert!(rule.to_string().contains("no ark"), "{rule}");
         // A rejection is about the whole command, so it says the line and no column.
@@ -556,11 +595,13 @@ set force 1 1
     #[test]
     fn a_refused_command_leaves_the_game_untouched() {
         let mut session = Session::new();
-        session.run("create planet tiny", &NoLibrary).unwrap();
+        session
+            .run("{create planet size:tiny}", &NoLibrary)
+            .unwrap();
         let before = session.game.clone();
-        assert!(session.run("land ark 1", &NoLibrary).is_err());
+        assert!(session.run("{deploy ark territory:1}", &NoLibrary).is_err());
         assert_eq!(session.game, before);
-        assert_eq!(session.history(), ["create planet tiny"]);
+        assert_eq!(session.history(), ["{create planet size:tiny}"]);
     }
 
     /// `spec/console.md`: commands may be organized in a hierarchy of files, one file
@@ -568,11 +609,14 @@ set force 1 1
     #[test]
     fn a_file_may_call_another_file() {
         let library = Embedded::of(&[
-            ("world", "create planet tiny\nrun forces\n"),
-            ("forces", "set force 1 1\nset force 2 1\n"),
+            ("world", "{create planet size:tiny}\n{run file:forces}\n"),
+            (
+                "forces",
+                "{set force territory:1 force:1}\n{set force territory:2 force:1}\n",
+            ),
         ]);
         let mut session = Session::new();
-        session.run("run world", &library).unwrap();
+        session.run("{run file:world}", &library).unwrap();
         assert_eq!(session.game.territories.len(), 12);
         assert_eq!(
             session
@@ -588,16 +632,16 @@ set force 1 1
     fn a_file_that_is_not_there_says_which_ones_are() {
         let library = Embedded::of(&[("setup", "start\n")]);
         let mut session = Session::new();
-        let problem = session.run("run missing", &library).unwrap_err();
+        let problem = session.run("{run file:missing}", &library).unwrap_err();
         assert!(problem.to_string().contains("missing"), "{problem}");
         assert!(problem.to_string().contains("setup"), "{problem}");
     }
 
     #[test]
     fn files_that_call_each_other_without_end_are_stopped() {
-        let library = Embedded::of(&[("a", "run b\n"), ("b", "run a\n")]);
+        let library = Embedded::of(&[("a", "{run file:b}\n"), ("b", "{run file:a}\n")]);
         let mut session = Session::new();
-        let problem = session.run("run a", &library).unwrap_err();
+        let problem = session.run("{run file:a}", &library).unwrap_err();
         let Problem::At { found, what } = problem else {
             panic!("expected a located problem")
         };
@@ -611,9 +655,12 @@ set force 1 1
     /// A failure inside a subroutine is reported against the line it is on.
     #[test]
     fn a_failure_inside_a_subroutine_names_its_own_line() {
-        let library = Embedded::of(&[("setup", "create planet tiny\nland ark nowhere\n")]);
+        let library = Embedded::of(&[(
+            "setup",
+            "{create planet size:tiny}\n{deploy ark territory:nowhere}\n",
+        )]);
         let mut session = Session::new();
-        let problem = session.run("run setup", &library).unwrap_err();
+        let problem = session.run("{run file:setup}", &library).unwrap_err();
         let Problem::At { found, what } = &problem else {
             panic!("expected a located problem, got {problem}")
         };
@@ -625,9 +672,9 @@ set force 1 1
         // none when seven files are in play, because it names a line in a file the reader
         // has to guess. That is the half that was missing.
         assert_eq!(found.line, 2);
-        assert_eq!(found.inside, ["run setup"]);
+        assert_eq!(found.inside, ["{run file:setup}"]);
         assert!(
-            problem.to_string().contains("inside `run setup`"),
+            problem.to_string().contains("inside `{run file:setup}`"),
             "{problem}"
         );
     }

@@ -61,7 +61,7 @@ mod tests {
             Form::new(
                 "land",
                 vec![Term::Keyword("land"), Term::required("unit", Kind::Name)],
-                "land a unit",
+                "{deploy a territory:unit}",
             ),
             Form::new(
                 "end-turn",

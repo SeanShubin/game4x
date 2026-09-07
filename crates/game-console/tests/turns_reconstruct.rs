@@ -85,11 +85,11 @@ fn replaying_what_the_report_lists_reaches_what_the_report_shows() {
     // The scenario as the report tells it, and the scenario as the file runs it, must be
     // the same game at every turn boundary.
     let mut replayed = Session::new();
-    for line in ["run setup", "start"] {
+    for line in ["{run file:setup}", "{start}"] {
         replayed.run(line, &files).expect("the setup runs");
     }
     let mut played = Session::new();
-    for line in ["run setup", "start"] {
+    for line in ["{run file:setup}", "{start}"] {
         played.run(line, &files).expect("the setup runs");
     }
 

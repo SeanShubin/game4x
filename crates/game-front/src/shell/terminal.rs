@@ -119,7 +119,7 @@ mod tests {
     #[test]
     fn a_command_prints_only_what_it_said() {
         exclusively(|| {
-            let said = answer("show territory 1");
+            let said = answer("{show territory id:1}");
             assert!(said.contains("territory 1"), "{said}");
             assert!(
                 !said.contains("> show territory 1"),

@@ -63,6 +63,50 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-54 - `S-59`'s count measured one file of seven, and `launch ark` fires no recipe
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** converting all seven command
+files and finding the second one disagreed with the item
+
+**derived from** every count in the scenario is 1 - `S-59`, from `P-323`'s measurement
+
+**Three things the conversion found, none of which blocked it.**
+
+**1. The count is not always 1, and that is why `repeat` is built rather than deferred.**
+`S-59` says *every count in the scenario is **1**, across 46 `work` commands and every `create
+labor` and `build`*, and concludes that **the count is a form the grammar allows and the file
+has never used**. True of `scenario/commands/play.4x`. **`scenario/commands/spread.4x` has
+fourteen lines with a count of 2** - seven `create labor 2 1` and seven `work 2 extractor ...`.
+
+**The instrument answered a narrower question than the one asked**, which is `C-28`'s shape:
+*the scenario* was read as the main scenario, and the sentence it produced was about the
+repository. **Found by converting rather than by re-measuring** - the converter asserted the
+count was 1 and stopped on the first line where it was not, which is the only reason this is a
+correction rather than fourteen silently dropped repeats.
+
+**So `repeat` is built.** Every player command may carry one, `Session::run` applies the
+transition that many times, and **all of them or none**: `spec/invariants.md` says a command
+that cannot be run changes nothing, so a repeat that fails on its third firing must not leave
+two behind.
+
+**2. `repeat:0` is accepted and fires nothing.** No rule says it may not, and refusing it would
+be a rule this lane invented. A negative one cannot be written at all - the tokenizer reads
+digits only, deliberately. **Say if zero should be refused** and it is one line.
+
+**3. `launch ark` fires no recipe, and `P-323` says every command is named for one.**
+`releases/first-release.md` -> *Recipes* declares sixteen and none is `launch`. The command
+exists, `scenario/commands/play.4x` uses it once, and it puts an Ark from a territory into the
+orbit above it - which is a `move` across what *Units and structures* calls an **ascent**.
+**Left exactly as it was**, named `launch ark`, because turning it into `{move ark ...}` needs
+a destination that is an orbit and no field names one. Related to `C-15`, *no recipe names an
+orbit*.
+
+**And one thing that got better rather than needing a decision.** `C-21` recorded that the
+scenario had never fired `move`, because `move` and `found by land` were both matched by the
+prefix `move ` and one line satisfied two rows of a check. **A command is named for its recipe
+now, so each prefix reaches exactly one of them** and the check in `tests/dump.rs` no longer
+carries that ambiguity.
+
 ### C-53 - `P-322` closed half the round trip and says it closed all of it, and its reason is `Q-66`'s shape
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** building `S-59`'s first half

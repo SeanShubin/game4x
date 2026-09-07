@@ -27,7 +27,7 @@ impl Library for Files {
 fn played() -> Session {
     let files = Files(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../scenario/commands"));
     let mut session = Session::new();
-    for command in ["run setup", "start", "run play"] {
+    for command in ["{run file:setup}", "{start}", "{run file:play}"] {
         session
             .run(command, &files)
             .unwrap_or_else(|why| panic!("`{command}` failed: {why}"));
@@ -298,7 +298,7 @@ fn every_turn_of_the_scenario_is_dumped() {
         .expect("scenario/commands/play.4x is the scenario");
     let boundaries = scenario
         .lines()
-        .filter(|line| line.trim() == "end turn")
+        .filter(|line| line.trim() == "{end turn}")
         .count();
     assert!(boundaries > 1, "a scenario of one turn tests nothing here");
 
@@ -347,14 +347,14 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
 
         let mut consumers = 0usize;
         for (at, line) in lines.iter().enumerate() {
-            let wants = line.starts_with("work ") || line.starts_with("build ");
+            let wants = line.starts_with("{work ") || line.starts_with("{build ");
             if !wants {
                 continue;
             }
             consumers += 1;
             checked += 1;
             let before = at.checked_sub(1).and_then(|n| lines.get(n)).copied();
-            let made = before.is_some_and(|line| line.starts_with("create labor "));
+            let made = before.is_some_and(|line| line.starts_with("{create labor "));
             assert!(
                 made,
                 "scenario/commands/{name}.4x line {}: `{line}` spends labor and the command before it \
@@ -362,21 +362,22 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
                 at + 1
             );
 
-            // And it makes as much as the consumer spends: `work 3` needs three.
-            let wanted: u32 = if line.starts_with("work ") {
+            // And it makes as much as the consumer spends. **The number is a `repeat` now**
+            // - `P-323` - so it is read from a named field rather than from a position, and a
+            // command without one fires once.
+            let repeat = |line: &str| -> u32 {
                 line.split_whitespace()
-                    .nth(1)
-                    .unwrap_or("0")
-                    .parse()
-                    .unwrap_or(0)
+                    .find_map(|word| word.strip_prefix("repeat:"))
+                    .map(|value| value.trim_end_matches('}'))
+                    .and_then(|value| value.parse().ok())
+                    .unwrap_or(1)
+            };
+            let wanted: u32 = if line.starts_with("{work ") {
+                repeat(line)
             } else {
                 1
             };
-            let made: u32 = before
-                .and_then(|l| l.split_whitespace().nth(2))
-                .unwrap_or("0")
-                .parse()
-                .unwrap_or(0);
+            let made: u32 = before.map(repeat).unwrap_or(0);
             assert_eq!(
                 made,
                 wanted,
@@ -429,25 +430,25 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
     // Which command fires which recipe. Small, and checked for completeness below - a recipe
     // the release adds and this does not name fails rather than going unnoticed.
     // **This says a command that *can* fire each recipe is present, not that each recipe
-    // ran.** Two of the nine share a command word: `move` and `found by land` are both
-    // `move `, and the model chooses between them by looking at the ground. So one
-    // `move pioneer 2` satisfies two rows here - and it founds, which means the recipe
-    // `move` has never been fired by this scenario while this check reported nine of nine.
+    // ran.** `tests/fired.rs` asks the model what actually happened; this is the cheaper
+    // question and it fails earlier - a recipe with no command at all is a hole in the
+    // console, and that is what it is for.
     //
-    // `tests/fired.rs` asks the model what actually happened and carries that gap as one
-    // named exception. This is kept because it is the cheaper question and it fails earlier:
-    // a recipe with no command at all is a hole in the console, and that is what it is for.
+    // **`P-323` closed the ambiguity this used to carry.** `move` and `found by land` were
+    // both matched by the prefix `move `, so one `move pioneer 2` satisfied two rows and the
+    // recipe `move` had never fired while the check read nine of nine - `C-21`. A command is
+    // named for its recipe now, so each prefix reaches exactly one of them.
     let fired_by: [(&str, &str); 10] = [
-        ("deploy ark", "land ark"),
-        ("build store", "build store"),
-        ("move", "move "),
-        ("found by land", "move "),
-        ("build extractor", "build extractor"),
-        ("build yard", "build yard"),
-        ("produce pioneer", "produce pioneer"),
-        ("produce ark", "produce ark"),
-        ("create labor", "create labor"),
-        ("work", "work "),
+        ("deploy ark", "{deploy ark"),
+        ("build store", "{build store"),
+        ("move", "{move "),
+        ("found by land", "{found by land"),
+        ("build extractor", "{build extractor"),
+        ("build yard", "{build yard"),
+        ("produce pioneer", "{produce pioneer"),
+        ("produce ark", "{produce ark"),
+        ("create labor", "{create labor"),
+        ("work", "{work "),
     ];
 
     let mut declared: Vec<String> = Vec::new();

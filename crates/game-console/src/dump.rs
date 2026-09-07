@@ -1074,7 +1074,7 @@ pub struct Turn {
 /// the wrong direction.
 pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
     let mut session = crate::Session::new();
-    for line in ["run setup", "start"] {
+    for line in ["{run file:setup}", "{start}"] {
         session
             .run(line, commands)
             .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
@@ -1085,7 +1085,7 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
         .unwrap_or_else(|| panic!("scenario/commands/play.4x is not there"));
     let boundaries = scenario
         .lines()
-        .filter(|line| line.trim() == "end turn")
+        .filter(|line| line.trim() == "{end turn}")
         .count();
 
     // **A turn is what ran, what changed, and what is there** - `S-38`. This used to be the
@@ -1104,7 +1104,7 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
         session
             .run(line, commands)
             .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
-        if line == "end turn" {
+        if line == "{end turn}" {
             let after = crate::state::entries(&session.game);
             turns.push(Turn {
                 commands: std::mem::take(&mut ran),

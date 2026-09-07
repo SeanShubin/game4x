@@ -8,12 +8,12 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 ## commands
 
 ```
-land ark 1
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 metal
-end turn
+{deploy ark territory:1}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{end turn}
 ```
 
 ## what changed
@@ -257,15 +257,15 @@ end turn
 ## commands
 
 ```
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-build extractor 1 food
-create labor 1 1
-build store 1 food
-end turn
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{build extractor territory:1 resource:food}
+{create labor territory:1}
+{build store territory:1 resource:food}
+{end turn}
 ```
 
 ## what changed
@@ -502,15 +502,15 @@ end turn
 ## commands
 
 ```
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-build store 1 metal
-end turn
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{build store territory:1 resource:metal}
+{end turn}
 ```
 
 ## what changed
@@ -747,21 +747,21 @@ end turn
 ## commands
 
 ```
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-build extractor 1 metal
-create labor 1 1
-build extractor 1 food
-create labor 1 1
-build extractor 1 energy
-create labor 1 1
-build store 1 energy
-end turn
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{build extractor territory:1 resource:metal}
+{create labor territory:1}
+{build extractor territory:1 resource:food}
+{create labor territory:1}
+{build extractor territory:1 resource:energy}
+{create labor territory:1}
+{build store territory:1 resource:energy}
+{end turn}
 ```
 
 ## what changed
@@ -1005,23 +1005,23 @@ end turn
 ## commands
 
 ```
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 1
-build extractor 1 metal
-create labor 1 1
-build extractor 1 energy
-end turn
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{work extractor territory:1 resource:energy}
+{create labor territory:1}
+{build extractor territory:1 resource:metal}
+{create labor territory:1}
+{build extractor territory:1 resource:energy}
+{end turn}
 ```
 
 ## what changed
@@ -1268,27 +1268,27 @@ end turn
 ## commands
 
 ```
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 1
-build extractor 1 energy
-create labor 1 1
-build store 1 energy
-end turn
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{work extractor territory:1 resource:energy}
+{create labor territory:1}
+{work extractor territory:1 resource:energy}
+{create labor territory:1}
+{build extractor territory:1 resource:energy}
+{create labor territory:1}
+{build store territory:1 resource:energy}
+{end turn}
 ```
 
 ## what changed
@@ -1532,29 +1532,29 @@ end turn
 ## commands
 
 ```
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 metal
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 1
-build store 1 metal
-create labor 1 1
-produce pioneer 1
-end turn
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{work extractor territory:1 resource:metal}
+{create labor territory:1}
+{work extractor territory:1 resource:energy}
+{create labor territory:1}
+{work extractor territory:1 resource:energy}
+{create labor territory:1}
+{work extractor territory:1 resource:energy}
+{create labor territory:1}
+{build store territory:1 resource:metal}
+{create labor territory:1}
+{produce pioneer territory:1}
+{end turn}
 ```
 
 ## what changed
@@ -1803,20 +1803,20 @@ end turn
 ## commands
 
 ```
-found by land 2
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 1
-build yard 1
-create labor 1 2
-work 1 extractor 2 food
-end turn
+{found by land territory:2}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:energy}
+{create labor territory:1}
+{build yard territory:1}
+{create labor territory:2}
+{work extractor territory:2 resource:food}
+{end turn}
 ```
 
 ## what changed
@@ -2076,20 +2076,20 @@ end turn
 ## commands
 
 ```
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 energy
-create labor 1 1
-produce ark 1
-create labor 1 2
-work 1 extractor 2 food
-move ark 2
-end turn
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:energy}
+{create labor territory:1}
+{produce ark territory:1}
+{create labor territory:2}
+{work extractor territory:2 resource:food}
+{move ark territory:2}
+{end turn}
 ```
 
 ## what changed
@@ -2340,14 +2340,14 @@ end turn
 ## commands
 
 ```
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 1
-work 1 extractor 1 food
-create labor 1 2
-work 1 extractor 2 food
-launch ark
-end turn
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:1}
+{work extractor territory:1 resource:food}
+{create labor territory:2}
+{work extractor territory:2 resource:food}
+{launch ark}
+{end turn}
 ```
 
 ## what changed

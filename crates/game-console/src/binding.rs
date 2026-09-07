@@ -78,33 +78,15 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
             word: word.to_string(),
         })
     };
-    let unit = |hole: &str| -> Result<UnitKind, Misreading> {
-        let word = utterance.name(hole)?;
-        UnitKind::named(word).ok_or_else(|| Misreading::Unknown {
-            what: "unit",
-            word: word.to_string(),
-        })
-    };
-    let structure = |hole: &str| -> Result<StructureKind, Misreading> {
-        let word = utterance.name(hole)?;
-        StructureKind::named(word).ok_or_else(|| Misreading::Unknown {
-            what: "structure",
-            word: word.to_string(),
-        })
-    };
-    // An optional resource that is present but misspelled is a mistake worth reporting,
-    // rather than one silently treated as absent.
-    let optional_resource = || -> Result<Option<Resource>, Misreading> {
-        match utterance.optional_name("resource") {
-            None => Ok(None),
-            Some(word) => Resource::named(word)
-                .map(Some)
-                .ok_or_else(|| Misreading::Unknown {
-                    what: "resource",
-                    word: word.to_string(),
-                }),
-        }
-    };
+    // **`unit`, `structure` and an optional-resource lookup used to sit here and are gone.**
+    // Each turned a word the player had put in a positional hole into a kind, and each could
+    // fail on a word that was simply not a kind - `land colonizer 1`. `P-323` made the kind
+    // part of the command's name, so the grammar refuses `{deploy colonizer territory:1}`
+    // before any of this runs, and the failure says which command was meant rather than which
+    // word was unrecognised.
+    //
+    // **Three ways to be wrong became one**, and the one that survives is the parser's, which
+    // already carries a line, a column and the command it was found inside - `P-215`.
 
     let meaning = match utterance.form {
         form::CREATE_PLANET => {
@@ -145,21 +127,33 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
             territory: territory("territory")?,
             biome: biome("biome")?,
         }),
-        form::ADD_UNIT => Meaning::Change(Transition::AddUnitToOrbit {
-            kind: unit("unit")?,
+        form::ADD_ARK => Meaning::Change(Transition::AddUnitToOrbit {
+            kind: UnitKind::Ark,
+            above: territory("territory")?,
+        }),
+        form::ADD_PIONEER => Meaning::Change(Transition::AddUnitToOrbit {
+            kind: UnitKind::Pioneer,
             above: territory("territory")?,
         }),
         form::START => Meaning::Change(Transition::Start),
 
-        form::LAND => Meaning::Change(Transition::Land {
-            kind: unit("unit")?,
+        // **The kind comes from the form now, not from a hole.** `P-323`: a command is named
+        // for the recipe it fires, and `deploy ark` is the recipe's own name - so which unit
+        // is deployed is part of what the player said rather than a word this had to look up
+        // and could fail to recognise.
+        form::DEPLOY_ARK => Meaning::Change(Transition::Land {
+            kind: UnitKind::Ark,
             territory: territory("territory")?,
         }),
-        form::LAUNCH => Meaning::Change(Transition::Launch {
-            kind: unit("unit")?,
+        form::LAUNCH_ARK => Meaning::Change(Transition::Launch {
+            kind: UnitKind::Ark,
         }),
-        form::MOVE => Meaning::Change(Transition::Move {
-            kind: unit("unit")?,
+        form::MOVE_ARK => Meaning::Change(Transition::Move {
+            kind: UnitKind::Ark,
+            territory: territory("territory")?,
+        }),
+        form::MOVE_PIONEER => Meaning::Change(Transition::Move {
+            kind: UnitKind::Pioneer,
             territory: territory("territory")?,
         }),
         // `P-214`: one command per recipe, so the player says which of the two this is
@@ -171,28 +165,40 @@ pub fn interpret(utterance: &Utterance) -> Result<Meaning, Misreading> {
             resource: resource("resource")?,
             territory: territory("territory")?,
         }),
-        form::BUILD => Meaning::Change(Transition::Build {
-            structure: structure("structure")?,
+        form::BUILD_EXTRACTOR => Meaning::Change(Transition::Build {
+            structure: StructureKind::Extractor,
             territory: territory("territory")?,
-            resource: optional_resource()?,
+            resource: Some(resource("resource")?),
         }),
-        form::PRODUCE => Meaning::Change(Transition::Produce {
-            kind: unit("unit")?,
+        form::BUILD_YARD => Meaning::Change(Transition::Build {
+            structure: StructureKind::Yard,
+            territory: territory("territory")?,
+            resource: None,
+        }),
+        form::PRODUCE_PIONEER => Meaning::Change(Transition::Produce {
+            kind: UnitKind::Pioneer,
             territory: territory("territory")?,
         }),
+        form::PRODUCE_ARK => Meaning::Change(Transition::Produce {
+            kind: UnitKind::Ark,
+            territory: territory("territory")?,
+        }),
+        // **The count is `repeat` now, and one firing makes one labor.** `P-323`: a repeat
+        // is a count of firings rather than an argument of the recipe, so the transition is
+        // what one firing does and `Session::run` applies it that many times.
         form::CREATE_LABOR => Meaning::Change(Transition::CreateLabor {
-            count: utterance.number("count")? as u32,
+            count: 1,
             territory: territory("territory")?,
         }),
-        form::WORK => Meaning::Change(Transition::Work {
-            count: utterance.number("count")? as u32,
-            structure: structure("structure")?,
+        form::WORK_EXTRACTOR => Meaning::Change(Transition::Work {
+            count: 1,
+            structure: StructureKind::Extractor,
             territory: territory("territory")?,
-            resource: optional_resource()?,
+            resource: Some(resource("resource")?),
         }),
         form::END_TURN => Meaning::Change(Transition::EndTurn),
 
-        form::SHOW_TERRITORY => Meaning::Show(Subject::Territory(territory("territory")?)),
+        form::SHOW_TERRITORY => Meaning::Show(Subject::Territory(territory("id")?)),
         form::SHOW_PLANET => Meaning::Show(Subject::Planet),
         form::SHOW_ORBIT => Meaning::Show(Subject::Orbit),
         form::SHOW_UNITS => Meaning::Show(Subject::Units),
@@ -221,17 +227,21 @@ pub fn handled() -> Vec<&'static str> {
         form::SET_RESOURCE,
         form::SET_FORCE,
         form::SET_BIOME,
-        form::ADD_UNIT,
+        form::ADD_ARK,
+        form::ADD_PIONEER,
         form::START,
-        form::LAND,
-        form::LAUNCH,
-        form::MOVE,
+        form::DEPLOY_ARK,
+        form::LAUNCH_ARK,
+        form::MOVE_ARK,
+        form::MOVE_PIONEER,
         form::FOUND_BY_LAND,
         form::BUILD_STORE,
-        form::BUILD,
-        form::PRODUCE,
+        form::BUILD_EXTRACTOR,
+        form::BUILD_YARD,
+        form::PRODUCE_PIONEER,
+        form::PRODUCE_ARK,
         form::CREATE_LABOR,
-        form::WORK,
+        form::WORK_EXTRACTOR,
         form::END_TURN,
         form::SHOW_TERRITORY,
         form::SHOW_PLANET,
@@ -296,54 +306,88 @@ mod tests {
     #[test]
     fn a_command_becomes_the_transition_it_names() {
         assert_eq!(
-            meaning("land ark 1"),
+            meaning("{deploy ark territory:1}"),
             Meaning::Change(Transition::Land {
                 kind: UnitKind::Ark,
                 territory: TerritoryId(1)
             })
         );
+        // **A repeat is not part of the transition**, so a command carrying one becomes the
+        // same transition as one without. `P-323`: it is a count of firings rather than an
+        // argument of the recipe, and `Session::run` is what fires it that many times.
+        let once = meaning("{work extractor territory:3 resource:metal}");
         assert_eq!(
-            meaning("work 4 extractor 3 metal"),
+            once,
             Meaning::Change(Transition::Work {
-                count: 4,
+                count: 1,
                 structure: StructureKind::Extractor,
                 territory: TerritoryId(3),
                 resource: Some(Resource::Metal),
             })
         );
-        assert_eq!(meaning("end turn"), Meaning::Change(Transition::EndTurn));
+        assert_eq!(
+            meaning("{work extractor territory:3 resource:metal repeat:4}"),
+            once,
+            "a repeat changes how many times, not what"
+        );
+        assert_eq!(meaning("{end turn}"), Meaning::Change(Transition::EndTurn));
     }
 
     #[test]
     fn asking_a_question_is_not_a_change() {
         assert_eq!(
-            meaning("show territory 5"),
+            meaning("{show territory id:5}"),
             Meaning::Show(Subject::Territory(TerritoryId(5)))
         );
         assert_eq!(
-            meaning("help move"),
+            meaning("{help command:move}"),
             Meaning::Help(Some("move".to_string()))
         );
-        assert_eq!(meaning("help"), Meaning::Help(None));
-        assert_eq!(meaning("history"), Meaning::History);
+        assert_eq!(meaning("{help}"), Meaning::Help(None));
+        assert_eq!(meaning("{history}"), Meaning::History);
     }
 
     /// A word in the right place that names nothing is a mistake about the game, and is
     /// reported as one.
+    ///
+    /// **`P-323` moved one of these out of reach and this is the other.** `build refinery 3`
+    /// used to reach here and be told *there is no structure called refinery*; the kind is
+    /// part of the command's name now, so `{build refinery territory:3}` is refused by the
+    /// grammar with a position and a list of what could have been written. **A resource is
+    /// still a value**, so a word that names none is still the game's mistake to report.
     #[test]
     fn a_word_that_names_nothing_is_reported_in_the_games_terms() {
-        let utterance = parse_line(&grammar(), "build refinery 3", 1)
+        let utterance = parse_line(&grammar(), "{build extractor territory:3 resource:gold}", 1)
             .unwrap()
             .unwrap();
         let misread = interpret(&utterance).unwrap_err();
-        assert_eq!(misread.to_string(), "there is no structure called refinery");
+        assert_eq!(misread.to_string(), "there is no resource called gold");
+    }
+
+    /// A kind that is not a kind never reaches the binding at all now.
+    ///
+    /// **The half that moved, checked where it moved to.** Without this the test above reads
+    /// as though one of the two cases had been deleted rather than relocated.
+    #[test]
+    fn a_kind_that_names_nothing_is_refused_by_the_grammar() {
+        let failure = parse_line(&grammar(), "{build refinery territory:3}", 1)
+            .expect_err("`refinery` opens no command");
+        assert_eq!(failure.position.column, 8, "at the word, not at the brace");
+        assert!(
+            failure.expected.iter().any(|what| what == "extractor"),
+            "and it says what could have been written: {failure}"
+        );
     }
 
     #[test]
     fn a_misspelled_optional_resource_is_reported_rather_than_ignored() {
-        let utterance = parse_line(&grammar(), "build extractor 3 metel", 1)
-            .unwrap()
-            .unwrap();
+        let utterance = parse_line(
+            &grammar(),
+            "{build extractor territory:3 resource:metel}",
+            1,
+        )
+        .unwrap()
+        .unwrap();
         let misread = interpret(&utterance).unwrap_err();
         assert_eq!(misread.to_string(), "there is no resource called metel");
     }
@@ -353,8 +397,8 @@ mod tests {
     #[test]
     fn creating_a_planet_twice_describes_the_same_world() {
         assert_eq!(
-            meaning("create planet small"),
-            meaning("create planet small")
+            meaning("{create planet size:small}"),
+            meaning("{create planet size:small}")
         );
     }
 
@@ -364,7 +408,7 @@ mod tests {
     #[test]
     fn a_planet_has_more_than_one_kind_of_ground() {
         let Meaning::Change(Transition::CreatePlanet { biomes, .. }) =
-            meaning("create planet huge")
+            meaning("{create planet size:huge}")
         else {
             panic!("not a create planet");
         };
@@ -379,7 +423,7 @@ mod tests {
             territories,
             adjacency,
             biomes,
-        }) = meaning("create planet tiny")
+        }) = meaning("{create planet size:tiny}")
         else {
             panic!("not a create planet");
         };
@@ -441,7 +485,7 @@ mod tests {
     #[test]
     fn adjacency_agrees_with_itself() {
         let Meaning::Change(Transition::CreatePlanet { adjacency, .. }) =
-            meaning("create planet tiny")
+            meaning("{create planet size:tiny}")
         else {
             panic!("not a create planet");
         };
@@ -458,7 +502,7 @@ mod tests {
 
     #[test]
     fn a_size_that_is_not_a_planet_size_is_reported() {
-        let utterance = parse_line(&grammar(), "create planet enormous", 1)
+        let utterance = parse_line(&grammar(), "{create planet size:enormous}", 1)
             .unwrap()
             .unwrap();
         assert_eq!(

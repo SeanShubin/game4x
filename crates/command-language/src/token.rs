@@ -28,6 +28,13 @@ impl Token {
     }
 }
 
+/// The two characters that open and close a command.
+///
+/// **`P-321`: a command is written `{name field:value ...}`.** They are their own tokens
+/// rather than characters stuck to the word beside them, so `{work` is never one word and a
+/// failure can point at the brace itself.
+pub const BRACES: [char; 2] = ['{', '}'];
+
 /// The character that begins a comment, to the end of the line.
 ///
 /// **Not in `spec/console.md`.** A command file that sets up twelve territories is
@@ -52,7 +59,7 @@ pub fn tokenize(line: &str, line_number: usize) -> Vec<Token> {
         if character == COMMENT {
             break;
         }
-        if character.is_whitespace() {
+        if character.is_whitespace() || BRACES.contains(&character) {
             if !word.is_empty() {
                 tokens.push(Token {
                     span: Span::new(
@@ -60,6 +67,17 @@ pub fn tokenize(line: &str, line_number: usize) -> Vec<Token> {
                         Position::new(line_number, column),
                     ),
                     text: std::mem::take(&mut word),
+                });
+            }
+            // A brace is a token of its own, so that a missing one is reported where it
+            // should have been rather than as part of the word beside it.
+            if BRACES.contains(&character) {
+                tokens.push(Token {
+                    span: Span::new(
+                        Position::new(line_number, column),
+                        Position::new(line_number, column + 1),
+                    ),
+                    text: character.to_string(),
                 });
             }
         } else {
@@ -101,7 +119,22 @@ mod tests {
 
     #[test]
     fn a_line_splits_into_words() {
-        assert_eq!(words("land ark 1"), ["land", "ark", "1"]);
+        assert_eq!(
+            words("{deploy ark territory:1}"),
+            ["{", "deploy", "ark", "territory:1", "}"]
+        );
+    }
+
+    /// A brace is a word of its own even with no space around it.
+    ///
+    /// **That is why it is a token rather than a character stuck to its neighbour.** Without
+    /// it, `{deploy` is one word and no form's name ever matches, and the failure reported
+    /// would be about a word nobody typed.
+    #[test]
+    fn a_brace_is_its_own_word_however_it_is_written() {
+        assert_eq!(words("{start}"), ["{", "start", "}"]);
+        assert_eq!(words("{ start }"), ["{", "start", "}"]);
+        assert_eq!(words("{end turn}"), ["{", "end", "turn", "}"]);
     }
 
     #[test]
@@ -127,13 +160,14 @@ mod tests {
     /// Columns are what a failure message quotes, so they have to be right.
     #[test]
     fn every_word_knows_where_it_started() {
-        let tokens = tokenize("land ark 12", 4);
+        let tokens = tokenize("{deploy ark territory:12}", 4);
         let starts: Vec<(usize, usize)> = tokens
             .iter()
             .map(|t| (t.span.from.line, t.span.from.column))
             .collect();
-        assert_eq!(starts, [(4, 1), (4, 6), (4, 10)]);
-        assert_eq!(tokens[2].span.to.column, 12, "just past the last character");
+        // `{` `deploy` `ark` `territory:12` `}` - five words, and the brace is one of them.
+        assert_eq!(starts, [(4, 1), (4, 2), (4, 9), (4, 13), (4, 25)]);
+        assert_eq!(tokens[3].span.to.column, 25, "just past the last character");
     }
 
     #[test]
