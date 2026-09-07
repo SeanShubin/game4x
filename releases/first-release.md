@@ -346,7 +346,7 @@ only one who can move them.
 
 ### R-6 - The loop can be played through
 
-**to** code - **status** open - **cited** `faafb5f`, `2f38241` - **nothing in the code blocks it**, 2026-09-05
+**to** code - **status** open - **cited** `faafb5f`, `2f38241`, `53bd58d`, `58c8b4a`, `92786a9` - **nothing in the code blocks it**, 2026-09-05
 
 - **In** - `spec/control.md`, *a player wins by launching an Ark from a fully exploited planet*
 - **Vetted when** - A scenario reaches a fully exploited planet and launches an Ark, on the
@@ -357,7 +357,7 @@ only one who can move them.
 
 ### R-7 - Each recipe can be confirmed on its own
 
-**to** code - **status** open
+**to** code - **status** open - **cited** `747de8a`, `025eecb`, `fe3dc9b`, `3bab70e`, `2e9a06e`
 
 - **In** - `docs/process.md`, *the definitions and the commands are enough to derive the data dump
   by hand*, applied to one recipe rather than to a whole scenario
@@ -372,7 +372,7 @@ only one who can move them.
 
 ### R-8 - I can see which kinds behave alike
 
-**to** sean - **status** **built** 2026-09-07 - `d938c8a` - **evidence** a signature per kind computed from the tables, reported by the code lane. **Its grouping is empty** - fifteen kinds, fifteen signatures - which is `C-64` and is a question for you rather than a defect in the build
+**to** sean - **status** **built** 2026-09-07 - **cited** `d938c8a`, `79d8f1d` - **evidence** a signature per kind computed from the tables, reported by the code lane. **Its grouping is empty** - fifteen kinds, fifteen signatures - which is `C-64` and is a question for you rather than a defect in the build
 
 - **In** - `docs/process.md`, *I insist that the AI make its work verifiable to a human*, applied
   to a kind's behaviour rather than to a scenario's outcome
@@ -383,7 +383,7 @@ only one who can move them.
 
 ### R-9 - I can browse the reports without a script running
 
-**to** sean - **status** **built** 2026-09-07 - `dc6d341` - **evidence** every reference a link, a diffable sibling for every view, no page carrying a script, two shared stylesheets, and a page plus a sibling for each of the twelve territories. `S-64` built with it
+**to** sean - **status** **built** 2026-09-07 - **cited** `dc6d341` - **evidence** every reference a link, a diffable sibling for every view, no page carrying a script, two shared stylesheets, and a page plus a sibling for each of the twelve territories. `S-64` built with it
 
 - **In** - `docs/process.md`, *presentations are generated from data*, and *I insist that the AI
   make its work verifiable to a human*

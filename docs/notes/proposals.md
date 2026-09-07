@@ -802,7 +802,7 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-07 - **source** the - **corrected** 2026-09-07 by `C-65`
+**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-07 - **source** the - **corrected** 2026-09-07 by `C-65`
 specification lane, rewritten because four promotions changed what is open to you
 
 **Ten items, and four of them are new capabilities Sean approved today.** The reports are most of
@@ -1280,7 +1280,7 @@ first bullet, and never read by the scenario test.
 
 ### S-26 - The command language has to follow seven promotions, and they do not all land at once
 
-**to** code - **status** open - **cited** `d1d0e3e` - **raised** 2026-09-03 - **source** `P-211` through `P-217`, promoted
+**to** code - **status** open - **cited** `d1d0e3e`, `1716f6d` - **raised** 2026-09-03 - **source** `P-211` through `P-217`, promoted
 in `1f0f762` and `b74fa0a`
 
 **Sean wants the code caught up to the new format while he verifies the scenario by hand.** Seven

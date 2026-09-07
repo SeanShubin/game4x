@@ -21,16 +21,9 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-49** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
-- **S-26** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
-- **P-346** - `0361e25` Q-68 acted by P-346, and their remedy is better than the one my item implied · still open in `docs/notes/decisions.md`
 - **C-65** - `524ff31` P-347 and P-348 from the code lane, and C-65 corrects my own ordering · still open in `crates/outbox.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
-- **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
-- **R-7** - `747de8a` R-7's remainder: the world's shown once on one end-turn, and two things that found · still open in `releases/first-release.md`
-- **R-8** - `79d8f1d` Q-69: the equality half of R-8's equivalence had no case, and now has one · still open in `releases/first-release.md`
-- **R-9** - `dc6d341` R-9: every reference is a link, every view has a sibling, and no page has a script · still open in `releases/first-release.md`
 
 ## What is outstanding
 

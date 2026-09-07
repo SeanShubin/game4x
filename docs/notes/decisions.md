@@ -119,7 +119,7 @@ deleted. **Neither answer can be half-done.**
 
 ### P-346 - Three statements fix what a move costs, and only one of them is a mechanism
 
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** the quality lens's `Q-68` - **asks**
+**to** sean - **status** open - **cited** `0361e25` - **raised** 2026-09-07 - **kind** the quality lens's `Q-68` - **asks**
 a decision - **into** `releases/first-release.md` -> *Units and structures* and *Recipes*, and
 `spec/units.md`
 
