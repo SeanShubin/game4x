@@ -8,6 +8,24 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on durability and gravitating toward realism
+
+*Thinking of it thematically, a citizen has a durability that it can last without food, getting food
+resets its durability to max. For example, a human can go a certain amount of time without water, a
+different amount of time without food. So we don't want to add the complexity of a hyperrealistic
+simulation, but we do want the game mechanics to be such that they naturally gravitate that way.*
+
+**The reset is what made it one mechanism.** Without it, spoilage and starvation are two ideas; with
+it they are one rule and the difference is only whether a thing has an upkeep to pay. Food has none,
+so its number never resets and is a pure lifetime.
+
+**And the gravitating property is a real constraint on the shape**, not a preference: a number per
+thing now, a number per thing per upkeep resource later, keyed the way a deposit keys density by
+resource. Nothing about the decrement or the reset changes, so the cheap version is not a dead end.
+
+**Filed as `P-338`**, which asks him for the maximum per kind - the one thing with no default,
+because it sets how much slack a player has.
+
 ## Said 2026-09-07, on duration and what durable means
 
 *I am thinking there should be some term for things that go away after a certain duration. The

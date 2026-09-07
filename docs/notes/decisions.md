@@ -21,62 +21,63 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-338 - A thing may last a number of turns, and having no number is what durable means
+### P-338 - A thing lasts a number of turns, paying its upkeep resets that, and having no number is durable
 
 **to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
-own - **asks** a decision - **into** `spec/resources.md` -> the expires rule, or
-`spec/invariants.md`; and `releases/first-release.md` -> Recipes
+own - **asks** a decision - **into** `spec/resources.md` or `spec/invariants.md`, and
+`releases/first-release.md` -> Traits and Recipes
 
-**Your idea, and it explains why `P-336` exists.** The specification has a **boolean** and the
-release has a **number**, and neither the model nor the two documents ever met.
+**Your reset is the piece that makes it one mechanism rather than three.** With it, spoilage and
+starvation are the same rule and `P-336` and `P-337` both dissolve into this.
 
-- **`spec/resources.md`** has a table with an **expires** column - yes for food, no for metal and
-  energy - and *a resource that expires is lost when the turn ends, whether it was used or not*
-- **`releases/first-release.md`** declares `keeps` - *the number of turns it will last* - and `age`,
-  which turns one food into a food that keeps one less
-- **The model implements the boolean**: `end_of_turn_losses` discards all food at every ending
+**The rule.** A thing may carry a number of turns it lasts. **It decrements at each turn's end.
+Paying its upkeep resets it to its maximum. At zero the thing is gone. Having no number is what
+durable means.**
 
-**The rule, in your terms**: a thing may carry a number of turns it lasts. **It decrements at each
-turn's end, and at zero the thing is gone. Having no number is what durable means.**
+**Why that is one rule and not two.** Food carries a number and has **no upkeep**, so nothing ever
+resets it - the number is a pure lifetime and food goes when it runs out. A citizen carries a number
+**and** an upkeep, so eating resets it and not eating spends it. **Same trait, same decrement, same
+recipe** - the difference is entirely whether the thing has an upkeep to pay.
 
-**It needs no language construct, and the mechanism is already used four times.** You asked whether
-this wants generics, and whether an inheritance hierarchy is the shape. **It is neither** - the
-recipe language already dispatches on **a family and a trait**.
+**So `spoil` and starvation stop being separate ideas.** `age` is the decrement over any thing with
+the number; `spoil` is the removal at zero. Both are already recipes and both become **one cell
+wider** - `food` becomes `thing`, which the recipe language already supports.
 
-A recipe's **Kind** column takes *the kind or the family alone*, `thing` is the family meaning *every
-kind above*, and **Traits** constrains it. So `upkeep` is already **require 1 `thing`, with upkeep**,
-and `perish`, `refresh` and `move` name families too. **`upkeep` is your pattern working today**: it
-acts on anything carrying the trait and does nothing to anything that lacks it.
+**What this dissolves.**
 
-**So *do nothing if it is not present* needs no rule.** A recipe constrained on a trait does not
-match a thing without it. That falls out rather than being handled.
+- **`P-336`** - `age` is unimplemented and fires in no state. Under this it fires on anything with
+  the number, which is what the release always meant
+- **`P-337`** - a starved pioneer is marked unusable. Under this it **keeps working while its number
+  runs down and then perishes**, so `usable` is not needed and the state change is visible as the
+  number falling. **A citizen that cannot eat still works until it is gone**, which is what you
+  described
 
-**And `age` becomes a one-cell change.** `| age | world | consume | 1 | **food** | keeps at least 1 |`
-becomes `thing`. `spoil` - *consume 1 food, keeps 0* - becomes `thing` as well. **Two cells, and the
-whole mechanism is expressed.**
+**Three things I need from you, and the first is the only one with no default.**
 
-**Why there is no word for the category, which is what you were reaching for.** An inheritance
-hierarchy would need a `Perishable` above `Food`. **A trait needs no category** - a kind gains the
-behaviour by gaining the trait, and *durable* is then a statement about an absence rather than a
-type. So the word you could not find is one the design does not need.
+**1. The maximum for each kind.** Food is 1 today and the release says so. **A citizen and a pioneer
+need numbers and I will not invent them** - they set how much slack a player has, which is the game
+rather than the mechanism.
 
-**Two things I am still not deciding.**
+**2. What it is called.** You said *durability* thematically. `keeps` is declared, free, and reads
+oddly on a citizen; *durability* reads well on both and is a new word in a release `P-284` keeps
+closed.
 
-**1. What the trait is called.** `keeps` is declared and free, but you said *things* rather than
-resources and `keeps` reads oddly on a unit.
+**3. Where the rule lives.** `spec/resources.md` holds the boolean it replaces, but **this is about
+any thing, not a resource** - so `spec/invariants.md` may be the honest home, which is a larger
+claim.
 
-**2. Where the rule lives.** Replacing the boolean puts it in `spec/resources.md`; **a rule about any
-thing does not belong in the resources file**, and moving it to `spec/invariants.md` makes it
-something every other document obeys, which is a bigger claim than you may have meant.
-
-**`P-337` is a third concept and is not folded in here.** *Durable while upkeep is met* is a
-condition rather than a count, and whether it should become a count is the question that item now
-carries.
+**On gravitating rather than simulating.** You want a human to last longer without food than without
+water without building that. **The shape admits it without redesign**: a number per thing today, and
+a number **per thing per upkeep resource** later, keyed the way a deposit keys density by resource.
+**Nothing about the decrement or the reset changes** - only how many numbers a thing carries. So the
+cheap version is not a dead end, which is the property you asked for.
 
 ### P-336 - `age` is declared, fires in no state, and `keeps` is not implemented
 
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** contradiction - **asks** a decision
 - **into** `releases/first-release.md` -> Recipes, and Traits
+
+**Held under `P-338`, 2026-09-07.** Your thematic model - a thing lasts a number of turns, and paying its upkeep resets that - makes this one case of a single rule rather than a question of its own. **It dissolves if `P-338` lands** and comes back only if it does not.
 
 **The code lane's `C-61`, found by trying to build `R-7`'s example for it.** Verified rather than
 taken.
@@ -107,6 +108,8 @@ expires* without saying whether food ages first.
 
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** contradiction - **asks** a decision
 - **into** `releases/first-release.md` -> Recipes, and Traits
+
+**Held under `P-338`, 2026-09-07.** Your thematic model - a thing lasts a number of turns, and paying its upkeep resets that - makes this one case of a single rule rather than a question of its own. **It dissolves if `P-338` lands** and comes back only if it does not.
 
 **The code lane's `C-62`, from the same attempt to build an example.** Verified.
 
