@@ -29,6 +29,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-24** - `1c7f62f` S-24: the commands artifact, and the recipe each one fired · still open in `docs/notes/proposals.md`
 - **P-311** - `26ccf43` Promote P-312, and move P-311 to questions.md where the rule I promoted says it belongs · still open in `docs/notes/decisions.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
+- **Q-63** - `17530bd` Q-63: the gate was red and I said it was green, twice · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 

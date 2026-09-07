@@ -311,6 +311,47 @@ fn derived_from(body: &[&str]) -> Option<String> {
     (!rule.is_empty()).then(|| rule.to_lowercase())
 }
 
+/// Items sitting in the wrong one of the two files addressed to Sean.
+///
+/// **`S-53`, and it fired on the specification lane the day the rule landed.** `P-311` was
+/// filed into `proposals.md` while asking a decision, and **Sean caught it two hours later
+/// rather than a check.** `docs/process.md` -> What I read, and what I do: `decisions.md`
+/// holds choices only he can make, `proposals.md` holds words for him to approve, and an
+/// item lives in one at a time.
+///
+/// **The routing field is the whole of the test**, which is why the file is named for it.
+/// `asks a decision` in the proposals file is misfiled one way; `asks approval` in the
+/// decisions file is misfiled the other. One comparison against a field already parsed, and
+/// **both directions**, because a check that only looked for stranded decisions would pass
+/// while approvals piled up where he never looks for them.
+///
+/// Returns how many items carry an `asks` field at all beside the offences, because zero
+/// offences against zero items carrying the field is the same green as a rule that holds.
+pub fn misfiled_by_asks(items: &[Item]) -> (usize, Vec<String>) {
+    let mut population = 0;
+    let mut wrong = Vec::new();
+    for item in items {
+        let home = match item.outbox.as_str() {
+            "docs/notes/proposals.md" => "approval",
+            "docs/notes/decisions.md" => "a decision",
+            _ => continue,
+        };
+        // `field` takes one word, and `a decision` is two.
+        let Some(asks) = whole_field(&item.fields, "asks") else {
+            continue;
+        };
+        let asks = asks.trim_end_matches(['·', '-']).trim();
+        population += 1;
+        if asks != home {
+            wrong.push(format!(
+                "{} in {} asks {asks}, and that file holds what asks {home}",
+                item.id, item.outbox
+            ));
+        }
+    }
+    (population, wrong)
+}
+
 /// Every proposal the queue records as withdrawn.
 ///
 /// **Withdrawn is not promoted and is not rejected.** A proposal that lands leaves the queue
@@ -1132,6 +1173,54 @@ Not closed, so not orphaned.
              misfiled row, which `Q-61` says is a ledger defect and not a withdrawal; C-73 \
              is not closed at all"
         );
+    }
+
+    /// An item in the wrong one of Sean's two files is reported, both directions.
+    ///
+    /// **It fired on the specification lane the day the rule landed and a person caught it,
+    /// not a check** - `P-311` filed into `proposals.md` while asking a decision, found by
+    /// Sean two hours later. Today the real files are clean, so the cases are written out;
+    /// a test reading them would pass over nothing.
+    #[test]
+    fn an_item_asking_the_wrong_thing_for_the_file_it_is_in_is_reported() {
+        let asking_a_decision = "\
+### P-311 - a choice only Sean can make
+
+**to** sean · **status** open · **asks** a decision
+";
+        let asking_approval = "\
+### P-312 - words for Sean to approve
+
+**to** sean · **status** open · **asks** approval
+";
+        let mut items = parse(asking_approval, "docs/notes/proposals.md");
+        items.extend(parse(asking_a_decision, "docs/notes/decisions.md"));
+        let (population, wrong) = misfiled_by_asks(&items);
+        assert_eq!(population, 2, "both carry an `asks` field");
+        assert!(
+            wrong.is_empty(),
+            "each is in the file named for what it asks: {wrong:?}"
+        );
+
+        // Now each in the other's file, which is the pair of failures.
+        let mut swapped = parse(asking_a_decision, "docs/notes/proposals.md");
+        swapped.extend(parse(asking_approval, "docs/notes/decisions.md"));
+        let (population, wrong) = misfiled_by_asks(&swapped);
+        assert_eq!(population, 2);
+        assert_eq!(
+            wrong.len(),
+            2,
+            "both directions, because a check looking only for stranded decisions would pass \
+             while approvals piled up where he never looks for them: {wrong:?}"
+        );
+        assert!(wrong[0].contains("P-311") && wrong[0].contains("proposals.md"));
+        assert!(wrong[1].contains("P-312") && wrong[1].contains("decisions.md"));
+
+        // An item in neither file is not this check's business, and an item with no `asks`
+        // is not in the population - zero offences over zero items is a green that means
+        // nothing.
+        let elsewhere = parse(asking_a_decision, "crates/outbox.md");
+        assert_eq!(misfiled_by_asks(&elsewhere), (0, Vec::new()));
     }
 
     /// An id that is in both of Sean's files during a move is reported.

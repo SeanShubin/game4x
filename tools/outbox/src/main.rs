@@ -20,8 +20,8 @@ use std::path::{Path, PathBuf};
 const DEPTH: usize = 400;
 
 use outbox::{
-    Item, LIMIT, Outboxes, duplicate_ids, history, open_by_addressee, pending, read, same_section,
-    unclosed,
+    Item, LIMIT, Outboxes, duplicate_ids, history, misfiled_by_asks, open_by_addressee, pending,
+    read, same_section, unclosed,
 };
 
 fn main() {
@@ -348,6 +348,18 @@ fn complain(all: &Outboxes) -> Vec<Note> {
         notes.push(Note::Blocking(format!(
             "the id {id} is used in {} - a cited id must resolve to one item",
             wheres.join(" and ")
+        )));
+    }
+    // Advisory for the same reason: both of Sean's files are the specification lane's, and
+    // this lane must not stop them committing over one. `S-53`.
+    let (asked, misfiled) = misfiled_by_asks(&all.items);
+    if !misfiled.is_empty() {
+        notes.push(Note::Advisory(format!(
+            "{} of {} item(s) carrying an `asks` field are in the wrong one of the two files \
+             addressed to Sean:\n  {}",
+            misfiled.len(),
+            asked,
+            misfiled.join("\n  ")
         )));
     }
     // Advisory, and named as such rather than kept out of the list. The two headings it
