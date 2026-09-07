@@ -63,120 +63,146 @@ Two limits Claude holds itself to:
 **Two, and both came out of your reading of the expected data rather than out of a
 review.** They are independent of each other.
 
-### P-308 - The `phase` cell describes what the trait admits instead of naming it
+### P-311 - Containment is a tree in the specification and a column in the data
 
-**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** gap -
-**shape** rows - **asks** approval - **into** `releases/first-release.md` -> Traits, and one sentence
-above the table
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **asks** a decision -
+**into** `releases/first-release.md` -> the dump's relations
 
-**Rewritten down to one row.** It offered two; `houses` is being deleted by `P-310` rather than
-named, so naming it would be work on a row that goes.
+**`spec/logistics.md` -> Containment is precise and none of it is visible in what you read.** Every
+thing is in at most one other; **the game is the one thing that is in nothing, so containment is a
+tree**; capacity is per kind with a stored **total**, a derived **used** and a derived **available**.
 
-**You asked what values `phase` can have and the release could not tell you.** I read
-`crates/game-model/src/game.rs` to answer, which is the release failing at the one thing it is for.
+**What the dump has instead.** Eight per-kind relations where the container is a column:
+`{store territory:1 resource:food amount:5}`, `{structure territory:1 structure:extractor count:3}`.
+Three consequences, and the third is why you cannot see what you asked to see:
 
-The rule above the table, then the row.
+- **Things inside containers are counted, not named.** `structure` gives a count, so no individual
+  store or extractor has an identity - you cannot point at one and ask what is in it
+- **There is no *thing is in thing* relation at all**, so the tree exists in the specification and
+  nowhere in the data
+- **Capacity is printed for exactly one case.** `{territory-resource territory:1 resource:food
+  capacity:3 density:4 built:3}` is a territory's capacity for extractors of a resource. **No store
+  prints a capacity, and used and available are printed nowhere**, though the specification says both
+  are derived and cannot disagree with what is there
 
-> Where a trait admits a closed set of values, its **Values** cell names them, or says where they
-> are listed.
+**Two relations would carry it, and the shape of the first is the decision.** Ids are unique among
+things of a kind rather than globally - the *Traits* table says so - so a container reference needs
+both a kind and a number, and there are two ways to write one.
 
-| Trait     | Of       | Values         | Stored or derived |
-| --------- | -------- | -------------- | ----------------- |
-| **phase** | the game | design or play | stored            |
+**A. A uniform column, so the relation is one shape.**
 
-**Why it is live rather than tidy.** `design` and `play` are the two variants of `Phase` in
-`game-model`, and `play` is printed in `scenario/expected/play.4x`. Under `P-284` a word that is not
-a kind, a trait or a trait value may not appear - so `play` is a forbidden word today purely because
-this cell never names it. That is `Q-57` from the quality lens and `C-37` from the code lane.
+```
+{thing kind:game     id:1}
+{thing kind:territory id:1 in-kind:game      in-id:1}
+{thing kind:store     id:1 in-kind:territory in-id:1}
+```
 
-**`control` was examined and is deliberately not changed**, which is where the code lane's reading
-and mine part. Its cell reads *held by a player, or unclaimed*, and a player is a reference rather
-than a member of a closed set - there is no table of players to point at, so it does not fail the
-rule above, which is scoped to closed sets on purpose. It is also not printed: `dump.rs` records
-that you chose to drop it.
+The tree is readable by one rule and a cycle is checkable by one pass. The cost is two new trait
+names, and `in-kind`/`in-id` appear nowhere in the game today.
 
-**The count, against a named population.** Nineteen rows in *Traits*, read one by one rather than
-grepped: six name their values, ten are numbers or free text, three describe. Of the three, `phase`
-changes here, `houses` is deleted by `P-310`, and `control` is argued above. I read every row because
-the code lane's first classifier scored `phase` as naming its values on the strength of the word
-*or*.
+**B. The container's kind is the column, which is what the dump does now.**
 
-### P-309 - The phase gate is two-way and the specification states one way
+```
+{thing kind:store id:1 territory:1}
+```
 
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** text -
-**asks** approval - **into** `spec/console.md` -> Phases, after the `start` bullet
+Nothing new is introduced and it matches `{store territory:1 ...}`. The cost is that the relation
+has a different column per container kind, so it is not one relation - and reading the tree means
+knowing every kind that can contain.
 
-**A correction first, because I told you the wrong thing.** I said nothing states which commands
-belong to which phase. `spec/console.md` does - *Available only before `start`* lists the six, and
-*Phases* already says a game has two and that `start` ends the first. **What is missing is smaller
-and is the other direction.**
+**My recommendation is A**, because the tree is the thing you want to see and B cannot be walked
+without already knowing the answer. But it adds vocabulary to a release that `P-284` deliberately
+keeps closed, so it is yours.
 
-> - A command of one phase is refused in the other. The five design commands are refused once
->   `start` has run, and every other command is refused before it.
+**The second relation follows the first and is not a separate decision.** Capacity per container,
+per kind, with the trait value where there is one:
 
-**What the code does, which is symmetric.** `Game::after` checks both ways before anything else
-happens and returns `WrongPhase` either way. Nothing is partially available: the partition is total,
-and `start` is the only crossing.
+```
+{capacity of-kind:territory of-id:1 for:extractor by:resource value:metal total:3 used:3}
+{capacity of-kind:territory of-id:1 for:store                            total:6 used:2}
+```
 
-**Why *available only before `start`* does not already say it.** It says where the six may run. It
-does not say that `land ark 1` is **refused** before `start` rather than merely unlisted - and that
-is the half a person deriving the dump by hand would get wrong, because the design half of the
-scenario is 63 commands long and every play command is unavailable throughout it.
+`available` is deliberately absent: the specification says it is the total less the used, and
+`P-245` says a document that restates another links to it rather than listing it. **Say if you want
+it printed anyway** - a number you can check by subtracting is different from one you must.
 
-**The evidence exists and predates this proposal**, which is why this is a gap in the writing rather
-than in the build. `crates/game-console/tests/first_release.rs` asserts both directions at the
-boundary - `land ark 1` refused before `start`, `add ark orbit` refused after it - and
-`crates/game-model/src/game.rs` carries two more.
+**What this is for.** An HTML tree in `reports/`, collapsible with `<details>`, generated from these
+two relations - so a collapsed container still reads `3/3 extractors` and you can see at a glance
+what is full. `S-54` is the build and waits on this.
 
-**Five and not six.** The list under *Available only before `start`* has six entries, but `start`
-itself is the crossing rather than a design command, so the sentence says five. If you would rather
-it counted `start` among them, that is the word to change.
+### P-312 - `houses` is now a trait no recipe uses and no kind carries
 
-### P-310 - `grow` requires a fiction and omits the cap the specification already states
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** cleanup - **shape** instruction -
+**asks** approval - **into** `releases/first-release.md` -> Traits, the `houses` row
 
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** recovered - **shape** rows -
-**asks** approval - **into** `releases/first-release.md` -> Recipes, the three `grow` rows
+**Filed immediately after the promotion that made it stale**, which is what the protocol requires
+rather than widening that promotion to cover it.
 
-**Nothing here is new.** `spec/population.md` already says it: *increases by the minimum of
-extra-food and total-citizens, at most doubling if there is plenty of food.* The code computes
-exactly that. **Only the release disagrees**, and it is the artifact you derive the dump from.
+**`P-310`'s destination was the three `grow` rows and nothing else**, so the *Traits* table still
+declares `houses` at line 116 - *a thing that contains things · whether people live in it · stored*.
+The recipe that referenced it is gone, no kind carries it, and `game-model` never read it. **It is
+now declared and referenced nowhere at all**, which is worse than when it was merely fictional: a
+reader has no remaining clue that it does nothing.
 
-| Recipe   | Owner | Role    | Qty                                                  | Kind    | Traits  | Where |
-| -------- | ----- | ------- | ---------------------------------------------------- | ------- | ------- | ----- |
-| **grow** | world | consume | the lesser of the surplus food and the citizens here | food    | surplus |       |
-|          |       | produce | the lesser of the surplus food and the citizens here | citizen |         |       |
+**The instruction:** delete the `houses` row from *Traits*.
 
-**Three rows become two.** The `require 1 thing, houses` row goes, and the two quantities stop being
-`1`.
+**The check the promoting commit runs**: `grep -n houses releases/first-release.md` finds nothing,
+and the *Traits* table has eighteen rows where it had nineteen.
 
-**Why `houses` goes rather than gets its values named.** It is declared as a trait, and **no kind
-carries it** - the only three occurrences in the tree are its own declaration, the qualifier
-constant, and this recipe row. `game-model` never reads it: `grow` is `population_after(citizens,
-food)`, which takes two arguments and neither is housing. So the recipe publishes a requirement that
-nothing can satisfy and nothing enforces, in `reports/recipes.md`, which is one of the four artifacts
-a person derives the dump with.
+**Why this is a separate item rather than a wider `P-310`.** A promotion may change only line
+wrapping, bullet-versus-paragraph and heading level, so a promotion that quietly took a second table
+with it would be the thing the protocol exists to prevent - and I told you `P-310` deleted `houses`
+when its destination line says the recipe rows. That sentence in `P-308` was ahead of what `P-310`
+actually offered.
 
-**Why the quantities change.** At 2 citizens and 6 food the table as written says four new citizens,
-one per surplus food. The specification and the code both say two. **The wording is
-`spec/population.md`'s own** - *the minimum of extra-food and total-citizens* - said in the table's
-vocabulary.
+**What follows for the code lane**, filed when this lands: `prototypes/kinds` mirrors the release
+cell for cell, so its `houses` trait row, the `HOUSES` qualifier and the `traited(Require, 1, THING,
+&HOUSES)` line go with it, and `reports/recipes.md` regenerates. The gate is red until they do -
+`the_release_tables_are_the_ones_in_this_crate` compares the two copies, which is exactly the check
+doing its job.
 
-**A correction to what I told you an hour ago.** I said the table has a `limit` role for exactly
-this. It does not: `limit` is a maximum on what is **present before** the recipe runs - `limit 0
-garrison` is how `deploy ark` requires unheld ground - so it cannot cap a production. An expression
-in **Qty** can, and the table already does it in `work`: *`$where`'s density for that resource*. This
-invents no new machinery.
-
-**What this leaves for the code lane, and I file it when this lands.** `prototypes/kinds` mirrors the
-release cell for cell, so the `houses` trait row, the `HOUSES` qualifier and the `traited(Require,
-1, THING, &HOUSES)` line all go with it, and `reports/recipes.md` regenerates. The model needs no
-change - it already behaves this way.
-
-**Deliberately not settled here**: whether population should ever be housing-limited. You said *not
-to say we can't put them in later*, so this is scoping rather than rejection, and `houses` should not
-be re-proposed as a new idea.
+**Still deliberately not settled**: whether population should ever be housing-limited. You said *not
+to say we can't put them in later*, so this is scoping and `houses` should not come back as a new
+idea.
 
 ## Addressed to other perspectives
+
+### S-54 - The containment tree Sean asked to see, and the scenario it is generated from
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** Sean, wanting to see the
+containers and capacities and how everything fits together
+
+**Do not build until `P-311` is promoted.** It asks a decision - how a container is referenced,
+given ids are unique per kind rather than globally - and the relation's shape depends on the answer.
+Filed now so it arrives as one item and so you can say if any of it is wrong before it is decided.
+
+**Three pieces, and the third is the one with a trap in it.**
+
+**1. Two relations in the dump**, whichever shape `P-311` settles: every thing with its kind, its id
+and what contains it; and capacity per container per kind, with a stored total and a derived used.
+`spec/logistics.md` -> Containment is the whole specification and needs no interpretation from me.
+
+**2. A collapsible HTML tree in `reports/`**, generated from those two relations, beside the
+`.md`/`.html` pairs already there and linked from `index.html`. `<details>` and `<summary>` collapse
+natively - **no JavaScript and no library**, which is what makes it readable from `file://` and
+diffable. **Put `used/total` on the summary line**, because a collapsed container that cannot say
+whether it is full defeats the reason he wants it collapsible.
+
+**3. A small scenario to generate it from, and it is not the main one.** Two territories, not
+twelve, arranged so every containment relationship appears and **at least one capacity sits at its
+bound** - he asked to see how things fit together, and *full* is the case that shows it. The main
+scenario is 199 commands and cannot be held in the head.
+
+**The trap, and it is why the scenario is generated rather than written.** A hand-authored tree can
+show a structure the code cannot produce. **That failed three times today in this repository** -
+`houses` requiring something no kind carries, `grow` publishing quantities the model does not
+compute, `phase` printing a value the release never named. Each was a published artifact describing
+behaviour that is not there, in the set of four he derives the dump from. A generated tree cannot
+lie about the model; a drawn one can.
+
+**One thing to tell me rather than decide.** If the two relations turn out to make the eight per-kind
+relations redundant, that is a bigger change than this item asks for and it is Sean's, not yours and
+not mine. **Say so and I file it** - do not fold it in.
 
 ### S-53 - `docs/notes/questions.md` exists and `tools/outbox` cannot see it
 
@@ -1786,6 +1812,9 @@ work the release exists to order.
 | P-306, the sentence saying inter-lane items have no limit, corrected                                                         | `docs/process.md` -> What I read, and what I do                                                                                              | 2026-09-06 |
 | P-305, when an item closes, and the withdrawal that would otherwise swallow one                                              | `docs/process.md` -> Outboxes and the index                                                                                                  | 2026-09-06 |
 | P-307, the process document stops calling its subject a game                                                                 | `docs/process.md`, six places                                                                                                                | 2026-09-06 |
+| P-308, the phase cell names its values, and closed sets say where they are listed                                            | `releases/first-release.md` -> Traits                                                                                                        | 2026-09-06 |
+| P-309, a command of one phase is refused in the other                                                                        | `spec/console.md` -> Phases                                                                                                                  | 2026-09-06 |
+| P-310, grow loses the houses requirement and gains the cap the specification states                                          | `releases/first-release.md` -> Recipes                                                                                                       | 2026-09-06 |
 
 ## Rejected
 

@@ -10,6 +10,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 - A game has two phases. In the first the world is designed. In the second it is played.
 - `start` ends the first and begins the second.
+- A command of one phase is refused in the other. The five design commands are refused once
+  `start` has run, and every other command is refused before it.
 - The rules of the game govern the second phase. In the first, the designer is the cause of what
   appears.
 

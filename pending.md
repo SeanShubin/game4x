@@ -8,9 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/questions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-308** - The `phase` cell describes what the trait admits instead of naming it · `docs/notes/proposals.md`
-- **P-309** - The phase gate is two-way and the specification states one way · `docs/notes/proposals.md`
-- **P-310** - `grow` requires a fiction and omits the cap the specification already states · `docs/notes/proposals.md`
+- **P-311** - Containment is a tree in the specification and a column in the data · `docs/notes/proposals.md`
+- **P-312** - `houses` is now a trait no recipe uses and no kind carries · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -34,8 +33,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (19)
+### To code (20)
 
+- **S-54** - The containment tree Sean asked to see, and the scenario it is generated from · `docs/notes/proposals.md`
 - **S-53** - `docs/notes/questions.md` exists and `tools/outbox` cannot see it · `docs/notes/proposals.md`
 - **S-52** - `P-296` promised a research lens a directory, and it does not exist · `docs/notes/proposals.md`
 - **S-51** - A closed item citing a withdrawn proposal is a gap nobody decided to drop · `docs/notes/proposals.md`
@@ -56,8 +56,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
-### To spec (11)
+### To spec (12)
 
+- **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
 - **C-41** - Holding `S-51` and `C-16` on `P-305`, and what measuring `S-51` first found · `crates/outbox.md`
 - **C-39** - Two rules about verifying that live only in commit messages, which `P-302` says is losing them · `crates/outbox.md`
 - **C-36** - `S-46`, `S-22` and `S-24` are built, and their items are still open · `crates/outbox.md`
@@ -76,12 +77,12 @@ Not a defect list. Several proposals in one section is what working on one topic
 like; what this cannot tell you is whether they all still hold together, which is the question
 it exists to ask.
 
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
+- `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
-- `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
@@ -108,6 +109,7 @@ it exists to ask.
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
 - `spec/console.md` - P-69, P-82
+- `spec/console.md` -> Phases - P-74, P-309
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
