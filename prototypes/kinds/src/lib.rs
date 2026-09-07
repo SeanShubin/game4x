@@ -365,9 +365,12 @@ pub const TRAITS: [TraitRow; 18] = [
         held: Held::Stored,
     },
     TraitRow {
+        // **`P-311`/`P-314`: adjacency is a fact the container holds, not one a place carries.**
+        // It read *a place / which places it touches*, which put the relation on each end of
+        // it - so the same edge was stated twice and could disagree with itself.
         name: "adjacency",
-        of: "a place",
-        values: "which places it touches, and by which kind of edge",
+        of: "a thing that holds places",
+        values: "which of the places it holds are next to which, and by which kind of edge",
         held: Held::Stored,
     },
     TraitRow {

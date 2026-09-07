@@ -159,9 +159,10 @@ instances and declining to file them, because two are this lane's
 **derived from** an insight that lives only in a conversation, a note, or an operating file is lost -
 `docs/process.md`, `P-302`
 
-**Four instances, three lanes, one day**, which is the bar this repository usually uses. The lens
-found three and declined to file it because two of them are mine; the fourth is mine and neither of
-us had counted it.
+**Five instances, three lanes, one day**, which is past the bar this repository usually uses. The
+lens found three and declined to file it because two of them are mine; the fourth is mine and
+neither of us had counted it. **The fifth was found by Sean**, looking at a shell this lane had told
+him was idle.
 
 - **`S-51`** says in its own words that it *reports and does not gate*. The change that built it made
   the report a `complain()`, which exits 2 under a hook running `set -e`. **It blocked its own commit
@@ -179,10 +180,19 @@ us had counted it.
   that rule this morning** - `ba9bd41`, the promotion checker - and then, editing `tools/outbox`,
   wrote a one-line match string against a statement `cargo fmt` had rewrapped across six. It matched
   nothing.
+- **And a fifth, found by Sean rather than by a lane.** `CLAUDE.md`: *write a script to a file
+  before running it; never assemble one inside a shell string. A file has one level of quoting.*
+  **This lane built a file-based helper on that rule at the start of the day and used it for every
+  edit**, then kept reaching for inline heredocs anyway. Two ate their backslashes - `[^"\]` arrived
+  as `[^"\]`, `'\'` as `'\''` - and were patched around rather than recognised. **The third wedged
+  a shell for two hours**: a stray `cat > file` with no argument, which reads standard input and
+  waits, so the heredoc after it never ran at all.
+
 
 **What makes it one shape rather than four mistakes.** The rule is **written, true, and present** in
-each case. Nothing was stale, nothing was mismeasured, and in three of the four the person who failed
-to run it is the person who wrote it - twice within the same hour.
+each case. Nothing was stale, nothing was mismeasured, and in four of the five the person who failed
+to run it is the person who wrote it - twice within the same hour, and once against a rule that
+lane had built a tool to obey that same morning.
 
 **Distinct from the two shapes already recorded, and the lens drew both lines.** `Q-54` is a *reason*
 that is false; here the reason is sound. `C-28` is an instrument answering a **narrower question**
@@ -190,7 +200,8 @@ than the one asked and returning a plausible number; here the instrument is corr
 picked up at all**. The failure is not in the rule and not in the check - it is that neither was
 applied to the work stating it.
 
-**Three of the four have a mechanical defence, and one resists.** The first version of this item
+**Three of the five have a mechanical defence, one resists, and one has a defence nobody has
+built.** The first version of this item
 said one did, and drew the wrong conclusion from it. **The quality lens refuted that by applying
 this item's own standard to its own instances**, which is the shape the item is about, arriving on
 the item itself.
@@ -210,6 +221,12 @@ The standard is not *does a tool detect that the rule went unapplied* - nothing 
   `exit_code` is a function an advisory note cannot change, with a test that says so.
 - **The third resists and is the lens's own.** A discriminator proposed from the single case that
   suggested it. A convention requiring a population is a habit, not a tool.
+- **The fifth admits one and does not have it.** A command that reads standard input when nobody
+  meant it to is a hang, and a hang is the quietest failure of the five - the harness reported the
+  job moved to the background and promised a notification on completion, so **the silence read as
+  work in progress for two hours**. Redirecting stdin from nothing on a non-interactive command
+  turns that wait into an immediate end. Not built: it is a change to how this lane drives a shell
+  rather than to anything in the repository, and it is Sean's shell.
 
 **So the conclusion is the opposite of what this item first drew.** *No check can ask whether a rule
 was applied* is true and is the wrong question to leave a reader with, because it reads as *nothing
