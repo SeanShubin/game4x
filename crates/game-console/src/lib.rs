@@ -22,6 +22,7 @@ pub mod grammar;
 pub mod report;
 pub mod state;
 pub mod tree;
+pub mod worked;
 
 use command_language::{Failure, Grammar, parse_line};
 use game_model::{Game, Rejection};
