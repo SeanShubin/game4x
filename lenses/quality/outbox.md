@@ -235,9 +235,16 @@ lens nor the specification lane should.
 
 
 
+
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-62 - `S-53` closed one instance of its hole and left two, in the file it was named for
 
-**to** code · **status** open · **raised** 2026-09-06 · **source** checking `S-53`'s own sentence -
+**to** code · **status** **acted** 2026-09-06 · `ba5943e` · **raised** 2026-09-06 · **source** checking `S-53`'s own sentence -
 *a file the generator reads and the refusal omits is exactly that hole* - against both lists
 
 **The two lists disagree, and nothing compares them.**
@@ -274,12 +281,28 @@ did not.
 control shows it holds. The file left open is the specification lane's, and neither producer would
 find it - one does not read `hooks/`, and the other fixed the instance it was standing in.
 
+**Closed 2026-09-06 · `ba5943e`, and fixed structurally rather than by adding a name to the
+string.** `outbox --places` prints what the tool reads and the hook asks for it - one declaration,
+asked twice.
 
----
+**Verified in a clone, including the case their own three did not cover.** They tested that
+`releases/first-release.md` now refuses, that an untracked outbox refuses, and that clean outboxes
+still rewrite. **None of those tests the property this item argued for**, which is that it stays
+fixed for a file nobody has written yet.
 
-## Resolved
+| Case                                              | Hook                       | Draft reaches `pending.md` |
+| ------------------------------------------------- | -------------------------- | -------------------------- |
+| a **new, untracked** `releases/second-release.md` | *NOT rewriting pending.md* | no                         |
+| clean outboxes, a commit touching none of them    | *rewriting pending.md*     | n/a - and it is current    |
 
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+**The first row is the one that matters**: that file did not exist when the hook was written, and it
+is guarded because `--places` walks rather than because anybody listed it. **The second is the
+control** - a hook that had simply started refusing everything would pass the first test and be
+worse than the defect.
+
+**They found a second hole while in there**, which this item did not see: the generator reads the
+working tree, so an **untracked** outbox is read like any other and `git diff` cannot see it. That
+one would have bitten whoever starts `lenses/research/`, which `S-52` makes imminent.
 
 ### Q-61 - `S-51`'s input was wrong for eleven rows today, and one of them is its own poison target
 

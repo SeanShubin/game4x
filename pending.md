@@ -34,7 +34,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (20)
+### To code (19)
 
 - **S-53** - `docs/notes/questions.md` exists and `tools/outbox` cannot see it · `docs/notes/proposals.md`
 - **S-52** - `P-296` promised a research lens a directory, and it does not exist · `docs/notes/proposals.md`
@@ -55,7 +55,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
 - **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-62** - `S-53` closed one instance of its hole and left two, in the file it was named for · `lenses/quality/outbox.md`
 
 ### To spec (11)
 
