@@ -67,6 +67,7 @@ Every territory has total capacity for at least one food extractor.
 | **labor**     | what working a machine takes; a citizen provides it each turn                                                |
 | **territory** | a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource |
 | **orbit**     | a place above one territory, which holds units and nothing else                                              |
+| **deposit**   | what a territory's ground offers of one resource, and how richly                                             |
 
 ## Families
 
@@ -117,7 +118,7 @@ are listed.
 | **fuel**           | a unit                                  | how much energy its tank holds                                            | stored                                           |
 | **upkeep**         | a thing with upkeep                     | food per turn                                                             | stored                                           |
 | **metal in it**    | whatever is built                       | a number                                                                  | derived: its binding plus the metal in its parts |
-| **density**        | a territory, per resource               | a number                                                                  | stored                                           |
+| **density**        | a deposit                               | a number                                                                  | stored                                           |
 | **total capacity** | a territory, per kind                   | a number                                                                  | stored                                           |
 | **control**        | a territory                             | held by a player, or unclaimed                                            | derived: a citizen of that player is there       |
 | **biome**          | a territory                             | one of the biomes                                                         | stored                                           |

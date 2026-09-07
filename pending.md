@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-321** - The command form is `{name field:value ...}`, and the positional statement goes · `docs/notes/proposals.md`
-- **P-322** - A deposit is a thing, so a territory's density has somewhere to be written · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -85,13 +85,13 @@ it exists to ask.
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
+- `spec/console.md` -> The language - P-254, P-287, P-284, P-321
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320
-- `spec/console.md` -> The language - P-254, P-287, P-284
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> All lanes - P-247, P-248
@@ -100,6 +100,7 @@ it exists to ask.
 - `docs/process.md` -> What this document has to be - P-302, P-303
 - `docs/process.md` -> Who writes what - P-271, P-316
 - `docs/process.md`, a new section - P-204, P-211
+- `releases/first-release.md` -> Kinds, Traits - P-192, P-322
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270

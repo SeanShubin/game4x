@@ -38,20 +38,6 @@ descriptions sort in**, so the same state is always the same bytes.
 **Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
 other word is wrong about the game rather than describing it.
 
-A command is a verb followed by arguments, one command to a line. A territory is named by its
-id, a structure by its kind and the territory it is in.
-
-```
-land ark 1
-move pioneer 7
-build extractor 3 metal
-produce pioneer 11
-work 4 extractor 3 metal
-end turn
-show territory 5
-help move
-```
-
 ## Commands
 
 - Commands to query the game state are available

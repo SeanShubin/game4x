@@ -60,86 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Two, and both came from [decisions.md](decisions.md) with their questions answered.** `P-321`
-is the command form and `P-322` is where a territory's density lives.
-
-### P-321 - The command form is `{name field:value ...}`, and the positional statement goes
-
-**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
-own - **shape** instruction - **asks** approval - **into** `spec/console.md` -> The language, the
-paragraph at line 41 and the fenced block that follows it
-
-**You chose the named form.** This removes the statement that contradicts it, so `spec/console.md`
-states one form rather than two.
-
-**The instruction.** Delete the paragraph *A command is a verb followed by arguments, one command to
-a line. A territory is named by its id, a structure by its kind and the territory it is in.* and the
-fenced block of eight examples that follows it. **Line 60 then stands as the only statement of the
-form**: *A command is written `{name field:value ...}`. Its name is the words that open it and its
-arguments are named.*
-
-**The check the promoting commit runs**: `spec/console.md` contains no *verb followed by arguments*,
-and the eight positional examples are gone.
-
-**A correction of my own first version.** It said the positional statement was at line 18. **It is at
-line 41** - I took the number from the code lane's `C-48` without opening the file, in a proposal
-about a contradiction, on the day this is being researched. The statements are otherwise exactly as
-`C-48` reported them and I have now read both.
-
-**What this deliberately does not do: replace the examples.** Eight worked examples are worth having
-and **every one of them encodes a choice you have not made.** `land ark 1` could become `{land ark
-territory:1}`, taking *land ark* as the name because line 60 says the name is the words that open
-it - or `{land kind:ark territory:1}`, or something else. `work 4 extractor 3 metal` has a count, a
-place and a resource and no rule says what any of them is called. **Filing my guesses as approved
-text is the thing a proposal asking approval may not contain**, so the examples come back as their
-own item once the field names are settled.
-
-**What it costs until then.** `spec/console.md` states the form and shows no example of it, which is
-thinner than it was. **The scenario is unaffected either way** - `scenario/commands/play.4x` is 199
-positional commands and rewriting it is `S-26`, not this.
-
-**One thing that follows and is not in scope.** The named form is the same shape as a description -
-a name and named fields - so a command and a thing become one form. That is worth stating on
-purpose rather than leaving to be noticed, and it is a separate proposal.
-
-### P-322 - A deposit is a thing, so a territory's density has somewhere to be written
-
-**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
-own - **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Kinds, then Traits
-
-**You chose it, so this moves from `decisions.md` and asks approval.** A description is a flat map
-from a trait name to one value; a territory has a density per resource; so `density` cannot be a
-trait of a territory and be written. **As a thing it can.**
-
-One row into *Kinds*:
-
-| Kind        | What it is                                                       |
-| ----------- | ---------------------------------------------------------------- |
-| **deposit** | what a territory's ground offers of one resource, and how richly |
-
-Then *Traits*, where `density` stops being a fact about a territory:
-
-| Trait       | Of        | Values   | Stored or derived |
-| ----------- | --------- | -------- | ----------------- |
-| **density** | a deposit | a number | stored            |
-
-**What a territory then contains** is `{deposit resource:food density:4} -> 1` beside everything
-else it holds, and **the round trip closes**: reading the file back rebuilds a territory's numbers,
-which `P-320`'s check requires and `C-46` found it could not do.
-
-**Why this and not the other two, in your words rather than mine.** It needs no change to what a
-description is, and `Territory.deposits` is already a `BTreeMap` keyed by resource - **the model
-reached this shape independently**, which is the argument that made you pick it.
-
-**`total capacity` is untouched and needs nothing.** `spec/logistics.md` makes it a fact about
-containment keyed by kind, so it is computed from what a thing holds rather than written. Only
-`density` was homeless.
-
-**What this makes stale, filed rather than left.** `spec/planet.md` says a territory carries a
-density per resource; if a deposit is the thing that carries it, that sentence describes the same
-fact through a thing that now exists. **I have not changed it and it is not part of this** - I will
-read that section whole and file separately, because rewording a rule of yours while landing another
-is the thing the protocol forbids.
+**Nothing.** [decisions.md](decisions.md) is empty too.
 
 ## Addressed to other perspectives
 
@@ -2025,6 +1946,8 @@ work the release exists to order.
 | P-317, the transformation reads the state and the commands and nothing else                                                  | `docs/process.md` -> How I know the application is right                                                                                     | 2026-09-06 |
 | P-319, say what you are referring to rather than where it was, and the three places it fired                                 | `docs/process.md` -> What I read and what I do, How I know the application is right, All lanes                                               | 2026-09-06 |
 | P-320, the dump is a data file and `spec/console.md` governs it; `P-311`'s container columns go                              | `releases/first-release.md` -> Where things are                                                                                              | 2026-09-06 |
+| P-321, a command is written `{name field:value ...}`, and the positional form goes                                           | `spec/console.md` -> The language                                                                                                            | 2026-09-06 |
+| P-322, a deposit is a thing, so a territory's density has somewhere to be written                                            | `releases/first-release.md` -> Kinds, Traits                                                                                                 | 2026-09-06 |
 
 ## Rejected
 
