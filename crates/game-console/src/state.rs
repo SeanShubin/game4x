@@ -40,6 +40,7 @@
 //! **The root carries no quantity**, because a quantity belongs to an entry in some map and
 //! the game is in no map: `spec/logistics.md` makes it *the one thing that is in nothing*.
 
+use command_language::token::{Token, tokenize};
 use game_model::containment::{Description, Entry, tree};
 
 /// What a freshly written file says about whether anybody has looked at it.
@@ -116,17 +117,46 @@ pub fn read(text: &str) -> Result<Entry, String> {
     let mut stack: Vec<Entry> = Vec::new();
     for (at, line) in text.lines().enumerate() {
         let line_number = at + 1;
-        if line.trim().is_empty() || line.trim_start().starts_with('#') {
+        // **One tokenizer for both readers** - `Q-67`. This used to split the line itself,
+        // and the two implementations of the same lexical rules diverged exactly once before
+        // anybody noticed. `spec/console.md` says *A `#` begins a comment. The rest of the
+        // line is ignored* - unqualified, and `command_language::tokenize` honoured it anywhere
+        // while this skipped a line only when it **started** with one. So a trailing comment
+        // was a parse error here and whitespace there.
+        //
+        // Nobody wrote that divergence. One reader never learned a rule the other had, and
+        // each went on passing its own tests - which is what two implementations of one
+        // notation were always going to produce. `S-59` is where the duplication came from:
+        // before it there were two notations and two readers, which was right.
+        //
+        // **The grammar is not shared and must not be.** `parse_line` is grammar-directed and
+        // this is shape-only, and this deliberately does not resolve kinds - a data file may
+        // name a kind the program does not have, and the honest failure is the comparison
+        // rather than the read. What is shared is the lexical layer alone.
+        let tokens = tokenize(line, line_number);
+        if tokens.is_empty() {
             continue;
         }
-        let depth = line.len() - line.trim_start().len();
-        if depth % INDENT != 0 {
+        // **`P-252` is a rule only if the reader enforces it.** *Nothing in a data file is
+        // quoted*, and a reader that lets a quote through leaves the door open for the next
+        // generator that wants a two-word name.
+        if let Some(quoted) = tokens.iter().find(|token| token.text.contains('"')) {
             return Err(format!(
-                "line {line_number}: indented {depth}, which is not a multiple of {INDENT}"
+                "line {line_number}: `{}` is quoted - `P-252`: nothing in a data file is, and \
+                 a name that needs two words joins them with dashes",
+                quoted.text
             ));
         }
-        let depth = depth / INDENT;
-        let (description, quantity) = parse(line.trim(), line_number)?;
+
+        // Indentation is where the first token starts, which the tokenizer already knows.
+        let indent = tokens[0].span.from.column - 1;
+        if !indent.is_multiple_of(INDENT) {
+            return Err(format!(
+                "line {line_number}: indented {indent}, which is not a multiple of {INDENT}"
+            ));
+        }
+        let depth = indent / INDENT;
+        let (description, quantity) = parse(&tokens, line_number)?;
 
         if stack.is_empty() {
             if depth != 0 {
@@ -191,38 +221,43 @@ fn close(stack: &mut Vec<Entry>) {
 }
 
 /// One line: `{kind trait:value ...}` and, unless it is the root, ` -> quantity`.
-fn parse(line: &str, at: usize) -> Result<(Description, Option<u32>), String> {
-    let (inside, rest) = match line.split_once('}') {
-        Some(split) => split,
-        None => return Err(format!("line {at}: not a `{{...}}` description: {line}")),
+fn parse(tokens: &[Token], at: usize) -> Result<(Description, Option<u32>), String> {
+    let written = |tokens: &[Token]| -> String {
+        tokens
+            .iter()
+            .map(|token| token.text.clone())
+            .collect::<Vec<_>>()
+            .join(" ")
     };
-    let Some(inside) = inside.strip_prefix('{') else {
-        return Err(format!("line {at}: not a `{{...}}` description: {line}"));
-    };
-    // **`P-252` is a rule only if the reader enforces it.** *Nothing in a data file is
-    // quoted*, and a reader that groups on quotes leaves the door open for the next
-    // generator that wants a two-word name.
-    if line.contains('"') {
-        return Err(format!(
-            "line {at}: quoted - `P-252`: nothing in a data file is, and a name that needs \
-             two words joins them with dashes"
-        ));
+    let mut read = tokens.iter();
+    match read.next() {
+        Some(token) if token.text == "{" => {}
+        _ => {
+            return Err(format!(
+                "line {at}: not a `{{...}}` description: {}",
+                written(tokens)
+            ));
+        }
     }
-
-    let mut words = inside.split_whitespace();
-    let Some(kind) = words.next() else {
+    let Some(kind) = read.next().filter(|token| token.text != "}") else {
         return Err(format!("line {at}: a description with no kind"));
     };
     let mut description = Description {
         // The kind is compared and written as text; it is not looked up, because a data file
         // may legitimately name a kind this program does not have and the honest failure is
         // the comparison rather than the read.
-        kind: Box::leak(kind.to_string().into_boxed_str()),
+        kind: Box::leak(kind.text.clone().into_boxed_str()),
         traits: Default::default(),
     };
-    for word in words {
-        let Some((name, value)) = word.split_once(':') else {
-            return Err(format!("line {at}: `{word}` is not `trait:value`"));
+
+    let mut closed = false;
+    for token in read.by_ref() {
+        if token.text == "}" {
+            closed = true;
+            break;
+        }
+        let Some((name, value)) = token.text.split_once(':') else {
+            return Err(format!("line {at}: `{}` is not `trait:value`", token.text));
         };
         if description
             .traits
@@ -234,18 +269,36 @@ fn parse(line: &str, at: usize) -> Result<(Description, Option<u32>), String> {
             ));
         }
     }
+    if !closed {
+        return Err(format!(
+            "line {at}: not a `{{...}}` description: {}",
+            written(tokens)
+        ));
+    }
 
-    let rest = rest.trim();
+    let rest: Vec<&Token> = read.collect();
     if rest.is_empty() {
         return Ok((description, None));
     }
-    let Some(quantity) = rest.strip_prefix("->") else {
-        return Err(format!("line {at}: `{rest}` follows the description"));
+    if rest[0].text != "->" {
+        return Err(format!(
+            "line {at}: `{}` follows the description",
+            written(tokens)
+        ));
+    }
+    let Some(quantity) = rest.get(1) else {
+        return Err(format!("line {at}: `->` with no quantity after it"));
     };
-    let quantity = quantity.trim();
+    if rest.len() > 2 {
+        return Err(format!(
+            "line {at}: `{}` follows the quantity",
+            rest[2].text
+        ));
+    }
     let quantity: u32 = quantity
+        .text
         .parse()
-        .map_err(|_| format!("line {at}: `{quantity}` is not a quantity"))?;
+        .map_err(|_| format!("line {at}: `{}` is not a quantity", quantity.text))?;
     Ok((description, Some(quantity)))
 }
 
@@ -392,6 +445,66 @@ mod tests {
         assert_eq!(tree.contents.len(), 2, "an orbit and a territory");
         assert_eq!(tree.contents[0].contents[0].quantity, 1);
         assert_eq!(tree.contents[1].contents[0].quantity, 8);
+    }
+
+    /// One notation, two readers, and the same lexical rules under both.
+    ///
+    /// **`Q-67`, and the divergence had already happened.** `spec/console.md` says *A `#`
+    /// begins a comment. The rest of the line is ignored* - unqualified, and in the section
+    /// that governs the language. `command_language::tokenize` honoured it anywhere in a line and
+    /// this reader skipped a line only when it **started** with one, so a trailing comment was
+    /// whitespace to the console and a parse error to the data file.
+    ///
+    /// **Nobody wrote it.** One reader never learned a rule the other had, and each went on
+    /// passing its own tests. `S-59` is where the duplication came from: before it there were
+    /// two notations and two readers, which was correct.
+    ///
+    /// **So the rules are exercised through both, over the same text.** A test that only
+    /// checked this reader would have passed on the day the two disagreed.
+    #[test]
+    fn a_comment_anywhere_in_a_line_is_ignored_by_both_readers() {
+        let cases: [(&str, usize); 4] = [
+            ("{game phase:play}", 4),
+            ("{game phase:play} # a trailing comment", 4),
+            ("# a whole line", 0),
+            ("   # an indented one", 0),
+        ];
+        assert_eq!(cases.len(), 4, "four ways a comment can sit on a line");
+        for (line, words) in cases {
+            assert_eq!(
+                tokenize(line, 1).len(),
+                words,
+                "the tokenizer reads `{line}` as {words} words"
+            );
+        }
+
+        // And the reader agrees, which is the half that was wrong.
+        let trailing = root(
+            "{game phase:play} # the game, before anything happens\n  {territory id:1} -> 1 # one\n",
+        );
+        assert_eq!(trailing.description.written(), "{game phase:play}");
+        assert_eq!(trailing.contents.len(), 1);
+        assert_eq!(trailing.contents[0].quantity, 1);
+        assert_eq!(
+            written(&trailing),
+            "{game phase:play}\n  {territory id:1} -> 1\n",
+            "a comment is ignored rather than kept, so writing it back drops it"
+        );
+    }
+
+    /// A `#` inside a value would begin a comment, which is worth knowing rather than finding.
+    ///
+    /// **Not a defect and not a decision this lane made** - it falls out of the rule being
+    /// unqualified. Recorded because a value containing one is the case where the shared
+    /// tokenizer changes what this reader accepts, and nothing in the game produces such a
+    /// value: every value is a kind, a trait value or a number.
+    #[test]
+    fn a_hash_inside_a_value_begins_a_comment_like_anywhere_else() {
+        let failure = read("{game phase:pl#ay}\n").expect_err("the brace is commented out");
+        assert!(
+            failure.contains("not a `{...}` description"),
+            "the line ends at the hash: {failure}"
+        );
     }
 
     /// Where a thing is, is where it appears - so a line's depth is the whole of it.

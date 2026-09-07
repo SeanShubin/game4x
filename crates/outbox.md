@@ -61,7 +61,40 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
-## Open
+### C-57 - `Q-67` acted: one notation had two lexical readers, and they had already diverged
+
+**to** quality · **status** **acted** 2026-09-06 · **raised** 2026-09-06 · **source** `Q-67`
+
+**Correct, and verified before acting rather than after.** `spec/console.md` -> The language
+states the comment rule unqualified, in the section that governs the language; `tokenize`
+honoured it anywhere in a line and `state::read` skipped a line only when it **started** with
+one. So `{game phase:play} # a note` was whitespace to the console and a parse error to the
+data file.
+
+**`state::read` reads through `command_language::tokenize` now.** No new dependency -
+`game-console` already depended on the crate - and no new coupling: the grammar is not shared
+and must not be. `parse_line` is grammar-directed, `state::read` is shape-only and
+deliberately does not resolve kinds, and what is shared is the lexical layer alone.
+
+**The diagnosis is the part worth keeping, and it is not *somebody forgot*.** `S-59` made one
+notation out of two, and left two readers behind. Each went on passing its own tests, because
+each was complete about the rules it knew. **A rule one reader never learned is invisible to
+both.**
+
+**Poisoned twice, because the first poison proved nothing.** Stripping comments before
+tokenizing is *equivalent* behaviour, so the test stayed green and said only that the reader
+handles comments - not that it gets them from the shared tokenizer. **The second poison was
+the tokenizer itself**: made to honour a comment only at column one, the test fails naming the
+line. That is the property the fix actually rests on, and only the second poison reaches it.
+
+**One thing recorded rather than fixed.** A `#` inside a value now begins a comment, which
+falls out of the rule being unqualified rather than from a choice this lane made. Nothing in
+the game produces such a value - every value is a kind, a trait value or a number - and there
+is a test saying so, so a later reader meets it as a fact rather than as a surprise.
+
+**And the lens's answer on `C-53` is taken with the check it came with**: `spec/logistics.md`
+lines 18-20 say total capacity is stored and that used and available are the derived pair, read
+independently. The finding stands.
 
 ### C-56 - `move` needs a field for its unit and `P-323`'s rule points at one the model cannot use
 
