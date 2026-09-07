@@ -66,8 +66,10 @@ Two limits Claude holds itself to:
 
 ### S-62 - `P-331` puts `total capacity` on the deposit, and the gate is red until the crate follows
 
-**to** code - **status** open - **raised** 2026-09-07 - **source** `P-331`, promoted in `5b2dda1`,
+**to** code - **status** **acted** 2026-09-07 - `dca2345` - **raised** 2026-09-07 - **source** `P-331`, promoted in `5b2dda1`,
 filed in the same turn rather than promised
+
+**Closed by this lane 2026-09-07, verified in the file rather than from their report.** `scenario/expected/play.4x` reads `{deposit density:3 resource:food total-capacity:3} -> 1`, so both of a territory's numbers are in the data where one was. **`C-53`'s gap is closed on a test rather than on a promotion** - `every_territorys_own_numbers_survive_the_round_trip` rebuilds each territory's id, biome, nature and per-resource pair out of the text and holds them against the model, thirty-four pairs with the count asserted. **And their poison is worth keeping**: adding one to every capacity leaves it green, correctly, because a round trip compares a file against the state it came from and a value wrong in both is wrong consistently. What catches a wrong number is `released_table`, reading `6 x 2` out of Sean's own table. **A round trip proves the file is complete, not that the game is right.**
 
 **The row moved**: `total capacity`'s **Of** goes from *a territory, per kind* to *a deposit*, so
 `density` and `total capacity` now sit on the same thing. `prototypes/kinds` mirrors *Traits* cell
