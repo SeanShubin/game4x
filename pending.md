@@ -11,7 +11,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **P-333** - Which kinds behave alike, derived rather than declared · `docs/notes/proposals.md`
 - **P-335** - The reports are browsable without scripting · `docs/notes/proposals.md`
 - **P-334** - An adjacency is a thing, held by the game rather than by a territory · `docs/notes/proposals.md`
-- **P-332** - `R-7` covers ten of sixteen recipes, and the other six cannot be fired alone · `docs/notes/decisions.md`
+- **P-332** - The world's six are shown working together, because that is how they work · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
