@@ -285,6 +285,41 @@ fn push_sentence(sentence: &str, out: &mut Vec<String>) {
 }
 
 /// The rule, over strings, so it can be run on documents written to be wrong.
+/// The shape a proposal declares, in the one form everything below compares against.
+///
+/// **`S-68`, and the repair belongs here rather than in the four proposals that tripped it.**
+/// `P-339`, `P-342`, `P-343` and `P-344` wrote `**shape** an instruction`; every earlier
+/// promotion wrote the bare word. This read `shape != "instruction"`, took all four for a
+/// shape it had never heard of, demanded a block none of them has, and reported four correct
+/// promotions as wrong.
+///
+/// **The article is not the specification lane's mistake.** `CLAUDE.md` names the three
+/// shapes in its own prose - *text*, *rows*, and **an instruction** - so the form this tool
+/// refused is the form the governing document uses. **A check that only accepts a spelling
+/// its own rules do not use catches a lane that did nothing wrong**, which costs exactly what
+/// a false finding costs anywhere: the time to prove it false.
+///
+/// So both are read, here, once. **Normalizing before comparing rather than matching more
+/// carefully** is the same lesson this repository has recorded for wrapped sentences and
+/// padded table rows; this is the third surface it has arrived on.
+///
+/// **An unrecognised shape returns `None` and is named** rather than falling through to a
+/// branch meant for something else, which is what made one typo look like two failures.
+pub fn shape_of(said: &str) -> Option<&'static str> {
+    let said = said.trim();
+    let bare = said
+        .strip_prefix("an ")
+        .or_else(|| said.strip_prefix("a "))
+        .unwrap_or(said)
+        .trim();
+    match bare {
+        "text" => Some("text"),
+        "rows" => Some("rows"),
+        "instruction" => Some("instruction"),
+        _ => None,
+    }
+}
+
 pub fn check(shape: &str, block: &str, destination: &str) -> Verdict {
     match shape {
         "text" => {
@@ -463,10 +498,32 @@ fn a_promotion_lands_what_was_approved() {
             .map(|row| row.id)
             .collect();
 
+        // **An item can leave this queue without landing anywhere, and one has.** `P-344`
+        // stopped asking approval and started asking a decision, so `4b9264d` moved it to
+        // `docs/notes/decisions.md` - out of the queue, no ledger row, and a row at `HEAD`
+        // because it was promoted for real three commits later. That is exactly the
+        // signature of *promoted, row arrived late*, so this checked a move as though its
+        // text should have landed, and reported a correct promotion as wrong.
+        //
+        // **`S-68`, and the second half of it.** The first half was the article on `an
+        // instruction`; this is the one the article did not explain. I recorded it as a
+        // named exception first - `P-344 declared shape rows and its table is an
+        // illustration` - which was a true sentence about the wrong occurrence, and **the
+        // exception mechanism refused it**: `P-344` is promoted twice in this history, the
+        // exception matched by id, and the real promotion tripped *is excepted and now
+        // passes*. A guard that will not let a wrong diagnosis in is worth more here than
+        // the diagnosis was.
+        let moved_away = git(
+            &root,
+            &["show", &format!("{commit}:docs/notes/decisions.md")],
+        )
+        .unwrap_or_default();
+
         let gone: Vec<outbox::Item> = outbox::parse(&before, "docs/notes/proposals.md")
             .into_iter()
             .filter(|item| item.id.starts_with("P-") && item.is_outstanding())
             .filter(|item| !after.contains(&format!("### {} ", item.id)))
+            .filter(|item| !moved_away.contains(&format!("### {} ", item.id)))
             .filter(|item| {
                 let promoted = landed_now.contains(&item.id) && !landed_before.contains(&item.id);
                 // Its row arrived in a later commit than the promotion it records.
@@ -496,8 +553,16 @@ fn a_promotion_lands_what_was_approved() {
             .collect();
 
         for item in gone {
-            let Some(shape) = field(&item.body, "shape") else {
+            let Some(said) = field(&item.body, "shape") else {
                 older += 1;
+                continue;
+            };
+            let Some(shape) = shape_of(&said) else {
+                wrong.push(format!(
+                    "{}: declares shape {said:?}, which is not text, rows or an instruction. \
+                     The article is accepted; the word is not one of the three",
+                    item.id
+                ));
                 continue;
             };
             let Some(into) = field(&item.body, "into").and_then(|i| destination_file(&i)) else {
@@ -523,7 +588,7 @@ fn a_promotion_lands_what_was_approved() {
             checked += 1;
             let mut verdict = match quoted.len() {
                 0 => Verdict::Landed, // an instruction; nothing lands verbatim
-                1 => check(&shape, &quoted[0], &destination),
+                1 => check(shape, &quoted[0], &destination),
                 _ => Verdict::Ambiguous,
             };
             // If it did not land then, ask whether it has landed since. Only a `Missing` is
@@ -532,7 +597,7 @@ fn a_promotion_lands_what_was_approved() {
                 && let Some(now) = git(&root, &["show", &format!("HEAD:{into}")])
                 && quoted
                     .iter()
-                    .all(|block| matches!(check(&shape, block, &now), Verdict::Landed))
+                    .all(|block| matches!(check(shape, block, &now), Verdict::Landed))
             {
                 verdict = Verdict::Repaired;
             }
@@ -618,6 +683,60 @@ fn a_promotion_lands_what_was_approved() {
         "a promotion did not land what was approved:\n  {}\n\n\
          The proposal is in the promoting commit's parent. Read it there.",
         wrong.join("\n  ")
+    );
+}
+
+/// The article on `an instruction` is read, and a word that is not a shape still is not one.
+///
+/// **The check this did not have, and `S-68` is what it cost.** Four correct promotions were
+/// reported as wrong because they spelled the shape the way `CLAUDE.md` spells it. Both forms
+/// are exercised here for all three shapes, and the population is asserted - a normalizer
+/// tested on one spelling of one shape says nothing about the other five.
+///
+/// **And the failing direction, which is the half that stops this from being a rubber stamp.**
+/// A normalizer that returned `Some("instruction")` for everything would pass every line above
+/// and hide every typo, so the last block requires unknown words to stay unknown.
+#[test]
+fn a_shape_is_read_with_or_without_its_article() {
+    let mut read = 0;
+    for (said, want) in [
+        ("text", "text"),
+        ("rows", "rows"),
+        ("instruction", "instruction"),
+        ("an instruction", "instruction"),
+        ("a text", "text"),
+        ("  an instruction  ", "instruction"),
+    ] {
+        assert_eq!(
+            shape_of(said),
+            Some(want),
+            "{said:?} is the shape {want:?}, written one of the two ways it is written"
+        );
+        read += 1;
+    }
+    assert_eq!(read, 6, "six spellings across the three shapes");
+
+    // **Not everything is a shape, and an article does not make one.** Without this, a
+    // normalizer that stripped the first word of anything would pass every case above.
+    let mut refused = 0;
+    for said in [
+        "an interpretation",
+        "instructions",
+        "a row",
+        "",
+        "an",
+        "table",
+    ] {
+        assert_eq!(
+            shape_of(said),
+            None,
+            "{said:?} is not one of the three shapes and must be named rather than guessed"
+        );
+        refused += 1;
+    }
+    assert_eq!(
+        refused, 6,
+        "six words that are not shapes, and none was accepted"
     );
 }
 
