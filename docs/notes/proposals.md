@@ -63,46 +63,43 @@ Two limits Claude holds itself to:
 **Two, and both came out of your reading of the expected data rather than out of a
 review.** They are independent of each other.
 
-### P-308 - Two Values cells describe what a trait admits instead of naming it
+### P-308 - The `phase` cell describes what the trait admits instead of naming it
 
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** rows -
-**asks** approval - **into** `releases/first-release.md` -> Traits, and one sentence above the table
+**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** gap -
+**shape** rows - **asks** approval - **into** `releases/first-release.md` -> Traits, and one sentence
+above the table
+
+**Rewritten down to one row.** It offered two; `houses` is being deleted by `P-310` rather than
+named, so naming it would be work on a row that goes.
 
 **You asked what values `phase` can have and the release could not tell you.** I read
 `crates/game-model/src/game.rs` to answer, which is the release failing at the one thing it is for.
 
-**Two rows change.** The rule above the table, first, then the rows.
+The rule above the table, then the row.
 
 > Where a trait admits a closed set of values, its **Values** cell names them, or says where they
 > are listed.
 
-| Trait      | Of                           | Values         | Stored or derived |
-| ---------- | ---------------------------- | -------------- | ----------------- |
-| **houses** | a thing that contains things | yes or no      | stored            |
-| **phase**  | the game                     | design or play | stored            |
+| Trait     | Of       | Values         | Stored or derived |
+| --------- | -------- | -------------- | ----------------- |
+| **phase** | the game | design or play | stored            |
 
-**`phase` is the live one.** `design` and `play` are the two variants of `Phase` in
+**Why it is live rather than tidy.** `design` and `play` are the two variants of `Phase` in
 `game-model`, and `play` is printed in `scenario/expected/play.4x`. Under `P-284` a word that is not
 a kind, a trait or a trait value may not appear - so `play` is a forbidden word today purely because
-this cell never names it. That is the eighteenth, and it is `Q-57` from the quality lens and `C-37`
-from the code lane.
-
-**`houses` is the same shape and is not urgent.** *Whether people live in it* states the question
-rather than the answers. Its three siblings - `ready`, `surplus`, `unpaid` - all say *yes or no*, and
-it is used as a requirement at line 237 exactly as they are.
+this cell never names it. That is `Q-57` from the quality lens and `C-37` from the code lane.
 
 **`control` was examined and is deliberately not changed**, which is where the code lane's reading
 and mine part. Its cell reads *held by a player, or unclaimed*, and a player is a reference rather
-than a member of a closed set - there is no table of players to point at. So it does not fail the
-rule above, which is scoped to closed sets on purpose. It is also **not printed**: `dump.rs` records
-that you chose to drop `control` rather than print it, so nothing about it is live.
+than a member of a closed set - there is no table of players to point at, so it does not fail the
+rule above, which is scoped to closed sets on purpose. It is also not printed: `dump.rs` records
+that you chose to drop it.
 
-**Two counts, both against a named population.** Nineteen rows in *Traits*: six name their values -
-`ready`, `surplus`, `unpaid` literally, and `kind`, `resource`, `biome` by pointing at a table - ten
-are numbers or free text, and **three describe.** Of those three, two change here and `control` is
-the one argued above. Six plus ten plus three is nineteen; I read every row rather than grepping,
-because the code lane's first classifier scored `phase` as naming its values on the strength of the
-word *or*.
+**The count, against a named population.** Nineteen rows in *Traits*, read one by one rather than
+grepped: six name their values, ten are numbers or free text, three describe. Of the three, `phase`
+changes here, `houses` is deleted by `P-310`, and `control` is argued above. I read every row because
+the code lane's first classifier scored `phase` as naming its values on the strength of the word
+*or*.
 
 ### P-309 - The phase gate is two-way and the specification states one way
 
@@ -134,6 +131,50 @@ boundary - `land ark 1` refused before `start`, `add ark orbit` refused after it
 **Five and not six.** The list under *Available only before `start`* has six entries, but `start`
 itself is the crossing rather than a design command, so the sentence says five. If you would rather
 it counted `start` among them, that is the word to change.
+
+### P-310 - `grow` requires a fiction and omits the cap the specification already states
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** recovered - **shape** rows -
+**asks** approval - **into** `releases/first-release.md` -> Recipes, the three `grow` rows
+
+**Nothing here is new.** `spec/population.md` already says it: *increases by the minimum of
+extra-food and total-citizens, at most doubling if there is plenty of food.* The code computes
+exactly that. **Only the release disagrees**, and it is the artifact you derive the dump from.
+
+| Recipe   | Owner | Role    | Qty                                                  | Kind    | Traits  | Where |
+| -------- | ----- | ------- | ---------------------------------------------------- | ------- | ------- | ----- |
+| **grow** | world | consume | the lesser of the surplus food and the citizens here | food    | surplus |       |
+|          |       | produce | the lesser of the surplus food and the citizens here | citizen |         |       |
+
+**Three rows become two.** The `require 1 thing, houses` row goes, and the two quantities stop being
+`1`.
+
+**Why `houses` goes rather than gets its values named.** It is declared as a trait, and **no kind
+carries it** - the only three occurrences in the tree are its own declaration, the qualifier
+constant, and this recipe row. `game-model` never reads it: `grow` is `population_after(citizens,
+food)`, which takes two arguments and neither is housing. So the recipe publishes a requirement that
+nothing can satisfy and nothing enforces, in `reports/recipes.md`, which is one of the four artifacts
+a person derives the dump with.
+
+**Why the quantities change.** At 2 citizens and 6 food the table as written says four new citizens,
+one per surplus food. The specification and the code both say two. **The wording is
+`spec/population.md`'s own** - *the minimum of extra-food and total-citizens* - said in the table's
+vocabulary.
+
+**A correction to what I told you an hour ago.** I said the table has a `limit` role for exactly
+this. It does not: `limit` is a maximum on what is **present before** the recipe runs - `limit 0
+garrison` is how `deploy ark` requires unheld ground - so it cannot cap a production. An expression
+in **Qty** can, and the table already does it in `work`: *`$where`'s density for that resource*. This
+invents no new machinery.
+
+**What this leaves for the code lane, and I file it when this lands.** `prototypes/kinds` mirrors the
+release cell for cell, so the `houses` trait row, the `HOUSES` qualifier and the `traited(Require,
+1, THING, &HOUSES)` line all go with it, and `reports/recipes.md` regenerates. The model needs no
+change - it already behaves this way.
+
+**Deliberately not settled here**: whether population should ever be housing-limited. You said *not
+to say we can't put them in later*, so this is scoping rather than rejection, and `houses` should not
+be re-proposed as a new idea.
 
 ## Addressed to other perspectives
 

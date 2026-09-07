@@ -8,8 +8,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/questions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-308** - Two Values cells describe what a trait admits instead of naming it · `docs/notes/proposals.md`
+- **P-308** - The `phase` cell describes what the trait admits instead of naming it · `docs/notes/proposals.md`
 - **P-309** - The phase gate is two-way and the specification states one way · `docs/notes/proposals.md`
+- **P-310** - `grow` requires a fiction and omits the cap the specification already states · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -17,7 +18,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-53** - `041a429` S-53: the other half of Sean's queue was invisible to the index · still open in `docs/notes/proposals.md`
+- **S-53** - `a68bb0e` Q-62: S-53 closed one instance of its own hole and left two · still open in `docs/notes/proposals.md`
 - **S-51** - `38b2cbe` S-51 on a measured predicate, Q-61 built in, and four items that were invisible · still open in `docs/notes/proposals.md`
 - **S-50** - `521d3b7` S-50's live half, C-33 closed by P-291, and the re-poison it asked for · still open in `docs/notes/proposals.md`
 - **S-48** - `8b772c2` S-48: `node` goes, and capacity bounds extractors directly · still open in `docs/notes/proposals.md`
