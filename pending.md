@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-350** - The one measurement that needs a cold instance, and you are starting cold instances right now · `docs/notes/decisions.md`
+- **P-350** - Three tasks, given to one instance you are restarting anyway, and only one of them can tell you anything · `docs/notes/decisions.md`
 - **P-349** - Every move is constrained by adjacency, and `spec/` is the one place that does not say so · `docs/notes/decisions.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`

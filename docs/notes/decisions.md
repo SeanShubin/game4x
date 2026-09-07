@@ -21,59 +21,65 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-350 - The one measurement that needs a cold instance, and you are starting cold instances right now
+### P-350 - Three tasks, given to one instance you are restarting anyway, and only one of them can tell you anything
 
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** the research lens's `X-5`, lifted -
-**asks** a decision - **into** nothing; it authorises a study or it does not
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** the
+research lens's `X-5`, lifted - **asks** a decision - **into** nothing; it authorises a study or it
+does not
 
-**Time-sensitive, which is the only reason it is in front of you today.** `X-5` has said *worth
-doing eventually rather than now* since 2026-09-06, and nothing waits on it. What changed is the
-cost, not the value.
+**Time-sensitive, and that is the only reason it is in front of you today.** `X-5` has said *worth
+doing eventually rather than now* since 2026-09-06, correctly, because it needed an instance started
+for the purpose. **You are starting instances anyway**, and the study needs a reader that has read
+the files and nothing else - which is what a restarting instance is for its first few minutes.
 
-**The ask is seven questions, not an instance.** `X-3` answered `S-57` by **classifying** seven
-cases rather than measuring them, and said so. The measurement it could not make needs a reader that
-has read the files **and nothing else** - which is exactly what a just-restarted instance is, for
-the few minutes before it starts work. So the decision is not *spend an instance on a study*. It is
-**before one of the instances you are restarting picks up its lane, have it answer seven questions
-from the files it has just read.** If you say no, nothing is lost and it carries on as its lane.
+**The ask is three ordinary tasks, not a study.** `X-3` answered `S-57` by **classifying** its cases
+rather than measuring them, and said so. The design is
+[the cold-instance study](../../lenses/research/2026-09-07-the-cold-instance-study.md), and its
+shape is the part worth your attention: **the instance is given its ordinary lane prompt and three
+pieces of ordinary work, and is told nothing about `S-57`, the report, or a study.** Each task can be
+done correctly only by opening one file, and each has a plausible wrong answer available without
+opening it. What is recorded is which files it opened before answering.
 
-**What it would settle.** `S-57`'s third question: *does clearing context actually fix it, and what
+**Run as the quality lane, because none of the three tasks writes anything** - so a wrong answer
+costs a paragraph rather than a commit.
+
+**Only one of the three can cost anybody their answer, and that is what makes it a study.** The
+predictions are written down before the run, which matters because `X-3` is that lens's own answer
+and a study designed after seeing it would agree with it.
+
+- Two of the tasks `X-3` predicts a cold instance **passes**. They can confirm and cannot refute
+- The third - *what are a lens's jobs?*, where the lens's own README restates them and is four days
+  behind `docs/process.md`, which owns them - `X-3` predicts a cold instance **fails**, and a
+  long-running one might not. **If it reaches the owning document unprompted, `X-3` loses its
+  central claim** that clearing context makes two of the phenomena worse
+
+**What it would settle** is `S-57`'s third question: *does clearing context actually fix it, and what
 does that cost?* **The outbox architecture assumes an instance is replaceable by a fresh one that
-reads the files** - that is what makes `pending.md` and the items worth keeping. `X-3` derived that
-restarting fixes one of the four phenomena and makes two worse; a cold reader either reproduces each
-failure or avoids it, which turns a derivation into evidence. No amount of further classifying
-produces it.
+reads the files** - that assumption is why `pending.md` and the items are worth keeping, and it has
+never been tested.
 
 **I checked the four cases that are my lane's, from the record rather than from memory**, since that
 is the failure under study. `P-320` and `S-56` are characterised correctly - `spec/console.md:45`
-does say *nothing states its container*, and the code lane's own `C-44` independently confirms
-`S-56`'s work was in the tree before the item existed. `P-310` and `P-312` are correct and produced
-a rule, promoted as `P-316`.
+does say *nothing states its container*, and the code lane's `C-44` independently confirms `S-56`'s
+work was in the tree before the item existed. `P-310` and `P-312` are correct and produced a rule,
+promoted as `P-316`.
 
-**And one is not, which is a reason to fix the question rather than to decline the study.** The seven
-cases are all meant to be *the information was there and I did not read it*. `P-315`'s own
-withdrawal says something else: I read the sentence and **inferred a deadlock from an imperative
-with no subject**. Both are true - the answer was also in the table two rows up - but a cold reader
-who reads that imperative can misparse it exactly as I did. **Reading more does not fix a wrong
-inference.** So `P-315` behaves like the eighth case rather than the seven, and if it is scored with
-them, a cold instance reproducing it reads as *restarting does not help* when the honest reading is
-*this was never a memory failure*. That is the failure this repository has recorded three times: an
-instrument answering a narrower question than the one asked, and **returning a plausible number
-rather than an error.**
+**And one case is gone, which is the better news in this item.** I filed this yesterday saying
+`P-315` was mis-scored - that its own withdrawal blames a misread imperative rather than an unread
+file, so a cold reader could reproduce it for a reason that has nothing to do with memory. **The
+research lens checked that and found something neither of us had**: `b1d12c9`, the commit that
+withdrew `P-315`, **also rewrote the sentence**. `CLAUDE.md` no longer contains the imperative with
+no subject. So the case is not mis-scored, it is **unrunnable** - a cold instance reading today's
+document gets the unambiguous version and passes for a reason that says nothing.
 
-**So there are two ways to say yes**, and the difference is one case:
+**The process had already repaired the thing the study would have measured, in the same commit that
+recorded the mistake.** That is the mechanism in `CLAUDE.md` working, and it is worth more than the
+data point it cost.
 
-- **Run the six**, with `P-315` moved to the eighth case's shape, and the study measures what it
-  says it measures
-- **Run the seven and score `P-315` separately**, which keeps the case and costs a sentence
-
-**What it costs you either way**: the minutes before one instance starts its lane. **What it costs
-if you decline**: nothing today, and the next time the question comes up it needs an instance
-started for the purpose, which is what has held it since the 6th.
-
-**The paste-ready prompt is the research lens's**, being written now so that the ask is a paste
-rather than a design whichever way you answer. That work does not depend on your answer and is not
-waiting on it.
+**What it costs you**: the first few minutes of one instance you are restarting for other reasons.
+**What declining costs**: nothing today. `X-3`'s answer stands and says it is a derivation; what
+stays unavailable is the ability to say **how much of a long-running instance's belief is memory**,
+which no further classifying will produce.
 
 ### P-349 - Every move is constrained by adjacency, and `spec/` is the one place that does not say so
 
