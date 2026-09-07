@@ -127,6 +127,25 @@ They go through one runner that says which branch it took. Verified in a clone, 
 - **the tool wholly broken** - the commit is refused before any of them, because `--places` runs
   under `set -e`. Loud in the other direction, and the safe one.
 
+**Two habits out of it, and the second is the lens's.**
+
+**A verification that tests only the broken cases passes a tool broken in the safe direction**, and
+that is the case people skip. The healthy control is what caught the runner treating every non-zero
+code as a failure.
+
+**When a file is refactored, re-run the checks of findings previously fixed in it.** Neither
+producer does this naturally, because what gets tested is what got changed - and `Q-62`'s guard is
+exactly the kind that would have gone quiet without failing, since **a hook that has stopped
+refusing looks identical to a hook with nothing to refuse.** The lens re-ran it against the
+rewritten file and it held; this lane had not thought to.
+
+**And it is mechanizable, which `C-43` says is the question worth asking.** The outbox already
+records which commits cite which items, and git already knows which files a commit touched - so
+*which closed findings were fixed in this file* is a query over two things already parsed, and could
+print beside the staged files at commit. **Not built here**, deliberately: it is a new mode at the
+end of a long session, which is the mistake `C-35` records once already. Written down so the next
+instance has the shape rather than the idea.
+
 ### C-42 - A rule that is written down, true, and not run over the work that states it
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** the quality lens naming three
