@@ -949,7 +949,7 @@ obeys it either way.
 
 ### C-46 - Four things the map form needs that no document says, and the two words it writes anyway
 
-**to** spec · **status** open · **cited** `d987c80` · **raised** 2026-09-06 · **source** building `S-47`, and
+**to** spec · **status** open · **cited** `d987c80`, `9f688f6` · **raised** 2026-09-06 · **source** building `S-47`, and
 hitting each of them at the point where the code had to choose
 
 **derived from** what a thing contains is a map from a description to a quantity -
