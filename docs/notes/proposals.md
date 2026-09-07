@@ -60,7 +60,73 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+### P-338 - A thing lasts a number of turns, paying its upkeep resets it, and having no number is durable
+
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
+own - **asks** approval - **shape** text - **into** `spec/resources.md` -> replacing the *expires*
+rule
+
+**The rule.**
+
+> A thing may carry a number of turns it lasts. At each turn's end it resets to its maximum if its
+> upkeep was paid, and decrements if it was not. At zero the thing is gone. Having no number is what
+> durable means.
+
+**One rule, not two.** Food carries a number and has **no upkeep**, so nothing resets it - the number
+is a pure lifetime. A citizen carries a number **and** an upkeep, so eating resets it and not eating
+spends it. Same trait, same decrement, same recipes; `age` and `spoil` each widen from `food` to
+`thing`, which the recipe language already dispatches.
+
+**The numbers, all of which are now 1 or none.**
+
+| Kind        | Number | Why                                                                                  |
+| ----------- | ------ | ------------------------------------------------------------------------------------ |
+| **food**    | 1      | already declared - made this turn, gone at this turn's end                           |
+| **citizen** | 1      | `spec/population.md`: *if less food than citizens, each unfed citizen starves*       |
+| **ark**     | none   | upkeep 0, so nothing could reset it - a number would be a countdown to certain death |
+| **pioneer** | none   | upkeep 0 under `P-339`, for the same reason                                          |
+
+**I proposed 2 for a citizen and the specification already said 1.** *Each unfed citizen starves* has
+no slack in it, so 2 would have contradicted `spec/population.md` - a collision you caught by asking
+to pull it lower rather than one this lane found.
+
+**And the slack was never needed.** Founding produces a food extractor in the same breath as the
+citizens, and `scenario/commands/play.4x` works it on the founding turn - founded at line 138,
+`create-labor` and `work` at 149 and 150, `end-turn` at 151. **A new territory feeds itself the turn
+it exists**, so expanding needs no buffer and no logistics.
+
+**What the number is, at each maximum.** This is the ladder, and only the first rung is in this
+release.
+
+| Maximum | What a living thing can show | What the number is                             | Entries per kind |
+| ------- | ---------------------------- | ---------------------------------------------- | ---------------- |
+| **1**   | 1, always                    | **a property of the kind** - nothing is stored | 1                |
+| 2       | 2 or 1                       | a stored boolean per thing - fed lately or not | 2                |
+| n       | n down to 1                  | a stored counter                               | n                |
+
+**At 1 it is a constant, not a boolean.** A thing at 0 does not exist, so every living thing of a
+kind shows the same number - which makes it a fact about the kind, exactly like the `expires` column
+it replaces. **So nothing new is stored, no description gains a trait, and `{citizen ready:yes}`
+stays exactly as it reads today.**
+
+**Which answers the question this proposal used to ask.** *Which citizens eat when there is not
+enough* only matters if two citizens can differ. They cannot: `force` is 1 for every citizen, and
+`ready` is cleared by `refresh`, which runs last at every turn's end. **Feeding one rather than
+another leaves the identical state**, so there is no rule to write and no tie-break to choose.
+
+**It is deferred rather than dropped.** The day a kind takes a maximum of 2, the number becomes
+stored, the map splits, and *which ones eat* becomes observable and must be decided. **That is the
+same day, and it is a better day to decide it** - the question will have a state that can tell two
+answers apart. `spec/turn.md` still requires the mechanic; `docs/notes/spec-backlog.md` still records
+that nothing supplies one; the research lens's `X-2` still names it.
+
+**What this dissolves**: `P-336`, because `age` then fires on anything with the number rather than on
+a count the model lacks; and `P-337`, already dissolved by `P-339`.
+
+**Where it goes.** `spec/resources.md` holds the boolean it replaces. The rule is about any thing
+rather than a resource, so `spec/invariants.md` is arguably the honest home - **but moving it makes it
+a claim every document obeys**, which is larger than this needs. `spec/resources.md`, and it moves if
+a second kind of thing ever needs it.
 
 ## Addressed to other perspectives
 

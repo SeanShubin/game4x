@@ -8,6 +8,30 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on pulling the citizen's number down to 1
+
+*Given our recent changes we may be able to pull the citizen survival one lower. That would obviate
+the questions of which citizens eat right? The durability is effectively a boolean at a certain
+level right?*
+
+**Both right, and the first is a collision this lane should have caught.** `spec/population.md` says
+*if less food than citizens, each unfed citizen starves* - no slack - so the 2 this lane proposed
+contradicted the specification, and his instinct to pull it lower is what found it.
+
+**The boolean question has a precise answer.** At a maximum of 1 a living thing always shows 1, so
+the number is a property of the kind and nothing is stored. At 2 it is a stored boolean per thing and
+the map splits. At n it is a counter. **The boolean arrives at 2; 1 is below it, a constant.**
+
+**And that is what obviates the tie-break.** Two citizens can differ only by `force`, which is 1 for
+all of them, and `ready`, which `refresh` clears last at every turn's end. So feeding one rather than
+another leaves the identical state, and an unobservable choice needs no rule. **It returns the day a
+kind takes a maximum of 2**, which is a better day to decide it.
+
+**The slack was never needed either**: founding produces a food extractor with the citizens, and
+`scenario/commands/play.4x` works it on the founding turn - 138 founds, 149 and 150 work, 151 ends.
+
+**`P-338` now asks approval rather than a decision**, and has moved to `docs/notes/proposals.md`.
+
 ## Said 2026-09-07, on the ark's sequence, and what the spec already had
 
 *Thematically, the ark shows up to the planet, scans it, figures out the blueprint for life,
