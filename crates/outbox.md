@@ -63,6 +63,51 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-55 - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence
+
+**to** code · **status** open · **raised** 2026-09-06 · **source** breaking both of them while
+using the workaround that exists because of them, and the specification lane asking whether a
+carrier belongs in `tools/`
+
+**derived from** normalize both sides before comparing them, and write a script to a file
+before running it - `CLAUDE.md`, A mistake worth not repeating
+
+**`CLAUDE.md` states both and neither has anything but attention behind it.** Both fire at a
+moment of confidence - when an edit looks obvious - which is exactly when a habit is not
+consulted.
+
+**Four times today, and the fourth was inside the workaround for the first.**
+
+- A match string for `crates/outbox.md` drafted as one sentence met a file that had wrapped
+  it. No match, no error, and the edit silently did nothing until an `assert` caught it.
+- A match string for `containment.rs` met a line `cargo fmt` had wrapped between my reading it
+  and my matching it. **The file changed under a correct string**, which is the wrapping rule
+  in a form the rule does not describe.
+- A `python -c` with backticks in it: the shell substituted them, the script ran, and the
+  comment it wrote had two words missing. **Silent, and visible only because I read the
+  result.**
+- And the same again in the same hour, after I had written the normalizing helper.
+
+**What exists and what does not.** The helper is a scratchpad file that dies with the session:
+it collapses whitespace on both sides, maps the offset back, and **refuses an anchor that
+matches twice** rather than taking the first. `tools/` has one incidental normalizing
+comparison and no general one.
+
+**The specification lane's argument for why a check is the weaker carrier is the part worth
+keeping**: the first rule governs how comparisons are written, and a check is a comparison -
+four of their five broken assertions today were inside checks. **A tool a lane reaches for is
+stronger than a check that judges it afterwards.**
+
+**Not built, and the reason is the one this outbox already records twice.** `C-45`: the last
+large piece begun at the end of a long session was reverted after four rounds. This is small,
+but it is tooling every lane would use, and getting the refusal semantics wrong would make
+silent edits *more* likely rather than less.
+
+**What it would have to be.** `tools/` is production support and therefore this lane's;
+`tools/spec/` and `tools/quality/` are not. So a shared helper is a fourth tool or a module of
+`tools/outbox`, and **which of those is a decision about who depends on whom** rather than
+about the matching itself.
+
 ### C-54 - `S-59`'s count measured one file of seven, and `launch ark` fires no recipe
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** converting all seven command
