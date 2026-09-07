@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-344** - Nothing ascends any more, and your fourth clause has become true · `docs/notes/proposals.md`
+- **P-344** - What an Ark crosses, now that nothing it does is a move · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
 
@@ -16,6 +16,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-344** - `ed8ffda` P-344 and S-66: the cleanup P-341 promised, and the code lane's work order · still open in `docs/notes/decisions.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`

@@ -60,35 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-344 - Nothing ascends any more, and your fourth clause has become true
-
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** the cleanup `P-341` promised -
-**asks** approval - **shape** rows - **into** `releases/first-release.md` -> *Units and structures*
-
-**An hour ago I declined to write a sentence of yours.** *It does not have the ability to launch into
-space again* collided with the win condition: `spec/control.md` says a player wins by launching an
-Ark, the Units table let an Ark cross *ascent*, and the scenario ended `{launch-ark}`.
-
-**Choosing one act made it true.** A Yard launches; no Ark is built to stand on the ground, and the
-one that arrives is spent deploying. **So nothing ever goes from a territory up to an orbit**, and
-`ascent` has no user left. The clause was right and the tree was what had to change.
-
-**One cell**, the ark's **Crosses**:
-
-| Thing   | Crosses now            | Crosses after  |
-| ------- | ---------------------- | -------------- |
-| **ark** | `orbit border, ascent` | `orbit border` |
-
-**How to tell it was carried out**: no line of `releases/first-release.md` contains `ascent`, and the
-ark's Crosses cell reads exactly `orbit border`.
-
-**What I am not deciding, and it is the next question rather than this one.** Whether `orbit border`
-still has a user depends on something the release does not say: **is deploying a move?** `deploy ark`
-consumes an Ark *in the orbit above `$where`* and produces ground things, which is not a `move` row -
-so an Ark may never cross that border either, and `Fuel`, `A move` and `Crosses` would all be
-describing something that never happens. **You said the Ark moves about in orbit and chooses a
-landing zone**, which needs `A move` and needs orbits joined to each other. That is consistent and it
-is not written down. Filed separately once you say whether it needs to be.
+**Nothing.** [decisions.md](decisions.md) holds `P-344`.
 
 ## Addressed to other perspectives
 

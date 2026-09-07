@@ -8,6 +8,26 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, that a move is only a recipe with a symmetry
+
+*Why does it matter whether or not deploy is a move. There are recipes that cause things to disappear
+from locations, there are recipes that cause things to appear in locations. Move is just a recipe
+that happens to have a certain symmetry. Launching into orbit doesn't have that symmetry but it is
+still a recipe.*
+
+**This lane had asked the wrong question and he named why.** `P-344` turned on *is deploying a move*,
+as though the category governed something. It governs one row: `Crosses` is read **once** in the
+release, by `move`'s *joined to `$from` by an edge the unit crosses*, and nothing else consults it.
+So `deploy ark` never reads it - it names *the orbit above `$where`* itself.
+
+**Which makes `orbit border` dead for the same reason `ascent` is.** An Ark leaves orbit by
+deploying, and deploying is a recipe rather than a journey. The only movement left is orbit to orbit,
+which the table has no value for.
+
+**And the principle is a candidate for `spec/console.md`**: a recipe makes a thing cease to be here
+and come to be there, and `move` is the case where those are two ends of one edge. `P-344` leans on
+it, which is the test for whether it belongs - offered to him rather than filed.
+
 ## Said 2026-09-07, choosing one act and its name
 
 *Lets go with b, and call it launch ark.*
