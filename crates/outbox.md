@@ -63,6 +63,60 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-48 - `spec/console.md` says a command is written two different ways, in two sections, and uses the older one throughout
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** starting `S-26`'s `P-212`
+half and finding no answer to *what does a command look like*
+
+**derived from** a command is written `{name field:value ...}` - `spec/console.md`, `P-212`
+
+**Filed the moment it was found**, which is the rule, and before doing the parts of `S-26`
+that do not depend on it.
+
+**`spec/console.md` -> The language:**
+
+*A command is a verb followed by arguments, one command to a line*, followed by eight
+examples of that form - `land ark 1`, `move pioneer 7`, `work 4 extractor 3 metal`.
+
+**`spec/console.md` -> Commands, nineteen lines later:**
+
+*A command is written `{name field:value ...}`. Its name is the words that open it and its
+arguments are named.*
+
+**Both are present tense and normative and they are about the same thing.** `land ark 1` has
+positional arguments that are not named; `{name field:value ...}` has named ones. A parser
+cannot be built to both.
+
+**And the second statement is contradicted by its own section.** Every command listed
+underneath it is written in the first form - `run <file>`, `show <subject>`, `help
+[<command>]`, `create planet <size>`, `set resource <territory> <resource> <extractors>
+<density>`, `add <unit> orbit`. So the newer sentence is surrounded by eleven uses of the
+older one.
+
+**This is the section-collision trigger firing on a section that has taken seven
+proposals** - `P-76`, `P-110`, `P-121`, `P-127`, `P-212`, `P-214`, `P-217` - which
+`pending.md` already lists. **The trigger is doing its job and nothing had re-read the
+section whole.**
+
+**What this lane did with it.** `S-26`'s three buildable pieces are `P-212`, `P-215` and
+`P-216`.
+
+- **`P-216` is built and does not depend on this** - `crates/game-console/tests/views.rs`.
+  The normalized view has no nested cells and the entity view has one, over every cell of
+  both, with the counts and with the predicate poisoned in both directions.
+- **`P-215`'s enclosing-command half is already built** and its nested half has no case,
+  which is `C-23` and is downstream of this.
+- **`P-212` is not started**, and this is why. **The assumption proceeded under is that
+  nothing changes**: `command-language` keeps the flat positional form, every `.4x` file
+  keeps working, and `scenario/commands/play.4x` does not move under Sean while he is
+  deriving it by hand - which `S-26` says explicitly must not happen.
+
+**Cheap to settle and expensive to guess.** If `{name field:value ...}` is the intended form,
+every command file in the repository is rewritten, including the one he is checking this
+week. If the older sentence is what stands, `P-212` was about the data notation rather than
+about commands - which is how the data files already read it, `state.rs` and its
+predecessor both.
+
 ### C-47 - The two relations subsume nine of the dump's ten tables, and the tenth needs one number
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** `S-54` asking to be told

@@ -230,7 +230,16 @@ pub fn entities(game: &Game) -> Vec<Entry> {
                     Phase::Play => "play".to_string(),
                 },
             ),
-            ("turn".to_string(), game.turn.to_string()),
+            // **`turn` is not here either** - `P-288` and `S-48`. It went out of
+            // `dump::tables` in the same change and stayed here, which is what a rule
+            // applied to one of two renderers looks like: the markdown state lost the
+            // column and the entity view went on printing it, and nothing compared them.
+            //
+            // Found by reading `entities.md` rather than by a check, and there is no check
+            // to add here that `tests/vocabulary.rs` does not already make over the data
+            // file - this view is a presentation and `P-284` does not bind it. What binds
+            // it is `P-288` saying `turn` is not a declared trait, and a presentation
+            // showing a fact the game does not have is the shape `founded` had.
             (
                 "territories".to_string(),
                 game.territories.len().to_string(),

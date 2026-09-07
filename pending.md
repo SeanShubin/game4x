@@ -19,7 +19,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - `f2ab5f3` X-3 answers S-57: four phenomena, and restarting fixes one of them · still open in `docs/notes/proposals.md`
 - **S-54** - `763e738` S-54: the containment tree Sean asked to see, generated from the scenario · still open in `docs/notes/proposals.md`
-- **S-47** - `6cbbaff` S-47: the map form, generated from the state rather than from the presentation · still open in `docs/notes/proposals.md`
+- **S-47** - `a4a6188` C-34 held against S-47, and the writer made to refuse what it was quietly losing · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 - **Q-64** - `39704b9` Q-64 into C-37, and a check made to match the claim in its own name · still open in `lenses/quality/outbox.md`
 
@@ -40,8 +40,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
-### To spec (17)
+### To spec (18)
 
+- **C-48** - `spec/console.md` says a command is written two different ways, in two sections, and uses the older one throughout · `crates/outbox.md`
 - **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
 - **C-46** - Four things the map form needs that no document says, and the two words it writes anyway · `crates/outbox.md`
 - **C-45** - Holding `S-47` for room, and the trigger this lane recorded may have dissolved · `crates/outbox.md`

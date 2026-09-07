@@ -5,9 +5,9 @@ These are the rows the F3 browser shows, from the same function.
 
 ## game
 
-| id       | phase | turn | territories | units |
-| -------- | ----- | ---- | ----------- | ----- |
-| the game | play  | 11   | 12          | 1     |
+| id       | phase | territories | units |
+| -------- | ----- | ----------- | ----- |
+| the game | play  | 12          | 1     |
 
 1 row(s)
 
