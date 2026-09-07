@@ -49,5 +49,6 @@ disagree, the spec is right and the note needs a superseded marker.
 | [Comparing region schemes](region-schemes.md)                                | Every known way to divide a sphere into hex-like regions, measured against each other                               | 2026-08-24 |
 - [Checks outlive examples](checks-outlive-examples.md) - why three findings in one day all looked green
 - [One tree](one-tree.md) - what has to change for a territory to stop being privileged
+- [A gate claim scoped to where I looked](2026-09-07-a-gate-claim-scoped-to-where-i-looked.md) - I named a directory when the gate covers a workspace
 - [How this lane fails](how-this-lane-fails.md) - the defects of 2026-09-01, by cause
 - [tools/spec, designed](tools-spec-design.md) - the editing tool as named operations rather than a script

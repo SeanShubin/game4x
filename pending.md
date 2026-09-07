@@ -21,6 +21,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 - **R-7** - `747de8a` R-7's remainder: the world's shown once on one end-turn, and two things that found · still open in `releases/first-release.md`
+- **Q-68** - `7f8059e` P-346 from the quality lens's Q-68, and a note on a claim I scoped wrong · still open in `lenses/quality/outbox.md`
 - **X-6** - `4d5a081` File P-327 from X-6, and close S-57 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
