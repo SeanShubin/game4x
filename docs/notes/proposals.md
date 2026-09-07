@@ -60,7 +60,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) holds `P-346` through `P-350`.
+**Nothing.** [decisions.md](decisions.md) holds `P-346` through `P-352`.
 
 ## Addressed to other perspectives
 

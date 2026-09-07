@@ -21,6 +21,84 @@ here without first becoming a proposal.
 
 ## Open
 
+### P-352 - `CLAUDE.md` names the staging hazard correctly and gives an instruction that cannot close it
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** the research lens's `X-7` - **asks**
+a decision - **into** `CLAUDE.md` -> Perspectives, the staging bullet
+
+**Only you can approve a change to `CLAUDE.md`, which is why this is an item rather than an edit.**
+
+**The bullet's diagnosis is right, and I checked that rather than relaying it.** It already says
+`git commit` commits the index rather than the caller's changes, and already says *this is not a
+caution about your own carefulness; the hazard is someone else*. **The code lane's account of it -
+that it reads as a caution about being careful - is wrong**, and I would have repeated that if I had
+not opened the file.
+
+**What is missing is only the remedy, and that gap is real.** The instruction is *stage by name*.
+**Staging by name bounds what you add, not what gets committed**, so it cannot close the hazard the
+bullet correctly describes. It fired again today: the research lens staged by name, exactly as
+written, and 21 lines of the code lane's file went into the research lens's commit. Twenty-six lines
+a fortnight ago, 21 today, content intact both times.
+
+**Checking for the lock first does not help either** - the window is after the check.
+
+**A carrier already exists and nothing points at it.** `git commit -- <paths>` commits the named
+paths from the working tree and never the index, and `hooks/post-commit` was wired in `a60def3` for
+the residue that leaves. **The word `pathspec` appears in that hook and in the quality lens's own
+files, and nowhere in `CLAUDE.md` or `docs/process.md`.** The code lane has used the form for four
+commits today. So this is `P-327`'s principle finding its first case: **the carrier was built and
+the sentence was never changed.**
+
+**The choice, and it is a real one.**
+
+- **Tell every lane to commit by pathspec.** The hazard stops being reachable rather than being
+  warned about. **The cost is a second git idiom** every lane has to know, in the one file every
+  lane reads first
+- **Correct the bullet without adding the idiom** - say that staging by name bounds what you add and
+  not what you commit, so the race is survivable rather than preventable. **Cheaper, and it leaves a
+  known hazard open** on the argument that it has fired twice with the content intact both times
+
+**I have drafted no words**, because a proposal that asks a decision carries none until you have
+made it. Say which and the wording comes back as an approval.
+
+### P-351 - Two words in the data file that the release does not declare, and the exception list is full
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** the code lane's `C-46`, which has
+carried both since 2026-09-06 - **asks** a decision - **into** `releases/first-release.md` ->
+*Kinds* and *Traits*
+
+**My delay, not theirs.** `C-46` put both of these to me on the 6th and I have not put them to you
+until now.
+
+**Both are named exceptions in `crates/game-console/tests/vocabulary.rs`**, which fails if either is
+repaired and fails if a third appears - so neither can outlive itself. That file's own warning is
+why this is not indefinitely deferrable: *past about two, a list of exceptions is the thing being
+checked written twice.* **It is at two.**
+
+**1. Is `game` a kind?** It is the root of every data file - `{game phase:play ...}` - and
+`spec/logistics.md` needs a thing that is in nothing for containment to be a tree. **The word is the
+specification's own**, used by `spec/console.md` and `spec/invariants.md`. The release's *Kinds*
+table declares no `game`.
+
+- **A kind**, and it gets a row like any other
+- **Not a kind**, and then something has to say what the root is instead, because the file still
+  writes the word and the check still has to admit it
+
+**2. Is `manned` a *Traits* row or a deletion?** `Trait::Manned` is *citizens working here this
+turn*, kept on a garrison by the model since `P-276` and declared by no row.
+
+**The deletion argument is that no rule reads it** - `held_force` stopped when a garrison's own
+force went to zero - and `thing.rs` records the general form: **an unread representation cannot
+diverge detectably.**
+
+**The argument is weaker than `C-46` states it, which I found by looking rather than by taking it.**
+`manned` **is** read, by `crates/game-console/src/report.rs:149` and `:280`, which print it. It is
+read by a presentation and by no rule. **So deleting it changes what the report shows**, and that is
+the actual cost rather than nothing.
+
+- **A row**, and the trait is declared and stays printed
+- **A deletion**, and the report loses a line it currently carries
+
 ### P-350 - Filing this study as an item is what makes it unrunnable, and that is the finding
 
 **to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07, and again on

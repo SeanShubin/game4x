@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-352** - `CLAUDE.md` names the staging hazard correctly and gives an instruction that cannot close it · `docs/notes/decisions.md`
+- **P-351** - Two words in the data file that the release does not declare, and the exception list is full · `docs/notes/decisions.md`
 - **P-350** - Filing this study as an item is what makes it unrunnable, and that is the finding · `docs/notes/decisions.md`
 - **P-349** - Every move is constrained by adjacency, and `spec/` is the one place that does not say so · `docs/notes/decisions.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
