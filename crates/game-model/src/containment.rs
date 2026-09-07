@@ -222,28 +222,13 @@ fn ready(is: bool) -> &'static str {
 /// rather than a decision - `tests/descriptions.rs` names every one of them and fails when
 /// one is repaired or another appears.
 fn describe(thing: &Thing) -> Description {
-    // **`Thing::children` is not read here, and this is what stops that being silent.**
-    //
-    // The quality lens went looking for what the tree drops - `Q-66`'s review - and this is
-    // the one path it found. `Entry::leaf` builds an entry with no contents, so a `Thing`
-    // that held something would appear in the file as a thing holding nothing: **a state
-    // written down wrongly rather than a state refused**, which is the failure `C-34` records
-    // twice already.
-    //
-    // **It is dead rather than latent today**: `children` is declared, initialised empty by
-    // `Thing::of`, and written by nothing in the repository. So this asserts rather than
-    // recursing - recursing would be code written against a future, which `thing.rs` forbids
-    // in its own words about five traits it deleted for exactly that. **Whether the field
-    // should exist at all is `C-51`**, because `S-47` names it as the shape containment
-    // should take and `thing.rs` names an unwritten field as the thing to delete, and those
-    // two cannot both be acted on by whoever happens to be here.
-    assert!(
-        thing.children.is_empty(),
-        "a {} holds {} things and the map form is being written from its traits alone, \
-         which would lose them - `C-51`",
-        thing.kind.name(),
-        thing.children.len()
-    );
+    // **A `Thing` cannot hold anything, which is why nothing is asserted here.** It carried a
+    // list of contained things that nothing wrote; `C-66` deleted it, so a thing appearing in
+    // the file as holding nothing is now a fact about the type rather than a guard that has
+    // to keep firing. `Q-66`'s review found this path while the field existed, and what it
+    // found - a state written down wrongly rather than refused - is unreachable now rather
+    // than merely checked. The tree's depth is built below, from `Territory::held` and
+    // `Game::units`.
     let mut description = Description::of(thing.kind);
     for (name, value) in &thing.traits {
         let written = match name {
@@ -803,22 +788,6 @@ mod tests {
                 TerritoryId(1),
             ));
         }
-        tree(&game);
-    }
-
-    /// A thing whose `children` hold something stops the tree rather than losing them.
-    ///
-    /// **The assertion is not a claim, because this exhibits the state it refuses.** `Q-66`'s
-    /// review found `describe` reading a thing's traits and not its children; the field is
-    /// written by nothing today, so the only way to know the refusal works is to write one
-    /// here and watch it fire.
-    #[test]
-    #[should_panic(expected = "which would lose them")]
-    fn a_thing_holding_something_the_description_cannot_carry_is_refused() {
-        let mut game = a_world();
-        let mut store = Thing::of(Kind::Store);
-        store.children.push(Thing::of(Kind::Food));
-        game.territories[0].held.push(store);
         tree(&game);
     }
 

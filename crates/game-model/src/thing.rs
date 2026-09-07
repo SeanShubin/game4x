@@ -1,4 +1,4 @@
-//! What a thing is: a kind, its own traits, and the things it contains.
+//! What a thing is: a kind and its own traits.
 //!
 //! `spec/invariants.md`, promoted 2026-08-31:
 //!
@@ -16,17 +16,25 @@
 //!
 //! # A leaf is an observation, not a type
 //!
-//! [`Thing`] has children and a value, and a thing with no children is a leaf. There is no
-//! separate leaf type, because that would be a case in the one place the rule forbids one -
-//! and because it would be wrong on this game's own facts: a territory has a biome *and*
-//! contains citizens, an extractor has a resource *and* contains its catch. Under
-//! *containers have no value of their own* neither can be said.
+//! A thing holding nothing is a leaf, and there is no separate leaf type - that would be a case
+//! in the one place the rule forbids one, and it would be wrong on this game's own facts: a
+//! territory has a biome *and* contains citizens, an extractor has a resource *and* contains its
+//! catch. Under *containers have no value of their own* neither can be said.
+//!
+//! **Containment is not a field on this type, and `C-66` is why.** [`Thing`] carried a list of
+//! contained things that nothing in the repository ever wrote. The tree the data file states is
+//! built in [`crate::containment`] from `Territory::held` and `Game::units`, and its `Entry` is
+//! what carries a description and its contents at once - so the paragraph above is a fact about
+//! `Entry`, and this type is the flat record a description is made from. **An unread
+//! representation cannot diverge detectably**, which is the rule this file applied to five
+//! traits before it applied it here.
 //!
 //! # Parts and contents are one list at different depths
 //!
-//! `docs/notes/what-a-thing-is.md`, Sean's answer: a tank is a part of a pioneer and the
-//! energy is in the tank. Nothing here distinguishes a part from cargo, because the tree
-//! already does, by depth.
+//! `docs/notes/what-a-thing-is.md`, Sean's answer: a tank is a part of a pioneer and the energy
+//! is in the tank. Nothing distinguishes a part from cargo, because the tree already does, by
+//! depth. **In this release the tank is not a thing at all** - `fuel` is a trait of the unit,
+//! which `containment.rs` records against the release's own words.
 
 use std::collections::BTreeMap;
 
@@ -219,21 +227,19 @@ pub enum Trait {
     Ready,
 }
 
-/// A thing: its kind, its own traits, and what it contains.
+/// A thing: its kind and its own traits.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Thing {
     pub kind: Kind,
     pub traits: BTreeMap<Trait, u32>,
-    pub children: Vec<Thing>,
 }
 
 impl Thing {
-    /// A thing of this kind with nothing distinguishing it and nothing in it.
+    /// A thing of this kind with nothing distinguishing it.
     pub fn of(kind: Kind) -> Self {
         Thing {
             kind,
             traits: BTreeMap::new(),
-            children: Vec::new(),
         }
     }
 
