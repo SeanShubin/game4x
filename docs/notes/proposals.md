@@ -60,6 +60,68 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-342 - `produce ark` becomes `launch ark`, and stops producing anything
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** follows from `P-341` - **asks**
+approval - **shape** an instruction - **waits on** `P-341` - **into**
+`releases/first-release.md` -> Recipes
+
+**The change is a rename and a deletion.** `produce ark` today carries five rows; the recipe keeps
+the first four, is renamed, and loses the last.
+
+| Role        | Qty | Kind    | After       |
+| ----------- | --- | ------- | ----------- |
+| **consume** | 3   | metal   | kept        |
+| **consume** | 12  | energy  | kept        |
+| **consume** | 2   | citizen | kept        |
+| **require** | 1   | yard    | kept        |
+| **produce** | 1   | ark     | **deleted** |
+
+**The recipe's name becomes `launch ark`**, which is your word and is the act the player means.
+Nothing else in the row group changes: the cost, the Yard, and the empty Where cells all stand.
+
+**How to tell it was carried out**: `releases/first-release.md` has a `launch ark` recipe whose rows
+are exactly those four; **no recipe in the release produces an `ark`**; and the recipe count in the
+Recipes table is unchanged at sixteen, because this is a rename rather than an addition.
+
+**What follows for the code lane, filed on promotion rather than assumed.**
+
+- `{produce-ark territory:1}` at `scenario/commands/play.4x:164` becomes `{launch-ark territory:1}`;
+  **the command gains the territory argument it lacks today**, because a recipe requiring a Yard has
+  to say whose
+- `{move unit:ark territory:2}` at line 170 and `{launch-ark}` at line 182 both go
+- `{ark fuel:1 id:1 ready:yes}` leaves `scenario/expected/play.4x:48`, and with it the last Ark on
+  the ground
+- **`R-6` becomes vettable**, because the launch finally changes the state its evidence describes
+
+**This is the whole of the release's part.** Everything else `P-341` settles, and the two land
+together or not at all.
+
+### P-341 - Building an Ark and launching it are one act
+
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
+own - **asks** approval - **shape** text - **into** `spec/structures.md` -> Yard
+
+**Your decision.** *Lets go with b, and call it launch ark.*
+
+**The specification says one thing about a Yard** - `spec/structures.md:23`, *A Yard produces Arks* -
+and nothing about how one leaves. Offered as a second bullet beneath it:
+
+> - Building an Ark and launching it are one act. An Ark a Yard builds never stands on the planet
+
+**Why this is the specification's and not the release's.** A release never invents a rule, and *an
+Ark you build is already gone* is a rule. The rows that carry it are `P-342`, which waits on this.
+
+**What it makes observable.** `R-6` is vetted by *a scenario reaching a fully exploited planet and
+launching an Ark*. Today `{launch-ark}` fires no recipe, so `scenario/expected/play.4x:48` still
+holds `{ark fuel:1 id:1 ready:yes}` after the game's last command - **the win condition leaves no
+trace.** Under this rule the Ark is consumed and the win is visible in the state that follows.
+
+**It also makes one cell stale, and I will file that rather than fold it in.** The Units table lets
+an Ark cross *ascent*. Under one act no Ark you build ever ascends, and the one that arrives only
+comes down - so **`ascent` has no user left**. Whether the cell goes is a separate question with a
+separate answer, and filing it immediately after this lands is the rule rather than my preference.
+
 ### P-340 - A unit is taken apart when it deploys, not when it arrives
 
 **to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's

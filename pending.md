@@ -8,10 +8,11 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-342** - `produce ark` becomes `launch ark`, and stops producing anything · `docs/notes/proposals.md`
+- **P-341** - Building an Ark and launching it are one act · `docs/notes/proposals.md`
 - **P-340** - A unit is taken apart when it deploys, not when it arrives · `docs/notes/proposals.md`
 - **P-339** - An ark and a pioneer print life rather than eating, so neither has upkeep · `docs/notes/proposals.md`
 - **P-338** - A thing lasts a number of turns, paying its upkeep resets it, and having no number is durable · `docs/notes/proposals.md`
-- **P-341** - How an Ark leaves, and whether building one is the same act as launching it · `docs/notes/decisions.md`
 - **P-336** - `age` is declared, fires in no state, and `keeps` is not implemented · `docs/notes/decisions.md`
 - **P-337** - `perish` says a thing is consumed and its metal produced, and the model does neither · `docs/notes/decisions.md`
 

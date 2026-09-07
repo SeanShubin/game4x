@@ -8,6 +8,23 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, choosing one act and its name
+
+*Lets go with b, and call it launch ark.*
+
+**Building an Ark and launching it are one act.** No Ark a Yard builds ever stands on the planet, so
+three commands collapse to one, the Yard requirement is automatic rather than a rule anyone can
+violate, and `R-6` becomes vettable - today `{launch-ark}` fires no recipe, so the finished state
+still holds `{ark fuel:1 id:1 ready:yes}` and the win condition leaves no trace.
+
+**Split across two proposals because a release may not invent a rule.** `P-341` puts the rule in
+`spec/structures.md`, whose whole account of a Yard is *A Yard produces Arks*; `P-342` renames
+`produce ark` and deletes its `produce 1 ark` row. They land together or not at all.
+
+**And one cell goes stale**: the Units table lets an Ark cross *ascent*, which under one act has no
+user - an Ark you build never ascends and the one that arrives only comes down. Filed after they
+land rather than folded in, because it is a separate question with a separate answer.
+
 ## Said 2026-09-07, on how an Ark leaves
 
 *I was envisioning a structure capable of launching an ark, possibly the same one that builds it.
