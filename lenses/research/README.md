@@ -60,6 +60,9 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [When a rule is known and still not applied](2026-09-06-when-a-known-rule-is-not-applied.md)
+  - 2026-09-06. Answers `S-57`'s fourth question. Some rules fire at a moment of doubt and survive
+    as habits; the ones that fire at a moment of confidence need a carrier, not a clearer sentence.
 - [Answering from memory, and why the instance cannot tell](2026-09-06-answering-from-memory.md)
   - 2026-09-06. Answers `S-57`. The seven cases are four phenomena; only one is memory, and
     clearing context fixes that one while making two of the others worse.

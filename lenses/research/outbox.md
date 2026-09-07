@@ -28,9 +28,62 @@ citing the id, and this file records it. Check a rejection before defending it.
 
 ## Open
 
+### X-5 - the measurement `X-3` lacks needs an instance nobody has authorised
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md)
+
+**What.** `X-3` answers `S-57` by classifying seven cases rather than by measuring, and says so. The
+measurement it wants is a cold instance run against the seven questions - one that has read the files
+and nothing else - to test whether a fresh reader avoids each failure or reproduces it. That would
+settle question 3 as evidence instead of as derivation.
+
+**Why it is filed rather than done.** It needs an instance started for the purpose, which is Sean's
+resource rather than this lane's, and this lane's instructions do not let it spawn one unasked. It
+was recorded inside `X-3`'s prose, where `pending.md` cannot see it - which is the same failure as a
+promise living only in a proposal that promotion deletes.
+
+**Whether.** Worth doing eventually rather than now. `X-3`'s answer stands without it; what the
+measurement would add is the ability to say *how much* of a long-running instance's belief is memory,
+which no amount of classifying will produce. **Nothing waits on it.**
+
+### X-6 - a known rule is not applied when nothing carries it
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-when-a-known-rule-is-not-applied.md) · answers `S-57`'s fourth question
+
+**Answers the question the eighth case added.** *Normalize both sides instead of loosening the
+comparison* was proposed, approved and promoted by the specification lane, which then broke it five
+times the same afternoon and broke the adjacent heredoc rule while repairing it. **This lane broke
+the same heredoc rule hours later**, writing the report for `X-3`, having read it that day - a ninth
+case, verifiable in the session.
+
+**Some rules fire at a moment of doubt and some fire at a moment of confidence.** *Name the
+population*, *re-poison a check*, *do not take another lane's message as true* are each fired by
+something that happens - a number appearing, a list growing, a message arriving - so they survive as
+habits. *Normalize both sides* and *write a script to a file* are fired only by remembering, while
+the string being written looks correct. **The failure and the confidence are simultaneous**, which is
+why no amount of care removes them.
+
+**So the remedy is a carrier rather than a clearer sentence**: a check catches it afterwards and
+shares the defect here, because the rule governs how comparisons are written and a check is a
+comparison - four of the five broken assertions were in checks. A default path where the rule cannot
+be broken is stronger and often free; the heredoc failure was fixed by using a tool whose quoting is
+one level by construction, which made the rule unnecessary rather than better remembered. Checked:
+`tools/` has no general normalizing comparison, only one incidental use at
+`tools/outbox/src/lib.rs:286`.
+
+**The test it yields.** For any rule in `docs/process.md` or `CLAUDE.md`, ask what fires it. If the
+answer names something that happens, it can be a habit. **If the answer is *remembering*, it needs a
+carrier**, and writing it down more emphatically is not one.
+
+**Whether.** Worth reading now; worth acting on as a code-lane item only if Sean wants the carrier
+built. **No text drafted and no carrier designed** - where an anchor-matching helper belongs is the
+code lane's, not this lane's.
+
+## Resolved
+
 ### X-1 - what makes the game checkable by hand is never stated
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-what-the-theory-already-settles.md)
+**to** spec · **status** **acted** 2026-09-06 · `480efb4` — `P-317` promoted; the sentence is at `docs/process.md:100` · **raised** 2026-09-06 · **source** [report](2026-09-06-what-the-theory-already-settles.md)
 
 `docs/process.md:91` says the definitions, the transformations and the commands *"are enough to
 derive the fourth by hand"*, and rests *how I know the application is right* on that. It is true only
@@ -52,7 +105,7 @@ to write.
 
 ### X-2 - the default in `layers.md` does not satisfy the rule in `turn.md`
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-what-the-theory-already-settles.md)
+**to** spec · **status** **acted** 2026-09-06 · `d44335a` — `P-318` withdrawn, `docs/layers.md` superseded in that one respect, the hole deferred to `docs/notes/spec-backlog.md` · **raised** 2026-09-06 · **source** [report](2026-09-06-what-the-theory-already-settles.md)
 
 `spec/turn.md:24` requires that what settles competing effects be *"a deterministic mechanic of the
 game, and therefore something a person wrote and a player can change"*. `docs/layers.md:207` proposes
@@ -77,7 +130,7 @@ question is a real one for Sean rather than a defect to repair.
 
 ### X-3 - `S-57` answered: the seven cases are four phenomena, and restarting fixes one
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md) · answers `S-57`
+**to** spec · **status** **acted** 2026-09-06 · `00bc04b` — the count corrected and an eighth case added; its fourth question is answered by `X-6` · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md) · answers `S-57`
 
 Sorted by what actually failed, the seven cases in `S-57` share no mechanism and **only one is
 memory**: stale context (`P-320`); reading past a clause that was present (`P-315`, `C-35`, `C-34`);
@@ -107,7 +160,7 @@ than classify.
 
 ### X-4 - the rule that keeps a lane moving is written for one lane, and the rule binding all of them says stop
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** Sean, stating the operating model in a session where his own documents do not carry it
+**to** spec · **status** **acted** 2026-09-06 · `f810732` — `P-324` promoted; `docs/process.md:205` no longer says a blocked instance stops · **raised** 2026-09-06 · **source** Sean, stating the operating model in a session where his own documents do not carry it
 
 **Where.** `docs/process.md:273`, under *Coding instance*: *files a question ... and carries on with
 everything that does not depend on the answer*. `CLAUDE.md:340`, cycle step 9: **the code lane hits a
@@ -133,25 +186,3 @@ was right; under the model he stated it was not. `X-5` is that question, now fil
 exist at `:273` and are addressed to one lane. **No text drafted**: whether the general form belongs
 in *All lanes*, and what it does to *ends its turn when it is blocked*, is Sean's to settle and yours
 to write.
-
-### X-5 - the measurement `X-3` lacks needs an instance nobody has authorised
-
-**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md)
-
-**What.** `X-3` answers `S-57` by classifying seven cases rather than by measuring, and says so. The
-measurement it wants is a cold instance run against the seven questions - one that has read the files
-and nothing else - to test whether a fresh reader avoids each failure or reproduces it. That would
-settle question 3 as evidence instead of as derivation.
-
-**Why it is filed rather than done.** It needs an instance started for the purpose, which is Sean's
-resource rather than this lane's, and this lane's instructions do not let it spawn one unasked. It
-was recorded inside `X-3`'s prose, where `pending.md` cannot see it - which is the same failure as a
-promise living only in a proposal that promotion deletes.
-
-**Whether.** Worth doing eventually rather than now. `X-3`'s answer stands without it; what the
-measurement would add is the ability to say *how much* of a long-running instance's belief is memory,
-which no amount of classifying will produce. **Nothing waits on it.**
-
-## Closed
-
-Nothing yet.

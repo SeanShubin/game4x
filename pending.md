@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-326** - State the kind of failure, not the occasion, and the three places that do not · `docs/notes/proposals.md`
+Nothing. Every perspective has said so in its own outbox, and this is read from those
+files rather than from anybody's memory of them.
 
 ## Open, and a commit says otherwise
 
@@ -44,7 +45,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
-### To spec (23)
+### To spec (20)
 
 - **C-53** - `P-322` closed half the round trip and says it closed all of it, and its reason is `Q-66`'s shape · `crates/outbox.md`
 - **C-51** - `Thing::children` is written by nothing, and two rules in this repository disagree about what to do with an unwritten field · `crates/outbox.md`
@@ -64,11 +65,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
-- **X-1** - what makes the game checkable by hand is never stated · `lenses/research/outbox.md`
-- **X-2** - the default in `layers.md` does not satisfy the rule in `turn.md` · `lenses/research/outbox.md`
-- **X-3** - `S-57` answered: the seven cases are four phenomena, and restarting fixes one · `lenses/research/outbox.md`
-- **X-4** - the rule that keeps a lane moving is written for one lane, and the rule binding all of them says stop · `lenses/research/outbox.md`
 - **X-5** - the measurement `X-3` lacks needs an instance nobody has authorised · `lenses/research/outbox.md`
+- **X-6** - a known rule is not applied when nothing carries it · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 
