@@ -280,7 +280,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 19] = [
+pub const TRAITS: [TraitRow; 18] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -388,21 +388,18 @@ pub const TRAITS: [TraitRow; 19] = [
         values: "yes or no",
         held: Held::Derived("its upkeep was not met"),
     },
-    TraitRow {
-        name: "houses",
-        of: "a thing that contains things",
-        values: "whether people live in it",
-        held: Held::Stored,
-    },
     // **`P-288`: `phase` is a declared trait and `turn` is not.** The release grew this row
     // and the gate went red until this list followed, which is what `P-263` says a promotion
     // into a table the code generates from does. `turn` gets no row here and needs no rule
     // forbidding one: `P-284` admits only kinds, traits and trait values into a data file,
     // and `turn` is none of the three.
+    // **`P-308` names the values.** The cell read *before it starts, or once it has*, which
+    // describes them and names neither - so `design` and `play` appeared nowhere in the
+    // release, and `play` was a forbidden word under `P-284` while sitting in the data file.
     TraitRow {
         name: "phase",
         of: "the game",
-        values: "before it starts, or once it has",
+        values: "design or play",
         held: Held::Stored,
     },
 ];
@@ -656,6 +653,25 @@ const fn measured(role: Role, quantity: Quantity, noun: Noun) -> Line {
     }
 }
 
+/// A quantity that is an expression, on a kind that is also qualified.
+///
+/// `grow` is the one row that needs both - `P-310` gave it *the lesser of the surplus food
+/// and the citizens here* while it still consumes food that is `surplus`.
+const fn measured_traited(
+    role: Role,
+    quantity: Quantity,
+    noun: Noun,
+    traits: &'static [Qualifier],
+) -> Line {
+    Line {
+        role,
+        quantity,
+        noun,
+        traits,
+        place: None,
+    }
+}
+
 use Kind::*;
 use Owner::{Player, World};
 use Quantity::OfATrait;
@@ -671,7 +687,6 @@ const OF_RESOURCE: [Qualifier; 1] = [by("`$resource`", "resource")];
 const READY: [Qualifier; 1] = [by("ready", "ready")];
 const NOT_READY: [Qualifier; 1] = [by("not ready", "ready")];
 const SURPLUS: [Qualifier; 1] = [by("surplus", "surplus")];
-const HOUSES: [Qualifier; 1] = [by("houses", "houses")];
 const WITH_UPKEEP: [Qualifier; 1] = [by("with upkeep", "upkeep")];
 const UPKEEP_UNPAID: [Qualifier; 1] = [by("whose upkeep is unpaid", "unpaid")];
 const KEEPS_NONE: [Qualifier; 1] = [by("keeps 0", "keeps")];
@@ -812,10 +827,24 @@ pub const RECIPES: &[Recipe] = &[
     Recipe {
         name: "grow",
         owner: World,
+        // **`P-310`: three rows become two, and the fiction goes.** The `require 1 thing,
+        // houses` row published a requirement nothing could satisfy and nothing enforced -
+        // no kind carried `houses`, and `population_after(citizens, food)` takes two
+        // arguments, neither of them housing. And the quantities were `1`, which said one
+        // new citizen per surplus food: at 2 citizens and 6 food the table promised four
+        // where `spec/population.md` and the code both say two.
         lines: &[
-            traited(Consume, 1, Noun::Of(Food), &SURPLUS),
-            traited(Require, 1, THING, &HOUSES),
-            just(Produce, 1, Noun::Of(Citizen)),
+            measured_traited(
+                Consume,
+                OfATrait("the lesser of the surplus food and the citizens here"),
+                Noun::Of(Food),
+                &SURPLUS,
+            ),
+            measured(
+                Produce,
+                OfATrait("the lesser of the surplus food and the citizens here"),
+                Noun::Of(Citizen),
+            ),
         ],
     },
     Recipe {

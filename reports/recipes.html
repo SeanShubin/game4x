@@ -27,7 +27,7 @@ ul { padding-left: 1.2rem }
 <h1>Recipes</h1>
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p kinds -- recipes</code>, or <code>scripts/kinds.sh recipes</code>.</p>
 <p>Every recipe the release declares, with its own lines gathered under it. The release states these across seven columns, one row per line and the name written only on the first - which is the right shape for a table and the wrong one for answering <em>what does this recipe do</em>.</p>
-<p>16 recipes, 60 lines between them.</p>
+<p>16 recipes, 59 lines between them.</p>
 <h2>deploy ark</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul>
@@ -125,9 +125,8 @@ ul { padding-left: 1.2rem }
 <h2>grow</h2>
 <p>Run by the <strong>world</strong>.</p>
 <ul>
-<li><strong>consume</strong> 1 food, surplus</li>
-<li><strong>require</strong> 1 thing, houses</li>
-<li><strong>produce</strong> 1 citizen</li>
+<li><strong>consume</strong> food — the lesser of the surplus food and the citizens here, surplus</li>
+<li><strong>produce</strong> citizen — the lesser of the surplus food and the citizens here</li>
 </ul>
 <h2>perish</h2>
 <p>Run by the <strong>world</strong>.</p>

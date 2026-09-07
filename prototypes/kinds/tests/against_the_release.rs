@@ -224,31 +224,28 @@ fn a_recipe_naming_a_family_matches_every_kind_in_it() {
         assert!(Family::Thing.covers(kind), "{} is a thing", kind.name());
     }
 
-    // **A rule changed when the table grew, and this is where it shows.** `thing` is *every
-    // kind above*, so declaring a territory put one inside the family - and `grow` requires
-    // `thing, houses`, a trait *of a thing that contains things*. A territory houses its
-    // citizens, and `grow` could not match one before `P-192`.
-    //
-    // `docs/recipes/README.md` has rendered `territory (houses)` in that recipe since it
-    // was written. The rendering was right and the data could not say it.
     assert!(
         Family::Thing.covers(Kind::Territory),
-        "a territory is a thing, so `grow` can require the thing that houses its citizens"
+        "`thing` is every kind above, so declaring a territory puts one inside the family"
     );
+
+    // **`grow`'s `thing, houses` row was the example here and `P-310` deleted it.** The row
+    // published a requirement nothing could satisfy: no kind carried `houses`, and the only
+    // three occurrences of the word in the tree were its own declaration, the qualifier, and
+    // this row. What replaces it as the example is the family that is still load-bearing -
+    // `grow` consumes `food, surplus`, and `surplus` is a trait of food rather than of a
+    // family, so the two are checked side by side.
     let grow = kinds::RECIPES
         .iter()
         .find(|recipe| recipe.name == "grow")
         .expect("the world grows citizens");
-    let houses = grow
-        .lines
-        .iter()
-        .find(|line| line.traits.iter().any(|t| t.written == "houses"))
-        .expect("grow requires something that houses");
-    assert_eq!(
-        houses.noun.name(),
-        "thing",
-        "and it requires it by family, which is what makes a territory eligible"
+    assert!(
+        grow.lines
+            .iter()
+            .all(|line| line.traits.iter().all(|t| t.written != "houses")),
+        "`houses` is gone from the release and must be gone from here - `P-310`, `P-312`"
     );
+    assert_eq!(grow.lines.len(), 2, "three rows became two");
 }
 
 /// Every role the release writes is one of the four, and each is used.
@@ -293,13 +290,14 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
     assert_eq!(
         keeps,
         [
+            // `grow` left this list when `P-310` deleted its `require 1 thing, houses` row.
+            // It consumes and produces now and requires nothing.
             "deploy ark",
             "move",
             "found by land",
             "produce ark",
             "work",
-            "upkeep",
-            "grow"
+            "upkeep"
         ]
     );
 

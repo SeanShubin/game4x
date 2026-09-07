@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-13 kinds, 4 families, 19 traits, 16 recipes.
+13 kinds, 4 families, 18 traits, 16 recipes.
 
 ## citizen
 
@@ -29,7 +29,7 @@ a person: provides labor, eats, and grows on surplus.
 - `produce ark` consumes 2
 - `create labor` consumes 1, ready
 - `create labor` produces 1, not ready
-- `grow` produces 1
+- `grow` produces the lesser of the surplus food and the citizens here
 
 ## garrison
 
@@ -161,7 +161,7 @@ eaten by citizens; expires.
 
 - `work` produces `$where`'s density for that resource (as a resource)
 - `upkeep` consumes the thing's upkeep
-- `grow` consumes 1, surplus
+- `grow` consumes the lesser of the surplus food and the citizens here, surplus
 - `spoil` consumes 1, keeps 0
 - `age` consumes 1, keeps at least 1
 - `age` produces 1, keeps one less

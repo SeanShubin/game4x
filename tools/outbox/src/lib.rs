@@ -164,14 +164,14 @@ pub fn places(root: &Path) -> Vec<PathBuf> {
         root.join("docs/notes/proposals.md"),
         // **`S-53`: half of Sean's queue was invisible.** `docs/process.md` -> What I read,
         // and what I do: *two files are addressed to me and they hold different things*.
-        // `questions.md` holds choices only he can make, `proposals.md` holds words for him
+        // `decisions.md` holds choices only he can make, `proposals.md` holds words for him
         // to approve, and **an item lives in one at a time** - it sits in the questions file
         // while any question in it is unanswered and moves across when the last one is
         // answered. Reading only the second meant `pending.md` could report nothing waiting
         // on him while a decision sat there.
         //
         // Cheapest to fix while the file is empty, which it is today.
-        root.join("docs/notes/questions.md"),
+        root.join("docs/notes/decisions.md"),
         root.join("crates/outbox.md"),
     ];
     // A release is an outbox too. Each capability carries an id, a `**to** code` line and
@@ -1137,13 +1137,13 @@ Not closed, so not orphaned.
     /// An id that is in both of Sean's files during a move is reported.
     ///
     /// **`S-53`'s hazard, checked rather than assumed covered.** `docs/process.md` says an
-    /// item lives in one of his two files at a time: it sits in `questions.md` while any
+    /// item lives in one of his two files at a time: it sits in `decisions.md` while any
     /// question in it is unanswered and moves to `proposals.md` when the last one is. **The
     /// move is two edits**, and between them the id is in both - at which point a commit
     /// citing it no longer says which item it closed, which is the failure `CLAUDE.md` names
     /// for a duplicated id.
     ///
-    /// Reading `questions.md` at all is the other half, and it is what made this reachable:
+    /// Reading `decisions.md` at all is the other half, and it is what made this reachable:
     /// while the file was unread, an id could sit in both and `duplicate_ids` would see one.
     #[test]
     fn an_id_in_both_of_the_files_addressed_to_sean_is_a_duplicate() {
@@ -1152,7 +1152,7 @@ Not closed, so not orphaned.
 
 **to** sean · **status** open · **asks** a decision
 ";
-        let mut items = parse(mid_move, "docs/notes/questions.md");
+        let mut items = parse(mid_move, "docs/notes/decisions.md");
         items.extend(parse(mid_move, "docs/notes/proposals.md"));
         assert_eq!(items.len(), 2, "one id, written into both files");
 
@@ -1161,7 +1161,7 @@ Not closed, so not orphaned.
             doubled.get("Q-99").map(Vec::as_slice),
             Some(
                 [
-                    "docs/notes/questions.md".to_string(),
+                    "docs/notes/decisions.md".to_string(),
                     "docs/notes/proposals.md".to_string()
                 ]
                 .as_slice()

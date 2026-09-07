@@ -6,7 +6,7 @@ Every recipe the release declares, with its own lines gathered under it. The rel
 these across seven columns, one row per line and the name written only on the first - which
 is the right shape for a table and the wrong one for answering *what does this recipe do*.
 
-16 recipes, 60 lines between them.
+16 recipes, 59 lines between them.
 
 ## deploy ark
 
@@ -117,9 +117,8 @@ Run by the **world**.
 
 Run by the **world**.
 
-- **consume** 1 food, surplus
-- **require** 1 thing, houses
-- **produce** 1 citizen
+- **consume** food — the lesser of the surplus food and the citizens here, surplus
+- **produce** citizen — the lesser of the surplus food and the citizens here
 
 ## perish
 
