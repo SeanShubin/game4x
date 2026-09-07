@@ -104,8 +104,7 @@ meant - but if you meant no ark ever leaves, that is a different game and `R-9` 
 would delete.
 
 **One known gap, already tracked, and not yours to act on.** `{launch-ark}` fires no recipe -
-`crates/game-console/src/fired.rs:70`, *no recipe in it names an orbit*. It is the win condition's
-command, and `R-9` is open against it.
+`crates/game-console/src/fired.rs:70`, *no recipe in it names an orbit*. It is the win condition's command, and `R-6` is open against it.
 
 ### P-339 - An ark and a pioneer print life rather than eating, so neither has upkeep
 

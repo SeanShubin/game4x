@@ -21,6 +21,53 @@ here without first becoming a proposal.
 
 ## Open
 
+### P-341 - How an Ark leaves, and whether building one is the same act as launching it
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** Sean's own - **asks** a decision -
+**into** `spec/structures.md` -> Yard, and `releases/first-release.md` -> Recipes
+
+**Your words.** *I was envisioning a structure capable of launching an ark, possibly the same one
+that builds it. Possibly building and launching are the same act.*
+
+**Nothing says how an Ark leaves, and the scenario proves it.** `{launch-ark}` is the last command
+in the main scenario and fires no recipe - `crates/game-console/src/fired.rs:70`, *no recipe in it
+names an orbit*. **So the ark is still there afterwards**: `scenario/expected/play.4x:48` reads
+`{ark fuel:1 id:1 ready:yes}` in the finished state.
+
+**That is why `R-6` cannot be vetted.** Its evidence is *a scenario reaches a fully exploited planet
+and launches an Ark*, and the launch currently changes nothing. **`R-6` is the open capability this
+decides**, and I named `R-9` for it an hour ago, which was wrong.
+
+**Two ways, and they differ in whether an Ark you build ever stands on the ground.**
+
+**A - two acts.** A Yard produces an Ark; a separate `launch ark` requires a Yard and consumes it.
+
+- The Ark exists, can move, can ascend, and could deploy on another territory of this planet
+- **The scenario contradicts it as written**: the yard is in territory 1 (line 148), the ark is
+  produced there (164), then **moved to territory 2** (170) and launched (182) - and territory 2 has
+  no yard. So promoting A makes the scenario wrong and the code lane has to change it
+
+**B - one act.** A Yard builds and launches in the same breath: 3 metal, 12 energy, 2 citizens, and
+the Ark is gone.
+
+- **No Ark ever stands on this planet**, so lines 164, 170 and 182 collapse to one command, and
+  `{ark fuel:1 id:1 ready:yes}` leaves the expected state
+- The Yard requirement is automatic rather than a rule anyone can violate
+- **What it costs**: an Ark built here can never deploy here. Today that route exists - ascend, then
+  `deploy ark` on unclaimed ground for 2 extractors and 2 stores, against a pioneer's 1 extractor for
+  half the energy. **Nothing in the scenario uses it**, so it is a possibility being closed rather
+  than a behaviour being removed
+
+**I recommend B**, by your own two tests. *Nothing we don't need*: it deletes a unit lifecycle the
+game never exercises. *Not troublesome later*: an Ark's destination becomes an argument to the one
+command when there are many planets, which is where it would have to live under A too.
+
+**What I need is the choice.** A or B - and if B, whether the recipe is called `launch ark`, since
+that is the act the player means and `produce ark` would no longer describe what happens.
+
+**Either way `spec/structures.md` gains a line**, because *A Yard produces Arks* is all it says today
+and a release may not invent the rest.
+
 ### P-336 - `age` is declared, fires in no state, and `keeps` is not implemented
 
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** contradiction - **asks** a decision

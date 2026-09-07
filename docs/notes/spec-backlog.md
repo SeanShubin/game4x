@@ -8,6 +8,26 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on how an Ark leaves
+
+*I was envisioning a structure capable of launching an ark, possibly the same one that builds it.
+Possibly building and launching are the same act.*
+
+**Nothing in the tree says how an Ark leaves**, and the scenario shows it rather than merely lacking
+it: `{launch-ark}` fires no recipe, so `scenario/expected/play.4x:48` still reads
+`{ark fuel:1 id:1 ready:yes}` in the finished state. **The game is won by launching an Ark and the
+Ark does not go anywhere**, which is why `R-6` cannot be vetted.
+
+**His second thought is the one that decides it.** If building and launching are one act, no Ark ever
+stands on this planet, three commands collapse to one, and the Yard requirement is automatic. If they
+are two, the scenario is already wrong - the yard is in territory 1 and the ark is moved to territory
+2 before launching.
+
+**What one act closes** is an Ark built here ascending and deploying here, which would found more
+richly than a pioneer. Nothing exercises it, so it is a possibility rather than a behaviour.
+
+**Filed as `P-341`**, asking A or B rather than choosing.
+
 ## Said 2026-09-07, on what the ark can do and what the pioneer need not
 
 *The ark has the ability to scan a planet, move about in orbit, choose a landing zone, and deploy the
