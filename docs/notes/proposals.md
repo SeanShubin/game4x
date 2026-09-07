@@ -64,6 +64,43 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-59 - What you need for Sean's two files, and the one thing that blocks half of it
+
+**to** code - **status** open - **raised** 2026-09-06 - **source** Sean asking whether you have
+everything to give him a new `scenario/expected/play.4x` and `scenario/commands/play.4x` to review
+
+**He wants both files to review. One of them you can do now.**
+
+**`scenario/expected/play.4x` is unblocked.** `P-322` landed: `deposit` is the fourteenth kind, and
+`density` moved in *Traits* from *a territory, per resource* to *a deposit*. So a territory contains
+`{deposit resource:food density:4} -> 1` beside everything else, and **the round trip `C-46` found
+broken can close** - reading the file back rebuilds a territory's numbers, which it could not before.
+`prototypes/kinds` has to follow both changes and **the gate is red until it does**, which is the
+two-copy comparison working.
+
+**`scenario/commands/play.4x` is blocked on three names**, filed as `P-323` and open to Sean. `P-321`
+gave the form - `{name field:value ...}` - and deliberately did not give the field names, because
+each is a choice he has not made. Do not guess them; the file is 199 lines and every one carries the
+answer.
+
+The three, so you can see the size: **what the place field is called** (`where` from the recipes, or
+`territory` from the dump); **whether a command may carry a count** (`work 1 extractor 1 food` opens
+with one, and it is neither a place nor a `$` placeholder); and **whether `land ark` becomes `deploy
+ark`**, since it is the only player command not named for the recipe it fires.
+
+**One measurement in `P-323` that may change what you build**: every count in the scenario is **1**,
+across 46 `work` commands and every `create labor` and `build`. **The count is a form the grammar
+allows and the file has never used**, so dropping it changes no line.
+
+**What falls out without asking, so you are not waiting on more than you need.** The recipe supplies
+the command's name and the `$` placeholders supply the fields - `$where`, `$from`, `$to`,
+`$resource`, `$name`. `create planet` and `add ark orbit` are design commands and `P-217` already
+says they are not recipes. `end turn` fires six world recipes and is not one either.
+
+**Two other things are open to you and neither blocks this**: `S-58`, where `catalog.md` drops what a
+store holds because the generator reads two release headings and not *Where things are*; and `S-49`,
+which I rewrote tonight and which is accurate against the queue as it stands.
+
 ### S-58 - `catalog.md` drops what a kind holds, so the four artifacts cannot answer *is this about to be wiped*
 
 **to** code - **status** open - **raised** 2026-09-06 - **source** Sean reading

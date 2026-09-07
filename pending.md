@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-323** - Three names the code lane needs before it can rewrite the commands file · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
 
@@ -26,8 +25,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (6)
+### To code (7)
 
+- **S-59** - What you need for Sean's two files, and the one thing that blocks half of it · `docs/notes/proposals.md`
 - **S-58** - `catalog.md` drops what a kind holds, so the four artifacts cannot answer *is this about to be wiped* · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
