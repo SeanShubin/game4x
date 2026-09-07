@@ -39,40 +39,26 @@ end turn
 <h2>what changed</h2>
 <p><strong>gone</strong> (1)</p>
 <ul>
-<li>{unit id:1 kind:ark in-kind:orbit in-id:1 fuel:2 ready:yes}</li>
+<li>{orbit id:1} {ark fuel:2 id:1 ready:yes} -&gt; 1</li>
 </ul>
-<p><strong>new</strong> (3)</p>
+<p><strong>new</strong> (7)</p>
 <ul>
-<li>{extractor territory:1 resource:food ready:yes}</li>
-<li>{extractor territory:1 resource:metal ready:yes}</li>
-<li>{garrison territory:1 force:0}</li>
-</ul>
-<p><strong>changed</strong> (15)</p>
-<ul>
-<li>game phase:play · turn: 1 → 2</li>
-<li>game phase:play · units: 1 → 0</li>
-<li>kind id:ark · in-play: 1 → 0</li>
-<li>kind id:citizen · in-play: 0 → 4</li>
-<li>kind id:extractor · in-play: 0 → 2</li>
-<li>kind id:garrison · in-play: 0 → 1</li>
-<li>kind id:metal · in-play: 0 → 4</li>
-<li>labor territory:1 · made: 0 → 4</li>
-<li>labor territory:1 · left: 0 → 4</li>
-<li>store territory:1 resource:metal · amount: 0 → 4</li>
-<li>structure territory:1 structure:extractor · count: 0 → 2</li>
-<li>structure territory:1 structure:garrison · count: 0 → 1</li>
-<li>territory id:1 · citizens: 0 → 4</li>
-<li>territory-resource territory:1 resource:food · built: 0 → 1</li>
-<li>territory-resource territory:1 resource:metal · built: 0 → 1</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} -&gt; 4</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {garrison force:0 manned:0} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {metal} -&gt; 4</li>
+<li>{territory biome:grassland id:1 nature:1} {store resource:food} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {store resource:metal} -&gt; 1</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
 <table>
 <thead>
-<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+<tr><th>phase</th><th>territories</th><th>units</th></tr>
 </thead>
 <tbody>
-<tr><td>play</td><td>2</td><td>12</td><td>0</td></tr>
+<tr><td>play</td><td>12</td><td>0</td></tr>
 </tbody>
 </table>
 <p>1 row(s)</p>
@@ -317,27 +303,20 @@ build store 1 food
 end turn
 </pre>
 <h2>what changed</h2>
-<p><strong>new</strong> (1)</p>
+<p><strong>changed</strong> (3)</p>
 <ul>
-<li>{extractor territory:1 resource:food ready:yes}</li>
-</ul>
-<p><strong>changed</strong> (6)</p>
-<ul>
-<li>game phase:play · turn: 2 → 3</li>
-<li>kind id:extractor · in-play: 2 → 3</li>
-<li>kind id:metal · in-play: 4 → 6</li>
-<li>store territory:1 resource:metal · amount: 4 → 6</li>
-<li>structure territory:1 structure:extractor · count: 2 → 3</li>
-<li>territory-resource territory:1 resource:food · built: 1 → 2</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} · 1 → 2</li>
+<li>{territory biome:grassland id:1 nature:1} {metal} · 4 → 6</li>
+<li>{territory biome:grassland id:1 nature:1} {store resource:food} · 1 → 2</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
 <table>
 <thead>
-<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+<tr><th>phase</th><th>territories</th><th>units</th></tr>
 </thead>
 <tbody>
-<tr><td>play</td><td>3</td><td>12</td><td>0</td></tr>
+<tr><td>play</td><td>12</td><td>0</td></tr>
 </tbody>
 </table>
 <p>1 row(s)</p>
@@ -583,24 +562,20 @@ build store 1 metal
 end turn
 </pre>
 <h2>what changed</h2>
-<p><strong>changed</strong> (7)</p>
+<p><strong>changed</strong> (3)</p>
 <ul>
-<li>game phase:play · turn: 3 → 4</li>
-<li>kind id:citizen · in-play: 4 → 8</li>
-<li>kind id:metal · in-play: 6 → 9</li>
-<li>labor territory:1 · made: 4 → 8</li>
-<li>labor territory:1 · left: 4 → 8</li>
-<li>store territory:1 resource:metal · amount: 6 → 9</li>
-<li>territory id:1 · citizens: 4 → 8</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 4 → 8</li>
+<li>{territory biome:grassland id:1 nature:1} {metal} · 6 → 9</li>
+<li>{territory biome:grassland id:1 nature:1} {store resource:metal} · 1 → 2</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
 <table>
 <thead>
-<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+<tr><th>phase</th><th>territories</th><th>units</th></tr>
 </thead>
 <tbody>
-<tr><td>play</td><td>4</td><td>12</td><td>0</td></tr>
+<tr><td>play</td><td>12</td><td>0</td></tr>
 </tbody>
 </table>
 <p>1 row(s)</p>
@@ -852,29 +827,24 @@ build store 1 energy
 end turn
 </pre>
 <h2>what changed</h2>
-<p><strong>new</strong> (3)</p>
+<p><strong>new</strong> (2)</p>
 <ul>
-<li>{extractor territory:1 resource:food ready:yes}</li>
-<li>{extractor territory:1 resource:metal ready:yes}</li>
-<li>{extractor territory:1 resource:energy ready:yes}</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {store resource:energy} -&gt; 1</li>
 </ul>
-<p><strong>changed</strong> (6)</p>
+<p><strong>changed</strong> (2)</p>
 <ul>
-<li>game phase:play · turn: 4 → 5</li>
-<li>kind id:extractor · in-play: 3 → 6</li>
-<li>structure territory:1 structure:extractor · count: 3 → 6</li>
-<li>territory-resource territory:1 resource:energy · built: 0 → 1</li>
-<li>territory-resource territory:1 resource:food · built: 2 → 3</li>
-<li>territory-resource territory:1 resource:metal · built: 1 → 2</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} · 2 → 3</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} · 1 → 2</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
 <table>
 <thead>
-<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+<tr><th>phase</th><th>territories</th><th>units</th></tr>
 </thead>
 <tbody>
-<tr><td>play</td><td>5</td><td>12</td><td>0</td></tr>
+<tr><td>play</td><td>12</td><td>0</td></tr>
 </tbody>
 </table>
 <p>1 row(s)</p>
@@ -1131,35 +1101,25 @@ build extractor 1 energy
 end turn
 </pre>
 <h2>what changed</h2>
-<p><strong>new</strong> (2)</p>
+<p><strong>new</strong> (1)</p>
 <ul>
-<li>{extractor territory:1 resource:energy ready:yes}</li>
-<li>{extractor territory:1 resource:metal ready:yes}</li>
+<li>{territory biome:grassland id:1 nature:1} {energy} -&gt; 4</li>
 </ul>
-<p><strong>changed</strong> (13)</p>
+<p><strong>changed</strong> (4)</p>
 <ul>
-<li>game phase:play · turn: 5 → 6</li>
-<li>kind id:citizen · in-play: 8 → 12</li>
-<li>kind id:energy · in-play: 0 → 4</li>
-<li>kind id:extractor · in-play: 6 → 8</li>
-<li>kind id:metal · in-play: 9 → 15</li>
-<li>labor territory:1 · made: 8 → 12</li>
-<li>labor territory:1 · left: 8 → 12</li>
-<li>store territory:1 resource:energy · amount: 0 → 4</li>
-<li>store territory:1 resource:metal · amount: 9 → 15</li>
-<li>structure territory:1 structure:extractor · count: 6 → 8</li>
-<li>territory id:1 · citizens: 8 → 12</li>
-<li>territory-resource territory:1 resource:energy · built: 1 → 2</li>
-<li>territory-resource territory:1 resource:metal · built: 2 → 3</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 8 → 12</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} · 1 → 2</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} · 2 → 3</li>
+<li>{territory biome:grassland id:1 nature:1} {metal} · 9 → 15</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
 <table>
 <thead>
-<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+<tr><th>phase</th><th>territories</th><th>units</th></tr>
 </thead>
 <tbody>
-<tr><td>play</td><td>6</td><td>12</td><td>0</td></tr>
+<tr><td>play</td><td>12</td><td>0</td></tr>
 </tbody>
 </table>
 <p>1 row(s)</p>
@@ -1422,29 +1382,21 @@ build store 1 energy
 end turn
 </pre>
 <h2>what changed</h2>
-<p><strong>new</strong> (1)</p>
+<p><strong>changed</strong> (4)</p>
 <ul>
-<li>{extractor territory:1 resource:energy ready:yes}</li>
-</ul>
-<p><strong>changed</strong> (8)</p>
-<ul>
-<li>game phase:play · turn: 6 → 7</li>
-<li>kind id:energy · in-play: 4 → 12</li>
-<li>kind id:extractor · in-play: 8 → 9</li>
-<li>kind id:metal · in-play: 15 → 20</li>
-<li>store territory:1 resource:energy · amount: 4 → 12</li>
-<li>store territory:1 resource:metal · amount: 15 → 20</li>
-<li>structure territory:1 structure:extractor · count: 8 → 9</li>
-<li>territory-resource territory:1 resource:energy · built: 2 → 3</li>
+<li>{territory biome:grassland id:1 nature:1} {energy} · 4 → 12</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} · 2 → 3</li>
+<li>{territory biome:grassland id:1 nature:1} {metal} · 15 → 20</li>
+<li>{territory biome:grassland id:1 nature:1} {store resource:energy} · 1 → 2</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
 <table>
 <thead>
-<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+<tr><th>phase</th><th>territories</th><th>units</th></tr>
 </thead>
 <tbody>
-<tr><td>play</td><td>7</td><td>12</td><td>0</td></tr>
+<tr><td>play</td><td>12</td><td>0</td></tr>
 </tbody>
 </table>
 <p>1 row(s)</p>
@@ -1712,30 +1664,23 @@ end turn
 <h2>what changed</h2>
 <p><strong>new</strong> (1)</p>
 <ul>
-<li>{unit id:1 kind:pioneer in-kind:territory in-id:1 fuel:2 ready:yes}</li>
+<li>{territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1 ready:yes} -&gt; 1</li>
 </ul>
-<p><strong>changed</strong> (11)</p>
+<p><strong>changed</strong> (4)</p>
 <ul>
-<li>game phase:play · turn: 7 → 8</li>
-<li>game phase:play · units: 0 → 1</li>
-<li>kind id:citizen · in-play: 12 → 11</li>
-<li>kind id:energy · in-play: 12 → 18</li>
-<li>kind id:metal · in-play: 20 → 28</li>
-<li>kind id:pioneer · in-play: 0 → 1</li>
-<li>labor territory:1 · made: 12 → 11</li>
-<li>labor territory:1 · left: 12 → 11</li>
-<li>store territory:1 resource:energy · amount: 12 → 18</li>
-<li>store territory:1 resource:metal · amount: 20 → 28</li>
-<li>territory id:1 · citizens: 12 → 11</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 12 → 11</li>
+<li>{territory biome:grassland id:1 nature:1} {energy} · 12 → 18</li>
+<li>{territory biome:grassland id:1 nature:1} {metal} · 20 → 28</li>
+<li>{territory biome:grassland id:1 nature:1} {store resource:metal} · 2 → 3</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
 <table>
 <thead>
-<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+<tr><th>phase</th><th>territories</th><th>units</th></tr>
 </thead>
 <tbody>
-<tr><td>play</td><td>8</td><td>12</td><td>1</td></tr>
+<tr><td>play</td><td>12</td><td>1</td></tr>
 </tbody>
 </table>
 <p>1 row(s)</p>
@@ -1995,48 +1940,32 @@ end turn
 <h2>what changed</h2>
 <p><strong>gone</strong> (1)</p>
 <ul>
-<li>{unit id:1 kind:pioneer in-kind:territory in-id:1 fuel:2 ready:yes}</li>
+<li>{territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1 ready:yes} -&gt; 1</li>
 </ul>
-<p><strong>new</strong> (3)</p>
+<p><strong>new</strong> (7)</p>
 <ul>
-<li>{extractor territory:2 resource:food ready:yes}</li>
-<li>{extractor territory:2 resource:metal ready:yes}</li>
-<li>{garrison territory:2 force:0}</li>
+<li>{territory biome:grassland id:1 nature:1} {yard} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {citizen ready:yes} -&gt; 4</li>
+<li>{territory biome:grassland id:2 nature:1} {extractor ready:yes resource:food} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {extractor ready:yes resource:metal} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {garrison force:0 manned:0} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {store resource:food} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {store resource:metal} -&gt; 1</li>
 </ul>
-<p><strong>changed</strong> (23)</p>
+<p><strong>changed</strong> (3)</p>
 <ul>
-<li>game phase:play · turn: 8 → 9</li>
-<li>game phase:play · units: 1 → 0</li>
-<li>kind id:citizen · in-play: 11 → 16</li>
-<li>kind id:energy · in-play: 18 → 20</li>
-<li>kind id:extractor · in-play: 9 → 11</li>
-<li>kind id:garrison · in-play: 1 → 2</li>
-<li>kind id:metal · in-play: 28 → 13</li>
-<li>kind id:pioneer · in-play: 1 → 0</li>
-<li>kind id:yard · in-play: 0 → 1</li>
-<li>labor territory:1 · made: 11 → 12</li>
-<li>labor territory:1 · left: 11 → 12</li>
-<li>labor territory:2 · made: 0 → 4</li>
-<li>labor territory:2 · left: 0 → 4</li>
-<li>store territory:1 resource:energy · amount: 18 → 20</li>
-<li>store territory:1 resource:metal · amount: 28 → 13</li>
-<li>structure territory:1 structure:yard · count: 0 → 1</li>
-<li>structure territory:2 structure:extractor · count: 0 → 2</li>
-<li>structure territory:2 structure:garrison · count: 0 → 1</li>
-<li>territory id:1 · citizens: 11 → 12</li>
-<li>territory id:1 · yards: 0 → 1</li>
-<li>territory id:2 · citizens: 0 → 4</li>
-<li>territory-resource territory:2 resource:food · built: 0 → 1</li>
-<li>territory-resource territory:2 resource:metal · built: 0 → 1</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 11 → 12</li>
+<li>{territory biome:grassland id:1 nature:1} {energy} · 18 → 20</li>
+<li>{territory biome:grassland id:1 nature:1} {metal} · 28 → 13</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
 <table>
 <thead>
-<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+<tr><th>phase</th><th>territories</th><th>units</th></tr>
 </thead>
 <tbody>
-<tr><td>play</td><td>9</td><td>12</td><td>0</td></tr>
+<tr><td>play</td><td>12</td><td>0</td></tr>
 </tbody>
 </table>
 <p>1 row(s)</p>
@@ -2298,30 +2227,22 @@ end turn
 <h2>what changed</h2>
 <p><strong>new</strong> (1)</p>
 <ul>
-<li>{unit id:1 kind:ark in-kind:territory in-id:2 fuel:1 ready:yes}</li>
+<li>{territory biome:grassland id:2 nature:1} {ark fuel:1 id:1 ready:yes} -&gt; 1</li>
 </ul>
-<p><strong>changed</strong> (11)</p>
+<p><strong>changed</strong> (3)</p>
 <ul>
-<li>game phase:play · turn: 9 → 10</li>
-<li>game phase:play · units: 0 → 1</li>
-<li>kind id:ark · in-play: 0 → 1</li>
-<li>kind id:citizen · in-play: 16 → 18</li>
-<li>kind id:energy · in-play: 20 → 12</li>
-<li>kind id:metal · in-play: 13 → 10</li>
-<li>labor territory:2 · made: 4 → 6</li>
-<li>labor territory:2 · left: 4 → 6</li>
-<li>store territory:1 resource:energy · amount: 20 → 12</li>
-<li>store territory:1 resource:metal · amount: 13 → 10</li>
-<li>territory id:2 · citizens: 4 → 6</li>
+<li>{territory biome:grassland id:1 nature:1} {energy} · 20 → 12</li>
+<li>{territory biome:grassland id:1 nature:1} {metal} · 13 → 10</li>
+<li>{territory biome:grassland id:2 nature:1} {citizen ready:yes} · 4 → 6</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
 <table>
 <thead>
-<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+<tr><th>phase</th><th>territories</th><th>units</th></tr>
 </thead>
 <tbody>
-<tr><td>play</td><td>10</td><td>12</td><td>1</td></tr>
+<tr><td>play</td><td>12</td><td>1</td></tr>
 </tbody>
 </table>
 <p>1 row(s)</p>
@@ -2576,23 +2497,26 @@ launch ark
 end turn
 </pre>
 <h2>what changed</h2>
-<p><strong>changed</strong> (6)</p>
+<p><strong>gone</strong> (1)</p>
 <ul>
-<li>game phase:play · turn: 10 → 11</li>
-<li>kind id:citizen · in-play: 18 → 14</li>
-<li>labor territory:1 · made: 12 → 8</li>
-<li>labor territory:1 · left: 12 → 8</li>
-<li>territory id:1 · citizens: 12 → 8</li>
-<li>unit id:1 · in-kind: territory → orbit</li>
+<li>{territory biome:grassland id:2 nature:1} {ark fuel:1 id:1 ready:yes} -&gt; 1</li>
+</ul>
+<p><strong>new</strong> (1)</p>
+<ul>
+<li>{orbit id:2} {ark fuel:1 id:1 ready:yes} -&gt; 1</li>
+</ul>
+<p><strong>changed</strong> (1)</p>
+<ul>
+<li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 12 → 8</li>
 </ul>
 <h2>what is there now</h2>
 <h3>game</h3>
 <table>
 <thead>
-<tr><th>phase</th><th>turn</th><th>territories</th><th>units</th></tr>
+<tr><th>phase</th><th>territories</th><th>units</th></tr>
 </thead>
 <tbody>
-<tr><td>play</td><td>11</td><td>12</td><td>1</td></tr>
+<tr><td>play</td><td>12</td><td>1</td></tr>
 </tbody>
 </table>
 <p>1 row(s)</p>

@@ -23,6 +23,7 @@
 //! territory sits on a sphere: adjacency arrives as a graph of integer ids, computed
 //! above and handed in with the transition that creates the planet.
 
+pub mod containment;
 pub mod game;
 pub mod identity;
 pub mod rejection;

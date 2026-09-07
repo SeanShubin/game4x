@@ -28,17 +28,6 @@ pub struct Table {
     pub name: &'static str,
     pub columns: &'static [&'static str],
     pub rows: Vec<Vec<String>>,
-    /// How many leading columns name a row rather than describe it.
-    ///
-    /// **Without this a comparison pairs the wrong rows.** `expected::compare` matched on
-    /// the table and its first column, which is right for `territory` and wrong for
-    /// `extractor`: every extractor in territory 1 shared one identity, so building two of
-    /// them read as *one row changed* instead of *two rows appeared*. Turn 2's delta said
-    /// `extractor territory:1 · node: 3 → 2` - true of nothing that happened.
-    ///
-    /// Found by the check that reconciles a printed delta against the printed states, on its
-    /// first run, which is the check I had declined to build.
-    pub key: usize,
 }
 
 impl Table {
@@ -47,7 +36,6 @@ impl Table {
             name,
             columns,
             rows: Vec::new(),
-            key: key_of(name),
         }
     }
 
@@ -80,19 +68,6 @@ fn ready(exhausted: bool) -> String {
     if exhausted { "no" } else { "yes" }.to_string()
 }
 
-/// How many leading columns name a row of this table.
-///
-/// **One declaration, read by the writer and by the reader.** A row written to a file does
-/// not carry its key - that would be noise in the one artifact a person reads - so reading
-/// one back has to ask the same question the writer asked. Asking a different place would be
-/// two declarations, and a row that round-tripped into a different identity.
-pub fn key_of(table: &str) -> usize {
-    match table {
-        "store" | "extractor" | "structure" | "territory-resource" => 2,
-        _ => 1,
-    }
-}
-
 /// Every table, in a fixed order, for one moment of one game.
 ///
 /// **The list is written here and not discovered from the state**, which is the difference
@@ -101,14 +76,21 @@ pub fn key_of(table: &str) -> usize {
 /// `P-134`, so for now the enumerations come from the model's own `ALL` arrays wherever it
 /// has one - which is what keeps a resource with nothing in it from vanishing.
 pub fn tables(game: &Game) -> Vec<Table> {
-    let mut summary = Table::new("game", &["phase", "turn", "territories", "units"]);
+    // **`turn` is gone from here** - `P-288` and `S-48`. `phase` is a declared trait and
+    // `turn` is not, so it was the one word in the summary that named nothing the release
+    // declares. `turns.md` is where a turn number belongs, and it is in the heading of each
+    // one; the dump is a state, and which turn produced it is a fact about the file rather
+    // than about the game.
+    //
+    // `territories` and `units` stay in the markdown, which is a presentation and free to
+    // count things. The data file counts them by having them - `state.rs`.
+    let mut summary = Table::new("game", &["phase", "territories", "units"]);
     summary.push(vec![
         match game.phase {
             Phase::Design => "design",
             Phase::Play => "play",
         }
         .to_string(),
-        game.turn.to_string(),
         game.territories.len().to_string(),
         game.units.len().to_string(),
     ]);
@@ -1005,7 +987,7 @@ pub fn index(generated: &[(&str, String)]) -> String {
 /// One turn: what ran, what it changed, and what was there afterwards.
 pub struct Turn {
     pub commands: Vec<String>,
-    pub changed: crate::expected::Disagreement,
+    pub changed: crate::state::Disagreement,
     pub state: String,
 }
 
@@ -1045,7 +1027,7 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
     // a reader validating the state function had to find the differences himself.
     let mut turns: Vec<Turn> = Vec::new();
     let mut ran: Vec<String> = Vec::new();
-    let mut before = crate::expected::rows(&session.game);
+    let mut before = crate::state::entries(&session.game);
     for line in scenario.lines() {
         let line = line.trim();
         if line.is_empty() || line.starts_with('#') {
@@ -1056,10 +1038,10 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
             .run(line, commands)
             .unwrap_or_else(|why| panic!("`{line}` failed: {why}"));
         if line == "end turn" {
-            let after = crate::expected::rows(&session.game);
+            let after = crate::state::entries(&session.game);
             turns.push(Turn {
                 commands: std::mem::take(&mut ran),
-                changed: crate::expected::compare(&before, &after),
+                changed: crate::state::compare(&before, &after),
                 state: markdown(&session.game, ""),
             });
             before = after;

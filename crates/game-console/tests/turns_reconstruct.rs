@@ -11,9 +11,10 @@
 //! delta by the same path, comparing them proves only that the path is consistent with
 //! itself.**
 //!
-//! It does. `expected::rows` renders a state and `expected::compare` differences two of
-//! them, and both the printed delta *and* the printed state come from `dump::tables`. There
-//! is no second derivation available - the model's own state comparison **is** `compare`.
+//! It does. `state::entries` renders a state and `state::compare` differences two of them,
+//! and both the printed delta *and* the printed state come from the same containment tree.
+//! There is no second derivation available - the model's own state comparison **is**
+//! `compare`.
 //! So *the delta equals the difference of the two states* would compare a path to itself and
 //! report green whatever either said. **It is not built, and that is the finding rather than
 //! a gap.**
@@ -29,7 +30,7 @@
 
 use std::path::PathBuf;
 
-use game_console::{Library, Session, expected};
+use game_console::{Library, Session, state};
 
 struct Files(PathBuf);
 
@@ -119,9 +120,9 @@ fn replaying_what_the_report_lists_reaches_what_the_report_shows() {
             }
         }
 
-        let wrong = expected::compare(
-            &expected::rows(&played.game),
-            &expected::rows(&replayed.game),
+        let wrong = state::compare(
+            &state::entries(&played.game),
+            &state::entries(&replayed.game),
         );
         assert_eq!(
             wrong.total(),
@@ -146,61 +147,102 @@ fn replaying_what_the_report_lists_reaches_what_the_report_shows() {
     );
 }
 
-/// The printed delta accounts for every row the printed states gained or lost.
+/// The printed delta accounts for every thing the printed states gained or lost.
 ///
 /// **The check I first declined, and my reason for declining was wrong.** I said the delta
 /// and the states share `dump::tables`, so there is no second derivation and comparing them
 /// would compare a path to itself. The specification lane pointed out that the lens's
 /// caution forbids a second derivation that shares the **computation**, not one that shares
 /// the inputs - and reading the printed tables back out of `turns.md` and counting them
-/// calls neither `expected::compare` nor `dump::tables`. It runs on the artifact.
+/// calls neither `state::compare` nor `dump::tables`. It runs on the artifact.
 ///
-/// **The real reason to stop short is cost, and it is why this counts rows rather than
-/// differencing fields.** The delta prints as items and the state prints as tables, so a
-/// full comparison means translating between two representations - and a translator wrong in
-/// the same direction as the printer is circular again, only harder to see. Row counts need
-/// no translation: a table has so many rows before and so many after, and the delta says how
-/// many appeared and vanished. Those must agree.
+/// **`S-47` removed the circularity that argument was working around.** The delta comes from
+/// the containment tree now and the printed state still comes from `dump::tables`, so the
+/// two really are separate projections of the model. What was a reconciliation of an artifact
+/// against itself is a reconciliation of two derivations.
 ///
-/// So this catches a delta that **omits** a row - `S-39`'s failure - and does not catch one
-/// that reports a field wrongly. Field-level differencing is buildable and not built, and
-/// the reason is the translator, not circularity.
+/// **It reconciles the `kind` table rather than every table**, and that is the translation
+/// this can afford. A row of `kind` is *how many of this kind are in play anywhere*, which is
+/// exactly what an entry's quantity says - so the two sides need no translator, and a
+/// translator wrong in the same direction as the printer would be the circularity again,
+/// only harder to see. The other tables print a row per territory and resource whether or not
+/// anything is there, so their row counts are not counts of things at all.
+///
+/// So this catches a delta that **omits** a thing - `S-39`'s failure - and does not catch one
+/// that reports the wrong container. Placement-level reconciliation is buildable and not
+/// built, and the reason is the translator, not circularity.
+///
+/// # Turn 1's delta is reconciled by nothing, and that was found by poisoning
+///
+/// **A comparison needs a state on both sides and turn 1 has one.** The report prints the
+/// state after each turn, so the first turn's delta is against a state that was never
+/// printed - and the loop below has nothing to be its `previous`. Deleting a line from turn
+/// 1's delta leaves this green.
+///
+/// It was found the way `docs/process.md` says to find this: **the check was poisoned before
+/// it was believed**, one delta line removed at a time, and the first attempt landed in the
+/// blind region and passed. A check that has only ever passed is a claim - `C-33`.
+///
+/// **Not repaired here, because repairing it means printing the state before play begins**,
+/// which changes the artifact Sean reads rather than the check that reads it. Recorded so
+/// that the coverage is nine turns out of ten and says so, rather than reading as ten.
 #[test]
-fn the_delta_accounts_for_every_row_the_states_gained_or_lost() {
+fn the_delta_accounts_for_every_thing_the_states_gained_or_lost() {
     let report =
         std::fs::read_to_string(root().join("reports/turns.md")).expect("turns.md is generated");
 
-    // Rows per table, in each turn's printed state, counted from the text.
-    let counts = |state: &str| -> std::collections::BTreeMap<String, usize> {
+    // How many of each kind the printed `kind` table says are in play.
+    fn in_play(state: &str) -> std::collections::BTreeMap<String, i64> {
         let mut out = std::collections::BTreeMap::new();
-        let mut table = String::new();
+        let mut inside = false;
         for line in state.lines() {
             if let Some(name) = line.trim().strip_prefix("### ") {
-                table = name.trim().to_string();
+                inside = name.trim() == "kind";
                 continue;
             }
             let line = line.trim();
-            // A body row: starts with `|`, and is not the header or the separator.
-            if line.starts_with('|') && !line.contains("---") && !table.is_empty() {
-                *out.entry(table.clone()).or_insert(0usize) += 1;
+            if !inside || !line.starts_with('|') || line.contains("---") {
+                continue;
+            }
+            let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
+            let (Some(kind), Some(count)) = (cells.first(), cells.get(1)) else {
+                continue;
+            };
+            if let Ok(count) = count.parse::<i64>() {
+                out.insert(kind.to_string(), count);
             }
         }
-        // The header of each table counted as a row above; take it back off.
-        for value in out.values_mut() {
-            *value = value.saturating_sub(1);
-        }
         out
-    };
+    }
+
+    // The kind an entry is of, which is the innermost description of its path.
+    //
+    // **The innermost and not the first.** A line reads `{territory id:1} {citizen} -> 8`,
+    // and the thing that appeared is the citizen; taking the first would credit every change
+    // to the territory that contains it.
+    fn kind_of(path: &str) -> Option<String> {
+        let last = path.rfind('{')?;
+        let inner = &path[last + 1..];
+        let end = inner.find(['}', ' '])?;
+        Some(inner[..end].to_string())
+    }
 
     let turns: Vec<&str> = report.split("\n# Turn ").skip(1).collect();
     assert!(turns.len() > 1, "only {} turns parsed", turns.len());
 
+    // Nine of the ten, because turn 1 has no printed state before it - see above.
+    let reconciled = turns.len() - 1;
     let mut checked = 0usize;
-    let mut previous: Option<std::collections::BTreeMap<String, usize>> = None;
+    let mut moved = 0usize;
+    let mut previous: Option<std::collections::BTreeMap<String, i64>> = None;
     for (at, turn) in turns.iter().enumerate() {
         let state = turn.split("## what is there now").nth(1).unwrap_or("");
-        let now = counts(state);
-        assert!(!now.is_empty(), "turn {} prints no tables", at + 1);
+        let now = in_play(state);
+        assert!(
+            !now.is_empty(),
+            "turn {} prints no `kind` table, so this compares nothing",
+            at + 1
+        );
 
         if let Some(before) = previous {
             let delta = turn
@@ -209,48 +251,76 @@ fn the_delta_accounts_for_every_row_the_states_gained_or_lost() {
                 .and_then(|rest| rest.split("## what is there now").next())
                 .unwrap_or("");
 
-            // How many rows of each table the delta says appeared and vanished. A row reads
-            // `- {table field:value ...}` under **new** or **gone**.
-            let named = |heading: &str| -> std::collections::BTreeMap<String, usize> {
-                let mut out = std::collections::BTreeMap::new();
-                let Some(section) = delta.split(heading).nth(1) else {
-                    return out;
-                };
-                for line in section.lines() {
-                    let line = line.trim();
-                    if line.starts_with("**") {
-                        break;
-                    }
-                    if let Some(row) = line.strip_prefix("- {") {
-                        let table = row
-                            .split_whitespace()
-                            .next()
-                            .unwrap_or("")
-                            .trim_matches('"')
-                            .to_string();
-                        *out.entry(table).or_insert(0) += 1;
-                    }
+            // What the delta says each kind gained, net. `new` and `gone` carry a quantity
+            // after `->`; `changed` carries the two quantities either side of an arrow.
+            let mut said: std::collections::BTreeMap<String, i64> =
+                std::collections::BTreeMap::new();
+            let mut heading = "";
+            for line in delta.lines() {
+                let line = line.trim();
+                if line.starts_with("**") {
+                    heading = if line.starts_with("**new**") {
+                        "new"
+                    } else if line.starts_with("**gone**") {
+                        "gone"
+                    } else {
+                        "changed"
+                    };
+                    continue;
                 }
-                out
-            };
-            let appeared = named("**new**");
-            let vanished = named("**gone**");
+                let Some(item) = line.strip_prefix("- ") else {
+                    continue;
+                };
+                let Some(kind) = kind_of(item) else { continue };
+                let change = match heading {
+                    "new" | "gone" => {
+                        let Some((_, quantity)) = item.rsplit_once("-> ") else {
+                            continue;
+                        };
+                        let Ok(quantity) = quantity.trim().parse::<i64>() else {
+                            continue;
+                        };
+                        if heading == "new" {
+                            quantity
+                        } else {
+                            -quantity
+                        }
+                    }
+                    _ => {
+                        let Some((was, is)) = item.rsplit_once(" \u{2192} ") else {
+                            continue;
+                        };
+                        let Some((_, was)) = was.rsplit_once("\u{b7} ") else {
+                            continue;
+                        };
+                        let (Ok(was), Ok(is)) =
+                            (was.trim().parse::<i64>(), is.trim().parse::<i64>())
+                        else {
+                            continue;
+                        };
+                        is - was
+                    }
+                };
+                *said.entry(kind).or_insert(0) += change;
+            }
 
-            for (table, after) in &now {
-                let was = before.get(table).copied().unwrap_or(0);
-                let grew = *after as i64 - was as i64;
-                let said = appeared.get(table).copied().unwrap_or(0) as i64
-                    - vanished.get(table).copied().unwrap_or(0) as i64;
+            for (kind, after) in &now {
+                let was = before.get(kind).copied().unwrap_or(0);
+                let grew = after - was;
+                let accounted = said.get(kind).copied().unwrap_or(0);
                 assert_eq!(
                     grew,
-                    said,
-                    "turn {}: the `{table}` table went from {was} rows to {after}, and the \
-                     delta accounts for {said}. A row changed hands without the delta \
-                     saying so, which is what a correct-looking report that omits \
+                    accounted,
+                    "turn {}: the printed state says `{kind}` went from {was} to {after}, and \
+                     the delta accounts for {accounted}. A thing changed hands without the \
+                     delta saying so, which is what a correct-looking report that omits \
                      something looks like.",
                     at + 1
                 );
                 checked += 1;
+                if grew != 0 {
+                    moved += 1;
+                }
             }
         }
         previous = Some(now);
@@ -259,6 +329,20 @@ fn the_delta_accounts_for_every_row_the_states_gained_or_lost() {
     // Over every case, and how many there were.
     assert!(
         checked > 20,
-        "only {checked} table-turns compared; the report's shape has probably changed"
+        "only {checked} kind-turns compared; the report's shape has probably changed"
+    );
+    assert_eq!(
+        checked % reconciled,
+        0,
+        "{checked} comparisons over {reconciled} turns is not a whole number of kinds each, \
+         so some turn printed a different `kind` table from the rest"
+    );
+    // **And how many of them actually moved.** Every kind agreeing at zero on both sides is a
+    // reconciliation of nothing against nothing, which is the count-over-nothing failure with
+    // the sign flipped: it would pass on a delta that printed no lines at all.
+    assert!(
+        moved > 5,
+        "only {moved} of {checked} comparisons had anything change, so this would pass on an \
+         empty delta"
     );
 }

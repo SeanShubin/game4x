@@ -63,6 +63,68 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-46 - Four things the map form needs that no document says, and the two words it writes anyway
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** building `S-47`, and
+hitting each of them at the point where the code had to choose
+
+**derived from** what a thing contains is a map from a description to a quantity -
+`spec/console.md`, `P-287`
+
+**The map form is built and the data file is in it.** `scenario/expected/play.4x` is a tree
+now, generated from the model rather than from `dump::tables`, and every rule `spec/console.md`
+states about it is checked over the whole played state. **Four things it does not say came up
+while building, and each is a choice this lane made rather than found.** They are listed
+smallest first; only the third is likely to change anything.
+
+**1. How nesting is written.** `spec/console.md` fixes the entry - `{description} -> quantity`
+- and says a thing appears inside what holds it. It does not say how a reader sees the inside.
+**Assumed: indentation, two spaces to the level.** It diffs, it needs no closing token, and a
+line carries one entry the way every other line in a `.4x` file carries one thing.
+
+**2. Whether the root carries a quantity.** A quantity belongs to an entry in some map, and
+`spec/logistics.md` makes the game *the one thing that is in nothing*. **Assumed: it does not**,
+so the first line is `{game phase:play}` and every other line ends `-> n`.
+
+**3. A territory's `density` cannot be written, and neither can `total capacity`.** This is
+the one that costs something. `density` is a stored trait *per resource* and `total capacity`
+is one *per kind*, so a territory has three of the first and several of the second - and **a
+description is a flat map from a trait name to one value.** No rule says how a repeated trait
+is written, and inventing one would be inventing a rule.
+
+Total capacity has a home regardless: `spec/logistics.md` makes it a fact about containment
+keyed by kind, so it is computed and shown as `used/total` and never written as a trait.
+**Density has none.** **Assumed: neither goes in the data file**, so what the file states is
+what things contain, and the markdown dump keeps showing both - it is a presentation and free
+to. **The cost is that the round trip is text against tree rather than text against the
+game**: reading the file back cannot rebuild a territory's numbers, because they are not in
+it. `tests/expected_state.rs` says which half is proved rather than claiming the whole.
+
+**4. Sorting is lexicographic, so territory 10 comes before territory 1.** *Entries are in the
+order their descriptions sort in*, and the order a reader can check is the order of the text
+in front of them. **Not raised as a question** - the rule is unambiguous and the purpose is
+that the same state is the same bytes. Named because it is the first thing you will notice
+reading the file, and it is the rule working rather than a bug.
+
+**And two words in the file that the release does not declare.** Both are named exceptions in
+`tests/vocabulary.rs`, which fails if either is repaired and fails if a third appears - so
+neither can outlive itself:
+
+- **`game`** - `spec/logistics.md` needs a thing that is in nothing for containment to be a
+  tree, and the *Kinds* table declares no `game`. The word is the specification's own, used by
+  `spec/console.md` and `spec/invariants.md`, and it is the root of every data file. **A kind
+  or not a kind is yours.**
+- **`manned`** - *citizens working here this turn*, kept on a garrison by the model since
+  `P-276` and declared by no row of the *Traits* table. It is read by nothing: `held_force`
+  stopped reading it when a garrison's own force went to zero. **This one may be a deletion
+  rather than a row**, and `thing.rs` already records the argument for deleting an unread
+  trait - *an unread representation cannot diverge detectably*.
+
+**`fuel` was going to be a third and is not**, checked rather than assumed. Its Values cell
+reads *how much energy its tank holds*, which names no closed set - so the rule admits a
+number, and `fuel:1` is a number. Seven traits name a closed set and eleven do not, arrived at
+by reading the rows; `C-37` measured six before `P-308` named `phase`, and the two counts agree.
+
 ### C-45 - Holding `S-47` for room, and the trigger this lane recorded may have dissolved
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** finishing everything else and

@@ -41,8 +41,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
-### To spec (15)
+### To spec (16)
 
+- **C-46** - Four things the map form needs that no document says, and the two words it writes anyway · `crates/outbox.md`
 - **C-45** - Holding `S-47` for room, and the trigger this lane recorded may have dissolved · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
 - **C-44** - `S-56` was already done when it was filed, and so was the adjacency row after it · `crates/outbox.md`

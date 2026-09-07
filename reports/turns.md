@@ -20,39 +20,25 @@ end turn
 
 **gone** (1)
 
-- {unit id:1 kind:ark in-kind:orbit in-id:1 fuel:2 ready:yes}
+- {orbit id:1} {ark fuel:2 id:1 ready:yes} -> 1
 
-**new** (3)
+**new** (7)
 
-- {extractor territory:1 resource:food ready:yes}
-- {extractor territory:1 resource:metal ready:yes}
-- {garrison territory:1 force:0}
-
-**changed** (15)
-
-- game phase:play · turn: 1 → 2
-- game phase:play · units: 1 → 0
-- kind id:ark · in-play: 1 → 0
-- kind id:citizen · in-play: 0 → 4
-- kind id:extractor · in-play: 0 → 2
-- kind id:garrison · in-play: 0 → 1
-- kind id:metal · in-play: 0 → 4
-- labor territory:1 · made: 0 → 4
-- labor territory:1 · left: 0 → 4
-- store territory:1 resource:metal · amount: 0 → 4
-- structure territory:1 structure:extractor · count: 0 → 2
-- structure territory:1 structure:garrison · count: 0 → 1
-- territory id:1 · citizens: 0 → 4
-- territory-resource territory:1 resource:food · built: 0 → 1
-- territory-resource territory:1 resource:metal · built: 0 → 1
+- {territory biome:grassland id:1 nature:1} {citizen ready:yes} -> 4
+- {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} -> 1
+- {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} -> 1
+- {territory biome:grassland id:1 nature:1} {garrison force:0 manned:0} -> 1
+- {territory biome:grassland id:1 nature:1} {metal} -> 4
+- {territory biome:grassland id:1 nature:1} {store resource:food} -> 1
+- {territory biome:grassland id:1 nature:1} {store resource:metal} -> 1
 
 ## what is there now
 
 ### game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 2    | 12          | 0     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 0     |
 
 1 row(s)
 
@@ -283,26 +269,19 @@ end turn
 
 ## what changed
 
-**new** (1)
+**changed** (3)
 
-- {extractor territory:1 resource:food ready:yes}
-
-**changed** (6)
-
-- game phase:play · turn: 2 → 3
-- kind id:extractor · in-play: 2 → 3
-- kind id:metal · in-play: 4 → 6
-- store territory:1 resource:metal · amount: 4 → 6
-- structure territory:1 structure:extractor · count: 2 → 3
-- territory-resource territory:1 resource:food · built: 1 → 2
+- {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} · 1 → 2
+- {territory biome:grassland id:1 nature:1} {metal} · 4 → 6
+- {territory biome:grassland id:1 nature:1} {store resource:food} · 1 → 2
 
 ## what is there now
 
 ### game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 3    | 12          | 0     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 0     |
 
 1 row(s)
 
@@ -534,23 +513,19 @@ end turn
 
 ## what changed
 
-**changed** (7)
+**changed** (3)
 
-- game phase:play · turn: 3 → 4
-- kind id:citizen · in-play: 4 → 8
-- kind id:metal · in-play: 6 → 9
-- labor territory:1 · made: 4 → 8
-- labor territory:1 · left: 4 → 8
-- store territory:1 resource:metal · amount: 6 → 9
-- territory id:1 · citizens: 4 → 8
+- {territory biome:grassland id:1 nature:1} {citizen ready:yes} · 4 → 8
+- {territory biome:grassland id:1 nature:1} {metal} · 6 → 9
+- {territory biome:grassland id:1 nature:1} {store resource:metal} · 1 → 2
 
 ## what is there now
 
 ### game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 4    | 12          | 0     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 0     |
 
 1 row(s)
 
@@ -788,28 +763,23 @@ end turn
 
 ## what changed
 
-**new** (3)
+**new** (2)
 
-- {extractor territory:1 resource:food ready:yes}
-- {extractor territory:1 resource:metal ready:yes}
-- {extractor territory:1 resource:energy ready:yes}
+- {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} -> 1
+- {territory biome:grassland id:1 nature:1} {store resource:energy} -> 1
 
-**changed** (6)
+**changed** (2)
 
-- game phase:play · turn: 4 → 5
-- kind id:extractor · in-play: 3 → 6
-- structure territory:1 structure:extractor · count: 3 → 6
-- territory-resource territory:1 resource:energy · built: 0 → 1
-- territory-resource territory:1 resource:food · built: 2 → 3
-- territory-resource territory:1 resource:metal · built: 1 → 2
+- {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} · 2 → 3
+- {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} · 1 → 2
 
 ## what is there now
 
 ### game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 5    | 12          | 0     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 0     |
 
 1 row(s)
 
@@ -1052,34 +1022,24 @@ end turn
 
 ## what changed
 
-**new** (2)
+**new** (1)
 
-- {extractor territory:1 resource:energy ready:yes}
-- {extractor territory:1 resource:metal ready:yes}
+- {territory biome:grassland id:1 nature:1} {energy} -> 4
 
-**changed** (13)
+**changed** (4)
 
-- game phase:play · turn: 5 → 6
-- kind id:citizen · in-play: 8 → 12
-- kind id:energy · in-play: 0 → 4
-- kind id:extractor · in-play: 6 → 8
-- kind id:metal · in-play: 9 → 15
-- labor territory:1 · made: 8 → 12
-- labor territory:1 · left: 8 → 12
-- store territory:1 resource:energy · amount: 0 → 4
-- store territory:1 resource:metal · amount: 9 → 15
-- structure territory:1 structure:extractor · count: 6 → 8
-- territory id:1 · citizens: 8 → 12
-- territory-resource territory:1 resource:energy · built: 1 → 2
-- territory-resource territory:1 resource:metal · built: 2 → 3
+- {territory biome:grassland id:1 nature:1} {citizen ready:yes} · 8 → 12
+- {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} · 1 → 2
+- {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} · 2 → 3
+- {territory biome:grassland id:1 nature:1} {metal} · 9 → 15
 
 ## what is there now
 
 ### game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 6    | 12          | 0     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 0     |
 
 1 row(s)
 
@@ -1328,28 +1288,20 @@ end turn
 
 ## what changed
 
-**new** (1)
+**changed** (4)
 
-- {extractor territory:1 resource:energy ready:yes}
-
-**changed** (8)
-
-- game phase:play · turn: 6 → 7
-- kind id:energy · in-play: 4 → 12
-- kind id:extractor · in-play: 8 → 9
-- kind id:metal · in-play: 15 → 20
-- store territory:1 resource:energy · amount: 4 → 12
-- store territory:1 resource:metal · amount: 15 → 20
-- structure territory:1 structure:extractor · count: 8 → 9
-- territory-resource territory:1 resource:energy · built: 2 → 3
+- {territory biome:grassland id:1 nature:1} {energy} · 4 → 12
+- {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} · 2 → 3
+- {territory biome:grassland id:1 nature:1} {metal} · 15 → 20
+- {territory biome:grassland id:1 nature:1} {store resource:energy} · 1 → 2
 
 ## what is there now
 
 ### game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 7    | 12          | 0     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 0     |
 
 1 row(s)
 
@@ -1603,29 +1555,22 @@ end turn
 
 **new** (1)
 
-- {unit id:1 kind:pioneer in-kind:territory in-id:1 fuel:2 ready:yes}
+- {territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1 ready:yes} -> 1
 
-**changed** (11)
+**changed** (4)
 
-- game phase:play · turn: 7 → 8
-- game phase:play · units: 0 → 1
-- kind id:citizen · in-play: 12 → 11
-- kind id:energy · in-play: 12 → 18
-- kind id:metal · in-play: 20 → 28
-- kind id:pioneer · in-play: 0 → 1
-- labor territory:1 · made: 12 → 11
-- labor territory:1 · left: 12 → 11
-- store territory:1 resource:energy · amount: 12 → 18
-- store territory:1 resource:metal · amount: 20 → 28
-- territory id:1 · citizens: 12 → 11
+- {territory biome:grassland id:1 nature:1} {citizen ready:yes} · 12 → 11
+- {territory biome:grassland id:1 nature:1} {energy} · 12 → 18
+- {territory biome:grassland id:1 nature:1} {metal} · 20 → 28
+- {territory biome:grassland id:1 nature:1} {store resource:metal} · 2 → 3
 
 ## what is there now
 
 ### game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 8    | 12          | 1     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 1     |
 
 1 row(s)
 
@@ -1871,47 +1816,31 @@ end turn
 
 **gone** (1)
 
-- {unit id:1 kind:pioneer in-kind:territory in-id:1 fuel:2 ready:yes}
+- {territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1 ready:yes} -> 1
 
-**new** (3)
+**new** (7)
 
-- {extractor territory:2 resource:food ready:yes}
-- {extractor territory:2 resource:metal ready:yes}
-- {garrison territory:2 force:0}
+- {territory biome:grassland id:1 nature:1} {yard} -> 1
+- {territory biome:grassland id:2 nature:1} {citizen ready:yes} -> 4
+- {territory biome:grassland id:2 nature:1} {extractor ready:yes resource:food} -> 1
+- {territory biome:grassland id:2 nature:1} {extractor ready:yes resource:metal} -> 1
+- {territory biome:grassland id:2 nature:1} {garrison force:0 manned:0} -> 1
+- {territory biome:grassland id:2 nature:1} {store resource:food} -> 1
+- {territory biome:grassland id:2 nature:1} {store resource:metal} -> 1
 
-**changed** (23)
+**changed** (3)
 
-- game phase:play · turn: 8 → 9
-- game phase:play · units: 1 → 0
-- kind id:citizen · in-play: 11 → 16
-- kind id:energy · in-play: 18 → 20
-- kind id:extractor · in-play: 9 → 11
-- kind id:garrison · in-play: 1 → 2
-- kind id:metal · in-play: 28 → 13
-- kind id:pioneer · in-play: 1 → 0
-- kind id:yard · in-play: 0 → 1
-- labor territory:1 · made: 11 → 12
-- labor territory:1 · left: 11 → 12
-- labor territory:2 · made: 0 → 4
-- labor territory:2 · left: 0 → 4
-- store territory:1 resource:energy · amount: 18 → 20
-- store territory:1 resource:metal · amount: 28 → 13
-- structure territory:1 structure:yard · count: 0 → 1
-- structure territory:2 structure:extractor · count: 0 → 2
-- structure territory:2 structure:garrison · count: 0 → 1
-- territory id:1 · citizens: 11 → 12
-- territory id:1 · yards: 0 → 1
-- territory id:2 · citizens: 0 → 4
-- territory-resource territory:2 resource:food · built: 0 → 1
-- territory-resource territory:2 resource:metal · built: 0 → 1
+- {territory biome:grassland id:1 nature:1} {citizen ready:yes} · 11 → 12
+- {territory biome:grassland id:1 nature:1} {energy} · 18 → 20
+- {territory biome:grassland id:1 nature:1} {metal} · 28 → 13
 
 ## what is there now
 
 ### game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 9    | 12          | 0     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 0     |
 
 1 row(s)
 
@@ -2159,29 +2088,21 @@ end turn
 
 **new** (1)
 
-- {unit id:1 kind:ark in-kind:territory in-id:2 fuel:1 ready:yes}
+- {territory biome:grassland id:2 nature:1} {ark fuel:1 id:1 ready:yes} -> 1
 
-**changed** (11)
+**changed** (3)
 
-- game phase:play · turn: 9 → 10
-- game phase:play · units: 0 → 1
-- kind id:ark · in-play: 0 → 1
-- kind id:citizen · in-play: 16 → 18
-- kind id:energy · in-play: 20 → 12
-- kind id:metal · in-play: 13 → 10
-- labor territory:2 · made: 4 → 6
-- labor territory:2 · left: 4 → 6
-- store territory:1 resource:energy · amount: 20 → 12
-- store territory:1 resource:metal · amount: 13 → 10
-- territory id:2 · citizens: 4 → 6
+- {territory biome:grassland id:1 nature:1} {energy} · 20 → 12
+- {territory biome:grassland id:1 nature:1} {metal} · 13 → 10
+- {territory biome:grassland id:2 nature:1} {citizen ready:yes} · 4 → 6
 
 ## what is there now
 
 ### game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 10   | 12          | 1     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 1     |
 
 1 row(s)
 
@@ -2422,22 +2343,25 @@ end turn
 
 ## what changed
 
-**changed** (6)
+**gone** (1)
 
-- game phase:play · turn: 10 → 11
-- kind id:citizen · in-play: 18 → 14
-- labor territory:1 · made: 12 → 8
-- labor territory:1 · left: 12 → 8
-- territory id:1 · citizens: 12 → 8
-- unit id:1 · in-kind: territory → orbit
+- {territory biome:grassland id:2 nature:1} {ark fuel:1 id:1 ready:yes} -> 1
+
+**new** (1)
+
+- {orbit id:2} {ark fuel:1 id:1 ready:yes} -> 1
+
+**changed** (1)
+
+- {territory biome:grassland id:1 nature:1} {citizen ready:yes} · 12 → 8
 
 ## what is there now
 
 ### game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 11   | 12          | 1     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 1     |
 
 1 row(s)
 

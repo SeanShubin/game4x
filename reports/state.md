@@ -5,9 +5,9 @@ is in it, because the names are what this is for.
 
 ## game
 
-| phase | turn | territories | units |
-| ----- | ---- | ----------- | ----- |
-| play  | 11   | 12          | 1     |
+| phase | territories | units |
+| ----- | ----------- | ----- |
+| play  | 12          | 1     |
 
 1 row(s)
 

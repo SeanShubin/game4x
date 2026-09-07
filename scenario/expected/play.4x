@@ -5,171 +5,50 @@
 # only record of one.
 #
 # Deleting a row, or this file, is how changing your mind is said - `docs/process.md`.
+#
+# A thing appears inside what holds it, and nothing states its container. A line reads
+# `{description} -> quantity`, and the description is the kind and every stored trait.
 
-{game phase:play turn:11 territories:12 units:1}
-
-{territory id:1 biome:grassland nature:1 citizens:8 labor-spent:0 yards:1}
-{territory id:2 biome:grassland nature:1 citizens:6 labor-spent:0 yards:0}
-{territory id:3 biome:grassland nature:1 citizens:0 labor-spent:0 yards:0}
-{territory id:4 biome:mountain nature:1 citizens:0 labor-spent:0 yards:0}
-{territory id:5 biome:mountain nature:1 citizens:0 labor-spent:0 yards:0}
-{territory id:6 biome:jungle nature:2 citizens:0 labor-spent:0 yards:0}
-{territory id:7 biome:jungle nature:2 citizens:0 labor-spent:0 yards:0}
-{territory id:8 biome:grassland nature:1 citizens:0 labor-spent:0 yards:0}
-{territory id:9 biome:mountain nature:1 citizens:0 labor-spent:0 yards:0}
-{territory id:10 biome:desert nature:1 citizens:0 labor-spent:0 yards:0}
-{territory id:11 biome:grassland nature:1 citizens:0 labor-spent:0 yards:0}
-{territory id:12 biome:ice nature:1 citizens:0 labor-spent:0 yards:0}
-
-{territory-resource territory:1 resource:food capacity:3 density:4 built:3}
-{territory-resource territory:1 resource:metal capacity:3 density:4 built:3}
-{territory-resource territory:1 resource:energy capacity:3 density:4 built:3}
-{territory-resource territory:2 resource:food capacity:2 density:6 built:1}
-{territory-resource territory:2 resource:metal capacity:2 density:4 built:1}
-{territory-resource territory:2 resource:energy capacity:2 density:4 built:0}
-{territory-resource territory:3 resource:food capacity:6 density:2 built:0}
-{territory-resource territory:3 resource:metal capacity:2 density:4 built:0}
-{territory-resource territory:3 resource:energy capacity:2 density:4 built:0}
-{territory-resource territory:4 resource:food capacity:1 density:2 built:0}
-{territory-resource territory:4 resource:metal capacity:4 density:5 built:0}
-{territory-resource territory:4 resource:energy capacity:4 density:5 built:0}
-{territory-resource territory:5 resource:food capacity:3 density:1 built:0}
-{territory-resource territory:5 resource:metal capacity:8 density:8 built:0}
-{territory-resource territory:5 resource:energy capacity:8 density:8 built:0}
-{territory-resource territory:6 resource:food capacity:4 density:4 built:0}
-{territory-resource territory:6 resource:metal capacity:0 density:0 built:0}
-{territory-resource territory:6 resource:energy capacity:4 density:5 built:0}
-{territory-resource territory:7 resource:food capacity:4 density:4 built:0}
-{territory-resource territory:7 resource:metal capacity:4 density:5 built:0}
-{territory-resource territory:7 resource:energy capacity:0 density:0 built:0}
-{territory-resource territory:8 resource:food capacity:6 density:6 built:0}
-{territory-resource territory:8 resource:metal capacity:1 density:2 built:0}
-{territory-resource territory:8 resource:energy capacity:1 density:2 built:0}
-{territory-resource territory:9 resource:food capacity:2 density:3 built:0}
-{territory-resource territory:9 resource:metal capacity:6 density:8 built:0}
-{territory-resource territory:9 resource:energy capacity:1 density:2 built:0}
-{territory-resource territory:10 resource:food capacity:3 density:3 built:0}
-{territory-resource territory:10 resource:metal capacity:1 density:3 built:0}
-{territory-resource territory:10 resource:energy capacity:6 density:8 built:0}
-{territory-resource territory:11 resource:food capacity:5 density:6 built:0}
-{territory-resource territory:11 resource:metal capacity:5 density:6 built:0}
-{territory-resource territory:11 resource:energy capacity:5 density:6 built:0}
-{territory-resource territory:12 resource:food capacity:2 density:2 built:0}
-{territory-resource territory:12 resource:metal capacity:8 density:8 built:0}
-{territory-resource territory:12 resource:energy capacity:8 density:8 built:0}
-
-{store territory:1 resource:food amount:0}
-{store territory:1 resource:metal amount:10}
-{store territory:1 resource:energy amount:12}
-{store territory:2 resource:food amount:0}
-{store territory:2 resource:metal amount:0}
-{store territory:2 resource:energy amount:0}
-{store territory:3 resource:food amount:0}
-{store territory:3 resource:metal amount:0}
-{store territory:3 resource:energy amount:0}
-{store territory:4 resource:food amount:0}
-{store territory:4 resource:metal amount:0}
-{store territory:4 resource:energy amount:0}
-{store territory:5 resource:food amount:0}
-{store territory:5 resource:metal amount:0}
-{store territory:5 resource:energy amount:0}
-{store territory:6 resource:food amount:0}
-{store territory:6 resource:metal amount:0}
-{store territory:6 resource:energy amount:0}
-{store territory:7 resource:food amount:0}
-{store territory:7 resource:metal amount:0}
-{store territory:7 resource:energy amount:0}
-{store territory:8 resource:food amount:0}
-{store territory:8 resource:metal amount:0}
-{store territory:8 resource:energy amount:0}
-{store territory:9 resource:food amount:0}
-{store territory:9 resource:metal amount:0}
-{store territory:9 resource:energy amount:0}
-{store territory:10 resource:food amount:0}
-{store territory:10 resource:metal amount:0}
-{store territory:10 resource:energy amount:0}
-{store territory:11 resource:food amount:0}
-{store territory:11 resource:metal amount:0}
-{store territory:11 resource:energy amount:0}
-{store territory:12 resource:food amount:0}
-{store territory:12 resource:metal amount:0}
-{store territory:12 resource:energy amount:0}
-
-{garrison territory:1 force:0}
-{garrison territory:2 force:0}
-
-{extractor territory:1 resource:food ready:yes}
-{extractor territory:1 resource:metal ready:yes}
-{extractor territory:1 resource:food ready:yes}
-{extractor territory:1 resource:metal ready:yes}
-{extractor territory:1 resource:food ready:yes}
-{extractor territory:1 resource:energy ready:yes}
-{extractor territory:1 resource:metal ready:yes}
-{extractor territory:1 resource:energy ready:yes}
-{extractor territory:1 resource:energy ready:yes}
-{extractor territory:2 resource:food ready:yes}
-{extractor territory:2 resource:metal ready:yes}
-
-{structure territory:1 structure:extractor count:9}
-{structure territory:1 structure:garrison count:1}
-{structure territory:1 structure:yard count:1}
-{structure territory:2 structure:extractor count:2}
-{structure territory:2 structure:garrison count:1}
-{structure territory:2 structure:yard count:0}
-{structure territory:3 structure:extractor count:0}
-{structure territory:3 structure:garrison count:0}
-{structure territory:3 structure:yard count:0}
-{structure territory:4 structure:extractor count:0}
-{structure territory:4 structure:garrison count:0}
-{structure territory:4 structure:yard count:0}
-{structure territory:5 structure:extractor count:0}
-{structure territory:5 structure:garrison count:0}
-{structure territory:5 structure:yard count:0}
-{structure territory:6 structure:extractor count:0}
-{structure territory:6 structure:garrison count:0}
-{structure territory:6 structure:yard count:0}
-{structure territory:7 structure:extractor count:0}
-{structure territory:7 structure:garrison count:0}
-{structure territory:7 structure:yard count:0}
-{structure territory:8 structure:extractor count:0}
-{structure territory:8 structure:garrison count:0}
-{structure territory:8 structure:yard count:0}
-{structure territory:9 structure:extractor count:0}
-{structure territory:9 structure:garrison count:0}
-{structure territory:9 structure:yard count:0}
-{structure territory:10 structure:extractor count:0}
-{structure territory:10 structure:garrison count:0}
-{structure territory:10 structure:yard count:0}
-{structure territory:11 structure:extractor count:0}
-{structure territory:11 structure:garrison count:0}
-{structure territory:11 structure:yard count:0}
-{structure territory:12 structure:extractor count:0}
-{structure territory:12 structure:garrison count:0}
-{structure territory:12 structure:yard count:0}
-
-{labor territory:1 made:8 spent:0 left:8}
-{labor territory:2 made:6 spent:0 left:6}
-{labor territory:3 made:0 spent:0 left:0}
-{labor territory:4 made:0 spent:0 left:0}
-{labor territory:5 made:0 spent:0 left:0}
-{labor territory:6 made:0 spent:0 left:0}
-{labor territory:7 made:0 spent:0 left:0}
-{labor territory:8 made:0 spent:0 left:0}
-{labor territory:9 made:0 spent:0 left:0}
-{labor territory:10 made:0 spent:0 left:0}
-{labor territory:11 made:0 spent:0 left:0}
-{labor territory:12 made:0 spent:0 left:0}
-
-{unit id:1 kind:ark in-kind:orbit in-id:2 fuel:1 ready:yes}
-
-{kind id:citizen in-play:14}
-{kind id:labor in-play:0}
-{kind id:food in-play:0}
-{kind id:metal in-play:10}
-{kind id:energy in-play:12}
-{kind id:extractor in-play:11}
-{kind id:garrison in-play:2}
-{kind id:yard in-play:1}
-{kind id:ark in-play:1}
-{kind id:pioneer in-play:0}
-{kind id:territory in-play:12}
+{game phase:play}
+  {orbit id:10} -> 1
+  {orbit id:11} -> 1
+  {orbit id:12} -> 1
+  {orbit id:1} -> 1
+  {orbit id:2} -> 1
+    {ark fuel:1 id:1 ready:yes} -> 1
+  {orbit id:3} -> 1
+  {orbit id:4} -> 1
+  {orbit id:5} -> 1
+  {orbit id:6} -> 1
+  {orbit id:7} -> 1
+  {orbit id:8} -> 1
+  {orbit id:9} -> 1
+  {territory biome:desert id:10 nature:1} -> 1
+  {territory biome:grassland id:1 nature:1} -> 1
+    {citizen ready:yes} -> 8
+    {energy} -> 12
+    {extractor ready:yes resource:energy} -> 3
+    {extractor ready:yes resource:food} -> 3
+    {extractor ready:yes resource:metal} -> 3
+    {garrison force:0 manned:0} -> 1
+    {metal} -> 10
+    {store resource:energy} -> 2
+    {store resource:food} -> 2
+    {store resource:metal} -> 3
+    {yard} -> 1
+  {territory biome:grassland id:11 nature:1} -> 1
+  {territory biome:grassland id:2 nature:1} -> 1
+    {citizen ready:yes} -> 6
+    {extractor ready:yes resource:food} -> 1
+    {extractor ready:yes resource:metal} -> 1
+    {garrison force:0 manned:0} -> 1
+    {store resource:food} -> 1
+    {store resource:metal} -> 1
+  {territory biome:grassland id:3 nature:1} -> 1
+  {territory biome:grassland id:8 nature:1} -> 1
+  {territory biome:ice id:12 nature:1} -> 1
+  {territory biome:jungle id:6 nature:2} -> 1
+  {territory biome:jungle id:7 nature:2} -> 1
+  {territory biome:mountain id:4 nature:1} -> 1
+  {territory biome:mountain id:5 nature:1} -> 1
+  {territory biome:mountain id:9 nature:1} -> 1
