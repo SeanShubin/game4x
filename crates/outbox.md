@@ -61,6 +61,41 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-67 - The language carries a tree and no command asks for one
+
+**to** spec · **status** open · **raised** 2026-09-07 · **source** building `P-212` and finding
+nothing that could use it
+
+**derived from** a value is a word, a number, or another command in the same form -
+`spec/console.md`, `P-212`
+
+**Where.** `crates/command-language/src/grammar.rs`, `Kind::Command`, built; and
+`crates/game-console/src/`, where 39 holes are declared and none of them is one.
+
+**What.** `P-212` is built at the language level and `5f18f9b` has the tests. **Nothing in the
+game can use it.** The console's grammar declares no command-valued hole, so a player cannot
+write a nested command, and the only place one is exercised is this crate's own test grammar -
+which is right for a crate whose first line says no game nouns live here, and is not evidence
+that the feature reaches anybody.
+
+**Why it costs.** Two things wait on the answer and neither is buildable without it.
+**`P-215`'s nested half is one**: it asks that a rejection name the command it was found
+inside, and `C-23` deferred that because no nested command could be written. One can be written
+now, but not to the console - so the reporting would still have nothing real to point at.
+**The other is whether `P-212` is finished.** If some recipe is meant to take a command, the
+form that declares it is the rest of the work; if none is, `P-212` is a capability the language
+holds against a later rule, and that is worth saying out loud rather than leaving as a gap
+somebody rediscovers.
+
+**Whether. Worth answering, not worth guessing.** Which recipe takes a command is a question
+about the game, and `spec/console.md` says a command *may* carry a tree without naming anything
+that does.
+
+**The assumption I proceeded under.** That the language capability is the whole of `P-212`, and
+that declaring a console form to use it would be inventing a rule. So I built the parser and
+stopped, rather than choosing a recipe to make nestable. The tests use a `repeat` form that
+exists in `parse.rs` and nowhere else, and its doc says why.
+
 ### C-66 - `Thing::children` has one reading left, and it says delete
 
 **to** code · **status** **acted** 2026-09-07 · `3447100` · **raised** 2026-09-07 · **source** `S-60` answering `C-51` and
@@ -90,7 +125,7 @@ right rather than quick.
 
 ### C-65 - `S-26`'s remainder is `P-212` and nothing else, and both `S-49` and this item said otherwise
 
-**to** spec · **status** open · **cited** `524ff31` · **raised** 2026-09-07 · **source** working `S-49`'s list in order
+**to** spec · **status** **answered** 2026-09-07 · `68f4fe8` · **cited** `524ff31` · **raised** 2026-09-07 · **source** working `S-49`'s list in order
 and reaching item six
 
 **Where.** `docs/notes/proposals.md` -> `S-49` item 6, against `S-26`'s own *now, and independent
@@ -2355,6 +2390,18 @@ untestable, and would go stale between now and `P-212` without anything noticing
 So: `Where::inside` is the chain of `run` commands, and when `P-212` lands it takes nested commands
 too without changing shape. **Nothing needs an answer.** Filed so that closing `S-26` does not read
 as closing all of `P-215`.
+
+**`P-212` landed on 2026-09-07 in `5f18f9b`, and this item's reason has moved rather than
+gone.** A nested command can now be written: `Kind::Command` is a hole, `Argument::Command`
+carries the tree, and `match_form` recurses at the value position. **The left recursion this
+lane was told to face deliberately does not exist** - `P-321` made braces their own tokens, so
+the recursive case is introduced by a terminal and one token of lookahead decides it.
+
+**What has not changed is why the nested half is still unbuilt.** No form in the console's
+grammar declares a command-valued hole, so no nested command can be written to the console
+even though the language accepts one. A field that could only ever be exercised by this crate's
+own test grammar would still be code written against a future. **That is `C-67`**, and it is a
+question rather than work.
 
 ### C-22 - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives
 

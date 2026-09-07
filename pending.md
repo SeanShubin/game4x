@@ -18,14 +18,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **C-65** - `68f4fe8` S-49 corrected back: C-65 was wrong and I rewrote an ordering on it · still open in `crates/outbox.md`
-
 ## What is outstanding
 
 ### To code (6)
@@ -39,7 +31,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ### To spec (23)
 
-- **C-65** - `S-26`'s remainder is `P-212` and nothing else, and both `S-49` and this item said otherwise · `crates/outbox.md`
+- **C-67** - The language carries a tree and no command asks for one · `crates/outbox.md`
 - **C-64** - `R-8` is built and its grouping is empty: no two kinds share a signature · `crates/outbox.md`
 - **C-63** - `move` is declared, has a command, and is fired by no scenario at all · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
