@@ -8,6 +8,24 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Deferred 2026-09-06, what settles competing effects
+
+*I understand the need to fill the hole, but not now.*
+
+**`spec/turn.md` requires a tie-break and never names one.** *What settles them is a
+deterministic mechanic of the game, and therefore something a person wrote and a player can
+change* - and nothing in `spec/`, `releases/` or `crates/` supplies one. Checked: no
+tie-break exists in the model, and `spec/turn.md`'s *Open questions* section is empty.
+
+**Nothing is blocked, which is why it waits.** Competing effects are not built yet; they
+arrive with the turn's sweep and with `S-44`'s storage. **The first real collision is when
+to decide**, so the choice is made against a case rather than in the abstract.
+
+**What was removed in the meantime**: `docs/layers.md` proposed the lower array index and
+is superseded in that one respect, because an index is not something a person wrote or a
+player can change. It was the only answer on file and it was the wrong kind of answer.
+Found by the research lane as `X-2`.
+
 ## Decided 2026-09-05, disorder is lost at the turn's end
 
 *B - Disorder is lost at turn end, while A could be interesting, so could a lot of other things and I

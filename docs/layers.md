@@ -204,11 +204,22 @@ matters — and the two answers have very different parallelism.
 correct, and inherently serial: *i+1* cannot start until *i* has landed. Parallelism is
 then confined to within a single event's own effect.
 
-**As a tie-break.** Every event in the array sees the same starting world. Where two
-events collide, the lower index wins. Fully parallel across the whole array, and still
-perfectly reproducible — because the index is data, not a schedule.
+**As a tie-break.** Every event in the array sees the same starting world. Fully parallel
+across the whole array, and still perfectly reproducible.
 
-Both are deterministic. Only the second is parallel. **Default to the tie-break reading**
+> **Superseded in one respect, 2026-09-06.** *Where two events collide, the lower index
+> wins* was written on 2026-08-24, a week before `spec/turn.md` said what settles competing
+> effects must be **a deterministic mechanic of the game, and therefore something a person
+> wrote and a player can change**. An array index is deterministic and is none of those,
+> so it is not the tie-break. **What is** has not been decided - Sean, 2026-09-06:
+> understood as a hole to fill, and not now. `docs/notes/spec-backlog.md` holds it.
+>
+> **The rest of this section stands.** *Every event sees the same starting world* is the
+> same claim `spec/turn.md` makes when it says nothing gains an advantage by being
+> considered first, and the parallelism argument is untouched.
+
+Both are deterministic. Only the second is parallel. **Default to the tie-break reading** - for its parallelism, which is what
+this paragraph is about; the tie-break itself is superseded above -
 and reach for sequencing only where a rule genuinely requires one event to observe
 another's result — which, for simultaneous turn resolution, is rare. Where a batch does
 need internal stages, it is usually cleaner to split the tick into two batches than to

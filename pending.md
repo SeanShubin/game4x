@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-317** - The thing that makes the fourth artifact derivable is never stated · `docs/notes/proposals.md`
-- **P-318** - `docs/layers.md` tells the code lane to default to a tie-break `spec/turn.md` forbids · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
 
@@ -17,6 +16,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-56** - `eb33c24` Close C-16 and C-41 under P-305, and file C-44: S-56 was already done · still open in `docs/notes/proposals.md`
 - **S-53** - `6f1a229` S-53: decisions.md, and the misfiling check that a person caught first · still open in `docs/notes/proposals.md`
 - **S-51** - `38b2cbe` S-51 on a measured predicate, Q-61 built in, and four items that were invisible · still open in `docs/notes/proposals.md`
 - **S-50** - `521d3b7` S-50's live half, C-33 closed by P-291, and the re-poison it asked for · still open in `docs/notes/proposals.md`
