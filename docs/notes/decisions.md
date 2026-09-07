@@ -21,39 +21,4 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-328 - A command's name is several words or one dashed word, and `spec/console.md` says both
-
-**to** sean - **status** open - **raised** 2026-09-06 - **kind** contradiction - **asks** a decision
-- **into** `spec/console.md` -> The language
-
-**You found it by reading the file the code lane produced.** It blocks
-`scenario/commands/play.4x`, which is the file you are waiting for, so it leads.
-
-**`spec/console.md`, line 23:** *A name is one word. **Where it needs more than one, the words are
-joined with dashes*** - `in-play`, not `"in play"`.
-
-**`spec/console.md`, twenty-four lines later:** *A command is written `{name field:value ...}`. Its
-**name is the words that open it***. And, from the same promotion: *a command is named for the
-recipe it fires.*
-
-**Ten recipes have names of more than one word** - `deploy ark`, `build extractor`, `build store`,
-`build yard`, `create labor`, `found by land`, `produce ark`, `produce pioneer`. So a command's name
-is either one token or several, and **the file says both.**
-
-- **Dashed.** `{deploy-ark territory:1}`, `{found-by-land territory:2}`. The name is one token like
-  every other name in every data file, and **there is no question of where the name ends**
-- **Several words.** `{deploy ark territory:1}`, `{found by land territory:2}`. Reads closer to
-  English, and needs a rule saying where the name stops - which nothing states, and which
-  `found by land` makes three words wide
-
-**My recommendation is dashed.** Line 23 is the older rule and the broader one: it governs **every
-name in every data file**, and the command sentence is the newer one that did not mention it.
-Dashing also removes the parsing question rather than answering it.
-
-**Every description in the expected data already opens with one token** - `{deposit ...}`,
-`{garrison ...}` - because no kind has a multi-word name. **Commands are the first place a
-multi-word name is written**, which is why this surfaced now rather than earlier.
-
-**One thing this does not touch.** Whether `deploy ark` is *a `deploy` command about an ark* is
-answered either way: it is one name, because a command is named for the recipe it fires and
-`deploy ark` is one recipe. **The question is only how that one name is spelled.**
+Nothing. Every choice put to Sean has been answered or withdrawn.

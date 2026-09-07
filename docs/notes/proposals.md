@@ -130,6 +130,46 @@ code, and the implementation details are the coding instance's own* stays exactl
 the reason underneath it**, which is what `P-302` says has to travel with a rule, and it settles the
 cases where *observable* alone would leave the boundary arguable.
 
+### P-328 - A name is one word, and a command's name is no exception
+
+**to** sean - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-06 - **kind** Sean's
+own - **shape** text - **asks** approval - **into** `spec/console.md` -> The language, replacing the
+sentence about a command's name
+
+**You chose dashed.** The sentence that said otherwise is the one that goes, so line 23's rule -
+*a name is one word, and where it needs more than one the words are joined with dashes* - governs a
+command's name like every other name.
+
+> A command is written `{name field:value ...}`. **Its name is one word**, dashed where it needs
+> more, and **it is the name of the recipe it fires**; its arguments are named. **A value is a word,
+> a number, or another command in the same form**, so a command may carry a tree.
+
+**What changes is four words.** *Its name is the words that open it* becomes *its name is one word,
+dashed where it needs more*. The rest of the sentence, and the tree-carrying half, are untouched.
+
+**The ten player commands then are**: `build-extractor`, `build-store`, `build-yard`, `create-labor`,
+`deploy-ark`, `found-by-land`, `move`, `produce-ark`, `produce-pioneer`, `work`. **So
+`{deploy-ark territory:1}` and `{found-by-land territory:2}`** - one token before the first field,
+with nothing to parse around.
+
+**On shortening them, which you said you did not feel strongly about: I checked all ten and none
+shortens without losing something.** The obvious candidate is not one.
+
+**`found-by-land` looks like it could be `found`, and it cannot.** `deploy-ark` produces a garrison,
+citizens, extractors and stores - **the same things `found-by-land` produces**. So there are two
+ways to found a territory, from orbit and by land, and ***by land* is exactly what distinguishes
+them.** Checked in the recipe rows rather than assumed from the names.
+
+**The others lose their subject.** `build-extractor`, `build-store` and `build-yard` differ only in
+what is built; `produce-ark` and `produce-pioneer` only in what is produced. Dropping the second word
+leaves `build` and `produce` meaning nothing in particular.
+
+**There is a real simplification here and it is not a shortening**, so I am not folding it in: those
+five could be two recipes taking a kind - `{build kind:extractor territory:1 resource:metal}`. **That
+merges rows in the recipe table rather than renaming them**, their costs would have to be shown to
+match first, and it is a change to the game's data rather than to how a name is spelled. Say if you
+want it looked at and it becomes its own item.
+
 ## Addressed to other perspectives
 
 ### S-61 - The check for `P-325`: a wait whose id is no longer open

@@ -10,7 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 - **P-327** - A rule that fires at a moment of confidence cannot be a habit · `docs/notes/proposals.md`
 - **P-329** - What decides what the specification instance owns · `docs/notes/proposals.md`
-- **P-328** - A command's name is several words or one dashed word, and `spec/console.md` says both · `docs/notes/decisions.md`
+- **P-328** - A name is one word, and a command's name is no exception · `docs/notes/proposals.md`
 
 ## Open, and a commit says otherwise
 
@@ -18,7 +18,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-59** - `ee9e386` S-59 first half: a deposit is a thing, so density is in the data file · still open in `docs/notes/proposals.md`
+- **S-59** - `ed2076d` S-59: every command is `{name field:value ...}`, named for the recipe it fires · still open in `docs/notes/proposals.md`
 - **S-58** - `8f505d7` S-58: the catalog reads Where things are, and a container that names no kind is loud · still open in `docs/notes/proposals.md`
 - **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-29** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
