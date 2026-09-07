@@ -349,7 +349,8 @@ A lens costs attention, which is the scarce resource. Before starting one, it ha
 class of finding will this produce that neither producer would?** If the honest answer is *the same
 things, sooner*, that is a case for better instructions to the code lane, not a new directory.
 
-To start one, create `lenses/<name>/README.md` and `lenses/<name>/outbox.md`, and tell it:
+To start one, tell it the following. `lenses/<name>/` is its own column, so **it creates**
+`lenses/<name>/README.md` and `lenses/<name>/outbox.md` itself if they are not there:
 
 > You are the `<name>` lens. Read `CLAUDE.md` → Perspectives, then `lenses/<name>/README.md`.
 >

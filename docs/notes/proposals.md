@@ -200,7 +200,7 @@ which is exactly the check two bullets up.
 
 ### S-52 - `P-296` promised a research lens a directory, and it does not exist
 
-**to** code - **status** **withdrawn** 2026-09-06 - `P-315` carries the gap: the code lane declined this correctly, because a producer never writes into a lens's directory and this lane is the other producer - **raised** 2026-09-06 - **source** `P-296`, promoted in `fb8608e`
+**to** code - **status** **withdrawn** 2026-09-06 - the code lane declined this correctly - a producer never writes into a lens's directory - and **nothing carries it, because nothing is outstanding**: the research lens is not running, so no finding is going unfiled, and starting it is what creates `lenses/research/`, which is its own column to write - **raised** 2026-09-06 - **source** `P-296`, promoted in `fb8608e`
 
 `docs/process.md` -> *Starting the instances* now carries a fourth prompt telling a research
 instance its outbox is `lenses/research/outbox.md`. **There is no such directory**, so the prompt
@@ -1835,3 +1835,4 @@ again in a later session.
 | P-237, three collisions from merging his process note                                 | Sean answered all three on 2026-09-04. Each is now its own item, which is what he can act on: `P-238` for what a proposal is, `P-239` for `pending.md`, `P-240` for who owns production support                                                                                                                                                             |            |
 | P-279, the twelve territories collapse to five profiles                               | withdrawn: it was a consequence of `P-272`, which `P-280` reverses                                                                                                                                                                                                                                                                                          | 2026-09-05 |
 | P-282, three of six columns on a territory row are not traits | withdrawn: `P-287` removes all three names rather than choosing between them | 2026-09-06 |
+| P-315, who may create a lens's directory | Withdrawn by this lane, 2026-09-06. **The premise was mine and it was wrong**: a lens's own directory is its own column, so the research lens creates `lenses/research/` itself on first run. I read *to start one, create ... and tell it* as requiring the files before the instance, and inferred a deadlock from an imperative with no subject. Sean asked how the cause followed and it did not. |
