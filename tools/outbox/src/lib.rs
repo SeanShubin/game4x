@@ -458,6 +458,103 @@ pub fn closed_on_withdrawn(
     (population, orphans, misfiled)
 }
 
+/// What became of the thing an item said it was waiting on.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Wait {
+    /// The id is still open, so the item is correctly held.
+    Holding,
+    /// The proposal landed. The wait is over.
+    Promoted { destination: String, date: String },
+    /// The proposal was withdrawn. The wait is over and nothing replaced it.
+    Withdrawn,
+    /// The item it waits on has closed. The wait is over.
+    Closed { status: String },
+    /// **Nothing anywhere has this id.** `S-51`'s shape: a predicate that cannot tell
+    /// *resolved* from *never was* reports both as fine, and this is the arm that keeps them
+    /// apart. A wait on an id that does not exist is a defect in the item.
+    Unknown,
+}
+
+/// An item held on something, and what became of that something.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Held {
+    pub item: String,
+    pub outbox: String,
+    /// The id in the item's `waits on` field.
+    pub on: String,
+    pub became: Wait,
+}
+
+/// Every open item whose `waits on` field names something that is no longer open.
+///
+/// **`S-61`, and the rule it checks is `P-325`**: *an item that cannot be acted on yet says
+/// what it waits on in a field, never in prose - `**waits on** P-n`. When that id is no longer
+/// open the wait is over, and whatever lists the outboxes says so.*
+///
+/// **A hold in a paragraph is invisible to every tool and to every reader who does not re-read
+/// the whole item**, so an item goes on telling a lane not to start work that is no longer
+/// blocked. Four of those in one night is what raised it, and the last stalled the file Sean
+/// was waiting for.
+///
+/// # A wait ends three ways and all three are visible
+///
+/// The proposal is **promoted**, and the queue's Accepted table says where and when; the
+/// proposal is **withdrawn**, and the Withdrawn table says so; or the item it waits on
+/// **closes**, and its own status says so. This looks in all three and reports which, because
+/// *the wait is over* and *the thing evaporated* are different things to hear.
+///
+/// # What it returns and why the population comes with it
+///
+/// The count of items carrying a wait, and the ones whose wait has ended. **Zero offences
+/// means nothing against a population that is also zero** - `docs/process.md`. On the first
+/// run the population is one: `S-61` carries the field and is its own first case.
+pub fn waiting(items: &[Item], queue: &str) -> (usize, Vec<Held>) {
+    let landed = accepted(queue);
+    let (gone, _) = withdrawn(queue);
+
+    let mut population = 0;
+    let mut over = Vec::new();
+    for item in items.iter().filter(|item| item.is_outstanding()) {
+        // **`field` rather than `whole_field`, because a wait is one id.** `whole_field`
+        // runs to the next `**`, which in the proposal queue is past the ` - ` separator -
+        // so the value came back as ``P-325` -`` and matched nothing, and the check reported
+        // its own first case as a wait on an id that does not exist. Found by running it.
+        let Some(on) = field(&item.fields, "waits on") else {
+            continue;
+        };
+        population += 1;
+
+        let became = if let Some(landed) = landed.iter().find(|landed| landed.id == on) {
+            Wait::Promoted {
+                destination: landed.destination.clone(),
+                date: landed.date.clone(),
+            }
+        } else if gone.contains(&on) {
+            Wait::Withdrawn
+        } else if let Some(other) = items.iter().find(|other| other.id == on) {
+            if other.is_outstanding() {
+                Wait::Holding
+            } else {
+                Wait::Closed {
+                    status: other.status.clone(),
+                }
+            }
+        } else {
+            Wait::Unknown
+        };
+
+        if became != Wait::Holding {
+            over.push(Held {
+                item: item.id.clone(),
+                outbox: item.outbox.clone(),
+                on,
+                became,
+            });
+        }
+    }
+    (population, over)
+}
+
 /// Whether a line names an id, without matching `P-30` inside `P-300`.
 fn mentions(text: &str, id: &str) -> bool {
     let mut from = 0;

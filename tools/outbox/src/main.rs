@@ -4,6 +4,7 @@
 //! outbox                  every open item, grouped by addressee
 //! outbox --to code        one addressee's inbox
 //! outbox --check          exit 1 if anything is open and addressed
+//! outbox --waiting        holds whose reason is over
 //! outbox --closing        what closed since HEAD, and open items deriving from its rule
 //! outbox --orphans        closed items whose closing line names a withdrawn proposal
 //! outbox --places         the outboxes it reads, one per line, for a caller that guards them
@@ -172,6 +173,47 @@ fn main() {
             }
             0
         }
+        // **`S-61`: a hold whose reason is over.** Reports and does not gate - `Q-60` settled
+        // that for `S-51` and the reasoning carries: a gate reddens for whichever lane commits
+        // next, and that may be a lane which must not repair it.
+        Some("--waiting") => {
+            let queue =
+                std::fs::read_to_string(root.join("docs/notes/proposals.md")).unwrap_or_default();
+            let (population, over) = outbox::waiting(&all.items, &queue);
+            // **Both numbers, because zero says nothing on its own.** *No stale waits* means
+            // nothing unless the count of items carrying a wait is non-zero.
+            println!(
+                "{population} open item(s) say what they wait on; {} of those waits are over",
+                over.len()
+            );
+            for held in &over {
+                let became = match &held.became {
+                    outbox::Wait::Promoted { destination, date } => {
+                        format!("promoted into {destination} on {date}")
+                    }
+                    outbox::Wait::Withdrawn => "withdrawn".to_string(),
+                    // `waiting` returns only waits that are over, so this cannot arrive.
+                    // Said plainly rather than as an `unreachable!`: a filtering mistake in a
+                    // reporting tool should print a wrong line, not stop the hook that runs it.
+                    outbox::Wait::Holding => {
+                        "still open, which this should not have reported".to_string()
+                    }
+                    outbox::Wait::Closed { status } => format!("closed as {status}"),
+                    // **Not a satisfied wait** - `S-51`'s shape. A predicate that cannot tell
+                    // *resolved* from *never was* reports both as fine.
+                    outbox::Wait::Unknown => {
+                        "nowhere - no outbox and no proposal has that id, so this wait names \
+                         nothing and is a defect in the item rather than a wait that ended"
+                            .to_string()
+                    }
+                };
+                println!(
+                    "{} in {} waits on {}, which was {became}",
+                    held.item, held.outbox, held.on
+                );
+            }
+            0
+        }
         Some("--closing") => {
             let closing = outbox::closing(&root, &all);
             let sharing = outbox::sharing_a_rule(&closing, &all.items);
@@ -261,6 +303,7 @@ outbox - what is open, and addressed to whom
     outbox                  every open item, grouped by addressee
     outbox --to WHO         one addressee's inbox
     outbox --check          exit 1 if anything is open and addressed
+    outbox --waiting        holds whose reason is over
     outbox --count          the aggregate, against the limit
     outbox --sections       sections that have taken more than one proposal
     outbox --write [PATH]   write the pending document, default pending.md
@@ -376,43 +419,6 @@ fn complain(all: &Outboxes) -> Vec<Note> {
     notes
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    /// An advisory note cannot reach the exit code, and a blocking one always does.
-    ///
-    /// **This is the check `C-42` said was unavailable.** It cannot ask whether somebody
-    /// applied a rule; it can make the unapplied path unreachable, which is what the quality
-    /// lens pointed out was the answerable question.
-    #[test]
-    fn only_a_blocking_note_can_stop_the_caller() {
-        let advisory = vec![
-            Note::Advisory("a heading does not parse".to_string()),
-            Note::Advisory("and another".to_string()),
-        ];
-        assert_eq!(
-            exit_code(&advisory, 0),
-            0,
-            "two advisory notes, and the caller is not stopped - three lanes share this tree"
-        );
-        assert_eq!(
-            exit_code(&advisory, 1),
-            1,
-            "nor is a caller's own code overridden"
-        );
-
-        let mut mixed = advisory;
-        mixed.push(Note::Blocking("a duplicated id".to_string()));
-        assert_eq!(
-            exit_code(&mixed, 0),
-            2,
-            "one blocking note among advisory ones still stops the caller"
-        );
-        assert_eq!(exit_code(&[], 0), 0, "and nothing to say changes nothing");
-    }
-}
-
 /// Sections that have taken more than one proposal.
 ///
 /// The trigger behind the rule Sean decided. Not a defect list: several proposals in one
@@ -453,5 +459,42 @@ fn show(items: &[Item], only: Option<&str>) {
         Some(who) if shown == 0 => println!("nothing open addressed to {who}"),
         None if shown == 0 => println!("nothing open"),
         _ => println!("{shown} open"),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// An advisory note cannot reach the exit code, and a blocking one always does.
+    ///
+    /// **This is the check `C-42` said was unavailable.** It cannot ask whether somebody
+    /// applied a rule; it can make the unapplied path unreachable, which is what the quality
+    /// lens pointed out was the answerable question.
+    #[test]
+    fn only_a_blocking_note_can_stop_the_caller() {
+        let advisory = vec![
+            Note::Advisory("a heading does not parse".to_string()),
+            Note::Advisory("and another".to_string()),
+        ];
+        assert_eq!(
+            exit_code(&advisory, 0),
+            0,
+            "two advisory notes, and the caller is not stopped - three lanes share this tree"
+        );
+        assert_eq!(
+            exit_code(&advisory, 1),
+            1,
+            "nor is a caller's own code overridden"
+        );
+
+        let mut mixed = advisory;
+        mixed.push(Note::Blocking("a duplicated id".to_string()));
+        assert_eq!(
+            exit_code(&mixed, 0),
+            2,
+            "one blocking note among advisory ones still stops the caller"
+        );
+        assert_eq!(exit_code(&[], 0), 0, "and nothing to say changes nothing");
     }
 }

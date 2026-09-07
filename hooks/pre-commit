@@ -135,11 +135,31 @@ else
         echo "$orphans" | sed 's/^/  /'
     fi
 
-    closing=$(outbox_says --closing | grep "derives from the same rule" || true)
+        closing=$(outbox_says --closing | grep "derives from the same rule" || true)
     if [ -n "$closing" ]; then
         echo "pre-commit: an item closed, and these open items derive from its rule:"
         echo "$closing" | sed 's/^/  /'
         echo "pre-commit: re-derive each one, or say in it that the number still holds"
+    fi
+
+    # S-61, checking P-325: an item that cannot be acted on yet says what it waits on in a
+    # field, and when that id is no longer open the wait is over. Four holds of the
+    # specification lane's went stale in one night and the last stalled the file Sean was
+    # waiting for - a hold in a paragraph is invisible to every tool and to every reader who
+    # does not re-read the whole item.
+    #
+    # Reports and never gates, for the reason Q-60 settled for S-51: a gate reddens for
+    # whichever lane commits next, and that may be a lane which must not repair it. The lane
+    # that wrote the hold is the one that lifts it.
+    #
+    # Matched on the sentence rather than on the summary line, which carries the words
+    # "waits are over" whether the count is zero or not - the same trap the orphans block
+    # above records falling into.
+    waiting=$(outbox_says --waiting | grep " waits on " || true)
+    if [ -n "$waiting" ]; then
+        echo "pre-commit: a hold is written on something that is no longer open:"
+        echo "$waiting" | sed 's/^/  /'
+        echo "pre-commit: lift it, or say in the item what it is waiting on now"
     fi
 fi
 
