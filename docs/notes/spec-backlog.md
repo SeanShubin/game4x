@@ -8,6 +8,20 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on duration and what durable means
+
+*I am thinking there should be some term for things that go away after a certain duration. The
+number decrements each turn. Not having a number means it is durable.*
+
+**Said on reading `P-336` and `P-337` together and finding them related.** It is filed as `P-338`,
+which asks three things he did not settle: what the trait is called, whether it lives in
+`spec/resources.md` or `spec/invariants.md`, and whether a starved unit gets one.
+
+**Why it is worth having whatever he decides.** `spec/resources.md` carries a boolean - an `expires`
+column, yes or no - and `releases/first-release.md` carries a number, `keeps`. **The release already
+made this move and nothing followed it**, which is `P-336`: `age` decrements a count the model does
+not have.
+
 ## Said 2026-09-06, on backreferences and who is reading
 
 *An ai assistant can remember backreferences but a human can't. I am probably going to want

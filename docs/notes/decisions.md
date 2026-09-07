@@ -21,6 +21,48 @@ here without first becoming a proposal.
 
 ## Open
 
+### P-338 - A thing may last a number of turns, and having no number is what durable means
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** Sean's own - **asks** a decision -
+**into** `spec/resources.md` -> the expires rule, or `spec/invariants.md`
+
+**Your idea, and it explains why `P-336` exists.** The specification has a **boolean** and the
+release has a **number**, and neither the model nor the two documents ever met.
+
+- **`spec/resources.md`** has a table with an **expires** column - yes for food, no for metal and
+  energy - and *a resource that expires is lost when the turn ends, whether it was used or not*
+- **`releases/first-release.md`** declares `keeps` - *the number of turns it will last* - and `age`,
+  which turns one food into a food that keeps one less
+- **The model implements the boolean**: `end_of_turn_losses` discards all food at every ending
+
+**So the release already made the move you are describing and nothing followed it.** That is `P-336`,
+and this is the rule underneath it.
+
+**The rule, in your terms**: a thing may carry a number of turns it lasts. **It decrements at each
+turn's end, and at zero the thing is gone. Having no number is what durable means.**
+
+**Three things I am not deciding, and they are why this asks rather than offers.**
+
+**1. What it is called.** `keeps` is declared and used - *food keeps for one turn* - so generalising
+it costs no new word. But you said *things*, not resources, and `keeps` reads oddly on a unit.
+**Nothing else in the release wants the name**, so it is free either way.
+
+**2. Where it lives.** The boolean is in `spec/resources.md` and would be replaced there. **But a
+rule about any thing does not belong in the resources file**, and moving it to `spec/invariants.md`
+makes it something every other document obeys. **The second is a bigger claim than you may have
+meant.**
+
+**3. Whether it answers `P-337`.** You said the two seem related and I can see the shape - a starved
+unit is *on its way out* the way expiring food is - but **a countdown on a disabled unit is a game
+rule I would be inventing.** If a starved unit is meant to be recoverable, a number is the wrong
+tool; if it is meant to decay, this is exactly the tool. **That is yours and I have not assumed it
+either way.**
+
+**What it would cost, so the size is visible.** The `expires` column in `spec/resources.md` becomes a
+number or goes; `keeps` widens from *food* to *a thing*; `age` becomes implementable and `R-7` can
+show it; and the model gains a per-thing counter where it has a blanket discard. **`spec/turn.md`'s
+*what expires expires* still reads correctly** and needs nothing.
+
 ### P-336 - `age` is declared, fires in no state, and `keeps` is not implemented
 
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** contradiction - **asks** a decision
