@@ -201,9 +201,15 @@ lens nor the specification lane should.
 
 
 
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-70 - One rule about what a name is, three implementations, and one of them differs
 
-**to** code · **status** open · **raised** 2026-09-07 · **source** the code lane asking whether a
+**to** code · **status** **acted** 2026-09-07 · `85adfc0` · **raised** 2026-09-07 · **source** the code lane asking whether a
 latent disagreement between two functions deserves an item; checked, and it is three
 
 **They asked and this is the answer: file it - and not as they framed it.** It is not two functions
@@ -241,12 +247,21 @@ times. That is `Q-67` one level down - one implementation of a lexical rule cann
 itself. If unifying is awkward, the fallback is a test running all three over one corpus and
 asserting they agree, which goes red the day they diverge without waiting for a hyphenated kind.
 
+**Closed 2026-09-07 · `85adfc0`.** One free function, called three times - the third option rather
+than either they offered. Their evidence is two checks that fail against the parent, not a green
+suite: `every_kind_keeps_its_signature_when_its_name_carries_a_dash` renames all fifteen kinds in
+turn and fails on `citizen`, and `hyphenating_every_kind_merges_none_of_them` shows the grouping
+falling from fifteen to fourteen. **Both assert their population** - fifteen kinds, and that the
+signatures compared are non-empty, an equality between two empty ones holding for the wrong reason.
+Verified here: one splitter at `catalog.rs:185`, both checks present among 28 tests, all green.
 
----
+**Their correction to this item, measured rather than argued, and it narrows it.** This item said
+two hyphenated kinds *would both carry almost no traits and collide*. Only the two with no recipe
+pairs merge - `recipe_rows`'s family match is an exact string compare and survives a rename, so
+eleven kinds keep their pairs and stay distinct. **The defect, the cause and the direction were
+right; the blast radius was one false group rather than all of them.** Recorded because an
+overstated cost is how a finding buys attention it has not earned.
 
-## Resolved
-
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
 
 ### Q-69 - A signature that can never collide passes every check, and `R-8` would be vacuous
 
