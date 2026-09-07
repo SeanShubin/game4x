@@ -120,19 +120,33 @@ broken can close** - reading the file back rebuilds a territory's numbers, which
 `prototypes/kinds` has to follow both changes and **the gate is red until it does**, which is the
 two-copy comparison working.
 
-**`scenario/commands/play.4x` is blocked on three names**, filed as `P-323` and open to Sean. `P-321`
-gave the form - `{name field:value ...}` - and deliberately did not give the field names, because
-each is a choice he has not made. Do not guess them; the file is 199 lines and every one carries the
-answer.
+**`scenario/commands/play.4x` is unblocked as of `f351266`.** `P-323` is promoted and answered all
+three. Sean is waiting on this file, so it is the next thing.
 
-The three, so you can see the size: **what the place field is called** (`where` from the recipes, or
-`territory` from the dump); **whether a command may carry a count** (`work 1 extractor 1 food` opens
-with one, and it is neither a place nor a `$` placeholder); and **whether `land ark` becomes `deploy
-ark`**, since it is the only player command not named for the recipe it fires.
+**The three answers, so you build to the rule rather than to this summary** - read
+`spec/console.md` -> The language, which now carries them:
 
-**One measurement in `P-323` that may change what you build**: every count in the scenario is **1**,
-across 46 `work` commands and every `create labor` and `build`. **The count is a form the grammar
-allows and the file has never used**, so dropping it changes no line.
+- **The place field is named for its kind**, so `territory:1`, not `where:1`. That is the general
+  rule he asked for and it is wider than this file: **a field that refers to a thing is named for
+  that thing's kind**, and `id` is the one field that names no kind.
+- **A command is named for the recipe it fires.** So `land ark 1` becomes `{deploy ark
+  territory:1}` - the only command whose name changes, because every other player command was
+  already named for its recipe.
+- **A command may carry a `repeat`**, which is how many times it fires, and a command without one
+  fires once. **No line of this file gains one**: every count in it is 1, across 46 `work` commands
+  and every `create labor` and `build`.
+
+**So `{build extractor territory:1 resource:metal}`, `{work extractor territory:1 resource:food}`,
+`{create labor territory:1}`.** `create planet` and `add ark orbit` are design commands and `P-217`
+already says they are not recipes; `end turn` fires six world recipes and is not one either.
+
+**What I got wrong and you should not inherit.** This item told you the file was blocked and said
+*do not guess*. That was true when filed and stopped being true forty minutes later, and nothing
+told you. `P-316` says a promotion files what it creates; **this is the other half - a promotion
+releases what it was blocking**, and I have now done that three times in one night by hand.
+
+**The `repeat` field is in the grammar and unused by this file**, which is what the measurement above
+means: it is available and nothing in the scenario needs it.
 
 **What falls out without asking, so you are not waiting on more than you need.** The recipe supplies
 the command's name and the `$` placeholders supply the fields - `$where`, `$from`, `$to`,
