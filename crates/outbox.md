@@ -63,6 +63,85 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-50 - `S-47`, `S-48` and `S-54` are built, and the items are yours to close
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** finishing them, and
+`docs/process.md` putting the account of what was delivered somewhere other than with whoever
+built it
+
+**Reported rather than closed, because these are yours.** `pending.md` lists all three as open
+to this lane. **Verified against the tree rather than against the commit that claimed it**,
+which is the habit `S-49` used on this lane's own items and found two already done.
+
+| Item       | Where it is                                                                                                           | What says so                                                                                                                                  |
+| ---------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`S-47`** | `crates/game-model/src/containment.rs`, `crates/game-console/src/state.rs`, `crates/game-console/tests/vocabulary.rs` | `scenario/expected/play.4x` is the map form; every rule `spec/console.md` states about it is checked over the whole played state, with counts |
+| **`S-48`** | `crates/game-model/src/territory.rs`, `crates/game-console/src/dump.rs`, `crates/game-console/src/report.rs`          | `node` went in `8b772c2`; `turn` is gone from the game's row, from `state.md` and from `entities.md`                                          |
+| **`S-54`** | `crates/game-console/src/tree.rs`, `reports/containment.html`                                                         | linked from `index.html`, collapsible, no script, `used/total` on every container                                                             |
+
+**Three parts of `S-47` did not land and each is filed rather than left.** `P-283` was already
+built - `tools/outbox` learned the allowance before this session. **`P-284`'s check carries two
+named exceptions**, `game` and `manned`, which are `C-46` and are findings rather than
+allowances. **`Unit.location` is still a field**, and that is the one thing `S-47` asked for
+that this lane did not do: the data file no longer states a container, but the model still
+does. It is roughly twenty call sites in `game.rs` and it changes no artifact Sean reads,
+which is why it was the part left rather than the part rushed.
+
+**`S-26` is partly built and `S-29` is finished apart from you** - `C-48` and `C-49` say which
+halves and why.
+
+**`S-49` is not work and can close with them.** It was the reading order, it was right, and it
+was followed: `S-48` first, `S-47` next, `S-54` after. Its one warning - that the obvious fix
+to `P-284` was backwards - is the reason no release row was proposed.
+
+### C-49 - `S-30` needs a second copy of your data before it can stop having one, and the order is yours
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** reaching `S-30` after
+`S-47` and `S-54`, and declining to start it
+
+**derived from** a release does not contain the game's data; it links to the generated view -
+`P-224`
+
+**`S-30` asks for a data file the release's eight tables are generated from, and says the
+data file comes first.** Both halves are right and they cannot both be first.
+
+**What this lane may do, and what it may not.** `scenario/` and `crates/` are this lane's, so
+writing a data file and a generator is squarely here. `releases/first-release.md` is not, so
+**the tables leaving it is your edit and the specification lane's to make.** Between those two
+moments the game's data exists twice - once in your file and once in mine - which is the state
+`S-30` exists to end.
+
+**A check makes that survivable and does not make it right.** A comparison cell for cell
+would fail the moment they diverged, so nothing could rot silently. **But the content of the
+data file would be your ideas transcribed by me**, and `CLAUDE.md` puts every idea in
+`releases/` in your hands. Transcribing is not introducing, and a transcription that becomes
+canonical is a promotion done by the wrong lane.
+
+**So the thing to say is the order, and it is one line.** Either:
+
+- **the file is authored and the tables leave in the same change**, and this lane builds the
+  loader and the generated view against it; or
+- **this lane transcribes first**, holds it to the release with a two-directional check, and
+  the tables leave afterwards - explicitly, because that is your data in a file you did not
+  write.
+
+**Nothing is blocked meanwhile and nothing was started.** `S-30` says so itself: *not a
+decision and not urgent... filed so the gap is visible while it is open.* Its measured half is
+already done and recorded - the checks reading the release do not go green when the tables
+leave.
+
+**`S-29` is finished apart from what waits on you, and it is worth saying which is which.**
+Its first bullet is built and covers nine files rather than five. Its third is built:
+`the_reviewed_expectation_holds` reads `scenario/commands/play.4x`, reads
+`scenario/expected/play.4x`, computes what happens and compares. **Its second bullet is
+deliberately not done**: the ninety-six assertions leave `first_release.rs` in the same change
+that puts the first *reviewed* expectation in - `S-34` - and the file's first line still reads
+`NOT YET REVIEWED`. Taking them out now would leave the scenario checked by a file nobody has
+read.
+
+**And the expected file changed shape today, so what is waiting for you is new.** `S-47`
+rewrote it into the map form. Deleting it is still how changing your mind is said.
+
 ### C-48 - `spec/console.md` says a command is written two different ways, in two sections, and uses the older one throughout
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** starting `S-26`'s `P-212`
