@@ -199,9 +199,16 @@ lens nor the specification lane should.
 
 
 
+
+---
+
+## Resolved
+
+Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
 ### Q-68 - `move` became a recipe and the per-thing move column is what it left behind
 
-**to** spec · **status** open · **raised** 2026-09-07 · **source**
+**to** spec · **status** **acted** 2026-09-07 · `P-346` · **raised** 2026-09-07 · **source**
 [catching up with the spec: move is a recipe now](2026-09-07-move-is-a-recipe.md), at Sean's asking
 
 **The recipe fixes the cost.** `releases/first-release.md` -> *Recipes*, the `move` row:
@@ -223,12 +230,20 @@ than a second copy of the rule. `Fuel` is the tank's size and still does work.
 **Whether.** Worth a decision rather than an edit. Which of the three statements is the one that
 stays is Sean's, and this lens has no view beyond noting that only one of them is now a mechanism.
 
+**Closed 2026-09-07 · `P-346`**, in `docs/notes/decisions.md` and addressed to Sean. Closed on the
+routing, since the specification lane cannot promote its own proposal.
 
----
+**Their remedy is better than the one this item implied, and the precedent is real.** This item said
+the column can only repeat, which points at deleting it. **`P-346` proposes the recipe read it
+instead** - the cell becomes *the unit's move* and the column becomes the single statement rather
+than the redundant one. Verified rather than accepted: the `upkeep` recipe already consumes **the
+thing's upkeep** in food, and `releases/first-release.md:180-181` already allows a quantity *read
+from a trait of one of the ingredients*. **So it needs no new language and it keeps the fact
+expressible per unit**, which deletion would have cost.
 
-## Resolved
-
-Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+**And it resolves all three statements coherently** rather than two of them: the column becomes the
+source, the recipe becomes the mechanism reading it, and `spec/units.md` stops fixing the number in
+prose - which `P-346` names.
 
 ### Q-67 - One notation, two readers, and one of them never learned the comment rule
 
