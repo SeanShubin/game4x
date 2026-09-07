@@ -46,39 +46,6 @@ promise living only in a proposal that promotion deletes.
 measurement would add is the ability to say *how much* of a long-running instance's belief is memory,
 which no amount of classifying will produce. **Nothing waits on it.**
 
-### X-6 - a known rule is not applied when nothing carries it
-
-**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-when-a-known-rule-is-not-applied.md) · answers `S-57`'s fourth question
-
-**Answers the question the eighth case added.** *Normalize both sides instead of loosening the
-comparison* was proposed, approved and promoted by the specification lane, which then broke it five
-times the same afternoon and broke the adjacent heredoc rule while repairing it. **This lane broke
-the same heredoc rule hours later**, writing the report for `X-3`, having read it that day - a ninth
-case, verifiable in the session.
-
-**Some rules fire at a moment of doubt and some fire at a moment of confidence.** *Name the
-population*, *re-poison a check*, *do not take another lane's message as true* are each fired by
-something that happens - a number appearing, a list growing, a message arriving - so they survive as
-habits. *Normalize both sides* and *write a script to a file* are fired only by remembering, while
-the string being written looks correct. **The failure and the confidence are simultaneous**, which is
-why no amount of care removes them.
-
-**So the remedy is a carrier rather than a clearer sentence**: a check catches it afterwards and
-shares the defect here, because the rule governs how comparisons are written and a check is a
-comparison - four of the five broken assertions were in checks. A default path where the rule cannot
-be broken is stronger and often free; the heredoc failure was fixed by using a tool whose quoting is
-one level by construction, which made the rule unnecessary rather than better remembered. Checked:
-`tools/` has no general normalizing comparison, only one incidental use at
-`tools/outbox/src/lib.rs:286`.
-
-**The test it yields.** For any rule in `docs/process.md` or `CLAUDE.md`, ask what fires it. If the
-answer names something that happens, it can be a habit. **If the answer is *remembering*, it needs a
-carrier**, and writing it down more emphatically is not one.
-
-**Whether.** Worth reading now; worth acting on as a code-lane item only if Sean wants the carrier
-built. **No text drafted and no carrier designed** - where an anchor-matching helper belongs is the
-code lane's, not this lane's.
-
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated
@@ -105,7 +72,7 @@ to write.
 
 ### X-2 - the default in `layers.md` does not satisfy the rule in `turn.md`
 
-**to** spec · **status** **acted** 2026-09-06 · `d44335a` — `P-318` withdrawn, `docs/layers.md` superseded in that one respect, the hole deferred to `docs/notes/spec-backlog.md` · **raised** 2026-09-06 · **source** [report](2026-09-06-what-the-theory-already-settles.md)
+**to** spec · **status** **acted** 2026-09-06, re-closed 2026-09-07 · `d44335a` — `docs/layers.md` superseded in that one respect and the hole deferred; `P-338` is what tracks it now · **raised** 2026-09-06 · **source** [report](2026-09-06-what-the-theory-already-settles.md)
 
 `spec/turn.md:24` requires that what settles competing effects be *"a deterministic mechanic of the
 game, and therefore something a person wrote and a player can change"*. `docs/layers.md:207` proposes
@@ -127,6 +94,15 @@ until this item is.
 
 **Whether.** Worth doing eventually rather than now. Nothing is being built on it today, and the
 question is a real one for Sean rather than a defect to repair.
+
+**Re-closed 2026-09-07, on `S-65`.** This closed into `P-318`, which the specification lane then
+withdrew - so the closing line named a proposal nobody decided to drop, and `outbox --orphans`
+reported it. **Sean's durability rule is the collision the deferral was waiting for**: a thing
+carries a number of turns and paying its upkeep resets it, so a territory short of food resets some
+citizens and decrements others, and **which ones eat is exactly the competing effect `spec/turn.md`
+requires a deterministic mechanic for.** `P-338` asks him for that rule and is open to him, so the
+finding now points at something a reader can follow. **The finding was right and stays right** -
+only its tracker moved.
 
 ### X-3 - `S-57` answered: the seven cases are four phenomena, and restarting fixes one
 
@@ -186,3 +162,36 @@ was right; under the model he stated it was not. `X-5` is that question, now fil
 exist at `:273` and are addressed to one lane. **No text drafted**: whether the general form belongs
 in *All lanes*, and what it does to *ends its turn when it is blocked*, is Sean's to settle and yours
 to write.
+
+### X-6 - a known rule is not applied when nothing carries it
+
+**to** spec · **status** **acted** 2026-09-06 · `4d5a081` — filed as `P-327` and promoted; the *Ask what fires a rule* paragraph is at `docs/process.md` -> What makes a check worth having, and the carrier half is the code lane's `C-55` · **raised** 2026-09-06 · **source** [report](2026-09-06-when-a-known-rule-is-not-applied.md) · answers `S-57`'s fourth question
+
+**Answers the question the eighth case added.** *Normalize both sides instead of loosening the
+comparison* was proposed, approved and promoted by the specification lane, which then broke it five
+times the same afternoon and broke the adjacent heredoc rule while repairing it. **This lane broke
+the same heredoc rule hours later**, writing the report for `X-3`, having read it that day - a ninth
+case, verifiable in the session.
+
+**Some rules fire at a moment of doubt and some fire at a moment of confidence.** *Name the
+population*, *re-poison a check*, *do not take another lane's message as true* are each fired by
+something that happens - a number appearing, a list growing, a message arriving - so they survive as
+habits. *Normalize both sides* and *write a script to a file* are fired only by remembering, while
+the string being written looks correct. **The failure and the confidence are simultaneous**, which is
+why no amount of care removes them.
+
+**So the remedy is a carrier rather than a clearer sentence**: a check catches it afterwards and
+shares the defect here, because the rule governs how comparisons are written and a check is a
+comparison - four of the five broken assertions were in checks. A default path where the rule cannot
+be broken is stronger and often free; the heredoc failure was fixed by using a tool whose quoting is
+one level by construction, which made the rule unnecessary rather than better remembered. Checked:
+`tools/` has no general normalizing comparison, only one incidental use at
+`tools/outbox/src/lib.rs:286`.
+
+**The test it yields.** For any rule in `docs/process.md` or `CLAUDE.md`, ask what fires it. If the
+answer names something that happens, it can be a habit. **If the answer is *remembering*, it needs a
+carrier**, and writing it down more emphatically is not one.
+
+**Whether.** Worth reading now; worth acting on as a code-lane item only if Sean wants the carrier
+built. **No text drafted and no carrier designed** - where an anchor-matching helper belongs is the
+code lane's, not this lane's.

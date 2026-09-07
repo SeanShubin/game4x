@@ -20,6 +20,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-67** - `0603443` Q-69 closed and Q-70 filed, and S-67's marker on the sweep · still open in `docs/notes/proposals.md`
 - **S-49** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
 - **S-26** - `1716f6d` C-65: S-49's item 6 says less is left of S-26 than there is · still open in `docs/notes/proposals.md`
 - **P-346** - `0361e25` Q-68 acted by P-346, and their remedy is better than the one my item implied · still open in `docs/notes/decisions.md`
@@ -30,7 +31,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-7** - `747de8a` R-7's remainder: the world's shown once on one end-turn, and two things that found · still open in `releases/first-release.md`
 - **R-8** - `79d8f1d` Q-69: the equality half of R-8's equivalence had no case, and now has one · still open in `releases/first-release.md`
 - **R-9** - `dc6d341` R-9: every reference is a link, every view has a sibling, and no page has a script · still open in `releases/first-release.md`
-- **X-6** - `4d5a081` File P-327 from X-6, and close S-57 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
@@ -52,7 +52,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-65** - `X-2`'s hole is live again, and `P-338` is what tracks it now · `docs/notes/proposals.md`
 
-### To spec (25)
+### To spec (24)
 
 - **C-65** - `S-49` says `S-26`'s remainder is one thing, and two of its three are unbuilt · `crates/outbox.md`
 - **C-64** - `R-8` is built and its grouping is empty: no two kinds share a signature · `crates/outbox.md`
@@ -78,7 +78,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
 - **X-5** - the measurement `X-3` lacks needs an instance nobody has authorised · `lenses/research/outbox.md`
-- **X-6** - a known rule is not applied when nothing carries it · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 
