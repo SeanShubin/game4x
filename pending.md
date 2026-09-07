@@ -39,7 +39,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
-### To spec (20)
+### To spec (22)
 
 - **C-51** - `Thing::children` is written by nothing, and two rules in this repository disagree about what to do with an unwritten field · `crates/outbox.md`
 - **C-50** - `S-47`, `S-48` and `S-54` are built, and the items are yours to close · `crates/outbox.md`
@@ -61,6 +61,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-1** - what makes the game checkable by hand is never stated · `lenses/research/outbox.md`
 - **X-2** - the default in `layers.md` does not satisfy the rule in `turn.md` · `lenses/research/outbox.md`
 - **X-3** - `S-57` answered: the seven cases are four phenomena, and restarting fixes one · `lenses/research/outbox.md`
+- **X-4** - the rule that keeps a lane moving is written for one lane, and the rule binding all of them says stop · `lenses/research/outbox.md`
+- **X-5** - the measurement `X-3` lacks needs an instance nobody has authorised · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 

@@ -105,6 +105,53 @@ question 1 written down. **No text drafted** - the words are his to approve and 
 obvious next study, not started: run a cold instance against the seven questions and measure rather
 than classify.
 
+### X-4 - the rule that keeps a lane moving is written for one lane, and the rule binding all of them says stop
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** Sean, stating the operating model in a session where his own documents do not carry it
+
+**Where.** `docs/process.md:273`, under *Coding instance*: *files a question ... and carries on with
+everything that does not depend on the answer*. `CLAUDE.md:340`, cycle step 9: **the code lane hits a
+gap and does not stop**. Those are the only two statements of the rule - two occurrences in
+`process.md`, both about code, the second inside the coding instance's own starting prompt.
+
+**What.** `docs/process.md` -> *All lanes* states the opposite default for everyone else: *an
+instance ends its turn when it is **blocked**, when it is holding for a stated reason, or when
+nothing is open to it.* So the general rule says a blocked lane stops, and only the code lane is told
+to file the block and keep going.
+
+**Why it costs something.** Sean described the intended model today: a lane works its backlog through
+to the end, files what it notices to the right backlog, and stops only for a decision that actually
+blocks the remainder - twenty tasks becoming twenty done, four decisions and three proposals, with
+stopping as the exceptional case. That is the *Coding instance* rule generalised, and no document
+carries it. **A lane reading only what binds it will stop early and be correct to.**
+
+**It has already fired, in this lane, today.** This lane ended a turn by asking Sean whether to run
+the cold-instance study `X-3` calls for, rather than filing it and continuing. Under *All lanes* that
+was right; under the model he stated it was not. `X-5` is that question, now filed instead.
+
+**Whether.** Worth doing now, and it is a scoping change rather than a new idea - the words already
+exist at `:273` and are addressed to one lane. **No text drafted**: whether the general form belongs
+in *All lanes*, and what it does to *ends its turn when it is blocked*, is Sean's to settle and yours
+to write.
+
+### X-5 - the measurement `X-3` lacks needs an instance nobody has authorised
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md)
+
+**What.** `X-3` answers `S-57` by classifying seven cases rather than by measuring, and says so. The
+measurement it wants is a cold instance run against the seven questions - one that has read the files
+and nothing else - to test whether a fresh reader avoids each failure or reproduces it. That would
+settle question 3 as evidence instead of as derivation.
+
+**Why it is filed rather than done.** It needs an instance started for the purpose, which is Sean's
+resource rather than this lane's, and this lane's instructions do not let it spawn one unasked. It
+was recorded inside `X-3`'s prose, where `pending.md` cannot see it - which is the same failure as a
+promise living only in a proposal that promotion deletes.
+
+**Whether.** Worth doing eventually rather than now. `X-3`'s answer stands without it; what the
+measurement would add is the ability to say *how much* of a long-running instance's belief is memory,
+which no amount of classifying will produce. **Nothing waits on it.**
+
 ## Closed
 
 Nothing yet.
