@@ -139,12 +139,21 @@ fn main() {
             let (population, orphans, misfiled) = outbox::closed_on_withdrawn(&all.items, &queue);
             // **Reported, never treated as a withdrawal** - `Q-61`. Acting on one would file
             // work into another lane's outbox because of a typo in a table.
+            // **Both sides of the classification, so it cannot start looking at nothing.**
+            // The safety rests on no genuine withdrawal opening its reason with a backticked
+            // filename, which holds over 26 rows today and is a small population that will
+            // grow - a reason reading "`spec/planet.md` already says this" would be read as
+            // a misfiled Accepted row and quietly leave the withdrawn set smaller. Printing
+            // the count that remains is what makes that visible.
+            let (genuine, _) = outbox::withdrawn(&queue);
+            println!(
+                "{} withdrawn proposal(s) read as genuine, {} row(s) read as an Accepted row \
+                 in the wrong table",
+                genuine.len(),
+                misfiled.len()
+            );
             if !misfiled.is_empty() {
-                println!(
-                    "{} row(s) under Withdrawn name a destination and a date, which is an \
-                     Accepted row in the wrong table: {misfiled:?}",
-                    misfiled.len()
-                );
+                println!("  misfiled: {misfiled:?}");
             }
             // **Both numbers, because zero says nothing on its own.** A predicate that had
             // stopped matching anything would report no orphans and look identical to a

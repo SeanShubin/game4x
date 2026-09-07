@@ -339,10 +339,25 @@ pub fn withdrawn(text: &str) -> (Vec<String>, Vec<String>) {
         // **A withdrawal says why; a promotion says where and when.** So a row whose second
         // cell names a destination and whose third is a date is an Accepted row in the wrong
         // table. It is not read as a withdrawal, and is reported instead.
+        //
+        // **Both conditions are load-bearing and the quality lens measured which**, over 26
+        // withdrawn rows and 281 accepted ones. *Third cell empty* holds on only 24 of 26,
+        // and *cell two opens with a withdrawal word* on 13 of 26 - both refuted. **Cell two
+        // opening with a backticked destination holds on 0 of 26 and 275 of 281.**
+        //
+        // And *dated* alone would be worse than useless: `P-279` and `P-282` are genuine
+        // withdrawals carrying a date, so it would read them as misfiled and **skip the
+        // orphan check on them** - a false negative, which is the direction `P-305` exists to
+        // guard. They are dated and do not open with a backtick, which is exactly why both
+        // conditions are required.
+        //
+        // The predecessor here asked whether the cell *contained* a backtick and then
+        // excluded anything opening with the word *withdrawn*. That works today and rests on
+        // a convention rather than a shape; this rests on where the destination sits.
         let destination = cells.get(1).map(|c| c.trim()).unwrap_or("");
         let date = cells.get(2).map(|c| c.trim()).unwrap_or("");
         let dated = date.len() == 10 && date.starts_with("20") && date.matches('-').count() == 2;
-        if dated && destination.contains('`') && !destination.starts_with("withdrawn") {
+        if dated && destination.starts_with('`') {
             misfiled.push(id.to_string());
             continue;
         }
@@ -1019,16 +1034,32 @@ One line of what it is.
 | Proposal                                 | Why                                  |    |
 | ---------------------------------------- | ------------------------------------ | -- |
 | P-77, a rule nobody needed               | Superseded by P-80.                  |    |
+| P-279, a genuine withdrawal that carries a date | withdrawn: it was a consequence of `P-27` | 2026-09-05 |
 | P-292, a promotion filed in the wrong table | `docs/process.md` -> Somewhere    | 2026-09-06 |
 ";
         let (gone, misfiled) = withdrawn(queue);
-        assert_eq!(gone, ["P-77"], "a withdrawal says why");
+        assert_eq!(
+            gone,
+            ["P-77", "P-279"],
+            "a withdrawal says why - and `P-279` is the case that makes both conditions \
+             necessary. It is dated, so *dated* alone would read it as a misfiled Accepted \
+             row and skip the orphan check on it, which is a false negative in the direction \
+             `P-305` exists to guard. It does not open with a backticked destination."
+        );
         assert_eq!(
             misfiled,
             ["P-292"],
-            "a row naming a destination and a date is an Accepted row in the wrong table, \
-             and `Q-61` is that it must not be read as a withdrawal - eleven were, and one \
-             of them is cited by a closed item"
+            "a row opening with a backticked destination and carrying a date is an Accepted \
+             row in the wrong table, and `Q-61` is that it must not be read as a withdrawal \
+             - eleven were, and one of them is cited by a closed item"
+        );
+        // Both sides counted, so the classifier cannot quietly start reading everything as
+        // one thing. Measured over the real queue it is 26 genuine and 0 misfiled.
+        assert_eq!(
+            (gone.len(), misfiled.len()),
+            (2, 1),
+            "two genuine withdrawals and one misfiled row were written; a rule that read \
+             every row as misfiled would empty the withdrawn set and report no orphans ever"
         );
 
         let items = parse(
