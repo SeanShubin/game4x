@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-336** - `age` is declared, fires in no state, and `keeps` is not implemented · `docs/notes/decisions.md`
+- **P-337** - `perish` says a thing is consumed and its metal produced, and the model does neither · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
 
@@ -23,7 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
-- **R-7** - `025eecb` Close S-62 and file P-332: R-7 covers ten of sixteen · still open in `releases/first-release.md`
+- **R-7** - `747de8a` R-7's remainder: the world's shown once on one end-turn, and two things that found · still open in `releases/first-release.md`
 - **X-6** - `4d5a081` File P-327 from X-6, and close S-57 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
