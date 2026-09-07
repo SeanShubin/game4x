@@ -27,50 +27,61 @@ here without first becoming a proposal.
 own - **asks** a decision - **into** `spec/resources.md` or `spec/invariants.md`, and
 `releases/first-release.md` -> Traits and Recipes
 
-**Your reset is the piece that makes it one mechanism rather than three.** With it, spoilage and
-starvation are the same rule and `P-336` and `P-337` both dissolve into this.
-
 **The rule.** A thing may carry a number of turns it lasts. **It decrements at each turn's end.
 Paying its upkeep resets it to its maximum. At zero the thing is gone. Having no number is what
 durable means.**
 
-**Why that is one rule and not two.** Food carries a number and has **no upkeep**, so nothing ever
-resets it - the number is a pure lifetime and food goes when it runs out. A citizen carries a number
-**and** an upkeep, so eating resets it and not eating spends it. **Same trait, same decrement, same
-recipe** - the difference is entirely whether the thing has an upkeep to pay.
+**One rule, not two.** Food carries a number and has **no upkeep**, so nothing resets it - the number
+is a pure lifetime. A citizen carries a number **and** an upkeep, so eating resets it and not eating
+spends it. Same trait, same decrement, same recipes; `age` and `spoil` each widen from `food` to
+`thing`, which the recipe language already supports.
 
-**So `spoil` and starvation stop being separate ideas.** `age` is the decrement over any thing with
-the number; `spoil` is the removal at zero. Both are already recipes and both become **one cell
-wider** - `food` becomes `thing`, which the recipe language already supports.
+**The numbers, and the arithmetic is worth checking rather than trusting.**
 
-**What this dissolves.**
+| Kind        | Number | Why                                                                                     |
+| ----------- | ------ | --------------------------------------------------------------------------------------- |
+| **food**    | 1      | already declared - made this turn, gone at this turn's end                              |
+| **citizen** | 2      | fed resets to 2; one unfed turn leaves 1 and it lives; a second leaves 0 and it is gone |
+| **ark**     | none   | upkeep 0, so nothing could ever reset it - it must be durable                           |
 
-- **`P-336`** - `age` is unimplemented and fires in no state. Under this it fires on anything with
-  the number, which is what the release always meant
-- **`P-337`** - a starved pioneer is marked unusable. Under this it **keeps working while its number
-  runs down and then perishes**, so `usable` is not needed and the state change is visible as the
-  number falling. **A citizen that cannot eat still works until it is gone**, which is what you
-  described
+**Two is what gives your one turn.** *Citizens get a turn before they starve, so we can expand
+without logistics as long as we set up a farm this turn.* With a maximum of 1, an unfed citizen
+reaches 0 the same turn and there is no farm-building turn at all. **If you meant no slack, the
+number is 1 and the sentence about the farm does not hold** - which is why the arithmetic is shown
+rather than asserted.
 
-**Three things I need from you, and the first is the only one with no default.**
+**And `ark` is a check on the rule rather than an entry.** A thing with no upkeep can never reset,
+so a number on it would be a countdown to certain death. **Food is exactly that and is meant to be**;
+an ark is not. So *no upkeep* and *has a number* is a combination that means mortal-by-design.
 
-**1. The maximum for each kind.** Food is 1 today and the release says so. **A citizen and a pioneer
-need numbers and I will not invent them** - they set how much slack a player has, which is the game
-rather than the mechanism.
+**The consequence you found, which I had missed.** A description is a kind and **every stored trait**,
+so **citizens at different numbers are different keys.** A territory reads
+`{citizen durability:2 ready:yes} -> 6` and `{citizen durability:1 ready:yes} -> 2`. That is the same
+splitting `ready` already does and needs no new machinery - but it multiplies citizen entries by the
+number of levels, so **keeping the maximum low is not only a game choice.**
 
-**2. What it is called.** You said *durability* thematically. `keeps` is declared, free, and reads
-oddly on a citizen; *durability* reads well on both and is a new word in a release `P-284` keeps
-closed.
+**And it makes a hole you deferred yesterday live.** If a territory has five citizens and three food,
+three reset and two decrement - **and which two is a competing effect.** `spec/turn.md` requires
+*a deterministic mechanic a person wrote and a player can change*, and `docs/notes/spec-backlog.md`
+records that nothing supplies one. **You deferred it saying the first real collision is when to
+decide. This is that collision.**
 
-**3. Where the rule lives.** `spec/resources.md` holds the boolean it replaces, but **this is about
-any thing, not a resource** - so `spec/invariants.md` may be the honest home, which is a larger
-claim.
+**Two things I need, and neither has a default.**
 
-**On gravitating rather than simulating.** You want a human to last longer without food than without
-water without building that. **The shape admits it without redesign**: a number per thing today, and
-a number **per thing per upkeep resource** later, keyed the way a deposit keys density by resource.
-**Nothing about the decrement or the reset changes** - only how many numbers a thing carries. So the
-cheap version is not a dead end, which is the property you asked for.
+1. **The pioneer's number.** Upkeep 1 food, like a citizen. **2 by the same reasoning, or 1?**
+2. **Which citizens eat when there is not enough.** The predecessor fed those who worked before the
+   idle, so the idle starved out - that is a rule a person wrote and a player could change, and it
+   is recorded in `docs/notes/game-4x-predecessor.md`. **Whether it is yours is your call**, and
+   without an answer the split above is undefined.
+
+**What this dissolves**: `P-336`, because `age` then fires on anything with the number, and `P-337`,
+because a starving thing keeps working while its number runs down and then perishes - so `usable` is
+not needed and the state change is visible as the number falling.
+
+**And it reaches further than this release, which you noted**: a territory whose weather wears things
+down, a material durable against one condition and not another. **A number per thing today, a number
+per thing per condition later**, keyed the way a deposit keys density by resource. The decrement and
+the reset do not change - only how many numbers a thing carries.
 
 ### P-336 - `age` is declared, fires in no state, and `keeps` is not implemented
 

@@ -8,6 +8,36 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on the numbers and on wearing down
+
+*It actually makes sense for future designs, a territory might have such harsh weather that units and
+buildings wear down. Some materials may be durable against certain conditions but not durable to
+others.*
+
+*For default numbers lets keep them low. Citizens get a turn before they starve, that lets us expand
+without needing logistics to get food from the outside as long as we set up a farm this turn.*
+
+*This also has consequences for the quantity map, citizens at different levels of need for food will
+be different keys.*
+
+**The weather case is the same generalisation from the other end.** Yesterday's was one thing lasting
+differently against food and against water; this is one condition wearing down many things. **Both
+are a number per thing per condition**, which is why neither needs the mechanism to change - only how
+many numbers a thing carries.
+
+**The map consequence is his and this lane had missed it.** A description is a kind and every stored
+trait, so citizens at different numbers are different keys, exactly as `ready` already splits them.
+It costs entries in proportion to the number of levels, which is a second reason to keep the maximum
+low.
+
+**And it makes the deferred tie-break live.** Partial feeding splits a territory's citizens into those
+that reset and those that decrement, and **which ones eat is a competing effect** - the hole
+`spec/turn.md` requires and nothing supplies, deferred on 2026-09-06 until a real collision. This is
+one.
+
+**Recorded in `P-338`**, which now carries food 1, citizen 2, ark none, and asks him only for the
+pioneer's number and for what settles the split.
+
 ## Said 2026-09-07, on durability and gravitating toward realism
 
 *Thinking of it thematically, a citizen has a durability that it can last without food, getting food
