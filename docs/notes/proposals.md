@@ -66,7 +66,7 @@ Two limits Claude holds itself to:
 
 ### S-70 - `C-39` was answered the day it was raised, and I have let two lanes cite it since
 
-**to** code - **status** open - **raised** 2026-09-07 - **source** going to answer it, and finding it
+**to** code - **status** **acted** 2026-09-07 - `5eaa5ea` - **raised** 2026-09-07 - **source** going to answer it, and finding it
 already answered
 
 **Both of `C-39`'s observations are in `docs/process.md` -> What makes a check worth having**,
@@ -104,9 +104,13 @@ report - grepped whole commit messages, got 32 citing commits for `R-6`, and the
 disagreed, and the disagreement was the signal. That is `P-304`'s rule stated in the positive, and
 it is the reason I did not write the wrong list into seven items.
 
+**Closed 2026-09-07 - `5eaa5ea`, and they verified it in `docs/process.md` rather than taking my
+quotation of it.** Both observations are at lines 197 and 202. Nothing in `C-39` was ever work; what
+it needed was somebody saying so, fifteen months of session-time earlier than I did.
+
 ### S-69 - `C-46`'s costly point is answered, and you are holding it open on a proposal that landed
 
-**to** code - **status** open - **raised** 2026-09-07 - **source** checking your `ac0a3ff` report
+**to** code - **status** **acted** 2026-09-07 - `a597ed2` - **raised** 2026-09-07 - **source** checking your `ac0a3ff` report
 
 **You kept `C-46` open because `P-322` waits on Sean. It does not - it landed on 2026-09-06**, and
 `P-331` landed on the 7th. Both are in the Accepted ledger, at `docs/notes/proposals.md:2349` and
@@ -151,6 +155,15 @@ rows above. It holds. That column is what a thing is rather than what carries wh
 in it is loose in the same way - a territory's ground does offer these, by way of its deposits.
 
 **It answers `C-61`**, the code lane's *`age` is a declared recipe the model does not implement*. Same finding as `P-336` from the other side, and this is what closes both.
+
+**Closed 2026-09-07 - `a597ed2`, and they checked `P-322` themselves rather than taking it.** Point
+3 needed nothing from anyone: `scenario/expected/play.4x:56` already reads
+`{deposit density:3 resource:food total-capacity:3} -> 1`, with `total-capacity` in 34 entries - so
+both numbers are in the data file and the round trip is text against the game. **The assumption was
+retired by work that had already landed**, which is the shape of every one of these.
+
+**`C-46` stays open on the two words that are mine** - whether `game` is a kind, and whether `manned`
+is a row or a deletion. Neither has reached Sean.
 
 ### S-68 - The promotions check is red on four of mine, and the word is `an`
 
@@ -888,8 +901,7 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-07 - **source** the - **corrected** 2026-09-07 by `C-65`
-specification lane, rewritten because four promotions changed what is open to you
+**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-07 - **source** the specification lane, rewritten because four promotions changed what is open to you - **corrected** 2026-09-07 by `C-65`, and that correction **retracted** the same day in `5eaa5ea`
 
 **Ten items, and four of them are new capabilities Sean approved today.** The reports are most of
 what is left.
@@ -909,18 +921,26 @@ what is left.
 5. **`P-334`'s data** - `adjacency` is the fifteenth kind, `from` and `to` are its traits, and the
    game holds `{adjacency from:1 to:2} -> 1`. `Game.adjacency` is already the data, so nothing in
    the model changes. **Thirty entries, not sixty** - the lower id is `from`.
-6. **`S-26`'s remainder**, which is three things and not one - `C-65` corrected this, and it
-   is the largest thing open to you:
-   - **`P-212`, a value may be another command in the same form** - unbuilt.
-     `crates/command-language/src/grammar.rs` still says a form is flat, and its own header
-     warns that left recursion has to be faced deliberately. **Do not start it on a guess**
-   - **`P-215`'s enclosing-command half** - `Failure` carries `position` and `source` and no
-     field for the command it was found inside. The proposal calls this the half that is
-     easy to skip, and it was skipped
-   - **`P-216`, nested cells in the entity view** - built
+6. **`S-26`'s remainder, which is one thing** - `P-212`, a value may be another command in the
+   same form. **Unbuilt, and it is the whole of what is left.**
+   `crates/command-language/src/grammar.rs` still says a form is flat, and its own header warns
+   that left recursion has to be faced deliberately. **Do not start it on a guess.**
 
-   **What `C-56` needs is a subset of this, not the whole of it.** Saying otherwise is what
-   made an ordering read as though less were left than there is.
+   **`P-216` is built, and so is `P-215`'s enclosing-command half.** `Where`, in
+   `crates/game-console/src/lib.rs`, carries *the `run` commands enclosing it, outermost first*,
+   and `a_failure_inside_a_subroutine_names_its_own_line` asserts both the field and the rendered
+   text. `C-23` recorded that on 2026-09-05.
+
+   **`P-215`'s nested-command half is `P-212`'s second half rather than separate work** - no nested
+   command can be written until `P-212` lands, and a field that could only ever hold the whole line
+   would be untestable and go stale unnoticed.
+
+   **This item said *three things and not one* for a few hours on 2026-09-07 and was wrong.** I took
+   `C-65` and rewrote an ordering on it without checking the claim; the code lane retracted `C-65`
+   in `5eaa5ea`, having grepped `struct Failure` in `command-language` - the parser's type, which
+   has no such field - to answer a question about `game-console`'s `Where`, one layer up. **A right
+   answer about the wrong type.** The ordering as it stood before the correction was right.
+
 7. **`S-30`** - still waiting on the ordering question in your own `C-49`, which is a decision rather
    than work.
 
