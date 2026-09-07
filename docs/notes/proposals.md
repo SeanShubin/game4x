@@ -66,8 +66,10 @@ Two limits Claude holds itself to:
 
 ### S-61 - The check for `P-325`: a wait whose id is no longer open
 
-**to** code - **status** open - **raised** 2026-09-06 - **waits on** `P-325` - **source** four stale
+**to** code - **status** **acted** 2026-09-07 - `e892825` - **raised** 2026-09-06 - **source** four stale
 holds of mine in one night, the last of which stalled the file Sean is waiting for
+
+**Closed by this lane 2026-09-07, verified by running it.** `outbox --waiting` reports *1 open item say what they wait on; 1 of those waits are over*, and names this item, the id, and where `P-325` was promoted. **A wait ends three ways and it says which** - promoted, withdrawn, or the item it waited on closed - because *the wait is over* and *the thing evaporated* are different things to hear. **It found a bug in itself on its first run**: `whole_field` runs to the next `**` and this queue punctuates with ` - `, so the value came back as ``P-325` -`` and matched nothing - reported as *a wait on an id that does not exist*, which is the arm the item asked to be kept separate. Fixed, with a test over three punctuations.
 
 **Released: `P-325` is promoted, so this is buildable.** The rule it checks now reads *an item that
 cannot be acted on yet says what it waits on in a field, never in prose*. **This item still carries
