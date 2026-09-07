@@ -66,11 +66,12 @@ Two limits Claude holds itself to:
 
 ### S-64 - Browsable reports, and the working model to copy rather than a description of one
 
-**to** code - **status** open - **raised** 2026-09-07 - **waits on** `P-335` - **source** Sean
+**to** code - **status** open - **raised** 2026-09-07 - **source** Sean
 pointing at `vote/generated/code-structure` after asking what the status of the HTML reports is
 
-**Do not build until `P-335` is promoted.** The shape below is his and is recorded so it arrives as
-one item.
+**Released: `P-335` is promoted as `R-9`, so this is buildable.** The capability is the rule;
+this item is the shape and the working model. Read `R-9` in `releases/first-release.md` rather
+than this summary of it.
 
 **Read `D:/keep/github/sean/vote/generated/code-structure/browse/` rather than this description.** It
 is Kotlin and graphviz and neither of those transfers; **the shape does.** A page there is
@@ -639,31 +640,40 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 ### S-49 - Everything a fresh instance of you needs, in order
 
 **to** code - **status** open - **raised** 2026-09-06 - **rewritten** 2026-09-07 - **source** the
-specification lane, rewritten because the previous version named work that is now finished
+specification lane, rewritten because four promotions changed what is open to you
 
-**Four items are real work and the rest are not.** The previous version ordered `S-48`, `S-47` and
-`S-54`; all three are built and closed, as are `S-58` and `S-59`. Read this rather than that.
+**Ten items, and four of them are new capabilities Sean approved today.** The reports are most of
+what is left.
 
 **The order.**
 
-1. **`S-26`** - the command language following the promotions. **Most of it is done**: the named
-   form, the dashed names and `repeat` all landed and all seven `.4x` files are converted. What is
-   left is whatever `C-56` turns out to need.
-2. **`S-30`** - the release's data tables have no data file to generate from. **Take it with your
-   own `C-49`**, which says it needs a second copy of the data before it can stop having one and
-   that the order is Sean's - so read that before starting.
+1. **`S-63`** - label which of the three views each report is. **Smallest, and it is why the rest of
+   this list exists**: he asked what the status of the reports was and had to be told rather than
+   open the page and see.
+2. **`R-9` with `S-64`** - browsable reports without a script. `S-64` is the shape and the working
+   model; **read `vote/generated/code-structure/browse/` rather than my description of it.** A
+   filtered view is a generated page, not a click.
+3. **`R-8`** - a signature per kind, the traits it carries and every recipe-and-role pair naming it,
+   with kinds sharing one shown together. **Derived from the tables**, never declared.
+4. **`R-7`'s remainder** - the world's six shown once, together, on `{end-turn}`. **The six notices
+   saying they have no example must go with it.**
+5. **`P-334`'s data** - `adjacency` is the fifteenth kind, `from` and `to` are its traits, and the
+   game holds `{adjacency from:1 to:2} -> 1`. `Game.adjacency` is already the data, so nothing in
+   the model changes. **Thirty entries, not sixty** - the lower id is `from`.
+6. **`S-26`'s remainder** - whatever `C-56` needs.
+7. **`S-30`** - still waiting on the ordering question in your own `C-49`, which is a decision rather
+   than work.
 
-**`R-6` is not yours to finish.** It needs Sean to play the loop through, and `C-20` records that
-this is roughly a thousand commands by hand.
+**`R-6` is not yours to finish**: it needs Sean to play the loop through.
 
-**Two of your own are open and neither is mine to close**: `C-55`, the two rules with no carrier -
-`P-327` landed the principle and the carrier is still yours to decide on - and the rest of the
-`C-4x` and `C-5x` series, which are reports to me rather than work for you.
+**One of your own is open and it is not mine to close**: `C-55`, the two rules with no carrier.
+`P-327` landed the principle - a rule that fires at a moment of confidence needs a carrier rather
+than a better sentence - and **whether a shared normalizing helper belongs in `tools/` is still
+yours.**
 
-**What closed since you last read this**, so you do not re-derive it: `S-45` withdrawn, and `S-22`,
-`S-24`, `S-41`, `S-44`, `S-46`, `S-47`, `S-48`, `S-50`, `S-51`, `S-53`, `S-54`, `S-55`, `S-56`,
-`S-57`, `S-58`, `S-59` and `S-60` closed - each verified against files and tests rather than against
-the commit that claimed it.
+**What Sean is waiting on that no lane can do.** `scenario/expected/play.4x` still opens *NOT YET
+REVIEWED*. **`P-334` changes its shape once more**, so that regeneration is the last one before he
+reads it.
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 
