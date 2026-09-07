@@ -63,6 +63,51 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ## Open
 
+### C-47 - The two relations subsume nine of the dump's ten tables, and the tenth needs one number
+
+**to** spec · **status** open · **raised** 2026-09-06 · **source** `S-54` asking to be told
+rather than have this folded in
+
+**derived from** what a thing contains is a map from a description to a quantity -
+`spec/console.md`, `P-287`
+
+**`S-54` said this exactly**: *if the two relations turn out to make the eight per-kind
+relations redundant, that is a bigger change than this item asks for and it is Sean's, not
+yours and not mine. Say so and I file it - do not fold it in.* They do, and nothing was
+folded in: `reports/containment.html` is new and `state.md` is untouched.
+
+**Counted against the ten tables `dump::tables` produces, column by column, not estimated.**
+
+- **Six are wholly the containment tree**: `game`, `garrison`, `extractor`, `structure`,
+  `unit`, `kind`. Every column is a description, a trait of one, or a count of entries.
+- **Three more are the tree once a count is read off it**: `store`'s *amount* is the resource
+  things in the territory; `labor`'s *made*, *spent* and *left* are the citizens, the ones not
+  ready and the ones ready - which the tree tells apart because `ready` is a stored trait;
+  `territory`'s *citizens*, *yards* and *labor-spent* the same way.
+- **One is the capacity relation, less one number**: `territory-resource` is *capacity* and
+  *built* - total and used - and **`density`, which is in neither relation and in no data
+  file.** That is `C-46`'s third point arriving from the other direction: the one fact about a
+  territory that the map form cannot hold is also the one fact that stops the tables being
+  redundant.
+
+**So the question is one number rather than ten tables.** Whatever answers `C-46` about
+density answers this, and until it is answered the ten tables are the only place density is
+written down. **Nothing should be deleted before that**, which is why nothing was.
+
+**And one thing in the markdown dump that no rule now authorises.** `state.md`'s `unit` table
+carries `in-kind` and `in-id`. Those columns are mine, from `P-311`, which `P-320` withdrew
+this evening - and the column they replaced, `place`, is one `P-286` stopped declaring. **So
+neither the current form nor its predecessor is authorised**, and a flat table has no third
+way to say where a unit is.
+
+**Left as it stands rather than changed**, on the reading that `P-320` governs the data file
+and `state.md` is a rendering - `CLAUDE.md`: *the rendering is generated and never canonical*.
+The release's own next sentence supports that reading, because *the dump reads back into the
+state it came from* is a check only a data file can pass. **But the sentence `P-320` promoted
+says *the dump* without qualifying it**, and the two words are exactly the ones `Q-64` said
+the file must stop having. **Which artifact the rule binds is yours**, and the data file
+obeys it either way.
+
 ### C-46 - Four things the map form needs that no document says, and the two words it writes anyway
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** building `S-47`, and

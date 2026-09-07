@@ -236,6 +236,31 @@ pub fn trait_name(name: Trait) -> &'static str {
     }
 }
 
+/// Whether a kind may contain things at all.
+///
+/// `spec/logistics.md` draws the line and says why it matters:
+///
+/// > **A kind that declares no capacity contains nothing, and never can.** A kind that
+/// > declares capacity may contain, and may happen to be empty - so a thing holding nothing
+/// > today is not thereby a thing that never could
+///
+/// **So this is a fact about the kind and not a count of what is there.** A reader who
+/// cannot tell *empty* from *never* is being shown the opposite of the rule, and the only
+/// place the difference can come from is here.
+///
+/// Three kinds, from `releases/first-release.md` -> *Where things are*, which gives this
+/// release exactly three sorts of capacity: **a territory**, for the kinds it has total
+/// capacity for; **a store**, for the resource it was built for; and **an orbit**, which
+/// *holds units and nothing else*.
+///
+/// **A unit is not among them, and that is the release's own arrangement rather than an
+/// omission.** *Where things are* gives a unit's tank as a sort of capacity, and the *Traits*
+/// table gives `fuel` as *how much energy its tank holds* - so in this release the tank is a
+/// number on the unit rather than a thing with a description, and a unit contains nothing.
+pub fn may_contain(kind: Kind) -> bool {
+    matches!(kind, Kind::Territory | Kind::Store | Kind::Orbit)
+}
+
 /// Whether a kind readies.
 ///
 /// `releases/first-release.md` -> *Units and structures* has a **Readies** column, and says

@@ -128,10 +128,12 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let mut generated = dump::generated(&Files(root.join("scenario/commands")));
 
+    // Ten since `S-54` added `containment.html`, which is the one page with no markdown
+    // beside it - `crate::tree` says why.
     assert_eq!(
         generated.len(),
-        9,
-        "nine dump files are generated; `dump::generated` returned {}",
+        10,
+        "ten dump files are generated; `dump::generated` returned {}",
         generated.len()
     );
 
@@ -147,8 +149,8 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     }
     assert_eq!(
         generated.len(),
-        11,
-        "eleven generated files, seven of them pages"
+        12,
+        "twelve generated files, eight of them pages"
     );
 
     let produced: std::collections::BTreeSet<String> =
@@ -204,8 +206,8 @@ fn every_committed_dump_is_what_the_scenario_produces() {
     // The set was discovered, so it can be empty for the wrong reason. This says it was not.
     assert_eq!(
         on_disk.len(),
-        11,
-        "eleven files carry the generated marker; found {} ({on_disk:?})",
+        12,
+        "twelve files carry the generated marker; found {} ({on_disk:?})",
         on_disk.len()
     );
 }
@@ -223,7 +225,7 @@ fn the_scenario_produces_tables_rather_than_empty_files() {
         let markdown = std::fs::read_to_string(root.join("reports").join(name)).unwrap();
         generated.push((dump::html_name(name), dump::page(&markdown, name)));
     }
-    assert_eq!(generated.len(), 11, "eleven generated files");
+    assert_eq!(generated.len(), 12, "twelve generated files");
 
     for (name, text) in &generated {
         assert!(
@@ -300,8 +302,9 @@ fn every_page_is_well_formed_enough_to_be_read_as_one() {
         pages += 1;
     }
     // Over every case, and how many cases there were - or this passes on an empty list, as
-    // it would have done for the whole session the defect above was live. Six and not five:
-    // `index.html` is a page as much as the five reports are, and is the one page that
-    // does not go through `dump::page`, so it is the likeliest to drift from them.
-    assert_eq!(pages, 7, "seven pages, and every one of them checked");
+    // it would have done for the whole session the defect above was live. `index.html` is a
+    // page as much as the reports are, and it is one of the two that do not go through
+    // `dump::page` - `containment.html` is the other, since `S-54` - so both are the
+    // likeliest to drift from the rest.
+    assert_eq!(pages, 8, "eight pages, and every one of them checked");
 }

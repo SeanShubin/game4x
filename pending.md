@@ -18,7 +18,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - `f2ab5f3` X-3 answers S-57: four phenomena, and restarting fixes one of them · still open in `docs/notes/proposals.md`
-- **S-47** - `de9cc27` File C-45: the hold on S-47, and a trigger that may have dissolved · still open in `docs/notes/proposals.md`
+- **S-47** - `6cbbaff` S-47: the map form, generated from the state rather than from the presentation · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 - **Q-64** - `39704b9` Q-64 into C-37, and a check made to match the claim in its own name · still open in `lenses/quality/outbox.md`
 
@@ -41,8 +41,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - Why a long-running instance answers from memory, and cannot tell that it is · `docs/notes/proposals.md`
 
-### To spec (16)
+### To spec (17)
 
+- **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
 - **C-46** - Four things the map form needs that no document says, and the two words it writes anyway · `crates/outbox.md`
 - **C-45** - Holding `S-47` for room, and the trigger this lane recorded may have dissolved · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`

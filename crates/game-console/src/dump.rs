@@ -470,7 +470,7 @@ pub fn entities_markdown(game: &Game, title: &str) -> String {
 }
 
 /// One escaping rule, because a value that has never met `<` is not evidence of anything.
-fn escaped(text: &str) -> String {
+pub fn escaped(text: &str) -> String {
     text.replace('&', "&amp;")
         .replace('<', "&lt;")
         .replace('>', "&gt;")
@@ -633,7 +633,7 @@ pub const RENDERED_ELSEWHERE: [&str; 2] = ["catalog.md", "recipes.md"];
 const MARKER: &str = "<!doctype html>\n<!-- Generated. Do not edit. -->\n";
 
 /// The opening of every page, so one stylesheet serves all of them.
-fn head(title: &str) -> String {
+pub fn head(title: &str) -> String {
     let mut out = String::from(MARKER);
     out.push_str("<html lang=\"en\">\n<head>\n");
     out.push_str("<meta charset=\"utf-8\">\n");
@@ -864,6 +864,9 @@ pub fn index(generated: &[(&str, String)]) -> String {
             "commands.md" => {
                 "every command that ran, flattened out of its files, with the recipe it fired"
             }
+            "containment.html" => {
+                "what holds what, collapsible, with used against total on every container"
+            }
             other => panic!("no description for {other}"),
         }
     };
@@ -959,22 +962,57 @@ pub fn index(generated: &[(&str, String)]) -> String {
     names.push("recipes.md");
     names.push("recipes.html");
     names.sort_unstable();
+
+    // **Every page, paired with its markdown where it has one.** It used to walk the
+    // markdown and demand a page for each, which is the direction that was failing when
+    // `S-40` landed. `S-54` adds the first page with no markdown twin, and walking the pages
+    // is what lets one exist without the pairing assertion becoming a list of exceptions.
     let mut listed = 0;
+    let mut paired = 0;
+    for page in names
+        .iter()
+        .filter(|name| name.ends_with(".html") && **name != "index.html")
+    {
+        let name = page.trim_end_matches(".html");
+        let markdown = format!("{name}.md");
+        let beside = if names.contains(&markdown.as_str()) {
+            paired += 1;
+            format!(" <span class=\"quiet\">(<a href=\"{markdown}\">markdown</a>)</span>")
+        } else {
+            // **Said rather than left blank.** A missing markdown link on one row of a list
+            // where every other row has one reads as an oversight, and this one is a
+            // decision - `crate::tree` carries the reason.
+            String::from(
+                " <span class=\"quiet\">(no markdown - it is the collapsing that makes it \
+                 readable)</span>",
+            )
+        };
+        out.push_str(&format!(
+            "<li><a href=\"{page}\">{name}</a> <span class=\"what\">- {}</span>{beside}</li>\n",
+            described(if names.contains(&markdown.as_str()) {
+                &markdown
+            } else {
+                page
+            })
+        ));
+        listed += 1;
+    }
+    assert_eq!(listed, 7, "seven pages are linked");
+    assert_eq!(
+        paired, 6,
+        "six of them have their markdown beside them, and `containment` is the one that does \
+         not"
+    );
+    // **The other direction, which the pairing above cannot see.** A markdown report that
+    // lost its page would simply stop being listed, and the count would still be seven if a
+    // page had been added elsewhere.
     for markdown in names.iter().filter(|name| name.ends_with(".md")) {
         let page = format!("{}.html", markdown.trim_end_matches(".md"));
         assert!(
             names.contains(&page.as_str()),
-            "{markdown} has no page; every report gets both"
+            "{markdown} has no page, so nothing on the index links it"
         );
-        let name = markdown.trim_end_matches(".md");
-        out.push_str(&format!(
-            "<li><a href=\"{page}\">{name}</a> <span class=\"what\">- {}</span> \
-             <span class=\"quiet\">(<a href=\"{markdown}\">markdown</a>)</span></li>\n",
-            described(markdown)
-        ));
-        listed += 1;
     }
-    assert_eq!(listed, 6, "six reports, each with a page and its markdown");
     out.push_str(
         "</ul>
 </body>
@@ -1142,6 +1180,15 @@ pub fn generated(commands: &dyn crate::Library) -> Vec<(&'static str, String)> {
         .map(|(name, text)| (html_name(name), page(text, name)))
         .collect();
     written.extend(pages);
+
+    // **`S-54`: the containment tree, and it has no markdown twin.** Collapsing is the
+    // feature - twenty-five lines shut and several hundred open - and a markdown file is
+    // always open, so a twin would be the same information in the form that made it
+    // unreadable. `crate::tree` says so at more length.
+    written.push((
+        "containment.html",
+        crate::tree::page(&session.game, "containment"),
+    ));
 
     // The page that links them, made from the list it links - so a report added here appears
     // on it, and one removed leaves it, without anybody editing a second file.
