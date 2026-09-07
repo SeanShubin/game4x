@@ -625,8 +625,26 @@ there is a test on that boundary at all.
 
 ### C-37 - The expected data file is generated from the presentation, which is why `P-284` fails
 
-**to** code · **status** open · **raised** 2026-09-06 · **source** measuring `P-284`'s gap before
+**to** code · **status** **acted** 2026-09-06 · `763e738` · **raised** 2026-09-06 · **source** measuring `P-284`'s gap before
 building `S-47`
+
+**The arrow turned round.** `expected.rs` is deleted and `state.rs` replaces it, writing the
+data file from `game_model::containment::tree` - the state itself - rather than by iterating
+`dump::tables`. The data file and the markdown dump are two renderings of one projection now,
+and neither renders the other.
+
+**The trigger this item recorded had dissolved, and `C-45` was right to say check rather than
+inherit.** It said: tell the specification lane before building `P-284`'s half, so a release
+row lands ahead of the check. **No row was needed.** `P-308` named `phase`, so `play` was
+already declared; `in-kind` and `in-id` are gone rather than declared, which is what `Q-64`
+and `C-45` both said; and of the nineteen words, seventeen went with the tables that carried
+them. **The two that remain are `game` and `manned`, and both are filed as `C-46` rather than
+promoted to silence the check** - which is the thing this item said must not happen.
+
+**The count here is superseded by a reading rather than corrected.** It arrived at nineteen by
+classifying Values cells; `tests/vocabulary.rs` checks each value against its own trait
+instead, which is the instrument this item said was needed. Seven traits name a closed set -
+this item's six plus `P-308`'s `phase` - arrived at independently.
 
 **derived from** every word in a data file is a kind, a trait, or one of a trait's values -
 `spec/console.md`, `P-284`
@@ -874,7 +892,11 @@ calls per commit, over 444 - so which of the two to do is left stated rather tha
 
 ### C-34 - The population for `S-47`'s unrepresentability claim, written before the change
 
-**to** code · **status** open · **cited** `4d79240` · **raised** 2026-09-06 · **corrected** 2026-09-06 by `Q-55`
+**to** code · **status** **acted** 2026-09-06 · `763e738` · **cited** `4d79240` · **raised** 2026-09-06 · **corrected** 2026-09-06 by `Q-55`
+
+**Closed by `S-47` landing and this being held against it, which is what it stayed open
+for.** The measurement is at the bottom and the record above it is unchanged, because a
+record edited after the fact is not one.
 
 **Open on purpose and it is not a task.** It is a record that has to outlive the change it
 describes, so it stays open until `S-47` writes the claim and this is held against it. The
@@ -927,6 +949,31 @@ before.
 
 **The count is two**, one unconditional and one conditional on identity becoming positional. A claim
 naming more wants an exhibit per entry before it is believed.
+
+## Held against `S-47`, 2026-09-06
+
+**Both entries were still writable when the map form landed, and the first version of it made
+one of them worse.** Measured by exhibiting each - `Q-55`'s test, run again on the other side
+of the change - rather than by reading the new code and judging it.
+
+- **The orphan vanished.** A game holding one Ark on `TerritoryId(99)` produced a tree
+  holding **none**, silently. The tree is built by asking each place what is on it, so a unit
+  in no place matches nothing. **A data file that is quietly wrong is worse than one that
+  fails**, and this was the quiet kind: the count of arks was zero and nothing said why.
+- **Two units sharing an id merged.** They produced `{ark fuel:2 id:1 ready:yes} -> 2`, a
+  plausible line stating a rule `spec/logistics.md` forbids outright - *there is never a
+  quantity of a thing with an `id`*.
+
+**So the honest claim after `S-47` is narrower than *unrepresentable*, and it is checkable.**
+**The model admits both exactly as before** - `Game.units` is still a `Vec`, `Unit` still
+carries a `location`, and `Thing` still has no id, so the second entry's condition was never
+met. **What changed is that neither can be written down**: `containment::tree` counts the
+units it placed against the units there are, and `group` refuses a quantity of a thing with
+an `id`. Both refusals have a test that exhibits the state and expects the refusal.
+
+**Nothing here claims a zero.** The population was two, both entries survive in the model,
+and the change is at the writer. **That is a smaller claim than this item anticipated, and
+recording the smaller one is the point of having written the population down first.**
 
 ### C-33 - A check that has only ever passed is a claim, and belief in it decays
 

@@ -18,13 +18,14 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-57** - `f2ab5f3` X-3 answers S-57: four phenomena, and restarting fixes one of them · still open in `docs/notes/proposals.md`
+- **S-54** - `763e738` S-54: the containment tree Sean asked to see, generated from the scenario · still open in `docs/notes/proposals.md`
 - **S-47** - `6cbbaff` S-47: the map form, generated from the state rather than from the presentation · still open in `docs/notes/proposals.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
 - **Q-64** - `39704b9` Q-64 into C-37, and a check made to match the claim in its own name · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (10)
+### To code (8)
 
 - **S-54** - The containment tree Sean asked to see, and the scenario it is generated from · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
@@ -33,8 +34,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-29** - Input and expected are data files; the dumps are neither · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
-- **C-37** - The expected data file is generated from the presentation, which is why `P-284` fails · `crates/outbox.md`
-- **C-34** - The population for `S-47`'s unrepresentability claim, written before the change · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 
 ### To research (1)

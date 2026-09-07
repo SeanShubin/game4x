@@ -173,6 +173,19 @@ fn group(things: Vec<Entry>) -> Vec<Entry> {
                     "two things are described by {key} and contain different things, which \
                      the map form cannot write down - a description is the key of the map"
                 );
+                // `spec/logistics.md`: **there is never a quantity of a thing with an
+                // `id`** - it is one thing, and anything that holds it holds exactly it.
+                //
+                // **`C-34`'s second entry, and refusing is the whole of what changed.**
+                // Two units sharing one id were writable before this and are writable
+                // still: `Game.units` is a `Vec` and nothing in it is keyed. What they can
+                // no longer do is produce a file, because grouping them would write
+                // `{ark id:1} -> 2` - a plausible line stating a rule the specification
+                // forbids, which is worse than a crash and quieter.
+                assert!(
+                    !already.description.traits.contains_key("id"),
+                    "{key} twice, and there is never a quantity of a thing with an `id`"
+                );
                 already.quantity += 1;
             }
             None => {
@@ -340,6 +353,34 @@ pub fn tree(game: &Game) -> Entry {
     }
 
     root.contents = group(children);
+
+    // **Every unit is somewhere, and this is what says so.**
+    //
+    // **`C-34`'s first entry.** `Location::On(TerritoryId(99))` constructs and refers to
+    // nothing; `game.rs` guards the ids it is handed and the struct admits any number. The
+    // tree is built by asking each place what is on it, so an orphan matches no place and
+    // **vanishes** - the file would say there is no Ark while the game held one, which is a
+    // data file that is quietly wrong rather than one that fails.
+    //
+    // Measured rather than assumed: before this line, a game with one orphaned Ark produced
+    // a tree with none, and nothing said so.
+    let placed = root
+        .walk()
+        .into_iter()
+        .filter(|entry| {
+            entry.description.kind == Kind::Ark.name()
+                || entry.description.kind == Kind::Pioneer.name()
+        })
+        .map(|entry| entry.quantity as usize)
+        .sum::<usize>();
+    assert_eq!(
+        placed,
+        game.units.len(),
+        "{} units are in the game and {placed} are in a place - one is somewhere the tree \
+         cannot reach, and writing it out would lose it silently",
+        game.units.len()
+    );
+
     root
 }
 
@@ -633,6 +674,43 @@ mod tests {
             .find(|c| c.of.written() == "{extractor resource:food}")
             .expect("a capacity for food extractors");
         assert_eq!((food.total, food.used, food.available()), (3, 1, 2));
+    }
+
+    /// A unit in a place the tree cannot reach stops the tree rather than vanishing from it.
+    ///
+    /// **`C-34`'s first entry, exhibited.** It said an orphan *holds unconditionally*, and it
+    /// still does - the struct admits any territory number. What changed is what happens
+    /// next: the state has no written form now, where before it had a plausible one that was
+    /// missing a unit.
+    #[test]
+    #[should_panic(expected = "cannot reach")]
+    fn a_unit_in_a_place_that_is_not_there_has_no_written_form() {
+        let mut game = a_world();
+        let mut orphan = crate::Unit::new(crate::UnitId(1), crate::UnitKind::Ark, TerritoryId(99));
+        orphan.location = crate::Location::On(TerritoryId(99));
+        game.units.push(orphan);
+        tree(&game);
+    }
+
+    /// Two things with one `id` have no written form either.
+    ///
+    /// **`C-34`'s second entry, and its condition is met.** The entry was conditional on
+    /// identity becoming positional; it did not - `Thing` still has no id and `game.rs` still
+    /// selects units by `UnitId`. So the state is writable exactly as it was, and what it can
+    /// no longer do is be written down: grouping produces `{ark id:1} -> 2`, which
+    /// `spec/logistics.md` forbids outright.
+    #[test]
+    #[should_panic(expected = "never a quantity of a thing with an `id`")]
+    fn two_things_sharing_an_id_have_no_written_form() {
+        let mut game = a_world();
+        for _ in 0..2 {
+            game.units.push(crate::Unit::new(
+                crate::UnitId(1),
+                crate::UnitKind::Ark,
+                TerritoryId(1),
+            ));
+        }
+        tree(&game);
     }
 
     /// Two things sharing a description and holding different things has no written form.
