@@ -60,9 +60,67 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) is empty too.
+**One**, and it is the grouping you asked for, derived rather than declared.
+
+### P-333 - Which kinds behave alike, derived rather than declared
+
+**to** sean - **status** open - **raised** 2026-09-07 - **kind** Sean's own - **shape** text -
+**asks** approval - **into** `releases/first-release.md` -> Capabilities, as `R-8`
+
+**Your words: prose does not prove what the code does, and an enum of behaviours would at least let
+you tell which things behave the same and then look the code up.** This is that, with one change -
+**derived instead of declared**, because a declared enum is a second copy and this repository has
+spent a week finding second copies that drifted.
+
+> ### R-8 - I can see which kinds behave alike
+>
+> **to** code - **status** open
+>
+> - **In** - `docs/process.md`, *I insist that the AI make its work verifiable to a human*, applied
+>   to a kind's behaviour rather than to a scenario's outcome
+> - **Vetted when** - `reports/catalog.md` gives each kind a **signature**: the traits it carries and
+>   every *(recipe, role)* pair that names it. **Kinds with the same signature are shown together**,
+>   and the signature is computed from the release's tables rather than written by anyone. I can scan
+>   the groups, see that two kinds behave alike, and have a name to grep for when I want the detail
+
+**Why a signature and not an enum.** An enum is a fact somebody maintains; a signature is a fact
+about the tables. **If `store` and `yard` stop behaving alike, the grouping changes without anyone
+remembering to change it** - which is the one property that would have prevented `houses`, where a
+requirement sat in the recipe table for weeks with no kind able to satisfy it.
+
+**What it does not claim.** A signature says two kinds are treated alike **by the rules as written**.
+It cannot say the code treats them alike - only the code says that, and you said an intermediate is
+acceptable so long as it is honest about being one. **The signature is a place to start reading, not
+a proof.**
+
+**Both halves already exist as data.** `catalog.md` already prints *Traits of it* and *In recipes*
+per kind; what it does not do is treat the pair as a key and group by it.
 
 ## Addressed to other perspectives
+
+### S-63 - The reports do not say which of the three views each one is
+
+**to** code - **status** open - **raised** 2026-09-07 - **source** Sean asking what the status of the
+HTML reports is and having to be told rather than being able to see it
+
+**Eight reports in four shapes and nothing labels them.** Counted rather than remembered:
+
+- **A tree** - `containment.html`, thirty `<details>`
+- **Tables** - `state.html` at ten, `turns.html` at a hundred, `entities.html` at three,
+  `commands.html` at one
+- **Prose** - `catalog.html` and `recipes.html`: headings, paragraphs and lists, no table and no tree
+- **`index.html`** itself, which is the page he browses from and which says none of this
+
+**He expects three kinds of view** - a tree he can collapse, a relational view as a table, and a
+physical view. **`reports/index.html` should say which each report is**, so the answer to *what is
+the status of the reports* is a page rather than a conversation.
+
+**One thing that is not yours and is why this is worth doing now.** There is no physical view at all,
+and `docs/process.md` requires one in two places - *data is presented to me in both the relational
+and the physical model*, and *the console allows both to be inspected*. **That is open to him as a
+decision**, because the game's state is not in an ECS - `game-model` depends on `planet-model` alone -
+so what a physical view of plain Rust structs should show is his call rather than mine. **Labelling
+what exists is what makes its absence visible**, which is the half that does not wait on him.
 
 ### S-62 - `P-331` puts `total capacity` on the deposit, and the gate is red until the crate follows
 

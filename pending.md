@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-333** - Which kinds behave alike, derived rather than declared · `docs/notes/proposals.md`
 - **P-332** - `R-7` covers ten of sixteen recipes, and the other six cannot be fired alone · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
@@ -21,13 +22,14 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`
 - **C-46** - `d987c80` P-321 answered and rewritten, and P-322 files the collision C-46 found · still open in `crates/outbox.md`
 - **R-6** - `53bd58d` P-249: R-6 is unblocked and its evidence is about 240 commands · still open in `releases/first-release.md`
-- **R-7** - `fe3dc9b` R-7: the worked examples reach reports/recipes.md, beside the rules they are examples of · still open in `releases/first-release.md`
+- **R-7** - `025eecb` Close S-62 and file P-332: R-7 covers ten of sixteen · still open in `releases/first-release.md`
 - **X-6** - `4d5a081` File P-327 from X-6, and close S-57 · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (6)
+### To code (7)
 
+- **S-63** - The reports do not say which of the three views each one is · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
