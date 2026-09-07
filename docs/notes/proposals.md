@@ -60,7 +60,33 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** One choice is waiting on you, in [decisions.md](decisions.md).
+**One**, and it is the research lens's first finding, verified here rather than taken.
+
+### P-317 - The thing that makes the fourth artifact derivable is never stated
+
+**to** sean - **status** open - **raised** 2026-09-06 - **kind** gap - **shape** text -
+**asks** approval - **into** `docs/process.md` -> How I know the application is right, after the
+four-artifacts paragraph
+
+**The research lens's `X-1`, its first finding, and I verified every claim in it rather than taking
+it.** *The first three are enough to derive the fourth by hand* holds only if the transformation
+reads the state and the commands and nothing else. **The document never says so.**
+
+> **The transformation reads the state and the commands and nothing else** - no clock, no
+> randomness, nothing about the machine it runs on. That is what makes the fourth artifact
+> derivable from the other three. **It fails silently if it stops holding**: every test still
+> passes, and the diff I review by hand becomes noise I cannot tell from a real change.
+
+**The measurement, and its denominator is named.** Grepping `determin|replay|nondeterm|random|clock|
+reproduc` case-insensitively over `docs/process.md` returns **0 hits against 459 lines** - a zero
+that means something because the population is not also zero.
+
+**It is relied on in two places and governs in neither.** `docs/layers.md` calls the tie-break
+*perfectly reproducible*, and a doc comment in `crates/game-model/src/lib.rs` says *beyond
+reproducing identically on every machine*. Both are downstream of a rule nothing states.
+
+**The lens deliberately did not draft the sentence**, saying the words are yours and mine to write.
+That is the boundary working: it found the gap and left the wording where it belongs.
 
 ## Addressed to other perspectives
 

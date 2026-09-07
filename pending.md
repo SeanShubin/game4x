@@ -8,8 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-Nothing. Every perspective has said so in its own outbox, and this is read from those
-files rather than from anybody's memory of them.
+- **P-317** - The thing that makes the fourth artifact derivable is never stated · `docs/notes/proposals.md`
+- **P-318** - `docs/layers.md` tells the code lane to default to a tie-break `spec/turn.md` forbids · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
 
