@@ -10,7 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 - **P-333** - Which kinds behave alike, derived rather than declared · `docs/notes/proposals.md`
 - **P-335** - The reports are browsable without scripting · `docs/notes/proposals.md`
-- **P-334** - `adjacency` is stored and appears in nothing you read · `docs/notes/decisions.md`
+- **P-334** - An adjacency is a thing, held by the game rather than by a territory · `docs/notes/proposals.md`
 - **P-332** - `R-7` covers ten of sixteen recipes, and the other six cannot be fired alone · `docs/notes/decisions.md`
 
 ## Open, and a commit says otherwise
@@ -19,6 +19,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-334** - `96b68b1` File P-334: adjacency is stored and appears in nothing he reads · still open in `docs/notes/proposals.md`
 - **S-30** - `0e5f8f4` Report S-47, S-48 and S-54 built, and file what S-30 and S-29 wait on · still open in `docs/notes/proposals.md`
 - **S-26** - `d1d0e3e` S-26: P-216 checked, turn out of the entity view, and the contradiction that stops P-212 · still open in `docs/notes/proposals.md`
 - **C-51** - `955d4f4` Answer C-51 with S-60: I withdraw the claim, and the field is theirs · still open in `crates/outbox.md`

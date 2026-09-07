@@ -140,6 +140,54 @@ the data file, a drawing is the only way it would ever be visible, which argues 
 file rather than for drawing it. **So this capability does not ask for a drawing**, and if `P-334`
 goes the other way I will file one then.
 
+### P-334 - An adjacency is a thing, held by the game rather than by a territory
+
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07 - **kind** Sean's
+own - **shape** rows - **asks** approval - **into** `releases/first-release.md` -> Kinds, then Traits
+
+**You rejected the narrowing** - *the commands creating the adjacencies is not enough* - so the round
+trip closes rather than being scoped down. **And you said where it goes**: not inside a territory,
+because adjacency operates at a different level.
+
+**That is what `spec/logistics.md` already says**, and what `P-314` corrected the release to: *a thing
+says which of the things in it are next to which; **that is a fact about the container** rather than
+about its contents.* So it is held by the game, which is what holds the territories.
+
+**A description is a flat map, and an adjacency is a pair - which is the problem `density` had.** It
+was solved by making a deposit a thing, and the same answer works here.
+
+One row into *Kinds*:
+
+| Kind          | What it is                                                       |
+| ------------- | ---------------------------------------------------------------- |
+| **adjacency** | two places that share an edge, held by the thing that holds them |
+
+Then *Traits*, where `adjacency` stops being a trait and becomes two:
+
+| Trait    | Of           | Values  | Stored or derived |
+| -------- | ------------ | ------- | ----------------- |
+| **from** | an adjacency | a place | stored            |
+| **to**   | an adjacency | a place | stored            |
+
+**So the game contains `{adjacency from:1 to:2} -> 1`**, beside its territories rather than inside
+them - which is the shape you drew: territories in one group and adjacencies in another.
+
+**Written once, not twice.** Adjacency is symmetric - the model says so in its own comment - so
+`{adjacency from:1 to:2}` and `{adjacency from:2 to:1}` are one fact. **The lower id is `from`**, so
+the same state is the same bytes, which is what `spec/console.md` requires of entries anyway. Twelve
+territories at five neighbours each is **thirty entries**, not sixty.
+
+**What this does not settle, and I am not folding it in.** The release's old wording said *and by
+which kind of edge*; **the model carries no edge kind** and only one kind is stored today -
+territory to territory. `spec/orbit.md` derives the orbital edges from these, so the second and third
+kinds are computed rather than written. **If you want the kind named when a second stored one
+arrives, that is a later row** and this proposal drops the phrase rather than inventing a value for
+it.
+
+**What follows for the code lane, filed when this lands**: `prototypes/kinds` mirrors both tables,
+`Game.adjacency` is already the data so nothing in the model changes, and the round trip gains
+thirty entries it can check.
+
 ## Addressed to other perspectives
 
 ### S-64 - Browsable reports, and the working model to copy rather than a description of one
