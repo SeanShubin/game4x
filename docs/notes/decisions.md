@@ -21,38 +21,6 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-350 - Measure whether a fresh instance reads the owning document, or the stale copy
-
-**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07, from 1,918 words to
-this - **kind** the research lens's `X-5`, lifted - **asks** a decision - **into** nothing; it
-authorises one task or it does not
-
-**The question.** On some future restart, should one instance be asked *what are a lens's jobs?* as
-ordinary work, with a record kept of which files it opened before answering?
-
-**Why that question.** The lens's own README restates its jobs and is four days behind
-`docs/process.md`, which owns them. `X-3` predicts a cold instance reads the README and fails. **The
-outbox architecture assumes an instance is replaceable by a fresh one that reads the files**, and
-that assumption has never been tested.
-
-**What it costs, and this is the part I put in front of you late.** The stale README is a **real
-defect**. Measuring it means leaving it broken until a restart happens. `P-315` is the same story
-backwards: there the repair arrived first, and there was nothing left to measure.
-
-**What you get.** One observation. `n = 1`.
-
-**What the alternative gets.** Fix the README now and read future restarts for free. The crash
-already produced six failures of this kind unasked -
-[what the crash showed](2026-09-07-what-the-crash-showed.md) - and that evidence accumulates at no
-cost.
-
-**I recommend no.** **Neither outcome changes what you do.** Either way the conclusion is *keep the
-files right*, which is what the architecture already assumes. An experiment whose result changes no
-action is not worth a defect held open.
-
-**You said yes before I named the cost**, so it is genuinely still open. If you want it anyway, say
-so and the README stays as it is until it runs.
-
 ### P-348 - `R-8` is built and no two kinds behave alike, which may be the answer or the defect
 
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** the code lane's `C-64` - **asks**

@@ -8,6 +8,26 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, declining the cold-instance study
+
+*Lets go with your latest recommendation, fix the README, let `X-3` stand as the derivation it says
+it is, and note what future restarts show.*
+
+**And the README was already fixed, which I found by going to do it.** `bc1781a`, 2026-09-05,
+*Apply `P-245` to the whole brief, not only the part that was pointed out*. It now links to
+`docs/process.md` instead of restating it, and records the failure in its own words: *this file said
+the Quality instance section gave three jobs; it was right when written and wrong four days later.*
+
+**So the third task was unrunnable before it was designed.** `X-3` is dated 2026-09-06 and the study
+2026-09-07; the repair landed on the 5th. The design describes the README in the present tense - *the
+lens's own README, which restates them and is four days behind* - and by then it did not.
+
+**All three tasks died the same way, and that is the finding worth keeping.** `P-315`'s sentence was
+repaired in the commit that recorded the mistake; the other two shapes were covered observationally
+by the crash; and this one was repaired two days before anyone proposed measuring it. **The process
+keeps fixing the defects the study would have measured**, which is a better answer than the study
+would have given.
+
 ## Said 2026-09-07, answering `P-351`: game is a kind, delete manned
 
 *`game` is a kind, delete `manned`.*
