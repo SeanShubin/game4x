@@ -60,47 +60,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-352 - The staging bullet gains the reason care cannot close it, and the check that can
-
-**to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
-- **asks** approval - **shape** an instruction - **into** `CLAUDE.md` -> Perspectives, the staging
-bullet
-
-**You chose the column check.** This replaces the last two sentences of that bullet. The first three
-sentences are unchanged and are already correct - they name the mechanism and say the hazard is
-someone else.
-
-**The instruction.** In the bullet beginning *Stage by name, never `git add -A`*, replace the two
-sentences from *It has happened:* to the end with:
-
-> **Staging by name bounds what you add and not what you commit**, so no amount of care closes it:
-> the window is between your `git add` and your `git commit`, and checking for the lock falls before
-> it. It has happened twice - twenty-six lines, then twenty-one - and both times the work survived
-> and the commit message was what was lost. **`hooks/pre-commit` refuses a commit whose files span
-> two perspectives' columns**, which is the shape of the race and of writing outside your own column
-> alike.
-
-**How to tell it was carried out**: the bullet no longer contains *touching a file outside that
-one's column*, and does contain *refuses a commit whose files span two perspectives' columns*. The
-three sentences before *It has happened* are byte-identical to what is there now.
-
-**The measurement that made this the answer**, so it is not taken on my word: over all 1,047 commits
-with files, **11 touch more than one perspective's column**, and both known incidents are among them
-- `8f687d5` today and `93d839d`, which is the twenty-six-line one. Most of the rest are pre-split
-history. **Roughly one fire per two hundred commits, and it refuses before the commit exists.** My
-classifier could not place twelve top-level paths from earlier layouts, so treat 11 as approximate
-rather than exact.
-
-**One thing your choice implies that you have not ruled on, and I am not resolving it quietly.** A
-check that refuses leaves the refused lane needing some way to commit, and the only one that works
-is `git commit -- <paths>`. **I have kept it out of `CLAUDE.md` deliberately** and propose it live in
-the hook's refusal message instead - so the idiom arrives at the moment a lane is stuck, which is a
-moment of doubt, rather than sitting in a document to be recalled at a moment of confidence. That
-keeps your choice of row three intact rather than smuggling row one back in. **Say if you would
-rather it were in the bullet.**
-
-**The hook is not mine to write.** `hooks/` is the code lane's, and `S-71` is the build order.
-
 ### S-72 - `manned` is deleted, by Sean's decision on `C-46`
 
 **to** code - **status** open - **raised** 2026-09-07 - **source** Sean answering `P-351`
@@ -2545,6 +2504,7 @@ work the release exists to order.
 | P-349, edge, border and boundary name one thing, and crossing is passing through it                                          | `spec/planet.md` -> Distance                                                                                                                                                                             | 2026-09-07 |
 | P-353, there is one notation, and the tree is what having one means                                                          | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-07 |
 | P-351, `game` is the sixteenth kind                                                                                          | `releases/first-release.md` -> Kinds                                                                                                                                                                     | 2026-09-07 |
+| P-352, the staging bullet gains the reason care cannot close it, and the check that can                                      | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-07 |
 | P-322, a deposit is a thing, so a territory's density has somewhere to be written                                            | `releases/first-release.md` -> Kinds, Traits                                                                                                                                                             | 2026-09-06 |
 | P-323, a field is named for the kind it refers to; a command is named for its recipe and may repeat                          | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-06 |
 | P-324, being blocked on one thing is not being blocked, and it applies to every lane                                         | `docs/process.md` -> All lanes                                                                                                                                                                           | 2026-09-06 |

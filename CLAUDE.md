@@ -129,9 +129,13 @@ Four things the perspectives make necessary, all of which have teeth:
 - **Stage by name, never `git add -A`, and know that staging is publishing.** `git add` writes to an
   index all three perspectives share, and `git commit` commits the index rather than the caller's
   changes - so a file you stage is committed by whoever commits next, under a message about
-  something else. This is not a caution about your own carefulness; the hazard is someone else. It
-  has happened: one perspective staged a file, lost a race for `.git/index.lock`, and twenty-six
-  lines of its work landed in another's commit, touching a file outside that one's column.
+  something else. This is not a caution about your own carefulness; the hazard is someone else.
+  **Staging by name bounds what you add and not what you commit**, so no amount of care closes
+  it: the window is between your `git add` and your `git commit`, and checking for the lock
+  falls before it. It has happened twice - twenty-six lines, then twenty-one - and both times
+  the work survived and the commit message was what was lost. **`hooks/pre-commit` refuses a
+  commit whose files span two perspectives' columns**, which is the shape of the race and of
+  writing outside your own column alike.
 - **`hooks/pre-push` runs the full gate** - `cargo fmt`, clippy and the test suite across every
   crate. A documentation-only or report-only push is therefore gated on code that perspective did
   not write and must not repair. If it fails for that reason, **say so and stop**; whether to

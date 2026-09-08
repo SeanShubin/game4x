@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-352** - The staging bullet gains the reason care cannot close it, and the check that can · `docs/notes/proposals.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`
 - **P-346** - Three statements fix what a move costs, and only one of them is a mechanism · `docs/notes/decisions.md`
@@ -79,9 +78,9 @@ it exists to ask.
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
+- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
-- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
