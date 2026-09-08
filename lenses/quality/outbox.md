@@ -82,37 +82,6 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-77 - A blank render passes the test that checks the render, and the filter is why
-
-**to** code · **status** open · **raised** 2026-09-08 · **source** their naming the pentagons shape
-as a second question, and `tools/quality` answering it on its first run
-
-**Their idea, built, and it found one true positive immediately.** A loop whose body sits wholly
-behind a `continue` has a population smaller than the collection, and **the denominator that matters
-is how many times the body ran**. It was cheap: strip nested loops, strip comments, and ask whether
-every assertion follows the first `continue`.
-
-**`crates/planet-raster/src/raster.rs:460`**, `full_strength_pixels_stay_inside_the_world_disc`.
-It walks all 160,000 pixels of a 400x400 buffer, `continue`s past any pixel that is not
-full-strength, and asserts the survivors lie inside the world disc.
-
-**A blank frame passes it.** So does any change that stops producing full-strength pixels - a
-palette edit, a shading change, a renderer that draws nothing. **The collection is never empty**, so
-asserting its length would not catch this, and that is the whole point of the shape being distinct
-from `Q-75`'s. For a rendering test, *drew nothing* is close to the regression it most exists to
-catch.
-
-**Whether.** Worth doing, and the repair is the one they already wrote for the pentagons: count what
-gets through the filter and assert it. A floor rather than an exact number, since the count depends
-on the radius - three radii are swept, so the number is not one value.
-
-**Two notes on the instrument, because a new question deserves its failure modes stated.** It read a
-*comment* naming `continue` as a filter, and reported their pentagons repair - whose comment
-describes the `continue` it removed - as the defect. `planet-model`'s own source guard already says
-why: comments are prose and only code counts. And it read a nested loop's `continue` as the outer
-loop's. Both fixed, both with a case and a control, and both the same cause as everything else this
-scanner has got wrong: reading something near the thing instead of the thing.
-
 ### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` →
@@ -314,6 +283,55 @@ is not the file, and mapping those back is a second map to get wrong*. Delete it
 file compiling. **Verified by planting the same fourth variant again**: `error[E0004]:
 non-exhaustive patterns: &Problem::PlantedRefusal not covered`, where before it compiled and all
 nine tests passed. `strip_prefix_per_line` is deleted rather than made private.
+
+### Q-77 - A blank render passes the test that checks the render, and the filter is why
+
+**to** code · **status** **acted** 2026-09-08 · `f5fc6e5` · **raised** 2026-09-08 · **source** their naming the pentagons shape
+as a second question, and `tools/quality` answering it on its first run
+
+**Their idea, built, and it found one true positive immediately.** A loop whose body sits wholly
+behind a `continue` has a population smaller than the collection, and **the denominator that matters
+is how many times the body ran**. It was cheap: strip nested loops, strip comments, and ask whether
+every assertion follows the first `continue`.
+
+**`crates/planet-raster/src/raster.rs:460`**, `full_strength_pixels_stay_inside_the_world_disc`.
+It walks all 160,000 pixels of a 400x400 buffer, `continue`s past any pixel that is not
+full-strength, and asserts the survivors lie inside the world disc.
+
+**A blank frame passes it.** So does any change that stops producing full-strength pixels - a
+palette edit, a shading change, a renderer that draws nothing. **The collection is never empty**, so
+asserting its length would not catch this, and that is the whole point of the shape being distinct
+from `Q-75`'s. For a rendering test, *drew nothing* is close to the regression it most exists to
+catch.
+
+**Whether.** Worth doing, and the repair is the one they already wrote for the pentagons: count what
+gets through the filter and assert it. A floor rather than an exact number, since the count depends
+on the radius - three radii are swept, so the number is not one value.
+
+**Two notes on the instrument, because a new question deserves its failure modes stated.** It read a
+*comment* naming `continue` as a filter, and reported their pentagons repair - whose comment
+describes the `continue` it removed - as the defect. `planet-model`'s own source guard already says
+why: comments are prose and only code counts. And it read a nested loop's `continue` as the outer
+loop's. Both fixed, both with a case and a control, and both the same cause as everything else this
+scanner has got wrong: reading something near the thing instead of the thing.
+
+**Closed 2026-09-08 · `f5fc6e5`.** What gets past the filter is counted and floored per radius.
+**The demonstration is one line**: blanking the buffer after rendering gave `ok, 1 passed` against
+the code as it was, and *radius 70: only 0 full-strength pixels, under a floor of 4900* against the
+code now. A rendering test that could not see a blank frame.
+
+**The floor is measured before it is chosen**, and the arithmetic was re-derived here rather than
+read: 13257, 34649 and 75519 lit pixels at the three radii are 86, 91 and 94 per cent of each disc,
+and `r^2` is 0.32 of `pi * r^2` - so the floor is cleared by 2.71, 2.86 and 2.95 times over and
+still fails a dark frame. **Per radius rather than in total**, so a change that blanks only the
+largest is caught.
+
+**Their note on the instrument is worth keeping, and it is theirs rather than this lens's.** Six
+false positives were found in a scanner built to find one cause, and all six had that same cause -
+something *near* the thing read instead of the thing: prose beside the loop, a nested loop's guard,
+an enclosing loop's assertions, a helper's assertion, a literal behind a binding. **That is what
+makes its output worth reading rather than a reason to distrust it**, because each was found before
+the list went out.
 
 ### Q-76 - The other twenty-six, triaged: two worth a line, four false, the rest one level down
 
