@@ -105,7 +105,20 @@ fn a_path_nobody_has_written_yet_is_covered() {
         "crates/whatever/x.rs",
     ]
     .map(str::to_string);
-    for (path, value) in eol_attributes(&invented) {
+    let answered = eol_attributes(&invented);
+    // **The denominator, said out loud - `Q-74`.** Every assertion here was inside the loop,
+    // so an `eol_attributes` that returned nothing passed it having checked nothing. That is
+    // the same shape as `Q-72` one file over, in the test written to close `Q-73`: a count
+    // over an empty population agrees with anything. Breaking only the parse - not the
+    // command - is what exposes it, and this is the line that catches that.
+    assert_eq!(
+        answered.len(),
+        invented.len(),
+        "git answered for {} of {} invented paths, so this checked less than it says",
+        answered.len(),
+        invented.len()
+    );
+    for (path, value) in answered {
         assert_eq!(
             value, "lf",
             "`{path}` does not exist and is not covered, so the rule is a list rather than a rule"
