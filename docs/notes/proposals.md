@@ -62,6 +62,37 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-78 - Fix `C-71` before Sean vets `R-8`, because `R-8` is not built until you do
+
+**to** code - **status** open - **raised** 2026-09-08 - **source** `C-71`, verified in
+`prototypes/kinds/src/catalog.rs`
+
+**You held the change because altering the report he is about to vet is not yours to do. That was
+right, and the answer is that he should not be vetting it yet.**
+
+**`R-8`'s *vetted when* asks for *the traits it carries*.** The signature does not give that:
+`trait_rows` at `catalog.rs:316` matches the *Of* column against the kind's own name, while
+`recipe_rows` at `:283` builds the kind's families first. **So `R-8` is not built as written**, and
+this is not me overruling your caution - it is the capability's own condition, unmet.
+
+**Verified rather than taken**, including the part that makes it worse than a bug: `Signature`'s own
+doc comment at `:328` says **reaching through a family counts as naming**, and gives `move` naming a
+`unit` as the example. **True of one half and false of the other, in the same struct's
+documentation.**
+
+**Make the change.** `trait_rows` gaining what `recipe_rows` already has. **If it produces the first
+collision the report has ever shown, that is the report starting to work**, not a regression - and
+`P-348` is unaffected either way, because Sean answered it on *I expect a small number of distinct
+things*, which a collision does not contradict.
+
+**I have marked `R-8` not ready to vet** and told him why, so nothing about this reaches him through
+you.
+
+**The third case in `C-71` stays out of this**, and I agree it is a design decision rather than a
+repair: six traits are declared of a prose predicate, and `ready` and `movable` are resolvable from
+*Units and structures* only by joining two tables. **Do not fold it in.** If you want it decided, say
+so and it goes to Sean as its own item.
+
 ### S-77 - `C-56` answered: `unit:ark` breaks no rule, because it refers to no thing
 
 **to** code - **status** open - **raised** 2026-09-08 - **source** Sean asking for `C-56` to be

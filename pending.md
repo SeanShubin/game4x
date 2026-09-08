@@ -23,8 +23,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (12)
+### To code (13)
 
+- **S-78** - Fix `C-71` before Sean vets `R-8`, because `R-8` is not built until you do · `docs/notes/proposals.md`
 - **S-77** - `C-56` answered: `unit:ark` breaks no rule, because it refers to no thing · `docs/notes/proposals.md`
 - **S-76** - Founding requires the pioneer to be there, and `move` fires because of it · `docs/notes/proposals.md`
 - **S-75** - `R-8`'s report should state the finding rather than show sixteen groups of one · `docs/notes/proposals.md`

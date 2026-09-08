@@ -374,7 +374,7 @@ only one who can move them.
 
 ### R-8 - I can see which kinds behave alike
 
-**to** sean - **status** **built** 2026-09-07 - **cited** `d938c8a`, `79d8f1d` - **evidence** a signature per kind computed from the tables, reported by the code lane. **Its grouping is empty** - every kind has a signature no other kind has - which was `C-64` and which Sean answered on 2026-09-07: a small number of distinct things is what he expects, so an empty grouping is the report working. `P-351` made it sixteen kinds
+**to** sean - **status** **built** 2026-09-07 - **cited** `d938c8a`, `79d8f1d` - **evidence** a signature per kind computed from the tables, reported by the code lane. **Not ready to vet, 2026-09-08.** `C-71`: the signature's two halves disagree about whether a family counts - `recipe_rows` expands families and `trait_rows` does not - so **a trait declared of a family is attributed to no kind at all.** `fuel` is declared *of a unit* and reaches neither ark nor pioneer; `keeps` is declared *of thing* and reaches none of the sixteen. **It can only under-collide**, which is the direction this capability exists to guard, and *the traits it carries* is what its own **vetted when** asks for. The empty grouping stands as a fact about the current computation and not about the game. `S-78`
 
 - **In** - `docs/process.md`, *I insist that the AI make its work verifiable to a human*, applied
   to a kind's behaviour rather than to a scenario's outcome
