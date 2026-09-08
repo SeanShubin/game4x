@@ -18,6 +18,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-76** - `8797e60` S-76: founding requires the pioneer to be there, and move fires because the game needs it · still open in `docs/notes/proposals.md`
 - **C-71** - `36afe27` R-8 is not ready to vet: C-71 verified, and its own condition is unmet · still open in `crates/outbox.md`
 - **C-56** - `8f292eb` Handle C-56: unit:ark breaks no rule, because it refers to no thing · still open in `crates/outbox.md`
 

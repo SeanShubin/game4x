@@ -17,13 +17,13 @@ when the release says the same things about them. Quantities are not part of it:
 are produced in different numbers by the same recipe still behave alike. **Being named through a
 family counts**, because a family is how the release addresses several kinds at once.
 
-16 kinds fall into 16 signatures, and 0 of those hold more than one kind.
+**No two of the 16 kinds behave alike**, over all 120 pairs of them.
 
-**Nothing is shown together, and that is the finding.** No two kinds share a signature, so
-every group below holds one kind. **The traits alone do collide** - 11 of the kinds carry
-exactly the traits another one carries - and every such pair is then separated by the recipes
-that name it. So the release has no two kinds it says *the same things* about, and whether that
-is what was wanted is a decision rather than a build: `C-64`.
+**Every group below holds one kind**, which is what that sentence means when
+you reach them. **The traits alone do collide** - 11 of the kinds carry exactly
+the traits another one carries - and every such pair is then separated by the recipes
+that name it. So the release has no two kinds it says *the same things* about, and Sean
+has accepted that as the answer: he expects a small number of distinct things.
 
 ### `s-1` - citizen
 

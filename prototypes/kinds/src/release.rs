@@ -63,6 +63,27 @@ pub fn table_under(document: &str, heading: &str) -> Vec<Vec<String>> {
     rows
 }
 
+/// Which column of a table carries this heading, by name rather than by counting.
+///
+/// **`C-70`.** `P-346` deleted the *A move* column from *Units and structures* and a reader
+/// that had written `cells.get(5)` began reporting that a pioneer has no metal cost - a true
+/// statement about column 5 and nothing at all about the release. **A test that counts columns
+/// fails loudly when one moves; a generator that counts them does not** - it would attribute a
+/// recipe row to the wrong kind and write a catalog that is wrong and current at once.
+///
+/// This is why [`table_under`] keeps the header row, and it went unused until a column moved.
+/// It panics rather than returning an option: a column the release does not have is a document
+/// this code was not written for, and carrying on would put a guess in a generated file.
+pub fn column_of(document: &str, heading: &str, column: &str) -> usize {
+    let rows = table_under(document, heading);
+    let head = rows
+        .first()
+        .unwrap_or_else(|| panic!("there is no table under `{heading}`"));
+    head.iter()
+        .position(|cell| plain(cell) == column)
+        .unwrap_or_else(|| panic!("`{heading}` has no `{column}` column: {head:?}"))
+}
+
 /// The rows under a heading with the header row dropped, which is what most callers want.
 pub fn body_under(document: &str, heading: &str) -> Vec<Vec<String>> {
     table_under(document, heading).into_iter().skip(1).collect()

@@ -13,7 +13,7 @@
 //! So this answers a question no table answers, which is the test of whether a derived form
 //! is worth generating: *what is a pioneer?* takes six tables and gets one section.
 
-use crate::release::{body_under, plain};
+use crate::release::{body_under, column_of, plain};
 
 /// The catalog, as markdown, from the release document.
 pub fn catalog(document: &str) -> String {
@@ -70,12 +70,27 @@ fn groups(document: &str) -> String {
          the same recipe still behave alike. **Being named through a\nfamily counts**, \
          because a family is how the release addresses several kinds at once.\n\n",
     );
-    out.push_str(&format!(
-        "{} kinds fall into {} signatures, and {} of those hold more than one kind.\n\n",
-        found.iter().map(|(_, _, kinds)| kinds.len()).sum::<usize>(),
-        found.len(),
-        together
-    ));
+    // **The headline is the finding, not the arithmetic - `S-75`.** *Sixteen kinds fall into
+    // sixteen signatures, and 0 of those hold more than one* is true and reads as a broken
+    // report; *no two of the sixteen kinds behave alike, over 120 pairs* is the same fact and
+    // reads as an answer. The counting form is kept for the day something does collide,
+    // because then the counts are what a reader wants.
+    //
+    // **The pair count is computed rather than written.** It was 105 at fifteen kinds and is
+    // 120 at sixteen, and a number in generated prose that somebody has to remember to edit is
+    // exactly what this file keeps finding stale.
+    let counted = found.iter().map(|(_, _, kinds)| kinds.len()).sum::<usize>();
+    let pairs = counted * counted.saturating_sub(1) / 2;
+    if together == 0 {
+        out.push_str(&format!(
+            "**No two of the {counted} kinds behave alike**, over all {pairs} pairs of them.\n\n"
+        ));
+    } else {
+        out.push_str(&format!(
+            "{counted} kinds fall into {} signatures over {pairs} pairs, and {together} of those\nhold more than one kind.\n\n",
+            found.len(),
+        ));
+    }
 
     // **A zero here is a finding, and a zero on its own reads as a statistic.** `R-8` is
     // vetted by scanning the groups and seeing that two kinds behave alike - and today there
@@ -98,12 +113,7 @@ fn groups(document: &str) -> String {
             })
             .count();
         out.push_str(&format!(
-            "**Nothing is shown together, and that is the finding.** No two kinds share a \
-             signature, so\nevery group below holds one kind. **The traits alone do \
-             collide** - {sharing} of the kinds carry\nexactly the traits another one \
-             carries - and every such pair is then separated by the recipes\nthat name it. \
-             So the release has no two kinds it says *the same things* about, and whether \
-             that\nis what was wanted is a decision rather than a build: `C-64`.\n\n"
+            "**Every group below holds one kind**, which is what that sentence means when\nyou reach them. **The traits alone do collide** - {sharing} of the kinds carry exactly\nthe traits another one carries - and every such pair is then separated by the recipes\nthat name it. So the release has no two kinds it says *the same things* about, and Sean\nhas accepted that as the answer: he expects a small number of distinct things.\n\n"
         ));
     }
 
@@ -154,10 +164,17 @@ fn recipe_names(document: &str) -> Vec<String> {
 
 /// The recipe each row belongs to, since only a recipe's first row carries its name.
 fn rows_with_recipe(document: &str) -> Vec<(String, Vec<String>)> {
+    let rows = body_under(document, "## Recipes");
+    if rows.is_empty() {
+        return Vec::new();
+    }
+    // **`C-70` again, and this was the one the first pass missed.** The recipe's own name was
+    // `row[0]`, which is only true while *Recipe* is the first column.
+    let name_at = column_of(document, "## Recipes", "Recipe");
     let mut current = String::new();
     let mut out = Vec::new();
-    for row in body_under(document, "## Recipes") {
-        let name = plain(&row[0]);
+    for row in rows {
+        let name = plain(&row[name_at]);
         if !name.is_empty() {
             current = name;
         }
@@ -291,10 +308,23 @@ fn recipe_rows(document: &str, kind: &str) -> Vec<(String, Vec<String>, Reach)> 
         .collect();
     families_of.push(kind.to_string());
 
+    // **By name, not by position - `C-70`.** These were `4` and `6`, which is the shape of
+    // read that broke when `P-346` deleted a column from another table.
+    //
+    // **Asked only when there are rows**, because a document with no Recipes table has no
+    // recipe rows rather than a missing column - which is what the partial documents in
+    // `tests/what_a_kind_holds.rs` are. A malformed table still panics.
+    let rows = rows_with_recipe(document);
+    if rows.is_empty() {
+        return Vec::new();
+    }
+    let named_at = column_of(document, "## Recipes", "Kind");
+    let where_at = column_of(document, "## Recipes", "Where");
+
     let mut out = Vec::new();
-    for (recipe, row) in rows_with_recipe(document) {
-        let named = row.get(4).map(|c| plain(c)).unwrap_or_default();
-        let place = row.get(6).cloned().unwrap_or_default();
+    for (recipe, row) in rows {
+        let named = row.get(named_at).map(|c| plain(c)).unwrap_or_default();
+        let place = row.get(where_at).cloned().unwrap_or_default();
         let in_where = names_it(&place, kind);
         let of_mine = families_of.iter().any(|f| f == &named);
         if !of_mine && !in_where {
@@ -352,10 +382,17 @@ pub fn signature(document: &str, kind: &str) -> Signature {
     traits.sort();
     traits.dedup();
 
-    let mut pairs: Vec<String> = recipe_rows(document, kind)
+    let rows = recipe_rows(document, kind);
+    // Same reason as `recipe_rows`: no rows means no table to ask about.
+    let role_at = if rows.is_empty() {
+        0
+    } else {
+        column_of(document, "## Recipes", "Role")
+    };
+    let mut pairs: Vec<String> = rows
         .iter()
         .map(|(recipe, row, _)| {
-            let role = row.get(2).cloned().unwrap_or_default();
+            let role = row.get(role_at).cloned().unwrap_or_default();
             format!("{recipe} {role}")
         })
         .collect();
