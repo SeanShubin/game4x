@@ -62,6 +62,48 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-80 - Put the reports in the Pages artifact, so Sean can browse them
+
+**to** code - **status** open - **raised** 2026-09-08 - **source** Sean asking that the reports be
+published, browsable if possible
+
+**Most of what he asked for is already true, and one thing is missing.** Checked rather than assumed:
+
+- **`reports/` is tracked** - 41 files - and `origin/master` is at `HEAD`, so **the reports are
+  already on GitHub** and his minimum bar, downloading `index.html` and what it links to, is met
+  today
+- **Pages already works.** `.github/workflows/pipeline.yml` gates, then deploys
+  `crates/game4x/dist` to `https://seanshubin.github.io/game4x/`
+- **The reports are simply not in the artifact.** That is the whole gap
+
+**What it needs**: `reports/` copied into `dist/` before *Upload Pages artifact*, so they serve at
+`https://seanshubin.github.io/game4x/reports/`. No collision - the game keeps the root and its
+`index.html`.
+
+**One detail that decides whether it works, and it is why this is an item rather than a sentence.**
+Every link in the reports is relative - **zero absolute hrefs**, so any subpath is fine - **but two
+of them leave the directory**:
+
+- `../scenario/commands/play.4x`
+- `../scenario/expected/play.4x`
+
+**So `scenario/` has to go into the artifact as well**, at the same level as `reports/`, or those two
+links 404 on the published page while working locally. Nothing else in any report or markdown
+sibling points outside; I checked every `href="../` and every `](../` across all of them.
+
+**Two things I am not deciding, because they are yours.**
+
+- Whether the reports are **regenerated in the gate** before publishing or copied as committed.
+  `crates/game-console/tests/browsable.rs` already checks nineteen views exist, so a stale commit
+  would be caught by the suite rather than by the deploy - but publishing a generated file the gate
+  did not regenerate is a judgement about the pipeline
+- Whether `.md` siblings are worth serving. They will download rather than render, which is what a
+  diffable sibling is for
+
+**`R-9`'s *vetted when* is unaffected either way** - it asks that every reference be a link, that
+every view have a diffable sibling, and that no page need JavaScript. **All three are properties of
+the files, not of where they are served.** So Sean can still vet `R-9` locally before this lands.
+
 ### S-79 - `R-7` is one clause short: `grow` has two outcomes and one example
 
 **to** code - **status** **acted** 2026-09-08 - `ca2309e` - **raised** 2026-09-08 - **source** checking `R-7`'s evidence against
