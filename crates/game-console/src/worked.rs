@@ -326,11 +326,13 @@ pub fn examples() -> Vec<Example> {
             recipe: "upkeep",
             command: "{end-turn}",
             case: Some(
-                "five of the world's six in one ending, in the release's order. \
-                 Territory 1 has four food for two citizens, so both eat and the two \
-                 left over grow two more; territory 2 has none, so its citizen goes \
-                 unpaid and perishes. What food is left is discarded and the worked \
-                 extractor is ready again. **The pioneer in territory 2 starved too and \
+                "five of the world's six in one ending, in the release's order, and \
+                 the way `grow` turns out when **the surplus is the lesser**. \
+                 Territory 1 has three food for two citizens, so both eat and the one \
+                 left over grows one more - one, because a surplus of one is less than \
+                 two citizens. Territory 2 has none, so its citizen goes unpaid and \
+                 perishes. What food is left is discarded and the worked extractor is \
+                 ready again. **The pioneer in territory 2 starved too and \
                  the file cannot show it** - the model marks it unusable rather than \
                  consuming it, and `usable` is a trait the release does not declare, so \
                  it reads unchanged. `C-62`",
@@ -340,8 +342,12 @@ pub fn examples() -> Vec<Example> {
                 {
                     let place = &mut game.territories[0];
                     place.add_store(Resource::Food);
-                    // Two eat, one is left over, and one citizen grows on it.
-                    place.add(Resource::Food, 4);
+                    // **Three, so the surplus is the lesser - `S-79`.** It was four, which
+                    // left a surplus of two against two citizens: a tie, which demonstrates
+                    // neither way the expression turns out. Two eat, one is left over, and
+                    // that one surplus is what `grow` takes.
+                    place.add(Resource::Food, 3);
+
                     // A worked extractor, so `refresh` has something to make ready again.
                     place.add_extractor(Resource::Food);
                     place.exhaust_extractor(0);
@@ -365,9 +371,42 @@ pub fn examples() -> Vec<Example> {
                 game
             },
         },
+        // **`grow`'s other outcome - `S-79`, and `R-7`'s own clause.** *A recipe whose
+        // quantity is an expression shows one example for each way the expression turns out*,
+        // and `grow`'s quantity is **the lesser of the surplus food and the citizens here**.
+        // The ending above is the way where the surplus is the lesser; this is the way where
+        // the citizens are.
+        //
+        // **`also` is empty deliberately.** This firing is an `{end-turn}` like any other and
+        // the world's other recipes act in it, but they are shown once together above -
+        // `P-332` - and listing them here would give five recipes a second example to answer
+        // a question only `grow` asks.
+        //
+        // The model's own tests name these two: *two spare feed two new*, and *plenty still
+        // only doubles*.
+        Example {
+            also: &[],
+            recipe: "grow",
+            command: "{end-turn}",
+            case: Some(
+                "the way `grow` turns out when **the citizens are the lesser**. Two \
+                 citizens eat two of the eight food, leaving a surplus of six - but two \
+                 citizens can only make two more, so the quantity is two and not six. \
+                 That is the doubling the release's expression bounds: a population grows \
+                 by at most itself, however much food there is",
+            ),
+            before: || {
+                let mut game = founded(&[(Resource::Food, 3, 4)], &[(Kind::Citizen, 2)]);
+                let place = &mut game.territories[0];
+                place.add_store(Resource::Food);
+                place.add(Resource::Food, 8);
+                game
+            },
+        },
         Example {
             also: &[],
             recipe: "launch ark",
+
             command: "{launch-ark territory:1}",
             case: None,
             before: || {
