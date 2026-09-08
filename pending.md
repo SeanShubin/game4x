@@ -13,14 +13,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
-## Open, and a commit says otherwise
-
-An item is closed by whoever filed it and answered by somebody else, so the filer gets
-no signal. These are still marked `open`, and a commit that touched no part of their own
-outbox cites them - which usually means they were settled and nobody went back.
-
-- **C-67** - `03b33a3` P-353 from C-67: the tree is built and nothing in the game asks for one · still open in `crates/outbox.md`
-
 ## What is outstanding
 
 ### To code (9)
@@ -39,7 +31,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
-- **C-67** - The language carries a tree and no command asks for one · `crates/outbox.md`
+- **C-68** - `game` holds twelve territories and declares no capacity to hold anything · `crates/outbox.md`
 - **C-64** - `R-8` is built and its grouping is empty: no two kinds share a signature · `crates/outbox.md`
 - **C-63** - `move` is declared, has a command, and is fired by no scenario at all · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`

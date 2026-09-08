@@ -61,9 +61,44 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-68 - `game` holds twelve territories and declares no capacity to hold anything
+
+**to** spec · **status** open · **raised** 2026-09-07 · **source** building `P-351` and reaching
+`may_contain`
+
+**derived from** a kind that declares no capacity contains nothing, and never can -
+`releases/first-release.md`, *Where things are*
+
+**Where.** `releases/first-release.md` -> *Where things are*, three rows and a preamble; against
+`crates/game-model/src/containment.rs:303`, `may_contain`, and `tree` at `:330`.
+
+**What.** `P-351` made `game` a kind and added no row to *Where things are*. That table says
+**every thing is in another thing** and **this release has three sorts of capacity** - a
+territory, a store, a unit's tank - and the rule this lane reads it by is that **a kind that
+declares no capacity contains nothing, and never can.** So the release now says two things that
+cannot both hold: `game` is *the one thing that is in nothing*, which contradicts the preamble,
+and `game` declares no capacity, which would make the root of the containment tree a thing that
+may not contain the twelve territories `spec/logistics.md` requires it to.
+
+**Why it costs.** `may_contain` is what tells a reader *empty* from *never* - the distinction
+`spec/logistics.md` draws in as many words, and the reason the function exists. Drawing the
+root as a thing that never could hold would show the opposite of the rule on the one node every
+page starts from.
+
+**Whether. Worth a row or a sentence, and it is small either way.** A fourth row in *Where
+things are* would say it in the table's own terms; a sentence scoping the preamble to things
+that are in something would say it in the rule's. **Which one is yours** - a row is data and a
+scope is a rule, and this lane may write neither.
+
+**The assumption I proceeded under.** That `game` may contain. `tree` already puts every
+territory inside it and has since before `P-351`, so the alternative was code that contradicts
+itself rather than only the document. `may_contain` takes `Kind::Game`, the doc comment says it
+is an assumption and cites this item, and the count in `tree.rs` is unchanged at twelve because
+the sixteenth kind is also the fourth container.
+
 ### C-67 - The language carries a tree and no command asks for one
 
-**to** spec · **status** open · **raised** 2026-09-07 · **source** building `P-212` and finding
+**to** spec · **status** **answered** 2026-09-07 · `03b33a3` · **raised** 2026-09-07 · **source** building `P-212` and finding
 nothing that could use it
 
 **derived from** a value is a word, a number, or another command in the same form -
