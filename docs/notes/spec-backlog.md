@@ -8,6 +8,23 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, answering `P-346`: individual recipes, not a generalized move
+
+*I don't want to generalize move too much yet, lets have individual recipes for now. Right now the
+recipe happens to be something like (unit, origin, 1 energy) -> (unit, destination).*
+
+**Neither option as I put them, and it makes the cheaper one free.** I offered *delete the column*
+against *make the recipe read it*, and recommended the second because deleting costs the ability to
+say a unit moves for more. **His answer recovers that ability by another route**: a unit that moves
+differently gets its own recipe, so the column was never what made it expressible.
+
+**So the column goes**, and nothing is lost. `P-346` becomes an instruction.
+
+**His formulation is worth keeping** - *(unit, origin, 1 energy) -> (unit, destination)* - because it
+is the recipe as it stands, and because it says `energy` where the column said `fuel`. The recipe
+consumes `1 energy`; the column said `1 fuel`; `fuel` is the trait naming how much energy a tank
+holds. **Deleting the column removes that discrepancy rather than resolving it.**
+
 ## Said 2026-09-07, answering `P-347`: founding requires the pioneer to be there
 
 *Founding should require the pioneer to be there.*
@@ -22,10 +39,11 @@ to move one before it can found, so `move` fires because the game needs it rathe
 case was written to exercise it. **`fired.rs`'s exception list, asserted to be exactly `["move"]`,
 empties.**
 
-**One thing his answer does not settle**, and it is unstated rather than undecided: the release never
-says what a blank *Where* cell means. `deploy ark` names `$where` and *the orbit above `$where`*;
-every other recipe leaves the column blank. Asked of the code lane in `S-76` rather than of him,
-because they implemented it and the answer may already exist.
+**And a claim I made about it was wrong.** I wrote that the release never says what a blank *Where*
+cell means. It does, at `releases/first-release.md:178`: *Where is the place the row is about, and a
+blank means the one place the recipe acts.* The code lane found it and said I had read past it,
+which I had. **So the release and his decision already agree**, and only the model disagrees with
+both.
 
 ## Said 2026-09-07, answering `P-348` and correcting how I file
 

@@ -8,18 +8,25 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-346** - Three statements fix what a move costs, and only one of them is a mechanism · `docs/notes/decisions.md`
+- **P-346** - The `A move` column goes · `docs/notes/proposals.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
+## Open, and a commit says otherwise
+
+An item is closed by whoever filed it and answered by somebody else, so the filer gets
+no signal. These are still marked `open`, and a commit that touched no part of their own
+outbox cites them - which usually means they were settled and nobody went back.
+
+- **P-346** - `c12146b` P-346 is stronger than I filed it: the form is declared, not merely precedented · still open in `docs/notes/proposals.md`
+
 ## What is outstanding
 
-### To code (11)
+### To code (10)
 
 - **S-76** - Founding requires the pioneer to be there, and `move` fires because of it · `docs/notes/proposals.md`
 - **S-75** - `R-8`'s report should state the finding rather than show sixteen groups of one · `docs/notes/proposals.md`
 - **S-72** - `manned` is deleted, by Sean's decision on `C-46` · `docs/notes/proposals.md`
-- **S-71** - The column check Sean chose, for `hooks/pre-commit` · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`

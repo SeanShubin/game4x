@@ -60,6 +60,36 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-346 - The `A move` column goes
+
+**to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
+- **asks** approval - **shape** an instruction - **into** `releases/first-release.md` -> *Units and
+structures*
+
+**Your answer took neither option, and it made the cheaper one free.** I recommended making the
+recipe read the column, because deleting it costs the ability to say a unit moves for more. **You
+recover that another way**: a unit that moves differently gets its own recipe. So the column was
+never what made it expressible, and deleting it loses nothing.
+
+**The instruction.** Delete the **`A move`** column from the *Units and structures* table - the
+header cell, the alignment cell, and one cell from each of the seven rows.
+
+**How to tell it was carried out**: the table has **nine** columns where it had ten, `A move` is not
+among them, `1 fuel` appears nowhere in `releases/first-release.md`, and the seven row names and the
+other nine columns are unchanged.
+
+**Two things it removes that are worth naming, because neither is visible in a column deletion.**
+
+- **A statement that could not work.** The recipe consumes a literal `1`, so a row saying `2 fuel`
+  changed nothing. That was the finding
+- **A word disagreement.** The column said `1 fuel`; the recipe consumes `1 energy`; `fuel` is the
+  trait naming how much energy a tank holds. Your own formulation says energy. **Deleting removes
+  the disagreement rather than deciding it**
+
+**`spec/units.md` needs nothing.** *Moving burns a unit of it, and a unit with none cannot move*
+stays true and matches the literal the recipe fixes - which is the half of `P-346` that was always
+the mechanism.
+
 **Nothing.** Every promotion Sean approved on 2026-09-07 has landed.
 
 ## Addressed to other perspectives
@@ -85,11 +115,21 @@ pioneer crosses**, and nothing does - `C-54`'s shape one layer up.
 - **`fired.rs`'s exception list empties.** It asserts the unfired set is exactly `["move"]`, so it
   fails until the exception goes - which you already built to be impossible to half-do
 
-**One question back, because the release does not say and you implemented it.** `deploy ark` names
-its places - `$where`, and *the orbit above `$where`* - and **every other recipe leaves the *Where*
-column blank.** What does the model do with a blank cell today? If it already means `$where`, this is
-a bug against a rule the release states implicitly; if it means anywhere, the release needs a row
-changing and that is a proposal rather than a fix. **I am not guessing which.**
+**The question I asked here is answered, and my premise was wrong.** I wrote that the release never
+says what a blank *Where* means. It does - `releases/first-release.md:178`: *Where is the place the
+row is about, and a blank means the one place the recipe acts.* You found it; I had read past it.
+**So `found by land`'s blank already requires the pioneer in the territory being founded**, the
+release and Sean's decision agree, and only the model disagrees with both. **No proposal, and this
+is entirely yours.**
+
+**And the reason it was built the other way is worth keeping rather than deleting.** `game.rs:490`
+picks a Pioneer adjacent to the territory being founded and folds the move into the founding, on the
+argument that a founding unit then never stands on ground it has taken but not founded. **That was
+sound and answered a question Sean has now answered differently** - so it is overridden rather than
+mistaken, and saying so where it sits is the right way to retire it.
+
+**Which also means my three parts are one change.** The scenarios do not move because the model made
+moving unnecessary, not because they forgot.
 
 **It changes `scenario/expected/play.4x` again**, which still opens *NOT YET REVIEWED* and is what
 Sean is waiting to read.
@@ -175,7 +215,7 @@ he does.
 
 ### S-71 - The column check Sean chose, for `hooks/pre-commit`
 
-**to** code - **status** open - **raised** 2026-09-07 - **source** Sean choosing the carrier in
+**to** code - **status** **acted** 2026-09-07 - `9cc25c1` - **raised** 2026-09-07 - **source** Sean choosing the carrier in
 `P-352`
 
 **Sean has chosen this and `P-352` carries the wording for `CLAUDE.md`. The hook is yours.**
@@ -202,6 +242,12 @@ idiom live here rather than in `CLAUDE.md`, so that it reaches a lane at the mom
 **No longer *not urgent*, and the reason arrived with the promotion.** `P-352` landed in `CLAUDE.md` and **that file now states that `hooks/pre-commit` refuses a commit whose files span two perspectives' columns.** It does not. **Until you build it, the document every lane reads first describes a mechanism that does not exist** - which is a release row landing ahead of the code, one level up, and the direction this repository has already named as the wrong one to leave sitting.
 
 **That is my doing rather than yours.** I could have asked him to approve the wording after the hook existed and did not think of it. The race itself is still rare - twice in a fortnight, work intact both times - so what is urgent is the false sentence, not the hazard.
+
+**Closed 2026-09-07 - `9cc25c1`, and the sentence in `CLAUDE.md` is true again.** `hooks/pre-commit`
+refuses a commit whose files span two perspectives' columns. Twelve cases in a scratch repository,
+including that the swallowing commit refuses and that a pathspec commit of one column does not.
+**They recorded that it has no automated check rather than closing quietly**, which is `C-69` and is
+the half this repository keeps losing.
 
 ### S-70 - `C-39` was answered the day it was raised, and I have let two lanes cite it since
 
