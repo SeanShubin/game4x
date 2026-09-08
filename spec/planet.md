@@ -31,6 +31,16 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 - There can be roads, portals and such that affect traversal, but they do so without
   changing distance
 
+**Adjacency is a shared boundary.** Two places are adjacent when they share one. **Edge, border
+and boundary name that shared thing**, and none of them means anything the others do not.
+
+**A territory is adjacent to the space above it, and two spaces are adjacent when the territories
+below them are.** Neither is a further rule; both are what sharing a boundary comes to when one
+place is above another.
+
+**To cross is to pass through a shared boundary.** A unit crosses some and not others, and which
+ones it crosses is a fact about that unit.
+
 ## What a territory carries
 
 - Each territory has an id, unique within its planet, starting at 1

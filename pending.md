@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 - **P-351** - `game` is the sixteenth kind · `docs/notes/proposals.md`
 - **P-352** - The staging bullet gains the reason care cannot close it, and the check that can · `docs/notes/proposals.md`
-- **P-349** - Edge, border and boundary name one thing, and crossing is passing through it · `docs/notes/proposals.md`
 - **P-353** - There is one notation, and the tree is what having one means · `docs/notes/proposals.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`
@@ -24,7 +23,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-349** - `feb8745` P-349 rewritten: crosses is not stricter, it is undefined · still open in `docs/notes/proposals.md`
 - **P-353** - `5c98ace` Reflow P-353's field line: a wrap split `asks a decision` into `asks a` · still open in `docs/notes/proposals.md`
 - **C-67** - `03b33a3` P-353 from C-67: the tree is built and nothing in the game asks for one · still open in `crates/outbox.md`
 
@@ -118,6 +116,7 @@ it exists to ask.
 - `spec/invariants.md` -> The game is one function - P-75, P-115
 - `spec/narrative.md` -> Violence and order - P-39, P-278
 - `spec/planet.md` - P-272, P-280
+- `spec/planet.md` -> Distance - P-24, P-349
 - `spec/planet.md` -> Shape - P-1, P-6
 - `spec/population.md` -> Citizens - P-37, P-28
 - `spec/resources.md` -> The list, `spec/turn.md` -> Order of operations - P-126, P-138
