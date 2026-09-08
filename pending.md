@@ -10,7 +10,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 - **P-351** - `game` is the sixteenth kind · `docs/notes/proposals.md`
 - **P-352** - The staging bullet gains the reason care cannot close it, and the check that can · `docs/notes/proposals.md`
-- **P-353** - There is one notation, and the tree is what having one means · `docs/notes/proposals.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`
 - **P-346** - Three statements fix what a move costs, and only one of them is a mechanism · `docs/notes/decisions.md`
@@ -23,7 +22,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-353** - `5c98ace` Reflow P-353's field line: a wrap split `asks a decision` into `asks a` · still open in `docs/notes/proposals.md`
 - **C-67** - `03b33a3` P-353 from C-67: the tree is built and nothing in the game asks for one · still open in `crates/outbox.md`
 
 ## What is outstanding
@@ -80,8 +78,8 @@ it exists to ask.
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
+- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
-- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-323, P-328
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223

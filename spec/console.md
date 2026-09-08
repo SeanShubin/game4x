@@ -17,6 +17,13 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 ## The language
 
+**There is one notation.** A command and a description of game state are written in the same form,
+and both carry a tree.
+
+**The language carries the tree whether or not a command uses one today.** Two notations would cost
+more to maintain and more to read than one, and a command that takes a tree is expected rather than
+hypothetical.
+
 - Commands may be organized in a hierarchy of files, one file invoking another as a subroutine
 - A `#` begins a comment. The rest of the line is ignored
 
