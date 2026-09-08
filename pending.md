@@ -18,10 +18,11 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-78** - `14b02d2` S-78 and C-71: a family's traits reach its members, so R-8 measures what it asks for · still open in `docs/notes/proposals.md`
 - **S-76** - `8797e60` S-76: founding requires the pioneer to be there, and move fires because the game needs it · still open in `docs/notes/proposals.md`
 - **S-75** - `2b048a1` S-75 and C-70: the catalog states its finding, and a column is found by its name · still open in `docs/notes/proposals.md`
-- **C-71** - `36afe27` R-8 is not ready to vet: C-71 verified, and its own condition is unmet · still open in `crates/outbox.md`
 - **C-56** - `8f292eb` Handle C-56: unit:ark breaks no rule, because it refers to no thing · still open in `crates/outbox.md`
+- **R-8** - `14b02d2` S-78 and C-71: a family's traits reach its members, so R-8 measures what it asks for · still open in `releases/first-release.md`
 
 ## What is outstanding
 
@@ -37,12 +38,11 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 
-### To spec (24)
+### To spec (23)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-72** - A tracked directory is in nobody's column, and the hook cannot see it · `crates/outbox.md`
-- **C-71** - `R-8`'s signature drops every trait the release declares of a family · `crates/outbox.md`
 - **C-68** - `game` holds twelve territories and declares no capacity to hold anything · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
 - **C-59** - `R-7` asks for the command that fires each recipe, and the world's six share one · `crates/outbox.md`

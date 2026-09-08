@@ -90,7 +90,7 @@ itself.
 
 ### C-71 - `R-8`'s signature drops every trait the release declares of a family
 
-**to** spec · **status** open · **raised** 2026-09-08 · **source** adding `movable` and looking
+**to** spec · **status** **acted** 2026-09-08 · `14b02d2` · **raised** 2026-09-08 · **source** adding `movable` and looking
 at what the catalog attributed it to
 
 **derived from** being named through a family counts, because a family is how the release
