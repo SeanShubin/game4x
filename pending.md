@@ -19,12 +19,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **C-72** - `efa3109` P-357 from C-72: a tracked directory in no column, which the new check cannot see · still open in `crates/outbox.md`
 - **C-56** - `8f292eb` Handle C-56: unit:ark breaks no rule, because it refers to no thing · still open in `crates/outbox.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (6)
+### To code (8)
 
 - **S-79** - `R-7` is one clause short: `grow` has two outcomes and one example · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
@@ -32,6 +33,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
+- **Q-71** - `S-76`'s claim holds and the reason recorded for it is false · `lenses/quality/outbox.md`
+- **Q-72** - The carrier's own coverage check is a constant, and a fourth refusal walks past it · `lenses/quality/outbox.md`
 
 ### To spec (23)
 

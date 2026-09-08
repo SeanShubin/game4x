@@ -82,6 +82,73 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
+### Q-71 - `S-76`'s claim holds and the reason recorded for it is false
+
+**to** code · **status** open · **raised** 2026-09-08 · **source**
+[three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md), answering their own first question
+
+**They asked whether the reasoning behind *`expected/play.4x` does not change* is sound. It is not,
+and the claim survives anyway** - because it rests on the test they poisoned, not on the sentence.
+
+`8797e60`: *Territory 2 is claimed a turn later and ends in the same state because food is discarded
+at every turn ending, so a farm worked one turn fewer leaves nothing behind.*
+
+**The second half is false.** `spec/turn.md:18` runs growth **before** the discard - *then a
+population grows on surplus food or starves for want of it; what expires expires* - and
+`releases/first-release.md:253` has `grow` consume surplus food and produce citizens. Citizens
+persist. **It also proves too much**: if a farm worked one turn fewer left nothing behind, food work
+could never matter at all.
+
+**Measured, in a clone at `dd93bd1`.** One extra `create-labor` + `work resource:food` in the final
+turn fails `the_reviewed_expectation_holds` at `expected_state.rs:454` with one different row:
+`{citizen ready:yes} · 8 -> 12`. **Controlled in both directions** - removing `found-by-land` fails
+at `expected_state.rs:71` inside `played()`, which is a rejected command rather than the comparison,
+and removing one food work leaves all six green.
+
+**The true reason is narrower and is about territory 2 alone.** It has one food extractor, so a
+second `work` there in a turn is refused outright, and its single turn of food never reaches a
+surplus that grows anybody.
+
+**Whether.** Worth correcting the recorded reason, and **no code change** - the model, the scenario
+and the expectation are all right. Filed because a reason is what the next edit is measured against:
+this one reads as permission to move food work between turns, and the probe puts four citizens on
+that.
+
+### Q-72 - The carrier's own coverage check is a constant, and a fourth refusal walks past it
+
+**to** code · **status** open · **raised** 2026-09-08 · **source**
+[three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md), answering their own second question
+
+**They asked whether `tools/anchor`'s refusal semantics are right. The semantics are; the check that
+says every refusal is covered is not.**
+
+`tools/anchor/tests/matching.rs:125`, `every_way_this_refuses_is_covered`, builds three errors in an
+array literal and asserts `refusals.len() == 3`. **A three-element array has length three by
+construction.** Nothing ties that number to the number of `Problem` variants, so the name claims a
+coverage the test does not have.
+
+**Poisoned rather than argued.** A fourth variant `PlantedRefusal` was added to `Problem` in a clone,
+with its `Display` arm so the crate compiles. **All nine tests pass.** Baseline is also nine, so the
+poison did not change the population it acted on, and it landed in the file the test reads.
+
+**Why it matters more here than elsewhere.** This crate is the *carrier* for the two rules that fire
+at a moment of confidence, built because a rule with only attention behind it is not carried. Its own
+coverage check is the shape it exists to prevent - `Q-48` and `Q-51` inside the tool built against
+them.
+
+**One thing that softens it.** `impl Display for Problem` matches every variant, so a new one cannot
+be added without the compiler demanding an arm. **The crate is not unsafe; the test's claim is
+false.** That is why this is worth doing and not urgent.
+
+**Whether.** Worth fixing now, because it is cheap: construct the cases through an exhaustive match
+over `Problem`, so a new variant fails to compile until it has one.
+
+**A second, smaller thing in the same crate, and noted rather than urgent.**
+`strip_prefix_per_line` at `tools/anchor/src/lib.rs:37` is `pub` and called by nothing - one
+occurrence in the tree, its own definition. It is **the superseded approach left reachable**, and
+`find`'s own doc says why it was superseded: stripping first *would give offsets into a string that
+is not the file, and mapping those back is a second map to get wrong*. Delete it or make it private.
+
 ### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` →
