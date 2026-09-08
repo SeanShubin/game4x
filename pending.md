@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-355** - `movable`, stored, and the half of it that has to wait · `docs/notes/proposals.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
@@ -18,7 +17,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-355** - `7c9a613` Rephrase P-355, and withdraw the framing it had · still open in `docs/notes/proposals.md`
 - **S-72** - `89f4966` S-72: manned is deleted, and C-46's second word goes with it · still open in `docs/notes/proposals.md`
 - **C-56** - `b59bc7d` P-355 becomes an instruction: movable, stored, and move waits on C-56 · still open in `crates/outbox.md`
 
