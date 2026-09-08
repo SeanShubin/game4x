@@ -432,9 +432,21 @@ mod tests {
     /// fixed word, so what a line means is decided by its first token; and no such word
     /// begins with a slash, so a line that does begins no command. Together they make
     /// "a slash line is not a command" true by construction rather than by inspection.
+    /// **The population is asserted, because the doc above claims coverage - `Q-76`.** *Two
+    /// things are asserted, because the rule needs both* is a claim about every form, and an
+    /// empty `forms()` would satisfy it silently while checking no command at all. The grammar
+    /// is the whole vocabulary, which is what makes this the one worth guarding first.
     #[test]
     fn no_command_can_begin_with_a_slash() {
-        for form in grammar::grammar().forms() {
+        let grammar = grammar::grammar();
+        let forms = grammar.forms();
+
+        assert!(
+            forms.len() >= 10,
+            "the console declares {} forms, which is too few to be its grammar",
+            forms.len()
+        );
+        for form in forms {
             match form.terms.first() {
                 Some(command_language::Term::Keyword(word)) => assert!(
                     !word.starts_with('/'),

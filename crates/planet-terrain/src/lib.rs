@@ -568,9 +568,19 @@ mod tests {
     ///
     /// This is what lets a history be replayed somewhere else: the biomes are not stored in
     /// the history, they are recomputed from `create planet <size>`.
+    /// **The population is asserted - `Q-76`.** Both assertions are inside the loop, so an
+    /// `over_the_sphere` returning nothing is a passing test that sampled no point. Its two
+    /// siblings at `a_different_seed_gives_a_different_field` and below assert outside their
+    /// loops and need no guard, which is why only this one was reported.
     #[test]
     fn the_same_seed_gives_the_same_field() {
-        for at in over_the_sphere(200) {
+        let points = over_the_sphere(200);
+        assert!(
+            points.len() >= 100,
+            "only {} points over the sphere, so this would compare almost nothing",
+            points.len()
+        );
+        for at in points {
             assert_eq!(sample(at, SEED), sample(at, SEED));
             assert_eq!(biome_at(at, SEED), biome_at(at, SEED));
         }

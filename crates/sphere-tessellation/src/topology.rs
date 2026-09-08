@@ -370,10 +370,18 @@ mod tests {
         let faces = faces();
         for (m, n) in class_one_up_to(200) {
             let built = build(m, n, &faces);
+            // **The pentagons are counted, and twelve is the claim - `Q-76`.** Every assertion
+            // below sits inside the loop *and* behind a `continue`, so this passed over a
+            // graph with no pentagons in it - a test named for the pentagons, checking none.
+            // An empty `built.neighbours` is the easy case; a shape that simply grew no
+            // pentagon is the one that would have gone unnoticed.
+            let mut pentagons = 0;
             for (region, list) in built.neighbours.iter().enumerate() {
                 if list.len() != 5 {
                     continue;
                 }
+                pentagons += 1;
+
                 assert!(
                     matches!(built.sites[region], Site::Corner(_)),
                     "GP({m},{n}): a pentagon that is not an icosahedron vertex"
@@ -388,6 +396,11 @@ mod tests {
                     }
                 }
             }
+            assert_eq!(
+                pentagons, 12,
+                "GP({m},{n}) has {pentagons} pentagons, so the assertions above ran over the \
+                 wrong population"
+            );
         }
     }
 
