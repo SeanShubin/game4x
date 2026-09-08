@@ -90,10 +90,26 @@ unit persists across a turn and is named.**
   so a fifth role is **what lets a thin system know it may mutate**, rather than infer it from the
   shape of a consume-and-produce pair. **It avoids the chaos rather than causing it**
 
-**And 3 is narrower than it looks: no unit carries an `id` today.** It reduces to **does a unit ever
-need to be named individually** - if not, consume-and-produce is right and nothing is needed.
+**And your intent that ids stay rare settles most of 3.** Fleets are identical and aggregate, so
+consume-and-produce is right for nearly everything; identity matters only for the flagship and
+leaders you said would be used sparingly.
 
-**The prices are not alike.** 1 and 2 are a row, some cells, and a convention. **3 adds a piece to
-the recipe language**, which is the kind of thing your own earlier note said should be decided
-deliberately rather than arrived at one step at a time.
+**That minority may need no fifth role at all.** `build extractor` already produces
+`1 extractor $resource` - a produce row carrying a `$`-bound trait value - and `spec/console.md:68`
+says a command binds *any ingredient or trait value it names with a `$`*. **`id` is a trait**, so a
+recipe could consume `id:$id` and produce `id:$id` and keep the name. **Check that before adding a
+role**; it composes with your `P-346` answer, being a separate recipe rather than a generalised
+`move`.
+
+**Two things your intent changes about the other two decisions.**
+
+- **1 gets a better argument than maintainability.** A player writing fully specified behaviour must
+  **name sets of things**. A trait is a name a player can use; **a family is a table only the
+  designer edits.** `spec/invariants.md` already says every rule a player can use is composed of
+  rules they can also use, and that nothing plays itself
+- **2 gets a consequence at scale.** A description is a kind and **every stored trait**, and a
+  derived trait is never part of one - so **the description is the aggregation key.** Every distinct
+  stored value splits a fleet into another entry; a derived trait costs nothing. **So the question
+  after *a number* is *stored or derived*** - that is what decides whether a graded quality
+  fragments a million identical objects
 

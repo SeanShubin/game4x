@@ -8,6 +8,41 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, that ids are rare and the empire is run by specification
+
+*My intention is for very few things to carry ids. Id's are for the places the player is keeping
+their attention, the individual territories on the planet, for example, but I intend for the player
+to be creating massive fleets of identical objects, setting behavior scripts for them and running a
+vast empire, fully specified, but each aspect only interacted with when it is set up. I may have a
+concept of a unique flagship or specialized leaders, but even that will be used sparingly. Some games
+could have 30 or so unique planet administrators to allocate in an optimal way, I am going to be more
+focused on controlling the infrastructure and economy by fully specified, automated behavior
+specifications.*
+
+**This settles most of decision 3 and sharpens the other two.**
+
+**Identity stops being the common case.** Fleets are identical and aggregate, so consume-and-produce
+is right for nearly everything, and identity matters only for the flagship-and-leaders minority.
+
+**And that minority may need no new machinery.** `build extractor` already produces
+`1 extractor $resource` - **a produce row carrying a `$`-bound trait value** - and `spec/console.md`
+says a command binds *any ingredient or trait value it names with a `$`*. `id` is a trait. So a
+recipe for a named thing could consume `id:$id` and produce `id:$id`, **preserving identity with a
+mechanism already in use**. Worth checking before a fifth role is added, and it composes with his
+`P-346` answer, since it would be a separate recipe rather than a generalised `move`.
+
+**Decision 1 gains a stronger argument than the one he gave.** A player writing fully specified
+behaviour has to **name sets of things**. A trait is a name a player can use; a family is a table
+only the designer edits. `spec/invariants.md` already says *every rule a player can use is composed
+of rules they can also use* and *nothing plays itself*. **The rules editor is the argument for
+traits**, and it is stronger than maintainability.
+
+**Decision 2 gains a consequence he will care about.** `spec/console.md`: a description is a kind and
+**every stored trait**, and a derived trait is never part of one. **The description is the
+aggregation key**, so every distinct stored value splits a fleet into another entry - while a derived
+trait costs nothing. **So the question after *a number* is *stored or derived*,** and that is what
+decides whether a graded quality fragments a million identical objects.
+
 ## Said 2026-09-07, his leanings on the three modelling decisions
 
 *1: I am leaning towards trait only because I think that will make it easier for the recipes to
