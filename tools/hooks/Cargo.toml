@@ -1,6 +1,8 @@
 # Not a workspace member. This tests `hooks/`, which is production support rather than part
 # of the game, so it stays out of `cargo build --workspace` and out of `cargo tree`. The gate
 # reaches it by walking `tools/*/Cargo.toml` rather than by being told its name - `Q-46`.
+[workspace]
+
 [package]
 name = "hooks"
 version = "0.1.0"

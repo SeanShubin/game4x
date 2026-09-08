@@ -1,6 +1,13 @@
 # Not a workspace member. This is a documentation tool, not part of the game, so it stays
-# out of `cargo build --workspace` and out of `cargo tree`. See the exclude in the
-# workspace root manifest.
+# out of `cargo build --workspace` and out of `cargo tree`.
+#
+# **Its own workspace root rather than a line in the root manifest's exclude list**, which is
+# what `CLAUDE.md` describes and what the quality lens chose for `tools/quality`. The root
+# manifest is the code lane's, so a list there meant no other lane could add a tool without
+# this one editing cargo - a cross-column dependency for something wholly inside their column.
+
+[workspace]
+
 [package]
 name = "pad-tables"
 version = "0.1.0"

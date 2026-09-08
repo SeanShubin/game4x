@@ -27,7 +27,17 @@ members = [
 ]
 # Documentation tooling, deliberately outside the workspace so it never appears in
 # `cargo tree` or `cargo build --workspace`.
-exclude = ["tools/pad-tables", "tools/outbox", "tools/spec", "tools/hooks", "tools/anchor"]
+# **Only `tools/spec` needs naming here, and only until that lane converts it.**
+#
+# A tool stays out of `cargo build --workspace` and `cargo tree` either by being listed here or
+# by declaring its own `[workspace]`. The five that declare one need no line, which matters for
+# a reason beyond tidiness: **this file is the code lane's**, so a list here meant a lens could
+# not add a tool without the code lane editing it. That is a cross-column dependency for
+# something entirely inside the lens's own column, and the quality lens hit it building
+# `tools/quality`. It chose the self-contained form, and it was right.
+#
+# `tools/spec` is the specification lane's to convert or leave; this lane may not edit it.
+exclude = ["tools/spec"]
 
 [workspace.package]
 version = "0.1.0"

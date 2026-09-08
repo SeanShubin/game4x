@@ -22,6 +22,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-72** - `efa3109` P-357 from C-72: a tracked directory in no column, which the new check cannot see · still open in `crates/outbox.md`
 - **C-56** - `8f292eb` Handle C-56: unit:ark breaks no rule, because it refers to no thing · still open in `crates/outbox.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
+- **Q-75** - `5f83693` Q-75: five tests swept an empty generator and reported green · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
