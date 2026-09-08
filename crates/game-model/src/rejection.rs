@@ -47,11 +47,6 @@ pub enum Rejection {
         from: TerritoryId,
         to: TerritoryId,
     },
-    /// `move` onto ground nobody holds. `P-214`: that is `found by land`, and the player
-    /// says which rather than the model deciding by looking.
-    NotFoundedYet {
-        territory: TerritoryId,
-    },
     /// `found by land` onto ground somebody already holds.
     AlreadyFounded {
         territory: TerritoryId,
@@ -157,14 +152,6 @@ impl fmt::Display for Rejection {
             Rejection::NotAdjacent { from, to } => {
                 write!(out, "territory {to} is not adjacent to territory {from}")
             }
-            // **Names the other command rather than merely refusing.** The player asked for
-            // something reasonable in the wrong words, and the words they wanted are one
-            // line away.
-            Rejection::NotFoundedYet { territory } => write!(
-                out,
-                "nobody holds territory {territory}, so moving there is \
-                 `{{found-by-land territory:{territory}}}`"
-            ),
             Rejection::AlreadyFounded { territory } => write!(
                 out,
                 "territory {territory} is already founded, so getting there is `move <unit> {territory}`"

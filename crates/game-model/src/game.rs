@@ -463,60 +463,54 @@ impl Game {
                 },
             })?;
 
-        // **`P-214`: moving is moving, and founding is a different command.** This used
-        // to found the territory when it arrived on unclaimed ground, so one command fired
-        // whichever of two recipes the ground happened to call for and the player never
-        // said which. The rejection names the other command rather than merely refusing,
-        // because the player asked for something reasonable in the wrong words.
-        if !self.territory(territory)?.founded() {
-            return Err(Rejection::NotFoundedYet { territory });
-        }
+        // **`P-214` still holds and this guard no longer serves it.** Moving is moving and
+        // founding is a different command - that was the rule, and the guard existed because
+        // arriving on unclaimed ground *was* founding, so a move onto it would have fired a
+        // recipe the player had not named.
+        //
+        // **`S-76` separated them.** A pioneer now has to be standing on unclaimed ground
+        // before `found by land` can fire, so moving there is the only way to found at all,
+        // and refusing it would make the recipe unreachable. Moving still founds nothing:
+        // arriving leaves the ground unclaimed and the player still says which recipe.
         self.units[at].cells -= cost::MOVE_CELLS;
         self.units[at].location = Location::On(territory);
         self.units[at].exhausted = true;
         Ok(())
     }
 
-    /// `found by land`: a pioneer takes adjacent unclaimed ground and is consumed by it.
+    /// `found by land`: a pioneer standing on unclaimed ground is consumed by founding it.
     ///
     /// **The unit is not an argument because the recipe names it.** `found by land`
     /// consumes one pioneer and nothing else can run it, so a command binding what the
     /// recipe leaves open binds only the place.
     ///
-    /// Unclaimed ground is taken and founded by arriving on it, which consumes the unit. So
-    /// a founding unit never stands on ground it has taken but not founded, and never has
-    /// to be fed there - which is why this is one act rather than a move and then a
-    /// founding.
+    /// **The pioneer has to be there - `S-76`, Sean's decision on `P-347`.** The blank
+    /// *Where* cell of `found by land`'s only row already said so:
+    /// `releases/first-release.md:178`, *a blank means the one place the recipe acts*. So the
+    /// release and the decision agreed, and only this function disagreed with both.
+    ///
+    /// **What it used to do, and why, because that reasoning was sound.** It picked a pioneer
+    /// on adjacent ground, spent its move, and founded - so a founding unit never stood on
+    /// ground it had taken but not founded, and never had to be fed there. That answered a
+    /// question Sean has now answered differently. **It is overridden, not mistaken.**
     fn found_by_land(&mut self, territory: TerritoryId) -> Result<(), Rejection> {
         if self.territory(territory)?.founded() {
             return Err(Rejection::AlreadyFounded { territory });
         }
         let kind = UnitKind::Pioneer;
-        let anywhere = self.pick(kind, |unit| !unit.in_orbit());
+        // **No cell is spent and no adjacency is asked.** Founding is not a move now, so
+        // getting there is `move` and costs what a move costs; this consumes what it finds
+        // standing on the ground.
         let at = self
-            .pick(kind, |unit| match unit.location {
-                Location::On(from) => {
-                    unit.cells >= cost::MOVE_CELLS && self.are_adjacent(from, territory)
-                }
-                Location::Orbit(_) => false,
-            })
-            .ok_or_else(|| match anywhere {
-                Some(other) => match self.units[other].location {
-                    Location::On(from) if !self.are_adjacent(from, territory) => {
-                        Rejection::NotAdjacent {
-                            from,
-                            to: territory,
-                        }
-                    }
-                    _ => Rejection::NoCells(kind),
-                },
-                None => Rejection::NoUnitAvailable {
-                    kind,
-                    where_from: "on the planet",
-                },
+            .pick(
+                kind,
+                |unit| matches!(unit.location, Location::On(here) if here == territory),
+            )
+            .ok_or(Rejection::NoUnitAvailable {
+                kind,
+                where_from: "on that ground to found it",
             })?;
 
-        self.units[at].cells -= cost::MOVE_CELLS;
         let brought = self.force_brought_to(territory);
         self.found(
             territory,
@@ -555,6 +549,14 @@ impl Game {
         self.units
             .iter()
             .filter(|unit| match unit.location {
+                // **A unit standing on the ground is bearing on it - `S-76`.** Founding used
+                // to be done from next door, so every unit that counted was adjacent and
+                // needed a move left to arrive. A pioneer that has already crossed is on the
+                // ground with no move to spend, and it is the one whose force is most
+                // obviously brought: `P-275` counts *the organised force brought*, not the
+                // force of the unit consumed, and this is what that phrase has to mean once
+                // arriving and founding are two acts.
+                Location::On(here) if here == territory => true,
                 Location::On(from) => {
                     unit.cells >= cost::MOVE_CELLS && self.are_adjacent(from, territory)
                 }
@@ -1727,30 +1729,32 @@ mod tests {
         assert!(pioneer.is_on(TerritoryId(2)));
     }
 
-    /// Moving onto ground you do not hold takes it and founds it, in one action - so the
-    /// unit is consumed and there is never a pioneer standing on ground it has taken but
-    /// not founded.
+    /// Founding needs the pioneer standing on the ground, and getting it there is a move.
+    ///
+    /// **`S-76`, Sean's decision on `P-347`, and the whole of it is checked here** - both
+    /// refusals, the move that founds nothing, and the turn the pioneer needs in between.
+    /// It used to be one act: a pioneer on adjacent ground founded and was consumed, so
+    /// nothing ever stood on ground it had taken but not founded.
     #[test]
-    fn founding_by_land_takes_the_ground_and_consumes_the_unit() {
+    fn founding_by_land_needs_the_pioneer_on_the_ground() {
         let mut game = founded();
         let id = UnitId(game.units.len() as u32 + 1);
         let mut pioneer = Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
         pioneer.location = Location::On(TerritoryId(1));
         game.units.push(pioneer);
 
-        // **`P-214`: this used to be a `move`**, and the model worked out from the ground
-        // which of two recipes was meant. Both directions are checked now, because the
-        // whole of the change is that each command refuses the other's case.
+        // Adjacent is no longer enough, and the refusal says what is missing.
         let refused = game
-            .after(&Transition::Move {
-                kind: UnitKind::Pioneer,
+            .after(&Transition::FoundByLand {
                 territory: TerritoryId(2),
             })
-            .expect_err("moving onto unclaimed ground is `found by land`");
+            .expect_err("the pioneer is on territory 1, not 2");
         assert!(
-            refused.to_string().contains("{found-by-land territory:2}"),
-            "the refusal names the command that does work: {refused}"
+            refused.to_string().contains("on that ground to found it"),
+            "{refused}"
         );
+
+        // Founding ground already held is still the other refusal.
         let refused = game
             .after(&Transition::FoundByLand {
                 territory: TerritoryId(1),
@@ -1758,18 +1762,40 @@ mod tests {
             .expect_err("founding ground already held is `move`");
         assert!(refused.to_string().contains("already founded"), "{refused}");
 
+        // **Moving onto unclaimed ground is allowed and founds nothing.** It was refused
+        // until `S-76`, because arriving there used to *be* founding.
         let moved = game
+            .after(&Transition::Move {
+                kind: UnitKind::Pioneer,
+                territory: TerritoryId(2),
+            })
+            .expect("a pioneer may cross onto unclaimed ground");
+        assert!(
+            !moved.territory(TerritoryId(2)).unwrap().founded(),
+            "moving is not founding - the ground is still unclaimed"
+        );
+
+        // **And it cannot do both in one turn**, because moving spends the unit.
+        moved
+            .after(&Transition::FoundByLand {
+                territory: TerritoryId(2),
+            })
+            .expect_err("a pioneer that has moved is spent until the turn ends");
+
+        // The turn ends, it is ready, and founding consumes it.
+        let next = moved.after(&Transition::EndTurn).unwrap();
+        let founded = next
             .after(&Transition::FoundByLand {
                 territory: TerritoryId(2),
             })
             .unwrap();
-        let two = moved.territory(TerritoryId(2)).unwrap();
+        let two = founded.territory(TerritoryId(2)).unwrap();
         assert!(two.founded());
         assert!(two.garrison().is_some());
         assert_eq!(two.citizens(), 2);
         assert_eq!(two.extractors().len(), 2, "a farm and a mine");
         assert!(
-            !moved.units.iter().any(|u| u.kind == UnitKind::Pioneer),
+            !founded.units.iter().any(|u| u.kind == UnitKind::Pioneer),
             "the pioneer became the territory"
         );
     }

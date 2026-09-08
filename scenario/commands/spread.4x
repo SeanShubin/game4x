@@ -36,13 +36,23 @@
 {produce-pioneer territory:1}
 {end-turn}
 
-# Turn 12. The second pioneer crosses to territory 3.
+# Turn 12. The second pioneer crosses to territory 3 and stops there. `S-76`: crossing is not
+# founding, so the ground is still unclaimed at the end of this turn and the pioneer is spent.
 {create-labor territory:1 repeat:2}
 {work territory:1 resource:food repeat:2}
 {create-labor territory:1 repeat:2}
 {work territory:1 resource:metal repeat:2}
 {create-labor territory:1 repeat:2}
 {work territory:1 resource:energy repeat:2}
+{create-labor territory:2}
+{work territory:2 resource:food}
+{move unit:pioneer territory:3}
+{end-turn}
+
+# Turn 13. The pioneer founds the ground it is standing on, and the new territory feeds itself
+# from the turn it is claimed.
+{create-labor territory:1 repeat:2}
+{work territory:1 resource:food repeat:2}
 {create-labor territory:2}
 {work territory:2 resource:food}
 {found-by-land territory:3}

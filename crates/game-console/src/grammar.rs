@@ -167,7 +167,7 @@ pub fn grammar() -> Grammar {
                 Term::required("territory", Kind::Number),
                 Term::optional("repeat", Kind::Number),
             ],
-            "move a unit to an adjacent territory that is already yours",
+            "move a unit to an adjacent territory, held or not",
         ),
         Form::new(
             form::FOUND_BY_LAND,

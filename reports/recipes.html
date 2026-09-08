@@ -104,21 +104,15 @@
 <p>Before:</p>
 <pre>
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -&gt; 1
-    {citizen ready:yes} -&gt; 1
-    {garrison force:0} -&gt; 1
-    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
+    {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <p><code>{found-by-land territory:2}</code></p>
 <p>After:</p>
 <pre>
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -&gt; 1
-    {citizen ready:yes} -&gt; 1
-    {garrison force:0} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 2
     {deposit density:4 resource:food total-capacity:3} -&gt; 1

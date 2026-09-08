@@ -120,13 +120,10 @@ Before:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
-    {citizen ready:yes} -> 1
-    {garrison force:0} -> 1
-    {pioneer fuel:2 id:1 ready:yes} -> 1
   {territory biome:grassland id:2 nature:0} -> 1
     {deposit density:4 resource:food total-capacity:3} -> 1
     {deposit density:4 resource:metal total-capacity:3} -> 1
+    {pioneer fuel:2 id:1 ready:yes} -> 1
 ```
 
 `{found-by-land territory:2}`
@@ -135,9 +132,6 @@ After:
 
 ```
 {game phase:play}
-  {territory biome:grassland id:1 nature:0} -> 1
-    {citizen ready:yes} -> 1
-    {garrison force:0} -> 1
   {territory biome:grassland id:2 nature:0} -> 1
     {citizen ready:yes} -> 2
     {deposit density:4 resource:food total-capacity:3} -> 1

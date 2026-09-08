@@ -10,9 +10,10 @@
 /// **Named rather than repeated, because `S-44` moved both and three assertions carried the
 /// old numbers.** They are asserted rather than derived: a test that counted the file and
 /// compared it with itself would agree with any scenario at all.
-// 134 since `S-66`: the Ark's move and the bare launch both went, because `P-342` made
-// launching one recipe that is not a move.
-const LINES: usize = 134;
+// 133 since `S-76`: turn 8 crosses instead of founding and turn 9 founds, so the two lines
+// that worked territory 2 before it existed moved into the turn that claims it - one command
+// fewer, and a `move` where there was none.
+const LINES: usize = 133;
 const TURNS: usize = 10;
 
 use game_console::{Library, fired};
@@ -130,10 +131,11 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
     // an exemption list of seventeen against a population of twenty-five is not a check,
     // it is a second copy of the thing being checked, and the second copy is what rots.
     // If a third is wanted here, that is the signal to fix the rule rather than the list.
-    const NOT_FIRED: [(&str, &str); 1] = [(
-        "move",
-        "S-66 removed the Ark move because P-342 made launching not a move, and it was the          only one in the repository. Declared, commanded, and fired by nothing - C-63.          Putting one back is Sean's, because he is about to derive this file by hand",
-    )];
+    // **Empty since `S-76`.** `move` was declared, commanded and fired by nothing, and
+    // what put one back was not a case written to exercise it: founding now requires the
+    // pioneer to be on the ground, so a pioneer has to cross before it can found. The
+    // recipe fires because the game needs it.
+    const NOT_FIRED: [(&str, &str); 0] = [];
 
     let players: Vec<String> = declared()
         .into_iter()
@@ -181,8 +183,8 @@ fn every_player_recipe_the_release_declares_is_actually_fired() {
     }
     assert_eq!(
         NOT_FIRED.len(),
-        1,
-        "one exception: `move` is declared, commanded, and fired by no scenario - `C-63`"
+        0,
+        "no exceptions: every player recipe the release declares is fired by the scenario,          which `S-76` made true of `move` by making founding need a crossing"
     );
 }
 

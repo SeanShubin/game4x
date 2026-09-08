@@ -128,8 +128,10 @@ fn every_claimable_biome_can_be_taken_by_something_the_release_provides() {
             continue;
         }
 
-        // A real game, a real pioneer next door, and a real founding. Territory 2 is
-        // adjacent to territory 1, which the scenario's own setup already proves.
+        // A real game, real pioneers standing on the ground, and a real founding.
+        // **They are on territory 2 rather than beside it - `S-76`.** Founding needs the
+        // pioneer where it founds, so force brought to a territory now counts what is
+        // standing on it.
         let mut session = planet();
         session.game.territories[1].biome = *kind;
         session.game.territories[1].force_of_nature = *nature;
@@ -146,8 +148,8 @@ fn every_claimable_biome_can_be_taken_by_something_the_release_provides() {
         // a defect in the model: nothing had said how an attacking force is assembled.
         for n in 0..2 {
             let id = game_model::UnitId(session.game.units.len() as u32 + 1 + n);
-            let mut pioneer = game_model::Unit::new(id, UnitKind::Pioneer, TerritoryId(1));
-            pioneer.location = game_model::Location::On(TerritoryId(1));
+            let mut pioneer = game_model::Unit::new(id, UnitKind::Pioneer, TerritoryId(2));
+            pioneer.location = game_model::Location::On(TerritoryId(2));
             session.game.units.push(pioneer);
         }
 

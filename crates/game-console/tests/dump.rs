@@ -402,8 +402,8 @@ fn every_labor_consumer_is_preceded_by_a_create_labor() {
     // Over every case, and how many there were: a scenario that stopped spending labor
     // would satisfy every assertion above by having nothing to check.
     assert_eq!(
-        checked, 70,
-        "fifty-nine labor consumers in play.4x and eleven in spread.4x; found {checked}"
+        checked, 71,
+        "fifty-eight labor consumers in play.4x and thirteen in spread.4x; found {checked}"
     );
 }
 
@@ -471,10 +471,13 @@ fn the_scenario_fires_every_player_recipe_the_release_declares() {
     // and cannot be forgotten while it is out. `C-63`, and putting one in is Sean's: he is
     // about to derive this file by hand and a command he has not been told about is a change
     // under him.
-    const NOT_IN_THE_SCENARIO: [(&str, &str); 1] = [(
-        "move",
-        "`S-66` removed the Ark's move with `P-342`, and it was the only one - `C-63`",
-    )];
+    // **Empty, and `S-76` is what emptied it.** `move` fires now, and it fires because
+    // the game needs it rather than because a case was written to exercise it: founding
+    // requires the pioneer to be standing on the ground, so the scenario has to cross
+    // before it founds. That is the distinction `C-54` exists to name, arriving as a
+    // consequence. An empty list is the claim that every declared recipe is in the
+    // scenario, and the count below states it.
+    const NOT_IN_THE_SCENARIO: [(&str, &str); 0] = [];
 
     let mut declared: Vec<String> = Vec::new();
     let mut inside = false;

@@ -281,6 +281,10 @@ pub fn examples() -> Vec<Example> {
             recipe: "found by land",
             command: "{found-by-land territory:2}",
             case: Some("the pioneer is consumed and the ground it takes is furnished"),
+            // **The pioneer stands on the ground it founds - `S-76`.** It used to be placed
+            // on territory 1 and reach across, because founding was a move and a founding in
+            // one act. It is placed on territory 2 now, which is what a worked example of
+            // this recipe has to show: the crossing is `move`'s example, one entry above.
             before: || {
                 let mut game = beside(false);
                 game.territories[1].deposits.insert(
@@ -300,9 +304,9 @@ pub fn examples() -> Vec<Example> {
                 let mut unit = game_model::Unit::new(
                     game_model::UnitId(1),
                     game_model::UnitKind::Pioneer,
-                    TerritoryId(1),
+                    TerritoryId(2),
                 );
-                unit.location = game_model::Location::On(TerritoryId(1));
+                unit.location = game_model::Location::On(TerritoryId(2));
                 game.units.push(unit);
                 game
             },

@@ -132,10 +132,11 @@
 {produce-pioneer territory:1}
 {end-turn}
 
-# Turn 8. The pioneer crosses into territory 2 and becomes it. `P-214`: the player says which
-# recipe this is, because arriving on unclaimed ground and arriving on your own are two
-# recipes, and the model no longer works out from the ground which was meant.
-{found-by-land territory:2}
+# Turn 8. The pioneer crosses into territory 2. It does not become it: `S-76`, founding
+# requires the pioneer to be standing on the ground, so crossing and founding are two acts a
+# turn apart. `P-214` still holds - the player says which recipe this is, and moving onto
+# unclaimed ground founds nothing.
+{move unit:pioneer territory:2}
 {create-labor territory:1}
 {work territory:1 resource:food}
 {create-labor territory:1}
@@ -146,12 +147,11 @@
 {work territory:1 resource:energy}
 {create-labor territory:1}
 {build-yard territory:1}
-{create-labor territory:2}
-{work territory:2 resource:food}
 {end-turn}
 
-# Turn 9. The Ark. Three metal and twelve energy against a Yard, and the new ground feeds
-# itself on the turn after the one it was claimed.
+# Turn 9. The pioneer founds the ground it crossed to, and the Ark follows: three metal and
+# twelve energy against a Yard. The new ground feeds itself from the turn it is claimed.
+{found-by-land territory:2}
 {create-labor territory:1}
 {work territory:1 resource:food}
 {create-labor territory:1}
@@ -167,9 +167,10 @@
 
 {end-turn}
 
-# Turn 10. Nothing crosses any more: `P-342` made launching one recipe that pays an Ark's
-# cost at a Yard and puts nothing into orbit, so there is no Ark to move and no move in this
-# file at all. `move` is a declared recipe this scenario no longer exercises - `C-63`.
+# Turn 10. No Ark crosses: `P-342` made launching one recipe that pays an Ark's cost at a Yard
+# and puts nothing into orbit, so there is no Ark to move. The pioneer's crossing on turn 8 is
+# the move this file fires, and it fires because founding needs it rather than because a case
+# was written to exercise it - `C-63` answered by `S-76`.
 # The farms are worked first, as always: a population that gathers nothing this turn starves
 # at the end of it, whatever else is going on.
 {create-labor territory:1}
