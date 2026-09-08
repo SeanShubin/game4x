@@ -203,6 +203,46 @@ this confirms nothing and the study would not accept it. **I record it because i
 what a study would ask, arriving unasked**, and because leaving it out would be choosing which
 observations to mention.
 
+## What the crash itself produced, asked 2026-09-07
+
+**Yes, and it is the closest thing to the study that will exist without running one.** Three
+instances went cold at once and worked for an hour. **Six failures of the study's own shape
+appeared, unasked**, and I verified three of them myself rather than taking the report.
+
+| #   | Lane     | What happened                                                                          | Whose shape |
+| --- | -------- | -------------------------------------------------------------------------------------- | ----------- |
+| 1   | code     | `grep -c 'P-322'` returned 3; the **absent heading** was the answer                    | `C-34`      |
+| 2   | spec     | grepped whole commit messages, got 32 citing commits where the tool said 3             | `C-34`      |
+| 3   | spec     | took `C-65`'s claim and rewrote `S-49` **without opening either file**                 | `C-34`      |
+| 4   | code     | called the staging bullet a carefulness caution; it **explicitly disclaims being one** | `C-34`      |
+| 5   | research | filed `X-7` asking the code lane to build a mechanism **that already existed**         | `S-56`      |
+| 6   | code     | read a gate's exit code from `tail`, got a green `0` that meant nothing                | `C-34`      |
+
+**Row 5 is the one that matters, because it is a prediction failing.** `X-3` predicts a cold
+instance **passes** `S-56`'s shape, and names the refutation exactly: *cold files without looking,
+which would move this case out of `never read` and into `nothing prompts a read`.* **That is what
+happened**, and the research lens found it the same way `S-56` was found - by reading the hook its
+own commit had just printed a message from. Its own words: `S-56`'s shape in a report about `S-56`'s
+shape.
+
+**Row 3 is mine and is the worst of the six**, because it wrote a wrong claim into the document a
+fresh instance is supposed to trust.
+
+**What this is not.** Not blind, not controlled, not pre-registered, and **self-reported** - each
+lane is the only witness to its own failures, so the count is of failures *noticed*, and the true
+number is larger by an unknown amount. **No row touches the third prediction**, the stale-README
+one, which is the only row that can cost `X-3` its central claim.
+
+**And the confound runs the wrong way for `X-3`, which is what makes this worth writing down.**
+Every one of these lanes had read the taxonomy - `S-57`, `C-28`, `C-33` are in the files they open
+first. **Knowing the failure by name did not prevent it six times in an hour.** A designed study
+would have to argue that its subject was not primed; this one has the opposite problem and still
+produced the failures.
+
+**What it changes about the decision.** Two of the three predictions now have observational evidence
+against them, so **the study's remaining value is concentrated almost entirely in the third task**.
+If you authorise it, the honest version is one task, not three.
+
 ### P-349 - Every move is constrained by adjacency, and `spec/` is the one place that does not say so
 
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** recovered, from your own sentence -
