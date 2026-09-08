@@ -29,24 +29,6 @@ pub fn collapse(text: &str) -> String {
     text.split_whitespace().collect::<Vec<_>>().join(" ")
 }
 
-/// The text with `prefix` removed from the start of each line, where it is there.
-///
-/// **Markers break a whitespace-only normalize.** A quoted block carries `> ` and a Rust doc
-/// comment carries `/// `, so the same words differ by a marker per line - and the offered
-/// text in a proposal is always quoted, which is where this bites most.
-pub fn strip_prefix_per_line(text: &str, prefix: &str) -> String {
-    text.lines()
-        .map(|line| {
-            let trimmed = line.trim_start();
-            match trimmed.strip_prefix(prefix) {
-                Some(rest) => rest.to_string(),
-                None => line.to_string(),
-            }
-        })
-        .collect::<Vec<_>>()
-        .join("\n")
-}
-
 /// Where the anchor sits in the text, as a byte range, ignoring how either was wrapped.
 ///
 /// **The offset is mapped back to the original.** Comparing normalized text and then editing

@@ -50,7 +50,9 @@ column_of() {
             if [ -d "lenses/$name" ]; then echo "lens:$name"; else echo "code"; fi ;;
         temporary-notes/*) echo "sean" ;;
         crates/*|web/*|commands/*|prototypes/*|scenario/*|reports/*) echo "code" ;;
-        hooks/*|scripts/*|.github/*|Cargo.toml|Cargo.lock|.gitignore) echo "code" ;;
+                hooks/*|scripts/*|.github/*|Cargo.toml|Cargo.lock) echo "code" ;;
+        .gitignore|.gitattributes) echo "code" ;;
+
         # **Unassigned rather than guessed.** A path this does not recognise is new, and
         # naming a column for it here would be this hook deciding something `CLAUDE.md` says.
         # It is listed in a refusal and never causes one.

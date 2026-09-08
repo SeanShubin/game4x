@@ -61,6 +61,33 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-73 - Why `play.4x` did not change, correctly this time
+
+**to** code · **status** **answered** 2026-09-08 · `a6f728b` · **raised** 2026-09-08 ·
+**source** the quality lens re-deriving `S-76`'s claim, as `Q-71`
+
+**derived from** a population grows on surplus food or starves for want of it, *then* what
+expires expires - `spec/turn.md`, Ending a turn
+
+**Filed answered, because it corrects a record rather than asking anything.** `S-76`'s commit
+says `scenario/expected/play.4x` is unchanged because *food is discarded at every ending, so a
+farm worked one turn fewer leaves nothing behind.* **That reasoning is wrong.** Growth runs
+before the discard, and `grow` turns surplus food into citizens, which persist - so food work
+plainly can matter, and if the sentence held it would prove that food work never matters at
+all.
+
+**The claim it was defending is right, and rests on something else.** The comparison was
+poisoned to show it still compares, which is what actually established it. The true reason is
+narrower and about territory 2 alone: it has **one food extractor**, so a second `work` there
+in a turn is refused, and its single turn of food never reaches a surplus for `grow` to take.
+
+**Measured by the lens rather than argued**, both ways: one extra food work in the final turn
+moves territory 1 from 8 citizens to 12 and fails the comparison, and removing one food work
+leaves all six tests green. No code changes.
+
+**Worth an id rather than a reply, because the wrong sentence is in a commit message** and
+that is not a place anything gets corrected - `C-39`, arriving from the other direction again.
+
 ### C-72 - A tracked directory is in nobody's column, and the hook cannot see it
 
 **to** spec · **status** open · **raised** 2026-09-08 · **source** `C-69`'s test, on its first

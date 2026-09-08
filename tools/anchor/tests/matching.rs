@@ -116,19 +116,46 @@ fn a_line_marker_is_not_a_difference() {
     assert!(find(doc, "one two three four", Some("///")).is_ok());
 }
 
-/// Every refusal is a refusal, and there are three of them.
+/// Every way this refuses is reachable from `find`, and adding a fifth breaks the build.
 ///
-/// **The population is asserted** so that a fourth kind of failure cannot be added without a
-/// case, and so that this cannot pass by there being no refusals to check.
-
+/// **`Q-72`: the first version of this asserted `refusals.len() == 3` over a three-element
+/// array literal**, which is three by construction and tied to nothing. The quality lens
+/// planted a fourth variant with its `Display` arm and all nine tests passed.
+///
+/// **The exhaustive `match` below is what ties it.** Rust cannot count an enum's variants
+/// without a macro, but it can refuse to compile a `match` that does not cover them - so a
+/// fifth kind of refusal stops this file building until somebody writes the case that
+/// produces it. The assertions after it are that each variant is reachable from `find`,
+/// which constructing one by hand would not show.
 #[test]
-fn every_way_this_refuses_is_covered() {
+fn every_way_this_refuses_is_reachable() {
     let refusals = [
         find("abc", "xyz", None).unwrap_err(),
         find("a a", "a", None).unwrap_err(),
         find("abc", " ", None).unwrap_err(),
     ];
-    assert_eq!(refusals.len(), 3, "a refusal lost its case");
+    for why in &refusals {
+        // No wildcard, deliberately: this arm is the tie to the variant count.
+        match why {
+            Problem::NotFound | Problem::Ambiguous(_) | Problem::EmptyAnchor => {}
+        }
+    }
+    assert!(
+        refusals.iter().any(|why| matches!(why, Problem::NotFound)),
+        "an anchor that is not there must be reachable"
+    );
+    assert!(
+        refusals
+            .iter()
+            .any(|why| matches!(why, Problem::Ambiguous(_))),
+        "an anchor that matches twice must be reachable"
+    );
+    assert!(
+        refusals
+            .iter()
+            .any(|why| matches!(why, Problem::EmptyAnchor)),
+        "an anchor of no words must be reachable"
+    );
 
     for why in &refusals {
         assert!(

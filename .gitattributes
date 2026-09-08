@@ -1,0 +1,26 @@
+# Every text file is LF in the working tree, on every platform.
+#
+# **`Q-73`: a fresh clone of this repository failed its own suite, and no existing working
+# tree could see it.** There was no `.gitattributes`, `core.autocrlf` is true on Windows, and
+# every generated report is committed with LF - so a checkout rewrote them CRLF, and
+# `crates/game-console/tests/dump.rs` asked whether `turns.md` contains `"\n# Turn 1\n"`.
+# It does not: it contains `"\r\n# Turn 1\r\n"`. The blob is identical either way, both trees
+# are status-clean, and the difference exists only after checkout.
+#
+# **Nobody had hit it because no existing tree's copy was checked out** - every one was
+# written by the generator, which writes LF. And CI could not: the gate runs on Linux where
+# `autocrlf` is off, and the only Windows job builds without testing. The first push from a
+# fresh Windows clone would have failed the gate for a reason unrelated to the change.
+#
+# **Settling the endings rather than making the parse tolerant**, which was the choice. Every
+# generator here writes LF, so LF is the canonical form and the rest is checkout doing
+# something to it. Tolerance would have to be added to every parser that reads a generated
+# file, including the next one somebody writes, and this is one line that cannot be forgotten.
+#
+# `text=auto` leaves binaries alone: git detects them and this does not apply. The only
+# extensions here that sometimes want CRLF are PowerShell scripts, which read LF fine, and
+# there are no `.bat` or `.cmd` files.
+#
+# Found by the quality lens, which built a fresh clone to establish a baseline and got a
+# failure this tree cannot produce.
+* text=auto eol=lf
