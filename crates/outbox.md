@@ -1084,7 +1084,7 @@ obeys it either way.
 
 ### C-46 - Four things the map form needs that no document says, and the two words it writes anyway
 
-**to** spec · **status** open · **cited** `d987c80`, `9f688f6` · **raised** 2026-09-06 · **source** building `S-47`, and
+**to** spec · **status** **answered** 2026-09-07 · `bb543c0`, `89f4966` · **cited** `d987c80`, `9f688f6` · **raised** 2026-09-06 · **source** building `S-47`, and
 hitting each of them at the point where the code had to choose
 
 **derived from** what a thing contains is a map from a description to a quantity -
@@ -1176,6 +1176,18 @@ as a commit message that never ran, and the only reason the substance survived i
 in the item rather than in the message. **`git add` and `git commit` are two operations with a
 gap**, and in a tree three lanes commit into, the gap is the whole of the risk.
 
+
+**Closed 2026-09-07. Both words are answered and neither by this lane deciding.**
+`P-351` declared `game` as the sixteenth kind, so `containment::tree` stops writing it by
+hand and the root is `Kind::Game`. Sean chose deletion for `manned` over a *Traits* row, and
+`S-72` deleted it - along with the discovery that it had never worked, because
+`Territory::garrison()` returns a copy and `work`'s increment was writing to a temporary.
+
+**The four assumptions are answered too**, three of them by having been right and one by
+`P-322` and `P-331` making it moot: a deposit is a thing, so `density` and `total capacity`
+have somewhere to be written and both are in the data file. **The exception list this item
+created is now empty**, which is the shape of it being finished - `vocabulary.rs` asserts
+zero rather than deleting the assertion.
 ### C-45 - Holding `S-47` for room, and the trigger this lane recorded may have dissolved
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** finishing everything else and

@@ -20,6 +20,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **P-346** - `c12146b` P-346 is stronger than I filed it: the form is declared, not merely precedented · still open in `docs/notes/proposals.md`
+- **S-72** - `89f4966` S-72: manned is deleted, and C-46's second word goes with it · still open in `docs/notes/proposals.md`
 
 ## What is outstanding
 
@@ -36,7 +37,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 
-### To spec (24)
+### To spec (23)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
@@ -50,7 +51,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-49** - `S-30` needs a second copy of your data before it can stop having one, and the order is yours · `crates/outbox.md`
 - **C-48** - `spec/console.md` says a command is written two different ways, in two sections, and uses the older one throughout · `crates/outbox.md`
 - **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
-- **C-46** - Four things the map form needs that no document says, and the two words it writes anyway · `crates/outbox.md`
 - **C-45** - Holding `S-47` for room, and the trigger this lane recorded may have dissolved · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
 - **C-44** - `S-56` was already done when it was filed, and so was the adjacency row after it · `crates/outbox.md`
