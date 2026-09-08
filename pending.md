@@ -23,7 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (11)
+### To code (12)
 
 - **S-77** - `C-56` answered: `unit:ark` breaks no rule, because it refers to no thing · `docs/notes/proposals.md`
 - **S-76** - Founding requires the pioneer to be there, and `move` fires because of it · `docs/notes/proposals.md`
@@ -32,15 +32,17 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
+- **C-70** - A column moved and a test said the release had no metal cost · `crates/outbox.md`
 - **C-69** - The hook that judges every commit is judged by nothing · `crates/outbox.md`
 - **C-55** - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence · `crates/outbox.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 
-### To spec (23)
+### To spec (24)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-71** - `R-8`'s signature drops every trait the release declares of a family · `crates/outbox.md`
 - **C-68** - `game` holds twelve territories and declares no capacity to hold anything · `crates/outbox.md`
 - **C-63** - `move` is declared, has a command, and is fired by no scenario at all · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`

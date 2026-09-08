@@ -61,6 +61,80 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-71 - `R-8`'s signature drops every trait the release declares of a family
+
+**to** spec · **status** open · **raised** 2026-09-08 · **source** adding `movable` and looking
+at what the catalog attributed it to
+
+**derived from** being named through a family counts, because a family is how the release
+addresses several kinds at once - `reports/catalog.md`, *Signatures*
+
+**Where.** `prototypes/kinds/src/catalog.rs`, `trait_rows` against `recipe_rows` twenty lines
+above it.
+
+**What.** The two halves of a signature disagree about whether a family counts. `recipe_rows`
+builds `families_of` and a recipe naming `unit` reaches `ark` and `pioneer`. **`trait_rows`
+matches the *Of* column against the kind's own name and nothing else**, so a trait declared of
+a family reaches no kind at all.
+
+Measured rather than argued, over the release as it stands:
+
+- **`keeps`** is declared *of* **thing**, and *thing* is the family whose members are **every
+  kind above**. It is attributed to **none of the sixteen**.
+- **`fuel`** is declared *of* **a unit**. `ark` and `pioneer` are the unit family. It is
+  attributed to **neither**.
+
+**Why it costs, and why now.** `reports/catalog.md` states *no two kinds share a signature* as
+`R-8`'s finding, and Sean vets `R-8` next. **A signature computed from an incomplete set of
+traits can only under-collide** - it is the direction `R-8` exists to guard, and `C-64` was
+settled on the strength of that sentence. The catalog's own paragraph says being named through
+a family counts; it is true of the recipes half and false of the traits half, in one report.
+
+**Whether. Worth deciding before he reads it, and the fix is small** - `trait_rows` gaining the
+family expansion `recipe_rows` already has. **What is yours rather than mine is whether it
+changes the answer**: attributing `keeps` to all sixteen moves every signature equally and
+changes no grouping, while `fuel` reaches exactly the two kinds that already agree on traits,
+so it may create the first collision the report has ever shown. **I have not made the change**,
+because doing it silently would alter the report he is about to vet.
+
+**A third case is a separate question and is not this item.** Six traits are declared of a
+prose predicate - *whatever readies*, *whatever moves*, *a thing with upkeep*, *whatever is
+built*, *a thing that must be named individually*, *every thing*. Only the last is resolved.
+`ready` and `movable` are now resolvable from *Units and structures*, which has a column for
+each, but joining two tables to compute a signature is a design decision rather than a repair.
+
+### C-70 - A column moved and a test said the release had no metal cost
+
+**to** code · **status** open · **raised** 2026-09-08 · **source** `P-346` deleting a column,
+and the failure that followed
+
+**derived from** arguments are reached by name; the predecessor indexed by position, so
+inserting a term silently shifted every index after it - `crates/command-language/src/syntax.rs`
+
+**Where.** Fixed in `crates/game-console/tests/first_release.rs`. **Still live** at
+`prototypes/kinds/src/catalog.rs:296` and `:297`.
+
+**What.** `P-346` deleted the *A move* column from *Units and structures*. `released_cost` read
+*Costs to produce* as `cells.get(5)`, with the header order written above it in a comment, so
+the column moved to 4 and the test failed saying **`pioneer` has no metal cost** - a true
+statement about column 5 and nothing at all about the release. That one is repaired: it finds
+the column by its header now.
+
+**What is not repaired is the same read in production.** `catalog.rs` takes the Recipes table's
+*Kind* as `row.get(4)` and *Where* as `row.get(6)`. **A test that counts columns fails loudly
+when one moves; a generator that counts columns does not.** It would attribute recipe rows to
+the wrong kind and read a quantity as a place, and `reports/catalog.md` would be regenerated,
+committed, and wrong - with `the_committed_catalog_is_what_the_release_generates` green, because
+it compares the file against the same wrong computation.
+
+**Why it costs.** The Recipes table has taken seven columns for a while and looks stable, which
+is exactly what *Units and structures* looked like yesterday. **The release is edited by another
+lane and this crate is not told.**
+
+**Whether. Worth doing and small** - a header lookup done once, as the test now does. Not urgent:
+no column of *Recipes* has moved, and the catalog is currently correct. Filed rather than fixed
+in the same commit, because the commit that found it was clearing a red gate for every lane.
+
 ### C-69 - The hook that judges every commit is judged by nothing
 
 **to** code · **status** open · **raised** 2026-09-07 · **source** building `P-352` and running
