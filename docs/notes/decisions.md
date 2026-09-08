@@ -21,76 +21,58 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-354 - Two questions in the movable trait, and only one of them changes the game
+### P-354 - Three decisions about how a thing says what it can do
 
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** recovered, from your sentence -
-**asks** a decision - **into** `releases/first-release.md` -> *Traits* and *Recipes*
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07, as three decisions
+rather than one - **kind** recovered - **asks** a decision - **into**
+`releases/first-release.md` -> *Traits* and *Recipes*
 
-**The release already tells structures from vehicles**, which is worth knowing before choosing: the
-*Families* table says **`unit` is `ark, pioneer`**, and `move` consumes `1 unit`. Movability is
-carried by family membership today.
+**Working in [do the sets cross-cut?](2026-09-07-do-the-sets-cross-cut.md)**, including why a
+hierarchy is already refuted and why an ECS fits. **These are the three choices that survive it.**
+They are independent: any answer to one works with any answer to the others.
 
-**Your sentence contains two changes, and they are not equally consequential.**
+---
 
-**1. `movable` trait, or `unit` family.** Both name **ark and pioneer and nothing else** today, so
-**no behaviour changes either way.** The difference is where it could go: a family is per kind, a
-trait is per thing, so a trait admits two things of one kind differing in whether they move. Nothing
-in the release needs that.
+**1. What says a recipe applies to a thing - the family it is in, or a trait it carries?**
 
-**2. *Same thing* moves, or a thing is consumed and another produced.** The table does the second:
-`consume 1 unit ... $from`, `produce 1 unit ... $to`. **Your formulation says the same thing arrives
-with one less energy**, which is not what those two rows say. A thing that must be named
-individually carries an `id`, so **consume-and-produce destroys one and makes another**, and the
-identity does not survive the move.
+|                |                                                                                                                                                       |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Today**      | the family. *Families* says `unit` is `ark, pioneer`; `move` consumes `1 unit`                                                                        |
+| **Or**         | a trait. `move` consumes `1 thing movable`                                                                                                            |
+| **Change**     | one row in *Traits*, and two cells in `move`                                                                                                          |
+| **Legal now?** | **Yes, both.** *Kind is the kind or the family alone*, `thing` is a family, and *Traits are the constraints on it* - so no grammar changes either way |
+| **Difference** | a family is per **kind**; a trait is per **thing**. Nothing in the release needs two things of one kind to differ                                     |
 
-**That second one is the change**, and it is the one I would put your attention on. Whether an ark
-that crosses is the same ark is a question about the game, not about notation.
+---
 
-**What I am not offering.** Wording for either, because a choice is open, and any account of how a
-recipe could move a thing without consuming it would be me inventing a mechanism you have not asked
-for.
+**2. Must a trait carry a number, or may it just be present?**
 
-**Do we know enough to choose how the data is modelled? Measured, not argued** -
-[do the sets cross-cut?](2026-09-07-do-the-sets-cross-cut.md).
+|                |                                                                                                                   |
+| -------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **Today**      | it carries a number. `Thing.traits` is `BTreeMap<Trait, u32>`, and **`ready` already encodes *yes or no* as one** |
+| **Or**         | a trait may appear with no value - `{ark movable}`                                                                |
+| **Change**     | `Thing.traits` becomes trait to **optional** number, and the data file needs a form for a valueless trait         |
+| **Difference** | notation. **No behaviour changes either way**                                                                     |
 
-**Enough to eliminate, not enough to select.** Nine capability columns in *Units and structures*,
-six distinct sets, 36 pairs, **five cross-cutting**. The clean one is *Force* against *Readies*:
-they share ark, citizen and pioneer, **garrison has force and does not ready**, **extractor readies
-and has no force.** Add *is built* and three kinds each carry a different pair - citizen not built,
-garrison never readies, extractor has no force. **That is a lattice, so a hierarchy of kinds is
-refuted by the release as it stands** rather than by a future it might have. Structural typing, a
-trait a thing carries, and a parameter over kinds all express a lattice, and **nothing measured
-separates them.**
+---
 
-**The surviving answer is already in use.** *Units and structures* **is** a capability matrix - a
-column per capability, a blank meaning *does not have it*. So the question is narrower than the
-paradigms make it sound: **whether a capability that already exists as a column should also be a
-named trait.** That is question 1 above, and this is what it is really asking.
+**3. When a thing moves, is it the same thing?**
 
-**And the duplication you want to refactor is measurable.** *Fuel*, *A move* and *Crosses* hold
-exactly `ark, pioneer` - **three columns, one set** - and `P-346` takes it to two. *Binding* and
-*Costs to produce* hold the same six. **Nine columns, six sets**, which is what any representation
-would have to justify itself against.
+|                |                                                                                                                                                                                                                |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Today**      | **no.** `move` **consumes** a unit at `$from` and **produces** one at `$to` - one thing destroyed, another made                                                                                                |
+| **Or**         | **yes** - the thing relocates, carrying one less energy. Your formulation, and what an ECS does                                                                                                                |
+| **Change**     | **a fifth role** beside `require`, `limit`, `consume` and `produce` - none of the four relocates anything - or a stated convention that consuming and producing one kind within one recipe preserves the thing |
+| **Difference** | whether anything can refer to a **particular** unit across a move                                                                                                                                              |
 
-**And it fits an ECS**, which sharpens the two questions rather than adding a third. Entity,
-component and system map onto thing, capability and recipe, and
-**`crates/game-model/src/thing.rs:247` already stores `traits` per thing rather than per kind** - so
-`movable` is the release's description catching up with the model. **Thin systems that crunch
-recipes are not a contradiction**, as you said: the invariant forbids a rule being code, not the
-engine, and the test is that the number of systems stays fixed as recipes are added.
+**Not observable today**, which is worth knowing before spending a role on it: **no ark or pioneer
+appears in the played state at all** - each is consumed in the turn it is made - and the only things
+carrying an `id` in `scenario/expected/play.4x` are orbits. **It becomes observable the first time a
+unit persists across a turn and is named.**
 
-**The two questions are not equally cheap, and that is the useful part.**
+---
 
-- **Question 1 is already legal.** *Kind is the kind or the family alone*, `thing` is a family, and
-  *Traits are the constraints on it* - so `consume 1 thing movable ready` needs **a `movable` row and
-  two cells in `move`**, and no change to the grammar
-- **Question 2 has no mechanism.** The four roles are `require`, `limit`, `consume` and `produce`,
-  and **none of them relocates a thing.** *Same-thing-with-one-less-energy* needs a fifth role or a
-  stated convention. **That is the one that costs something**
-
-**Your own example would not have decided it.** Moving is `ark, pioneer`; upkeep is `citizen`.
-**Disjoint** - so that pair alone is consistent with a hierarchy.
-
-**Nothing is blocked.** `P-346` stands as it is - deleting the `A move` column is about cost, and
-neither question here touches it.
+**The prices are not alike.** 1 and 2 are a row, some cells, and a convention. **3 adds a piece to
+the recipe language**, which is the kind of thing your own earlier note said should be decided
+deliberately rather than arrived at one step at a time.
 
