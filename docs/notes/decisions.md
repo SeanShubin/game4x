@@ -21,169 +21,37 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-350 - Filing this study as an item is what makes it unrunnable, and that is the finding
+### P-350 - Measure whether a fresh instance reads the owning document, or the stale copy
 
-**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07, and again on
-the 7th - **kind** the
-research lens's `X-5`, lifted - **asks** a decision - **into** nothing; it authorises a study or it
-does not
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07, from 1,918 words to
+this - **kind** the research lens's `X-5`, lifted - **asks** a decision - **into** nothing; it
+authorises one task or it does not
 
-**The question, in one line.** On some future restart, should one instance be given one task as
-ordinary work - *what are a lens's jobs?* - with a record kept of which files it opened before
-answering?
+**The question.** On some future restart, should one instance be asked *what are a lens's jobs?* as
+ordinary work, with a record kept of which files it opened before answering?
 
-**Everything else about this item has collapsed into that.** Two of the three tasks now have
-observational evidence against them from the crash, so they can only confirm; `P-315` is unrunnable
-because the sentence that caused it was repaired. **One task is left.**
+**Why that question.** The lens's own README restates its jobs and is four days behind
+`docs/process.md`, which owns them. `X-3` predicts a cold instance reads the README and fails. **The
+outbox architecture assumes an instance is replaceable by a fresh one that reads the files**, and
+that assumption has never been tested.
 
-- **What it tests.** The lens's own README restates its jobs and is four days behind
-  `docs/process.md`, which owns them. `X-3` predicts a cold instance **fails** - reaches the README -
-  and that a long-running one might not. **If it reaches `docs/process.md` unprompted, `X-3` loses
-  its central claim** that clearing context makes two of the phenomena worse
-- **Why it is worth a person's attention at all.** The outbox architecture assumes an instance is
-  replaceable by a fresh one that reads the files. **That assumption is why `pending.md` and the
-  items are worth keeping, and it has never been tested**
-- **When it can run.** Only after you answer. While this item is open, `pending.md` names it and the
-  instance reads that first - which is the finding below
-- **What it costs.** A few minutes of one restart, and no writes. **Declining costs nothing**:
-  `X-3`'s answer stands as a derivation and says so
+**What it costs, and this is the part I put in front of you late.** The stale README is a **real
+defect**. Measuring it means leaving it broken until a restart happens. `P-315` is the same story
+backwards: there the repair arrived first, and there was nothing left to measure.
 
-**Time-sensitive, and that is the only reason it is in front of you today.** `X-5` has said *worth
-doing eventually rather than now* since 2026-09-06, correctly, because it needed an instance started
-for the purpose. **You are starting instances anyway**, and the study needs a reader that has read
-the files and nothing else - which is what a restarting instance is for its first few minutes.
+**What you get.** One observation. `n = 1`.
 
-**The ask is three ordinary tasks, not a study.** `X-3` answered `S-57` by **classifying** its cases
-rather than measuring them, and said so. The design is
-[the cold-instance study](../../lenses/research/2026-09-07-the-cold-instance-study.md), and its
-shape is the part worth your attention: **the instance is given its ordinary lane prompt and three
-pieces of ordinary work, and is told nothing about `S-57`, the report, or a study.** Each task can be
-done correctly only by opening one file, and each has a plausible wrong answer available without
-opening it. What is recorded is which files it opened before answering.
+**What the alternative gets.** Fix the README now and read future restarts for free. The crash
+already produced six failures of this kind unasked -
+[what the crash showed](2026-09-07-what-the-crash-showed.md) - and that evidence accumulates at no
+cost.
 
-**Run as the quality lane, because none of the three tasks writes anything** - so a wrong answer
-costs a paragraph rather than a commit.
+**I recommend no.** **Neither outcome changes what you do.** Either way the conclusion is *keep the
+files right*, which is what the architecture already assumes. An experiment whose result changes no
+action is not worth a defect held open.
 
-**Only one of the three can cost anybody their answer, and that is what makes it a study.** The
-predictions are written down before the run, which matters because `X-3` is that lens's own answer
-and a study designed after seeing it would agree with it.
-
-- Two of the tasks `X-3` predicts a cold instance **passes**. They can confirm and cannot refute
-- The third - *what are a lens's jobs?*, where the lens's own README restates them and is four days
-  behind `docs/process.md`, which owns them - `X-3` predicts a cold instance **fails**, and a
-  long-running one might not. **If it reaches the owning document unprompted, `X-3` loses its
-  central claim** that clearing context makes two of the phenomena worse
-
-**What it would settle** is `S-57`'s third question: *does clearing context actually fix it, and what
-does that cost?* **The outbox architecture assumes an instance is replaceable by a fresh one that
-reads the files** - that assumption is why `pending.md` and the items are worth keeping, and it has
-never been tested.
-
-**I checked the four cases that are my lane's, from the record rather than from memory**, since that
-is the failure under study. `P-320` and `S-56` are characterised correctly - `spec/console.md:45`
-does say *nothing states its container*, and the code lane's `C-44` independently confirms `S-56`'s
-work was in the tree before the item existed. `P-310` and `P-312` are correct and produced a rule,
-promoted as `P-316`.
-
-**And one case is gone, which is the better news in this item.** I filed this yesterday saying
-`P-315` was mis-scored - that its own withdrawal blames a misread imperative rather than an unread
-file, so a cold reader could reproduce it for a reason that has nothing to do with memory. **The
-research lens checked that and found something neither of us had**: `b1d12c9`, the commit that
-withdrew `P-315`, **also rewrote the sentence**. `CLAUDE.md` no longer contains the imperative with
-no subject. So the case is not mis-scored, it is **unrunnable** - a cold instance reading today's
-document gets the unambiguous version and passes for a reason that says nothing.
-
-**The process had already repaired the thing the study would have measured, in the same commit that
-recorded the mistake.** That is the mechanism in `CLAUDE.md` working, and it is worth more than the
-data point it cost.
-
-**What it costs you**: the first few minutes of one instance you are restarting for other reasons.
-**What declining costs**: nothing today. `X-3`'s answer stands and says it is a derivation; what
-stays unavailable is the ability to say **how much of a long-running instance's belief is memory**,
-which no further classifying will produce.
-
-## What changed while it sat here, and it is the answer to *have we learned anything*
-
-**Two things, and the second is worth more than the study was.**
-
-**The window closed.** This item's whole urgency was that you were restarting instances anyway and a
-cold reader was free for a few minutes. They have been running for twenty-four minutes and are
-working. **That version of the offer is gone until the next restart**, and nothing was lost by
-missing it, because of what follows.
-
-**The study cannot be blind while it is an open item, and I verified this rather than reasoned it.**
-The design says: run it as the quality lane, give it **the ordinary lane prompt unchanged**, then
-three tasks, and say **nothing about `S-57`, this report, or a study.** The ordinary quality prompt
-in `docs/process.md` -> *Starting the instances* ends:
-
-> Start by telling me what is open and addressed, read from the files rather than remembered.
-
-**Doing that reads the index, and the index names this item.** `pending.md:11` carries it in full,
-and so does `tools/outbox`. So a cold quality instance, following the unchanged prompt as its
-**first action**, reads a line saying that an instance being restarted is about to be given three
-tasks - before it is given them.
-
-**That is not bad luck and no wording fixes it.** *Nothing open means nothing outstanding* works
-because every open item is visible to every lane; `to` is what makes an instance's reading list a
-query. **A measurement whose validity depends on the subject not knowing about it cannot be an open
-item in a system built on every item being visible.** Filing it is what broke it, and filing it was
-correct - `X-5` sat in a report's prose for a day precisely because it had not been filed.
-
-**So the decision in front of you is a different one now**, and simpler:
-
-- **Decline.** `X-3`'s answer stands as a derivation and says so. Nothing waits on it
-- **Answer it, and let it be run on a later restart.** A closed item leaves the index, so an
-  instance restarted after that reads no line about it. **This is the only order that works** - the
-  study runs *after* the decision, never while it is the decision
-
-**One thing today produced that bears on it, and it is not evidence.** Two instances cold from the
-crash - the code lane and me - each committed the plausible-number failure within their first
-twenty minutes. They read `grep -c 'P-322'` and got 3 where the absent heading was the answer; I
-grepped whole commit messages and got 32 citing commits where the tool said 3. **Neither was blind,
-neither was pre-registered, and both of us have read the reports these failures are named in** - so
-this confirms nothing and the study would not accept it. **I record it because it is the shape of
-what a study would ask, arriving unasked**, and because leaving it out would be choosing which
-observations to mention.
-
-## What the crash itself produced, asked 2026-09-07
-
-**Yes, and it is the closest thing to the study that will exist without running one.** Three
-instances went cold at once and worked for an hour. **Six failures of the study's own shape
-appeared, unasked**, and I verified three of them myself rather than taking the report.
-
-| #   | Lane     | What happened                                                                          | Whose shape |
-| --- | -------- | -------------------------------------------------------------------------------------- | ----------- |
-| 1   | code     | `grep -c 'P-322'` returned 3; the **absent heading** was the answer                    | `C-34`      |
-| 2   | spec     | grepped whole commit messages, got 32 citing commits where the tool said 3             | `C-34`      |
-| 3   | spec     | took `C-65`'s claim and rewrote `S-49` **without opening either file**                 | `C-34`      |
-| 4   | code     | called the staging bullet a carefulness caution; it **explicitly disclaims being one** | `C-34`      |
-| 5   | research | filed `X-7` asking the code lane to build a mechanism **that already existed**         | `S-56`      |
-| 6   | code     | read a gate's exit code from `tail`, got a green `0` that meant nothing                | `C-34`      |
-
-**Row 5 is the one that matters, because it is a prediction failing.** `X-3` predicts a cold
-instance **passes** `S-56`'s shape, and names the refutation exactly: *cold files without looking,
-which would move this case out of `never read` and into `nothing prompts a read`.* **That is what
-happened**, and the research lens found it the same way `S-56` was found - by reading the hook its
-own commit had just printed a message from. Its own words: `S-56`'s shape in a report about `S-56`'s
-shape.
-
-**Row 3 is mine and is the worst of the six**, because it wrote a wrong claim into the document a
-fresh instance is supposed to trust.
-
-**What this is not.** Not blind, not controlled, not pre-registered, and **self-reported** - each
-lane is the only witness to its own failures, so the count is of failures *noticed*, and the true
-number is larger by an unknown amount. **No row touches the third prediction**, the stale-README
-one, which is the only row that can cost `X-3` its central claim.
-
-**And the confound runs the wrong way for `X-3`, which is what makes this worth writing down.**
-Every one of these lanes had read the taxonomy - `S-57`, `C-28`, `C-33` are in the files they open
-first. **Knowing the failure by name did not prevent it six times in an hour.** A designed study
-would have to argue that its subject was not primed; this one has the opposite problem and still
-produced the failures.
-
-**What it changes about the decision.** Two of the three predictions now have observational evidence
-against them, so **the study's remaining value is concentrated almost entirely in the third task**.
-If you authorise it, the honest version is one task, not three.
+**You said yes before I named the cost**, so it is genuinely still open. If you want it anyway, say
+so and the README stays as it is until it runs.
 
 ### P-348 - `R-8` is built and no two kinds behave alike, which may be the answer or the defect
 

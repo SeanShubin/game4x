@@ -12,7 +12,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **P-352** - The staging bullet gains the reason care cannot close it, and the check that can · `docs/notes/proposals.md`
 - **P-349** - Edge, border and boundary name one thing, and crossing is passing through it · `docs/notes/proposals.md`
 - **P-353** - There is one notation, and the tree is what having one means · `docs/notes/proposals.md`
-- **P-350** - Filing this study as an item is what makes it unrunnable, and that is the finding · `docs/notes/decisions.md`
+- **P-350** - Measure whether a fresh instance reads the owning document, or the stale copy · `docs/notes/decisions.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`
 - **P-346** - Three statements fix what a move costs, and only one of them is a mechanism · `docs/notes/decisions.md`
