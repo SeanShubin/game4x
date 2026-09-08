@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-16 kinds, 4 families, 19 traits, 16 recipes.
+16 kinds, 4 families, 20 traits, 16 recipes.
 
 ## Signatures
 
@@ -245,7 +245,7 @@ carries a landing, and can invade from orbit.
 
 **Bounded by** a capacity of 2
 
-**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: yes
+**As a thing** Force: 2 · Fuel: 2 · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: yes · Movable: yes
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 
@@ -267,7 +267,7 @@ founds a territory.
 
 **Bounded by** a capacity of 2
 
-**As a thing** Force: 2 · Fuel: 2 · A move: 1 fuel · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes
+**As a thing** Force: 2 · Fuel: 2 · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes · Movable: yes
 
 **Holds** energy, up to the unit's fuel - *a fact about each one rather than about the kind*
 

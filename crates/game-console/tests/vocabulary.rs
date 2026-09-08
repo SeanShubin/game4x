@@ -228,23 +228,24 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     );
     assert_eq!(
         traits.len(),
-        19,
-        "nineteen traits; the release lists {:?}",
+        20,
+        "twenty traits; the release lists {:?}",
         traits.keys().collect::<Vec<_>>()
     );
     let closed = traits
         .values()
         .filter(|a| matches!(a, Admits::OneOf(_)))
         .count();
-    // **Seven, and the seventh is `phase`.** `C-37` measured six - `ready`, `surplus` and
-    // `unpaid` outright, and `kind`, `resource`, `biome` by pointing at a table - and that
-    // was before `P-308` named `phase`'s values. This arrives at seven by reading the rows
-    // rather than by adding one to a remembered figure, which is the only way the two counts
-    // are independent. `control` is the eighth candidate and describes rather than naming:
-    // *held by a player, or unclaimed* names one value and describes the other.
+    // **Eight, and the eighth is `movable`.** `C-37` measured six - `ready`, `surplus` and
+    // `unpaid` outright, and `kind`, `resource`, `biome` by pointing at a table - `P-308`
+    // named `phase`'s values for the seventh, and `P-355` added `movable`, *yes or no*.
+    // This arrives at the figure by reading the rows rather than by adding one to a
+    // remembered number, which is the only way the two counts are independent. `control` is
+    // the next candidate and describes rather than naming: *held by a player, or unclaimed*
+    // names one value and describes the other.
     assert_eq!(
-        closed, 7,
-        "seven traits name a closed set - `kind`, `resource`, `biome`, `ready`, `surplus`, `unpaid` and `phase`; {closed} do"
+        closed, 8,
+        "eight traits name a closed set - `kind`, `resource`, `biome`, `ready`, `surplus`, `unpaid`, `phase` and `movable`; {closed} do"
     );
 
     let session = played();

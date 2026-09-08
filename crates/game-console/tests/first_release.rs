@@ -128,6 +128,15 @@ fn released_cost(thing: &str) -> Vec<(u32, String)> {
     .expect("the release document");
 
     let mut inside = false;
+    // **Which column holds the costs, read from the header rather than counted.**
+    // This was `cells.get(5)` with the header order written above it in a comment, and
+    // `P-346` deleting the `A move` column moved *Costs to produce* from 5 to 4 - so the
+    // test failed saying `pioneer` has no metal cost, which is a true statement about
+    // column 5 and nothing at all about the release. **That is the failure this repository
+    // designed the command language to avoid** - `syntax.rs`: the predecessor indexed a
+    // list by position, so inserting a term silently shifted every index after it. The
+    // same mistake, in a test that reads a document instead of a grammar.
+    let mut costs_at: Option<usize> = None;
     for line in text.lines() {
         let line = line.trim();
         if line.starts_with("## ") {
@@ -137,18 +146,29 @@ fn released_cost(thing: &str) -> Vec<(u32, String)> {
             inside = line == "## Units and structures";
             continue;
         }
-        if !inside || !line.starts_with("| **") {
+        if !inside {
             continue;
         }
         let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
-        // | Thing | Force | Cells | A move | Upkeep | Costs to produce | Requires |
+        if costs_at.is_none() && cells.iter().any(|cell| *cell == "Thing") {
+            costs_at = cells.iter().position(|cell| *cell == "Costs to produce");
+            assert!(
+                costs_at.is_some(),
+                "the units table has no `Costs to produce` column: {cells:?}"
+            );
+            continue;
+        }
+        if !line.starts_with("| **") {
+            continue;
+        }
         let Some(name) = cells.first().map(|cell| cell.trim_matches('*')) else {
             continue;
         };
         if name != thing {
             continue;
         }
-        let Some(costs) = cells.get(5) else { continue };
+        let at = costs_at.expect("the header row comes before any row of things");
+        let Some(costs) = cells.get(at) else { continue };
         return costs
             .split(',')
             .filter_map(|part| {

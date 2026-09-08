@@ -302,7 +302,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 19] = [
+pub const TRAITS: [TraitRow; 20] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -431,6 +431,15 @@ pub const TRAITS: [TraitRow; 19] = [
         name: "phase",
         of: "the game",
         values: "design or play",
+        held: Held::Stored,
+    },
+    // **`P-355`.** It replaces nothing: the `A move` column `P-346` deleted was a cost in
+    // fuel, and this is whether the thing moves at all. `move` still consumes a literal 1
+    // energy, and selecting by this trait rather than by the `unit` family waits on `C-56`.
+    TraitRow {
+        name: "movable",
+        of: "whatever moves",
+        values: "yes or no",
         held: Held::Stored,
     },
 ];
@@ -926,11 +935,17 @@ pub struct Producible {
     pub kind: Kind,
     pub force: Option<u32>,
     pub fuel: Option<u32>,
-    pub a_move: Option<u32>,
     pub upkeep: Option<(u32, Kind)>,
     pub costs: &'static [(u32, Kind)],
     /// What holds it together, and what `perish` gives back before its parts are counted.
     pub binding: Option<u32>,
+    /// **`P-355`: whatever moves, yes or no, stored.** Filled for an ark and a pioneer only.
+    ///
+    /// **Three columns now name exactly those two - Fuel, Crosses and this - and that is a
+    /// decision rather than duplication.** Sean approved it knowing the sets coincide today,
+    /// because they are expected to diverge: fuel in a tank is one way to move and there will
+    /// be others.
+    pub movable: bool,
     /// Which kinds of edge it may move along, which is what decides where it can ever be.
     ///
     /// **An Ark crosses one kind of edge and it is not `border`**: `orbit border`, between
@@ -995,9 +1010,9 @@ pub const PRODUCIBLE: &[Producible] = &[
         kind: Citizen,
         force: Some(1),
         fuel: None,
-        a_move: None,
         upkeep: Some((1, Food)),
         costs: &[],
+        movable: false,
         binding: None,
         crosses: None,
         requires: None,
@@ -1010,9 +1025,9 @@ pub const PRODUCIBLE: &[Producible] = &[
         // and nothing has to work it. Its cost is unchanged.
         force: Some(0),
         fuel: None,
-        a_move: None,
         upkeep: None,
         costs: &[(1, Labor), (1, Metal)],
+        movable: false,
         binding: Some(1),
         crosses: None,
         requires: None,
@@ -1022,9 +1037,9 @@ pub const PRODUCIBLE: &[Producible] = &[
         kind: Extractor,
         force: None,
         fuel: None,
-        a_move: None,
         upkeep: None,
         costs: &[(1, Labor), (1, Metal)],
+        movable: false,
         binding: Some(1),
         crosses: None,
         requires: None,
@@ -1034,9 +1049,9 @@ pub const PRODUCIBLE: &[Producible] = &[
         kind: Yard,
         force: None,
         fuel: None,
-        a_move: None,
         upkeep: None,
         costs: &[(1, Labor), (15, Metal)],
+        movable: false,
         binding: Some(15),
         crosses: None,
         requires: None,
@@ -1049,9 +1064,9 @@ pub const PRODUCIBLE: &[Producible] = &[
         kind: Store,
         force: None,
         fuel: None,
-        a_move: None,
         upkeep: None,
         costs: &[(1, Labor), (1, Metal)],
+        movable: false,
         binding: Some(1),
         crosses: None,
         requires: None,
@@ -1061,9 +1076,9 @@ pub const PRODUCIBLE: &[Producible] = &[
         kind: Ark,
         force: Some(2),
         fuel: Some(2),
-        a_move: Some(1),
         upkeep: None,
         costs: &[(3, Metal), (12, Energy), (2, Citizen)],
+        movable: true,
         binding: Some(3),
         crosses: Some("orbit border"),
         requires: Some("a Yard"),
@@ -1073,11 +1088,11 @@ pub const PRODUCIBLE: &[Producible] = &[
         kind: Pioneer,
         force: Some(2),
         fuel: Some(2),
-        a_move: Some(1),
         // `P-339`: a pioneer's Upkeep cell is empty, and a citizen is the only thing in
         // the release with one.
         upkeep: None,
         costs: &[(3, Metal), (6, Energy), (2, Citizen)],
+        movable: true,
         binding: Some(3),
         crosses: Some("border"),
         requires: None,
@@ -1156,29 +1171,26 @@ pub fn units_table() -> Vec<Vec<String>> {
         "Thing",
         "Force",
         "Fuel",
-        "A move",
         "Upkeep",
         "Costs to produce",
         "Binding",
         "Crosses",
         "Requires",
         "Readies",
+        "Movable",
     ])];
     for thing in PRODUCIBLE {
         rows.push(vec![
             format!("**{}**", thing.kind.name()),
             thing.force.map(|n| n.to_string()).unwrap_or_default(),
             thing.fuel.map(|n| n.to_string()).unwrap_or_default(),
-            thing
-                .a_move
-                .map(|n| format!("{n} fuel"))
-                .unwrap_or_default(),
             thing.upkeep_written(),
             thing.cost_written(),
             thing.binding.map(|n| n.to_string()).unwrap_or_default(),
             thing.crosses.unwrap_or_default().to_string(),
             thing.requires.unwrap_or_default().to_string(),
             if thing.readies { "yes" } else { "" }.to_string(),
+            if thing.movable { "yes" } else { "" }.to_string(),
         ]);
     }
     rows
