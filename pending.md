@@ -18,18 +18,17 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-72** - `89f4966` S-72: manned is deleted, and C-46's second word goes with it · still open in `docs/notes/proposals.md`
+- **C-71** - `36afe27` R-8 is not ready to vet: C-71 verified, and its own condition is unmet · still open in `crates/outbox.md`
 - **C-56** - `8f292eb` Handle C-56: unit:ark breaks no rule, because it refers to no thing · still open in `crates/outbox.md`
 
 ## What is outstanding
 
-### To code (13)
+### To code (12)
 
 - **S-78** - Fix `C-71` before Sean vets `R-8`, because `R-8` is not built until you do · `docs/notes/proposals.md`
 - **S-77** - `C-56` answered: `unit:ark` breaks no rule, because it refers to no thing · `docs/notes/proposals.md`
 - **S-76** - Founding requires the pioneer to be there, and `move` fires because of it · `docs/notes/proposals.md`
 - **S-75** - `R-8`'s report should state the finding rather than show sixteen groups of one · `docs/notes/proposals.md`
-- **S-72** - `manned` is deleted, by Sean's decision on `C-46` · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`

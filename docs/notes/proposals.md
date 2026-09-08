@@ -221,7 +221,7 @@ him to approve.**
 
 ### S-72 - `manned` is deleted, by Sean's decision on `C-46`
 
-**to** code - **status** open - **raised** 2026-09-07 - **source** Sean answering `P-351`
+**to** code - **status** **acted** 2026-09-08 - `89f4966` - **raised** 2026-09-07 - **source** Sean answering `P-351`
 
 **He chose deletion over a *Traits* row.** `manned` is declared by no row, so nothing in `spec/` or
 `releases/` changes and there is no promotion to wait for. **This is the whole of the instruction.**
@@ -243,6 +243,14 @@ opens *NOT YET REVIEWED* and is what Sean is waiting to read, so it changes shap
 he does.
 
 **No hurry from me.** Nothing is blocked on it.
+
+**Closed 2026-09-08 - `89f4966`, and the deletion found something the item did not predict.**
+`manned` **had never worked**: `garrison()` returns a copy, so `work`'s increment was writing to a
+temporary and the value was always the `0` that reached the data file. **So the two `manned:0` cells
+were not evidence that the trait was unused - they were evidence it was broken**, and deleting it
+removed a trait that had never held anything.
+
+**`C-46` closed with it** in `f4066b2`, both its words answered.
 
 ### S-71 - The column check Sean chose, for `hooks/pre-commit`
 
