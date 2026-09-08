@@ -102,38 +102,6 @@ my delay rather than yours.
 be how a fleet moves. **That points at an exception to the rule rather than a change to the
 command**, and I will put it to you as its own item rather than fold it in here.
 
-### P-346 - The `A move` column goes
-
-**to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
-- **asks** approval - **shape** an instruction - **into** `releases/first-release.md` -> *Units and
-structures*
-
-**Your answer took neither option, and it made the cheaper one free.** I recommended making the
-recipe read the column, because deleting it costs the ability to say a unit moves for more. **You
-recover that another way**: a unit that moves differently gets its own recipe. So the column was
-never what made it expressible, and deleting it loses nothing.
-
-**The instruction.** Delete the **`A move`** column from the *Units and structures* table - the
-header cell, the alignment cell, and one cell from each of the seven rows.
-
-**How to tell it was carried out**: the table has **nine** columns where it had ten, `A move` is not
-among them, `1 fuel` appears nowhere in `releases/first-release.md`, and the seven row names and the
-other nine columns are unchanged.
-
-**Two things it removes that are worth naming, because neither is visible in a column deletion.**
-
-- **A statement that could not work.** The recipe consumes a literal `1`, so a row saying `2 fuel`
-  changed nothing. That was the finding
-- **A word disagreement.** The column said `1 fuel`; the recipe consumes `1 energy`; `fuel` is the
-  trait naming how much energy a tank holds. Your own formulation says energy. **Deleting removes
-  the disagreement rather than deciding it**
-
-**`spec/units.md` needs nothing.** *Moving burns a unit of it, and a unit with none cannot move*
-stays true and matches the literal the recipe fixes - which is the half of `P-346` that was always
-the mechanism.
-
-**Nothing.** Every promotion Sean approved on 2026-09-07 has landed.
-
 ## Addressed to other perspectives
 
 ### S-76 - Founding requires the pioneer to be there, and `move` fires because of it
@@ -2683,6 +2651,7 @@ work the release exists to order.
 | P-353, there is one notation, and the tree is what having one means                                                          | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-07 |
 | P-351, `game` is the sixteenth kind                                                                                          | `releases/first-release.md` -> Kinds                                                                                                                                                                     | 2026-09-07 |
 | P-352, the staging bullet gains the reason care cannot close it, and the check that can                                      | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-07 |
+| P-346, the `A move` column goes                                                                                              | `releases/first-release.md` -> Units and structures                                                                                                                                                      | 2026-09-08 |
 | P-322, a deposit is a thing, so a territory's density has somewhere to be written                                            | `releases/first-release.md` -> Kinds, Traits                                                                                                                                                             | 2026-09-06 |
 | P-323, a field is named for the kind it refers to; a command is named for its recipe and may repeat                          | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-06 |
 | P-324, being blocked on one thing is not being blocked, and it applies to every lane                                         | `docs/process.md` -> All lanes                                                                                                                                                                           | 2026-09-06 |

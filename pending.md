@@ -9,7 +9,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-355** - `movable`, stored, and the half of it that has to wait · `docs/notes/proposals.md`
-- **P-346** - The `A move` column goes · `docs/notes/proposals.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
@@ -20,8 +19,8 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **P-355** - `7c9a613` Rephrase P-355, and withdraw the framing it had · still open in `docs/notes/proposals.md`
-- **P-346** - `c12146b` P-346 is stronger than I filed it: the form is declared, not merely precedented · still open in `docs/notes/proposals.md`
 - **S-72** - `89f4966` S-72: manned is deleted, and C-46's second word goes with it · still open in `docs/notes/proposals.md`
+- **C-56** - `b59bc7d` P-355 becomes an instruction: movable, stored, and move waits on C-56 · still open in `crates/outbox.md`
 
 ## What is outstanding
 
@@ -74,10 +73,10 @@ it exists to ask.
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
+- `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335
-- `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123

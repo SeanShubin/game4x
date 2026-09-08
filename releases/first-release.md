@@ -154,15 +154,15 @@ use it immediately, store it, or lose it.**
 
 ## Units and structures
 
-| Thing         | Force | Fuel | A move | Upkeep          | Costs to produce               | Binding | Crosses      | Requires | Readies |
-| ------------- | ----- | ---- | ------ | --------------- | ------------------------------ | ------- | ------------ | -------- | ------- |
-| **citizen**   | 1     |      |        | 1 food per turn |                                |         |              |          | yes     |
-| **garrison**  | 0     |      |        |                 | 1 labor, 1 metal               | 1       |              |          |         |
-| **extractor** |       |      |        |                 | 1 labor, 1 metal               | 1       |              |          | yes     |
-| **yard**      |       |      |        |                 | 1 labor, 15 metal              | 15      |              |          |         |
-| **store**     |       |      |        |                 | 1 labor, 1 metal               | 1       |              |          |         |
-| **ark**       | 2     | 2    | 1 fuel |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border | a Yard   | yes     |
-| **pioneer**   | 2     | 2    | 1 fuel |                 | 3 metal, 6 energy, 2 citizens  | 3       | border       |          | yes     |
+| Thing         | Force | Fuel | Upkeep          | Costs to produce               | Binding | Crosses      | Requires | Readies |
+| ------------- | ----- | ---- | --------------- | ------------------------------ | ------- | ------------ | -------- | ------- |
+| **citizen**   | 1     |      | 1 food per turn |                                |         |              |          | yes     |
+| **garrison**  | 0     |      |                 | 1 labor, 1 metal               | 1       |              |          |         |
+| **extractor** |       |      |                 | 1 labor, 1 metal               | 1       |              |          | yes     |
+| **yard**      |       |      |                 | 1 labor, 15 metal              | 15      |              |          |         |
+| **store**     |       |      |                 | 1 labor, 1 metal               | 1       |              |          |         |
+| **ark**       | 2     | 2    |                 | 3 metal, 12 energy, 2 citizens | 3       | orbit border | a Yard   | yes     |
+| **pioneer**   | 2     | 2    |                 | 3 metal, 6 energy, 2 citizens  | 3       | border       |          | yes     |
 
 An Ark can invade land from orbit. Nothing outside this table
 readies.
