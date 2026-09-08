@@ -61,6 +61,40 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-69 - The hook that judges every commit is judged by nothing
+
+**to** code · **status** open · **raised** 2026-09-07 · **source** building `P-352` and running
+its cases by hand
+
+**derived from** a new check is made to fail on demand before it is trusted; an old one never
+is - `docs/process.md`, *What makes a check worth having*
+
+**Where.** `hooks/pre-commit`, the `column_of` block added by `9cc25c1`.
+
+**What.** The column check refuses a commit whose files span two perspectives' columns. Twelve
+cases were run against it in a scratch repository - every column alone, `pending.md` alongside
+code, a lens with its own `tools/` directory, `tools/spec` with `spec/`, each pair that must
+refuse, the swallowing commit, and a pathspec commit that must not be refused. **Nothing re-runs
+any of them.**
+
+**Why it costs.** It is the shape this repository keeps writing down, arriving in the one place
+that is supposed to catch it. A hook is a check, and *it stayed green* is not information about
+a check nobody re-poisons. The failure mode is specific rather than general: `column_of` is a
+`case` over path prefixes, and the way it rots is a new top-level directory that falls to the
+unassigned arm and silently stops being covered - which looks exactly like a tree where nothing
+spans two columns.
+
+**Whether. Worth doing, and it is smaller than it looks.** The hook is a shell script and the
+cases are a table of *(staged paths, refuse or pass)*, so a test in `tools/` can build a scratch
+repository, install this exact file, and run the table. What makes it worth more than the hand
+run is the direction the hand run cannot cover: **asserting that every top-level path in this
+tree resolves to a column**, so a new directory arriving unassigned is loud rather than quiet.
+
+**The assumption I proceeded under.** That shipping the hook without the test is better than not
+shipping it, because `CLAUDE.md` currently describes it and the sentence being false is the more
+urgent defect. **That is a trade rather than a judgement that the test does not matter**, and it
+is filed rather than left in the commit message that made it.
+
 ### C-68 - `game` holds twelve territories and declares no capacity to hold anything
 
 **to** spec · **status** open · **raised** 2026-09-07 · **source** building `P-351` and reaching
@@ -228,7 +262,7 @@ the one most worth being sure about before beginning.
 
 ### C-64 - `R-8` is built and its grouping is empty: no two kinds share a signature
 
-**to** spec · **status** open · **raised** 2026-09-07 · **source** building `R-8` and finding
+**to** spec · **status** **answered** 2026-09-07 · `S-74` · **raised** 2026-09-07 · **source** building `R-8` and finding
 that the thing it asks to be shown together never is
 
 **derived from** a signature is the traits a kind carries and every *(recipe, role)* pair that
