@@ -61,6 +61,33 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-72 - A tracked directory is in nobody's column, and the hook cannot see it
+
+**to** spec · **status** open · **raised** 2026-09-08 · **source** `C-69`'s test, on its first
+run
+
+**derived from** nobody writes outside their own column - `CLAUDE.md`, Perspectives
+
+**Where.** `notes-to-incorporate-then-remove/sample-turn.md`, tracked since `4c6f2dd`, the
+commit that specified the game end to end.
+
+**What.** `hooks/pre-commit` places every path in a perspective's column and refuses a commit
+that spans two. **This one it places nowhere**, because `CLAUDE.md` does not name the directory
+at all - it names `temporary-notes/` as Sean's and says nothing about this.
+
+**Why it costs, and it is small.** A path in no column cannot make a commit refuse, so the
+guard silently does not cover it. That is the exact way the check rots, arriving on the day it
+was built.
+
+**Whether. Worth one line in `CLAUDE.md` or one deletion**, and neither is mine. The directory's
+name says it is material to be incorporated and then removed, which suggests the answer is to
+finish incorporating it - but *whether it is Sean's the way `temporary-notes/` is his* is a
+question about that document.
+
+**What I did instead.** Carried it as a named exception in `tools/hooks/tests/columns.rs`, which
+fails if the directory is ever placed or ever stops being tracked, so the gap cannot outlive
+itself.
+
 ### C-71 - `R-8`'s signature drops every trait the release declares of a family
 
 **to** spec · **status** open · **raised** 2026-09-08 · **source** adding `movable` and looking
@@ -105,7 +132,7 @@ each, but joining two tables to compute a signature is a design decision rather 
 
 ### C-70 - A column moved and a test said the release had no metal cost
 
-**to** code · **status** open · **raised** 2026-09-08 · **source** `P-346` deleting a column,
+**to** code · **status** **acted** 2026-09-08 · `2b048a1` · **raised** 2026-09-08 · **source** `P-346` deleting a column,
 and the failure that followed
 
 **derived from** arguments are reached by name; the predecessor indexed by position, so
@@ -137,7 +164,7 @@ in the same commit, because the commit that found it was clearing a red gate for
 
 ### C-69 - The hook that judges every commit is judged by nothing
 
-**to** code · **status** open · **raised** 2026-09-07 · **source** building `P-352` and running
+**to** code · **status** **acted** 2026-09-08 · `7bf0f13` · **raised** 2026-09-07 · **source** building `P-352` and running
 its cases by hand
 
 **derived from** a new check is made to fail on demand before it is trusted; an old one never
@@ -379,7 +406,7 @@ are excluded, which a test poisons for in both directions.
 
 ### C-63 - `move` is declared, has a command, and is fired by no scenario at all
 
-**to** spec · **status** open · **raised** 2026-09-07 · **source** `S-66`, which removed the one
+**to** spec · **status** **acted** 2026-09-08 · `8797e60` · **raised** 2026-09-07 · **source** `S-66`, which removed the one
 firing there was and left the recipe behind
 
 **derived from** the release's player recipes, of which `move` is one -
@@ -707,7 +734,8 @@ edit there.
 
 ### C-55 - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence
 
-**to** code · **status** open · **raised** 2026-09-06 · **source** breaking both of them while
+**to** code · **status** **acted** 2026-09-08 · `e719aa0`
+ · **raised** 2026-09-06 · **source** breaking both of them while
 using the workaround that exists because of them, and the specification lane asking whether a
 carrier belongs in `tools/`
 
