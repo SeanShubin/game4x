@@ -8,6 +8,28 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on representing what can move
+
+*To be more formal about movement, there are structures and vehicles, and we should decide how to
+represent them. Perhaps a movable trait, so the recipe becomes
+(thing-with-movable-trait-and-at-least-one-energy, origin) -> (same-thing-with-one-less-energy,
+destination).*
+
+**The release already represents it, as family membership**: `unit` is *ark, pioneer*, and `move`
+consumes `1 unit`. So structures and vehicles are already told apart - by which family a kind is in
+rather than by a trait a thing carries.
+
+**Two separable questions in his sentence**, and they are not equally consequential.
+
+- **Trait or family.** `movable` on a thing against `unit` as a family of kinds. **They name the same
+  two things today**, so nothing in the game changes either way; what differs is whether movability
+  can vary between two things of the same kind
+- **Whether the same thing moves.** His *same-thing-with-one-less-energy* is not what the table says.
+  `move` **consumes** a unit at `$from` and **produces** one at `$to` - so a thing with an `id` is
+  destroyed and a new one made. **That is a behavioural difference and the first is not.**
+
+Filed as `P-354`.
+
 ## Said 2026-09-07, answering `P-346`: individual recipes, not a generalized move
 
 *I don't want to generalize move too much yet, lets have individual recipes for now. Right now the
