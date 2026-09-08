@@ -21,32 +21,44 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-355 - What is `movable` derived from?
+### P-355 - Does movability need a name of its own, or does `fuel` already say it?
 
-**to** sean - **status** open - **raised** 2026-09-08 - **kind** entailed, by your own three answers
-- **asks** a decision - **into** `releases/first-release.md` -> *Traits*
+**to** sean - **status** open - **raised** 2026-09-08 - **rewritten** 2026-09-08, because the first
+phrasing was wrong - **asks** a decision - **into** `releases/first-release.md` -> *Traits* and
+*Recipes*
 
-**Your three answers settle everything but one cell.** A *Traits* row needs a **Values** cell and a
-**stored or derived** cell. You said **derived**, and **a derived trait names its derivation** -
-*metal in it* is *its binding plus the metal in its parts*; *control* is *a citizen of that player is
-there*. **`movable` needs one too**, and that is the only thing stopping this becoming words.
+**You chose *select by trait*. The question left is which trait.**
 
-**Two candidates, and they are the only two in the data.** Once `P-346` deletes *A move*, the columns
-naming exactly `{ark, pioneer}` are:
+|                   |                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------- |
+| **A new one**     | `movable`, derived from having a tank. `move` consumes `1 thing movable`        |
+| **The one there** | **none added.** `move` consumes `1 thing fuel` - *a thing with a tank can move* |
 
-| From        | It would read                           | So a thing moves because           |
-| ----------- | --------------------------------------- | ---------------------------------- |
-| **Fuel**    | derived: it has a tank                  | **it has somewhere to put energy** |
-| **Crosses** | derived: there is a boundary it crosses | **there is somewhere it can go**   |
+**`fuel` already means what `movable` would mean.** Its Values cell is *how much energy its tank
+holds*, and a thing with a tank is a thing that carries what a move spends. **A `movable` derived
+from having a tank is a second name for having a tank.**
 
-**They name the same two kinds today**, so nothing in the game changes either way. **They are
-different reasons**, and the one you pick is what a later kind will be measured against - a thing
-with a tank and nothing it can cross, or a thing that could cross but carries no energy.
+**I recommend the second, on your own test**: same strategic depth, one fewer name.
 
-**I am not choosing.** Both are already in the table, so neither is an invention, and nothing in what
-you have said prefers one.
+**And I withdraw the way I put this yesterday.** I offered *derived from `Fuel`* against *derived
+from `Crosses`* as though the two were rival sources for one fact. **They are not duplicates and I
+had that wrong.**
 
-**What lands once you answer**: one *Traits* row, and two cells of `move` changed from `unit` to
-`thing` plus `movable`. **The grammar allows it already** - *Kind is the kind or the family alone*,
-`thing` is a family, and *Traits are the constraints on it*.
+- **`fuel` says whether** a thing can move at all - it holds what a move spends
+- **`Crosses` says where** it may go, which is what `P-349` promoted: *which ones it crosses is a
+  fact about that unit*
+
+**They name the same two kinds today by coincidence of the current data**, not because they say the
+same thing. A later kind with a tank and nothing it can cross, or something that could cross but
+carries no energy, separates them - and **deriving movability from `Crosses` would answer *whether*
+with a fact about *where*.**
+
+**What lands once you answer.** If `fuel`: two cells of `move` change from `unit` to `thing` plus
+`fuel`, and **no row is added**. If `movable`: a *Traits* row as well, naming what it derives from.
+
+**One thing neither answer settles, so it is not hiding in here.** The *Traits* table's *Carried by*
+column says `fuel` is carried by *a unit* - a family. **Selecting by trait while the trait's carrier
+is named by a family leaves the family doing the work**, so that column has to become descriptive of
+the matrix rather than the source of it. It is a consequence of the choice you already made in
+`P-354`, and I will file it as its own item rather than fold it in here.
 
