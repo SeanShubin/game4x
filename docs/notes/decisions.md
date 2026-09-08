@@ -72,11 +72,21 @@ exactly `ark, pioneer` - **three columns, one set** - and `P-346` takes it to tw
 *Costs to produce* hold the same six. **Nine columns, six sets**, which is what any representation
 would have to justify itself against.
 
-**And it fits an ECS**, which sharpens question 1 rather than adding a third option. Entity,
-component and system map onto thing, capability and recipe; **`crates/game-model/src/thing.rs:247`
-already stores `traits` per thing rather than per kind**, so `movable` is the release's description
-catching up with the model. **The system half does not fit**: an ECS system is code and
-`spec/invariants.md` says a recipe is data. Same note.
+**And it fits an ECS**, which sharpens the two questions rather than adding a third. Entity,
+component and system map onto thing, capability and recipe, and
+**`crates/game-model/src/thing.rs:247` already stores `traits` per thing rather than per kind** - so
+`movable` is the release's description catching up with the model. **Thin systems that crunch
+recipes are not a contradiction**, as you said: the invariant forbids a rule being code, not the
+engine, and the test is that the number of systems stays fixed as recipes are added.
+
+**The two questions are not equally cheap, and that is the useful part.**
+
+- **Question 1 is already legal.** *Kind is the kind or the family alone*, `thing` is a family, and
+  *Traits are the constraints on it* - so `consume 1 thing movable ready` needs **a `movable` row and
+  two cells in `move`**, and no change to the grammar
+- **Question 2 has no mechanism.** The four roles are `require`, `limit`, `consume` and `produce`,
+  and **none of them relocates a thing.** *Same-thing-with-one-less-energy* needs a fifth role or a
+  stated convention. **That is the one that costs something**
 
 **Your own example would not have decided it.** Moving is `ark, pioneer`; upkeep is `citizen`.
 **Disjoint** - so that pair alone is consistent with a hierarchy.

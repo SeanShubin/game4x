@@ -8,6 +8,24 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, that thin systems crunching recipes are not a contradiction
+
+*I am hoping to have very thin systems that crunch the recipes, so this does not seem like a
+contradiction, it seems like it can fit right in as long as I make the correct
+traits-vs-alternatives decisions.*
+
+**He is right and my objection was too strong.** I said the system half of an ECS cannot fit because
+`spec/invariants.md` makes a recipe data rather than code. **The invariant forbids a rule being code,
+not the engine being code** - a handful of generic systems reading recipe rows is an interpreter, the
+recipes stay data, and a player can still write one. **The test that separates them: the number of
+systems stays fixed as the number of recipes grows.**
+
+**Which leaves the decisions he names, and they are not equally cheap.** Selecting by trait is
+already legal - `Kind` may be a family, `thing` is one, so `consume 1 thing movable` needs a *Traits*
+row and two cells. A marker component is a convention, since `ready` already encodes *yes or no* in a
+`u32`. **Keeping a thing's identity across a move has no mechanism at all**: the four roles are
+require, limit, consume and produce, and none relocates a thing.
+
 ## Asked 2026-09-07, whether one of the options fits an ECS
 
 *Do one of these options more naturally fit in with an ECS?*

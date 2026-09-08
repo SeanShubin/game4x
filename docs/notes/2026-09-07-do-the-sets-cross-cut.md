@@ -130,14 +130,45 @@ so a thing carrying an `id` is destroyed and another made. **Sean's *same-thing-
 is the ECS-natural form**, and `P-354`'s second question is exactly this - which is why it is the
 half that changes the game.
 
-**Systems are code and recipes must stay data.** `spec/invariants.md`: *every kind of thing, and
-every recipe that turns some things into others, is data rather than code.* **An ECS system is
-compiled; a recipe is interpreted**, and it must stay so, because Sean wants a player to write rules
-without programming. **So the entity and component halves fit and the system half does not** - and
-adopting the word *system* in the specification would import the half that contradicts an invariant.
+**Systems are code and recipes are data - and Sean corrected me here, rightly.** I wrote that the
+system half does not fit, because `spec/invariants.md` says *every kind of thing, and every recipe
+that turns some things into others, is data rather than code*. **He answered: thin systems that
+crunch the recipes.** That is not a contradiction and my objection was too strong.
 
-**Which makes the answer narrower than the question.** Components yes, and the release should say
-`movable` where it now says *which family a kind is in*. Systems no, and recipes stay data.
+**The invariant forbids a rule being code, not the engine.** A handful of generic systems that read
+recipe rows and apply them is engine; the recipes stay data and a player can still write one. **The
+number of systems stays fixed as the number of recipes grows**, which is the test that tells the two
+apart. The earlier backlog entry saw this coming - *a thin engine mapping data to visuals becomes an
+interpreter somewhere along that line* - and he has said he wants the interpreter.
+
+## What *the correct traits-vs-alternatives decisions* actually are
+
+Sean: *as long as I make the correct traits-vs-alternatives decisions.* Three, and **only the third
+needs machinery the release does not have.**
+
+**1. Selecting by trait rather than by family - already expressible, no change to the grammar.**
+The *Recipes* preamble says **Kind** is *the kind or the family alone* and **Traits** are *the
+constraints on it*. `thing` is a family covering every kind. So
+
+> `consume 1 thing movable ready` at `$from`
+
+is legal today: `thing` in the Kind cell, `movable` in the Traits cell. **His formulation needs a
+`movable` row in *Traits* and two cells changed in `move`** - and nothing else.
+
+**2. A marker against a valued component - a convention, not machinery.** `Thing.traits` is
+`BTreeMap<Trait, u32>`, so every trait carries a number and a component that means only *present* has
+to encode it. **`ready` already does this**, taking *yes or no* into a `u32`. So a marker is
+expressible and the decision is only whether to say so once rather than per trait.
+
+**3. Identity across a move - this one has no mechanism.** The four roles are `require`, `limit`,
+`consume` and `produce`. **None of them relocates a thing.** *Same-thing-with-one-less-energy* cannot
+be said with what the table has, so it needs either a fifth role or a stated convention that
+consuming and producing one kind in one recipe preserves the thing. **That is the decision with a
+cost**, and it is `P-354`'s second question.
+
+**So the fit is cheap and the identity is not.** Components cost a row and two cells. Keeping a
+thing's identity across a move costs a new piece of the language, which is exactly the kind of thing
+that should be decided deliberately rather than arrived at.
 
 ## The example that prompted the question does not decide it
 
