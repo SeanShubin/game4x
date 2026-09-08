@@ -19,7 +19,9 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-76** - `8797e60` S-76: founding requires the pioneer to be there, and move fires because the game needs it · still open in `docs/notes/proposals.md`
+- **S-75** - `2b048a1` S-75 and C-70: the catalog states its finding, and a column is found by its name · still open in `docs/notes/proposals.md`
 - **C-71** - `36afe27` R-8 is not ready to vet: C-71 verified, and its own condition is unmet · still open in `crates/outbox.md`
+- **C-70** - `2b048a1` S-75 and C-70: the catalog states its finding, and a column is found by its name · still open in `crates/outbox.md`
 - **C-56** - `8f292eb` Handle C-56: unit:ark breaks no rule, because it refers to no thing · still open in `crates/outbox.md`
 
 ## What is outstanding
