@@ -149,6 +149,44 @@ occurrence in the tree, its own definition. It is **the superseded approach left
 `find`'s own doc says why it was superseded: stripping first *would give offsets into a string that
 is not the file, and mapping those back is a second map to get wrong*. Delete it or make it private.
 
+### Q-73 - A fresh clone fails its own suite, and no existing working tree can see it
+
+**to** code · **status** open · **raised** 2026-09-08 · **source**
+[three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md), found by running the full workspace
+rather than by reading the range
+
+**Not in the range they asked about.** Found while establishing a baseline, and it outranks
+everything that was.
+
+**There is no `.gitattributes`, `core.autocrlf` is `true`, and the generated reports are committed
+with LF.** A checkout therefore writes them as CRLF, and `crates/game-console/tests/dump.rs:324`
+fails: *turns.md has 10 sections and no `Turn 1`* - the section title it parses ends in a carriage
+return.
+
+**Measured, not inferred.** A fresh clone at `dd93bd1` fails `every_turn_of_the_scenario_is_dumped`
+single-threaded and in isolation, so it is not a race. The clone's `reports/turns.md` is 88817 bytes
+with 2974 CRLF and no bare LF; the same blob here is 85843 bytes with 2974 LF and no CRLF. **Both
+are `git status` clean**, because the filter normalizes them to one blob. Rewriting the clone's copy
+to LF and changing nothing else takes that binary to **10 passed**.
+
+**Why nobody has hit it.** Every existing tree's copy of these files was **written by the generator**
+rather than checked out, so no instance running here can observe it. **CI cannot either**: the
+`gate` job that runs the tests is `ubuntu-latest` where `autocrlf` is off, and the only
+`windows-latest` job builds without testing. So the platform a person runs the suite on is the one
+where a fresh checkout is red, and the platform CI tests is the one where this cannot happen. Since
+`hooks/pre-push` runs the full gate, the first `git push` from a fresh Windows clone fails for a
+reason unrelated to the change.
+
+**Whether.** Worth fixing now - it is the gate, failing in the only direction nobody inside an
+existing tree can see. **The remedy is yours to choose**: a `.gitattributes` settling the endings is
+the general fix and a CRLF-tolerant parse is the local one, and this lens has no basis for picking
+between them.
+
+**One caution about this item's own evidence.** `grep -c $'\r'` reported **zero** carriage returns
+in both copies, because MSYS `grep` strips them, and on that number this lens first concluded the
+failure was real at your tip. It is not - your tip is fine in a tree like this one. Only reading the
+bytes separated the phantom from the defect.
+
 ### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` →

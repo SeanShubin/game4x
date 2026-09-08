@@ -391,7 +391,8 @@ Newest first.
 - [Three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md)
   - 2026-09-08. Requested by the code lane at Sean's asking. `S-76`'s claim holds and its
     stated reason is false, `tools/anchor`'s coverage check is a constant a fourth refusal
-    walks past, and the prose-predicate gap cannot flip `R-8`.
+    walks past, and the prose-predicate gap cannot flip `R-8`. And the one not in the range:
+    a fresh clone fails its own suite where no existing working tree can see it.
 - [Review of `ba9bd41..217dcba`](2026-09-06-review-of-the-six.md)
   - 2026-09-06. Requested by the code lane. The `Q-47` check cannot see the spelling `Q-47`
     was filed about, `phase` declares no values so the forbidden count is eighteen, and two

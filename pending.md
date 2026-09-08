@@ -25,7 +25,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
 - **S-79** - `R-7` is one clause short: `grow` has two outcomes and one example · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
@@ -35,6 +35,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **Q-71** - `S-76`'s claim holds and the reason recorded for it is false · `lenses/quality/outbox.md`
 - **Q-72** - The carrier's own coverage check is a constant, and a fourth refusal walks past it · `lenses/quality/outbox.md`
+- **Q-73** - A fresh clone fails its own suite, and no existing working tree can see it · `lenses/quality/outbox.md`
 
 ### To spec (23)
 

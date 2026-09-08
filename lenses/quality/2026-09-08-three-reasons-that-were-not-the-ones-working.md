@@ -147,6 +147,44 @@ Said because it is not obvious from the gap itself, and because it means an open
 sitting under a vetted answer. If the sixteen had collided, the gap would have been a live suspect;
 they did not, so it is not.
 
+## 5. A fresh clone of this repository fails its own suite, and no existing tree can see it
+
+**Not in the range, found by running it.** This is the one finding here that is not about the
+commits reviewed.
+
+**Where.** No `.gitattributes` exists; `core.autocrlf` is `true`; `crates/game-console/tests/dump.rs:324`
+reads `reports/turns.md`.
+
+**What.** The generated reports are committed with LF. On checkout with `autocrlf=true` - this
+repository's own setting, and the Windows default - they arrive as CRLF, and
+`every_turn_of_the_scenario_is_dumped` then fails with *turns.md has 10 sections and no `Turn 1`*,
+because the section title it parses ends in a carriage return.
+
+**Measured.** A fresh `git clone` of this repository at `dd93bd1` fails that test - single-threaded
+and in isolation, so it is not a race. `reports/turns.md` in the clone is 88817 bytes with 2974 CRLF
+and no bare LF; the same blob in the working tree here is 85843 bytes with 2974 LF and no CRLF. Both
+are `git status` clean, because the filter normalizes them to the same blob. **Rewriting the clone's
+copy to LF and changing nothing else turns the whole binary green: 10 passed.**
+
+**Why it matters, and why nobody has hit it.** Every existing working tree's copy of these files was
+**written by the generator**, with LF, rather than checked out - so no instance running here can
+observe it. And CI cannot either: the `gate` job that runs the tests is `ubuntu-latest`, where
+`autocrlf` is off, and the only `windows-latest` job builds without testing. **So the one platform a
+person actually runs the suite on is the one where a fresh checkout is red, and the one platform CI
+tests is the one where this cannot happen.** `hooks/pre-push` runs the full gate, so on a fresh
+Windows clone the first `git push` fails for a reason that has nothing to do with the change.
+
+**Whether.** Worth fixing now. It is the gate, and it fails in the only direction nobody inside an
+existing tree can see. A `.gitattributes` settling the endings is the general fix and a
+CRLF-tolerant parse is the local one; **which is the code lane's call**, not this lens's.
+
+**And the instrument nearly hid it, in the shape this lens has already recorded once.** `grep -c
+$'\r'` reported **zero** carriage returns in both copies - MSYS `grep` strips them - and on that
+number this lens first concluded the files were identical and the failure was real at their tip. It
+was a phantom in one direction and a real defect in the other, and only reading the bytes told them
+apart. This README already carries the rule from the last time, with `git show` and `grep` named:
+**the tool that filters line endings is the tool you cannot ask about line endings.**
+
 ## What was checked and found nothing
 
 Recorded so a later report does not present these as unexamined.
@@ -158,5 +196,5 @@ Recorded so a later report does not present these as unexamined.
 - **The two suites this review poisoned**, named rather than called *the suite*, because a green run
   bounds what it covers and nothing more. `game-console`'s `expected_state` - six tests - and
   `tools/anchor` - nine - were green in a clone at `dd93bd1` before any poison, and green again after
-  each was reverted. **The full workspace was not run to completion here**, so nothing in this report
-  rests on it.
+  each was reverted.
+- **The full workspace**, which found the fifth thing below and is the reason this report has one.
