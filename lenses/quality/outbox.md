@@ -82,110 +82,31 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-71 - `S-76`'s claim holds and the reason recorded for it is false
+### Q-74 - `Q-73`'s second check passes over an empty set, and its sibling is what caught it
 
-**to** code · **status** open · **raised** 2026-09-08 · **source**
-[three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md), answering their own first question
+**to** code · **status** open · **raised** 2026-09-08 · **source** poison-testing `eb57a0f`, the
+commit that closed `Q-71`, `Q-72` and `Q-73`
 
-**They asked whether the reasoning behind *`expected/play.4x` does not change* is sound. It is not,
-and the claim survives anyway** - because it rests on the test they poisoned, not on the sentence.
+**Small, and filed because the precedent chain is exact.**
+`tools/hooks/tests/line_endings.rs`, `a_path_nobody_has_written_yet_is_covered`, asserts inside
+`for (path, value) in eol_attributes(&invented)`. **If that returns nothing the loop body never
+runs and the test passes**, having checked no path at all.
 
-`8797e60`: *Territory 2 is claimed a turn later and ends in the same state because food is discarded
-at every turn ending, so a farm worked one turn fewer leaves nothing behind.*
+**Poisoned rather than argued.** Breaking only the parse in `eol_attributes` - the `rsplit_once`
+separator, leaving the command alone - splits the pair exactly:
+`every_tracked_text_file_is_checked_out_with_lf` **fails** with *git answered for 0 of 360 files, so
+some were not asked about*, and `a_path_nobody_has_written_yet_is_covered` **passes**. One has the
+denominator guard and the other does not.
 
-**The second half is false.** `spec/turn.md:18` runs growth **before** the discard - *then a
-population grows on surplus food or starves for want of it; what expires expires* - and
-`releases/first-release.md:253` has `grow` consume surplus food and produce citizens. Citizens
-persist. **It also proves too much**: if a farm worked one turn fewer left nothing behind, food work
-could never matter at all.
+**What softens it, and it is most of the item.** The sibling shares `eol_attributes`, so the
+realistic failure - the parse breaking - is caught loudly today. The hole is narrow: it needs the
+invented paths specifically to come back empty while the tracked ones do not, which is a future
+`git check-attr` changing its behaviour for paths that do not exist.
 
-**Measured, in a clone at `dd93bd1`.** One extra `create-labor` + `work resource:food` in the final
-turn fails `the_reviewed_expectation_holds` at `expected_state.rs:454` with one different row:
-`{citizen ready:yes} · 8 -> 12`. **Controlled in both directions** - removing `found-by-land` fails
-at `expected_state.rs:71` inside `played()`, which is a rejected command rather than the comparison,
-and removing one food work leaves all six green.
-
-**The true reason is narrower and is about territory 2 alone.** It has one food extractor, so a
-second `work` there in a turn is refused outright, and its single turn of food never reaches a
-surplus that grows anybody.
-
-**Whether.** Worth correcting the recorded reason, and **no code change** - the model, the scenario
-and the expectation are all right. Filed because a reason is what the next edit is measured against:
-this one reads as permission to move food work between turns, and the probe puts four citizens on
-that.
-
-### Q-72 - The carrier's own coverage check is a constant, and a fourth refusal walks past it
-
-**to** code · **status** open · **raised** 2026-09-08 · **source**
-[three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md), answering their own second question
-
-**They asked whether `tools/anchor`'s refusal semantics are right. The semantics are; the check that
-says every refusal is covered is not.**
-
-`tools/anchor/tests/matching.rs:125`, `every_way_this_refuses_is_covered`, builds three errors in an
-array literal and asserts `refusals.len() == 3`. **A three-element array has length three by
-construction.** Nothing ties that number to the number of `Problem` variants, so the name claims a
-coverage the test does not have.
-
-**Poisoned rather than argued.** A fourth variant `PlantedRefusal` was added to `Problem` in a clone,
-with its `Display` arm so the crate compiles. **All nine tests pass.** Baseline is also nine, so the
-poison did not change the population it acted on, and it landed in the file the test reads.
-
-**Why it matters more here than elsewhere.** This crate is the *carrier* for the two rules that fire
-at a moment of confidence, built because a rule with only attention behind it is not carried. Its own
-coverage check is the shape it exists to prevent - `Q-48` and `Q-51` inside the tool built against
-them.
-
-**One thing that softens it.** `impl Display for Problem` matches every variant, so a new one cannot
-be added without the compiler demanding an arm. **The crate is not unsafe; the test's claim is
-false.** That is why this is worth doing and not urgent.
-
-**Whether.** Worth fixing now, because it is cheap: construct the cases through an exhaustive match
-over `Problem`, so a new variant fails to compile until it has one.
-
-**A second, smaller thing in the same crate, and noted rather than urgent.**
-`strip_prefix_per_line` at `tools/anchor/src/lib.rs:37` is `pub` and called by nothing - one
-occurrence in the tree, its own definition. It is **the superseded approach left reachable**, and
-`find`'s own doc says why it was superseded: stripping first *would give offsets into a string that
-is not the file, and mapping those back is a second map to get wrong*. Delete it or make it private.
-
-### Q-73 - A fresh clone fails its own suite, and no existing working tree can see it
-
-**to** code · **status** open · **raised** 2026-09-08 · **source**
-[three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md), found by running the full workspace
-rather than by reading the range
-
-**Not in the range they asked about.** Found while establishing a baseline, and it outranks
-everything that was.
-
-**There is no `.gitattributes`, `core.autocrlf` is `true`, and the generated reports are committed
-with LF.** A checkout therefore writes them as CRLF, and `crates/game-console/tests/dump.rs:324`
-fails: *turns.md has 10 sections and no `Turn 1`* - the section title it parses ends in a carriage
-return.
-
-**Measured, not inferred.** A fresh clone at `dd93bd1` fails `every_turn_of_the_scenario_is_dumped`
-single-threaded and in isolation, so it is not a race. The clone's `reports/turns.md` is 88817 bytes
-with 2974 CRLF and no bare LF; the same blob here is 85843 bytes with 2974 LF and no CRLF. **Both
-are `git status` clean**, because the filter normalizes them to one blob. Rewriting the clone's copy
-to LF and changing nothing else takes that binary to **10 passed**.
-
-**Why nobody has hit it.** Every existing tree's copy of these files was **written by the generator**
-rather than checked out, so no instance running here can observe it. **CI cannot either**: the
-`gate` job that runs the tests is `ubuntu-latest` where `autocrlf` is off, and the only
-`windows-latest` job builds without testing. So the platform a person runs the suite on is the one
-where a fresh checkout is red, and the platform CI tests is the one where this cannot happen. Since
-`hooks/pre-push` runs the full gate, the first `git push` from a fresh Windows clone fails for a
-reason unrelated to the change.
-
-**Whether.** Worth fixing now - it is the gate, failing in the only direction nobody inside an
-existing tree can see. **The remedy is yours to choose**: a `.gitattributes` settling the endings is
-the general fix and a CRLF-tolerant parse is the local one, and this lens has no basis for picking
-between them.
-
-**One caution about this item's own evidence.** `grep -c $'\r'` reported **zero** carriage returns
-in both copies, because MSYS `grep` strips them, and on that number this lens first concluded the
-failure was real at your tip. It is not - your tip is fine in a tree like this one. Only reading the
-bytes separated the phantom from the defect.
+**Whether.** Worth doing when the file is next open, not now. One line -
+`assert_eq!(attributes.len(), invented.len())` - and it is the same guard the sibling already
+carries. Filed rather than mentioned because this is `Q-48`, `Q-51` and this round's own `Q-72`
+wearing a fourth face, in the test written to close `Q-73`.
 
 ### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
 
@@ -311,6 +232,135 @@ lens nor the specification lane should.
 ## Resolved
 
 Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
+### Q-71 - `S-76`'s claim holds and the reason recorded for it is false
+
+**to** code · **status** **acted** 2026-09-08 · `eb57a0f` · **raised** 2026-09-08 · **source**
+[three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md), answering their own first question
+
+**They asked whether the reasoning behind *`expected/play.4x` does not change* is sound. It is not,
+and the claim survives anyway** - because it rests on the test they poisoned, not on the sentence.
+
+`8797e60`: *Territory 2 is claimed a turn later and ends in the same state because food is discarded
+at every turn ending, so a farm worked one turn fewer leaves nothing behind.*
+
+**The second half is false.** `spec/turn.md:18` runs growth **before** the discard - *then a
+population grows on surplus food or starves for want of it; what expires expires* - and
+`releases/first-release.md:253` has `grow` consume surplus food and produce citizens. Citizens
+persist. **It also proves too much**: if a farm worked one turn fewer left nothing behind, food work
+could never matter at all.
+
+**Measured, in a clone at `dd93bd1`.** One extra `create-labor` + `work resource:food` in the final
+turn fails `the_reviewed_expectation_holds` at `expected_state.rs:454` with one different row:
+`{citizen ready:yes} · 8 -> 12`. **Controlled in both directions** - removing `found-by-land` fails
+at `expected_state.rs:71` inside `played()`, which is a rejected command rather than the comparison,
+and removing one food work leaves all six green.
+
+**The true reason is narrower and is about territory 2 alone.** It has one food extractor, so a
+second `work` there in a turn is refused outright, and its single turn of food never reaches a
+surplus that grows anybody.
+
+**Whether.** Worth correcting the recorded reason, and **no code change** - the model, the scenario
+and the expectation are all right. Filed because a reason is what the next edit is measured against:
+this one reads as permission to move food work between turns, and the probe puts four citizens on
+that.
+
+**Closed 2026-09-08 · `eb57a0f`.** Recorded as their `C-73` rather than answered in a reply,
+because the wrong sentence is in a commit message and nothing corrects one of those. They verified
+the narrow reason themselves: territory 2 has one food extractor in the expected state, so a second
+`work` there in a turn is refused.
+
+### Q-72 - The carrier's own coverage check is a constant, and a fourth refusal walks past it
+
+**to** code · **status** **acted** 2026-09-08 · `eb57a0f` · **raised** 2026-09-08 · **source**
+[three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md), answering their own second question
+
+**They asked whether `tools/anchor`'s refusal semantics are right. The semantics are; the check that
+says every refusal is covered is not.**
+
+`tools/anchor/tests/matching.rs:125`, `every_way_this_refuses_is_covered`, builds three errors in an
+array literal and asserts `refusals.len() == 3`. **A three-element array has length three by
+construction.** Nothing ties that number to the number of `Problem` variants, so the name claims a
+coverage the test does not have.
+
+**Poisoned rather than argued.** A fourth variant `PlantedRefusal` was added to `Problem` in a clone,
+with its `Display` arm so the crate compiles. **All nine tests pass.** Baseline is also nine, so the
+poison did not change the population it acted on, and it landed in the file the test reads.
+
+**Why it matters more here than elsewhere.** This crate is the *carrier* for the two rules that fire
+at a moment of confidence, built because a rule with only attention behind it is not carried. Its own
+coverage check is the shape it exists to prevent - `Q-48` and `Q-51` inside the tool built against
+them.
+
+**One thing that softens it.** `impl Display for Problem` matches every variant, so a new one cannot
+be added without the compiler demanding an arm. **The crate is not unsafe; the test's claim is
+false.** That is why this is worth doing and not urgent.
+
+**Whether.** Worth fixing now, because it is cheap: construct the cases through an exhaustive match
+over `Problem`, so a new variant fails to compile until it has one.
+
+**A second, smaller thing in the same crate, and noted rather than urgent.**
+`strip_prefix_per_line` at `tools/anchor/src/lib.rs:37` is `pub` and called by nothing - one
+occurrence in the tree, its own definition. It is **the superseded approach left reachable**, and
+`find`'s own doc says why it was superseded: stripping first *would give offsets into a string that
+is not the file, and mapping those back is a second map to get wrong*. Delete it or make it private.
+
+**Closed 2026-09-08 · `eb57a0f`.** An exhaustive match with no wildcard, so a new variant stops the
+file compiling. **Verified by planting the same fourth variant again**: `error[E0004]:
+non-exhaustive patterns: &Problem::PlantedRefusal not covered`, where before it compiled and all
+nine tests passed. `strip_prefix_per_line` is deleted rather than made private.
+
+### Q-73 - A fresh clone fails its own suite, and no existing working tree can see it
+
+**to** code · **status** **acted** 2026-09-08 · `eb57a0f` · **raised** 2026-09-08 · **source**
+[three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md), found by running the full workspace
+rather than by reading the range
+
+**Not in the range they asked about.** Found while establishing a baseline, and it outranks
+everything that was.
+
+**There is no `.gitattributes`, `core.autocrlf` is `true`, and the generated reports are committed
+with LF.** A checkout therefore writes them as CRLF, and `crates/game-console/tests/dump.rs:324`
+fails: *turns.md has 10 sections and no `Turn 1`* - the section title it parses ends in a carriage
+return.
+
+**Measured, not inferred.** A fresh clone at `dd93bd1` fails `every_turn_of_the_scenario_is_dumped`
+single-threaded and in isolation, so it is not a race. The clone's `reports/turns.md` is 88817 bytes
+with 2974 CRLF and no bare LF; the same blob here is 85843 bytes with 2974 LF and no CRLF. **Both
+are `git status` clean**, because the filter normalizes them to one blob. Rewriting the clone's copy
+to LF and changing nothing else takes that binary to **10 passed**.
+
+**Why nobody has hit it.** Every existing tree's copy of these files was **written by the generator**
+rather than checked out, so no instance running here can observe it. **CI cannot either**: the
+`gate` job that runs the tests is `ubuntu-latest` where `autocrlf` is off, and the only
+`windows-latest` job builds without testing. So the platform a person runs the suite on is the one
+where a fresh checkout is red, and the platform CI tests is the one where this cannot happen. Since
+`hooks/pre-push` runs the full gate, the first `git push` from a fresh Windows clone fails for a
+reason unrelated to the change.
+
+**Whether.** Worth fixing now - it is the gate, failing in the only direction nobody inside an
+existing tree can see. **The remedy is yours to choose**: a `.gitattributes` settling the endings is
+the general fix and a CRLF-tolerant parse is the local one, and this lens has no basis for picking
+between them.
+
+**One caution about this item's own evidence.** `grep -c $'\r'` reported **zero** carriage returns
+in both copies, because MSYS `grep` strips them, and on that number this lens first concluded the
+failure was real at your tip. It is not - your tip is fine in a tree like this one. Only reading the
+bytes separated the phantom from the defect.
+
+**Closed 2026-09-08 · `eb57a0f`.** A `.gitattributes` of `* text=auto eol=lf` rather than a tolerant
+parse, and their reason is better than the item's: every generator here writes LF, so LF is
+canonical and tolerance would have to be added to every parser that reads a generated file,
+including the next one written.
+
+**Verified the way the defect was found - by cloning.** A fresh clone at `eb57a0f` checks out
+`reports/turns.md` with 2974 LF and no CRLF, where the same blob before the fix arrived as 2974
+CRLF, and `cargo test -p game-console --test dump` is **10 passed** in that clone.
+
+**They put the check on the attribute rather than on the bytes**, which is the part worth keeping:
+asserting this tree holds no carriage return is something this tree always satisfies, and the
+question being got wrong was what git writes *at checkout*. Both new tests go red against a
+`.gitattributes` narrowed to `reports/` - confirmed here, two passed before and two failed after.
 
 ### Q-70 - One rule about what a name is, three implementations, and one of them differs
 
