@@ -8,6 +8,28 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-08, movability gets a name of its own
+
+*Movability needs a name of its own. Fuel in a tank is a coincidence of the recipe we happen to have
+on first release, there will be other ways to move.*
+
+**The name is settled and the reason rules out the derivation I recommended.** I proposed selecting
+on `fuel` because a thing with a tank carries what a move spends. **He is right that this is one
+mechanism**, and a sail, a rail or a launch would each be another.
+
+**Which collides with *derived confirmed*.** A derived trait names its derivation, and **the only
+thing in the release to derive movability from is `fuel`** - the very coincidence he has just
+rejected. So *derived* and *not from fuel* cannot both hold on today's data. Filed as the remaining
+question rather than settled by me.
+
+**And the aggregation reason for preferring derived does not bite here.** A stored trait fragments a
+fleet only when its **value varies**; every movable thing would carry the same `movable`. **So
+storing it costs nothing at scale**, which was the whole reason derived was attractive.
+
+**The general form is worth keeping.** *A name for the capability, and separate names for the
+mechanisms that provide it* - which is what lets a second mechanism arrive without every rule that
+says *movable* being rewritten.
+
 ## Decided 2026-09-08, all three of `P-354`
 
 *1: trait confirmed. 2: derived confirmed, mainly because i think we gain a lot of simplicity for the

@@ -21,44 +21,35 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-355 - Does movability need a name of its own, or does `fuel` already say it?
+### P-355 - `movable` is stored, or it is derived from the coincidence you just rejected
 
-**to** sean - **status** open - **raised** 2026-09-08 - **rewritten** 2026-09-08, because the first
-phrasing was wrong - **asks** a decision - **into** `releases/first-release.md` -> *Traits* and
-*Recipes*
+**to** sean - **status** open - **raised** 2026-09-08 - **rewritten** 2026-09-08, after you named it
+- **asks** a decision - **into** `releases/first-release.md` -> *Traits*
 
-**You chose *select by trait*. The question left is which trait.**
+**The name is settled: `movable`.** Your reason - *fuel in a tank is a coincidence of the recipe we
+happen to have on first release* - is right, and it rules out what I recommended. **It also collides
+with something you confirmed yesterday**, which is why this is back in front of you.
 
-|                   |                                                                                 |
-| ----------------- | ------------------------------------------------------------------------------- |
-| **A new one**     | `movable`, derived from having a tank. `move` consumes `1 thing movable`        |
-| **The one there** | **none added.** `move` consumes `1 thing fuel` - *a thing with a tank can move* |
+**A derived trait names its derivation**, and **the only thing in the release to derive movability
+from is `fuel`.** There is no second mechanism yet. So on today's data:
 
-**`fuel` already means what `movable` would mean.** Its Values cell is *how much energy its tank
-holds*, and a thing with a tank is a thing that carries what a move spends. **A `movable` derived
-from having a tank is a second name for having a tank.**
+|             |                                                                                 |
+| ----------- | ------------------------------------------------------------------------------- |
+| **derived** | can only read *it has a tank* - **the coincidence you just rejected**           |
+| **stored**  | a thing simply carries `movable`, and each mechanism is a recipe's own business |
 
-**I recommend the second, on your own test**: same strategic depth, one fewer name.
+**`derived` and *not from fuel* cannot both hold today.** One of the two has to give.
 
-**And I withdraw the way I put this yesterday.** I offered *derived from `Fuel`* against *derived
-from `Crosses`* as though the two were rival sources for one fact. **They are not duplicates and I
-had that wrong.**
+**I recommend stored, and the reason derived was attractive does not apply here.** Derived was better
+because **a stored trait fragments a fleet when its value varies** - and `movable` does not vary
+among things that have it, so a million movable things stay one entry either way. **Storing it costs
+nothing at scale.**
 
-- **`fuel` says whether** a thing can move at all - it holds what a move spends
-- **`Crosses` says where** it may go, which is what `P-349` promoted: *which ones it crosses is a
-  fact about that unit*
+**It is also what your own reason asks for.** A stored `movable` says *this thing can move* without
+saying how, so **a sail or a rail arrives as another recipe and nothing that says `movable` is
+rewritten.** A derivation from `fuel` would have to be edited every time a mechanism is added.
 
-**They name the same two kinds today by coincidence of the current data**, not because they say the
-same thing. A later kind with a tank and nothing it can cross, or something that could cross but
-carries no energy, separates them - and **deriving movability from `Crosses` would answer *whether*
-with a fact about *where*.**
-
-**What lands once you answer.** If `fuel`: two cells of `move` change from `unit` to `thing` plus
-`fuel`, and **no row is added**. If `movable`: a *Traits* row as well, naming what it derives from.
-
-**One thing neither answer settles, so it is not hiding in here.** The *Traits* table's *Carried by*
-column says `fuel` is carried by *a unit* - a family. **Selecting by trait while the trait's carrier
-is named by a family leaves the family doing the work**, so that column has to become descriptive of
-the matrix rather than the source of it. It is a consequence of the choice you already made in
-`P-354`, and I will file it as its own item rather than fold it in here.
+**One cell still needs you either way: what `movable` holds.** `ready` is *yes or no*; `fuel` is a
+number. **If movability is the capability and the mechanisms carry the numbers, yes-or-no is the
+answer** - but you said traits are better graded than absolute, so I am asking rather than assuming.
 
