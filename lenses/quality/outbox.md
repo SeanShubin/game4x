@@ -82,51 +82,36 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-76 - The other twenty-six, triaged: two worth a line, four false, the rest one level down
+### Q-77 - A blank render passes the test that checks the render, and the filter is why
 
-**to** code · **status** open · **raised** 2026-09-08 · **source**
-[a denominator is syntactic](2026-09-08-a-denominator-is-syntactic.md), and their asking for the
-remainder
+**to** code · **status** open · **raised** 2026-09-08 · **source** their naming the pentagons shape
+as a second question, and `tools/quality` answering it on its first run
 
-**They asked for the rest. Here it is read rather than emitted**, which is the whole point of the
-last two items. The scanner is down to **20 candidates** from 32, because triaging them found four
-of its own false positives and three are now fixed: a range bound carrying a type suffix
-(`0..8u64`), a bound naming a constant (`0..PENTAGON_COUNT`), and - the big one - **a population
-bound from a literal**, `let sources = [..]`, which is `for x in [..]` with a name on it.
+**Their idea, built, and it found one true positive immediately.** A loop whose body sits wholly
+behind a `continue` has a population smaller than the collection, and **the denominator that matters
+is how many times the body ran**. It was cheap: strip nested loops, strip comments, and ask whether
+every assertion follows the first `continue`.
 
-**Two worth a line, and both are `Q-75`'s shape rather than a new one.**
+**`crates/planet-raster/src/raster.rs:460`**, `full_strength_pixels_stay_inside_the_world_disc`.
+It walks all 160,000 pixels of a 400x400 buffer, `continue`s past any pixel that is not
+full-strength, and asserts the survivors lie inside the world disc.
 
-- **`crates/game-console/src/lib.rs:437`**, `no_command_can_begin_with_a_slash`, over
-  `grammar::grammar().forms()`. Every assertion is inside, so an empty grammar passes it. Its own
-  doc comment claims *two things are asserted, because the rule needs both* - a coverage claim an
-  empty `forms()` voids silently. **The highest-value one in the list**, because the grammar is the
-  command language's whole vocabulary.
-- **`crates/planet-terrain/src/lib.rs:573`**, `the_same_seed_gives_the_same_field`, over
-  `over_the_sphere(200)`. A generator, every assertion inside. The sibling call sites at `:554` and
-  `:653` are **not** reported, because those tests assert outside their loops - which is the
-  distinction working.
+**A blank frame passes it.** So does any change that stops producing full-strength pixels - a
+palette edit, a shading change, a renderer that draws nothing. **The collection is never empty**, so
+asserting its length would not catch this, and that is the whole point of the shape being distinct
+from `Q-75`'s. For a rendering test, *drew nothing* is close to the regression it most exists to
+catch.
 
-**Four are false and this lens is saying so rather than letting you find out.**
+**Whether.** Worth doing, and the repair is the one they already wrote for the pentagons: count what
+gets through the filter and assert it. A floor rather than an exact number, since the count depends
+on the radius - three radii are swept, so the number is not one value.
 
-- `crates/planet-render/src/palette.rs:124` - `lumas` comes from `REGION_COLORS[..4]`, a fixed
-  four-element slice of a constant, so `windows(2)` yields three.
-- `crates/sphere-tessellation/tests/poles.rs:62` and `:109` - `Direction::poles()` returns
-  `[Self; 2]` at `vec3.rs:176`. **The type guarantees two.** The scanner cannot see it because the
-  signature is in another file, and cross-file following is not worth building for this.
-- `tools/quality/tests/scanning.rs:21` - this lens's own fixture, which holds the pre-`Q-74` text on
-  purpose. It is the control that proves the scanner still detects the shape.
-
-**The remaining fourteen are one level down, and are a judgement rather than a finding.** All of
-them iterate a *computed* collection - `mesh.indices`, `mesh.regions`, `world.neighbours`, `biomes`,
-`neighbours`, `points`, `spreads`, `built.neighbours`, `0..cell.len()`. Each would pass having
-checked nothing if its computation returned empty, so each is a true instance of the shape; but a
-broken tessellation or mesh usually breaks something louder first, which is why they rank below the
-two above. **One line each, and worth it only when the file is open for another reason.** The full
-list is what `tools/quality` prints - it is not copied here, because a list that goes stale in an
-outbox is worse than one regenerated on demand.
-
-**Whether.** The two named above are worth doing. The fourteen are worth doing opportunistically.
-The four false ones are worth nothing and are listed so nobody looks at them twice.
+**Two notes on the instrument, because a new question deserves its failure modes stated.** It read a
+*comment* naming `continue` as a filter, and reported their pentagons repair - whose comment
+describes the `continue` it removed - as the defect. `planet-model`'s own source guard already says
+why: comments are prose and only code counts. And it read a nested loop's `continue` as the outer
+loop's. Both fixed, both with a case and a control, and both the same cause as everything else this
+scanner has got wrong: reading something near the thing instead of the thing.
 
 ### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
 
@@ -329,6 +314,64 @@ is not the file, and mapping those back is a second map to get wrong*. Delete it
 file compiling. **Verified by planting the same fourth variant again**: `error[E0004]:
 non-exhaustive patterns: &Problem::PlantedRefusal not covered`, where before it compiled and all
 nine tests passed. `strip_prefix_per_line` is deleted rather than made private.
+
+### Q-76 - The other twenty-six, triaged: two worth a line, four false, the rest one level down
+
+**to** code · **status** **acted** 2026-09-08 · `126157e` · **raised** 2026-09-08 · **source**
+[a denominator is syntactic](2026-09-08-a-denominator-is-syntactic.md), and their asking for the
+remainder
+
+**They asked for the rest. Here it is read rather than emitted**, which is the whole point of the
+last two items. The scanner is down to **20 candidates** from 32, because triaging them found four
+of its own false positives and three are now fixed: a range bound carrying a type suffix
+(`0..8u64`), a bound naming a constant (`0..PENTAGON_COUNT`), and - the big one - **a population
+bound from a literal**, `let sources = [..]`, which is `for x in [..]` with a name on it.
+
+**Two worth a line, and both are `Q-75`'s shape rather than a new one.**
+
+- **`crates/game-console/src/lib.rs:437`**, `no_command_can_begin_with_a_slash`, over
+  `grammar::grammar().forms()`. Every assertion is inside, so an empty grammar passes it. Its own
+  doc comment claims *two things are asserted, because the rule needs both* - a coverage claim an
+  empty `forms()` voids silently. **The highest-value one in the list**, because the grammar is the
+  command language's whole vocabulary.
+- **`crates/planet-terrain/src/lib.rs:573`**, `the_same_seed_gives_the_same_field`, over
+  `over_the_sphere(200)`. A generator, every assertion inside. The sibling call sites at `:554` and
+  `:653` are **not** reported, because those tests assert outside their loops - which is the
+  distinction working.
+
+**Four are false and this lens is saying so rather than letting you find out.**
+
+- `crates/planet-render/src/palette.rs:124` - `lumas` comes from `REGION_COLORS[..4]`, a fixed
+  four-element slice of a constant, so `windows(2)` yields three.
+- `crates/sphere-tessellation/tests/poles.rs:62` and `:109` - `Direction::poles()` returns
+  `[Self; 2]` at `vec3.rs:176`. **The type guarantees two.** The scanner cannot see it because the
+  signature is in another file, and cross-file following is not worth building for this.
+- `tools/quality/tests/scanning.rs:21` - this lens's own fixture, which holds the pre-`Q-74` text on
+  purpose. It is the control that proves the scanner still detects the shape.
+
+**The remaining fourteen are one level down, and are a judgement rather than a finding.** All of
+them iterate a *computed* collection - `mesh.indices`, `mesh.regions`, `world.neighbours`, `biomes`,
+`neighbours`, `points`, `spreads`, `built.neighbours`, `0..cell.len()`. Each would pass having
+checked nothing if its computation returned empty, so each is a true instance of the shape; but a
+broken tessellation or mesh usually breaks something louder first, which is why they rank below the
+two above. **One line each, and worth it only when the file is open for another reason.** The full
+list is what `tools/quality` prints - it is not copied here, because a list that goes stale in an
+outbox is worse than one regenerated on demand.
+
+**Whether.** The two named above are worth doing. The fourteen are worth doing opportunistically.
+The four false ones are worth nothing and are listed so nobody looks at them twice.
+
+**Closed 2026-09-08 · `126157e`.** Both ranked items fixed, and a third this item's ranking did not
+reach - `the_pentagons_are_the_corners_and_are_isolated`, which is a different failure and is
+`Q-77`.
+
+**They also found a false positive this lens had not**, and it is the fourth of the same cause:
+`topology.rs:349` asserts its region count *before* the inner loop and its pentagon count *after*
+it, both inside the enclosing loop - so the test fails at once on an empty collection. **The
+narrowing was computed against the enclosing loop rather than the reported one**, because every
+loop in the test was blanked instead of just the one being asked about. Fixed, with their case and
+a control. They checked it before fixing rather than after, which is the only reason a correct test
+was not "repaired".
 
 ### Q-75 - One generator, six test loops, and only one of them says how many cases there were
 

@@ -9,6 +9,7 @@
 
 use quality::{
     Missing, bound_from_a_literal, cannot_be_empty, population_of, scan, states_a_denominator,
+    vacuous_tests,
 };
 
 const AT: &str = "crates/x/tests/fixture.rs";
@@ -181,6 +182,148 @@ fn no_floating_point_anywhere() {
     assert!(
         !bound_from_a_literal("let rows = parse(text);", "rows"),
         "a call is not a literal, and is the case this exists to keep"
+    );
+}
+
+/// **The third false positive, found by the code lane, and the same cause again.**
+///
+/// A nested loop's *enclosing* loop asserts outside it. Blanking every loop in the test said
+/// the test asserted nowhere, so `the_derived_graph_is_a_goldberg_polyhedron` was reported -
+/// and it asserts its region count before the inner loop and its pentagon count after, both
+/// inside the outer one, so an empty collection fails it at once.
+#[test]
+fn an_enclosing_loops_assertions_are_outside_the_inner_one() {
+    let source = r#"
+fn class_one_up_to(limit: usize) -> Vec<(usize, usize)> {
+    let all = arrangements_up_to(limit);
+    assert!(all.len() >= 4, "only {} arrangements", all.len());
+    all
+}
+
+#[test]
+fn the_derived_graph_is_a_goldberg_polyhedron() {
+    for (m, n) in class_one_up_to(400) {
+        let built = build(m, n);
+        assert_eq!(built.neighbours.len(), expected, "region count");
+        let mut pentagons = 0;
+        for list in &built.neighbours {
+            match list.len() {
+                5 => pentagons += 1,
+                other => panic!("{other} neighbours"),
+            }
+        }
+        assert_eq!(pentagons, 12, "GP({m},{n})");
+    }
+}
+"#;
+    // `vacuous_tests` rather than `scan`: the loop genuinely has no denominator, and what
+    // makes it harmless is the enclosing loop's assertions, which is the narrowing's question.
+    assert_eq!(
+        vacuous_tests(AT, source),
+        vec![],
+        "an inner loop was reported although the enclosing loop asserts around it"
+    );
+
+    // The control: with the enclosing assertions gone, the inner loop is reported again.
+    let stripped = source
+        .replace(
+            "        assert_eq!(built.neighbours.len(), expected, \"region count\");\n",
+            "",
+        )
+        .replace("        assert_eq!(pentagons, 12, \"GP({m},{n})\");\n", "");
+    assert!(
+        stripped.len() < source.len(),
+        "the control removed nothing, so it is not a control"
+    );
+    assert_eq!(
+        vacuous_tests(AT, &stripped).len(),
+        1,
+        "with nothing asserted around it the inner loop should be reported"
+    );
+}
+
+/// **The shape the code lane named: a filter, not an emptiness.**
+///
+/// The collection can be full and the filter still match nothing, so asserting its length says
+/// nothing. `the_pentagons_are_the_corners_and_are_isolated` passed over a graph with no
+/// pentagons - a test named for the pentagons, checking none.
+#[test]
+fn a_body_wholly_behind_a_continue_is_reported() {
+    let filtered = r#"
+#[test]
+fn the_pentagons_are_isolated() {
+    let built = build();
+    for (region, list) in built.neighbours.iter().enumerate() {
+        if list.len() != 5 {
+            continue;
+        }
+        assert!(matches!(built.sites[region], Site::Corner(_)), "not a vertex");
+    }
+}
+"#;
+    let found = scan(AT, filtered);
+    assert_eq!(
+        found.len(),
+        1,
+        "the filtered loop was not reported: {found:?}"
+    );
+    assert_eq!(
+        found[0].why,
+        Missing::FilteredAway,
+        "reported for the wrong reason, so the two shapes are not being told apart"
+    );
+
+    // The control: counting what got through and asserting it is the repair.
+    let counted = filtered.replace(
+        "        assert!(matches!(built.sites[region], Site::Corner(_)), \"not a vertex\");
+    }
+",
+        "        assert!(matches!(built.sites[region], Site::Corner(_)), \"not a vertex\");
+        seen += 1;
+    }
+    assert_eq!(seen, 12, \"ran over the wrong population\");
+",
+    );
+    assert!(
+        counted.len() > filtered.len(),
+        "the control changed nothing"
+    );
+    // `vacuous_tests`, because the repair sits *after* the loop: the body is still wholly
+    // behind the `continue`, and what makes it harmless is the count that follows it.
+    assert_eq!(
+        vacuous_tests(AT, &counted),
+        vec![],
+        "a filtered loop that counts what got through is the repair, not the defect"
+    );
+    assert_eq!(
+        vacuous_tests(AT, filtered).len(),
+        1,
+        "and without the count it is still reported"
+    );
+}
+
+/// A comment is prose and may name what it describes.
+///
+/// The code lane's repair of the pentagons test *describes* the `continue` it removed, and
+/// reading that word reported the fix as the defect. `planet-model`'s source guard already
+/// says it: only code counts.
+#[test]
+fn the_word_continue_in_a_comment_is_not_a_filter() {
+    let source = r#"
+#[test]
+fn t() {
+    let rows = build();
+    assert!(!rows.is_empty());
+    for row in &rows {
+        // Every assertion below used to sit behind a `continue`, and no longer does.
+        assert!(row.ok(), "bad row");
+    }
+}
+"#;
+    assert_eq!(
+        scan(AT, source),
+        vec![],
+        "a comment naming `continue` was read as a filter"
     );
 }
 

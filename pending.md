@@ -33,7 +33,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
-- **Q-76** - The other twenty-six, triaged: two worth a line, four false, the rest one level down · `lenses/quality/outbox.md`
+- **Q-77** - A blank render passes the test that checks the render, and the filter is why · `lenses/quality/outbox.md`
 
 ### To spec (23)
 

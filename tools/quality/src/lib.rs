@@ -36,6 +36,14 @@ pub enum Missing {
     NeverNamed,
     /// The population has a name and no length or emptiness assertion precedes the loop.
     NotAsserted,
+    /// Every assertion in the body sits behind a `continue`, so the population that matters is
+    /// **how many times the body ran**, not how long the collection was.
+    ///
+    /// **A different failure from an empty collection, and a worse one.** The collection can be
+    /// full and the filter still match nothing - `the_pentagons_are_the_corners_and_are_isolated`
+    /// passed over a graph with no pentagons in it, a test named for the pentagons checking
+    /// none. Asserting the collection's length would not have caught it. Named by the code lane.
+    FilteredAway,
 }
 
 impl std::fmt::Display for Missing {
@@ -43,6 +51,7 @@ impl std::fmt::Display for Missing {
         match self {
             Missing::NeverNamed => write!(out, "never named"),
             Missing::NotAsserted => write!(out, "not asserted"),
+            Missing::FilteredAway => write!(out, "filtered, and the filter is uncounted"),
         }
     }
 }
@@ -58,6 +67,12 @@ pub struct Candidate {
     /// The enclosing function, where one was found.
     pub in_fn: String,
     pub why: Missing,
+    /// Where the `for` begins, as a character offset into the source it was scanned from.
+    ///
+    /// **Carried so that only *this* loop is blanked** when asking whether the test asserts
+    /// anywhere else. Blanking every loop was the bug: a nested loop's enclosing loop asserts
+    /// outside it, and removing both said the test asserted nowhere.
+    pub at: usize,
 }
 
 /// The identifier a population would be asserted about, or `None` when there is not one.
@@ -178,6 +193,62 @@ pub fn states_a_denominator(text: &str, name: &str) -> bool {
     false
 }
 
+/// Whether every assertion in this loop body sits behind a `continue`.
+///
+/// **The denominator is then how many times the body ran.** A full collection whose filter
+/// matches nothing runs the body zero times, and asserting the collection's length says nothing
+/// about that - which is why this is reported even when the population *is* asserted.
+pub fn body_is_behind_a_filter(body: &str) -> bool {
+    // **Only this loop's own `continue` counts**, and only in code. A nested loop's guard is
+    // not this one's, and a comment is prose: the code lane's repair of the pentagons test
+    // *describes* the `continue` it removed, and reading that word reported the fix as the
+    // defect. `planet-model`'s own source guard already says it - only code counts.
+    let own = code_only(&without_nested_loops(body));
+    let Some(guard) = own.find("continue") else {
+        return false;
+    };
+    if !asserts_something(&own) {
+        return false;
+    }
+    // Every assertion after the guard, and none before it.
+    !asserts_something(&own[..guard])
+}
+
+/// The text with line comments removed, because prose may name what it is about.
+fn code_only(text: &str) -> String {
+    text.lines()
+        .map(|line| line.split("//").next().unwrap_or(""))
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+/// The body with any nested `for` loop blanked out, leaving what this loop does itself.
+fn without_nested_loops(body: &str) -> String {
+    let chars: Vec<char> = body.chars().collect();
+    let mut kept = String::new();
+    let mut at = 0usize;
+    // The body's own opening brace, so the scan starts inside it.
+    while at < chars.len() {
+        let rest: String = chars[at..].iter().collect();
+        let Some(found) = rest.find("for ") else {
+            kept.push_str(&rest);
+            break;
+        };
+        let start = at + rest[..found].chars().count();
+        kept.push_str(&rest[..found]);
+        match header_of(&chars, start)
+            .and_then(|(_, brace)| block_after(&chars, brace).map(|b| brace + b.chars().count()))
+        {
+            Some(end) => at = end,
+            None => {
+                kept.push_str("for ");
+                at = start + 4;
+            }
+        }
+    }
+    kept
+}
+
 /// Whether a block of code asserts anything.
 pub fn asserts_something(text: &str) -> bool {
     text.contains("assert!")
@@ -204,10 +275,10 @@ pub fn vacuous_tests(path: &str, source: &str) -> Vec<Candidate> {
         if out.iter().any(|kept| kept.in_fn == candidate.in_fn) {
             continue;
         }
-        let Some(body) = test_body(source, &candidate.in_fn) else {
+        let Some((from, to)) = test_body_span(source, &candidate.in_fn) else {
             continue;
         };
-        if asserts_outside_its_loops(&body) {
+        if asserts_outside(source, (from, to), candidate.at) {
             continue;
         }
         out.push(candidate);
@@ -215,45 +286,39 @@ pub fn vacuous_tests(path: &str, source: &str) -> Vec<Candidate> {
     out
 }
 
-/// The body of the named function, if it is a `#[test]`.
-fn test_body(source: &str, name: &str) -> Option<String> {
+/// The span of the named function's body, if it is a `#[test]`, in character offsets.
+fn test_body_span(source: &str, name: &str) -> Option<(usize, usize)> {
     let at = source.find(&format!("fn {name}("))?;
-    let before = &source[..at];
-    if !before.trim_end().ends_with("#[test]") && !before.contains("#[test]") {
+    if !source[..at].contains("#[test]") {
         return None;
     }
     let chars: Vec<char> = source.chars().collect();
     let brace = source[at..].find('{')? + at;
-    block_after(&chars, source[..brace].chars().count())
+    let from = source[..brace].chars().count();
+    let body = block_after(&chars, from)?;
+    Some((from, from + body.chars().count()))
 }
 
-/// Whether anything outside this body's `for` loops asserts.
+/// Whether the test asserts anywhere outside the one loop at `at`.
 ///
-/// **The loops are blanked rather than skipped**, so an assertion sitting between two of them is
-/// still seen. What is left is everything the test says when no loop runs.
-fn asserts_outside_its_loops(body: &str) -> bool {
-    let chars: Vec<char> = body.chars().collect();
-    let mut kept = String::new();
-    let mut at = 0usize;
-    while at < chars.len() {
-        let rest: String = chars[at..].iter().collect();
-        let Some(found) = rest.find("for ") else {
-            kept.push_str(&rest);
-            break;
-        };
-        let start = at + rest[..found].chars().count();
-        kept.push_str(&rest[..found]);
-        match header_of(&chars, start).and_then(|(_, brace)| {
-            block_after(&chars, brace).map(|block| brace + block.chars().count())
-        }) {
-            Some(end) => at = end,
-            None => {
-                kept.push_str("for ");
-                at = start + 4;
-            }
-        }
-    }
-    asserts_something(&kept)
+/// **Only that loop is blanked.** `the_derived_graph_is_a_goldberg_polyhedron` asserts its
+/// region count before an inner loop and its pentagon count after it, both inside an enclosing
+/// loop - so blanking every loop reported a test that fails at once on an empty collection.
+/// Found by the code lane, and it is the same cause as this scanner's other three: not
+/// following where the population came from.
+fn asserts_outside(source: &str, body: (usize, usize), at: usize) -> bool {
+    let chars: Vec<char> = source.chars().collect();
+    let (from, to) = body;
+    let Some((_, brace)) = header_of(&chars, at) else {
+        return false;
+    };
+    let Some(block) = block_after(&chars, brace) else {
+        return false;
+    };
+    let end = brace + block.chars().count();
+    let before: String = chars[from..at.min(to)].iter().collect();
+    let after: String = chars[end.min(to)..to].iter().collect();
+    asserts_something(&before) || asserts_something(&after)
 }
 
 /// The candidate loops in one file's source.
@@ -288,10 +353,22 @@ pub fn scan(path: &str, source: &str) -> Vec<Candidate> {
         let Some(body) = block_after(&bytes, body_at) else {
             continue;
         };
-        if !asserts_something(&body) || cannot_be_empty(&over) {
+        if !asserts_something(&body) || (cannot_be_empty(&over) && !body_is_behind_a_filter(&body))
+        {
             continue;
         }
         let before: String = bytes[function_start(&bytes, start)..start].iter().collect();
+        if body_is_behind_a_filter(&body) {
+            out.push(Candidate {
+                file: path.to_string(),
+                line: source[..index].matches('\n').count() + 1,
+                over: over.trim().to_string(),
+                in_fn: enclosing_fn(&bytes, start),
+                why: Missing::FilteredAway,
+                at: start,
+            });
+            continue;
+        }
         let why = match population_of(&over) {
             // **The population may be asserted where it is computed rather than where it is
             // used**, which is better practice and was this scanner's worst false positive:
@@ -310,6 +387,7 @@ pub fn scan(path: &str, source: &str) -> Vec<Candidate> {
             over: over.trim().to_string(),
             in_fn: enclosing_fn(&bytes, start),
             why,
+            at: start,
         });
     }
     out
