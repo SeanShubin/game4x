@@ -8,6 +8,28 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Asked 2026-09-07, whether we know enough to choose how the data is modelled
+
+*This game is going to have many entities and many patterns. Different transformations will apply to
+different sets of entities, and the same set of entities that one transformation applies to might
+have both overlap and not overlap for a different transformation. Think like, things-that-can-move,
+things-that-require-food. Object oriented paradigms have one solution, parametric polymorphism, duck
+typing, all different solutions. Based on what we know about the game so far, do we have enough
+information to make an informed decision regarding how we should model the data?*
+
+**Answered by measuring rather than by arguing** -
+[do the sets cross-cut?](2026-09-07-do-the-sets-cross-cut.md). **Yes for eliminating, no for
+selecting.** The release already contains a crossing pair, so a hierarchy is refuted by data rather
+than by prediction; and nothing measured distinguishes the answers that survive.
+
+**His own example does not cross-cut.** Moving is `ark, pioneer`, upkeep is `citizen`, and they are
+disjoint. The counterexample comes from force against readying instead.
+
+**Recorded here because it sharpened an earlier entry rather than replacing it.** *Parametric
+polymorphism, and why waiting costs nothing* said an abstraction should be invented after its
+instances. **The instances have now been counted**: nine capability columns, six distinct sets, and
+three pairs of columns that name one set between them.
+
 ## Said 2026-09-07, on representing what can move
 
 *To be more formal about movement, there are structures and vehicles, and we should decide how to

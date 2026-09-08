@@ -50,6 +50,31 @@ that crosses is the same ark is a question about the game, not about notation.
 recipe could move a thing without consuming it would be me inventing a mechanism you have not asked
 for.
 
+**Do we know enough to choose how the data is modelled? Measured, not argued** -
+[do the sets cross-cut?](2026-09-07-do-the-sets-cross-cut.md).
+
+**Enough to eliminate, not enough to select.** Nine capability columns in *Units and structures*,
+six distinct sets, 36 pairs, **five cross-cutting**. The clean one is *Force* against *Readies*:
+they share ark, citizen and pioneer, **garrison has force and does not ready**, **extractor readies
+and has no force.** Add *is built* and three kinds each carry a different pair - citizen not built,
+garrison never readies, extractor has no force. **That is a lattice, so a hierarchy of kinds is
+refuted by the release as it stands** rather than by a future it might have. Structural typing, a
+trait a thing carries, and a parameter over kinds all express a lattice, and **nothing measured
+separates them.**
+
+**The surviving answer is already in use.** *Units and structures* **is** a capability matrix - a
+column per capability, a blank meaning *does not have it*. So the question is narrower than the
+paradigms make it sound: **whether a capability that already exists as a column should also be a
+named trait.** That is question 1 above, and this is what it is really asking.
+
+**And the duplication you want to refactor is measurable.** *Fuel*, *A move* and *Crosses* hold
+exactly `ark, pioneer` - **three columns, one set** - and `P-346` takes it to two. *Binding* and
+*Costs to produce* hold the same six. **Nine columns, six sets**, which is what any representation
+would have to justify itself against.
+
+**Your own example would not have decided it.** Moving is `ark, pioneer`; upkeep is `citizen`.
+**Disjoint** - so that pair alone is consistent with a hierarchy.
+
 **Nothing is blocked.** `P-346` stands as it is - deleting the `A move` column is about cost, and
 neither question here touches it.
 

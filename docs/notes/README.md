@@ -11,6 +11,7 @@ disagree, the spec is right and the note needs a superseded marker.
 
 | Note                                                                         | What it records                                                                                                                                     | Date       |
 | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| [Do the sets cross-cut?](2026-09-07-do-the-sets-cross-cut.md)                | Whether the release already contains sets a hierarchy cannot hold, measured over its own capability columns                                         | 2026-09-07 |
 | [What the crash showed](2026-09-07-what-the-crash-showed.md)                 | Six failures of `S-57`'s own shape from three cold instances in an hour, and why the study that would have measured them cannot be filed as an item | 2026-09-07 |
 | [Decisions](decisions.md)                                                    | Choices only Sean can make, held where he will find them; empty when nothing is open                                                                | 2026-09-06 |
 | [What the proposal limit has actually done](queue-depth.md)                  | Every open-queue depth in this repository's history, and what the limit has never done                                                              | 2026-09-06 |
