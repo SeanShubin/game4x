@@ -28,7 +28,7 @@ pub mod release;
 // Kinds
 // ---------------------------------------------------------------------------------------
 
-/// The twelve kinds the release declares.
+/// The sixteen kinds the release declares.
 ///
 /// **Ten until `P-192`.** The recipes' `Kind` column had held `territory` in four rows all
 /// along, and the Kinds table did not list it - so the release named a kind it had not
@@ -52,6 +52,7 @@ pub enum Kind {
     Orbit,
     Deposit,
     Adjacency,
+    Game,
 }
 
 impl Kind {
@@ -72,6 +73,7 @@ impl Kind {
             Kind::Orbit => "orbit",
             Kind::Deposit => "deposit",
             Kind::Adjacency => "adjacency",
+            Kind::Game => "game",
         }
     }
 
@@ -95,6 +97,7 @@ impl Kind {
             Kind::Orbit => "a place above one territory, which holds units and nothing else",
             Kind::Deposit => "what a territory's ground offers of one resource, and how richly",
             Kind::Adjacency => "two places that share an edge, held by the thing that holds them",
+            Kind::Game => "every thing is in it, and it is the one thing that is in nothing",
         }
     }
 
@@ -107,7 +110,7 @@ impl Kind {
     /// produced one wrong number - a stated capacity of 8 citizens that the model never
     /// implemented and Sean never intended.
     ///
-    /// `None` for the two kinds that are places rather than things in one.
+    /// `None` for the five kinds that are not things in a territory.
     pub fn bounded_by(self) -> Option<&'static str> {
         Some(match self {
             Kind::Citizen => "the food produced here, through upkeep",
@@ -130,13 +133,18 @@ impl Kind {
             // ground *is* rather than something built on it, so there is no capacity for it.
             // The two places are `None` for the same reason: the table is about things in a
             // territory.
-            Kind::Territory | Kind::Orbit | Kind::Deposit | Kind::Adjacency => return None,
+            // **`P-351`: `game` is in nothing**, so *what bounds a kind in a territory* cannot
+            // be about it at all - it is not in a territory, it holds them. That is a stronger
+            // reason than the four above have, and it lands in the same arm.
+            Kind::Territory | Kind::Orbit | Kind::Deposit | Kind::Adjacency | Kind::Game => {
+                return None;
+            }
         })
     }
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 15] = [
+pub const KINDS: [Kind; 16] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -152,6 +160,7 @@ pub const KINDS: [Kind; 15] = [
     Kind::Orbit,
     Kind::Deposit,
     Kind::Adjacency,
+    Kind::Game,
 ];
 
 /// In the order the bounds table lists them, which is not the Kinds order.

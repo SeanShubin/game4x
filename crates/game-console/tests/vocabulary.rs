@@ -197,19 +197,11 @@ fn declared_traits(document: &str) -> BTreeMap<String, Admits> {
 /// cannot outlive itself and cannot be closed by quietly weakening the assertion. The pattern
 /// is `closed_sets.rs`'s, and its warning holds here too: past about two, a list of
 /// exceptions is the thing being checked written twice.
-const UNDECLARED: [(&str, &str); 2] = [
-    (
-        "game",
-        "`spec/logistics.md` needs a thing that is in nothing for containment to be a tree, \
-         and the release's *Kinds* table declares no `game`. The word is the specification's \
-         own. `C-46`",
-    ),
-    (
-        "manned",
-        "`Trait::Manned` is *citizens working here this turn*, kept on a garrison by the \
+const UNDECLARED: [(&str, &str); 1] = [(
+    "manned",
+    "`Trait::Manned` is *citizens working here this turn*, kept on a garrison by the \
          model and declared by no row of the release's *Traits* table. `C-46`",
-    ),
-];
+)];
 
 /// Every word of every description in the played state is one the release declares.
 #[test]
@@ -225,8 +217,8 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // that is the direction guarded here.
     assert_eq!(
         kinds.len(),
-        15,
-        "fifteen kinds; the release lists {kinds:?}"
+        16,
+        "sixteen kinds; the release lists {kinds:?}"
     );
     assert_eq!(
         families.len(),
@@ -316,8 +308,8 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     }
     assert_eq!(
         UNDECLARED.len(),
-        2,
-        "two words are undeclared, and both are findings rather than allowances"
+        1,
+        "one word is undeclared, and it is a finding rather than an allowance"
     );
 }
 

@@ -4,7 +4,7 @@
 //! that showed two kinds grouping would go on passing after the pair that made it true was
 //! edited away - `docs/notes/checks-outlive-examples.md` is three checks that did exactly
 //! that. The grouping is instead re-derived a second way and compared against the first over
-//! all 105 pairs, and the pair count is asserted, because an equivalence over no pairs holds
+//! all 120 pairs, and the pair count is asserted, because an equivalence over no pairs holds
 //! for the wrong reason.
 
 use kinds::catalog::{signature, signatures};
@@ -29,8 +29,8 @@ fn the_groups_partition_the_kinds() {
     let kinds = every_kind(&document);
     assert_eq!(
         kinds.len(),
-        15,
-        "the release declares fifteen kinds; every count below is against that population"
+        16,
+        "the release declares sixteen kinds; every count below is against that population"
     );
 
     let mut grouped: Vec<String> = signatures(&document)
@@ -96,8 +96,8 @@ fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     }
     assert_eq!(
         pairs,
-        15 * 14 / 2,
-        "every pair of the fifteen kinds is compared, and there are 105 of them"
+        16 * 15 / 2,
+        "every pair of the sixteen kinds is compared, and there are 120 of them"
     );
 
     // **The population this check ran against, said out loud.** Every assertion above is
@@ -106,7 +106,7 @@ fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     // not a pass**, it is the check reporting what it could not test, which is `C-64`.
     assert_eq!(
         agreeing, 0,
-        "no two of the fifteen kinds share a signature, so nothing above tested two kinds \
+        "no two of the sixteen kinds share a signature, so nothing above tested two kinds \
          grouping together. If this fails, two kinds now collide - which is `C-64` answered, \
          and the catalog's paragraph about there being nothing to scan goes with it"
     );
@@ -368,7 +368,7 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
     assert_eq!(
         distinct.len(),
         real.len(),
-        "the fifteen real kinds are still in fifteen groups, so the pair grouping is the \
+        "the sixteen real kinds are still in sixteen groups, so the pair grouping is the \
          signature agreeing rather than the signature collapsing"
     );
 }

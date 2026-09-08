@@ -442,7 +442,7 @@ mod tests {
         assert_eq!(
             cannot.len(),
             12,
-            "three of the fifteen kinds may contain; {} may not",
+            "four of the sixteen kinds may contain; {} may not",
             cannot.len()
         );
 

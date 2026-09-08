@@ -300,8 +300,17 @@ pub fn trait_name(name: Trait) -> &'static str {
 /// omission.** *Where things are* gives a unit's tank as a sort of capacity, and the *Traits*
 /// table gives `fuel` as *how much energy its tank holds* - so in this release the tank is a
 /// number on the unit rather than a thing with a description, and a unit contains nothing.
+/// **`game` is the fourth, and it is an assumption rather than a reading - `C-68`.** `P-351`
+/// made `game` a kind and added no row to *Where things are*, so the rule quoted above says a
+/// kind declaring no capacity *contains nothing, and never can* - while `tree` puts twelve
+/// territories inside it and `spec/logistics.md` requires exactly that. **The release and the
+/// code cannot both be read literally**, and drawing the root as a thing that never could hold
+/// would contradict the tree it is the root of. So this proceeds, and the question is filed.
 pub fn may_contain(kind: Kind) -> bool {
-    matches!(kind, Kind::Territory | Kind::Store | Kind::Orbit)
+    matches!(
+        kind,
+        Kind::Territory | Kind::Store | Kind::Orbit | Kind::Game
+    )
 }
 
 /// Whether a kind readies.
@@ -323,16 +332,13 @@ pub fn readies(kind: Kind) -> bool {
 /// counts that used to sit beside it - `territories`, `units` - are the contents, which is
 /// where a count of things belongs.
 ///
-/// **`game` is not one of the thirteen kinds.** `spec/logistics.md` needs a thing that is in
-/// nothing for containment to be a tree, and the release's *Kinds* table does not declare
-/// one. Filed as `C-46`; the assumption proceeded under is the specification's own word for
-/// it.
+/// **`game` is a kind now, and `P-351` is what made it one.** `spec/logistics.md` needed a
+/// thing that is in nothing for containment to be a tree, and the *Kinds* table did not declare
+/// one - so this function wrote the word by hand, and `C-46` reported it as a word the code
+/// writes anyway. The root is [`Kind::Game`] rather than a string, so the one place that
+/// decides how a kind is spelled decides this one too.
 pub fn tree(game: &Game) -> Entry {
-    let mut root = Entry::leaf(Description {
-        kind: "game",
-        traits: BTreeMap::new(),
-    })
-    .with_trait(
+    let mut root = Entry::leaf(Description::of(Kind::Game)).with_trait(
         "phase",
         match game.phase {
             Phase::Design => "design",

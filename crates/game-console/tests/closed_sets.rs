@@ -139,10 +139,10 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
     // because a description is a flat map and the thing being written was not one value.
     // **This count is what catches a kind arriving**: the release declares it, the model does
     // not have it, and the gate is red for every lane until the model follows. It has done
-    // that three times.
+    // that four times, the fourth being `game` in `P-351`.
     assert_eq!(
-        compared, 21,
-        "fifteen kinds and six biomes were compared when this was written; {compared} were"
+        compared, 22,
+        "sixteen kinds and six biomes were compared when this was written; {compared} were"
     );
 }
 

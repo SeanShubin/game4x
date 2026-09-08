@@ -12,7 +12,7 @@
 //! alike. **Only kinds with no recipe pairs merged** - the family match in `recipe_rows` is an
 //! exact string compare and survives a rename - so the cost was one false group, not all of them.
 //!
-//! **Checked over every kind rather than on one.** All fifteen are renamed in turn, because a
+//! **Checked over every kind rather than on one.** All sixteen are renamed in turn, because a
 //! test that hyphenated one kind would go on passing after that kind was edited away - which is
 //! the failure `docs/notes/checks-outlive-examples.md` records three of. The count is asserted,
 //! and so is the size of what is being preserved: an equality between two empty signatures holds
@@ -68,7 +68,7 @@ fn renaming(document: &str, name: &str, to: &str) -> String {
 ///
 /// **The rename is the only difference**, so the signature must be identical: the traits it
 /// carries and every *(recipe, role)* pair naming it are facts about the kind, not about how its
-/// name is spelled. Before `Q-70` this failed on all fifteen - two of the three matchers split
+/// name is spelled. Before `Q-70` this failed on all sixteen - two of the three matchers split
 /// the new name in half and found neither piece.
 #[test]
 fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
@@ -79,8 +79,8 @@ fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
         .collect();
     assert_eq!(
         kinds.len(),
-        15,
-        "the release declares fifteen kinds; the count below is against that population"
+        16,
+        "the release declares sixteen kinds; the count below is against that population"
     );
 
     let mut checked = 0;
@@ -120,7 +120,7 @@ fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
     }
 
     assert_eq!(
-        checked, 15,
+        checked, 16,
         "a kind was skipped, so the rule is unchecked on it"
     );
     assert!(
@@ -135,9 +135,11 @@ fn every_kind_keeps_its_signature_when_its_name_carries_a_dash() {
 /// **`Q-8`'s shape: the test above says the matcher is right, and this one says what being
 /// wrong cost.** `R-8` exists to find kinds that behave alike, so the direction that matters is
 /// over-collision - a signature reporting two unrelated kinds as the same. Measured against the
-/// pre-`Q-70` code rather than argued: renaming all fifteen collapsed the grouping to fourteen,
-/// and `deposit` and `adjacency` merged on the key `kind | ` - each stripped to one trait and no
-/// pairs, which is not a resemblance but two matchers failing in the same way.
+/// pre-`Q-70` code rather than argued, on 2026-09-07 when there were fifteen kinds: renaming
+/// them all collapsed the grouping to fourteen, and `deposit` and `adjacency` merged on the key
+/// `kind | ` - each stripped to one trait and no pairs, which is not a resemblance but two
+/// matchers failing in the same way. **The number is the one it was measured at**, and `game`
+/// arrived after it; what the test asserts is derived from the table rather than from this.
 ///
 /// **The grouping is the assertion, not the traits**, because a reader of `reports/catalog.md`
 /// sees the groups. A false group is a confident wrong answer from the instrument built to give
@@ -152,8 +154,8 @@ fn hyphenating_every_kind_merges_none_of_them() {
     let before = signatures(&document).len();
     assert_eq!(
         (kinds.len(), before),
-        (15, 15),
-        "fifteen kinds in fifteen groups is the baseline this compares against"
+        (16, 16),
+        "sixteen kinds in sixteen groups is the baseline this compares against"
     );
 
     let mut hyphenated = document.clone();

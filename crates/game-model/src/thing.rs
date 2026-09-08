@@ -81,6 +81,14 @@ pub enum Kind {
     /// thing says which of the things in it are next to which. That is a fact about the
     /// container rather than about its contents.*
     Adjacency,
+    /// **`P-351`: every thing is in it, and it is the one thing that is in nothing.**
+    ///
+    /// `spec/logistics.md` needed a thing that is in nothing for containment to be a tree, and
+    /// the Kinds table did not declare one - so `containment::tree` wrote the word `game` by
+    /// hand and `C-46` reported it as a word the code writes anyway. **This is that word
+    /// answered**: the release declares it now, so the root of the tree is a kind like any
+    /// other rather than a string this file happens to spell the same way.
+    Game,
 }
 
 impl Kind {
@@ -101,11 +109,12 @@ impl Kind {
             Kind::Orbit => "orbit",
             Kind::Deposit => "deposit",
             Kind::Adjacency => "adjacency",
+            Kind::Game => "game",
         }
     }
 
     /// Every kind, so that a reader can name one that is nowhere.
-    pub const ALL: [Kind; 15] = [
+    pub const ALL: [Kind; 16] = [
         Kind::Citizen,
         Kind::Garrison,
         Kind::Extractor,
@@ -121,6 +130,7 @@ impl Kind {
         Kind::Orbit,
         Kind::Deposit,
         Kind::Adjacency,
+        Kind::Game,
     ];
 
     /// The kind a unit of this resource is.

@@ -7,7 +7,7 @@ Every kind the release declares, with everything it says about that kind gathere
 and generated rather than written; this is one such form. It is a view and not a copy - each
 section is a join across six tables that the document does not perform anywhere.
 
-15 kinds, 4 families, 19 traits, 16 recipes.
+16 kinds, 4 families, 19 traits, 16 recipes.
 
 ## Signatures
 
@@ -17,7 +17,7 @@ when the release says the same things about them. Quantities are not part of it:
 are produced in different numbers by the same recipe still behave alike. **Being named through a
 family counts**, because a family is how the release addresses several kinds at once.
 
-15 kinds fall into 15 signatures, and 0 of those hold more than one kind.
+16 kinds fall into 16 signatures, and 0 of those hold more than one kind.
 
 **Nothing is shown together, and that is the finding.** No two kinds share a signature, so
 every group below holds one kind. **The traits alone do collide** - 11 of the kinds carry
@@ -112,6 +112,12 @@ is what was wanted is a decision rather than a build: `C-64`.
 ### `s-15` - adjacency
 
 **Traits** `from`, `kind`, `to`
+
+**Named by** no recipe at all.
+
+### `s-16` - game
+
+**Traits** `kind`, `phase`
 
 **Named by** no recipe at all.
 
@@ -407,6 +413,18 @@ two places that share an edge, held by the thing that holds them.
 **Traits of it** `kind` (one of the kinds), `from` (a place), `to` (a place)
 
 **Signature** `s-15`
+
+**In recipes** none name it.
+
+## game
+
+every thing is in it, and it is the one thing that is in nothing.
+
+**In families** thing
+
+**Traits of it** `kind` (one of the kinds), `phase` (design or play)
+
+**Signature** `s-16`
 
 **In recipes** none name it.
 
