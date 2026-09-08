@@ -1,4 +1,4 @@
-//! `C-70`: a column is found by its name, so moving one changes nothing.
+//! `C-70` and `C-71`: a column is found by its name, and a family reaches its members.
 //!
 //! **`P-346` deleted a column and a reader that counted them started answering a different
 //! question.** `first_release.rs` had `cells.get(5)` for *Costs to produce*, the column moved
@@ -110,4 +110,93 @@ fn a_signature_does_not_depend_on_which_column_a_value_sits_in() {
 #[should_panic(expected = "has no `Nonesuch` column")]
 fn a_column_that_is_not_there_is_refused() {
     column_of(&release(), "## Recipes", "Nonesuch");
+}
+
+/// A trait declared of a family is carried by that family's members.
+///
+/// **`C-71`, and the two halves of a signature agreeing at last.** `recipe_rows` expanded
+/// families and `trait_rows` matched the kind's own name alone, so `fuel` - declared *of a
+/// unit* - reached neither ark nor pioneer, and `keeps` - declared *of thing* - reached none of
+/// the sixteen. `Signature`'s own doc said reaching through a family counts as naming, which
+/// was true of one half and false of the other in the same struct's documentation.
+///
+/// **Read from the release rather than listed here.** The families and their members are the
+/// document's, so this cannot drift from it by someone editing a list in a test.
+#[test]
+fn a_trait_of_a_family_reaches_its_members() {
+    let document = release();
+    let families = body_under(&document, "## Families");
+    assert_eq!(families.len(), 4, "four families is the population here");
+
+    // `fuel` is *of a unit*, and the unit family is ark and pioneer.
+    for kind in ["ark", "pioneer"] {
+        let carried = signature(&document, kind).traits;
+        assert!(
+            carried.contains(&"fuel".to_string()),
+            "`{kind}` is a unit and `fuel` is declared of a unit: {carried:?}"
+        );
+    }
+    // And nothing outside the family gains it.
+    for kind in ["citizen", "food", "territory"] {
+        let carried = signature(&document, kind).traits;
+        assert!(
+            !carried.contains(&"fuel".to_string()),
+            "`{kind}` is not a unit and should not carry `fuel`: {carried:?}"
+        );
+    }
+
+    // `keeps` is *of thing*, and the thing family is written `every kind above` - a membership
+    // rather than a list, which is the form both joins used to split on commas and miss.
+    let kinds: Vec<String> = body_under(&document, "## Kinds")
+        .iter()
+        .map(|row| plain(&row[0]))
+        .collect();
+    assert_eq!(kinds.len(), 16, "sixteen kinds is the population here");
+    for kind in &kinds {
+        assert!(
+            signature(&document, kind)
+                .traits
+                .contains(&"keeps".to_string()),
+            "`{kind}` is a thing and `keeps` is declared of thing"
+        );
+    }
+}
+
+/// A cell that describes rather than names is attributed to nothing.
+///
+/// **`S-78`'s third case, deliberately left out and pinned here so it stays out.** `upkeep` is
+/// declared *of a thing with upkeep*, which contains the word `thing` and is a predicate rather
+/// than the *thing* family. Matching a family by word attributed `upkeep`, `unpaid` and `id` to
+/// all sixteen kinds - which is the first attempt at `C-71`, caught by regenerating the report
+/// and reading it.
+///
+/// Whether these should be resolved from *Units and structures*, which has a column for
+/// `Readies` and one for `Movable`, is a design decision and not this repair.
+#[test]
+fn a_cell_that_describes_rather_than_names_reaches_nothing() {
+    let document = release();
+    let described = ["upkeep", "unpaid", "id", "ready", "movable"];
+    let kinds: Vec<String> = body_under(&document, "## Kinds")
+        .iter()
+        .map(|row| plain(&row[0]))
+        .collect();
+
+    let mut checked = 0;
+    for name in described {
+        for kind in &kinds {
+            assert!(
+                !signature(&document, kind)
+                    .traits
+                    .contains(&name.to_string()),
+                "`{name}` describes which things carry it and names no family, so no kind \
+                 should be given it - `{kind}` was"
+            );
+            checked += 1;
+        }
+    }
+    assert_eq!(
+        checked,
+        described.len() * kinds.len(),
+        "a case was skipped, so this checked less than it says"
+    );
 }

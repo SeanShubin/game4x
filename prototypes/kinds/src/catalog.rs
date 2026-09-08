@@ -291,6 +291,36 @@ enum Reach {
     AsPlace(String),
 }
 
+/// Every family this kind belongs to, and the kind's own name with them.
+///
+/// **One implementation, because it is one rule - `C-71`, and `Q-70` one level up.** The two
+/// halves of a signature disagreed about whether a family counts: `recipe_rows` built this list
+/// and `trait_rows` matched the kind's own name alone, so a trait declared *of a unit* reached
+/// neither ark nor pioneer. `Signature`'s own doc said reaching through a family counts as
+/// naming - true of one half and false of the other, in the same struct's documentation.
+///
+/// **`every kind above` is a membership and not a name.** The *thing* family is written that
+/// way, so splitting on commas finds nothing in it and `keeps`, declared *of thing*, reached
+/// none of the sixteen kinds. `containers` had handled this literal and the two joins had not.
+fn families_of(document: &str, kind: &str) -> Vec<String> {
+    let rows = body_under(document, "## Families");
+    let mut out: Vec<String> = Vec::new();
+    if !rows.is_empty() {
+        let family_at = column_of(document, "## Families", "Family");
+        let members_at = column_of(document, "## Families", "Members");
+        for row in &rows {
+            let members = row.get(members_at).map(String::as_str).unwrap_or_default();
+            let holds = members.trim() == "every kind above"
+                || members.split(',').any(|one| one.trim() == kind);
+            if holds {
+                out.push(plain(&row[family_at]));
+            }
+        }
+    }
+    out.push(kind.to_string());
+    out
+}
+
 /// Every Recipes row that names this kind, with the recipe it belongs to and how it got there.
 ///
 /// **Extracted so that `signature` and `section` cannot disagree.** They are the same join
@@ -298,15 +328,7 @@ enum Reach {
 /// matcher this fiddly would drift on the first family that changed. `R-8` is what made the
 /// second caller exist.
 fn recipe_rows(document: &str, kind: &str) -> Vec<(String, Vec<String>, Reach)> {
-    let mut families_of: Vec<String> = body_under(document, "## Families")
-        .iter()
-        .filter(|row| {
-            let members = row.get(1).map(String::as_str).unwrap_or_default();
-            members.split(',').any(|m| m.trim() == kind)
-        })
-        .map(|row| plain(&row[0]))
-        .collect();
-    families_of.push(kind.to_string());
+    let families_of = families_of(document, kind);
 
     // **By name, not by position - `C-70`.** These were `4` and `6`, which is the shape of
     // read that broke when `P-346` deleted a column from another table.
@@ -342,11 +364,49 @@ fn recipe_rows(document: &str, kind: &str) -> Vec<(String, Vec<String>, Reach)> 
     out
 }
 
+/// Whether an *Of* cell names this family, rather than merely containing its name.
+///
+/// **The distinction `C-71`'s first attempt lost.** [`mentions`] splits into words, which is
+/// right for a cell listing kinds - *citizen, garrison, ark, pioneer* - and wrong for a family:
+/// `upkeep` is declared of *a thing with upkeep*, which contains the word `thing` and is a
+/// predicate rather than the *thing* family. Matching by word attributed `upkeep`, `unpaid` and
+/// `id` to all sixteen kinds, which is `S-78`'s third case folded in by accident and badly.
+///
+/// **So a family is named by the whole cell, allowing an article.** `fuel` is *of a unit* and
+/// `keeps` is *of thing*; `upkeep` is *of a thing with upkeep* and is neither.
+fn names_the_family(of: &str, family: &str) -> bool {
+    let said = of.trim();
+    let said = said
+        .strip_prefix("a ")
+        .or_else(|| said.strip_prefix("an "))
+        .or_else(|| said.strip_prefix("the "))
+        .unwrap_or(said);
+    said.trim() == family
+}
+
 /// The Traits rows whose *Of* column covers this kind.
 fn trait_rows(document: &str, kind: &str) -> Vec<Vec<String>> {
-    body_under(document, "## Traits")
-        .iter()
-        .filter(|row| mentions(row.get(1).map(String::as_str).unwrap_or_default(), kind))
+    let rows = body_under(document, "## Traits");
+    if rows.is_empty() {
+        return Vec::new();
+    }
+    // **A trait of a family is a trait of its members - `C-71`.** `R-8` asks for *the traits it
+    // carries*, and a signature that dropped every trait declared of a family was answering a
+    // narrower question than the capability asked.
+    //
+    // **Two matchers, because the cell says two kinds of thing.** A list of kinds is matched by
+    // word; a family is matched by the whole cell. `S-78`'s third case - a cell that describes
+    // rather than names, like *whatever readies* - is deliberately left out of both.
+    let families: Vec<String> = families_of(document, kind)
+        .into_iter()
+        .filter(|name| name != kind)
+        .collect();
+    let of_at = column_of(document, "## Traits", "Of");
+    rows.iter()
+        .filter(|row| {
+            let of = row.get(of_at).map(String::as_str).unwrap_or_default();
+            mentions(of, kind) || families.iter().any(|family| names_the_family(of, family))
+        })
         .cloned()
         .collect()
 }

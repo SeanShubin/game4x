@@ -314,11 +314,40 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
         b.key(),
         "the document says the same things about both, so their keys are equal"
     );
+    // `keeps` is declared *of thing*, and *thing* is the family whose members are every kind
+    // above - so every kind carries it. It reached none of them until `C-71`, because
+    // `every kind above` is a membership rather than a comma-separated list and both joins
+    // split on commas. The synthetic trait is what this case is about; `keeps` is here
+    // because leaving it out would be asserting the bug.
     assert_eq!(
         a.traits,
-        vec![String::from("kind"), String::from("pairing")]
+        vec![
+            String::from("keeps"),
+            String::from("kind"),
+            String::from("pairing")
+        ]
     );
-    assert_eq!(a.pairs, vec![String::from("pair up produce")]);
+
+    // The world's five recipes name `thing`, so they reach every kind - and they reached none
+    // until `C-71`, for the same reason `keeps` did not. `pair up` is the one this case adds.
+    assert!(
+        a.pairs.contains(&String::from("pair up produce")),
+        "the synthetic recipe is what this case is about: {:?}",
+        a.pairs
+    );
+    assert_eq!(
+        a.pairs,
+        vec![
+            String::from("age consume"),
+            String::from("age produce"),
+            String::from("pair up produce"),
+            String::from("perish consume"),
+            String::from("refresh consume"),
+            String::from("refresh produce"),
+            String::from("spoil consume"),
+            String::from("upkeep require")
+        ]
+    );
 
     let found = signatures(&poisoned);
     let group_of = |kind: &str| -> String {
