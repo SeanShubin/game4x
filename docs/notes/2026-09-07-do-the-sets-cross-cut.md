@@ -170,6 +170,77 @@ cost**, and it is `P-354`'s second question.
 thing's identity across a move costs a new piece of the language, which is exactly the kind of thing
 that should be decided deliberately rather than arrived at.
 
+## Going over the reasoning, 2026-09-07
+
+Sean gave his leaning on each of the three and said **the reasoning matters more than the answers.**
+Two hold and are stronger than he put them. **The third is sound about the risk and points the
+opposite way.**
+
+### 1. Trait, *because recipes are easier to maintain when I don't know what recipes I will add*
+
+**The argument is right, and the reason is sharper than *easier*.** The two mechanisms differ in
+**where membership lives**. A family centralises it: `unit` is a row listing `ark, pioneer`. A trait
+distributes it: each thing says what it has.
+
+**Under unknown future recipes you also do not know what families will exist** - and every new family
+is a new row that must be filled by revisiting every kind. **A trait costs one edit where the kind is
+declared**, whatever sets later turn out to matter. That asymmetry is the whole argument and it holds.
+
+**The measurement supports it more strongly than the argument does.** The release **already has both
+mechanisms**, and they already duplicate: `unit` names `{ark, pioneer}` and so do the *Fuel*, *A
+move* and *Crosses* columns. **Three names for one set, and a fourth in the Families table.** The
+duplication he wants to refactor away is **caused by keeping both**, so choosing one collapses it.
+
+**The one real cost, and it is already paid.** A family answers *what is a unit?* at a glance; traits
+make you scan every thing. **`R-8` already computes exactly that** - a signature per kind derived
+from the tables - so the answer is generated rather than read off a row.
+
+### 2. A number, *because it is not durable-or-not, it is how-durable*
+
+**His example is already in the release.** `keeps` is *the number of turns it will last* - how
+durable, carrying a number, today.
+
+**And markers are the minority, counted rather than assumed.** Of the nineteen traits: **5 are plain
+numbers, 3 are yes-or-no, and 11 are neither.** So a trait system built around presence would be
+built around the smallest of the three groups.
+
+**But the question I put to him was too narrow, and that is my error rather than his.** I offered
+*number or marker*. The release has **three** value shapes: a number, yes-or-no, and **one of a
+closed set** - `kind`, `resource`, `biome`, `control`, `phase`, and the references `from` and `to`.
+**The model flattens all of them into `u32`.** So the live question is not whether a trait carries a
+number; it is **what a trait's value may be**, and *a number* is already not the whole answer.
+
+**One consequence of answering 1 and 2 together.** If movability is a trait and traits carry values,
+then **`movable` wants a value**, and the natural one is his own reasoning applied to movement: not
+*can it move* but *how far*, or *how many moves a turn*. That is a question his two leanings raise
+rather than one either answers.
+
+### 3. Torn - *simplicity of destroy-then-create with same identity*, against *chaos at a million objects*
+
+**The worry is well founded and the conclusion inverts.** Three things, and the first is the one that
+decides it.
+
+**The model already aggregates, so identity is what creates the million.** `spec/console.md`: *each
+distinct description is its own entry*, and **a thing carrying an `id` has a description no other
+thing shares, so its quantity is always one.** So `{citizen ready:yes} -> 8` is **one entry, not
+eight things**. Individuation is caused by carrying an id. **Preserving identity across a move is
+therefore what forces a million movers to exist as a million entries** - and consume-and-produce over
+aggregates lets eight citizens move as one entry with a count. **The unification he wants is the
+thing that creates the scale problem he fears.**
+
+**And in an ECS, mutation is the cheap path.** Changing a location component is a write; destroying
+and creating is an allocation and an archetype move. **So at a million movers he wants mutation** -
+which means a thin system has to *know* it may mutate. **A fifth role is what tells it.** Without
+one, the system either takes the expensive path always, or **infers relocation from the shape of a
+consume-and-produce pair** - and inferring intent from shape is the failure this repository records
+most often. So the fifth role is not the machinery that risks chaos; **it is what avoids it.**
+
+**Which makes decision 3 narrower than it looks.** Identity only means something for a thing that
+carries an `id`, and **no unit carries one today** - no ark or pioneer appears in the played state at
+all, and the only ids there belong to orbits. **So the real question is: does a unit ever need to be
+named individually?** If no, consume-and-produce is right and nothing is needed. If yes, that is
+where the fifth role earns itself, and only for the things that carry ids.
+
 ## The example that prompted the question does not decide it
 
 Sean's own pair - *things that can move* against *things that require food* - **does not cross-cut

@@ -8,6 +8,26 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, his leanings on the three modelling decisions
+
+*1: I am leaning towards trait only because I think that will make it easier for the recipes to
+maintain when I don't know what recipes I am going to add yet. 2: I am leaning towards a number
+because the systems I am modeling arent as natural as absolutes, it is not durable-or-not, but
+how-durable, for example. 3: I am torn on this one, I want the simplicity and unification of a move
+being a destroy then create with same identity, but if move is a substantively different kind of
+thing I am worried about causing chaos to the ECS system as my world grows to a million objects
+moving per turn.*
+
+**He asked for the reasoning to be gone over rather than the answers agreed with.**
+[Done in the note.](2026-09-07-do-the-sets-cross-cut.md) One and two hold. **Three inverts**: the
+model aggregates, and only a thing carrying an `id` is individuated - so preserving identity is what
+would create a million entries rather than what protects against them.
+
+**Two things the review changed that are mine rather than his.** I posed decision 2 as *number or
+marker* and the release has **three** value shapes, the third being one-of-a-closed-set, all
+flattened to `u32` in the model. And decision 3 is narrower than stated: **no unit carries an `id`
+today**, so it reduces to whether a unit ever needs naming individually.
+
 ## Said 2026-09-07, that thin systems crunching recipes are not a contradiction
 
 *I am hoping to have very thin systems that crunch the recipes, so this does not seem like a

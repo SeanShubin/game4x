@@ -72,6 +72,27 @@ unit persists across a turn and is named.**
 
 ---
 
+**Your leanings, and what going over them changed** -
+[the reasoning](2026-09-07-do-the-sets-cross-cut.md).
+
+- **1, trait.** Holds, and the measurement is stronger than the argument: the release **already has
+  both mechanisms and they already duplicate** - `unit`, *Fuel*, *A move* and *Crosses* all name
+  `{ark, pioneer}`. **Keeping both is what causes the duplication you want gone.** Its one cost,
+  scanning to find what is movable, is already paid by `R-8`
+- **2, a number.** Holds - `keeps` is *the number of turns it will last*, your how-durable, already
+  in the table - and **5 traits are numbers, 3 are yes-or-no, 11 are neither.** But **I posed it too
+  narrowly**: the third shape is *one of a closed set*, and the model flattens all three to `u32`.
+  **The question is what a trait's value may be**, not whether it is a number
+- **3, torn - and it inverts.** `spec/console.md` says a thing carrying an `id` has a description no
+  other thing shares, **so its quantity is always one**, while `{citizen ready:yes} -> 8` is one
+  entry. **Individuation is caused by identity**, so preserving it across a move is what would make a
+  million movers a million entries. And in an ECS mutation is cheap where destroy-and-create is not -
+  so a fifth role is **what lets a thin system know it may mutate**, rather than infer it from the
+  shape of a consume-and-produce pair. **It avoids the chaos rather than causing it**
+
+**And 3 is narrower than it looks: no unit carries an `id` today.** It reduces to **does a unit ever
+need to be named individually** - if not, consume-and-produce is right and nothing is needed.
+
 **The prices are not alike.** 1 and 2 are a row, some cells, and a convention. **3 adds a piece to
 the recipe language**, which is the kind of thing your own earlier note said should be decided
 deliberately rather than arrived at one step at a time.
