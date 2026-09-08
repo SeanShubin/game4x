@@ -265,7 +265,6 @@ pub fn trait_name(name: Trait) -> &'static str {
         Trait::Resource => "resource",
         Trait::Force => "force",
         Trait::Multiplier => "multiplier",
-        Trait::Manned => "manned",
         Trait::Ready => "ready",
         Trait::Density => "density",
         // **Dashed, because a name is one word.** `spec/console.md` joins the words of a

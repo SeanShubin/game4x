@@ -142,10 +142,7 @@ fn restricted(state: &Entry, places: &[String]) -> String {
 fn founded(offers: &[(Resource, u32, u32)], holds: &[(game_model::thing::Kind, u32)]) -> Game {
     let mut game = ground(offers);
     let place = &mut game.territories[0];
-    place.set_garrison(Some(game_model::territory::Garrison {
-        force: 0,
-        manned: 0,
-    }));
+    place.set_garrison(Some(game_model::territory::Garrison { force: 0 }));
     // **A citizen, because control is derived from one being there** -
     // `releases/first-release.md` -> *Traits*, and `S-19` made it derived so nothing could
     // leave it wrong. A garrison alone is ground nobody holds, and every player recipe
@@ -167,10 +164,7 @@ fn beside(second_is_held: bool) -> Game {
     let mut game = founded(&[], &[]);
     let mut other = game_model::Territory::empty(TerritoryId(2), game_model::Biome::Grassland);
     if second_is_held {
-        other.set_garrison(Some(game_model::territory::Garrison {
-            force: 0,
-            manned: 0,
-        }));
+        other.set_garrison(Some(game_model::territory::Garrison { force: 0 }));
         other.put(game_model::thing::Kind::Citizen, 1);
     }
     game.territories.push(other);
@@ -352,10 +346,7 @@ pub fn examples() -> Vec<Example> {
                 // A second territory with a pioneer and nothing to feed it.
                 let mut hungry =
                     game_model::Territory::empty(TerritoryId(2), game_model::Biome::Grassland);
-                hungry.set_garrison(Some(game_model::territory::Garrison {
-                    force: 0,
-                    manned: 0,
-                }));
+                hungry.set_garrison(Some(game_model::territory::Garrison { force: 0 }));
                 hungry.put(Kind::Citizen, 1);
                 game.territories.push(hungry);
                 game.adjacency = vec![vec![TerritoryId(2)], vec![TerritoryId(1)]];

@@ -7,10 +7,12 @@
 //! - **The normalized view has no nested cells.** `state.md` is one table per relation, and
 //!   the whole reason for a relation is that a value can be compared down a column. A cell
 //!   holding `force 0 manned 0` cannot be compared with anything; it is two facts wearing one
-//!   heading.
+//!   heading. **That example is historical**: `S-72` deleted `manned`, so the cell reads
+//!   `force 0` now and the rule it illustrates is unchanged.
 //! - **The entity view may.** `entities.md` is one row per thing and one column per
 //!   component, so a component that is itself several facts has nowhere else to go. Its
-//!   garrison cell reads `force 0 manned 0` today.
+//!   garrison cell reads `force 0` today, which is still a name and a value in one cell
+//!   rather than a value a column could be compared down.
 //!
 //! # Why this needed a check rather than a look
 //!
@@ -178,7 +180,9 @@ fn a_node_is_told_from_a_name_and_from_a_number() {
     ] {
         assert!(!is_a_node(one), "`{one}` is one word and is not a node");
     }
-    for several in ["force 0 manned 0", "the game", "1 food per turn"] {
+    // `force 0` is the garrison cell as the report actually writes it - the test below
+    // asserts that same cell is a node, so this example and that one cannot drift apart.
+    for several in ["force 0", "the game", "1 food per turn"] {
         assert!(is_a_node(several), "`{several}` is more than one fact");
     }
     // And the reader finds cells at all in a document that has them, which is the failure

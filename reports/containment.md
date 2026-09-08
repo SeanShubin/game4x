@@ -59,7 +59,7 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {extractor ready:yes resource:energy} x 3
     - {extractor ready:yes resource:food} x 3
     - {extractor ready:yes resource:metal} x 3
-    - {garrison force:0 manned:0}
+    - {garrison force:0}
     - {metal} x 10
     - {store resource:energy} x 2
     - {store resource:food} x 2
@@ -76,7 +76,7 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {deposit density:6 resource:food total-capacity:2}
     - {extractor ready:yes resource:food}
     - {extractor ready:yes resource:metal}
-    - {garrison force:0 manned:0}
+    - {garrison force:0}
     - {store resource:food}
     - {store resource:metal}
   - {territory biome:grassland id:3 nature:1} - garrison&nbsp;0/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;0/6 store&nbsp;resource:food&nbsp;0/6 extractor&nbsp;resource:metal&nbsp;0/2 store&nbsp;resource:metal&nbsp;0/2 extractor&nbsp;resource:energy&nbsp;0/2 store&nbsp;resource:energy&nbsp;0/2

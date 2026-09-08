@@ -765,9 +765,12 @@ impl Game {
                     });
                 }
                 self.spend_labor(territory, count)?;
-                if let Some(garrison) = &mut self.territory_mut(territory)?.garrison() {
-                    garrison.manned += count;
-                }
+                // **Working a garrison spends labor and records nothing, which is what it
+                // already did.** `manned` was deleted by `S-72`, and the line that used to
+                // increment it here was writing to a temporary: `garrison()` returns a copy,
+                // so `garrison.manned += count` vanished and every garrison read `manned 0`.
+                // The field's own doc claimed production never made that mistake; this was
+                // production making it.
                 Ok(())
             }
             StructureKind::Extractor => {

@@ -68,9 +68,6 @@ pub struct Garrison {
     /// stays because a garrison is a thing with traits like any other and the release still
     /// gives it a Force cell, which happens to hold zero.
     pub force: u32,
-    /// What a citizen working here produces in force.
-    /// Citizens working here this turn.
-    pub manned: u32,
 }
 
 impl Garrison {
@@ -83,10 +80,7 @@ impl Garrison {
     /// founding still turns a unit into this - what changed is what the result presents, not
     /// where it came from.
     pub fn from_founding_unit(_unit_force: u32) -> Self {
-        Self {
-            force: 0,
-            manned: 0,
-        }
+        Self { force: 0 }
     }
 }
 
@@ -213,33 +207,14 @@ impl Territory {
             .find(|thing| thing.kind == Kind::Garrison)
             .map(|thing| Garrison {
                 force: thing.trait_of(Trait::Force).unwrap_or(0),
-                manned: thing.trait_of(Trait::Manned).unwrap_or(0),
             })
     }
 
     pub fn set_garrison(&mut self, garrison: Option<Garrison>) {
         self.held.retain(|thing| thing.kind != Kind::Garrison);
         if let Some(garrison) = garrison {
-            self.held.push(
-                Thing::of(Kind::Garrison)
-                    .with(Trait::Force, garrison.force)
-                    .with(Trait::Manned, garrison.manned),
-            );
-        }
-    }
-
-    /// Set how many citizens are manning the garrison this turn.
-    ///
-    /// **`garrison()` returns a copy, so mutating what it hands back changes nothing.**
-    /// That is the cost of the accessor and it needs an operation rather than a field: the
-    /// test for this wrote `garrison().as_mut().unwrap().manned = 3` and silently mutated a
-    /// temporary. Production never did - it went through `set_garrison` - but nothing would
-    /// have said so if it had.
-    pub fn man_garrison(&mut self, citizens: u32) {
-        for thing in &mut self.held {
-            if thing.kind == Kind::Garrison {
-                thing.set(Trait::Manned, citizens);
-            }
+            self.held
+                .push(Thing::of(Kind::Garrison).with(Trait::Force, garrison.force));
         }
     }
 
@@ -595,11 +570,10 @@ impl Territory {
             thing.refresh();
         }
         // **The two loops that used to follow this were mutating copies.** `extractors()`
-        // and `garrison()` hand back owned values now, so `extractor.exhausted = false` and
-        // `garrison.manned = 0` changed a temporary and vanished. The refresh above already
-        // readies every extractor, because it names no kind; the manning needed an
-        // operation rather than a field.
-        self.man_garrison(0);
+        // and `garrison()` hand back owned values now, so `extractor.exhausted = false`
+        // changed a temporary and vanished. The refresh above already readies every
+        // extractor, because it names no kind. **The manning that used to be reset here is
+        // gone with `manned` itself** - `S-72`, Sean's decision on `C-46`.
     }
 
     /// What nature does when it takes a territory back.
@@ -743,19 +717,12 @@ mod tests {
         );
 
         // **`P-276` and `P-277`.** A garrison has no force of its own and does one thing:
-        // it lets the citizens sum instead of presenting only the highest. It does that by
-        // existing, so manning it changes nothing.
-        territory.set_garrison(Some(Garrison {
-            force: 0,
-            manned: 0,
-        }));
+        // it lets the citizens sum instead of presenting only the highest. **It does that by
+        // existing**, which is the whole assertion now that `manned` is gone - `S-72`. The
+        // manning half set a field to 3 and checked the force had not moved; it could not
+        // have moved, because nothing ever read that field.
+        territory.set_garrison(Some(Garrison { force: 0 }));
         assert_eq!(territory.held_force(), 4, "four citizens, summed");
-        territory.man_garrison(3);
-        assert_eq!(
-            territory.held_force(),
-            4,
-            "still four - nothing has to work it"
-        );
     }
 
     /// `spec/control.md` and the release: **a garrison has no force of its own.**
@@ -779,15 +746,11 @@ mod tests {
         // index out of bounds rather than with a wrong answer.
         territory.add_extractor(Resource::Food);
         territory.exhaust_extractor(0);
-        territory.set_garrison(Some(Garrison {
-            force: 1,
-            manned: 2,
-        }));
+        territory.set_garrison(Some(Garrison { force: 1 }));
 
         territory.make_ready();
         assert_eq!(territory.labor_available(), 2);
         assert!(!territory.extractors()[0].exhausted);
-        assert_eq!(territory.garrison().unwrap().manned, 0);
     }
 
     #[test]

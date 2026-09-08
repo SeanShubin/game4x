@@ -168,6 +168,13 @@ impl Kind {
 /// read* is not something a compiler or a test can tell from *dead*, and an unread
 /// representation cannot diverge detectably.
 ///
+/// **`Manned` came back and has gone again, by Sean's decision on `C-46` - `S-72`.** It was
+/// declared by no row of the release's *Traits* table, so the choice was a row or a deletion
+/// and he chose the deletion. **It had also never worked**: `Territory::garrison()` returns a
+/// copy, so `work`'s `garrison.manned += count` incremented a temporary and every garrison
+/// read `manned 0`. The rule this file states caught the field twice and the arithmetic not
+/// once, which is the limit of the rule rather than a failure of it.
+///
 /// **They are back in the commit that makes a rule read them**, which is what deleting them
 /// was for: a garrison and an extractor are things now, and these are what distinguish
 /// them. Nothing here is written down against a future.
@@ -200,8 +207,6 @@ pub enum Trait {
     Force,
     /// What a citizen working here produces in force.
     Multiplier,
-    /// Citizens working here this turn.
-    Manned,
     /// Which place an adjacency runs from. `P-334`.
     From,
     /// Which place an adjacency runs to.

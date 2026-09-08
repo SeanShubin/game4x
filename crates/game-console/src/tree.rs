@@ -247,10 +247,7 @@ mod tests {
 
         let first = &mut game.territories[0];
         first.put(Kind::Citizen, 3);
-        first.set_garrison(Some(game_model::territory::Garrison {
-            force: 0,
-            manned: 0,
-        }));
+        first.set_garrison(Some(game_model::territory::Garrison { force: 0 }));
         first.put(Kind::Yard, 1);
         // Both food extractors, which puts one capacity at its bound.
         first.add_extractor(Resource::Food);

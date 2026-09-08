@@ -145,10 +145,7 @@ fn territory(game: &Game, id: TerritoryId) -> String {
         ));
     }
     match place.garrison() {
-        Some(garrison) => lines.push(format!(
-            "  garrison force {}, manned by {}",
-            garrison.force, garrison.manned
-        )),
+        Some(garrison) => lines.push(format!("  garrison force {}", garrison.force)),
         None => lines.push("  no garrison".to_string()),
     }
     if place.yards() > 0 {
@@ -277,7 +274,7 @@ pub fn entities(game: &Game) -> Vec<Entry> {
         components.push((
             "garrison".to_string(),
             match place.garrison() {
-                Some(garrison) => format!("force {} manned {}", garrison.force, garrison.manned),
+                Some(garrison) => format!("force {}", garrison.force),
                 None => "none".to_string(),
             },
         ));

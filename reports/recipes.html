@@ -49,7 +49,7 @@
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
     {extractor ready:yes resource:food} -&gt; 1
     {extractor ready:yes resource:metal} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
     {store resource:metal} -&gt; 1
 </pre>
@@ -69,11 +69,11 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
 </pre>
 <p><code>{move unit:pioneer territory:2}</code></p>
 <p>After:</p>
@@ -81,10 +81,10 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:1 id:1 ready:no} -&gt; 1
 </pre>
 <h2 id="found-by-land">found by land</h2>
@@ -106,7 +106,7 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
@@ -118,14 +118,14 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 2
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
     {extractor ready:yes resource:food} -&gt; 1
     {extractor ready:yes resource:metal} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
     {store resource:metal} -&gt; 1
 </pre>
@@ -143,7 +143,7 @@
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {labor} -&gt; 1
     {metal} -&gt; 1
 </pre>
@@ -155,7 +155,7 @@
     {citizen ready:yes} -&gt; 1
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
     {extractor ready:yes resource:metal} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
 </pre>
 <h2 id="build-store">build store</h2>
 <p>Run by the <strong>player</strong>.</p>
@@ -172,7 +172,7 @@
     {citizen ready:yes} -&gt; 1
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
     {extractor ready:yes resource:metal} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {labor} -&gt; 1
     {metal} -&gt; 1
 </pre>
@@ -184,7 +184,7 @@
     {citizen ready:yes} -&gt; 1
     {deposit density:4 resource:metal total-capacity:3} -&gt; 1
     {extractor ready:yes resource:metal} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:metal} -&gt; 1
 </pre>
 <h2 id="build-yard">build yard</h2>
@@ -200,7 +200,7 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {labor} -&gt; 1
     {metal} -&gt; 15
 </pre>
@@ -210,7 +210,7 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {yard} -&gt; 1
 </pre>
 <h2 id="produce-pioneer">produce pioneer</h2>
@@ -228,7 +228,7 @@
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 2
     {energy} -&gt; 6
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {metal} -&gt; 3
 </pre>
 <p><code>{produce-pioneer territory:1}</code></p>
@@ -236,7 +236,7 @@
 <pre>
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <h2 id="launch-ark">launch ark</h2>
@@ -254,7 +254,7 @@
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 2
     {energy} -&gt; 12
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {metal} -&gt; 3
     {yard} -&gt; 1
 </pre>
@@ -263,7 +263,7 @@
 <pre>
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {yard} -&gt; 1
 </pre>
 <h2 id="create-labor">create labor</h2>
@@ -279,7 +279,7 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
 </pre>
 <p><code>{create-labor territory:1}</code></p>
 <p>After:</p>
@@ -287,7 +287,7 @@
 {game phase:play}
   {territory biome:grassland id:1 nature:0} -&gt; 1
     {citizen ready:no} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {labor} -&gt; 1
 </pre>
 <h2 id="work">work</h2>
@@ -308,7 +308,7 @@
     {citizen ready:yes} -&gt; 1
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:yes resource:food} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {labor} -&gt; 1
     {store resource:food} -&gt; 1
 </pre>
@@ -321,7 +321,7 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:no resource:food} -&gt; 1
     {food} -&gt; 4
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
 </pre>
 <h2 id="upkeep">upkeep</h2>
@@ -341,11 +341,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:no resource:food} -&gt; 1
     {food} -&gt; 4
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -356,10 +356,10 @@
     {citizen ready:yes} -&gt; 4
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:yes resource:food} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <h2 id="grow">grow</h2>
@@ -379,11 +379,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:no resource:food} -&gt; 1
     {food} -&gt; 4
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -394,10 +394,10 @@
     {citizen ready:yes} -&gt; 4
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:yes resource:food} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <h2 id="perish">perish</h2>
@@ -417,11 +417,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:no resource:food} -&gt; 1
     {food} -&gt; 4
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -432,10 +432,10 @@
     {citizen ready:yes} -&gt; 4
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:yes resource:food} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <h2 id="age">age</h2>
@@ -455,11 +455,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:no resource:food} -&gt; 1
     {food} -&gt; 4
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -470,10 +470,10 @@
     {citizen ready:yes} -&gt; 4
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:yes resource:food} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <h2 id="spoil">spoil</h2>
@@ -492,11 +492,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:no resource:food} -&gt; 1
     {food} -&gt; 4
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -507,10 +507,10 @@
     {citizen ready:yes} -&gt; 4
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:yes resource:food} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <h2 id="refresh">refresh</h2>
@@ -530,11 +530,11 @@
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:no resource:food} -&gt; 1
     {food} -&gt; 4
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
     {citizen ready:yes} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 <p><code>{end-turn}</code></p>
@@ -545,10 +545,10 @@
     {citizen ready:yes} -&gt; 4
     {deposit density:4 resource:food total-capacity:3} -&gt; 1
     {extractor ready:yes resource:food} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {store resource:food} -&gt; 1
   {territory biome:grassland id:2 nature:0} -&gt; 1
-    {garrison force:0 manned:0} -&gt; 1
+    {garrison force:0} -&gt; 1
     {pioneer fuel:2 id:1 ready:yes} -&gt; 1
 </pre>
 </body>

@@ -197,11 +197,12 @@ fn declared_traits(document: &str) -> BTreeMap<String, Admits> {
 /// cannot outlive itself and cannot be closed by quietly weakening the assertion. The pattern
 /// is `closed_sets.rs`'s, and its warning holds here too: past about two, a list of
 /// exceptions is the thing being checked written twice.
-const UNDECLARED: [(&str, &str); 1] = [(
-    "manned",
-    "`Trait::Manned` is *citizens working here this turn*, kept on a garrison by the \
-         model and declared by no row of the release's *Traits* table. `C-46`",
-)];
+/// **It is empty, and that is the finding rather than a check with nothing to do.** Both
+/// entries were `C-46`'s two words: `game`, which `P-351` declared, and `manned`, which Sean
+/// deleted in `S-72`. **An empty list is a claim** - that every word in the data file is one
+/// the release declares - and the count below states it, so emptying this stays a deliberate
+/// act rather than somewhere a weakened test could arrive.
+const UNDECLARED: [(&str, &str); 0] = [];
 
 /// Every word of every description in the played state is one the release declares.
 #[test]
@@ -308,8 +309,8 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     }
     assert_eq!(
         UNDECLARED.len(),
-        1,
-        "one word is undeclared, and it is a finding rather than an allowance"
+        0,
+        "every word in the data file is declared; an entry here is a finding rather than an allowance"
     );
 }
 

@@ -65,7 +65,7 @@
     {extractor ready:yes resource:energy} -> 3
     {extractor ready:yes resource:food} -> 3
     {extractor ready:yes resource:metal} -> 3
-    {garrison force:0 manned:0} -> 1
+    {garrison force:0} -> 1
     {metal} -> 10
     {store resource:energy} -> 2
     {store resource:food} -> 2
@@ -82,7 +82,7 @@
     {deposit density:6 resource:food total-capacity:2} -> 1
     {extractor ready:yes resource:food} -> 1
     {extractor ready:yes resource:metal} -> 1
-    {garrison force:0 manned:0} -> 1
+    {garrison force:0} -> 1
     {store resource:food} -> 1
     {store resource:metal} -> 1
   {territory biome:grassland id:3 nature:1} -> 1

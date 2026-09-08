@@ -27,7 +27,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 - {territory biome:grassland id:1 nature:1} {citizen ready:yes} -> 4
 - {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} -> 1
 - {territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} -> 1
-- {territory biome:grassland id:1 nature:1} {garrison force:0 manned:0} -> 1
+- {territory biome:grassland id:1 nature:1} {garrison force:0} -> 1
 - {territory biome:grassland id:1 nature:1} {metal} -> 4
 - {territory biome:grassland id:1 nature:1} {store resource:food} -> 1
 - {territory biome:grassland id:1 nature:1} {store resource:metal} -> 1
@@ -2103,7 +2103,7 @@ The turn numbers are the scenario's own boundaries, so they line up with its com
 - {territory biome:grassland id:2 nature:1} {citizen ready:yes} -> 4
 - {territory biome:grassland id:2 nature:1} {extractor ready:yes resource:food} -> 1
 - {territory biome:grassland id:2 nature:1} {extractor ready:yes resource:metal} -> 1
-- {territory biome:grassland id:2 nature:1} {garrison force:0 manned:0} -> 1
+- {territory biome:grassland id:2 nature:1} {garrison force:0} -> 1
 - {territory biome:grassland id:2 nature:1} {store resource:food} -> 1
 - {territory biome:grassland id:2 nature:1} {store resource:metal} -> 1
 
