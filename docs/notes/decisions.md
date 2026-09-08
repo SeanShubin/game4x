@@ -72,6 +72,12 @@ exactly `ark, pioneer` - **three columns, one set** - and `P-346` takes it to tw
 *Costs to produce* hold the same six. **Nine columns, six sets**, which is what any representation
 would have to justify itself against.
 
+**And it fits an ECS**, which sharpens question 1 rather than adding a third option. Entity,
+component and system map onto thing, capability and recipe; **`crates/game-model/src/thing.rs:247`
+already stores `traits` per thing rather than per kind**, so `movable` is the release's description
+catching up with the model. **The system half does not fit**: an ECS system is code and
+`spec/invariants.md` says a recipe is data. Same note.
+
 **Your own example would not have decided it.** Moving is `ark, pioneer`; upkeep is `citizen`.
 **Disjoint** - so that pair alone is consistent with a hierarchy.
 

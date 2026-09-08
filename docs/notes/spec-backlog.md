@@ -8,6 +8,25 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Asked 2026-09-07, whether one of the options fits an ECS
+
+*Do one of these options more naturally fit in with an ECS?*
+
+**Yes, and it is the one the measurement left standing** - entity, component, system maps onto thing,
+capability, recipe, and cross-cutting sets are the problem ECS exists to solve.
+[Answered in the same note](2026-09-07-do-the-sets-cross-cut.md).
+
+**Three things that made the answer concrete rather than theoretical.** `Thing` already carries
+`traits: BTreeMap<Trait, u32>` - **components per entity**, while the release describes them per
+kind, so `movable` is the description catching up rather than a new paradigm. The world's recipes
+already run over everything that matches at end of turn, which is what a system does. And Bevy is
+already a dependency of four crates, with a `planet-ecs` beside them.
+
+**The half that does not fit is the half that matters.** An ECS system is code; `spec/invariants.md`
+says a recipe is **data rather than code**, and it must stay so for a player to write rules without
+programming. **Entities and components yes; systems no.** Containment being a tree is the other
+friction, and identity surviving a move is `P-354`'s second question arriving from a new direction.
+
 ## Asked 2026-09-07, whether we know enough to choose how the data is modelled
 
 *This game is going to have many entities and many patterns. Different transformations will apply to

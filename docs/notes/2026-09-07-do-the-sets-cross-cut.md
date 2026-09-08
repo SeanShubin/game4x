@@ -88,6 +88,57 @@ built* - under two names.
 duplications to justify itself against**, which is what the earlier note asked for when it said an
 abstraction should be invented after its instances rather than before them.
 
+## Does one of them fit an ECS? Yes, and the tree is already half-way there
+
+**Asked 2026-09-07.** The correspondence is one-to-one with what was measured above.
+
+| ECS           | Here                                                 |
+| ------------- | ---------------------------------------------------- |
+| **Entity**    | a thing, which carries an `id` when it must be named |
+| **Component** | a capability - a column above, or a trait            |
+| **System**    | a transformation - a recipe                          |
+
+**Cross-cutting sets are the problem ECS exists to solve.** *Force* against *Readies* - garrison has
+force and never readies, extractor readies with no force - is the textbook case for components over
+inheritance. **So the option that fits is the same one the measurement left standing**, and the
+option ECS was invented to escape is the one already refuted.
+
+**The model is further along than the release.** `crates/game-model/src/thing.rs:247` is
+`Thing { kind, traits: BTreeMap<Trait, u32> }` - **components per entity, not per kind.** The
+release's *Units and structures* describes capabilities **per kind**, which is an archetype table.
+So a `movable` trait is not a new paradigm; it is **the release's description catching up with what
+the model already is.**
+
+**The world's recipes are already systems.** They fire when the turn ends, over everything that
+matches - `upkeep`, `grow`, `perish`, `age`, `spoil`, `refresh`. The player's recipes are commands
+against a chosen place, which is an ECS command buffer rather than a system.
+
+**And an ECS is already in the tree**, so the vocabulary would be shared rather than imported: Bevy
+is a dependency of `game4x`, `game-globe`, `planet-bevy` and `planet-flat`, and there is a
+`planet-ecs` crate.
+
+### Three places it does not fit, and the third is the one that matters
+
+**Containment is a tree, and ECS is flat.** `spec/logistics.md` makes every thing in the game and the
+game in nothing, and `spec/console.md` says *where a thing is, is where it appears*. **Parent-child
+containment is the awkward part of every ECS**, expressed as a parent component and a lot of care.
+This is real friction rather than a detail.
+
+**Identity survives a move in an ECS and does not here.** An ECS mutates a location component and
+keeps the entity. The release's `move` **consumes** a unit at `$from` and **produces** one at `$to`,
+so a thing carrying an `id` is destroyed and another made. **Sean's *same-thing-with-one-less-energy*
+is the ECS-natural form**, and `P-354`'s second question is exactly this - which is why it is the
+half that changes the game.
+
+**Systems are code and recipes must stay data.** `spec/invariants.md`: *every kind of thing, and
+every recipe that turns some things into others, is data rather than code.* **An ECS system is
+compiled; a recipe is interpreted**, and it must stay so, because Sean wants a player to write rules
+without programming. **So the entity and component halves fit and the system half does not** - and
+adopting the word *system* in the specification would import the half that contradicts an invariant.
+
+**Which makes the answer narrower than the question.** Components yes, and the release should say
+`movable` where it now says *which family a kind is in*. Systems no, and recipes stay data.
+
 ## The example that prompted the question does not decide it
 
 Sean's own pair - *things that can move* against *things that require food* - **does not cross-cut
