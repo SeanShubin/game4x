@@ -21,35 +21,3 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-355 - `movable` is stored, or it is derived from the coincidence you just rejected
-
-**to** sean - **status** open - **raised** 2026-09-08 - **rewritten** 2026-09-08, after you named it
-- **asks** a decision - **into** `releases/first-release.md` -> *Traits*
-
-**The name is settled: `movable`.** Your reason - *fuel in a tank is a coincidence of the recipe we
-happen to have on first release* - is right, and it rules out what I recommended. **It also collides
-with something you confirmed yesterday**, which is why this is back in front of you.
-
-**A derived trait names its derivation**, and **the only thing in the release to derive movability
-from is `fuel`.** There is no second mechanism yet. So on today's data:
-
-|             |                                                                                 |
-| ----------- | ------------------------------------------------------------------------------- |
-| **derived** | can only read *it has a tank* - **the coincidence you just rejected**           |
-| **stored**  | a thing simply carries `movable`, and each mechanism is a recipe's own business |
-
-**`derived` and *not from fuel* cannot both hold today.** One of the two has to give.
-
-**I recommend stored, and the reason derived was attractive does not apply here.** Derived was better
-because **a stored trait fragments a fleet when its value varies** - and `movable` does not vary
-among things that have it, so a million movable things stay one entry either way. **Storing it costs
-nothing at scale.**
-
-**It is also what your own reason asks for.** A stored `movable` says *this thing can move* without
-saying how, so **a sail or a rail arrives as another recipe and nothing that says `movable` is
-rewritten.** A derivation from `fuel` would have to be edited every time a mechanism is added.
-
-**One cell still needs you either way: what `movable` holds.** `ready` is *yes or no*; `fuel` is a
-number. **If movability is the capability and the mechanisms carry the numbers, yes-or-no is the
-answer** - but you said traits are better graded than absolute, so I am asking rather than assuming.
-

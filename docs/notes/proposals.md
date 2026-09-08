@@ -60,6 +60,48 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-355 - `movable`, stored, and the half of it that has to wait
+
+**to** sean - **status** open - **raised** 2026-09-08 - **answered** 2026-09-08 - **kind** recovered
+- **asks** approval - **shape** an instruction - **into** `releases/first-release.md` -> *Traits*
+and *Units and structures*
+
+**Your answers settle the trait. They do not settle `move`, and I am not promoting that half.**
+
+**The instruction, in two parts.**
+
+- **Add to *Traits***, after `phase`: **`movable`** - carried by *whatever moves* - values
+  *yes or no* - **stored**
+- **Add to *Units and structures*** a **`Movable`** column reading `yes` for **ark** and **pioneer**,
+  blank for the other five rows
+
+**How to tell it was carried out**: *Traits* has one more row and it is `movable`; *Units and
+structures* has a `Movable` column filled in exactly two rows; the other columns and all seven row
+names are unchanged.
+
+**Why *yes or no* rather than a number**, since you said traits are better graded: **it is your own
+separation doing the work.** A name for the capability, separate names for the mechanisms - so
+`movable` says *this thing can move* and the mechanisms carry the numbers. **Say the word if you
+want it graded** and this becomes a different row.
+
+**The cost, stated so you are not discovering it later.** A stored trait needs somewhere to be
+declared, and for units that is the matrix - so `Movable` joins `Fuel` and `Crosses`, and **three
+columns then name exactly `{ark, pioneer}`.** That is the duplication you want refactored away, and
+it is justified only by the sets diverging later, which is the future-proofing you are trading
+against concreteness. **Your call, made visible rather than made for you.**
+
+**What is not in this instruction, and why.** `move` still consumes `1 unit`. Changing it to
+`1 thing movable` forces `C-56`, which is open **to me** and unanswered: the command reads
+`{move unit:ark territory:2}`, and `unit` is a **family**, where `spec/console.md` says a field
+referring to a thing is named for that thing's **kind**. **Making the recipe's Kind cell more
+general makes that field say less, not more.** So the selector change waits on `C-56`, and `C-56` is
+my delay rather than yours.
+
+**Your recent answers may resolve it.** If ids stay rare and fleet units carry none, then
+`{move ark:1 ...}` - naming one ark by id, which is what `P-323`'s rule literally describes - cannot
+be how a fleet moves. **That points at an exception to the rule rather than a change to the
+command**, and I will put it to you as its own item rather than fold it in here.
+
 ### P-346 - The `A move` column goes
 
 **to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered

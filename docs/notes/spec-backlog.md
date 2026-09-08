@@ -8,6 +8,25 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-08, stored for now, to see the problems rather than predict them
+
+*I am trying to balance future proofing with making it concrete so that I can see the problems in
+reality rather than speculate about them, for that reason, lets go with stored for now and see what
+happens.*
+
+**Consistent with what this repository already recorded**, which is worth saying because it is a
+coherence check rather than a new principle. *Parametric polymorphism, and why waiting costs
+nothing*: three concrete recipes are what a parameterised one expands to, and **they give the type
+system a first thing to prove itself on, which an abstraction invented before its instances would
+not.** Same test, applied to a trait instead of a parameter.
+
+**One cost he should see rather than discover.** A stored `movable` needs somewhere to be declared,
+and for units that is the *Units and structures* matrix - so it becomes **a column naming exactly
+`{ark, pioneer}`, beside `Fuel` and `Crosses`, which name the same two.** Three columns, one set,
+which is the duplication he wants refactored away. **It is justified only by the sets diverging
+later**, which is exactly the future-proofing he is trading against concreteness. Stated on `P-355`
+so the trade is visible.
+
 ## Decided 2026-09-08, movability gets a name of its own
 
 *Movability needs a name of its own. Fuel in a tank is a coincidence of the recipe we happen to have
