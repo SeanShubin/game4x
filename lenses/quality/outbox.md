@@ -82,32 +82,6 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-74 - `Q-73`'s second check passes over an empty set, and its sibling is what caught it
-
-**to** code · **status** open · **raised** 2026-09-08 · **source** poison-testing `eb57a0f`, the
-commit that closed `Q-71`, `Q-72` and `Q-73`
-
-**Small, and filed because the precedent chain is exact.**
-`tools/hooks/tests/line_endings.rs`, `a_path_nobody_has_written_yet_is_covered`, asserts inside
-`for (path, value) in eol_attributes(&invented)`. **If that returns nothing the loop body never
-runs and the test passes**, having checked no path at all.
-
-**Poisoned rather than argued.** Breaking only the parse in `eol_attributes` - the `rsplit_once`
-separator, leaving the command alone - splits the pair exactly:
-`every_tracked_text_file_is_checked_out_with_lf` **fails** with *git answered for 0 of 360 files, so
-some were not asked about*, and `a_path_nobody_has_written_yet_is_covered` **passes**. One has the
-denominator guard and the other does not.
-
-**What softens it, and it is most of the item.** The sibling shares `eol_attributes`, so the
-realistic failure - the parse breaking - is caught loudly today. The hole is narrow: it needs the
-invented paths specifically to come back empty while the tracked ones do not, which is a future
-`git check-attr` changing its behaviour for paths that do not exist.
-
-**Whether.** Worth doing when the file is next open, not now. One line -
-`assert_eq!(attributes.len(), invented.len())` - and it is the same guard the sibling already
-carries. Filed rather than mentioned because this is `Q-48`, `Q-51` and this round's own `Q-72`
-wearing a fourth face, in the test written to close `Q-73`.
-
 ### Q-75 - One generator, six test loops, and only one of them says how many cases there were
 
 **to** code · **status** open · **raised** 2026-09-08 · **source**
@@ -348,6 +322,47 @@ is not the file, and mapping those back is a second map to get wrong*. Delete it
 file compiling. **Verified by planting the same fourth variant again**: `error[E0004]:
 non-exhaustive patterns: &Problem::PlantedRefusal not covered`, where before it compiled and all
 nine tests passed. `strip_prefix_per_line` is deleted rather than made private.
+
+### Q-74 - `Q-73`'s second check passes over an empty set, and its sibling is what caught it
+
+**to** code · **status** **acted** 2026-09-08 · `968fa12` · **raised** 2026-09-08 · **source** poison-testing `eb57a0f`, the
+commit that closed `Q-71`, `Q-72` and `Q-73`
+
+**Small, and filed because the precedent chain is exact.**
+`tools/hooks/tests/line_endings.rs`, `a_path_nobody_has_written_yet_is_covered`, asserts inside
+`for (path, value) in eol_attributes(&invented)`. **If that returns nothing the loop body never
+runs and the test passes**, having checked no path at all.
+
+**Poisoned rather than argued.** Breaking only the parse in `eol_attributes` - the `rsplit_once`
+separator, leaving the command alone - splits the pair exactly:
+`every_tracked_text_file_is_checked_out_with_lf` **fails** with *git answered for 0 of 360 files, so
+some were not asked about*, and `a_path_nobody_has_written_yet_is_covered` **passes**. One has the
+denominator guard and the other does not.
+
+**What softens it, and it is most of the item.** The sibling shares `eol_attributes`, so the
+realistic failure - the parse breaking - is caught loudly today. The hole is narrow: it needs the
+invented paths specifically to come back empty while the tracked ones do not, which is a future
+`git check-attr` changing its behaviour for paths that do not exist.
+
+**Whether.** Worth doing when the file is next open, not now. One line -
+`assert_eq!(attributes.len(), invented.len())` - and it is the same guard the sibling already
+carries. Filed rather than mentioned because this is `Q-48`, `Q-51` and this round's own `Q-72`
+wearing a fourth face, in the test written to close `Q-73`.
+
+**Closed 2026-09-08 · `968fa12`.** The denominator is asserted before the loop now. They reproduced
+the poison rather than trusting the intent: breaking only the `rsplit_once` separator used to split
+the pair, and both tests fail.
+
+**Verified here with `tools/quality`, which the next item built.** The scanner does not report
+`line_endings.rs` any more, and it still reports `tools/quality/tests/scanning.rs:19` - the fixture
+holding that same test's *pre-fix* text. **The same code before and after, one reported and one
+not**, which is a paired check rather than a green run.
+
+**Their own note is the part worth keeping.** They wrote this one about an hour after fixing `Q-72`
+for exactly this shape, in the test written to close `Q-73` - so reading the item did not stop them
+making the same mistake in the next file they opened. That is a better instance of a rule firing at
+a moment of confidence than the one `C-55` was built for, and it is why the sweep was worth building
+rather than resolving to be careful.
 
 ### Q-73 - A fresh clone fails its own suite, and no existing working tree can see it
 
