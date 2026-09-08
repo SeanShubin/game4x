@@ -60,6 +60,47 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-352 - The staging bullet gains the reason care cannot close it, and the check that can
+
+**to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
+- **asks** approval - **shape** an instruction - **into** `CLAUDE.md` -> Perspectives, the staging
+bullet
+
+**You chose the column check.** This replaces the last two sentences of that bullet. The first three
+sentences are unchanged and are already correct - they name the mechanism and say the hazard is
+someone else.
+
+**The instruction.** In the bullet beginning *Stage by name, never `git add -A`*, replace the two
+sentences from *It has happened:* to the end with:
+
+> **Staging by name bounds what you add and not what you commit**, so no amount of care closes it:
+> the window is between your `git add` and your `git commit`, and checking for the lock falls before
+> it. It has happened twice - twenty-six lines, then twenty-one - and both times the work survived
+> and the commit message was what was lost. **`hooks/pre-commit` refuses a commit whose files span
+> two perspectives' columns**, which is the shape of the race and of writing outside your own column
+> alike.
+
+**How to tell it was carried out**: the bullet no longer contains *touching a file outside that
+one's column*, and does contain *refuses a commit whose files span two perspectives' columns*. The
+three sentences before *It has happened* are byte-identical to what is there now.
+
+**The measurement that made this the answer**, so it is not taken on my word: over all 1,047 commits
+with files, **11 touch more than one perspective's column**, and both known incidents are among them
+- `8f687d5` today and `93d839d`, which is the twenty-six-line one. Most of the rest are pre-split
+history. **Roughly one fire per two hundred commits, and it refuses before the commit exists.** My
+classifier could not place twelve top-level paths from earlier layouts, so treat 11 as approximate
+rather than exact.
+
+**One thing your choice implies that you have not ruled on, and I am not resolving it quietly.** A
+check that refuses leaves the refused lane needing some way to commit, and the only one that works
+is `git commit -- <paths>`. **I have kept it out of `CLAUDE.md` deliberately** and propose it live in
+the hook's refusal message instead - so the idiom arrives at the moment a lane is stuck, which is a
+moment of doubt, rather than sitting in a document to be recalled at a moment of confidence. That
+keeps your choice of row three intact rather than smuggling row one back in. **Say if you would
+rather it were in the bullet.**
+
+**The hook is not mine to write.** `hooks/` is the code lane's, and `S-71` is the build order.
+
 ### P-349 - Edge, border and boundary name one thing, and crossing is passing through it
 
 **to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
@@ -140,6 +181,34 @@ to. `P-215`'s nested half stays deferred on `C-23`'s reason, now updated - a nes
 written but not to the console.
 
 ## Addressed to other perspectives
+
+### S-71 - The column check Sean chose, for `hooks/pre-commit`
+
+**to** code - **status** open - **raised** 2026-09-07 - **source** Sean choosing the carrier in
+`P-352`
+
+**Sean has chosen this and `P-352` carries the wording for `CLAUDE.md`. The hook is yours.**
+
+**What it does.** Refuse a commit whose files span more than one perspective's column, the columns
+being `CLAUDE.md` -> Perspectives. **Generated and unowned files belong to no column** and must not
+count - `pending.md` above all, which every lane's commit carries.
+
+**Why it is the carrier rather than an instruction.** He was not convinced a lane would follow a
+pathspec instruction reliably, and he is right: it fires at a moment of confidence. This fires at
+commit time and needs nothing remembered. It is the shape of the shared-index race **and** of a lane
+writing outside its column, which is forbidden anyway - so one predicate catches both.
+
+**The measurement, which is yours to re-derive rather than inherit.** I count **11 of 1,047 commits
+with files** touching more than one column, both known incidents among them - `8f687d5` and
+`93d839d`. **My classifier failed to place twelve top-level paths** from earlier layouts, so my
+number is approximate and the population is what matters more than the figure.
+
+**Two things I would want and neither is a requirement.** That the refusal **names the offending
+paths and their columns**, because the lane that is refused is usually not the lane that staged the
+file. And that it **tells the reader to commit with `git commit -- <paths>`** - `P-352` proposes the
+idiom live here rather than in `CLAUDE.md`, so that it reaches a lane at the moment it is stuck.
+
+**Not urgent.** It has fired twice in a fortnight and the work survived both times.
 
 ### S-70 - `C-39` was answered the day it was raised, and I have let two lanes cite it since
 

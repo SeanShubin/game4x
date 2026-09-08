@@ -8,6 +8,20 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, choosing the carrier for the shared-index race
+
+*Lets go with the third row, column check in pre-commit.*
+
+**Chosen over two alternatives he had in front of him**, and the reason he gave earlier is the one
+that decided it: he was not convinced an AI assistant would follow a pathspec instruction reliably.
+**That is `P-327` applied to a proposal of mine** - a rule firing at a moment of confidence needs a
+carrier rather than a better sentence.
+
+**One consequence he has not ruled on, and it is in `P-352`.** A check that refuses leaves the lane
+needing a way to commit, and the only one that works is the pathspec form. **Putting it in the
+hook's refusal message rather than in `CLAUDE.md` keeps his choice intact** - the instruction then
+arrives at a moment of doubt, which is the kind that survives.
+
 ## Said 2026-09-07, that adjacency is a shared boundary
 
 *Adjacency shouldn't be too hard to define. It is a shared boundary. We can derive it from goldberg
