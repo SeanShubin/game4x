@@ -8,6 +8,23 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, on words that arrive without meanings
+
+*It sounds like we are inheriting meaning from similar words without specifying what those words
+mean. If words that don't have meaning in our context are slipping into the specification, we need
+to call that out and either define the difference or stick to words that are defined.*
+
+**Said while refusing a claim of mine.** `P-349` argued the release said *strictly more* than his
+sentence; he asked whether it said more, or whether nobody had defined *cross*. **Nobody had.**
+`crosses` is not one of the nineteen declared traits, `border` and `orbit border` are defined
+nowhere, and `edge` is defined between territories only while orbit adjacency is stated as *next
+to*.
+
+**The general form is his and is the reusable part**: a word carried into the specification from
+ordinary usage looks defined because it is familiar. **Familiarity is not a definition**, and the
+check that would catch it does not exist - `vocabulary.rs` reads the played state, so a release
+column that never becomes data is invisible to it.
+
 ## Said 2026-09-07, answering `P-353`: one notation, and the tree stays
 
 *Much of the design has been about unification, and trees are used, if only to present game state to

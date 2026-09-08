@@ -243,39 +243,52 @@ produced the failures.
 against them, so **the study's remaining value is concentrated almost entirely in the third task**.
 If you authorise it, the honest version is one task, not three.
 
-### P-349 - Every move is constrained by adjacency, and `spec/` is the one place that does not say so
+### P-349 - `crosses` is load-bearing and undefined, and my *strictly more* was wrong
 
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** recovered, from your own sentence -
-**asks** a decision - **into** `spec/units.md` -> a bullet, or `spec/planet.md`
+**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07, after you asked
+whether the release says more or says something undefined - **asks** a decision -
+**into** `spec/planet.md` and `releases/first-release.md` -> *Units and structures*
 
-**You said it today and it never got written.** `docs/notes/spec-backlog.md:23` carries *moves have
-an adjacency constraint*, said while removing the cost line from `spec/orbit.md`. The removal
-landed; the constraint did not.
+**You were right and I checked rather than defended.** I wrote that your sentence says *adjacency*
+and the release says adjacency **and** that the unit crosses that edge, *which is strictly more*.
+**It is not more. It is undefined**, and a defined term cannot be compared to an undefined one.
 
-**Everything else already enforces it.** The release's `move` requires `$to` to be *joined to
-`$from` by an edge the unit crosses*; `crates/game-model` rejects a landing on ground an Ark is not
-above. **`spec/` states the adjacency facts and never says a move is bound by them** - that two
-territories sharing an edge are adjacent, and that an orbit is next to the territory below it, and
-then nothing that reads either.
+| Where                     | What it says                                                 | Defined?                          |
+| ------------------------- | ------------------------------------------------------------ | --------------------------------- |
+| `spec/planet.md:28`       | two territories are adjacent when they **share an edge**     | **yes**, between territories only |
+| `spec/orbit.md:20`        | an orbit is **next to** the territory below it               | yes, and it does not say *edge*   |
+| release, `move`           | `$to` is *joined to `$from` by an **edge the unit crosses*** | **no**                            |
+| release, *Crosses* column | `border` for a pioneer, `orbit border` for an ark            | **no**                            |
 
-**This is how the quality lens found it, and its own conclusion was too weak.** Re-deriving `S-67`
-it said the specification *leaves landing undecided*. Landing is not undecided and is not a move:
-`deploy ark` is its own recipe and takes the ark from *the orbit above `$where`*, which is what
-fixes where an Ark lands. **What is undecided is the general rule**, which is why this is one item
-and not the one they were looking at.
+**`crosses` is not one of the nineteen declared traits**, and neither `border` nor `orbit border`
+appears anywhere else in the repository. **No check can see this**: `vocabulary.rs` tests the words
+in the played state, and `crosses` reaches `scenario/expected/play.4x` zero times - so a release
+column that never becomes data is invisible to the one instrument built to catch undeclared words.
 
-**Why it is a decision and not words to approve.** Your sentence says *adjacency*; the release says
-adjacency **and** that the unit crosses that edge, which is strictly more. I cannot tell which you
-meant, and they differ for any unit that cannot cross some edges.
+**And it is not dead, which is what makes it matter.** The two values are the whole difference
+between an ark and a pioneer: an ark crosses an *orbit border* and a pioneer crosses a *border*, and
+**that is what stops a pioneer flying into orbit.** Deleting the column would delete a rule of the
+game. So this is not tidying - a real constraint is carried by words nothing defines.
 
-- **Adjacency alone** - the invariant says places must be adjacent, and what a given unit can cross
-  stays a recipe's business. Consistent with removing the cost line for the same reason
-- **Adjacency and crossability** - the invariant carries both, and the release's qualifier is
-  reading it rather than adding to it
+**The second gap is `edge` itself.** `spec/` gives *edge* a meaning between territories only, and
+states orbit adjacency as *next to*. **So the `move` qualifier, read strictly, does not reach an
+orbit at all** - the same seam `P-345` opened when the cost line came out of `spec/orbit.md`.
 
-**Nothing is blocked and nothing changes in the game either way** - the code already behaves as the
-release says. What it buys is that the rule is in the place that outranks both, so the next lane
-that needs it reads `spec/` rather than a table.
+**What I need from you.**
+
+- **Define them**, and `crosses` gets a Traits row with named values, `border` and `orbit border` get
+  meanings, and `edge` either widens to cover orbit adjacency or the qualifier stops saying *edge*
+- **Replace them**, if the distinction is better carried by words already defined - a pioneer moves
+  between territories, an ark between places - and then the column goes and no rule is lost
+
+**I am not choosing between them.** Both change what the game permits at its edges, and your own
+instruction is the test: *either define the difference or stick to words that are defined*.
+
+**Three more columns of that table are not declared traits either** - `binding`, `requires` and
+`readies` - measured against the Traits table rather than assumed. `binding` is at least referenced
+by a declared trait, since *metal in it* is derived from it. **I have not audited what the other two
+mean**, and I am not folding them in; they are named so that answering this does not read as
+clearing the table.
 
 ### P-348 - `R-8` is built and no two kinds behave alike, which may be the answer or the defect
 

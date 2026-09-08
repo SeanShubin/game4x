@@ -12,7 +12,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 - **P-352** - `CLAUDE.md` names the staging hazard correctly and gives an instruction that cannot close it · `docs/notes/decisions.md`
 - **P-351** - Two words in the data file that the release does not declare, and the exception list is full · `docs/notes/decisions.md`
 - **P-350** - Filing this study as an item is what makes it unrunnable, and that is the finding · `docs/notes/decisions.md`
-- **P-349** - Every move is constrained by adjacency, and `spec/` is the one place that does not say so · `docs/notes/decisions.md`
+- **P-349** - `crosses` is load-bearing and undefined, and my *strictly more* was wrong · `docs/notes/decisions.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`
 - **P-346** - Three statements fix what a move costs, and only one of them is a mechanism · `docs/notes/decisions.md`
