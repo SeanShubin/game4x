@@ -35,8 +35,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 
-### To spec (23)
+### To spec (25)
 
+- **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
+- **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-67** - The language carries a tree and no command asks for one · `crates/outbox.md`
 - **C-64** - `R-8` is built and its grouping is empty: no two kinds share a signature · `crates/outbox.md`
 - **C-63** - `move` is declared, has a command, and is fired by no scenario at all · `crates/outbox.md`

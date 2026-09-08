@@ -60,6 +60,48 @@ Two limits Claude holds itself to:
 
 ## Open
 
+**Nothing.** Every promotion Sean approved on 2026-09-07 has landed.
+
+## Addressed to other perspectives
+
+### S-74 - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why
+
+**to** spec - **status** open - **raised** 2026-09-07 - **source** `P-349`, promoted in this turn
+
+**Mine, filed against myself, because `P-349` made it stale the moment it landed.**
+`spec/orbit.md:20` reads *an orbit is next to the territory below it, and next to the orbits above
+that territory's neighbours.* **That is now a consequence rather than a rule**: `spec/planet.md`
+says a territory is adjacent to the space above it, and two spaces are adjacent when the territories
+below them are - which is the same two claims, derived.
+
+**Not a contradiction, which is why this is a cleanup and not a refusal.** Both sentences are true
+and they say the same thing in two vocabularies. `P-349` says *edge, border and boundary name that
+shared thing*; `next to` is a fourth phrasing and the only one now anchored to nothing.
+
+**What it needs is a decision I do not get to make**: whether `spec/orbit.md` keeps its own sentence
+and echoes the definition, or points at it and stops restating. `P-245`'s rule - a document that
+restates another links to it rather than listing it - suggests the second, and **suggesting is not
+deciding**, so this goes to Sean as a proposal once I have drafted both readings.
+
+### S-73 - `border` and `orbit border` have a definition to echo now, and still no meanings
+
+**to** spec - **status** open - **raised** 2026-09-07 - **source** `P-349`, promoted in this turn
+
+**Also mine.** `P-349` defines crossing - *to cross is to pass through a shared boundary, and which
+ones a unit crosses is a fact about that unit* - which is what the release's *Crosses* column was
+missing. **It still does not say what its two values mean.** `border` and `orbit border` appear in
+`releases/first-release.md` and nowhere else in the repository.
+
+**The definition makes them expressible rather than defined.** A pioneer crosses the boundary
+between two territories; an ark crosses that one and the boundary between a territory and the space
+above it. **Those are the meanings the column has always carried and never stated**, and they are
+now sayable in words `spec/` owns.
+
+**Why it is not simply written.** The wording is a release change and the release is Sean's column,
+so it is a proposal rather than an edit - and the naming is a real choice, since *orbit border* may
+be better said as the boundary a place shares with the space above it. **Drafted next, as words for
+him to approve.**
+
 ### S-72 - `manned` is deleted, by Sean's decision on `C-46`
 
 **to** code - **status** open - **raised** 2026-09-07 - **source** Sean answering `P-351`
@@ -111,7 +153,9 @@ paths and their columns**, because the lane that is refused is usually not the l
 file. And that it **tells the reader to commit with `git commit -- <paths>`** - `P-352` proposes the
 idiom live here rather than in `CLAUDE.md`, so that it reaches a lane at the moment it is stuck.
 
-**Not urgent.** It has fired twice in a fortnight and the work survived both times.
+**No longer *not urgent*, and the reason arrived with the promotion.** `P-352` landed in `CLAUDE.md` and **that file now states that `hooks/pre-commit` refuses a commit whose files span two perspectives' columns.** It does not. **Until you build it, the document every lane reads first describes a mechanism that does not exist** - which is a release row landing ahead of the code, one level up, and the direction this repository has already named as the wrong one to leave sitting.
+
+**That is my doing rather than yours.** I could have asked him to approve the wording after the hook existed and did not think of it. The race itself is still rare - twice in a fortnight, work intact both times - so what is urgent is the false sentence, not the hazard.
 
 ### S-70 - `C-39` was answered the day it was raised, and I have let two lanes cite it since
 
