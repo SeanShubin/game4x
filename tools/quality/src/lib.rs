@@ -127,13 +127,30 @@ pub fn cannot_be_empty(expression: &str) -> bool {
     }
     let bounds: Vec<&str> = text.splitn(2, "..").collect();
     if bounds.len() == 2 {
-        // `2_000` is a literal too, so the separator counts as part of the number.
-        let numeric = |bound: &str| {
-            !bound.is_empty()
-                && bound.chars().any(|c| c.is_ascii_digit())
-                && bound.chars().all(|c| c.is_ascii_digit() || c == '_')
+        // A bound is visible when it is a literal or a constant. `2_000` carries a separator
+        // and `8u64` a type suffix, and `0..PENTAGON_COUNT` names a constant - all three are
+        // written in the source, and none of them is a question a test should be asserting.
+        let visible = |bound: &str| {
+            let bound = bound.trim();
+            if bound.is_empty() {
+                return false;
+            }
+            // A type suffix ends in digits too - `8u64` - so the number is taken from the
+            // front and whatever follows must begin with a letter to be one.
+            let head: String = bound
+                .chars()
+                .take_while(|c| c.is_ascii_digit() || *c == '_')
+                .collect();
+            let rest = &bound[head.len()..];
+            let numeric = head.chars().any(|c| c.is_ascii_digit())
+                && (rest.is_empty() || rest.starts_with(|c: char| c.is_ascii_alphabetic()));
+            let constant = bound.chars().any(|c| c.is_ascii_uppercase())
+                && bound
+                    .chars()
+                    .all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == '_');
+            numeric || constant
         };
-        if numeric(bounds[0].trim()) && numeric(bounds[1].trim_start_matches('=').trim()) {
+        if visible(bounds[0].trim()) && visible(bounds[1].trim_start_matches('=').trim()) {
             return true;
         }
     }
@@ -283,6 +300,7 @@ pub fn scan(path: &str, source: &str) -> Vec<Candidate> {
             None if called_helper_asserts_its_size(source, &over) => continue,
             None => Missing::NeverNamed,
             Some(name) if states_a_denominator(&before, &name) => continue,
+            Some(name) if bound_from_a_literal(&before, &name) => continue,
             Some(name) if bound_from_helper_that_asserts(source, &before, &name) => continue,
             Some(_) => Missing::NotAsserted,
         };
@@ -295,6 +313,24 @@ pub fn scan(path: &str, source: &str) -> Vec<Candidate> {
         });
     }
     out
+}
+
+/// Whether `name` was bound from a literal, whose size is visible in the source.
+///
+/// **`let sources = [..]` is `for x in [..]` with a name on it.** The scanner's false positives
+/// were all one thing - not following where the population came from - and this is the second
+/// half of it, after the helper that asserts its own return.
+pub fn bound_from_a_literal(before: &str, name: &str) -> bool {
+    let Some(at) = before.rfind(&format!("let {name}")) else {
+        return false;
+    };
+    let after = &before[at..];
+    let Some(equals) = after.find('=') else {
+        return false;
+    };
+    // Skip a type annotation and any `mut`, then look at what the value starts with.
+    let value = after[equals + 1..].trim_start();
+    value.starts_with('[') || value.starts_with("&[") || value.starts_with("vec![")
 }
 
 /// Whether the function this expression calls asserts its own size.

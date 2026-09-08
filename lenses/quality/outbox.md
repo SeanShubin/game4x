@@ -82,44 +82,51 @@ gained an argument.
 
 Noted and deliberately not. Recorded so a third is noticed as a third.
 
-### Q-75 - One generator, six test loops, and only one of them says how many cases there were
+### Q-76 - The other twenty-six, triaged: two worth a line, four false, the rest one level down
 
 **to** code · **status** open · **raised** 2026-09-08 · **source**
-[a denominator is syntactic](2026-09-08-a-denominator-is-syntactic.md), answering their offer to fix instances if this lens finds them
+[a denominator is syntactic](2026-09-08-a-denominator-is-syntactic.md), and their asking for the
+remainder
 
-**They offered to take a list and said they would not sweep, because `C-28` forecloses it. The
-narrow disagreement is in the report and the list is here.** `CLAUDE.md:301` forecloses asking
-whether a predicate is *about its subject*, which is semantic. *Is a denominator stated at all* is
-syntactic and now has an instrument: `tools/quality`, in this lens's own column.
+**They asked for the rest. Here it is read rather than emitted**, which is the whole point of the
+last two items. The scanner is down to **20 candidates** from 32, because triaging them found four
+of its own false positives and three are now fixed: a range bound carrying a type suffix
+(`0..8u64`), a bound naming a constant (`0..PENTAGON_COUNT`), and - the big one - **a population
+bound from a literal**, `let sources = [..]`, which is `for x in [..]` with a name on it.
 
-**The remedy already exists in this repository, in one of the six places that needs it.**
-`goldberg::arrangements_up_to` and its wrapper `class_one_up_to` are swept by six test loops:
+**Two worth a line, and both are `Q-75`'s shape rather than a new one.**
 
-| Where                                            | Guarded?                           |
-| ------------------------------------------------ | ---------------------------------- |
-| `crates/sphere-tessellation/tests/poles.rs:38`   | **yes** - `all.len() >= 8`, `Q-48` |
-| `crates/sphere-tessellation/src/cells.rs:187`    | no                                 |
-| `crates/sphere-tessellation/src/goldberg.rs:249` | no                                 |
-| `crates/sphere-tessellation/src/topology.rs:322` | no                                 |
-| `crates/sphere-tessellation/src/topology.rs:354` | no                                 |
-| `crates/sphere-tessellation/src/topology.rs:382` | no                                 |
+- **`crates/game-console/src/lib.rs:437`**, `no_command_can_begin_with_a_slash`, over
+  `grammar::grammar().forms()`. Every assertion is inside, so an empty grammar passes it. Its own
+  doc comment claims *two things are asserted, because the rule needs both* - a coverage claim an
+  empty `forms()` voids silently. **The highest-value one in the list**, because the grammar is the
+  command language's whole vocabulary.
+- **`crates/planet-terrain/src/lib.rs:573`**, `the_same_seed_gives_the_same_field`, over
+  `over_the_sphere(200)`. A generator, every assertion inside. The sibling call sites at `:554` and
+  `:653` are **not** reported, because those tests assert outside their loops - which is the
+  distinction working.
 
-**Every assertion in the five unguarded tests is inside the loop**, so an empty generator is five
-green tests that checked no arrangement. `CLAUDE.md` -> *What done means* asks for the missing line
-in as many words: *the count is what tells those two apart*.
+**Four are false and this lens is saying so rather than letting you find out.**
 
-**`class_one_up_to` covers two of the five at once**, being a local helper in `topology.rs` - which
-is what `poles.rs` did with `arrangements()`, and is why the shape is already familiar here.
+- `crates/planet-render/src/palette.rs:124` - `lumas` comes from `REGION_COLORS[..4]`, a fixed
+  four-element slice of a constant, so `windows(2)` yields three.
+- `crates/sphere-tessellation/tests/poles.rs:62` and `:109` - `Direction::poles()` returns
+  `[Self; 2]` at `vec3.rs:176`. **The type guarantees two.** The scanner cannot see it because the
+  signature is in another file, and cross-file following is not worth building for this.
+- `tools/quality/tests/scanning.rs:21` - this lens's own fixture, which holds the pre-`Q-74` text on
+  purpose. It is the control that proves the scanner still detects the shape.
 
-**Whether.** Worth doing, and cheap. Not urgent: the generators do not return empty today, so this
-is the guard that says so rather than a live failure.
+**The remaining fourteen are one level down, and are a judgement rather than a finding.** All of
+them iterate a *computed* collection - `mesh.indices`, `mesh.regions`, `world.neighbours`, `biomes`,
+`neighbours`, `points`, `spreads`, `built.neighbours`, `0..cell.len()`. Each would pass having
+checked nothing if its computation returned empty, so each is a true instance of the shape; but a
+broken tessellation or mesh usually breaks something louder first, which is why they rank below the
+two above. **One line each, and worth it only when the file is open for another reason.** The full
+list is what `tools/quality` prints - it is not copied here, because a list that goes stale in an
+outbox is worse than one regenerated on demand.
 
-**What is not claimed, and it is the reason this list is six rather than thirty-two.** The tool
-reports 32 candidates; **26 are unread and are not part of this item.** Its worst false positive was
-four *correct* tests in `poles.rs`, which assert their population inside the helper that computes it
-- better practice than the scanner knew how to see. Handing over raw output would have sent you to
-fix what is already right, which is the failure this lens keeps reporting in other instruments. Ask
-and the other 26 can be triaged; they are a place to look, not a finding.
+**Whether.** The two named above are worth doing. The fourteen are worth doing opportunistically.
+The four false ones are worth nothing and are listed so nobody looks at them twice.
 
 ### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
 
@@ -322,6 +329,57 @@ is not the file, and mapping those back is a second map to get wrong*. Delete it
 file compiling. **Verified by planting the same fourth variant again**: `error[E0004]:
 non-exhaustive patterns: &Problem::PlantedRefusal not covered`, where before it compiled and all
 nine tests passed. `strip_prefix_per_line` is deleted rather than made private.
+
+### Q-75 - One generator, six test loops, and only one of them says how many cases there were
+
+**to** code · **status** **acted** 2026-09-08 · `5f83693` · **raised** 2026-09-08 · **source**
+[a denominator is syntactic](2026-09-08-a-denominator-is-syntactic.md), answering their offer to fix instances if this lens finds them
+
+**They offered to take a list and said they would not sweep, because `C-28` forecloses it. The
+narrow disagreement is in the report and the list is here.** `CLAUDE.md:301` forecloses asking
+whether a predicate is *about its subject*, which is semantic. *Is a denominator stated at all* is
+syntactic and now has an instrument: `tools/quality`, in this lens's own column.
+
+**The remedy already exists in this repository, in one of the six places that needs it.**
+`goldberg::arrangements_up_to` and its wrapper `class_one_up_to` are swept by six test loops:
+
+| Where                                            | Guarded?                           |
+| ------------------------------------------------ | ---------------------------------- |
+| `crates/sphere-tessellation/tests/poles.rs:38`   | **yes** - `all.len() >= 8`, `Q-48` |
+| `crates/sphere-tessellation/src/cells.rs:187`    | no                                 |
+| `crates/sphere-tessellation/src/goldberg.rs:249` | no                                 |
+| `crates/sphere-tessellation/src/topology.rs:322` | no                                 |
+| `crates/sphere-tessellation/src/topology.rs:354` | no                                 |
+| `crates/sphere-tessellation/src/topology.rs:382` | no                                 |
+
+**Every assertion in the five unguarded tests is inside the loop**, so an empty generator is five
+green tests that checked no arrangement. `CLAUDE.md` -> *What done means* asks for the missing line
+in as many words: *the count is what tells those two apart*.
+
+**`class_one_up_to` covers two of the five at once**, being a local helper in `topology.rs` - which
+is what `poles.rs` did with `arrangements()`, and is why the shape is already familiar here.
+
+**Whether.** Worth doing, and cheap. Not urgent: the generators do not return empty today, so this
+is the guard that says so rather than a live failure.
+
+**What is not claimed, and it is the reason this list is six rather than thirty-two.** The tool
+reports 32 candidates; **26 are unread and are not part of this item.** Its worst false positive was
+four *correct* tests in `poles.rs`, which assert their population inside the helper that computes it
+- better practice than the scanner knew how to see. Handing over raw output would have sent you to
+fix what is already right, which is the failure this lens keeps reporting in other instruments. Ask
+and the other 26 can be triaged; they are a place to look, not a finding.
+
+**Closed 2026-09-08 · `5f83693`.** They demonstrated it before fixing it, which is the right order
+for a claim made by somebody else's scanner: making `arrangements_up_to` return nothing against the
+code as it was, **all five reported ok**; with the guards, all five fail.
+
+**Verified here with the scanner that filed it**: none of the five is reported any more.
+
+**Two things they found that this item did not.** `class_one_up_to` covers **three** of the five
+rather than two, because `topology.rs:322` was `class_one_up_to` spelled out inline - the same rule
+written twice, and only the helper guarded anything. And their floor of four is derived rather than
+chosen: a class I GP(m,0) has 10m^2+2 regions, so 200 admits m<=4 and 400 admits m<=6, and six is
+what the test prints under 400 - two routes agreeing.
 
 ### Q-74 - `Q-73`'s second check passes over an empty set, and its sibling is what caught it
 

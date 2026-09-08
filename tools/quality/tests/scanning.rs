@@ -7,7 +7,9 @@
 //! The fixtures are named `tests/` so `scan` treats them as test code, which is the only thing
 //! the path is used for.
 
-use quality::{Missing, cannot_be_empty, population_of, scan, states_a_denominator};
+use quality::{
+    Missing, bound_from_a_literal, cannot_be_empty, population_of, scan, states_a_denominator,
+};
 
 const AT: &str = "crates/x/tests/fixture.rs";
 
@@ -150,6 +152,38 @@ fn both_poles_sit_at_the_centre_of_a_pentagon() {
     );
 }
 
+/// **The second false positive, and the same cause as the first.** `let sources = [..]` is a
+/// literal with a name on it, and three correct tests were reported until this followed the
+/// binding - one of them `against_the_release.rs`, which already asserts its own floor and says
+/// in a comment that a parser finding nothing would agree with anything.
+#[test]
+fn a_population_bound_from_a_literal_is_not_reported() {
+    let source = r#"
+#[test]
+fn no_floating_point_anywhere() {
+    let sources = [("lib.rs", "a"), ("world.rs", "b")];
+    for (name, text) in sources {
+        assert!(!text.contains("f32"), "{name}");
+    }
+}
+"#;
+    assert_eq!(
+        scan(AT, source),
+        vec![],
+        "a population bound from a literal was reported"
+    );
+
+    assert!(bound_from_a_literal(
+        "let sources = [(\"a\", 1)];",
+        "sources"
+    ));
+    assert!(bound_from_a_literal("let rows = vec![1, 2];", "rows"));
+    assert!(
+        !bound_from_a_literal("let rows = parse(text);", "rows"),
+        "a call is not a literal, and is the case this exists to keep"
+    );
+}
+
 #[test]
 fn a_population_is_the_root_of_the_expression() {
     let cases = [
@@ -203,6 +237,17 @@ fn a_denominator_is_an_assertion_about_size() {
 
 #[test]
 fn only_literal_bounds_make_a_range_safe() {
+    // A bound is visible when it is written in the source: a plain number, one carrying a
+    // type suffix or a separator, or a named constant. All four were false positives.
+    for bound in [
+        "0..3",
+        "0..8u64",
+        "1..=8u64",
+        "0..PENTAGON_COUNT",
+        "0..2_000",
+    ] {
+        assert!(cannot_be_empty(bound), "`{bound}` is visible in the source");
+    }
     assert!(cannot_be_empty("0..3"));
     assert!(cannot_be_empty("[\"a\"]"));
     assert!(
