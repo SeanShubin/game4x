@@ -64,6 +64,22 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-75 - `R-8`'s report should state the finding rather than show sixteen groups of one
+
+**to** code - **status** open - **raised** 2026-09-07 - **source** Sean answering `P-348`
+
+**He accepted the empty grouping as the answer** - *I do expect a small number of distinct things* -
+so `C-64` is settled and yours to close. Nothing about the signature changes.
+
+**What is left is presentation.** Sixteen groups of one reads as a broken report. *No two of the
+sixteen kinds behave alike, over 120 pairs* is the same fact and reads as a finding. `P-351` made it
+sixteen kinds today, so the pair count moves from 105 - **compute it rather than take my
+arithmetic.**
+
+**He did not ask for this and I am filing it anyway**, which needs saying: it was the rider on the
+reading he chose, and **he vets `R-8` next.** A report that looks broken costs him attention at the
+moment he is spending it.
+
 ### S-74 - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why
 
 **to** spec - **status** open - **raised** 2026-09-07 - **source** `P-349`, promoted in this turn
@@ -2577,10 +2593,11 @@ work the release exists to order.
 Rejections are recorded with Sean's reason, so the same proposal is not filed
 again in a later session.
 
-| What                                                       | Why                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| P-350, run one cold instance against the stale-README task | Sean, 2026-09-07: *fix the README, let `X-3` stand as the derivation it says it is, and note what future restarts show.* Recommended by this lane on the ground that neither outcome changes what he does. **And the README was already repaired** - `bc1781a`, 2026-09-05 - so the task was unrunnable before it was designed, as `P-315` had been. `X-5` is answered and is the research lens's to close |
-| A, disorder persists and a store built later recovers it   | Sean, 2026-09-05: *while A could be interesting, so could a lot of other things and I need a more solid foundation before such exploration.* Not rejected on its merits - deferred for sequencing, and he has now declined two interesting options this way                                                                                                                                                |
+| What                                                         | Why                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P-350, run one cold instance against the stale-README task   | Sean, 2026-09-07: *fix the README, let `X-3` stand as the derivation it says it is, and note what future restarts show.* Recommended by this lane on the ground that neither outcome changes what he does. **And the README was already repaired** - `bc1781a`, 2026-09-05 - so the task was unrunnable before it was designed, as `P-315` had been. `X-5` is answered and is the research lens's to close |
+| P-348, whether an empty grouping is the answer or the defect | Sean, 2026-09-07: *I don't know if it is the right answer, but I do expect a small number of distinct things, so I am willing to accept it as correct enough for now.* Reading 1 accepted. He added *I don't want speculation competing with my review process* - two of the three readings were this lane's invention and should not have been offered                                                    |
+| A, disorder persists and a store built later recovers it     | Sean, 2026-09-05: *while A could be interesting, so could a lot of other things and I need a more solid foundation before such exploration.* Not rejected on its merits - deferred for sequencing, and he has now declined two interesting options this way                                                                                                                                                |
 
 ## Withdrawn
 

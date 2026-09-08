@@ -8,6 +8,25 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, answering `P-348` and correcting how I file
+
+*I don't know if it is the right answer, but I do expect a small number of distinct things, so I am
+willing to accept it as correct enough for now, and I don't want speculation competing with my
+review process.*
+
+**The answer is reading 1**: an empty grouping is the report telling him fifteen - now sixteen -
+kinds are distinct, which is what a small release should have.
+
+**The second clause is the part worth keeping, and it is not what `CLAUDE.md` already says.**
+`CLAUDE.md` says reasoning that does not change the decision belongs in a note. **This is narrower
+and sharper: an invented alternative is not reasoning, it is a competitor.** `P-348` offered him
+three readings; one was the code lane's finding and two were mine, speculating about what might be
+wrong. Offering those made him adjudicate my guesses **before** he could review the work - so the
+cost is not length, it is that the review surface fills with things nobody observed.
+
+**The test that follows**: a proposal may carry what was observed and what it entails. **An
+alternative nobody has evidence for is speculation, and it waits until there is.**
+
 ## Said 2026-09-07, declining the cold-instance study
 
 *Lets go with your latest recommendation, fix the README, let `X-3` stand as the derivation it says

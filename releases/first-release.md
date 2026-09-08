@@ -373,7 +373,7 @@ only one who can move them.
 
 ### R-8 - I can see which kinds behave alike
 
-**to** sean - **status** **built** 2026-09-07 - **cited** `d938c8a`, `79d8f1d` - **evidence** a signature per kind computed from the tables, reported by the code lane. **Its grouping is empty** - fifteen kinds, fifteen signatures - which is `C-64` and is a question for you rather than a defect in the build
+**to** sean - **status** **built** 2026-09-07 - **cited** `d938c8a`, `79d8f1d` - **evidence** a signature per kind computed from the tables, reported by the code lane. **Its grouping is empty** - every kind has a signature no other kind has - which was `C-64` and which Sean answered on 2026-09-07: a small number of distinct things is what he expects, so an empty grouping is the report working. `P-351` made it sixteen kinds
 
 - **In** - `docs/process.md`, *I insist that the AI make its work verifiable to a human*, applied
   to a kind's behaviour rather than to a scenario's outcome
