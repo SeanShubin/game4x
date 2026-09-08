@@ -184,7 +184,17 @@ mod tests {
     /// faces meet at each corner, so `V = 2F - 4`.
     #[test]
     fn every_goldberg_polyhedron_closes_up() {
-        for (m, n) in goldberg::arrangements_up_to(200) {
+        // **The denominator, said out loud - `Q-75`.** Every assertion below is inside this
+        // loop, so an empty generator is a passing test that closed up nothing. Eight is
+        // `poles.rs`'s floor for the same call, chosen there and repeated here rather than
+        // invented: a limit of 200 admits ten arrangements across all three classes.
+        let arrangements = goldberg::arrangements_up_to(200);
+        assert!(
+            arrangements.len() >= 8,
+            "only {} arrangements under 200, so this would check almost nothing",
+            arrangements.len()
+        );
+        for (m, n) in arrangements {
             let seeds = goldberg::seeds(m, n);
             let neighbours = crate::adjacency::adjacency(&seeds);
             let solid = solid(&seeds, &neighbours);

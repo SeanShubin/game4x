@@ -246,7 +246,16 @@ mod tests {
     #[test]
     fn every_arrangement_is_a_perfect_hex_tiling() {
         println!("\n  GP(m,n) | class | regions | pent | hex | touching | area | edges");
-        for (m, n) in arrangements_up_to(220) {
+        // **The denominator, said out loud - `Q-75`.** Every assertion below is inside this
+        // loop, so an empty generator is a passing test that tiled nothing. A limit of 220
+        // admits ten arrangements; eight is the floor `poles.rs` uses for the same call.
+        let arrangements = arrangements_up_to(220);
+        assert!(
+            arrangements.len() >= 8,
+            "only {} arrangements under 220, so this would check almost nothing",
+            arrangements.len()
+        );
+        for (m, n) in arrangements {
             let seeds = seeds(m, n);
             let expected = region_count(m, n);
             assert_eq!(seeds.len(), expected, "GP({m},{n}) seed count");

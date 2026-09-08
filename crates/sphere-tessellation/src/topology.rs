@@ -279,11 +279,28 @@ mod tests {
     }
 
     /// Only class I is derivable so far — see the note on [`build`].
+    ///
+    /// **The population is asserted where it is computed - `Q-75`**, which is `poles.rs`'s
+    /// pattern and for its reason: every assertion in the three tests below sits inside
+    /// `for (m, n) in class_one_up_to(..)`, so an empty return is three passing tests that
+    /// checked no arrangement at all. Guarding here covers all three at once and cannot be
+    /// forgotten at a call site.
+    ///
+    /// **Four, and the arithmetic says why.** A class I `GP(m,0)` has `10m^2 + 2` regions, so
+    /// a limit of 200 admits `m <= 4` and a limit of 400 admits `m <= 6`. Four is the floor
+    /// that holds for the smallest limit any caller passes.
     fn class_one_up_to(limit: usize) -> Vec<(usize, usize)> {
-        crate::goldberg::arrangements_up_to(limit)
+        let found: Vec<(usize, usize)> = crate::goldberg::arrangements_up_to(limit)
             .into_iter()
             .filter(|&(_, n)| n == 0)
-            .collect()
+            .collect();
+        assert!(
+            found.len() >= 4,
+            "only {} class I arrangements under {limit}, so a sweep over them would check \
+             almost nothing",
+            found.len()
+        );
+        found
     }
 
     #[test]
@@ -319,10 +336,10 @@ mod tests {
     fn the_derived_graph_is_a_goldberg_polyhedron() {
         let faces = faces();
         println!("\n  GP(m,n) | regions | pentagons | hexagons");
-        for (m, n) in crate::goldberg::arrangements_up_to(400)
-            .into_iter()
-            .filter(|&(_, n)| n == 0)
-        {
+        // **`class_one_up_to` written out by hand, and now called - `Q-75`.** It was the same
+        // filter over the same generator, so it was one rule with two implementations and only
+        // one of them guarded its population.
+        for (m, n) in class_one_up_to(400) {
             let built = build(m, n, &faces);
             let expected = crate::goldberg::region_count(m, n);
             assert_eq!(built.neighbours.len(), expected, "GP({m},{n}) region count");
