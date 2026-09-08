@@ -8,6 +8,25 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, answering `P-347`: founding requires the pioneer to be there
+
+*Founding should require the pioneer to be there.*
+
+**So the scenarios were wrong and their comments were right.** `play.4x` and `spread.4x` found
+territories with a pioneer that never left the territory it was produced in, while their own prose
+said it crossed. That is a defect rather than a rule, and `P-340` - promoted the same day - is the
+rule it breaks.
+
+**`move` stops being the question.** Once founding requires the pioneer to be there, a scenario has
+to move one before it can found, so `move` fires because the game needs it rather than because a
+case was written to exercise it. **`fired.rs`'s exception list, asserted to be exactly `["move"]`,
+empties.**
+
+**One thing his answer does not settle**, and it is unstated rather than undecided: the release never
+says what a blank *Where* cell means. `deploy ark` names `$where` and *the orbit above `$where`*;
+every other recipe leaves the column blank. Asked of the code lane in `S-76` rather than of him,
+because they implemented it and the answer may already exist.
+
 ## Said 2026-09-07, answering `P-348` and correcting how I file
 
 *I don't know if it is the right answer, but I do expect a small number of distinct things, so I am

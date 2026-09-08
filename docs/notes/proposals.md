@@ -64,6 +64,36 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-76 - Founding requires the pioneer to be there, and `move` fires because of it
+
+**to** code - **status** open - **raised** 2026-09-07 - **source** Sean answering `P-347`
+
+**His decision: founding should require the pioneer to be there.** So the present behaviour is a
+defect, and `P-340` - *a Pioneer is taken apart when it founds; moving is not founding, and it may
+cross ground its player already holds* - is the rule it breaks.
+
+**What is observably wrong**, checked rather than reported: `spread.4x:36` produces a pioneer in
+territory 1 and `spread.4x:48` founds territory **3**, with nothing between them that moves anything.
+`play.4x:132` and `:138` do the same into territory 2. Both pass. **Their own comments say the
+pioneer crosses**, and nothing does - `C-54`'s shape one layer up.
+
+**Three things follow, and the third is the one that cannot be half-done.**
+
+- **`found by land` requires a pioneer in `$where`**
+- **The scenarios have to move a pioneer before founding**, which makes their existing comments true
+  rather than false
+- **`fired.rs`'s exception list empties.** It asserts the unfired set is exactly `["move"]`, so it
+  fails until the exception goes - which you already built to be impossible to half-do
+
+**One question back, because the release does not say and you implemented it.** `deploy ark` names
+its places - `$where`, and *the orbit above `$where`* - and **every other recipe leaves the *Where*
+column blank.** What does the model do with a blank cell today? If it already means `$where`, this is
+a bug against a rule the release states implicitly; if it means anywhere, the release needs a row
+changing and that is a proposal rather than a fix. **I am not guessing which.**
+
+**It changes `scenario/expected/play.4x` again**, which still opens *NOT YET REVIEWED* and is what
+Sean is waiting to read.
+
 ### S-75 - `R-8`'s report should state the finding rather than show sixteen groups of one
 
 **to** code - **status** open - **raised** 2026-09-07 - **source** Sean answering `P-348`
@@ -2593,11 +2623,12 @@ work the release exists to order.
 Rejections are recorded with Sean's reason, so the same proposal is not filed
 again in a later session.
 
-| What                                                         | Why                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| P-350, run one cold instance against the stale-README task   | Sean, 2026-09-07: *fix the README, let `X-3` stand as the derivation it says it is, and note what future restarts show.* Recommended by this lane on the ground that neither outcome changes what he does. **And the README was already repaired** - `bc1781a`, 2026-09-05 - so the task was unrunnable before it was designed, as `P-315` had been. `X-5` is answered and is the research lens's to close |
-| P-348, whether an empty grouping is the answer or the defect | Sean, 2026-09-07: *I don't know if it is the right answer, but I do expect a small number of distinct things, so I am willing to accept it as correct enough for now.* Reading 1 accepted. He added *I don't want speculation competing with my review process* - two of the three readings were this lane's invention and should not have been offered                                                    |
-| A, disorder persists and a store built later recovers it     | Sean, 2026-09-05: *while A could be interesting, so could a lot of other things and I need a more solid foundation before such exploration.* Not rejected on its merits - deferred for sequencing, and he has now declined two interesting options this way                                                                                                                                                |
+| What                                                           | Why                                                                                                                                                                                                                                                                                                                                                                                                        |
+| -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P-350, run one cold instance against the stale-README task     | Sean, 2026-09-07: *fix the README, let `X-3` stand as the derivation it says it is, and note what future restarts show.* Recommended by this lane on the ground that neither outcome changes what he does. **And the README was already repaired** - `bc1781a`, 2026-09-05 - so the task was unrunnable before it was designed, as `P-315` had been. `X-5` is answered and is the research lens's to close |
+| P-348, whether an empty grouping is the answer or the defect   | Sean, 2026-09-07: *I don't know if it is the right answer, but I do expect a small number of distinct things, so I am willing to accept it as correct enough for now.* Reading 1 accepted. He added *I don't want speculation competing with my review process* - two of the three readings were this lane's invention and should not have been offered                                                    |
+| P-347, whether founding should require the pioneer to be there | Sean, 2026-09-07: *founding should require the pioneer to be there.* Not a rejection - the decision that makes the current behaviour a defect. Filed as `S-76`; `move` then fires because the game needs it rather than because a case was written for it                                                                                                                                                  |
+| A, disorder persists and a store built later recovers it       | Sean, 2026-09-05: *while A could be interesting, so could a lot of other things and I need a more solid foundation before such exploration.* Not rejected on its merits - deferred for sequencing, and he has now declined two interesting options this way                                                                                                                                                |
 
 ## Withdrawn
 

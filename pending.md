@@ -8,15 +8,15 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-347** - Founding does not require the pioneer to be there, which is why `move` never fires · `docs/notes/decisions.md`
 - **P-346** - Three statements fix what a move costs, and only one of them is a mechanism · `docs/notes/decisions.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
+- **S-76** - Founding requires the pioneer to be there, and `move` fires because of it · `docs/notes/proposals.md`
 - **S-75** - `R-8`'s report should state the finding rather than show sixteen groups of one · `docs/notes/proposals.md`
 - **S-72** - `manned` is deleted, by Sean's decision on `C-46` · `docs/notes/proposals.md`
 - **S-71** - The column check Sean chose, for `hooks/pre-commit` · `docs/notes/proposals.md`
