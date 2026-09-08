@@ -1,0 +1,24 @@
+# Not a workspace member. This is the quality lens's own instrument, not part of the game, so it
+# stays out of `cargo build --workspace` and out of `cargo tree`. The gate reaches it by walking
+# `tools/*/Cargo.toml` rather than by being told its name.
+#
+# **Its own workspace root rather than a line in the root `exclude` list**, which is how the
+# other five tools are kept out. That list is in `Cargo.toml`, and cargo is the code lane's
+# column - so this achieves the same isolation without a lens editing a producer's file. If the
+# code lane would rather have it in `exclude` for consistency, that is theirs to move.
+[workspace]
+
+[package]
+name = "quality"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "quality"
+path = "src/lib.rs"
+
+[[bin]]
+name = "denominators"
+path = "src/main.rs"
+
+[dependencies]

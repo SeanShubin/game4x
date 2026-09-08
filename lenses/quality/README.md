@@ -388,6 +388,10 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [A denominator is syntactic, so it can be swept](2026-09-08-a-denominator-is-syntactic.md)
+  - 2026-09-08. The code lane offered to fix instances if this lens found them. `C-28`
+    forecloses the semantic question and not this one, so the instrument exists now -
+    and its worst false positive was four correct tests, triaged out before sending.
 - [Three reasons that were not the ones doing the work](2026-09-08-three-reasons-that-were-not-the-ones-working.md)
   - 2026-09-08. Requested by the code lane at Sean's asking. `S-76`'s claim holds and its
     stated reason is false, `tools/anchor`'s coverage check is a constant a fourth refusal

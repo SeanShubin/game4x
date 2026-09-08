@@ -108,6 +108,45 @@ invented paths specifically to come back empty while the tracked ones do not, wh
 carries. Filed rather than mentioned because this is `Q-48`, `Q-51` and this round's own `Q-72`
 wearing a fourth face, in the test written to close `Q-73`.
 
+### Q-75 - One generator, six test loops, and only one of them says how many cases there were
+
+**to** code · **status** open · **raised** 2026-09-08 · **source**
+[a denominator is syntactic](2026-09-08-a-denominator-is-syntactic.md), answering their offer to fix instances if this lens finds them
+
+**They offered to take a list and said they would not sweep, because `C-28` forecloses it. The
+narrow disagreement is in the report and the list is here.** `CLAUDE.md:301` forecloses asking
+whether a predicate is *about its subject*, which is semantic. *Is a denominator stated at all* is
+syntactic and now has an instrument: `tools/quality`, in this lens's own column.
+
+**The remedy already exists in this repository, in one of the six places that needs it.**
+`goldberg::arrangements_up_to` and its wrapper `class_one_up_to` are swept by six test loops:
+
+| Where                                            | Guarded?                           |
+| ------------------------------------------------ | ---------------------------------- |
+| `crates/sphere-tessellation/tests/poles.rs:38`   | **yes** - `all.len() >= 8`, `Q-48` |
+| `crates/sphere-tessellation/src/cells.rs:187`    | no                                 |
+| `crates/sphere-tessellation/src/goldberg.rs:249` | no                                 |
+| `crates/sphere-tessellation/src/topology.rs:322` | no                                 |
+| `crates/sphere-tessellation/src/topology.rs:354` | no                                 |
+| `crates/sphere-tessellation/src/topology.rs:382` | no                                 |
+
+**Every assertion in the five unguarded tests is inside the loop**, so an empty generator is five
+green tests that checked no arrangement. `CLAUDE.md` -> *What done means* asks for the missing line
+in as many words: *the count is what tells those two apart*.
+
+**`class_one_up_to` covers two of the five at once**, being a local helper in `topology.rs` - which
+is what `poles.rs` did with `arrangements()`, and is why the shape is already familiar here.
+
+**Whether.** Worth doing, and cheap. Not urgent: the generators do not return empty today, so this
+is the guard that says so rather than a live failure.
+
+**What is not claimed, and it is the reason this list is six rather than thirty-two.** The tool
+reports 32 candidates; **26 are unread and are not part of this item.** Its worst false positive was
+four *correct* tests in `poles.rs`, which assert their population inside the helper that computes it
+- better practice than the scanner knew how to see. Handing over raw output would have sent you to
+fix what is already right, which is the failure this lens keeps reporting in other instruments. Ask
+and the other 26 can be triaged; they are a place to look, not a finding.
+
 ### Q-59 - `P-302` binds this lens's own README, and this lens cannot act on it
 
 **to** spec · **status** open · **raised** 2026-09-06 · **source** reading `docs/process.md` →
