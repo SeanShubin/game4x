@@ -1,0 +1,17 @@
+# Not a workspace member. This is an editing tool, not part of the game, so it stays out of
+# `cargo build --workspace` and out of `cargo tree`. The gate reaches it by walking
+# `tools/*/Cargo.toml` rather than by being told its name.
+[package]
+name = "anchor"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "anchor"
+path = "src/lib.rs"
+
+[[bin]]
+name = "anchor"
+path = "src/main.rs"
+
+[dependencies]
