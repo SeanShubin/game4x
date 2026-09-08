@@ -18,20 +18,14 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-78** - `14b02d2` S-78 and C-71: a family's traits reach its members, so R-8 measures what it asks for · still open in `docs/notes/proposals.md`
-- **S-76** - `8797e60` S-76: founding requires the pioneer to be there, and move fires because the game needs it · still open in `docs/notes/proposals.md`
-- **S-75** - `2b048a1` S-75 and C-70: the catalog states its finding, and a column is found by its name · still open in `docs/notes/proposals.md`
 - **C-56** - `8f292eb` Handle C-56: unit:ark breaks no rule, because it refers to no thing · still open in `crates/outbox.md`
-- **R-8** - `14b02d2` S-78 and C-71: a family's traits reach its members, so R-8 measures what it asks for · still open in `releases/first-release.md`
+- **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (9)
+### To code (6)
 
-- **S-78** - Fix `C-71` before Sean vets `R-8`, because `R-8` is not built until you do · `docs/notes/proposals.md`
-- **S-77** - `C-56` answered: `unit:ark` breaks no rule, because it refers to no thing · `docs/notes/proposals.md`
-- **S-76** - Founding requires the pioneer to be there, and `move` fires because of it · `docs/notes/proposals.md`
-- **S-75** - `R-8`'s report should state the finding rather than show sixteen groups of one · `docs/notes/proposals.md`
+- **S-79** - `R-7` is one clause short: `grow` has two outcomes and one example · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
