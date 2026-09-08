@@ -60,39 +60,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-351 - `game` is the sixteenth kind
-
-**to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
-- **asks** approval - **shape** rows - **into** `releases/first-release.md` -> Kinds, appended after
-`adjacency`
-
-**You said `game` is a kind.** One row. The words are `spec/logistics.md:27` echoed rather than
-invented - *every thing is in the game, directly or through what contains it. The game is the one
-thing that is in nothing.*
-
-| Kind     | What it is                                                       |
-| -------- | ---------------------------------------------------------------- |
-| **game** | every thing is in it, and it is the one thing that is in nothing |
-
-**Appended rather than placed**, because `deposit` and `adjacency` were both appended and I would
-otherwise be inventing an order. Say if it belongs first - it is the root, and there is a reading
-where the table should open with it.
-
-**Two things this makes true that you should know before approving, because neither is visible in
-the row.**
-
-- **The gate goes red until the code follows.** The release's tables are generated from, and
-  `prototypes/kinds` asserts it holds the same ones. A sixteenth kind is a red gate for whichever
-  lane commits next, which may not be the lane that can fix it
-- **`R-8` reports fifteen kinds and will report sixteen.** Its grouping is empty at fifteen, which
-  is `P-348`, still open to you. **A sixteenth kind cannot collide with anything** - `game` carries
-  no traits any other kind carries and is named by no recipe - so it becomes a sixteenth group of
-  one, and `P-348`'s question is unchanged rather than answered
-
-**The other half of your answer is not a promotion.** `manned` is declared by no row, so deleting it
-changes nothing in `spec/` or `releases/`. It is filed as `S-72` to the code lane and needs nothing
-from you.
-
 ### P-352 - The staging bullet gains the reason care cannot close it, and the check that can
 
 **to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
@@ -2577,6 +2544,7 @@ work the release exists to order.
 | P-321, a command is written `{name field:value ...}`, and the positional form goes                                           | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-06 |
 | P-349, edge, border and boundary name one thing, and crossing is passing through it                                          | `spec/planet.md` -> Distance                                                                                                                                                                             | 2026-09-07 |
 | P-353, there is one notation, and the tree is what having one means                                                          | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-07 |
+| P-351, `game` is the sixteenth kind                                                                                          | `releases/first-release.md` -> Kinds                                                                                                                                                                     | 2026-09-07 |
 | P-322, a deposit is a thing, so a territory's density has somewhere to be written                                            | `releases/first-release.md` -> Kinds, Traits                                                                                                                                                             | 2026-09-06 |
 | P-323, a field is named for the kind it refers to; a command is named for its recipe and may repeat                          | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-06 |
 | P-324, being blocked on one thing is not being blocked, and it applies to every lane                                         | `docs/process.md` -> All lanes                                                                                                                                                                           | 2026-09-06 |

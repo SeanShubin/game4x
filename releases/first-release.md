@@ -67,6 +67,7 @@ Every territory has total capacity for at least one food extractor.
 | **orbit**     | a place above one territory, which holds units and nothing else                                              |
 | **deposit**   | what a territory's ground offers of one resource, and how richly                                             |
 | **adjacency** | two places that share an edge, held by the thing that holds them                                             |
+| **game**      | every thing is in it, and it is the one thing that is in nothing                                             |
 
 ## Families
 

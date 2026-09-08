@@ -8,7 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-351** - `game` is the sixteenth kind · `docs/notes/proposals.md`
 - **P-352** - The staging bullet gains the reason care cannot close it, and the check that can · `docs/notes/proposals.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`
