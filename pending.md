@@ -8,11 +8,11 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-349** - Edge, border and boundary name one thing, and crossing is passing through it · `docs/notes/proposals.md`
 - **P-353** - There is one notation, and the tree is what having one means · `docs/notes/proposals.md`
 - **P-352** - `CLAUDE.md` names the staging hazard correctly and gives an instruction that cannot close it · `docs/notes/decisions.md`
 - **P-351** - Two words in the data file that the release does not declare, and the exception list is full · `docs/notes/decisions.md`
 - **P-350** - Filing this study as an item is what makes it unrunnable, and that is the finding · `docs/notes/decisions.md`
-- **P-349** - `crosses` is load-bearing and undefined, and my *strictly more* was wrong · `docs/notes/decisions.md`
 - **P-348** - `R-8` is built and no two kinds behave alike, which may be the answer or the defect · `docs/notes/decisions.md`
 - **P-347** - No scenario fires `move`, and `P-340` just made the missing case explicit · `docs/notes/decisions.md`
 - **P-346** - Three statements fix what a move costs, and only one of them is a mechanism · `docs/notes/decisions.md`
@@ -25,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-349** - `feb8745` P-349 rewritten: crosses is not stricter, it is undefined · still open in `docs/notes/proposals.md`
 - **P-353** - `5c98ace` Reflow P-353's field line: a wrap split `asks a decision` into `asks a` · still open in `docs/notes/proposals.md`
 - **C-67** - `03b33a3` P-353 from C-67: the tree is built and nothing in the game asks for one · still open in `crates/outbox.md`
 

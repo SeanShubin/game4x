@@ -106,6 +106,26 @@ the 7th - **kind** the
 research lens's `X-5`, lifted - **asks** a decision - **into** nothing; it authorises a study or it
 does not
 
+**The question, in one line.** On some future restart, should one instance be given one task as
+ordinary work - *what are a lens's jobs?* - with a record kept of which files it opened before
+answering?
+
+**Everything else about this item has collapsed into that.** Two of the three tasks now have
+observational evidence against them from the crash, so they can only confirm; `P-315` is unrunnable
+because the sentence that caused it was repaired. **One task is left.**
+
+- **What it tests.** The lens's own README restates its jobs and is four days behind
+  `docs/process.md`, which owns them. `X-3` predicts a cold instance **fails** - reaches the README -
+  and that a long-running one might not. **If it reaches `docs/process.md` unprompted, `X-3` loses
+  its central claim** that clearing context makes two of the phenomena worse
+- **Why it is worth a person's attention at all.** The outbox architecture assumes an instance is
+  replaceable by a fresh one that reads the files. **That assumption is why `pending.md` and the
+  items are worth keeping, and it has never been tested**
+- **When it can run.** Only after you answer. While this item is open, `pending.md` names it and the
+  instance reads that first - which is the finding below
+- **What it costs.** A few minutes of one restart, and no writes. **Declining costs nothing**:
+  `X-3`'s answer stands as a derivation and says so
+
 **Time-sensitive, and that is the only reason it is in front of you today.** `X-5` has said *worth
 doing eventually rather than now* since 2026-09-06, correctly, because it needed an instance started
 for the purpose. **You are starting instances anyway**, and the study needs a reader that has read
@@ -242,53 +262,6 @@ produced the failures.
 **What it changes about the decision.** Two of the three predictions now have observational evidence
 against them, so **the study's remaining value is concentrated almost entirely in the third task**.
 If you authorise it, the honest version is one task, not three.
-
-### P-349 - `crosses` is load-bearing and undefined, and my *strictly more* was wrong
-
-**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07, after you asked
-whether the release says more or says something undefined - **asks** a decision -
-**into** `spec/planet.md` and `releases/first-release.md` -> *Units and structures*
-
-**You were right and I checked rather than defended.** I wrote that your sentence says *adjacency*
-and the release says adjacency **and** that the unit crosses that edge, *which is strictly more*.
-**It is not more. It is undefined**, and a defined term cannot be compared to an undefined one.
-
-| Where                     | What it says                                                 | Defined?                          |
-| ------------------------- | ------------------------------------------------------------ | --------------------------------- |
-| `spec/planet.md:28`       | two territories are adjacent when they **share an edge**     | **yes**, between territories only |
-| `spec/orbit.md:20`        | an orbit is **next to** the territory below it               | yes, and it does not say *edge*   |
-| release, `move`           | `$to` is *joined to `$from` by an **edge the unit crosses*** | **no**                            |
-| release, *Crosses* column | `border` for a pioneer, `orbit border` for an ark            | **no**                            |
-
-**`crosses` is not one of the nineteen declared traits**, and neither `border` nor `orbit border`
-appears anywhere else in the repository. **No check can see this**: `vocabulary.rs` tests the words
-in the played state, and `crosses` reaches `scenario/expected/play.4x` zero times - so a release
-column that never becomes data is invisible to the one instrument built to catch undeclared words.
-
-**And it is not dead, which is what makes it matter.** The two values are the whole difference
-between an ark and a pioneer: an ark crosses an *orbit border* and a pioneer crosses a *border*, and
-**that is what stops a pioneer flying into orbit.** Deleting the column would delete a rule of the
-game. So this is not tidying - a real constraint is carried by words nothing defines.
-
-**The second gap is `edge` itself.** `spec/` gives *edge* a meaning between territories only, and
-states orbit adjacency as *next to*. **So the `move` qualifier, read strictly, does not reach an
-orbit at all** - the same seam `P-345` opened when the cost line came out of `spec/orbit.md`.
-
-**What I need from you.**
-
-- **Define them**, and `crosses` gets a Traits row with named values, `border` and `orbit border` get
-  meanings, and `edge` either widens to cover orbit adjacency or the qualifier stops saying *edge*
-- **Replace them**, if the distinction is better carried by words already defined - a pioneer moves
-  between territories, an ark between places - and then the column goes and no rule is lost
-
-**I am not choosing between them.** Both change what the game permits at its edges, and your own
-instruction is the test: *either define the difference or stick to words that are defined*.
-
-**Three more columns of that table are not declared traits either** - `binding`, `requires` and
-`readies` - measured against the Traits table rather than assumed. `binding` is at least referenced
-by a declared trait, since *metal in it* is derived from it. **I have not audited what the other two
-mean**, and I am not folding them in; they are named so that answering this does not read as
-clearing the table.
 
 ### P-348 - `R-8` is built and no two kinds behave alike, which may be the answer or the defect
 

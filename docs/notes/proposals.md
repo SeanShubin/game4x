@@ -60,6 +60,48 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-349 - Edge, border and boundary name one thing, and crossing is passing through it
+
+**to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
+- **asks** approval - **shape** text - **into** `spec/planet.md` -> Distance, after the two bullets
+already there
+
+**You defined it and most of it was already written.** `spec/planet.md:26` says two territories are
+adjacent when they share an edge, corners excluded - **that is your shared boundary, already
+normative** - and `P-334` already put the list in the data. What was missing is only the
+tying-together you offered.
+
+> **Adjacency is a shared boundary.** Two places are adjacent when they share one. **Edge, border
+> and boundary name that shared thing**, and none of them means anything the others do not.
+>
+> **A territory is adjacent to the space above it, and two spaces are adjacent when the territories
+> below them are.** Neither is a further rule; both are what sharing a boundary comes to when one
+> place is above another.
+>
+> **To cross is to pass through a shared boundary.** A unit crosses some and not others, and which
+> ones it crosses is a fact about that unit.
+
+**What this fixes, which is the whole reason it exists.** `crosses` and its values `border` and
+`orbit border` are undefined today, and they are load-bearing - they are what stops a pioneer flying
+into orbit. **The last sentence is what they will echo**: the release names which boundaries a unit
+crosses, and *crosses* finally means something.
+
+**Three things I deliberately did not write, each with a reason.**
+
+- **Goldberg polyhedra.** You said adjacency can be derived from them. `spec/planet.md` -> Shape
+  already carries the solid, and **how a fact is obtained is not the same as what it means** - the
+  definition should hold if the shape ever changes
+- **That it can be put in a list.** `P-334` did that, and it is data. Saying so in prose would be
+  the specification restating what a data file already states
+- **Kinds of boundary.** The ark-and-pioneer distinction needs boundaries to differ somehow, but you
+  did not say *kinds*, so the text says **which ones a unit crosses** rather than inventing a
+  taxonomy. If a taxonomy is wanted it is a later proposal, and nothing here forecloses one
+
+**What it leaves for me after it lands, filed rather than assumed.** `border` and `orbit border`
+still need meanings in `releases/first-release.md`, and `spec/orbit.md`'s *next to* should echo this
+rather than sit beside it. **Both are mine to write and I will file them as a cleanup in the same
+turn as the promotion**, which is what the staleness rule asks.
+
 ### P-353 - There is one notation, and the tree is what having one means
 
 **to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered

@@ -8,6 +8,26 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, that adjacency is a shared boundary
+
+*Adjacency shouldn't be too hard to define. It is a shared boundary. We can derive it from goldberg
+polyhedrons. We can put it in a list. We know spaces above territories inherit the adjacency
+properties because of how three dimensional space works. We know land is adjacent to the space above
+it. As long as the definitions are solid and the prose just echoes the definitions, we should have no
+ambiguity even if the words are different. If we need to we can try a clarifying sentence somewhere
+that describes the relationship between adjacency, crossing, and shared boundaries.*
+
+**Two of the four are already done, which narrows what has to be written.** `spec/planet.md:26`
+already defines adjacency as a shared edge, corners excluded; and `P-334` already put the list in the
+data - `adjacency` is a kind with `from` and `to`, and the game holds `{adjacency from:1 to:2} -> 1`.
+
+**What is missing is the tying-together**, which is the clarifying sentence he offered: that *edge*,
+*border* and *boundary* name one thing, that a territory and the space above it share one, and what
+crossing one means. Drafted as `P-349`.
+
+**The principle is the reusable part and is not about this case**: words may differ as long as each
+is anchored to a definition. He is not asking for one word; he is asking that no word float.
+
 ## Said 2026-09-07, on words that arrive without meanings
 
 *It sounds like we are inheriting meaning from similar words without specifying what those words
