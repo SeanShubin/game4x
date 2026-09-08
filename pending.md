@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-356** - A field may name a kind instead of a thing, and nothing says so · `docs/notes/decisions.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
@@ -22,8 +23,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
+- **S-77** - `C-56` answered: `unit:ark` breaks no rule, because it refers to no thing · `docs/notes/proposals.md`
 - **S-76** - Founding requires the pioneer to be there, and `move` fires because of it · `docs/notes/proposals.md`
 - **S-75** - `R-8`'s report should state the finding rather than show sixteen groups of one · `docs/notes/proposals.md`
 - **S-72** - `manned` is deleted, by Sean's decision on `C-46` · `docs/notes/proposals.md`

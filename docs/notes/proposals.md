@@ -62,6 +62,38 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-77 - `C-56` answered: `unit:ark` breaks no rule, because it refers to no thing
+
+**to** code - **status** open - **raised** 2026-09-08 - **source** Sean asking for `C-56` to be
+handled
+
+**Keep `{move unit:ark territory:2}`. Nothing changes, and `C-56` closes with no work.**
+
+**The form you filed as rule-following is refused, on Sean's own decision.** `{move ark:1 ...}` names
+**one particular ark by its `id`**, and he has since said ids stay rare and are for the places he
+keeps his attention on - **fleet units carry none.** So selecting by id cannot be how a fleet moves,
+and your instinct to preserve behaviour rather than follow the sentence literally was right.
+
+**And the sentence does not apply anyway.** `spec/console.md`: *a field that refers to a thing is
+named for that thing's kind* - and its example is `territory:1`, **whose value is an `id`.**
+`unit:ark`'s value is a **kind**, so it refers to no thing; it says which kind of thing to move.
+**Those are two different sorts of field and the rule governs only the first.**
+
+**The release already uses both and nobody has questioned the other.**
+`{work territory:1 resource:food}` carries `territory:1`, which refers to a thing, beside
+`resource:food`, which names a value. **`unit:ark` is the second shape**, not a broken instance of
+the first.
+
+**What is genuinely missing is a sentence, and it is mine.** `spec/console.md` says what a
+thing-referring field looks like and **says nothing at all about a field whose value selects a
+kind**, though the release has two. That absence is what cost you a question, so it is filed to Sean
+as `P-356`. **You need not wait for it** - nothing about the current form changes whichever way he
+answers.
+
+**One thing that will come back to you later.** When `move` adopts `movable` and its Kind cell stops
+saying `unit`, the field `unit:ark` will name a family the recipe no longer mentions. **That is a
+consequence of `P-354`'s first decision, not of this**, and it arrives as its own proposal.
+
 ### S-76 - Founding requires the pioneer to be there, and `move` fires because of it
 
 **to** code - **status** open - **raised** 2026-09-07 - **source** Sean answering `P-347`
