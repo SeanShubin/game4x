@@ -8,6 +8,34 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Decided 2026-09-08, all three of `P-354`
+
+*1: trait confirmed. 2: derived confirmed, mainly because i think we gain a lot of simplicity for the
+same amount of strategic depth. 3: consume-and-produce confirmed.*
+
+**Three answers, and they land very differently.**
+
+**3 is the status quo**, so nothing is written and nothing is built. `move` consumes at `$from` and
+produces at `$to` today. **Recorded so it is not reopened**, and with the reason: ids stay rare,
+fleets aggregate, and identity is for the flagship-and-leaders minority.
+
+**1 needs one more thing before it can be words.** Selecting by trait means a `movable` row in
+*Traits*, and a row has a **Values** cell and a **stored or derived** cell. He has answered the
+second - derived - and not the first.
+
+**And *derived* raises the question that decides the first**: derived **from what**? A derived trait
+names its derivation - *its binding plus the metal in its parts*, *a citizen of that player is
+there*. **`movable` has to name one too.**
+
+**Two candidates exist in the data and no others.** After `P-346` deletes *A move*, the columns
+naming exactly `{ark, pioneer}` are **`Fuel`** and **`Crosses`**. So a thing is movable **because it
+has a tank**, or **because there is a boundary it can cross**. They name the same set today and are
+different reasons. **Filed as `P-355` rather than chosen**, because which is the reason is his.
+
+**His stated ground for 2 is worth keeping**: *we gain a lot of simplicity for the same amount of
+strategic depth*. **Depth held constant, simplicity decides** - which is a test that applies well
+beyond this decision.
+
 ## Said 2026-09-07, that ids are rare and the empire is run by specification
 
 *My intention is for very few things to carry ids. Id's are for the places the player is keeping

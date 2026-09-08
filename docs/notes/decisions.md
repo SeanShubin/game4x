@@ -21,95 +21,32 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-354 - Three decisions about how a thing says what it can do
+### P-355 - What is `movable` derived from?
 
-**to** sean - **status** open - **raised** 2026-09-07 - **rewritten** 2026-09-07, as three decisions
-rather than one - **kind** recovered - **asks** a decision - **into**
-`releases/first-release.md` -> *Traits* and *Recipes*
+**to** sean - **status** open - **raised** 2026-09-08 - **kind** entailed, by your own three answers
+- **asks** a decision - **into** `releases/first-release.md` -> *Traits*
 
-**Working in [do the sets cross-cut?](2026-09-07-do-the-sets-cross-cut.md)**, including why a
-hierarchy is already refuted and why an ECS fits. **These are the three choices that survive it.**
-They are independent: any answer to one works with any answer to the others.
+**Your three answers settle everything but one cell.** A *Traits* row needs a **Values** cell and a
+**stored or derived** cell. You said **derived**, and **a derived trait names its derivation** -
+*metal in it* is *its binding plus the metal in its parts*; *control* is *a citizen of that player is
+there*. **`movable` needs one too**, and that is the only thing stopping this becoming words.
 
----
+**Two candidates, and they are the only two in the data.** Once `P-346` deletes *A move*, the columns
+naming exactly `{ark, pioneer}` are:
 
-**1. What says a recipe applies to a thing - the family it is in, or a trait it carries?**
+| From        | It would read                           | So a thing moves because           |
+| ----------- | --------------------------------------- | ---------------------------------- |
+| **Fuel**    | derived: it has a tank                  | **it has somewhere to put energy** |
+| **Crosses** | derived: there is a boundary it crosses | **there is somewhere it can go**   |
 
-|                |                                                                                                                                                       |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Today**      | the family. *Families* says `unit` is `ark, pioneer`; `move` consumes `1 unit`                                                                        |
-| **Or**         | a trait. `move` consumes `1 thing movable`                                                                                                            |
-| **Change**     | one row in *Traits*, and two cells in `move`                                                                                                          |
-| **Legal now?** | **Yes, both.** *Kind is the kind or the family alone*, `thing` is a family, and *Traits are the constraints on it* - so no grammar changes either way |
-| **Difference** | a family is per **kind**; a trait is per **thing**. Nothing in the release needs two things of one kind to differ                                     |
+**They name the same two kinds today**, so nothing in the game changes either way. **They are
+different reasons**, and the one you pick is what a later kind will be measured against - a thing
+with a tank and nothing it can cross, or a thing that could cross but carries no energy.
 
----
+**I am not choosing.** Both are already in the table, so neither is an invention, and nothing in what
+you have said prefers one.
 
-**2. Must a trait carry a number, or may it just be present?**
-
-|                |                                                                                                                   |
-| -------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **Today**      | it carries a number. `Thing.traits` is `BTreeMap<Trait, u32>`, and **`ready` already encodes *yes or no* as one** |
-| **Or**         | a trait may appear with no value - `{ark movable}`                                                                |
-| **Change**     | `Thing.traits` becomes trait to **optional** number, and the data file needs a form for a valueless trait         |
-| **Difference** | notation. **No behaviour changes either way**                                                                     |
-
----
-
-**3. When a thing moves, is it the same thing?**
-
-|                |                                                                                                                                                                                                                |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Today**      | **no.** `move` **consumes** a unit at `$from` and **produces** one at `$to` - one thing destroyed, another made                                                                                                |
-| **Or**         | **yes** - the thing relocates, carrying one less energy. Your formulation, and what an ECS does                                                                                                                |
-| **Change**     | **a fifth role** beside `require`, `limit`, `consume` and `produce` - none of the four relocates anything - or a stated convention that consuming and producing one kind within one recipe preserves the thing |
-| **Difference** | whether anything can refer to a **particular** unit across a move                                                                                                                                              |
-
-**Not observable today**, which is worth knowing before spending a role on it: **no ark or pioneer
-appears in the played state at all** - each is consumed in the turn it is made - and the only things
-carrying an `id` in `scenario/expected/play.4x` are orbits. **It becomes observable the first time a
-unit persists across a turn and is named.**
-
----
-
-**Your leanings, and what going over them changed** -
-[the reasoning](2026-09-07-do-the-sets-cross-cut.md).
-
-- **1, trait.** Holds, and the measurement is stronger than the argument: the release **already has
-  both mechanisms and they already duplicate** - `unit`, *Fuel*, *A move* and *Crosses* all name
-  `{ark, pioneer}`. **Keeping both is what causes the duplication you want gone.** Its one cost,
-  scanning to find what is movable, is already paid by `R-8`
-- **2, a number.** Holds - `keeps` is *the number of turns it will last*, your how-durable, already
-  in the table - and **5 traits are numbers, 3 are yes-or-no, 11 are neither.** But **I posed it too
-  narrowly**: the third shape is *one of a closed set*, and the model flattens all three to `u32`.
-  **The question is what a trait's value may be**, not whether it is a number
-- **3, torn - and it inverts.** `spec/console.md` says a thing carrying an `id` has a description no
-  other thing shares, **so its quantity is always one**, while `{citizen ready:yes} -> 8` is one
-  entry. **Individuation is caused by identity**, so preserving it across a move is what would make a
-  million movers a million entries. And in an ECS mutation is cheap where destroy-and-create is not -
-  so a fifth role is **what lets a thin system know it may mutate**, rather than infer it from the
-  shape of a consume-and-produce pair. **It avoids the chaos rather than causing it**
-
-**And your intent that ids stay rare settles most of 3.** Fleets are identical and aggregate, so
-consume-and-produce is right for nearly everything; identity matters only for the flagship and
-leaders you said would be used sparingly.
-
-**That minority may need no fifth role at all.** `build extractor` already produces
-`1 extractor $resource` - a produce row carrying a `$`-bound trait value - and `spec/console.md:68`
-says a command binds *any ingredient or trait value it names with a `$`*. **`id` is a trait**, so a
-recipe could consume `id:$id` and produce `id:$id` and keep the name. **Check that before adding a
-role**; it composes with your `P-346` answer, being a separate recipe rather than a generalised
-`move`.
-
-**Two things your intent changes about the other two decisions.**
-
-- **1 gets a better argument than maintainability.** A player writing fully specified behaviour must
-  **name sets of things**. A trait is a name a player can use; **a family is a table only the
-  designer edits.** `spec/invariants.md` already says every rule a player can use is composed of
-  rules they can also use, and that nothing plays itself
-- **2 gets a consequence at scale.** A description is a kind and **every stored trait**, and a
-  derived trait is never part of one - so **the description is the aggregation key.** Every distinct
-  stored value splits a fleet into another entry; a derived trait costs nothing. **So the question
-  after *a number* is *stored or derived*** - that is what decides whether a graded quality
-  fragments a million identical objects
+**What lands once you answer**: one *Traits* row, and two cells of `move` changed from `unit` to
+`thing` plus `movable`. **The grammar allows it already** - *Kind is the kind or the family alone*,
+`thing` is a family, and *Traits are the constraints on it*.
 

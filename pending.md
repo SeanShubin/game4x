@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-346** - The `A move` column goes · `docs/notes/proposals.md`
-- **P-354** - Three decisions about how a thing says what it can do · `docs/notes/decisions.md`
+- **P-355** - What is `movable` derived from? · `docs/notes/decisions.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
 
