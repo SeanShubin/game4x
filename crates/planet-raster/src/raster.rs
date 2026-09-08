@@ -456,21 +456,45 @@ mod tests {
             render(&mut buffer, &view, &scene, None);
 
             let full = full_colors();
+            // **What got past the filter is counted - `Q-77`.** Every assertion below sits
+            // behind the `continue`, so a blank frame passed this, and so did any change that
+            // stopped producing full-strength pixels at all: a palette edit, a shading change,
+            // a renderer drawing nothing. **The collection is never empty** - it is always
+            // 160,000 pixels - so asserting its length catches none of that. The population
+            // that matters is how many times the body ran.
+            //
+            // For a rendering test, *drew nothing* is close to the regression it most exists
+            // to catch, which is what makes this worth a count rather than a note.
+            let mut inside_the_disc = 0;
             for y in 0..400 {
                 for x in 0..400 {
                     if !full.contains(&buffer[y * 400 + x]) {
                         continue;
                     }
+                    inside_the_disc += 1;
+
                     let distance = ((x as f64 + 0.5 - 200.0).powi(2)
                         + (y as f64 + 0.5 - 200.0).powi(2))
                     .sqrt();
                     assert!(
                         distance <= radius + 2.0,
                         "radius {radius}: full-strength pixel at ({x}, {y}) is \
-                         {distance:.1} out, past the world disc"
+                                                  {distance:.1} out, past the world disc"
                     );
                 }
             }
+            // **A floor that scales rather than a measured number.** The disc has area
+            // `pi * r^2` and the lit part of it measured 13257, 34649 and 75519 pixels at the
+            // three radii - 86 to 94 per cent of the disc. `r^2` is about a third of that
+            // area, so this is satisfied three times over and still fails a frame that has
+            // gone dark. Per radius rather than in total, so a change that blanks only the
+            // largest is caught too.
+            let floor = (radius * radius) as usize;
+            assert!(
+                inside_the_disc >= floor,
+                "radius {radius}: only {inside_the_disc} full-strength pixels, under a floor \
+                 of {floor} - the assertions above ran over almost nothing"
+            );
         }
     }
 
