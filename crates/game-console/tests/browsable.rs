@@ -12,6 +12,7 @@
 //! `turns.html` at a hundred tables - so the rule has nothing to be true of. Said here rather
 //! than asserted as a zero, because a zero against an empty population is not evidence.
 
+use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
 use game_console::{Library, browse, dump};
@@ -239,5 +240,62 @@ fn every_column_is_either_a_reference_or_declared_not_to_be() {
         "every column named as not a reference is a column that exists; the list has {} and \
          {declared} were found",
         browse::UNLINKED.len()
+    );
+}
+
+/// Everything the reports link outward to, so publishing them can carry it - `S-80`.
+///
+/// **The pipeline copies `reports/` and `scenario/` into the Pages artifact**, side by side,
+/// because two report links leave the directory: `../scenario/commands/play.4x` and
+/// `../scenario/expected/play.4x`. Every other link is relative and inside, so any subpath
+/// serves them.
+///
+/// **A third outward directory would 404 on the published page and work perfectly in a
+/// clone**, which is the failure this exists to make loud - the deploy is the one place the
+/// gate does not reach, and the gate is where this belongs instead.
+///
+/// It asserts the set rather than a count, because a count would go on passing if one
+/// outward link were replaced by a different one.
+#[test]
+fn the_reports_point_outward_only_at_what_the_pipeline_publishes() {
+    /// Directories the pipeline copies beside `reports/`. Adding one here is a promise that
+    /// `.github/workflows/pipeline.yml` copies it too.
+    const PUBLISHED_BESIDE: [&str; 1] = ["scenario"];
+
+    let files = everything();
+    assert!(
+        files.len() > 20,
+        "only {} report files, so this would agree with anything",
+        files.len()
+    );
+
+    let mut outward: BTreeSet<String> = BTreeSet::new();
+    let mut links = 0;
+    for (name, text) in &files {
+        if !name.ends_with(".html") && !name.ends_with(".md") {
+            continue;
+        }
+        for at in text.match_indices("../") {
+            links += 1;
+            // The first path segment after `../` is the directory being reached into.
+            let rest = &text[at.0 + 3..];
+            let end = rest
+                .find(['/', '"', ')', '\'', ' ', '\n'])
+                .unwrap_or(rest.len());
+            outward.insert(rest[..end].to_string());
+        }
+    }
+    assert!(
+        links > 0,
+        "no report links outward at all, so this checked nothing - the two that should are \
+         `../scenario/commands/play.4x` and `../scenario/expected/play.4x`"
+    );
+
+    let expected: BTreeSet<String> = PUBLISHED_BESIDE.iter().map(|it| it.to_string()).collect();
+    assert_eq!(
+        outward, expected,
+        "the reports reach outward at {outward:?} and the pipeline publishes {expected:?} \
+         beside them - anything in the first and not the second is a link that works in a \
+         clone and 404s on the published page"
     );
 }
