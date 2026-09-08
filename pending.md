@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-358** - `P-351` made the release contradict itself, and one word fixes it · `docs/notes/proposals.md`
 - **P-357** - A tracked directory belongs to no perspective, and the new check cannot see it · `docs/notes/decisions.md`
 - **P-356** - A field may name a kind instead of a thing, and nothing says so · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -26,9 +27,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (5)
+### To code (4)
 
-- **S-80** - Put the reports in the Pages artifact, so Sean can browse them · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`

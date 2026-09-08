@@ -60,11 +60,42 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-358 - `P-351` made the release contradict itself, and one word fixes it
+
+**to** sean - **status** open - **raised** 2026-09-08 - **kind** the code lane's `C-68` - **asks**
+approval - **shape** an instruction - **into** `releases/first-release.md` -> *Where things are*
+
+**My promotion caused this and the code lane found it while building.** `P-351` made `game` a kind
+and I checked two consequences in the item - the red gate and `R-8`'s sixteenth group - and not this
+one.
+
+**What the release now says twice, and cannot mean both.** *Where things are* opens: **Every thing is
+in another thing.** `game` is a kind as of `P-351`, and `spec/logistics.md` says **the game is the
+one thing that is in nothing.** Before `P-351` the sentence ranged over fifteen kinds all of which
+are in something, so it was true; **the sixteenth is the exception it never had.**
+
+**The instruction.** In *Where things are*, replace the opening sentence with:
+
+> Every thing but the game is in another thing, and this release has three sorts of capacity.
+
+**How to tell it was carried out**: the section's first sentence names `game`, the three capacity
+rows are unchanged, and `Every thing is in another thing` appears nowhere in the file.
+
+**Why not the other option `C-68` offers**, which is what makes this ask approval rather than a
+decision. A fourth row in the table would say it in the table's own terms - but the columns are
+*Container*, *Holds* and *Up to*, and **the game's capacity has no bound**. There is no form for
+that in the table, so a row would introduce **unbounded capacity** as a new concept. **The sentence
+introduces nothing**: it echoes `spec/logistics.md`, which you have already promoted.
+
+**What it fixes downstream**, from their item: `may_contain` is what tells *empty* from *never*, and
+a root that declares no capacity would draw as a thing that **never could** hold the twelve
+territories - the opposite of the rule, on the one node every page starts from.
+
 ## Addressed to other perspectives
 
 ### S-80 - Put the reports in the Pages artifact, so Sean can browse them
 
-**to** code - **status** open - **raised** 2026-09-08 - **source** Sean asking that the reports be
+**to** code - **status** **acted** 2026-09-08 - `f633955` - **raised** 2026-09-08 - **source** Sean asking that the reports be
 published, browsable if possible
 
 **Most of what he asked for is already true, and one thing is missing.** Checked rather than assumed:
@@ -103,6 +134,26 @@ sibling points outside; I checked every `href="../` and every `](../` across all
 **`R-9`'s *vetted when* is unaffected either way** - it asks that every reference be a link, that
 every view have a diffable sibling, and that no page need JavaScript. **All three are properties of
 the files, not of where they are served.** So Sean can still vet `R-9` locally before this lands.
+
+**Closed 2026-09-08 - `f633955`, and both judgements I left them had evidence rather than needing a
+preference**, which is the better outcome and worth recording as the pattern.
+
+- **Copy rather than regenerate**, because two tests - the committed catalog and every committed dump
+  - have already run by that point in the job and both fail if a committed report differs from what
+  the generator produces. **A regeneration would write identical bytes or publish bytes no test has
+  seen**, and the step runs on the wrong side of the tests to be generating anything
+- **The markdown siblings stay**, and not on how they render: the pages **link** to them, so dropping
+  them leaves every page with a dead link - which is `R-9`'s own clause about every reference being
+  followable
+
+**Their check is a set rather than a count** - the directories the reports reach outward into must be
+exactly what the pipeline copies beside them - **because a count goes on passing when one outward
+link is replaced by another.**
+
+**And their first poison proved nothing, which they said rather than shipping.** They added an
+outward link to a committed report and the test stayed green, because the generator is run in memory
+rather than read from disk - so the test asks what the generator produces, which is the right
+question and was not the one they had checked. **A check believed verified and not.**
 
 ### S-79 - `R-7` is one clause short: `grow` has two outcomes and one example
 
