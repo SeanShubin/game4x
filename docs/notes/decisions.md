@@ -21,35 +21,6 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-353 - A command may carry a tree, and nothing in the game asks for one
-
-**to** sean - **status** open - **raised** 2026-09-07 - **kind** the code lane's `C-67` -
-**asks** a decision - **into** `releases/first-release.md`, only if the answer is *yes, this one*
-
-**`spec/console.md:57` says a value is a word, a number, or another command in the same form, so a
-command may carry a tree.** `P-212` built that, and **nothing can reach it.** Verified rather than
-taken: `Kind::Command` appears only in `crates/command-language`, and the single hole using it is
-that crate's own test grammar. No console form declares a command-valued hole, so a player cannot
-write a nested command even though the parser accepts one.
-
-**The question is whether any command takes another one, and it is a question about the game.** I am
-not going to guess at candidates - naming a recipe to make nestable would be inventing a rule, which
-is what the code lane declined to do and was right to.
-
-- **Name one now**, and the form that declares it is the rest of `P-212`
-- **None now**, and `P-212` is a language capability the parser holds against a later rule.
-  **Recorded rather than left as a gap somebody rediscovers**, which is the whole of the cost
-
-**I recommend the second**, and the reason is that it costs nothing and forecloses nothing. The
-specification already permits the tree, the parser already carries it, and no rule needs writing for
-it to sit there. **Naming a recipe today to justify a capability is the tail wagging the dog.**
-
-**What the answer unblocks either way.** `P-215`'s nested half - *a rejection names the command it
-was found inside* - has been deferred since `C-23` on the grounds that no nested command could be
-written. One can be written now, but not to the console, so the reporting still has nothing real to
-point at. **If the answer is *none now*, that deferral is correct and stays**, with its reason
-updated rather than merely inherited.
-
 ### P-352 - `CLAUDE.md` names the staging hazard correctly and gives an instruction that cannot close it
 
 **to** sean - **status** open - **raised** 2026-09-07 - **kind** the research lens's `X-7` - **asks**

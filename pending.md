@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-353** - A command may carry a tree, and nothing in the game asks for one · `docs/notes/decisions.md`
+- **P-353** - There is one notation, and the tree is what having one means · `docs/notes/proposals.md`
 - **P-352** - `CLAUDE.md` names the staging hazard correctly and gives an instruction that cannot close it · `docs/notes/decisions.md`
 - **P-351** - Two words in the data file that the release does not declare, and the exception list is full · `docs/notes/decisions.md`
 - **P-350** - Filing this study as an item is what makes it unrunnable, and that is the finding · `docs/notes/decisions.md`
@@ -25,6 +25,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-353** - `5c98ace` Reflow P-353's field line: a wrap split `asks a decision` into `asks a` · still open in `docs/notes/proposals.md`
 - **C-67** - `03b33a3` P-353 from C-67: the tree is built and nothing in the game asks for one · still open in `crates/outbox.md`
 
 ## What is outstanding

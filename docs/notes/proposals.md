@@ -60,7 +60,42 @@ Two limits Claude holds itself to:
 
 ## Open
 
-**Nothing.** [decisions.md](decisions.md) holds `P-346` through `P-353`.
+### P-353 - There is one notation, and the tree is what having one means
+
+**to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
+- **asks** approval - **shape** text - **into** `spec/console.md` -> The language, as the opening
+statement of the section
+
+**You answered `C-67` with a principle rather than with a choice**, so this stopped asking a
+decision and now offers words. Nothing in `spec/` states it: I checked `spec/` and `docs/process.md`
+for any statement that the game has one notation and found none, which is why the next lane to see
+an unreachable capability would have had nothing to read.
+
+**Why it needs saying at all, rather than being obvious.** `thing.rs` records that *an unread
+representation cannot diverge detectably*, and that argument is in front of you right now for
+`manned` in `P-351`. **Applied to `Kind::Command` it says delete it** - nothing calls it. This is
+what stops that, and without it the next lane to notice has a rule on its side.
+
+> **There is one notation.** A command and a description of game state are written in the same form,
+> and both carry a tree.
+>
+> **The language carries the tree whether or not a command uses one today.** Two notations would cost
+> more to maintain and more to read than one, and a command that takes a tree is expected rather than
+> hypothetical.
+
+**One thing I deliberately did not write, because it would have been false.** The two trees are not
+the same construct: a data file nests by indentation and containment, and a command nests by putting
+a value inside a value. **They share the form, not the mechanism**, so the text says both carry a
+tree rather than that what nests in one nests in the other.
+
+**Re-read whole, as the trigger asks** - *The language* has taken six proposals. Nothing in it
+conflicts. It fixes names, quoting, ids, references, descriptions and word admissibility, and every
+one of those rules already applies to commands and data files alike **without the section ever
+saying so.** That is the gap this fills.
+
+**What it settles when it lands.** `C-67` is answered: no recipe takes a command today and none needs
+to. `P-215`'s nested half stays deferred on `C-23`'s reason, now updated - a nested command can be
+written but not to the console.
 
 ## Addressed to other perspectives
 

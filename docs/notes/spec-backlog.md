@@ -8,6 +8,27 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, answering `P-353`: one notation, and the tree stays
+
+*Much of the design has been about unification, and trees are used, if only to present game state to
+me. I don't want to pay the cost, maintenance or cognitive, of different formats, especially when I
+am fairly certain we are going to need to pass nested trees to commands eventually.*
+
+**This answers `C-67` and `P-353`, and it answers them differently from either option offered.** I
+put *name a recipe now* against *hold the capability in reserve*, and recommended the second. **His
+reason is neither**: the tree is not held against a future rule, it is **what having one notation
+means**. A command and a description of game state are written in the same form, so the language
+carries a tree because the notation does.
+
+**The load-bearing part is why it may not be deleted.** `thing.rs` records the argument that *an
+unread representation cannot diverge detectably* - the argument now in front of him for `manned`,
+in `P-351`. Applied to `Kind::Command` it says delete, because nothing calls it. **His answer is
+what stops that**, and until it is written down the next lane to notice an unreachable capability
+has a rule on its side.
+
+**`P-353` is rewritten to ask approval**, with the words offered for `spec/console.md` -> *The
+language*.
+
 ## Said 2026-09-07, by the quality lens rather than by Sean
 
 **`Q-68`**: `move` becoming an ordinary recipe left a per-thing `A move` column behind. The recipe
