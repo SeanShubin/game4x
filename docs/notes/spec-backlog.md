@@ -8,6 +8,18 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-07, answering `P-351`: game is a kind, delete manned
+
+*`game` is a kind, delete `manned`.*
+
+**Both halves close a named exception in `crates/game-console/tests/vocabulary.rs`**, whose own
+warning was the reason the item could not wait: *past about two, a list of exceptions is the thing
+being checked written twice.* It was at two and is now at none.
+
+**The two halves go different ways**, which is why they separate here. `game` becomes a row of the
+release's *Kinds* table, so it is a promotion - `P-351`. `manned` is declared by no row, so deleting
+it changes nothing in `spec/` or `releases/` and is work rather than a promotion - `S-72`.
+
 ## Said 2026-09-07, choosing the carrier for the shared-index race
 
 *Lets go with the third row, column check in pre-commit.*

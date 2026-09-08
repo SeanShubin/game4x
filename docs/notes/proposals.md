@@ -60,6 +60,39 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-351 - `game` is the sixteenth kind
+
+**to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
+- **asks** approval - **shape** rows - **into** `releases/first-release.md` -> Kinds, appended after
+`adjacency`
+
+**You said `game` is a kind.** One row. The words are `spec/logistics.md:27` echoed rather than
+invented - *every thing is in the game, directly or through what contains it. The game is the one
+thing that is in nothing.*
+
+| Kind     | What it is                                                       |
+| -------- | ---------------------------------------------------------------- |
+| **game** | every thing is in it, and it is the one thing that is in nothing |
+
+**Appended rather than placed**, because `deposit` and `adjacency` were both appended and I would
+otherwise be inventing an order. Say if it belongs first - it is the root, and there is a reading
+where the table should open with it.
+
+**Two things this makes true that you should know before approving, because neither is visible in
+the row.**
+
+- **The gate goes red until the code follows.** The release's tables are generated from, and
+  `prototypes/kinds` asserts it holds the same ones. A sixteenth kind is a red gate for whichever
+  lane commits next, which may not be the lane that can fix it
+- **`R-8` reports fifteen kinds and will report sixteen.** Its grouping is empty at fifteen, which
+  is `P-348`, still open to you. **A sixteenth kind cannot collide with anything** - `game` carries
+  no traits any other kind carries and is named by no recipe - so it becomes a sixteenth group of
+  one, and `P-348`'s question is unchanged rather than answered
+
+**The other half of your answer is not a promotion.** `manned` is declared by no row, so deleting it
+changes nothing in `spec/` or `releases/`. It is filed as `S-72` to the code lane and needs nothing
+from you.
+
 ### P-352 - The staging bullet gains the reason care cannot close it, and the check that can
 
 **to** sean - **status** open - **raised** 2026-09-07 - **answered** 2026-09-07 - **kind** recovered
@@ -181,6 +214,31 @@ to. `P-215`'s nested half stays deferred on `C-23`'s reason, now updated - a nes
 written but not to the console.
 
 ## Addressed to other perspectives
+
+### S-72 - `manned` is deleted, by Sean's decision on `C-46`
+
+**to** code - **status** open - **raised** 2026-09-07 - **source** Sean answering `P-351`
+
+**He chose deletion over a *Traits* row.** `manned` is declared by no row, so nothing in `spec/` or
+`releases/` changes and there is no promotion to wait for. **This is the whole of the instruction.**
+
+**What it touches, as far as I can see from outside your column** - yours to check rather than
+inherit:
+
+- `Trait::Manned`, and `garrison.manned` wherever it is set - `tree.rs:252` and three places in
+  `worked.rs` set it to `0`
+- `crates/game-console/src/report.rs:149` and `:280`, which **print** it. `C-46` said `manned` was
+  read by nothing; it is read by the report and by no rule, which I corrected in `P-351`
+- the `manned` entry in `UNDECLARED` in `tests/vocabulary.rs`. **The list drops from two to one when
+  this lands and to none when `P-351` is promoted**, which is what that file's own warning asked for
+
+**It changes `scenario/expected/play.4x`, which is the part worth flagging.** Lines 68 and 85 read
+`{garrison force:0 manned:0} -> 1` and become `{garrison force:0} -> 1`. **Both values are `0` and
+always have been**, which is evidence for the deletion rather than against it - but that file still
+opens *NOT YET REVIEWED* and is what Sean is waiting to read, so it changes shape once more before
+he does.
+
+**No hurry from me.** Nothing is blocked on it.
 
 ### S-71 - The column check Sean chose, for `hooks/pre-commit`
 
