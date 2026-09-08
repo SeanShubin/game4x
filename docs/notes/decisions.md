@@ -23,8 +23,8 @@ here without first becoming a proposal.
 
 ### P-356 - A field may name a kind instead of a thing, and nothing says so
 
-**to** sean - **status** open - **raised** 2026-09-08 - **kind** entailed, from `C-56` - **asks** a
-decision - **into** `spec/console.md` -> The language
+**to** sean - **status** open - **raised** 2026-09-08 - **kind** entailed, from `C-56` -
+**asks** a decision - **into** `spec/console.md` -> The language
 
 **`spec/console.md` says how a field that refers to a **thing** is written, and says nothing about a
 field whose value is a **kind**.** The release uses both:

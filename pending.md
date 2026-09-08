@@ -19,7 +19,7 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-72** - `89f4966` S-72: manned is deleted, and C-46's second word goes with it · still open in `docs/notes/proposals.md`
-- **C-56** - `b59bc7d` P-355 becomes an instruction: movable, stored, and move waits on C-56 · still open in `crates/outbox.md`
+- **C-56** - `8f292eb` Handle C-56: unit:ark breaks no rule, because it refers to no thing · still open in `crates/outbox.md`
 
 ## What is outstanding
 
