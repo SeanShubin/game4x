@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-357** - A tracked directory belongs to no perspective, and the new check cannot see it · `docs/notes/decisions.md`
 - **P-356** - A field may name a kind instead of a thing, and nothing says so · `docs/notes/decisions.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`

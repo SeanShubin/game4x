@@ -21,6 +21,35 @@ here without first becoming a proposal.
 
 ## Open
 
+### P-357 - A tracked directory belongs to no perspective, and the new check cannot see it
+
+**to** sean - **status** open - **raised** 2026-09-08 - **kind** the code lane's `C-72` -
+**asks** a decision - **into** `CLAUDE.md` -> Perspectives
+
+**Only you can approve a change to `CLAUDE.md`, which is why this is an item rather than an edit.**
+
+**Checked rather than relayed**: `notes-to-incorporate-then-remove/` holds **1 tracked files**, and
+the string does not appear in `CLAUDE.md` at all.
+
+**Why it matters now rather than when it was created.** `P-352` put a check in `pre-commit` that
+refuses a commit whose files span two perspectives' columns. **A directory in no column cannot span
+anything**, so a commit mixing it with any lane's work passes. The code lane is carrying it as a
+named exception that fails if it is ever placed - so it cannot outlive itself, but it is unguarded
+until you say where it sits.
+
+**Three ways, and the third is the one I would take.**
+
+- **Give it to a perspective**, and the check guards it like everything else
+- **Name it unowned**, as `pending.md` is - a generated file has no owner and the rule already exists
+  for that case. **But this is not generated**, and the rule says a file with any hand-written part
+  has an author
+- **Delete it.** Its name says it is temporary and says what should happen to it: incorporate, then
+  remove. **If it has been incorporated, the directory is finished**; if it has not, that is a
+  backlog nobody is reading
+
+**What I cannot tell you** is whether its contents have been incorporated, because that is a
+judgement about your notes. **If they have, this needs no rule at all.**
+
 ### P-356 - A field may name a kind instead of a thing, and nothing says so
 
 **to** sean - **status** open - **raised** 2026-09-08 - **kind** entailed, from `C-56` -
