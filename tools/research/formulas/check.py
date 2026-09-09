@@ -411,6 +411,38 @@ def check_containment():
     return examined, homeless, undeclared
 
 
+RELEASE = pathlib.Path(__file__).parents[3] / "releases" / "first-release.md"
+
+
+def release_traits():
+    """The release's *Traits* table, parsed from the document itself."""
+    rows, inside = {}, False
+    for line in RELEASE.read_text(encoding="utf-8").splitlines():
+        if line.startswith("| Trait "):
+            inside = True
+            continue
+        if inside:
+            if not line.startswith("|"):
+                break
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            if set(cells[0]) <= set("- "):
+                continue
+            name = cells[0].strip("*").strip().replace(" ", "-")
+            rows[name] = "derived" if cells[3].startswith("derived") else "stored"
+    return rows
+
+
+def check_drift():
+    """Check 7. Where the copy and the release disagree. Reports, never fails."""
+    theirs = release_traits()
+    assert theirs, "parsed no traits from the release, so this check knows nothing"
+    ours = {r[0]: r[2] for r in DATA["traits"]}
+    only_ours = sorted(set(ours) - set(theirs))
+    only_theirs = sorted(set(theirs) - set(ours))
+    differ = sorted(k for k in set(ours) & set(theirs) if ours[k] != theirs[k])
+    return len(theirs), only_ours, only_theirs, differ
+
+
 def check_cap(cap=1000):
     """Check 3. A backstop: apply every recipe once and report anything past the cap."""
     by_name = gather()
@@ -518,6 +550,17 @@ def self_test():
         ok = False
     else:
         print(f"  poison ok: check 6 goes red on X-20's state, over {len(bad20)} lines")
+
+    # Check 7 poison: claim a stored trait is derived and it must notice.
+    _t = {r[0]: r[2] for r in DATA["traits"]}
+    _row = next(r for r in DATA["traits"] if r[0] == "ready")
+    _row[2] = "derived"
+    if "ready" not in check_drift()[3]:
+        print("  POISON FAILED: check 7 did not notice a copy that disagrees with the release")
+        ok = False
+    else:
+        print("  poison ok: check 7 notices a copy that disagrees with the release")
+    _row[2] = _t["ready"]
 
     return ok
 
@@ -668,6 +711,21 @@ def main():
         print(f"  UNDECLARED: {name}: {target} - nothing says a {container} may hold a {kind}")
     if not homeless and not undeclared:
         print("  every one lands somewhere that declares it")
+
+    n_rel, only_ours, only_theirs, differ = check_drift()
+    print()
+    print("CHECK 7 - where this lane's copy differs from the release")
+    print(f"  {n_rel} traits parsed from releases/first-release.md, {len(DATA['traits'])} copied here")
+    for k in differ:
+        ours = {r[0]: r[2] for r in DATA["traits"]}
+        print(f"  DIFFERS: {k} - release says {release_traits()[k]}, this copy says {ours[k]}")
+    for k in only_ours:
+        print(f"  ONLY HERE: {k}")
+    for k in only_theirs:
+        print(f"  ONLY IN THE RELEASE: {k}")
+    if not (differ or only_ours or only_theirs):
+        print("  the copy matches, so nothing here has diverged yet")
+    print("  divergence is allowed and is the reason for copying - this reports it, never fails it")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1

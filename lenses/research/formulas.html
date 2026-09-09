@@ -999,8 +999,69 @@ transition can create a loop among transitions that were all fine before.</p>
 incremental, and it does nothing for the second.</p>
 </div>
 
+<h2>Selection, and what an interface needs</h2>
+<p>Sean, 2026-09-09, on the interface: select a thing and be shown the options for it; select several
+things; select a portion of a quantity - all citizens, one, five of ten. And: <em>perhaps recipes
+have an implicit selection parameter, and certain recipes only apply to certain types of
+selections.</em></p>
+<p><strong>They already do, and it is prose.</strong> Every one of the 11 player recipes carries
+a <em>selection</em> field, and it has never been part of the language:</p>
+<div class="scroll"><table><thead><tr><th>Recipe</th><th>What is selected</th><th>What else the player picks</th></tr></thead><tbody><tr><td class="target">deploy ark</td><td>an ark</td><td class="target">&mdash;</td></tr><tr><td class="target">found-colony(t)</td><td>called, not selected</td><td class="target">&mdash;</td></tr><tr><td class="target">found by land</td><td>a pioneer</td><td class="target">&mdash;</td></tr><tr><td class="target">move</td><td>a unit that is ready</td><td class="target">to</td></tr><tr><td class="target">build extractor</td><td>a territory you control</td><td class="target">resource</td></tr><tr><td class="target">build store</td><td>a territory you control</td><td class="target">resource</td></tr><tr><td class="target">build yard</td><td>a territory you control</td><td class="target">&mdash;</td></tr><tr><td class="target">produce pioneer</td><td>a territory you control</td><td class="target">&mdash;</td></tr><tr><td class="target">launch ark</td><td>a yard</td><td class="target">&mdash;</td></tr><tr><td class="target">create labor</td><td>a citizen that is ready</td><td class="target">&mdash;</td></tr><tr><td class="target">work</td><td>an extractor that is ready</td><td class="target">&mdash;</td></tr></tbody></table></div>
+<div class="callout">
+<h4>The owner column <em>is</em> the quantifier</h4>
+<p>The world's recipes now say <code>each x: {...}</code> on their first line. The player's name one
+thing. That is the same field with a different quantifier &mdash; <strong>a world recipe fires for
+every member of the set, and a player recipe is offered for one the player picks</strong> &mdash;
+and it is the specification's own distinction: <em>the player's are offered wherever their inputs are
+present, to take or to leave; the world's are not offered.</em></p>
+<p>So <code>owner</code> is not a third thing to carry. It is <em>which quantifier</em>, and the six
+world recipes prove one half of it is already writable.</p>
+</div>
+<div class="callout">
+<h4>Fungibility is not a simplification the interface may take advantage of &mdash; it is the state</h4>
+<p><em>Five of ten citizens</em> is not five things picked out of ten. <code>spec/console.md</code>:
+<strong>what a thing contains is a map from a description to a quantity</strong>, and
+<strong>there is never a quantity of a thing with an <code>id</code></strong>. Ten citizens in a
+territory are one entry of ten, and <strong>there is no citizen number three to select</strong>.</p>
+<p>So a selection is <strong>a description and a count</strong> &mdash; which is the same object as a
+container's contents, and the same object a recipe line targets. All, one, and five of ten are one
+shape with a different number, and the interface needs no special case for any of them. What it
+cannot offer is picking <em>which</em> five, because that question has no referent.</p>
+</div>
+<div class="callout">
+<h4>Nothing needs multi-select, and what looks like it is a parameter</h4>
+<p><strong>Every one of the 11 player recipes selects exactly one thing</strong>, and
+0 select two. What looks like a second selection is a parameter: <code>move</code> selects a
+unit and takes <code>$to</code>; <code>build extractor</code> and <code>build store</code> select a
+territory and take <code>$resource</code>. Two of eleven need one at all.</p>
+<p>That is `X-8`'s distinction doing work: <strong>a parameter is a choice the player makes and a
+derived term is not</strong>, so which parameters exist decides exactly what the interface has to
+ask for after the selection. Here that is a place, twice, and a resource, twice.</p>
+</div>
+<div class="callout">
+<h4>The gap: a selection tests derived traits, and a description may not carry one</h4>
+<p><strong>Six selections test a derived trait</strong> &mdash; <em>a territory you control</em> four
+times, plus <code>surplus</code> in <code>grow</code> and <code>unpaid</code> in
+<code>perish</code>. And <code>spec/console.md</code> says a description is a kind and every
+<em>stored</em> trait, and <strong>a derived trait is never part of one</strong>.</p>
+<p>So <strong>what the player selects is a query rather than a description</strong>, and only the
+second has a form in the notation. They are close enough to be confused and different in exactly one
+way: a description says what a thing <em>is stored as</em>, and a query says what is <em>true of
+it</em>. An interface needs the second - you select what you control, not what is recorded.</p>
+<p>This is the same hole the encoding has flagged all along for <code>food[surplus]</code>, now with
+five more instances and a reason. Filed as an open decision.</p>
+</div>
+<div class="callout">
+<h4>What the model does not care about</h4>
+<p>A radial dial, a fixed row of buttons that change with the selection, a context menu - the model
+is indifferent, because all three render the same list. <strong>What is settled is the order</strong>:
+noun then verb, select then operate, which `X-8` traced to the Xerox Star and which is right here for
+a reason stronger than habit - selecting first leaves the system in <strong>no mode</strong>, and
+verb-first does not.</p>
+</div>
+
 <h2>Still open, and yours to take</h2>
-<p>8 of the 15 questions this re-encoding raised are still open. The rest are
+<p>9 of the 16 questions this re-encoding raised are still open. The rest are
 below, under <em>What has already been settled</em>, so that this list is short enough to be a list
 of things to do.</p>
 <div class="scroll"><table><thead><tr>
@@ -1047,6 +1108,11 @@ of things to do.</p>
 <td>OPEN - may a recipe define a kind or another recipe, and when</td>
 <td>The specification already says definitions are part of the state and defining is a transition. Nothing can express it: neither &lt;code&gt;kind&lt;/code&gt; nor &lt;code&gt;recipe&lt;/code&gt; is one of the sixteen kinds, so a definition has nowhere to live, and check 6 refuses it.</td>
 <td class="note">Two kinds and two declarations would allow it. &lt;strong&gt;The phase it is allowed in decides whether any check still means anything&lt;/strong&gt; - see &lt;em&gt;Defining a kind, then using it&lt;/em&gt;.</td>
+</tr>
+<tr>
+<td>OPEN - is a selection a description, when it has to test derived traits</td>
+<td>A description is a kind and every &lt;em&gt;stored&lt;/em&gt; trait, and &lt;strong&gt;a derived trait is never part of one&lt;/strong&gt;. Six selections test one anyway - &lt;code&gt;control&lt;/code&gt; four times, &lt;code&gt;surplus&lt;/code&gt; and &lt;code&gt;unpaid&lt;/code&gt; once each.</td>
+<td class="note">So what the player selects is a &lt;em&gt;query&lt;/em&gt; rather than a description, and only the second has a form. See &lt;em&gt;Selection, and what an interface needs&lt;/em&gt;.</td>
 </tr>
 </tbody></table></div>
 

@@ -558,6 +558,21 @@ def repetition_counts():
     return len(quantifiers), len(multiplied), len(over_state), len(every)
 
 
+def selection_table():
+    """What each player recipe selects, and what else the player must pick."""
+    rows = "".join(
+        f'<tr><td class="target">{esc(n)}</td><td>{esc(s)}</td><td class="target">{p}</td></tr>'
+        for n, s, p in DATA["selections"]
+    )
+    assert len(DATA["selections"]) == len(DATA["player"])
+    multi = [s for _n, s, _p in DATA["selections"] if " and " in s]
+    return (
+        len(DATA["selections"]), len(multi),
+        '<div class="scroll"><table><thead><tr><th>Recipe</th><th>What is selected</th>'
+        "<th>What else the player picks</th></tr></thead><tbody>" + rows + "</tbody></table></div>",
+    )
+
+
 def assumption_table():
     """What the encoding assumed, and how many lines needed each - counted, not written."""
     rows = []
@@ -629,6 +644,7 @@ def main():
     cap_table = capacity_table()
     n_storage, sto_table = storage_table()
     n_quant, n_mult, n_state, n_recipes = repetition_counts()
+    n_sel, n_multi, sel_table = selection_table()
     c6 = RESULTS["containment"]
     c6_examined, c6_x20 = c6["examined"], c6["x20_lines"]
     n_declared = c6["declared"]
@@ -1085,6 +1101,67 @@ transition can create a loop among transitions that were all fine before.</p>
 <p><strong>So the working rule is cheap and precise: on defining a recipe, check the new one against
 1 and 6, and re-run 2 over everything.</strong> Monotone time is exactly what makes the first half
 incremental, and it does nothing for the second.</p>
+</div>
+
+<h2>Selection, and what an interface needs</h2>
+<p>Sean, 2026-09-09, on the interface: select a thing and be shown the options for it; select several
+things; select a portion of a quantity - all citizens, one, five of ten. And: <em>perhaps recipes
+have an implicit selection parameter, and certain recipes only apply to certain types of
+selections.</em></p>
+<p><strong>They already do, and it is prose.</strong> Every one of the {n_sel} player recipes carries
+a <em>selection</em> field, and it has never been part of the language:</p>
+{sel_table}
+<div class="callout">
+<h4>The owner column <em>is</em> the quantifier</h4>
+<p>The world's recipes now say <code>each x: {{...}}</code> on their first line. The player's name one
+thing. That is the same field with a different quantifier &mdash; <strong>a world recipe fires for
+every member of the set, and a player recipe is offered for one the player picks</strong> &mdash;
+and it is the specification's own distinction: <em>the player's are offered wherever their inputs are
+present, to take or to leave; the world's are not offered.</em></p>
+<p>So <code>owner</code> is not a third thing to carry. It is <em>which quantifier</em>, and the six
+world recipes prove one half of it is already writable.</p>
+</div>
+<div class="callout">
+<h4>Fungibility is not a simplification the interface may take advantage of &mdash; it is the state</h4>
+<p><em>Five of ten citizens</em> is not five things picked out of ten. <code>spec/console.md</code>:
+<strong>what a thing contains is a map from a description to a quantity</strong>, and
+<strong>there is never a quantity of a thing with an <code>id</code></strong>. Ten citizens in a
+territory are one entry of ten, and <strong>there is no citizen number three to select</strong>.</p>
+<p>So a selection is <strong>a description and a count</strong> &mdash; which is the same object as a
+container's contents, and the same object a recipe line targets. All, one, and five of ten are one
+shape with a different number, and the interface needs no special case for any of them. What it
+cannot offer is picking <em>which</em> five, because that question has no referent.</p>
+</div>
+<div class="callout">
+<h4>Nothing needs multi-select, and what looks like it is a parameter</h4>
+<p><strong>Every one of the {n_sel} player recipes selects exactly one thing</strong>, and
+{n_multi} select two. What looks like a second selection is a parameter: <code>move</code> selects a
+unit and takes <code>$to</code>; <code>build extractor</code> and <code>build store</code> select a
+territory and take <code>$resource</code>. Two of eleven need one at all.</p>
+<p>That is `X-8`'s distinction doing work: <strong>a parameter is a choice the player makes and a
+derived term is not</strong>, so which parameters exist decides exactly what the interface has to
+ask for after the selection. Here that is a place, twice, and a resource, twice.</p>
+</div>
+<div class="callout">
+<h4>The gap: a selection tests derived traits, and a description may not carry one</h4>
+<p><strong>Six selections test a derived trait</strong> &mdash; <em>a territory you control</em> four
+times, plus <code>surplus</code> in <code>grow</code> and <code>unpaid</code> in
+<code>perish</code>. And <code>spec/console.md</code> says a description is a kind and every
+<em>stored</em> trait, and <strong>a derived trait is never part of one</strong>.</p>
+<p>So <strong>what the player selects is a query rather than a description</strong>, and only the
+second has a form in the notation. They are close enough to be confused and different in exactly one
+way: a description says what a thing <em>is stored as</em>, and a query says what is <em>true of
+it</em>. An interface needs the second - you select what you control, not what is recorded.</p>
+<p>This is the same hole the encoding has flagged all along for <code>food[surplus]</code>, now with
+five more instances and a reason. Filed as an open decision.</p>
+</div>
+<div class="callout">
+<h4>What the model does not care about</h4>
+<p>A radial dial, a fixed row of buttons that change with the selection, a context menu - the model
+is indifferent, because all three render the same list. <strong>What is settled is the order</strong>:
+noun then verb, select then operate, which `X-8` traced to the Xerox Star and which is right here for
+a reason stronger than habit - selecting first leaves the system in <strong>no mode</strong>, and
+verb-first does not.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>

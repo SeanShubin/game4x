@@ -870,6 +870,11 @@
       "OPEN - may a recipe define a kind or another recipe, and when",
       "The specification already says definitions are part of the state and defining is a transition. Nothing can express it: neither <code>kind</code> nor <code>recipe</code> is one of the sixteen kinds, so a definition has nowhere to live, and check 6 refuses it.",
       "Two kinds and two declarations would allow it. <strong>The phase it is allowed in decides whether any check still means anything</strong> - see <em>Defining a kind, then using it</em>."
+    ],
+    [
+      "OPEN - is a selection a description, when it has to test derived traits",
+      "A description is a kind and every <em>stored</em> trait, and <strong>a derived trait is never part of one</strong>. Six selections test one anyway - <code>control</code> four times, <code>surplus</code> and <code>unpaid</code> once each.",
+      "So what the player selects is a <em>query</em> rather than a description, and only the second has a form. See <em>Selection, and what an interface needs</em>."
     ]
   ],
   "collapse": [
@@ -1708,7 +1713,7 @@
     [
       "unpaid",
       "a thing with upkeep",
-      "stored"
+      "derived"
     ],
     [
       "phase",
@@ -2346,6 +2351,63 @@
       "not applicable",
       "persists",
       []
+    ]
+  ],
+  "selections": [
+    [
+      "deploy ark",
+      "an ark",
+      "&mdash;"
+    ],
+    [
+      "found-colony(t)",
+      "called, not selected",
+      "&mdash;"
+    ],
+    [
+      "found by land",
+      "a pioneer",
+      "&mdash;"
+    ],
+    [
+      "move",
+      "a unit that is ready",
+      "to"
+    ],
+    [
+      "build extractor",
+      "a territory you control",
+      "resource"
+    ],
+    [
+      "build store",
+      "a territory you control",
+      "resource"
+    ],
+    [
+      "build yard",
+      "a territory you control",
+      "&mdash;"
+    ],
+    [
+      "produce pioneer",
+      "a territory you control",
+      "&mdash;"
+    ],
+    [
+      "launch ark",
+      "a yard",
+      "&mdash;"
+    ],
+    [
+      "create labor",
+      "a citizen that is ready",
+      "&mdash;"
+    ],
+    [
+      "work",
+      "an extractor that is ready",
+      "&mdash;"
     ]
   ]
 }
