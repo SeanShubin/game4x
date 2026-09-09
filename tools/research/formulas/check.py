@@ -88,11 +88,20 @@ def place_of(target):
 
 
 def amount_of(raw):
-    """An integer amount, or None when the formula's amount depends on the state."""
+    """A signed integer amount, or None when the formula's amount depends on the state.
+
+    Amounts carry their own sign since 2026-09-09: `create` and `consume` are one `change`,
+    and which direction it goes is in the number rather than in the operator.
+    """
     try:
         return int(str(raw).strip())
     except (TypeError, ValueError):
         return None
+
+
+def sign_of(raw):
+    """The direction of a change, for the amounts an integer cannot be read from."""
+    return -1 if str(raw).strip().startswith("-") else 1
 
 
 def effects(formula, formulas_by_name, seen=(), bounded=False, binding=None):
@@ -135,9 +144,8 @@ def effects(formula, formulas_by_name, seen=(), bounded=False, binding=None):
             b = DATA.get("bounds", {}).get(formula["name"].split("(")[0].strip(), {}).get(k)
             if b is None:
                 return None
-            n = b[0]
-        sign = 1 if op == "create" else -1
-        net[k] = net.get(k, 0) + sign * n
+            n = sign_of(raw) * b[0]
+        net[k] = net.get(k, 0) + n
     return net
 
 
@@ -320,7 +328,7 @@ def check_attachment():
     meaningful, unobservable = [], []
     for f in DATA["player"] + DATA["world"]:
         for op, target, _amt, attach, _n in f["lines"]:
-            if op != "create" or not attach:
+            if op != "change" or sign_of(_amt) < 0 or not attach:
                 continue
             k = place_of(target)
             row = (f["name"], target, attach)
@@ -345,7 +353,7 @@ def check_placement():
     out = []
     for f in DATA["player"] + DATA["world"]:
         for op, target, _amt, attach, _n in f["lines"]:
-            if op != "create" or "[" not in target:
+            if op != "change" or sign_of(_amt) < 0 or "[" not in target:
                 continue
             kind = target.split("[")[0].strip()
             res = target.split("[", 1)[1].split("]")[0].strip()
@@ -385,7 +393,7 @@ def self_test():
         "POISON-free-metal": {
             "name": "POISON-free-metal",
             "selection": "poison",
-            "lines": [["create", "metal in t", "1", "", "poison"]],
+            "lines": [["change", "metal in t", "+1", "", "poison"]],
         }
     }
     w = check_unbounded(extra=poison)[2]
@@ -412,8 +420,8 @@ def self_test():
     # must go red for exactly that reason. A check that stayed green here would have been
     # agreeing with the fix rather than measuring it.
     fc = next(f for f in DATA["player"] if f["name"].startswith("found-colony"))
-    fc["lines"] += [["create", "store[food] in t", "1", "", "poison"],
-                    ["create", "store[metal] in t", "1", "", "poison"]]
+    fc["lines"] += [["change", "store[food] in t", "+1", "", "poison"],
+                    ["change", "store[metal] in t", "+1", "", "poison"]]
     _, _, bad2 = check_conservation()
     names2 = {n for n, _t, _p in bad2}
     if {"deploy ark", "found by land"} <= names2:

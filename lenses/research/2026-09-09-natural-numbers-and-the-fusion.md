@@ -36,13 +36,23 @@ distinction the game never used.
 
 Every figure below is computed by the renderer from the data, not typed.
 
-|                                        | Before            | After                |
-| -------------------------------------- | ----------------- | -------------------- |
-| lines across all formulas              | 80                | **65**               |
-| the release's rows, re-encoded         | 58 → 63, **up 5** | 58 → 48, **down 10** |
-| primitives                             | 6                 | **5**                |
-| line-counts the report has to explain  | 3                 | **1**                |
-| assumptions the console encoding needs | 10                | **9**                |
+|                                        | Before             | After the fusion      | After both decisions |
+| -------------------------------------- | ------------------ | --------------------- | -------------------- |
+| lines across all formulas              | 80                 | 65                    | **56**               |
+| the release's rows, re-encoded         | 58 -> 63, **up 5** | 58 -> 48, **down 10** | unchanged            |
+| primitives                             | 6                  | 6                     | **5**                |
+| line-counts the report has to explain  | 3                  | **1**                 | 1                    |
+| assumptions the console encoding needs | 10                 | **9**                 | 9                    |
+|                                        |                    |                       |                      |
+| **the world-building `set`s**          | 9                  | 9                     | **0**                |
+
+**The third row was wrong when this report was first written, and the error is worth more than the
+row.** It said six primitives became five. They did not: `destroy` and `threshold` became `consume`
+and `require` split out of the same move, so **six became six**. The count was a word typed in prose
+beside a table that disagreed with it - the same failure as the typed verdict recorded below, and
+found the same way, by reading the data next to the claim. **The primitive saving arrived only with
+the signed `change`**, a second decision later the same day. Every count on the generated page is
+now read from the data, this one included.
 
 The second row is the one worth pausing on. Re-encoding the release into primitives used to **cost**
 five lines against the release's own row count, and the report had to explain that the rise was
@@ -76,10 +86,14 @@ intent - **amounts are signed, and it is the *result* that may not go negative.*
 exact rather than approximate: a signed delta vector, counters that must stay non-negative, and no
 adaptation in between.
 
-**The consequence is a question, not a cost.** If amounts carry a sign, then `create` and `consume`
-are one operation with the sign fixed, and the primitive set is **four** rather than five. Nothing
-here decides that - it is noted because it follows, and because `X-11` reached the same place from
-the other direction: *`subtract` has no counterpart, which a signed amount repairs.*
+**The consequence was a question, and Sean took it the same day.** If amounts carry a sign then
+`create` and `consume` are one operation with the sign fixed, and they now are: **`change`**, with
+17 positive lines and 21 negative ones. `X-11` reached the same place from the other direction -
+*`subtract` has no counterpart, which a signed amount repairs.*
+
+What that costs is one thing worth naming: **the operator no longer says which way a line goes**, so
+the sign has to be read. The generated tables colour it for that reason, which is a presentation
+answer to a real loss of legibility rather than a denial that there is one.
 
 **`clamp` is monus.** Truncated subtraction, `a ∸ b = 0` when `b` exceeds `a`, is the operator that
 makes the natural numbers a commutative monoid - the standard way to total a subtraction that is
@@ -202,6 +216,17 @@ So sequential composition is strictly more permissive - `create 3, consume 2` st
 succeeds under it and fails under the other - and by his own test it does not earn that: nothing
 uses it, removing it makes the formulas shorter rather than longer, and keeping it would invalidate
 two of the checks.
+
+**Decided the same day, and the prediction held exactly.** Composition is not sequential, and a
+`change` carries its traits. The four world-building formulas went from 13 lines to 4, the total
+from 65 to 56, and **the nine `set`s in world-building became none** - so building the world is now
+a positive `change` and a `call`, and nothing else. The finding at the top of the generated report
+gets stronger rather than weaker: it used to say world-building needs `create` and `set`, and it
+needs neither a guard nor a `set` now.
+
+`set` survives for the five places that change a thing which already exists - `move`'s location and
+ready, `create labor`'s and `work`'s ready flips, and `refresh`. **That is what `set` is now for**,
+and the primitive's own description says so, which it could not while world-building depended on it.
 
 ## Two defects this found, both in this lane's own tooling
 

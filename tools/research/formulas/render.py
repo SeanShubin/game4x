@@ -16,8 +16,7 @@ DATA = json.loads((HERE / "data.json").read_text(encoding="utf-8"))
 RESULTS = json.loads((HERE / "results.json").read_text(encoding="utf-8"))
 
 OP_CLASS = {
-    "create": "op-create",
-    "consume": "op-consume",
+    "change": "op-change",
     "set": "op-set",
     "require": "op-require",
     "call": "op-call",
@@ -148,13 +147,21 @@ def _description(target, where):
     fields = []
     if "[" in head:
         kind, arg = head[: head.index("[")], head[head.index("[") + 1 : head.rindex("]")]
-        field = BRACKET_FIELD.get(kind)
-        assert field, f"no bracket field for kind {kind!r}"
-        if field == "surplus":
-            _assume("derived-trait", where)
-            fields.append("surplus:yes")
+        if ":" in arg:
+            # A create carries its traits, since composition is not sequential.
+            for pair in arg.split(","):
+                trait, value = (q.strip() for q in pair.split(":", 1))
+                if trait in UNNAMED_TRAITS:
+                    _assume("unnamed-trait", where)
+                fields.append(f"{trait}:{_value(value, where)}")
         else:
-            fields.append(f"{field}:{_value(arg, where)}")
+            field = BRACKET_FIELD.get(kind)
+            assert field, f"no bracket field for kind {kind!r}"
+            if field == "surplus":
+                _assume("derived-trait", where)
+                fields.append("surplus:yes")
+            else:
+                fields.append(f"{field}:{_value(arg, where)}")
         if kind in FAMILIES:
             _assume("family-not-kind", where)
     else:
@@ -229,15 +236,15 @@ def console_line(op, target, amount, attach, note, where):
         assert amount.startswith("at least "), amount
         out = f"{{require thing:{thing} at-least:{_value(amount[len('at least '):], where)}}}"
 
-    elif op == "consume" and "." in target and " in " not in target:
-        # A numeric trait is a counter too, so `age` subtracts from one.
+    elif op == "change" and "." in target and " in " not in target:
+        # A numeric trait is a counter too, so `age` changes one.
         subject, trait = target.rsplit(".", 1)
         if subject in FAMILIES:
             _assume("family-not-kind", where)
-        out = f"{{consume thing:{{{subject}}} {trait}:{_value(amount, where)}}}"
+        out = f"{{change thing:{{{subject}}} {trait}:{_value(amount, where)}}}"
 
-    elif op in ("create", "consume"):
-        out = f"{{{op} thing:{_description(target, where)} amount:{_value(amount, where)}}}"
+    elif op == "change":
+        out = f"{{change thing:{_description(target, where)} amount:{_value(amount, where)}}}"
 
     else:
         raise KeyError(op)
@@ -292,10 +299,14 @@ def formula_table(f):
     for i, (op, target, amount, attach, was_note) in enumerate(f["lines"]):
         cls = OP_CLASS.get(op, "")
         attach_cell = f'<span class="attach">{esc(attach)}</span>' if attach else ""
+        # The operator no longer says which way a change goes, so the sign has to carry it.
+        sign = ""
+        if op == "change":
+            sign = " amt-neg" if str(amount).startswith("-") else " amt-pos"
         out.append(
             f'<tr><td class="op {cls}">{esc(op)}</td>'
             f"<td class=\"target\">{esc(target)}</td>"
-            f"<td class=\"amt\">{esc(amount)}</td>"
+            f'<td class="amt{sign}">{esc(amount)}</td>'
             f"<td>{attach_cell}</td>"
             f'<td class="note">{esc(was_note)}</td>'
             f'<td class="one-string">{_one_string_cell(ENCODED[(f["name"], i)])}</td></tr>'
@@ -403,6 +414,7 @@ def totals():
 def main():
     was, now = totals()
     direction = "down" if now < was else "up"
+    n_primitives = len(DATA["primitives"])
     n_player = len(DATA["player"])
     n_world = len(DATA["world"])
     n_creation = len(DATA["creation"])
@@ -442,8 +454,10 @@ td {{ border-bottom: 1px solid var(--rule); padding: 5px 9px; vertical-align: to
 tbody tr:nth-child(odd) {{ background: var(--shade); }}
 .scroll {{ overflow-x: auto; }}
 .op {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; white-space: nowrap; }}
-.op-create {{ color: var(--create); }} .op-consume {{ color: var(--destroy); }}
-.op-set {{ color: var(--set); }} .op-require {{ color: var(--threshold); }}
+.op-change {{ color: var(--fg); }} .op-set {{ color: var(--set); }}
+.op-require {{ color: var(--threshold); }}
+.amt-pos {{ color: var(--create); font-weight: 700; }}
+.amt-neg {{ color: var(--destroy); font-weight: 700; }}
 .op-call {{ color: var(--call); }} .op-let {{ color: var(--muted); }}
 .target, .amt {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
 .one-string {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
@@ -468,17 +482,17 @@ code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:
 </style>
 <div class="wrap">
 <h1>The whole specification as formulas</h1>
-<p class="lede">Every recipe re-expressed in five primitives &mdash; and the same five building
-the world from an empty game. Generated from <code>tools/research/formulas/data.json</code>.</p>
+<p class="lede">Every recipe re-expressed in {n_primitives} primitives &mdash; and the same
+{n_primitives} building the world from an empty game. Generated from
+<code>tools/research/formulas/data.json</code>.</p>
 
 <div class="callout">
 <h4>The one finding</h4>
 <p><strong>Creation and transformation are already the same format, because the specification has
 been quietly turning relations into things.</strong> <code>deposit</code> and
 <code>adjacency</code> are kinds. Once a relation is a thing, building the world is
-<code>create</code> and <code>set</code> with nothing that can refuse &mdash; the identical
-primitives that play the game. Nothing needs adding for world-building except the <code>set</code>
-that transformation needed anyway.</p>
+<code>change</code> and <code>call</code> with nothing that can refuse &mdash; the
+identical primitives that play the game, and nothing added for world-building at all.</p>
 </div>
 
 <h2>The primitives</h2>
@@ -497,10 +511,11 @@ depends on a decision about a different column.</strong></p>
     DATA["attach_values"], ["op", "", "note", "attach"])}</div>
 <div class="callout">
 <h4>Which lines can fail at all</h4>
-<p><code>consume</code> always can &mdash; that is what fusing the guard into it means, and it is
-now the only line that refuses on a count. <code>require</code> can, being a read that has to find
-something. <code>create</code> can only where a capacity is declared, which is the same condition
-seen from the other end: a capacity is a count of free space.
+<p><code>change</code> can, and it is the only line that refuses on a count &mdash; that
+is what fusing the guard into it means. A <strong>negative</strong> change fails when there is not
+enough; a <strong>positive</strong> one fails only where a capacity is declared, which is the same
+condition seen from the other end, because a capacity is a count of free space.
+<code>require</code> can, being a read that has to find something.
 <code>call</code> can, when something inside it fails hard. <code>let</code> can, when a path does
 not resolve &mdash; <code>ark.location.below</code> has no answer for an ark that is not in orbit,
 and <strong>hard is the only sane value there</strong>. <code>set</code> effectively cannot, which
@@ -570,10 +585,12 @@ out for being written twice rather than for being written at all.</p>
 
 <h2>Building the world <span class="badge">{n_creation}</span></h2>
 <div class="callout">
-<p><strong>No new primitive appears below.</strong> Every line is <code>create</code>,
-<code>set</code> or <code>call</code> &mdash; and not one <code>consume</code> or
-<code>require</code>, because nothing at design time can be refused. That is the answer to whether one format can both make the environment and
-play the game: <strong>world-building is the play language with the guards left out.</strong></p>
+<p><strong>No new primitive appears below, and one fewer than before.</strong> Every line
+is a positive <code>change</code> or a <code>call</code> &mdash; not one <code>require</code>,
+because nothing at design time can be refused, and since a <code>change</code> carries its traits,
+not one <code>set</code> either. That is the answer to whether one format can both make the
+environment and play the game: <strong>world-building is the play language with the guards left
+out.</strong></p>
 </div>
 {"".join(formula_table(f) for f in DATA["creation"])}
 
@@ -862,8 +879,18 @@ and the spend are one line, they are the same number</strong> &mdash; and the ri
 that is to stop reporting two.</p>
 <p>The saving is not the point either. <strong>The vocabulary went from four roles that could not
 name <code>create-if-missing</code>, to six primitives that also build the world from nothing, to
-five that cannot express a zero test.</strong> A count of lines cannot see that, which is the whole
-reason to fix the metric first.</p>
+{n_primitives} that cannot express a zero test.</strong> A count of lines cannot see that, which is
+the whole reason to fix the metric first.</p>
+<div class="callout">
+<h4>A number that was typed rather than counted, and was wrong</h4>
+<p>This report said on 2026-09-09 that fusing the guard into the spend took the primitives from six
+to five. <strong>It did not.</strong> <code>destroy</code> and <code>threshold</code> became
+<code>consume</code>, and <code>require</code> split out of the same move &mdash; six became six,
+and the count was a word typed in prose beside a table that disagreed with it. The line saving was
+real; the primitive saving arrived only with the signed <code>change</code>, a decision later the
+same day. <strong>Every count on this page is now read from the data</strong>, this one included,
+which is why it now says {n_primitives}.</p>
+</div>
 </div>
 <div class="scroll">{simple_table(
     ["Formula", "Rows before", "Lines after", "Why"],

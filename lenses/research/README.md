@@ -61,12 +61,14 @@ reader can tell whether a finding was acted on or merely forgotten.
 Newest first.
 
 - [Natural numbers, and what the fusion removed](2026-09-09-natural-numbers-and-the-fusion.md)
-  - 2026-09-09. Carries `X-11`'s update. Sean decided that guard and spend are one operation and
-    that a count may never go below zero. 15 of 16 guards were already that pair with the same
-    amount on both sides; six primitives became five; the report's three line-counts became one;
-    and the model's only arithmetic expression disappeared. The literature calls it a VASS, calls
-    `clamp` monus, and warns that the usual way to build natural numbers - unsigned arithmetic -
-    wraps instead of failing, which is `CWE-191`.
+  - 2026-09-09. Carries `X-11`'s update. Three decisions of Sean's: guard and spend are one
+    operation, amounts are signed with a negative *result* the error, and composition is not
+    sequential. 15 of 16 guards were already that pair with the same amount on both sides; six
+    primitives became five - but only on the second decision, not the first, and the report records
+    where it said otherwise; 80 lines became 56; and the model's only arithmetic expression
+    disappeared. The literature calls it a VASS, calls `clamp` monus, gives Felleisen's test for
+    when a construct earns its place, and warns that the usual way to build natural numbers -
+    unsigned arithmetic - wraps instead of failing, which is `CWE-191`.
 
 - [The whole specification as formulas](formulas.html) - generated, and the one file here
   that is not prose

@@ -1,16 +1,10 @@
 {
   "primitives": [
     [
-      "create",
-      "Bring a thing into being, of a kind, inside a container",
-      "create garrison in t",
-      "the only way anything begins to exist"
-    ],
-    [
-      "consume",
-      "Subtract a count, and fail if it would go below zero",
-      "consume 3 metal in t",
-      "the guard and the spend are one line, and no other line can refuse"
+      "change",
+      "Add a signed amount to a count, and fail if the result would go below zero",
+      "change -3 metal in t",
+      "one operation: creating is a positive amount and spending a negative one"
     ],
     [
       "require",
@@ -20,28 +14,33 @@
     ],
     [
       "set",
-      "Assign a trait on an identified thing",
+      "Assign a trait on a thing that already exists",
       "set extractor.ready = no",
-      "the primitive the sketch was missing"
+      "only for changing a thing, since a create carries its traits"
     ],
     [
       "attach",
-      "On any line: what to do when the subtraction would go below zero",
-      "consume 1 labor in t [hard]",
+      "On any line: what to do when the result would go below zero",
+      "change -1 labor in t [hard]",
       "one question, and hard, soft, clamp and record are its four answers"
     ],
     [
       "call",
       "Apply another formula with arguments",
       "call found-colony(t) [soft]",
-      "the hierarchy"
+      "the hierarchy, and what keeps formulas short without adding expressiveness"
     ]
   ],
   "sugar": [
     [
-      "change(k, +n)",
-      "n creates",
-      "linear - readability only"
+      "create n k",
+      "change +n k",
+      "linear - a name for a positive change"
+    ],
+    [
+      "consume n k",
+      "change -n k",
+      "linear - a name for a negative change"
     ],
     [
       "let x = path",
@@ -50,13 +49,18 @@
     ],
     [
       "destroy k",
-      "consume 1 k, where k is an identified thing",
-      "DELETED as a primitive - it was consume with the count left implicit"
+      "change -1 k, where k is an identified thing",
+      "DELETED as a primitive - it was a change with the count left implicit"
     ],
     [
       "threshold(k, at least n) then n destroys",
-      "consume n k",
+      "change -n k",
       "DELETED as two lines - it is one, and 15 of the 16 guards were this"
+    ],
+    [
+      "create k then set k.trait",
+      "change +1 k[trait:value]",
+      "DELETED - composition is not sequential, so a set on a thing this formula creates has no referent. Four world-building formulas were this, and 13 lines became 4"
     ],
     [
       "limit n k",
@@ -78,9 +82,9 @@
           "was row 1 and row 2's qualifier"
         ],
         [
-          "consume",
+          "change",
           "ark",
-          "1",
+          "-1",
           "",
           "row 2"
         ],
@@ -100,30 +104,30 @@
       "new": true,
       "lines": [
         [
-          "create",
+          "change",
           "garrison in t",
-          "1",
+          "+1",
           "SOFT",
           "rows 3 and 4 were a guard and a create"
         ],
         [
-          "create",
+          "change",
           "citizen in t",
-          "2",
+          "+2",
           "",
           "Sean: 2 citizens, unconditionally. A territory never refuses one"
         ],
         [
-          "create",
+          "change",
           "extractor[food] in t",
-          "1",
+          "+1",
           "SOFT",
           "Sean: only if there is capacity. No territory lacks food capacity"
         ],
         [
-          "create",
+          "change",
           "extractor[metal] in t",
-          "1",
+          "+1",
           "SOFT",
           "Sean: only if there is capacity. Territory 6 has no metal, so it skips there"
         ]
@@ -142,9 +146,9 @@
           ""
         ],
         [
-          "consume",
+          "change",
           "pioneer",
-          "1",
+          "-1",
           "",
           "row 1"
         ],
@@ -177,9 +181,9 @@
           "row 2"
         ],
         [
-          "consume",
+          "change",
           "energy in unit",
-          "1",
+          "-1",
           "hard",
           "row 4"
         ],
@@ -205,23 +209,23 @@
       "selection": "a territory you control",
       "lines": [
         [
-          "consume",
+          "change",
           "labor in t",
-          "1",
+          "-1",
           "hard",
           ""
         ],
         [
-          "consume",
+          "change",
           "metal in t",
-          "1",
+          "-1",
           "hard",
           ""
         ],
         [
-          "create",
+          "change",
           "extractor[$resource] in t",
-          "1",
+          "+1",
           "HARD",
           "capacity is the container's now"
         ]
@@ -233,23 +237,23 @@
       "selection": "a territory you control",
       "lines": [
         [
-          "consume",
+          "change",
           "labor in t",
-          "1",
+          "-1",
           "hard",
           ""
         ],
         [
-          "consume",
+          "change",
           "metal in t",
-          "1",
+          "-1",
           "hard",
           ""
         ],
         [
-          "create",
+          "change",
           "store[$resource] in t",
-          "1",
+          "+1",
           "",
           ""
         ]
@@ -261,23 +265,23 @@
       "selection": "a territory you control",
       "lines": [
         [
-          "consume",
+          "change",
           "labor in t",
-          "1",
+          "-1",
           "hard",
           ""
         ],
         [
-          "consume",
+          "change",
           "metal in t",
-          "15",
+          "-15",
           "hard",
           ""
         ],
         [
-          "create",
+          "change",
           "yard in t",
-          "1",
+          "+1",
           "HARD",
           "capacity is the container's now"
         ]
@@ -289,30 +293,30 @@
       "selection": "a territory you control",
       "lines": [
         [
-          "consume",
+          "change",
           "metal in t",
-          "3",
+          "-3",
           "hard",
           ""
         ],
         [
-          "consume",
+          "change",
           "energy in t",
-          "6",
+          "-6",
           "hard",
           ""
         ],
         [
-          "consume",
+          "change",
           "citizen in t",
-          "2",
+          "-2",
           "hard",
           ""
         ],
         [
-          "create",
+          "change",
           "pioneer in t",
-          "1",
+          "+1",
           "",
           ""
         ]
@@ -331,30 +335,30 @@
           "was require 1 yard"
         ],
         [
-          "consume",
+          "change",
           "metal in t",
-          "3",
+          "-3",
           "hard",
           ""
         ],
         [
-          "consume",
+          "change",
           "energy in t",
-          "12",
+          "-12",
           "hard",
           ""
         ],
         [
-          "consume",
+          "change",
           "citizen in t",
-          "2",
+          "-2",
           "hard",
           ""
         ],
         [
-          "create",
+          "change",
           "ark in t.orbit",
-          "1",
+          "+1",
           "",
           ""
         ]
@@ -373,9 +377,9 @@
           "rows 1 and 2 were one flip"
         ],
         [
-          "create",
+          "change",
           "labor in citizen.location",
-          "1",
+          "+1",
           "",
           "row 3"
         ]
@@ -394,9 +398,9 @@
           "was row 1"
         ],
         [
-          "consume",
+          "change",
           "labor in t",
-          "1",
+          "-1",
           "hard",
           "row 2"
         ],
@@ -408,9 +412,9 @@
           "rows 3 and 4 were one flip"
         ],
         [
-          "create",
+          "change",
           "resource[extractor.resource] in t",
-          "t.deposit[extractor.resource].density",
+          "+t.deposit[extractor.resource].density",
           "",
           "row 5"
         ]
@@ -424,9 +428,9 @@
       "selection": "each thing with upkeep",
       "lines": [
         [
-          "consume",
+          "change",
           "food in thing.location",
-          "thing.upkeep",
+          "-thing.upkeep",
           "hard",
           "row 1 was the selector; row 2"
         ]
@@ -445,16 +449,16 @@
           ""
         ],
         [
-          "consume",
+          "change",
           "food[surplus] in t",
-          "n",
+          "-n",
           "",
           "row 1"
         ],
         [
-          "create",
+          "change",
           "citizen in t",
-          "n",
+          "+n",
           "",
           "row 2"
         ]
@@ -466,16 +470,16 @@
       "selection": "each thing whose upkeep is unpaid",
       "lines": [
         [
-          "create",
+          "change",
           "metal in thing.location",
-          "thing.metal-in-it",
+          "+thing.metal-in-it",
           "",
           "row 2"
         ],
         [
-          "consume",
+          "change",
           "thing",
-          "1",
+          "-1",
           "",
           "row 1"
         ]
@@ -487,9 +491,9 @@
       "selection": "each thing with keeps",
       "lines": [
         [
-          "consume",
+          "change",
           "thing.keeps",
-          "1",
+          "-1",
           "soft",
           "both rows were one decrement; the guard `keeps at least 1` is now the operation"
         ]
@@ -501,9 +505,9 @@
       "selection": "each thing with keeps 0",
       "lines": [
         [
-          "consume",
+          "change",
           "thing",
-          "1",
+          "-1",
           "",
           "row 1"
         ]
@@ -531,32 +535,11 @@
       "selection": "applied at design time, against the empty game",
       "lines": [
         [
-          "create",
-          "territory in game",
-          "1",
+          "change",
+          "territory[id:id, biome:biome, nature:nature] in game",
+          "+1",
           "",
-          ""
-        ],
-        [
-          "set",
-          "territory.id = id",
-          "",
-          "",
-          ""
-        ],
-        [
-          "set",
-          "territory.biome = biome",
-          "",
-          "",
-          ""
-        ],
-        [
-          "set",
-          "territory.nature = nature",
-          "",
-          "",
-          ""
+          "was a create and three sets; non-sequential composition has no referent for those"
         ]
       ]
     },
@@ -566,32 +549,11 @@
       "selection": "applied at design time",
       "lines": [
         [
-          "create",
-          "deposit in t",
-          "1",
+          "change",
+          "deposit[resource:resource, total-capacity:capacity, density:density] in t",
+          "+1",
           "",
-          ""
-        ],
-        [
-          "set",
-          "deposit.resource = resource",
-          "",
-          "",
-          ""
-        ],
-        [
-          "set",
-          "deposit.total-capacity = capacity",
-          "",
-          "",
-          ""
-        ],
-        [
-          "set",
-          "deposit.density = density",
-          "",
-          "",
-          ""
+          "was a create and three sets"
         ]
       ]
     },
@@ -601,18 +563,11 @@
       "selection": "applied at design time",
       "lines": [
         [
-          "create",
-          "orbit in game",
-          "1",
+          "change",
+          "orbit[below:t] in game",
+          "+1",
           "",
-          ""
-        ],
-        [
-          "set",
-          "orbit.below = t",
-          "",
-          "",
-          ""
+          "was a create and one set"
         ]
       ]
     },
@@ -622,25 +577,11 @@
       "selection": "applied at design time",
       "lines": [
         [
-          "create",
-          "adjacency in game",
-          "1",
+          "change",
+          "adjacency[from:a, to:b] in game",
+          "+1",
           "",
-          ""
-        ],
-        [
-          "set",
-          "adjacency.from = a",
-          "",
-          "",
-          ""
-        ],
-        [
-          "set",
-          "adjacency.to = b",
-          "",
-          "",
-          ""
+          "was a create and two sets"
         ]
       ]
     },

@@ -198,10 +198,30 @@ there is an error.
   makes the naturals a commutative monoid. It still has no call site. **`record` has a name**, and
   Sean's starvation case is what it is for.
 
-**Still open to you**, and unchanged by the decision: whether composition is sequential - whether
-each line sees the starting state or the effects of the lines before it. A recipe that consumes and
-produces the same resource exposes it immediately, and the fusion makes that recipe easier to write
-rather than harder.
+**Decided later the same day, and it answers the third question too.** Sean took two more:
+**amounts are signed**, so `create` and `consume` are one operation `change` - 17 positive lines and
+21 negative - and the primitive set is genuinely **five** at last. And **composition is not
+sequential**: every line reads the starting state.
+
+- **The primitive count in this item's first update was wrong.** Fusing the guard into the spend did
+  **not** take six primitives to five - `destroy` and `threshold` became `consume` while `require`
+  split out, so six became six. It was typed rather than counted. The reduction came from the signed
+  `change`, and every count on the generated page is now read from the data.
+- **Non-sequential composition was measured before it was decided.** Over 22 formulas and 65 lines:
+  **zero** lines read a count another line changes, **one** reads a trait another writes - `move`'s
+  `let from = unit.location` against `set unit.location = $to` - and **four** were a `set` on a thing
+  a `create` in the same formula makes. `check.py` already assumed it: `effects()` sums a formula's
+  net in any order, because check 1 is a P-invariant and check 2 a linear program, so **sequential
+  composition would make both unsound.**
+- **It made the formulas shorter, which is the test Sean set.** A `change` carries its traits, so the
+  four world-building create-then-sets became one line each: 13 lines to 4, 65 to 56, and the nine
+  `set`s in world-building became **none**. `set` now exists only to change a thing that already
+  exists, and there are five such lines.
+
+**Nothing is open to you in this item any more.** All three of the questions it left are answered -
+composition, whether a change and a threshold share a line, and whether upper thresholds stay. It is
+kept `open` only because the primitive set is yours to build against and this is where its shape is
+recorded; close it when you have read it.
 
 ### X-12 - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting
 
@@ -412,6 +432,31 @@ person can follow and no page to need a script, and these pages satisfy both.
 report as a published artifact, so this buys reachability from one place rather than access.
 **Declining is reasonable** if mixing a lens's output into the state reports muddies what
 `reports/` is for; say so and this lane will keep it out.
+
+**Sean asked again 2026-09-09 - *rendered somewhere reasonable upon deploy to github* - so it is
+no longer "when convenient".** What he wants is unambiguous now, and two facts make it smaller than
+the item above suggests.
+
+- **Neither route works today.** GitHub serves a committed `.html` as source rather than rendering
+  it, so browsing the repository will never show the page. And the Pages artifact is
+  `crates/game4x/dist` plus `reports/` and `scenario/` - `lenses/` is not copied, so it is not on
+  the site either. **The `.md` reports in this directory do render on github.com**; only the
+  generated one does not.
+- **The mechanism is one line of the workflow**, beside the two `cp`s already in *Copy the reports
+  into the artifact*: copy `lenses/research` into `dist` and it is served at
+  `<pages>/lenses/research/formulas.html`.
+
+**Two things checked so the risk is known rather than assumed.** `lenses/research/formulas.html`
+contains **no `href`, no `src`, no `url(` and no `<script>`** - it is one self-contained file of
+about 93 KB, so it cannot 404, needs no sibling copied beside it, and cannot add a
+reference that `tests/browsable.rs` would count as pointing outward.
+
+**The shape question in the paragraph above still stands and is yours.** Copying `lenses/` into the
+artifact publishes a lens's working directory alongside the game, which may be the wrong thing to
+put on the site even though the one file is harmless. **An alternative that keeps `reports/` for
+state**: publish it at a path of your choosing and link it from `reports/index.html` under a heading
+that says it is research rather than state. This lane has no preference between them and cannot
+write either.
 
 ### X-17 - what check 2 should become: subordinate to the declarations, not to a baseline
 
