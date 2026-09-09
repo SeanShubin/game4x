@@ -97,6 +97,13 @@
     "cap": 1000,
     "breaches": []
   },
+  "containment": {
+    "examined": 18,
+    "declared": 21,
+    "homeless": [],
+    "undeclared": [],
+    "x20_lines": 3
+  },
   "placement": [
     [
       "found-colony(t)",

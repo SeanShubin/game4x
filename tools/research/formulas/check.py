@@ -1,4 +1,4 @@
-"""The three checks, run against `data.json`.
+"""The checks, run against `data.json`.
 
     python tools/research/formulas/check.py
 
@@ -16,7 +16,7 @@
    A backstop for bugs in 1 and 2, never the mechanism.
 
 **Every check is poisoned before it is believed** - see `self_test`. A checker that cannot be
-made to fail on demand is a checker whose green means nothing, and all three here are green on
+made to fail on demand is a checker whose green means nothing, and every one here is green on
 purpose in the ordinary case.
 """
 
@@ -366,6 +366,46 @@ def check_placement():
     return out
 
 
+def container_of(target):
+    """The name a target gives for what will hold the thing, or None if it names none."""
+    return target.split(" in ", 1)[1].strip() if " in " in str(target) else None
+
+
+def check_containment():
+    """Check 6. Every positive change names a container that declares a bound for that kind.
+
+    `spec/logistics.md`: every thing is in the game, directly or through what contains it, and
+    a kind that declares no capacity contains nothing and never can. So a recipe that creates
+    a thing somewhere nothing allows it is a defect, and one that creates it nowhere at all is
+    a worse one.
+
+    Negative changes are not tested: they act on something that already exists, so where it is
+    is a fact about the state rather than a claim by the recipe.
+    """
+    allowed = {(c, k) for c, k, _b, _s in DATA["containment_declared"]}
+    names = DATA["container_kind"]
+    examined, homeless, undeclared = 0, [], []
+    for f in DATA["player"] + DATA["world"] + DATA["creation"]:
+        for op, target, amount, _attach, _note in f["lines"]:
+            if op != "change" or sign_of(amount) < 0:
+                continue
+            if "." in str(target) and " in " not in str(target):
+                continue  # a numeric trait, not a thing being put anywhere
+            examined += 1
+            where = container_of(target)
+            if where is None:
+                homeless.append((f["name"], target))
+                continue
+            container = names.get(where)
+            if container is None:
+                homeless.append((f["name"], f"{target} - no kind known for {where!r}"))
+                continue
+            kind = place_of(target)
+            if (container, kind) not in allowed:
+                undeclared.append((f["name"], target, container, kind))
+    return examined, homeless, undeclared
+
+
 def check_cap(cap=1000):
     """Check 3. A backstop: apply every recipe once and report anything past the cap."""
     by_name = gather()
@@ -437,6 +477,43 @@ def self_test():
         ok = False
     else:
         print("  poison ok: check 3 goes red at a cap of 0")
+    # Check 6 poison: put a garrison in an orbit, which nothing declares.
+    saved = [list(r) for r in DATA["containment_declared"]]
+    fc = dict(DATA["player"][0])
+    DATA["player"] = [dict(f) for f in DATA["player"]]
+    victim = DATA["player"][0]
+    victim["lines"] = list(victim["lines"]) + [["change", "garrison in t.orbit", "+1", "", "poison"]]
+    _e, _h, bad6 = check_containment()
+    victim["lines"] = victim["lines"][:-1]
+    if not any(k == "garrison" and c == "orbit" for _n, _t, c, k in bad6):
+        print("  POISON FAILED: check 6 did not flag a garrison put in an orbit")
+        ok = False
+    else:
+        print("  poison ok: check 6 flags a thing put where nothing declares it")
+    DATA["containment_declared"] = saved
+
+    # Check 6 against X-20: take back the four rows Sean's answer added and it must go red.
+    # This is the evidence that the check has teeth - it would have caught the contradiction
+    # that this lane's own model carried for a day.
+    saved = list(DATA["containment_declared"])
+    DATA["containment_declared"] = [
+        r for r in saved
+        # `resource` goes too: it is the row that lets `work` put what it mines in a
+        # territory, and X-20 was about resources rather than about three named kinds.
+        if not (r[0] == "territory"
+                and r[1] in ("food", "metal", "energy", "labor", "resource"))
+    ]
+    _e2, _h2, bad20 = check_containment()
+    DATA["containment_declared"] = saved
+    caught = {k for _n, _t, c, k in bad20 if c == "territory"}
+    # `food` is absent on purpose: no recipe puts food in a territory by name - `work` makes
+    # the family `resource`, and that is the row that carries it.
+    if not {"metal", "labor", "resource"} <= caught:
+        print(f"  POISON FAILED: check 6 would not have caught X-20 (caught {sorted(caught)})")
+        ok = False
+    else:
+        print(f"  poison ok: check 6 goes red on X-20's state, over {len(bad20)} lines")
+
     return ok
 
 
@@ -450,6 +527,17 @@ def as_dict():
     names, skipped2, witness, gain, metal_gain, free, undeclared, hidden = check_unbounded()
     n2, _s2, w2, g2, mg2, f2, u2, _h2 = check_unbounded(exclude_sources=True)
     cap, breached = check_cap()
+    c6_examined, c6_homeless, c6_undeclared = check_containment()
+    # How many lines the check flags in the state the release still describes - the evidence
+    # that it has X-20's teeth, recorded rather than left only in the poison output.
+    _saved = list(DATA["containment_declared"])
+    DATA["containment_declared"] = [
+        r for r in _saved
+        if not (r[0] == "territory"
+                and r[1] in ("food", "metal", "energy", "labor", "resource"))
+    ]
+    x20_lines = len(check_containment()[2])
+    DATA["containment_declared"] = _saved
     return {
         "conservation": {
             "analysed": len(analysed), "skipped": skipped,
@@ -473,6 +561,11 @@ def as_dict():
                                 "free": sorted(f2), "undeclared": sorted(u2)},
         },
         "cap": {"cap": cap, "breaches": [[n, k, c] for n, k, c in breached]},
+        "containment": {"examined": c6_examined,
+                        "declared": len(DATA["containment_declared"]),
+                        "homeless": [[n, t] for n, t in c6_homeless],
+                        "undeclared": [list(r) for r in c6_undeclared],
+                        "x20_lines": x20_lines},
         "placement": [[n, tg, at, b] for n, tg, at, b in check_placement()],
         "attachment": {"meaningful": [list(r) for r in check_attachment()[0]],
                        "unobservable": [list(r) for r in check_attachment()[1]]},
@@ -558,7 +651,20 @@ def main():
     print(f"CHECK 3 - cap of {cap}")
     print("  " + (f"{len(breached)} breach(es)" if breached else "no breach applying each recipe once"))
     print()
-    print("All three green means nothing unless the poison above went red.")
+    examined, homeless, undeclared = check_containment()
+    print()
+    print("CHECK 6 - is everything created put somewhere that declares it?")
+    print(f"  {examined} positive changes examined, over "
+          f"{len(DATA['containment_declared'])} declared (container, kind) pairs")
+    assert examined, "check 6 examined nothing, so its green means nothing"
+    for name, target in homeless:
+        print(f"  NO CONTAINER: {name}: {target}")
+    for name, target, container, kind in undeclared:
+        print(f"  UNDECLARED: {name}: {target} - nothing says a {container} may hold a {kind}")
+    if not homeless and not undeclared:
+        print("  every one lands somewhere that declares it")
+
+    print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1
 
 

@@ -1969,5 +1969,292 @@
       "persists",
       "the one thing that is in nothing"
     ]
+  ],
+  "container_kind": {
+    "t": "territory",
+    "game": "game",
+    "unit": "unit",
+    "t.orbit": "orbit",
+    "citizen.location": "territory",
+    "thing.location": "territory",
+    "from": "place",
+    "$to": "place"
+  },
+  "containment_declared": [
+    [
+      "territory",
+      "garrison",
+      "1",
+      "release -> What bounds a kind in a territory"
+    ],
+    [
+      "territory",
+      "yard",
+      "1",
+      "release -> What bounds a kind in a territory"
+    ],
+    [
+      "territory",
+      "ark",
+      "2",
+      "release -> What bounds a kind in a territory"
+    ],
+    [
+      "territory",
+      "pioneer",
+      "2",
+      "release -> What bounds a kind in a territory"
+    ],
+    [
+      "territory",
+      "extractor",
+      "its deposit's total capacity for that resource, which may be 0",
+      "release -> Territory resources"
+    ],
+    [
+      "territory",
+      "store",
+      "as many as the extractors of its resource",
+      "release -> What bounds a kind in a territory"
+    ],
+    [
+      "territory",
+      "citizen",
+      "no limit",
+      "held down by food through upkeep, not by a capacity"
+    ],
+    [
+      "territory",
+      "food",
+      "no limit",
+      "Sean, 2026-09-09 - `X-20`"
+    ],
+    [
+      "territory",
+      "metal",
+      "no limit",
+      "Sean, 2026-09-09 - `X-20`"
+    ],
+    [
+      "territory",
+      "energy",
+      "no limit",
+      "Sean, 2026-09-09 - `X-20`"
+    ],
+    [
+      "territory",
+      "labor",
+      "no limit",
+      "Sean, 2026-09-09 - `X-20`"
+    ],
+    [
+      "territory",
+      "deposit",
+      "no limit",
+      "three per territory, fixed at design time"
+    ],
+    [
+      "territory",
+      "resource",
+      "no limit",
+      "the family, for what `work` makes before it grounds"
+    ],
+    [
+      "store",
+      "resource",
+      "10",
+      "release -> Where things are"
+    ],
+    [
+      "unit",
+      "energy",
+      "the unit's fuel",
+      "release -> Where things are, a unit's tank"
+    ],
+    [
+      "orbit",
+      "ark",
+      "no limit",
+      "release -> Kinds: an orbit holds units and nothing else. **No number is stated**"
+    ],
+    [
+      "orbit",
+      "pioneer",
+      "no limit",
+      "release -> Kinds: an orbit holds units and nothing else. **No number is stated**"
+    ],
+    [
+      "game",
+      "territory",
+      "no limit",
+      "twelve, fixed at design time"
+    ],
+    [
+      "game",
+      "orbit",
+      "no limit",
+      "one per territory"
+    ],
+    [
+      "game",
+      "adjacency",
+      "no limit",
+      "one per shared edge"
+    ],
+    [
+      "place",
+      "unit",
+      "no limit",
+      "`move` enters a place, which is a territory or an orbit"
+    ]
+  ],
+  "storage_kinds": [
+    [
+      "Attached to the territory, a declared number",
+      "the territory holds it directly",
+      "a number, and <strong>zero is one of its values</strong>",
+      "persists",
+      [
+        [
+          "territory",
+          "garrison"
+        ],
+        [
+          "territory",
+          "yard"
+        ],
+        [
+          "territory",
+          "ark"
+        ],
+        [
+          "territory",
+          "pioneer"
+        ],
+        [
+          "territory",
+          "extractor"
+        ],
+        [
+          "territory",
+          "store"
+        ]
+      ]
+    ],
+    [
+      "Attached to the territory, no limit",
+      "the territory holds it directly",
+      "nothing - a loop holds it down instead",
+      "persists",
+      [
+        [
+          "territory",
+          "citizen"
+        ],
+        [
+          "territory",
+          "deposit"
+        ]
+      ]
+    ],
+    [
+      "Loose in the territory",
+      "the territory holds it directly",
+      "nothing",
+      "<strong>lost at the turn's end, to disorder</strong>",
+      [
+        [
+          "territory",
+          "food"
+        ],
+        [
+          "territory",
+          "metal"
+        ],
+        [
+          "territory",
+          "energy"
+        ],
+        [
+          "territory",
+          "labor"
+        ],
+        [
+          "territory",
+          "resource"
+        ]
+      ]
+    ],
+    [
+      "Inside a container in the territory",
+      "a store, which is itself bounded by the territory",
+      "10 of the one resource it was built for",
+      "persists",
+      [
+        [
+          "store",
+          "resource"
+        ]
+      ]
+    ],
+    [
+      "Inside a unit",
+      "a unit's tank, and the unit may be anywhere",
+      "the unit's fuel",
+      "persists",
+      [
+        [
+          "unit",
+          "energy"
+        ]
+      ]
+    ],
+    [
+      "In a place, by moving",
+      "a territory or an orbit",
+      "no number is stated for an orbit",
+      "persists",
+      [
+        [
+          "orbit",
+          "ark"
+        ],
+        [
+          "orbit",
+          "pioneer"
+        ],
+        [
+          "place",
+          "unit"
+        ]
+      ]
+    ],
+    [
+      "In the game",
+      "the game holds it directly",
+      "nothing - all are fixed at design time",
+      "persists",
+      [
+        [
+          "game",
+          "territory"
+        ],
+        [
+          "game",
+          "orbit"
+        ],
+        [
+          "game",
+          "adjacency"
+        ]
+      ]
+    ],
+    [
+      "Held by nothing, and holding nothing",
+      "the game is in nothing; an extractor declares no capacity so holds nothing",
+      "not applicable",
+      "persists",
+      []
+    ]
   ]
 }

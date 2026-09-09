@@ -496,6 +496,29 @@ def capacity_table():
     )
 
 
+def storage_table():
+    """Every kind of storage, with what is stored that way, read from the declarations."""
+    by_pair = {(c, k): (b, s) for c, k, b, s in DATA["containment_declared"]}
+    rows = []
+    for label, where, bound, life, pairs in DATA["storage_kinds"]:
+        examples = ", ".join(
+            f"{k} in a {c}" if c != "territory" else k for c, k in pairs
+        ) or "&mdash;"
+        for c, k in pairs:
+            assert (c, k) in by_pair, (c, k)
+        rows.append(
+            f'<tr><td class="target"><strong>{esc(label)}</strong></td><td>{esc(where)}</td>'
+            f"<td>{bound}</td><td>{life}</td>"
+            f'<td class="target">{esc(examples)}</td></tr>'
+        )
+    return (
+        len(rows),
+        '<div class="scroll"><table><thead><tr><th>Storage</th><th>Where it is</th>'
+        "<th>What bounds it</th><th>Lifetime</th><th>What is stored that way</th></tr></thead>"
+        "<tbody>" + "".join(rows) + "</tbody></table></div>",
+    )
+
+
 def assumption_table():
     """What the encoding assumed, and how many lines needed each - counted, not written."""
     rows = []
@@ -565,6 +588,13 @@ def main():
     n_clash, n_all, clash_table = kind_collisions()
     open_decisions, shut_decisions = decisions_split()
     cap_table = capacity_table()
+    n_storage, sto_table = storage_table()
+    c6 = RESULTS["containment"]
+    c6_examined, c6_x20 = c6["examined"], c6["x20_lines"]
+    n_declared = c6["declared"]
+    c6_bad = len(c6["homeless"]) + len(c6["undeclared"])
+    v6, v6cls = ("every one lands somewhere declared", "down") if not c6_bad else (
+        f"{c6_bad} land nowhere declared", "up")
     n_open, n_decisions = len(open_decisions), len(DATA['decisions'])
     n_player = len(DATA["player"])
     n_world = len(DATA["world"])
@@ -831,6 +861,27 @@ ignoring location is right for them and blind here. That is why <code>X-20</code
 this lane's own tooling for a day.</p>
 </div>
 
+<h2>The kinds of storage, and what is stored each way</h2>
+<p><strong>{n_storage} of them</strong>, and every one of the
+{n_declared} (container, kind) pairs the game allows belongs to exactly one &mdash; asserted, so a
+pair that fitted none, or two, would fail rather than render.</p>
+{sto_table}
+<div class="callout">
+<h4>The three that are easy to confuse</h4>
+<p><strong>Loose in the territory</strong> and <strong>attached to the territory with no limit</strong>
+are the same containment and differ only in lifetime: a citizen the territory holds directly stays,
+and a unit of metal it holds directly does not. Nothing about <em>where</em> tells them apart, which
+is why lifetime has to be its own column rather than a consequence of the bound.</p>
+<p><strong>Inside a container in the territory</strong> is two bounds, not one. A store is bounded by
+the territory - as many as the extractors of its resource - and then holds 10 itself. That is the
+spec's <em>a thing that contains things takes up capacity in whatever contains it, so capacity is not
+conserved</em>.</p>
+<p><strong>Held by nothing, and holding nothing</strong> are two different facts that both come out
+empty. The game is in nothing, which is the one exception to everything being somewhere. An extractor
+<em>declares no capacity</em>, so it holds nothing and never can - and that is not a capacity of zero,
+which territory 6's metal extractors have.</p>
+</div>
+
 <h2>The capacities the game declares</h2>
 <div class="callout">
 <h4>Where a bound lives, decided 2026-09-08</h4>
@@ -944,7 +995,7 @@ state &mdash; a territory that exists with no biome. Non-sequential composition 
 invariant was not the reason for the decision.</p>
 </div>
 
-<h2>The three checks, as run</h2>
+<h2>The checks, as run</h2>
 <p>Not a description of what they would report &mdash; the output of
 <code>tools/research/formulas/check.py</code>, read from <code>results.json</code>, so this page
 and the checker cannot disagree. <strong>All three were poisoned before being believed</strong>:
@@ -1102,6 +1153,22 @@ somewhere and the other is a thing the player asked for.</p>
 <p>Under a selection interface the second never even arises: grounding the recipe against
 territory 6 produces no <code>build extractor[metal]</code> to select. <strong>The attachment is
 what the console needs and the menu is what the interface needs, from one line.</strong></p>
+</div>
+
+<h3>Check 6 &mdash; is everything created put somewhere that declares it? &nbsp;<span class="badge {v6cls}">{v6}</span></h3>
+<p><strong>Every positive change names a container, and that container declares a bound for that
+kind.</strong> {c6_examined} positive changes read from the recipes themselves, against
+{n_declared} declared pairs. A negative change is not tested: it acts on something that already
+exists, so where it is is a fact about the state rather than a claim the recipe makes.</p>
+<div class="callout">
+<h4>Its green would mean nothing, so it is poisoned twice</h4>
+<p>The declarations were written after Sean answered <code>X-20</code>, so the check agreeing with
+the recipes today proves only that they were written from the same source. <strong>The second poison
+is the evidence</strong>: take back the rows his answer added - a territory holds a resource with no
+limit - and the check goes red on {c6_x20} lines, which is the state the release still describes.
+<strong>So this check would have caught the contradiction this lane's own model carried for a
+day</strong>, and neither of the other checks could, because both aggregate by kind and ignore where
+a thing is.</p>
 </div>
 
 <h3>Check 3 &mdash; a cap of {RESULTS["cap"]["cap"]} &nbsp;<span class="badge down">{len(RESULTS["cap"]["breaches"])} breaches</span></h3>
