@@ -462,6 +462,16 @@ def kind_collisions():
     )
 
 
+def decisions_split():
+    """Open questions, and ones already answered. Partitioned by the row's own prefix."""
+    settled = ("ANSWERED", "CORRECTED", "WITHDRAWN", "NOTED", "NOT A DECISION")
+    op = [r for r in DATA["decisions"] if not r[0].startswith(settled)]
+    shut = [r for r in DATA["decisions"] if r[0].startswith(settled)]
+    assert len(op) + len(shut) == len(DATA["decisions"])
+    assert all(r[0].startswith("OPEN") for r in op), [r[0] for r in op]
+    return op, shut
+
+
 def assumption_table():
     """What the encoding assumed, and how many lines needed each - counted, not written."""
     rows = []
@@ -529,6 +539,8 @@ def main():
     t_id, t_note, n_facts, t_table, t_text = a_territory(DATA["territories"][0])
     n_kinds, kinds_table = every_kind()
     n_clash, n_all, clash_table = kind_collisions()
+    open_decisions, shut_decisions = decisions_split()
+    n_open, n_decisions = len(open_decisions), len(DATA['decisions'])
     n_player = len(DATA["player"])
     n_world = len(DATA["world"])
     n_creation = len(DATA["creation"])
@@ -610,8 +622,9 @@ identical primitives that play the game, and nothing added for world-building at
 </div>
 
 <h2>The primitives</h2>
-<p>Six. <code>set</code> is the one the sketch was missing, and it is what collapses
-<code>age</code> and <code>refresh</code> from two rows to one each.</p>
+<p>There are {n_primitives}. <code>change</code> carries the guard, so it is the only line that can
+refuse on a count; <code>set</code> exists only to change a thing that already exists, since a
+positive <code>change</code> carries its traits.</p>
 <div class="scroll">{simple_table(
     ["Primitive", "What it does", "Example", "Why it earns a place"],
     DATA["primitives"], ["op", "", "target", "note"])}</div>
@@ -636,29 +649,47 @@ and <strong>hard is the only sane value there</strong>. <code>set</code> effecti
 is why no <code>set</code> in this report carries an attachment.</p>
 </div>
 
-<h3>Three decisions the column is carrying, none of them taken</h3>
-<div class="scroll">{simple_table(
-    ["Question", "The two readings", "What is at stake", "Where it came from"],
-    DATA["attach_decisions"], ["target", "", "note", "note"])}</div>
-<div class="callout">
-<h4><code>record</code> is the one worth looking at, because it is already there</h4>
-<p><code>unpaid</code> is a trait in the specification &mdash; <em>derived: its upkeep was not
-met</em> &mdash; and <code>perish</code> fires on it. So when <code>upkeep</code> cannot take its
-food, the failure <strong>neither stops the turn nor vanishes</strong>: it is written down, and
-another recipe reads it next. <strong>That is a third behaviour on failure, in the game today,
-which a two-valued column cannot express.</strong></p>
-<p>It may not want to be an attach value. The alternative is that <strong>failure is state</strong>
-&mdash; every line's outcome is recorded, and <code>unpaid</code> is just one query over it. That is
-a larger idea and a cleaner one, and it is the sort of thing worth deciding before the column sets
-rather than after.</p>
-</div>
-
 <h2>What is sugar</h2>
 <p>Removable with linear growth, so by the test each is readability rather than expressiveness
 &mdash; which means they can be added freely.</p>
 <div class="scroll">{simple_table(
     ["Written as", "Means", "Cost of removing it"],
     DATA["sugar"], ["target", "", "note"])}</div>
+
+<h2>The last column: every row as one string</h2>
+<p>The last column of every recipe table restates that row &mdash; op, target, amount, attach and
+the note &mdash; as a single string in the notation <code>spec/console.md</code> gives for a command
+and for a description of state: <code>{{name field:value ...}}</code>, where a value is a word, a
+number or another command, a field referring to a thing is named for that thing's kind, and
+<code>#</code> begins a comment. All {N_LINES} lines are encoded, none by hand.</p>
+<p>Nine of them needed something that notation does not define. The encoder records each rather
+than inventing quietly, and they are listed under <em>What the encoding assumed</em>, below the
+data.</p>
+
+<h2>Player recipes <span class="badge">{n_player}</span></h2>
+{"".join(formula_table(f) for f in DATA["player"])}
+
+<h2>World recipes <span class="badge">{n_world}</span></h2>
+<p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
+{"".join(formula_table(f) for f in DATA["world"])}
+
+<h2>Building the world <span class="badge">{n_creation}</span></h2>
+<div class="callout">
+<p><strong>No new primitive appears below, and one fewer than before.</strong> Every line
+is a positive <code>change</code> or a <code>call</code> &mdash; not one <code>require</code>,
+because nothing at design time can be refused, and since a <code>change</code> carries its traits,
+not one <code>set</code> either. That is the answer to whether one format can both make the
+environment and play the game: <strong>world-building is the play language with the guards left
+out.</strong></p>
+</div>
+{"".join(formula_table(f) for f in DATA["creation"])}
+
+<h3>The data those calls consume</h3>
+<p>Copied for review. <code>3 x 4</code> is capacity 3, density 4 &mdash; so
+<code>make-deposit(1, food, 3, 4)</code>.</p>
+<div class="scroll">{simple_table(
+    ["Territory", "Food", "Metal", "Energy", "What it exercises"],
+    DATA["territories"], ["amt", "amt", "amt", "amt", "note"])}</div>
 
 <h2>Every kind, the way every recipe is</h2>
 <p>Sean, 2026-09-09: <em>I want to be able to review things just as easily as I can review
@@ -669,32 +700,6 @@ the two checks below have a population to count against: <strong>every kind has 
 <strong>every trait but one lands on a kind</strong> &mdash; <code>unpaid</code> is the exception,
 because it is <em>of a thing with upkeep</em>, which is a predicate rather than a kind.</p>
 {kinds_table}
-
-<h2>Should a kind be a trait?</h2>
-<p><strong>It already is one.</strong> The release's <em>Traits</em> table opens with
-<code>kind &middot; every thing &middot; one of the kinds &middot; stored</code>, and
-<code>spec/invariants.md</code> says <em>a thing is a set of traits, and one of them names its
-kind</em>. So they are not two sorts of thing to be unified; a kind is the value of a trait, and the
-notation writes it first rather than as <code>kind:citizen</code> because every thing has one.</p>
-<p><strong>The question worth asking is the harder one: could it be dropped?</strong> If a thing were
-nothing but its traits, with no discriminator, the traits would have to say which kind it is. They
-cannot. <strong>{n_clash} of the {n_all} kinds share their trait set with another</strong>, so no
-reading of the traits could tell them apart:</p>
-{clash_table}
-<div class="callout">
-<h4>What that settles, and what it does not</h4>
-<p>Five kinds carry <strong>no stored traits whatever</strong>. A yard and a unit of metal are the
-same bag of traits, and only the kind separates them &mdash; so <strong><code>kind</code> is not
-derivable, and dropping it would mean inventing a discriminating trait, which is <code>kind</code>
-under another name.</strong></p>
-<p>It does <em>not</em> settle that kinds are a second sort of thing. They also appear as
-<strong>values</strong>: <code>resource</code> takes <code>food</code>, <code>metal</code> or
-<code>energy</code>, which are kinds, and <code>from</code> and <code>to</code> take places, which
-are things. <code>spec/console.md</code> already leans on this &mdash; <em>a field that refers to a
-thing is named for that thing's kind</em>. So a kind is doing two jobs: it classifies a thing, and it
-is a domain that trait values are drawn from. <strong>Unify the first job with traits, because it
-already is one; keep the second, because a value has to come from somewhere.</strong></p>
-</div>
 
 <h2>A thing, as tabular data and as text</h2>
 <p>Sean, 2026-09-09: <em>I want to see things as organized tabular data, with the corresponding text
@@ -738,26 +743,44 @@ easier to read than {n_facts} rows would be. <code>CLAUDE.md</code> already sepa
 <em>a table of game data in markdown is a rendering and never a source.</em> Both forms exist above,
 and the wide one was generated from the long one rather than the other way round.</p>
 
-<h2>What unifies, and what must not</h2>
-<p><strong>The shared object is the description, and the specification says so before this report
-does.</strong> <em>A game's state is things, in places, and how many of each. A thing is a set of
-traits, and one of them names its kind.</em> That is <code>{{kind trait:value ...}}</code> &mdash;
-the same object a recipe line targets. So a thing and a recipe line are not two structures to be
-unified; they are one structure appearing in two roles.</p>
-<div class="scroll"><table><thead><tr><th></th><th>Which</th><th>Why</th></tr></thead>
-<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["unify"])}</tbody></table></div>
+<h2>Capacities</h2>
 <div class="callout">
-<h4>Then what is a recipe that only creates? Nothing but the thing</h4>
-<p>Since the fold, <strong>every world-building recipe is one line, with
-<code>change</code> as its operator, <code>+1</code> as its amount and no attachment</strong> &mdash;
-all three constant. Take away what never varies and what remains is the description. <strong>So
-&ldquo;one recipe creates each thing&rdquo; is not a way to unify them: it is what is left when
-they already are unified.</strong></p>
-<p>And it turns out to satisfy a rule nobody was aiming at. <code>spec/invariants.md</code>:
-<em>A definition arrives in one transition. There is no state in which a kind or a recipe is half
-defined.</em> A <code>create</code> followed by three <code>set</code>s <strong>has</strong> such a
-state &mdash; a territory that exists with no biome. Non-sequential composition removes it, and the
-invariant was not the reason for the decision.</p>
+<h4>Where a bound lives, decided 2026-09-08</h4>
+<p><strong>A capacity is a property of the container, declared once, and no recipe states it.</strong>
+That deletes the <code>limit</code> role outright: both of its uses in the whole specification were
+<code>limit 0 garrison</code>, restating a capacity of 1 that <em>What bounds a kind in a territory</em>
+already declared. Every other capacity below was <em>never</em> written in a recipe &mdash; so the
+engine was already enforcing seven bounds that no recipe stated, and the garrison was the odd one
+out for being written twice rather than for being written at all.</p>
+</div>
+<div class="scroll">{simple_table(
+    ["Container", "Holds", "Up to", "Was it ever in a recipe?"],
+    DATA["capacities"], ["target", "target", "amt", "note"])}</div>
+
+<h2>Still open, and yours to take</h2>
+<p>{n_open} of the {n_decisions} questions this re-encoding raised are still open. The rest are
+below, under <em>What has already been settled</em>, so that this list is short enough to be a list
+of things to do.</p>
+<div class="scroll">{simple_table(
+    ["Question", "What is at stake", "How it shows up"],
+    open_decisions, ["", "", "note"])}</div>
+
+<h2>Where the attach column might still go</h2>
+<p>Four questions about the column, not about how to read it &mdash; one of them withdrawn since, and kept so it is not asked again.</p>
+<div class="scroll">{simple_table(
+    ["Question", "The two readings", "What is at stake", "Where it came from"],
+    DATA["attach_decisions"], ["target", "", "note", "note"])}</div>
+<div class="callout">
+<h4><code>record</code> is the one worth looking at, because it is already there</h4>
+<p><code>unpaid</code> is a trait in the specification &mdash; <em>derived: its upkeep was not
+met</em> &mdash; and <code>perish</code> fires on it. So when <code>upkeep</code> cannot take its
+food, the failure <strong>neither stops the turn nor vanishes</strong>: it is written down, and
+another recipe reads it next. <strong>That is a third behaviour on failure, in the game today,
+which a two-valued column cannot express.</strong></p>
+<p>It may not want to be an attach value. The alternative is that <strong>failure is state</strong>
+&mdash; every line's outcome is recorded, and <code>unpaid</code> is just one query over it. That is
+a larger idea and a cleaner one, and it is the sort of thing worth deciding before the column sets
+rather than after.</p>
 </div>
 
 <h2>Design time, if it stopped being a category</h2>
@@ -785,160 +808,52 @@ recognisable shape and a message can be written for it. But it is the thing to c
 deciding, and it is the only cost this lane can find.</p>
 </div>
 
-<h2>Every row as one string</h2>
-<p>The last column of every recipe table below restates that row &mdash; op, target, amount,
-attach and the note &mdash; as a single string in the notation <code>spec/console.md</code> gives
-for a command and for a description of state. All {N_LINES} lines are encoded, none by hand.</p>
+<h2>Should a kind be a trait?</h2>
+<p><strong>It already is one.</strong> The release's <em>Traits</em> table opens with
+<code>kind &middot; every thing &middot; one of the kinds &middot; stored</code>, and
+<code>spec/invariants.md</code> says <em>a thing is a set of traits, and one of them names its
+kind</em>. So they are not two sorts of thing to be unified; a kind is the value of a trait, and the
+notation writes it first rather than as <code>kind:citizen</code> because every thing has one.</p>
+<p><strong>The question worth asking is the harder one: could it be dropped?</strong> If a thing were
+nothing but its traits, with no discriminator, the traits would have to say which kind it is. They
+cannot. <strong>{n_clash} of the {n_all} kinds share their trait set with another</strong>, so no
+reading of the traits could tell them apart:</p>
+{clash_table}
 <div class="callout">
-<h4>What the encoding assumes, and why it is worth reading</h4>
-<p>The notation says a command is <code>{{name field:value ...}}</code>, that a value is a word, a
-number or another command, that a field referring to a thing is named for that thing's kind, and
-that <code>#</code> begins a comment. <strong>Where a line needed something that notation does not
-define, the encoder records it rather than inventing quietly</strong> &mdash; so this list is the
-report's real output, and it is generated from the encoding rather than written beside it.</p>
-{assumption_table()}
-<p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
-line required a choice the specification has not made.</p>
+<h4>What that settles, and what it does not</h4>
+<p>Five kinds carry <strong>no stored traits whatever</strong>. A yard and a unit of metal are the
+same bag of traits, and only the kind separates them &mdash; so <strong><code>kind</code> is not
+derivable, and dropping it would mean inventing a discriminating trait, which is <code>kind</code>
+under another name.</strong></p>
+<p>It does <em>not</em> settle that kinds are a second sort of thing. They also appear as
+<strong>values</strong>: <code>resource</code> takes <code>food</code>, <code>metal</code> or
+<code>energy</code>, which are kinds, and <code>from</code> and <code>to</code> take places, which
+are things. <code>spec/console.md</code> already leans on this &mdash; <em>a field that refers to a
+thing is named for that thing's kind</em>. So a kind is doing two jobs: it classifies a thing, and it
+is a domain that trait values are drawn from. <strong>Unify the first job with traits, because it
+already is one; keep the second, because a value has to come from somewhere.</strong></p>
 </div>
 
-<h2>Player recipes <span class="badge">{n_player}</span></h2>
-{"".join(formula_table(f) for f in DATA["player"])}
-
-<h2>World recipes <span class="badge">{n_world}</span></h2>
-<p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
-{"".join(formula_table(f) for f in DATA["world"])}
-
-<h2>Capacities</h2>
+<h2>What unifies, and what must not</h2>
+<p><strong>The shared object is the description, and the specification says so before this report
+does.</strong> <em>A game's state is things, in places, and how many of each. A thing is a set of
+traits, and one of them names its kind.</em> That is <code>{{kind trait:value ...}}</code> &mdash;
+the same object a recipe line targets. So a thing and a recipe line are not two structures to be
+unified; they are one structure appearing in two roles.</p>
+<div class="scroll"><table><thead><tr><th></th><th>Which</th><th>Why</th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["unify"])}</tbody></table></div>
 <div class="callout">
-<h4>Where a bound lives, decided 2026-09-08</h4>
-<p><strong>A capacity is a property of the container, declared once, and no recipe states it.</strong>
-That deletes the <code>limit</code> role outright: both of its uses in the whole specification were
-<code>limit 0 garrison</code>, restating a capacity of 1 that <em>What bounds a kind in a territory</em>
-already declared. Every other capacity below was <em>never</em> written in a recipe &mdash; so the
-engine was already enforcing seven bounds that no recipe stated, and the garrison was the odd one
-out for being written twice rather than for being written at all.</p>
-</div>
-<div class="scroll">{simple_table(
-    ["Container", "Holds", "Up to", "Was it ever in a recipe?"],
-    DATA["capacities"], ["target", "target", "amt", "note"])}</div>
-
-<h2>Building the world <span class="badge">{n_creation}</span></h2>
-<div class="callout">
-<p><strong>No new primitive appears below, and one fewer than before.</strong> Every line
-is a positive <code>change</code> or a <code>call</code> &mdash; not one <code>require</code>,
-because nothing at design time can be refused, and since a <code>change</code> carries its traits,
-not one <code>set</code> either. That is the answer to whether one format can both make the
-environment and play the game: <strong>world-building is the play language with the guards left
-out.</strong></p>
-</div>
-{"".join(formula_table(f) for f in DATA["creation"])}
-
-<h3>The data those calls consume</h3>
-<p>Copied for review. <code>3 x 4</code> is capacity 3, density 4 &mdash; so
-<code>make-deposit(1, food, 3, 4)</code>.</p>
-<div class="scroll">{simple_table(
-    ["Territory", "Food", "Metal", "Energy", "What it exercises"],
-    DATA["territories"], ["amt", "amt", "amt", "amt", "note"])}</div>
-
-<h2>Detecting a glitch, without a cap</h2>
-<div class="callout">
-<h4>Unbounded capacity does not cost you detection</h4>
-<p><strong>Boundedness for one starting state is EXPSPACE-complete. Boundedness for
-<em>every</em> starting state is polynomial &mdash; a linear program over the incidence
-matrix.</strong> The second is the one an editor needs, because an author is editing recipes and
-not a saved game. A net is not structurally bounded exactly when there is a non-negative firing
-vector <code>x</code>, not all zero, with <code>C&middot;x &ge; 0</code>: a set of recipes that,
-fired in some ratio, ends with more than it began. <strong>The vector is the error message</strong>
-&mdash; it names which recipes and how many of each.</p>
-<p><strong>All of it needs the plain fragment.</strong> A zero test on an unbounded quantity makes
-the language Turing-complete and every line of this section false.</p>
-</div>
-<div class="scroll">{simple_table(
-    ["Check", "What it asks", "Cost and character", "What it reports", "Where it fits"],
-    DATA["detection"], ["target", "", "", "", "note"])}</div>
-
-<h3>What the specification already declares, and nothing checks</h3>
-<p>These four sentences are invariant declarations sitting in the <em>Kinds</em> table as prose.
-Making them checkable is the smallest change with the largest payoff.</p>
-<div class="scroll">{simple_table(
-    ["Kind", "Declared", "Where it already says so", "What would check it", "Note"],
-    DATA["invariants"], ["target", "", "note", "", "note"])}</div>
-<div class="callout">
-<h4>Why the broad check must be a diff</h4>
-<p><strong>The intended economy is itself an infinite loop.</strong> Food feeds citizens, citizens
-make labor, labor works extractors, extractors make food. That is a T-increasing and a structural
-check will flag it &mdash; correctly. So check 2 cannot ask <em>is anything unbounded</em>; it asks
-<em>is anything unbounded that was not there before</em>. Check 1 has no such problem, because the
-author names the resource that must not grow and food is simply not on the list.</p>
-</div>
-
-<h2>Theme, and the number it derives</h2>
-<p>Sean, 2026-09-09: <em>food gets energy from the sun, citizens get energy from food, so labor is
-not thematically free.</em> <strong>He is right that it does not belong in a recipe, and right that
-it helps reason about them &mdash; it derives a quantity the specification never states.</strong></p>
-<div class="scroll">{simple_table(
-    ["", "The claim", "What it gives", "Status"],
-    DATA["theme"], ["target", "target", "", "note"])}</div>
-
-<h3>Growth rate, and why density does not buy speed</h3>
-<p>Reproduction caps the per-capita rate at <strong>1</strong> &mdash; a parent per child. Food caps
-it at <strong>d&minus;1</strong>. So the realised rate is <strong>min(d&minus;1, 1)</strong>. Every
-density in the release is an integer, so <strong>the food-limited middle case never occurs</strong>:
-a territory either doubles or is frozen.</p>
-<div class="scroll">{simple_table(
-    ["Territory", "Food", "Density", "Rate", "Behaviour", "Ceiling", "Surplus lost per turn"],
-    DATA["growth"], ["amt", "amt", "amt", "amt", "attach", "amt", "note"])}</div>
-<div class="callout">
-<h4>Density does two things, and speed is not one of them</h4>
-<p>Territory 3 is <code>6 x 2</code> and territory 8 is <code>6 x 6</code>. <strong>They grow at
-exactly the same rate</strong> &mdash; both double every turn &mdash; and differ only in where they
-stop: ceiling 12 against 36. Above density 2, extra density buys <strong>ceiling and surplus, never
-speed</strong>. A reader who takes <code>6 x 6</code> as <em>six times faster</em> would be wrong,
-and the release does not say otherwise anywhere.</p>
-</div>
-<div class="callout">
-<h4>Which raises a question about the surplus, and about food stores</h4>
-<p>Territory 8 produces <strong>5n</strong> surplus food and <code>grow</code> can use only
-<strong>n</strong> of it. The other <strong>4n</strong> has nowhere to go. Food is made with
-<code>keeps</code> 1, and the turn runs <em>upkeep, grow, perish, age, spoil</em> &mdash; so food
-made this turn is aged to 0 and spoiled <strong>at the same turn end</strong>, whether it sits in a
-store or in nothing.</p>
-<p><strong>If that reading is right, a food store buys nothing</strong>, because stored and unstored
-food die at the same moment. It may be that storing is meant to reset <code>keeps</code> and nothing
-says so. <strong>Raised rather than filed as a defect</strong> &mdash; and it is a curious postscript
-to dropping the two stores from <code>found-colony</code>, one of which was a food store.</p>
-</div>
-
-<h3>The population ceiling, which no document contains</h3>
-<p>Per citizen per turn: <code>upkeep</code> eats 1 food, <code>create labor</code> yields 1 labor,
-and <code>work</code> turns 1 labor into <em>d</em> food. So with <em>n</em> citizens and <em>c</em>
-food extractors, the surplus is <strong>n(d&minus;1)</strong> while n &le; c, and
-<strong>c&middot;d &minus; n</strong> after that. <strong>It reaches zero at n = c&middot;d</strong>
-&mdash; so a territory's population ceiling is its food capacity times its density, which is the
-<em>Food</em> column read as a product.</p>
-<div class="scroll">{simple_table(
-    ["Territory", "Food", "Ceiling", "Can it grow?", "What the release says it exercises"],
-    DATA["ceiling"], ["amt", "amt", "amt", "attach", "note"])}</div>
-<div class="callout">
-<h4>Every note is explained by that one number, and one of them says so out loud</h4>
-<p>Territories 2 and 3 are <code>2 x 6</code> and <code>6 x 2</code> &mdash; different shapes,
-<strong>ceiling 12 both</strong> &mdash; and the release's own note on territory 3 reads
-<em>many thin food extractors, <strong>same food total</strong></em>. Territory 9 has a ceiling of 6
-against metal capacity 6: <em>rich metal, too few hands to work it</em>. Territory 12 has a ceiling
-of 4 against 8 metal extractors: <em>rich extractors, almost no workers</em>. <strong>The notes were
-written from a quantity that was never written down.</strong></p>
-<p><strong>And territory 5 is sharper than its note.</strong> At density 1 a citizen eats exactly
-what it produces, so the surplus is <em>n(1&minus;1) = 0</em> at any size: it is not merely
-low-ceilinged, it <strong>cannot grow at all</strong> and is frozen at whatever founds it. The note
-says <em>Food density 1</em>; the consequence is that the ceiling of 3 is unreachable.</p>
-</div>
-<div class="callout">
-<h4>One thing the chain does not explain, and it is worth knowing</h4>
-<p><code>grow</code> produces <em>the lesser of the surplus food and the citizens here</em>, so
-growth <strong>caps at doubling per turn</strong> however dense the food is. Density above 2 does
-not make a colony grow faster &mdash; it makes surplus for something else. <strong>So the ceiling
-and the growth rate are set by different halves of the same column</strong>, and a reader who takes
-<em>6 x 6</em> as <em>six times faster</em> would be wrong.</p>
+<h4>Then what is a recipe that only creates? Nothing but the thing</h4>
+<p>Since the fold, <strong>every world-building recipe is one line, with
+<code>change</code> as its operator, <code>+1</code> as its amount and no attachment</strong> &mdash;
+all three constant. Take away what never varies and what remains is the description. <strong>So
+&ldquo;one recipe creates each thing&rdquo; is not a way to unify them: it is what is left when
+they already are unified.</strong></p>
+<p>And it turns out to satisfy a rule nobody was aiming at. <code>spec/invariants.md</code>:
+<em>A definition arrives in one transition. There is no state in which a kind or a recipe is half
+defined.</em> A <code>create</code> followed by three <code>set</code>s <strong>has</strong> such a
+state &mdash; a territory that exists with no biome. Non-sequential composition removes it, and the
+invariant was not the reason for the decision.</p>
 </div>
 
 <h2>The three checks, as run</h2>
@@ -1106,6 +1021,115 @@ what the console needs and the menu is what the interface needs, from one line.<
 <strong>it found neither of the two things the other checks found.</strong> It is a backstop
 against bugs in checks 1 and 2, not a way of finding anything.</p>
 
+<h2>Detecting a glitch, without a cap</h2>
+<div class="callout">
+<h4>Unbounded capacity does not cost you detection</h4>
+<p><strong>Boundedness for one starting state is EXPSPACE-complete. Boundedness for
+<em>every</em> starting state is polynomial &mdash; a linear program over the incidence
+matrix.</strong> The second is the one an editor needs, because an author is editing recipes and
+not a saved game. A net is not structurally bounded exactly when there is a non-negative firing
+vector <code>x</code>, not all zero, with <code>C&middot;x &ge; 0</code>: a set of recipes that,
+fired in some ratio, ends with more than it began. <strong>The vector is the error message</strong>
+&mdash; it names which recipes and how many of each.</p>
+<p><strong>All of it needs the plain fragment.</strong> A zero test on an unbounded quantity makes
+the language Turing-complete and every line of this section false.</p>
+</div>
+<div class="scroll">{simple_table(
+    ["Check", "What it asks", "Cost and character", "What it reports", "Where it fits"],
+    DATA["detection"], ["target", "", "", "", "note"])}</div>
+
+<h3>What the specification already declares, and nothing checks</h3>
+<p>These four sentences are invariant declarations sitting in the <em>Kinds</em> table as prose.
+Making them checkable is the smallest change with the largest payoff.</p>
+<div class="scroll">{simple_table(
+    ["Kind", "Declared", "Where it already says so", "What would check it", "Note"],
+    DATA["invariants"], ["target", "", "note", "", "note"])}</div>
+<div class="callout">
+<h4>Why the broad check must be a diff</h4>
+<p><strong>The intended economy is itself an infinite loop.</strong> Food feeds citizens, citizens
+make labor, labor works extractors, extractors make food. That is a T-increasing and a structural
+check will flag it &mdash; correctly. So check 2 cannot ask <em>is anything unbounded</em>; it asks
+<em>is anything unbounded that was not there before</em>. Check 1 has no such problem, because the
+author names the resource that must not grow and food is simply not on the list.</p>
+</div>
+
+<h2>Theme, and the number it derives</h2>
+<p>Sean, 2026-09-09: <em>food gets energy from the sun, citizens get energy from food, so labor is
+not thematically free.</em> <strong>He is right that it does not belong in a recipe, and right that
+it helps reason about them &mdash; it derives a quantity the specification never states.</strong></p>
+<div class="scroll">{simple_table(
+    ["", "The claim", "What it gives", "Status"],
+    DATA["theme"], ["target", "target", "", "note"])}</div>
+
+<h3>Growth rate, and why density does not buy speed</h3>
+<p>Reproduction caps the per-capita rate at <strong>1</strong> &mdash; a parent per child. Food caps
+it at <strong>d&minus;1</strong>. So the realised rate is <strong>min(d&minus;1, 1)</strong>. Every
+density in the release is an integer, so <strong>the food-limited middle case never occurs</strong>:
+a territory either doubles or is frozen.</p>
+<div class="scroll">{simple_table(
+    ["Territory", "Food", "Density", "Rate", "Behaviour", "Ceiling", "Surplus lost per turn"],
+    DATA["growth"], ["amt", "amt", "amt", "amt", "attach", "amt", "note"])}</div>
+<div class="callout">
+<h4>Density does two things, and speed is not one of them</h4>
+<p>Territory 3 is <code>6 x 2</code> and territory 8 is <code>6 x 6</code>. <strong>They grow at
+exactly the same rate</strong> &mdash; both double every turn &mdash; and differ only in where they
+stop: ceiling 12 against 36. Above density 2, extra density buys <strong>ceiling and surplus, never
+speed</strong>. A reader who takes <code>6 x 6</code> as <em>six times faster</em> would be wrong,
+and the release does not say otherwise anywhere.</p>
+</div>
+<div class="callout">
+<h4>Which raises a question about the surplus, and about food stores</h4>
+<p>Territory 8 produces <strong>5n</strong> surplus food and <code>grow</code> can use only
+<strong>n</strong> of it. The other <strong>4n</strong> has nowhere to go. Food is made with
+<code>keeps</code> 1, and the turn runs <em>upkeep, grow, perish, age, spoil</em> &mdash; so food
+made this turn is aged to 0 and spoiled <strong>at the same turn end</strong>, whether it sits in a
+store or in nothing.</p>
+<p><strong>If that reading is right, a food store buys nothing</strong>, because stored and unstored
+food die at the same moment. It may be that storing is meant to reset <code>keeps</code> and nothing
+says so. <strong>Raised rather than filed as a defect</strong> &mdash; and it is a curious postscript
+to dropping the two stores from <code>found-colony</code>, one of which was a food store.</p>
+</div>
+
+<h3>The population ceiling, which no document contains</h3>
+<p>Per citizen per turn: <code>upkeep</code> eats 1 food, <code>create labor</code> yields 1 labor,
+and <code>work</code> turns 1 labor into <em>d</em> food. So with <em>n</em> citizens and <em>c</em>
+food extractors, the surplus is <strong>n(d&minus;1)</strong> while n &le; c, and
+<strong>c&middot;d &minus; n</strong> after that. <strong>It reaches zero at n = c&middot;d</strong>
+&mdash; so a territory's population ceiling is its food capacity times its density, which is the
+<em>Food</em> column read as a product.</p>
+<div class="scroll">{simple_table(
+    ["Territory", "Food", "Ceiling", "Can it grow?", "What the release says it exercises"],
+    DATA["ceiling"], ["amt", "amt", "amt", "attach", "note"])}</div>
+<div class="callout">
+<h4>Every note is explained by that one number, and one of them says so out loud</h4>
+<p>Territories 2 and 3 are <code>2 x 6</code> and <code>6 x 2</code> &mdash; different shapes,
+<strong>ceiling 12 both</strong> &mdash; and the release's own note on territory 3 reads
+<em>many thin food extractors, <strong>same food total</strong></em>. Territory 9 has a ceiling of 6
+against metal capacity 6: <em>rich metal, too few hands to work it</em>. Territory 12 has a ceiling
+of 4 against 8 metal extractors: <em>rich extractors, almost no workers</em>. <strong>The notes were
+written from a quantity that was never written down.</strong></p>
+<p><strong>And territory 5 is sharper than its note.</strong> At density 1 a citizen eats exactly
+what it produces, so the surplus is <em>n(1&minus;1) = 0</em> at any size: it is not merely
+low-ceilinged, it <strong>cannot grow at all</strong> and is frozen at whatever founds it. The note
+says <em>Food density 1</em>; the consequence is that the ceiling of 3 is unreachable.</p>
+</div>
+<div class="callout">
+<h4>One thing the chain does not explain, and it is worth knowing</h4>
+<p><code>grow</code> produces <em>the lesser of the surplus food and the citizens here</em>, so
+growth <strong>caps at doubling per turn</strong> however dense the food is. Density above 2 does
+not make a colony grow faster &mdash; it makes surplus for something else. <strong>So the ceiling
+and the growth rate are set by different halves of the same column</strong>, and a reader who takes
+<em>6 x 6</em> as <em>six times faster</em> would be wrong.</p>
+</div>
+
+<h2>What the encoding assumed</h2>
+<p><strong>Where a line needed something the notation does not define, the encoder records it
+rather than inventing quietly</strong> &mdash; so this list is the report's real output, and it is
+generated from the encoding rather than written beside it.</p>
+{assumption_table()}
+<p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
+line required a choice the specification has not made.</p>
+
 <h2>What the re-encoding cost and saved</h2>
 <p>Computed from the data rather than asserted. <strong>{was} rows became {now} lines &mdash;
 {direction} {abs(now - was)}</strong>.</p>
@@ -1136,10 +1160,12 @@ which is why it now says {n_primitives}.</p>
     [[r[0], r[1], lines_after(r[0]), r[2]] for r in DATA["collapse"]],
     ["target", "amt", "amt", "note"])}</div>
 
-<h2>Decisions this forced, none of them taken here</h2>
+<h2>What has already been settled</h2>
+<p>Kept rather than deleted: a question that was answered is what stops it being asked again, and
+each row names who answered it.</p>
 <div class="scroll">{simple_table(
     ["Question", "What is at stake", "How it shows up"],
-    DATA["decisions"], ["", "", "note"])}</div>
+    shut_decisions, ["", "", "note"])}</div>
 
 <h2>The source, for review</h2>
 <p>Everything above is generated from two files, and no number on this page is typed by hand.</p>
@@ -1152,7 +1178,6 @@ which is why it now says {n_primitives}.</p>
      ["lenses/research/formulas.html", "this page, generated", "generated"],
      ["releases/first-release.md", "what was copied and modified from, not referenced", "the specification lane"]],
     ["target", "", "note"])}</div>
-
 <p class="foot">Research lens, 2026-09-08. Copied and modified from
 <code>releases/first-release.md</code> rather than referencing it, per the request &mdash; so
 divergence from the specification is expected and is not a defect in either. Every count here is

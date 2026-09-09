@@ -75,8 +75,9 @@ identical primitives that play the game, and nothing added for world-building at
 </div>
 
 <h2>The primitives</h2>
-<p>Six. <code>set</code> is the one the sketch was missing, and it is what collapses
-<code>age</code> and <code>refresh</code> from two rows to one each.</p>
+<p>There are 5. <code>change</code> carries the guard, so it is the only line that can
+refuse on a count; <code>set</code> exists only to change a thing that already exists, since a
+positive <code>change</code> carries its traits.</p>
 <div class="scroll"><table><thead><tr>
 <th>Primitive</th>
 <th>What it does</th>
@@ -169,51 +170,6 @@ and <strong>hard is the only sane value there</strong>. <code>set</code> effecti
 is why no <code>set</code> in this report carries an attachment.</p>
 </div>
 
-<h3>Three decisions the column is carrying, none of them taken</h3>
-<div class="scroll"><table><thead><tr>
-<th>Question</th>
-<th>The two readings</th>
-<th>What is at stake</th>
-<th>Where it came from</th>
-</tr></thead><tbody>
-<tr>
-<td class="target">WITHDRAWN - *what does soft test* was a false choice</td>
-<td>This report asked whether soft means *the container is full* or *one is already there*. There is only one condition under which a create can fail, and it is the first.</td>
-<td class="note">Withdrawn 2026-09-09 after Sean said he did not understand the question. He was right not to: it was not a question. The real distinction is below and it is about create, not about soft.</td>
-<td class="note">Raised and withdrawn by this lane</td>
-</tr>
-<tr>
-<td class="target">OPEN - is *add one if there is room* ever the wrong thing?</td>
-<td>`create X [soft]` adds one when the container has space. That is not the same as *ensure one exists*.</td>
-<td class="note">They coincide wherever capacity is 1, which is every case in the report except the extractors. Territory 1 has food capacity 3, so deploying twice would add a second food extractor. If that is wrong, the fix is at the call - skip founding a colony that is already founded - and not a second kind of create.</td>
-<td class="note">The real question the false one was standing in front of</td>
-</tr>
-<tr>
-<td class="target">Is a failure observable to other recipes?</td>
-<td>hard and soft both leave nothing behind. `unpaid` leaves something behind, and `perish` reads it.</td>
-<td class="note">This is a second axis, not a third value, and the column currently conflates them. If failures are observable, they are state; if they are state, they are subject to every rule about state.</td>
-<td class="note">The specification already answers yes, once</td>
-</tr>
-<tr>
-<td class="target">May the amount column hold arithmetic?</td>
-<td>`grow` consumes *the lesser of the surplus food and the citizens here*.</td>
-<td class="note">This decides whether clamp is a primitive. If the amount may hold arithmetic, clamp is sugar and should go. If the amount holds only constants and paths - which is what keeps the language finite - then clamp is the only way to say *as many as possible*, and it is a primitive.</td>
-<td class="note">The one recipe that needs it today</td>
-</tr>
-</tbody></table></div>
-<div class="callout">
-<h4><code>record</code> is the one worth looking at, because it is already there</h4>
-<p><code>unpaid</code> is a trait in the specification &mdash; <em>derived: its upkeep was not
-met</em> &mdash; and <code>perish</code> fires on it. So when <code>upkeep</code> cannot take its
-food, the failure <strong>neither stops the turn nor vanishes</strong>: it is written down, and
-another recipe reads it next. <strong>That is a third behaviour on failure, in the game today,
-which a two-valued column cannot express.</strong></p>
-<p>It may not want to be an attach value. The alternative is that <strong>failure is state</strong>
-&mdash; every line's outcome is recorded, and <code>unpaid</code> is just one query over it. That is
-a larger idea and a cleaner one, and it is the sort of thing worth deciding before the column sets
-rather than after.</p>
-</div>
-
 <h2>What is sugar</h2>
 <p>Removable with linear growth, so by the test each is readability rather than expressiveness
 &mdash; which means they can be added freely.</p>
@@ -259,149 +215,15 @@ rather than after.</p>
 </tr>
 </tbody></table></div>
 
-<h2>Every kind, the way every recipe is</h2>
-<p>Sean, 2026-09-09: <em>I want to be able to review things just as easily as I can review
-recipes.</em> A recipe gets a table of lines and a string for each; here is the other half.
-<strong>All 16 kinds</strong>, with what a thing of each carries and how it is written.
-The <em>Kinds</em> and <em>Traits</em> tables are copied from the release into this lane's data, so
-the two checks below have a population to count against: <strong>every kind has a row</strong>, and
-<strong>every trait but one lands on a kind</strong> &mdash; <code>unpaid</code> is the exception,
-because it is <em>of a thing with upkeep</em>, which is a predicate rather than a kind.</p>
-<div class="scroll"><table><thead><tr><th>Kind</th><th>In</th><th>Identity</th><th>Stored traits</th><th>Derived</th><th>Written as</th><th></th></tr></thead><tbody><tr><td class="target">citizen</td><td>territory</td><td>counted</td><td class="target">ready, force, upkeep</td><td class="note">&mdash;</td><td class="one-string">{citizen ready:.. force:.. upkeep:.. territory:..}</td><td class="note">the only kind that both works and eats</td></tr><tr><td class="target">garrison</td><td>territory</td><td>counted</td><td class="target">force</td><td class="note">metal-in-it</td><td class="one-string">{garrison force:.. territory:..}</td><td class="note">capacity 1, which is why <code>limit 0 garrison</code> was a restatement</td></tr><tr><td class="target">extractor</td><td>territory</td><td>counted</td><td class="target">resource, ready</td><td class="note">metal-in-it</td><td class="one-string">{extractor resource:.. ready:.. territory:..}</td><td class="note">counted, not identified - <code>work</code> selects <em>an</em> extractor that is ready</td></tr><tr><td class="target">yard</td><td>territory</td><td>counted</td><td class="target">&mdash;</td><td class="note">metal-in-it</td><td class="one-string">{yard territory:..}</td><td class="note">capacity 1</td></tr><tr><td class="target">store</td><td>territory</td><td>counted</td><td class="target">resource</td><td class="note">metal-in-it</td><td class="one-string">{store resource:.. territory:..}</td><td class="note">holds 10 of its resource; which store holds which unit is not recorded</td></tr><tr><td class="target">ark</td><td>orbit or territory</td><td>counted</td><td class="target">force, fuel, movable</td><td class="note">metal-in-it</td><td class="one-string">{ark force:.. fuel:.. movable:.. orbit:..}</td><td class="note"></td></tr><tr><td class="target">pioneer</td><td>territory</td><td>counted</td><td class="target">force, fuel, movable</td><td class="note">metal-in-it</td><td class="one-string">{pioneer force:.. fuel:.. movable:.. territory:..}</td><td class="note"></td></tr><tr><td class="target">food</td><td>territory, or a store</td><td>counted</td><td class="target">keeps</td><td class="note">surplus</td><td class="one-string">{food keeps:.. territory:..}</td><td class="note">made with <code>keeps</code> 1, so it cannot cross a turn boundary</td></tr><tr><td class="target">metal</td><td>territory, or a store</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{metal territory:..}</td><td class="note"></td></tr><tr><td class="target">energy</td><td>territory, a store, or a unit's tank</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{energy territory:..}</td><td class="note"></td></tr><tr><td class="target">labor</td><td>territory</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{labor territory:..}</td><td class="note">made each turn and never stored</td></tr><tr><td class="target">territory</td><td>game</td><td><strong>id</strong></td><td class="target">id, biome, nature</td><td class="note">control</td><td class="one-string">{territory id:1 biome:.. nature:.. game:..}</td><td class="note"><code>biome</code> and <code>nature</code> have no value in any document - <code>X-19</code></td></tr><tr><td class="target">orbit</td><td>game</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{orbit game:..}</td><td class="note">which territory it is above has <strong>no named trait</strong> - this report calls it <code>below</code></td></tr><tr><td class="target">deposit</td><td>territory</td><td>counted</td><td class="target">resource, total-capacity, density</td><td class="note">&mdash;</td><td class="one-string">{deposit resource:.. total-capacity:.. density:.. territory:..}</td><td class="note"></td></tr><tr><td class="target">adjacency</td><td>game</td><td>counted</td><td class="target">from, to</td><td class="note">&mdash;</td><td class="one-string">{adjacency from:.. to:.. game:..}</td><td class="note"></td></tr><tr><td class="target">game</td><td><em>nothing</em></td><td>counted</td><td class="target">phase</td><td class="note">&mdash;</td><td class="one-string">{game phase:..}</td><td class="note">the one thing that is in nothing, so its container field has nothing to name</td></tr></tbody></table></div>
-
-<h2>Should a kind be a trait?</h2>
-<p><strong>It already is one.</strong> The release's <em>Traits</em> table opens with
-<code>kind &middot; every thing &middot; one of the kinds &middot; stored</code>, and
-<code>spec/invariants.md</code> says <em>a thing is a set of traits, and one of them names its
-kind</em>. So they are not two sorts of thing to be unified; a kind is the value of a trait, and the
-notation writes it first rather than as <code>kind:citizen</code> because every thing has one.</p>
-<p><strong>The question worth asking is the harder one: could it be dropped?</strong> If a thing were
-nothing but its traits, with no discriminator, the traits would have to say which kind it is. They
-cannot. <strong>7 of the 16 kinds share their trait set with another</strong>, so no
-reading of the traits could tell them apart:</p>
-<table><thead><tr><th>These stored traits</th><th>Kinds</th><th>Which</th></tr></thead><tbody><tr><td class="target"><em>no stored traits at all</em></td><td>5</td><td class="target">yard, metal, energy, labor, orbit</td></tr><tr><td class="target">force, fuel, movable</td><td>2</td><td class="target">ark, pioneer</td></tr></tbody></table>
-<div class="callout">
-<h4>What that settles, and what it does not</h4>
-<p>Five kinds carry <strong>no stored traits whatever</strong>. A yard and a unit of metal are the
-same bag of traits, and only the kind separates them &mdash; so <strong><code>kind</code> is not
-derivable, and dropping it would mean inventing a discriminating trait, which is <code>kind</code>
-under another name.</strong></p>
-<p>It does <em>not</em> settle that kinds are a second sort of thing. They also appear as
-<strong>values</strong>: <code>resource</code> takes <code>food</code>, <code>metal</code> or
-<code>energy</code>, which are kinds, and <code>from</code> and <code>to</code> take places, which
-are things. <code>spec/console.md</code> already leans on this &mdash; <em>a field that refers to a
-thing is named for that thing's kind</em>. So a kind is doing two jobs: it classifies a thing, and it
-is a domain that trait values are drawn from. <strong>Unify the first job with traits, because it
-already is one; keep the second, because a value has to come from somewhere.</strong></p>
-</div>
-
-<h2>A thing, as tabular data and as text</h2>
-<p>Sean, 2026-09-09: <em>I want to see things as organized tabular data, with the corresponding text
-representation</em> &mdash; and, off the top of his head, a territory. Here is territory
-1: <em>The landing site. Everything works</em>. Every value below is read from the release's own
-<em>Territory resources</em> row; none is typed here.</p>
-<table><thead><tr><th>Thing</th><th>Trait</th><th>Value</th><th>Where the value comes from</th></tr></thead><tbody><tr><td class="target">territory 1</td><td class="target">id</td><td class="amt">1</td><td class="note"><code>releases/first-release.md</code> &rarr; <em>Territory resources</em>, the row's first column</td></tr><tr><td class="target">territory 1</td><td class="target">biome</td><td class="amt"><em>unstated</em></td><td class="note"><strong>not in any document</strong> &mdash; <code>biomes_of</code> in the code assigns it, which <code>R-4</code> vetted</td></tr><tr><td class="target">territory 1</td><td class="target">nature</td><td class="amt"><em>unstated</em></td><td class="note"><strong>not in any document</strong> &mdash; the <em>Biomes</em> table binds it to the biome, and no territory has a biome stated</td></tr><tr><td class="target">territory 1</td><td class="target">control</td><td class="amt">&mdash;</td><td class="note">a citizen of that player is there &mdash; never stored, so never a column</td></tr><tr><td class="target">deposit (1, food)</td><td class="target">resource</td><td class="amt">food</td><td class="note">the column this cell sits in</td></tr><tr><td class="target">deposit (1, food)</td><td class="target">total-capacity</td><td class="amt">3</td><td class="note"><code>3 x 4</code>, left of the &times;</td></tr><tr><td class="target">deposit (1, food)</td><td class="target">density</td><td class="amt">4</td><td class="note"><code>3 x 4</code>, right of the &times;</td></tr><tr><td class="target">deposit (1, metal)</td><td class="target">resource</td><td class="amt">metal</td><td class="note">the column this cell sits in</td></tr><tr><td class="target">deposit (1, metal)</td><td class="target">total-capacity</td><td class="amt">3</td><td class="note"><code>3 x 4</code>, left of the &times;</td></tr><tr><td class="target">deposit (1, metal)</td><td class="target">density</td><td class="amt">4</td><td class="note"><code>3 x 4</code>, right of the &times;</td></tr><tr><td class="target">deposit (1, energy)</td><td class="target">resource</td><td class="amt">energy</td><td class="note">the column this cell sits in</td></tr><tr><td class="target">deposit (1, energy)</td><td class="target">total-capacity</td><td class="amt">3</td><td class="note"><code>3 x 4</code>, left of the &times;</td></tr><tr><td class="target">deposit (1, energy)</td><td class="target">density</td><td class="amt">4</td><td class="note"><code>3 x 4</code>, right of the &times;</td></tr></tbody></table>
-<pre><code>{territory id:1 game:game}
-{deposit territory:1 resource:food total-capacity:3 density:4}
-{deposit territory:1 resource:metal total-capacity:3 density:4}
-{deposit territory:1 resource:energy total-capacity:3 density:4}</code></pre>
-<div class="callout">
-<h4>Two of a territory's four traits have no value anywhere</h4>
-<p><strong><code>biome</code> and <code>nature</code> are stored traits of every territory, and no
-document gives either one a value for any of the twelve.</strong> <em>Territory resources</em> has
-four columns and none of them is a biome; the <em>Biomes</em> table describes what each biome is
-like and says <em>force of nature is the one column that binds</em>, which binds a territory's
-nature to a biome it has not been given. The code assigns them &mdash; <code>biomes_of</code>, which
-<code>R-4</code> vetted &mdash; so this is where a thing lives in two authorities at once, and only
-one of them is a document.</p>
-<p><strong>This report asserted otherwise until today.</strong> Its world-building data said
-<code>make-territory(1, grassland, 1)</code>, which named a biome for territory 1 and a nature for
-it, and <strong>nothing states either</strong>. Removed rather than corrected, because there is no
-correct value to put there. It was found by trying to draw the table above and having two columns
-come up empty &mdash; which is the argument for drawing it.</p>
-</div>
-
-<h3><code>metal.density</code> or <code>density.metal</code>: neither</h3>
-<p>The question only exists because the resource has been moved into the name.
-<strong><code>density</code> is a variable and <code>metal</code> is a value of a different variable,
-<code>resource</code></strong> &mdash; so once <code>resource</code> is a column there is nothing
-left to order, and the row above reads
-<code>{deposit territory:1 resource:metal total-capacity:.. density:..}</code>.</p>
-<p><strong>The specification already rules on this, and not by analogy.</strong>
-<em>Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
-reads the state reads it the same way whatever kind it holds.</em> A territory carrying
-<code>metal.density</code>, <code>food.density</code> and <code>energy.density</code> gains a field
-per resource, which is exactly what that forbids. The long form gains a <em>row</em> per resource
-instead, and rows are free.</p>
-<p><strong>The instinct behind the dots is right about presentation and wrong about statement.</strong>
-The release's <em>Territory resources</em> is wide on purpose &mdash; one row per territory, a
-resource per column, <code>3 x 4</code> packing two variables into one cell &mdash; and it is far
-easier to read than 13 rows would be. <code>CLAUDE.md</code> already separates these:
-<em>a table of game data in markdown is a rendering and never a source.</em> Both forms exist above,
-and the wide one was generated from the long one rather than the other way round.</p>
-
-<h2>What unifies, and what must not</h2>
-<p><strong>The shared object is the description, and the specification says so before this report
-does.</strong> <em>A game's state is things, in places, and how many of each. A thing is a set of
-traits, and one of them names its kind.</em> That is <code>{kind trait:value ...}</code> &mdash;
-the same object a recipe line targets. So a thing and a recipe line are not two structures to be
-unified; they are one structure appearing in two roles.</p>
-<div class="scroll"><table><thead><tr><th></th><th>Which</th><th>Why</th></tr></thead>
-<tbody><tr><td class="target">the description</td><td><strong>shared</strong></td><td class="note"><code>{kind trait:value ...}</code> &mdash; the spec already says <em>a thing is a set of traits, and one of them names its kind</em></td></tr><tr><td class="target">the number</td><td><strong>shared shape, different constraint</strong></td><td class="note">a thing's is a non-negative count; a recipe's is a signed delta. Same column, and only the constraint differs</td></tr><tr><td class="target"><code>attach</code></td><td>recipe only</td><td class="note">what to do when the result would go below zero. A count that is simply there has no failure to answer for</td></tr><tr><td class="target">the container</td><td><strong>shared</strong></td><td class="note">a field named for the container's kind, in both</td></tr><tr><td class="target">selection</td><td>recipe only</td><td class="note"><em>which</em> thing this acts on. A thing does not select; it is selected</td></tr><tr><td class="target"><code>call</code></td><td>recipe only</td><td class="note">the hierarchy. Nothing in a state refers to another state</td></tr></tbody></table></div>
-<div class="callout">
-<h4>Then what is a recipe that only creates? Nothing but the thing</h4>
-<p>Since the fold, <strong>every world-building recipe is one line, with
-<code>change</code> as its operator, <code>+1</code> as its amount and no attachment</strong> &mdash;
-all three constant. Take away what never varies and what remains is the description. <strong>So
-&ldquo;one recipe creates each thing&rdquo; is not a way to unify them: it is what is left when
-they already are unified.</strong></p>
-<p>And it turns out to satisfy a rule nobody was aiming at. <code>spec/invariants.md</code>:
-<em>A definition arrives in one transition. There is no state in which a kind or a recipe is half
-defined.</em> A <code>create</code> followed by three <code>set</code>s <strong>has</strong> such a
-state &mdash; a territory that exists with no biome. Non-sequential composition removes it, and the
-invariant was not the reason for the decision.</p>
-</div>
-
-<h2>Design time, if it stopped being a category</h2>
-<p>Sean, 2026-09-09, still considering it: <em>removing the design-time distinction from the data as
-something special, having it either enforced from the engine or having a trait indicate when it can
-be used</em>. Today it is neither &mdash; it is a <strong>separate list</strong>, and that is the one
-option below with no cost and no check.</p>
-<div class="scroll"><table><thead><tr><th>Option</th><th>What it is</th><th>Cost</th><th>What it buys, and what it does not</th></tr></thead>
-<tbody><tr><td class="target">a separate section, as today</td><td><code>creation</code> is its own list in the data, and the engine knows that list is design-time</td><td class="amt">0 lines</td><td class="note">The distinction lives in the <em>shape of the data</em>, so nothing states it and nothing can check it. It is also the only place a recipe's category is not a trait.</td></tr><tr><td class="target"><code>require 1 game[phase:design]</code> on each</td><td>one ordinary read line per design recipe, guarded <code>hard</code></td><td class="amt">+5 lines</td><td class="note"><strong>Introduces nothing.</strong> <code>require</code> already exists for <code>move</code>'s adjacency, and this takes it from 1 use to 6 - which is most of the case for it being a primitive at all. The phase becomes a fact in the state that a recipe reads, which is what <em>the game is data</em> asks for. And <code>start</code> stops being special: it is the recipe that sets <code>game.phase</code> to <code>play</code>.</td></tr><tr><td class="target">a <code>phase</code> field on the recipe</td><td>a declaration beside <code>owner</code>, rather than a line</td><td class="amt">0 lines, +1 column</td><td class="note">Shorter to read, but it adds a concept: a recipe-level trait that only the engine interprets. By the <em>minimum expressiveness</em> test that is the worse trade - a new field to say what an existing line already says.</td></tr></tbody></table></div>
-<div class="callout">
-<h4>The middle one, and the one thing it costs that is not a line</h4>
-<p><strong>It introduces no concept at all</strong>, which under <em>minimum expressiveness</em> is
-the whole argument. <code>spec/console.md</code> already says <em>a command of one phase is refused
-in the other</em>, and refusing is what a <code>require</code> does &mdash; so the sentence stops
-being a rule the engine implements and becomes a line the recipe carries. It also takes
-<code>require</code> from one use to six, which is most of the case for keeping it a primitive
-rather than sugar for a self-loop.</p>
-<p><strong>The cost is the error message.</strong> A design command refused after <code>start</code>
-can say <em>that command belongs to the design phase</em> only because the engine knows the
-category. Refused by a guard, it says <em>no game with phase design</em> &mdash; true, and worse.
-<code>spec/console.md</code> asks that a rejection be <em>in terms of the game rather than the
-parser</em> and name <em>what was wrong, where, and what was expected instead</em>, so this is a
-real requirement and not a nicety. It is not fatal: a guard on <code>game.phase</code> is a
-recognisable shape and a message can be written for it. But it is the thing to check before
-deciding, and it is the only cost this lane can find.</p>
-</div>
-
-<h2>Every row as one string</h2>
-<p>The last column of every recipe table below restates that row &mdash; op, target, amount,
-attach and the note &mdash; as a single string in the notation <code>spec/console.md</code> gives
-for a command and for a description of state. All 56 lines are encoded, none by hand.</p>
-<div class="callout">
-<h4>What the encoding assumes, and why it is worth reading</h4>
-<p>The notation says a command is <code>{name field:value ...}</code>, that a value is a word, a
-number or another command, that a field referring to a thing is named for that thing's kind, and
-that <code>#</code> begins a comment. <strong>Where a line needed something that notation does not
-define, the encoder records it rather than inventing quietly</strong> &mdash; so this list is the
-report's real output, and it is generated from the encoding rather than written beside it.</p>
-<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">13</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">4</td><td><strong><em>For each</em> has no form.</strong> The notation has <code>repeat</code>, which is how many times one command fires. World-building needs twelve calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits in a comment, where nothing can run it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 1</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 3</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 2</td></tr><tr><td class="amt">2</td><td><code>surplus:yes</code> puts a <strong>derived</strong> trait in a description. The release lists <em>surplus</em> as derived, and the notation says a description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is never part of one</strong>. So <code>grow</code>'s target has no form as a description, and this is the one assumption here that contradicts a rule rather than filling a gap.</td><td class="note">grow line 1</td></tr><tr><td class="amt">10</td><td><code>location</code> and <code>below</code> are <strong>not traits the release lists</strong>. In a dump a thing appears inside what holds it and nothing states its container, so <em>where a thing is</em> has no name &mdash; yet <code>move</code> sets it and four of the six <code>let</code>s read it. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">7</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
-<p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
-line required a choice the specification has not made.</p>
-</div>
+<h2>The last column: every row as one string</h2>
+<p>The last column of every recipe table restates that row &mdash; op, target, amount, attach and
+the note &mdash; as a single string in the notation <code>spec/console.md</code> gives for a command
+and for a description of state: <code>{name field:value ...}</code>, where a value is a word, a
+number or another command, a field referring to a thing is named for that thing's kind, and
+<code>#</code> begins a comment. All 56 lines are encoded, none by hand.</p>
+<p>Nine of them needed something that notation does not define. The encoder records each rather
+than inventing quietly, and they are listed under <em>What the encoding assumed</em>, below the
+data.</p>
 
 <h2>Player recipes <span class="badge">11</span></h2>
 <h3>deploy ark <span class="badge down">9 rows &rarr; 3 lines (&minus;6)</span></h3>
@@ -628,78 +450,6 @@ line required a choice the specification has not made.</p>
 <tr><td class="op op-set">set</td><td class="target">thing.ready = yes</td><td class="amt"></td><td></td><td class="note">both rows were one flip</td><td class="one-string">{set thing:{thing} ready:yes} <span class="cmt"># both rows were one flip</span></td></tr>
 </tbody></table></div>
 
-<h2>Capacities</h2>
-<div class="callout">
-<h4>Where a bound lives, decided 2026-09-08</h4>
-<p><strong>A capacity is a property of the container, declared once, and no recipe states it.</strong>
-That deletes the <code>limit</code> role outright: both of its uses in the whole specification were
-<code>limit 0 garrison</code>, restating a capacity of 1 that <em>What bounds a kind in a territory</em>
-already declared. Every other capacity below was <em>never</em> written in a recipe &mdash; so the
-engine was already enforcing seven bounds that no recipe stated, and the garrison was the odd one
-out for being written twice rather than for being written at all.</p>
-</div>
-<div class="scroll"><table><thead><tr>
-<th>Container</th>
-<th>Holds</th>
-<th>Up to</th>
-<th>Was it ever in a recipe?</th>
-</tr></thead><tbody>
-<tr>
-<td class="target">territory</td>
-<td class="target">garrison</td>
-<td class="amt">1</td>
-<td class="note">was also written as limit 0 garrison in two recipes</td>
-</tr>
-<tr>
-<td class="target">territory</td>
-<td class="target">yard</td>
-<td class="amt">1</td>
-<td class="note">never stated in any recipe</td>
-</tr>
-<tr>
-<td class="target">territory</td>
-<td class="target">ark</td>
-<td class="amt">2</td>
-<td class="note">never stated in any recipe</td>
-</tr>
-<tr>
-<td class="target">territory</td>
-<td class="target">pioneer</td>
-<td class="amt">2</td>
-<td class="note">never stated in any recipe</td>
-</tr>
-<tr>
-<td class="target">territory</td>
-<td class="target">extractor[r]</td>
-<td class="amt">its deposit's total capacity for r</td>
-<td class="note">never stated in any recipe</td>
-</tr>
-<tr>
-<td class="target">territory</td>
-<td class="target">store[r]</td>
-<td class="amt">as many as the extractors of r</td>
-<td class="note">never stated in any recipe</td>
-</tr>
-<tr>
-<td class="target">store</td>
-<td class="target">the resource it was built for</td>
-<td class="amt">10</td>
-<td class="note">never stated in any recipe</td>
-</tr>
-<tr>
-<td class="target">unit's tank</td>
-<td class="target">energy</td>
-<td class="amt">the unit's fuel</td>
-<td class="note">never stated in any recipe</td>
-</tr>
-<tr>
-<td class="target">territory</td>
-<td class="target">citizen</td>
-<td class="amt">unbounded - held down by food through upkeep</td>
-<td class="note">not a capacity at all</td>
-</tr>
-</tbody></table></div>
-
 <h2>Building the world <span class="badge">5</span></h2>
 <div class="callout">
 <p><strong>No new primitive appears below, and one fewer than before.</strong> Every line
@@ -864,6 +614,610 @@ out.</strong></p>
 <td class="note">Rich extractors, almost no workers</td>
 </tr>
 </tbody></table></div>
+
+<h2>Every kind, the way every recipe is</h2>
+<p>Sean, 2026-09-09: <em>I want to be able to review things just as easily as I can review
+recipes.</em> A recipe gets a table of lines and a string for each; here is the other half.
+<strong>All 16 kinds</strong>, with what a thing of each carries and how it is written.
+The <em>Kinds</em> and <em>Traits</em> tables are copied from the release into this lane's data, so
+the two checks below have a population to count against: <strong>every kind has a row</strong>, and
+<strong>every trait but one lands on a kind</strong> &mdash; <code>unpaid</code> is the exception,
+because it is <em>of a thing with upkeep</em>, which is a predicate rather than a kind.</p>
+<div class="scroll"><table><thead><tr><th>Kind</th><th>In</th><th>Identity</th><th>Stored traits</th><th>Derived</th><th>Written as</th><th></th></tr></thead><tbody><tr><td class="target">citizen</td><td>territory</td><td>counted</td><td class="target">ready, force, upkeep</td><td class="note">&mdash;</td><td class="one-string">{citizen ready:.. force:.. upkeep:.. territory:..}</td><td class="note">the only kind that both works and eats</td></tr><tr><td class="target">garrison</td><td>territory</td><td>counted</td><td class="target">force</td><td class="note">metal-in-it</td><td class="one-string">{garrison force:.. territory:..}</td><td class="note">capacity 1, which is why <code>limit 0 garrison</code> was a restatement</td></tr><tr><td class="target">extractor</td><td>territory</td><td>counted</td><td class="target">resource, ready</td><td class="note">metal-in-it</td><td class="one-string">{extractor resource:.. ready:.. territory:..}</td><td class="note">counted, not identified - <code>work</code> selects <em>an</em> extractor that is ready</td></tr><tr><td class="target">yard</td><td>territory</td><td>counted</td><td class="target">&mdash;</td><td class="note">metal-in-it</td><td class="one-string">{yard territory:..}</td><td class="note">capacity 1</td></tr><tr><td class="target">store</td><td>territory</td><td>counted</td><td class="target">resource</td><td class="note">metal-in-it</td><td class="one-string">{store resource:.. territory:..}</td><td class="note">holds 10 of its resource; which store holds which unit is not recorded</td></tr><tr><td class="target">ark</td><td>orbit or territory</td><td>counted</td><td class="target">force, fuel, movable</td><td class="note">metal-in-it</td><td class="one-string">{ark force:.. fuel:.. movable:.. orbit:..}</td><td class="note"></td></tr><tr><td class="target">pioneer</td><td>territory</td><td>counted</td><td class="target">force, fuel, movable</td><td class="note">metal-in-it</td><td class="one-string">{pioneer force:.. fuel:.. movable:.. territory:..}</td><td class="note"></td></tr><tr><td class="target">food</td><td>territory, or a store</td><td>counted</td><td class="target">keeps</td><td class="note">surplus</td><td class="one-string">{food keeps:.. territory:..}</td><td class="note">made with <code>keeps</code> 1, so it cannot cross a turn boundary</td></tr><tr><td class="target">metal</td><td>territory, or a store</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{metal territory:..}</td><td class="note"></td></tr><tr><td class="target">energy</td><td>territory, a store, or a unit's tank</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{energy territory:..}</td><td class="note"></td></tr><tr><td class="target">labor</td><td>territory</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{labor territory:..}</td><td class="note">made each turn and never stored</td></tr><tr><td class="target">territory</td><td>game</td><td><strong>id</strong></td><td class="target">id, biome, nature</td><td class="note">control</td><td class="one-string">{territory id:1 biome:.. nature:.. game:..}</td><td class="note"><code>biome</code> and <code>nature</code> have no value in any document - <code>X-19</code></td></tr><tr><td class="target">orbit</td><td>game</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{orbit game:..}</td><td class="note">which territory it is above has <strong>no named trait</strong> - this report calls it <code>below</code></td></tr><tr><td class="target">deposit</td><td>territory</td><td>counted</td><td class="target">resource, total-capacity, density</td><td class="note">&mdash;</td><td class="one-string">{deposit resource:.. total-capacity:.. density:.. territory:..}</td><td class="note"></td></tr><tr><td class="target">adjacency</td><td>game</td><td>counted</td><td class="target">from, to</td><td class="note">&mdash;</td><td class="one-string">{adjacency from:.. to:.. game:..}</td><td class="note"></td></tr><tr><td class="target">game</td><td><em>nothing</em></td><td>counted</td><td class="target">phase</td><td class="note">&mdash;</td><td class="one-string">{game phase:..}</td><td class="note">the one thing that is in nothing, so its container field has nothing to name</td></tr></tbody></table></div>
+
+<h2>A thing, as tabular data and as text</h2>
+<p>Sean, 2026-09-09: <em>I want to see things as organized tabular data, with the corresponding text
+representation</em> &mdash; and, off the top of his head, a territory. Here is territory
+1: <em>The landing site. Everything works</em>. Every value below is read from the release's own
+<em>Territory resources</em> row; none is typed here.</p>
+<table><thead><tr><th>Thing</th><th>Trait</th><th>Value</th><th>Where the value comes from</th></tr></thead><tbody><tr><td class="target">territory 1</td><td class="target">id</td><td class="amt">1</td><td class="note"><code>releases/first-release.md</code> &rarr; <em>Territory resources</em>, the row's first column</td></tr><tr><td class="target">territory 1</td><td class="target">biome</td><td class="amt"><em>unstated</em></td><td class="note"><strong>not in any document</strong> &mdash; <code>biomes_of</code> in the code assigns it, which <code>R-4</code> vetted</td></tr><tr><td class="target">territory 1</td><td class="target">nature</td><td class="amt"><em>unstated</em></td><td class="note"><strong>not in any document</strong> &mdash; the <em>Biomes</em> table binds it to the biome, and no territory has a biome stated</td></tr><tr><td class="target">territory 1</td><td class="target">control</td><td class="amt">&mdash;</td><td class="note">a citizen of that player is there &mdash; never stored, so never a column</td></tr><tr><td class="target">deposit (1, food)</td><td class="target">resource</td><td class="amt">food</td><td class="note">the column this cell sits in</td></tr><tr><td class="target">deposit (1, food)</td><td class="target">total-capacity</td><td class="amt">3</td><td class="note"><code>3 x 4</code>, left of the &times;</td></tr><tr><td class="target">deposit (1, food)</td><td class="target">density</td><td class="amt">4</td><td class="note"><code>3 x 4</code>, right of the &times;</td></tr><tr><td class="target">deposit (1, metal)</td><td class="target">resource</td><td class="amt">metal</td><td class="note">the column this cell sits in</td></tr><tr><td class="target">deposit (1, metal)</td><td class="target">total-capacity</td><td class="amt">3</td><td class="note"><code>3 x 4</code>, left of the &times;</td></tr><tr><td class="target">deposit (1, metal)</td><td class="target">density</td><td class="amt">4</td><td class="note"><code>3 x 4</code>, right of the &times;</td></tr><tr><td class="target">deposit (1, energy)</td><td class="target">resource</td><td class="amt">energy</td><td class="note">the column this cell sits in</td></tr><tr><td class="target">deposit (1, energy)</td><td class="target">total-capacity</td><td class="amt">3</td><td class="note"><code>3 x 4</code>, left of the &times;</td></tr><tr><td class="target">deposit (1, energy)</td><td class="target">density</td><td class="amt">4</td><td class="note"><code>3 x 4</code>, right of the &times;</td></tr></tbody></table>
+<pre><code>{territory id:1 game:game}
+{deposit territory:1 resource:food total-capacity:3 density:4}
+{deposit territory:1 resource:metal total-capacity:3 density:4}
+{deposit territory:1 resource:energy total-capacity:3 density:4}</code></pre>
+<div class="callout">
+<h4>Two of a territory's four traits have no value anywhere</h4>
+<p><strong><code>biome</code> and <code>nature</code> are stored traits of every territory, and no
+document gives either one a value for any of the twelve.</strong> <em>Territory resources</em> has
+four columns and none of them is a biome; the <em>Biomes</em> table describes what each biome is
+like and says <em>force of nature is the one column that binds</em>, which binds a territory's
+nature to a biome it has not been given. The code assigns them &mdash; <code>biomes_of</code>, which
+<code>R-4</code> vetted &mdash; so this is where a thing lives in two authorities at once, and only
+one of them is a document.</p>
+<p><strong>This report asserted otherwise until today.</strong> Its world-building data said
+<code>make-territory(1, grassland, 1)</code>, which named a biome for territory 1 and a nature for
+it, and <strong>nothing states either</strong>. Removed rather than corrected, because there is no
+correct value to put there. It was found by trying to draw the table above and having two columns
+come up empty &mdash; which is the argument for drawing it.</p>
+</div>
+
+<h3><code>metal.density</code> or <code>density.metal</code>: neither</h3>
+<p>The question only exists because the resource has been moved into the name.
+<strong><code>density</code> is a variable and <code>metal</code> is a value of a different variable,
+<code>resource</code></strong> &mdash; so once <code>resource</code> is a column there is nothing
+left to order, and the row above reads
+<code>{deposit territory:1 resource:metal total-capacity:.. density:..}</code>.</p>
+<p><strong>The specification already rules on this, and not by analogy.</strong>
+<em>Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
+reads the state reads it the same way whatever kind it holds.</em> A territory carrying
+<code>metal.density</code>, <code>food.density</code> and <code>energy.density</code> gains a field
+per resource, which is exactly what that forbids. The long form gains a <em>row</em> per resource
+instead, and rows are free.</p>
+<p><strong>The instinct behind the dots is right about presentation and wrong about statement.</strong>
+The release's <em>Territory resources</em> is wide on purpose &mdash; one row per territory, a
+resource per column, <code>3 x 4</code> packing two variables into one cell &mdash; and it is far
+easier to read than 13 rows would be. <code>CLAUDE.md</code> already separates these:
+<em>a table of game data in markdown is a rendering and never a source.</em> Both forms exist above,
+and the wide one was generated from the long one rather than the other way round.</p>
+
+<h2>Capacities</h2>
+<div class="callout">
+<h4>Where a bound lives, decided 2026-09-08</h4>
+<p><strong>A capacity is a property of the container, declared once, and no recipe states it.</strong>
+That deletes the <code>limit</code> role outright: both of its uses in the whole specification were
+<code>limit 0 garrison</code>, restating a capacity of 1 that <em>What bounds a kind in a territory</em>
+already declared. Every other capacity below was <em>never</em> written in a recipe &mdash; so the
+engine was already enforcing seven bounds that no recipe stated, and the garrison was the odd one
+out for being written twice rather than for being written at all.</p>
+</div>
+<div class="scroll"><table><thead><tr>
+<th>Container</th>
+<th>Holds</th>
+<th>Up to</th>
+<th>Was it ever in a recipe?</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">territory</td>
+<td class="target">garrison</td>
+<td class="amt">1</td>
+<td class="note">was also written as limit 0 garrison in two recipes</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">yard</td>
+<td class="amt">1</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">ark</td>
+<td class="amt">2</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">pioneer</td>
+<td class="amt">2</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">extractor[r]</td>
+<td class="amt">its deposit's total capacity for r</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">store[r]</td>
+<td class="amt">as many as the extractors of r</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">store</td>
+<td class="target">the resource it was built for</td>
+<td class="amt">10</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">unit's tank</td>
+<td class="target">energy</td>
+<td class="amt">the unit's fuel</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">citizen</td>
+<td class="amt">unbounded - held down by food through upkeep</td>
+<td class="note">not a capacity at all</td>
+</tr>
+</tbody></table></div>
+
+<h2>Still open, and yours to take</h2>
+<p>6 of the 13 questions this re-encoding raised are still open. The rest are
+below, under <em>What has already been settled</em>, so that this list is short enough to be a list
+of things to do.</p>
+<div class="scroll"><table><thead><tr>
+<th>Question</th>
+<th>What is at stake</th>
+<th>How it shows up</th>
+</tr></thead><tbody>
+<tr>
+<td>OPEN - the six lines beside it</td>
+<td>Soft on the garrison alone still creates 2 citizens, 2 extractors and 2 stores on a territory that already has them, because their capacities are not zero.</td>
+<td class="note">Marked ? in found-colony. Each needs hard, soft, or removing - and they are not the same answer.</td>
+</tr>
+<tr>
+<td>OPEN - or make the call soft instead, and answer all seven at once</td>
+<td>call found-colony(t) [soft] means deploying onto a founded territory destroys the ark and does nothing else. Soft on each create means deploy tops up a damaged colony.</td>
+<td class="note">Those are different games. The model expresses both; attachment is on the call as readily as on a create.</td>
+</tr>
+<tr>
+<td>OPEN - if a call can fail as a unit, does it roll back?</td>
+<td>found-colony can now half-succeed. If the ark is destroyed before the call, a soft call that skips leaves the ark spent for nothing.</td>
+<td class="note">This is the same question as whether composition sees the starting state or the running one.</td>
+</tr>
+<tr>
+<td>OPEN - do the sketch's missing stores come back?</td>
+<td>The sketch creates a garrison, 2 citizens and 2 extractors. The specification also creates a food store and a metal store.</td>
+<td class="note">Dropping them changes the game.</td>
+</tr>
+<tr>
+<td>OPEN - does a thing have identity, or is it a count?</td>
+<td>set requires an identified thing. destroy ark means this ark. create citizen 2 asks for no identity.</td>
+<td class="note">The dump already answers this: nine of its ten tables are the containment tree of identified things.</td>
+</tr>
+<tr>
+<td>OPEN - what is a food store for?</td>
+<td>Food is made with keeps 1. The turn order is upkeep, grow, perish, age, spoil - so food made this turn is aged to 0 and spoiled at the same turn end, whether it is in a store or in nothing.</td>
+<td class="note">If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect.</td>
+</tr>
+</tbody></table></div>
+
+<h2>Where the attach column might still go</h2>
+<p>Four questions about the column, not about how to read it &mdash; one of them withdrawn since, and kept so it is not asked again.</p>
+<div class="scroll"><table><thead><tr>
+<th>Question</th>
+<th>The two readings</th>
+<th>What is at stake</th>
+<th>Where it came from</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">WITHDRAWN - *what does soft test* was a false choice</td>
+<td>This report asked whether soft means *the container is full* or *one is already there*. There is only one condition under which a create can fail, and it is the first.</td>
+<td class="note">Withdrawn 2026-09-09 after Sean said he did not understand the question. He was right not to: it was not a question. The real distinction is below and it is about create, not about soft.</td>
+<td class="note">Raised and withdrawn by this lane</td>
+</tr>
+<tr>
+<td class="target">OPEN - is *add one if there is room* ever the wrong thing?</td>
+<td>`create X [soft]` adds one when the container has space. That is not the same as *ensure one exists*.</td>
+<td class="note">They coincide wherever capacity is 1, which is every case in the report except the extractors. Territory 1 has food capacity 3, so deploying twice would add a second food extractor. If that is wrong, the fix is at the call - skip founding a colony that is already founded - and not a second kind of create.</td>
+<td class="note">The real question the false one was standing in front of</td>
+</tr>
+<tr>
+<td class="target">Is a failure observable to other recipes?</td>
+<td>hard and soft both leave nothing behind. `unpaid` leaves something behind, and `perish` reads it.</td>
+<td class="note">This is a second axis, not a third value, and the column currently conflates them. If failures are observable, they are state; if they are state, they are subject to every rule about state.</td>
+<td class="note">The specification already answers yes, once</td>
+</tr>
+<tr>
+<td class="target">May the amount column hold arithmetic?</td>
+<td>`grow` consumes *the lesser of the surplus food and the citizens here*.</td>
+<td class="note">This decides whether clamp is a primitive. If the amount may hold arithmetic, clamp is sugar and should go. If the amount holds only constants and paths - which is what keeps the language finite - then clamp is the only way to say *as many as possible*, and it is a primitive.</td>
+<td class="note">The one recipe that needs it today</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4><code>record</code> is the one worth looking at, because it is already there</h4>
+<p><code>unpaid</code> is a trait in the specification &mdash; <em>derived: its upkeep was not
+met</em> &mdash; and <code>perish</code> fires on it. So when <code>upkeep</code> cannot take its
+food, the failure <strong>neither stops the turn nor vanishes</strong>: it is written down, and
+another recipe reads it next. <strong>That is a third behaviour on failure, in the game today,
+which a two-valued column cannot express.</strong></p>
+<p>It may not want to be an attach value. The alternative is that <strong>failure is state</strong>
+&mdash; every line's outcome is recorded, and <code>unpaid</code> is just one query over it. That is
+a larger idea and a cleaner one, and it is the sort of thing worth deciding before the column sets
+rather than after.</p>
+</div>
+
+<h2>Design time, if it stopped being a category</h2>
+<p>Sean, 2026-09-09, still considering it: <em>removing the design-time distinction from the data as
+something special, having it either enforced from the engine or having a trait indicate when it can
+be used</em>. Today it is neither &mdash; it is a <strong>separate list</strong>, and that is the one
+option below with no cost and no check.</p>
+<div class="scroll"><table><thead><tr><th>Option</th><th>What it is</th><th>Cost</th><th>What it buys, and what it does not</th></tr></thead>
+<tbody><tr><td class="target">a separate section, as today</td><td><code>creation</code> is its own list in the data, and the engine knows that list is design-time</td><td class="amt">0 lines</td><td class="note">The distinction lives in the <em>shape of the data</em>, so nothing states it and nothing can check it. It is also the only place a recipe's category is not a trait.</td></tr><tr><td class="target"><code>require 1 game[phase:design]</code> on each</td><td>one ordinary read line per design recipe, guarded <code>hard</code></td><td class="amt">+5 lines</td><td class="note"><strong>Introduces nothing.</strong> <code>require</code> already exists for <code>move</code>'s adjacency, and this takes it from 1 use to 6 - which is most of the case for it being a primitive at all. The phase becomes a fact in the state that a recipe reads, which is what <em>the game is data</em> asks for. And <code>start</code> stops being special: it is the recipe that sets <code>game.phase</code> to <code>play</code>.</td></tr><tr><td class="target">a <code>phase</code> field on the recipe</td><td>a declaration beside <code>owner</code>, rather than a line</td><td class="amt">0 lines, +1 column</td><td class="note">Shorter to read, but it adds a concept: a recipe-level trait that only the engine interprets. By the <em>minimum expressiveness</em> test that is the worse trade - a new field to say what an existing line already says.</td></tr></tbody></table></div>
+<div class="callout">
+<h4>The middle one, and the one thing it costs that is not a line</h4>
+<p><strong>It introduces no concept at all</strong>, which under <em>minimum expressiveness</em> is
+the whole argument. <code>spec/console.md</code> already says <em>a command of one phase is refused
+in the other</em>, and refusing is what a <code>require</code> does &mdash; so the sentence stops
+being a rule the engine implements and becomes a line the recipe carries. It also takes
+<code>require</code> from one use to six, which is most of the case for keeping it a primitive
+rather than sugar for a self-loop.</p>
+<p><strong>The cost is the error message.</strong> A design command refused after <code>start</code>
+can say <em>that command belongs to the design phase</em> only because the engine knows the
+category. Refused by a guard, it says <em>no game with phase design</em> &mdash; true, and worse.
+<code>spec/console.md</code> asks that a rejection be <em>in terms of the game rather than the
+parser</em> and name <em>what was wrong, where, and what was expected instead</em>, so this is a
+real requirement and not a nicety. It is not fatal: a guard on <code>game.phase</code> is a
+recognisable shape and a message can be written for it. But it is the thing to check before
+deciding, and it is the only cost this lane can find.</p>
+</div>
+
+<h2>Should a kind be a trait?</h2>
+<p><strong>It already is one.</strong> The release's <em>Traits</em> table opens with
+<code>kind &middot; every thing &middot; one of the kinds &middot; stored</code>, and
+<code>spec/invariants.md</code> says <em>a thing is a set of traits, and one of them names its
+kind</em>. So they are not two sorts of thing to be unified; a kind is the value of a trait, and the
+notation writes it first rather than as <code>kind:citizen</code> because every thing has one.</p>
+<p><strong>The question worth asking is the harder one: could it be dropped?</strong> If a thing were
+nothing but its traits, with no discriminator, the traits would have to say which kind it is. They
+cannot. <strong>7 of the 16 kinds share their trait set with another</strong>, so no
+reading of the traits could tell them apart:</p>
+<table><thead><tr><th>These stored traits</th><th>Kinds</th><th>Which</th></tr></thead><tbody><tr><td class="target"><em>no stored traits at all</em></td><td>5</td><td class="target">yard, metal, energy, labor, orbit</td></tr><tr><td class="target">force, fuel, movable</td><td>2</td><td class="target">ark, pioneer</td></tr></tbody></table>
+<div class="callout">
+<h4>What that settles, and what it does not</h4>
+<p>Five kinds carry <strong>no stored traits whatever</strong>. A yard and a unit of metal are the
+same bag of traits, and only the kind separates them &mdash; so <strong><code>kind</code> is not
+derivable, and dropping it would mean inventing a discriminating trait, which is <code>kind</code>
+under another name.</strong></p>
+<p>It does <em>not</em> settle that kinds are a second sort of thing. They also appear as
+<strong>values</strong>: <code>resource</code> takes <code>food</code>, <code>metal</code> or
+<code>energy</code>, which are kinds, and <code>from</code> and <code>to</code> take places, which
+are things. <code>spec/console.md</code> already leans on this &mdash; <em>a field that refers to a
+thing is named for that thing's kind</em>. So a kind is doing two jobs: it classifies a thing, and it
+is a domain that trait values are drawn from. <strong>Unify the first job with traits, because it
+already is one; keep the second, because a value has to come from somewhere.</strong></p>
+</div>
+
+<h2>What unifies, and what must not</h2>
+<p><strong>The shared object is the description, and the specification says so before this report
+does.</strong> <em>A game's state is things, in places, and how many of each. A thing is a set of
+traits, and one of them names its kind.</em> That is <code>{kind trait:value ...}</code> &mdash;
+the same object a recipe line targets. So a thing and a recipe line are not two structures to be
+unified; they are one structure appearing in two roles.</p>
+<div class="scroll"><table><thead><tr><th></th><th>Which</th><th>Why</th></tr></thead>
+<tbody><tr><td class="target">the description</td><td><strong>shared</strong></td><td class="note"><code>{kind trait:value ...}</code> &mdash; the spec already says <em>a thing is a set of traits, and one of them names its kind</em></td></tr><tr><td class="target">the number</td><td><strong>shared shape, different constraint</strong></td><td class="note">a thing's is a non-negative count; a recipe's is a signed delta. Same column, and only the constraint differs</td></tr><tr><td class="target"><code>attach</code></td><td>recipe only</td><td class="note">what to do when the result would go below zero. A count that is simply there has no failure to answer for</td></tr><tr><td class="target">the container</td><td><strong>shared</strong></td><td class="note">a field named for the container's kind, in both</td></tr><tr><td class="target">selection</td><td>recipe only</td><td class="note"><em>which</em> thing this acts on. A thing does not select; it is selected</td></tr><tr><td class="target"><code>call</code></td><td>recipe only</td><td class="note">the hierarchy. Nothing in a state refers to another state</td></tr></tbody></table></div>
+<div class="callout">
+<h4>Then what is a recipe that only creates? Nothing but the thing</h4>
+<p>Since the fold, <strong>every world-building recipe is one line, with
+<code>change</code> as its operator, <code>+1</code> as its amount and no attachment</strong> &mdash;
+all three constant. Take away what never varies and what remains is the description. <strong>So
+&ldquo;one recipe creates each thing&rdquo; is not a way to unify them: it is what is left when
+they already are unified.</strong></p>
+<p>And it turns out to satisfy a rule nobody was aiming at. <code>spec/invariants.md</code>:
+<em>A definition arrives in one transition. There is no state in which a kind or a recipe is half
+defined.</em> A <code>create</code> followed by three <code>set</code>s <strong>has</strong> such a
+state &mdash; a territory that exists with no biome. Non-sequential composition removes it, and the
+invariant was not the reason for the decision.</p>
+</div>
+
+<h2>The three checks, as run</h2>
+<p>Not a description of what they would report &mdash; the output of
+<code>tools/research/formulas/check.py</code>, read from <code>results.json</code>, so this page
+and the checker cannot disagree. <strong>All three were poisoned before being believed</strong>:
+check 2 flags a recipe with no inputs; check 1 goes red on a wrong weighting; check 3 goes red at a cap of 0.</p>
+
+<h3>Check 1 &mdash; metal conserved outside extraction &nbsp;<span class="badge down">0 violations</span></h3>
+<p>12 recipes analysed;
+3 skipped for state-dependent amounts
+(grow, perish, upkeep); <code>work</code> excluded as the declared
+source. Weights are the <em>Binding</em> column, copied rather than invented:
+metal 1, garrison 1, extractor 1, store 1, yard 15, ark 3, pioneer 3.</p>
+<div class="callout">
+<h4>Clean, and the two stores were the whole of it</h4>
+<p><strong>Sean dropped the two stores on 2026-09-09 and metal now balances exactly.</strong>
+<code>found-colony</code> delivers garrison 1 + extractor 1 + extractor 1 = <strong>3</strong>,
+which is precisely an ark's Binding and a pioneer's, so <code>deploy ark</code> and
+<code>found by land</code> both come out at <strong>0</strong>. His principle &mdash; what a unit
+costs in metal is what it delivers &mdash; now holds for every recipe that is not mining.</p>
+<p><strong>The check is poisoned against exactly this.</strong> Putting the two stores back turns
+<code>deploy ark</code> and <code>found by land</code> red again, which is what makes the green
+above worth reading. A check that agreed with a fix rather than measuring it would look identical
+from here.</p>
+<p><strong>Two faults in the check itself, both found by his objection and both fixed.</strong>
+It tested a stronger claim than the words can carry &mdash; mining creates metal, so
+<code>work</code> is a declared source and the invariant is <em>conserved outside extraction</em>.
+And it weighed <code>found-colony</code> as if a player could fire it with no ark and no pioneer
+spent; a recipe that is only ever called is not a transition.</p>
+</div>
+
+<h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded, as it should be</span></h3>
+<p>17 transitions after grounding;
+1 skipped (perish).</p>
+<div class="scroll"><table><thead><tr>
+<th>Fire this many times</th>
+<th>Recipe</th>
+</tr></thead><tbody>
+<tr>
+<td class="amt">1</td>
+<td class="target">create labor</td>
+</tr>
+<tr>
+<td class="amt">13/27</td>
+<td class="target">found by land</td>
+</tr>
+<tr>
+<td class="amt">1</td>
+<td class="target">grow</td>
+</tr>
+<tr>
+<td class="amt">1</td>
+<td class="target">move</td>
+</tr>
+<tr>
+<td class="amt">13/27</td>
+<td class="target">produce pioneer</td>
+</tr>
+<tr>
+<td class="amt">1</td>
+<td class="target">upkeep</td>
+</tr>
+<tr>
+<td class="amt">1/3</td>
+<td class="target">work[food]</td>
+</tr>
+<tr>
+<td class="amt">13/72</td>
+<td class="target">work[metal]</td>
+</tr>
+<tr>
+<td class="amt">35/72</td>
+<td class="target">work[energy]</td>
+</tr>
+</tbody></table></div>
+<p>Metal-equivalent gain <strong>13/9</strong>, and
+<code>work[metal]</code> is in the witness &mdash; which is the point. <strong>The check can see
+mining now.</strong> Until families were resolved to kinds, <code>work</code> produced
+<code>resource</code>, a family with no metal weight, and the game's only metal source scored
+zero.</p>
+<div class="callout">
+<h4>Grounding, and it is the same operation the menu needs</h4>
+<p>A target naming a family stands for one transition per kind in it, so <code>work</code> is
+three: <code>work[food]</code>, <code>work[metal]</code>, <code>work[energy]</code>, each with its
+own largest density. <strong>That is grounding</strong> &mdash; instantiating a recipe against
+what it could apply to &mdash; and it is the same operation an interface performs to build a menu.
+The analysis and the interface want the same machinery, which is a reason to build it once.</p>
+</div>
+
+<h3>Check 2b &mdash; the same without mining &nbsp;<span class="badge down">clean</span></h3>
+<p>14 transitions with <code>work</code>
+removed. <strong>This is the question worth asking</strong>, and it is the recommendation in
+practice: rather than keeping a baseline of intended loops, remove the declared source and ask
+whether metal can still grow.</p>
+<div class="scroll"><table><thead><tr>
+<th>Fire this many times</th>
+<th>Recipe</th>
+</tr></thead><tbody>
+<tr>
+<td class="amt">1</td>
+<td class="target">create labor</td>
+</tr>
+</tbody></table></div>
+<p>Metal-equivalent gain <strong>0</strong>.
+The one loop left is <code>create labor</code>, which makes labor from nothing every turn and is
+declared free in the <em>Kinds</em> table. <strong>So there is no metal source other than
+extraction</strong> &mdash; which is what conservation was supposed to mean, now checked rather
+than asserted.</p>
+
+<h3>Check 4 &mdash; is an attachment observable? &nbsp;<span class="badge up">0 decide nothing</span></h3>
+<p>A <code>create</code> fails when its container will not hold another. So an attachment on a
+create whose target has <strong>no capacity</strong> decides nothing &mdash; hard and soft behave
+identically and always will. <strong>Naming a question does not make it one.</strong></p>
+<div class="scroll"><table><thead><tr>
+<th>Recipe</th>
+<th>Line</th>
+<th>Attach</th>
+<th>Capacity</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">garrison in t</td>
+<td class="attach">SOFT</td>
+<td class="note">1</td>
+</tr>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">extractor[food] in t</td>
+<td class="attach">SOFT</td>
+<td class="note">its deposit's total capacity for r</td>
+</tr>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">extractor[metal] in t</td>
+<td class="attach">SOFT</td>
+<td class="note">its deposit's total capacity for r</td>
+</tr>
+<tr>
+<td class="target">build extractor</td>
+<td class="target">extractor[$resource] in t</td>
+<td class="attach">HARD</td>
+<td class="note">its deposit's total capacity for r</td>
+</tr>
+<tr>
+<td class="target">build yard</td>
+<td class="target">yard in t</td>
+<td class="attach">HARD</td>
+<td class="note">1</td>
+</tr>
+</tbody></table></div>
+<p>And the one where it does not:</p>
+<div class="scroll"><table><thead><tr>
+<th>Recipe</th>
+<th>Line</th>
+<th>Attach</th>
+<th>Why it cannot fail</th>
+</tr></thead><tbody>
+</tbody></table></div>
+<div class="callout">
+<h4>The citizen question mark is not a decision</h4>
+<p>A territory never refuses a citizen &mdash; they are held down by food through upkeep, which is
+not a capacity. <strong>So hard and soft are the same line.</strong> The options are below, and the
+only one that behaves differently is a second reading of the word <em>soft</em> rather than a
+second value of it.</p>
+</div>
+<div class="scroll"><table><thead><tr>
+<th>Option</th>
+<th>What it does</th>
+<th>What it costs</th>
+<th>Applies to</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">Leave it unattached</td>
+<td>The line cannot fail, so it always runs. Deploying onto an inhabited territory adds 2 more citizens.</td>
+<td class="note">Recommended. A citizen is a quantity, and 2 is an increment.</td>
+<td class="note">citizen</td>
+</tr>
+<tr>
+<td class="target">hard</td>
+<td>Fail the action if the citizen cannot be created.</td>
+<td class="note">Identical behaviour today, and forever unless a population cap is added. A word that decides nothing.</td>
+<td class="note">citizen</td>
+</tr>
+<tr>
+<td class="target">soft, reading soft as *the container is full*</td>
+<td>Skip the line when the container will not hold another.</td>
+<td class="note">Identical behaviour today, for the same reason: a territory has no citizen capacity.</td>
+<td class="note">citizen</td>
+</tr>
+<tr>
+<td class="target">soft, reading soft as *one is already there*</td>
+<td>Skip when the territory already has any citizen.</td>
+<td class="note">Observably different, and it turns 2 from an increment into a target. Almost certainly not wanted for a quantity - but this is the line where the two readings of soft come apart.</td>
+<td class="note">citizen</td>
+</tr>
+<tr>
+<td class="target">Decide at the call instead</td>
+<td>call found-colony(t) [soft], guarded on the garrison.</td>
+<td class="note">Answers all three question marks at once: deploying onto a founded colony spends the ark and does nothing else.</td>
+<td class="note">all three</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>Withdrawn: <em>what does soft test</em> was a false choice</h4>
+<p>An earlier version of this report asked whether <code>soft</code> means <em>the container is
+full</em> or <em>one is already there</em>. <strong>There is exactly one condition under which a
+create can fail &mdash; the container will not take another &mdash; so there is one meaning and
+not two.</strong> The second reading was this lane's invention with no case behind it, and Sean
+was right not to understand the question.</p>
+<p><strong>The real distinction it was standing in front of is about <code>create</code>, not about
+<code>soft</code>.</strong> <code>create X [soft]</code> means <em>add one if there is room</em>,
+which is not the same as <em>ensure one exists</em>. Those coincide wherever capacity is 1 &mdash;
+every case here except the extractors. Territory 1 has food capacity 3, so deploying twice would
+add a second food extractor. <strong>If that is wrong, the fix is at the call</strong> &mdash;
+do not found a colony that is already founded &mdash; and not a second kind of create.</p>
+</div>
+<h3>Parameter domains &mdash; what a recipe may be instantiated over</h3>
+<p>A parameter is not free. Its domain is a <strong>condition on the kind</strong>, not a list, and
+grounding resolves it &mdash; so an instance that does not satisfy the condition never exists, and
+in a selection interface the player never sees it.</p>
+<div class="scroll"><table><thead><tr>
+<th>Recipe</th>
+<th>Parameter</th>
+<th>Domain</th>
+<th>Today</th>
+<th>Why</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">build store</td>
+<td class="target">$resource</td>
+<td>a resource whose things do not expire</td>
+<td class="amt">metal, energy</td>
+<td class="note">food is excluded because it is made with keeps 1 and dies at the turn end it was made, so a food store cannot hold anything across a turn</td>
+</tr>
+<tr>
+<td class="target">build extractor</td>
+<td class="target">$resource</td>
+<td>a resource this territory has a deposit for</td>
+<td class="amt">per territory</td>
+<td class="note">territory 6 has no metal deposit, so build extractor[metal] does not exist there - check 5</td>
+</tr>
+<tr>
+<td class="target">work</td>
+<td class="target">extractor.resource</td>
+<td>the resource the selected extractor was built for</td>
+<td class="amt">not a choice</td>
+<td class="note">determined by the selection, so it grounds to one instance rather than a domain</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>Food stores, and why the rule is derived rather than named</h4>
+<p><strong>Sean, 2026-09-09: a food store buys nothing, so it is out.</strong> The tempting fix is
+to write <em>no food stores</em>. The better one is
+<strong><em>a store may be built for a resource whose things do not expire</em></strong>, which
+today admits metal and energy and excludes food, because food is made with <code>keeps</code> 1 and
+dies at the turn end it was made.</p>
+<p><strong>Preservation technology raises food's <code>keeps</code>, and food stores become
+available with no change to the rule.</strong> That is the difference between a condition and a
+list: one of them already knows about a feature that does not exist yet.</p>
+</div>
+<div class="callout">
+<h4>Two reasons agreeing is not two pieces of evidence</h4>
+<p><code>found-colony</code> has no stores. That was decided for <strong>conservation</strong>
+&mdash; garrison plus two extractors is 3, exactly an ark's Binding &mdash; and the food store also
+turns out to buy nothing, so it would have gone anyway. <strong>The metal store does buy something
+and still stays out</strong>: a new colony gets the minimum that works and builds its own. Worth
+separating, because a decision that looks doubly supported is easy to stop examining.</p>
+</div>
+
+<h3>Check 5 &mdash; which territories would refuse a create, per line</h3>
+<div class="scroll"><table><thead><tr>
+<th>Recipe</th>
+<th>Line</th>
+<th>Attach</th>
+<th>Blocked on</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">extractor[food] in t</td>
+<td class="attach">SOFT</td>
+<td class="note">none - every territory has room</td>
+</tr>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">extractor[metal] in t</td>
+<td class="attach">SOFT</td>
+<td class="note">territory 6</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>Corrected: territory 7 was never affected</h4>
+<p>An earlier version of this report said territories 6 and 7 both mattered. <strong>Territory 7
+has no energy, and no recipe here creates an energy extractor</strong>, so it never did. Sean
+caught it. The check now asks which territories lack <em>the resource the line actually names</em>
+rather than which lack any resource &mdash; a wider question with a plausible answer, which is the
+failure this repository keeps recording.</p>
+<p><strong>Decided 2026-09-09.</strong> Two citizens unconditionally; each extractor only where
+there is capacity. So both extractor lines are <code>SOFT</code>, and <strong>only territory 6 is
+affected, and only by the metal line</strong>: a colony founded there simply has no metal
+extractor, rather than founding being refused.</p>
+</div>
+<div class="callout">
+<h4>The same condition, two attachments, and both are right</h4>
+<p><code>found-colony</code> creates a metal extractor <code>SOFT</code>, so founding on territory
+6 succeeds without one. <code>build extractor</code> creates one <code>HARD</code>, so a player who
+chooses to build a metal extractor on territory 6 is refused. <strong>Identical condition, opposite
+answers, and neither is a mistake</strong> &mdash; because one is a consequence of landing
+somewhere and the other is a thing the player asked for.</p>
+<p>Under a selection interface the second never even arises: grounding the recipe against
+territory 6 produces no <code>build extractor[metal]</code> to select. <strong>The attachment is
+what the console needs and the menu is what the interface needs, from one line.</strong></p>
+</div>
+
+<h3>Check 3 &mdash; a cap of 1000 &nbsp;<span class="badge down">0 breaches</span></h3>
+<p>Applying each recipe once breaches nothing, which is exactly the point about a cap:
+<strong>it found neither of the two things the other checks found.</strong> It is a backstop
+against bugs in checks 1 and 2, not a way of finding anything.</p>
 
 <h2>Detecting a glitch, without a cap</h2>
 <div class="callout">
@@ -1269,322 +1623,13 @@ and the growth rate are set by different halves of the same column</strong>, and
 <em>6 x 6</em> as <em>six times faster</em> would be wrong.</p>
 </div>
 
-<h2>The three checks, as run</h2>
-<p>Not a description of what they would report &mdash; the output of
-<code>tools/research/formulas/check.py</code>, read from <code>results.json</code>, so this page
-and the checker cannot disagree. <strong>All three were poisoned before being believed</strong>:
-check 2 flags a recipe with no inputs; check 1 goes red on a wrong weighting; check 3 goes red at a cap of 0.</p>
-
-<h3>Check 1 &mdash; metal conserved outside extraction &nbsp;<span class="badge down">0 violations</span></h3>
-<p>12 recipes analysed;
-3 skipped for state-dependent amounts
-(grow, perish, upkeep); <code>work</code> excluded as the declared
-source. Weights are the <em>Binding</em> column, copied rather than invented:
-metal 1, garrison 1, extractor 1, store 1, yard 15, ark 3, pioneer 3.</p>
-<div class="callout">
-<h4>Clean, and the two stores were the whole of it</h4>
-<p><strong>Sean dropped the two stores on 2026-09-09 and metal now balances exactly.</strong>
-<code>found-colony</code> delivers garrison 1 + extractor 1 + extractor 1 = <strong>3</strong>,
-which is precisely an ark's Binding and a pioneer's, so <code>deploy ark</code> and
-<code>found by land</code> both come out at <strong>0</strong>. His principle &mdash; what a unit
-costs in metal is what it delivers &mdash; now holds for every recipe that is not mining.</p>
-<p><strong>The check is poisoned against exactly this.</strong> Putting the two stores back turns
-<code>deploy ark</code> and <code>found by land</code> red again, which is what makes the green
-above worth reading. A check that agreed with a fix rather than measuring it would look identical
-from here.</p>
-<p><strong>Two faults in the check itself, both found by his objection and both fixed.</strong>
-It tested a stronger claim than the words can carry &mdash; mining creates metal, so
-<code>work</code> is a declared source and the invariant is <em>conserved outside extraction</em>.
-And it weighed <code>found-colony</code> as if a player could fire it with no ark and no pioneer
-spent; a recipe that is only ever called is not a transition.</p>
-</div>
-
-<h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded, as it should be</span></h3>
-<p>17 transitions after grounding;
-1 skipped (perish).</p>
-<div class="scroll"><table><thead><tr>
-<th>Fire this many times</th>
-<th>Recipe</th>
-</tr></thead><tbody>
-<tr>
-<td class="amt">1</td>
-<td class="target">create labor</td>
-</tr>
-<tr>
-<td class="amt">13/27</td>
-<td class="target">found by land</td>
-</tr>
-<tr>
-<td class="amt">1</td>
-<td class="target">grow</td>
-</tr>
-<tr>
-<td class="amt">1</td>
-<td class="target">move</td>
-</tr>
-<tr>
-<td class="amt">13/27</td>
-<td class="target">produce pioneer</td>
-</tr>
-<tr>
-<td class="amt">1</td>
-<td class="target">upkeep</td>
-</tr>
-<tr>
-<td class="amt">1/3</td>
-<td class="target">work[food]</td>
-</tr>
-<tr>
-<td class="amt">13/72</td>
-<td class="target">work[metal]</td>
-</tr>
-<tr>
-<td class="amt">35/72</td>
-<td class="target">work[energy]</td>
-</tr>
-</tbody></table></div>
-<p>Metal-equivalent gain <strong>13/9</strong>, and
-<code>work[metal]</code> is in the witness &mdash; which is the point. <strong>The check can see
-mining now.</strong> Until families were resolved to kinds, <code>work</code> produced
-<code>resource</code>, a family with no metal weight, and the game's only metal source scored
-zero.</p>
-<div class="callout">
-<h4>Grounding, and it is the same operation the menu needs</h4>
-<p>A target naming a family stands for one transition per kind in it, so <code>work</code> is
-three: <code>work[food]</code>, <code>work[metal]</code>, <code>work[energy]</code>, each with its
-own largest density. <strong>That is grounding</strong> &mdash; instantiating a recipe against
-what it could apply to &mdash; and it is the same operation an interface performs to build a menu.
-The analysis and the interface want the same machinery, which is a reason to build it once.</p>
-</div>
-
-<h3>Check 2b &mdash; the same without mining &nbsp;<span class="badge down">clean</span></h3>
-<p>14 transitions with <code>work</code>
-removed. <strong>This is the question worth asking</strong>, and it is the recommendation in
-practice: rather than keeping a baseline of intended loops, remove the declared source and ask
-whether metal can still grow.</p>
-<div class="scroll"><table><thead><tr>
-<th>Fire this many times</th>
-<th>Recipe</th>
-</tr></thead><tbody>
-<tr>
-<td class="amt">1</td>
-<td class="target">create labor</td>
-</tr>
-</tbody></table></div>
-<p>Metal-equivalent gain <strong>0</strong>.
-The one loop left is <code>create labor</code>, which makes labor from nothing every turn and is
-declared free in the <em>Kinds</em> table. <strong>So there is no metal source other than
-extraction</strong> &mdash; which is what conservation was supposed to mean, now checked rather
-than asserted.</p>
-
-<h3>Check 4 &mdash; is an attachment observable? &nbsp;<span class="badge up">0 decide nothing</span></h3>
-<p>A <code>create</code> fails when its container will not hold another. So an attachment on a
-create whose target has <strong>no capacity</strong> decides nothing &mdash; hard and soft behave
-identically and always will. <strong>Naming a question does not make it one.</strong></p>
-<div class="scroll"><table><thead><tr>
-<th>Recipe</th>
-<th>Line</th>
-<th>Attach</th>
-<th>Capacity</th>
-</tr></thead><tbody>
-<tr>
-<td class="target">found-colony(t)</td>
-<td class="target">garrison in t</td>
-<td class="attach">SOFT</td>
-<td class="note">1</td>
-</tr>
-<tr>
-<td class="target">found-colony(t)</td>
-<td class="target">extractor[food] in t</td>
-<td class="attach">SOFT</td>
-<td class="note">its deposit's total capacity for r</td>
-</tr>
-<tr>
-<td class="target">found-colony(t)</td>
-<td class="target">extractor[metal] in t</td>
-<td class="attach">SOFT</td>
-<td class="note">its deposit's total capacity for r</td>
-</tr>
-<tr>
-<td class="target">build extractor</td>
-<td class="target">extractor[$resource] in t</td>
-<td class="attach">HARD</td>
-<td class="note">its deposit's total capacity for r</td>
-</tr>
-<tr>
-<td class="target">build yard</td>
-<td class="target">yard in t</td>
-<td class="attach">HARD</td>
-<td class="note">1</td>
-</tr>
-</tbody></table></div>
-<p>And the one where it does not:</p>
-<div class="scroll"><table><thead><tr>
-<th>Recipe</th>
-<th>Line</th>
-<th>Attach</th>
-<th>Why it cannot fail</th>
-</tr></thead><tbody>
-</tbody></table></div>
-<div class="callout">
-<h4>The citizen question mark is not a decision</h4>
-<p>A territory never refuses a citizen &mdash; they are held down by food through upkeep, which is
-not a capacity. <strong>So hard and soft are the same line.</strong> The options are below, and the
-only one that behaves differently is a second reading of the word <em>soft</em> rather than a
-second value of it.</p>
-</div>
-<div class="scroll"><table><thead><tr>
-<th>Option</th>
-<th>What it does</th>
-<th>What it costs</th>
-<th>Applies to</th>
-</tr></thead><tbody>
-<tr>
-<td class="target">Leave it unattached</td>
-<td>The line cannot fail, so it always runs. Deploying onto an inhabited territory adds 2 more citizens.</td>
-<td class="note">Recommended. A citizen is a quantity, and 2 is an increment.</td>
-<td class="note">citizen</td>
-</tr>
-<tr>
-<td class="target">hard</td>
-<td>Fail the action if the citizen cannot be created.</td>
-<td class="note">Identical behaviour today, and forever unless a population cap is added. A word that decides nothing.</td>
-<td class="note">citizen</td>
-</tr>
-<tr>
-<td class="target">soft, reading soft as *the container is full*</td>
-<td>Skip the line when the container will not hold another.</td>
-<td class="note">Identical behaviour today, for the same reason: a territory has no citizen capacity.</td>
-<td class="note">citizen</td>
-</tr>
-<tr>
-<td class="target">soft, reading soft as *one is already there*</td>
-<td>Skip when the territory already has any citizen.</td>
-<td class="note">Observably different, and it turns 2 from an increment into a target. Almost certainly not wanted for a quantity - but this is the line where the two readings of soft come apart.</td>
-<td class="note">citizen</td>
-</tr>
-<tr>
-<td class="target">Decide at the call instead</td>
-<td>call found-colony(t) [soft], guarded on the garrison.</td>
-<td class="note">Answers all three question marks at once: deploying onto a founded colony spends the ark and does nothing else.</td>
-<td class="note">all three</td>
-</tr>
-</tbody></table></div>
-<div class="callout">
-<h4>Withdrawn: <em>what does soft test</em> was a false choice</h4>
-<p>An earlier version of this report asked whether <code>soft</code> means <em>the container is
-full</em> or <em>one is already there</em>. <strong>There is exactly one condition under which a
-create can fail &mdash; the container will not take another &mdash; so there is one meaning and
-not two.</strong> The second reading was this lane's invention with no case behind it, and Sean
-was right not to understand the question.</p>
-<p><strong>The real distinction it was standing in front of is about <code>create</code>, not about
-<code>soft</code>.</strong> <code>create X [soft]</code> means <em>add one if there is room</em>,
-which is not the same as <em>ensure one exists</em>. Those coincide wherever capacity is 1 &mdash;
-every case here except the extractors. Territory 1 has food capacity 3, so deploying twice would
-add a second food extractor. <strong>If that is wrong, the fix is at the call</strong> &mdash;
-do not found a colony that is already founded &mdash; and not a second kind of create.</p>
-</div>
-<h3>Parameter domains &mdash; what a recipe may be instantiated over</h3>
-<p>A parameter is not free. Its domain is a <strong>condition on the kind</strong>, not a list, and
-grounding resolves it &mdash; so an instance that does not satisfy the condition never exists, and
-in a selection interface the player never sees it.</p>
-<div class="scroll"><table><thead><tr>
-<th>Recipe</th>
-<th>Parameter</th>
-<th>Domain</th>
-<th>Today</th>
-<th>Why</th>
-</tr></thead><tbody>
-<tr>
-<td class="target">build store</td>
-<td class="target">$resource</td>
-<td>a resource whose things do not expire</td>
-<td class="amt">metal, energy</td>
-<td class="note">food is excluded because it is made with keeps 1 and dies at the turn end it was made, so a food store cannot hold anything across a turn</td>
-</tr>
-<tr>
-<td class="target">build extractor</td>
-<td class="target">$resource</td>
-<td>a resource this territory has a deposit for</td>
-<td class="amt">per territory</td>
-<td class="note">territory 6 has no metal deposit, so build extractor[metal] does not exist there - check 5</td>
-</tr>
-<tr>
-<td class="target">work</td>
-<td class="target">extractor.resource</td>
-<td>the resource the selected extractor was built for</td>
-<td class="amt">not a choice</td>
-<td class="note">determined by the selection, so it grounds to one instance rather than a domain</td>
-</tr>
-</tbody></table></div>
-<div class="callout">
-<h4>Food stores, and why the rule is derived rather than named</h4>
-<p><strong>Sean, 2026-09-09: a food store buys nothing, so it is out.</strong> The tempting fix is
-to write <em>no food stores</em>. The better one is
-<strong><em>a store may be built for a resource whose things do not expire</em></strong>, which
-today admits metal and energy and excludes food, because food is made with <code>keeps</code> 1 and
-dies at the turn end it was made.</p>
-<p><strong>Preservation technology raises food's <code>keeps</code>, and food stores become
-available with no change to the rule.</strong> That is the difference between a condition and a
-list: one of them already knows about a feature that does not exist yet.</p>
-</div>
-<div class="callout">
-<h4>Two reasons agreeing is not two pieces of evidence</h4>
-<p><code>found-colony</code> has no stores. That was decided for <strong>conservation</strong>
-&mdash; garrison plus two extractors is 3, exactly an ark's Binding &mdash; and the food store also
-turns out to buy nothing, so it would have gone anyway. <strong>The metal store does buy something
-and still stays out</strong>: a new colony gets the minimum that works and builds its own. Worth
-separating, because a decision that looks doubly supported is easy to stop examining.</p>
-</div>
-
-<h3>Check 5 &mdash; which territories would refuse a create, per line</h3>
-<div class="scroll"><table><thead><tr>
-<th>Recipe</th>
-<th>Line</th>
-<th>Attach</th>
-<th>Blocked on</th>
-</tr></thead><tbody>
-<tr>
-<td class="target">found-colony(t)</td>
-<td class="target">extractor[food] in t</td>
-<td class="attach">SOFT</td>
-<td class="note">none - every territory has room</td>
-</tr>
-<tr>
-<td class="target">found-colony(t)</td>
-<td class="target">extractor[metal] in t</td>
-<td class="attach">SOFT</td>
-<td class="note">territory 6</td>
-</tr>
-</tbody></table></div>
-<div class="callout">
-<h4>Corrected: territory 7 was never affected</h4>
-<p>An earlier version of this report said territories 6 and 7 both mattered. <strong>Territory 7
-has no energy, and no recipe here creates an energy extractor</strong>, so it never did. Sean
-caught it. The check now asks which territories lack <em>the resource the line actually names</em>
-rather than which lack any resource &mdash; a wider question with a plausible answer, which is the
-failure this repository keeps recording.</p>
-<p><strong>Decided 2026-09-09.</strong> Two citizens unconditionally; each extractor only where
-there is capacity. So both extractor lines are <code>SOFT</code>, and <strong>only territory 6 is
-affected, and only by the metal line</strong>: a colony founded there simply has no metal
-extractor, rather than founding being refused.</p>
-</div>
-<div class="callout">
-<h4>The same condition, two attachments, and both are right</h4>
-<p><code>found-colony</code> creates a metal extractor <code>SOFT</code>, so founding on territory
-6 succeeds without one. <code>build extractor</code> creates one <code>HARD</code>, so a player who
-chooses to build a metal extractor on territory 6 is refused. <strong>Identical condition, opposite
-answers, and neither is a mistake</strong> &mdash; because one is a consequence of landing
-somewhere and the other is a thing the player asked for.</p>
-<p>Under a selection interface the second never even arises: grounding the recipe against
-territory 6 produces no <code>build extractor[metal]</code> to select. <strong>The attachment is
-what the console needs and the menu is what the interface needs, from one line.</strong></p>
-</div>
-
-<h3>Check 3 &mdash; a cap of 1000 &nbsp;<span class="badge down">0 breaches</span></h3>
-<p>Applying each recipe once breaches nothing, which is exactly the point about a cap:
-<strong>it found neither of the two things the other checks found.</strong> It is a backstop
-against bugs in checks 1 and 2, not a way of finding anything.</p>
+<h2>What the encoding assumed</h2>
+<p><strong>Where a line needed something the notation does not define, the encoder records it
+rather than inventing quietly</strong> &mdash; so this list is the report's real output, and it is
+generated from the encoding rather than written beside it.</p>
+<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">13</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">4</td><td><strong><em>For each</em> has no form.</strong> The notation has <code>repeat</code>, which is how many times one command fires. World-building needs twelve calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits in a comment, where nothing can run it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 1</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 3</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 2</td></tr><tr><td class="amt">2</td><td><code>surplus:yes</code> puts a <strong>derived</strong> trait in a description. The release lists <em>surplus</em> as derived, and the notation says a description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is never part of one</strong>. So <code>grow</code>'s target has no form as a description, and this is the one assumption here that contradicts a rule rather than filling a gap.</td><td class="note">grow line 1</td></tr><tr><td class="amt">10</td><td><code>location</code> and <code>below</code> are <strong>not traits the release lists</strong>. In a dump a thing appears inside what holds it and nothing states its container, so <em>where a thing is</em> has no name &mdash; yet <code>move</code> sets it and four of the six <code>let</code>s read it. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">7</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
+<p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
+line required a choice the specification has not made.</p>
 
 <h2>What the re-encoding cost and saved</h2>
 <p>Computed from the data rather than asserted. <strong>58 rows became 48 lines &mdash;
@@ -1721,7 +1766,9 @@ which is why it now says 5.</p>
 </tr>
 </tbody></table></div>
 
-<h2>Decisions this forced, none of them taken here</h2>
+<h2>What has already been settled</h2>
+<p>Kept rather than deleted: a question that was answered is what stops it being asked again, and
+each row names who answered it.</p>
 <div class="scroll"><table><thead><tr>
 <th>Question</th>
 <th>What is at stake</th>
@@ -1748,39 +1795,9 @@ which is why it now says 5.</p>
 <td class="note">It does not. Structural boundedness is polynomial by linear programming, at edit time, with a witness - see Detecting a glitch. Boundedness for one starting state is EXPSPACE-complete; boundedness for every starting state is polynomial, and the second is the one an editor needs.</td>
 </tr>
 <tr>
-<td>OPEN - the six lines beside it</td>
-<td>Soft on the garrison alone still creates 2 citizens, 2 extractors and 2 stores on a territory that already has them, because their capacities are not zero.</td>
-<td class="note">Marked ? in found-colony. Each needs hard, soft, or removing - and they are not the same answer.</td>
-</tr>
-<tr>
-<td>OPEN - or make the call soft instead, and answer all seven at once</td>
-<td>call found-colony(t) [soft] means deploying onto a founded territory destroys the ark and does nothing else. Soft on each create means deploy tops up a damaged colony.</td>
-<td class="note">Those are different games. The model expresses both; attachment is on the call as readily as on a create.</td>
-</tr>
-<tr>
-<td>OPEN - if a call can fail as a unit, does it roll back?</td>
-<td>found-colony can now half-succeed. If the ark is destroyed before the call, a soft call that skips leaves the ark spent for nothing.</td>
-<td class="note">This is the same question as whether composition sees the starting state or the running one.</td>
-</tr>
-<tr>
-<td>OPEN - do the sketch's missing stores come back?</td>
-<td>The sketch creates a garrison, 2 citizens and 2 extractors. The specification also creates a food store and a metal store.</td>
-<td class="note">Dropping them changes the game.</td>
-</tr>
-<tr>
-<td>OPEN - does a thing have identity, or is it a count?</td>
-<td>set requires an identified thing. destroy ark means this ark. create citizen 2 asks for no identity.</td>
-<td class="note">The dump already answers this: nine of its ten tables are the containment tree of identified things.</td>
-</tr>
-<tr>
 <td>NOT A DECISION - recorded because it explains the numbers</td>
 <td>Sean, 2026-09-09, on theme: labor is not free, it is the sun's energy through food and citizens.</td>
 <td class="note">It derives a quantity the specification never states - the population ceiling - and that quantity explains all twelve territory notes.</td>
-</tr>
-<tr>
-<td>OPEN - what is a food store for?</td>
-<td>Food is made with keeps 1. The turn order is upkeep, grow, perish, age, spoil - so food made this turn is aged to 0 and spoiled at the same turn end, whether it is in a store or in nothing.</td>
-<td class="note">If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect.</td>
 </tr>
 <tr>
 <td>ANSWERED - food stores are out, and the rule is derived rather than named</td>
@@ -1832,7 +1849,6 @@ which is why it now says 5.</p>
 <td class="note">the specification lane</td>
 </tr>
 </tbody></table></div>
-
 <p class="foot">Research lens, 2026-09-08. Copied and modified from
 <code>releases/first-release.md</code> rather than referencing it, per the request &mdash; so
 divergence from the specification is expected and is not a defect in either. Every count here is
