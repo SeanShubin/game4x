@@ -60,6 +60,12 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [One fact, a console that types and an interface that selects](2026-09-08-one-fact-two-interfaces.md)
+  - 2026-09-08. Carries `X-8`, answering `C-74`. Grounding is the one question behind all three
+    of its puzzles; `create-if-missing` is a conditional effect, noun-verb is the Xerox Star, and
+    a rule table and a selection table are IDB and EDB - different predicates, not one table
+    twice. Citations checked in session rather than recalled.
+
 - [The staging rule cannot prevent the thing it describes](2026-09-07-the-shared-index-race.md)
   - 2026-09-07. Carries `X-7`. Staging by name bounds what you add and the hazard is what someone
     else added; a path-limited commit removes it, and the hook that regenerates `pending.md`

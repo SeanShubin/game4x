@@ -67,6 +67,62 @@ instances after a crash, so a reader that has read the files and nothing else is
 producing anyway. **The cost is three tasks at one instance's startup, and no writes.** The
 specification lane has been asked to put it to him as its own decision.
 
+### X-8 - `C-74` answered: the three puzzles are one, and it is called grounding
+
+**to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-one-fact-two-interfaces.md) · answers `C-74`
+
+**Answered where it was asked**, because that lane is prototyping and asked. **Nothing here proposes
+a structure** - Sean said he does not want the present one presumed, so this names what is settled
+and stops.
+
+**The three puzzles are one question with a name.** A recipe is an operator with parameters; the rows
+a person selects from are that operator **instantiated against the current state**, one row per
+binding whose preconditions hold. Then: whether a condition is a precondition or a guard on an effect
+decides whether a row **appears at all**; which parameters exist decides **what the person picks**,
+because a parameter is a choice and a derived term is not; and the rows mentioning a selected thing
+**are** the verbs available on it. The console and the interface become two renderings of one
+operator rather than two designs to keep in agreement.
+
+**`create-if-missing` is a conditional effect** - ADL, Pednault 1989; PDDL's `(when ...)` behind
+`:conditional-effects`. It is not a fifth role, it is an effect with a guard, and **the guard sits
+somewhere a precondition does not**. Today's `limit 0` is a precondition, so a garrison present makes
+`deploy ark` inapplicable; his keeps it applicable and skips one effect. **In a selection-only
+interface that is the difference between the player seeing the option and not seeing it**, which is
+this lane's own inference and the reason it is worth Sean's attention: the two are equivalent in a
+console and are not equivalent in an interface.
+
+**And there is a second half.** In STRIPS an effect is a fact and adding one that holds is a no-op,
+so create-if-missing is free. **The four roles are quantities** - the numeric-fluent world of PDDL
+2.1, Fox and Long 2003 - where no increase is idempotent. So a garrison and a citizen are **different
+kinds of thing sharing one Qty column**: one is a fact, at most one, and the other is a count.
+**Object creation is where the analogy stops** - classical planning assumes a fixed universe of
+objects, and `create citizen 2` does not.
+
+**The subject moving is the relational-versus-functional choice**, and for an interface it is direct:
+every parameter is something a person must pick, so choosing the representation *is* choosing what
+the player selects. Noted: under a functional subject, `crates/game-model/src/rejection.rs`'s
+`NotAboveThatTerritory` has nothing left to reject.
+
+**The verb attaching to the thing is the oldest settled thing here.** It is **noun-verb**, or
+select-then-operate - the Xerox Star, Smith et al., Byte 1982 - and what makes it right for a
+selection-only interface is **modelessness**, not preference: selecting before commanding puts the
+system in no mode, and verb-first does. **Sean's own sentence is the paradigm stated exactly**, and
+this lane's contribution is the name and the forty-five years.
+
+**The table question was the best one, as you guessed, and it has a precise name.** A table storing a
+rule is **intensional**; a table a person selects rows from is **extensional** - IDB and EDB in
+Datalog - and the structural rule is that **a predicate is one or the other and not both**. So the
+selection table is not a prettier recipe table; it is a different predicate, produced from the recipe
+table rather than maintained beside it. **This repository draws that line once and not twice**:
+`CLAUDE.md` separates a rule from a rendering of a rule, and this is rule against world.
+
+**Whether.** Worth reading now; **nothing to act on and nothing to build**. Three things are left
+unsettled on purpose because they are decisions rather than facts - whether a garrison is a fact or a
+quantity, whether an action's subject is derived or selected, and whether object creation stays
+inside this vocabulary at all. **If any of them becomes a specification question it is `to spec`, not
+yours**, and this lane has deliberately drafted no text: the vocabulary is the route and not the
+destination, which `CLAUDE.md` names as the trap for exactly this kind of finding.
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated
