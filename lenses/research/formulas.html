@@ -259,6 +259,42 @@ rather than after.</p>
 </tr>
 </tbody></table></div>
 
+<h2>Every kind, the way every recipe is</h2>
+<p>Sean, 2026-09-09: <em>I want to be able to review things just as easily as I can review
+formulas.</em> A recipe gets a table of lines and a string for each; here is the other half.
+<strong>All 16 kinds</strong>, with what a thing of each carries and how it is written.
+The <em>Kinds</em> and <em>Traits</em> tables are copied from the release into this lane's data, so
+the two checks below have a population to count against: <strong>every kind has a row</strong>, and
+<strong>every trait but one lands on a kind</strong> &mdash; <code>unpaid</code> is the exception,
+because it is <em>of a thing with upkeep</em>, which is a predicate rather than a kind.</p>
+<div class="scroll"><table><thead><tr><th>Kind</th><th>In</th><th>Identity</th><th>Stored traits</th><th>Derived</th><th>Written as</th><th></th></tr></thead><tbody><tr><td class="target">citizen</td><td>territory</td><td>counted</td><td class="target">ready, force, upkeep</td><td class="note">&mdash;</td><td class="one-string">{citizen ready:.. force:.. upkeep:.. territory:..}</td><td class="note">the only kind that both works and eats</td></tr><tr><td class="target">garrison</td><td>territory</td><td>counted</td><td class="target">force</td><td class="note">metal-in-it</td><td class="one-string">{garrison force:.. territory:..}</td><td class="note">capacity 1, which is why <code>limit 0 garrison</code> was a restatement</td></tr><tr><td class="target">extractor</td><td>territory</td><td>counted</td><td class="target">resource, ready</td><td class="note">metal-in-it</td><td class="one-string">{extractor resource:.. ready:.. territory:..}</td><td class="note">counted, not identified - <code>work</code> selects <em>an</em> extractor that is ready</td></tr><tr><td class="target">yard</td><td>territory</td><td>counted</td><td class="target">&mdash;</td><td class="note">metal-in-it</td><td class="one-string">{yard territory:..}</td><td class="note">capacity 1</td></tr><tr><td class="target">store</td><td>territory</td><td>counted</td><td class="target">resource</td><td class="note">metal-in-it</td><td class="one-string">{store resource:.. territory:..}</td><td class="note">holds 10 of its resource; which store holds which unit is not recorded</td></tr><tr><td class="target">ark</td><td>orbit or territory</td><td>counted</td><td class="target">force, fuel, movable</td><td class="note">metal-in-it</td><td class="one-string">{ark force:.. fuel:.. movable:.. orbit:..}</td><td class="note"></td></tr><tr><td class="target">pioneer</td><td>territory</td><td>counted</td><td class="target">force, fuel, movable</td><td class="note">metal-in-it</td><td class="one-string">{pioneer force:.. fuel:.. movable:.. territory:..}</td><td class="note"></td></tr><tr><td class="target">food</td><td>territory, or a store</td><td>counted</td><td class="target">keeps</td><td class="note">surplus</td><td class="one-string">{food keeps:.. territory:..}</td><td class="note">made with <code>keeps</code> 1, so it cannot cross a turn boundary</td></tr><tr><td class="target">metal</td><td>territory, or a store</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{metal territory:..}</td><td class="note"></td></tr><tr><td class="target">energy</td><td>territory, a store, or a unit's tank</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{energy territory:..}</td><td class="note"></td></tr><tr><td class="target">labor</td><td>territory</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{labor territory:..}</td><td class="note">made each turn and never stored</td></tr><tr><td class="target">territory</td><td>game</td><td><strong>id</strong></td><td class="target">id, biome, nature</td><td class="note">control</td><td class="one-string">{territory id:1 biome:.. nature:.. game:..}</td><td class="note"><code>biome</code> and <code>nature</code> have no value in any document - <code>X-19</code></td></tr><tr><td class="target">orbit</td><td>game</td><td>counted</td><td class="target">&mdash;</td><td class="note">&mdash;</td><td class="one-string">{orbit game:..}</td><td class="note">which territory it is above has <strong>no named trait</strong> - this report calls it <code>below</code></td></tr><tr><td class="target">deposit</td><td>territory</td><td>counted</td><td class="target">resource, total-capacity, density</td><td class="note">&mdash;</td><td class="one-string">{deposit resource:.. total-capacity:.. density:.. territory:..}</td><td class="note"></td></tr><tr><td class="target">adjacency</td><td>game</td><td>counted</td><td class="target">from, to</td><td class="note">&mdash;</td><td class="one-string">{adjacency from:.. to:.. game:..}</td><td class="note"></td></tr><tr><td class="target">game</td><td><em>nothing</em></td><td>counted</td><td class="target">phase</td><td class="note">&mdash;</td><td class="one-string">{game phase:..}</td><td class="note">the one thing that is in nothing, so its container field has nothing to name</td></tr></tbody></table></div>
+
+<h2>Should a kind be a trait?</h2>
+<p><strong>It already is one.</strong> The release's <em>Traits</em> table opens with
+<code>kind &middot; every thing &middot; one of the kinds &middot; stored</code>, and
+<code>spec/invariants.md</code> says <em>a thing is a set of traits, and one of them names its
+kind</em>. So they are not two sorts of thing to be unified; a kind is the value of a trait, and the
+notation writes it first rather than as <code>kind:citizen</code> because every thing has one.</p>
+<p><strong>The question worth asking is the harder one: could it be dropped?</strong> If a thing were
+nothing but its traits, with no discriminator, the traits would have to say which kind it is. They
+cannot. <strong>7 of the 16 kinds share their trait set with another</strong>, so no
+reading of the traits could tell them apart:</p>
+<table><thead><tr><th>These stored traits</th><th>Kinds</th><th>Which</th></tr></thead><tbody><tr><td class="target"><em>no stored traits at all</em></td><td>5</td><td class="target">yard, metal, energy, labor, orbit</td></tr><tr><td class="target">force, fuel, movable</td><td>2</td><td class="target">ark, pioneer</td></tr></tbody></table>
+<div class="callout">
+<h4>What that settles, and what it does not</h4>
+<p>Five kinds carry <strong>no stored traits whatever</strong>. A yard and a unit of metal are the
+same bag of traits, and only the kind separates them &mdash; so <strong><code>kind</code> is not
+derivable, and dropping it would mean inventing a discriminating trait, which is <code>kind</code>
+under another name.</strong></p>
+<p>It does <em>not</em> settle that kinds are a second sort of thing. They also appear as
+<strong>values</strong>: <code>resource</code> takes <code>food</code>, <code>metal</code> or
+<code>energy</code>, which are kinds, and <code>from</code> and <code>to</code> take places, which
+are things. <code>spec/console.md</code> already leans on this &mdash; <em>a field that refers to a
+thing is named for that thing's kind</em>. So a kind is doing two jobs: it classifies a thing, and it
+is a domain that trait values are drawn from. <strong>Unify the first job with traits, because it
+already is one; keep the second, because a value has to come from somewhere.</strong></p>
+</div>
+
 <h2>A thing, as tabular data and as text</h2>
 <p>Sean, 2026-09-09: <em>I want to see things as organized tabular data, with the corresponding text
 representation</em> &mdash; and, off the top of his head, a territory. Here is territory

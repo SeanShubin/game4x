@@ -1454,5 +1454,353 @@
       "0 lines, +1 column",
       "Shorter to read, but it adds a concept: a formula-level trait that only the engine interprets. By the <em>minimum expressiveness</em> test that is the worse trade - a new field to say what an existing line already says."
     ]
+  ],
+  "kinds": [
+    [
+      "citizen",
+      "a person: provides labor, eats, and grows on surplus"
+    ],
+    [
+      "garrison",
+      "what holds a territory; a territory has at most one"
+    ],
+    [
+      "extractor",
+      "built for one resource, and worked to produce it"
+    ],
+    [
+      "yard",
+      "where an Ark is produced"
+    ],
+    [
+      "store",
+      "built to hold one resource, and holds nothing else"
+    ],
+    [
+      "ark",
+      "carries a landing, and can invade from orbit"
+    ],
+    [
+      "pioneer",
+      "founds a territory"
+    ],
+    [
+      "food",
+      "eaten by citizens; expires"
+    ],
+    [
+      "metal",
+      "what things are built from; conserved"
+    ],
+    [
+      "energy",
+      "what moves things; neither conserved nor expiring"
+    ],
+    [
+      "labor",
+      "what working a machine takes; a citizen provides it each turn"
+    ],
+    [
+      "territory",
+      "a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource"
+    ],
+    [
+      "orbit",
+      "a place above one territory, which holds units and nothing else"
+    ],
+    [
+      "deposit",
+      "what a territory's ground offers of one resource, and how richly"
+    ],
+    [
+      "adjacency",
+      "two places that share an edge, held by the thing that holds them"
+    ],
+    [
+      "game",
+      "every thing is in it, and it is the one thing that is in nothing"
+    ]
+  ],
+  "traits": [
+    [
+      "kind",
+      "every thing",
+      "stored"
+    ],
+    [
+      "id",
+      "a thing that must be named individually",
+      "stored"
+    ],
+    [
+      "ready",
+      "whatever readies",
+      "stored"
+    ],
+    [
+      "resource",
+      "an extractor or a store",
+      "stored"
+    ],
+    [
+      "force",
+      "citizen, garrison, ark, pioneer",
+      "stored"
+    ],
+    [
+      "fuel",
+      "a unit",
+      "stored"
+    ],
+    [
+      "upkeep",
+      "a thing with upkeep",
+      "stored"
+    ],
+    [
+      "metal-in-it",
+      "whatever is built",
+      "derived"
+    ],
+    [
+      "density",
+      "a deposit",
+      "stored"
+    ],
+    [
+      "total-capacity",
+      "a deposit",
+      "stored"
+    ],
+    [
+      "control",
+      "a territory",
+      "derived"
+    ],
+    [
+      "biome",
+      "a territory",
+      "stored"
+    ],
+    [
+      "nature",
+      "a territory",
+      "stored"
+    ],
+    [
+      "from",
+      "an adjacency",
+      "stored"
+    ],
+    [
+      "to",
+      "an adjacency",
+      "stored"
+    ],
+    [
+      "keeps",
+      "thing",
+      "stored"
+    ],
+    [
+      "surplus",
+      "food",
+      "derived"
+    ],
+    [
+      "unpaid",
+      "a thing with upkeep",
+      "stored"
+    ],
+    [
+      "phase",
+      "the game",
+      "stored"
+    ],
+    [
+      "movable",
+      "whatever moves",
+      "stored"
+    ]
+  ],
+  "thing_shape": [
+    [
+      "citizen",
+      "territory",
+      "counted",
+      [
+        "ready",
+        "force",
+        "upkeep"
+      ],
+      [],
+      "the only kind that both works and eats"
+    ],
+    [
+      "garrison",
+      "territory",
+      "counted",
+      [
+        "force"
+      ],
+      [
+        "metal-in-it"
+      ],
+      "capacity 1, which is why <code>limit 0 garrison</code> was a restatement"
+    ],
+    [
+      "extractor",
+      "territory",
+      "counted",
+      [
+        "resource",
+        "ready"
+      ],
+      [
+        "metal-in-it"
+      ],
+      "counted, not identified - <code>work</code> selects <em>an</em> extractor that is ready"
+    ],
+    [
+      "yard",
+      "territory",
+      "counted",
+      [],
+      [
+        "metal-in-it"
+      ],
+      "capacity 1"
+    ],
+    [
+      "store",
+      "territory",
+      "counted",
+      [
+        "resource"
+      ],
+      [
+        "metal-in-it"
+      ],
+      "holds 10 of its resource; which store holds which unit is not recorded"
+    ],
+    [
+      "ark",
+      "orbit or territory",
+      "counted",
+      [
+        "force",
+        "fuel",
+        "movable"
+      ],
+      [
+        "metal-in-it"
+      ],
+      ""
+    ],
+    [
+      "pioneer",
+      "territory",
+      "counted",
+      [
+        "force",
+        "fuel",
+        "movable"
+      ],
+      [
+        "metal-in-it"
+      ],
+      ""
+    ],
+    [
+      "food",
+      "territory, or a store",
+      "counted",
+      [
+        "keeps"
+      ],
+      [
+        "surplus"
+      ],
+      "made with <code>keeps</code> 1, so it cannot cross a turn boundary"
+    ],
+    [
+      "metal",
+      "territory, or a store",
+      "counted",
+      [],
+      [],
+      ""
+    ],
+    [
+      "energy",
+      "territory, a store, or a unit's tank",
+      "counted",
+      [],
+      [],
+      ""
+    ],
+    [
+      "labor",
+      "territory",
+      "counted",
+      [],
+      [],
+      "made each turn and never stored"
+    ],
+    [
+      "territory",
+      "game",
+      "<strong>id</strong>",
+      [
+        "id",
+        "biome",
+        "nature"
+      ],
+      [
+        "control"
+      ],
+      "<code>biome</code> and <code>nature</code> have no value in any document - <code>X-19</code>"
+    ],
+    [
+      "orbit",
+      "game",
+      "counted",
+      [],
+      [],
+      "which territory it is above has <strong>no named trait</strong> - this report calls it <code>below</code>"
+    ],
+    [
+      "deposit",
+      "territory",
+      "counted",
+      [
+        "resource",
+        "total-capacity",
+        "density"
+      ],
+      [],
+      ""
+    ],
+    [
+      "adjacency",
+      "game",
+      "counted",
+      [
+        "from",
+        "to"
+      ],
+      [],
+      ""
+    ],
+    [
+      "game",
+      "<em>nothing</em>",
+      "counted",
+      [
+        "phase"
+      ],
+      [],
+      "the one thing that is in nothing, so its container field has nothing to name"
+    ]
   ]
 }

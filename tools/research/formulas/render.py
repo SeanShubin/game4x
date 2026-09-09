@@ -396,6 +396,72 @@ def a_territory(row):
     )
 
 
+def every_kind():
+    """One row per kind: what a thing of it carries, and how it is written.
+
+    The point is that a thing should be as reviewable as a recipe. A recipe gets a table of
+    lines and a string per line; this gives a kind a row of traits and a string per kind.
+    """
+    stored = {t: s for t, _of, s in DATA["traits"]}
+    rows, unstated = [], 0
+    for kind, container, identity, keeps, derived, note in DATA["thing_shape"]:
+        for t in keeps + derived:
+            assert t in stored, f"{kind} carries {t}, which the Traits table does not list"
+        fields = " ".join(f"{t}:.." for t in keeps if t != "id")
+        if kind == "territory":
+            fields = "id:1 " + fields
+            unstated += 2
+        text = "{" + " ".join(x for x in (kind, fields) if x) + "}"
+        if container not in ("<em>nothing</em>",):
+            text = text[:-1] + f" {container.split(',')[0].split(' or ')[0]}:..}}"
+        rows.append(
+            f'<tr><td class="target">{esc(kind)}</td>'
+            f"<td>{container}</td><td>{identity}</td>"
+            f'<td class="target">{esc(", ".join(keeps)) or "&mdash;"}</td>'
+            f'<td class="note">{esc(", ".join(derived)) or "&mdash;"}</td>'
+            f'<td class="one-string">{esc(text)}</td>'
+            f'<td class="note">{note}</td></tr>'
+        )
+    assert len(rows) == len(DATA["kinds"])
+    head = (
+        "<th>Kind</th><th>In</th><th>Identity</th><th>Stored traits</th><th>Derived</th>"
+        "<th>Written as</th><th></th>"
+    )
+    return (
+        len(rows),
+        '<div class="scroll"><table><thead><tr>'
+        + head
+        + "</tr></thead><tbody>"
+        + "".join(rows)
+        + "</tbody></table></div>",
+    )
+
+
+def kind_collisions():
+    """Kinds that no set of traits could tell apart, counted rather than argued.
+
+    The question is whether `kind` could be dropped and a thing be nothing but its traits.
+    It could not, and this is why: if two kinds carry the same traits, traits cannot name
+    which one a thing is, and something else has to.
+    """
+    groups = {}
+    for kind, _c, _i, keeps, _d, _n in DATA["thing_shape"]:
+        groups.setdefault(tuple(sorted(keeps)), []).append(kind)
+    clashes = {sig: ks for sig, ks in groups.items() if len(ks) > 1}
+    caught = sum(len(ks) for ks in clashes.values())
+    rows = "".join(
+        f'<tr><td class="target">{esc(", ".join(sig)) or "<em>no stored traits at all</em>"}</td>'
+        f'<td>{len(ks)}</td><td class="target">{esc(", ".join(ks))}</td></tr>'
+        for sig, ks in sorted(clashes.items(), key=lambda x: -len(x[1]))
+    )
+    return (
+        caught,
+        len(DATA["thing_shape"]),
+        "<table><thead><tr><th>These stored traits</th><th>Kinds</th><th>Which</th></tr></thead>"
+        "<tbody>" + rows + "</tbody></table>",
+    )
+
+
 def assumption_table():
     """What the encoding assumed, and how many lines needed each - counted, not written."""
     rows = []
@@ -461,6 +527,8 @@ def main():
     direction = "down" if now < was else "up"
     n_primitives = len(DATA["primitives"])
     t_id, t_note, n_facts, t_table, t_text = a_territory(DATA["territories"][0])
+    n_kinds, kinds_table = every_kind()
+    n_clash, n_all, clash_table = kind_collisions()
     n_player = len(DATA["player"])
     n_world = len(DATA["world"])
     n_creation = len(DATA["creation"])
@@ -591,6 +659,42 @@ rather than after.</p>
 <div class="scroll">{simple_table(
     ["Written as", "Means", "Cost of removing it"],
     DATA["sugar"], ["target", "", "note"])}</div>
+
+<h2>Every kind, the way every recipe is</h2>
+<p>Sean, 2026-09-09: <em>I want to be able to review things just as easily as I can review
+formulas.</em> A recipe gets a table of lines and a string for each; here is the other half.
+<strong>All {n_kinds} kinds</strong>, with what a thing of each carries and how it is written.
+The <em>Kinds</em> and <em>Traits</em> tables are copied from the release into this lane's data, so
+the two checks below have a population to count against: <strong>every kind has a row</strong>, and
+<strong>every trait but one lands on a kind</strong> &mdash; <code>unpaid</code> is the exception,
+because it is <em>of a thing with upkeep</em>, which is a predicate rather than a kind.</p>
+{kinds_table}
+
+<h2>Should a kind be a trait?</h2>
+<p><strong>It already is one.</strong> The release's <em>Traits</em> table opens with
+<code>kind &middot; every thing &middot; one of the kinds &middot; stored</code>, and
+<code>spec/invariants.md</code> says <em>a thing is a set of traits, and one of them names its
+kind</em>. So they are not two sorts of thing to be unified; a kind is the value of a trait, and the
+notation writes it first rather than as <code>kind:citizen</code> because every thing has one.</p>
+<p><strong>The question worth asking is the harder one: could it be dropped?</strong> If a thing were
+nothing but its traits, with no discriminator, the traits would have to say which kind it is. They
+cannot. <strong>{n_clash} of the {n_all} kinds share their trait set with another</strong>, so no
+reading of the traits could tell them apart:</p>
+{clash_table}
+<div class="callout">
+<h4>What that settles, and what it does not</h4>
+<p>Five kinds carry <strong>no stored traits whatever</strong>. A yard and a unit of metal are the
+same bag of traits, and only the kind separates them &mdash; so <strong><code>kind</code> is not
+derivable, and dropping it would mean inventing a discriminating trait, which is <code>kind</code>
+under another name.</strong></p>
+<p>It does <em>not</em> settle that kinds are a second sort of thing. They also appear as
+<strong>values</strong>: <code>resource</code> takes <code>food</code>, <code>metal</code> or
+<code>energy</code>, which are kinds, and <code>from</code> and <code>to</code> take places, which
+are things. <code>spec/console.md</code> already leans on this &mdash; <em>a field that refers to a
+thing is named for that thing's kind</em>. So a kind is doing two jobs: it classifies a thing, and it
+is a domain that trait values are drawn from. <strong>Unify the first job with traits, because it
+already is one; keep the second, because a value has to come from somewhere.</strong></p>
+</div>
 
 <h2>A thing, as tabular data and as text</h2>
 <p>Sean, 2026-09-09: <em>I want to see things as organized tabular data, with the corresponding text
