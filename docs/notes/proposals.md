@@ -60,6 +60,29 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-359 - `temporary-notes/` is read when you point at it, and not otherwise
+
+**to** sean - **status** open - **raised** 2026-09-08 - **kind** recovered - **asks** approval -
+**shape** text - **into** `CLAUDE.md` -> Perspectives, after the sentence that begins
+*`temporary-notes/` is Sean's*
+
+**`CLAUDE.md` says no instance writes there and that it is not tracked. It says nothing about
+reading** - and the file's general rule is that everyone reads everything. **So a lane following the
+rules exactly would read a thought you have not decided to keep**, and could act on it. That is what
+your sentence closes, and nothing in the file closes it today.
+
+> **And no instance reads it unless he points at a file.** What is there are thoughts he has not
+> decided to keep, so reading one uninvited risks a lane treating a half-formed idea as intent. He
+> names the file when he wants what is in it made formal; **until then it is addressed to nobody.**
+
+**The last phrase is deliberate rather than decorative.** `CLAUDE.md` already says *unaddressed
+research is addressed to nobody, and that is a feature* - so this is the same idea applied to your
+notes rather than a lens's, and it reads as the file's own vocabulary.
+
+**One word I chose and you should check**: *unless he points at a file*, where you said *typically*.
+I made it a rule rather than a tendency, because a lane cannot act on a tendency - it either reads
+uninvited or it does not. **If you meant the looser thing, say so and it becomes *unless he asks*.**
+
 ### P-358 - `P-351` made the release contradict itself, and one word fixes it
 
 **to** sean - **status** open - **raised** 2026-09-08 - **kind** the code lane's `C-68` - **asks**
@@ -2866,6 +2889,7 @@ again in a later session.
 | P-348, whether an empty grouping is the answer or the defect   | Sean, 2026-09-07: *I don't know if it is the right answer, but I do expect a small number of distinct things, so I am willing to accept it as correct enough for now.* Reading 1 accepted. He added *I don't want speculation competing with my review process* - two of the three readings were this lane's invention and should not have been offered                                                    |
 | P-347, whether founding should require the pioneer to be there | Sean, 2026-09-07: *founding should require the pioneer to be there.* Not a rejection - the decision that makes the current behaviour a defect. Filed as `S-76`; `move` then fires because the game needs it rather than because a case was written for it                                                                                                                                                  |
 | P-354, how a thing says what it can do                         | Sean, 2026-09-08, on all three: *trait confirmed; derived confirmed, mainly because i think we gain a lot of simplicity for the same amount of strategic depth; consume-and-produce confirmed.* Not a rejection - three decisions made. **3 is the status quo**, so nothing is written or built. **1 waits on `P-355`**, since a derived trait must name its derivation                                    |
+| P-357, where `notes-to-incorporate-then-remove/` sits          | Sean, 2026-09-08: he is using `temporary-notes/` instead, and moved `sample-turn.md` there. **Answered by the directory ceasing to exist** - that file was its last tracked one, committed in `e6cb9e8`, which is the third option the item recommended. No rule needed                                                                                                                                    |
 | A, disorder persists and a store built later recovers it       | Sean, 2026-09-05: *while A could be interesting, so could a lot of other things and I need a more solid foundation before such exploration.* Not rejected on its merits - deferred for sequencing, and he has now declined two interesting options this way                                                                                                                                                |
 
 ## Withdrawn

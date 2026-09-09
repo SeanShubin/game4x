@@ -8,6 +8,29 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-08, that `temporary-notes/` is his and is read only when he says
+
+*I am no longer going to be using notes-to-incorporate-then-remove, I will be using temporary-notes
+instead, thats why I moved sample-turn there, these are just thoughts in my head that I am not ready
+to go into version control, and I typically will only want you to look at them when I direct you to,
+when I want the temporary ideas there made formal.*
+
+**Two things, and only one of them is already written.**
+
+**The directory is finished.** `sample-turn.md` was the last tracked file under
+`notes-to-incorporate-then-remove/`, so committing his move emptied it. **`P-357` is answered by the
+thing it asked about ceasing to exist**, which is the option its own name suggested - *incorporate,
+then remove*.
+
+**The reading rule is new.** `CLAUDE.md` says no instance **writes** there and that it is not
+tracked. **It does not say anything about reading**, and the file's general rule is *everyone reads
+everything*. So a lane following the rules exactly would read half-formed thoughts and could act on
+one. **That is the risk his sentence closes**, and it is `P-359`.
+
+**It has a shape the file already uses**, which is why it fits rather than being bolted on:
+*unaddressed research is addressed to nobody, and that is a feature.* A note he has not pointed at is
+addressed to nobody in the same sense.
+
 ## Decided 2026-09-08, stored for now, to see the problems rather than predict them
 
 *I am trying to balance future proofing with making it concrete so that I can see the problems in
