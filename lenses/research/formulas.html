@@ -827,8 +827,77 @@ out for being written twice rather than for being written at all.</p>
 </tr>
 </tbody></table></div>
 
+<h2>Repetition, or quantification</h2>
+<p>Sean, 2026-09-09: <em>should we have a construct for repetition? It is an extra construct but has
+the potential to lower the number of instructions needed.</em> Then, a minute later:
+<em>I suppose repetition and quantity are similar concepts.</em></p>
+<p><strong>They are the same concept, and the specification already says exactly when.</strong>
+<code>change +2 citizen in t</code> <em>is</em> the creation of a citizen repeated twice &mdash; the
+amount column is a repetition count written as a number. So there is no question of adding
+repetition; it is there, and it is called a quantity.</p>
+<div class="callout">
+<h4>The line between them is whether the repeated things are distinguishable</h4>
+<p><code>spec/console.md</code>: <strong>what a thing contains is a map from a description to a
+quantity</strong>, and <strong>each distinct description is its own entry</strong>. So a quantity is
+always <em>per description</em>. Two citizens made in the same territory share a description, so
+they are one entry of two. Twelve territories have different ids, so they are twelve descriptions
+and <strong>no number can merge them</strong>.</p>
+<p>The rule is already stated from the other side as well: <strong>there is never a quantity of a
+thing with an <code>id</code></strong>, and a thing carrying one has a description no other thing
+shares, so its quantity is always one. <strong><code>change +12 territory</code> is therefore not
+merely awkward, it is forbidden</strong> &mdash; and that is the whole reason
+<code>make-territory</code> has to be called twelve times rather than once with an amount.</p>
+<p>So the missing construct is not repetition. <strong>It is what you need when repetition cannot
+collapse into a quantity</strong>, which is quantification: one firing per member of a set, with
+something bound differently each time.</p>
+</div>
+<div class="scroll"><table><thead><tr><th></th><th>What it is</th><th>Where it is used</th>
+<th>Is it expressible?</th></tr></thead><tbody>
+<tr><td class="target"><strong>Repetition</strong></td>
+<td>the same thing, n times</td>
+<td><strong>8</strong> changes whose amount is more than one</td>
+<td><strong>Yes, twice over.</strong> The amount column does it for a change, and
+<code>spec/console.md</code> gives a command a <code>repeat</code>, which is <em>how many times it
+fires</em>. A third way would buy nothing.</td></tr>
+<tr><td class="target"><strong>Quantification</strong></td>
+<td>once per member of a set, with something bound differently each time</td>
+<td><strong>6</strong> of the 22 recipes, plus <strong>4</strong> lines of
+<code>make-world</code></td>
+<td><strong>No, nowhere.</strong> The 6 hide it in a prose <em>selection</em> field that is
+not part of the language; the 4 hide it in a comment, where nothing can run it.</td></tr>
+</tbody></table></div>
+<div class="callout">
+<h4>It is not sugar, and the reason is <code>xE</code></h4>
+<p>The test this report has used since <code>X-11</code> is Felleisen's: a construct is
+<em>eliminable</em> if a local expansion removes it without restructuring anything. Quantification
+over twelve territories expands to twelve lines &mdash; linear, and by that test sugar.</p>
+<p><strong>Except that twelve is not a constant.</strong> <code>spec/console.md</code> has
+<code>create planet &lt;size&gt;</code> and <code>spec/planet.md</code> has five planet sizes, so the
+number of territories is a parameter and the number of shared edges is whatever the geometry gives
+&mdash; which is why that row's multiplicity is written <code>xE</code> and not a number.
+<strong>You cannot expand what you cannot count when you write it.</strong> So quantification is not
+removable by a local expansion, which is precisely what it means for a construct to add expressive
+power rather than convenience.</p>
+</div>
+<div class="callout">
+<h4>And it is already half-built, in two places</h4>
+<p><code>spec/invariants.md</code>: <strong>a rule is a source of transitions, not a kind of
+one.</strong> A rule that is a <em>source</em> of many is a schema, and turning it into its
+transitions is quantification &mdash; so the specification has already committed to this, and the
+word for it is grounding.</p>
+<p><code>check.py</code> does it today. <code>work</code> names the family <code>resource</code> and
+the checker expands it into <code>work[food]</code>, <code>work[metal]</code> and
+<code>work[energy]</code>, which is <code>X-17</code>. <strong>That is a quantifier over a family,
+already implemented, and the same operation an interface performs to build a menu.</strong> What is
+missing is not the machinery but a way to write it in a line.</p>
+<p><strong>The caveat is the same one <code>X-9</code> gave <code>call</code>.</strong> A quantifier
+ranging over a set the recipe does not change is finite and free. One ranging over something the
+recipe itself creates is a loop, and that is where the analysis stops terminating. <em>Each
+territory</em> is safe; <em>each thing this makes</em> is not.</p>
+</div>
+
 <h2>Still open, and yours to take</h2>
-<p>6 of the 13 questions this re-encoding raised are still open. The rest are
+<p>7 of the 14 questions this re-encoding raised are still open. The rest are
 below, under <em>What has already been settled</em>, so that this list is short enough to be a list
 of things to do.</p>
 <div class="scroll"><table><thead><tr>
@@ -865,6 +934,11 @@ of things to do.</p>
 <td>OPEN - what is a food store for?</td>
 <td>Food is made with keeps 1. The turn order is upkeep, grow, perish, age, spoil - so food made this turn is aged to 0 and spoiled at the same turn end, whether it is in a store or in nothing.</td>
 <td class="note">If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect.</td>
+</tr>
+<tr>
+<td>OPEN - a construct for quantification, which is not the same as repetition</td>
+<td>Repetition is covered twice already - the amount column and the console's &lt;code&gt;repeat&lt;/code&gt;. Quantification, one firing per member of a set, is covered nowhere and is used in ten places.</td>
+<td class="note">Six world recipes hide it in a prose &lt;em&gt;selection&lt;/em&gt;; &lt;code&gt;make-world&lt;/code&gt;'s four calls hide it in a comment. See &lt;em&gt;Repetition, or quantification&lt;/em&gt;.</td>
 </tr>
 </tbody></table></div>
 

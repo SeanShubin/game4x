@@ -779,6 +779,11 @@
       "NOTED - found-colony has no stores for two independent reasons",
       "Both stores were dropped for conservation: garrison + 2 extractors = 3, exactly an ark's Binding.",
       "The food one also buys nothing, so it would have gone anyway. **The metal store does buy something and still stays out** - a new colony gets the minimum that works and builds its own stores. Two reasons agreeing is not two pieces of evidence."
+    ],
+    [
+      "OPEN - a construct for quantification, which is not the same as repetition",
+      "Repetition is covered twice already - the amount column and the console's <code>repeat</code>. Quantification, one firing per member of a set, is covered nowhere and is used in ten places.",
+      "Six world recipes hide it in a prose <em>selection</em>; <code>make-world</code>'s four calls hide it in a comment. See <em>Repetition, or quantification</em>."
     ]
   ],
   "collapse": [

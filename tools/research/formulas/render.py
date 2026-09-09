@@ -519,6 +519,22 @@ def storage_table():
     )
 
 
+def repetition_counts():
+    """Where each sort of repeating shows up, counted rather than recalled."""
+    every = DATA["player"] + DATA["world"] + DATA["creation"]
+    quantified = [f["name"] for f in every if "each" in f.get("selection", "")]
+    multiplied = [
+        (f["name"], t) for f in every for op, t, a, _at, _n in f["lines"]
+        if op == "change" and str(a).lstrip("+-").isdigit() and abs(int(a)) > 1
+    ]
+    in_comment = [
+        (f["name"], t) for f in every for _op, t, a, _at, _n in f["lines"]
+        if str(a).startswith("x")
+    ]
+    assert quantified and multiplied and in_comment, "counted over nothing"
+    return len(quantified), len(multiplied), len(in_comment), len(every)
+
+
 def assumption_table():
     """What the encoding assumed, and how many lines needed each - counted, not written."""
     rows = []
@@ -589,6 +605,7 @@ def main():
     open_decisions, shut_decisions = decisions_split()
     cap_table = capacity_table()
     n_storage, sto_table = storage_table()
+    n_quant, n_mult, n_comment, n_recipes = repetition_counts()
     c6 = RESULTS["containment"]
     c6_examined, c6_x20 = c6["examined"], c6["x20_lines"]
     n_declared = c6["declared"]
@@ -895,6 +912,75 @@ out for being written twice rather than for being written at all.</p>
 <div class="scroll">{simple_table(
     ["Container", "Holds", "Up to", "Was it ever in a recipe?"],
     DATA["capacities"], ["target", "target", "amt", "note"])}</div>
+
+<h2>Repetition, or quantification</h2>
+<p>Sean, 2026-09-09: <em>should we have a construct for repetition? It is an extra construct but has
+the potential to lower the number of instructions needed.</em> Then, a minute later:
+<em>I suppose repetition and quantity are similar concepts.</em></p>
+<p><strong>They are the same concept, and the specification already says exactly when.</strong>
+<code>change +2 citizen in t</code> <em>is</em> the creation of a citizen repeated twice &mdash; the
+amount column is a repetition count written as a number. So there is no question of adding
+repetition; it is there, and it is called a quantity.</p>
+<div class="callout">
+<h4>The line between them is whether the repeated things are distinguishable</h4>
+<p><code>spec/console.md</code>: <strong>what a thing contains is a map from a description to a
+quantity</strong>, and <strong>each distinct description is its own entry</strong>. So a quantity is
+always <em>per description</em>. Two citizens made in the same territory share a description, so
+they are one entry of two. Twelve territories have different ids, so they are twelve descriptions
+and <strong>no number can merge them</strong>.</p>
+<p>The rule is already stated from the other side as well: <strong>there is never a quantity of a
+thing with an <code>id</code></strong>, and a thing carrying one has a description no other thing
+shares, so its quantity is always one. <strong><code>change +12 territory</code> is therefore not
+merely awkward, it is forbidden</strong> &mdash; and that is the whole reason
+<code>make-territory</code> has to be called twelve times rather than once with an amount.</p>
+<p>So the missing construct is not repetition. <strong>It is what you need when repetition cannot
+collapse into a quantity</strong>, which is quantification: one firing per member of a set, with
+something bound differently each time.</p>
+</div>
+<div class="scroll"><table><thead><tr><th></th><th>What it is</th><th>Where it is used</th>
+<th>Is it expressible?</th></tr></thead><tbody>
+<tr><td class="target"><strong>Repetition</strong></td>
+<td>the same thing, n times</td>
+<td><strong>{n_mult}</strong> changes whose amount is more than one</td>
+<td><strong>Yes, twice over.</strong> The amount column does it for a change, and
+<code>spec/console.md</code> gives a command a <code>repeat</code>, which is <em>how many times it
+fires</em>. A third way would buy nothing.</td></tr>
+<tr><td class="target"><strong>Quantification</strong></td>
+<td>once per member of a set, with something bound differently each time</td>
+<td><strong>{n_quant}</strong> of the {n_recipes} recipes, plus <strong>{n_comment}</strong> lines of
+<code>make-world</code></td>
+<td><strong>No, nowhere.</strong> The {n_quant} hide it in a prose <em>selection</em> field that is
+not part of the language; the {n_comment} hide it in a comment, where nothing can run it.</td></tr>
+</tbody></table></div>
+<div class="callout">
+<h4>It is not sugar, and the reason is <code>xE</code></h4>
+<p>The test this report has used since <code>X-11</code> is Felleisen's: a construct is
+<em>eliminable</em> if a local expansion removes it without restructuring anything. Quantification
+over twelve territories expands to twelve lines &mdash; linear, and by that test sugar.</p>
+<p><strong>Except that twelve is not a constant.</strong> <code>spec/console.md</code> has
+<code>create planet &lt;size&gt;</code> and <code>spec/planet.md</code> has five planet sizes, so the
+number of territories is a parameter and the number of shared edges is whatever the geometry gives
+&mdash; which is why that row's multiplicity is written <code>xE</code> and not a number.
+<strong>You cannot expand what you cannot count when you write it.</strong> So quantification is not
+removable by a local expansion, which is precisely what it means for a construct to add expressive
+power rather than convenience.</p>
+</div>
+<div class="callout">
+<h4>And it is already half-built, in two places</h4>
+<p><code>spec/invariants.md</code>: <strong>a rule is a source of transitions, not a kind of
+one.</strong> A rule that is a <em>source</em> of many is a schema, and turning it into its
+transitions is quantification &mdash; so the specification has already committed to this, and the
+word for it is grounding.</p>
+<p><code>check.py</code> does it today. <code>work</code> names the family <code>resource</code> and
+the checker expands it into <code>work[food]</code>, <code>work[metal]</code> and
+<code>work[energy]</code>, which is <code>X-17</code>. <strong>That is a quantifier over a family,
+already implemented, and the same operation an interface performs to build a menu.</strong> What is
+missing is not the machinery but a way to write it in a line.</p>
+<p><strong>The caveat is the same one <code>X-9</code> gave <code>call</code>.</strong> A quantifier
+ranging over a set the recipe does not change is finite and free. One ranging over something the
+recipe itself creates is a loop, and that is where the analysis stops terminating. <em>Each
+territory</em> is safe; <em>each thing this makes</em> is not.</p>
+</div>
 
 <h2>Still open, and yours to take</h2>
 <p>{n_open} of the {n_decisions} questions this re-encoding raised are still open. The rest are
