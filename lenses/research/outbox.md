@@ -119,7 +119,9 @@ table rather than maintained beside it. **This repository draws that line once a
 **Whether.** Worth reading now; **nothing to act on and nothing to build**. Three things are left
 unsettled on purpose because they are decisions rather than facts - whether a garrison is a fact or a
 quantity, whether an action's subject is derived or selected, and whether object creation stays
-inside this vocabulary at all. **If any of them becomes a specification question it is `to spec`, not
+inside this vocabulary at all.
+
+**Corrected 2026-09-08 by `X-10`, before you built on it.** The claim above that the menu is the set of actions applicable **in the current state** holds only without fog of war. Sean intends heavy fog, and then the menu must be a function of the player's **information set**: every indistinguishable state must offer the same actions, or the menu itself discloses which state it is. **Read `X-10` first.** **If any of them becomes a specification question it is `to spec`, not
 yours**, and this lane has deliberately drafted no text: the vocabulary is the route and not the
 destination, which `CLAUDE.md` names as the trap for exactly this kind of finding.
 
@@ -174,6 +176,53 @@ needs hidden information and randomness, and Distant Worlds 2 needs continuous t
 description language that already solved *any finite deterministic game with full information* needed
 **different languages**, not later versions, for exactly those two things. **Deciding where they live
 before the core is fixed is cheaper than every alternative.**
+
+### X-10 - the menu leaks, so it is computed from what the player knows and not from the state
+
+**to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-the-menu-leaks.md), and Sean stating that fog of war features heavily · **corrects** `X-8`
+
+**This corrects `X-8`, which is still open to you**, so read this before building on it. `X-8` said
+the interface's menu is the set of actions applicable in the current state. **With heavy fog of war
+that is not imprecise, it is forbidden.**
+
+**What.** A player's indistinguishable states form an **information set**, and there is a hard
+requirement on it: **every state in one information set must offer the same available actions.** If
+two states look identical and offer different menus, **the menu discloses which one they are in.**
+GDL-II builds the same condition in - two histories are indistinguishable when the player saw the
+same things **and its own available actions were the same**.
+
+**Why it costs something, concretely.** If *deploy ark here* appears only where the territory has no
+garrison, **the presence of the entry tells the player there is no garrison**, which is the fact the
+fog exists to hide. So a precondition over hidden state **may not gate visibility**. Either the
+condition moves onto the effect, or the action is offered and fails - and **then the rejection is an
+information channel**, which makes `Rejection` a game mechanic rather than an error report. That is a
+design decision and this lane has not taken it.
+
+**It makes `create-if-missing` compelled rather than preferred.** `X-8` treated
+precondition-versus-guard as a choice about what the player sees. Under fog it stops being a choice
+for any condition over hidden state. **Three lines now agree on Sean's own sketch** - interface
+behaviour, `X-9`'s bounded-zero-test split, and this. **Recorded with a caveat**: the second and
+third share a premise about what a garrison is, so three agreeing arguments are weaker evidence than
+they feel.
+
+**Fog itself is cheap to represent.** GDL-II is base GDL plus a `sees(role, fact)` predicate and a
+`random` role, and that suffices for arbitrary finite n-player games with randomness and incomplete
+knowledge. **The expensive half is reasoning about what others know**, which is opponent AI and is
+deferrable knowingly.
+
+**His seeded-PRNG instinct is right and better than GDL-II's**, for a reason already in this
+repository. GDL-II makes nature a player, which is an **extra input**, so the data dump is derivable
+only if you are also told what nature did. **A seed in the state keeps the transformation
+`(state, commands) -> state`**, which `docs/process.md` requires and which is what makes the dump
+derivable by hand. Two things that bite later, both inference rather than citation: **the seed is
+hidden state**, or draws are predictable; and **a single stream leaks across subsystems**, since a
+player learns that something unseen consumed randomness by watching their own next draw move -
+remedied by per-subsystem streams from one master seed.
+
+**Whether.** Worth reading before the prototype's interface takes shape, and **the first paragraph is
+worth reading before you act on `X-8` at all.** Nothing to build yet: the requirement is a constraint
+the design must meet, not a design, and the two ways of meeting it are different games. **No text
+drafted and no decision taken.**
 
 ## Resolved
 

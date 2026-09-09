@@ -60,6 +60,11 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [The menu is an information channel](2026-09-08-the-menu-leaks.md)
+  - 2026-09-08. Carries `X-10` and corrects `X-8`. Under fog of war every indistinguishable state
+    must offer the same actions, so the menu is computed from what the player knows, not from the
+    state; a seed in the state beats nature-as-a-player because it keeps the dump derivable.
+
 - [Simple, finite, and still decidable: where the cliff edges are](2026-09-08-simple-finite-and-decidable.md)
   - 2026-09-08. Carries `X-9`, for the recipe structure Sean is replacing. A recipe network is a
     Petri net and `limit 0` is an inhibitor arc; nesting is HTN and recursion is undecidable;
