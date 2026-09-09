@@ -70,9 +70,16 @@ integer vectors and are legal exactly when nothing goes negative, is a **vector 
 states**. `phase` is the control state; every quantity is a counter. This is not an analogy: it is
 the definition, and it is why boundedness and coverability stay decidable.
 
-One cost of Sean's constraint, named rather than hidden: a VASS uses a single **signed** vector.
-Because a negative may not be written, the model needs two operations - `create` and `consume` -
-where the formalism uses one. That is the price, and it is cheap.
+**Corrected 2026-09-09, same day.** This section first said the model needs two operations where
+the formalism uses one, because a negative could not be written. That was wrong about Sean's
+intent - **amounts are signed, and it is the *result* that may not go negative.** So the fit is
+exact rather than approximate: a signed delta vector, counters that must stay non-negative, and no
+adaptation in between.
+
+**The consequence is a question, not a cost.** If amounts carry a sign, then `create` and `consume`
+are one operation with the sign fixed, and the primitive set is **four** rather than five. Nothing
+here decides that - it is noted because it follows, and because `X-11` reached the same place from
+the other direction: *`subtract` has no counterpart, which a signed amount repairs.*
 
 **`clamp` is monus.** Truncated subtraction, `a ∸ b = 0` when `b` exceeds `a`, is the operator that
 makes the natural numbers a commutative monoid - the standard way to total a subtraction that is
@@ -112,7 +119,8 @@ The distinction matters because it is exactly the thing that makes Sean's versio
 of the design is in the error, not in the unsignedness.** A model whose counts cannot be negative
 and whose underflow *wraps* is worse than one that allows negatives, because the impossible state
 becomes a plausible number instead of a stop. Named here so that the implementation cannot quietly
-be the other one.
+be the other one - and his shape avoids it by construction, because **a signed delta against a
+checked result has somewhere to put the failure**, where an unsigned counter has only a number.
 
 This is the general form of what he described as *a model only capable of representing things that
 actually exist*: the representable states are exactly the possible ones, so a defect that would have
@@ -136,6 +144,64 @@ Three things, and saying so is the point of the exercise.
 
 And `age` and `spoil` do not merge for free. Destroying a thing when its decrement would underflow,
 rather than when `keeps` is already 0, moves every death one turn later.
+
+## Composition, and the objective measure Sean asked for
+
+Added the same day, after he stated the objective: **minimum expressiveness and maximum
+conciseness, constrained by completeness** - and that if being less expressive forces longer
+expressions to say the same thing, that is a failure.
+
+**That test has a name and a definition.** Felleisen, *On the expressive power of programming
+languages* (1991): a construct is **eliminable** if it can be removed by a **local, syntax-directed
+transformation** - a macro - that leaves the surrounding program's structure untouched. If removing
+it forces a global restructuring, it is genuinely more expressive rather than sugar. That is exactly
+his criterion, stated as a property rather than a preference, and it is the same instrument `X-11`
+already used through Nebel's compilation schemes.
+
+**His suspicion about `call` is correct, and it is the standard reason abstraction exists.**
+Procedural abstraction is what decouples succinctness from expressive power: it lets shared
+structure be named once instead of copied, so a small primitive set does not force long formulas.
+This is already measured here rather than argued - `X-12` found `deploy ark` and `found by land`
+sharing seven rows verbatim, and factoring them into `found-colony` took **17 release rows to 10
+lines**. The caveat is `X-9`'s and has not moved: **acyclic** calls buy this for free, and recursive
+ones make the analysis undecidable.
+
+### Whether the lines are sequential
+
+Sean's inclination is that they are not, and that sequential composition is too expressive and will
+produce confusing recipes. Measured over all 22 formulas and 65 lines:
+
+|                                                                     |       |
+| ------------------------------------------------------------------- | ----- |
+| a line reading a **count** another line in the same formula changes | **0** |
+| a line reading a **trait** another line writes                      | **1** |
+| the same trait assigned twice                                       | **0** |
+| a `set` on a thing a `create` in the same formula brings into being | **4** |
+
+**Nothing in the game uses sequential composition.** The one trait case is `move`: `let from =
+unit.location` on line 1, and `set unit.location = $to` on line 4. Under non-sequential semantics
+every line reads the starting state, so `from` is the origin **by construction**. Under sequential
+semantics it is the origin **because the `let` was written first** - and reordering two lines would
+silently make a unit move from its own destination. That is one formula, and it is the whole
+argument from defects rather than from taste.
+
+The four `create`-then-`set` cases are all world-building, and they are the real objection: under
+non-sequential semantics a `set` on a thing that does not exist at the start has no referent. **The
+fix makes the formulas shorter, which is the outcome his test asks for.** A `create` already takes a
+description, and a description is a kind with its traits - so `create territory in game` followed by
+three `set`s is one line that creates a territory with its id, biome and nature. Across the four:
+**13 lines become 4**, and the total goes from 65 to **56**.
+
+**And the checks already assume it.** `effects()` in `check.py` accumulates a formula's net effect
+as `net[k] += sign * n` over its lines, in any order - because check 1 is a P-invariant and check 2
+is a linear program, and both need a formula to *be* a single vector. **If composition were
+sequential, both checks would be unsound**, since the guard would apply at each step rather than to
+the net. That is not an argument from taste either: it is the analysis the report already runs.
+
+So sequential composition is strictly more permissive - `create 3, consume 2` starting from nothing
+succeeds under it and fails under the other - and by his own test it does not earn that: nothing
+uses it, removing it makes the formulas shorter rather than longer, and keeping it would invalidate
+two of the checks.
 
 ## Two defects this found, both in this lane's own tooling
 
@@ -163,5 +229,10 @@ which is the argument for writing the assertion rather than the note.
   represents something that never happens, which is the kind of stored abstraction the rule exists
   to remove. Left as a primitive, used once.
 - Whether `clamp` is adopted at all. It now has a definition and still has no call site.
+- **Whether `create` and `consume` are one operation.** They are, if amounts are signed - which is
+  Sean's intent - and that would make the set four primitives. Not decided, and not implemented.
+- **Whether composition is non-sequential**, and with it whether `create` carries its traits. The
+  measurement above says nothing uses sequential composition, the checks already assume it is not,
+  and removing it shortens the formulas by nine lines. Not implemented either.
 - The nine remaining assumptions in the console encoding, three of which are holes in the
   specification rather than in the notation - see the report.
