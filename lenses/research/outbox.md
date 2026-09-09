@@ -125,6 +125,58 @@ inside this vocabulary at all.
 yours**, and this lane has deliberately drafted no text: the vocabulary is the route and not the
 destination, which `CLAUDE.md` names as the trap for exactly this kind of finding.
 
+### X-11 - the four roles are two dimensions, and `create-if-missing` is a cell the grid always had
+
+**to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-least-expressive-yet-complete.md), and Sean sketching four candidate primitives
+
+**Sean is choosing a primitive set** - composition, subtract, fail-behavior, constraints on
+parameters - and expects some to be subsumed. **His judgement is the measure and this does not argue
+otherwise.** What it adds is one place the literature gives a decision procedure, and a
+decomposition he can check against the specification without building anything.
+
+**The test, and it is the whole of the item.** Nebel's compilation schemes: **conditional effects
+cannot be compiled away preserving linear plan size, and can be with polynomial growth.** Gazen and
+Knoblock's compilation removes them by expanding one operator into **one per combination of which
+conditions hold** - exponential, and shown not improvable. **So fail-behavior is provably not
+sugar.** The sharper point is where the cost lands: removing it **moves the explosion out of the
+generated space and into the hand-authored one** - a recipe with four optional parts becomes sixteen
+recipes a person maintains. Hence: **a primitive earns its place when removing it moves the
+combinatorial explosion from the generated space into the authored space**, and anything whose
+removal only enlarges the generated space is sugar.
+
+**The decomposition, and the part worth checking today.** Two of his four are one thing - a
+*constraint* is a guard and *fail-behavior* is where the guard attaches. And `subtract` has no
+counterpart, which a **signed** amount repairs. Then the present four roles are **two independent
+dimensions**, a **change** and a **threshold**:
+
+- `consume 3 food` - change **-3**, threshold at least 3
+- `require 3 workers` - change **0**, threshold at least 3
+- `produce 1 metal` - change **+1**, no threshold
+- `limit 0 garrison` - no change, threshold **at most 0**
+
+**So `create-if-missing` is not a missing fifth role. It is a cell the grid always had**, which the
+`Role` column could not name because that column conflates the two dimensions into one word. **That
+is a defect in the present structure, found by re-encoding rather than by review**, which is what he
+predicted re-encoding would do.
+
+**The demonstration.** Under this decomposition, the question that took `C-74`, `X-8`, `X-9` and
+`C-75` to circle is one word in one column: today's garrison is
+`threshold(garrison, at most 0, **hard**)` plus `change(garrison, +1)`; his sketch is the same two
+lines with **soft**.
+
+**Three things that do not collapse**, worth knowing before they are discovered: a threshold with a
+zero change is **not** expressible as a change, since a net effect of nothing is not a requirement -
+it is a read arc and genuinely a second primitive. Upper and lower thresholds unify only via
+complementary quantities, which is `C-75`'s construction and **probably not worth taking**, because
+it costs a person reading *garrison-slots-free*. And **composition has an unmade decision inside it**:
+whether each line sees the starting state or the effects of the lines before it, which a recipe that
+consumes and produces the same resource will expose immediately.
+
+**Whether.** **Worth reading before the primitive set is fixed and worth little afterwards.**
+Nothing to build and no decision taken - whether composition is sequential, whether upper thresholds
+stay, and whether a change and a threshold share a line are all left open on purpose. **The naming is
+his**; this is a reading of his four, not a replacement for them.
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

@@ -60,6 +60,11 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [Least expressive yet complete, and the test for whether a primitive earns its place](2026-09-08-least-expressive-yet-complete.md)
+  - 2026-09-08. Carries `X-11`. A primitive earns its place when removing it moves the explosion
+    from the generated space into the authored one; the four roles are two dimensions, a change
+    and a threshold, and `create-if-missing` is a cell the grid always had.
+
 - [The menu is an information channel](2026-09-08-the-menu-leaks.md)
   - 2026-09-08. Carries `X-10`, **whose main claim Sean refuted the same day** - the information-set
     condition is definitional and restricts no game. What stands: a seed in the state beats
