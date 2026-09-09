@@ -189,12 +189,31 @@ jobs:
       # **The markdown siblings go out too**, because the pages link to them: `catalog.html`
       # has `href="catalog.md"`. `R-9` asks that every reference be a link the reader can
       # follow, so dropping them for rendering badly would leave every page with a dead link.
+      # `reports/index.html` links outward at four paths and every one of them is copied
+      # here. Two kinds of copy, deliberately: `scenario/` goes whole because all of it is
+      # canonical data, and the research lens's files go one at a time because `lenses/` is
+      # a working directory - its outbox, its dated reports, its notes to itself - and none
+      # of that belongs on the site. `X-16`.
+      #
+      # The link is the repository's own path in both cases, so the same href works in a
+      # clone and here, and there is no second copy of anything to go stale.
+      #
+      # `tests/browsable.rs` reads this file and fails if a linked path is not named in it.
+      # That check can see the name and not the copy, so every copy asserts its own result
+      # below - `cp` of a moved file is loud, but a `cp -r` of a moved directory is not.
       - name: Copy the reports into the artifact
         run: |
           cp -r reports crates/game4x/dist/reports
           cp -r scenario crates/game4x/dist/scenario
+          mkdir -p crates/game4x/dist/lenses/research crates/game4x/dist/tools/research/formulas
+          cp lenses/research/formulas.html crates/game4x/dist/lenses/research/formulas.html
+          cp tools/research/formulas/data.json crates/game4x/dist/tools/research/formulas/data.json
+          cp tools/research/formulas/results.json crates/game4x/dist/tools/research/formulas/results.json
           test -f crates/game4x/dist/reports/index.html
           test -f crates/game4x/dist/scenario/expected/play.4x
+          test -f crates/game4x/dist/lenses/research/formulas.html
+          test -f crates/game4x/dist/tools/research/formulas/data.json
+          test -f crates/game4x/dist/tools/research/formulas/results.json
           echo "Published $(find crates/game4x/dist/reports -type f | wc -l) report files"
 
       - name: Upload Pages artifact

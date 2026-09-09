@@ -671,6 +671,35 @@ pub fn html_name(markdown: &str) -> &'static str {
 /// nothing and must go on depending on nothing. So the generator moved here and this list lost
 /// a name.
 pub const RENDERED_ELSEWHERE: [&str; 1] = ["catalog.md"];
+/// The research lens's files, linked from the index and published beside the reports - `X-16`.
+///
+/// **Three files by name, not a directory.** Copying `lenses/` whole would publish a lens's
+/// working directory alongside the game - its outbox, its dated reports, its notes to itself -
+/// and none of that is what the site is for. Naming the files publishes the files.
+///
+/// **The path is the repository's, so a clone and the site agree.** The alternative was a
+/// second copy under a path invented for the deployment, which is one more generated file to
+/// go stale and a link meaning two different things depending on where it is read.
+///
+/// **Not state, and the heading says so.** `reports/` is generated from the game; these are
+/// generated from `tools/research/formulas/data.json` by a lens that cannot write here. Sean
+/// asked for the report to be *rendered somewhere reasonable upon deploy* and said it need
+/// not go through the specification lane, so the shape was this lane's.
+pub const RESEARCH: [(&str, &str); 3] = [
+    (
+        "lenses/research/formulas.html",
+        "the specification re-expressed in six primitives, and the world built from an empty \
+         game in the same six",
+    ),
+    (
+        "tools/research/formulas/data.json",
+        "the only one of these edited by hand - the report above is generated from it",
+    ),
+    (
+        "tools/research/formulas/results.json",
+        "what the three checks last reported",
+    ),
+];
 
 /// The generated marker, on line two of every page.
 ///
@@ -1159,6 +1188,38 @@ pub fn index(generated: &[(String, String)]) -> String {
             "{markdown} has no page, so nothing on the index links it"
         );
     }
+    out.push_str("</ul>\n");
+
+    // **`X-16`: the research lens's files, last and plainly apart.** Everything above is
+    // generated from the game; these are generated from a lens's own data by a lane that
+    // cannot write this page. A heading saying which is what keeps `reports/` meaning the
+    // state - the alternative was listing them under *Reports*, where a reader would take
+    // them for one more view of the scenario.
+    //
+    // **Linked at the repository's own path**, so one href works in a clone and on the
+    // published site, and `the_reports_point_outward_only_at_what_the_pipeline_publishes`
+    // is what holds the pipeline to copying them.
+    out.push_str("<h2>Research</h2>\n");
+    out.push_str(
+        "<p class=\"note\">Not the game's state, and not generated from it. These are the \
+         research lens's files, published beside the reports because nothing else on the \
+         site reaches them. Linked at the path they live at, so the link means the same \
+         thing in a clone as it does here.</p>\n",
+    );
+    out.push_str("<ul class=\"reports\">\n");
+    let mut research = 0;
+    for (path, what) in RESEARCH {
+        out.push_str(&format!(
+            "<li><a href=\"../{path}\">../{path}</a> <span class=\"what\">- {what}</span></li>\n"
+        ));
+        research += 1;
+    }
+    assert_eq!(
+        research,
+        RESEARCH.len(),
+        "every research file is linked exactly once"
+    );
+
     out.push_str(
         "</ul>
 </body>

@@ -256,12 +256,24 @@ fn every_column_is_either_a_reference_or_declared_not_to_be() {
 ///
 /// It asserts the set rather than a count, because a count would go on passing if one
 /// outward link were replaced by a different one.
+///
+/// # Paths rather than directories - `X-16`
+///
+/// **Whole paths, because two kinds of thing are published now.** `scenario/` is copied
+/// whole; the research lens's three files are copied by name, so that publishing one file
+/// out of `lenses/` does not publish a lens's working directory. A check on the first path
+/// segment would have accepted `../lenses/quality/outbox.md` and let it 404, which is the
+/// narrower-predicate failure this repository has recorded often enough to expect.
+///
+/// **Both directions, so a stale entry is as loud as a missing one.** Every path linked must
+/// be published, and everything named as published must be linked and must be on disk -
+/// otherwise a file that moved leaves a copy line copying nothing and a check agreeing.
 #[test]
 fn the_reports_point_outward_only_at_what_the_pipeline_publishes() {
-    /// Directories the pipeline copies beside `reports/`. Adding one here is a promise that
-    /// `.github/workflows/pipeline.yml` copies it too.
-    const PUBLISHED_BESIDE: [&str; 1] = ["scenario"];
+    /// Directories the pipeline copies whole beside `reports/`.
+    const PUBLISHED_WHOLE: [&str; 1] = ["scenario"];
 
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let files = everything();
     assert!(
         files.len() > 20,
@@ -277,10 +289,12 @@ fn the_reports_point_outward_only_at_what_the_pipeline_publishes() {
         }
         for at in text.match_indices("../") {
             links += 1;
-            // The first path segment after `../` is the directory being reached into.
+            // **The whole path, not its first segment.** `/` is deliberately not a
+            // terminator: a file published by name is only published at the name it was
+            // published under.
             let rest = &text[at.0 + 3..];
             let end = rest
-                .find(['/', '"', ')', '\'', ' ', '\n'])
+                .find(['"', ')', '\'', ' ', '\n', '<'])
                 .unwrap_or(rest.len());
             outward.insert(rest[..end].to_string());
         }
@@ -291,11 +305,102 @@ fn the_reports_point_outward_only_at_what_the_pipeline_publishes() {
          `../scenario/commands/play.4x` and `../scenario/expected/play.4x`"
     );
 
-    let expected: BTreeSet<String> = PUBLISHED_BESIDE.iter().map(|it| it.to_string()).collect();
+    // **The pipeline is read rather than trusted.** The list below used to carry a comment
+    // saying that adding a name here was a promise the workflow copied it too, and a promise
+    // is what goes quiet.
+    //
+    // **What is read is where each `cp` puts things, not whether the file mentions a path.**
+    // The first version of this asked `pipeline.contains(path)` and stayed green with the
+    // copy line deleted, because the same path is in the `test -f` line beside it and in the
+    // comment above it - a right answer about the wrong question, which is the shape
+    // `CLAUDE.md` records four times. Three mutations found it: deleting either copy left it
+    // green, and only a link to an unpublished file failed.
+    //
+    // **It still cannot see the copy happen**; it sees a `cp` whose destination is the
+    // artifact path. The `test -f` lines in that step are the half that runs.
+    let pipeline = std::fs::read_to_string(root.join(".github/workflows/pipeline.yml"))
+        .expect("the pipeline that publishes the artifact");
+    let copied: BTreeSet<&str> = pipeline
+        .lines()
+        .map(str::trim)
+        .filter(|line| line.starts_with("cp "))
+        .filter_map(|line| line.split_whitespace().last())
+        .collect();
+    assert!(
+        !copied.is_empty(),
+        "the pipeline copies nothing into the artifact, so either it changed shape or this \
+         no longer reads it"
+    );
+
+    // **A path is under a directory published whole, or it is not.** The two halves are
+    // checked differently because they are different promises: a directory published whole
+    // carries whatever is in it, so any number of links may reach into it; a file published
+    // by name carries only itself.
+    let under = |target: &str| {
+        PUBLISHED_WHOLE
+            .iter()
+            .any(|directory| target.starts_with(&format!("{directory}/")))
+    };
+
+    // **Set equality on the by-name half, in both directions at once.** A link to a file
+    // nothing copies fails here, and so does a copy line outliving the link that wanted it -
+    // the second being the one nothing else would notice, because a file copied and never
+    // read looks exactly like a file copied and read.
+    let linked_by_name: BTreeSet<String> = outward
+        .iter()
+        .filter(|target| !under(target))
+        .cloned()
+        .collect();
+    let published_by_name: BTreeSet<String> = dump::RESEARCH
+        .iter()
+        .map(|(path, _)| (*path).to_string())
+        .collect();
     assert_eq!(
-        outward, expected,
-        "the reports reach outward at {outward:?} and the pipeline publishes {expected:?} \
-         beside them - anything in the first and not the second is a link that works in a \
-         clone and 404s on the published page"
+        linked_by_name, published_by_name,
+        "the reports link outward at {linked_by_name:?} outside the directories published \
+         whole, and the pipeline publishes {published_by_name:?} by name - anything in the \
+         first and not the second is a link that works in a clone and 404s on the published \
+         page"
+    );
+
+    // **No count over the directory half, deliberately.** A third file linked inside
+    // `scenario/` is already published and would fail a count, and the fix for that would be
+    // to raise the number - which is how a duplicate on the index survived a week. What is
+    // asserted instead is that each published directory is reached by something, so a copy
+    // nobody links is as loud as a link nobody copies.
+    for directory in PUBLISHED_WHOLE {
+        assert!(
+            outward
+                .iter()
+                .any(|target| under(target) && target.starts_with(&format!("{directory}/"))),
+            "`{directory}` is published beside the reports and nothing links into it, so the \
+             copy is carrying a directory no reader reaches"
+        );
+        let into = format!("crates/game4x/dist/{directory}");
+        assert!(
+            copied.contains(into.as_str()),
+            "`{directory}` is named as published whole and no `cp` in \
+             `.github/workflows/pipeline.yml` has `{into}` as its destination"
+        );
+    }
+
+    for (path, _) in dump::RESEARCH {
+        assert!(
+            root.join(path).is_file(),
+            "`{path}` is published and linked, and is not in the repository"
+        );
+        let into = format!("crates/game4x/dist/{path}");
+        assert!(
+            copied.contains(into.as_str()),
+            "`{path}` is linked from the index and no `cp` in \
+             `.github/workflows/pipeline.yml` has `{into}` as its destination, so it would \
+             404 on the published page"
+        );
+    }
+
+    assert!(
+        !linked_by_name.is_empty() && outward.len() > linked_by_name.len(),
+        "both halves have to be exercised or one of the two rules was never asked: \
+         {outward:?} outward, of which {linked_by_name:?} are published by name"
     );
 }
