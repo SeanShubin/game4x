@@ -80,7 +80,7 @@ Every territory has total capacity for at least one food extractor.
 
 ## Where things are
 
-Every thing is in another thing, and this release has three sorts of capacity.
+Every thing but the game is in another thing, and this release has three sorts of capacity.
 
 | Container                               | Holds                         | Up to                            |
 | --------------------------------------- | ----------------------------- | -------------------------------- |

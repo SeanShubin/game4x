@@ -60,74 +60,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-359 - `temporary-notes/` is read when you point at it, and never decides anything
-
-**to** sean - **status** open - **raised** 2026-09-08 - **rewritten** 2026-09-08, to carry the path
-you named - **asks** approval - **shape** text - **into** `CLAUDE.md` -> Perspectives, after the
-sentence that begins *`temporary-notes/` is Sean's*
-
-**`CLAUDE.md` says no instance writes there and that it is not tracked. It says nothing about
-reading**, and the file's general rule is that everyone reads everything - so a lane following the
-rules exactly would read a thought you have not decided to keep. **And it says nothing about the path
-out**, which is the half that makes the rule safe rather than merely restrictive.
-
-> **And no instance reads it unless he points at a file.** What is there are thoughts he has not
-> decided to keep, so reading one uninvited risks a lane treating a half-formed idea as intent. He
-> names the file when he wants what is in it made formal; **until then it is addressed to nobody.**
->
-> **There is a path out, and the original never travels it.** He says which ideas to take, and they
-> are written into the column that owns them. **What is in `temporary-notes/` is never canonical and
-> what is derived from it may be** - so being told to read a note begins the ordinary route rather
-> than shortening it, and anything bound for `spec/` still arrives by promotion.
-
-**Both halves have a shape the file already uses**, which is why this reads as its own vocabulary
-rather than a new mechanism:
-
-- *Unaddressed research is addressed to nobody, and that is a feature* - the first paragraph is that,
-  applied to your notes rather than a lens's
-- *The rendering is generated and never canonical*, and *anything in `docs/notes/` is a proposal,
-  however confident it sounds* - **a source that never decides, and derived work that can**
-
-**One guard I added that you did not say**, because the file already says it of proposals and the
-same trap exists here: *anything bound for `spec/` still arrives by promotion*. Without it,
-**told to read a note and make it formal** could be read as permission to write into `spec/`
-directly, which `CLAUDE.md` forbids everywhere else - *accepting a proposal is not permission to
-write it*. **Say if that is heavier than you want.**
-
-**And the word I flagged before still stands**: you said *typically*, and I have written a rule,
-because a lane cannot act on a tendency. If you meant the looser thing it becomes *unless he asks*.
-
-### P-358 - `P-351` made the release contradict itself, and one word fixes it
-
-**to** sean - **status** open - **raised** 2026-09-08 - **kind** the code lane's `C-68` - **asks**
-approval - **shape** an instruction - **into** `releases/first-release.md` -> *Where things are*
-
-**My promotion caused this and the code lane found it while building.** `P-351` made `game` a kind
-and I checked two consequences in the item - the red gate and `R-8`'s sixteenth group - and not this
-one.
-
-**What the release now says twice, and cannot mean both.** *Where things are* opens: **Every thing is
-in another thing.** `game` is a kind as of `P-351`, and `spec/logistics.md` says **the game is the
-one thing that is in nothing.** Before `P-351` the sentence ranged over fifteen kinds all of which
-are in something, so it was true; **the sixteenth is the exception it never had.**
-
-**The instruction.** In *Where things are*, replace the opening sentence with:
-
-> Every thing but the game is in another thing, and this release has three sorts of capacity.
-
-**How to tell it was carried out**: the section's first sentence names `game`, the three capacity
-rows are unchanged, and `Every thing is in another thing` appears nowhere in the file.
-
-**Why not the other option `C-68` offers**, which is what makes this ask approval rather than a
-decision. A fourth row in the table would say it in the table's own terms - but the columns are
-*Container*, *Holds* and *Up to*, and **the game's capacity has no bound**. There is no form for
-that in the table, so a row would introduce **unbounded capacity** as a new concept. **The sentence
-introduces nothing**: it echoes `spec/logistics.md`, which you have already promoted.
-
-**What it fixes downstream**, from their item: `may_contain` is what tells *empty* from *never*, and
-a root that declares no capacity would draw as a thing that **never could** hold the twelve
-territories - the opposite of the rule, on the one node every page starts from.
-
 ## Addressed to other perspectives
 
 ### S-80 - Put the reports in the Pages artifact, so Sean can browse them
@@ -2869,6 +2801,8 @@ work the release exists to order.
 | P-352, the staging bullet gains the reason care cannot close it, and the check that can                                      | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-07 |
 | P-346, the `A move` column goes                                                                                              | `releases/first-release.md` -> Units and structures                                                                                                                                                      | 2026-09-08 |
 | P-355, `movable` is a stored trait, and a `Movable` column declares it                                                       | `releases/first-release.md` -> Traits, Units and structures                                                                                                                                              | 2026-09-08 |
+| P-358, `P-351` made the release contradict itself, and one word fixes it                                                     | `releases/first-release.md` -> Where things are                                                                                                                                                          | 2026-09-08 |
+| P-359, `temporary-notes/` is read when he points at it, and never decides anything                                           | `CLAUDE.md` -> Perspectives                                                                                                                                                                              | 2026-09-08 |
 | P-322, a deposit is a thing, so a territory's density has somewhere to be written                                            | `releases/first-release.md` -> Kinds, Traits                                                                                                                                                             | 2026-09-06 |
 | P-323, a field is named for the kind it refers to; a command is named for its recipe and may repeat                          | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-06 |
 | P-324, being blocked on one thing is not being blocked, and it applies to every lane                                         | `docs/process.md` -> All lanes                                                                                                                                                                           | 2026-09-06 |

@@ -8,8 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-359** - `temporary-notes/` is read when you point at it, and never decides anything · `docs/notes/proposals.md`
-- **P-358** - `P-351` made the release contradict itself, and one word fixes it · `docs/notes/proposals.md`
 - **P-356** - A field may name a kind instead of a thing, and nothing says so · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -77,19 +75,19 @@ it exists to ask.
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
-- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352
+- `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
+- `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
-- `releases/first-release.md` -> Where things are - P-265, P-311, P-320
 - `spec/control.md` -> Winning - P-77, P-81, P-125
 - `spec/resources.md` -> The list - P-49, P-65, P-338
 - `docs/process.md` - P-289, P-291

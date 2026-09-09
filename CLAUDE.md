@@ -63,6 +63,15 @@ code lane was the only one that cost nothing already being paid.**
 asked for by name. It is not tracked - the files in it are transient, which is what the name says -
 and it is not `docs/notes/`, which is Claude's and is kept.
 
+**And no instance reads it unless he points at a file.** What is there are thoughts he has not
+decided to keep, so reading one uninvited risks a lane treating a half-formed idea as intent. He
+names the file when he wants what is in it made formal; **until then it is addressed to nobody.**
+
+**There is a path out, and the original never travels it.** He says which ideas to take, and they
+are written into the column that owns them. **What is in `temporary-notes/` is never canonical and
+what is derived from it may be** - so being told to read a note begins the ordinary route rather
+than shortening it, and anything bound for `spec/` still arrives by promotion.
+
 **Everyone reads everything; nobody writes outside their own column.** That asymmetry is what makes
 them composable rather than merely separated - a perspective that cannot read the others has to
 guess, and one that can write to another has to be trusted. **It binds each producer against the
