@@ -8,11 +8,12 @@ offered for Sean's review. A proposal becomes real only when he accepts it and i
 
 ## The files that need you
 
-**Two things only you can do, and one page to browse from.**
+**Three things only you can do, and one page to browse from.**
 
 | To           | Read                                                                                                                                                                                                              |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **create**   | this file. You approve, or say what to change                                                                                                                                                                     |
+| **decide**   | [`decisions.md`](decisions.md) - the questions only you can answer, which are not words to approve. Empty when none is open                                                                                       |
 | **browse**   | [`reports/index.html`](../../reports/index.html) - every generated view, and links to the two files below                                                                                                         |
 | **validate** | [`scenario/expected/play.4x`](../../scenario/expected/play.4x) beside [`scenario/commands/play.4x`](../../scenario/commands/play.4x) - what the scenario is expected to produce, and the commands that produce it |
 
@@ -21,8 +22,9 @@ while approving, rather than as separate errands.
 
 **Why these and not others is in [`docs/process.md`](../process.md)** - *What I read, and what I do*,
 and *Outboxes and the index* for what is deliberately not yours. **That document decides it and this
-table is only the two files**, because `P-245` says a document that restates another links to it
-rather than listing it.
+table is only the three artifacts it names**, because `P-245` says a document that restates another
+links to it rather than listing it. It said *two* and named two while that document named three,
+which is how `P-356` sat in a file nothing pointed at.
 
 ## How this works
 
