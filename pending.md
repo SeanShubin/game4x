@@ -36,7 +36,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
 - **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
 
-### To spec (23)
+### To spec (24)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
@@ -61,6 +61,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-14** - founding is an undeclared metal source; Sean has decided, and the release still says otherwise · `lenses/research/outbox.md`
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
+- **X-20** - a loose resource has nowhere to be that both documents allow · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 

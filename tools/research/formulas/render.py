@@ -472,6 +472,22 @@ def decisions_split():
     return op, shut
 
 
+def capacity_table():
+    """Every kind, and how capacity treats it."""
+    rows = "".join(
+        f'<tr><td class="target">{esc(k)}</td><td>{where}</td><td>{at}</td>'
+        f"<td>{life}</td><td class=\"note\">{note}</td></tr>"
+        for k, where, at, life, note in DATA["capacity_shape"]
+    )
+    assert len(DATA["capacity_shape"]) == len(DATA["kinds"])
+    return (
+        '<div class="scroll"><table><thead><tr><th>Kind</th><th>Where the bound lives</th>'
+        "<th>At the bound</th><th>Lifetime</th><th></th></tr></thead><tbody>"
+        + rows
+        + "</tbody></table></div>"
+    )
+
+
 def assumption_table():
     """What the encoding assumed, and how many lines needed each - counted, not written."""
     rows = []
@@ -540,6 +556,7 @@ def main():
     n_kinds, kinds_table = every_kind()
     n_clash, n_all, clash_table = kind_collisions()
     open_decisions, shut_decisions = decisions_split()
+    cap_table = capacity_table()
     n_open, n_decisions = len(open_decisions), len(DATA['decisions'])
     n_player = len(DATA["player"])
     n_world = len(DATA["world"])
@@ -743,7 +760,43 @@ easier to read than {n_facts} rows would be. <code>CLAUDE.md</code> already sepa
 <em>a table of game data in markdown is a rendering and never a source.</em> Both forms exist above,
 and the wide one was generated from the long one rather than the other way round.</p>
 
-<h2>Capacities</h2>
+<h2>Capacity, in four questions rather than one</h2>
+<p>Sean, 2026-09-09, listing what capacity has to cover: things a territory has capacity for;
+containers inside a territory with their own; things that need not worry about it; things that are
+ephemeral; and four behaviours &mdash; cannot exist over capacity, can go over with the excess
+discarded at the turn's end, cannot be created in that container at all, and no limit.</p>
+<p><strong>Mapped onto the rules that exist, the list is shorter than it looks.</strong> Two of the
+four behaviours are the same capacity answer wearing different lifetimes, and one of the four is not
+a capacity behaviour at all.</p>
+{cap_table}
+<div class="callout">
+<h4>Nothing ever goes over capacity, and that is why the excess can be discarded</h4>
+<p><em>Can go over capacity, excess discarded at the turn's end</em> describes resources, and it is
+not what the rules say happens. <strong>A territory declares no capacity for a resource. It declares
+capacity for the things that hold them</strong> &mdash; a store holds ten of what it was built for.
+A resource beyond that is not an overflowing store; it is a resource <em>no store holds</em>, and
+what the release says of it is <em>use it immediately, store it, or lose it</em>.</p>
+<p>So the store never overflows and never refuses. The bound is real, and exceeding it is not an
+error &mdash; it is the difference between a unit of metal that survives the turn and one that does
+not. <strong>That is a lifetime, not a capacity</strong>, and it is why this behaviour needs no
+attach value: nothing failed.</p>
+</div>
+<div class="callout">
+<h4><em>Cannot be created there at all</em> is already a rule, and it is not capacity zero</h4>
+<p><code>spec/logistics.md</code>: <strong>a kind that declares no capacity contains nothing, and
+never can.</strong> That is stronger than a capacity of zero and different in kind &mdash; a
+capacity of zero is a number that could have been another number, and no declaration is a statement
+about what sort of thing this is. Both appear in the game: territory 6 has a metal extractor
+capacity of <strong>zero</strong>, which is a number from <em>Territory resources</em>; an extractor
+declares no capacity at all, so it holds nothing and never will.</p>
+<p>And the spec already carries the reading this report reached from the other side. <strong>Total
+capacity is stored; used and available capacity are derived</strong>, available being the total less
+the used. <strong>Available capacity is a counter</strong>, and filling a container is subtracting
+from it &mdash; which is the complement construction, in the specification, before this lane
+suggested it.</p>
+</div>
+
+<h2>The capacities the game declares</h2>
 <div class="callout">
 <h4>Where a bound lives, decided 2026-09-08</h4>
 <p><strong>A capacity is a property of the container, declared once, and no recipe states it.</strong>

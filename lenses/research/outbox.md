@@ -451,6 +451,47 @@ nature for territory 1 that nothing states, until `d74a1c6`'s successor removed 
 that leaves a stored trait with no source invites the reader to invent one**, and this reader did.
 
 
+### X-20 - a loose resource has nowhere to be that both documents allow
+
+**to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *Capacity, in four questions rather than one* · **found by** mapping Sean's capacity taxonomy onto the rules that already exist
+
+**Three statements, and they cannot all hold.**
+
+- `releases/first-release.md` -> *What bounds a kind in a territory*: **A territory declares no
+  capacity for a resource.** It declares capacity for the things that hold them
+- `spec/logistics.md` -> *Containment*: **A kind that declares no capacity contains nothing, and
+  never can**
+- `releases/first-release.md`, same paragraph: **A resource that is in nothing** can be used the
+  turn it is made, and is lost when that turn ends
+
+**What follows.** By the first two, a territory can never hold a resource. So a unit of metal that
+no store holds is *in nothing* - and `spec/logistics.md` also says **every thing is in the game,
+directly or through what contains it**, and that **the game is the one thing that is in nothing**.
+A resource in nothing would be a second such thing.
+
+**The escape does not work either.** If *in nothing* is read loosely as *in no store*, then the
+resource is in the territory - and the first two statements say a territory can never hold one. The
+reading that saves the third breaks the first, and the reading that saves the first breaks the
+third.
+
+**Why it costs something, and it is not a word.** *Each territory is self-contained. No resource
+and no citizen crosses a territory boundary* - so where a loose resource sits is load-bearing. If it
+is in the game rather than in a territory, the game holds a pool that has lost the one fact the
+release insists on. **`work` puts metal somewhere and nothing says where.**
+
+**This lane assumed one of the two readings and did not notice.** Every line of its encoding puts
+resources in a territory - `{food territory:t}`, `{metal territory:t}`, `{labor territory:t}` - and
+both checks aggregate by kind while ignoring location, so **neither check could have caught it.**
+That is a count over the wrong subject in this lane's own tooling, and it is why this is filed with
+the assumption named rather than as a clean finding.
+
+**Whether.** **Worth deciding, and the fix is probably one sentence.** Three readings, and this lane
+takes none: a territory declares capacity for a resource after all, and the number is unbounded; or
+a loose resource is held by the territory as an exception the containment rule names; or *in
+nothing* means *in the game*, and the release says what that costs. **The first is the smallest and
+the third is the only one that changes the game.**
+
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

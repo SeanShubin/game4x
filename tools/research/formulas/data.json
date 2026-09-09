@@ -1802,5 +1802,165 @@
       [],
       "the one thing that is in nothing, so its container field has nothing to name"
     ]
+  ],
+  "bounds_stated": [
+    [
+      "citizen",
+      "the food produced here, through upkeep"
+    ],
+    [
+      "garrison",
+      "a capacity of 1"
+    ],
+    [
+      "extractor",
+      "a capacity, from <em>Territory resources</em>"
+    ],
+    [
+      "store",
+      "as many as the extractors of its resource"
+    ],
+    [
+      "yard",
+      "a capacity of 1"
+    ],
+    [
+      "ark",
+      "a capacity of 2"
+    ],
+    [
+      "pioneer",
+      "a capacity of 2"
+    ],
+    [
+      "labor",
+      "the citizens that make it, one each per turn"
+    ],
+    [
+      "food",
+      "the things in it that hold it, and it keeps for one turn"
+    ],
+    [
+      "metal",
+      "the things in it that hold it"
+    ],
+    [
+      "energy",
+      "the things in it that hold it"
+    ]
+  ],
+  "capacity_shape": [
+    [
+      "garrison",
+      "the territory",
+      "refused",
+      "persists",
+      "a declared number: 1"
+    ],
+    [
+      "yard",
+      "the territory",
+      "refused",
+      "persists",
+      "a declared number: 1"
+    ],
+    [
+      "ark",
+      "the territory",
+      "refused",
+      "persists",
+      "a declared number: 2"
+    ],
+    [
+      "pioneer",
+      "the territory",
+      "refused",
+      "persists",
+      "a declared number: 2"
+    ],
+    [
+      "extractor",
+      "the territory",
+      "refused",
+      "persists",
+      "a number per resource, and <strong>zero is one of its values</strong> - territory 6 has no metal deposit, so no metal extractor can ever be built there"
+    ],
+    [
+      "store",
+      "the territory",
+      "refused",
+      "persists",
+      "as many as the extractors of its resource, so the bound moves as the territory is built"
+    ],
+    [
+      "citizen",
+      "nowhere",
+      "no bound",
+      "persists",
+      "held down by food through upkeep, which is a loop rather than a capacity"
+    ],
+    [
+      "food",
+      "a store, holding 10",
+      "not refused - it is simply not in the store",
+      "<strong>ephemeral</strong>",
+      "made with <code>keeps</code> 1, so even a stored unit dies at the turn end"
+    ],
+    [
+      "metal",
+      "a store, holding 10",
+      "not refused - it is simply not in the store",
+      "ephemeral unless stored",
+      ""
+    ],
+    [
+      "energy",
+      "a store holding 10, or a unit's tank holding its fuel",
+      "not refused - it is simply not in the store",
+      "ephemeral unless stored",
+      "the only resource with a second sort of container"
+    ],
+    [
+      "labor",
+      "nowhere",
+      "no bound",
+      "<strong>ephemeral</strong>",
+      "one per citizen per turn, and no thing holds it"
+    ],
+    [
+      "territory",
+      "the game",
+      "no bound",
+      "persists",
+      "twelve, fixed at design time"
+    ],
+    [
+      "orbit",
+      "the game",
+      "no bound",
+      "persists",
+      "one per territory"
+    ],
+    [
+      "deposit",
+      "the territory",
+      "no bound",
+      "persists",
+      "three per territory, fixed at design time"
+    ],
+    [
+      "adjacency",
+      "the game",
+      "no bound",
+      "persists",
+      "one per shared edge"
+    ],
+    [
+      "game",
+      "&mdash;",
+      "no bound",
+      "persists",
+      "the one thing that is in nothing"
+    ]
   ]
 }
