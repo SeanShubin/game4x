@@ -42,6 +42,39 @@ METAL_WEIGHT = {
 
 NON_EFFECT_OPS = {"let", "threshold"}
 
+# What the Kinds table declares. metal is "conserved"; energy is "neither conserved nor
+# expiring"; food "expires"; a citizen grows on surplus. So a loop that gains energy, food,
+# citizens or labor is the game, and a loop that gains metal is a bug. Check 2 uses these
+# rather than a separate list of intended loops - one declaration, two checks.
+DECLARED_FREE = {"energy", "food", "citizen", "labor"}
+
+# **Extraction is a declared source and check 1 was wrong to test against its absence.**
+# `work` on a metal extractor mines up to 8 metal out of the ground, so "metal is conserved"
+# cannot mean globally conserved - no arrangement of the other formulas could make it true.
+# What the specification can mean is: conserved OUTSIDE extraction. Sean's objection is what
+# found this; the check was testing a stronger claim than the words can carry.
+DECLARED_SOURCES = {"work"}
+
+# A family in a target hides a kind. `resource[extractor.resource]` collapses to the family
+# `resource`, which has no metal weight, so working a metal extractor scored zero. A check
+# that cannot see the game's only metal source is a check aimed at the wrong subject.
+FAMILIES = {"resource": ("food", "metal", "energy"), "unit": ("ark", "pioneer")}
+
+
+def called_names(data):
+    """Formulas that are only ever reached through a call.
+
+    A called formula is not a transition. Counting `found-colony` as one lets it fire on its
+    own, with no ark and no pioneer spent - which reports a metal source that no player can
+    reach. Found by Sean pushing back on check 1, and it was overstating.
+    """
+    called = set()
+    for f in data["player"] + data["world"]:
+        for op, target, _a, _at, _n in f["lines"]:
+            if op == "call":
+                called.add(target.split("(")[0].strip())
+    return called
+
 
 def place_of(target):
     """The kind a target names, ignoring where it is.
@@ -62,7 +95,7 @@ def amount_of(raw):
         return None
 
 
-def effects(formula, formulas_by_name, seen=()):
+def effects(formula, formulas_by_name, seen=(), bounded=False):
     """Net effect per kind, or None if any amount is state-dependent.
 
     Calls are inlined. A cycle would be an unbounded decomposition, which the acyclicity
@@ -81,17 +114,22 @@ def effects(formula, formulas_by_name, seen=()):
             sub = formulas_by_name.get(name)
             if sub is None:
                 return None
-            inner = effects(sub, formulas_by_name, seen + (name,))
+            inner = effects(sub, formulas_by_name, seen + (name,), bounded)
             if inner is None:
                 return None
             for k, v in inner.items():
                 net[k] = net.get(k, 0) + v
             continue
         n = amount_of(raw)
-        if n is None:
-            return None
-        sign = 1 if op == "create" else -1
         k = place_of(target)
+        if n is None:
+            if not bounded:
+                return None
+            b = DATA.get("bounds", {}).get(formula["name"].split("(")[0].strip(), {}).get(k)
+            if b is None:
+                return None
+            n = b[0]
+        sign = 1 if op == "create" else -1
         net[k] = net.get(k, 0) + sign * n
     return net
 
@@ -104,10 +142,12 @@ def gather():
 
 
 def check_conservation():
-    """Check 1. Exact: a violation is a violation."""
+    """Check 1. Metal conserved OUTSIDE declared extraction. Exact: a violation is a violation."""
     by_name = gather()
     analysed, skipped, bad = [], [], []
     for name, f in sorted(by_name.items()):
+        if name in DECLARED_SOURCES:
+            continue
         net = effects(f, by_name)
         if net is None:
             skipped.append(name)
@@ -170,16 +210,19 @@ def check_unbounded(extra=None):
     by_name = gather()
     if extra:
         by_name = dict(by_name, **extra)
+    only_called = called_names(DATA)
     names, nets, skipped = [], [], []
     for name, f in sorted(by_name.items()):
-        net = effects(f, by_name)
+        if name in only_called and not extra:
+            continue  # inlined into its callers; not a transition of its own
+        net = effects(f, by_name, bounded=True)
         if net is None:
             skipped.append(name)
             continue
-        if not any(l[0] == "call" for l in f["lines"]):
-            names.append(name)
-            nets.append(net)
+        names.append(name)
+        nets.append(net)
     kinds = sorted({k for net in nets for k in net})
+    hidden = sorted({k for k in kinds if k in FAMILIES})
     # maximise sum(x) subject to -C.x <= 0 and x <= 1
     A, b = [], []
     for k in kinds:
@@ -203,7 +246,14 @@ def check_unbounded(extra=None):
         g = sum(net.get(k, 0) * v for net, v in zip(nets, x or []))
         if g > 0:
             gain[k] = g
-    return names, skipped, witness, gain
+    # Split the gain by what the specification declares. A gain in a declared-free kind is
+    # the game; a gain in metal-equivalent is the bug; a gain in a kind nobody declared is a
+    # question for whoever added it.
+    metal_gain = sum(METAL_WEIGHT.get(k, 0) * v for k, v in gain.items())
+    free = {k: v for k, v in gain.items() if k in DECLARED_FREE}
+    undeclared = {k: v for k, v in gain.items()
+                  if k not in DECLARED_FREE and k not in METAL_WEIGHT}
+    return names, skipped, witness, gain, metal_gain, free, undeclared, hidden
 
 
 def check_cap(cap=1000):
@@ -236,7 +286,7 @@ def self_test():
             "lines": [["create", "metal in t", "1", "", "poison"]],
         }
     }
-    _, _, w, _ = check_unbounded(extra=poison)
+    w = check_unbounded(extra=poison)[2]
     if not any(n == "POISON-free-metal" for n, _ in w):
         print("  POISON FAILED: check 2 did not flag a formula that creates metal from nothing")
         ok = False
@@ -272,7 +322,7 @@ def as_dict():
     the checker cannot disagree.
     """
     analysed, skipped, bad = check_conservation()
-    names, skipped2, witness, gain = check_unbounded()
+    names, skipped2, witness, gain, metal_gain, free, undeclared, hidden = check_unbounded()
     cap, breached = check_cap()
     return {
         "conservation": {
@@ -284,6 +334,9 @@ def as_dict():
             "analysed": len(names), "skipped": skipped2,
             "witness": [[n, str(v)] for n, v in witness],
             "gain": {k: str(v) for k, v in sorted(gain.items())},
+            "metal_gain": str(metal_gain),
+            "free": sorted(free), "undeclared": sorted(undeclared),
+            "hidden": hidden,
         },
         "cap": {"cap": cap, "breaches": [[n, k, c] for n, k, c in breached]},
         "poison": ["check 2 flags a formula with no inputs",
@@ -301,7 +354,8 @@ def main():
     print()
 
     analysed, skipped, bad = check_conservation()
-    print(f"CHECK 1 - metal conserved, weighted by Binding")
+    print("CHECK 1 - metal conserved OUTSIDE extraction, weighted by Binding")
+    print(f"  declared sources, excluded: {', '.join(sorted(DECLARED_SOURCES))}")
     print(f"  {len(analysed)} formulas analysed, {len(skipped)} skipped for state-dependent amounts")
     if skipped:
         print(f"  skipped: {', '.join(skipped)}")
@@ -312,7 +366,7 @@ def main():
         print("  no violation")
     print()
 
-    names, skipped2, witness, gain = check_unbounded()
+    names, skipped2, witness, gain, metal_gain, free, undeclared, hidden = check_unbounded()
     print("CHECK 2 - structurally unbounded")
     print(f"  {len(names)} formulas in the matrix, {len(skipped2)} skipped for state-dependent amounts")
     if witness:
@@ -320,6 +374,15 @@ def main():
         for n, v in witness:
             print(f"    {v}  x  {n}")
         print(f"  net gain: {', '.join(f'{k} +{v}' for k, v in sorted(gain.items()))}")
+        print(f"  metal-equivalent gain: {metal_gain}   <- the number that matters")
+        if free:
+            print(f"  declared free, so not a defect: {', '.join(sorted(free))}")
+        if undeclared:
+            print(f"  UNDECLARED - nobody said whether these may grow: {', '.join(sorted(undeclared))}")
+    if hidden:
+        print(f"  A FAMILY HIDES A KIND: {', '.join(hidden)} - each stands for "
+              f"{'; '.join(k + ' = ' + '/'.join(FAMILIES[k]) for k in hidden)}. "
+              "Weighted zero, so the metal one is invisible here.")
     else:
         print("  no non-negative firing vector gains anything - structurally bounded")
     print()

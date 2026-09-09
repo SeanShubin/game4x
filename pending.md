@@ -27,7 +27,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
@@ -38,6 +38,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
 - **X-16** - the formula files are not reachable from the deployment, and `reports/` is not this lane's · `lenses/research/outbox.md`
+- **X-17** - what check 2 should become: subordinate to the declarations, not to a baseline · `lenses/research/outbox.md`
 
 ### To research (1)
 

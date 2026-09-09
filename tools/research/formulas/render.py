@@ -296,13 +296,33 @@ copied rather than invented: {", ".join(f"{k} {v}" for k, v in RESULTS["conserva
     [[v[0], f"{v[1]:+d}", v[2]] for v in RESULTS["conservation"]["violations"]],
     ["target", "amt", "note"])}</div>
 <div class="callout">
-<h4>What this says</h4>
-<p><strong>Founding a colony creates five metal from nothing</strong> &mdash; a garrison, two
-extractors and two stores, each holding one metal of binding, with nothing consumed. Deploying an
-ark spends three and creates five, so each founding nets <strong>+2</strong>. The specification
-says metal is <em>conserved</em>. Either that word is wrong, or founding should cost what it
-builds. <strong>This is a defect in the specification, found by a check on its first run</strong>,
-and it is not this lens's to decide.</p>
+<h4>Corrected 2026-09-09, after Sean said the first version did not convince him</h4>
+<p><strong>He was right twice.</strong> His principle &mdash; <em>if it takes 5 metal to build a
+unit, then when that unit deploys 5 metal comes out, metal was conserved</em> &mdash; is exactly
+the invariant worth testing, and chasing it found two faults in the check rather than in his
+reasoning.</p>
+<p><strong>First, the check tested a stronger claim than the words can carry.</strong> Working a
+metal extractor mines up to 8 metal out of the ground, so metal is <em>not</em> globally conserved
+and no arrangement of the other formulas could make it so. <code>work</code> is now a
+<strong>declared source</strong> and the invariant is <em>conserved outside extraction</em>.</p>
+<p><strong>Second, a family was hiding a kind.</strong> <code>work</code> produces
+<code>resource[...]</code>, which collapses to the family <code>resource</code> and carries no
+metal weight &mdash; so the game's only metal source scored zero. A check that cannot see the
+thing it is about is aimed at the wrong subject, and it is reported below rather than quietly
+fixed.</p>
+<p><strong>And the finding survives both, on his own principle.</strong> An ark costs 3 metal and
+its Binding is 3. Founding delivers <strong>5</strong>. So founding is a second, undeclared source
+of <strong>+2 metal per landing</strong> &mdash; not a failure of conservation in general, but an
+unnamed source beside the named one.</p>
+</div>
+<div class="callout">
+<h4>And his own sketch already fixes it, exactly</h4>
+<p>The colony without the two stores &mdash; which is what his <code>ark.deploy</code> sketch
+wrote &mdash; delivers <strong>garrison 1 + extractor 1 + extractor 1 = 3</strong>, which is
+precisely the ark's Binding of 3 and the pioneer's Binding of 3.
+<strong><code>deploy ark</code> and <code>found by land</code> both go to exactly 0.</strong>
+The two stores are the entire discrepancy. That is arithmetic on his numbers, not an argument:
+either the stores go, or a unit that delivers them should cost 5 rather than 3.</p>
 </div>
 
 <h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded</span></h3>
@@ -315,6 +335,21 @@ in these proportions, and you end with more than you began.</p>
     [[w[1], w[0]] for w in RESULTS["unbounded"]["witness"]],
     ["amt", "target"])}</div>
 <p>Net gain per turn of the ratio: <strong>{", ".join(f"{k} +{v}" for k, v in RESULTS["unbounded"]["gain"].items())}</strong>.</p>
+<div class="callout">
+<h4>What check 2 should become &mdash; the recommendation</h4>
+<p><strong>Subordinate it to check 1's declarations rather than to a baseline of intended
+loops.</strong> One list already exists in the <em>Kinds</em> table: energy, food, citizens and
+labor may grow; metal may not; extraction is the one declared source. Then check 2 asks a single
+answerable question &mdash; <strong>is there a loop that gains metal without going through
+<code>work</code>?</strong> &mdash; and the false positive that made a baseline seem necessary
+disappears, because a labor loop is declared and simply not reported.</p>
+<p>Three fixes it needed, all found by pulling on Sean's objection and all now in:
+<strong>only entry points are transitions</strong> &mdash; counting <code>found-colony</code> as
+one let it fire with no ark spent, reporting a source no player could reach;
+<strong>state-dependent amounts get a bound</strong>, production taking its maximum and
+consumption its minimum, so a loop that exists is never missed;
+and <strong>families must resolve to kinds</strong>, which is the one still outstanding.</p>
+</div>
 <div class="callout">
 <h4>One of these two is the game and the other is the bug</h4>
 <p><code>create labor</code> makes labor from nothing every turn. <strong>That is the intended

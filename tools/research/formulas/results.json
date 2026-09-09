@@ -4,8 +4,7 @@
     "skipped": [
       "grow",
       "perish",
-      "upkeep",
-      "work"
+      "upkeep"
     ],
     "weights": {
       "metal": 1,
@@ -35,12 +34,9 @@
     ]
   },
   "unbounded": {
-    "analysed": 11,
+    "analysed": 15,
     "skipped": [
-      "grow",
-      "perish",
-      "upkeep",
-      "work"
+      "perish"
     ],
     "witness": [
       [
@@ -48,17 +44,21 @@
         "1"
       ],
       [
-        "found-colony",
+        "work",
         "1"
       ]
     ],
     "gain": {
-      "citizen": "2",
-      "extractor": "2",
-      "garrison": "1",
-      "labor": "1",
-      "store": "2"
-    }
+      "resource": "8"
+    },
+    "metal_gain": "0",
+    "free": [],
+    "undeclared": [
+      "resource"
+    ],
+    "hidden": [
+      "resource"
+    ]
   },
   "cap": {
     "cap": 1000,

@@ -289,6 +289,31 @@ founding is a deliberate exception and says so. **The first is free, the second 
 and the third is a sentence.** It is a defect in the specification rather than in the prototype,
 which is why it is yours.
 
+**Rewritten 2026-09-09: Sean said the first version did not convince him, and he was right twice.**
+His principle - *if it takes 5 metal to build a unit, then when that unit deploys 5 metal comes
+out* - is the invariant worth testing, and pulling on it found two faults in the **check** rather
+than in his reasoning.
+
+- **The check tested a stronger claim than the words can carry.** Working a metal extractor mines
+  up to 8 metal out of the ground, so metal is not globally conserved and **no arrangement of the
+  other formulas could make it so.** `work` is now a declared source and the invariant is
+  *conserved outside extraction*.
+- **A family was hiding a kind.** `work` produces `resource[...]`, which collapsed to the family
+  `resource` and carried no metal weight - so **the game's only metal source scored zero.**
+  Reported by the checker now rather than quietly fixed; resolving families to kinds is still
+  outstanding and is in `X-17`.
+
+**The finding survives both, restated on his principle.** An ark costs 3 metal and its Binding is
+3; founding delivers 5. So founding is **a second, undeclared source of +2 per landing** - not a
+failure of conservation in general, but an unnamed source beside the named one.
+
+**And his own sketch already fixes it exactly.** The colony without the two stores - which is what
+`ark.deploy` wrote - delivers garrison 1 + extractor 1 + extractor 1 = **3**, precisely the ark's
+Binding and the pioneer's. **`deploy ark` and `found by land` both go to exactly 0.** The two
+stores are the entire discrepancy, so either they go or a unit that delivers them costs 5 rather
+than 3. **That is arithmetic on his numbers rather than an argument**, and it turns the open
+question about the missing stores from a matter of taste into one with a right answer.
+
 ### X-15 - the inventory, so that nothing said in one conversation is lost on the way to `spec/`
 
 **to** spec · **status** open · **raised** 2026-09-08 · **source** Sean, saying he may want to promote this and asking that nothing be lost
@@ -350,6 +375,37 @@ person can follow and no page to need a script, and these pages satisfy both.
 report as a published artifact, so this buys reachability from one place rather than access.
 **Declining is reasonable** if mixing a lens's output into the state reports muddies what
 `reports/` is for; say so and this lane will keep it out.
+
+### X-17 - what check 2 should become: subordinate to the declarations, not to a baseline
+
+**to** code · **status** open · **raised** 2026-09-09 · **source** Sean, asking what this lane recommends for check 2
+
+**Recommended: drop the baseline of intended loops and use check 1's declarations instead.** The
+list already exists in the *Kinds* table - energy, food, citizens and labor may grow, metal may
+not, and extraction is the one declared source. Then check 2 asks a single answerable question:
+**is there a loop that gains metal without going through `work`?** The false positive that made a
+baseline look necessary disappears on its own, because a labor loop is declared and simply is not
+reported. **One declaration serves both checks and there is nothing to keep in sync.**
+
+**Three defects in check 2 that Sean's objection surfaced, two fixed and one not.**
+
+- **Only entry points are transitions.** `found-colony` was counted as firable on its own, so the
+  check reported a metal source **with no ark and no pioneer spent** - a loop no player can reach.
+  Fixed.
+- **State-dependent amounts get a bound**, production taking its maximum and consumption its
+  minimum, so a loop that exists is never missed. Three of the four are in; `perish` stays out
+  because its effect depends on *which* thing, and a representative would be choosing the answer.
+  Fixed, and each bound carries its justification.
+- **A family hides a kind, and this one is open.** `resource[...]` collapses to `resource`, which
+  has no metal weight, so **working a metal extractor scored zero** - the check was blind to the
+  game's only metal source. The checker now says so instead of scoring it silently, which is the
+  least it can do; resolving a family to its kinds is the fix and is not written.
+
+**Whether.** **Worth doing if the formula work continues, and worth nothing otherwise.** The first
+two are done and in `tools/research/formulas/check.py`, which is this lane's tooling - **if any of
+it graduates to production it is yours to own and rewrite, not to inherit.** The family fix is the
+one that matters, because a check that cannot see the subject it is about is the failure this
+repository has now recorded four times.
 
 ## Resolved
 

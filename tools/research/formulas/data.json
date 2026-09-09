@@ -1127,5 +1127,35 @@
       "Says a number got large. Says nothing about which formulas did it.",
       "Keep as a backstop against bugs in checks 1 and 2. Never as the mechanism - a cap that fires tells you nothing about why."
     ]
+  ],
+  "bounds": {
+    "work": {
+      "resource": [
+        8,
+        "the largest density in Territory resources is 8; production takes its maximum"
+      ]
+    },
+    "grow": {
+      "food": [
+        1,
+        "consumption takes its minimum: grow fires only when it consumes at least 1"
+      ],
+      "citizen": [
+        1,
+        "production is equal to consumption, so the ratio is 1:1 and the magnitude does not matter"
+      ]
+    },
+    "upkeep": {
+      "food": [
+        1,
+        "the smallest upkeep in Units and structures is 1 food per turn"
+      ]
+    }
+  },
+  "unbounded_skipped": [
+    [
+      "perish",
+      "consumes a thing and produces that thing's metal, so its effect depends on WHICH thing. Conserving by construction, and putting a representative thing in would be choosing the answer."
+    ]
   ]
 }
