@@ -69,8 +69,24 @@ jobs:
       # Clippy compiles the Bevy-facing crates natively, so this job needs Bevy's Linux
       # system libraries. The wasm32 Trunk build links none of them; installing here is
       # harmless either way.
+      #
+      # **`apt-get update` exits 100 if ANY index fails**, including third-party repositories
+      # the runner image carries and this build never touches. On 2026-09-09 that reddened the
+      # gate and blocked a deploy because `dl.google.com/linux/chrome-stable` served a
+      # `Packages.gz` not matching its own `Release` file - while every Ubuntu index
+      # downloaded fine, 9436 kB of them.
+      #
+      # **The subject of this step is whether four packages install**, so that is what is
+      # allowed to fail it. Judging the input rather than the outcome is the shape `CLAUDE.md`
+      # records four times; here it cost a deploy rather than a wrong answer. A genuinely
+      # broken Ubuntu index still fails loudly, on the install, naming what it could not get.
+      #
+      # The same line is in the two verify jobs and changed with this one.
       - name: Install Bevy Linux dependencies
-        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
+        run: |
+          sudo apt-get update \
+            || echo "apt-get update failed; the install below is what decides this step"
+          sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
 
       - name: Install Rust toolchain (wasm32 + lint components)
         uses: dtolnay/rust-toolchain@stable
@@ -254,7 +270,10 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Install Bevy Linux dependencies
-        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
+        run: |
+          sudo apt-get update \
+            || echo "apt-get update failed; the install below is what decides this step"
+          sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -281,7 +300,10 @@ jobs:
 
       - name: Install Bevy Linux dependencies
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
+        run: |
+          sudo apt-get update \
+            || echo "apt-get update failed; the install below is what decides this step"
+          sudo apt-get install -y libasound2-dev libudev-dev libwayland-dev libxkbcommon-dev
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
