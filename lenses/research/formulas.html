@@ -625,6 +625,97 @@ play the game: <strong>world-building is the play language with the guards left 
 </tr>
 </tbody></table></div>
 
+<h2>Detecting a glitch, without a cap</h2>
+<div class="callout">
+<h4>Unbounded capacity does not cost you detection</h4>
+<p><strong>Boundedness for one starting state is EXPSPACE-complete. Boundedness for
+<em>every</em> starting state is polynomial &mdash; a linear program over the incidence
+matrix.</strong> The second is the one an editor needs, because an author is editing formulas and
+not a saved game. A net is not structurally bounded exactly when there is a non-negative firing
+vector <code>x</code>, not all zero, with <code>C&middot;x &ge; 0</code>: a set of formulas that,
+fired in some ratio, ends with more than it began. <strong>The vector is the error message</strong>
+&mdash; it names which formulas and how many of each.</p>
+<p><strong>All of it needs the plain fragment.</strong> A zero test on an unbounded quantity makes
+the language Turing-complete and every line of this section false.</p>
+</div>
+<div class="scroll"><table><thead><tr>
+<th>Check</th>
+<th>What it asks</th>
+<th>Cost and character</th>
+<th>What it reports</th>
+<th>Where it fits</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">1. Declared conservation</td>
+<td>P-invariant: is there a weighting under which this resource's net change is zero across every formula?</td>
+<td>Polynomial. EXACT - it cannot cry wolf.</td>
+<td>Names the formula that breaks it.</td>
+<td class="note">Targets exactly "I accidentally made metal from nothing". The spec already declares which resources are conserved; nothing checks it.</td>
+</tr>
+<tr>
+<td class="target">2. Structural unboundedness</td>
+<td>T-increasing: is there a non-negative firing vector x, not all zero, with C.x &gt;= 0?</td>
+<td>Polynomial by linear programming. CONSERVATIVE - it ignores guards, so it can flag a loop the guards prevent, and cannot miss one.</td>
+<td>The firing vector IS the witness: which formulas, in what ratio.</td>
+<td class="note">Catches loops nobody declared. Must be reported as a diff against intended loops, because the citizen economy is genuinely a T-increasing.</td>
+</tr>
+<tr>
+<td class="target">3. A large generic cap at runtime</td>
+<td>Stop and report if any count passes a big number.</td>
+<td>Cheap. Detects after the fact, in one playthrough, at whatever numbers that run happened to hit.</td>
+<td>Says a number got large. Says nothing about which formulas did it.</td>
+<td class="note">Keep as a backstop against bugs in checks 1 and 2. Never as the mechanism - a cap that fires tells you nothing about why.</td>
+</tr>
+</tbody></table></div>
+
+<h3>What the specification already declares, and nothing checks</h3>
+<p>These four sentences are invariant declarations sitting in the <em>Kinds</em> table as prose.
+Making them checkable is the smallest change with the largest payoff.</p>
+<div class="scroll"><table><thead><tr>
+<th>Kind</th>
+<th>Declared</th>
+<th>Where it already says so</th>
+<th>What would check it</th>
+<th>Note</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">metal</td>
+<td>conserved</td>
+<td class="note">Kinds: "what things are built from; conserved"</td>
+<td>P-invariant: every formula's net effect on metal is zero. EXACT - no false alarms.</td>
+<td class="note">Recommended first. The declaration already exists as prose and nothing checks it.</td>
+</tr>
+<tr>
+<td class="target">energy</td>
+<td>neither conserved nor expiring</td>
+<td class="note">Kinds: stated in those words</td>
+<td>Declared free to grow, so excluded from the conservation check by the author's own words.</td>
+<td class="note">Nothing to check, and saying so is the point - the check knows what it is not looking at.</td>
+</tr>
+<tr>
+<td class="target">food</td>
+<td>expires</td>
+<td class="note">Kinds: "eaten by citizens; expires"</td>
+<td>keeps 1, so it cannot accumulate across turns. A separate property from conservation.</td>
+<td class="note">The growth loop lives here and is intended.</td>
+</tr>
+<tr>
+<td class="target">citizen</td>
+<td>grows on surplus</td>
+<td class="note">the automatic food recipe holds it in check</td>
+<td>Deliberately unbounded. A structural check WILL flag this loop, correctly.</td>
+<td class="note">Which is why the broad check has to be a diff against declared intent, not an absolute.</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>Why the broad check must be a diff</h4>
+<p><strong>The intended economy is itself an infinite loop.</strong> Food feeds citizens, citizens
+make labor, labor works extractors, extractors make food. That is a T-increasing and a structural
+check will flag it &mdash; correctly. So check 2 cannot ask <em>is anything unbounded</em>; it asks
+<em>is anything unbounded that was not there before</em>. Check 1 has no such problem, because the
+author names the resource that must not grow and food is simply not on the list.</p>
+</div>
+
 <h2>What the re-encoding cost and saved</h2>
 <p>Computed from the data rather than asserted. In bare primitives,
 <strong>58 rows became 65 lines &mdash; up 7</strong>. That is the number predicted
@@ -761,6 +852,11 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <td>ANSWERED - the garrison is soft, and capacity 1 lives on the territory</td>
 <td>Sean, 2026-09-08. A garrison is built if absent, skipped if present, and never fails the command.</td>
 <td class="note">One line: create garrison in t [soft]. The guard and the create became one line, and the limit role has no remaining use.</td>
+</tr>
+<tr>
+<td>ANSWERED - how to catch an infinite-resource glitch</td>
+<td>Sean, 2026-09-08, asking whether unbounded capacity means specification errors cannot be detected.</td>
+<td class="note">It does not. Structural boundedness is polynomial by linear programming, at edit time, with a witness - see Detecting a glitch. Boundedness for one starting state is EXPSPACE-complete; boundedness for every starting state is polynomial, and the second is the one an editor needs.</td>
 </tr>
 <tr>
 <td>OPEN - the six lines beside it</td>

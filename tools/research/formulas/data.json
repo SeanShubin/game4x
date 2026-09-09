@@ -902,6 +902,11 @@
       "One line: create garrison in t [soft]. The guard and the create became one line, and the limit role has no remaining use."
     ],
     [
+      "ANSWERED - how to catch an infinite-resource glitch",
+      "Sean, 2026-09-08, asking whether unbounded capacity means specification errors cannot be detected.",
+      "It does not. Structural boundedness is polynomial by linear programming, at edit time, with a witness - see Detecting a glitch. Boundedness for one starting state is EXPSPACE-complete; boundedness for every starting state is polynomial, and the second is the one an editor needs."
+    ],
+    [
       "OPEN - the six lines beside it",
       "Soft on the garrison alone still creates 2 citizens, 2 extractors and 2 stores on a territory that already has them, because their capacities are not zero.",
       "Marked ? in found-colony. Each needs hard, soft, or removing - and they are not the same answer."
@@ -1068,6 +1073,59 @@
       "citizen",
       "unbounded - held down by food through upkeep",
       "not a capacity at all"
+    ]
+  ],
+  "invariants": [
+    [
+      "metal",
+      "conserved",
+      "Kinds: \"what things are built from; conserved\"",
+      "P-invariant: every formula's net effect on metal is zero. EXACT - no false alarms.",
+      "Recommended first. The declaration already exists as prose and nothing checks it."
+    ],
+    [
+      "energy",
+      "neither conserved nor expiring",
+      "Kinds: stated in those words",
+      "Declared free to grow, so excluded from the conservation check by the author's own words.",
+      "Nothing to check, and saying so is the point - the check knows what it is not looking at."
+    ],
+    [
+      "food",
+      "expires",
+      "Kinds: \"eaten by citizens; expires\"",
+      "keeps 1, so it cannot accumulate across turns. A separate property from conservation.",
+      "The growth loop lives here and is intended."
+    ],
+    [
+      "citizen",
+      "grows on surplus",
+      "the automatic food recipe holds it in check",
+      "Deliberately unbounded. A structural check WILL flag this loop, correctly.",
+      "Which is why the broad check has to be a diff against declared intent, not an absolute."
+    ]
+  ],
+  "detection": [
+    [
+      "1. Declared conservation",
+      "P-invariant: is there a weighting under which this resource's net change is zero across every formula?",
+      "Polynomial. EXACT - it cannot cry wolf.",
+      "Names the formula that breaks it.",
+      "Targets exactly \"I accidentally made metal from nothing\". The spec already declares which resources are conserved; nothing checks it."
+    ],
+    [
+      "2. Structural unboundedness",
+      "T-increasing: is there a non-negative firing vector x, not all zero, with C.x >= 0?",
+      "Polynomial by linear programming. CONSERVATIVE - it ignores guards, so it can flag a loop the guards prevent, and cannot miss one.",
+      "The firing vector IS the witness: which formulas, in what ratio.",
+      "Catches loops nobody declared. Must be reported as a diff against intended loops, because the citizen economy is genuinely a T-increasing."
+    ],
+    [
+      "3. A large generic cap at runtime",
+      "Stop and report if any count passes a big number.",
+      "Cheap. Detects after the fact, in one playthrough, at whatever numbers that run happened to hit.",
+      "Says a number got large. Says nothing about which formulas did it.",
+      "Keep as a backstop against bugs in checks 1 and 2. Never as the mechanism - a cap that fires tells you nothing about why."
     ]
   ]
 }

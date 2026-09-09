@@ -247,6 +247,38 @@ play the game: <strong>world-building is the play language with the guards left 
     ["Territory", "Food", "Metal", "Energy", "What it exercises"],
     DATA["territories"], ["amt", "amt", "amt", "amt", "note"])}</div>
 
+<h2>Detecting a glitch, without a cap</h2>
+<div class="callout">
+<h4>Unbounded capacity does not cost you detection</h4>
+<p><strong>Boundedness for one starting state is EXPSPACE-complete. Boundedness for
+<em>every</em> starting state is polynomial &mdash; a linear program over the incidence
+matrix.</strong> The second is the one an editor needs, because an author is editing formulas and
+not a saved game. A net is not structurally bounded exactly when there is a non-negative firing
+vector <code>x</code>, not all zero, with <code>C&middot;x &ge; 0</code>: a set of formulas that,
+fired in some ratio, ends with more than it began. <strong>The vector is the error message</strong>
+&mdash; it names which formulas and how many of each.</p>
+<p><strong>All of it needs the plain fragment.</strong> A zero test on an unbounded quantity makes
+the language Turing-complete and every line of this section false.</p>
+</div>
+<div class="scroll">{simple_table(
+    ["Check", "What it asks", "Cost and character", "What it reports", "Where it fits"],
+    DATA["detection"], ["target", "", "", "", "note"])}</div>
+
+<h3>What the specification already declares, and nothing checks</h3>
+<p>These four sentences are invariant declarations sitting in the <em>Kinds</em> table as prose.
+Making them checkable is the smallest change with the largest payoff.</p>
+<div class="scroll">{simple_table(
+    ["Kind", "Declared", "Where it already says so", "What would check it", "Note"],
+    DATA["invariants"], ["target", "", "note", "", "note"])}</div>
+<div class="callout">
+<h4>Why the broad check must be a diff</h4>
+<p><strong>The intended economy is itself an infinite loop.</strong> Food feeds citizens, citizens
+make labor, labor works extractors, extractors make food. That is a T-increasing and a structural
+check will flag it &mdash; correctly. So check 2 cannot ask <em>is anything unbounded</em>; it asks
+<em>is anything unbounded that was not there before</em>. Check 1 has no such problem, because the
+author names the resource that must not grow and food is simply not on the list.</p>
+</div>
+
 <h2>What the re-encoding cost and saved</h2>
 <p>Computed from the data rather than asserted. In bare primitives,
 <strong>{was} rows became {now} lines &mdash; up {now - was}</strong>. That is the number predicted
