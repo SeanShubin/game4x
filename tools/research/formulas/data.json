@@ -1210,5 +1210,57 @@
       "Answers all three question marks at once: deploying onto a founded colony spends the ark and does nothing else.",
       "all three"
     ]
+  ],
+  "attach_values": [
+    [
+      "(blank)",
+      "The line cannot fail, so no attachment is meaningful.",
+      "Not a value so much as the absence of a question. Check 4 finds these mechanically: a create whose container has no capacity, a set on a thing that exists.",
+      "IN USE - create citizen in t"
+    ],
+    [
+      "hard",
+      "If the line cannot do what it says, the whole action fails and nothing happens.",
+      "The right default for anything spent, and for a path that must resolve. A player is told why, and the state is untouched - so a failure costs nothing but the click.",
+      "IN USE - every threshold that guards a cost"
+    ],
+    [
+      "soft",
+      "If the line cannot do what it says, skip this line and carry on. The action still succeeds.",
+      "What create-if-missing needs. Note that the rest of the formula still runs, which is why one soft line does not answer for the lines beside it.",
+      "IN USE - create garrison in t"
+    ],
+    [
+      "clamp",
+      "Do as much as the state allows. Destroy 3 where there are 2, and destroy 2.",
+      "NOT IN USE, and it earns its place only under one condition - see below. Distinct from both: hard refuses, soft does nothing, clamp does part.",
+      "CANDIDATE"
+    ],
+    [
+      "record",
+      "The line fails, the action continues, and the failure is written where another formula can read it.",
+      "NOT NAMED, BUT ALREADY IN THE GAME. `unpaid` is a trait - *derived: its upkeep was not met* - and `perish` fires on it. So a failed upkeep is neither hard nor soft: it does not stop the turn and it does not vanish.",
+      "IN USE WITHOUT A NAME - upkeep, read by perish"
+    ]
+  ],
+  "attach_decisions": [
+    [
+      "What does soft test?",
+      "*The container is full* or *one is already there*.",
+      "They coincide on a capacity-one thing like a garrison, and come apart on a citizen. Recommended: the container is full - it is the reading a container can answer without knowing what the line intended.",
+      "Raised by the citizen line, 2026-09-09"
+    ],
+    [
+      "Is a failure observable to other formulas?",
+      "hard and soft both leave nothing behind. `unpaid` leaves something behind, and `perish` reads it.",
+      "This is a second axis, not a third value, and the column currently conflates them. If failures are observable, they are state; if they are state, they are subject to every rule about state.",
+      "The specification already answers yes, once"
+    ],
+    [
+      "May the amount column hold arithmetic?",
+      "`grow` consumes *the lesser of the surplus food and the citizens here*.",
+      "This decides whether clamp is a primitive. If the amount may hold arithmetic, clamp is sugar and should go. If the amount holds only constants and paths - which is what keeps the language finite - then clamp is the only way to say *as many as possible*, and it is a primitive.",
+      "The one formula that needs it today"
+    ]
   ]
 }

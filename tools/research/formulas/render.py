@@ -204,6 +204,40 @@ transformation needed anyway.</p>
     ["Primitive", "What it does", "Example", "Why it earns a place"],
     DATA["primitives"], ["op", "", "target", "note"])}</div>
 
+<h2>The attach column</h2>
+<p>What happens when a line cannot do what it says. <strong>Five values, of which two are in use,
+one is the absence of a question, one is in the game without a name, and one is a candidate that
+depends on a decision about a different column.</strong></p>
+<div class="scroll">{simple_table(
+    ["Value", "What it means", "What to know", "Status"],
+    DATA["attach_values"], ["op", "", "note", "attach"])}</div>
+<div class="callout">
+<h4>Which lines can fail at all</h4>
+<p><code>threshold</code> always can &mdash; refusing is its purpose. <code>create</code> can only
+where a capacity is declared. <code>destroy</code> can, when there is not enough.
+<code>call</code> can, when something inside it fails hard. <code>let</code> can, when a path does
+not resolve &mdash; <code>ark.location.below</code> has no answer for an ark that is not in orbit,
+and <strong>hard is the only sane value there</strong>. <code>set</code> effectively cannot, which
+is why no <code>set</code> in this report carries an attachment.</p>
+</div>
+
+<h3>Three decisions the column is carrying, none of them taken</h3>
+<div class="scroll">{simple_table(
+    ["Question", "The two readings", "What is at stake", "Where it came from"],
+    DATA["attach_decisions"], ["target", "", "note", "note"])}</div>
+<div class="callout">
+<h4><code>record</code> is the one worth looking at, because it is already there</h4>
+<p><code>unpaid</code> is a trait in the specification &mdash; <em>derived: its upkeep was not
+met</em> &mdash; and <code>perish</code> fires on it. So when <code>upkeep</code> cannot take its
+food, the failure <strong>neither stops the turn nor vanishes</strong>: it is written down, and
+another formula reads it next. <strong>That is a third behaviour on failure, in the game today,
+which a two-valued column cannot express.</strong></p>
+<p>It may not want to be an attach value. The alternative is that <strong>failure is state</strong>
+&mdash; every line's outcome is recorded, and <code>unpaid</code> is just one query over it. That is
+a larger idea and a cleaner one, and it is the sort of thing worth deciding before the column sets
+rather than after.</p>
+</div>
+
 <h2>What is sugar</h2>
 <p>Removable with linear growth, so by the test each is readability rather than expressiveness
 &mdash; which means they can be added freely.</p>
