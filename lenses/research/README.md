@@ -61,9 +61,10 @@ reader can tell whether a finding was acted on or merely forgotten.
 Newest first.
 
 - [The menu is an information channel](2026-09-08-the-menu-leaks.md)
-  - 2026-09-08. Carries `X-10` and corrects `X-8`. Under fog of war every indistinguishable state
-    must offer the same actions, so the menu is computed from what the player knows, not from the
-    state; a seed in the state beats nature-as-a-player because it keeps the dump derivable.
+  - 2026-09-08. Carries `X-10`, **whose main claim Sean refuted the same day** - the information-set
+    condition is definitional and restricts no game. What stands: a seed in the state beats
+    nature-as-a-player because it keeps the dump derivable, one generator leaks across subsystems,
+    and the metric for re-representation must be chosen before the measurement.
 
 - [Simple, finite, and still decidable: where the cliff edges are](2026-09-08-simple-finite-and-decidable.md)
   - 2026-09-08. Carries `X-9`, for the recipe structure Sean is replacing. A recipe network is a

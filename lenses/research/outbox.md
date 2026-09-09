@@ -121,56 +121,9 @@ unsettled on purpose because they are decisions rather than facts - whether a ga
 quantity, whether an action's subject is derived or selected, and whether object creation stays
 inside this vocabulary at all.
 
-**Corrected 2026-09-08 by `X-10`, before you built on it.** The claim above that the menu is the set of actions applicable **in the current state** holds only without fog of war. Sean intends heavy fog, and then the menu must be a function of the player's **information set**: every indistinguishable state must offer the same actions, or the menu itself discloses which state it is. **Read `X-10` first.** **If any of them becomes a specification question it is `to spec`, not
+**A correction was stamped here on 2026-09-08 and withdrawn the same day.** `X-10` claimed that under fog of war the menu must be computed from the player's information set rather than the state. Sean refuted it: the condition it rested on is definitional and restricts no game. **This item stands as originally filed**, and the withdrawal is recorded in `X-10` rather than hidden by deleting it. **If any of them becomes a specification question it is `to spec`, not
 yours**, and this lane has deliberately drafted no text: the vocabulary is the route and not the
 destination, which `CLAUDE.md` names as the trap for exactly this kind of finding.
-
-### X-10 - the menu leaks, so it is computed from what the player knows and not from the state
-
-**to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-the-menu-leaks.md), and Sean stating that fog of war features heavily · **corrects** `X-8`
-
-**This corrects `X-8`, which is still open to you**, so read this before building on it. `X-8` said
-the interface's menu is the set of actions applicable in the current state. **With heavy fog of war
-that is not imprecise, it is forbidden.**
-
-**What.** A player's indistinguishable states form an **information set**, and there is a hard
-requirement on it: **every state in one information set must offer the same available actions.** If
-two states look identical and offer different menus, **the menu discloses which one they are in.**
-GDL-II builds the same condition in - two histories are indistinguishable when the player saw the
-same things **and its own available actions were the same**.
-
-**Why it costs something, concretely.** If *deploy ark here* appears only where the territory has no
-garrison, **the presence of the entry tells the player there is no garrison**, which is the fact the
-fog exists to hide. So a precondition over hidden state **may not gate visibility**. Either the
-condition moves onto the effect, or the action is offered and fails - and **then the rejection is an
-information channel**, which makes `Rejection` a game mechanic rather than an error report. That is a
-design decision and this lane has not taken it.
-
-**It makes `create-if-missing` compelled rather than preferred.** `X-8` treated
-precondition-versus-guard as a choice about what the player sees. Under fog it stops being a choice
-for any condition over hidden state. **Three lines now agree on Sean's own sketch** - interface
-behaviour, `X-9`'s bounded-zero-test split, and this. **Recorded with a caveat**: the second and
-third share a premise about what a garrison is, so three agreeing arguments are weaker evidence than
-they feel.
-
-**Fog itself is cheap to represent.** GDL-II is base GDL plus a `sees(role, fact)` predicate and a
-`random` role, and that suffices for arbitrary finite n-player games with randomness and incomplete
-knowledge. **The expensive half is reasoning about what others know**, which is opponent AI and is
-deferrable knowingly.
-
-**His seeded-PRNG instinct is right and better than GDL-II's**, for a reason already in this
-repository. GDL-II makes nature a player, which is an **extra input**, so the data dump is derivable
-only if you are also told what nature did. **A seed in the state keeps the transformation
-`(state, commands) -> state`**, which `docs/process.md` requires and which is what makes the dump
-derivable by hand. Two things that bite later, both inference rather than citation: **the seed is
-hidden state**, or draws are predictable; and **a single stream leaks across subsystems**, since a
-player learns that something unseen consumed randomness by watching their own next draw move -
-remedied by per-subsystem streams from one master seed.
-
-**Whether.** Worth reading before the prototype's interface takes shape, and **the first paragraph is
-worth reading before you act on `X-8` at all.** Nothing to build yet: the requirement is a constraint
-the design must meet, not a design, and the two ways of meeting it are different games. **No text
-drafted and no decision taken.**
 
 ## Resolved
 
@@ -444,3 +397,56 @@ before the core is fixed is cheaper than every alternative.**
 **Answered 2026-09-08 by the code lane, which measured rather than took it, and corrected this lane twice.** **First**, this item implied the present structure had already crossed the line. It has not: **both zero tests in the release are `limit 0 garrison`, and garrison has a stated capacity of one**, so all of them sit on a bounded place. The report contradicted itself - its own next subsection says a bounded place is safe - and the measurement is what exposed it. **The cliff is ahead, not behind**, so the rule costs nothing to adopt now and stops being free at the first zero test against food or a store. Their split of the eleven bound kinds, five bounded by a stated capacity and six by something else, is `C-74`'s fact-versus-quantity line arriving a third time.
 
 **Second, they refused the acyclic check and were right to.** No recipe calls any recipe today, so the check would be green over an empty population - which is the exact defect this repository has spent a day removing, and which this lane proposed without counting the population first. **It becomes worth wiring on the first nested recipe.** Whether the boundedness rule is adopted at all is Sean's and is now `C-75`, open to spec.
+
+### X-10 - the menu leaks, so it is computed from what the player knows and not from the state
+
+**to** code · **status** **withdrawn** 2026-09-08 — its main claim was wrong and Sean refuted it; **`X-8` stands as filed** · **raised** 2026-09-08 · **source** [report](2026-09-08-the-menu-leaks.md), and Sean stating that fog of war features heavily
+
+**This corrects `X-8`, which is still open to you**, so read this before building on it. `X-8` said
+the interface's menu is the set of actions applicable in the current state. **With heavy fog of war
+that is not imprecise, it is forbidden.**
+
+**What.** A player's indistinguishable states form an **information set**, and there is a hard
+requirement on it: **every state in one information set must offer the same available actions.** If
+two states look identical and offer different menus, **the menu discloses which one they are in.**
+GDL-II builds the same condition in - two histories are indistinguishable when the player saw the
+same things **and its own available actions were the same**.
+
+**Why it costs something, concretely.** If *deploy ark here* appears only where the territory has no
+garrison, **the presence of the entry tells the player there is no garrison**, which is the fact the
+fog exists to hide. So a precondition over hidden state **may not gate visibility**. Either the
+condition moves onto the effect, or the action is offered and fails - and **then the rejection is an
+information channel**, which makes `Rejection` a game mechanic rather than an error report. That is a
+design decision and this lane has not taken it.
+
+**It makes `create-if-missing` compelled rather than preferred.** `X-8` treated
+precondition-versus-guard as a choice about what the player sees. Under fog it stops being a choice
+for any condition over hidden state. **Three lines now agree on Sean's own sketch** - interface
+behaviour, `X-9`'s bounded-zero-test split, and this. **Recorded with a caveat**: the second and
+third share a premise about what a garrison is, so three agreeing arguments are weaker evidence than
+they feel.
+
+**Fog itself is cheap to represent.** GDL-II is base GDL plus a `sees(role, fact)` predicate and a
+`random` role, and that suffices for arbitrary finite n-player games with randomness and incomplete
+knowledge. **The expensive half is reasoning about what others know**, which is opponent AI and is
+deferrable knowingly.
+
+**His seeded-PRNG instinct is right and better than GDL-II's**, for a reason already in this
+repository. GDL-II makes nature a player, which is an **extra input**, so the data dump is derivable
+only if you are also told what nature did. **A seed in the state keeps the transformation
+`(state, commands) -> state`**, which `docs/process.md` requires and which is what makes the dump
+derivable by hand. Two things that bite later, both inference rather than citation: **the seed is
+hidden state**, or draws are predictable; and **a single stream leaks across subsystems**, since a
+player learns that something unseen consumed randomness by watching their own next draw move -
+remedied by per-subsystem streams from one master seed.
+
+**Whether.** Worth reading before the prototype's interface takes shape, and **the first paragraph is
+worth reading before you act on `X-8` at all.** Nothing to build yet: the requirement is a constraint
+the design must meet, not a design, and the two ways of meeting it are different games. **No text
+drafted and no decision taken.**
+
+**Withdrawn the same day, by Sean, and `X-8` needs no correction after all.** He asked what any of this has to do with determinism, computability or distinguishable states, and observed that games forbid actions under fog all the time. **The condition is definitional**: *all nodes in an information set have the same available actions* is a well-formedness rule about **how the model is drawn** - if the actions differed the player could tell the nodes apart, so they were never one information set. **It restricts no game.** A game that greys out an action under fog simply has finer information sets, and the menu is one of the things the player observes.
+
+**So the residue is an accounting identity and not a constraint**: if the menu differs, the player can distinguish. Worth a sentence of awareness when deciding between greying an action out and omitting it, since those disclose different amounts - and that is ordinary design judgement, not a theorem. **Nothing here should change what you build**, and the correction previously written onto `X-8` is itself withdrawn.
+
+**How it happened, since this lane spent the week cataloguing exactly this.** The citation was checked and is accurate. **The check returned a true answer and the truth of it stopped the next question** - whether the condition bound games or bound the drawing. That is `C-65`'s shape, filed by the code lane against itself two days ago, reproduced here by the lane that wrote it up.

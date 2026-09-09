@@ -9,6 +9,39 @@ re-representing the current specification that way.
 actions applicable in the current state. **With fog of war that is not merely imprecise, it is
 forbidden.** Citations checked against sources in the session that wrote this.
 
+**Withdrawn in its main claim 2026-09-08, hours after filing, by Sean.** He asked what any of this
+has to do with determinism, computability or distinguishable states, and pointed out that plenty of
+games let you attempt what you cannot know will succeed and plenty forbid actions under fog. **He is
+right and this report's central claim was wrong.**
+
+**The condition is definitional, not a restriction on games.** *All nodes in an information set have
+the same available actions* is a **well-formedness condition on how the model is drawn**: if the
+available actions differed, the player could tell the nodes apart, so by definition they were never
+one information set. It says nothing about what a game may do. **A game that greys out an action
+under fog is not violating anything** - its information sets are simply finer than someone might have
+drawn them, and the menu is part of what the player observes.
+
+**So the correct statement is an accounting identity and forbids nothing**: if the menu differs
+between two situations, the player can distinguish them. That is worth one sentence of design
+awareness and is not a constraint.
+
+**And there is no connection to determinism or computability.** Those are separate concerns -
+determinism is about whether the transition reads hidden inputs, computability is about Petri nets
+and recursion - and **this lane connected three things because they arrived in one conversation
+rather than because they connect.** The seed needing to be unobservable is a real link between
+randomness and hidden state, and it is about the seed and not about menus.
+
+**This is the `C-65` shape, in the week this lane catalogued it.** A check was run, it returned a
+true answer - the citation is accurate and still stands - and **the truth of it stopped the next
+question**, which was whether the condition constrained games or constrained the drawing. A right
+answer about the wrong thing invites no follow-up. It took a designer's *why would that matter* to
+find it.
+
+**What survives, demoted to its actual size**, is in section 3 and section 4 and is unaffected: the
+seed is hidden state or draws are predictable; one generator leaks across subsystems; fog costs about
+one predicate to represent; and the metric for re-representation has to be chosen before the
+measurement.
+
 ## 1. The constraint that changes the design
 
 In an imperfect-information game, a player's indistinguishable states form an **information set**, and
