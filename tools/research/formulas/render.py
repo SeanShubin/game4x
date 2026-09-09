@@ -417,14 +417,34 @@ every case here except the extractors. Territory 1 has food capacity 3, so deplo
 add a second food extractor. <strong>If that is wrong, the fix is at the call</strong> &mdash;
 do not found a colony that is already founded &mdash; and not a second kind of create.</p>
 </div>
+<h3>Check 5 &mdash; which territories would refuse a create, per line</h3>
+<div class="scroll">{simple_table(
+    ["Formula", "Line", "Attach", "Blocked on"],
+    [[r[0], r[1], r[2], ("none - every territory has room" if not r[3]
+      else "territory " + ", ".join(r[3]))] for r in RESULTS["placement"]],
+    ["target", "target", "attach", "note"])}</div>
 <div class="callout">
-<h4>But the urgent question marks are the two below it</h4>
-<p><strong>Territory 6 has no metal and territory 7 has no energy.</strong> Under
-<code>HARD</code>, a create that cannot be placed fails the whole action &mdash; so founding a
-colony on territory 6 would be <strong>refused entirely</strong>, because
-<code>create extractor[metal]</code> has nowhere to go. Those two lines want <code>SOFT</code>, or
-founding breaks on two of the twelve territories. <strong>That is a decision the data forces and
-the citizen one is not.</strong></p>
+<h4>Corrected: territory 7 was never affected</h4>
+<p>An earlier version of this report said territories 6 and 7 both mattered. <strong>Territory 7
+has no energy, and no formula here creates an energy extractor</strong>, so it never did. Sean
+caught it. The check now asks which territories lack <em>the resource the line actually names</em>
+rather than which lack any resource &mdash; a wider question with a plausible answer, which is the
+failure this repository keeps recording.</p>
+<p><strong>Decided 2026-09-09.</strong> Two citizens unconditionally; each extractor only where
+there is capacity. So both extractor lines are <code>SOFT</code>, and <strong>only territory 6 is
+affected, and only by the metal line</strong>: a colony founded there simply has no metal
+extractor, rather than founding being refused.</p>
+</div>
+<div class="callout">
+<h4>The same condition, two attachments, and both are right</h4>
+<p><code>found-colony</code> creates a metal extractor <code>SOFT</code>, so founding on territory
+6 succeeds without one. <code>build extractor</code> creates one <code>HARD</code>, so a player who
+chooses to build a metal extractor on territory 6 is refused. <strong>Identical condition, opposite
+answers, and neither is a mistake</strong> &mdash; because one is a consequence of landing
+somewhere and the other is a thing the player asked for.</p>
+<p>Under a selection interface the second never even arises: grounding the formula against
+territory 6 produces no <code>build extractor[metal]</code> to select. <strong>The attachment is
+what the console needs and the menu is what the interface needs, from one line.</strong></p>
 </div>
 
 <h3>Check 3 &mdash; a cap of {RESULTS["cap"]["cap"]} &nbsp;<span class="badge down">{len(RESULTS["cap"]["breaches"])} breaches</span></h3>

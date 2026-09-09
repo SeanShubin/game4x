@@ -331,6 +331,33 @@ def check_attachment():
     return meaningful, unobservable
 
 
+RESOURCE_COLUMN = {"food": 1, "metal": 2, "energy": 3}
+
+
+def check_placement():
+    """Check 5. Which territories would refuse a create, per line.
+
+    **Aimed at the resource the line actually names.** An earlier version of this report said
+    territory 7 mattered because it has no energy - and no formula here creates an energy
+    extractor, so it never did. Listing territories that lack *any* resource answers a wider
+    question than the one asked, which is the failure this repository keeps recording.
+    """
+    out = []
+    for f in DATA["player"] + DATA["world"]:
+        for op, target, _amt, attach, _n in f["lines"]:
+            if op != "create" or "[" not in target:
+                continue
+            kind = target.split("[")[0].strip()
+            res = target.split("[", 1)[1].split("]")[0].strip()
+            col = RESOURCE_COLUMN.get(res)
+            if kind != "extractor" or col is None:
+                continue
+            blocked = [row[0] for row in DATA["territories"]
+                       if row[col].strip().lower() == "none"]
+            out.append((f["name"], target, attach, blocked))
+    return out
+
+
 def check_cap(cap=1000):
     """Check 3. A backstop: apply every formula once and report anything past the cap."""
     by_name = gather()
@@ -433,6 +460,7 @@ def as_dict():
                                 "metal_gain": str(mg2)},
         },
         "cap": {"cap": cap, "breaches": [[n, k, c] for n, k, c in breached]},
+        "placement": [[n, tg, at, b] for n, tg, at, b in check_placement()],
         "attachment": {"meaningful": [list(r) for r in check_attachment()[0]],
                        "unobservable": [list(r) for r in check_attachment()[1]]},
         "poison": ["check 2 flags a formula with no inputs",
@@ -491,6 +519,15 @@ def main():
         print(f"  metal-equivalent gain: {mg2}   <- a metal source that is not extraction")
     else:
         print("  no loop gains metal without mining")
+    print()
+
+    print("CHECK 5 - which territories would refuse a create, per line")
+    for name, target, attach, blocked in check_placement():
+        where = ("none - every territory has room" if not blocked
+                 else "territory " + ", ".join(blocked))
+        verdict = "" if not blocked else ("  <- HARD would refuse founding there"
+                                          if attach.upper() != "SOFT" else "  (soft, so it skips)")
+        print(f"  {name:16} {target:24} [{attach or '-'}]  blocked on: {where}{verdict}")
     print()
 
     meaningful, unobservable = check_attachment()

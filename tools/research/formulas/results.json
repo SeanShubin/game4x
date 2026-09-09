@@ -86,6 +86,22 @@
     "cap": 1000,
     "breaches": []
   },
+  "placement": [
+    [
+      "found-colony(t)",
+      "extractor[food] in t",
+      "SOFT",
+      []
+    ],
+    [
+      "found-colony(t)",
+      "extractor[metal] in t",
+      "SOFT",
+      [
+        "6"
+      ]
+    ]
+  ],
   "attachment": {
     "meaningful": [
       [
@@ -97,13 +113,13 @@
       [
         "found-colony(t)",
         "extractor[food] in t",
-        "?",
+        "SOFT",
         "its deposit's total capacity for r"
       ],
       [
         "found-colony(t)",
         "extractor[metal] in t",
-        "?",
+        "SOFT",
         "its deposit's total capacity for r"
       ],
       [
@@ -119,14 +135,7 @@
         "1"
       ]
     ],
-    "unobservable": [
-      [
-        "found-colony(t)",
-        "citizen in t",
-        "?",
-        "unbounded - held down by food through upkeep"
-      ]
-    ]
+    "unobservable": []
   },
   "poison": [
     "check 2 flags a formula with no inputs",

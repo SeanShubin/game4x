@@ -120,22 +120,22 @@
           "create",
           "citizen in t",
           "2",
-          "?",
-          "? is not a decision - a territory never refuses a citizen"
+          "",
+          "Sean: 2 citizens, unconditionally. A territory never refuses one"
         ],
         [
           "create",
           "extractor[food] in t",
           "1",
-          "?",
-          "? is live - every territory has food capacity, so HARD is safe here"
+          "SOFT",
+          "Sean: only if there is capacity. No territory lacks food capacity"
         ],
         [
           "create",
           "extractor[metal] in t",
           "1",
-          "?",
-          "? is URGENT - territory 6 has no metal, so HARD refuses founding there"
+          "SOFT",
+          "Sean: only if there is capacity. Territory 6 has no metal, so it skips there"
         ]
       ]
     },
@@ -888,9 +888,14 @@
       "3 metal-equivalent, which is exactly an ark's Binding and a pioneer's, so deploy ark and found by land both conserve exactly."
     ],
     [
-      "OPEN and urgent - the two extractor lines, not the citizen one",
-      "found-colony creates extractor[food] and extractor[metal]. Territory 6 has no metal and territory 7 has no energy.",
-      "Under HARD, a create that cannot be placed fails the whole action - so founding a colony on territory 6 would be refused entirely. These two want SOFT, or founding breaks on two of the twelve territories."
+      "ANSWERED - all three question marks in found-colony",
+      "Sean, 2026-09-09: add 2 citizens; create a food extractor if there is capacity for one; create a metal extractor if there is capacity for one.",
+      "Citizens unattached - the line cannot fail. Both extractors SOFT. Only territory 6 is affected, and only the metal line: it founds there without a metal extractor rather than being refused."
+    ],
+    [
+      "CORRECTED - territory 7 was never affected",
+      "This report said territories 6 and 7 both mattered. Territory 7 has no energy, and no formula here creates an energy extractor.",
+      "Sean caught it. The check now asks which territories lack the resource the line actually names, rather than which lack any resource - see check 5."
     ],
     [
       "ANSWERED - how to catch an infinite-resource glitch",

@@ -280,9 +280,9 @@ rather than after.</p>
 <th>Was</th>
 </tr></thead><tbody>
 <tr><td class="op op-create">create</td><td class="target">garrison in t</td><td class="amt">1</td><td><span class="attach">SOFT</span></td><td class="note">rows 3 and 4 were a guard and a create</td></tr>
-<tr><td class="op op-create">create</td><td class="target">citizen in t</td><td class="amt">2</td><td><span class="attach">?</span></td><td class="note">? is not a decision - a territory never refuses a citizen</td></tr>
-<tr><td class="op op-create">create</td><td class="target">extractor[food] in t</td><td class="amt">1</td><td><span class="attach">?</span></td><td class="note">? is live - every territory has food capacity, so HARD is safe here</td></tr>
-<tr><td class="op op-create">create</td><td class="target">extractor[metal] in t</td><td class="amt">1</td><td><span class="attach">?</span></td><td class="note">? is URGENT - territory 6 has no metal, so HARD refuses founding there</td></tr>
+<tr><td class="op op-create">create</td><td class="target">citizen in t</td><td class="amt">2</td><td></td><td class="note">Sean: 2 citizens, unconditionally. A territory never refuses one</td></tr>
+<tr><td class="op op-create">create</td><td class="target">extractor[food] in t</td><td class="amt">1</td><td><span class="attach">SOFT</span></td><td class="note">Sean: only if there is capacity. No territory lacks food capacity</td></tr>
+<tr><td class="op op-create">create</td><td class="target">extractor[metal] in t</td><td class="amt">1</td><td><span class="attach">SOFT</span></td><td class="note">Sean: only if there is capacity. Territory 6 has no metal, so it skips there</td></tr>
 </tbody></table><h3>found by land <span class="badge down">8 rows &rarr; 3 lines (&minus;5)</span></h3>
 <p class="sel">selection: <em>a pioneer</em></p>
 <table><thead><tr>
@@ -918,7 +918,7 @@ declared free in the <em>Kinds</em> table. <strong>So there is no metal source o
 extraction</strong> &mdash; which is what conservation was supposed to mean, now checked rather
 than asserted.</p>
 
-<h3>Check 4 &mdash; is an attachment observable? &nbsp;<span class="badge up">1 decide nothing</span></h3>
+<h3>Check 4 &mdash; is an attachment observable? &nbsp;<span class="badge up">0 decide nothing</span></h3>
 <p>A <code>create</code> fails when its container will not hold another. So an attachment on a
 create whose target has <strong>no capacity</strong> decides nothing &mdash; hard and soft behave
 identically and always will. <strong>Naming a question does not make it one.</strong></p>
@@ -937,13 +937,13 @@ identically and always will. <strong>Naming a question does not make it one.</st
 <tr>
 <td class="target">found-colony(t)</td>
 <td class="target">extractor[food] in t</td>
-<td class="attach">?</td>
+<td class="attach">SOFT</td>
 <td class="note">its deposit's total capacity for r</td>
 </tr>
 <tr>
 <td class="target">found-colony(t)</td>
 <td class="target">extractor[metal] in t</td>
-<td class="attach">?</td>
+<td class="attach">SOFT</td>
 <td class="note">its deposit's total capacity for r</td>
 </tr>
 <tr>
@@ -966,12 +966,6 @@ identically and always will. <strong>Naming a question does not make it one.</st
 <th>Attach</th>
 <th>Why it cannot fail</th>
 </tr></thead><tbody>
-<tr>
-<td class="target">found-colony(t)</td>
-<td class="target">citizen in t</td>
-<td class="attach">?</td>
-<td class="note">unbounded - held down by food through upkeep</td>
-</tr>
 </tbody></table></div>
 <div class="callout">
 <h4>The citizen question mark is not a decision</h4>
@@ -1031,14 +1025,48 @@ every case here except the extractors. Territory 1 has food capacity 3, so deplo
 add a second food extractor. <strong>If that is wrong, the fix is at the call</strong> &mdash;
 do not found a colony that is already founded &mdash; and not a second kind of create.</p>
 </div>
+<h3>Check 5 &mdash; which territories would refuse a create, per line</h3>
+<div class="scroll"><table><thead><tr>
+<th>Formula</th>
+<th>Line</th>
+<th>Attach</th>
+<th>Blocked on</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">extractor[food] in t</td>
+<td class="attach">SOFT</td>
+<td class="note">none - every territory has room</td>
+</tr>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">extractor[metal] in t</td>
+<td class="attach">SOFT</td>
+<td class="note">territory 6</td>
+</tr>
+</tbody></table></div>
 <div class="callout">
-<h4>But the urgent question marks are the two below it</h4>
-<p><strong>Territory 6 has no metal and territory 7 has no energy.</strong> Under
-<code>HARD</code>, a create that cannot be placed fails the whole action &mdash; so founding a
-colony on territory 6 would be <strong>refused entirely</strong>, because
-<code>create extractor[metal]</code> has nowhere to go. Those two lines want <code>SOFT</code>, or
-founding breaks on two of the twelve territories. <strong>That is a decision the data forces and
-the citizen one is not.</strong></p>
+<h4>Corrected: territory 7 was never affected</h4>
+<p>An earlier version of this report said territories 6 and 7 both mattered. <strong>Territory 7
+has no energy, and no formula here creates an energy extractor</strong>, so it never did. Sean
+caught it. The check now asks which territories lack <em>the resource the line actually names</em>
+rather than which lack any resource &mdash; a wider question with a plausible answer, which is the
+failure this repository keeps recording.</p>
+<p><strong>Decided 2026-09-09.</strong> Two citizens unconditionally; each extractor only where
+there is capacity. So both extractor lines are <code>SOFT</code>, and <strong>only territory 6 is
+affected, and only by the metal line</strong>: a colony founded there simply has no metal
+extractor, rather than founding being refused.</p>
+</div>
+<div class="callout">
+<h4>The same condition, two attachments, and both are right</h4>
+<p><code>found-colony</code> creates a metal extractor <code>SOFT</code>, so founding on territory
+6 succeeds without one. <code>build extractor</code> creates one <code>HARD</code>, so a player who
+chooses to build a metal extractor on territory 6 is refused. <strong>Identical condition, opposite
+answers, and neither is a mistake</strong> &mdash; because one is a consequence of landing
+somewhere and the other is a thing the player asked for.</p>
+<p>Under a selection interface the second never even arises: grounding the formula against
+territory 6 produces no <code>build extractor[metal]</code> to select. <strong>The attachment is
+what the console needs and the menu is what the interface needs, from one line.</strong></p>
 </div>
 
 <h3>Check 3 &mdash; a cap of 1000 &nbsp;<span class="badge down">0 breaches</span></h3>
@@ -1184,9 +1212,14 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <td class="note">3 metal-equivalent, which is exactly an ark's Binding and a pioneer's, so deploy ark and found by land both conserve exactly.</td>
 </tr>
 <tr>
-<td>OPEN and urgent - the two extractor lines, not the citizen one</td>
-<td>found-colony creates extractor[food] and extractor[metal]. Territory 6 has no metal and territory 7 has no energy.</td>
-<td class="note">Under HARD, a create that cannot be placed fails the whole action - so founding a colony on territory 6 would be refused entirely. These two want SOFT, or founding breaks on two of the twelve territories.</td>
+<td>ANSWERED - all three question marks in found-colony</td>
+<td>Sean, 2026-09-09: add 2 citizens; create a food extractor if there is capacity for one; create a metal extractor if there is capacity for one.</td>
+<td class="note">Citizens unattached - the line cannot fail. Both extractors SOFT. Only territory 6 is affected, and only the metal line: it founds there without a metal extractor rather than being refused.</td>
+</tr>
+<tr>
+<td>CORRECTED - territory 7 was never affected</td>
+<td>This report said territories 6 and 7 both mattered. Territory 7 has no energy, and no formula here creates an energy extractor.</td>
+<td class="note">Sean caught it. The check now asks which territories lack the resource the line actually names, rather than which lack any resource - see check 5.</td>
 </tr>
 <tr>
 <td>ANSWERED - how to catch an infinite-resource glitch</td>
