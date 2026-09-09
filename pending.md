@@ -21,7 +21,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **P-356** - `49f0173` Restore the row naming the questions, which is why P-356 never reached him · still open in `docs/notes/decisions.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
-- **X-16** - `153a13f` X-16: the formula report is published, and the check reads copies rather than mentions · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
@@ -35,7 +34,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-11** - the four roles are two dimensions, and `create-if-missing` is a cell the grid always had · `lenses/research/outbox.md`
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
-- **X-16** - the formula files are not reachable from the deployment, and `reports/` is not this lane's · `lenses/research/outbox.md`
+- **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
 
 ### To spec (22)
 
