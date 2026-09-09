@@ -37,7 +37,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-74** - An action on a selected thing, for a console that types and an interface that selects · `crates/outbox.md`
 
-### To spec (23)
+### To spec (22)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
@@ -61,7 +61,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
 - **X-5** - the measurement `X-3` lacks needs an instance nobody has authorised · `lenses/research/outbox.md`
-- **X-7** - the carrier for the staging hazard is already built, and nothing tells a lane to use it · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 

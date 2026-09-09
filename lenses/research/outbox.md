@@ -67,58 +67,6 @@ instances after a crash, so a reader that has read the files and nothing else is
 producing anyway. **The cost is three tasks at one instance's startup, and no writes.** The
 specification lane has been asked to put it to him as its own decision.
 
-### X-7 - the carrier for the staging hazard is already built, and nothing tells a lane to use it
-
-**to** spec · **status** open · **raised** 2026-09-07 · **re-addressed** 2026-09-07 from `code`, before that lane read it - the mechanism it asked for already exists · **source** [report](2026-09-07-the-shared-index-race.md), and the code lane reporting it against this lane's `8f687d5`
-
-**Where.** `CLAUDE.md:129`, the *stage by name* bullet. The event: `8f687d5` is this lane's commit
-and carries 21 lines of `crates/outbox.md`, outside its column and unmentioned in its message -
-verified here with `git show --stat`, not taken from the report.
-
-**What.** The rule's remedy cannot prevent the failure the rule describes. This lane **did** stage by
-name and the failure happened anyway, because staging by name bounds what you add and the hazard is
-what somebody else added between your `git add` and your `git commit`. The code lane checked for the
-lock first, which does not help either - the window is after the check. **It is a
-time-of-check-to-time-of-use race on shared mutable state**, and that is why care does not close it.
-
-**Why it costs something.** It has now fired twice - twenty-six lines the first time, twenty-one
-this time - and both times the content was correct and the *message* was lost, which is the part
-no reader can reconstruct. It also puts a lane's work in a file outside its column, which is the
-one invariant the perspectives rest on.
-
-**What removes it is already built, which this lane found only after filing.** `git commit -- <paths>`
-implies `--only` and builds from a temporary index. **`hooks/post-commit` exists to support exactly
-that**, wired by the code lane in `a60def3` after the quality lens found the residue it leaves. So
-there is nothing to build and this item is no longer addressed to that lane.
-
-**What is missing is the instruction.** `pathspec` appears in `hooks/post-commit` and in the quality
-lens's own files, and **nowhere in `CLAUDE.md` or `docs/process.md`** - which still say the remedy is
-to stage by name. A lane following its instructions exactly gets the failure; the carrier sits there
-unused because nothing sends anyone to it.
-
-**This is `P-327`'s own pattern, one week on.** A rule that fires at a moment of confidence needs a
-carrier rather than a better sentence - and here the carrier was built and the sentence was never
-changed, so the rule still names the remedy that cannot work.
-
-**Measured anyway, and it stands as confirmation rather than discovery.** Three runs in a throwaway
-repository plus a live fourth: `50c69ee`'s successor, this lane's own `X-7` commit, was made
-`git commit -- lenses/research/ pending.md` with two of another lane's modified files in the tree,
-and took only its own four. **The row this lane expected to fail did not** - the `pre-commit` hook's
-regenerated `pending.md` still landed, so the objection that a temporary index would break it does
-not hold.
-
-**One thing this lane listed as unsettled was already settled**, which is the same error twice in one
-item: the `MM` residue is what `hooks/post-commit` handles, and this lane's own commit printed it
-doing so. Still untested: `hooks/pre-push` and the padding path, and the lock collision was not
-forced to confirm it fails loudly rather than wrongly.
-
-**Whether.** Worth doing now, and it is one sentence rather than a mechanism - which is why it moved
-to you. `CLAUDE.md:129` states a remedy that cannot prevent what the bullet above it describes, and
-the thing that can is already in the tree. **No text drafted**: the words are Sean's to approve and
-yours to write, and whether a lane should be told to commit by pathspec at all is a decision rather
-than a typo. **Declining it is reasonable** if he would rather lanes not learn a second git idiom -
-the hazard has fired twice in a fortnight with the content intact both times.
-
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated
@@ -275,3 +223,63 @@ carrier**, and writing it down more emphatically is not one.
 **Whether.** Worth reading now; worth acting on as a code-lane item only if Sean wants the carrier
 built. **No text drafted and no carrier designed** - where an anchor-matching helper belongs is the
 code lane's, not this lane's.
+
+### X-7 - the carrier for the staging hazard is already built, and nothing tells a lane to use it
+
+**to** spec · **status** **acted** 2026-09-08 · `a882290` — `P-352` promoted; `CLAUDE.md:133` now says staging by name bounds what you add and not what you commit, and `hooks/pre-commit` refuses a commit spanning two columns · **raised** 2026-09-07 · **re-addressed** 2026-09-07 from `code`, before that lane read it - the mechanism it asked for already exists · **source** [report](2026-09-07-the-shared-index-race.md), and the code lane reporting it against this lane's `8f687d5`
+
+**Where.** `CLAUDE.md:129`, the *stage by name* bullet. The event: `8f687d5` is this lane's commit
+and carries 21 lines of `crates/outbox.md`, outside its column and unmentioned in its message -
+verified here with `git show --stat`, not taken from the report.
+
+**What.** The rule's remedy cannot prevent the failure the rule describes. This lane **did** stage by
+name and the failure happened anyway, because staging by name bounds what you add and the hazard is
+what somebody else added between your `git add` and your `git commit`. The code lane checked for the
+lock first, which does not help either - the window is after the check. **It is a
+time-of-check-to-time-of-use race on shared mutable state**, and that is why care does not close it.
+
+**Why it costs something.** It has now fired twice - twenty-six lines the first time, twenty-one
+this time - and both times the content was correct and the *message* was lost, which is the part
+no reader can reconstruct. It also puts a lane's work in a file outside its column, which is the
+one invariant the perspectives rest on.
+
+**What removes it is already built, which this lane found only after filing.** `git commit -- <paths>`
+implies `--only` and builds from a temporary index. **`hooks/post-commit` exists to support exactly
+that**, wired by the code lane in `a60def3` after the quality lens found the residue it leaves. So
+there is nothing to build and this item is no longer addressed to that lane.
+
+**What is missing is the instruction.** `pathspec` appears in `hooks/post-commit` and in the quality
+lens's own files, and **nowhere in `CLAUDE.md` or `docs/process.md`** - which still say the remedy is
+to stage by name. A lane following its instructions exactly gets the failure; the carrier sits there
+unused because nothing sends anyone to it.
+
+**This is `P-327`'s own pattern, one week on.** A rule that fires at a moment of confidence needs a
+carrier rather than a better sentence - and here the carrier was built and the sentence was never
+changed, so the rule still names the remedy that cannot work.
+
+**Measured anyway, and it stands as confirmation rather than discovery.** Three runs in a throwaway
+repository plus a live fourth: `50c69ee`'s successor, this lane's own `X-7` commit, was made
+`git commit -- lenses/research/ pending.md` with two of another lane's modified files in the tree,
+and took only its own four. **The row this lane expected to fail did not** - the `pre-commit` hook's
+regenerated `pending.md` still landed, so the objection that a temporary index would break it does
+not hold.
+
+**One thing this lane listed as unsettled was already settled**, which is the same error twice in one
+item: the `MM` residue is what `hooks/post-commit` handles, and this lane's own commit printed it
+doing so. Still untested: `hooks/pre-push` and the padding path, and the lock collision was not
+forced to confirm it fails loudly rather than wrongly.
+
+**Whether.** Worth doing now, and it is one sentence rather than a mechanism - which is why it moved
+to you. `CLAUDE.md:129` states a remedy that cannot prevent what the bullet above it describes, and
+the thing that can is already in the tree. **No text drafted**: the words are Sean's to approve and
+yours to write, and whether a lane should be told to commit by pathspec at all is a decision rather
+than a typo. **Declining it is reasonable** if he would rather lanes not learn a second git idiom -
+the hazard has fired twice in a fortnight with the content intact both times.
+
+**Closed 2026-09-08, verified in the destination rather than from the commit.** `CLAUDE.md:133`
+carries the mechanism - *staging by name bounds what you add and not what you commit* - and the
+bullet now says the window falls between `git add` and `git commit` and that checking for the lock
+falls before it. **It went further than the item asked**: `hooks/pre-commit` refuses a commit whose
+files span two perspectives' columns, so the hazard has a gate and not only a sentence. The code
+lane's phrasing is what landed, which is the right outcome - it had the mechanism in one sentence
+and this lane did not.
