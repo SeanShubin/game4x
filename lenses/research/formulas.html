@@ -810,6 +810,163 @@ check will flag it &mdash; correctly. So check 2 cannot ask <em>is anything unbo
 author names the resource that must not grow and food is simply not on the list.</p>
 </div>
 
+<h2>Theme, and the number it derives</h2>
+<p>Sean, 2026-09-09: <em>food gets energy from the sun, citizens get energy from food, so labor is
+not thematically free.</em> <strong>He is right that it does not belong in a recipe, and right that
+it helps reason about them &mdash; it derives a quantity the specification never states.</strong></p>
+<div class="scroll"><table><thead><tr>
+<th></th>
+<th>The claim</th>
+<th>What it gives</th>
+<th>Status</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">The chain has a name</td>
+<td class="target">sun -&gt; food -&gt; citizen -&gt; labor</td>
+<td>**Emergy** (H.T. Odum): the solar energy used up directly and indirectly to make a thing - *energy memory*. **Transformity** is emergy per unit of energy, so a thing high in the chain carries more sun in it.</td>
+<td class="note">Confirmed against sources rather than recalled</td>
+</tr>
+<tr>
+<td class="target">Why `create labor` is not the bug it looks like</td>
+<td class="target">Check 2 reports it as a loop that makes labor from nothing.</td>
+<td>It does, *inside the model*. Thematically the sun is paying, and the sun is outside. **So the model has exactly one open boundary - solar, entering through food - and everything else should be closed.** That is a better statement of the declaration list than *these kinds may grow*.</td>
+<td class="note">Restates a check result in the theme's terms</td>
+</tr>
+<tr>
+<td class="target">What labor is worth</td>
+<td class="target">1 labor costs 1 citizen-turn costs 1 food.</td>
+<td>So labor and food sit at about 1:1. Metal costs 1/d labor, where d is the territory's metal density - **so the same metal carries different amounts of sun depending on where it was dug.** That is what makes one territory worth more than another, stated as a quantity rather than a feeling.</td>
+<td class="note">Follows from upkeep, create labor and work</td>
+</tr>
+<tr>
+<td class="target">It is a boundary condition, not a rule</td>
+<td class="target">Sean: this does not need to be in a recipe.</td>
+<td>Agreed, and there is a reason in the model: a boundary condition **constrains** the formulas without being **fired** by anything. Writing it as a recipe would give it a trigger it does not have.</td>
+<td class="note">Why it stays out of the table</td>
+</tr>
+</tbody></table></div>
+
+<h3>The population ceiling, which no document contains</h3>
+<p>Per citizen per turn: <code>upkeep</code> eats 1 food, <code>create labor</code> yields 1 labor,
+and <code>work</code> turns 1 labor into <em>d</em> food. So with <em>n</em> citizens and <em>c</em>
+food extractors, the surplus is <strong>n(d&minus;1)</strong> while n &le; c, and
+<strong>c&middot;d &minus; n</strong> after that. <strong>It reaches zero at n = c&middot;d</strong>
+&mdash; so a territory's population ceiling is its food capacity times its density, which is the
+<em>Food</em> column read as a product.</p>
+<div class="scroll"><table><thead><tr>
+<th>Territory</th>
+<th>Food</th>
+<th>Ceiling</th>
+<th>Can it grow?</th>
+<th>What the release says it exercises</th>
+</tr></thead><tbody>
+<tr>
+<td class="amt">1</td>
+<td class="amt">3 x 4</td>
+<td class="amt">12</td>
+<td class="attach">yes</td>
+<td class="note">The landing site. Everything works</td>
+</tr>
+<tr>
+<td class="amt">2</td>
+<td class="amt">2 x 6</td>
+<td class="amt">12</td>
+<td class="attach">yes</td>
+<td class="note">Few dense food extractors</td>
+</tr>
+<tr>
+<td class="amt">3</td>
+<td class="amt">6 x 2</td>
+<td class="amt">12</td>
+<td class="attach">yes</td>
+<td class="note">Many thin food extractors, same food total</td>
+</tr>
+<tr>
+<td class="amt">4</td>
+<td class="amt">1 x 2</td>
+<td class="amt">2</td>
+<td class="attach">yes</td>
+<td class="note">The minimum a territory can be</td>
+</tr>
+<tr>
+<td class="amt">5</td>
+<td class="amt">3 x 1</td>
+<td class="amt">3</td>
+<td class="attach">NO - static at any size</td>
+<td class="note">Food density 1</td>
+</tr>
+<tr>
+<td class="amt">6</td>
+<td class="amt">4 x 4</td>
+<td class="amt">16</td>
+<td class="attach">yes</td>
+<td class="note">No metal</td>
+</tr>
+<tr>
+<td class="amt">7</td>
+<td class="amt">4 x 4</td>
+<td class="amt">16</td>
+<td class="attach">yes</td>
+<td class="note">No energy</td>
+</tr>
+<tr>
+<td class="amt">8</td>
+<td class="amt">6 x 6</td>
+<td class="amt">36</td>
+<td class="attach">yes</td>
+<td class="note">Population without industry</td>
+</tr>
+<tr>
+<td class="amt">9</td>
+<td class="amt">2 x 3</td>
+<td class="amt">6</td>
+<td class="attach">yes</td>
+<td class="note">Rich metal, too few hands to work it</td>
+</tr>
+<tr>
+<td class="amt">10</td>
+<td class="amt">3 x 3</td>
+<td class="amt">9</td>
+<td class="attach">yes</td>
+<td class="note">An energy depot</td>
+</tr>
+<tr>
+<td class="amt">11</td>
+<td class="amt">5 x 6</td>
+<td class="amt">30</td>
+<td class="attach">yes</td>
+<td class="note">The prize</td>
+</tr>
+<tr>
+<td class="amt">12</td>
+<td class="amt">2 x 2</td>
+<td class="amt">4</td>
+<td class="attach">yes</td>
+<td class="note">Rich extractors, almost no workers</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>Every note is explained by that one number, and one of them says so out loud</h4>
+<p>Territories 2 and 3 are <code>2 x 6</code> and <code>6 x 2</code> &mdash; different shapes,
+<strong>ceiling 12 both</strong> &mdash; and the release's own note on territory 3 reads
+<em>many thin food extractors, <strong>same food total</strong></em>. Territory 9 has a ceiling of 6
+against metal capacity 6: <em>rich metal, too few hands to work it</em>. Territory 12 has a ceiling
+of 4 against 8 metal extractors: <em>rich extractors, almost no workers</em>. <strong>The notes were
+written from a quantity that was never written down.</strong></p>
+<p><strong>And territory 5 is sharper than its note.</strong> At density 1 a citizen eats exactly
+what it produces, so the surplus is <em>n(1&minus;1) = 0</em> at any size: it is not merely
+low-ceilinged, it <strong>cannot grow at all</strong> and is frozen at whatever founds it. The note
+says <em>Food density 1</em>; the consequence is that the ceiling of 3 is unreachable.</p>
+</div>
+<div class="callout">
+<h4>One thing the chain does not explain, and it is worth knowing</h4>
+<p><code>grow</code> produces <em>the lesser of the surplus food and the citizens here</em>, so
+growth <strong>caps at doubling per turn</strong> however dense the food is. Density above 2 does
+not make a colony grow faster &mdash; it makes surplus for something else. <strong>So the ceiling
+and the growth rate are set by different halves of the same column</strong>, and a reader who takes
+<em>6 x 6</em> as <em>six times faster</em> would be wrong.</p>
+</div>
+
 <h2>The three checks, as run</h2>
 <p>Not a description of what they would report &mdash; the output of
 <code>tools/research/formulas/check.py</code>, read from <code>results.json</code>, so this page
@@ -1250,6 +1407,11 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <td>OPEN - does a thing have identity, or is it a count?</td>
 <td>set requires an identified thing. destroy ark means this ark. create citizen 2 asks for no identity.</td>
 <td class="note">The dump already answers this: nine of its ten tables are the containment tree of identified things.</td>
+</tr>
+<tr>
+<td>NOT A DECISION - recorded because it explains the numbers</td>
+<td>Sean, 2026-09-09, on theme: labor is not free, it is the sun's energy through food and citizens.</td>
+<td class="note">It derives a quantity the specification never states - the population ceiling - and that quantity explains all twelve territory notes.</td>
 </tr>
 </tbody></table></div>
 

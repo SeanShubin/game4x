@@ -926,6 +926,11 @@
       "OPEN - does a thing have identity, or is it a count?",
       "set requires an identified thing. destroy ark means this ark. create citizen 2 asks for no identity.",
       "The dump already answers this: nine of its ten tables are the containment tree of identified things."
+    ],
+    [
+      "NOT A DECISION - recorded because it explains the numbers",
+      "Sean, 2026-09-09, on theme: labor is not free, it is the sun's energy through food and citizens.",
+      "It derives a quantity the specification never states - the population ceiling - and that quantity explains all twelve territory notes."
     ]
   ],
   "collapse": [
@@ -1272,6 +1277,118 @@
       "`grow` consumes *the lesser of the surplus food and the citizens here*.",
       "This decides whether clamp is a primitive. If the amount may hold arithmetic, clamp is sugar and should go. If the amount holds only constants and paths - which is what keeps the language finite - then clamp is the only way to say *as many as possible*, and it is a primitive.",
       "The one formula that needs it today"
+    ]
+  ],
+  "ceiling": [
+    [
+      "1",
+      "3 x 4",
+      "12",
+      "yes",
+      "The landing site. Everything works"
+    ],
+    [
+      "2",
+      "2 x 6",
+      "12",
+      "yes",
+      "Few dense food extractors"
+    ],
+    [
+      "3",
+      "6 x 2",
+      "12",
+      "yes",
+      "Many thin food extractors, same food total"
+    ],
+    [
+      "4",
+      "1 x 2",
+      "2",
+      "yes",
+      "The minimum a territory can be"
+    ],
+    [
+      "5",
+      "3 x 1",
+      "3",
+      "NO - static at any size",
+      "Food density 1"
+    ],
+    [
+      "6",
+      "4 x 4",
+      "16",
+      "yes",
+      "No metal"
+    ],
+    [
+      "7",
+      "4 x 4",
+      "16",
+      "yes",
+      "No energy"
+    ],
+    [
+      "8",
+      "6 x 6",
+      "36",
+      "yes",
+      "Population without industry"
+    ],
+    [
+      "9",
+      "2 x 3",
+      "6",
+      "yes",
+      "Rich metal, too few hands to work it"
+    ],
+    [
+      "10",
+      "3 x 3",
+      "9",
+      "yes",
+      "An energy depot"
+    ],
+    [
+      "11",
+      "5 x 6",
+      "30",
+      "yes",
+      "The prize"
+    ],
+    [
+      "12",
+      "2 x 2",
+      "4",
+      "yes",
+      "Rich extractors, almost no workers"
+    ]
+  ],
+  "theme": [
+    [
+      "The chain has a name",
+      "sun -> food -> citizen -> labor",
+      "**Emergy** (H.T. Odum): the solar energy used up directly and indirectly to make a thing - *energy memory*. **Transformity** is emergy per unit of energy, so a thing high in the chain carries more sun in it.",
+      "Confirmed against sources rather than recalled"
+    ],
+    [
+      "Why `create labor` is not the bug it looks like",
+      "Check 2 reports it as a loop that makes labor from nothing.",
+      "It does, *inside the model*. Thematically the sun is paying, and the sun is outside. **So the model has exactly one open boundary - solar, entering through food - and everything else should be closed.** That is a better statement of the declaration list than *these kinds may grow*.",
+      "Restates a check result in the theme's terms"
+    ],
+    [
+      "What labor is worth",
+      "1 labor costs 1 citizen-turn costs 1 food.",
+      "So labor and food sit at about 1:1. Metal costs 1/d labor, where d is the territory's metal density - **so the same metal carries different amounts of sun depending on where it was dug.** That is what makes one territory worth more than another, stated as a quantity rather than a feeling.",
+      "Follows from upkeep, create labor and work"
+    ],
+    [
+      "It is a boundary condition, not a rule",
+      "Sean: this does not need to be in a recipe.",
+      "Agreed, and there is a reason in the model: a boundary condition **constrains** the formulas without being **fired** by anything. Writing it as a recipe would give it a trigger it does not have.",
+      "Why it stays out of the table"
     ]
   ]
 }

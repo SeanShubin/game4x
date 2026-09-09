@@ -314,6 +314,46 @@ check will flag it &mdash; correctly. So check 2 cannot ask <em>is anything unbo
 author names the resource that must not grow and food is simply not on the list.</p>
 </div>
 
+<h2>Theme, and the number it derives</h2>
+<p>Sean, 2026-09-09: <em>food gets energy from the sun, citizens get energy from food, so labor is
+not thematically free.</em> <strong>He is right that it does not belong in a recipe, and right that
+it helps reason about them &mdash; it derives a quantity the specification never states.</strong></p>
+<div class="scroll">{simple_table(
+    ["", "The claim", "What it gives", "Status"],
+    DATA["theme"], ["target", "target", "", "note"])}</div>
+
+<h3>The population ceiling, which no document contains</h3>
+<p>Per citizen per turn: <code>upkeep</code> eats 1 food, <code>create labor</code> yields 1 labor,
+and <code>work</code> turns 1 labor into <em>d</em> food. So with <em>n</em> citizens and <em>c</em>
+food extractors, the surplus is <strong>n(d&minus;1)</strong> while n &le; c, and
+<strong>c&middot;d &minus; n</strong> after that. <strong>It reaches zero at n = c&middot;d</strong>
+&mdash; so a territory's population ceiling is its food capacity times its density, which is the
+<em>Food</em> column read as a product.</p>
+<div class="scroll">{simple_table(
+    ["Territory", "Food", "Ceiling", "Can it grow?", "What the release says it exercises"],
+    DATA["ceiling"], ["amt", "amt", "amt", "attach", "note"])}</div>
+<div class="callout">
+<h4>Every note is explained by that one number, and one of them says so out loud</h4>
+<p>Territories 2 and 3 are <code>2 x 6</code> and <code>6 x 2</code> &mdash; different shapes,
+<strong>ceiling 12 both</strong> &mdash; and the release's own note on territory 3 reads
+<em>many thin food extractors, <strong>same food total</strong></em>. Territory 9 has a ceiling of 6
+against metal capacity 6: <em>rich metal, too few hands to work it</em>. Territory 12 has a ceiling
+of 4 against 8 metal extractors: <em>rich extractors, almost no workers</em>. <strong>The notes were
+written from a quantity that was never written down.</strong></p>
+<p><strong>And territory 5 is sharper than its note.</strong> At density 1 a citizen eats exactly
+what it produces, so the surplus is <em>n(1&minus;1) = 0</em> at any size: it is not merely
+low-ceilinged, it <strong>cannot grow at all</strong> and is frozen at whatever founds it. The note
+says <em>Food density 1</em>; the consequence is that the ceiling of 3 is unreachable.</p>
+</div>
+<div class="callout">
+<h4>One thing the chain does not explain, and it is worth knowing</h4>
+<p><code>grow</code> produces <em>the lesser of the surplus food and the citizens here</em>, so
+growth <strong>caps at doubling per turn</strong> however dense the food is. Density above 2 does
+not make a colony grow faster &mdash; it makes surplus for something else. <strong>So the ceiling
+and the growth rate are set by different halves of the same column</strong>, and a reader who takes
+<em>6 x 6</em> as <em>six times faster</em> would be wrong.</p>
+</div>
+
 <h2>The three checks, as run</h2>
 <p>Not a description of what they would report &mdash; the output of
 <code>tools/research/formulas/check.py</code>, read from <code>results.json</code>, so this page
