@@ -99,19 +99,19 @@ transformation needed anyway.</p>
 <tr>
 <td class="op">threshold</td>
 <td>A guard: a count against a bound, in a direction</td>
-<td class="target">garrison in t at most 0</td>
+<td class="target">metal in t at least 3</td>
 <td class="note">the only thing that can refuse</td>
 </tr>
 <tr>
 <td class="op">attach</td>
-<td>Whether failing a guard fails the action, or skips its own line</td>
-<td class="target">hard / soft</td>
-<td class="note">Sean's fail-behavior</td>
+<td>On any line: hard fails the action, soft skips that line</td>
+<td class="target">create garrison in t [soft]</td>
+<td class="note">Sean's fail-behavior, and it attaches to a create and a call as well as to a guard</td>
 </tr>
 <tr>
 <td class="op">call</td>
 <td>Apply another formula with arguments</td>
-<td class="target">call found-colony(t)</td>
+<td class="target">call found-colony(t) [soft]</td>
 <td class="note">the hierarchy</td>
 </tr>
 </tbody></table></div>
@@ -156,8 +156,8 @@ transformation needed anyway.</p>
 </tr>
 <tr>
 <td class="target">limit n k</td>
-<td>threshold(k, at most n, hard)</td>
-<td class="note">exact</td>
+<td>DELETED - a container's capacity, declared once in Capacities</td>
+<td class="note">both uses were restatements</td>
 </tr>
 </tbody></table></div>
 
@@ -183,13 +183,12 @@ transformation needed anyway.</p>
 <th>Attach</th>
 <th>Was</th>
 </tr></thead><tbody>
-<tr><td class="op op-threshold">threshold</td><td class="target">garrison in t</td><td class="amt">at most 0</td><td><span class="attach">HARD?</span></td><td class="note">row 3 - see Decisions</td></tr>
-<tr><td class="op op-create">create</td><td class="target">garrison in t</td><td class="amt">1</td><td></td><td class="note">row 4</td></tr>
-<tr><td class="op op-create">create</td><td class="target">citizen in t</td><td class="amt">2</td><td></td><td class="note">row 5</td></tr>
-<tr><td class="op op-create">create</td><td class="target">extractor[food] in t</td><td class="amt">1</td><td></td><td class="note">row 6</td></tr>
-<tr><td class="op op-create">create</td><td class="target">extractor[metal] in t</td><td class="amt">1</td><td></td><td class="note">row 7</td></tr>
-<tr><td class="op op-create">create</td><td class="target">store[food] in t</td><td class="amt">1</td><td></td><td class="note">row 8</td></tr>
-<tr><td class="op op-create">create</td><td class="target">store[metal] in t</td><td class="amt">1</td><td></td><td class="note">row 9</td></tr>
+<tr><td class="op op-create">create</td><td class="target">garrison in t</td><td class="amt">1</td><td><span class="attach">SOFT</span></td><td class="note">rows 3 and 4 were a guard and a create</td></tr>
+<tr><td class="op op-create">create</td><td class="target">citizen in t</td><td class="amt">2</td><td><span class="attach">?</span></td><td class="note">row 5 - see Decisions</td></tr>
+<tr><td class="op op-create">create</td><td class="target">extractor[food] in t</td><td class="amt">1</td><td><span class="attach">?</span></td><td class="note">row 6 - see Decisions</td></tr>
+<tr><td class="op op-create">create</td><td class="target">extractor[metal] in t</td><td class="amt">1</td><td><span class="attach">?</span></td><td class="note">row 7 - see Decisions</td></tr>
+<tr><td class="op op-create">create</td><td class="target">store[food] in t</td><td class="amt">1</td><td><span class="attach">?</span></td><td class="note">row 8 - see Decisions</td></tr>
+<tr><td class="op op-create">create</td><td class="target">store[metal] in t</td><td class="amt">1</td><td><span class="attach">?</span></td><td class="note">row 9 - see Decisions</td></tr>
 </tbody></table><h3>found by land <span class="badge down">8 rows &rarr; 3 lines (&minus;5)</span></h3>
 <p class="sel">selection: <em>a pioneer</em></p>
 <table><thead><tr>
@@ -217,7 +216,7 @@ transformation needed anyway.</p>
 <tr><td class="op op-destroy">destroy</td><td class="target">energy in unit</td><td class="amt">1</td><td></td><td class="note">row 4</td></tr>
 <tr><td class="op op-set">set</td><td class="target">unit.location = $to</td><td class="amt"></td><td></td><td class="note">rows 3 and 5 were one move</td></tr>
 <tr><td class="op op-set">set</td><td class="target">unit.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 5</td></tr>
-</tbody></table><h3>build extractor <span class="badge up">3 rows &rarr; 6 lines (+3)</span></h3>
+</tbody></table><h3>build extractor <span class="badge up">3 rows &rarr; 5 lines (+2)</span></h3>
 <p class="sel">selection: <em>a territory you control</em></p>
 <table><thead><tr>
 <th>Op</th>
@@ -228,10 +227,9 @@ transformation needed anyway.</p>
 </tr></thead><tbody>
 <tr><td class="op op-threshold">threshold</td><td class="target">labor in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
 <tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">extractor[$resource] in t</td><td class="amt">at most t.deposit[$resource].capacity - 1</td><td><span class="attach">hard</span></td><td class="note">was implicit in capacity</td></tr>
 <tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
 <tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
-<tr><td class="op op-create">create</td><td class="target">extractor[$resource] in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-create">create</td><td class="target">extractor[$resource] in t</td><td class="amt">1</td><td><span class="attach">HARD</span></td><td class="note">capacity is the container's now</td></tr>
 </tbody></table><h3>build store <span class="badge up">3 rows &rarr; 5 lines (+2)</span></h3>
 <p class="sel">selection: <em>a territory you control</em></p>
 <table><thead><tr>
@@ -246,7 +244,7 @@ transformation needed anyway.</p>
 <tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
 <tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
 <tr><td class="op op-create">create</td><td class="target">store[$resource] in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
-</tbody></table><h3>build yard <span class="badge up">3 rows &rarr; 6 lines (+3)</span></h3>
+</tbody></table><h3>build yard <span class="badge up">3 rows &rarr; 5 lines (+2)</span></h3>
 <p class="sel">selection: <em>a territory you control</em></p>
 <table><thead><tr>
 <th>Op</th>
@@ -257,10 +255,9 @@ transformation needed anyway.</p>
 </tr></thead><tbody>
 <tr><td class="op op-threshold">threshold</td><td class="target">labor in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
 <tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 15</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">yard in t</td><td class="amt">at most 0</td><td><span class="attach">hard</span></td><td class="note">capacity 1</td></tr>
 <tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
 <tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">15</td><td></td><td class="note"></td></tr>
-<tr><td class="op op-create">create</td><td class="target">yard in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-create">create</td><td class="target">yard in t</td><td class="amt">1</td><td><span class="attach">HARD</span></td><td class="note">capacity is the container's now</td></tr>
 </tbody></table><h3>produce pioneer <span class="badge up">4 rows &rarr; 7 lines (+3)</span></h3>
 <p class="sel">selection: <em>a territory you control</em></p>
 <table><thead><tr>
@@ -388,6 +385,78 @@ transformation needed anyway.</p>
 </tr></thead><tbody>
 <tr><td class="op op-set">set</td><td class="target">thing.ready = yes</td><td class="amt"></td><td></td><td class="note">both rows were one flip</td></tr>
 </tbody></table>
+
+<h2>Capacities</h2>
+<div class="callout">
+<h4>Where a bound lives, decided 2026-09-08</h4>
+<p><strong>A capacity is a property of the container, declared once, and no formula states it.</strong>
+That deletes the <code>limit</code> role outright: both of its uses in the whole specification were
+<code>limit 0 garrison</code>, restating a capacity of 1 that <em>What bounds a kind in a territory</em>
+already declared. Every other capacity below was <em>never</em> written in a recipe &mdash; so the
+engine was already enforcing seven bounds that no formula stated, and the garrison was the odd one
+out for being written twice rather than for being written at all.</p>
+</div>
+<div class="scroll"><table><thead><tr>
+<th>Container</th>
+<th>Holds</th>
+<th>Up to</th>
+<th>Was it ever in a recipe?</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">territory</td>
+<td class="target">garrison</td>
+<td class="amt">1</td>
+<td class="note">was also written as limit 0 garrison in two recipes</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">yard</td>
+<td class="amt">1</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">ark</td>
+<td class="amt">2</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">pioneer</td>
+<td class="amt">2</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">extractor[r]</td>
+<td class="amt">its deposit's total capacity for r</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">store[r]</td>
+<td class="amt">as many as the extractors of r</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">store</td>
+<td class="target">the resource it was built for</td>
+<td class="amt">10</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">unit's tank</td>
+<td class="target">energy</td>
+<td class="amt">the unit's fuel</td>
+<td class="note">never stated in any recipe</td>
+</tr>
+<tr>
+<td class="target">territory</td>
+<td class="target">citizen</td>
+<td class="amt">unbounded - held down by food through upkeep</td>
+<td class="note">not a capacity at all</td>
+</tr>
+</tbody></table></div>
 
 <h2>Building the world <span class="badge">5</span></h2>
 <div class="callout">
@@ -558,16 +627,16 @@ play the game: <strong>world-building is the play language with the guards left 
 
 <h2>What the re-encoding cost and saved</h2>
 <p>Computed from the data rather than asserted. In bare primitives,
-<strong>58 rows became 68 lines &mdash; up 10</strong>. That is the number predicted
+<strong>58 rows became 65 lines &mdash; up 7</strong>. That is the number predicted
 before any of this was written, and it is the misleading one.</p>
 <p>Almost all of the rise is one thing: today's <code>consume</code> fuses a guard and an effect,
 and splitting it costs a line each time. There are <strong>15</strong> such pairs. Since
 <code>consume</code> is sugar &mdash; it is in the table above &mdash; an author never has to write
-both, and the authored count is <strong>53 lines, down 5 from 58</strong>.</p>
+both, and the authored count is <strong>50 lines, down 8 from 58</strong>.</p>
 <div class="callout">
 <h4>So which number is real</h4>
-<p>All three, measuring different things. <strong>Up 10</strong> is what the machine
-executes. <strong>Down 5</strong> is what a person writes. And the one that matters
+<p>All three, measuring different things. <strong>Up 7</strong> is what the machine
+executes. <strong>Down 8</strong> is what a person writes. And the one that matters
 is neither: <strong>the vocabulary went from four roles that could not name
 <code>create-if-missing</code> to six primitives that also build the world from nothing.</strong>
 A count of lines cannot see that, which is the whole reason to fix the metric first.</p>
@@ -587,8 +656,8 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <tr>
 <td class="target">found-colony</td>
 <td class="amt">0</td>
-<td class="amt">7</td>
-<td class="note">new - the block both recipes shared</td>
+<td class="amt">6</td>
+<td class="note">new - the block both recipes shared; guard and create are now one soft create</td>
 </tr>
 <tr>
 <td class="target">found by land</td>
@@ -605,8 +674,8 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <tr>
 <td class="target">build extractor</td>
 <td class="amt">3</td>
-<td class="amt">6</td>
-<td class="note">up: the capacity guard was implicit and is now stated</td>
+<td class="amt">5</td>
+<td class="note">the capacity guard went to the container</td>
 </tr>
 <tr>
 <td class="target">build store</td>
@@ -617,8 +686,8 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <tr>
 <td class="target">build yard</td>
 <td class="amt">3</td>
-<td class="amt">6</td>
-<td class="note">up: same, plus the capacity-1 guard</td>
+<td class="amt">5</td>
+<td class="note">the capacity guard went to the container</td>
 </tr>
 <tr>
 <td class="target">produce pioneer</td>
@@ -689,29 +758,34 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <th>How it shows up</th>
 </tr></thead><tbody>
 <tr>
-<td>The garrison threshold in found-colony: hard or soft?</td>
-<td>Hard is today's rule and refuses the whole action. Soft is the sketch, and then a second deploy adds 2 citizens, 2 extractors and 2 stores to an existing colony.</td>
-<td class="note">If soft, each of the six creates needs its own threshold, and they are not the same answer.</td>
+<td>ANSWERED - the garrison is soft, and capacity 1 lives on the territory</td>
+<td>Sean, 2026-09-08. A garrison is built if absent, skipped if present, and never fails the command.</td>
+<td class="note">One line: create garrison in t [soft]. The guard and the create became one line, and the limit role has no remaining use.</td>
 </tr>
 <tr>
-<td>Do the sketch's missing stores come back?</td>
+<td>OPEN - the six lines beside it</td>
+<td>Soft on the garrison alone still creates 2 citizens, 2 extractors and 2 stores on a territory that already has them, because their capacities are not zero.</td>
+<td class="note">Marked ? in found-colony. Each needs hard, soft, or removing - and they are not the same answer.</td>
+</tr>
+<tr>
+<td>OPEN - or make the call soft instead, and answer all seven at once</td>
+<td>call found-colony(t) [soft] means deploying onto a founded territory destroys the ark and does nothing else. Soft on each create means deploy tops up a damaged colony.</td>
+<td class="note">Those are different games. The model expresses both; attachment is on the call as readily as on a create.</td>
+</tr>
+<tr>
+<td>OPEN - if a call can fail as a unit, does it roll back?</td>
+<td>found-colony can now half-succeed. If the ark is destroyed before the call, a soft call that skips leaves the ark spent for nothing.</td>
+<td class="note">This is the same question as whether composition sees the starting state or the running one.</td>
+</tr>
+<tr>
+<td>OPEN - do the sketch's missing stores come back?</td>
 <td>The sketch creates a garrison, 2 citizens and 2 extractors. The specification also creates a food store and a metal store.</td>
 <td class="note">Dropping them changes the game.</td>
 </tr>
 <tr>
-<td>Does composition see the starting state or the running one?</td>
-<td>Each line applied can mean every line reads the state as it was, or each reads the effects of the ones before it.</td>
-<td class="note">grow consumes food and creates citizens; work destroys labor and creates a resource. Any recipe touching one thing twice will tell them apart.</td>
-</tr>
-<tr>
-<td>Does a thing have identity, or is it a count?</td>
-<td>set requires an identified thing. destroy ark means this ark. create citizen 2 means two more, with no identity asked for.</td>
+<td>OPEN - does a thing have identity, or is it a count?</td>
+<td>set requires an identified thing. destroy ark means this ark. create citizen 2 asks for no identity.</td>
 <td class="note">The dump already answers this: nine of its ten tables are the containment tree of identified things.</td>
-</tr>
-<tr>
-<td>Is extractor capacity a threshold on the recipe, or a property of the container?</td>
-<td>build extractor now needs an explicit at most capacity - 1 threshold, which the current table left implicit in Where things are.</td>
-<td class="note">Making it explicit is more rows. Leaving it implicit means the engine enforces something no formula states.</td>
 </tr>
 </tbody></table></div>
 

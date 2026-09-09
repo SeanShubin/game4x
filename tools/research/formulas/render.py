@@ -83,6 +83,18 @@ def simple_table(headers, rows, classes=None):
     return "\n".join(out)
 
 
+def lines_after(name):
+    """The line count for a formula, read from the formula itself.
+
+    `collapse` used to restate this number, so the table could disagree with the tables
+    above it without anything noticing. One number, one home.
+    """
+    for f in DATA["player"] + DATA["world"]:
+        if f["name"] == name or f["name"].split("(")[0] == name:
+            return len(f["lines"])
+    raise KeyError(name)
+
+
 def totals():
     """Rows before, lines in bare primitives, and lines once the sugar is used.
 
@@ -91,8 +103,12 @@ def totals():
     moment the author writes `consume`. Counted, not estimated: a threshold reading
     "at least" whose target is also destroyed in the same formula is one such pair.
     """
+    by_name = {}
+    for f in DATA["player"] + DATA["world"]:
+        by_name[f["name"]] = len(f["lines"])
+        by_name[f["name"].split("(")[0]] = len(f["lines"])
     was = sum(r[1] for r in DATA["collapse"])
-    now = sum(r[2] for r in DATA["collapse"])
+    now = sum(by_name[r[0]] for r in DATA["collapse"])
     pairs = 0
     for f in DATA["player"] + DATA["world"]:
         destroyed = {l[1] for l in f["lines"] if l[0] == "destroy"}
@@ -201,6 +217,20 @@ transformation needed anyway.</p>
 <p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
 {"".join(formula_table(f) for f in DATA["world"])}
 
+<h2>Capacities</h2>
+<div class="callout">
+<h4>Where a bound lives, decided 2026-09-08</h4>
+<p><strong>A capacity is a property of the container, declared once, and no formula states it.</strong>
+That deletes the <code>limit</code> role outright: both of its uses in the whole specification were
+<code>limit 0 garrison</code>, restating a capacity of 1 that <em>What bounds a kind in a territory</em>
+already declared. Every other capacity below was <em>never</em> written in a recipe &mdash; so the
+engine was already enforcing seven bounds that no formula stated, and the garrison was the odd one
+out for being written twice rather than for being written at all.</p>
+</div>
+<div class="scroll">{simple_table(
+    ["Container", "Holds", "Up to", "Was it ever in a recipe?"],
+    DATA["capacities"], ["target", "target", "amt", "note"])}</div>
+
 <h2>Building the world <span class="badge">{n_creation}</span></h2>
 <div class="callout">
 <p><strong>No new primitive appears below.</strong> Every line is <code>create</code>,
@@ -235,7 +265,8 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 </div>
 <div class="scroll">{simple_table(
     ["Formula", "Rows before", "Lines after", "Why"],
-    DATA["collapse"], ["target", "amt", "amt", "note"])}</div>
+    [[r[0], r[1], lines_after(r[0]), r[2]] for r in DATA["collapse"]],
+    ["target", "amt", "amt", "note"])}</div>
 
 <h2>Decisions this forced, none of them taken here</h2>
 <div class="scroll">{simple_table(

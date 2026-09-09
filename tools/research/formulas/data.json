@@ -1,20 +1,78 @@
 {
   "primitives": [
-    ["create", "Bring a thing into being, of a kind, inside a container", "create garrison in t", "the only way anything begins to exist"],
-    ["destroy", "Remove an identified thing", "destroy ark", "the only way anything stops existing"],
-    ["set", "Assign a trait on an identified thing", "set extractor.ready = no", "the primitive the sketch was missing"],
-    ["threshold", "A guard: a count against a bound, in a direction", "garrison in t at most 0", "the only thing that can refuse"],
-    ["attach", "Whether failing a guard fails the action, or skips its own line", "hard / soft", "Sean's fail-behavior"],
-    ["call", "Apply another formula with arguments", "call found-colony(t)", "the hierarchy"]
+    [
+      "create",
+      "Bring a thing into being, of a kind, inside a container",
+      "create garrison in t",
+      "the only way anything begins to exist"
+    ],
+    [
+      "destroy",
+      "Remove an identified thing",
+      "destroy ark",
+      "the only way anything stops existing"
+    ],
+    [
+      "set",
+      "Assign a trait on an identified thing",
+      "set extractor.ready = no",
+      "the primitive the sketch was missing"
+    ],
+    [
+      "threshold",
+      "A guard: a count against a bound, in a direction",
+      "metal in t at least 3",
+      "the only thing that can refuse"
+    ],
+    [
+      "attach",
+      "On any line: hard fails the action, soft skips that line",
+      "create garrison in t [soft]",
+      "Sean's fail-behavior, and it attaches to a create and a call as well as to a guard"
+    ],
+    [
+      "call",
+      "Apply another formula with arguments",
+      "call found-colony(t) [soft]",
+      "the hierarchy"
+    ]
   ],
   "sugar": [
-    ["change(k, +n)", "n creates", "linear - readability only"],
-    ["change(k, -n)", "n destroys", "linear - readability only"],
-    ["let x = path", "substitute the path at each use", "linear - readability only"],
-    ["consume n k", "threshold(k, at least n, hard) then n destroys", "linear"],
-    ["require n k", "threshold(k, at least n, hard)", "exact"],
-    ["produce n k", "n creates", "exact"],
-    ["limit n k", "threshold(k, at most n, hard)", "exact"]
+    [
+      "change(k, +n)",
+      "n creates",
+      "linear - readability only"
+    ],
+    [
+      "change(k, -n)",
+      "n destroys",
+      "linear - readability only"
+    ],
+    [
+      "let x = path",
+      "substitute the path at each use",
+      "linear - readability only"
+    ],
+    [
+      "consume n k",
+      "threshold(k, at least n, hard) then n destroys",
+      "linear"
+    ],
+    [
+      "require n k",
+      "threshold(k, at least n, hard)",
+      "exact"
+    ],
+    [
+      "produce n k",
+      "n creates",
+      "exact"
+    ],
+    [
+      "limit n k",
+      "DELETED - a container's capacity, declared once in Capacities",
+      "both uses were restatements"
+    ]
   ],
   "player": [
     {
@@ -22,9 +80,27 @@
       "was": 9,
       "selection": "an ark",
       "lines": [
-        ["let", "t = ark.location.below", "", "", "was row 1 and row 2's qualifier"],
-        ["destroy", "ark", "1", "", "row 2"],
-        ["call", "found-colony(t)", "", "", "rows 3-9"]
+        [
+          "let",
+          "t = ark.location.below",
+          "",
+          "",
+          "was row 1 and row 2's qualifier"
+        ],
+        [
+          "destroy",
+          "ark",
+          "1",
+          "",
+          "row 2"
+        ],
+        [
+          "call",
+          "found-colony(t)",
+          "",
+          "",
+          "rows 3-9"
+        ]
       ]
     },
     {
@@ -33,13 +109,48 @@
       "selection": "called, not selected",
       "new": true,
       "lines": [
-        ["threshold", "garrison in t", "at most 0", "HARD?", "row 3 - see Decisions"],
-        ["create", "garrison in t", "1", "", "row 4"],
-        ["create", "citizen in t", "2", "", "row 5"],
-        ["create", "extractor[food] in t", "1", "", "row 6"],
-        ["create", "extractor[metal] in t", "1", "", "row 7"],
-        ["create", "store[food] in t", "1", "", "row 8"],
-        ["create", "store[metal] in t", "1", "", "row 9"]
+        [
+          "create",
+          "garrison in t",
+          "1",
+          "SOFT",
+          "rows 3 and 4 were a guard and a create"
+        ],
+        [
+          "create",
+          "citizen in t",
+          "2",
+          "?",
+          "row 5 - see Decisions"
+        ],
+        [
+          "create",
+          "extractor[food] in t",
+          "1",
+          "?",
+          "row 6 - see Decisions"
+        ],
+        [
+          "create",
+          "extractor[metal] in t",
+          "1",
+          "?",
+          "row 7 - see Decisions"
+        ],
+        [
+          "create",
+          "store[food] in t",
+          "1",
+          "?",
+          "row 8 - see Decisions"
+        ],
+        [
+          "create",
+          "store[metal] in t",
+          "1",
+          "?",
+          "row 9 - see Decisions"
+        ]
       ]
     },
     {
@@ -47,9 +158,27 @@
       "was": 8,
       "selection": "a pioneer",
       "lines": [
-        ["let", "t = pioneer.location", "", "", ""],
-        ["destroy", "pioneer", "1", "", "row 1"],
-        ["call", "found-colony(t)", "", "", "rows 2-8, identical to deploy ark's"]
+        [
+          "let",
+          "t = pioneer.location",
+          "",
+          "",
+          ""
+        ],
+        [
+          "destroy",
+          "pioneer",
+          "1",
+          "",
+          "row 1"
+        ],
+        [
+          "call",
+          "found-colony(t)",
+          "",
+          "",
+          "rows 2-8, identical to deploy ark's"
+        ]
       ]
     },
     {
@@ -57,12 +186,48 @@
       "was": 5,
       "selection": "a unit that is ready",
       "lines": [
-        ["let", "from = unit.location", "", "", "was row 1"],
-        ["threshold", "adjacency from -> $to the unit crosses", "at least 1", "hard", "row 2"],
-        ["threshold", "energy in unit", "at least 1", "hard", "row 4"],
-        ["destroy", "energy in unit", "1", "", "row 4"],
-        ["set", "unit.location = $to", "", "", "rows 3 and 5 were one move"],
-        ["set", "unit.ready = no", "", "", "rows 3 and 5"]
+        [
+          "let",
+          "from = unit.location",
+          "",
+          "",
+          "was row 1"
+        ],
+        [
+          "threshold",
+          "adjacency from -> $to the unit crosses",
+          "at least 1",
+          "hard",
+          "row 2"
+        ],
+        [
+          "threshold",
+          "energy in unit",
+          "at least 1",
+          "hard",
+          "row 4"
+        ],
+        [
+          "destroy",
+          "energy in unit",
+          "1",
+          "",
+          "row 4"
+        ],
+        [
+          "set",
+          "unit.location = $to",
+          "",
+          "",
+          "rows 3 and 5 were one move"
+        ],
+        [
+          "set",
+          "unit.ready = no",
+          "",
+          "",
+          "rows 3 and 5"
+        ]
       ]
     },
     {
@@ -70,12 +235,41 @@
       "was": 3,
       "selection": "a territory you control",
       "lines": [
-        ["threshold", "labor in t", "at least 1", "hard", ""],
-        ["threshold", "metal in t", "at least 1", "hard", ""],
-        ["threshold", "extractor[$resource] in t", "at most t.deposit[$resource].capacity - 1", "hard", "was implicit in capacity"],
-        ["destroy", "labor in t", "1", "", ""],
-        ["destroy", "metal in t", "1", "", ""],
-        ["create", "extractor[$resource] in t", "1", "", ""]
+        [
+          "threshold",
+          "labor in t",
+          "at least 1",
+          "hard",
+          ""
+        ],
+        [
+          "threshold",
+          "metal in t",
+          "at least 1",
+          "hard",
+          ""
+        ],
+        [
+          "destroy",
+          "labor in t",
+          "1",
+          "",
+          ""
+        ],
+        [
+          "destroy",
+          "metal in t",
+          "1",
+          "",
+          ""
+        ],
+        [
+          "create",
+          "extractor[$resource] in t",
+          "1",
+          "HARD",
+          "capacity is the container's now"
+        ]
       ]
     },
     {
@@ -83,11 +277,41 @@
       "was": 3,
       "selection": "a territory you control",
       "lines": [
-        ["threshold", "labor in t", "at least 1", "hard", ""],
-        ["threshold", "metal in t", "at least 1", "hard", ""],
-        ["destroy", "labor in t", "1", "", ""],
-        ["destroy", "metal in t", "1", "", ""],
-        ["create", "store[$resource] in t", "1", "", ""]
+        [
+          "threshold",
+          "labor in t",
+          "at least 1",
+          "hard",
+          ""
+        ],
+        [
+          "threshold",
+          "metal in t",
+          "at least 1",
+          "hard",
+          ""
+        ],
+        [
+          "destroy",
+          "labor in t",
+          "1",
+          "",
+          ""
+        ],
+        [
+          "destroy",
+          "metal in t",
+          "1",
+          "",
+          ""
+        ],
+        [
+          "create",
+          "store[$resource] in t",
+          "1",
+          "",
+          ""
+        ]
       ]
     },
     {
@@ -95,12 +319,41 @@
       "was": 3,
       "selection": "a territory you control",
       "lines": [
-        ["threshold", "labor in t", "at least 1", "hard", ""],
-        ["threshold", "metal in t", "at least 15", "hard", ""],
-        ["threshold", "yard in t", "at most 0", "hard", "capacity 1"],
-        ["destroy", "labor in t", "1", "", ""],
-        ["destroy", "metal in t", "15", "", ""],
-        ["create", "yard in t", "1", "", ""]
+        [
+          "threshold",
+          "labor in t",
+          "at least 1",
+          "hard",
+          ""
+        ],
+        [
+          "threshold",
+          "metal in t",
+          "at least 15",
+          "hard",
+          ""
+        ],
+        [
+          "destroy",
+          "labor in t",
+          "1",
+          "",
+          ""
+        ],
+        [
+          "destroy",
+          "metal in t",
+          "15",
+          "",
+          ""
+        ],
+        [
+          "create",
+          "yard in t",
+          "1",
+          "HARD",
+          "capacity is the container's now"
+        ]
       ]
     },
     {
@@ -108,13 +361,55 @@
       "was": 4,
       "selection": "a territory you control",
       "lines": [
-        ["threshold", "metal in t", "at least 3", "hard", ""],
-        ["threshold", "energy in t", "at least 6", "hard", ""],
-        ["threshold", "citizen in t", "at least 2", "hard", ""],
-        ["destroy", "metal in t", "3", "", ""],
-        ["destroy", "energy in t", "6", "", ""],
-        ["destroy", "citizen in t", "2", "", ""],
-        ["create", "pioneer in t", "1", "", ""]
+        [
+          "threshold",
+          "metal in t",
+          "at least 3",
+          "hard",
+          ""
+        ],
+        [
+          "threshold",
+          "energy in t",
+          "at least 6",
+          "hard",
+          ""
+        ],
+        [
+          "threshold",
+          "citizen in t",
+          "at least 2",
+          "hard",
+          ""
+        ],
+        [
+          "destroy",
+          "metal in t",
+          "3",
+          "",
+          ""
+        ],
+        [
+          "destroy",
+          "energy in t",
+          "6",
+          "",
+          ""
+        ],
+        [
+          "destroy",
+          "citizen in t",
+          "2",
+          "",
+          ""
+        ],
+        [
+          "create",
+          "pioneer in t",
+          "1",
+          "",
+          ""
+        ]
       ]
     },
     {
@@ -122,14 +417,62 @@
       "was": 4,
       "selection": "a yard",
       "lines": [
-        ["let", "t = yard.location", "", "", "was require 1 yard"],
-        ["threshold", "metal in t", "at least 3", "hard", ""],
-        ["threshold", "energy in t", "at least 12", "hard", ""],
-        ["threshold", "citizen in t", "at least 2", "hard", ""],
-        ["destroy", "metal in t", "3", "", ""],
-        ["destroy", "energy in t", "12", "", ""],
-        ["destroy", "citizen in t", "2", "", ""],
-        ["create", "ark in t.orbit", "1", "", ""]
+        [
+          "let",
+          "t = yard.location",
+          "",
+          "",
+          "was require 1 yard"
+        ],
+        [
+          "threshold",
+          "metal in t",
+          "at least 3",
+          "hard",
+          ""
+        ],
+        [
+          "threshold",
+          "energy in t",
+          "at least 12",
+          "hard",
+          ""
+        ],
+        [
+          "threshold",
+          "citizen in t",
+          "at least 2",
+          "hard",
+          ""
+        ],
+        [
+          "destroy",
+          "metal in t",
+          "3",
+          "",
+          ""
+        ],
+        [
+          "destroy",
+          "energy in t",
+          "12",
+          "",
+          ""
+        ],
+        [
+          "destroy",
+          "citizen in t",
+          "2",
+          "",
+          ""
+        ],
+        [
+          "create",
+          "ark in t.orbit",
+          "1",
+          "",
+          ""
+        ]
       ]
     },
     {
@@ -137,8 +480,20 @@
       "was": 3,
       "selection": "a citizen that is ready",
       "lines": [
-        ["set", "citizen.ready = no", "", "", "rows 1 and 2 were one flip"],
-        ["create", "labor in citizen.location", "1", "", "row 3"]
+        [
+          "set",
+          "citizen.ready = no",
+          "",
+          "",
+          "rows 1 and 2 were one flip"
+        ],
+        [
+          "create",
+          "labor in citizen.location",
+          "1",
+          "",
+          "row 3"
+        ]
       ]
     },
     {
@@ -146,11 +501,41 @@
       "was": 5,
       "selection": "an extractor that is ready",
       "lines": [
-        ["let", "t = extractor.location", "", "", "was row 1"],
-        ["threshold", "labor in t", "at least 1", "hard", "row 2"],
-        ["destroy", "labor in t", "1", "", "row 2"],
-        ["set", "extractor.ready = no", "", "", "rows 3 and 4 were one flip"],
-        ["create", "resource[extractor.resource] in t", "t.deposit[extractor.resource].density", "", "row 5"]
+        [
+          "let",
+          "t = extractor.location",
+          "",
+          "",
+          "was row 1"
+        ],
+        [
+          "threshold",
+          "labor in t",
+          "at least 1",
+          "hard",
+          "row 2"
+        ],
+        [
+          "destroy",
+          "labor in t",
+          "1",
+          "",
+          "row 2"
+        ],
+        [
+          "set",
+          "extractor.ready = no",
+          "",
+          "",
+          "rows 3 and 4 were one flip"
+        ],
+        [
+          "create",
+          "resource[extractor.resource] in t",
+          "t.deposit[extractor.resource].density",
+          "",
+          "row 5"
+        ]
       ]
     }
   ],
@@ -160,8 +545,20 @@
       "was": 2,
       "selection": "each thing with upkeep",
       "lines": [
-        ["threshold", "food in thing.location", "at least thing.upkeep", "hard", "row 1 was the selector"],
-        ["destroy", "food in thing.location", "thing.upkeep", "", "row 2"]
+        [
+          "threshold",
+          "food in thing.location",
+          "at least thing.upkeep",
+          "hard",
+          "row 1 was the selector"
+        ],
+        [
+          "destroy",
+          "food in thing.location",
+          "thing.upkeep",
+          "",
+          "row 2"
+        ]
       ]
     },
     {
@@ -169,9 +566,27 @@
       "was": 2,
       "selection": "each territory",
       "lines": [
-        ["let", "n = min(surplus food in t, citizen in t)", "", "", ""],
-        ["destroy", "food[surplus] in t", "n", "", "row 1"],
-        ["create", "citizen in t", "n", "", "row 2"]
+        [
+          "let",
+          "n = min(surplus food in t, citizen in t)",
+          "",
+          "",
+          ""
+        ],
+        [
+          "destroy",
+          "food[surplus] in t",
+          "n",
+          "",
+          "row 1"
+        ],
+        [
+          "create",
+          "citizen in t",
+          "n",
+          "",
+          "row 2"
+        ]
       ]
     },
     {
@@ -179,8 +594,20 @@
       "was": 2,
       "selection": "each thing whose upkeep is unpaid",
       "lines": [
-        ["create", "metal in thing.location", "thing.metal-in-it", "", "row 2"],
-        ["destroy", "thing", "1", "", "row 1"]
+        [
+          "create",
+          "metal in thing.location",
+          "thing.metal-in-it",
+          "",
+          "row 2"
+        ],
+        [
+          "destroy",
+          "thing",
+          "1",
+          "",
+          "row 1"
+        ]
       ]
     },
     {
@@ -188,7 +615,13 @@
       "was": 2,
       "selection": "each thing with keeps at least 1",
       "lines": [
-        ["set", "thing.keeps = thing.keeps - 1", "", "", "both rows were one decrement"]
+        [
+          "set",
+          "thing.keeps = thing.keeps - 1",
+          "",
+          "",
+          "both rows were one decrement"
+        ]
       ]
     },
     {
@@ -196,7 +629,13 @@
       "was": 1,
       "selection": "each thing with keeps 0",
       "lines": [
-        ["destroy", "thing", "1", "", "row 1"]
+        [
+          "destroy",
+          "thing",
+          "1",
+          "",
+          "row 1"
+        ]
       ]
     },
     {
@@ -204,7 +643,13 @@
       "was": 2,
       "selection": "each thing that is not ready",
       "lines": [
-        ["set", "thing.ready = yes", "", "", "both rows were one flip"]
+        [
+          "set",
+          "thing.ready = yes",
+          "",
+          "",
+          "both rows were one flip"
+        ]
       ]
     }
   ],
@@ -214,10 +659,34 @@
       "was": null,
       "selection": "applied at design time, against the empty game",
       "lines": [
-        ["create", "territory in game", "1", "", ""],
-        ["set", "territory.id = id", "", "", ""],
-        ["set", "territory.biome = biome", "", "", ""],
-        ["set", "territory.nature = nature", "", "", ""]
+        [
+          "create",
+          "territory in game",
+          "1",
+          "",
+          ""
+        ],
+        [
+          "set",
+          "territory.id = id",
+          "",
+          "",
+          ""
+        ],
+        [
+          "set",
+          "territory.biome = biome",
+          "",
+          "",
+          ""
+        ],
+        [
+          "set",
+          "territory.nature = nature",
+          "",
+          "",
+          ""
+        ]
       ]
     },
     {
@@ -225,10 +694,34 @@
       "was": null,
       "selection": "applied at design time",
       "lines": [
-        ["create", "deposit in t", "1", "", ""],
-        ["set", "deposit.resource = resource", "", "", ""],
-        ["set", "deposit.total-capacity = capacity", "", "", ""],
-        ["set", "deposit.density = density", "", "", ""]
+        [
+          "create",
+          "deposit in t",
+          "1",
+          "",
+          ""
+        ],
+        [
+          "set",
+          "deposit.resource = resource",
+          "",
+          "",
+          ""
+        ],
+        [
+          "set",
+          "deposit.total-capacity = capacity",
+          "",
+          "",
+          ""
+        ],
+        [
+          "set",
+          "deposit.density = density",
+          "",
+          "",
+          ""
+        ]
       ]
     },
     {
@@ -236,8 +729,20 @@
       "was": null,
       "selection": "applied at design time",
       "lines": [
-        ["create", "orbit in game", "1", "", ""],
-        ["set", "orbit.below = t", "", "", ""]
+        [
+          "create",
+          "orbit in game",
+          "1",
+          "",
+          ""
+        ],
+        [
+          "set",
+          "orbit.below = t",
+          "",
+          "",
+          ""
+        ]
       ]
     },
     {
@@ -245,9 +750,27 @@
       "was": null,
       "selection": "applied at design time",
       "lines": [
-        ["create", "adjacency in game", "1", "", ""],
-        ["set", "adjacency.from = a", "", "", ""],
-        ["set", "adjacency.to = b", "", "", ""]
+        [
+          "create",
+          "adjacency in game",
+          "1",
+          "",
+          ""
+        ],
+        [
+          "set",
+          "adjacency.from = a",
+          "",
+          "",
+          ""
+        ],
+        [
+          "set",
+          "adjacency.to = b",
+          "",
+          "",
+          ""
+        ]
       ]
     },
     {
@@ -255,51 +778,296 @@
       "was": null,
       "selection": "the whole environment, from the empty game",
       "lines": [
-        ["call", "make-territory(1, grassland, 1) ... make-territory(12, mountain, 1)", "x12", "", "from Territory resources"],
-        ["call", "make-deposit(t, r, capacity, density) for each territory and resource", "x36", "", "3 x 4 reads capacity 3, density 4"],
-        ["call", "make-orbit(t) for each territory", "x12", "", ""],
-        ["call", "make-adjacency(a, b) for each shared edge", "xE", "", "orbital adjacency is derived, not stated"]
+        [
+          "call",
+          "make-territory(1, grassland, 1) ... make-territory(12, mountain, 1)",
+          "x12",
+          "",
+          "from Territory resources"
+        ],
+        [
+          "call",
+          "make-deposit(t, r, capacity, density) for each territory and resource",
+          "x36",
+          "",
+          "3 x 4 reads capacity 3, density 4"
+        ],
+        [
+          "call",
+          "make-orbit(t) for each territory",
+          "x12",
+          "",
+          ""
+        ],
+        [
+          "call",
+          "make-adjacency(a, b) for each shared edge",
+          "xE",
+          "",
+          "orbital adjacency is derived, not stated"
+        ]
       ]
     }
   ],
   "territories": [
-    ["1", "3 x 4", "3 x 4", "3 x 4", "The landing site. Everything works"],
-    ["2", "2 x 6", "2 x 4", "2 x 4", "Few dense food extractors"],
-    ["3", "6 x 2", "2 x 4", "2 x 4", "Many thin food extractors, same food total"],
-    ["4", "1 x 2", "4 x 5", "4 x 5", "The minimum a territory can be"],
-    ["5", "3 x 1", "8 x 8", "8 x 8", "Food density 1"],
-    ["6", "4 x 4", "none", "4 x 5", "No metal"],
-    ["7", "4 x 4", "4 x 5", "none", "No energy"],
-    ["8", "6 x 6", "1 x 2", "1 x 2", "Population without industry"],
-    ["9", "2 x 3", "6 x 8", "1 x 2", "Rich metal, too few hands to work it"],
-    ["10", "3 x 3", "1 x 3", "6 x 8", "An energy depot"],
-    ["11", "5 x 6", "5 x 6", "5 x 6", "The prize"],
-    ["12", "2 x 2", "8 x 8", "8 x 8", "Rich extractors, almost no workers"]
+    [
+      "1",
+      "3 x 4",
+      "3 x 4",
+      "3 x 4",
+      "The landing site. Everything works"
+    ],
+    [
+      "2",
+      "2 x 6",
+      "2 x 4",
+      "2 x 4",
+      "Few dense food extractors"
+    ],
+    [
+      "3",
+      "6 x 2",
+      "2 x 4",
+      "2 x 4",
+      "Many thin food extractors, same food total"
+    ],
+    [
+      "4",
+      "1 x 2",
+      "4 x 5",
+      "4 x 5",
+      "The minimum a territory can be"
+    ],
+    [
+      "5",
+      "3 x 1",
+      "8 x 8",
+      "8 x 8",
+      "Food density 1"
+    ],
+    [
+      "6",
+      "4 x 4",
+      "none",
+      "4 x 5",
+      "No metal"
+    ],
+    [
+      "7",
+      "4 x 4",
+      "4 x 5",
+      "none",
+      "No energy"
+    ],
+    [
+      "8",
+      "6 x 6",
+      "1 x 2",
+      "1 x 2",
+      "Population without industry"
+    ],
+    [
+      "9",
+      "2 x 3",
+      "6 x 8",
+      "1 x 2",
+      "Rich metal, too few hands to work it"
+    ],
+    [
+      "10",
+      "3 x 3",
+      "1 x 3",
+      "6 x 8",
+      "An energy depot"
+    ],
+    [
+      "11",
+      "5 x 6",
+      "5 x 6",
+      "5 x 6",
+      "The prize"
+    ],
+    [
+      "12",
+      "2 x 2",
+      "8 x 8",
+      "8 x 8",
+      "Rich extractors, almost no workers"
+    ]
   ],
   "decisions": [
-    ["The garrison threshold in found-colony: hard or soft?", "Hard is today's rule and refuses the whole action. Soft is the sketch, and then a second deploy adds 2 citizens, 2 extractors and 2 stores to an existing colony.", "If soft, each of the six creates needs its own threshold, and they are not the same answer."],
-    ["Do the sketch's missing stores come back?", "The sketch creates a garrison, 2 citizens and 2 extractors. The specification also creates a food store and a metal store.", "Dropping them changes the game."],
-    ["Does composition see the starting state or the running one?", "Each line applied can mean every line reads the state as it was, or each reads the effects of the ones before it.", "grow consumes food and creates citizens; work destroys labor and creates a resource. Any recipe touching one thing twice will tell them apart."],
-    ["Does a thing have identity, or is it a count?", "set requires an identified thing. destroy ark means this ark. create citizen 2 means two more, with no identity asked for.", "The dump already answers this: nine of its ten tables are the containment tree of identified things."],
-    ["Is extractor capacity a threshold on the recipe, or a property of the container?", "build extractor now needs an explicit at most capacity - 1 threshold, which the current table left implicit in Where things are.", "Making it explicit is more rows. Leaving it implicit means the engine enforces something no formula states."]
+    [
+      "ANSWERED - the garrison is soft, and capacity 1 lives on the territory",
+      "Sean, 2026-09-08. A garrison is built if absent, skipped if present, and never fails the command.",
+      "One line: create garrison in t [soft]. The guard and the create became one line, and the limit role has no remaining use."
+    ],
+    [
+      "OPEN - the six lines beside it",
+      "Soft on the garrison alone still creates 2 citizens, 2 extractors and 2 stores on a territory that already has them, because their capacities are not zero.",
+      "Marked ? in found-colony. Each needs hard, soft, or removing - and they are not the same answer."
+    ],
+    [
+      "OPEN - or make the call soft instead, and answer all seven at once",
+      "call found-colony(t) [soft] means deploying onto a founded territory destroys the ark and does nothing else. Soft on each create means deploy tops up a damaged colony.",
+      "Those are different games. The model expresses both; attachment is on the call as readily as on a create."
+    ],
+    [
+      "OPEN - if a call can fail as a unit, does it roll back?",
+      "found-colony can now half-succeed. If the ark is destroyed before the call, a soft call that skips leaves the ark spent for nothing.",
+      "This is the same question as whether composition sees the starting state or the running one."
+    ],
+    [
+      "OPEN - do the sketch's missing stores come back?",
+      "The sketch creates a garrison, 2 citizens and 2 extractors. The specification also creates a food store and a metal store.",
+      "Dropping them changes the game."
+    ],
+    [
+      "OPEN - does a thing have identity, or is it a count?",
+      "set requires an identified thing. destroy ark means this ark. create citizen 2 asks for no identity.",
+      "The dump already answers this: nine of its ten tables are the containment tree of identified things."
+    ]
   ],
   "collapse": [
-    ["deploy ark", 9, 3, "row 1 is a parameter declaration; the colony block becomes a call"],
-    ["found-colony", 0, 7, "new - the block both recipes shared"],
-    ["found by land", 8, 3, "same call"],
-    ["move", 5, 6, "up: the ready flip and the location move are both explicit"],
-    ["build extractor", 3, 6, "up: the capacity guard was implicit and is now stated"],
-    ["build store", 3, 5, "up: require and consume split into threshold and destroy"],
-    ["build yard", 3, 6, "up: same, plus the capacity-1 guard"],
-    ["produce pioneer", 4, 7, "up: three requires become three thresholds and three destroys"],
-    ["launch ark", 4, 8, "up: same"],
-    ["create labor", 3, 2, "down: the ready flip was two rows"],
-    ["work", 5, 5, "level: one flip saved, one threshold gained"],
-    ["upkeep", 2, 2, "level"],
-    ["grow", 2, 3, "up: the binding is explicit"],
-    ["perish", 2, 2, "level"],
-    ["age", 2, 1, "down: a decrement was written as destroy-and-recreate"],
-    ["spoil", 1, 1, "level"],
-    ["refresh", 2, 1, "down: a flip was written as destroy-and-recreate"]
+    [
+      "deploy ark",
+      9,
+      "row 1 is a parameter declaration; the colony block becomes a call"
+    ],
+    [
+      "found-colony",
+      0,
+      "new - the block both recipes shared; guard and create are now one soft create"
+    ],
+    [
+      "found by land",
+      8,
+      "same call"
+    ],
+    [
+      "move",
+      5,
+      "up: the ready flip and the location move are both explicit"
+    ],
+    [
+      "build extractor",
+      3,
+      "the capacity guard went to the container"
+    ],
+    [
+      "build store",
+      3,
+      "up: require and consume split into threshold and destroy"
+    ],
+    [
+      "build yard",
+      3,
+      "the capacity guard went to the container"
+    ],
+    [
+      "produce pioneer",
+      4,
+      "up: three requires become three thresholds and three destroys"
+    ],
+    [
+      "launch ark",
+      4,
+      "up: same"
+    ],
+    [
+      "create labor",
+      3,
+      "down: the ready flip was two rows"
+    ],
+    [
+      "work",
+      5,
+      "level: one flip saved, one threshold gained"
+    ],
+    [
+      "upkeep",
+      2,
+      "level"
+    ],
+    [
+      "grow",
+      2,
+      "up: the binding is explicit"
+    ],
+    [
+      "perish",
+      2,
+      "level"
+    ],
+    [
+      "age",
+      2,
+      "down: a decrement was written as destroy-and-recreate"
+    ],
+    [
+      "spoil",
+      1,
+      "level"
+    ],
+    [
+      "refresh",
+      2,
+      "down: a flip was written as destroy-and-recreate"
+    ]
+  ],
+  "capacities": [
+    [
+      "territory",
+      "garrison",
+      "1",
+      "was also written as limit 0 garrison in two recipes"
+    ],
+    [
+      "territory",
+      "yard",
+      "1",
+      "never stated in any recipe"
+    ],
+    [
+      "territory",
+      "ark",
+      "2",
+      "never stated in any recipe"
+    ],
+    [
+      "territory",
+      "pioneer",
+      "2",
+      "never stated in any recipe"
+    ],
+    [
+      "territory",
+      "extractor[r]",
+      "its deposit's total capacity for r",
+      "never stated in any recipe"
+    ],
+    [
+      "territory",
+      "store[r]",
+      "as many as the extractors of r",
+      "never stated in any recipe"
+    ],
+    [
+      "store",
+      "the resource it was built for",
+      "10",
+      "never stated in any recipe"
+    ],
+    [
+      "unit's tank",
+      "energy",
+      "the unit's fuel",
+      "never stated in any recipe"
+    ],
+    [
+      "territory",
+      "citizen",
+      "unbounded - held down by food through upkeep",
+      "not a capacity at all"
+    ]
   ]
 }
