@@ -40,10 +40,11 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-74** - An action on a selected thing, for a console that types and an interface that selects · `crates/outbox.md`
 
-### To spec (22)
+### To spec (23)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-75** - The boundedness rule `X-9` names already holds, so adopting it costs nothing · `crates/outbox.md`
 - **C-72** - A tracked directory is in nobody's column, and the hook cannot see it · `crates/outbox.md`
 - **C-68** - `game` holds twelve territories and declares no capacity to hold anything · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`

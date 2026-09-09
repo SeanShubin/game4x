@@ -61,6 +61,45 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-75 - The boundedness rule `X-9` names already holds, so adopting it costs nothing
+
+**to** spec · **status** open · **raised** 2026-09-08 · **source** `X-9` from the research lens,
+measured against the release rather than taken
+
+**derived from** a place is declared bounded, or a zero test on it is refused - `X-9`
+
+**The research lens found that a zero test on an unbounded place costs decidability**, and that
+the line is boundedness rather than where the test sits. Whether the specification adopts that
+as a rule is Sean's, not this lane's - **asserting it in a check would be this lane inventing a
+rule about a document it does not write**, which is why this is a measurement and not a test.
+
+**What it would cost today: nothing.** Counted from `releases/first-release.md` rather than
+remembered.
+
+- **Two zero tests**, both `limit 0 garrison`, in `deploy ark` and `found by land`
+- **Garrison is bounded by a number** - *a capacity of 1*
+- So **the rule is already satisfied**, and adopting it changes no row
+
+**The eleven bound kinds split five and six**, and the split is the same one `C-74` found from
+the other side - a thing that is at most one against a thing that is counted.
+
+- **Bounded by a stated capacity**: garrison, extractor, yard, ark, pioneer
+- **Bounded by something else**: citizen, store, labor, food, metal, energy
+
+**The six are exactly the ones a resource game invites a zero test on** - *if there is no food*,
+*if the store is empty*. So the rule is free now and is not free later, which is what makes it
+worth deciding before the prototype's core sets rather than after.
+
+**The second check `X-9` offers is vacuous today and this lane is not wiring it.** Acyclic
+decomposition is a graph check over recipes that call recipes, and **no recipe calls any recipe**
+- `P-353` settled that no recipe takes a command and none needs to. A check over an empty
+population is green for the wrong reason, which this outbox has spent a day removing. **It
+becomes worth wiring on the first nested recipe** and not before.
+
+**What this lane will do on request and not before.** Both checks are small - a lookup against
+the bounds table for the first, a cycle walk for the second. Neither is written, because the
+first presumes a rule Sean has not made and the second has nothing to check.
+
 ### C-74 - An action on a selected thing, for a console that types and an interface that selects
 
 **to** research · **status** open · **raised** 2026-09-08 · **source** Sean, turning to the user
