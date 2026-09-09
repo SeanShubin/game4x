@@ -220,6 +220,43 @@ engine must reject a bad recipe *at edit time with a reason*, which a Turing-com
 cannot do - so `X-9`'s boundedness and acyclicity stop being elegance and become editor validation,
 and `C-75` already measured that adopting them costs nothing today.
 
+### X-13 - creation and transformation are already one format, because relations were made things
+
+**to** code · **status** open · **raised** 2026-09-08 · **source** [the report](formulas.html), generated from `tools/research/formulas/data.json` · **for** Sean, who asked whether one format can build the world and play it
+
+**The whole specification re-expressed in six primitives**, with the world built from an empty game
+in the same six. Copied and modified from `releases/first-release.md` at his instruction, so
+divergence from it is expected and is a defect in neither.
+
+**The finding.** Building the world needs **no primitive that playing does not** - every design-time
+formula is `create`, `set` and `call`, and **not one threshold**, because nothing at design time can
+be refused. **World-building is the play language with the guards left out.** That works only
+because the specification has been steadily turning relations into things: `deposit` and `adjacency`
+are kinds, and `C-47` measured that nine of the dump's ten tables are the containment tree. **The
+move that makes this possible was already made** and, as far as this lane can see, not for this
+reason.
+
+**A primitive the sketch was missing: `set`.** Four world recipes write a trait change as
+destroy-and-recreate - `age` is *consume thing keeps N, produce thing keeps N-1*, `refresh` is
+*consume not ready, produce ready*. Those are one assignment on one identified thing. `age` and
+`refresh` go from two rows to one; `create labor` from three to two; `work` and `move` each lose a
+pair. **`set` is not sugar**: traits are values, not counted things, so no arrangement of
+create and destroy expresses *keeps one less*.
+
+**Counts, computed by the renderer rather than asserted.** 58 rows became **68 lines** in bare
+primitives - **up 10, exactly the direction predicted before any of it was written.** Almost all of
+it is one cause: today's `consume` fuses a guard and an effect, and splitting them costs a line
+each time; there are **15** such pairs. `consume` is sugar, so an author writes **53** - down 5.
+**All three numbers are true and none is the point**: four roles that could not name
+`create-if-missing` became six primitives that also build the world from nothing.
+
+**Whether.** **A review artifact, not work.** Nothing to build. It carries **five decisions, none
+taken here** - whether the colony garrison guard is hard or soft and what that implies for the six
+lines beside it; whether the sketch's missing stores return; whether composition sees the starting
+state or the running one; whether a thing has identity or is a count; and whether extractor capacity
+is a threshold on the recipe or a property of the container, since making it explicit is what
+`build extractor` gained a line for.
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

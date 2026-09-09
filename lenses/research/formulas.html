@@ -1,0 +1,722 @@
+<title>Formula Report</title>
+<style>
+:root {
+  --bg: #fbfaf8; --fg: #1c1a17; --muted: #6b6560; --rule: #ddd8d1;
+  --card: #ffffff; --accent: #7c4a2d; --shade: #f4f1ec;
+  --create: #1f6f43; --destroy: #9a2c2c; --set: #1f5b8f; --threshold: #8a6d1f; --call: #5b3a8f;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16151a; --fg: #eae7e2; --muted: #a49d95; --rule: #34313a;
+    --card: #1e1d23; --accent: #d9a07a; --shade: #24232a;
+    --create: #6fd39b; --destroy: #f08c8c; --set: #82b8ea; --threshold: #dcc07a; --call: #b79ae8;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16151a; --fg: #eae7e2; --muted: #a49d95; --rule: #34313a;
+  --card: #1e1d23; --accent: #d9a07a; --shade: #24232a;
+  --create: #6fd39b; --destroy: #f08c8c; --set: #82b8ea; --threshold: #dcc07a; --call: #b79ae8;
+}
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 -apple-system, BlinkMacSystemFont,
+  "Segoe UI", Roboto, sans-serif; margin: 0; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 80px; }
+h1 { font-size: 30px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.01em; }
+h2 { font-size: 21px; margin: 44px 0 6px; padding-top: 18px; border-top: 2px solid var(--rule); }
+h3 { font-size: 15px; margin: 26px 0 2px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.lede { color: var(--muted); margin: 0 0 4px; }
+.sel { color: var(--muted); font-size: 13px; margin: 0 0 8px; }
+p { margin: 10px 0; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0 4px; font-size: 13.5px; }
+th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted); border-bottom: 1px solid var(--rule); padding: 5px 9px; font-weight: 600; }
+td { border-bottom: 1px solid var(--rule); padding: 5px 9px; vertical-align: top; }
+tbody tr:nth-child(odd) { background: var(--shade); }
+.scroll { overflow-x: auto; }
+.op { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; white-space: nowrap; }
+.op-create { color: var(--create); } .op-destroy { color: var(--destroy); }
+.op-set { color: var(--set); } .op-threshold { color: var(--threshold); }
+.op-call { color: var(--call); } .op-let { color: var(--muted); }
+.target, .amt { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.note { color: var(--muted); font-size: 12.5px; }
+.attach { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+.badge { font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 600; padding: 2px 7px;
+  border-radius: 10px; background: var(--shade); color: var(--muted); border: 1px solid var(--rule);
+  margin-left: 6px; white-space: nowrap; }
+.badge.down { color: var(--create); border-color: var(--create); }
+.badge.up { color: var(--threshold); border-color: var(--threshold); }
+.badge.new { color: var(--call); border-color: var(--call); }
+.badge.design { color: var(--set); border-color: var(--set); }
+.callout { background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+  padding: 14px 18px; margin: 18px 0; border-radius: 3px; }
+.callout h4 { margin: 0 0 6px; font-size: 14px; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--shade);
+  padding: 1px 5px; border-radius: 3px; font-size: 0.92em; }
+.foot { color: var(--muted); font-size: 12.5px; margin-top: 40px; padding-top: 16px;
+  border-top: 1px solid var(--rule); }
+</style>
+<div class="wrap">
+<h1>The whole specification as formulas</h1>
+<p class="lede">Every recipe re-expressed in six primitives &mdash; and the same six building the
+world from an empty game. Generated from <code>tools/research/formulas/data.json</code>.</p>
+
+<div class="callout">
+<h4>The one finding</h4>
+<p><strong>Creation and transformation are already the same format, because the specification has
+been quietly turning relations into things.</strong> <code>deposit</code> and
+<code>adjacency</code> are kinds. Once a relation is a thing, building the world is
+<code>create</code> and <code>set</code> with no thresholds &mdash; the identical primitives that
+play the game. Nothing needs adding for world-building except the <code>set</code> that
+transformation needed anyway.</p>
+</div>
+
+<h2>The primitives</h2>
+<p>Six. <code>set</code> is the one the sketch was missing, and it is what collapses
+<code>age</code> and <code>refresh</code> from two rows to one each.</p>
+<div class="scroll"><table><thead><tr>
+<th>Primitive</th>
+<th>What it does</th>
+<th>Example</th>
+<th>Why it earns a place</th>
+</tr></thead><tbody>
+<tr>
+<td class="op">create</td>
+<td>Bring a thing into being, of a kind, inside a container</td>
+<td class="target">create garrison in t</td>
+<td class="note">the only way anything begins to exist</td>
+</tr>
+<tr>
+<td class="op">destroy</td>
+<td>Remove an identified thing</td>
+<td class="target">destroy ark</td>
+<td class="note">the only way anything stops existing</td>
+</tr>
+<tr>
+<td class="op">set</td>
+<td>Assign a trait on an identified thing</td>
+<td class="target">set extractor.ready = no</td>
+<td class="note">the primitive the sketch was missing</td>
+</tr>
+<tr>
+<td class="op">threshold</td>
+<td>A guard: a count against a bound, in a direction</td>
+<td class="target">garrison in t at most 0</td>
+<td class="note">the only thing that can refuse</td>
+</tr>
+<tr>
+<td class="op">attach</td>
+<td>Whether failing a guard fails the action, or skips its own line</td>
+<td class="target">hard / soft</td>
+<td class="note">Sean's fail-behavior</td>
+</tr>
+<tr>
+<td class="op">call</td>
+<td>Apply another formula with arguments</td>
+<td class="target">call found-colony(t)</td>
+<td class="note">the hierarchy</td>
+</tr>
+</tbody></table></div>
+
+<h2>What is sugar</h2>
+<p>Removable with linear growth, so by the test each is readability rather than expressiveness
+&mdash; which means they can be added freely.</p>
+<div class="scroll"><table><thead><tr>
+<th>Written as</th>
+<th>Means</th>
+<th>Cost of removing it</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">change(k, +n)</td>
+<td>n creates</td>
+<td class="note">linear - readability only</td>
+</tr>
+<tr>
+<td class="target">change(k, -n)</td>
+<td>n destroys</td>
+<td class="note">linear - readability only</td>
+</tr>
+<tr>
+<td class="target">let x = path</td>
+<td>substitute the path at each use</td>
+<td class="note">linear - readability only</td>
+</tr>
+<tr>
+<td class="target">consume n k</td>
+<td>threshold(k, at least n, hard) then n destroys</td>
+<td class="note">linear</td>
+</tr>
+<tr>
+<td class="target">require n k</td>
+<td>threshold(k, at least n, hard)</td>
+<td class="note">exact</td>
+</tr>
+<tr>
+<td class="target">produce n k</td>
+<td>n creates</td>
+<td class="note">exact</td>
+</tr>
+<tr>
+<td class="target">limit n k</td>
+<td>threshold(k, at most n, hard)</td>
+<td class="note">exact</td>
+</tr>
+</tbody></table></div>
+
+<h2>Player formulas <span class="badge">11</span></h2>
+<h3>deploy ark <span class="badge down">9 rows &rarr; 3 lines (&minus;6)</span></h3>
+<p class="sel">selection: <em>an ark</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-let">let</td><td class="target">t = ark.location.below</td><td class="amt"></td><td></td><td class="note">was row 1 and row 2's qualifier</td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">ark</td><td class="amt">1</td><td></td><td class="note">row 2</td></tr>
+<tr><td class="op op-call">call</td><td class="target">found-colony(t)</td><td class="amt"></td><td></td><td class="note">rows 3-9</td></tr>
+</tbody></table><h3>found-colony(t) <span class="badge new">new</span></h3>
+<p class="sel">selection: <em>called, not selected</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-threshold">threshold</td><td class="target">garrison in t</td><td class="amt">at most 0</td><td><span class="attach">HARD?</span></td><td class="note">row 3 - see Decisions</td></tr>
+<tr><td class="op op-create">create</td><td class="target">garrison in t</td><td class="amt">1</td><td></td><td class="note">row 4</td></tr>
+<tr><td class="op op-create">create</td><td class="target">citizen in t</td><td class="amt">2</td><td></td><td class="note">row 5</td></tr>
+<tr><td class="op op-create">create</td><td class="target">extractor[food] in t</td><td class="amt">1</td><td></td><td class="note">row 6</td></tr>
+<tr><td class="op op-create">create</td><td class="target">extractor[metal] in t</td><td class="amt">1</td><td></td><td class="note">row 7</td></tr>
+<tr><td class="op op-create">create</td><td class="target">store[food] in t</td><td class="amt">1</td><td></td><td class="note">row 8</td></tr>
+<tr><td class="op op-create">create</td><td class="target">store[metal] in t</td><td class="amt">1</td><td></td><td class="note">row 9</td></tr>
+</tbody></table><h3>found by land <span class="badge down">8 rows &rarr; 3 lines (&minus;5)</span></h3>
+<p class="sel">selection: <em>a pioneer</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-let">let</td><td class="target">t = pioneer.location</td><td class="amt"></td><td></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">pioneer</td><td class="amt">1</td><td></td><td class="note">row 1</td></tr>
+<tr><td class="op op-call">call</td><td class="target">found-colony(t)</td><td class="amt"></td><td></td><td class="note">rows 2-8, identical to deploy ark's</td></tr>
+</tbody></table><h3>move <span class="badge up">5 rows &rarr; 6 lines (+1)</span></h3>
+<p class="sel">selection: <em>a unit that is ready</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-let">let</td><td class="target">from = unit.location</td><td class="amt"></td><td></td><td class="note">was row 1</td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">adjacency from -&gt; $to the unit crosses</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note">row 2</td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">energy in unit</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note">row 4</td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">energy in unit</td><td class="amt">1</td><td></td><td class="note">row 4</td></tr>
+<tr><td class="op op-set">set</td><td class="target">unit.location = $to</td><td class="amt"></td><td></td><td class="note">rows 3 and 5 were one move</td></tr>
+<tr><td class="op op-set">set</td><td class="target">unit.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 5</td></tr>
+</tbody></table><h3>build extractor <span class="badge up">3 rows &rarr; 6 lines (+3)</span></h3>
+<p class="sel">selection: <em>a territory you control</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-threshold">threshold</td><td class="target">labor in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">extractor[$resource] in t</td><td class="amt">at most t.deposit[$resource].capacity - 1</td><td><span class="attach">hard</span></td><td class="note">was implicit in capacity</td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-create">create</td><td class="target">extractor[$resource] in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+</tbody></table><h3>build store <span class="badge up">3 rows &rarr; 5 lines (+2)</span></h3>
+<p class="sel">selection: <em>a territory you control</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-threshold">threshold</td><td class="target">labor in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-create">create</td><td class="target">store[$resource] in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+</tbody></table><h3>build yard <span class="badge up">3 rows &rarr; 6 lines (+3)</span></h3>
+<p class="sel">selection: <em>a territory you control</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-threshold">threshold</td><td class="target">labor in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 15</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">yard in t</td><td class="amt">at most 0</td><td><span class="attach">hard</span></td><td class="note">capacity 1</td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">15</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-create">create</td><td class="target">yard in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+</tbody></table><h3>produce pioneer <span class="badge up">4 rows &rarr; 7 lines (+3)</span></h3>
+<p class="sel">selection: <em>a territory you control</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 3</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">energy in t</td><td class="amt">at least 6</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">citizen in t</td><td class="amt">at least 2</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">3</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">energy in t</td><td class="amt">6</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">citizen in t</td><td class="amt">2</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-create">create</td><td class="target">pioneer in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+</tbody></table><h3>launch ark <span class="badge up">4 rows &rarr; 8 lines (+4)</span></h3>
+<p class="sel">selection: <em>a yard</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-let">let</td><td class="target">t = yard.location</td><td class="amt"></td><td></td><td class="note">was require 1 yard</td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 3</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">energy in t</td><td class="amt">at least 12</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">citizen in t</td><td class="amt">at least 2</td><td><span class="attach">hard</span></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">3</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">energy in t</td><td class="amt">12</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">citizen in t</td><td class="amt">2</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-create">create</td><td class="target">ark in t.orbit</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+</tbody></table><h3>create labor <span class="badge down">3 rows &rarr; 2 lines (&minus;1)</span></h3>
+<p class="sel">selection: <em>a citizen that is ready</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-set">set</td><td class="target">citizen.ready = no</td><td class="amt"></td><td></td><td class="note">rows 1 and 2 were one flip</td></tr>
+<tr><td class="op op-create">create</td><td class="target">labor in citizen.location</td><td class="amt">1</td><td></td><td class="note">row 3</td></tr>
+</tbody></table><h3>work <span class="badge level">5 rows &rarr; 5 lines (=)</span></h3>
+<p class="sel">selection: <em>an extractor that is ready</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-let">let</td><td class="target">t = extractor.location</td><td class="amt"></td><td></td><td class="note">was row 1</td></tr>
+<tr><td class="op op-threshold">threshold</td><td class="target">labor in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note">row 2</td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note">row 2</td></tr>
+<tr><td class="op op-set">set</td><td class="target">extractor.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 4 were one flip</td></tr>
+<tr><td class="op op-create">create</td><td class="target">resource[extractor.resource] in t</td><td class="amt">t.deposit[extractor.resource].density</td><td></td><td class="note">row 5</td></tr>
+</tbody></table>
+
+<h2>World formulas <span class="badge">6</span></h2>
+<p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
+<h3>upkeep <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
+<p class="sel">selection: <em>each thing with upkeep</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-threshold">threshold</td><td class="target">food in thing.location</td><td class="amt">at least thing.upkeep</td><td><span class="attach">hard</span></td><td class="note">row 1 was the selector</td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">food in thing.location</td><td class="amt">thing.upkeep</td><td></td><td class="note">row 2</td></tr>
+</tbody></table><h3>grow <span class="badge up">2 rows &rarr; 3 lines (+1)</span></h3>
+<p class="sel">selection: <em>each territory</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-let">let</td><td class="target">n = min(surplus food in t, citizen in t)</td><td class="amt"></td><td></td><td class="note"></td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">food[surplus] in t</td><td class="amt">n</td><td></td><td class="note">row 1</td></tr>
+<tr><td class="op op-create">create</td><td class="target">citizen in t</td><td class="amt">n</td><td></td><td class="note">row 2</td></tr>
+</tbody></table><h3>perish <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
+<p class="sel">selection: <em>each thing whose upkeep is unpaid</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-create">create</td><td class="target">metal in thing.location</td><td class="amt">thing.metal-in-it</td><td></td><td class="note">row 2</td></tr>
+<tr><td class="op op-destroy">destroy</td><td class="target">thing</td><td class="amt">1</td><td></td><td class="note">row 1</td></tr>
+</tbody></table><h3>age <span class="badge down">2 rows &rarr; 1 lines (&minus;1)</span></h3>
+<p class="sel">selection: <em>each thing with keeps at least 1</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-set">set</td><td class="target">thing.keeps = thing.keeps - 1</td><td class="amt"></td><td></td><td class="note">both rows were one decrement</td></tr>
+</tbody></table><h3>spoil <span class="badge level">1 rows &rarr; 1 lines (=)</span></h3>
+<p class="sel">selection: <em>each thing with keeps 0</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-destroy">destroy</td><td class="target">thing</td><td class="amt">1</td><td></td><td class="note">row 1</td></tr>
+</tbody></table><h3>refresh <span class="badge down">2 rows &rarr; 1 lines (&minus;1)</span></h3>
+<p class="sel">selection: <em>each thing that is not ready</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-set">set</td><td class="target">thing.ready = yes</td><td class="amt"></td><td></td><td class="note">both rows were one flip</td></tr>
+</tbody></table>
+
+<h2>Building the world <span class="badge">5</span></h2>
+<div class="callout">
+<p><strong>No new primitive appears below.</strong> Every line is <code>create</code>,
+<code>set</code> or <code>call</code> &mdash; and not one threshold, because nothing at design
+time can be refused. That is the answer to whether one format can both make the environment and
+play the game: <strong>world-building is the play language with the guards left out.</strong></p>
+</div>
+<h3>make-territory(id, biome, nature) <span class="badge design">design time</span></h3>
+<p class="sel">selection: <em>applied at design time, against the empty game</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-create">create</td><td class="target">territory in game</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-set">set</td><td class="target">territory.id = id</td><td class="amt"></td><td></td><td class="note"></td></tr>
+<tr><td class="op op-set">set</td><td class="target">territory.biome = biome</td><td class="amt"></td><td></td><td class="note"></td></tr>
+<tr><td class="op op-set">set</td><td class="target">territory.nature = nature</td><td class="amt"></td><td></td><td class="note"></td></tr>
+</tbody></table><h3>make-deposit(t, resource, capacity, density) <span class="badge design">design time</span></h3>
+<p class="sel">selection: <em>applied at design time</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-create">create</td><td class="target">deposit in t</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-set">set</td><td class="target">deposit.resource = resource</td><td class="amt"></td><td></td><td class="note"></td></tr>
+<tr><td class="op op-set">set</td><td class="target">deposit.total-capacity = capacity</td><td class="amt"></td><td></td><td class="note"></td></tr>
+<tr><td class="op op-set">set</td><td class="target">deposit.density = density</td><td class="amt"></td><td></td><td class="note"></td></tr>
+</tbody></table><h3>make-orbit(t) <span class="badge design">design time</span></h3>
+<p class="sel">selection: <em>applied at design time</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-create">create</td><td class="target">orbit in game</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-set">set</td><td class="target">orbit.below = t</td><td class="amt"></td><td></td><td class="note"></td></tr>
+</tbody></table><h3>make-adjacency(a, b) <span class="badge design">design time</span></h3>
+<p class="sel">selection: <em>applied at design time</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-create">create</td><td class="target">adjacency in game</td><td class="amt">1</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-set">set</td><td class="target">adjacency.from = a</td><td class="amt"></td><td></td><td class="note"></td></tr>
+<tr><td class="op op-set">set</td><td class="target">adjacency.to = b</td><td class="amt"></td><td></td><td class="note"></td></tr>
+</tbody></table><h3>make-world() <span class="badge design">design time</span></h3>
+<p class="sel">selection: <em>the whole environment, from the empty game</em></p>
+<table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+</tr></thead><tbody>
+<tr><td class="op op-call">call</td><td class="target">make-territory(1, grassland, 1) ... make-territory(12, mountain, 1)</td><td class="amt">x12</td><td></td><td class="note">from Territory resources</td></tr>
+<tr><td class="op op-call">call</td><td class="target">make-deposit(t, r, capacity, density) for each territory and resource</td><td class="amt">x36</td><td></td><td class="note">3 x 4 reads capacity 3, density 4</td></tr>
+<tr><td class="op op-call">call</td><td class="target">make-orbit(t) for each territory</td><td class="amt">x12</td><td></td><td class="note"></td></tr>
+<tr><td class="op op-call">call</td><td class="target">make-adjacency(a, b) for each shared edge</td><td class="amt">xE</td><td></td><td class="note">orbital adjacency is derived, not stated</td></tr>
+</tbody></table>
+
+<h3>The data those calls consume</h3>
+<p>Copied for review. <code>3 x 4</code> is capacity 3, density 4 &mdash; so
+<code>make-deposit(1, food, 3, 4)</code>.</p>
+<div class="scroll"><table><thead><tr>
+<th>Territory</th>
+<th>Food</th>
+<th>Metal</th>
+<th>Energy</th>
+<th>What it exercises</th>
+</tr></thead><tbody>
+<tr>
+<td class="amt">1</td>
+<td class="amt">3 x 4</td>
+<td class="amt">3 x 4</td>
+<td class="amt">3 x 4</td>
+<td class="note">The landing site. Everything works</td>
+</tr>
+<tr>
+<td class="amt">2</td>
+<td class="amt">2 x 6</td>
+<td class="amt">2 x 4</td>
+<td class="amt">2 x 4</td>
+<td class="note">Few dense food extractors</td>
+</tr>
+<tr>
+<td class="amt">3</td>
+<td class="amt">6 x 2</td>
+<td class="amt">2 x 4</td>
+<td class="amt">2 x 4</td>
+<td class="note">Many thin food extractors, same food total</td>
+</tr>
+<tr>
+<td class="amt">4</td>
+<td class="amt">1 x 2</td>
+<td class="amt">4 x 5</td>
+<td class="amt">4 x 5</td>
+<td class="note">The minimum a territory can be</td>
+</tr>
+<tr>
+<td class="amt">5</td>
+<td class="amt">3 x 1</td>
+<td class="amt">8 x 8</td>
+<td class="amt">8 x 8</td>
+<td class="note">Food density 1</td>
+</tr>
+<tr>
+<td class="amt">6</td>
+<td class="amt">4 x 4</td>
+<td class="amt">none</td>
+<td class="amt">4 x 5</td>
+<td class="note">No metal</td>
+</tr>
+<tr>
+<td class="amt">7</td>
+<td class="amt">4 x 4</td>
+<td class="amt">4 x 5</td>
+<td class="amt">none</td>
+<td class="note">No energy</td>
+</tr>
+<tr>
+<td class="amt">8</td>
+<td class="amt">6 x 6</td>
+<td class="amt">1 x 2</td>
+<td class="amt">1 x 2</td>
+<td class="note">Population without industry</td>
+</tr>
+<tr>
+<td class="amt">9</td>
+<td class="amt">2 x 3</td>
+<td class="amt">6 x 8</td>
+<td class="amt">1 x 2</td>
+<td class="note">Rich metal, too few hands to work it</td>
+</tr>
+<tr>
+<td class="amt">10</td>
+<td class="amt">3 x 3</td>
+<td class="amt">1 x 3</td>
+<td class="amt">6 x 8</td>
+<td class="note">An energy depot</td>
+</tr>
+<tr>
+<td class="amt">11</td>
+<td class="amt">5 x 6</td>
+<td class="amt">5 x 6</td>
+<td class="amt">5 x 6</td>
+<td class="note">The prize</td>
+</tr>
+<tr>
+<td class="amt">12</td>
+<td class="amt">2 x 2</td>
+<td class="amt">8 x 8</td>
+<td class="amt">8 x 8</td>
+<td class="note">Rich extractors, almost no workers</td>
+</tr>
+</tbody></table></div>
+
+<h2>What the re-encoding cost and saved</h2>
+<p>Computed from the data rather than asserted. In bare primitives,
+<strong>58 rows became 68 lines &mdash; up 10</strong>. That is the number predicted
+before any of this was written, and it is the misleading one.</p>
+<p>Almost all of the rise is one thing: today's <code>consume</code> fuses a guard and an effect,
+and splitting it costs a line each time. There are <strong>15</strong> such pairs. Since
+<code>consume</code> is sugar &mdash; it is in the table above &mdash; an author never has to write
+both, and the authored count is <strong>53 lines, down 5 from 58</strong>.</p>
+<div class="callout">
+<h4>So which number is real</h4>
+<p>All three, measuring different things. <strong>Up 10</strong> is what the machine
+executes. <strong>Down 5</strong> is what a person writes. And the one that matters
+is neither: <strong>the vocabulary went from four roles that could not name
+<code>create-if-missing</code> to six primitives that also build the world from nothing.</strong>
+A count of lines cannot see that, which is the whole reason to fix the metric first.</p>
+</div>
+<div class="scroll"><table><thead><tr>
+<th>Formula</th>
+<th>Rows before</th>
+<th>Lines after</th>
+<th>Why</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">deploy ark</td>
+<td class="amt">9</td>
+<td class="amt">3</td>
+<td class="note">row 1 is a parameter declaration; the colony block becomes a call</td>
+</tr>
+<tr>
+<td class="target">found-colony</td>
+<td class="amt">0</td>
+<td class="amt">7</td>
+<td class="note">new - the block both recipes shared</td>
+</tr>
+<tr>
+<td class="target">found by land</td>
+<td class="amt">8</td>
+<td class="amt">3</td>
+<td class="note">same call</td>
+</tr>
+<tr>
+<td class="target">move</td>
+<td class="amt">5</td>
+<td class="amt">6</td>
+<td class="note">up: the ready flip and the location move are both explicit</td>
+</tr>
+<tr>
+<td class="target">build extractor</td>
+<td class="amt">3</td>
+<td class="amt">6</td>
+<td class="note">up: the capacity guard was implicit and is now stated</td>
+</tr>
+<tr>
+<td class="target">build store</td>
+<td class="amt">3</td>
+<td class="amt">5</td>
+<td class="note">up: require and consume split into threshold and destroy</td>
+</tr>
+<tr>
+<td class="target">build yard</td>
+<td class="amt">3</td>
+<td class="amt">6</td>
+<td class="note">up: same, plus the capacity-1 guard</td>
+</tr>
+<tr>
+<td class="target">produce pioneer</td>
+<td class="amt">4</td>
+<td class="amt">7</td>
+<td class="note">up: three requires become three thresholds and three destroys</td>
+</tr>
+<tr>
+<td class="target">launch ark</td>
+<td class="amt">4</td>
+<td class="amt">8</td>
+<td class="note">up: same</td>
+</tr>
+<tr>
+<td class="target">create labor</td>
+<td class="amt">3</td>
+<td class="amt">2</td>
+<td class="note">down: the ready flip was two rows</td>
+</tr>
+<tr>
+<td class="target">work</td>
+<td class="amt">5</td>
+<td class="amt">5</td>
+<td class="note">level: one flip saved, one threshold gained</td>
+</tr>
+<tr>
+<td class="target">upkeep</td>
+<td class="amt">2</td>
+<td class="amt">2</td>
+<td class="note">level</td>
+</tr>
+<tr>
+<td class="target">grow</td>
+<td class="amt">2</td>
+<td class="amt">3</td>
+<td class="note">up: the binding is explicit</td>
+</tr>
+<tr>
+<td class="target">perish</td>
+<td class="amt">2</td>
+<td class="amt">2</td>
+<td class="note">level</td>
+</tr>
+<tr>
+<td class="target">age</td>
+<td class="amt">2</td>
+<td class="amt">1</td>
+<td class="note">down: a decrement was written as destroy-and-recreate</td>
+</tr>
+<tr>
+<td class="target">spoil</td>
+<td class="amt">1</td>
+<td class="amt">1</td>
+<td class="note">level</td>
+</tr>
+<tr>
+<td class="target">refresh</td>
+<td class="amt">2</td>
+<td class="amt">1</td>
+<td class="note">down: a flip was written as destroy-and-recreate</td>
+</tr>
+</tbody></table></div>
+
+<h2>Decisions this forced, none of them taken here</h2>
+<div class="scroll"><table><thead><tr>
+<th>Question</th>
+<th>What is at stake</th>
+<th>How it shows up</th>
+</tr></thead><tbody>
+<tr>
+<td>The garrison threshold in found-colony: hard or soft?</td>
+<td>Hard is today's rule and refuses the whole action. Soft is the sketch, and then a second deploy adds 2 citizens, 2 extractors and 2 stores to an existing colony.</td>
+<td class="note">If soft, each of the six creates needs its own threshold, and they are not the same answer.</td>
+</tr>
+<tr>
+<td>Do the sketch's missing stores come back?</td>
+<td>The sketch creates a garrison, 2 citizens and 2 extractors. The specification also creates a food store and a metal store.</td>
+<td class="note">Dropping them changes the game.</td>
+</tr>
+<tr>
+<td>Does composition see the starting state or the running one?</td>
+<td>Each line applied can mean every line reads the state as it was, or each reads the effects of the ones before it.</td>
+<td class="note">grow consumes food and creates citizens; work destroys labor and creates a resource. Any recipe touching one thing twice will tell them apart.</td>
+</tr>
+<tr>
+<td>Does a thing have identity, or is it a count?</td>
+<td>set requires an identified thing. destroy ark means this ark. create citizen 2 means two more, with no identity asked for.</td>
+<td class="note">The dump already answers this: nine of its ten tables are the containment tree of identified things.</td>
+</tr>
+<tr>
+<td>Is extractor capacity a threshold on the recipe, or a property of the container?</td>
+<td>build extractor now needs an explicit at most capacity - 1 threshold, which the current table left implicit in Where things are.</td>
+<td class="note">Making it explicit is more rows. Leaving it implicit means the engine enforces something no formula states.</td>
+</tr>
+</tbody></table></div>
+
+<p class="foot">Research lens, 2026-09-08. Copied and modified from
+<code>releases/first-release.md</code> rather than referencing it, per the request &mdash; so
+divergence from the specification is expected and is not a defect in either. Every count here is
+computed by <code>render.py</code> from <code>data.json</code>; no number is written by hand.</p>
+</div>

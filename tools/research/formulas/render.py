@@ -1,0 +1,254 @@
+"""Render the formula report from data.json.
+
+The data states; this renders. Nothing is decided here - every number in the output is
+computed from `data.json`, so a claim in the report can be checked by reading the data
+rather than by trusting the prose.
+
+    python tools/research/formulas/render.py > lenses/research/formulas.html
+"""
+
+import json
+import pathlib
+import sys
+
+HERE = pathlib.Path(__file__).parent
+DATA = json.loads((HERE / "data.json").read_text(encoding="utf-8"))
+
+OP_CLASS = {
+    "create": "op-create",
+    "destroy": "op-destroy",
+    "set": "op-set",
+    "threshold": "op-threshold",
+    "call": "op-call",
+    "let": "op-let",
+}
+
+
+def esc(text):
+    return (
+        str(text)
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+
+
+def formula_table(f):
+    out = []
+    was = f.get("was")
+    if f.get("new"):
+        badge = '<span class="badge new">new</span>'
+    elif was is None:
+        badge = '<span class="badge design">design time</span>'
+    else:
+        delta = len(f["lines"]) - was
+        cls = "down" if delta < 0 else ("up" if delta > 0 else "level")
+        arrow = "&minus;" if delta < 0 else ("+" if delta > 0 else "=")
+        badge = (
+            f'<span class="badge {cls}">{was} rows &rarr; {len(f["lines"])} lines '
+            f'({arrow}{abs(delta) if delta else ""})</span>'
+        )
+    out.append(f'<h3>{esc(f["name"])} {badge}</h3>')
+    out.append(f'<p class="sel">selection: <em>{esc(f["selection"])}</em></p>')
+    out.append("<table><thead><tr>")
+    for h in ("Op", "Target", "Amount / Bound", "Attach", "Was"):
+        out.append(f"<th>{h}</th>")
+    out.append("</tr></thead><tbody>")
+    for op, target, amount, attach, was_note in f["lines"]:
+        cls = OP_CLASS.get(op, "")
+        attach_cell = f'<span class="attach">{esc(attach)}</span>' if attach else ""
+        out.append(
+            f'<tr><td class="op {cls}">{esc(op)}</td>'
+            f"<td class=\"target\">{esc(target)}</td>"
+            f"<td class=\"amt\">{esc(amount)}</td>"
+            f"<td>{attach_cell}</td>"
+            f'<td class="note">{esc(was_note)}</td></tr>'
+        )
+    out.append("</tbody></table>")
+    return "\n".join(out)
+
+
+def simple_table(headers, rows, classes=None):
+    out = ["<table><thead><tr>"]
+    for h in headers:
+        out.append(f"<th>{esc(h)}</th>")
+    out.append("</tr></thead><tbody>")
+    for row in rows:
+        out.append("<tr>")
+        for i, cell in enumerate(row):
+            cls = f' class="{classes[i]}"' if classes and classes[i] else ""
+            out.append(f"<td{cls}>{esc(cell)}</td>")
+        out.append("</tr>")
+    out.append("</tbody></table>")
+    return "\n".join(out)
+
+
+def totals():
+    """Rows before, lines in bare primitives, and lines once the sugar is used.
+
+    The third is the honest one for an author. `consume n k` is listed as sugar for a
+    threshold plus destroys, so a pair that came from one `consume` is one line again the
+    moment the author writes `consume`. Counted, not estimated: a threshold reading
+    "at least" whose target is also destroyed in the same formula is one such pair.
+    """
+    was = sum(r[1] for r in DATA["collapse"])
+    now = sum(r[2] for r in DATA["collapse"])
+    pairs = 0
+    for f in DATA["player"] + DATA["world"]:
+        destroyed = {l[1] for l in f["lines"] if l[0] == "destroy"}
+        for op, target, amount, _attach, _note in f["lines"]:
+            if op == "threshold" and str(amount).startswith("at least") and target in destroyed:
+                pairs += 1
+    return was, now, pairs
+
+
+def main():
+    was, now, pairs = totals()
+    sugared = now - pairs
+    n_player = len(DATA["player"])
+    n_world = len(DATA["world"])
+    n_creation = len(DATA["creation"])
+    parts = []
+    parts.append(f"""<title>Formula Report</title>
+<style>
+:root {{
+  --bg: #fbfaf8; --fg: #1c1a17; --muted: #6b6560; --rule: #ddd8d1;
+  --card: #ffffff; --accent: #7c4a2d; --shade: #f4f1ec;
+  --create: #1f6f43; --destroy: #9a2c2c; --set: #1f5b8f; --threshold: #8a6d1f; --call: #5b3a8f;
+}}
+@media (prefers-color-scheme: dark) {{
+  :root:not([data-theme="light"]) {{
+    --bg: #16151a; --fg: #eae7e2; --muted: #a49d95; --rule: #34313a;
+    --card: #1e1d23; --accent: #d9a07a; --shade: #24232a;
+    --create: #6fd39b; --destroy: #f08c8c; --set: #82b8ea; --threshold: #dcc07a; --call: #b79ae8;
+  }}
+}}
+:root[data-theme="dark"] {{
+  --bg: #16151a; --fg: #eae7e2; --muted: #a49d95; --rule: #34313a;
+  --card: #1e1d23; --accent: #d9a07a; --shade: #24232a;
+  --create: #6fd39b; --destroy: #f08c8c; --set: #82b8ea; --threshold: #dcc07a; --call: #b79ae8;
+}}
+body {{ background: var(--bg); color: var(--fg); font: 15px/1.55 -apple-system, BlinkMacSystemFont,
+  "Segoe UI", Roboto, sans-serif; margin: 0; }}
+.wrap {{ max-width: 1080px; margin: 0 auto; padding: 40px 24px 80px; }}
+h1 {{ font-size: 30px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.01em; }}
+h2 {{ font-size: 21px; margin: 44px 0 6px; padding-top: 18px; border-top: 2px solid var(--rule); }}
+h3 {{ font-size: 15px; margin: 26px 0 2px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
+.lede {{ color: var(--muted); margin: 0 0 4px; }}
+.sel {{ color: var(--muted); font-size: 13px; margin: 0 0 8px; }}
+p {{ margin: 10px 0; }}
+table {{ border-collapse: collapse; width: 100%; margin: 10px 0 4px; font-size: 13.5px; }}
+th {{ text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted); border-bottom: 1px solid var(--rule); padding: 5px 9px; font-weight: 600; }}
+td {{ border-bottom: 1px solid var(--rule); padding: 5px 9px; vertical-align: top; }}
+tbody tr:nth-child(odd) {{ background: var(--shade); }}
+.scroll {{ overflow-x: auto; }}
+.op {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; white-space: nowrap; }}
+.op-create {{ color: var(--create); }} .op-destroy {{ color: var(--destroy); }}
+.op-set {{ color: var(--set); }} .op-threshold {{ color: var(--threshold); }}
+.op-call {{ color: var(--call); }} .op-let {{ color: var(--muted); }}
+.target, .amt {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
+.note {{ color: var(--muted); font-size: 12.5px; }}
+.attach {{ font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }}
+.badge {{ font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 600; padding: 2px 7px;
+  border-radius: 10px; background: var(--shade); color: var(--muted); border: 1px solid var(--rule);
+  margin-left: 6px; white-space: nowrap; }}
+.badge.down {{ color: var(--create); border-color: var(--create); }}
+.badge.up {{ color: var(--threshold); border-color: var(--threshold); }}
+.badge.new {{ color: var(--call); border-color: var(--call); }}
+.badge.design {{ color: var(--set); border-color: var(--set); }}
+.callout {{ background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+  padding: 14px 18px; margin: 18px 0; border-radius: 3px; }}
+.callout h4 {{ margin: 0 0 6px; font-size: 14px; }}
+code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--shade);
+  padding: 1px 5px; border-radius: 3px; font-size: 0.92em; }}
+.foot {{ color: var(--muted); font-size: 12.5px; margin-top: 40px; padding-top: 16px;
+  border-top: 1px solid var(--rule); }}
+</style>
+<div class="wrap">
+<h1>The whole specification as formulas</h1>
+<p class="lede">Every recipe re-expressed in six primitives &mdash; and the same six building the
+world from an empty game. Generated from <code>tools/research/formulas/data.json</code>.</p>
+
+<div class="callout">
+<h4>The one finding</h4>
+<p><strong>Creation and transformation are already the same format, because the specification has
+been quietly turning relations into things.</strong> <code>deposit</code> and
+<code>adjacency</code> are kinds. Once a relation is a thing, building the world is
+<code>create</code> and <code>set</code> with no thresholds &mdash; the identical primitives that
+play the game. Nothing needs adding for world-building except the <code>set</code> that
+transformation needed anyway.</p>
+</div>
+
+<h2>The primitives</h2>
+<p>Six. <code>set</code> is the one the sketch was missing, and it is what collapses
+<code>age</code> and <code>refresh</code> from two rows to one each.</p>
+<div class="scroll">{simple_table(
+    ["Primitive", "What it does", "Example", "Why it earns a place"],
+    DATA["primitives"], ["op", "", "target", "note"])}</div>
+
+<h2>What is sugar</h2>
+<p>Removable with linear growth, so by the test each is readability rather than expressiveness
+&mdash; which means they can be added freely.</p>
+<div class="scroll">{simple_table(
+    ["Written as", "Means", "Cost of removing it"],
+    DATA["sugar"], ["target", "", "note"])}</div>
+
+<h2>Player formulas <span class="badge">{n_player}</span></h2>
+{"".join(formula_table(f) for f in DATA["player"])}
+
+<h2>World formulas <span class="badge">{n_world}</span></h2>
+<p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
+{"".join(formula_table(f) for f in DATA["world"])}
+
+<h2>Building the world <span class="badge">{n_creation}</span></h2>
+<div class="callout">
+<p><strong>No new primitive appears below.</strong> Every line is <code>create</code>,
+<code>set</code> or <code>call</code> &mdash; and not one threshold, because nothing at design
+time can be refused. That is the answer to whether one format can both make the environment and
+play the game: <strong>world-building is the play language with the guards left out.</strong></p>
+</div>
+{"".join(formula_table(f) for f in DATA["creation"])}
+
+<h3>The data those calls consume</h3>
+<p>Copied for review. <code>3 x 4</code> is capacity 3, density 4 &mdash; so
+<code>make-deposit(1, food, 3, 4)</code>.</p>
+<div class="scroll">{simple_table(
+    ["Territory", "Food", "Metal", "Energy", "What it exercises"],
+    DATA["territories"], ["amt", "amt", "amt", "amt", "note"])}</div>
+
+<h2>What the re-encoding cost and saved</h2>
+<p>Computed from the data rather than asserted. In bare primitives,
+<strong>{was} rows became {now} lines &mdash; up {now - was}</strong>. That is the number predicted
+before any of this was written, and it is the misleading one.</p>
+<p>Almost all of the rise is one thing: today's <code>consume</code> fuses a guard and an effect,
+and splitting it costs a line each time. There are <strong>{pairs}</strong> such pairs. Since
+<code>consume</code> is sugar &mdash; it is in the table above &mdash; an author never has to write
+both, and the authored count is <strong>{sugared} lines, down {was - sugared} from {was}</strong>.</p>
+<div class="callout">
+<h4>So which number is real</h4>
+<p>All three, measuring different things. <strong>Up {now - was}</strong> is what the machine
+executes. <strong>Down {was - sugared}</strong> is what a person writes. And the one that matters
+is neither: <strong>the vocabulary went from four roles that could not name
+<code>create-if-missing</code> to six primitives that also build the world from nothing.</strong>
+A count of lines cannot see that, which is the whole reason to fix the metric first.</p>
+</div>
+<div class="scroll">{simple_table(
+    ["Formula", "Rows before", "Lines after", "Why"],
+    DATA["collapse"], ["target", "amt", "amt", "note"])}</div>
+
+<h2>Decisions this forced, none of them taken here</h2>
+<div class="scroll">{simple_table(
+    ["Question", "What is at stake", "How it shows up"],
+    DATA["decisions"], ["", "", "note"])}</div>
+
+<p class="foot">Research lens, 2026-09-08. Copied and modified from
+<code>releases/first-release.md</code> rather than referencing it, per the request &mdash; so
+divergence from the specification is expected and is not a defect in either. Every count here is
+computed by <code>render.py</code> from <code>data.json</code>; no number is written by hand.</p>
+</div>""")
+    sys.stdout.write("\n".join(parts))
+
+
+if __name__ == "__main__":
+    main()
