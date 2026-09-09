@@ -936,6 +936,16 @@
       "OPEN - what is a food store for?",
       "Food is made with keeps 1. The turn order is upkeep, grow, perish, age, spoil - so food made this turn is aged to 0 and spoiled at the same turn end, whether it is in a store or in nothing.",
       "If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect."
+    ],
+    [
+      "ANSWERED - food stores are out, and the rule is derived rather than named",
+      "Sean, 2026-09-09: a food store buys nothing. It will matter once food preservation technology exists, but that is not in the game now.",
+      "Stated as *a store may be built for a resource whose things do not expire*, which today admits metal and energy and excludes food. **Preservation raises food's keeps and food stores become available with no change to the rule** - which is the point of deriving it instead of listing it."
+    ],
+    [
+      "NOTED - found-colony has no stores for two independent reasons",
+      "Both stores were dropped for conservation: garrison + 2 extractors = 3, exactly an ark's Binding.",
+      "The food one also buys nothing, so it would have gone anyway. **The metal store does buy something and still stays out** - a new colony gets the minimum that works and builds its own stores. Two reasons agreeing is not two pieces of evidence."
     ]
   ],
   "collapse": [
@@ -1516,6 +1526,29 @@
       "doubles",
       "4",
       "none"
+    ]
+  ],
+  "domains": [
+    [
+      "build store",
+      "$resource",
+      "a resource whose things do not expire",
+      "metal, energy",
+      "food is excluded because it is made with keeps 1 and dies at the turn end it was made, so a food store cannot hold anything across a turn"
+    ],
+    [
+      "build extractor",
+      "$resource",
+      "a resource this territory has a deposit for",
+      "per territory",
+      "territory 6 has no metal deposit, so build extractor[metal] does not exist there - check 5"
+    ],
+    [
+      "work",
+      "extractor.resource",
+      "the resource the selected extractor was built for",
+      "not a choice",
+      "determined by the selection, so it grounds to one instance rather than a domain"
     ]
   ]
 }

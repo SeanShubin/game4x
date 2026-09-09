@@ -1338,6 +1338,59 @@ every case here except the extractors. Territory 1 has food capacity 3, so deplo
 add a second food extractor. <strong>If that is wrong, the fix is at the call</strong> &mdash;
 do not found a colony that is already founded &mdash; and not a second kind of create.</p>
 </div>
+<h3>Parameter domains &mdash; what a formula may be instantiated over</h3>
+<p>A parameter is not free. Its domain is a <strong>condition on the kind</strong>, not a list, and
+grounding resolves it &mdash; so an instance that does not satisfy the condition never exists, and
+in a selection interface the player never sees it.</p>
+<div class="scroll"><table><thead><tr>
+<th>Formula</th>
+<th>Parameter</th>
+<th>Domain</th>
+<th>Today</th>
+<th>Why</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">build store</td>
+<td class="target">$resource</td>
+<td>a resource whose things do not expire</td>
+<td class="amt">metal, energy</td>
+<td class="note">food is excluded because it is made with keeps 1 and dies at the turn end it was made, so a food store cannot hold anything across a turn</td>
+</tr>
+<tr>
+<td class="target">build extractor</td>
+<td class="target">$resource</td>
+<td>a resource this territory has a deposit for</td>
+<td class="amt">per territory</td>
+<td class="note">territory 6 has no metal deposit, so build extractor[metal] does not exist there - check 5</td>
+</tr>
+<tr>
+<td class="target">work</td>
+<td class="target">extractor.resource</td>
+<td>the resource the selected extractor was built for</td>
+<td class="amt">not a choice</td>
+<td class="note">determined by the selection, so it grounds to one instance rather than a domain</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>Food stores, and why the rule is derived rather than named</h4>
+<p><strong>Sean, 2026-09-09: a food store buys nothing, so it is out.</strong> The tempting fix is
+to write <em>no food stores</em>. The better one is
+<strong><em>a store may be built for a resource whose things do not expire</em></strong>, which
+today admits metal and energy and excludes food, because food is made with <code>keeps</code> 1 and
+dies at the turn end it was made.</p>
+<p><strong>Preservation technology raises food's <code>keeps</code>, and food stores become
+available with no change to the rule.</strong> That is the difference between a condition and a
+list: one of them already knows about a feature that does not exist yet.</p>
+</div>
+<div class="callout">
+<h4>Two reasons agreeing is not two pieces of evidence</h4>
+<p><code>found-colony</code> has no stores. That was decided for <strong>conservation</strong>
+&mdash; garrison plus two extractors is 3, exactly an ark's Binding &mdash; and the food store also
+turns out to buy nothing, so it would have gone anyway. <strong>The metal store does buy something
+and still stays out</strong>: a new colony gets the minimum that works and builds its own. Worth
+separating, because a decision that looks doubly supported is easy to stop examining.</p>
+</div>
+
 <h3>Check 5 &mdash; which territories would refuse a create, per line</h3>
 <div class="scroll"><table><thead><tr>
 <th>Formula</th>
@@ -1573,6 +1626,16 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <td>OPEN - what is a food store for?</td>
 <td>Food is made with keeps 1. The turn order is upkeep, grow, perish, age, spoil - so food made this turn is aged to 0 and spoiled at the same turn end, whether it is in a store or in nothing.</td>
 <td class="note">If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect.</td>
+</tr>
+<tr>
+<td>ANSWERED - food stores are out, and the rule is derived rather than named</td>
+<td>Sean, 2026-09-09: a food store buys nothing. It will matter once food preservation technology exists, but that is not in the game now.</td>
+<td class="note">Stated as *a store may be built for a resource whose things do not expire*, which today admits metal and energy and excludes food. **Preservation raises food's keeps and food stores become available with no change to the rule** - which is the point of deriving it instead of listing it.</td>
+</tr>
+<tr>
+<td>NOTED - found-colony has no stores for two independent reasons</td>
+<td>Both stores were dropped for conservation: garrison + 2 extractors = 3, exactly an ark's Binding.</td>
+<td class="note">The food one also buys nothing, so it would have gone anyway. **The metal store does buy something and still stays out** - a new colony gets the minimum that works and builds its own stores. Two reasons agreeing is not two pieces of evidence.</td>
 </tr>
 </tbody></table></div>
 

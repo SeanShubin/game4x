@@ -486,6 +486,33 @@ every case here except the extractors. Territory 1 has food capacity 3, so deplo
 add a second food extractor. <strong>If that is wrong, the fix is at the call</strong> &mdash;
 do not found a colony that is already founded &mdash; and not a second kind of create.</p>
 </div>
+<h3>Parameter domains &mdash; what a formula may be instantiated over</h3>
+<p>A parameter is not free. Its domain is a <strong>condition on the kind</strong>, not a list, and
+grounding resolves it &mdash; so an instance that does not satisfy the condition never exists, and
+in a selection interface the player never sees it.</p>
+<div class="scroll">{simple_table(
+    ["Formula", "Parameter", "Domain", "Today", "Why"],
+    DATA["domains"], ["target", "target", "", "amt", "note"])}</div>
+<div class="callout">
+<h4>Food stores, and why the rule is derived rather than named</h4>
+<p><strong>Sean, 2026-09-09: a food store buys nothing, so it is out.</strong> The tempting fix is
+to write <em>no food stores</em>. The better one is
+<strong><em>a store may be built for a resource whose things do not expire</em></strong>, which
+today admits metal and energy and excludes food, because food is made with <code>keeps</code> 1 and
+dies at the turn end it was made.</p>
+<p><strong>Preservation technology raises food's <code>keeps</code>, and food stores become
+available with no change to the rule.</strong> That is the difference between a condition and a
+list: one of them already knows about a feature that does not exist yet.</p>
+</div>
+<div class="callout">
+<h4>Two reasons agreeing is not two pieces of evidence</h4>
+<p><code>found-colony</code> has no stores. That was decided for <strong>conservation</strong>
+&mdash; garrison plus two extractors is 3, exactly an ark's Binding &mdash; and the food store also
+turns out to buy nothing, so it would have gone anyway. <strong>The metal store does buy something
+and still stays out</strong>: a new colony gets the minimum that works and builds its own. Worth
+separating, because a decision that looks doubly supported is easy to stop examining.</p>
+</div>
+
 <h3>Check 5 &mdash; which territories would refuse a create, per line</h3>
 <div class="scroll">{simple_table(
     ["Formula", "Line", "Attach", "Blocked on"],
