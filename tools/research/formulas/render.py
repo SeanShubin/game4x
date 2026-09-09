@@ -351,6 +351,51 @@ def _one_string_cell(text):
     return esc(text)
 
 
+def a_territory(row):
+    """One territory as rows, and as text. Derived from the release's own table.
+
+    `row` is a *Territory resources* row: id, then `capacity x density` per resource, then
+    what it exercises. The wide form is what a person reads; the long form is what the model
+    holds - and turning one into the other is the whole of the answer to whether it should
+    be `metal.density` or `density.metal`.
+    """
+    tid, note = row[0], row[4]
+    facts, text = [], [f"{{territory id:{tid} game:game}}"]
+    for trait, values, stored, source in DATA["thing_traits"]:
+        if trait == "id":
+            facts.append((f"territory {tid}", trait, tid, source))
+        elif stored == "derived":
+            facts.append((f"territory {tid}", trait, "&mdash;", source))
+        else:
+            facts.append((f"territory {tid}", trait, "<em>unstated</em>", source))
+    for i, resource in enumerate(("food", "metal", "energy"), start=1):
+        cell = row[i].strip()
+        if cell == "none":
+            continue
+        capacity, density = (p.strip() for p in cell.split("x"))
+        who = f"deposit ({tid}, {resource})"
+        facts.append((who, "resource", resource, "the column this cell sits in"))
+        facts.append((who, "total-capacity", capacity, f"<code>{cell}</code>, left of the &times;"))
+        facts.append((who, "density", density, f"<code>{cell}</code>, right of the &times;"))
+        text.append(
+            f"{{deposit territory:{tid} resource:{resource} "
+            f"total-capacity:{capacity} density:{density}}}"
+        )
+    rows = "".join(
+        f'<tr><td class="target">{esc(w)}</td><td class="target">{esc(t)}</td>'
+        f'<td class="amt">{v}</td><td class="note">{s}</td></tr>'
+        for w, t, v, s in facts
+    )
+    return (
+        tid,
+        note,
+        len(facts),
+        '<table><thead><tr><th>Thing</th><th>Trait</th><th>Value</th>'
+        "<th>Where the value comes from</th></tr></thead><tbody>" + rows + "</tbody></table>",
+        "\n".join(text),
+    )
+
+
 def assumption_table():
     """What the encoding assumed, and how many lines needed each - counted, not written."""
     rows = []
@@ -415,6 +460,7 @@ def main():
     was, now = totals()
     direction = "down" if now < was else "up"
     n_primitives = len(DATA["primitives"])
+    t_id, t_note, n_facts, t_table, t_text = a_territory(DATA["territories"][0])
     n_player = len(DATA["player"])
     n_world = len(DATA["world"])
     n_creation = len(DATA["creation"])
@@ -545,6 +591,95 @@ rather than after.</p>
 <div class="scroll">{simple_table(
     ["Written as", "Means", "Cost of removing it"],
     DATA["sugar"], ["target", "", "note"])}</div>
+
+<h2>A thing, as tabular data and as text</h2>
+<p>Sean, 2026-09-09: <em>I want to see things as organized tabular data, with the corresponding text
+representation</em> &mdash; and, off the top of his head, a territory. Here is territory
+{t_id}: <em>{t_note}</em>. Every value below is read from the release's own
+<em>Territory resources</em> row; none is typed here.</p>
+{t_table}
+<pre><code>{t_text}</code></pre>
+<div class="callout">
+<h4>Two of a territory's four traits have no value anywhere</h4>
+<p><strong><code>biome</code> and <code>nature</code> are stored traits of every territory, and no
+document gives either one a value for any of the twelve.</strong> <em>Territory resources</em> has
+four columns and none of them is a biome; the <em>Biomes</em> table describes what each biome is
+like and says <em>force of nature is the one column that binds</em>, which binds a territory's
+nature to a biome it has not been given. The code assigns them &mdash; <code>biomes_of</code>, which
+<code>R-4</code> vetted &mdash; so this is where a thing lives in two authorities at once, and only
+one of them is a document.</p>
+<p><strong>This report asserted otherwise until today.</strong> Its world-building data said
+<code>make-territory(1, grassland, 1)</code>, which named a biome for territory 1 and a nature for
+it, and <strong>nothing states either</strong>. Removed rather than corrected, because there is no
+correct value to put there. It was found by trying to draw the table above and having two columns
+come up empty &mdash; which is the argument for drawing it.</p>
+</div>
+
+<h3><code>metal.density</code> or <code>density.metal</code>: neither</h3>
+<p>The question only exists because the resource has been moved into the name.
+<strong><code>density</code> is a variable and <code>metal</code> is a value of a different variable,
+<code>resource</code></strong> &mdash; so once <code>resource</code> is a column there is nothing
+left to order, and the row above reads
+<code>{{deposit territory:{t_id} resource:metal total-capacity:.. density:..}}</code>.</p>
+<p><strong>The specification already rules on this, and not by analogy.</strong>
+<em>Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
+reads the state reads it the same way whatever kind it holds.</em> A territory carrying
+<code>metal.density</code>, <code>food.density</code> and <code>energy.density</code> gains a field
+per resource, which is exactly what that forbids. The long form gains a <em>row</em> per resource
+instead, and rows are free.</p>
+<p><strong>The instinct behind the dots is right about presentation and wrong about statement.</strong>
+The release's <em>Territory resources</em> is wide on purpose &mdash; one row per territory, a
+resource per column, <code>3 x 4</code> packing two variables into one cell &mdash; and it is far
+easier to read than {n_facts} rows would be. <code>CLAUDE.md</code> already separates these:
+<em>a table of game data in markdown is a rendering and never a source.</em> Both forms exist above,
+and the wide one was generated from the long one rather than the other way round.</p>
+
+<h2>What unifies, and what must not</h2>
+<p><strong>The shared object is the description, and the specification says so before this report
+does.</strong> <em>A game's state is things, in places, and how many of each. A thing is a set of
+traits, and one of them names its kind.</em> That is <code>{{kind trait:value ...}}</code> &mdash;
+the same object a formula line targets. So a thing and a formula line are not two structures to be
+unified; they are one structure appearing in two roles.</p>
+<div class="scroll"><table><thead><tr><th></th><th>Which</th><th>Why</th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["unify"])}</tbody></table></div>
+<div class="callout">
+<h4>Then what is a formula that only creates? Nothing but the thing</h4>
+<p>Since the fold, <strong>every world-building formula is one line, with
+<code>change</code> as its operator, <code>+1</code> as its amount and no attachment</strong> &mdash;
+all three constant. Take away what never varies and what remains is the description. <strong>So
+&ldquo;one formula creates each thing&rdquo; is not a way to unify them: it is what is left when
+they already are unified.</strong></p>
+<p>And it turns out to satisfy a rule nobody was aiming at. <code>spec/invariants.md</code>:
+<em>A definition arrives in one transition. There is no state in which a kind or a recipe is half
+defined.</em> A <code>create</code> followed by three <code>set</code>s <strong>has</strong> such a
+state &mdash; a territory that exists with no biome. Non-sequential composition removes it, and the
+invariant was not the reason for the decision.</p>
+</div>
+
+<h2>Design time, if it stopped being a category</h2>
+<p>Sean, 2026-09-09, still considering it: <em>removing the design-time distinction from the data as
+something special, having it either enforced from the engine or having a trait indicate when it can
+be used</em>. Today it is neither &mdash; it is a <strong>separate list</strong>, and that is the one
+option below with no cost and no check.</p>
+<div class="scroll"><table><thead><tr><th>Option</th><th>What it is</th><th>Cost</th><th>What it buys, and what it does not</th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td class="amt">{r[2]}</td><td class="note">{r[3]}</td></tr>' for r in DATA["phase_options"])}</tbody></table></div>
+<div class="callout">
+<h4>The middle one, and the one thing it costs that is not a line</h4>
+<p><strong>It introduces no concept at all</strong>, which under <em>minimum expressiveness</em> is
+the whole argument. <code>spec/console.md</code> already says <em>a command of one phase is refused
+in the other</em>, and refusing is what a <code>require</code> does &mdash; so the sentence stops
+being a rule the engine implements and becomes a line the formula carries. It also takes
+<code>require</code> from one use to six, which is most of the case for keeping it a primitive
+rather than sugar for a self-loop.</p>
+<p><strong>The cost is the error message.</strong> A design command refused after <code>start</code>
+can say <em>that command belongs to the design phase</em> only because the engine knows the
+category. Refused by a guard, it says <em>no game with phase design</em> &mdash; true, and worse.
+<code>spec/console.md</code> asks that a rejection be <em>in terms of the game rather than the
+parser</em> and name <em>what was wrong, where, and what was expected instead</em>, so this is a
+real requirement and not a nicety. It is not fatal: a guard on <code>game.phase</code> is a
+recognisable shape and a message can be written for it. But it is the thing to check before
+deciding, and it is the only cost this lane can find.</p>
+</div>
 
 <h2>Every row as one string</h2>
 <p>The last column of every formula table below restates that row &mdash; op, target, amount,

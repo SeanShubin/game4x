@@ -411,6 +411,45 @@ rather this lane stopped changing the number under you, say so and it will hold 
 still until you have read it.
 
 
+### X-19 - a territory has four traits and two of them have no value anywhere
+
+**to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *A thing, as tabular data and as text* · **found by** trying to draw one territory and having two columns come up empty
+
+**Where.** `releases/first-release.md` -> *Traits* gives a territory **biome** (*one of the biomes*,
+stored) and **nature** (*a number*, stored). *Territory resources* fixes all twelve territories and
+has four columns - Territory, Food, Metal, Energy - **and no biome**. *Biomes* describes what each
+biome is like and says **force of nature is the one column that binds**.
+
+**What.** **No territory is given a biome anywhere in `spec/` or `releases/`** - `grassland`,
+`jungle` and `mountain` appear only in `spec/planet.md:54`, which lists the six, and in the *Biomes*
+table's own rows. So the one column that binds, binds a territory's nature to a biome the territory
+has not been given, and **nature is undetermined for all twelve**.
+
+**Counted against a population that is not zero:** twelve territories, twelve without a stated
+biome, and the resources of all twelve are stated in the row beside it.
+
+**This may be correct rather than a gap, and that is the decision.** `R-4` is **vetted** on the
+evidence that *`biomes_of` gives every territory one*, so the code assigns biomes from the planet's
+geometry and no document was ever meant to. If that is the intent, the gap is not the missing values
+but that **nothing says the values come from there** - a reader of *Traits* and *Territory
+resources* has no way to learn it, and this lane guessed wrong for a day.
+
+- **If biomes are generated**, one sentence in *Territory resources* saying so is the whole fix, and
+  it names `R-4` rather than repeating it
+- **If they are meant to be fixed like the resources**, the table needs a fifth column, and twelve
+  values are Sean's to choose
+
+**Why it costs something.** A territory is the thing the game is played on, and its row is assembled
+from two authorities - resources from the release, biome and nature from the code. **That is fine
+and unsaid**, and unsaid is what makes it a defect rather than a design.
+
+**Whether.** **Worth a sentence, not worth a table** - unless the answer is the second reading, in
+which case it is twelve values and only Sean has them. **This lane got it wrong in exactly the way
+the item describes**: its own data said `make-territory(1, grassland, 1)`, asserting a biome and a
+nature for territory 1 that nothing states, until `d74a1c6`'s successor removed it. **A document
+that leaves a stored trait with no source invites the reader to invent one**, and this reader did.
+
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

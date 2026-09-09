@@ -592,10 +592,10 @@
       "lines": [
         [
           "call",
-          "make-territory(1, grassland, 1) ... make-territory(12, mountain, 1)",
+          "make-territory(id, biome, nature) for each of the twelve",
           "x12",
           "",
-          "from Territory resources"
+          "resources come from Territory resources; biome and nature come from `biomes_of` in the code, per R-4"
         ],
         [
           "call",
@@ -1375,6 +1375,84 @@
       "the resource the selected extractor was built for",
       "not a choice",
       "determined by the selection, so it grounds to one instance rather than a domain"
+    ]
+  ],
+  "thing_traits": [
+    [
+      "id",
+      "a number",
+      "stored",
+      "<code>releases/first-release.md</code> &rarr; <em>Territory resources</em>, the row's first column"
+    ],
+    [
+      "biome",
+      "one of six",
+      "stored",
+      "<strong>not in any document</strong> &mdash; <code>biomes_of</code> in the code assigns it, which <code>R-4</code> vetted"
+    ],
+    [
+      "nature",
+      "a number",
+      "stored",
+      "<strong>not in any document</strong> &mdash; the <em>Biomes</em> table binds it to the biome, and no territory has a biome stated"
+    ],
+    [
+      "control",
+      "a player, or unclaimed",
+      "derived",
+      "a citizen of that player is there &mdash; never stored, so never a column"
+    ]
+  ],
+  "unify": [
+    [
+      "the description",
+      "<strong>shared</strong>",
+      "<code>{kind trait:value ...}</code> &mdash; the spec already says <em>a thing is a set of traits, and one of them names its kind</em>"
+    ],
+    [
+      "the number",
+      "<strong>shared shape, different constraint</strong>",
+      "a thing's is a non-negative count; a formula's is a signed delta. Same column, and only the constraint differs"
+    ],
+    [
+      "<code>attach</code>",
+      "formula only",
+      "what to do when the result would go below zero. A count that is simply there has no failure to answer for"
+    ],
+    [
+      "the container",
+      "<strong>shared</strong>",
+      "a field named for the container's kind, in both"
+    ],
+    [
+      "selection",
+      "formula only",
+      "<em>which</em> thing this acts on. A thing does not select; it is selected"
+    ],
+    [
+      "<code>call</code>",
+      "formula only",
+      "the hierarchy. Nothing in a state refers to another state"
+    ]
+  ],
+  "phase_options": [
+    [
+      "a separate section, as today",
+      "<code>creation</code> is its own list in the data, and the engine knows that list is design-time",
+      "0 lines",
+      "The distinction lives in the <em>shape of the data</em>, so nothing states it and nothing can check it. It is also the only place a formula's category is not a trait."
+    ],
+    [
+      "<code>require 1 game[phase:design]</code> on each",
+      "one ordinary read line per design formula, guarded <code>hard</code>",
+      "+5 lines",
+      "<strong>Introduces nothing.</strong> <code>require</code> already exists for <code>move</code>'s adjacency, and this takes it from 1 use to 6 - which is most of the case for it being a primitive at all. The phase becomes a fact in the state that a formula reads, which is what <em>the game is data</em> asks for. And <code>start</code> stops being special: it is the formula that sets <code>game.phase</code> to <code>play</code>."
+    ],
+    [
+      "a <code>phase</code> field on the formula",
+      "a declaration beside <code>owner</code>, rather than a line",
+      "0 lines, +1 column",
+      "Shorter to read, but it adds a concept: a formula-level trait that only the engine interprets. By the <em>minimum expressiveness</em> test that is the worse trade - a new field to say what an existing line already says."
     ]
   ]
 }

@@ -259,6 +259,98 @@ rather than after.</p>
 </tr>
 </tbody></table></div>
 
+<h2>A thing, as tabular data and as text</h2>
+<p>Sean, 2026-09-09: <em>I want to see things as organized tabular data, with the corresponding text
+representation</em> &mdash; and, off the top of his head, a territory. Here is territory
+1: <em>The landing site. Everything works</em>. Every value below is read from the release's own
+<em>Territory resources</em> row; none is typed here.</p>
+<table><thead><tr><th>Thing</th><th>Trait</th><th>Value</th><th>Where the value comes from</th></tr></thead><tbody><tr><td class="target">territory 1</td><td class="target">id</td><td class="amt">1</td><td class="note"><code>releases/first-release.md</code> &rarr; <em>Territory resources</em>, the row's first column</td></tr><tr><td class="target">territory 1</td><td class="target">biome</td><td class="amt"><em>unstated</em></td><td class="note"><strong>not in any document</strong> &mdash; <code>biomes_of</code> in the code assigns it, which <code>R-4</code> vetted</td></tr><tr><td class="target">territory 1</td><td class="target">nature</td><td class="amt"><em>unstated</em></td><td class="note"><strong>not in any document</strong> &mdash; the <em>Biomes</em> table binds it to the biome, and no territory has a biome stated</td></tr><tr><td class="target">territory 1</td><td class="target">control</td><td class="amt">&mdash;</td><td class="note">a citizen of that player is there &mdash; never stored, so never a column</td></tr><tr><td class="target">deposit (1, food)</td><td class="target">resource</td><td class="amt">food</td><td class="note">the column this cell sits in</td></tr><tr><td class="target">deposit (1, food)</td><td class="target">total-capacity</td><td class="amt">3</td><td class="note"><code>3 x 4</code>, left of the &times;</td></tr><tr><td class="target">deposit (1, food)</td><td class="target">density</td><td class="amt">4</td><td class="note"><code>3 x 4</code>, right of the &times;</td></tr><tr><td class="target">deposit (1, metal)</td><td class="target">resource</td><td class="amt">metal</td><td class="note">the column this cell sits in</td></tr><tr><td class="target">deposit (1, metal)</td><td class="target">total-capacity</td><td class="amt">3</td><td class="note"><code>3 x 4</code>, left of the &times;</td></tr><tr><td class="target">deposit (1, metal)</td><td class="target">density</td><td class="amt">4</td><td class="note"><code>3 x 4</code>, right of the &times;</td></tr><tr><td class="target">deposit (1, energy)</td><td class="target">resource</td><td class="amt">energy</td><td class="note">the column this cell sits in</td></tr><tr><td class="target">deposit (1, energy)</td><td class="target">total-capacity</td><td class="amt">3</td><td class="note"><code>3 x 4</code>, left of the &times;</td></tr><tr><td class="target">deposit (1, energy)</td><td class="target">density</td><td class="amt">4</td><td class="note"><code>3 x 4</code>, right of the &times;</td></tr></tbody></table>
+<pre><code>{territory id:1 game:game}
+{deposit territory:1 resource:food total-capacity:3 density:4}
+{deposit territory:1 resource:metal total-capacity:3 density:4}
+{deposit territory:1 resource:energy total-capacity:3 density:4}</code></pre>
+<div class="callout">
+<h4>Two of a territory's four traits have no value anywhere</h4>
+<p><strong><code>biome</code> and <code>nature</code> are stored traits of every territory, and no
+document gives either one a value for any of the twelve.</strong> <em>Territory resources</em> has
+four columns and none of them is a biome; the <em>Biomes</em> table describes what each biome is
+like and says <em>force of nature is the one column that binds</em>, which binds a territory's
+nature to a biome it has not been given. The code assigns them &mdash; <code>biomes_of</code>, which
+<code>R-4</code> vetted &mdash; so this is where a thing lives in two authorities at once, and only
+one of them is a document.</p>
+<p><strong>This report asserted otherwise until today.</strong> Its world-building data said
+<code>make-territory(1, grassland, 1)</code>, which named a biome for territory 1 and a nature for
+it, and <strong>nothing states either</strong>. Removed rather than corrected, because there is no
+correct value to put there. It was found by trying to draw the table above and having two columns
+come up empty &mdash; which is the argument for drawing it.</p>
+</div>
+
+<h3><code>metal.density</code> or <code>density.metal</code>: neither</h3>
+<p>The question only exists because the resource has been moved into the name.
+<strong><code>density</code> is a variable and <code>metal</code> is a value of a different variable,
+<code>resource</code></strong> &mdash; so once <code>resource</code> is a column there is nothing
+left to order, and the row above reads
+<code>{deposit territory:1 resource:metal total-capacity:.. density:..}</code>.</p>
+<p><strong>The specification already rules on this, and not by analogy.</strong>
+<em>Nothing in the state is special to a kind. Adding a kind adds no field and no case, and whatever
+reads the state reads it the same way whatever kind it holds.</em> A territory carrying
+<code>metal.density</code>, <code>food.density</code> and <code>energy.density</code> gains a field
+per resource, which is exactly what that forbids. The long form gains a <em>row</em> per resource
+instead, and rows are free.</p>
+<p><strong>The instinct behind the dots is right about presentation and wrong about statement.</strong>
+The release's <em>Territory resources</em> is wide on purpose &mdash; one row per territory, a
+resource per column, <code>3 x 4</code> packing two variables into one cell &mdash; and it is far
+easier to read than 13 rows would be. <code>CLAUDE.md</code> already separates these:
+<em>a table of game data in markdown is a rendering and never a source.</em> Both forms exist above,
+and the wide one was generated from the long one rather than the other way round.</p>
+
+<h2>What unifies, and what must not</h2>
+<p><strong>The shared object is the description, and the specification says so before this report
+does.</strong> <em>A game's state is things, in places, and how many of each. A thing is a set of
+traits, and one of them names its kind.</em> That is <code>{kind trait:value ...}</code> &mdash;
+the same object a formula line targets. So a thing and a formula line are not two structures to be
+unified; they are one structure appearing in two roles.</p>
+<div class="scroll"><table><thead><tr><th></th><th>Which</th><th>Why</th></tr></thead>
+<tbody><tr><td class="target">the description</td><td><strong>shared</strong></td><td class="note"><code>{kind trait:value ...}</code> &mdash; the spec already says <em>a thing is a set of traits, and one of them names its kind</em></td></tr><tr><td class="target">the number</td><td><strong>shared shape, different constraint</strong></td><td class="note">a thing's is a non-negative count; a formula's is a signed delta. Same column, and only the constraint differs</td></tr><tr><td class="target"><code>attach</code></td><td>formula only</td><td class="note">what to do when the result would go below zero. A count that is simply there has no failure to answer for</td></tr><tr><td class="target">the container</td><td><strong>shared</strong></td><td class="note">a field named for the container's kind, in both</td></tr><tr><td class="target">selection</td><td>formula only</td><td class="note"><em>which</em> thing this acts on. A thing does not select; it is selected</td></tr><tr><td class="target"><code>call</code></td><td>formula only</td><td class="note">the hierarchy. Nothing in a state refers to another state</td></tr></tbody></table></div>
+<div class="callout">
+<h4>Then what is a formula that only creates? Nothing but the thing</h4>
+<p>Since the fold, <strong>every world-building formula is one line, with
+<code>change</code> as its operator, <code>+1</code> as its amount and no attachment</strong> &mdash;
+all three constant. Take away what never varies and what remains is the description. <strong>So
+&ldquo;one formula creates each thing&rdquo; is not a way to unify them: it is what is left when
+they already are unified.</strong></p>
+<p>And it turns out to satisfy a rule nobody was aiming at. <code>spec/invariants.md</code>:
+<em>A definition arrives in one transition. There is no state in which a kind or a recipe is half
+defined.</em> A <code>create</code> followed by three <code>set</code>s <strong>has</strong> such a
+state &mdash; a territory that exists with no biome. Non-sequential composition removes it, and the
+invariant was not the reason for the decision.</p>
+</div>
+
+<h2>Design time, if it stopped being a category</h2>
+<p>Sean, 2026-09-09, still considering it: <em>removing the design-time distinction from the data as
+something special, having it either enforced from the engine or having a trait indicate when it can
+be used</em>. Today it is neither &mdash; it is a <strong>separate list</strong>, and that is the one
+option below with no cost and no check.</p>
+<div class="scroll"><table><thead><tr><th>Option</th><th>What it is</th><th>Cost</th><th>What it buys, and what it does not</th></tr></thead>
+<tbody><tr><td class="target">a separate section, as today</td><td><code>creation</code> is its own list in the data, and the engine knows that list is design-time</td><td class="amt">0 lines</td><td class="note">The distinction lives in the <em>shape of the data</em>, so nothing states it and nothing can check it. It is also the only place a formula's category is not a trait.</td></tr><tr><td class="target"><code>require 1 game[phase:design]</code> on each</td><td>one ordinary read line per design formula, guarded <code>hard</code></td><td class="amt">+5 lines</td><td class="note"><strong>Introduces nothing.</strong> <code>require</code> already exists for <code>move</code>'s adjacency, and this takes it from 1 use to 6 - which is most of the case for it being a primitive at all. The phase becomes a fact in the state that a formula reads, which is what <em>the game is data</em> asks for. And <code>start</code> stops being special: it is the formula that sets <code>game.phase</code> to <code>play</code>.</td></tr><tr><td class="target">a <code>phase</code> field on the formula</td><td>a declaration beside <code>owner</code>, rather than a line</td><td class="amt">0 lines, +1 column</td><td class="note">Shorter to read, but it adds a concept: a formula-level trait that only the engine interprets. By the <em>minimum expressiveness</em> test that is the worse trade - a new field to say what an existing line already says.</td></tr></tbody></table></div>
+<div class="callout">
+<h4>The middle one, and the one thing it costs that is not a line</h4>
+<p><strong>It introduces no concept at all</strong>, which under <em>minimum expressiveness</em> is
+the whole argument. <code>spec/console.md</code> already says <em>a command of one phase is refused
+in the other</em>, and refusing is what a <code>require</code> does &mdash; so the sentence stops
+being a rule the engine implements and becomes a line the formula carries. It also takes
+<code>require</code> from one use to six, which is most of the case for keeping it a primitive
+rather than sugar for a self-loop.</p>
+<p><strong>The cost is the error message.</strong> A design command refused after <code>start</code>
+can say <em>that command belongs to the design phase</em> only because the engine knows the
+category. Refused by a guard, it says <em>no game with phase design</em> &mdash; true, and worse.
+<code>spec/console.md</code> asks that a rejection be <em>in terms of the game rather than the
+parser</em> and name <em>what was wrong, where, and what was expected instead</em>, so this is a
+real requirement and not a nicety. It is not fatal: a guard on <code>game.phase</code> is a
+recognisable shape and a message can be written for it. But it is the thing to check before
+deciding, and it is the only cost this lane can find.</p>
+</div>
+
 <h2>Every row as one string</h2>
 <p>The last column of every formula table below restates that row &mdash; op, target, amount,
 attach and the note &mdash; as a single string in the notation <code>spec/console.md</code> gives
@@ -635,7 +727,7 @@ out.</strong></p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-call">call</td><td class="target">make-territory(1, grassland, 1) ... make-territory(12, mountain, 1)</td><td class="amt">x12</td><td></td><td class="note">from Territory resources</td><td class="one-string">{call recipe:make-territory id:1 biome:grassland nature:1} ... {call recipe:make-territory id:12 biome:mountain nature:1} <span class="cmt"># x12, one call per argument - from Territory resources</span></td></tr>
+<tr><td class="op op-call">call</td><td class="target">make-territory(id, biome, nature) for each of the twelve</td><td class="amt">x12</td><td></td><td class="note">resources come from Territory resources; biome and nature come from `biomes_of` in the code, per R-4</td><td class="one-string">{call recipe:make-territory id:id biome:biome nature:nature} <span class="cmt"># x12, one call per argument - resources come from Territory resources; biome and nature come from `biomes_of` in the code, per R-4</span></td></tr>
 <tr><td class="op op-call">call</td><td class="target">make-deposit(t, r, capacity, density) for each territory and resource</td><td class="amt">x36</td><td></td><td class="note">3 x 4 reads capacity 3, density 4</td><td class="one-string">{call recipe:make-deposit territory:t resource:r capacity:capacity density:density} <span class="cmt"># x36, one call per argument - 3 x 4 reads capacity 3, density 4</span></td></tr>
 <tr><td class="op op-call">call</td><td class="target">make-orbit(t) for each territory</td><td class="amt">x12</td><td></td><td class="note"></td><td class="one-string">{call recipe:make-orbit territory:t} <span class="cmt"># x12, one call per argument</span></td></tr>
 <tr><td class="op op-call">call</td><td class="target">make-adjacency(a, b) for each shared edge</td><td class="amt">xE</td><td></td><td class="note">orbital adjacency is derived, not stated</td><td class="one-string">{call recipe:make-adjacency from:a to:b} <span class="cmt"># xE, one call per argument - orbital adjacency is derived, not stated</span></td></tr>
