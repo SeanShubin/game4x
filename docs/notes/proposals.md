@@ -60,28 +60,42 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-359 - `temporary-notes/` is read when you point at it, and not otherwise
+### P-359 - `temporary-notes/` is read when you point at it, and never decides anything
 
-**to** sean - **status** open - **raised** 2026-09-08 - **kind** recovered - **asks** approval -
-**shape** text - **into** `CLAUDE.md` -> Perspectives, after the sentence that begins
-*`temporary-notes/` is Sean's*
+**to** sean - **status** open - **raised** 2026-09-08 - **rewritten** 2026-09-08, to carry the path
+you named - **asks** approval - **shape** text - **into** `CLAUDE.md` -> Perspectives, after the
+sentence that begins *`temporary-notes/` is Sean's*
 
 **`CLAUDE.md` says no instance writes there and that it is not tracked. It says nothing about
-reading** - and the file's general rule is that everyone reads everything. **So a lane following the
-rules exactly would read a thought you have not decided to keep**, and could act on it. That is what
-your sentence closes, and nothing in the file closes it today.
+reading**, and the file's general rule is that everyone reads everything - so a lane following the
+rules exactly would read a thought you have not decided to keep. **And it says nothing about the path
+out**, which is the half that makes the rule safe rather than merely restrictive.
 
 > **And no instance reads it unless he points at a file.** What is there are thoughts he has not
 > decided to keep, so reading one uninvited risks a lane treating a half-formed idea as intent. He
 > names the file when he wants what is in it made formal; **until then it is addressed to nobody.**
+>
+> **There is a path out, and the original never travels it.** He says which ideas to take, and they
+> are written into the column that owns them. **What is in `temporary-notes/` is never canonical and
+> what is derived from it may be** - so being told to read a note begins the ordinary route rather
+> than shortening it, and anything bound for `spec/` still arrives by promotion.
 
-**The last phrase is deliberate rather than decorative.** `CLAUDE.md` already says *unaddressed
-research is addressed to nobody, and that is a feature* - so this is the same idea applied to your
-notes rather than a lens's, and it reads as the file's own vocabulary.
+**Both halves have a shape the file already uses**, which is why this reads as its own vocabulary
+rather than a new mechanism:
 
-**One word I chose and you should check**: *unless he points at a file*, where you said *typically*.
-I made it a rule rather than a tendency, because a lane cannot act on a tendency - it either reads
-uninvited or it does not. **If you meant the looser thing, say so and it becomes *unless he asks*.**
+- *Unaddressed research is addressed to nobody, and that is a feature* - the first paragraph is that,
+  applied to your notes rather than a lens's
+- *The rendering is generated and never canonical*, and *anything in `docs/notes/` is a proposal,
+  however confident it sounds* - **a source that never decides, and derived work that can**
+
+**One guard I added that you did not say**, because the file already says it of proposals and the
+same trap exists here: *anything bound for `spec/` still arrives by promotion*. Without it,
+**told to read a note and make it formal** could be read as permission to write into `spec/`
+directly, which `CLAUDE.md` forbids everywhere else - *accepting a proposal is not permission to
+write it*. **Say if that is heavier than you want.**
+
+**And the word I flagged before still stands**: you said *typically*, and I have written a rule,
+because a lane cannot act on a tendency. If you meant the looser thing it becomes *unless he asks*.
 
 ### P-358 - `P-351` made the release contradict itself, and one word fixes it
 

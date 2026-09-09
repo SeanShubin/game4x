@@ -8,7 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-359** - `temporary-notes/` is read when you point at it, and not otherwise · `docs/notes/proposals.md`
+- **P-359** - `temporary-notes/` is read when you point at it, and never decides anything · `docs/notes/proposals.md`
 - **P-358** - `P-351` made the release contradict itself, and one word fixes it · `docs/notes/proposals.md`
 - **P-356** - A field may name a kind instead of a thing, and nothing says so · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`

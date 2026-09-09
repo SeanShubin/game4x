@@ -8,6 +8,24 @@ things Sean has *said* but has not yet *written*, and only the writing counts.
 Design intent stated in conversation that has not reached [the specification](../../spec/README.md).
 When an item lands in the spec, delete the row. Nothing here is decided.
 
+## Said 2026-09-08, the path from `temporary-notes/` into the project
+
+*There is a path from temporary-notes into the project, it is when I tell you what ideas to read from
+it and create files accordingly, the original in temporary-notes is never canonical, but things
+derived from it can be.*
+
+**This is the half that makes the rule safe rather than merely restrictive**, and it has the same
+shape as two rules already in the file: *the rendering is generated and never canonical*, and
+*anything in `docs/notes/` is a proposal, however confident it sounds.* **A source that never decides
+anything, and derived work that can.**
+
+**And it needs a guard he did not have to say, because the file already says it elsewhere.** *Accepting
+a proposal is not permission to write it.* Being told to read a note and make something of it is the
+**beginning** of the ordinary route, not a shortcut past it - what it becomes still reaches `spec/`
+by promotion.
+
+`P-359` rewritten to carry both halves.
+
 ## Said 2026-09-08, that `temporary-notes/` is his and is read only when he says
 
 *I am no longer going to be using notes-to-incorporate-then-remove, I will be using temporary-notes
