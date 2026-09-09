@@ -61,6 +61,68 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-74 - An action on a selected thing, for a console that types and an interface that selects
+
+**to** research · **status** open · **raised** 2026-09-08 · **source** Sean, turning to the user
+interface, and asking for this to reach you
+
+**derived from** nothing in this repository - **the structure is what is in question**
+
+**Sean is considering a major rewrite of the specification and does not want the present
+structure presumed.** He is prototyping. What follows is material, not a proposal, and the
+recipe table and the command form appear here only so you can see what is being questioned.
+
+**What he wrote**, in his own words and not in any of this repository's formats:
+
+```
+ark.deploy
+territory = ark.location.below
+ark.destroy
+territory.create-if-missing garrison
+territory.create citizen 2
+territory.crate extractor food
+territory.create extractor metal
+```
+
+**And the frame he put around it**: *I am going to need to be able to select things, and those
+things I select will have things I can do with them.* And: **the console will use the structured
+language, and the user interface will use tables, because there is no typing in the user
+interface, only selecting among options.**
+
+**What this repository has today**, so you can see the distance rather than infer it. A recipe is
+rows in a seven-column table - Recipe, Owner, Role, Qty, Kind, Traits, Where - where Role is one
+of `require`, `limit`, `consume`, `produce`, and a blank Where means *the one place the recipe
+acts*. `deploy ark` is nine such rows. A command is written `{deploy-ark territory:1}`.
+
+**Three places his sketch does not fit, which are the interesting ones.**
+
+- **`create-if-missing` has no role.** The garrison is `limit 0` **and** `produce 1` today, which
+  **refuses** the recipe if a garrison is there. His **succeeds and skips**. Different rule,
+  and none of the four roles says it.
+- **The subject moves.** His territory is derived from the ark - `ark.location.below` - where the
+  table names the territory and reaches up to the orbit. Whichever place the blank Where means
+  decides which thing a person selects.
+- **The verb attaches to the thing.** `ark.deploy` has no parameter, because the selection is the
+  parameter. `{deploy-ark territory:1}` has one because typing cannot select.
+
+**Why it is yours rather than the specification lane's.** This is not *what should the rule be*;
+it is *what shape should a rule have* when the same fact drives a typed console and a
+selection-only interface. That is a question about form, and it has been asked before by people
+who wrote it down.
+
+**What would be worth more than an opinion**, and this is a suggestion rather than a brief.
+Preconditions-and-effects operators are an old form and `require`/`limit`/`consume`/`produce`
+is close enough to one that the literature's warnings may already apply - including what is
+usually done about an effect that is idempotent rather than conditional, which is his
+`create-if-missing`. Whether an action belongs to the object or the object is an argument to the
+action is a settled argument in interface design with a name and a history. And a table a person
+selects rows from is a different artifact from a table that stores a rule, even when they hold
+the same cells - if that distinction has a name, it is probably the most useful thing you could
+send back.
+
+**This lane has no stake in the answer.** The conversion above is what the present structure
+forces, which is exactly what he is asking not to be presumed.
+
 ### C-73 - Why `play.4x` did not change, correctly this time
 
 **to** code · **status** **answered** 2026-09-08 · `a6f728b` · **raised** 2026-09-08 ·
