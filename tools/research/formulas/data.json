@@ -7,10 +7,16 @@
       "the only way anything begins to exist"
     ],
     [
-      "destroy",
-      "Remove an identified thing",
-      "destroy ark",
-      "the only way anything stops existing"
+      "consume",
+      "Subtract a count, and fail if it would go below zero",
+      "consume 3 metal in t",
+      "the guard and the spend are one line, and no other line can refuse"
+    ],
+    [
+      "require",
+      "A read: at least n, and not consumed",
+      "require 1 adjacency from -> $to",
+      "the one guard that is not a cost - a read arc, used once"
     ],
     [
       "set",
@@ -19,16 +25,10 @@
       "the primitive the sketch was missing"
     ],
     [
-      "threshold",
-      "A guard: a count against a bound, in a direction",
-      "metal in t at least 3",
-      "the only thing that can refuse"
-    ],
-    [
       "attach",
-      "On any line: hard fails the action, soft skips that line",
-      "create garrison in t [soft]",
-      "Sean's fail-behavior, and it attaches to a create and a call as well as to a guard"
+      "On any line: what to do when the subtraction would go below zero",
+      "consume 1 labor in t [hard]",
+      "one question, and hard, soft, clamp and record are its four answers"
     ],
     [
       "call",
@@ -44,29 +44,19 @@
       "linear - readability only"
     ],
     [
-      "change(k, -n)",
-      "n destroys",
-      "linear - readability only"
-    ],
-    [
       "let x = path",
       "substitute the path at each use",
       "linear - readability only"
     ],
     [
+      "destroy k",
+      "consume 1 k, where k is an identified thing",
+      "DELETED as a primitive - it was consume with the count left implicit"
+    ],
+    [
+      "threshold(k, at least n) then n destroys",
       "consume n k",
-      "threshold(k, at least n, hard) then n destroys",
-      "linear"
-    ],
-    [
-      "require n k",
-      "threshold(k, at least n, hard)",
-      "exact"
-    ],
-    [
-      "produce n k",
-      "n creates",
-      "exact"
+      "DELETED as two lines - it is one, and 15 of the 16 guards were this"
     ],
     [
       "limit n k",
@@ -88,7 +78,7 @@
           "was row 1 and row 2's qualifier"
         ],
         [
-          "destroy",
+          "consume",
           "ark",
           "1",
           "",
@@ -152,7 +142,7 @@
           ""
         ],
         [
-          "destroy",
+          "consume",
           "pioneer",
           "1",
           "",
@@ -180,24 +170,17 @@
           "was row 1"
         ],
         [
-          "threshold",
+          "require",
           "adjacency from -> $to the unit crosses",
           "at least 1",
           "hard",
           "row 2"
         ],
         [
-          "threshold",
-          "energy in unit",
-          "at least 1",
-          "hard",
-          "row 4"
-        ],
-        [
-          "destroy",
+          "consume",
           "energy in unit",
           "1",
-          "",
+          "hard",
           "row 4"
         ],
         [
@@ -222,31 +205,17 @@
       "selection": "a territory you control",
       "lines": [
         [
-          "threshold",
+          "consume",
           "labor in t",
-          "at least 1",
+          "1",
           "hard",
           ""
         ],
         [
-          "threshold",
+          "consume",
           "metal in t",
-          "at least 1",
+          "1",
           "hard",
-          ""
-        ],
-        [
-          "destroy",
-          "labor in t",
-          "1",
-          "",
-          ""
-        ],
-        [
-          "destroy",
-          "metal in t",
-          "1",
-          "",
           ""
         ],
         [
@@ -264,31 +233,17 @@
       "selection": "a territory you control",
       "lines": [
         [
-          "threshold",
+          "consume",
           "labor in t",
-          "at least 1",
+          "1",
           "hard",
           ""
         ],
         [
-          "threshold",
+          "consume",
           "metal in t",
-          "at least 1",
+          "1",
           "hard",
-          ""
-        ],
-        [
-          "destroy",
-          "labor in t",
-          "1",
-          "",
-          ""
-        ],
-        [
-          "destroy",
-          "metal in t",
-          "1",
-          "",
           ""
         ],
         [
@@ -306,31 +261,17 @@
       "selection": "a territory you control",
       "lines": [
         [
-          "threshold",
-          "labor in t",
-          "at least 1",
-          "hard",
-          ""
-        ],
-        [
-          "threshold",
-          "metal in t",
-          "at least 15",
-          "hard",
-          ""
-        ],
-        [
-          "destroy",
+          "consume",
           "labor in t",
           "1",
-          "",
+          "hard",
           ""
         ],
         [
-          "destroy",
+          "consume",
           "metal in t",
           "15",
-          "",
+          "hard",
           ""
         ],
         [
@@ -348,45 +289,24 @@
       "selection": "a territory you control",
       "lines": [
         [
-          "threshold",
-          "metal in t",
-          "at least 3",
-          "hard",
-          ""
-        ],
-        [
-          "threshold",
-          "energy in t",
-          "at least 6",
-          "hard",
-          ""
-        ],
-        [
-          "threshold",
-          "citizen in t",
-          "at least 2",
-          "hard",
-          ""
-        ],
-        [
-          "destroy",
+          "consume",
           "metal in t",
           "3",
-          "",
+          "hard",
           ""
         ],
         [
-          "destroy",
+          "consume",
           "energy in t",
           "6",
-          "",
+          "hard",
           ""
         ],
         [
-          "destroy",
+          "consume",
           "citizen in t",
           "2",
-          "",
+          "hard",
           ""
         ],
         [
@@ -411,45 +331,24 @@
           "was require 1 yard"
         ],
         [
-          "threshold",
-          "metal in t",
-          "at least 3",
-          "hard",
-          ""
-        ],
-        [
-          "threshold",
-          "energy in t",
-          "at least 12",
-          "hard",
-          ""
-        ],
-        [
-          "threshold",
-          "citizen in t",
-          "at least 2",
-          "hard",
-          ""
-        ],
-        [
-          "destroy",
+          "consume",
           "metal in t",
           "3",
-          "",
+          "hard",
           ""
         ],
         [
-          "destroy",
+          "consume",
           "energy in t",
           "12",
-          "",
+          "hard",
           ""
         ],
         [
-          "destroy",
+          "consume",
           "citizen in t",
           "2",
-          "",
+          "hard",
           ""
         ],
         [
@@ -495,17 +394,10 @@
           "was row 1"
         ],
         [
-          "threshold",
-          "labor in t",
-          "at least 1",
-          "hard",
-          "row 2"
-        ],
-        [
-          "destroy",
+          "consume",
           "labor in t",
           "1",
-          "",
+          "hard",
           "row 2"
         ],
         [
@@ -532,18 +424,11 @@
       "selection": "each thing with upkeep",
       "lines": [
         [
-          "threshold",
-          "food in thing.location",
-          "at least thing.upkeep",
-          "hard",
-          "row 1 was the selector"
-        ],
-        [
-          "destroy",
+          "consume",
           "food in thing.location",
           "thing.upkeep",
-          "",
-          "row 2"
+          "hard",
+          "row 1 was the selector; row 2"
         ]
       ]
     },
@@ -560,7 +445,7 @@
           ""
         ],
         [
-          "destroy",
+          "consume",
           "food[surplus] in t",
           "n",
           "",
@@ -588,7 +473,7 @@
           "row 2"
         ],
         [
-          "destroy",
+          "consume",
           "thing",
           "1",
           "",
@@ -599,14 +484,14 @@
     {
       "name": "age",
       "was": 2,
-      "selection": "each thing with keeps at least 1",
+      "selection": "each thing with keeps",
       "lines": [
         [
-          "set",
-          "thing.keeps = thing.keeps - 1",
-          "",
-          "",
-          "both rows were one decrement"
+          "consume",
+          "thing.keeps",
+          "1",
+          "soft",
+          "both rows were one decrement; the guard `keeps at least 1` is now the operation"
         ]
       ]
     },
@@ -616,7 +501,7 @@
       "selection": "each thing with keeps 0",
       "lines": [
         [
-          "destroy",
+          "consume",
           "thing",
           "1",
           "",
@@ -967,32 +852,32 @@
     [
       "move",
       5,
-      "up: the ready flip and the location move are both explicit"
+      "level: the ready flip and the location move are both explicit, and the two energy rows became one consume"
     ],
     [
       "build extractor",
       3,
-      "the capacity guard went to the container"
+      "level: the capacity guard went to the container, and guard and spend are one line"
     ],
     [
       "build store",
       3,
-      "up: require and consume split into threshold and destroy"
+      "level: require and consume are one consume again, which is what they always were"
     ],
     [
       "build yard",
       3,
-      "the capacity guard went to the container"
+      "level: the capacity guard went to the container, and guard and spend are one line"
     ],
     [
       "produce pioneer",
       4,
-      "up: three requires become three thresholds and three destroys"
+      "level: three requires are three consumes, not three pairs"
     ],
     [
       "launch ark",
       4,
-      "up: same"
+      "up: the yard requirement became a let, and the three costs are three consumes"
     ],
     [
       "create labor",
@@ -1002,12 +887,12 @@
     [
       "work",
       5,
-      "level: one flip saved, one threshold gained"
+      "down: one flip saved, and the labor guard is part of spending it"
     ],
     [
       "upkeep",
       2,
-      "level"
+      "down: the guard and the spend were always one operation"
     ],
     [
       "grow",
@@ -1022,7 +907,7 @@
     [
       "age",
       2,
-      "down: a decrement was written as destroy-and-recreate"
+      "down: a decrement was written as destroy-and-recreate, and is now one consume from a trait - the last arithmetic in the model"
     ],
     [
       "spoil",
@@ -1239,33 +1124,33 @@
   "attach_values": [
     [
       "(blank)",
-      "The line cannot fail, so no attachment is meaningful.",
+      "The count provably cannot go below zero, so no attachment is meaningful.",
       "Not a value so much as the absence of a question. Check 4 finds these mechanically: a create whose container has no capacity, a set on a thing that exists.",
       "IN USE - create citizen in t"
     ],
     [
       "hard",
-      "If the line cannot do what it says, the whole action fails and nothing happens.",
-      "The right default for anything spent, and for a path that must resolve. A player is told why, and the state is untouched - so a failure costs nothing but the click.",
-      "IN USE - every threshold that guards a cost"
+      "The subtraction would go below zero, so the whole action fails and nothing happens.",
+      "The right default for anything spent. A player is told why, and the state is untouched - so a failure costs nothing but the click. Subtraction as a partial function: undefined, and the caller fails.",
+      "IN USE - every consume that pays a cost"
     ],
     [
       "soft",
-      "The container will not take another, so skip this line and carry on. The action still succeeds.",
-      "There is exactly one condition under which a create fails - the container is full - so soft has one meaning and not two. An earlier version of this report offered a second reading and it was a false choice.",
-      "IN USE - create garrison in t"
+      "The subtraction would go below zero, so skip this line and carry on. The action still succeeds.",
+      "A capacity is a count of free space, so a container that will not take another is the same condition as any other underflow. One meaning, not two.",
+      "IN USE - create garrison in t, and age"
     ],
     [
       "clamp",
-      "Do as much as the state allows. Destroy 3 where there are 2, and destroy 2.",
-      "NOT IN USE, and it earns its place only under one condition - see below. Distinct from both: hard refuses, soft does nothing, clamp does part.",
-      "CANDIDATE"
+      "Do as much as the state allows. Take 3 where there are 2, and take 2.",
+      "This is monus - truncated subtraction, the operator that makes the natural numbers a commutative monoid: a - b is 0 when b exceeds a. The standard way to total a subtraction that is otherwise partial.",
+      "CANDIDATE - and it is now a named operation rather than an invention"
     ],
     [
       "record",
-      "The line fails, the action continues, and the failure is written where another formula can read it.",
-      "NOT NAMED, BUT ALREADY IN THE GAME. `unpaid` is a trait - *derived: its upkeep was not met* - and `perish` fires on it. So a failed upkeep is neither hard nor soft: it does not stop the turn and it does not vanish.",
-      "IN USE WITHOUT A NAME - upkeep, read by perish"
+      "Take what is there, write the shortfall where another formula can read it, and carry on.",
+      "`unpaid` is a trait - derived: its upkeep was not met - and `perish` fires on it. So a failed upkeep is neither hard nor soft. This is the value Sean's rule names: the population lost to starvation is an event, never a negative number.",
+      "IN USE - upkeep, read by perish"
     ]
   ],
   "attach_decisions": [

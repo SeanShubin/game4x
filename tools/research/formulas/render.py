@@ -17,9 +17,9 @@ RESULTS = json.loads((HERE / "results.json").read_text(encoding="utf-8"))
 
 OP_CLASS = {
     "create": "op-create",
-    "destroy": "op-destroy",
+    "consume": "op-consume",
     "set": "op-set",
-    "threshold": "op-threshold",
+    "require": "op-require",
     "call": "op-call",
     "let": "op-let",
 }
@@ -77,10 +77,6 @@ ASSUMPTIONS = {
     "path": "A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. "
     "The notation says a value is a word, a number, or another command, so a path is none of "
     "the three. Every <code>let</code> needs one.",
-    "arithmetic": "An <strong>arithmetic expression</strong> is used as a value &mdash; "
-    "<code>keeps:(thing.keeps - 1)</code>. Written verbatim in brackets rather than as an invented "
-    "command: the brackets are not the notation's either, and without them the spaces read as "
-    "three fields rather than one value.",
     "for-each": "<strong><em>For each</em> has no form.</strong> The notation has "
     "<code>repeat</code>, which is how many times one command fires. World-building needs twelve "
     "calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits "
@@ -121,7 +117,11 @@ _used = {}
 
 
 def _assume(tag, where):
-    assert tag in ASSUMPTIONS, tag
+    # `arithmetic` was declared here until 2026-09-09. The fusion turned `age`'s
+    # `thing.keeps - 1` into a consume, and it was the only arithmetic expression in the
+    # model - so the tag stopped being needed and the assertion below found that, rather
+    # than the list quietly keeping an entry nothing used.
+    assert tag in ASSUMPTIONS, f"{tag} is assumed at {where} and is not declared"
     _used.setdefault(tag, []).append(where)
 
 
@@ -220,16 +220,23 @@ def console_line(op, target, amount, attach, note, where):
             _assume("family-not-kind", where)
         out = f"{{set thing:{{{subject}}} {trait}:{_value(value, where)}}}"
 
-    elif op == "threshold":
+    elif op == "require":
         if target.startswith("adjacency from"):
             _assume("crossed-by", where)
             thing = "{adjacency from:from to:$to crossed-by:unit}"
         else:
             thing = _description(target, where)
         assert amount.startswith("at least "), amount
-        out = f"{{threshold thing:{thing} at-least:{_value(amount[len('at least '):], where)}}}"
+        out = f"{{require thing:{thing} at-least:{_value(amount[len('at least '):], where)}}}"
 
-    elif op in ("create", "destroy"):
+    elif op == "consume" and "." in target and " in " not in target:
+        # A numeric trait is a counter too, so `age` subtracts from one.
+        subject, trait = target.rsplit(".", 1)
+        if subject in FAMILIES:
+            _assume("family-not-kind", where)
+        out = f"{{consume thing:{{{subject}}} {trait}:{_value(amount, where)}}}"
+
+    elif op in ("create", "consume"):
         out = f"{{{op} thing:{_description(target, where)} amount:{_value(amount, where)}}}"
 
     else:
@@ -297,6 +304,34 @@ def formula_table(f):
     return "\n".join(out)
 
 
+def verdicts():
+    """The two verdicts that were typed rather than derived.
+
+    Check 2 is expected to be unbounded and check 2b is expected to be clean, and both said
+    so in hand-written words beside a checker that reports its own answer. Found on
+    2026-09-09 while fusing the primitives: the checker printed UNBOUNDED WITHOUT MINING and
+    the page beside it printed `clean`. Both were true - the only loop gains no metal and
+    lives in a declared-free kind - but a verdict nothing computes cannot go red.
+    """
+    u = RESULTS["unbounded"]
+    two = (
+        ("unbounded, as it should be", "up")
+        if u["witness"]
+        else ("BOUNDED - which the growth loop says it should not be", "down")
+    )
+    w = u["without_sources"]
+    clean = w["metal_gain"] == "0" and not w["undeclared"]
+    two_b = (
+        ("clean", "down")
+        if clean
+        else (f"metal gain {w['metal_gain']} without mining", "up")
+    )
+    return two, two_b
+
+
+VERDICT_2, VERDICT_2B = verdicts()
+
+
 def _one_string_cell(text):
     """The string as it is, with its comment set back so the command reads first."""
     if "  # " in text:
@@ -349,12 +384,12 @@ def lines_after(name):
 
 
 def totals():
-    """Rows before, lines in bare primitives, and lines once the sugar is used.
+    """Rows before, and lines now.
 
-    The third is the honest one for an author. `consume n k` is listed as sugar for a
-    threshold plus destroys, so a pair that came from one `consume` is one line again the
-    moment the author writes `consume`. Counted, not estimated: a threshold reading
-    "at least" whose target is also destroyed in the same formula is one such pair.
+    There used to be a third number. `consume n k` was sugar for a threshold plus destroys,
+    so what the machine ran and what a person wrote were different counts and the report had
+    to carry both. Since the fusion they are the same number, and the honest way to report
+    that is to stop reporting two.
     """
     by_name = {}
     for f in DATA["player"] + DATA["world"]:
@@ -362,18 +397,12 @@ def totals():
         by_name[f["name"].split("(")[0]] = len(f["lines"])
     was = sum(r[1] for r in DATA["collapse"])
     now = sum(by_name[r[0]] for r in DATA["collapse"])
-    pairs = 0
-    for f in DATA["player"] + DATA["world"]:
-        destroyed = {l[1] for l in f["lines"] if l[0] == "destroy"}
-        for op, target, amount, _attach, _note in f["lines"]:
-            if op == "threshold" and str(amount).startswith("at least") and target in destroyed:
-                pairs += 1
-    return was, now, pairs
+    return was, now
 
 
 def main():
-    was, now, pairs = totals()
-    sugared = now - pairs
+    was, now = totals()
+    direction = "down" if now < was else "up"
     n_player = len(DATA["player"])
     n_world = len(DATA["world"])
     n_creation = len(DATA["creation"])
@@ -413,8 +442,8 @@ td {{ border-bottom: 1px solid var(--rule); padding: 5px 9px; vertical-align: to
 tbody tr:nth-child(odd) {{ background: var(--shade); }}
 .scroll {{ overflow-x: auto; }}
 .op {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; white-space: nowrap; }}
-.op-create {{ color: var(--create); }} .op-destroy {{ color: var(--destroy); }}
-.op-set {{ color: var(--set); }} .op-threshold {{ color: var(--threshold); }}
+.op-create {{ color: var(--create); }} .op-consume {{ color: var(--destroy); }}
+.op-set {{ color: var(--set); }} .op-require {{ color: var(--threshold); }}
 .op-call {{ color: var(--call); }} .op-let {{ color: var(--muted); }}
 .target, .amt {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
 .one-string {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
@@ -439,17 +468,17 @@ code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:
 </style>
 <div class="wrap">
 <h1>The whole specification as formulas</h1>
-<p class="lede">Every recipe re-expressed in six primitives &mdash; and the same six building the
-world from an empty game. Generated from <code>tools/research/formulas/data.json</code>.</p>
+<p class="lede">Every recipe re-expressed in five primitives &mdash; and the same five building
+the world from an empty game. Generated from <code>tools/research/formulas/data.json</code>.</p>
 
 <div class="callout">
 <h4>The one finding</h4>
 <p><strong>Creation and transformation are already the same format, because the specification has
 been quietly turning relations into things.</strong> <code>deposit</code> and
 <code>adjacency</code> are kinds. Once a relation is a thing, building the world is
-<code>create</code> and <code>set</code> with no thresholds &mdash; the identical primitives that
-play the game. Nothing needs adding for world-building except the <code>set</code> that
-transformation needed anyway.</p>
+<code>create</code> and <code>set</code> with nothing that can refuse &mdash; the identical
+primitives that play the game. Nothing needs adding for world-building except the <code>set</code>
+that transformation needed anyway.</p>
 </div>
 
 <h2>The primitives</h2>
@@ -468,8 +497,10 @@ depends on a decision about a different column.</strong></p>
     DATA["attach_values"], ["op", "", "note", "attach"])}</div>
 <div class="callout">
 <h4>Which lines can fail at all</h4>
-<p><code>threshold</code> always can &mdash; refusing is its purpose. <code>create</code> can only
-where a capacity is declared. <code>destroy</code> can, when there is not enough.
+<p><code>consume</code> always can &mdash; that is what fusing the guard into it means, and it is
+now the only line that refuses on a count. <code>require</code> can, being a read that has to find
+something. <code>create</code> can only where a capacity is declared, which is the same condition
+seen from the other end: a capacity is a count of free space.
 <code>call</code> can, when something inside it fails hard. <code>let</code> can, when a path does
 not resolve &mdash; <code>ark.location.below</code> has no answer for an ark that is not in orbit,
 and <strong>hard is the only sane value there</strong>. <code>set</code> effectively cannot, which
@@ -540,8 +571,8 @@ out for being written twice rather than for being written at all.</p>
 <h2>Building the world <span class="badge">{n_creation}</span></h2>
 <div class="callout">
 <p><strong>No new primitive appears below.</strong> Every line is <code>create</code>,
-<code>set</code> or <code>call</code> &mdash; and not one threshold, because nothing at design
-time can be refused. That is the answer to whether one format can both make the environment and
+<code>set</code> or <code>call</code> &mdash; and not one <code>consume</code> or
+<code>require</code>, because nothing at design time can be refused. That is the answer to whether one format can both make the environment and
 play the game: <strong>world-building is the play language with the guards left out.</strong></p>
 </div>
 {"".join(formula_table(f) for f in DATA["creation"])}
@@ -684,7 +715,7 @@ And it weighed <code>found-colony</code> as if a player could fire it with no ar
 spent; a formula that is only ever called is not a transition.</p>
 </div>
 
-<h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded, as it should be</span></h3>
+<h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge {VERDICT_2[1]}">{VERDICT_2[0]}</span></h3>
 <p>{RESULTS["unbounded"]["analysed"]} transitions after grounding;
 {len(RESULTS["unbounded"]["skipped"])} skipped ({", ".join(RESULTS["unbounded"]["skipped"])}).</p>
 <div class="scroll">{simple_table(
@@ -705,7 +736,7 @@ what it could apply to &mdash; and it is the same operation an interface perform
 The analysis and the interface want the same machinery, which is a reason to build it once.</p>
 </div>
 
-<h3>Check 2b &mdash; the same without mining &nbsp;<span class="badge down">clean</span></h3>
+<h3>Check 2b &mdash; the same without mining &nbsp;<span class="badge {VERDICT_2B[1]}">{VERDICT_2B[0]}</span></h3>
 <p>{RESULTS["unbounded"]["without_sources"]["transitions"]} transitions with <code>work</code>
 removed. <strong>This is the question worth asking</strong>, and it is the recommendation in
 practice: rather than keeping a baseline of intended loops, remove the declared source and ask
@@ -820,20 +851,19 @@ what the console needs and the menu is what the interface needs, from one line.<
 against bugs in checks 1 and 2, not a way of finding anything.</p>
 
 <h2>What the re-encoding cost and saved</h2>
-<p>Computed from the data rather than asserted. In bare primitives,
-<strong>{was} rows became {now} lines &mdash; up {now - was}</strong>. That is the number predicted
-before any of this was written, and it is the misleading one.</p>
-<p>Almost all of the rise is one thing: today's <code>consume</code> fuses a guard and an effect,
-and splitting it costs a line each time. There are <strong>{pairs}</strong> such pairs. Since
-<code>consume</code> is sugar &mdash; it is in the table above &mdash; an author never has to write
-both, and the authored count is <strong>{sugared} lines, down {was - sugared} from {was}</strong>.</p>
+<p>Computed from the data rather than asserted. <strong>{was} rows became {now} lines &mdash;
+{direction} {abs(now - was)}</strong>.</p>
 <div class="callout">
-<h4>So which number is real</h4>
-<p>All three, measuring different things. <strong>Up {now - was}</strong> is what the machine
-executes. <strong>Down {was - sugared}</strong> is what a person writes. And the one that matters
-is neither: <strong>the vocabulary went from four roles that could not name
-<code>create-if-missing</code> to six primitives that also build the world from nothing.</strong>
-A count of lines cannot see that, which is the whole reason to fix the metric first.</p>
+<h4>There used to be three numbers here, and now there is one</h4>
+<p>Before the fusion this section had to carry two counts and explain the gap. <code>consume</code>
+was <em>sugar</em> for a guard plus a destroy, so what the machine executed and what a person wrote
+were different numbers, and the honest figure depended on which you meant. <strong>Since the guard
+and the spend are one line, they are the same number</strong> &mdash; and the right way to report
+that is to stop reporting two.</p>
+<p>The saving is not the point either. <strong>The vocabulary went from four roles that could not
+name <code>create-if-missing</code>, to six primitives that also build the world from nothing, to
+five that cannot express a zero test.</strong> A count of lines cannot see that, which is the whole
+reason to fix the metric first.</p>
 </div>
 <div class="scroll">{simple_table(
     ["Formula", "Rows before", "Lines after", "Why"],

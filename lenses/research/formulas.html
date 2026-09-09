@@ -33,8 +33,8 @@ td { border-bottom: 1px solid var(--rule); padding: 5px 9px; vertical-align: top
 tbody tr:nth-child(odd) { background: var(--shade); }
 .scroll { overflow-x: auto; }
 .op { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; white-space: nowrap; }
-.op-create { color: var(--create); } .op-destroy { color: var(--destroy); }
-.op-set { color: var(--set); } .op-threshold { color: var(--threshold); }
+.op-create { color: var(--create); } .op-consume { color: var(--destroy); }
+.op-set { color: var(--set); } .op-require { color: var(--threshold); }
 .op-call { color: var(--call); } .op-let { color: var(--muted); }
 .target, .amt { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 .one-string { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
@@ -59,17 +59,17 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: 
 </style>
 <div class="wrap">
 <h1>The whole specification as formulas</h1>
-<p class="lede">Every recipe re-expressed in six primitives &mdash; and the same six building the
-world from an empty game. Generated from <code>tools/research/formulas/data.json</code>.</p>
+<p class="lede">Every recipe re-expressed in five primitives &mdash; and the same five building
+the world from an empty game. Generated from <code>tools/research/formulas/data.json</code>.</p>
 
 <div class="callout">
 <h4>The one finding</h4>
 <p><strong>Creation and transformation are already the same format, because the specification has
 been quietly turning relations into things.</strong> <code>deposit</code> and
 <code>adjacency</code> are kinds. Once a relation is a thing, building the world is
-<code>create</code> and <code>set</code> with no thresholds &mdash; the identical primitives that
-play the game. Nothing needs adding for world-building except the <code>set</code> that
-transformation needed anyway.</p>
+<code>create</code> and <code>set</code> with nothing that can refuse &mdash; the identical
+primitives that play the game. Nothing needs adding for world-building except the <code>set</code>
+that transformation needed anyway.</p>
 </div>
 
 <h2>The primitives</h2>
@@ -88,10 +88,16 @@ transformation needed anyway.</p>
 <td class="note">the only way anything begins to exist</td>
 </tr>
 <tr>
-<td class="op">destroy</td>
-<td>Remove an identified thing</td>
-<td class="target">destroy ark</td>
-<td class="note">the only way anything stops existing</td>
+<td class="op">consume</td>
+<td>Subtract a count, and fail if it would go below zero</td>
+<td class="target">consume 3 metal in t</td>
+<td class="note">the guard and the spend are one line, and no other line can refuse</td>
+</tr>
+<tr>
+<td class="op">require</td>
+<td>A read: at least n, and not consumed</td>
+<td class="target">require 1 adjacency from -&gt; $to</td>
+<td class="note">the one guard that is not a cost - a read arc, used once</td>
 </tr>
 <tr>
 <td class="op">set</td>
@@ -100,16 +106,10 @@ transformation needed anyway.</p>
 <td class="note">the primitive the sketch was missing</td>
 </tr>
 <tr>
-<td class="op">threshold</td>
-<td>A guard: a count against a bound, in a direction</td>
-<td class="target">metal in t at least 3</td>
-<td class="note">the only thing that can refuse</td>
-</tr>
-<tr>
 <td class="op">attach</td>
-<td>On any line: hard fails the action, soft skips that line</td>
-<td class="target">create garrison in t [soft]</td>
-<td class="note">Sean's fail-behavior, and it attaches to a create and a call as well as to a guard</td>
+<td>On any line: what to do when the subtraction would go below zero</td>
+<td class="target">consume 1 labor in t [hard]</td>
+<td class="note">one question, and hard, soft, clamp and record are its four answers</td>
 </tr>
 <tr>
 <td class="op">call</td>
@@ -131,39 +131,41 @@ depends on a decision about a different column.</strong></p>
 </tr></thead><tbody>
 <tr>
 <td class="op">(blank)</td>
-<td>The line cannot fail, so no attachment is meaningful.</td>
+<td>The count provably cannot go below zero, so no attachment is meaningful.</td>
 <td class="note">Not a value so much as the absence of a question. Check 4 finds these mechanically: a create whose container has no capacity, a set on a thing that exists.</td>
 <td class="attach">IN USE - create citizen in t</td>
 </tr>
 <tr>
 <td class="op">hard</td>
-<td>If the line cannot do what it says, the whole action fails and nothing happens.</td>
-<td class="note">The right default for anything spent, and for a path that must resolve. A player is told why, and the state is untouched - so a failure costs nothing but the click.</td>
-<td class="attach">IN USE - every threshold that guards a cost</td>
+<td>The subtraction would go below zero, so the whole action fails and nothing happens.</td>
+<td class="note">The right default for anything spent. A player is told why, and the state is untouched - so a failure costs nothing but the click. Subtraction as a partial function: undefined, and the caller fails.</td>
+<td class="attach">IN USE - every consume that pays a cost</td>
 </tr>
 <tr>
 <td class="op">soft</td>
-<td>The container will not take another, so skip this line and carry on. The action still succeeds.</td>
-<td class="note">There is exactly one condition under which a create fails - the container is full - so soft has one meaning and not two. An earlier version of this report offered a second reading and it was a false choice.</td>
-<td class="attach">IN USE - create garrison in t</td>
+<td>The subtraction would go below zero, so skip this line and carry on. The action still succeeds.</td>
+<td class="note">A capacity is a count of free space, so a container that will not take another is the same condition as any other underflow. One meaning, not two.</td>
+<td class="attach">IN USE - create garrison in t, and age</td>
 </tr>
 <tr>
 <td class="op">clamp</td>
-<td>Do as much as the state allows. Destroy 3 where there are 2, and destroy 2.</td>
-<td class="note">NOT IN USE, and it earns its place only under one condition - see below. Distinct from both: hard refuses, soft does nothing, clamp does part.</td>
-<td class="attach">CANDIDATE</td>
+<td>Do as much as the state allows. Take 3 where there are 2, and take 2.</td>
+<td class="note">This is monus - truncated subtraction, the operator that makes the natural numbers a commutative monoid: a - b is 0 when b exceeds a. The standard way to total a subtraction that is otherwise partial.</td>
+<td class="attach">CANDIDATE - and it is now a named operation rather than an invention</td>
 </tr>
 <tr>
 <td class="op">record</td>
-<td>The line fails, the action continues, and the failure is written where another formula can read it.</td>
-<td class="note">NOT NAMED, BUT ALREADY IN THE GAME. `unpaid` is a trait - *derived: its upkeep was not met* - and `perish` fires on it. So a failed upkeep is neither hard nor soft: it does not stop the turn and it does not vanish.</td>
-<td class="attach">IN USE WITHOUT A NAME - upkeep, read by perish</td>
+<td>Take what is there, write the shortfall where another formula can read it, and carry on.</td>
+<td class="note">`unpaid` is a trait - derived: its upkeep was not met - and `perish` fires on it. So a failed upkeep is neither hard nor soft. This is the value Sean's rule names: the population lost to starvation is an event, never a negative number.</td>
+<td class="attach">IN USE - upkeep, read by perish</td>
 </tr>
 </tbody></table></div>
 <div class="callout">
 <h4>Which lines can fail at all</h4>
-<p><code>threshold</code> always can &mdash; refusing is its purpose. <code>create</code> can only
-where a capacity is declared. <code>destroy</code> can, when there is not enough.
+<p><code>consume</code> always can &mdash; that is what fusing the guard into it means, and it is
+now the only line that refuses on a count. <code>require</code> can, being a read that has to find
+something. <code>create</code> can only where a capacity is declared, which is the same condition
+seen from the other end: a capacity is a count of free space.
 <code>call</code> can, when something inside it fails hard. <code>let</code> can, when a path does
 not resolve &mdash; <code>ark.location.below</code> has no answer for an ark that is not in orbit,
 and <strong>hard is the only sane value there</strong>. <code>set</code> effectively cannot, which
@@ -229,29 +231,19 @@ rather than after.</p>
 <td class="note">linear - readability only</td>
 </tr>
 <tr>
-<td class="target">change(k, -n)</td>
-<td>n destroys</td>
-<td class="note">linear - readability only</td>
-</tr>
-<tr>
 <td class="target">let x = path</td>
 <td>substitute the path at each use</td>
 <td class="note">linear - readability only</td>
 </tr>
 <tr>
-<td class="target">consume n k</td>
-<td>threshold(k, at least n, hard) then n destroys</td>
-<td class="note">linear</td>
+<td class="target">destroy k</td>
+<td>consume 1 k, where k is an identified thing</td>
+<td class="note">DELETED as a primitive - it was consume with the count left implicit</td>
 </tr>
 <tr>
-<td class="target">require n k</td>
-<td>threshold(k, at least n, hard)</td>
-<td class="note">exact</td>
-</tr>
-<tr>
-<td class="target">produce n k</td>
-<td>n creates</td>
-<td class="note">exact</td>
+<td class="target">threshold(k, at least n) then n destroys</td>
+<td>consume n k</td>
+<td class="note">DELETED as two lines - it is one, and 15 of the 16 guards were this</td>
 </tr>
 <tr>
 <td class="target">limit n k</td>
@@ -263,7 +255,7 @@ rather than after.</p>
 <h2>Every row as one string</h2>
 <p>The last column of every formula table below restates that row &mdash; op, target, amount,
 attach and the note &mdash; as a single string in the notation <code>spec/console.md</code> gives
-for a command and for a description of state. All 80 lines are encoded, none by hand.</p>
+for a command and for a description of state. All 65 lines are encoded, none by hand.</p>
 <div class="callout">
 <h4>What the encoding assumes, and why it is worth reading</h4>
 <p>The notation says a command is <code>{name field:value ...}</code>, that a value is a word, a
@@ -271,7 +263,7 @@ number or another command, that a field referring to a thing is named for that t
 that <code>#</code> begins a comment. <strong>Where a line needed something that notation does not
 define, the encoder records it rather than inventing quietly</strong> &mdash; so this list is the
 report's real output, and it is generated from the encoding rather than written beside it.</p>
-<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">15</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">1</td><td>An <strong>arithmetic expression</strong> is used as a value &mdash; <code>keeps:(thing.keeps - 1)</code>. Written verbatim in brackets rather than as an invented command: the brackets are not the notation's either, and without them the spaces read as three fields rather than one value.</td><td class="note">age line 1</td></tr><tr><td class="amt">4</td><td><strong><em>For each</em> has no form.</strong> The notation has <code>repeat</code>, which is how many times one command fires. World-building needs twelve calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits in a comment, where nothing can run it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 1</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the formula a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 3</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 2</td></tr><tr><td class="amt">2</td><td><code>surplus:yes</code> puts a <strong>derived</strong> trait in a description. The release lists <em>surplus</em> as derived, and the notation says a description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is never part of one</strong>. So <code>grow</code>'s target has no form as a description, and this is the one assumption here that contradicts a rule rather than filling a gap.</td><td class="note">grow line 1</td></tr><tr><td class="amt">11</td><td><code>location</code> and <code>below</code> are <strong>not traits the release lists</strong>. In a dump a thing appears inside what holds it and nothing states its container, so <em>where a thing is</em> has no name &mdash; yet <code>move</code> sets it and four of the six <code>let</code>s read it. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">7</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world formulas, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 5</td></tr></tbody></table>
+<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">13</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">4</td><td><strong><em>For each</em> has no form.</strong> The notation has <code>repeat</code>, which is how many times one command fires. World-building needs twelve calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits in a comment, where nothing can run it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 1</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the formula a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 3</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 2</td></tr><tr><td class="amt">2</td><td><code>surplus:yes</code> puts a <strong>derived</strong> trait in a description. The release lists <em>surplus</em> as derived, and the notation says a description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is never part of one</strong>. So <code>grow</code>'s target has no form as a description, and this is the one assumption here that contradicts a rule rather than filling a gap.</td><td class="note">grow line 1</td></tr><tr><td class="amt">10</td><td><code>location</code> and <code>below</code> are <strong>not traits the release lists</strong>. In a dump a thing appears inside what holds it and nothing states its container, so <em>where a thing is</em> has no name &mdash; yet <code>move</code> sets it and four of the six <code>let</code>s read it. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">7</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world formulas, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
 <p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
 line required a choice the specification has not made.</p>
 </div>
@@ -288,7 +280,7 @@ line required a choice the specification has not made.</p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-let">let</td><td class="target">t = ark.location.below</td><td class="amt"></td><td></td><td class="note">was row 1 and row 2's qualifier</td><td class="one-string">{let t:ark.location.below} <span class="cmt"># was row 1 and row 2's qualifier</span></td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">ark</td><td class="amt">1</td><td></td><td class="note">row 2</td><td class="one-string">{destroy thing:{ark} amount:1} <span class="cmt"># row 2</span></td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">ark</td><td class="amt">1</td><td></td><td class="note">row 2</td><td class="one-string">{consume thing:{ark} amount:1} <span class="cmt"># row 2</span></td></tr>
 <tr><td class="op op-call">call</td><td class="target">found-colony(t)</td><td class="amt"></td><td></td><td class="note">rows 3-9</td><td class="one-string">{call recipe:found-colony territory:t} <span class="cmt"># rows 3-9</span></td></tr>
 </tbody></table></div><h3>found-colony(t) <span class="badge new">new</span></h3>
 <p class="sel">selection: <em>called, not selected</em></p>
@@ -315,9 +307,9 @@ line required a choice the specification has not made.</p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-let">let</td><td class="target">t = pioneer.location</td><td class="amt"></td><td></td><td class="note"></td><td class="one-string">{let t:pioneer.location}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">pioneer</td><td class="amt">1</td><td></td><td class="note">row 1</td><td class="one-string">{destroy thing:{pioneer} amount:1} <span class="cmt"># row 1</span></td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">pioneer</td><td class="amt">1</td><td></td><td class="note">row 1</td><td class="one-string">{consume thing:{pioneer} amount:1} <span class="cmt"># row 1</span></td></tr>
 <tr><td class="op op-call">call</td><td class="target">found-colony(t)</td><td class="amt"></td><td></td><td class="note">rows 2-8, identical to deploy ark's</td><td class="one-string">{call recipe:found-colony territory:t} <span class="cmt"># rows 2-8, identical to deploy ark's</span></td></tr>
-</tbody></table></div><h3>move <span class="badge up">5 rows &rarr; 6 lines (+1)</span></h3>
+</tbody></table></div><h3>move <span class="badge level">5 rows &rarr; 5 lines (=)</span></h3>
 <p class="sel">selection: <em>a unit that is ready</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -328,12 +320,11 @@ line required a choice the specification has not made.</p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-let">let</td><td class="target">from = unit.location</td><td class="amt"></td><td></td><td class="note">was row 1</td><td class="one-string">{let from:unit.location} <span class="cmt"># was row 1</span></td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">adjacency from -&gt; $to the unit crosses</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note">row 2</td><td class="one-string">{threshold thing:{adjacency from:from to:$to crossed-by:unit} at-least:1 attach:hard} <span class="cmt"># row 2</span></td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">energy in unit</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note">row 4</td><td class="one-string">{threshold thing:{energy unit:unit} at-least:1 attach:hard} <span class="cmt"># row 4</span></td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">energy in unit</td><td class="amt">1</td><td></td><td class="note">row 4</td><td class="one-string">{destroy thing:{energy unit:unit} amount:1} <span class="cmt"># row 4</span></td></tr>
+<tr><td class="op op-require">require</td><td class="target">adjacency from -&gt; $to the unit crosses</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note">row 2</td><td class="one-string">{require thing:{adjacency from:from to:$to crossed-by:unit} at-least:1 attach:hard} <span class="cmt"># row 2</span></td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">energy in unit</td><td class="amt">1</td><td><span class="attach">hard</span></td><td class="note">row 4</td><td class="one-string">{consume thing:{energy unit:unit} amount:1 attach:hard} <span class="cmt"># row 4</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">unit.location = $to</td><td class="amt"></td><td></td><td class="note">rows 3 and 5 were one move</td><td class="one-string">{set thing:{unit} location:$to} <span class="cmt"># rows 3 and 5 were one move</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">unit.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 5</td><td class="one-string">{set thing:{unit} ready:no} <span class="cmt"># rows 3 and 5</span></td></tr>
-</tbody></table></div><h3>build extractor <span class="badge up">3 rows &rarr; 5 lines (+2)</span></h3>
+</tbody></table></div><h3>build extractor <span class="badge level">3 rows &rarr; 3 lines (=)</span></h3>
 <p class="sel">selection: <em>a territory you control</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -343,12 +334,10 @@ line required a choice the specification has not made.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-threshold">threshold</td><td class="target">labor in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{labor territory:t} at-least:1 attach:hard}</td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{metal territory:t} at-least:1 attach:hard}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{labor territory:t} amount:1}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">1</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{metal territory:t} amount:1}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">labor in t</td><td class="amt">1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{labor territory:t} amount:1 attach:hard}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">metal in t</td><td class="amt">1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{metal territory:t} amount:1 attach:hard}</td></tr>
 <tr><td class="op op-create">create</td><td class="target">extractor[$resource] in t</td><td class="amt">1</td><td><span class="attach">HARD</span></td><td class="note">capacity is the container's now</td><td class="one-string">{create thing:{extractor resource:$resource territory:t} amount:1 attach:hard} <span class="cmt"># capacity is the container's now</span></td></tr>
-</tbody></table></div><h3>build store <span class="badge up">3 rows &rarr; 5 lines (+2)</span></h3>
+</tbody></table></div><h3>build store <span class="badge level">3 rows &rarr; 3 lines (=)</span></h3>
 <p class="sel">selection: <em>a territory you control</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -358,12 +347,10 @@ line required a choice the specification has not made.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-threshold">threshold</td><td class="target">labor in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{labor territory:t} at-least:1 attach:hard}</td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{metal territory:t} at-least:1 attach:hard}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{labor territory:t} amount:1}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">1</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{metal territory:t} amount:1}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">labor in t</td><td class="amt">1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{labor territory:t} amount:1 attach:hard}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">metal in t</td><td class="amt">1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{metal territory:t} amount:1 attach:hard}</td></tr>
 <tr><td class="op op-create">create</td><td class="target">store[$resource] in t</td><td class="amt">1</td><td></td><td class="note"></td><td class="one-string">{create thing:{store resource:$resource territory:t} amount:1}</td></tr>
-</tbody></table></div><h3>build yard <span class="badge up">3 rows &rarr; 5 lines (+2)</span></h3>
+</tbody></table></div><h3>build yard <span class="badge level">3 rows &rarr; 3 lines (=)</span></h3>
 <p class="sel">selection: <em>a territory you control</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -373,12 +360,10 @@ line required a choice the specification has not made.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-threshold">threshold</td><td class="target">labor in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{labor territory:t} at-least:1 attach:hard}</td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 15</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{metal territory:t} at-least:15 attach:hard}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{labor territory:t} amount:1}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">15</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{metal territory:t} amount:15}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">labor in t</td><td class="amt">1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{labor territory:t} amount:1 attach:hard}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">metal in t</td><td class="amt">15</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{metal territory:t} amount:15 attach:hard}</td></tr>
 <tr><td class="op op-create">create</td><td class="target">yard in t</td><td class="amt">1</td><td><span class="attach">HARD</span></td><td class="note">capacity is the container's now</td><td class="one-string">{create thing:{yard territory:t} amount:1 attach:hard} <span class="cmt"># capacity is the container's now</span></td></tr>
-</tbody></table></div><h3>produce pioneer <span class="badge up">4 rows &rarr; 7 lines (+3)</span></h3>
+</tbody></table></div><h3>produce pioneer <span class="badge level">4 rows &rarr; 4 lines (=)</span></h3>
 <p class="sel">selection: <em>a territory you control</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -388,14 +373,11 @@ line required a choice the specification has not made.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 3</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{metal territory:t} at-least:3 attach:hard}</td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">energy in t</td><td class="amt">at least 6</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{energy territory:t} at-least:6 attach:hard}</td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">citizen in t</td><td class="amt">at least 2</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{citizen territory:t} at-least:2 attach:hard}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">3</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{metal territory:t} amount:3}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">energy in t</td><td class="amt">6</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{energy territory:t} amount:6}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">citizen in t</td><td class="amt">2</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{citizen territory:t} amount:2}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">metal in t</td><td class="amt">3</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{metal territory:t} amount:3 attach:hard}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">energy in t</td><td class="amt">6</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{energy territory:t} amount:6 attach:hard}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">citizen in t</td><td class="amt">2</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{citizen territory:t} amount:2 attach:hard}</td></tr>
 <tr><td class="op op-create">create</td><td class="target">pioneer in t</td><td class="amt">1</td><td></td><td class="note"></td><td class="one-string">{create thing:{pioneer territory:t} amount:1}</td></tr>
-</tbody></table></div><h3>launch ark <span class="badge up">4 rows &rarr; 8 lines (+4)</span></h3>
+</tbody></table></div><h3>launch ark <span class="badge up">4 rows &rarr; 5 lines (+1)</span></h3>
 <p class="sel">selection: <em>a yard</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -406,12 +388,9 @@ line required a choice the specification has not made.</p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-let">let</td><td class="target">t = yard.location</td><td class="amt"></td><td></td><td class="note">was require 1 yard</td><td class="one-string">{let t:yard.location} <span class="cmt"># was require 1 yard</span></td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">metal in t</td><td class="amt">at least 3</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{metal territory:t} at-least:3 attach:hard}</td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">energy in t</td><td class="amt">at least 12</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{energy territory:t} at-least:12 attach:hard}</td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">citizen in t</td><td class="amt">at least 2</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{threshold thing:{citizen territory:t} at-least:2 attach:hard}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">metal in t</td><td class="amt">3</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{metal territory:t} amount:3}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">energy in t</td><td class="amt">12</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{energy territory:t} amount:12}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">citizen in t</td><td class="amt">2</td><td></td><td class="note"></td><td class="one-string">{destroy thing:{citizen territory:t} amount:2}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">metal in t</td><td class="amt">3</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{metal territory:t} amount:3 attach:hard}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">energy in t</td><td class="amt">12</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{energy territory:t} amount:12 attach:hard}</td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">citizen in t</td><td class="amt">2</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{consume thing:{citizen territory:t} amount:2 attach:hard}</td></tr>
 <tr><td class="op op-create">create</td><td class="target">ark in t.orbit</td><td class="amt">1</td><td></td><td class="note"></td><td class="one-string">{create thing:{ark orbit:t.orbit} amount:1}</td></tr>
 </tbody></table></div><h3>create labor <span class="badge down">3 rows &rarr; 2 lines (&minus;1)</span></h3>
 <p class="sel">selection: <em>a citizen that is ready</em></p>
@@ -425,7 +404,7 @@ line required a choice the specification has not made.</p>
 </tr></thead><tbody>
 <tr><td class="op op-set">set</td><td class="target">citizen.ready = no</td><td class="amt"></td><td></td><td class="note">rows 1 and 2 were one flip</td><td class="one-string">{set thing:{citizen} ready:no} <span class="cmt"># rows 1 and 2 were one flip</span></td></tr>
 <tr><td class="op op-create">create</td><td class="target">labor in citizen.location</td><td class="amt">1</td><td></td><td class="note">row 3</td><td class="one-string">{create thing:{labor territory:citizen.location} amount:1} <span class="cmt"># row 3</span></td></tr>
-</tbody></table></div><h3>work <span class="badge level">5 rows &rarr; 5 lines (=)</span></h3>
+</tbody></table></div><h3>work <span class="badge down">5 rows &rarr; 4 lines (&minus;1)</span></h3>
 <p class="sel">selection: <em>an extractor that is ready</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -436,15 +415,14 @@ line required a choice the specification has not made.</p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-let">let</td><td class="target">t = extractor.location</td><td class="amt"></td><td></td><td class="note">was row 1</td><td class="one-string">{let t:extractor.location} <span class="cmt"># was row 1</span></td></tr>
-<tr><td class="op op-threshold">threshold</td><td class="target">labor in t</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note">row 2</td><td class="one-string">{threshold thing:{labor territory:t} at-least:1 attach:hard} <span class="cmt"># row 2</span></td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">labor in t</td><td class="amt">1</td><td></td><td class="note">row 2</td><td class="one-string">{destroy thing:{labor territory:t} amount:1} <span class="cmt"># row 2</span></td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">labor in t</td><td class="amt">1</td><td><span class="attach">hard</span></td><td class="note">row 2</td><td class="one-string">{consume thing:{labor territory:t} amount:1 attach:hard} <span class="cmt"># row 2</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">extractor.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 4 were one flip</td><td class="one-string">{set thing:{extractor} ready:no} <span class="cmt"># rows 3 and 4 were one flip</span></td></tr>
 <tr><td class="op op-create">create</td><td class="target">resource[extractor.resource] in t</td><td class="amt">t.deposit[extractor.resource].density</td><td></td><td class="note">row 5</td><td class="one-string">{create thing:{resource kind:extractor.resource territory:t} amount:t.deposit[extractor.resource].density} <span class="cmt"># row 5</span></td></tr>
 </tbody></table></div>
 
 <h2>World formulas <span class="badge">6</span></h2>
 <p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
-<h3>upkeep <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
+<h3>upkeep <span class="badge down">2 rows &rarr; 1 lines (&minus;1)</span></h3>
 <p class="sel">selection: <em>each thing with upkeep</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -454,8 +432,7 @@ line required a choice the specification has not made.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-threshold">threshold</td><td class="target">food in thing.location</td><td class="amt">at least thing.upkeep</td><td><span class="attach">hard</span></td><td class="note">row 1 was the selector</td><td class="one-string">{threshold thing:{food territory:thing.location} at-least:thing.upkeep attach:hard} <span class="cmt"># row 1 was the selector</span></td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">food in thing.location</td><td class="amt">thing.upkeep</td><td></td><td class="note">row 2</td><td class="one-string">{destroy thing:{food territory:thing.location} amount:thing.upkeep} <span class="cmt"># row 2</span></td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">food in thing.location</td><td class="amt">thing.upkeep</td><td><span class="attach">hard</span></td><td class="note">row 1 was the selector; row 2</td><td class="one-string">{consume thing:{food territory:thing.location} amount:thing.upkeep attach:hard} <span class="cmt"># row 1 was the selector; row 2</span></td></tr>
 </tbody></table></div><h3>grow <span class="badge up">2 rows &rarr; 3 lines (+1)</span></h3>
 <p class="sel">selection: <em>each territory</em></p>
 <div class="scroll"><table><thead><tr>
@@ -467,7 +444,7 @@ line required a choice the specification has not made.</p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-let">let</td><td class="target">n = min(surplus food in t, citizen in t)</td><td class="amt"></td><td></td><td class="note"></td><td class="one-string">{let n:{min {food surplus:yes territory:t} {citizen territory:t}}}</td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">food[surplus] in t</td><td class="amt">n</td><td></td><td class="note">row 1</td><td class="one-string">{destroy thing:{food surplus:yes territory:t} amount:n} <span class="cmt"># row 1</span></td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">food[surplus] in t</td><td class="amt">n</td><td></td><td class="note">row 1</td><td class="one-string">{consume thing:{food surplus:yes territory:t} amount:n} <span class="cmt"># row 1</span></td></tr>
 <tr><td class="op op-create">create</td><td class="target">citizen in t</td><td class="amt">n</td><td></td><td class="note">row 2</td><td class="one-string">{create thing:{citizen territory:t} amount:n} <span class="cmt"># row 2</span></td></tr>
 </tbody></table></div><h3>perish <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
 <p class="sel">selection: <em>each thing whose upkeep is unpaid</em></p>
@@ -480,9 +457,9 @@ line required a choice the specification has not made.</p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-create">create</td><td class="target">metal in thing.location</td><td class="amt">thing.metal-in-it</td><td></td><td class="note">row 2</td><td class="one-string">{create thing:{metal territory:thing.location} amount:thing.metal-in-it} <span class="cmt"># row 2</span></td></tr>
-<tr><td class="op op-destroy">destroy</td><td class="target">thing</td><td class="amt">1</td><td></td><td class="note">row 1</td><td class="one-string">{destroy thing:{thing} amount:1} <span class="cmt"># row 1</span></td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">thing</td><td class="amt">1</td><td></td><td class="note">row 1</td><td class="one-string">{consume thing:{thing} amount:1} <span class="cmt"># row 1</span></td></tr>
 </tbody></table></div><h3>age <span class="badge down">2 rows &rarr; 1 lines (&minus;1)</span></h3>
-<p class="sel">selection: <em>each thing with keeps at least 1</em></p>
+<p class="sel">selection: <em>each thing with keeps</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -491,7 +468,7 @@ line required a choice the specification has not made.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-set">set</td><td class="target">thing.keeps = thing.keeps - 1</td><td class="amt"></td><td></td><td class="note">both rows were one decrement</td><td class="one-string">{set thing:{thing} keeps:(thing.keeps - 1)} <span class="cmt"># both rows were one decrement</span></td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">thing.keeps</td><td class="amt">1</td><td><span class="attach">soft</span></td><td class="note">both rows were one decrement; the guard `keeps at least 1` is now the operation</td><td class="one-string">{consume thing:{thing} keeps:1 attach:soft} <span class="cmt"># both rows were one decrement; the guard `keeps at least 1` is now the operation</span></td></tr>
 </tbody></table></div><h3>spoil <span class="badge level">1 rows &rarr; 1 lines (=)</span></h3>
 <p class="sel">selection: <em>each thing with keeps 0</em></p>
 <div class="scroll"><table><thead><tr>
@@ -502,7 +479,7 @@ line required a choice the specification has not made.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-destroy">destroy</td><td class="target">thing</td><td class="amt">1</td><td></td><td class="note">row 1</td><td class="one-string">{destroy thing:{thing} amount:1} <span class="cmt"># row 1</span></td></tr>
+<tr><td class="op op-consume">consume</td><td class="target">thing</td><td class="amt">1</td><td></td><td class="note">row 1</td><td class="one-string">{consume thing:{thing} amount:1} <span class="cmt"># row 1</span></td></tr>
 </tbody></table></div><h3>refresh <span class="badge down">2 rows &rarr; 1 lines (&minus;1)</span></h3>
 <p class="sel">selection: <em>each thing that is not ready</em></p>
 <div class="scroll"><table><thead><tr>
@@ -591,8 +568,8 @@ out for being written twice rather than for being written at all.</p>
 <h2>Building the world <span class="badge">5</span></h2>
 <div class="callout">
 <p><strong>No new primitive appears below.</strong> Every line is <code>create</code>,
-<code>set</code> or <code>call</code> &mdash; and not one threshold, because nothing at design
-time can be refused. That is the answer to whether one format can both make the environment and
+<code>set</code> or <code>call</code> &mdash; and not one <code>consume</code> or
+<code>require</code>, because nothing at design time can be refused. That is the answer to whether one format can both make the environment and
 play the game: <strong>world-building is the play language with the guards left out.</strong></p>
 </div>
 <h3>make-territory(id, biome, nature) <span class="badge design">design time</span></h3>
@@ -1482,20 +1459,19 @@ what the console needs and the menu is what the interface needs, from one line.<
 against bugs in checks 1 and 2, not a way of finding anything.</p>
 
 <h2>What the re-encoding cost and saved</h2>
-<p>Computed from the data rather than asserted. In bare primitives,
-<strong>58 rows became 63 lines &mdash; up 5</strong>. That is the number predicted
-before any of this was written, and it is the misleading one.</p>
-<p>Almost all of the rise is one thing: today's <code>consume</code> fuses a guard and an effect,
-and splitting it costs a line each time. There are <strong>15</strong> such pairs. Since
-<code>consume</code> is sugar &mdash; it is in the table above &mdash; an author never has to write
-both, and the authored count is <strong>48 lines, down 10 from 58</strong>.</p>
+<p>Computed from the data rather than asserted. <strong>58 rows became 48 lines &mdash;
+down 10</strong>.</p>
 <div class="callout">
-<h4>So which number is real</h4>
-<p>All three, measuring different things. <strong>Up 5</strong> is what the machine
-executes. <strong>Down 10</strong> is what a person writes. And the one that matters
-is neither: <strong>the vocabulary went from four roles that could not name
-<code>create-if-missing</code> to six primitives that also build the world from nothing.</strong>
-A count of lines cannot see that, which is the whole reason to fix the metric first.</p>
+<h4>There used to be three numbers here, and now there is one</h4>
+<p>Before the fusion this section had to carry two counts and explain the gap. <code>consume</code>
+was <em>sugar</em> for a guard plus a destroy, so what the machine executed and what a person wrote
+were different numbers, and the honest figure depended on which you meant. <strong>Since the guard
+and the spend are one line, they are the same number</strong> &mdash; and the right way to report
+that is to stop reporting two.</p>
+<p>The saving is not the point either. <strong>The vocabulary went from four roles that could not
+name <code>create-if-missing</code>, to six primitives that also build the world from nothing, to
+five that cannot express a zero test.</strong> A count of lines cannot see that, which is the whole
+reason to fix the metric first.</p>
 </div>
 <div class="scroll"><table><thead><tr>
 <th>Formula</th>
@@ -1524,38 +1500,38 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <tr>
 <td class="target">move</td>
 <td class="amt">5</td>
-<td class="amt">6</td>
-<td class="note">up: the ready flip and the location move are both explicit</td>
+<td class="amt">5</td>
+<td class="note">level: the ready flip and the location move are both explicit, and the two energy rows became one consume</td>
 </tr>
 <tr>
 <td class="target">build extractor</td>
 <td class="amt">3</td>
-<td class="amt">5</td>
-<td class="note">the capacity guard went to the container</td>
+<td class="amt">3</td>
+<td class="note">level: the capacity guard went to the container, and guard and spend are one line</td>
 </tr>
 <tr>
 <td class="target">build store</td>
 <td class="amt">3</td>
-<td class="amt">5</td>
-<td class="note">up: require and consume split into threshold and destroy</td>
+<td class="amt">3</td>
+<td class="note">level: require and consume are one consume again, which is what they always were</td>
 </tr>
 <tr>
 <td class="target">build yard</td>
 <td class="amt">3</td>
-<td class="amt">5</td>
-<td class="note">the capacity guard went to the container</td>
+<td class="amt">3</td>
+<td class="note">level: the capacity guard went to the container, and guard and spend are one line</td>
 </tr>
 <tr>
 <td class="target">produce pioneer</td>
 <td class="amt">4</td>
-<td class="amt">7</td>
-<td class="note">up: three requires become three thresholds and three destroys</td>
+<td class="amt">4</td>
+<td class="note">level: three requires are three consumes, not three pairs</td>
 </tr>
 <tr>
 <td class="target">launch ark</td>
 <td class="amt">4</td>
-<td class="amt">8</td>
-<td class="note">up: same</td>
+<td class="amt">5</td>
+<td class="note">up: the yard requirement became a let, and the three costs are three consumes</td>
 </tr>
 <tr>
 <td class="target">create labor</td>
@@ -1566,14 +1542,14 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <tr>
 <td class="target">work</td>
 <td class="amt">5</td>
-<td class="amt">5</td>
-<td class="note">level: one flip saved, one threshold gained</td>
+<td class="amt">4</td>
+<td class="note">down: one flip saved, and the labor guard is part of spending it</td>
 </tr>
 <tr>
 <td class="target">upkeep</td>
 <td class="amt">2</td>
-<td class="amt">2</td>
-<td class="note">level</td>
+<td class="amt">1</td>
+<td class="note">down: the guard and the spend were always one operation</td>
 </tr>
 <tr>
 <td class="target">grow</td>
@@ -1591,7 +1567,7 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <td class="target">age</td>
 <td class="amt">2</td>
 <td class="amt">1</td>
-<td class="note">down: a decrement was written as destroy-and-recreate</td>
+<td class="note">down: a decrement was written as destroy-and-recreate, and is now one consume from a trait - the last arithmetic in the model</td>
 </tr>
 <tr>
 <td class="target">spoil</td>

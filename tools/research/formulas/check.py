@@ -40,7 +40,7 @@ METAL_WEIGHT = {
     "pioneer": 3,
 }
 
-NON_EFFECT_OPS = {"let", "threshold"}
+NON_EFFECT_OPS = {"let", "require"}
 
 # What the Kinds table declares. metal is "conserved"; energy is "neither conserved nor
 # expiring"; food "expires"; a citizen grows on surplus. So a loop that gains energy, food,
@@ -440,7 +440,7 @@ def as_dict():
     """
     analysed, skipped, bad = check_conservation()
     names, skipped2, witness, gain, metal_gain, free, undeclared, hidden = check_unbounded()
-    n2, _s2, w2, _g2, mg2, _f2, _u2, _h2 = check_unbounded(exclude_sources=True)
+    n2, _s2, w2, g2, mg2, f2, u2, _h2 = check_unbounded(exclude_sources=True)
     cap, breached = check_cap()
     return {
         "conservation": {
@@ -455,9 +455,14 @@ def as_dict():
             "metal_gain": str(metal_gain),
             "free": sorted(free), "undeclared": sorted(undeclared),
             "hidden": hidden,
+            # The verdict needs the breakdown, not just the metal figure. Without it the
+            # renderer had a hand-typed "clean" beside a checker saying UNBOUNDED - true,
+            # for the reason the prose gave, and not derived from anything.
             "without_sources": {"transitions": len(n2),
                                 "witness": [[n, str(v)] for n, v in w2],
-                                "metal_gain": str(mg2)},
+                                "gain": {k: str(v) for k, v in sorted(g2.items())},
+                                "metal_gain": str(mg2),
+                                "free": sorted(f2), "undeclared": sorted(u2)},
         },
         "cap": {"cap": cap, "breaches": [[n, k, c] for n, k, c in breached]},
         "placement": [[n, tg, at, b] for n, tg, at, b in check_placement()],

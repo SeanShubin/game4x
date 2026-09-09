@@ -79,7 +79,14 @@
           "1"
         ]
       ],
-      "metal_gain": "0"
+      "gain": {
+        "labor": "1"
+      },
+      "metal_gain": "0",
+      "free": [
+        "labor"
+      ],
+      "undeclared": []
     }
   },
   "cap": {

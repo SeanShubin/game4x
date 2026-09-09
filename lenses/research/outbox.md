@@ -177,6 +177,32 @@ Nothing to build and no decision taken - whether composition is sequential, whet
 stay, and whether a change and a threshold share a line are all left open on purpose. **The naming is
 his**; this is a reading of his four, not a replacement for them.
 
+**Decided 2026-09-09, and two of the three open questions above are answered.** Sean: a change and a
+threshold **do** share a line, and a count may never go below zero - anything that would take it
+there is an error.
+[The report](2026-09-09-natural-numbers-and-the-fusion.md) carries the argument and the numbers; the
+[formula report](formulas.html) is re-rendered against it.
+
+- **Upper thresholds are gone, and that is the point rather than a side effect.** The grid's fourth
+  cell was `limit 0 garrison` - *no change, threshold at most 0* - and a fused subtraction cannot
+  express `at most`. So the construct `X-9` identified as ending every analysis becomes
+  **unwritable** rather than merely unused. What that rule needs travelling with it: `spoil` selects
+  *each thing with keeps 0*, which is a zero test and is safe **only because `keeps` is bounded**.
+- **The read arc survives exactly as this item predicted.** A threshold with a zero change is not a
+  change, and one line needs it - `move`'s adjacency. It is now the primitive `require`, used once.
+- **Measured before deciding**: 15 of the 16 guards were already a threshold and a destroy of the
+  **identical** amount, 0 differed, and the 5 destroys with no guard are each safe by construction.
+  Six primitives became five, 80 lines became 65, and re-encoding the release now **saves** ten lines
+  against its own row count where it used to cost five.
+- **`clamp` has a definition it did not have**: it is monus, truncated subtraction, the operator that
+  makes the naturals a commutative monoid. It still has no call site. **`record` has a name**, and
+  Sean's starvation case is what it is for.
+
+**Still open to you**, and unchanged by the decision: whether composition is sequential - whether
+each line sees the starting state or the effects of the lines before it. A recipe that consumes and
+produces the same resource exposes it immediately, and the fusion makes that recipe easier to write
+rather than harder.
+
 ### X-12 - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting
 
 **to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-deploy-worked.md), and Sean asking for a recipe to be worked through

@@ -60,6 +60,14 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [Natural numbers, and what the fusion removed](2026-09-09-natural-numbers-and-the-fusion.md)
+  - 2026-09-09. Carries `X-11`'s update. Sean decided that guard and spend are one operation and
+    that a count may never go below zero. 15 of 16 guards were already that pair with the same
+    amount on both sides; six primitives became five; the report's three line-counts became one;
+    and the model's only arithmetic expression disappeared. The literature calls it a VASS, calls
+    `clamp` monus, and warns that the usual way to build natural numbers - unsigned arithmetic -
+    wraps instead of failing, which is `CWE-191`.
+
 - [The whole specification as formulas](formulas.html) - generated, and the one file here
   that is not prose
   - 2026-09-08. Carries `X-13`, `X-14`, `X-15`, `X-16`. Every recipe in six primitives, the world
