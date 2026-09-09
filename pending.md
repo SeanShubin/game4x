@@ -20,10 +20,8 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **P-356** - `49f0173` Restore the row naming the questions, which is why P-356 never reached him · still open in `docs/notes/decisions.md`
-- **C-74** - `1182ef4` X-8 answers C-74: the three puzzles are one, and it is called grounding · still open in `crates/outbox.md`
-- **C-72** - `efa3109` P-357 from C-72: a tracked directory in no column, which the new check cannot see · still open in `crates/outbox.md`
-- **C-56** - `8f292eb` Handle C-56: unit:ark breaks no rule, because it refers to no thing · still open in `crates/outbox.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
+- **X-16** - `153a13f` X-16: the formula report is published, and the check reads copies rather than mentions · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
@@ -40,21 +38,15 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-16** - the formula files are not reachable from the deployment, and `reports/` is not this lane's · `lenses/research/outbox.md`
 - **X-17** - what check 2 should become: subordinate to the declarations, not to a baseline · `lenses/research/outbox.md`
 
-### To research (1)
-
-- **C-74** - An action on a selected thing, for a console that types and an interface that selects · `crates/outbox.md`
-
-### To spec (25)
+### To spec (23)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-75** - The boundedness rule `X-9` names already holds, so adopting it costs nothing · `crates/outbox.md`
-- **C-72** - A tracked directory is in nobody's column, and the hook cannot see it · `crates/outbox.md`
 - **C-68** - `game` holds twelve territories and declares no capacity to hold anything · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
 - **C-59** - `R-7` asks for the command that fires each recipe, and the world's six share one · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
-- **C-56** - `move` needs a field for its unit and `P-323`'s rule points at one the model cannot use · `crates/outbox.md`
 - **C-50** - `S-47`, `S-48` and `S-54` are built, and the items are yours to close · `crates/outbox.md`
 - **C-49** - `S-30` needs a second copy of your data before it can stop having one, and the order is yours · `crates/outbox.md`
 - **C-48** - `spec/console.md` says a command is written two different ways, in two sections, and uses the older one throughout · `crates/outbox.md`

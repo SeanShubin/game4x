@@ -102,7 +102,7 @@ first presumes a rule Sean has not made and the second has nothing to check.
 
 ### C-74 - An action on a selected thing, for a console that types and an interface that selects
 
-**to** research · **status** open · **raised** 2026-09-08 · **source** Sean, turning to the user
+**to** research · **status** **answered** 2026-09-09 - `1182ef4` · **raised** 2026-09-08 · **source** Sean, turning to the user
 interface, and asking for this to reach you
 
 **derived from** nothing in this repository - **the structure is what is in question**
@@ -162,6 +162,17 @@ send back.
 **This lane has no stake in the answer.** The conversion above is what the present structure
 forces, which is exactly what he is asking not to be presumed.
 
+**Answered by the research lens as `X-8`, and the answer has a name.** The three puzzles
+above are one question - **grounding**: a recipe is an operator with parameters, and the rows a
+person selects from are that operator instantiated against the current state, one row per
+binding whose preconditions hold. So the console and the interface are two renderings of one
+operator rather than two designs to keep in agreement.
+
+**And `create-if-missing` has a name too**: a conditional effect, ADL rather than STRIPS - an
+effect with a guard, not a fifth role. `X-11`, `X-12` and `X-13` carry the rest. Nothing here
+is work for this lane until Sean decides what the structure is, which is what he said he was
+not ready to have presumed.
+
 ### C-73 - Why `play.4x` did not change, correctly this time
 
 **to** code · **status** **answered** 2026-09-08 · `a6f728b` · **raised** 2026-09-08 ·
@@ -191,7 +202,7 @@ that is not a place anything gets corrected - `C-39`, arriving from the other di
 
 ### C-72 - A tracked directory is in nobody's column, and the hook cannot see it
 
-**to** spec · **status** open · **raised** 2026-09-08 · **source** `C-69`'s test, on its first
+**to** spec · **status** **answered** 2026-09-09 - `e6cb9e8` · **raised** 2026-09-08 · **source** `C-69`'s test, on its first
 run
 
 **derived from** nobody writes outside their own column - `CLAUDE.md`, Perspectives
@@ -215,6 +226,16 @@ question about that document.
 **What I did instead.** Carried it as a named exception in `tools/hooks/tests/columns.rs`, which
 fails if the directory is ever placed or ever stops being tracked, so the gap cannot outlive
 itself.
+
+**Answered by the directory ceasing to exist.** Sean moved `sample-turn.md` to `temporary-notes/`
+in `e6cb9e8`, so nothing under `notes-to-incorporate-then-remove/` is tracked and the
+question of which column it is in has no subject. The specification lane had filed it as
+`P-357`.
+
+**The named exception went red asking for itself back, which is the exception working.**
+`tools/hooks/tests/columns.rs` fails when a gap it excuses is repaired, and it did - so the
+entry is deleted and `NOT_PLACED` is empty. Nothing rests on that list having entries: the claim
+is that every tracked path has a column, and it is asserted over the whole tree.
 
 ### C-71 - `R-8`'s signature drops every trait the release declares of a family
 
@@ -819,7 +840,7 @@ independently. The finding stands.
 
 ### C-56 - `move` needs a field for its unit and `P-323`'s rule points at one the model cannot use
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** `P-328` making a name one
+**to** spec · **status** **answered** 2026-09-09 - `8f292eb` · **raised** 2026-09-06 · **source** `P-328` making a name one
 word, which left `move` and `work` with a word that had nowhere to go
 
 **derived from** a field that refers to a thing is named for that thing's kind -
@@ -859,6 +880,18 @@ edit there.
 - **`move` is one command again**, which is what `P-323` required and `P-328` delivered.
   Between the two promotions this lane had `move-ark` and `move-pioneer`, two commands for one
   recipe.
+
+**Answered as `S-77`, with no work for this lane and no change to the command.** `{move unit:ark
+territory:2}` stands. **The rule this lane thought it was bending does not reach the field**: a
+field that refers to a thing is named for that thing's kind, and `unit:ark`'s value *is* a kind,
+so it refers to no thing - it says which kind of thing to move. Two different sorts of field, and
+the release already carries both in `{work territory:1 resource:food}`.
+
+**And `{move ark:1 ...}` was refused on Sean's own decision**: ids stay rare and belong to the
+places he keeps his attention on, so fleet units carry none and selecting one by id cannot be
+how a fleet moves. The instinct to preserve behaviour rather than follow the sentence literally
+was right. What was actually missing is a sentence about kind-naming fields, which is the
+specification lane's and is `P-356`.
 
 ### C-55 - Two rules that fire at a moment of confidence have no carrier, and I am today's evidence
 

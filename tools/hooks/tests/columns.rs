@@ -97,13 +97,18 @@ fn every_tracked_path_is_owned_by_somebody() {
 
     /// Placed by nothing, with the reason each is allowed to be here.
     ///
-    /// **A named exception fails when it is repaired**, so a gap cannot outlive itself. This
-    /// one is not the hook's to close: `CLAUDE.md` -> Perspectives is the document that says
-    /// who writes what, and it does not name this directory at all. Reported as `C-72`.
-    const NOT_PLACED: [(&str, &str); 1] = [(
-        "notes-to-incorporate-then-remove/",
-        "Sean's raw material, from the first specification commit. `CLAUDE.md` names          `temporary-notes/` as his and does not name this, so which column it is in - or          whether it is his like the other one - is a question about that file rather than          about this hook. `C-72`",
-    )];
+    /// **A named exception fails when it is repaired**, so a gap cannot outlive itself - and
+    /// this list is empty because that is exactly what happened. It held
+    /// `notes-to-incorporate-then-remove/`, tracked since the first specification commit and
+    /// named by `CLAUDE.md` in no column at all, reported as `C-72` and asked of the
+    /// specification lane as `P-357`. Sean moved its one file to `temporary-notes/` in
+    /// `e6cb9e8`, the directory stopped being tracked, and the check went red asking for its
+    /// own exception back - which is the exception working rather than failing.
+    ///
+    /// **Empty is not a weaker check here.** Nothing rests on this list having entries: the
+    /// claim is that every tracked path has a column, and it is asserted below over more than
+    /// a hundred files. An entry only ever excused one of them.
+    const NOT_PLACED: [(&str, &str); 0] = [];
 
     let files = tracked();
     assert!(
