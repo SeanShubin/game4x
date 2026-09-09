@@ -95,7 +95,7 @@ def amount_of(raw):
         return None
 
 
-def effects(formula, formulas_by_name, seen=(), bounded=False):
+def effects(formula, formulas_by_name, seen=(), bounded=False, binding=None):
     """Net effect per kind, or None if any amount is state-dependent.
 
     Calls are inlined. A cycle would be an unbounded decomposition, which the acyclicity
@@ -114,7 +114,7 @@ def effects(formula, formulas_by_name, seen=(), bounded=False):
             sub = formulas_by_name.get(name)
             if sub is None:
                 return None
-            inner = effects(sub, formulas_by_name, seen + (name,), bounded)
+            inner = effects(sub, formulas_by_name, seen + (name,), bounded, binding)
             if inner is None:
                 return None
             for k, v in inner.items():
@@ -122,6 +122,13 @@ def effects(formula, formulas_by_name, seen=(), bounded=False):
             continue
         n = amount_of(raw)
         k = place_of(target)
+        # **Grounding, and it is the same operation the menu needs.** A target naming a
+        # family stands for one transition per kind in it. Leaving it a family is what made
+        # the check blind to mining: `resource` has no metal weight, so working a metal
+        # extractor scored zero. Found by Sean asking what a check that cannot see its own
+        # subject is worth.
+        if binding and k in binding:
+            k = binding[k]
         if n is None:
             if not bounded:
                 return None
@@ -134,6 +141,37 @@ def effects(formula, formulas_by_name, seen=(), bounded=False):
     return net
 
 
+def families_in(formula):
+    """Which families a formula's targets name, in a stable order."""
+    seen = []
+    for op, target, _a, _at, _n in formula["lines"]:
+        if op in NON_EFFECT_OPS or op in ("set", "call"):
+            continue
+        k = place_of(target)
+        if k in FAMILIES and k not in seen:
+            seen.append(k)
+    return seen
+
+
+def ground(name, formula):
+    """One (name, binding) per instantiation of the families this formula mentions.
+
+    A formula naming no family grounds to itself, so this is the identity in the ordinary
+    case and only the three that name one expand.
+    """
+    fams = families_in(formula)
+    if not fams:
+        return [(name, None)]
+    out = [(name, {})]
+    for fam in fams:
+        nxt = []
+        for nm, b in out:
+            for kind in FAMILIES[fam]:
+                nxt.append((f"{nm}[{kind}]", dict(b, **{fam: kind})))
+        out = nxt
+    return out
+
+
 def gather():
     by_name = {}
     for f in DATA["player"] + DATA["world"]:
@@ -144,9 +182,15 @@ def gather():
 def check_conservation():
     """Check 1. Metal conserved OUTSIDE declared extraction. Exact: a violation is a violation."""
     by_name = gather()
+    only_called = called_names(DATA)
     analysed, skipped, bad = [], [], []
     for name, f in sorted(by_name.items()):
         if name in DECLARED_SOURCES:
+            continue
+        # The same fix check 2 needed: a formula that is only ever called is not fired on its
+        # own, so weighing it alone reports a source no player can reach. `found-colony`
+        # delivers 3 and its callers each spend a unit worth 3; only the pair is a real event.
+        if name in only_called:
             continue
         net = effects(f, by_name)
         if net is None:
@@ -205,7 +249,7 @@ def simplex(A, b, c):
     return T[-1][-1], x
 
 
-def check_unbounded(extra=None):
+def check_unbounded(extra=None, exclude_sources=False):
     """Check 2. Conservative: it ignores guards, so a hit is a candidate and a miss is a proof."""
     by_name = gather()
     if extra:
@@ -215,12 +259,16 @@ def check_unbounded(extra=None):
     for name, f in sorted(by_name.items()):
         if name in only_called and not extra:
             continue  # inlined into its callers; not a transition of its own
-        net = effects(f, by_name, bounded=True)
-        if net is None:
-            skipped.append(name)
+        if exclude_sources and name in DECLARED_SOURCES:
             continue
-        names.append(name)
-        nets.append(net)
+        for gname, binding in ground(name, f):
+            net = effects(f, by_name, bounded=True, binding=binding)
+            if net is None:
+                if name not in skipped:
+                    skipped.append(name)
+                continue
+            names.append(gname)
+            nets.append(net)
     kinds = sorted({k for net in nets for k in net})
     hidden = sorted({k for k in kinds if k in FAMILIES})
     # maximise sum(x) subject to -C.x <= 0 and x <= 1
@@ -306,6 +354,21 @@ def self_test():
     else:
         METAL_WEIGHT["citizen"] = saved
 
+    # The poison aimed at the thing Sean just changed: put the two stores back and check 1
+    # must go red for exactly that reason. A check that stayed green here would have been
+    # agreeing with the fix rather than measuring it.
+    fc = next(f for f in DATA["player"] if f["name"].startswith("found-colony"))
+    fc["lines"] += [["create", "store[food] in t", "1", "", "poison"],
+                    ["create", "store[metal] in t", "1", "", "poison"]]
+    _, _, bad2 = check_conservation()
+    names2 = {n for n, _t, _p in bad2}
+    if {"deploy ark", "found by land"} <= names2:
+        print("  poison ok: putting the two stores back turns deploy ark and found by land red")
+    else:
+        print("  POISON FAILED: the two stores went back and check 1 stayed green")
+        ok = False
+    fc["lines"] = [l for l in fc["lines"] if l[4] != "poison"]
+
     _, breached = check_cap(cap=0)
     if not breached:
         print("  POISON FAILED: check 3 stayed green with a cap of 0")
@@ -323,6 +386,7 @@ def as_dict():
     """
     analysed, skipped, bad = check_conservation()
     names, skipped2, witness, gain, metal_gain, free, undeclared, hidden = check_unbounded()
+    n2, _s2, w2, _g2, mg2, _f2, _u2, _h2 = check_unbounded(exclude_sources=True)
     cap, breached = check_cap()
     return {
         "conservation": {
@@ -337,6 +401,9 @@ def as_dict():
             "metal_gain": str(metal_gain),
             "free": sorted(free), "undeclared": sorted(undeclared),
             "hidden": hidden,
+            "without_sources": {"transitions": len(n2),
+                                "witness": [[n, str(v)] for n, v in w2],
+                                "metal_gain": str(mg2)},
         },
         "cap": {"cap": cap, "breaches": [[n, k, c] for n, k, c in breached]},
         "poison": ["check 2 flags a formula with no inputs",
@@ -367,6 +434,7 @@ def main():
     print()
 
     names, skipped2, witness, gain, metal_gain, free, undeclared, hidden = check_unbounded()
+    n2, _s2, w2, g2, mg2, _f2, _u2, _h2 = check_unbounded(exclude_sources=True)
     print("CHECK 2 - structurally unbounded")
     print(f"  {len(names)} formulas in the matrix, {len(skipped2)} skipped for state-dependent amounts")
     if witness:
@@ -379,12 +447,21 @@ def main():
             print(f"  declared free, so not a defect: {', '.join(sorted(free))}")
         if undeclared:
             print(f"  UNDECLARED - nobody said whether these may grow: {', '.join(sorted(undeclared))}")
-    if hidden:
-        print(f"  A FAMILY HIDES A KIND: {', '.join(hidden)} - each stands for "
-              f"{'; '.join(k + ' = ' + '/'.join(FAMILIES[k]) for k in hidden)}. "
-              "Weighted zero, so the metal one is invisible here.")
     else:
         print("  no non-negative firing vector gains anything - structurally bounded")
+    if hidden:
+        print(f"  A FAMILY STILL HIDES A KIND: {', '.join(hidden)}")
+    print()
+
+    print(f"CHECK 2b - the same, with the declared sources removed ({', '.join(sorted(DECLARED_SOURCES))})")
+    print(f"  {len(n2)} transitions, and this is the question worth asking")
+    if w2:
+        print("  UNBOUNDED WITHOUT MINING. Witness:")
+        for n, v in w2:
+            print(f"    {v}  x  {n}")
+        print(f"  metal-equivalent gain: {mg2}   <- a metal source that is not extraction")
+    else:
+        print("  no loop gains metal without mining")
     print()
 
     cap, breached = check_cap()

@@ -286,79 +286,65 @@ author names the resource that must not grow and food is simply not on the list.
 and the checker cannot disagree. <strong>All three were poisoned before being believed</strong>:
 {"; ".join(RESULTS["poison"])}.</p>
 
-<h3>Check 1 &mdash; metal conserved &nbsp;<span class="badge up">{len(RESULTS["conservation"]["violations"])} violations</span></h3>
+<h3>Check 1 &mdash; metal conserved outside extraction &nbsp;<span class="badge down">{len(RESULTS["conservation"]["violations"])} violations</span></h3>
 <p>{RESULTS["conservation"]["analysed"]} formulas analysed;
 {len(RESULTS["conservation"]["skipped"])} skipped for state-dependent amounts
-({", ".join(RESULTS["conservation"]["skipped"])}). Weights are the <em>Binding</em> column,
-copied rather than invented: {", ".join(f"{k} {v}" for k, v in RESULTS["conservation"]["weights"].items())}.</p>
-<div class="scroll">{simple_table(
-    ["Formula", "Net metal-equivalent", "Where it comes from"],
-    [[v[0], f"{v[1]:+d}", v[2]] for v in RESULTS["conservation"]["violations"]],
-    ["target", "amt", "note"])}</div>
+({", ".join(RESULTS["conservation"]["skipped"])}); <code>work</code> excluded as the declared
+source. Weights are the <em>Binding</em> column, copied rather than invented:
+{", ".join(f"{k} {v}" for k, v in RESULTS["conservation"]["weights"].items())}.</p>
 <div class="callout">
-<h4>Corrected 2026-09-09, after Sean said the first version did not convince him</h4>
-<p><strong>He was right twice.</strong> His principle &mdash; <em>if it takes 5 metal to build a
-unit, then when that unit deploys 5 metal comes out, metal was conserved</em> &mdash; is exactly
-the invariant worth testing, and chasing it found two faults in the check rather than in his
-reasoning.</p>
-<p><strong>First, the check tested a stronger claim than the words can carry.</strong> Working a
-metal extractor mines up to 8 metal out of the ground, so metal is <em>not</em> globally conserved
-and no arrangement of the other formulas could make it so. <code>work</code> is now a
-<strong>declared source</strong> and the invariant is <em>conserved outside extraction</em>.</p>
-<p><strong>Second, a family was hiding a kind.</strong> <code>work</code> produces
-<code>resource[...]</code>, which collapses to the family <code>resource</code> and carries no
-metal weight &mdash; so the game's only metal source scored zero. A check that cannot see the
-thing it is about is aimed at the wrong subject, and it is reported below rather than quietly
-fixed.</p>
-<p><strong>And the finding survives both, on his own principle.</strong> An ark costs 3 metal and
-its Binding is 3. Founding delivers <strong>5</strong>. So founding is a second, undeclared source
-of <strong>+2 metal per landing</strong> &mdash; not a failure of conservation in general, but an
-unnamed source beside the named one.</p>
-</div>
-<div class="callout">
-<h4>And his own sketch already fixes it, exactly</h4>
-<p>The colony without the two stores &mdash; which is what his <code>ark.deploy</code> sketch
-wrote &mdash; delivers <strong>garrison 1 + extractor 1 + extractor 1 = 3</strong>, which is
-precisely the ark's Binding of 3 and the pioneer's Binding of 3.
-<strong><code>deploy ark</code> and <code>found by land</code> both go to exactly 0.</strong>
-The two stores are the entire discrepancy. That is arithmetic on his numbers, not an argument:
-either the stores go, or a unit that delivers them should cost 5 rather than 3.</p>
+<h4>Clean, and the two stores were the whole of it</h4>
+<p><strong>Sean dropped the two stores on 2026-09-09 and metal now balances exactly.</strong>
+<code>found-colony</code> delivers garrison 1 + extractor 1 + extractor 1 = <strong>3</strong>,
+which is precisely an ark's Binding and a pioneer's, so <code>deploy ark</code> and
+<code>found by land</code> both come out at <strong>0</strong>. His principle &mdash; what a unit
+costs in metal is what it delivers &mdash; now holds for every formula that is not mining.</p>
+<p><strong>The check is poisoned against exactly this.</strong> Putting the two stores back turns
+<code>deploy ark</code> and <code>found by land</code> red again, which is what makes the green
+above worth reading. A check that agreed with a fix rather than measuring it would look identical
+from here.</p>
+<p><strong>Two faults in the check itself, both found by his objection and both fixed.</strong>
+It tested a stronger claim than the words can carry &mdash; mining creates metal, so
+<code>work</code> is a declared source and the invariant is <em>conserved outside extraction</em>.
+And it weighed <code>found-colony</code> as if a player could fire it with no ark and no pioneer
+spent; a formula that is only ever called is not a transition.</p>
 </div>
 
-<h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded</span></h3>
-<p>{RESULTS["unbounded"]["analysed"]} formulas in the matrix;
-{len(RESULTS["unbounded"]["skipped"])} skipped
-({", ".join(RESULTS["unbounded"]["skipped"])}). The witness is a firing ratio &mdash; run these,
-in these proportions, and you end with more than you began.</p>
+<h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded, as it should be</span></h3>
+<p>{RESULTS["unbounded"]["analysed"]} transitions after grounding;
+{len(RESULTS["unbounded"]["skipped"])} skipped ({", ".join(RESULTS["unbounded"]["skipped"])}).</p>
 <div class="scroll">{simple_table(
     ["Fire this many times", "Formula"],
     [[w[1], w[0]] for w in RESULTS["unbounded"]["witness"]],
     ["amt", "target"])}</div>
-<p>Net gain per turn of the ratio: <strong>{", ".join(f"{k} +{v}" for k, v in RESULTS["unbounded"]["gain"].items())}</strong>.</p>
+<p>Metal-equivalent gain <strong>{RESULTS["unbounded"]["metal_gain"]}</strong>, and
+<code>work[metal]</code> is in the witness &mdash; which is the point. <strong>The check can see
+mining now.</strong> Until families were resolved to kinds, <code>work</code> produced
+<code>resource</code>, a family with no metal weight, and the game's only metal source scored
+zero.</p>
 <div class="callout">
-<h4>What check 2 should become &mdash; the recommendation</h4>
-<p><strong>Subordinate it to check 1's declarations rather than to a baseline of intended
-loops.</strong> One list already exists in the <em>Kinds</em> table: energy, food, citizens and
-labor may grow; metal may not; extraction is the one declared source. Then check 2 asks a single
-answerable question &mdash; <strong>is there a loop that gains metal without going through
-<code>work</code>?</strong> &mdash; and the false positive that made a baseline seem necessary
-disappears, because a labor loop is declared and simply not reported.</p>
-<p>Three fixes it needed, all found by pulling on Sean's objection and all now in:
-<strong>only entry points are transitions</strong> &mdash; counting <code>found-colony</code> as
-one let it fire with no ark spent, reporting a source no player could reach;
-<strong>state-dependent amounts get a bound</strong>, production taking its maximum and
-consumption its minimum, so a loop that exists is never missed;
-and <strong>families must resolve to kinds</strong>, which is the one still outstanding.</p>
+<h4>Grounding, and it is the same operation the menu needs</h4>
+<p>A target naming a family stands for one transition per kind in it, so <code>work</code> is
+three: <code>work[food]</code>, <code>work[metal]</code>, <code>work[energy]</code>, each with its
+own largest density. <strong>That is grounding</strong> &mdash; instantiating a formula against
+what it could apply to &mdash; and it is the same operation an interface performs to build a menu.
+The analysis and the interface want the same machinery, which is a reason to build it once.</p>
 </div>
-<div class="callout">
-<h4>One of these two is the game and the other is the bug</h4>
-<p><code>create labor</code> makes labor from nothing every turn. <strong>That is the intended
-economy</strong> and it is why this check must be a diff against declared intent rather than an
-absolute. <code>found-colony</code> is the one to look at, and check 1 already named it exactly.
-<strong>The checks agreeing from two different directions is the useful part</strong>: check 1 is
-exact and narrow, check 2 is conservative and broad, and the formula they both point at is the
-one worth opening.</p>
-</div>
+
+<h3>Check 2b &mdash; the same without mining &nbsp;<span class="badge down">clean</span></h3>
+<p>{RESULTS["unbounded"]["without_sources"]["transitions"]} transitions with <code>work</code>
+removed. <strong>This is the question worth asking</strong>, and it is the recommendation in
+practice: rather than keeping a baseline of intended loops, remove the declared source and ask
+whether metal can still grow.</p>
+<div class="scroll">{simple_table(
+    ["Fire this many times", "Formula"],
+    [[w[1], w[0]] for w in RESULTS["unbounded"]["without_sources"]["witness"]],
+    ["amt", "target"])}</div>
+<p>Metal-equivalent gain <strong>{RESULTS["unbounded"]["without_sources"]["metal_gain"]}</strong>.
+The one loop left is <code>create labor</code>, which makes labor from nothing every turn and is
+declared free in the <em>Kinds</em> table. <strong>So there is no metal source other than
+extraction</strong> &mdash; which is what conservation was supposed to mean, now checked rather
+than asserted.</p>
 
 <h3>Check 3 &mdash; a cap of {RESULTS["cap"]["cap"]} &nbsp;<span class="badge down">{len(RESULTS["cap"]["breaches"])} breaches</span></h3>
 <p>Applying each formula once breaches nothing, which is exactly the point about a cap:

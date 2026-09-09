@@ -121,35 +121,21 @@
           "citizen in t",
           "2",
           "?",
-          "row 5 - see Decisions"
+          "row 5"
         ],
         [
           "create",
           "extractor[food] in t",
           "1",
           "?",
-          "row 6 - see Decisions"
+          "row 6"
         ],
         [
           "create",
           "extractor[metal] in t",
           "1",
           "?",
-          "row 7 - see Decisions"
-        ],
-        [
-          "create",
-          "store[food] in t",
-          "1",
-          "?",
-          "row 8 - see Decisions"
-        ],
-        [
-          "create",
-          "store[metal] in t",
-          "1",
-          "?",
-          "row 9 - see Decisions"
+          "row 7"
         ]
       ]
     },
@@ -897,9 +883,9 @@
   ],
   "decisions": [
     [
-      "ANSWERED - the garrison is soft, and capacity 1 lives on the territory",
-      "Sean, 2026-09-08. A garrison is built if absent, skipped if present, and never fails the command.",
-      "One line: create garrison in t [soft]. The guard and the create became one line, and the limit role has no remaining use."
+      "ANSWERED - the two stores are dropped",
+      "Sean, 2026-09-09. found-colony delivers a garrison and two extractors.",
+      "3 metal-equivalent, which is exactly an ark's Binding and a pioneer's, so deploy ark and found by land both conserve exactly."
     ],
     [
       "ANSWERED - how to catch an infinite-resource glitch",
@@ -1130,9 +1116,17 @@
   ],
   "bounds": {
     "work": {
-      "resource": [
+      "food": [
+        6,
+        "the largest food density in Territory resources is 6"
+      ],
+      "metal": [
         8,
-        "the largest density in Territory resources is 8; production takes its maximum"
+        "the largest metal density is 8"
+      ],
+      "energy": [
+        8,
+        "the largest energy density is 8"
       ]
     },
     "grow": {
@@ -1156,6 +1150,28 @@
     [
       "perish",
       "consumes a thing and produces that thing's metal, so its effect depends on WHICH thing. Conserving by construction, and putting a representative thing in would be choosing the answer."
+    ]
+  ],
+  "families": [
+    [
+      "resource",
+      "food, metal, energy",
+      "`work` produces `resource[...]`, so it is three transitions and one of them mines metal"
+    ],
+    [
+      "unit",
+      "ark, pioneer",
+      "`move` consumes a `unit`, and the two have the same Binding, so expanding changes no weight"
+    ],
+    [
+      "place",
+      "territory, orbit",
+      "carries no metal, so expansion changes nothing"
+    ],
+    [
+      "thing",
+      "every kind",
+      "`age`, `spoil` and `refresh` only `set` or destroy, and destroying a thing of unknown kind is why `perish` stays out"
     ]
   ]
 }

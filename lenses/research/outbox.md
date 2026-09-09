@@ -314,6 +314,17 @@ stores are the entire discrepancy, so either they go or a unit that delivers the
 than 3. **That is arithmetic on his numbers rather than an argument**, and it turns the open
 question about the missing stores from a matter of taste into one with a right answer.
 
+**Closed 2026-09-09: Sean dropped the two stores**, and check 1 reports no violation over 12
+formulas. **The check is poisoned against exactly this decision** - putting the stores back turns
+`deploy ark` and `found by land` red again - so the green is a measurement of the fix rather than
+an agreement with it. **Three of the fifteen formulas are still skipped** for state-dependent
+amounts: `grow`, `perish` and `upkeep`. The population is named and is not zero.
+
+**Two of the three faults this item went through were in the check.** Its first version claimed
+metal was not conserved at all, which no arrangement of the formulas could have made true, because
+mining is a source. Its second still weighed a called formula as independently firable. **Sean
+refused the first version and the refusal is what found both.**
+
 ### X-15 - the inventory, so that nothing said in one conversation is lost on the way to `spec/`
 
 **to** spec · **status** open · **raised** 2026-09-08 · **source** Sean, saying he may want to promote this and asking that nothing be lost
@@ -406,6 +417,27 @@ two are done and in `tools/research/formulas/check.py`, which is this lane's too
 it graduates to production it is yours to own and rewrite, not to inherit.** The family fix is the
 one that matters, because a check that cannot see the subject it is about is the failure this
 repository has now recorded four times.
+
+**Done 2026-09-09, on Sean's instruction, and the third defect is closed.** A target naming a
+family now stands for one transition per kind in it, so `work` is three - `work[food]`,
+`work[metal]`, `work[energy]` - each carrying its own largest density. **`work[metal]` is in check
+2's witness now**, which is the whole point: until this, the game's only metal source scored zero.
+
+**And it is grounding**, the same operation an interface performs to build a menu from a formula
+and a state. **The analysis and the interface want the same machinery**, which is an argument for
+building it once rather than twice, and this lane did not expect that when it filed the item.
+
+**The recommendation is now implemented rather than described.** `check_unbounded` runs twice:
+once whole, and once with the declared sources removed. **The second run is the one worth
+reading** - it asks whether metal can grow without mining, and needs no baseline of intended
+loops, because a labor loop is declared free and simply is not reported. Result: **no metal source
+other than extraction.**
+
+**A fourth defect was found while doing it, and it was in check 1 rather than check 2.** Check 1
+was still weighing `found-colony` as if a player could fire it alone - the same fault fixed in
+check 2 two hours earlier and not carried across. **One fix, applied to one of the two places that
+needed it**, which is worth recording because nothing would have caught it: the check was red for
+a real reason and stayed red for a wrong one.
 
 ## Resolved
 
