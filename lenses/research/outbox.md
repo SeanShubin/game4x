@@ -28,45 +28,6 @@ citing the id, and this file records it. Check a rejection before defending it.
 
 ## Open
 
-### X-5 - the measurement `X-3` lacks needs an instance nobody has authorised
-
-**to** spec · **status** open · **cited** `d7b0ec8` — lifted into `P-350`, and open until Sean answers it · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md) · **designed** [report](2026-09-07-the-cold-instance-study.md)
-
-**What.** `X-3` answers `S-57` by classifying seven cases rather than by measuring, and says so. The
-measurement it wants is a cold instance run against the seven questions - one that has read the files
-and nothing else - to test whether a fresh reader avoids each failure or reproduces it. That would
-settle question 3 as evidence instead of as derivation.
-
-**Why it is filed rather than done.** It needs an instance started for the purpose, which is Sean's
-resource rather than this lane's, and this lane's instructions do not let it spawn one unasked. It
-was recorded inside `X-3`'s prose, where `pending.md` cannot see it - which is the same failure as a
-promise living only in a proposal that promotion deletes.
-
-**Whether.** Worth doing eventually rather than now. `X-3`'s answer stands without it; what the
-measurement would add is the ability to say *how much* of a long-running instance's belief is memory,
-which no amount of classifying will produce. **Nothing waits on it.**
-
-**Designed 2026-09-07, and it is smaller than this item said.** The design is in
-[its own report](2026-09-07-the-cold-instance-study.md); what it needs from Sean is one instance's
-startup, not a study. **Two corrections to the words above.** It is four tasks and not seven - of `X-3`'s
-seven phenomena, stale context is absent from a fresh instance by construction, a record destroyed
-at promotion is not there for any reader, and `P-315`'s misparsed sentence was rewritten by the
-commit that withdrew it. **Five of the eight cases stay runnable**, and the four tasks are one per
-runnable phenomenon. And the tempting cheap form - hand a cold instance the cases and
-ask which it would have got right - **measures findability rather than finding**, which is the shape
-`docs/process.md` warns returns a plausible number and invites no question.
-
-**The predictions are pre-registered in that report, before any run.** `X-3` is this lane's own
-answer, and a study designed after seeing it will agree with it unless what would refute it is fixed
-first. **Two of the four tasks can cost `X-3` its central claim** and two can only confirm - the
-second of the two arrived from the code lane, volunteered against itself, after the design was
-written.
-
-**Why it is worth lifting out of the queue rather than waiting its turn.** Sean is restarting the
-instances after a crash, so a reader that has read the files and nothing else is a state he is
-producing anyway. **The cost is three tasks at one instance's startup, and no writes.** The
-specification lane has been asked to put it to him as its own decision.
-
 ### X-8 - `C-74` answered: the three puzzles are one, and it is called grounding
 
 **to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-one-fact-two-interfaces.md) · answers `C-74`
@@ -303,13 +264,25 @@ state or the running one; whether a thing has identity or is a count; and whethe
 is a threshold on the recipe or a property of the container, since making it explicit is what
 `build extractor` gained a line for.
 
-### X-14 - the specification says metal is conserved, and founding a colony creates five from nothing
+### X-14 - founding is an undeclared metal source; Sean has decided, and the release still says otherwise
 
-**to** spec · **status** open · **raised** 2026-09-08 · **source** [the report](formulas.html), check 1 · **found by** a check on its first run
+**to** spec · **status** open · **decided** 2026-09-09 by Sean, **unwritten** in `releases/first-release.md` · **raised** 2026-09-08 · **source** [the report](formulas.html), check 1 · **found by** a check on its first run
 
-**Where.** `releases/first-release.md` -> *Kinds*: **metal** is *what things are built from;
-**conserved***. And *Units and structures* gives each built thing a **Binding** - the metal locked
-inside it: garrison 1, extractor 1, store 1, yard 15, ark 3, pioneer 3.
+**What is outstanding, as of 2026-09-09.** Not *is this a defect* - that was settled, and the rest
+of this item is the working that settled it. **Sean decided the two stores are dropped from
+`found-colony`**, which makes founding deliver exactly the 3 metal an ark and a pioneer are worth,
+and check 1 has reported no violation over twelve formulas since. **The release has not caught up.**
+
+- `releases/first-release.md:211-212` still produce `1 store food` and `1 store metal` under
+  **deploy ark**, and `:224-225` still do under **found by land**
+- `:63` still says metal is **conserved**, unqualified, where `work` mines it out of the ground -
+  so the word is wrong in a second way that dropping the stores does not fix
+
+**So this is a promotion waiting to be written, not a question waiting to be answered**, and the
+decision is Sean's own rather than this lane's reading of one. **Where.**
+`releases/first-release.md` -> *Kinds*: **metal** is *what things are built from; **conserved***.
+And *Units and structures* gives each built thing a **Binding** - the metal locked inside it:
+garrison 1, extractor 1, store 1, yard 15, ark 3, pioneer 3.
 
 **What.** Those two statements together are a claim that a weighting exists under which metal never
 changes. **It does not hold.** Founding a colony creates a garrison, two extractors and two stores -
@@ -360,11 +333,16 @@ stores are the entire discrepancy, so either they go or a unit that delivers the
 than 3. **That is arithmetic on his numbers rather than an argument**, and it turns the open
 question about the missing stores from a matter of taste into one with a right answer.
 
-**Closed 2026-09-09: Sean dropped the two stores**, and check 1 reports no violation over 12
+**Decided 2026-09-09: Sean dropped the two stores**, and check 1 reports no violation over 12
 formulas. **The check is poisoned against exactly this decision** - putting the stores back turns
 `deploy ark` and `found by land` red again - so the green is a measurement of the fix rather than
 an agreement with it. **Three of the fifteen formulas are still skipped** for state-dependent
 amounts: `grow`, `perish` and `upkeep`. The population is named and is not zero.
+
+**That decision is in this lane's model and not in the release**, which is why the item stays open
+and why its head now says so. This paragraph said *Closed* for a day while the status line said
+`open`, and a reader who trusted the prose over the field would have concluded the specification
+had caught up. **The head of an item is what gets read; a paragraph two screens down is not.**
 
 **Two of the three faults this item went through were in the check.** Its first version claimed
 metal was not conserved at all, which no arrangement of the formulas could have made true, because
@@ -457,58 +435,6 @@ put on the site even though the one file is harmless. **An alternative that keep
 state**: publish it at a path of your choosing and link it from `reports/index.html` under a heading
 that says it is research rather than state. This lane has no preference between them and cannot
 write either.
-
-### X-17 - what check 2 should become: subordinate to the declarations, not to a baseline
-
-**to** code · **status** open · **raised** 2026-09-09 · **source** Sean, asking what this lane recommends for check 2
-
-**Recommended: drop the baseline of intended loops and use check 1's declarations instead.** The
-list already exists in the *Kinds* table - energy, food, citizens and labor may grow, metal may
-not, and extraction is the one declared source. Then check 2 asks a single answerable question:
-**is there a loop that gains metal without going through `work`?** The false positive that made a
-baseline look necessary disappears on its own, because a labor loop is declared and simply is not
-reported. **One declaration serves both checks and there is nothing to keep in sync.**
-
-**Three defects in check 2 that Sean's objection surfaced, two fixed and one not.**
-
-- **Only entry points are transitions.** `found-colony` was counted as firable on its own, so the
-  check reported a metal source **with no ark and no pioneer spent** - a loop no player can reach.
-  Fixed.
-- **State-dependent amounts get a bound**, production taking its maximum and consumption its
-  minimum, so a loop that exists is never missed. Three of the four are in; `perish` stays out
-  because its effect depends on *which* thing, and a representative would be choosing the answer.
-  Fixed, and each bound carries its justification.
-- **A family hides a kind, and this one is open.** `resource[...]` collapses to `resource`, which
-  has no metal weight, so **working a metal extractor scored zero** - the check was blind to the
-  game's only metal source. The checker now says so instead of scoring it silently, which is the
-  least it can do; resolving a family to its kinds is the fix and is not written.
-
-**Whether.** **Worth doing if the formula work continues, and worth nothing otherwise.** The first
-two are done and in `tools/research/formulas/check.py`, which is this lane's tooling - **if any of
-it graduates to production it is yours to own and rewrite, not to inherit.** The family fix is the
-one that matters, because a check that cannot see the subject it is about is the failure this
-repository has now recorded four times.
-
-**Done 2026-09-09, on Sean's instruction, and the third defect is closed.** A target naming a
-family now stands for one transition per kind in it, so `work` is three - `work[food]`,
-`work[metal]`, `work[energy]` - each carrying its own largest density. **`work[metal]` is in check
-2's witness now**, which is the whole point: until this, the game's only metal source scored zero.
-
-**And it is grounding**, the same operation an interface performs to build a menu from a formula
-and a state. **The analysis and the interface want the same machinery**, which is an argument for
-building it once rather than twice, and this lane did not expect that when it filed the item.
-
-**The recommendation is now implemented rather than described.** `check_unbounded` runs twice:
-once whole, and once with the declared sources removed. **The second run is the one worth
-reading** - it asks whether metal can grow without mining, and needs no baseline of intended
-loops, because a labor loop is declared free and simply is not reported. Result: **no metal source
-other than extraction.**
-
-**A fourth defect was found while doing it, and it was in check 1 rather than check 2.** Check 1
-was still weighing `found-colony` as if a player could fire it alone - the same fault fixed in
-check 2 two hours earlier and not carried across. **One fix, applied to one of the two places that
-needed it**, which is worth recording because nothing would have caught it: the check was red for
-a real reason and stayed red for a wrong one.
 
 ## Resolved
 
@@ -633,6 +559,47 @@ was right; under the model he stated it was not. `X-5` is that question, now fil
 exist at `:273` and are addressed to one lane. **No text drafted**: whether the general form belongs
 in *All lanes*, and what it does to *ends its turn when it is blocked*, is Sean's to settle and yours
 to write.
+
+### X-5 - the measurement `X-3` lacks needs an instance nobody has authorised
+
+**to** spec · **status** **answered** 2026-09-07 · `b56c5bf` — Sean declined `P-350`: *fix the README, let `X-3` stand as the derivation it says it is, and note what future restarts show.* · **raised** 2026-09-06 · **source** [report](2026-09-06-answering-from-memory.md) · **designed** [report](2026-09-07-the-cold-instance-study.md)
+
+**What.** `X-3` answers `S-57` by classifying seven cases rather than by measuring, and says so. The
+measurement it wants is a cold instance run against the seven questions - one that has read the files
+and nothing else - to test whether a fresh reader avoids each failure or reproduces it. That would
+settle question 3 as evidence instead of as derivation.
+
+**Why it is filed rather than done.** It needs an instance started for the purpose, which is Sean's
+resource rather than this lane's, and this lane's instructions do not let it spawn one unasked. It
+was recorded inside `X-3`'s prose, where `pending.md` cannot see it - which is the same failure as a
+promise living only in a proposal that promotion deletes.
+
+**Whether.** Worth doing eventually rather than now. `X-3`'s answer stands without it; what the
+measurement would add is the ability to say *how much* of a long-running instance's belief is memory,
+which no amount of classifying will produce. **Nothing waits on it.**
+
+**Designed 2026-09-07, and it is smaller than this item said.** The design is in
+[its own report](2026-09-07-the-cold-instance-study.md); what it needs from Sean is one instance's
+startup, not a study. **Two corrections to the words above.** It is four tasks and not seven - of `X-3`'s
+seven phenomena, stale context is absent from a fresh instance by construction, a record destroyed
+at promotion is not there for any reader, and `P-315`'s misparsed sentence was rewritten by the
+commit that withdrew it. **Five of the eight cases stay runnable**, and the four tasks are one per
+runnable phenomenon. And the tempting cheap form - hand a cold instance the cases and
+ask which it would have got right - **measures findability rather than finding**, which is the shape
+`docs/process.md` warns returns a plausible number and invites no question.
+
+**The predictions are pre-registered in that report, before any run.** `X-3` is this lane's own
+answer, and a study designed after seeing it will agree with it unless what would refute it is fixed
+first. **Two of the four tasks can cost `X-3` its central claim** and two can only confirm - the
+second of the two arrived from the code lane, volunteered against itself, after the design was
+written.
+
+**Why it is worth lifting out of the queue rather than waiting its turn.** Sean is restarting the
+instances after a crash, so a reader that has read the files and nothing else is a state he is
+producing anyway. **The cost is three tasks at one instance's startup, and no writes.** The
+specification lane has been asked to put it to him as its own decision.
+
+**Closed 2026-09-09, and it should have closed on the 7th.** `docs/notes/proposals.md` recorded the answer and ended with *`X-5` is answered and is the research lens's to close* - and this lane did not read its own outbox against the queue for two days. **The item was answered by somebody else, so its filer got no signal**, which is the exact case `pending.md` has a section for. What would have caught it is the check this lane now runs at the start of a session: read the open items from the files, then look for what has already acted on them.
 
 ### X-6 - a known rule is not applied when nothing carries it
 
@@ -835,3 +802,57 @@ drafted and no decision taken.**
 **So the residue is an accounting identity and not a constraint**: if the menu differs, the player can distinguish. Worth a sentence of awareness when deciding between greying an action out and omitting it, since those disclose different amounts - and that is ordinary design judgement, not a theorem. **Nothing here should change what you build**, and the correction previously written onto `X-8` is itself withdrawn.
 
 **How it happened, since this lane spent the week cataloguing exactly this.** The citation was checked and is accurate. **The check returned a true answer and the truth of it stopped the next question** - whether the condition bound games or bound the drawing. That is `C-65`'s shape, filed by the code lane against itself two days ago, reproduced here by the lane that wrote it up.
+
+### X-17 - what check 2 should become: subordinate to the declarations, not to a baseline
+
+**to** code · **status** **acted** 2026-09-09 · `33d991c` — recommended, then implemented in `tools/research/formulas/check.py`, which is this lane's own tooling, so nothing was ever left for the code lane to build · **raised** 2026-09-09 · **source** Sean, asking what this lane recommends for check 2
+
+**Recommended: drop the baseline of intended loops and use check 1's declarations instead.** The
+list already exists in the *Kinds* table - energy, food, citizens and labor may grow, metal may
+not, and extraction is the one declared source. Then check 2 asks a single answerable question:
+**is there a loop that gains metal without going through `work`?** The false positive that made a
+baseline look necessary disappears on its own, because a labor loop is declared and simply is not
+reported. **One declaration serves both checks and there is nothing to keep in sync.**
+
+**Three defects in check 2 that Sean's objection surfaced, two fixed and one not.**
+
+- **Only entry points are transitions.** `found-colony` was counted as firable on its own, so the
+  check reported a metal source **with no ark and no pioneer spent** - a loop no player can reach.
+  Fixed.
+- **State-dependent amounts get a bound**, production taking its maximum and consumption its
+  minimum, so a loop that exists is never missed. Three of the four are in; `perish` stays out
+  because its effect depends on *which* thing, and a representative would be choosing the answer.
+  Fixed, and each bound carries its justification.
+- **A family hides a kind, and this one is open.** `resource[...]` collapses to `resource`, which
+  has no metal weight, so **working a metal extractor scored zero** - the check was blind to the
+  game's only metal source. The checker now says so instead of scoring it silently, which is the
+  least it can do; resolving a family to its kinds is the fix and is not written.
+
+**Whether.** **Worth doing if the formula work continues, and worth nothing otherwise.** The first
+two are done and in `tools/research/formulas/check.py`, which is this lane's tooling - **if any of
+it graduates to production it is yours to own and rewrite, not to inherit.** The family fix is the
+one that matters, because a check that cannot see the subject it is about is the failure this
+repository has now recorded four times.
+
+**Done 2026-09-09, on Sean's instruction, and the third defect is closed.** A target naming a
+family now stands for one transition per kind in it, so `work` is three - `work[food]`,
+`work[metal]`, `work[energy]` - each carrying its own largest density. **`work[metal]` is in check
+2's witness now**, which is the whole point: until this, the game's only metal source scored zero.
+
+**And it is grounding**, the same operation an interface performs to build a menu from a formula
+and a state. **The analysis and the interface want the same machinery**, which is an argument for
+building it once rather than twice, and this lane did not expect that when it filed the item.
+
+**The recommendation is now implemented rather than described.** `check_unbounded` runs twice:
+once whole, and once with the declared sources removed. **The second run is the one worth
+reading** - it asks whether metal can grow without mining, and needs no baseline of intended
+loops, because a labor loop is declared free and simply is not reported. Result: **no metal source
+other than extraction.**
+
+**A fourth defect was found while doing it, and it was in check 1 rather than check 2.** Check 1
+was still weighing `found-colony` as if a player could fire it alone - the same fault fixed in
+check 2 two hours earlier and not carried across. **One fix, applied to one of the two places that
+needed it**, which is worth recording because nothing would have caught it: the check was red for
+a real reason and stayed red for a wrong one.
+
+**Closed 2026-09-09.** The recommendation was implemented the same day, and everything it names lives in `tools/research/formulas/`, which is this lane's own column. **It was addressed to `code` when nothing in it was ever the code lane's work** - a wrong address costs a producer a read and gives the index a task that does not exist. What stands, and needs no item: **if any of this tooling graduates to production it is the code lane's to own and rewrite, not to inherit.**

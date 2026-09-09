@@ -25,7 +25,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (9)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
@@ -36,9 +36,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
 - **X-16** - the formula files are not reachable from the deployment, and `reports/` is not this lane's · `lenses/research/outbox.md`
-- **X-17** - what check 2 should become: subordinate to the declarations, not to a baseline · `lenses/research/outbox.md`
 
-### To spec (23)
+### To spec (22)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
@@ -60,8 +59,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
-- **X-5** - the measurement `X-3` lacks needs an instance nobody has authorised · `lenses/research/outbox.md`
-- **X-14** - the specification says metal is conserved, and founding a colony creates five from nothing · `lenses/research/outbox.md`
+- **X-14** - founding is an undeclared metal source; Sean has decided, and the release still says otherwise · `lenses/research/outbox.md`
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
