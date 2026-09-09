@@ -25,6 +25,12 @@
       "one question, and hard, soft, clamp and record are its four answers"
     ],
     [
+      "each",
+      "Bind a name over every member of a set, and repeat the lines below it once per member",
+      "each t: {territory}",
+      "the one construct that cannot be expanded when it is written - see *Repetition, or quantification*"
+    ],
+    [
       "call",
       "Apply another recipe with arguments",
       "call found-colony(t) [soft]",
@@ -66,6 +72,11 @@
       "limit n k",
       "DELETED - a container's capacity, declared once in Capacities",
       "both uses were restatements"
+    ],
+    [
+      "a recipe's prose <em>selection</em>",
+      "each x: {description}",
+      "DELETED as prose - six world recipes quantified in a field the language could not see"
     ]
   ],
   "player": [
@@ -432,8 +443,15 @@
     {
       "name": "upkeep",
       "was": 2,
-      "selection": "each thing with upkeep",
+      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
+        [
+          "each",
+          "thing: {thing upkeep:any}",
+          "",
+          "",
+          "was the selection *each thing with upkeep*, which was prose outside the language"
+        ],
         [
           "change",
           "food in thing.location",
@@ -446,8 +464,15 @@
     {
       "name": "grow",
       "was": 2,
-      "selection": "each territory",
+      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
+        [
+          "each",
+          "t: {territory}",
+          "",
+          "",
+          "was the selection *each territory*, which was prose outside the language"
+        ],
         [
           "let",
           "n = min(surplus food in t, citizen in t)",
@@ -474,8 +499,15 @@
     {
       "name": "perish",
       "was": 2,
-      "selection": "each thing whose upkeep is unpaid",
+      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
+        [
+          "each",
+          "thing: {thing unpaid:yes}",
+          "",
+          "",
+          "was the selection *each thing whose upkeep is unpaid*, which was prose outside the language"
+        ],
         [
           "change",
           "metal in thing.location",
@@ -495,8 +527,15 @@
     {
       "name": "age",
       "was": 2,
-      "selection": "each thing with keeps",
+      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
+        [
+          "each",
+          "thing: {thing keeps:any}",
+          "",
+          "",
+          "was the selection *each thing with keeps*, which was prose outside the language"
+        ],
         [
           "change",
           "thing.keeps",
@@ -509,8 +548,15 @@
     {
       "name": "spoil",
       "was": 1,
-      "selection": "each thing with keeps 0",
+      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
+        [
+          "each",
+          "thing: {thing keeps:0}",
+          "",
+          "",
+          "was the selection *each thing with keeps 0*, which was prose outside the language"
+        ],
         [
           "change",
           "thing",
@@ -523,8 +569,15 @@
     {
       "name": "refresh",
       "was": 2,
-      "selection": "each thing that is not ready",
+      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
+        [
+          "each",
+          "thing: {thing ready:no}",
+          "",
+          "",
+          "was the selection *each thing that is not ready*, which was prose outside the language"
+        ],
         [
           "set",
           "thing.ready = yes",
@@ -598,30 +651,58 @@
       "selection": "the whole environment, from the empty game",
       "lines": [
         [
-          "call",
-          "make-territory(id, biome, nature) for each of the twelve",
+          "each",
+          "r: every row of Territory resources",
           "x12",
           "",
-          "resources come from Territory resources; biome and nature come from `biomes_of` in the code, per R-4"
+          "**over a data table, not over the state** - the territories do not exist yet"
         ],
         [
           "call",
-          "make-deposit(t, r, capacity, density) for each territory and resource",
+          "make-territory(r.id, r.biome, r.nature)",
+          "",
+          "",
+          "biome and nature are `X-19`"
+        ],
+        [
+          "each",
+          "(t, r): every territory and every resource",
           "x36",
+          "",
+          "over the state and a data table at once"
+        ],
+        [
+          "call",
+          "make-deposit(t, r, capacity, density)",
+          "",
           "",
           "3 x 4 reads capacity 3, density 4"
         ],
         [
-          "call",
-          "make-orbit(t) for each territory",
+          "each",
+          "t: {territory}",
           "x12",
+          "",
+          "over the state, now that the territories exist"
+        ],
+        [
+          "call",
+          "make-orbit(t)",
+          "",
           "",
           ""
         ],
         [
-          "call",
-          "make-adjacency(a, b) for each shared edge",
+          "each",
+          "(a, b): every shared edge",
           "xE",
+          "",
+          "**over the planet's geometry** - neither the state nor a data table, and `E` is why this cannot be expanded when it is written"
+        ],
+        [
+          "call",
+          "make-adjacency(a, b)",
+          "",
           "",
           "orbital adjacency is derived, not stated"
         ]

@@ -33,6 +33,7 @@ td { border-bottom: 1px solid var(--rule); padding: 5px 9px; vertical-align: top
 tbody tr:nth-child(odd) { background: var(--shade); }
 .scroll { overflow-x: auto; }
 .op { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; white-space: nowrap; }
+.op-each { color: var(--call); font-weight: 700; }
 .op-change { color: var(--fg); } .op-set { color: var(--set); }
 .op-require { color: var(--threshold); }
 .amt-pos { color: var(--create); font-weight: 700; }
@@ -61,8 +62,8 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: 
 </style>
 <div class="wrap">
 <h1>The whole specification as recipes</h1>
-<p class="lede">Every recipe re-expressed in 5 primitives &mdash; and the same
-5 building the world from an empty game. Generated from
+<p class="lede">Every recipe re-expressed in 6 primitives &mdash; and the same
+6 building the world from an empty game. Generated from
 <code>tools/research/formulas/data.json</code>.</p>
 
 <div class="callout">
@@ -75,7 +76,7 @@ identical primitives that play the game, and nothing added for world-building at
 </div>
 
 <h2>The primitives</h2>
-<p>There are 5. <code>change</code> carries the guard, so it is the only line that can
+<p>There are 6. <code>change</code> carries the guard, so it is the only line that can
 refuse on a count; <code>set</code> exists only to change a thing that already exists, since a
 positive <code>change</code> carries its traits.</p>
 <div class="scroll"><table><thead><tr>
@@ -107,6 +108,12 @@ positive <code>change</code> carries its traits.</p>
 <td>On any line: what to do when the result would go below zero</td>
 <td class="target">change -1 labor in t [hard]</td>
 <td class="note">one question, and hard, soft, clamp and record are its four answers</td>
+</tr>
+<tr>
+<td class="op">each</td>
+<td>Bind a name over every member of a set, and repeat the lines below it once per member</td>
+<td class="target">each t: {territory}</td>
+<td class="note">the one construct that cannot be expanded when it is written - see *Repetition, or quantification*</td>
 </tr>
 <tr>
 <td class="op">call</td>
@@ -213,6 +220,11 @@ is why no <code>set</code> in this report carries an attachment.</p>
 <td>DELETED - a container's capacity, declared once in Capacities</td>
 <td class="note">both uses were restatements</td>
 </tr>
+<tr>
+<td class="target">a recipe's prose &lt;em&gt;selection&lt;/em&gt;</td>
+<td>each x: {description}</td>
+<td class="note">DELETED as prose - six world recipes quantified in a field the language could not see</td>
+</tr>
 </tbody></table></div>
 
 <h2>The last column: every row as one string</h2>
@@ -220,7 +232,7 @@ is why no <code>set</code> in this report carries an attachment.</p>
 the note &mdash; as a single string in the notation <code>spec/console.md</code> gives for a command
 and for a description of state: <code>{name field:value ...}</code>, where a value is a word, a
 number or another command, a field referring to a thing is named for that thing's kind, and
-<code>#</code> begins a comment. All 57 lines are encoded, none by hand.</p>
+<code>#</code> begins a comment. All 67 lines are encoded, none by hand.</p>
 <p>Nine of them needed something that notation does not define. The encoder records each rather
 than inventing quietly, and they are listed under <em>What the encoding assumed</em>, below the
 data.</p>
@@ -380,8 +392,8 @@ data.</p>
 
 <h2>World recipes <span class="badge">6</span></h2>
 <p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
-<h3>upkeep <span class="badge down">2 rows &rarr; 1 lines (&minus;1)</span></h3>
-<p class="sel">selection: <em>each thing with upkeep</em></p>
+<h3>upkeep <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
+<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -390,9 +402,10 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
+<tr><td class="op op-each">each</td><td class="target">thing: {thing upkeep:any}</td><td class="amt"></td><td></td><td class="note">was the selection *each thing with upkeep*, which was prose outside the language</td><td class="one-string">{each thing:{thing upkeep:any}} <span class="cmt"># was the selection *each thing with upkeep*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">food in thing.location</td><td class="amt amt-neg">-thing.upkeep</td><td><span class="attach">hard</span></td><td class="note">row 1 was the selector; row 2</td><td class="one-string">{change thing:{food territory:thing.location} amount:-thing.upkeep attach:hard} <span class="cmt"># row 1 was the selector; row 2</span></td></tr>
-</tbody></table></div><h3>grow <span class="badge up">2 rows &rarr; 3 lines (+1)</span></h3>
-<p class="sel">selection: <em>each territory</em></p>
+</tbody></table></div><h3>grow <span class="badge up">2 rows &rarr; 4 lines (+2)</span></h3>
+<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -401,11 +414,12 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
+<tr><td class="op op-each">each</td><td class="target">t: {territory}</td><td class="amt"></td><td></td><td class="note">was the selection *each territory*, which was prose outside the language</td><td class="one-string">{each t:{territory}} <span class="cmt"># was the selection *each territory*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-let">let</td><td class="target">n = min(surplus food in t, citizen in t)</td><td class="amt"></td><td></td><td class="note"></td><td class="one-string">{let n:{min {food surplus:yes territory:t} {citizen territory:t}}}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">food[surplus] in t</td><td class="amt amt-neg">-n</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{food surplus:yes territory:t} amount:-n} <span class="cmt"># row 1</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">citizen in t</td><td class="amt amt-pos">+n</td><td></td><td class="note">row 2</td><td class="one-string">{change thing:{citizen territory:t} amount:+n} <span class="cmt"># row 2</span></td></tr>
-</tbody></table></div><h3>perish <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
-<p class="sel">selection: <em>each thing whose upkeep is unpaid</em></p>
+</tbody></table></div><h3>perish <span class="badge up">2 rows &rarr; 3 lines (+1)</span></h3>
+<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -414,10 +428,11 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
+<tr><td class="op op-each">each</td><td class="target">thing: {thing unpaid:yes}</td><td class="amt"></td><td></td><td class="note">was the selection *each thing whose upkeep is unpaid*, which was prose outside the language</td><td class="one-string">{each thing:{thing unpaid:yes}} <span class="cmt"># was the selection *each thing whose upkeep is unpaid*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">metal in thing.location</td><td class="amt amt-pos">+thing.metal-in-it</td><td></td><td class="note">row 2</td><td class="one-string">{change thing:{metal territory:thing.location} amount:+thing.metal-in-it} <span class="cmt"># row 2</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">thing</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{thing} amount:-1} <span class="cmt"># row 1</span></td></tr>
-</tbody></table></div><h3>age <span class="badge down">2 rows &rarr; 1 lines (&minus;1)</span></h3>
-<p class="sel">selection: <em>each thing with keeps</em></p>
+</tbody></table></div><h3>age <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
+<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -426,9 +441,10 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
+<tr><td class="op op-each">each</td><td class="target">thing: {thing keeps:any}</td><td class="amt"></td><td></td><td class="note">was the selection *each thing with keeps*, which was prose outside the language</td><td class="one-string">{each thing:{thing keeps:any}} <span class="cmt"># was the selection *each thing with keeps*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">thing.keeps</td><td class="amt amt-neg">-1</td><td><span class="attach">soft</span></td><td class="note">both rows were one decrement; the guard `keeps at least 1` is now the operation</td><td class="one-string">{change thing:{thing} keeps:-1 attach:soft} <span class="cmt"># both rows were one decrement; the guard `keeps at least 1` is now the operation</span></td></tr>
-</tbody></table></div><h3>spoil <span class="badge level">1 rows &rarr; 1 lines (=)</span></h3>
-<p class="sel">selection: <em>each thing with keeps 0</em></p>
+</tbody></table></div><h3>spoil <span class="badge up">1 rows &rarr; 2 lines (+1)</span></h3>
+<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -437,9 +453,10 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
+<tr><td class="op op-each">each</td><td class="target">thing: {thing keeps:0}</td><td class="amt"></td><td></td><td class="note">was the selection *each thing with keeps 0*, which was prose outside the language</td><td class="one-string">{each thing:{thing keeps:0}} <span class="cmt"># was the selection *each thing with keeps 0*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">thing</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{thing} amount:-1} <span class="cmt"># row 1</span></td></tr>
-</tbody></table></div><h3>refresh <span class="badge down">2 rows &rarr; 1 lines (&minus;1)</span></h3>
-<p class="sel">selection: <em>each thing that is not ready</em></p>
+</tbody></table></div><h3>refresh <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
+<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -448,6 +465,7 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
+<tr><td class="op op-each">each</td><td class="target">thing: {thing ready:no}</td><td class="amt"></td><td></td><td class="note">was the selection *each thing that is not ready*, which was prose outside the language</td><td class="one-string">{each thing:{thing ready:no}} <span class="cmt"># was the selection *each thing that is not ready*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">thing.ready = yes</td><td class="amt"></td><td></td><td class="note">both rows were one flip</td><td class="one-string">{set thing:{thing} ready:yes} <span class="cmt"># both rows were one flip</span></td></tr>
 </tbody></table></div>
 
@@ -514,10 +532,14 @@ out.</strong></p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-call">call</td><td class="target">make-territory(id, biome, nature) for each of the twelve</td><td class="amt">x12</td><td></td><td class="note">resources come from Territory resources; biome and nature come from `biomes_of` in the code, per R-4</td><td class="one-string">{call recipe:make-territory id:id biome:biome nature:nature} <span class="cmt"># x12, one call per argument - resources come from Territory resources; biome and nature come from `biomes_of` in the code, per R-4</span></td></tr>
-<tr><td class="op op-call">call</td><td class="target">make-deposit(t, r, capacity, density) for each territory and resource</td><td class="amt">x36</td><td></td><td class="note">3 x 4 reads capacity 3, density 4</td><td class="one-string">{call recipe:make-deposit territory:t resource:r capacity:capacity density:density} <span class="cmt"># x36, one call per argument - 3 x 4 reads capacity 3, density 4</span></td></tr>
-<tr><td class="op op-call">call</td><td class="target">make-orbit(t) for each territory</td><td class="amt">x12</td><td></td><td class="note"></td><td class="one-string">{call recipe:make-orbit territory:t} <span class="cmt"># x12, one call per argument</span></td></tr>
-<tr><td class="op op-call">call</td><td class="target">make-adjacency(a, b) for each shared edge</td><td class="amt">xE</td><td></td><td class="note">orbital adjacency is derived, not stated</td><td class="one-string">{call recipe:make-adjacency from:a to:b} <span class="cmt"># xE, one call per argument - orbital adjacency is derived, not stated</span></td></tr>
+<tr><td class="op op-each">each</td><td class="target">r: every row of Territory resources</td><td class="amt">x12</td><td></td><td class="note">**over a data table, not over the state** - the territories do not exist yet</td><td class="one-string">{each r:every row of Territory resources} <span class="cmt"># x12 of them - **over a data table, not over the state** - the territories do not exist yet</span></td></tr>
+<tr><td class="op op-call">call</td><td class="target">make-territory(r.id, r.biome, r.nature)</td><td class="amt"></td><td></td><td class="note">biome and nature are `X-19`</td><td class="one-string">{call recipe:make-territory id:r.id biome:r.biome nature:r.nature} <span class="cmt"># biome and nature are `X-19`</span></td></tr>
+<tr><td class="op op-each">each</td><td class="target">(t, r): every territory and every resource</td><td class="amt">x36</td><td></td><td class="note">over the state and a data table at once</td><td class="one-string">{each (t, r):every territory and every resource} <span class="cmt"># x36 of them - over the state and a data table at once</span></td></tr>
+<tr><td class="op op-call">call</td><td class="target">make-deposit(t, r, capacity, density)</td><td class="amt"></td><td></td><td class="note">3 x 4 reads capacity 3, density 4</td><td class="one-string">{call recipe:make-deposit territory:t resource:r capacity:capacity density:density} <span class="cmt"># 3 x 4 reads capacity 3, density 4</span></td></tr>
+<tr><td class="op op-each">each</td><td class="target">t: {territory}</td><td class="amt">x12</td><td></td><td class="note">over the state, now that the territories exist</td><td class="one-string">{each t:{territory}} <span class="cmt"># x12 of them - over the state, now that the territories exist</span></td></tr>
+<tr><td class="op op-call">call</td><td class="target">make-orbit(t)</td><td class="amt"></td><td></td><td class="note"></td><td class="one-string">{call recipe:make-orbit territory:t}</td></tr>
+<tr><td class="op op-each">each</td><td class="target">(a, b): every shared edge</td><td class="amt">xE</td><td></td><td class="note">**over the planet's geometry** - neither the state nor a data table, and `E` is why this cannot be expanded when it is written</td><td class="one-string">{each (a, b):every shared edge} <span class="cmt"># xE of them - **over the planet's geometry** - neither the state nor a data table, and `E` is why this cannot be expanded when it is written</span></td></tr>
+<tr><td class="op op-call">call</td><td class="target">make-adjacency(a, b)</td><td class="amt"></td><td></td><td class="note">orbital adjacency is derived, not stated</td><td class="one-string">{call recipe:make-adjacency from:a to:b} <span class="cmt"># orbital adjacency is derived, not stated</span></td></tr>
 </tbody></table></div>
 
 <h3>The data those calls consume</h3>
@@ -861,11 +883,31 @@ something bound differently each time.</p>
 fires</em>. A third way would buy nothing.</td></tr>
 <tr><td class="target"><strong>Quantification</strong></td>
 <td>once per member of a set, with something bound differently each time</td>
-<td><strong>6</strong> of the 22 recipes, plus <strong>4</strong> lines of
-<code>make-world</code></td>
-<td><strong>No, nowhere.</strong> The 6 hide it in a prose <em>selection</em> field that is
-not part of the language; the 4 hide it in a comment, where nothing can run it.</td></tr>
+<td><strong>10</strong> <code>each</code> lines, 7 of them over a description</td>
+<td><strong>Yes, since 2026-09-09.</strong> It was in a prose <em>selection</em> field in six
+recipes and in a comment in four lines of <code>make-world</code>; Sean added the construct and both
+became lines.</td></tr>
 </tbody></table></div>
+<div class="callout">
+<h4>Added 2026-09-09, and what it cost</h4>
+<p><code>each &lt;name&gt;: &lt;set&gt;</code> binds a name over every member of a set and scopes
+the lines below it, up to the next <code>each</code> or the end of the recipe. One rule covers both
+shapes: a world recipe has one at the top scoping its whole body, and <code>make-world</code> has
+four, each scoping the call beneath it.</p>
+<p><strong>It cost ten lines and a sixth primitive</strong>, and bought the thing the constraint
+asks for rather than conciseness: the six world recipes and the four world-building calls now say
+what they do <em>in the language</em>, where before they said it in a field and a comment that
+nothing could run. <strong>10 quantifiers, 7 of them over a description of the
+state</strong> - the rest range over a data table or over the planet's geometry, which the notation
+has no form for and which the assumption list records.</p>
+<p><strong>It changes nothing about the checks, and that is on purpose.</strong> An
+<code>each</code> has no effect of its own: it says how many transitions a recipe is a source of,
+and the lines below it are the transition. So checks 1 and 2 weigh the body, exactly as
+<code>spec/invariants.md</code> describes - <em>a rule is a source of transitions, not a kind of
+one</em>. Weighing the whole would make a recipe's net effect depend on the size of the planet,
+which is not a fixed vector at all.</p>
+</div>
+
 <div class="callout">
 <h4>It is not sugar, and the reason is <code>xE</code></h4>
 <p>The test this report has used since <code>X-11</code> is Felleisen's: a construct is
@@ -1806,13 +1848,13 @@ and the growth rate are set by different halves of the same column</strong>, and
 <p><strong>Where a line needed something the notation does not define, the encoder records it
 rather than inventing quietly</strong> &mdash; so this list is the report's real output, and it is
 generated from the encoding rather than written beside it.</p>
-<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">12</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">4</td><td><strong><em>For each</em> has no form.</strong> The notation has <code>repeat</code>, which is how many times one command fires. World-building needs twelve calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits in a comment, where nothing can run it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 1</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 3</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 2</td></tr><tr><td class="amt">2</td><td><code>surplus:yes</code> puts a <strong>derived</strong> trait in a description. The release lists <em>surplus</em> as derived, and the notation says a description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is never part of one</strong>. So <code>grow</code>'s target has no form as a description, and this is the one assumption here that contradicts a rule rather than filling a gap.</td><td class="note">grow line 1</td></tr><tr><td class="amt">8</td><td><code>location</code> and <code>below</code> are read as though they were traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not located by a trait, and what holds it is what says where it is.</strong> So these paths have to mean <em>what holds this</em> rather than <em>this thing's location field</em> &mdash; a reading the notation has no form for. <code>move</code> no longer sets one; since 2026-09-09 it leaves one place and enters another. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">11</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 3</td></tr></tbody></table>
+<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">15</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">4</td><td><strong>How many a quantifier ranges over is not in the line.</strong> <code>each</code> now says <em>that</em> a recipe repeats, and the size of the set is still written beside it &mdash; <code>x12</code>, <code>x36</code>, <code>xE</code>. That is right rather than missing: <code>E</code> depends on the planet, so the number cannot be written when the recipe is. It is recorded because a reader will want it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">3</td><td><strong>A quantifier ranges over something that is not a description.</strong> <code>every row of Territory resources</code> is a data table and the territories do not exist yet; <code>every shared edge</code> is the planet's geometry, which is neither the state nor a table. The notation has a form for <em>every thing matching this description</em> and none for either of these.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 2</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 3</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 2</td></tr><tr><td class="amt">2</td><td><code>surplus:yes</code> puts a <strong>derived</strong> trait in a description. The release lists <em>surplus</em> as derived, and the notation says a description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is never part of one</strong>. So <code>grow</code>'s target has no form as a description, and this is the one assumption here that contradicts a rule rather than filling a gap.</td><td class="note">grow line 2</td></tr><tr><td class="amt">8</td><td><code>location</code> and <code>below</code> are read as though they were traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not located by a trait, and what holds it is what says where it is.</strong> So these paths have to mean <em>what holds this</em> rather than <em>this thing's location field</em> &mdash; a reading the notation has no form for. <code>move</code> no longer sets one; since 2026-09-09 it leaves one place and enters another. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">11</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 3</td></tr></tbody></table>
 <p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
 line required a choice the specification has not made.</p>
 
 <h2>What the re-encoding cost and saved</h2>
-<p>Computed from the data rather than asserted. <strong>58 rows became 49 lines &mdash;
-down 9</strong>.</p>
+<p>Computed from the data rather than asserted. <strong>58 rows became 55 lines &mdash;
+down 3</strong>.</p>
 <div class="callout">
 <h4>There used to be three numbers here, and now there is one</h4>
 <p>Before the fusion this section had to carry two counts and explain the gap. <code>consume</code>
@@ -1822,7 +1864,7 @@ and the spend are one line, they are the same number</strong> &mdash; and the ri
 that is to stop reporting two.</p>
 <p>The saving is not the point either. <strong>The vocabulary went from four roles that could not
 name <code>create-if-missing</code>, to six primitives that also build the world from nothing, to
-5 that cannot express a zero test.</strong> A count of lines cannot see that, which is
+6 that cannot express a zero test.</strong> A count of lines cannot see that, which is
 the whole reason to fix the metric first.</p>
 <div class="callout">
 <h4>A number that was typed rather than counted, and was wrong</h4>
@@ -1832,7 +1874,7 @@ to five. <strong>It did not.</strong> <code>destroy</code> and <code>threshold</
 and the count was a word typed in prose beside a table that disagreed with it. The line saving was
 real; the primitive saving arrived only with the signed <code>change</code>, a decision later the
 same day. <strong>Every count on this page is now read from the data</strong>, this one included,
-which is why it now says 5.</p>
+which is why it now says 6.</p>
 </div>
 </div>
 <div class="scroll"><table><thead><tr>
@@ -1910,37 +1952,37 @@ which is why it now says 5.</p>
 <tr>
 <td class="target">upkeep</td>
 <td class="amt">2</td>
-<td class="amt">1</td>
+<td class="amt">2</td>
 <td class="note">down: the guard and the spend were always one operation</td>
 </tr>
 <tr>
 <td class="target">grow</td>
 <td class="amt">2</td>
-<td class="amt">3</td>
+<td class="amt">4</td>
 <td class="note">up: the binding is explicit</td>
 </tr>
 <tr>
 <td class="target">perish</td>
 <td class="amt">2</td>
-<td class="amt">2</td>
+<td class="amt">3</td>
 <td class="note">level</td>
 </tr>
 <tr>
 <td class="target">age</td>
 <td class="amt">2</td>
-<td class="amt">1</td>
+<td class="amt">2</td>
 <td class="note">down: a decrement was written as destroy-and-recreate, and is now one consume from a trait - the last arithmetic in the model</td>
 </tr>
 <tr>
 <td class="target">spoil</td>
 <td class="amt">1</td>
-<td class="amt">1</td>
+<td class="amt">2</td>
 <td class="note">level</td>
 </tr>
 <tr>
 <td class="target">refresh</td>
 <td class="amt">2</td>
-<td class="amt">1</td>
+<td class="amt">2</td>
 <td class="note">down: a flip was written as destroy-and-recreate</td>
 </tr>
 </tbody></table></div>

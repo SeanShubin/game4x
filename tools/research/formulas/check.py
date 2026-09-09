@@ -40,7 +40,12 @@ METAL_WEIGHT = {
     "pioneer": 3,
 }
 
-NON_EFFECT_OPS = {"let", "require"}
+# `each` has no effect of its own: it says how many transitions this recipe is a source of,
+# and the lines below it are the transition. `spec/invariants.md` - *a rule is a source of
+# transitions, not a kind of one* - so the body is what checks 1 and 2 must weigh, and the
+# quantifier is the count of firings rather than part of one. Weighing the whole would make a
+# recipe's net effect depend on the size of the planet, which is not a fixed vector at all.
+NON_EFFECT_OPS = {"let", "require", "each"}
 
 # What the Kinds table declares. metal is "conserved"; energy is "neither conserved nor
 # expiring"; food "expires"; a citizen grows on surplus. So a loop that gains energy, food,

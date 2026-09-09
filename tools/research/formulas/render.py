@@ -16,6 +16,7 @@ DATA = json.loads((HERE / "data.json").read_text(encoding="utf-8"))
 RESULTS = json.loads((HERE / "results.json").read_text(encoding="utf-8"))
 
 OP_CLASS = {
+    "each": "op-each",
     "change": "op-change",
     "set": "op-set",
     "require": "op-require",
@@ -80,10 +81,16 @@ ASSUMPTIONS = {
     "path": "A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. "
     "The notation says a value is a word, a number, or another command, so a path is none of "
     "the three. Every <code>let</code> needs one.",
-    "for-each": "<strong><em>For each</em> has no form.</strong> The notation has "
-    "<code>repeat</code>, which is how many times one command fires. World-building needs twelve "
-    "calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits "
-    "in a comment, where nothing can run it.",
+    "for-each": "<strong>How many a quantifier ranges over is not in the line.</strong> "
+    "<code>each</code> now says <em>that</em> a recipe repeats, and the size of the set is still "
+    "written beside it &mdash; <code>x12</code>, <code>x36</code>, <code>xE</code>. That is right "
+    "rather than missing: <code>E</code> depends on the planet, so the number cannot be written "
+    "when the recipe is. It is recorded because a reader will want it.",
+    "set-not-in-state": "<strong>A quantifier ranges over something that is not a description.</strong> "
+    "<code>every row of Territory resources</code> is a data table and the territories do not exist "
+    "yet; <code>every shared edge</code> is the planet's geometry, which is neither the state nor a "
+    "table. The notation has a form for <em>every thing matching this description</em> and none for "
+    "either of these.",
     "positional": "<strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other "
     "argument in the notation is named.",
     "recipe-as-thing": "<code>recipe:</code> names the recipe a <code>call</code> fires, which "
@@ -192,7 +199,19 @@ def console_line(op, target, amount, attach, note, where):
     """One row of a recipe table, as a single string in the console's notation."""
     amount, attach = str(amount).strip(), str(attach).strip().lower()
 
-    if op == "let":
+    if op == "each":
+        name, over = (p.strip() for p in target.split(":", 1))
+        if over.startswith("{"):
+            body = over
+        else:
+            _assume("set-not-in-state", where)
+            body = over
+        out = f"{{each {name}:{body}}}"
+        if amount.startswith("x"):
+            _assume("for-each", where)
+            note = f"{amount} of them" + (f" - {note}" if note else "")
+
+    elif op == "let":
         name, expr = [p.strip() for p in target.split("=", 1)]
         if expr.startswith("min("):
             _assume("positional", where)
@@ -520,19 +539,23 @@ def storage_table():
 
 
 def repetition_counts():
-    """Where each sort of repeating shows up, counted rather than recalled."""
+    """Where each sort of repeating shows up, counted rather than recalled.
+
+    This counted prose `selection` fields until 2026-09-09, and went to zero the moment they
+    became `each` lines - which is the assertion below doing its job rather than a break. A
+    count of the input stops meaning anything when the input moves; this now counts the lines.
+    """
     every = DATA["player"] + DATA["world"] + DATA["creation"]
-    quantified = [f["name"] for f in every if "each" in f.get("selection", "")]
+    quantifiers = [
+        (f["name"], t) for f in every for op, t, _a, _at, _n in f["lines"] if op == "each"
+    ]
+    over_state = [q for q in quantifiers if ": {" in q[1]]
     multiplied = [
         (f["name"], t) for f in every for op, t, a, _at, _n in f["lines"]
         if op == "change" and str(a).lstrip("+-").isdigit() and abs(int(a)) > 1
     ]
-    in_comment = [
-        (f["name"], t) for f in every for _op, t, a, _at, _n in f["lines"]
-        if str(a).startswith("x")
-    ]
-    assert quantified and multiplied and in_comment, "counted over nothing"
-    return len(quantified), len(multiplied), len(in_comment), len(every)
+    assert quantifiers and multiplied, "counted over nothing"
+    return len(quantifiers), len(multiplied), len(over_state), len(every)
 
 
 def assumption_table():
@@ -605,7 +628,7 @@ def main():
     open_decisions, shut_decisions = decisions_split()
     cap_table = capacity_table()
     n_storage, sto_table = storage_table()
-    n_quant, n_mult, n_comment, n_recipes = repetition_counts()
+    n_quant, n_mult, n_state, n_recipes = repetition_counts()
     c6 = RESULTS["containment"]
     c6_examined, c6_x20 = c6["examined"], c6["x20_lines"]
     n_declared = c6["declared"]
@@ -652,6 +675,7 @@ td {{ border-bottom: 1px solid var(--rule); padding: 5px 9px; vertical-align: to
 tbody tr:nth-child(odd) {{ background: var(--shade); }}
 .scroll {{ overflow-x: auto; }}
 .op {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; white-space: nowrap; }}
+.op-each {{ color: var(--call); font-weight: 700; }}
 .op-change {{ color: var(--fg); }} .op-set {{ color: var(--set); }}
 .op-require {{ color: var(--threshold); }}
 .amt-pos {{ color: var(--create); font-weight: 700; }}
@@ -947,11 +971,31 @@ something bound differently each time.</p>
 fires</em>. A third way would buy nothing.</td></tr>
 <tr><td class="target"><strong>Quantification</strong></td>
 <td>once per member of a set, with something bound differently each time</td>
-<td><strong>{n_quant}</strong> of the {n_recipes} recipes, plus <strong>{n_comment}</strong> lines of
-<code>make-world</code></td>
-<td><strong>No, nowhere.</strong> The {n_quant} hide it in a prose <em>selection</em> field that is
-not part of the language; the {n_comment} hide it in a comment, where nothing can run it.</td></tr>
+<td><strong>{n_quant}</strong> <code>each</code> lines, {n_state} of them over a description</td>
+<td><strong>Yes, since 2026-09-09.</strong> It was in a prose <em>selection</em> field in six
+recipes and in a comment in four lines of <code>make-world</code>; Sean added the construct and both
+became lines.</td></tr>
 </tbody></table></div>
+<div class="callout">
+<h4>Added 2026-09-09, and what it cost</h4>
+<p><code>each &lt;name&gt;: &lt;set&gt;</code> binds a name over every member of a set and scopes
+the lines below it, up to the next <code>each</code> or the end of the recipe. One rule covers both
+shapes: a world recipe has one at the top scoping its whole body, and <code>make-world</code> has
+four, each scoping the call beneath it.</p>
+<p><strong>It cost ten lines and a sixth primitive</strong>, and bought the thing the constraint
+asks for rather than conciseness: the six world recipes and the four world-building calls now say
+what they do <em>in the language</em>, where before they said it in a field and a comment that
+nothing could run. <strong>{n_quant} quantifiers, {n_state} of them over a description of the
+state</strong> - the rest range over a data table or over the planet's geometry, which the notation
+has no form for and which the assumption list records.</p>
+<p><strong>It changes nothing about the checks, and that is on purpose.</strong> An
+<code>each</code> has no effect of its own: it says how many transitions a recipe is a source of,
+and the lines below it are the transition. So checks 1 and 2 weigh the body, exactly as
+<code>spec/invariants.md</code> describes - <em>a rule is a source of transitions, not a kind of
+one</em>. Weighing the whole would make a recipe's net effect depend on the size of the planet,
+which is not a fixed vector at all.</p>
+</div>
+
 <div class="callout">
 <h4>It is not sugar, and the reason is <code>xE</code></h4>
 <p>The test this report has used since <code>X-11</code> is Felleisen's: a construct is
