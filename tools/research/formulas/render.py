@@ -1026,6 +1026,49 @@ recipe itself creates is a loop, and that is where the analysis stops terminatin
 territory</em> is safe; <em>each thing this makes</em> is not.</p>
 </div>
 
+<h2>Defining a kind, then using it</h2>
+<p>Sean, 2026-09-09: <em>can we define what an ark is first, then define recipes that define what an
+ark does? Is that kind of thing possible with our current model?</em></p>
+<p><strong>The specification already commits to it.</strong> <code>spec/invariants.md</code>: <em>the
+definitions are part of the game state, and defining one is a transition like any other, so a game's
+history is a complete account of it, including what its rules were.</em> And <em>a definition
+arrives in one transition; there is no state in which a kind or a recipe is half defined</em> -
+which is exactly what a positive <code>change</code> carrying its traits now does.</p>
+<div class="callout">
+<h4>It is not possible today, and check 6 says why in one line</h4>
+<p>Written as a recipe and run through the checks, <code>define ark</code> is refused:</p>
+<pre><code>UNDECLARED: define ark | kind[name:ark, force:1, fuel:6] in game
+            nothing says a game may hold a kind
+UNDECLARED: define ark | recipe[name:launch-ark] in game
+            nothing says a game may hold a recipe</code></pre>
+<p><strong>Neither <code>kind</code> nor <code>recipe</code> is one of the sixteen kinds</strong>, so
+a definition has nowhere in the state to be - and everything but the game has to be somewhere. The
+fix is small and mechanical: two kinds, and two declarations saying the game may hold them. Half the
+step is taken already, since <code>call</code> writes <code>recipe:found-colony</code> as though a
+recipe were a thing with a name, six times.</p>
+<p><strong>The ordering is not a difficulty.</strong> Defining the ark and defining what it does are
+two transitions, and a recipe that needs a kind to exist first can say so with the primitive that
+survived for exactly this shape: <code>require 1 {{kind name:ark}}</code>. A read arc makes the
+dependency explicit and checkable rather than a matter of writing them in the right order.</p>
+</div>
+<div class="callout">
+<h4>The limiting factor is analysis, not expression &mdash; and the phase rule is what draws the line</h4>
+<p>Every check on this page assumes <strong>a fixed set of transitions</strong>. Check 2 builds a
+matrix of them; check 1 weighs each one; check 6 reads them all. A model that can create transitions
+while it runs has no such set.</p>
+<p>The literature is blunt about the cost. <strong>Net rewriting systems are Turing powerful, so the
+basic decidable properties of Petri nets are lost and automatic verification is not possible for
+that class.</strong> But <strong>reconfigurable nets</strong> - where the rewriting rules are fixed
+in advance rather than invented as it goes - are a subclass for which <strong>boundedness can still
+be decided</strong>.</p>
+<p><strong>That is the line, and this game already has it drawn.</strong> Definitions made in the
+<em>design</em> phase, from a fixed set of definition recipes, leave a net that is settled before
+play begins - reconfigurable, and every check still means something. Definitions made during
+<em>play</em> do not. <strong>So the design-time distinction Sean kept for its convenience turns out
+to be what keeps checks 1, 2, 3 and 6 worth running</strong>, which is a better reason than the one
+it was kept for.</p>
+</div>
+
 <h2>Still open, and yours to take</h2>
 <p>{n_open} of the {n_decisions} questions this re-encoding raised are still open. The rest are
 below, under <em>What has already been settled</em>, so that this list is short enough to be a list

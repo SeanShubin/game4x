@@ -865,6 +865,11 @@
       "OPEN - a construct for quantification, which is not the same as repetition",
       "Repetition is covered twice already - the amount column and the console's <code>repeat</code>. Quantification, one firing per member of a set, is covered nowhere and is used in ten places.",
       "Six world recipes hide it in a prose <em>selection</em>; <code>make-world</code>'s four calls hide it in a comment. See <em>Repetition, or quantification</em>."
+    ],
+    [
+      "OPEN - may a recipe define a kind or another recipe, and when",
+      "The specification already says definitions are part of the state and defining is a transition. Nothing can express it: neither <code>kind</code> nor <code>recipe</code> is one of the sixteen kinds, so a definition has nowhere to live, and check 6 refuses it.",
+      "Two kinds and two declarations would allow it. <strong>The phase it is allowed in decides whether any check still means anything</strong> - see <em>Defining a kind, then using it</em>."
     ]
   ],
   "collapse": [
