@@ -145,7 +145,7 @@
     "unobservable": []
   },
   "poison": [
-    "check 2 flags a formula with no inputs",
+    "check 2 flags a recipe with no inputs",
     "check 1 goes red on a wrong weighting",
     "check 3 goes red at a cap of 0"
   ]

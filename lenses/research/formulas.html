@@ -1,4 +1,4 @@
-<title>Formula Report</title>
+<title>Recipe Report</title>
 <style>
 :root {
   --bg: #fbfaf8; --fg: #1c1a17; --muted: #6b6560; --rule: #ddd8d1;
@@ -60,7 +60,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: 
   border-top: 1px solid var(--rule); }
 </style>
 <div class="wrap">
-<h1>The whole specification as formulas</h1>
+<h1>The whole specification as recipes</h1>
 <p class="lede">Every recipe re-expressed in 5 primitives &mdash; and the same
 5 building the world from an empty game. Generated from
 <code>tools/research/formulas/data.json</code>.</p>
@@ -109,9 +109,9 @@ identical primitives that play the game, and nothing added for world-building at
 </tr>
 <tr>
 <td class="op">call</td>
-<td>Apply another formula with arguments</td>
+<td>Apply another recipe with arguments</td>
 <td class="target">call found-colony(t) [soft]</td>
-<td class="note">the hierarchy, and what keeps formulas short without adding expressiveness</td>
+<td class="note">the hierarchy, and what keeps recipes short without adding expressiveness</td>
 </tr>
 </tbody></table></div>
 
@@ -151,7 +151,7 @@ depends on a decision about a different column.</strong></p>
 </tr>
 <tr>
 <td class="op">record</td>
-<td>Take what is there, write the shortfall where another formula can read it, and carry on.</td>
+<td>Take what is there, write the shortfall where another recipe can read it, and carry on.</td>
 <td class="note">`unpaid` is a trait - derived: its upkeep was not met - and `perish` fires on it. So a failed upkeep is neither hard nor soft. This is the value Sean's rule names: the population lost to starvation is an event, never a negative number.</td>
 <td class="attach">IN USE - upkeep, read by perish</td>
 </tr>
@@ -189,7 +189,7 @@ is why no <code>set</code> in this report carries an attachment.</p>
 <td class="note">The real question the false one was standing in front of</td>
 </tr>
 <tr>
-<td class="target">Is a failure observable to other formulas?</td>
+<td class="target">Is a failure observable to other recipes?</td>
 <td>hard and soft both leave nothing behind. `unpaid` leaves something behind, and `perish` reads it.</td>
 <td class="note">This is a second axis, not a third value, and the column currently conflates them. If failures are observable, they are state; if they are state, they are subject to every rule about state.</td>
 <td class="note">The specification already answers yes, once</td>
@@ -198,7 +198,7 @@ is why no <code>set</code> in this report carries an attachment.</p>
 <td class="target">May the amount column hold arithmetic?</td>
 <td>`grow` consumes *the lesser of the surplus food and the citizens here*.</td>
 <td class="note">This decides whether clamp is a primitive. If the amount may hold arithmetic, clamp is sugar and should go. If the amount holds only constants and paths - which is what keeps the language finite - then clamp is the only way to say *as many as possible*, and it is a primitive.</td>
-<td class="note">The one formula that needs it today</td>
+<td class="note">The one recipe that needs it today</td>
 </tr>
 </tbody></table></div>
 <div class="callout">
@@ -206,7 +206,7 @@ is why no <code>set</code> in this report carries an attachment.</p>
 <p><code>unpaid</code> is a trait in the specification &mdash; <em>derived: its upkeep was not
 met</em> &mdash; and <code>perish</code> fires on it. So when <code>upkeep</code> cannot take its
 food, the failure <strong>neither stops the turn nor vanishes</strong>: it is written down, and
-another formula reads it next. <strong>That is a third behaviour on failure, in the game today,
+another recipe reads it next. <strong>That is a third behaviour on failure, in the game today,
 which a two-valued column cannot express.</strong></p>
 <p>It may not want to be an attach value. The alternative is that <strong>failure is state</strong>
 &mdash; every line's outcome is recorded, and <code>unpaid</code> is just one query over it. That is
@@ -250,7 +250,7 @@ rather than after.</p>
 <tr>
 <td class="target">create k then set k.trait</td>
 <td>change +1 k[trait:value]</td>
-<td class="note">DELETED - composition is not sequential, so a set on a thing this formula creates has no referent. Four world-building formulas were this, and 13 lines became 4</td>
+<td class="note">DELETED - composition is not sequential, so a set on a thing this recipe creates has no referent. Four world-building recipes were this, and 13 lines became 4</td>
 </tr>
 <tr>
 <td class="target">limit n k</td>
@@ -261,7 +261,7 @@ rather than after.</p>
 
 <h2>Every kind, the way every recipe is</h2>
 <p>Sean, 2026-09-09: <em>I want to be able to review things just as easily as I can review
-formulas.</em> A recipe gets a table of lines and a string for each; here is the other half.
+recipes.</em> A recipe gets a table of lines and a string for each; here is the other half.
 <strong>All 16 kinds</strong>, with what a thing of each carries and how it is written.
 The <em>Kinds</em> and <em>Traits</em> tables are copied from the release into this lane's data, so
 the two checks below have a population to count against: <strong>every kind has a row</strong>, and
@@ -344,16 +344,16 @@ and the wide one was generated from the long one rather than the other way round
 <p><strong>The shared object is the description, and the specification says so before this report
 does.</strong> <em>A game's state is things, in places, and how many of each. A thing is a set of
 traits, and one of them names its kind.</em> That is <code>{kind trait:value ...}</code> &mdash;
-the same object a formula line targets. So a thing and a formula line are not two structures to be
+the same object a recipe line targets. So a thing and a recipe line are not two structures to be
 unified; they are one structure appearing in two roles.</p>
 <div class="scroll"><table><thead><tr><th></th><th>Which</th><th>Why</th></tr></thead>
-<tbody><tr><td class="target">the description</td><td><strong>shared</strong></td><td class="note"><code>{kind trait:value ...}</code> &mdash; the spec already says <em>a thing is a set of traits, and one of them names its kind</em></td></tr><tr><td class="target">the number</td><td><strong>shared shape, different constraint</strong></td><td class="note">a thing's is a non-negative count; a formula's is a signed delta. Same column, and only the constraint differs</td></tr><tr><td class="target"><code>attach</code></td><td>formula only</td><td class="note">what to do when the result would go below zero. A count that is simply there has no failure to answer for</td></tr><tr><td class="target">the container</td><td><strong>shared</strong></td><td class="note">a field named for the container's kind, in both</td></tr><tr><td class="target">selection</td><td>formula only</td><td class="note"><em>which</em> thing this acts on. A thing does not select; it is selected</td></tr><tr><td class="target"><code>call</code></td><td>formula only</td><td class="note">the hierarchy. Nothing in a state refers to another state</td></tr></tbody></table></div>
+<tbody><tr><td class="target">the description</td><td><strong>shared</strong></td><td class="note"><code>{kind trait:value ...}</code> &mdash; the spec already says <em>a thing is a set of traits, and one of them names its kind</em></td></tr><tr><td class="target">the number</td><td><strong>shared shape, different constraint</strong></td><td class="note">a thing's is a non-negative count; a recipe's is a signed delta. Same column, and only the constraint differs</td></tr><tr><td class="target"><code>attach</code></td><td>recipe only</td><td class="note">what to do when the result would go below zero. A count that is simply there has no failure to answer for</td></tr><tr><td class="target">the container</td><td><strong>shared</strong></td><td class="note">a field named for the container's kind, in both</td></tr><tr><td class="target">selection</td><td>recipe only</td><td class="note"><em>which</em> thing this acts on. A thing does not select; it is selected</td></tr><tr><td class="target"><code>call</code></td><td>recipe only</td><td class="note">the hierarchy. Nothing in a state refers to another state</td></tr></tbody></table></div>
 <div class="callout">
-<h4>Then what is a formula that only creates? Nothing but the thing</h4>
-<p>Since the fold, <strong>every world-building formula is one line, with
+<h4>Then what is a recipe that only creates? Nothing but the thing</h4>
+<p>Since the fold, <strong>every world-building recipe is one line, with
 <code>change</code> as its operator, <code>+1</code> as its amount and no attachment</strong> &mdash;
 all three constant. Take away what never varies and what remains is the description. <strong>So
-&ldquo;one formula creates each thing&rdquo; is not a way to unify them: it is what is left when
+&ldquo;one recipe creates each thing&rdquo; is not a way to unify them: it is what is left when
 they already are unified.</strong></p>
 <p>And it turns out to satisfy a rule nobody was aiming at. <code>spec/invariants.md</code>:
 <em>A definition arrives in one transition. There is no state in which a kind or a recipe is half
@@ -368,13 +368,13 @@ something special, having it either enforced from the engine or having a trait i
 be used</em>. Today it is neither &mdash; it is a <strong>separate list</strong>, and that is the one
 option below with no cost and no check.</p>
 <div class="scroll"><table><thead><tr><th>Option</th><th>What it is</th><th>Cost</th><th>What it buys, and what it does not</th></tr></thead>
-<tbody><tr><td class="target">a separate section, as today</td><td><code>creation</code> is its own list in the data, and the engine knows that list is design-time</td><td class="amt">0 lines</td><td class="note">The distinction lives in the <em>shape of the data</em>, so nothing states it and nothing can check it. It is also the only place a formula's category is not a trait.</td></tr><tr><td class="target"><code>require 1 game[phase:design]</code> on each</td><td>one ordinary read line per design formula, guarded <code>hard</code></td><td class="amt">+5 lines</td><td class="note"><strong>Introduces nothing.</strong> <code>require</code> already exists for <code>move</code>'s adjacency, and this takes it from 1 use to 6 - which is most of the case for it being a primitive at all. The phase becomes a fact in the state that a formula reads, which is what <em>the game is data</em> asks for. And <code>start</code> stops being special: it is the formula that sets <code>game.phase</code> to <code>play</code>.</td></tr><tr><td class="target">a <code>phase</code> field on the formula</td><td>a declaration beside <code>owner</code>, rather than a line</td><td class="amt">0 lines, +1 column</td><td class="note">Shorter to read, but it adds a concept: a formula-level trait that only the engine interprets. By the <em>minimum expressiveness</em> test that is the worse trade - a new field to say what an existing line already says.</td></tr></tbody></table></div>
+<tbody><tr><td class="target">a separate section, as today</td><td><code>creation</code> is its own list in the data, and the engine knows that list is design-time</td><td class="amt">0 lines</td><td class="note">The distinction lives in the <em>shape of the data</em>, so nothing states it and nothing can check it. It is also the only place a recipe's category is not a trait.</td></tr><tr><td class="target"><code>require 1 game[phase:design]</code> on each</td><td>one ordinary read line per design recipe, guarded <code>hard</code></td><td class="amt">+5 lines</td><td class="note"><strong>Introduces nothing.</strong> <code>require</code> already exists for <code>move</code>'s adjacency, and this takes it from 1 use to 6 - which is most of the case for it being a primitive at all. The phase becomes a fact in the state that a recipe reads, which is what <em>the game is data</em> asks for. And <code>start</code> stops being special: it is the recipe that sets <code>game.phase</code> to <code>play</code>.</td></tr><tr><td class="target">a <code>phase</code> field on the recipe</td><td>a declaration beside <code>owner</code>, rather than a line</td><td class="amt">0 lines, +1 column</td><td class="note">Shorter to read, but it adds a concept: a recipe-level trait that only the engine interprets. By the <em>minimum expressiveness</em> test that is the worse trade - a new field to say what an existing line already says.</td></tr></tbody></table></div>
 <div class="callout">
 <h4>The middle one, and the one thing it costs that is not a line</h4>
 <p><strong>It introduces no concept at all</strong>, which under <em>minimum expressiveness</em> is
 the whole argument. <code>spec/console.md</code> already says <em>a command of one phase is refused
 in the other</em>, and refusing is what a <code>require</code> does &mdash; so the sentence stops
-being a rule the engine implements and becomes a line the formula carries. It also takes
+being a rule the engine implements and becomes a line the recipe carries. It also takes
 <code>require</code> from one use to six, which is most of the case for keeping it a primitive
 rather than sugar for a self-loop.</p>
 <p><strong>The cost is the error message.</strong> A design command refused after <code>start</code>
@@ -388,7 +388,7 @@ deciding, and it is the only cost this lane can find.</p>
 </div>
 
 <h2>Every row as one string</h2>
-<p>The last column of every formula table below restates that row &mdash; op, target, amount,
+<p>The last column of every recipe table below restates that row &mdash; op, target, amount,
 attach and the note &mdash; as a single string in the notation <code>spec/console.md</code> gives
 for a command and for a description of state. All 56 lines are encoded, none by hand.</p>
 <div class="callout">
@@ -398,12 +398,12 @@ number or another command, that a field referring to a thing is named for that t
 that <code>#</code> begins a comment. <strong>Where a line needed something that notation does not
 define, the encoder records it rather than inventing quietly</strong> &mdash; so this list is the
 report's real output, and it is generated from the encoding rather than written beside it.</p>
-<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">13</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">4</td><td><strong><em>For each</em> has no form.</strong> The notation has <code>repeat</code>, which is how many times one command fires. World-building needs twelve calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits in a comment, where nothing can run it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 1</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the formula a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 3</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 2</td></tr><tr><td class="amt">2</td><td><code>surplus:yes</code> puts a <strong>derived</strong> trait in a description. The release lists <em>surplus</em> as derived, and the notation says a description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is never part of one</strong>. So <code>grow</code>'s target has no form as a description, and this is the one assumption here that contradicts a rule rather than filling a gap.</td><td class="note">grow line 1</td></tr><tr><td class="amt">10</td><td><code>location</code> and <code>below</code> are <strong>not traits the release lists</strong>. In a dump a thing appears inside what holds it and nothing states its container, so <em>where a thing is</em> has no name &mdash; yet <code>move</code> sets it and four of the six <code>let</code>s read it. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">7</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world formulas, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
+<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">13</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">4</td><td><strong><em>For each</em> has no form.</strong> The notation has <code>repeat</code>, which is how many times one command fires. World-building needs twelve calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits in a comment, where nothing can run it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 1</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 3</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 2</td></tr><tr><td class="amt">2</td><td><code>surplus:yes</code> puts a <strong>derived</strong> trait in a description. The release lists <em>surplus</em> as derived, and the notation says a description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is never part of one</strong>. So <code>grow</code>'s target has no form as a description, and this is the one assumption here that contradicts a rule rather than filling a gap.</td><td class="note">grow line 1</td></tr><tr><td class="amt">10</td><td><code>location</code> and <code>below</code> are <strong>not traits the release lists</strong>. In a dump a thing appears inside what holds it and nothing states its container, so <em>where a thing is</em> has no name &mdash; yet <code>move</code> sets it and four of the six <code>let</code>s read it. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">7</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
 <p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
 line required a choice the specification has not made.</p>
 </div>
 
-<h2>Player formulas <span class="badge">11</span></h2>
+<h2>Player recipes <span class="badge">11</span></h2>
 <h3>deploy ark <span class="badge down">9 rows &rarr; 3 lines (&minus;6)</span></h3>
 <p class="sel">selection: <em>an ark</em></p>
 <div class="scroll"><table><thead><tr>
@@ -555,7 +555,7 @@ line required a choice the specification has not made.</p>
 <tr><td class="op op-change">change</td><td class="target">resource[extractor.resource] in t</td><td class="amt amt-pos">+t.deposit[extractor.resource].density</td><td></td><td class="note">row 5</td><td class="one-string">{change thing:{resource kind:extractor.resource territory:t} amount:+t.deposit[extractor.resource].density} <span class="cmt"># row 5</span></td></tr>
 </tbody></table></div>
 
-<h2>World formulas <span class="badge">6</span></h2>
+<h2>World recipes <span class="badge">6</span></h2>
 <p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
 <h3>upkeep <span class="badge down">2 rows &rarr; 1 lines (&minus;1)</span></h3>
 <p class="sel">selection: <em>each thing with upkeep</em></p>
@@ -631,11 +631,11 @@ line required a choice the specification has not made.</p>
 <h2>Capacities</h2>
 <div class="callout">
 <h4>Where a bound lives, decided 2026-09-08</h4>
-<p><strong>A capacity is a property of the container, declared once, and no formula states it.</strong>
+<p><strong>A capacity is a property of the container, declared once, and no recipe states it.</strong>
 That deletes the <code>limit</code> role outright: both of its uses in the whole specification were
 <code>limit 0 garrison</code>, restating a capacity of 1 that <em>What bounds a kind in a territory</em>
 already declared. Every other capacity below was <em>never</em> written in a recipe &mdash; so the
-engine was already enforcing seven bounds that no formula stated, and the garrison was the odd one
+engine was already enforcing seven bounds that no recipe stated, and the garrison was the odd one
 out for being written twice rather than for being written at all.</p>
 </div>
 <div class="scroll"><table><thead><tr>
@@ -870,11 +870,11 @@ out.</strong></p>
 <h4>Unbounded capacity does not cost you detection</h4>
 <p><strong>Boundedness for one starting state is EXPSPACE-complete. Boundedness for
 <em>every</em> starting state is polynomial &mdash; a linear program over the incidence
-matrix.</strong> The second is the one an editor needs, because an author is editing formulas and
+matrix.</strong> The second is the one an editor needs, because an author is editing recipes and
 not a saved game. A net is not structurally bounded exactly when there is a non-negative firing
-vector <code>x</code>, not all zero, with <code>C&middot;x &ge; 0</code>: a set of formulas that,
+vector <code>x</code>, not all zero, with <code>C&middot;x &ge; 0</code>: a set of recipes that,
 fired in some ratio, ends with more than it began. <strong>The vector is the error message</strong>
-&mdash; it names which formulas and how many of each.</p>
+&mdash; it names which recipes and how many of each.</p>
 <p><strong>All of it needs the plain fragment.</strong> A zero test on an unbounded quantity makes
 the language Turing-complete and every line of this section false.</p>
 </div>
@@ -887,23 +887,23 @@ the language Turing-complete and every line of this section false.</p>
 </tr></thead><tbody>
 <tr>
 <td class="target">1. Declared conservation</td>
-<td>P-invariant: is there a weighting under which this resource's net change is zero across every formula?</td>
+<td>P-invariant: is there a weighting under which this resource's net change is zero across every recipe?</td>
 <td>Polynomial. EXACT - it cannot cry wolf.</td>
-<td>Names the formula that breaks it.</td>
+<td>Names the recipe that breaks it.</td>
 <td class="note">Targets exactly "I accidentally made metal from nothing". The spec already declares which resources are conserved; nothing checks it.</td>
 </tr>
 <tr>
 <td class="target">2. Structural unboundedness</td>
 <td>T-increasing: is there a non-negative firing vector x, not all zero, with C.x &gt;= 0?</td>
 <td>Polynomial by linear programming. CONSERVATIVE - it ignores guards, so it can flag a loop the guards prevent, and cannot miss one.</td>
-<td>The firing vector IS the witness: which formulas, in what ratio.</td>
+<td>The firing vector IS the witness: which recipes, in what ratio.</td>
 <td class="note">Catches loops nobody declared. Must be reported as a diff against intended loops, because the citizen economy is genuinely a T-increasing.</td>
 </tr>
 <tr>
 <td class="target">3. A large generic cap at runtime</td>
 <td>Stop and report if any count passes a big number.</td>
 <td>Cheap. Detects after the fact, in one playthrough, at whatever numbers that run happened to hit.</td>
-<td>Says a number got large. Says nothing about which formulas did it.</td>
+<td>Says a number got large. Says nothing about which recipes did it.</td>
 <td class="note">Keep as a backstop against bugs in checks 1 and 2. Never as the mechanism - a cap that fires tells you nothing about why.</td>
 </tr>
 </tbody></table></div>
@@ -922,7 +922,7 @@ Making them checkable is the smallest change with the largest payoff.</p>
 <td class="target">metal</td>
 <td>conserved</td>
 <td class="note">Kinds: "what things are built from; conserved"</td>
-<td>P-invariant: every formula's net effect on metal is zero. EXACT - no false alarms.</td>
+<td>P-invariant: every recipe's net effect on metal is zero. EXACT - no false alarms.</td>
 <td class="note">Recommended first. The declaration already exists as prose and nothing checks it.</td>
 </tr>
 <tr>
@@ -999,7 +999,7 @@ it helps reason about them &mdash; it derives a quantity the specification never
 <tr>
 <td class="target">It is a boundary condition, not a rule</td>
 <td class="target">Sean: this does not need to be in a recipe.</td>
-<td>Agreed, and there is a reason in the model: a boundary condition **constrains** the formulas without being **fired** by anything. Writing it as a recipe would give it a trigger it does not have.</td>
+<td>Agreed, and there is a reason in the model: a boundary condition **constrains** the recipes without being **fired** by anything. Writing it as a recipe would give it a trigger it does not have.</td>
 <td class="note">Why it stays out of the table</td>
 </tr>
 </tbody></table></div>
@@ -1273,10 +1273,10 @@ and the growth rate are set by different halves of the same column</strong>, and
 <p>Not a description of what they would report &mdash; the output of
 <code>tools/research/formulas/check.py</code>, read from <code>results.json</code>, so this page
 and the checker cannot disagree. <strong>All three were poisoned before being believed</strong>:
-check 2 flags a formula with no inputs; check 1 goes red on a wrong weighting; check 3 goes red at a cap of 0.</p>
+check 2 flags a recipe with no inputs; check 1 goes red on a wrong weighting; check 3 goes red at a cap of 0.</p>
 
 <h3>Check 1 &mdash; metal conserved outside extraction &nbsp;<span class="badge down">0 violations</span></h3>
-<p>12 formulas analysed;
+<p>12 recipes analysed;
 3 skipped for state-dependent amounts
 (grow, perish, upkeep); <code>work</code> excluded as the declared
 source. Weights are the <em>Binding</em> column, copied rather than invented:
@@ -1287,7 +1287,7 @@ metal 1, garrison 1, extractor 1, store 1, yard 15, ark 3, pioneer 3.</p>
 <code>found-colony</code> delivers garrison 1 + extractor 1 + extractor 1 = <strong>3</strong>,
 which is precisely an ark's Binding and a pioneer's, so <code>deploy ark</code> and
 <code>found by land</code> both come out at <strong>0</strong>. His principle &mdash; what a unit
-costs in metal is what it delivers &mdash; now holds for every formula that is not mining.</p>
+costs in metal is what it delivers &mdash; now holds for every recipe that is not mining.</p>
 <p><strong>The check is poisoned against exactly this.</strong> Putting the two stores back turns
 <code>deploy ark</code> and <code>found by land</code> red again, which is what makes the green
 above worth reading. A check that agreed with a fix rather than measuring it would look identical
@@ -1296,7 +1296,7 @@ from here.</p>
 It tested a stronger claim than the words can carry &mdash; mining creates metal, so
 <code>work</code> is a declared source and the invariant is <em>conserved outside extraction</em>.
 And it weighed <code>found-colony</code> as if a player could fire it with no ark and no pioneer
-spent; a formula that is only ever called is not a transition.</p>
+spent; a recipe that is only ever called is not a transition.</p>
 </div>
 
 <h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded, as it should be</span></h3>
@@ -1304,7 +1304,7 @@ spent; a formula that is only ever called is not a transition.</p>
 1 skipped (perish).</p>
 <div class="scroll"><table><thead><tr>
 <th>Fire this many times</th>
-<th>Formula</th>
+<th>Recipe</th>
 </tr></thead><tbody>
 <tr>
 <td class="amt">1</td>
@@ -1352,7 +1352,7 @@ zero.</p>
 <h4>Grounding, and it is the same operation the menu needs</h4>
 <p>A target naming a family stands for one transition per kind in it, so <code>work</code> is
 three: <code>work[food]</code>, <code>work[metal]</code>, <code>work[energy]</code>, each with its
-own largest density. <strong>That is grounding</strong> &mdash; instantiating a formula against
+own largest density. <strong>That is grounding</strong> &mdash; instantiating a recipe against
 what it could apply to &mdash; and it is the same operation an interface performs to build a menu.
 The analysis and the interface want the same machinery, which is a reason to build it once.</p>
 </div>
@@ -1364,7 +1364,7 @@ practice: rather than keeping a baseline of intended loops, remove the declared 
 whether metal can still grow.</p>
 <div class="scroll"><table><thead><tr>
 <th>Fire this many times</th>
-<th>Formula</th>
+<th>Recipe</th>
 </tr></thead><tbody>
 <tr>
 <td class="amt">1</td>
@@ -1382,7 +1382,7 @@ than asserted.</p>
 create whose target has <strong>no capacity</strong> decides nothing &mdash; hard and soft behave
 identically and always will. <strong>Naming a question does not make it one.</strong></p>
 <div class="scroll"><table><thead><tr>
-<th>Formula</th>
+<th>Recipe</th>
 <th>Line</th>
 <th>Attach</th>
 <th>Capacity</th>
@@ -1420,7 +1420,7 @@ identically and always will. <strong>Naming a question does not make it one.</st
 </tbody></table></div>
 <p>And the one where it does not:</p>
 <div class="scroll"><table><thead><tr>
-<th>Formula</th>
+<th>Recipe</th>
 <th>Line</th>
 <th>Attach</th>
 <th>Why it cannot fail</th>
@@ -1484,12 +1484,12 @@ every case here except the extractors. Territory 1 has food capacity 3, so deplo
 add a second food extractor. <strong>If that is wrong, the fix is at the call</strong> &mdash;
 do not found a colony that is already founded &mdash; and not a second kind of create.</p>
 </div>
-<h3>Parameter domains &mdash; what a formula may be instantiated over</h3>
+<h3>Parameter domains &mdash; what a recipe may be instantiated over</h3>
 <p>A parameter is not free. Its domain is a <strong>condition on the kind</strong>, not a list, and
 grounding resolves it &mdash; so an instance that does not satisfy the condition never exists, and
 in a selection interface the player never sees it.</p>
 <div class="scroll"><table><thead><tr>
-<th>Formula</th>
+<th>Recipe</th>
 <th>Parameter</th>
 <th>Domain</th>
 <th>Today</th>
@@ -1539,7 +1539,7 @@ separating, because a decision that looks doubly supported is easy to stop exami
 
 <h3>Check 5 &mdash; which territories would refuse a create, per line</h3>
 <div class="scroll"><table><thead><tr>
-<th>Formula</th>
+<th>Recipe</th>
 <th>Line</th>
 <th>Attach</th>
 <th>Blocked on</th>
@@ -1560,7 +1560,7 @@ separating, because a decision that looks doubly supported is easy to stop exami
 <div class="callout">
 <h4>Corrected: territory 7 was never affected</h4>
 <p>An earlier version of this report said territories 6 and 7 both mattered. <strong>Territory 7
-has no energy, and no formula here creates an energy extractor</strong>, so it never did. Sean
+has no energy, and no recipe here creates an energy extractor</strong>, so it never did. Sean
 caught it. The check now asks which territories lack <em>the resource the line actually names</em>
 rather than which lack any resource &mdash; a wider question with a plausible answer, which is the
 failure this repository keeps recording.</p>
@@ -1576,13 +1576,13 @@ extractor, rather than founding being refused.</p>
 chooses to build a metal extractor on territory 6 is refused. <strong>Identical condition, opposite
 answers, and neither is a mistake</strong> &mdash; because one is a consequence of landing
 somewhere and the other is a thing the player asked for.</p>
-<p>Under a selection interface the second never even arises: grounding the formula against
+<p>Under a selection interface the second never even arises: grounding the recipe against
 territory 6 produces no <code>build extractor[metal]</code> to select. <strong>The attachment is
 what the console needs and the menu is what the interface needs, from one line.</strong></p>
 </div>
 
 <h3>Check 3 &mdash; a cap of 1000 &nbsp;<span class="badge down">0 breaches</span></h3>
-<p>Applying each formula once breaches nothing, which is exactly the point about a cap:
+<p>Applying each recipe once breaches nothing, which is exactly the point about a cap:
 <strong>it found neither of the two things the other checks found.</strong> It is a backstop
 against bugs in checks 1 and 2, not a way of finding anything.</p>
 
@@ -1612,7 +1612,7 @@ which is why it now says 5.</p>
 </div>
 </div>
 <div class="scroll"><table><thead><tr>
-<th>Formula</th>
+<th>Recipe</th>
 <th>Rows before</th>
 <th>Lines after</th>
 <th>Why</th>
@@ -1739,7 +1739,7 @@ which is why it now says 5.</p>
 </tr>
 <tr>
 <td>CORRECTED - territory 7 was never affected</td>
-<td>This report said territories 6 and 7 both mattered. Territory 7 has no energy, and no formula here creates an energy extractor.</td>
+<td>This report said territories 6 and 7 both mattered. Territory 7 has no energy, and no recipe here creates an energy extractor.</td>
 <td class="note">Sean caught it. The check now asks which territories lack the resource the line actually names, rather than which lack any resource - see check 5.</td>
 </tr>
 <tr>
@@ -1803,7 +1803,7 @@ which is why it now says 5.</p>
 </tr></thead><tbody>
 <tr>
 <td class="target">tools/research/formulas/data.json</td>
-<td>the formulas, primitives, capacities, invariants and decisions - the only thing to edit</td>
+<td>the recipes, primitives, capacities, invariants and decisions - the only thing to edit</td>
 <td class="note">the research lens</td>
 </tr>
 <tr>

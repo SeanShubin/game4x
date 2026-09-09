@@ -3,7 +3,7 @@
 **Research, 2026-09-09.** Derived. Not binding - a finding is a claim about the tree, not a decision
 about it.
 
-[Research](README.md) · [The formula report](formulas.html) · [Outbox](outbox.md)
+[Research](README.md) · [The recipe report](formulas.html) · [Outbox](outbox.md)
 
 Sean, 2026-09-09, in two steps. First: **the guard and the spend are one operation** - a threshold
 followed by a destroy of the same thing is a subtraction that fails rather than two lines. Then:
@@ -13,9 +13,9 @@ starvation*.
 
 This records what that costs, what it removes, and what the literature already knows about it.
 
-## What the formulas were already doing
+## What the recipes were already doing
 
-Measured over every formula in `tools/research/formulas/data.json`, not sampled.
+Measured over every recipe in `tools/research/formulas/data.json`, not sampled.
 
 |                                                              |              |
 | ------------------------------------------------------------ | ------------ |
@@ -38,7 +38,7 @@ Every figure below is computed by the renderer from the data, not typed.
 
 |                                        | Before             | After the fusion      | After both decisions |
 | -------------------------------------- | ------------------ | --------------------- | -------------------- |
-| lines across all formulas              | 80                 | 65                    | **56**               |
+| lines across all recipes               | 80                 | 65                    | **56**               |
 | the release's rows, re-encoded         | 58 -> 63, **up 5** | 58 -> 48, **down 10** | unchanged            |
 | primitives                             | 6                  | 6                     | **5**                |
 | line-counts the report has to explain  | 3                  | **1**                 | 1                    |
@@ -103,13 +103,13 @@ named operation with a definition older than the game.
 So the `attach` column stops being a list of failure behaviours and becomes **four answers to one
 question** - what happens when this subtraction would go below zero:
 
-|            |                                                                        |
-| ---------- | ---------------------------------------------------------------------- |
-| *(blank)*  | it provably cannot                                                     |
-| **hard**   | subtraction as a partial function: undefined, and the caller fails     |
-| **soft**   | skip the line, and the action still succeeds                           |
-| **clamp**  | monus - go to zero and no further                                      |
-| **record** | take what is there, write the shortfall where another formula reads it |
+|            |                                                                       |
+| ---------- | --------------------------------------------------------------------- |
+| *(blank)*  | it provably cannot                                                    |
+| **hard**   | subtraction as a partial function: undefined, and the caller fails    |
+| **soft**   | skip the line, and the action still succeeds                          |
+| **clamp**  | monus - go to zero and no further                                     |
+| **record** | take what is there, write the shortfall where another recipe reads it |
 
 **`record` is the value Sean's rule names.** It was already in use and had no name: `unpaid` is a
 derived trait and `perish` fires on it, so a failed upkeep is neither a hard failure nor a skip.
@@ -146,7 +146,7 @@ representation admits a value the domain does not - which is precisely the unsig
 Three things, and saying so is the point of the exercise.
 
 - **Grounding.** Territory 6 has no metal deposit, so `build extractor[metal]` is not *refused*
-  there - it does not *exist* there. That is a question about which instances a formula has, not
+  there - it does not *exist* there. That is a question about which instances a recipe has, not
   about a count, and it is `X-8` and `X-17`.
 - **Phase.** A design command in the play phase is a test on a trait's value. In the VASS reading it
   is the control state, which is a different thing from a counter by construction.
@@ -174,7 +174,7 @@ already used through Nebel's compilation schemes.
 
 **His suspicion about `call` is correct, and it is the standard reason abstraction exists.**
 Procedural abstraction is what decouples succinctness from expressive power: it lets shared
-structure be named once instead of copied, so a small primitive set does not force long formulas.
+structure be named once instead of copied, so a small primitive set does not force long recipes.
 This is already measured here rather than argued - `X-12` found `deploy ark` and `found by land`
 sharing seven rows verbatim, and factoring them into `found-colony` took **17 release rows to 10
 lines**. The caveat is `X-9`'s and has not moved: **acyclic** calls buy this for free, and recursive
@@ -183,42 +183,42 @@ ones make the analysis undecidable.
 ### Whether the lines are sequential
 
 Sean's inclination is that they are not, and that sequential composition is too expressive and will
-produce confusing recipes. Measured over all 22 formulas and 65 lines:
+produce confusing recipes. Measured over all 22 recipes and 65 lines:
 
-|                                                                     |       |
-| ------------------------------------------------------------------- | ----- |
-| a line reading a **count** another line in the same formula changes | **0** |
-| a line reading a **trait** another line writes                      | **1** |
-| the same trait assigned twice                                       | **0** |
-| a `set` on a thing a `create` in the same formula brings into being | **4** |
+|                                                                    |       |
+| ------------------------------------------------------------------ | ----- |
+| a line reading a **count** another line in the same recipe changes | **0** |
+| a line reading a **trait** another line writes                     | **1** |
+| the same trait assigned twice                                      | **0** |
+| a `set` on a thing a `create` in the same recipe brings into being | **4** |
 
 **Nothing in the game uses sequential composition.** The one trait case is `move`: `let from =
 unit.location` on line 1, and `set unit.location = $to` on line 4. Under non-sequential semantics
 every line reads the starting state, so `from` is the origin **by construction**. Under sequential
 semantics it is the origin **because the `let` was written first** - and reordering two lines would
-silently make a unit move from its own destination. That is one formula, and it is the whole
+silently make a unit move from its own destination. That is one recipe, and it is the whole
 argument from defects rather than from taste.
 
 The four `create`-then-`set` cases are all world-building, and they are the real objection: under
 non-sequential semantics a `set` on a thing that does not exist at the start has no referent. **The
-fix makes the formulas shorter, which is the outcome his test asks for.** A `create` already takes a
+fix makes the recipes shorter, which is the outcome his test asks for.** A `create` already takes a
 description, and a description is a kind with its traits - so `create territory in game` followed by
 three `set`s is one line that creates a territory with its id, biome and nature. Across the four:
 **13 lines become 4**, and the total goes from 65 to **56**.
 
-**And the checks already assume it.** `effects()` in `check.py` accumulates a formula's net effect
+**And the checks already assume it.** `effects()` in `check.py` accumulates a recipe's net effect
 as `net[k] += sign * n` over its lines, in any order - because check 1 is a P-invariant and check 2
-is a linear program, and both need a formula to *be* a single vector. **If composition were
+is a linear program, and both need a recipe to *be* a single vector. **If composition were
 sequential, both checks would be unsound**, since the guard would apply at each step rather than to
 the net. That is not an argument from taste either: it is the analysis the report already runs.
 
 So sequential composition is strictly more permissive - `create 3, consume 2` starting from nothing
 succeeds under it and fails under the other - and by his own test it does not earn that: nothing
-uses it, removing it makes the formulas shorter rather than longer, and keeping it would invalidate
+uses it, removing it makes the recipes shorter rather than longer, and keeping it would invalidate
 two of the checks.
 
 **Decided the same day, and the prediction held exactly.** Composition is not sequential, and a
-`change` carries its traits. The four world-building formulas went from 13 lines to 4, the total
+`change` carries its traits. The four world-building recipes went from 13 lines to 4, the total
 from 65 to 56, and **the nine `set`s in world-building became none** - so building the world is now
 a positive `change` and a `call`, and nothing else. The finding at the top of the generated report
 gets stronger rather than weaker: it used to say world-building needs `create` and `set`, and it
@@ -249,7 +249,7 @@ which is the argument for writing the assertion rather than the note.
 ## What is not settled
 
 - Whether `require` stays a primitive or becomes sugar for a self-loop - `consume` then `create` the
-  same thing back. The loop is the classical encoding and costs one line in one formula; a read arc
+  same thing back. The loop is the classical encoding and costs one line in one recipe; a read arc
   is the better model of *checking without taking*, and reading and returning an adjacency
   represents something that never happens, which is the kind of stored abstraction the rule exists
   to remove. Left as a primitive, used once.
@@ -258,6 +258,6 @@ which is the argument for writing the assertion rather than the note.
   Sean's intent - and that would make the set four primitives. Not decided, and not implemented.
 - **Whether composition is non-sequential**, and with it whether `create` carries its traits. The
   measurement above says nothing uses sequential composition, the checks already assume it is not,
-  and removing it shortens the formulas by nine lines. Not implemented either.
+  and removing it shortens the recipes by nine lines. Not implemented either.
 - The nine remaining assumptions in the console encoding, three of which are holes in the
   specification rather than in the notation - see the report.

@@ -5,14 +5,14 @@
 1. **Declared conservation.** The specification says metal is *conserved*. Metal is conserved
    only if the metal bound inside built things counts, so the weights are the Binding column
    of *Units and structures*. This asks whether that weighting is a P-invariant: does every
-   formula leave the total unchanged? It is exact - it cannot raise a false alarm.
+   recipe leave the total unchanged? It is exact - it cannot raise a false alarm.
 
 2. **Structural unboundedness.** Is there a non-negative firing vector `x`, not all zero, with
-   `C.x >= 0` - a set of formulas that, fired in some ratio, ends with more than it began?
+   `C.x >= 0` - a set of transitions that, fired in some ratio, ends with more than it began?
    Decided by linear programming over exact rationals. It ignores guards, so it is conservative:
    it can flag a loop the guards prevent and cannot miss one.
 
-3. **A cap.** Applies formulas to a state and reports the first count to pass a declared bound.
+3. **A cap.** Applies recipes to a state and reports the first count to pass a declared bound.
    A backstop for bugs in 1 and 2, never the mechanism.
 
 **Every check is poisoned before it is believed** - see `self_test`. A checker that cannot be
@@ -50,7 +50,7 @@ DECLARED_FREE = {"energy", "food", "citizen", "labor"}
 
 # **Extraction is a declared source and check 1 was wrong to test against its absence.**
 # `work` on a metal extractor mines up to 8 metal out of the ground, so "metal is conserved"
-# cannot mean globally conserved - no arrangement of the other formulas could make it true.
+# cannot mean globally conserved - no arrangement of the other recipes could make it true.
 # What the specification can mean is: conserved OUTSIDE extraction. Sean's objection is what
 # found this; the check was testing a stronger claim than the words can carry.
 DECLARED_SOURCES = {"work"}
@@ -62,9 +62,9 @@ FAMILIES = {"resource": ("food", "metal", "energy"), "unit": ("ark", "pioneer")}
 
 
 def called_names(data):
-    """Formulas that are only ever reached through a call.
+    """Recipes that are only ever reached through a call.
 
-    A called formula is not a transition. Counting `found-colony` as one lets it fire on its
+    A called recipe is not a transition. Counting `found-colony` as one lets it fire on its
     own, with no ark and no pioneer spent - which reports a metal source that no player can
     reach. Found by Sean pushing back on check 1, and it was overstating.
     """
@@ -88,7 +88,7 @@ def place_of(target):
 
 
 def amount_of(raw):
-    """A signed integer amount, or None when the formula's amount depends on the state.
+    """A signed integer amount, or None when the recipe's amount depends on the state.
 
     Amounts carry their own sign since 2026-09-09: `create` and `consume` are one `change`,
     and which direction it goes is in the number rather than in the operator.
@@ -104,14 +104,14 @@ def sign_of(raw):
     return -1 if str(raw).strip().startswith("-") else 1
 
 
-def effects(formula, formulas_by_name, seen=(), bounded=False, binding=None):
+def effects(recipe, recipes_by_name, seen=(), bounded=False, binding=None):
     """Net effect per kind, or None if any amount is state-dependent.
 
     Calls are inlined. A cycle would be an unbounded decomposition, which the acyclicity
     rule forbids, so meeting one is a defect rather than a case to handle.
     """
     net = {}
-    for op, target, raw, _attach, _note in formula["lines"]:
+    for op, target, raw, _attach, _note in recipe["lines"]:
         if op in NON_EFFECT_OPS:
             continue
         if op == "set":
@@ -120,10 +120,10 @@ def effects(formula, formulas_by_name, seen=(), bounded=False, binding=None):
             name = target.split("(")[0].strip()
             if name in seen:
                 raise ValueError("recipe call cycle at %r" % name)
-            sub = formulas_by_name.get(name)
+            sub = recipes_by_name.get(name)
             if sub is None:
                 return None
-            inner = effects(sub, formulas_by_name, seen + (name,), bounded, binding)
+            inner = effects(sub, recipes_by_name, seen + (name,), bounded, binding)
             if inner is None:
                 return None
             for k, v in inner.items():
@@ -141,7 +141,7 @@ def effects(formula, formulas_by_name, seen=(), bounded=False, binding=None):
         if n is None:
             if not bounded:
                 return None
-            b = DATA.get("bounds", {}).get(formula["name"].split("(")[0].strip(), {}).get(k)
+            b = DATA.get("bounds", {}).get(recipe["name"].split("(")[0].strip(), {}).get(k)
             if b is None:
                 return None
             n = sign_of(raw) * b[0]
@@ -149,10 +149,10 @@ def effects(formula, formulas_by_name, seen=(), bounded=False, binding=None):
     return net
 
 
-def families_in(formula):
-    """Which families a formula's targets name, in a stable order."""
+def families_in(recipe):
+    """Which families a recipe's targets name, in a stable order."""
     seen = []
-    for op, target, _a, _at, _n in formula["lines"]:
+    for op, target, _a, _at, _n in recipe["lines"]:
         if op in NON_EFFECT_OPS or op in ("set", "call"):
             continue
         k = place_of(target)
@@ -161,13 +161,13 @@ def families_in(formula):
     return seen
 
 
-def ground(name, formula):
-    """One (name, binding) per instantiation of the families this formula mentions.
+def ground(name, recipe):
+    """One (name, binding) per instantiation of the families this recipe mentions.
 
-    A formula naming no family grounds to itself, so this is the identity in the ordinary
+    A recipe naming no family grounds to itself, so this is the identity in the ordinary
     case and only the three that name one expand.
     """
-    fams = families_in(formula)
+    fams = families_in(recipe)
     if not fams:
         return [(name, None)]
     out = [(name, {})]
@@ -195,7 +195,7 @@ def check_conservation():
     for name, f in sorted(by_name.items()):
         if name in DECLARED_SOURCES:
             continue
-        # The same fix check 2 needed: a formula that is only ever called is not fired on its
+        # The same fix check 2 needed: a recipe that is only ever called is not fired on its
         # own, so weighing it alone reports a source no player can reach. `found-colony`
         # delivers 3 and its callers each spend a unit worth 3; only the pair is a real event.
         if name in only_called:
@@ -291,10 +291,10 @@ def check_unbounded(extra=None, exclude_sources=False):
     witness = []
     if opt and opt > 0:
         for name, net, v in zip(names, nets, x):
-            # A formula whose net effect is entirely zero rides along for free: the LP is
+            # A transition whose net effect is entirely zero rides along for free: the LP is
             # indifferent to it, so it lands in the answer at whatever value fits. Naming it
             # costs a reader time and tells them nothing, so the witness carries only
-            # formulas that actually move something.
+            # transitions that actually move something.
             if v > 0 and any(net.values()):
                 witness.append((name, v))
     gain = {}
@@ -346,7 +346,7 @@ def check_placement():
     """Check 5. Which territories would refuse a create, per line.
 
     **Aimed at the resource the line actually names.** An earlier version of this report said
-    territory 7 mattered because it has no energy - and no formula here creates an energy
+    territory 7 mattered because it has no energy - and no recipe here creates an energy
     extractor, so it never did. Listing territories that lack *any* resource answers a wider
     question than the one asked, which is the failure this repository keeps recording.
     """
@@ -367,7 +367,7 @@ def check_placement():
 
 
 def check_cap(cap=1000):
-    """Check 3. A backstop: apply every formula once and report anything past the cap."""
+    """Check 3. A backstop: apply every recipe once and report anything past the cap."""
     by_name = gather()
     state, breached = {}, []
     for name, f in sorted(by_name.items()):
@@ -385,8 +385,8 @@ def self_test():
     """Poison every check before believing any of it.
 
     The poison is aimed OUTSIDE the region each check already covers where it can be: the
-    conservation poison creates metal from nothing, which no real formula does, and the
-    unboundedness poison is a formula with no inputs at all.
+    conservation poison creates metal from nothing, which no real recipe does, and the
+    unboundedness poison is a recipe with no inputs at all.
     """
     ok = True
     poison = {
@@ -398,10 +398,10 @@ def self_test():
     }
     w = check_unbounded(extra=poison)[2]
     if not any(n == "POISON-free-metal" for n, _ in w):
-        print("  POISON FAILED: check 2 did not flag a formula that creates metal from nothing")
+        print("  POISON FAILED: check 2 did not flag a recipe that creates metal from nothing")
         ok = False
     else:
-        print("  poison ok: check 2 flags a formula with no inputs")
+        print("  poison ok: check 2 flags a recipe with no inputs")
 
     saved = METAL_WEIGHT.get("citizen")
     METAL_WEIGHT["citizen"] = 1
@@ -410,7 +410,7 @@ def self_test():
         print("  POISON FAILED: check 1 stayed green with citizens weighted as metal")
         ok = False
     else:
-        print(f"  poison ok: check 1 goes red on a wrong weighting ({len(bad)} formulas)")
+        print(f"  poison ok: check 1 goes red on a wrong weighting ({len(bad)} recipes)")
     if saved is None:
         del METAL_WEIGHT["citizen"]
     else:
@@ -476,7 +476,7 @@ def as_dict():
         "placement": [[n, tg, at, b] for n, tg, at, b in check_placement()],
         "attachment": {"meaningful": [list(r) for r in check_attachment()[0]],
                        "unobservable": [list(r) for r in check_attachment()[1]]},
-        "poison": ["check 2 flags a formula with no inputs",
+        "poison": ["check 2 flags a recipe with no inputs",
                    "check 1 goes red on a wrong weighting",
                    "check 3 goes red at a cap of 0"],
     }
@@ -493,7 +493,7 @@ def main():
     analysed, skipped, bad = check_conservation()
     print("CHECK 1 - metal conserved OUTSIDE extraction, weighted by Binding")
     print(f"  declared sources, excluded: {', '.join(sorted(DECLARED_SOURCES))}")
-    print(f"  {len(analysed)} formulas analysed, {len(skipped)} skipped for state-dependent amounts")
+    print(f"  {len(analysed)} recipes analysed, {len(skipped)} skipped for state-dependent amounts")
     if skipped:
         print(f"  skipped: {', '.join(skipped)}")
     if bad:
@@ -506,7 +506,7 @@ def main():
     names, skipped2, witness, gain, metal_gain, free, undeclared, hidden = check_unbounded()
     n2, _s2, w2, g2, mg2, _f2, _u2, _h2 = check_unbounded(exclude_sources=True)
     print("CHECK 2 - structurally unbounded")
-    print(f"  {len(names)} formulas in the matrix, {len(skipped2)} skipped for state-dependent amounts")
+    print(f"  {len(names)} transitions in the matrix, {len(skipped2)} skipped for state-dependent amounts")
     if witness:
         print("  UNBOUNDED. A witness, as a firing ratio:")
         for n, v in witness:
@@ -556,7 +556,7 @@ def main():
 
     cap, breached = check_cap()
     print(f"CHECK 3 - cap of {cap}")
-    print("  " + (f"{len(breached)} breach(es)" if breached else "no breach applying each formula once"))
+    print("  " + (f"{len(breached)} breach(es)" if breached else "no breach applying each recipe once"))
     print()
     print("All three green means nothing unless the poison above went red.")
     return 0 if poisoned else 1

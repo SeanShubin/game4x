@@ -142,7 +142,7 @@ his**; this is a reading of his four, not a replacement for them.
 threshold **do** share a line, and a count may never go below zero - anything that would take it
 there is an error.
 [The report](2026-09-09-natural-numbers-and-the-fusion.md) carries the argument and the numbers; the
-[formula report](formulas.html) is re-rendered against it.
+[recipe report](formulas.html) is re-rendered against it.
 
 - **Upper thresholds are gone, and that is the point rather than a side effect.** The grid's fourth
   cell was `limit 0 garrison` - *no change, threshold at most 0* - and a fused subtraction cannot
@@ -168,13 +168,13 @@ sequential**: every line reads the starting state.
   **not** take six primitives to five - `destroy` and `threshold` became `consume` while `require`
   split out, so six became six. It was typed rather than counted. The reduction came from the signed
   `change`, and every count on the generated page is now read from the data.
-- **Non-sequential composition was measured before it was decided.** Over 22 formulas and 65 lines:
+- **Non-sequential composition was measured before it was decided.** Over 22 recipes and 65 lines:
   **zero** lines read a count another line changes, **one** reads a trait another writes - `move`'s
   `let from = unit.location` against `set unit.location = $to` - and **four** were a `set` on a thing
-  a `create` in the same formula makes. `check.py` already assumed it: `effects()` sums a formula's
+  a `create` in the same recipe makes. `check.py` already assumed it: `effects()` sums a recipe's
   net in any order, because check 1 is a P-invariant and check 2 a linear program, so **sequential
   composition would make both unsound.**
-- **It made the formulas shorter, which is the test Sean set.** A `change` carries its traits, so the
+- **It made the recipes shorter, which is the test Sean set.** A `change` carries its traits, so the
   four world-building create-then-sets became one line each: 13 lines to 4, 65 to 56, and the nine
   `set`s in world-building became **none**. `set` now exists only to change a thing that already
   exists, and there are five such lines.
@@ -231,12 +231,13 @@ and `C-75` already measured that adopting them costs nothing today.
 
 **to** code · **status** open · **raised** 2026-09-08 · **source** [the report](formulas.html), generated from `tools/research/formulas/data.json` · **for** Sean, who asked whether one format can build the world and play it
 
-**The whole specification re-expressed in six primitives**, with the world built from an empty game
-in the same six. Copied and modified from `releases/first-release.md` at his instruction, so
+**The whole specification re-expressed in one small primitive set**, with the world built from an
+empty game in the same primitives. Six when this was raised, five since the signed `change` landed
+on 2026-09-09. Copied and modified from `releases/first-release.md` at his instruction, so
 divergence from it is expected and is a defect in neither.
 
 **The finding.** Building the world needs **no primitive that playing does not** - every design-time
-formula is `create`, `set` and `call`, and **not one threshold**, because nothing at design time can
+recipe is `create`, `set` and `call`, and **not one threshold**, because nothing at design time can
 be refused. **World-building is the play language with the guards left out.** That works only
 because the specification has been steadily turning relations into things: `deposit` and `adjacency`
 are kinds, and `C-47` measured that nine of the dump's ten tables are the containment tree. **The
@@ -271,7 +272,7 @@ is a threshold on the recipe or a property of the container, since making it exp
 **What is outstanding, as of 2026-09-09.** Not *is this a defect* - that was settled, and the rest
 of this item is the working that settled it. **Sean decided the two stores are dropped from
 `found-colony`**, which makes founding deliver exactly the 3 metal an ark and a pioneer are worth,
-and check 1 has reported no violation over twelve formulas since. **The release has not caught up.**
+and check 1 has reported no violation over twelve recipes since. **The release has not caught up.**
 
 - `releases/first-release.md:211-212` still produce `1 store food` and `1 store metal` under
   **deploy ark**, and `:224-225` still do under **found by land**
@@ -293,12 +294,12 @@ changes. **It does not hold.** Founding a colony creates a garrison, two extract
 - **`found by land`**: spends a pioneer worth 3, creates 5 - net **+2** per founding
 
 **Verified rather than argued.** `tools/research/formulas/check.py` computes it from the Binding
-column, copied from the release and not invented. **13 of 17 formulas were analysed and 4 skipped**
+column, copied from the release and not invented. **13 of 17 recipes were analysed and 4 skipped**
 because their amounts depend on the state - `grow`, `perish`, `upkeep`, `work` - so the population
 is named and is not zero. **The check was poisoned first** and goes red on a wrong weighting.
 
 **Why it costs something.** *Conserved* is the kind of word a later rule leans on, and a second
-check found the same three formulas from the opposite direction - a structural unboundedness test,
+check found the same three recipes from the opposite direction - a structural unboundedness test,
 which ignores guards entirely, named `found-colony` too. **Two checks of different character
 agreeing is the part worth acting on.**
 
@@ -315,7 +316,7 @@ than in his reasoning.
 
 - **The check tested a stronger claim than the words can carry.** Working a metal extractor mines
   up to 8 metal out of the ground, so metal is not globally conserved and **no arrangement of the
-  other formulas could make it so.** `work` is now a declared source and the invariant is
+  other recipes could make it so.** `work` is now a declared source and the invariant is
   *conserved outside extraction*.
 - **A family was hiding a kind.** `work` produces `resource[...]`, which collapsed to the family
   `resource` and carried no metal weight - so **the game's only metal source scored zero.**
@@ -334,9 +335,9 @@ than 3. **That is arithmetic on his numbers rather than an argument**, and it tu
 question about the missing stores from a matter of taste into one with a right answer.
 
 **Decided 2026-09-09: Sean dropped the two stores**, and check 1 reports no violation over 12
-formulas. **The check is poisoned against exactly this decision** - putting the stores back turns
+recipes. **The check is poisoned against exactly this decision** - putting the stores back turns
 `deploy ark` and `found by land` red again - so the green is a measurement of the fix rather than
-an agreement with it. **Three of the fifteen formulas are still skipped** for state-dependent
+an agreement with it. **Three of the fifteen recipes are still skipped** for state-dependent
 amounts: `grow`, `perish` and `upkeep`. The population is named and is not zero.
 
 **That decision is in this lane's model and not in the release**, which is why the item stays open
@@ -345,22 +346,22 @@ and why its head now says so. This paragraph said *Closed* for a day while the s
 had caught up. **The head of an item is what gets read; a paragraph two screens down is not.**
 
 **Two of the three faults this item went through were in the check.** Its first version claimed
-metal was not conserved at all, which no arrangement of the formulas could have made true, because
-mining is a source. Its second still weighed a called formula as independently firable. **Sean
+metal was not conserved at all, which no arrangement of the recipes could have made true, because
+mining is a source. Its second still weighed a called recipe as independently firable. **Sean
 refused the first version and the refusal is what found both.**
 
 ### X-15 - the inventory, so that nothing said in one conversation is lost on the way to `spec/`
 
 **to** spec · **status** open · **raised** 2026-09-08 · **source** Sean, saying he may want to promote this and asking that nothing be lost
 
-**Not a proposal and not a request to write one.** Sean said that if the formula work goes well he
+**Not a proposal and not a request to write one.** Sean said that if the recipe work goes well he
 will want it in `spec/`, and asked that nothing be lost in the meantime. **This is the inventory of
 what would have to become text, and where each piece already lives**, so that the promotion path is
 a reading list rather than a memory.
 
 | What                                                                                 | Where it is now                                                                                |
 | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| The six primitives, and which are sugar                                              | [report](formulas.html) -> The primitives, What is sugar; `X-11`                               |
+| The primitives, and which are sugar                                                  | [report](formulas.html) -> The primitives, What is sugar; `X-11`                               |
 | The test for whether a primitive earns its place                                     | `X-11` - removing it moves the explosion from the generated space to the authored space        |
 | Capacity belongs to the container, and `limit` is deleted                            | [report](formulas.html) -> Capacities; both uses were restatements                             |
 | World-building is the play language with the guards left out                         | [report](formulas.html) -> Building the world; `X-13`                                          |
@@ -383,7 +384,7 @@ drafted** - deliberately, because the words are Sean's to approve and yours to w
 
 **Whether.** **Nothing to do today.** This is a holding record so that a promotion, if it comes,
 starts from a list rather than from this conversation. **It is `open` rather than `noted` for one
-reason**: if the formula work is abandoned, this should be closed as withdrawn rather than left
+reason**: if the recipe work is abandoned, this should be closed as withdrawn rather than left
 implying work.
 
 ### X-18 - `reports/index.html` says six primitives, and the report it links says five
@@ -842,7 +843,7 @@ reported. **One declaration serves both checks and there is nothing to keep in s
   game's only metal source. The checker now says so instead of scoring it silently, which is the
   least it can do; resolving a family to its kinds is the fix and is not written.
 
-**Whether.** **Worth doing if the formula work continues, and worth nothing otherwise.** The first
+**Whether.** **Worth doing if the recipe work continues, and worth nothing otherwise.** The first
 two are done and in `tools/research/formulas/check.py`, which is this lane's tooling - **if any of
 it graduates to production it is yours to own and rewrite, not to inherit.** The family fix is the
 one that matters, because a check that cannot see the subject it is about is the failure this
@@ -853,7 +854,7 @@ family now stands for one transition per kind in it, so `work` is three - `work[
 `work[metal]`, `work[energy]` - each carrying its own largest density. **`work[metal]` is in check
 2's witness now**, which is the whole point: until this, the game's only metal source scored zero.
 
-**And it is grounding**, the same operation an interface performs to build a menu from a formula
+**And it is grounding**, the same operation an interface performs to build a menu from a recipe
 and a state. **The analysis and the interface want the same machinery**, which is an argument for
 building it once rather than twice, and this lane did not expect that when it filed the item.
 
@@ -871,9 +872,9 @@ a real reason and stayed red for a wrong one.
 
 **Closed 2026-09-09.** The recommendation was implemented the same day, and everything it names lives in `tools/research/formulas/`, which is this lane's own column. **It was addressed to `code` when nothing in it was ever the code lane's work** - a wrong address costs a producer a read and gives the index a task that does not exist. What stands, and needs no item: **if any of this tooling graduates to production it is the code lane's to own and rewrite, not to inherit.**
 
-### X-16 - the formula files are not reachable from the deployment, and `reports/` is not this lane's
+### X-16 - the recipe files are not reachable from the deployment, and `reports/` is not this lane's
 
-**to** code · **status** **acted** 2026-09-09 · `153a13f` — three files by name rather than `lenses/` whole, linked at their repository paths under a *Research* heading that says they are not the game's state · **raised** 2026-09-08 · **source** Sean, asking for the formula files to be browsable from the deployment
+**to** code · **status** **acted** 2026-09-09 · `153a13f` — three files by name rather than `lenses/` whole, linked at their repository paths under a *Research* heading that says they are not the game's state · **raised** 2026-09-08 · **source** Sean, asking for the recipe files to be browsable from the deployment
 
 **What.** `reports/index.html` is the browsable deployment and is generated by
 `crates/game-console` - **your column, not this lane's**, so this is filed rather than wired.

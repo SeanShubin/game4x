@@ -1,4 +1,4 @@
-"""Render the formula report from data.json.
+"""Render the recipe report from data.json.
 
 The data states; this renders. Nothing is decided here - every number in the output is
 computed from `data.json`, so a claim in the report can be checked by reading the data
@@ -39,7 +39,7 @@ def esc(text):
 # `spec/console.md` gives one notation for a command and for a description of state:
 # `{name field:value ...}`, a value is a word, a number or another command, a field
 # that refers to a thing is named for that thing's kind, and `#` begins a comment.
-# Everything below is that notation applied to a formula line. Where a line needs
+# Everything below is that notation applied to a recipe line. Where a line needs
 # something the notation does not define, the encoder records an assumption rather
 # than inventing quietly - the assumptions are listed in the report and counted.
 # ---------------------------------------------------------------------------
@@ -63,7 +63,7 @@ BRACKET_FIELD = {
     "food": "surplus",
 }
 
-# The parameters each called formula takes, named as the fields of the call.
+# The parameters each called recipe takes, named as the fields of the call.
 CALL_FIELDS = {
     "found-colony": ["territory"],
     "make-territory": ["id", "biome", "nature"],
@@ -82,7 +82,7 @@ ASSUMPTIONS = {
     "in a comment, where nothing can run it.",
     "positional": "<strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other "
     "argument in the notation is named.",
-    "recipe-as-thing": "<code>recipe:</code> names the formula a <code>call</code> fires, which "
+    "recipe-as-thing": "<code>recipe:</code> names the recipe a <code>call</code> fires, which "
     "treats a recipe as a thing with a name. The alternative is a second field that names no kind, "
     "and <code>id</code> is meant to be the only one.",
     "root-container": "<code>game:game</code> &mdash; the game is the one thing inside nothing, so "
@@ -102,11 +102,11 @@ ASSUMPTIONS = {
     "and four of the six <code>let</code>s read it. The code lane's <code>C-56</code> is the same "
     "hole from the other side.",
     "family-not-kind": "A description names a <strong>family</strong> rather than a kind &mdash; "
-    "<code>{thing}</code> for the world formulas, <code>{resource kind:...}</code> for what "
+    "<code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what "
     "<code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.",
 }
 
-# Traits used by the formulas that the release's Traits table does not list.
+# Traits used by the recipes that the release's Traits table does not list.
 UNNAMED_TRAITS = {"location", "below"}
 
 # The families, read from the data rather than restated, so the two cannot disagree.
@@ -181,7 +181,7 @@ def _description(target, where):
 
 
 def console_line(op, target, amount, attach, note, where):
-    """One row of a formula table, as a single string in the console's notation."""
+    """One row of a recipe table, as a single string in the console's notation."""
     amount, attach = str(amount).strip(), str(attach).strip().lower()
 
     if op == "let":
@@ -494,7 +494,7 @@ def simple_table(headers, rows, classes=None):
 
 
 def lines_after(name):
-    """The line count for a formula, read from the formula itself.
+    """The line count for a recipe, read from the recipe itself.
 
     `collapse` used to restate this number, so the table could disagree with the tables
     above it without anything noticing. One number, one home.
@@ -533,7 +533,7 @@ def main():
     n_world = len(DATA["world"])
     n_creation = len(DATA["creation"])
     parts = []
-    parts.append(f"""<title>Formula Report</title>
+    parts.append(f"""<title>Recipe Report</title>
 <style>
 :root {{
   --bg: #fbfaf8; --fg: #1c1a17; --muted: #6b6560; --rule: #ddd8d1;
@@ -595,7 +595,7 @@ code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:
   border-top: 1px solid var(--rule); }}
 </style>
 <div class="wrap">
-<h1>The whole specification as formulas</h1>
+<h1>The whole specification as recipes</h1>
 <p class="lede">Every recipe re-expressed in {n_primitives} primitives &mdash; and the same
 {n_primitives} building the world from an empty game. Generated from
 <code>tools/research/formulas/data.json</code>.</p>
@@ -645,7 +645,7 @@ is why no <code>set</code> in this report carries an attachment.</p>
 <p><code>unpaid</code> is a trait in the specification &mdash; <em>derived: its upkeep was not
 met</em> &mdash; and <code>perish</code> fires on it. So when <code>upkeep</code> cannot take its
 food, the failure <strong>neither stops the turn nor vanishes</strong>: it is written down, and
-another formula reads it next. <strong>That is a third behaviour on failure, in the game today,
+another recipe reads it next. <strong>That is a third behaviour on failure, in the game today,
 which a two-valued column cannot express.</strong></p>
 <p>It may not want to be an attach value. The alternative is that <strong>failure is state</strong>
 &mdash; every line's outcome is recorded, and <code>unpaid</code> is just one query over it. That is
@@ -662,7 +662,7 @@ rather than after.</p>
 
 <h2>Every kind, the way every recipe is</h2>
 <p>Sean, 2026-09-09: <em>I want to be able to review things just as easily as I can review
-formulas.</em> A recipe gets a table of lines and a string for each; here is the other half.
+recipes.</em> A recipe gets a table of lines and a string for each; here is the other half.
 <strong>All {n_kinds} kinds</strong>, with what a thing of each carries and how it is written.
 The <em>Kinds</em> and <em>Traits</em> tables are copied from the release into this lane's data, so
 the two checks below have a population to count against: <strong>every kind has a row</strong>, and
@@ -742,16 +742,16 @@ and the wide one was generated from the long one rather than the other way round
 <p><strong>The shared object is the description, and the specification says so before this report
 does.</strong> <em>A game's state is things, in places, and how many of each. A thing is a set of
 traits, and one of them names its kind.</em> That is <code>{{kind trait:value ...}}</code> &mdash;
-the same object a formula line targets. So a thing and a formula line are not two structures to be
+the same object a recipe line targets. So a thing and a recipe line are not two structures to be
 unified; they are one structure appearing in two roles.</p>
 <div class="scroll"><table><thead><tr><th></th><th>Which</th><th>Why</th></tr></thead>
 <tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["unify"])}</tbody></table></div>
 <div class="callout">
-<h4>Then what is a formula that only creates? Nothing but the thing</h4>
-<p>Since the fold, <strong>every world-building formula is one line, with
+<h4>Then what is a recipe that only creates? Nothing but the thing</h4>
+<p>Since the fold, <strong>every world-building recipe is one line, with
 <code>change</code> as its operator, <code>+1</code> as its amount and no attachment</strong> &mdash;
 all three constant. Take away what never varies and what remains is the description. <strong>So
-&ldquo;one formula creates each thing&rdquo; is not a way to unify them: it is what is left when
+&ldquo;one recipe creates each thing&rdquo; is not a way to unify them: it is what is left when
 they already are unified.</strong></p>
 <p>And it turns out to satisfy a rule nobody was aiming at. <code>spec/invariants.md</code>:
 <em>A definition arrives in one transition. There is no state in which a kind or a recipe is half
@@ -772,7 +772,7 @@ option below with no cost and no check.</p>
 <p><strong>It introduces no concept at all</strong>, which under <em>minimum expressiveness</em> is
 the whole argument. <code>spec/console.md</code> already says <em>a command of one phase is refused
 in the other</em>, and refusing is what a <code>require</code> does &mdash; so the sentence stops
-being a rule the engine implements and becomes a line the formula carries. It also takes
+being a rule the engine implements and becomes a line the recipe carries. It also takes
 <code>require</code> from one use to six, which is most of the case for keeping it a primitive
 rather than sugar for a self-loop.</p>
 <p><strong>The cost is the error message.</strong> A design command refused after <code>start</code>
@@ -786,7 +786,7 @@ deciding, and it is the only cost this lane can find.</p>
 </div>
 
 <h2>Every row as one string</h2>
-<p>The last column of every formula table below restates that row &mdash; op, target, amount,
+<p>The last column of every recipe table below restates that row &mdash; op, target, amount,
 attach and the note &mdash; as a single string in the notation <code>spec/console.md</code> gives
 for a command and for a description of state. All {N_LINES} lines are encoded, none by hand.</p>
 <div class="callout">
@@ -801,21 +801,21 @@ report's real output, and it is generated from the encoding rather than written 
 line required a choice the specification has not made.</p>
 </div>
 
-<h2>Player formulas <span class="badge">{n_player}</span></h2>
+<h2>Player recipes <span class="badge">{n_player}</span></h2>
 {"".join(formula_table(f) for f in DATA["player"])}
 
-<h2>World formulas <span class="badge">{n_world}</span></h2>
+<h2>World recipes <span class="badge">{n_world}</span></h2>
 <p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
 {"".join(formula_table(f) for f in DATA["world"])}
 
 <h2>Capacities</h2>
 <div class="callout">
 <h4>Where a bound lives, decided 2026-09-08</h4>
-<p><strong>A capacity is a property of the container, declared once, and no formula states it.</strong>
+<p><strong>A capacity is a property of the container, declared once, and no recipe states it.</strong>
 That deletes the <code>limit</code> role outright: both of its uses in the whole specification were
 <code>limit 0 garrison</code>, restating a capacity of 1 that <em>What bounds a kind in a territory</em>
 already declared. Every other capacity below was <em>never</em> written in a recipe &mdash; so the
-engine was already enforcing seven bounds that no formula stated, and the garrison was the odd one
+engine was already enforcing seven bounds that no recipe stated, and the garrison was the odd one
 out for being written twice rather than for being written at all.</p>
 </div>
 <div class="scroll">{simple_table(
@@ -845,11 +845,11 @@ out.</strong></p>
 <h4>Unbounded capacity does not cost you detection</h4>
 <p><strong>Boundedness for one starting state is EXPSPACE-complete. Boundedness for
 <em>every</em> starting state is polynomial &mdash; a linear program over the incidence
-matrix.</strong> The second is the one an editor needs, because an author is editing formulas and
+matrix.</strong> The second is the one an editor needs, because an author is editing recipes and
 not a saved game. A net is not structurally bounded exactly when there is a non-negative firing
-vector <code>x</code>, not all zero, with <code>C&middot;x &ge; 0</code>: a set of formulas that,
+vector <code>x</code>, not all zero, with <code>C&middot;x &ge; 0</code>: a set of recipes that,
 fired in some ratio, ends with more than it began. <strong>The vector is the error message</strong>
-&mdash; it names which formulas and how many of each.</p>
+&mdash; it names which recipes and how many of each.</p>
 <p><strong>All of it needs the plain fragment.</strong> A zero test on an unbounded quantity makes
 the language Turing-complete and every line of this section false.</p>
 </div>
@@ -948,7 +948,7 @@ and the checker cannot disagree. <strong>All three were poisoned before being be
 {"; ".join(RESULTS["poison"])}.</p>
 
 <h3>Check 1 &mdash; metal conserved outside extraction &nbsp;<span class="badge down">{len(RESULTS["conservation"]["violations"])} violations</span></h3>
-<p>{RESULTS["conservation"]["analysed"]} formulas analysed;
+<p>{RESULTS["conservation"]["analysed"]} recipes analysed;
 {len(RESULTS["conservation"]["skipped"])} skipped for state-dependent amounts
 ({", ".join(RESULTS["conservation"]["skipped"])}); <code>work</code> excluded as the declared
 source. Weights are the <em>Binding</em> column, copied rather than invented:
@@ -959,7 +959,7 @@ source. Weights are the <em>Binding</em> column, copied rather than invented:
 <code>found-colony</code> delivers garrison 1 + extractor 1 + extractor 1 = <strong>3</strong>,
 which is precisely an ark's Binding and a pioneer's, so <code>deploy ark</code> and
 <code>found by land</code> both come out at <strong>0</strong>. His principle &mdash; what a unit
-costs in metal is what it delivers &mdash; now holds for every formula that is not mining.</p>
+costs in metal is what it delivers &mdash; now holds for every recipe that is not mining.</p>
 <p><strong>The check is poisoned against exactly this.</strong> Putting the two stores back turns
 <code>deploy ark</code> and <code>found by land</code> red again, which is what makes the green
 above worth reading. A check that agreed with a fix rather than measuring it would look identical
@@ -968,14 +968,14 @@ from here.</p>
 It tested a stronger claim than the words can carry &mdash; mining creates metal, so
 <code>work</code> is a declared source and the invariant is <em>conserved outside extraction</em>.
 And it weighed <code>found-colony</code> as if a player could fire it with no ark and no pioneer
-spent; a formula that is only ever called is not a transition.</p>
+spent; a recipe that is only ever called is not a transition.</p>
 </div>
 
 <h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge {VERDICT_2[1]}">{VERDICT_2[0]}</span></h3>
 <p>{RESULTS["unbounded"]["analysed"]} transitions after grounding;
 {len(RESULTS["unbounded"]["skipped"])} skipped ({", ".join(RESULTS["unbounded"]["skipped"])}).</p>
 <div class="scroll">{simple_table(
-    ["Fire this many times", "Formula"],
+    ["Fire this many times", "Recipe"],
     [[w[1], w[0]] for w in RESULTS["unbounded"]["witness"]],
     ["amt", "target"])}</div>
 <p>Metal-equivalent gain <strong>{RESULTS["unbounded"]["metal_gain"]}</strong>, and
@@ -987,7 +987,7 @@ zero.</p>
 <h4>Grounding, and it is the same operation the menu needs</h4>
 <p>A target naming a family stands for one transition per kind in it, so <code>work</code> is
 three: <code>work[food]</code>, <code>work[metal]</code>, <code>work[energy]</code>, each with its
-own largest density. <strong>That is grounding</strong> &mdash; instantiating a formula against
+own largest density. <strong>That is grounding</strong> &mdash; instantiating a recipe against
 what it could apply to &mdash; and it is the same operation an interface performs to build a menu.
 The analysis and the interface want the same machinery, which is a reason to build it once.</p>
 </div>
@@ -998,7 +998,7 @@ removed. <strong>This is the question worth asking</strong>, and it is the recom
 practice: rather than keeping a baseline of intended loops, remove the declared source and ask
 whether metal can still grow.</p>
 <div class="scroll">{simple_table(
-    ["Fire this many times", "Formula"],
+    ["Fire this many times", "Recipe"],
     [[w[1], w[0]] for w in RESULTS["unbounded"]["without_sources"]["witness"]],
     ["amt", "target"])}</div>
 <p>Metal-equivalent gain <strong>{RESULTS["unbounded"]["without_sources"]["metal_gain"]}</strong>.
@@ -1012,12 +1012,12 @@ than asserted.</p>
 create whose target has <strong>no capacity</strong> decides nothing &mdash; hard and soft behave
 identically and always will. <strong>Naming a question does not make it one.</strong></p>
 <div class="scroll">{simple_table(
-    ["Formula", "Line", "Attach", "Capacity"],
+    ["Recipe", "Line", "Attach", "Capacity"],
     [[r[0], r[1], r[2], r[3]] for r in RESULTS["attachment"]["meaningful"]],
     ["target", "target", "attach", "note"])}</div>
 <p>And the one where it does not:</p>
 <div class="scroll">{simple_table(
-    ["Formula", "Line", "Attach", "Why it cannot fail"],
+    ["Recipe", "Line", "Attach", "Why it cannot fail"],
     [[r[0], r[1], r[2], r[3]] for r in RESULTS["attachment"]["unobservable"]],
     ["target", "target", "attach", "note"])}</div>
 <div class="callout">
@@ -1044,12 +1044,12 @@ every case here except the extractors. Territory 1 has food capacity 3, so deplo
 add a second food extractor. <strong>If that is wrong, the fix is at the call</strong> &mdash;
 do not found a colony that is already founded &mdash; and not a second kind of create.</p>
 </div>
-<h3>Parameter domains &mdash; what a formula may be instantiated over</h3>
+<h3>Parameter domains &mdash; what a recipe may be instantiated over</h3>
 <p>A parameter is not free. Its domain is a <strong>condition on the kind</strong>, not a list, and
 grounding resolves it &mdash; so an instance that does not satisfy the condition never exists, and
 in a selection interface the player never sees it.</p>
 <div class="scroll">{simple_table(
-    ["Formula", "Parameter", "Domain", "Today", "Why"],
+    ["Recipe", "Parameter", "Domain", "Today", "Why"],
     DATA["domains"], ["target", "target", "", "amt", "note"])}</div>
 <div class="callout">
 <h4>Food stores, and why the rule is derived rather than named</h4>
@@ -1073,14 +1073,14 @@ separating, because a decision that looks doubly supported is easy to stop exami
 
 <h3>Check 5 &mdash; which territories would refuse a create, per line</h3>
 <div class="scroll">{simple_table(
-    ["Formula", "Line", "Attach", "Blocked on"],
+    ["Recipe", "Line", "Attach", "Blocked on"],
     [[r[0], r[1], r[2], ("none - every territory has room" if not r[3]
       else "territory " + ", ".join(r[3]))] for r in RESULTS["placement"]],
     ["target", "target", "attach", "note"])}</div>
 <div class="callout">
 <h4>Corrected: territory 7 was never affected</h4>
 <p>An earlier version of this report said territories 6 and 7 both mattered. <strong>Territory 7
-has no energy, and no formula here creates an energy extractor</strong>, so it never did. Sean
+has no energy, and no recipe here creates an energy extractor</strong>, so it never did. Sean
 caught it. The check now asks which territories lack <em>the resource the line actually names</em>
 rather than which lack any resource &mdash; a wider question with a plausible answer, which is the
 failure this repository keeps recording.</p>
@@ -1096,13 +1096,13 @@ extractor, rather than founding being refused.</p>
 chooses to build a metal extractor on territory 6 is refused. <strong>Identical condition, opposite
 answers, and neither is a mistake</strong> &mdash; because one is a consequence of landing
 somewhere and the other is a thing the player asked for.</p>
-<p>Under a selection interface the second never even arises: grounding the formula against
+<p>Under a selection interface the second never even arises: grounding the recipe against
 territory 6 produces no <code>build extractor[metal]</code> to select. <strong>The attachment is
 what the console needs and the menu is what the interface needs, from one line.</strong></p>
 </div>
 
 <h3>Check 3 &mdash; a cap of {RESULTS["cap"]["cap"]} &nbsp;<span class="badge down">{len(RESULTS["cap"]["breaches"])} breaches</span></h3>
-<p>Applying each formula once breaches nothing, which is exactly the point about a cap:
+<p>Applying each recipe once breaches nothing, which is exactly the point about a cap:
 <strong>it found neither of the two things the other checks found.</strong> It is a backstop
 against bugs in checks 1 and 2, not a way of finding anything.</p>
 
@@ -1132,7 +1132,7 @@ which is why it now says {n_primitives}.</p>
 </div>
 </div>
 <div class="scroll">{simple_table(
-    ["Formula", "Rows before", "Lines after", "Why"],
+    ["Recipe", "Rows before", "Lines after", "Why"],
     [[r[0], r[1], lines_after(r[0]), r[2]] for r in DATA["collapse"]],
     ["target", "amt", "amt", "note"])}</div>
 
@@ -1145,7 +1145,7 @@ which is why it now says {n_primitives}.</p>
 <p>Everything above is generated from two files, and no number on this page is typed by hand.</p>
 <div class="scroll">{simple_table(
     ["File", "What it is", "Who may write it"],
-    [["tools/research/formulas/data.json", "the formulas, primitives, capacities, invariants and decisions - the only thing to edit", "the research lens"],
+    [["tools/research/formulas/data.json", "the recipes, primitives, capacities, invariants and decisions - the only thing to edit", "the research lens"],
      ["tools/research/formulas/render.py", "this page", "the research lens"],
      ["tools/research/formulas/check.py", "the three checks, with their poison", "the research lens"],
      ["tools/research/formulas/results.json", "what check.py last reported, read by this page", "generated"],
