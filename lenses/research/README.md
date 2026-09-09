@@ -60,6 +60,13 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [Bootstrapping the game from a small kernel](2026-09-09-bootstrapping-from-a-kernel.md)
+  - 2026-09-09. **Addressed to nobody** - Sean intends it once the game works, and not now. What
+    today's decisions already buy it: a primitive set minimal by a test rather than by taste, `call`
+    as the defining word, `require` for dependency order, and an incremental check rule. What would
+    make it hard: the kernel has to be complete before the tower is tall, diagnostics degrade with
+    depth, and nothing can be defined from within yet. The path is two kinds and two declarations.
+
 - [Natural numbers, and what the fusion removed](2026-09-09-natural-numbers-and-the-fusion.md)
   - 2026-09-09. Carries `X-11`'s update. Three decisions of Sean's: guard and spend are one
     operation, amounts are signed with a negative *result* the error, and composition is not
