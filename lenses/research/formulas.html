@@ -184,9 +184,9 @@ transformation needed anyway.</p>
 <th>Was</th>
 </tr></thead><tbody>
 <tr><td class="op op-create">create</td><td class="target">garrison in t</td><td class="amt">1</td><td><span class="attach">SOFT</span></td><td class="note">rows 3 and 4 were a guard and a create</td></tr>
-<tr><td class="op op-create">create</td><td class="target">citizen in t</td><td class="amt">2</td><td><span class="attach">?</span></td><td class="note">row 5</td></tr>
-<tr><td class="op op-create">create</td><td class="target">extractor[food] in t</td><td class="amt">1</td><td><span class="attach">?</span></td><td class="note">row 6</td></tr>
-<tr><td class="op op-create">create</td><td class="target">extractor[metal] in t</td><td class="amt">1</td><td><span class="attach">?</span></td><td class="note">row 7</td></tr>
+<tr><td class="op op-create">create</td><td class="target">citizen in t</td><td class="amt">2</td><td><span class="attach">?</span></td><td class="note">? is not a decision - a territory never refuses a citizen</td></tr>
+<tr><td class="op op-create">create</td><td class="target">extractor[food] in t</td><td class="amt">1</td><td><span class="attach">?</span></td><td class="note">? is live - every territory has food capacity, so HARD is safe here</td></tr>
+<tr><td class="op op-create">create</td><td class="target">extractor[metal] in t</td><td class="amt">1</td><td><span class="attach">?</span></td><td class="note">? is URGENT - territory 6 has no metal, so HARD refuses founding there</td></tr>
 </tbody></table><h3>found by land <span class="badge down">8 rows &rarr; 3 lines (&minus;5)</span></h3>
 <p class="sel">selection: <em>a pioneer</em></p>
 <table><thead><tr>
@@ -822,6 +822,123 @@ declared free in the <em>Kinds</em> table. <strong>So there is no metal source o
 extraction</strong> &mdash; which is what conservation was supposed to mean, now checked rather
 than asserted.</p>
 
+<h3>Check 4 &mdash; is an attachment observable? &nbsp;<span class="badge up">1 decide nothing</span></h3>
+<p>A <code>create</code> fails when its container will not hold another. So an attachment on a
+create whose target has <strong>no capacity</strong> decides nothing &mdash; hard and soft behave
+identically and always will. <strong>Naming a question does not make it one.</strong></p>
+<div class="scroll"><table><thead><tr>
+<th>Formula</th>
+<th>Line</th>
+<th>Attach</th>
+<th>Capacity</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">garrison in t</td>
+<td class="attach">SOFT</td>
+<td class="note">1</td>
+</tr>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">extractor[food] in t</td>
+<td class="attach">?</td>
+<td class="note">its deposit's total capacity for r</td>
+</tr>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">extractor[metal] in t</td>
+<td class="attach">?</td>
+<td class="note">its deposit's total capacity for r</td>
+</tr>
+<tr>
+<td class="target">build extractor</td>
+<td class="target">extractor[$resource] in t</td>
+<td class="attach">HARD</td>
+<td class="note">its deposit's total capacity for r</td>
+</tr>
+<tr>
+<td class="target">build yard</td>
+<td class="target">yard in t</td>
+<td class="attach">HARD</td>
+<td class="note">1</td>
+</tr>
+</tbody></table></div>
+<p>And the one where it does not:</p>
+<div class="scroll"><table><thead><tr>
+<th>Formula</th>
+<th>Line</th>
+<th>Attach</th>
+<th>Why it cannot fail</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="target">citizen in t</td>
+<td class="attach">?</td>
+<td class="note">unbounded - held down by food through upkeep</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>The citizen question mark is not a decision</h4>
+<p>A territory never refuses a citizen &mdash; they are held down by food through upkeep, which is
+not a capacity. <strong>So hard and soft are the same line.</strong> The options are below, and the
+only one that behaves differently is a second reading of the word <em>soft</em> rather than a
+second value of it.</p>
+</div>
+<div class="scroll"><table><thead><tr>
+<th>Option</th>
+<th>What it does</th>
+<th>What it costs</th>
+<th>Applies to</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">Leave it unattached</td>
+<td>The line cannot fail, so it always runs. Deploying onto an inhabited territory adds 2 more citizens.</td>
+<td class="note">Recommended. A citizen is a quantity, and 2 is an increment.</td>
+<td class="note">citizen</td>
+</tr>
+<tr>
+<td class="target">hard</td>
+<td>Fail the action if the citizen cannot be created.</td>
+<td class="note">Identical behaviour today, and forever unless a population cap is added. A word that decides nothing.</td>
+<td class="note">citizen</td>
+</tr>
+<tr>
+<td class="target">soft, reading soft as *the container is full*</td>
+<td>Skip the line when the container will not hold another.</td>
+<td class="note">Identical behaviour today, for the same reason: a territory has no citizen capacity.</td>
+<td class="note">citizen</td>
+</tr>
+<tr>
+<td class="target">soft, reading soft as *one is already there*</td>
+<td>Skip when the territory already has any citizen.</td>
+<td class="note">Observably different, and it turns 2 from an increment into a target. Almost certainly not wanted for a quantity - but this is the line where the two readings of soft come apart.</td>
+<td class="note">citizen</td>
+</tr>
+<tr>
+<td class="target">Decide at the call instead</td>
+<td>call found-colony(t) [soft], guarded on the garrison.</td>
+<td class="note">Answers all three question marks at once: deploying onto a founded colony spends the ark and does nothing else.</td>
+<td class="note">all three</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>Where the two readings of <em>soft</em> come apart, and why the garrison could not show it</h4>
+<p><code>soft</code> can mean <em>the container is full</em> or <em>one is already there</em>. On a
+capacity-one thing like a garrison <strong>those coincide</strong>, which is why the decision
+looked settled. On a citizen they diverge completely: the first never fires, the second fires
+whenever anyone lives there and turns <code>2</code> from an increment into a target.
+<strong>This line is the first place the language has to say which it means.</strong></p>
+</div>
+<div class="callout">
+<h4>But the urgent question marks are the two below it</h4>
+<p><strong>Territory 6 has no metal and territory 7 has no energy.</strong> Under
+<code>HARD</code>, a create that cannot be placed fails the whole action &mdash; so founding a
+colony on territory 6 would be <strong>refused entirely</strong>, because
+<code>create extractor[metal]</code> has nowhere to go. Those two lines want <code>SOFT</code>, or
+founding breaks on two of the twelve territories. <strong>That is a decision the data forces and
+the citizen one is not.</strong></p>
+</div>
+
 <h3>Check 3 &mdash; a cap of 1000 &nbsp;<span class="badge down">0 breaches</span></h3>
 <p>Applying each formula once breaches nothing, which is exactly the point about a cap:
 <strong>it found neither of the two things the other checks found.</strong> It is a backstop
@@ -963,6 +1080,11 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <td>ANSWERED - the two stores are dropped</td>
 <td>Sean, 2026-09-09. found-colony delivers a garrison and two extractors.</td>
 <td class="note">3 metal-equivalent, which is exactly an ark's Binding and a pioneer's, so deploy ark and found by land both conserve exactly.</td>
+</tr>
+<tr>
+<td>OPEN and urgent - the two extractor lines, not the citizen one</td>
+<td>found-colony creates extractor[food] and extractor[metal]. Territory 6 has no metal and territory 7 has no energy.</td>
+<td class="note">Under HARD, a create that cannot be placed fails the whole action - so founding a colony on territory 6 would be refused entirely. These two want SOFT, or founding breaks on two of the twelve territories.</td>
 </tr>
 <tr>
 <td>ANSWERED - how to catch an infinite-resource glitch</td>

@@ -86,6 +86,48 @@
     "cap": 1000,
     "breaches": []
   },
+  "attachment": {
+    "meaningful": [
+      [
+        "found-colony(t)",
+        "garrison in t",
+        "SOFT",
+        "1"
+      ],
+      [
+        "found-colony(t)",
+        "extractor[food] in t",
+        "?",
+        "its deposit's total capacity for r"
+      ],
+      [
+        "found-colony(t)",
+        "extractor[metal] in t",
+        "?",
+        "its deposit's total capacity for r"
+      ],
+      [
+        "build extractor",
+        "extractor[$resource] in t",
+        "HARD",
+        "its deposit's total capacity for r"
+      ],
+      [
+        "build yard",
+        "yard in t",
+        "HARD",
+        "1"
+      ]
+    ],
+    "unobservable": [
+      [
+        "found-colony(t)",
+        "citizen in t",
+        "?",
+        "unbounded - held down by food through upkeep"
+      ]
+    ]
+  },
   "poison": [
     "check 2 flags a formula with no inputs",
     "check 1 goes red on a wrong weighting",

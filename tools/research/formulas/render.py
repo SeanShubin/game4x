@@ -346,6 +346,47 @@ declared free in the <em>Kinds</em> table. <strong>So there is no metal source o
 extraction</strong> &mdash; which is what conservation was supposed to mean, now checked rather
 than asserted.</p>
 
+<h3>Check 4 &mdash; is an attachment observable? &nbsp;<span class="badge up">{len(RESULTS["attachment"]["unobservable"])} decide nothing</span></h3>
+<p>A <code>create</code> fails when its container will not hold another. So an attachment on a
+create whose target has <strong>no capacity</strong> decides nothing &mdash; hard and soft behave
+identically and always will. <strong>Naming a question does not make it one.</strong></p>
+<div class="scroll">{simple_table(
+    ["Formula", "Line", "Attach", "Capacity"],
+    [[r[0], r[1], r[2], r[3]] for r in RESULTS["attachment"]["meaningful"]],
+    ["target", "target", "attach", "note"])}</div>
+<p>And the one where it does not:</p>
+<div class="scroll">{simple_table(
+    ["Formula", "Line", "Attach", "Why it cannot fail"],
+    [[r[0], r[1], r[2], r[3]] for r in RESULTS["attachment"]["unobservable"]],
+    ["target", "target", "attach", "note"])}</div>
+<div class="callout">
+<h4>The citizen question mark is not a decision</h4>
+<p>A territory never refuses a citizen &mdash; they are held down by food through upkeep, which is
+not a capacity. <strong>So hard and soft are the same line.</strong> The options are below, and the
+only one that behaves differently is a second reading of the word <em>soft</em> rather than a
+second value of it.</p>
+</div>
+<div class="scroll">{simple_table(
+    ["Option", "What it does", "What it costs", "Applies to"],
+    DATA["attachment_options"], ["target", "", "note", "note"])}</div>
+<div class="callout">
+<h4>Where the two readings of <em>soft</em> come apart, and why the garrison could not show it</h4>
+<p><code>soft</code> can mean <em>the container is full</em> or <em>one is already there</em>. On a
+capacity-one thing like a garrison <strong>those coincide</strong>, which is why the decision
+looked settled. On a citizen they diverge completely: the first never fires, the second fires
+whenever anyone lives there and turns <code>2</code> from an increment into a target.
+<strong>This line is the first place the language has to say which it means.</strong></p>
+</div>
+<div class="callout">
+<h4>But the urgent question marks are the two below it</h4>
+<p><strong>Territory 6 has no metal and territory 7 has no energy.</strong> Under
+<code>HARD</code>, a create that cannot be placed fails the whole action &mdash; so founding a
+colony on territory 6 would be <strong>refused entirely</strong>, because
+<code>create extractor[metal]</code> has nowhere to go. Those two lines want <code>SOFT</code>, or
+founding breaks on two of the twelve territories. <strong>That is a decision the data forces and
+the citizen one is not.</strong></p>
+</div>
+
 <h3>Check 3 &mdash; a cap of {RESULTS["cap"]["cap"]} &nbsp;<span class="badge down">{len(RESULTS["cap"]["breaches"])} breaches</span></h3>
 <p>Applying each formula once breaches nothing, which is exactly the point about a cap:
 <strong>it found neither of the two things the other checks found.</strong> It is a backstop

@@ -121,21 +121,21 @@
           "citizen in t",
           "2",
           "?",
-          "row 5"
+          "? is not a decision - a territory never refuses a citizen"
         ],
         [
           "create",
           "extractor[food] in t",
           "1",
           "?",
-          "row 6"
+          "? is live - every territory has food capacity, so HARD is safe here"
         ],
         [
           "create",
           "extractor[metal] in t",
           "1",
           "?",
-          "row 7"
+          "? is URGENT - territory 6 has no metal, so HARD refuses founding there"
         ]
       ]
     },
@@ -888,6 +888,11 @@
       "3 metal-equivalent, which is exactly an ark's Binding and a pioneer's, so deploy ark and found by land both conserve exactly."
     ],
     [
+      "OPEN and urgent - the two extractor lines, not the citizen one",
+      "found-colony creates extractor[food] and extractor[metal]. Territory 6 has no metal and territory 7 has no energy.",
+      "Under HARD, a create that cannot be placed fails the whole action - so founding a colony on territory 6 would be refused entirely. These two want SOFT, or founding breaks on two of the twelve territories."
+    ],
+    [
       "ANSWERED - how to catch an infinite-resource glitch",
       "Sean, 2026-09-08, asking whether unbounded capacity means specification errors cannot be detected.",
       "It does not. Structural boundedness is polynomial by linear programming, at edit time, with a witness - see Detecting a glitch. Boundedness for one starting state is EXPSPACE-complete; boundedness for every starting state is polynomial, and the second is the one an editor needs."
@@ -1172,6 +1177,38 @@
       "thing",
       "every kind",
       "`age`, `spoil` and `refresh` only `set` or destroy, and destroying a thing of unknown kind is why `perish` stays out"
+    ]
+  ],
+  "attachment_options": [
+    [
+      "Leave it unattached",
+      "The line cannot fail, so it always runs. Deploying onto an inhabited territory adds 2 more citizens.",
+      "Recommended. A citizen is a quantity, and 2 is an increment.",
+      "citizen"
+    ],
+    [
+      "hard",
+      "Fail the action if the citizen cannot be created.",
+      "Identical behaviour today, and forever unless a population cap is added. A word that decides nothing.",
+      "citizen"
+    ],
+    [
+      "soft, reading soft as *the container is full*",
+      "Skip the line when the container will not hold another.",
+      "Identical behaviour today, for the same reason: a territory has no citizen capacity.",
+      "citizen"
+    ],
+    [
+      "soft, reading soft as *one is already there*",
+      "Skip when the territory already has any citizen.",
+      "Observably different, and it turns 2 from an increment into a target. Almost certainly not wanted for a quantity - but this is the line where the two readings of soft come apart.",
+      "citizen"
+    ],
+    [
+      "Decide at the call instead",
+      "call found-colony(t) [soft], guarded on the garrison.",
+      "Answers all three question marks at once: deploying onto a founded colony spends the ark and does nothing else.",
+      "all three"
     ]
   ]
 }

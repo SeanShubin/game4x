@@ -304,6 +304,33 @@ def check_unbounded(extra=None, exclude_sources=False):
     return names, skipped, witness, gain, metal_gain, free, undeclared, hidden
 
 
+def check_attachment():
+    """Check 4. An attachment is only observable where the line can actually fail.
+
+    A `create` fails when its container will not hold another. So an attachment on a create
+    whose target has **no capacity** decides nothing: hard and soft behave identically and
+    always will. Naming the question does not make it one.
+
+    Returns (meaningful, unobservable, no_capacity_kinds).
+    """
+    bounded = {}
+    for container, holds, upto, _note in DATA.get("capacities", []):
+        base = holds.split("[")[0].strip()
+        bounded[base] = (container, upto)
+    meaningful, unobservable = [], []
+    for f in DATA["player"] + DATA["world"]:
+        for op, target, _amt, attach, _n in f["lines"]:
+            if op != "create" or not attach:
+                continue
+            k = place_of(target)
+            row = (f["name"], target, attach)
+            if k in bounded and "unbounded" not in bounded[k][1]:
+                meaningful.append(row + (bounded[k][1],))
+            else:
+                unobservable.append(row + (bounded.get(k, ("", "no capacity declared"))[1],))
+    return meaningful, unobservable
+
+
 def check_cap(cap=1000):
     """Check 3. A backstop: apply every formula once and report anything past the cap."""
     by_name = gather()
@@ -406,6 +433,8 @@ def as_dict():
                                 "metal_gain": str(mg2)},
         },
         "cap": {"cap": cap, "breaches": [[n, k, c] for n, k, c in breached]},
+        "attachment": {"meaningful": [list(r) for r in check_attachment()[0]],
+                       "unobservable": [list(r) for r in check_attachment()[1]]},
         "poison": ["check 2 flags a formula with no inputs",
                    "check 1 goes red on a wrong weighting",
                    "check 3 goes red at a cap of 0"],
@@ -462,6 +491,17 @@ def main():
         print(f"  metal-equivalent gain: {mg2}   <- a metal source that is not extraction")
     else:
         print("  no loop gains metal without mining")
+    print()
+
+    meaningful, unobservable = check_attachment()
+    print("CHECK 4 - is an attachment observable?")
+    print(f"  {len(meaningful)} create(s) whose container can refuse, so hard and soft differ:")
+    for name, target, attach, upto in meaningful:
+        print(f"    {name:16} {target:28} [{attach}]  capacity {upto}")
+    if unobservable:
+        print(f"  {len(unobservable)} where the container never refuses, so the attachment decides nothing:")
+        for name, target, attach, upto in unobservable:
+            print(f"    {name:16} {target:28} [{attach}]  {upto}")
     print()
 
     cap, breached = check_cap()
