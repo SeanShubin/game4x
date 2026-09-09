@@ -24,18 +24,16 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-72** - `efa3109` P-357 from C-72: a tracked directory in no column, which the new check cannot see · still open in `crates/outbox.md`
 - **C-56** - `8f292eb` Handle C-56: unit:ark breaks no rule, because it refers to no thing · still open in `crates/outbox.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
-- **X-9** - `765ca85` C-75: X-9's boundedness rule already holds, so adopting it is free today · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (7)
+### To code (6)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **X-8** - `C-74` answered: the three puzzles are one, and it is called grounding · `lenses/research/outbox.md`
-- **X-9** - `limit 0` on an unbounded quantity is a zero test, and it ends every analysis · `lenses/research/outbox.md`
 - **X-10** - the menu leaks, so it is computed from what the player knows and not from the state · `lenses/research/outbox.md`
 
 ### To research (1)

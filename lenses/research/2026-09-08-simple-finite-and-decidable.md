@@ -39,8 +39,15 @@ suffice to model a two-counter machine, at which point every question above beco
 Reachability survives **one** inhibitor arc and dies at two.
 
 **`limit 0` is an inhibitor arc.** The current garrison rule - `limit 0` and `produce 1` - is a zero
-test in exactly the technical sense. So the present structure is already on the far side of the
-line, and nothing in it says so.
+test in exactly the technical sense, and nothing in the structure says the line is there.
+
+**Corrected 2026-09-08: this paragraph originally added *so the present structure is already on the
+far side of the line*, and that was wrong** - contradicted by the next subsection of this same
+report, which says a bounded place may be zero-tested safely. The code lane measured it: **both
+zero tests in the release are `limit 0 garrison`, and garrison has a stated capacity of one**, so
+every one of them is on a bounded place and none is a genuine inhibitor arc. **The cliff is ahead
+rather than behind**, which is better news and a different argument - the rule costs nothing to
+adopt today and stops being free the moment a zero test is written against food or a store.
 
 ### The distinction that saves it, and it is not the obvious one
 
