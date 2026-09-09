@@ -322,6 +322,35 @@ it helps reason about them &mdash; it derives a quantity the specification never
     ["", "The claim", "What it gives", "Status"],
     DATA["theme"], ["target", "target", "", "note"])}</div>
 
+<h3>Growth rate, and why density does not buy speed</h3>
+<p>Reproduction caps the per-capita rate at <strong>1</strong> &mdash; a parent per child. Food caps
+it at <strong>d&minus;1</strong>. So the realised rate is <strong>min(d&minus;1, 1)</strong>. Every
+density in the release is an integer, so <strong>the food-limited middle case never occurs</strong>:
+a territory either doubles or is frozen.</p>
+<div class="scroll">{simple_table(
+    ["Territory", "Food", "Density", "Rate", "Behaviour", "Ceiling", "Surplus lost per turn"],
+    DATA["growth"], ["amt", "amt", "amt", "amt", "attach", "amt", "note"])}</div>
+<div class="callout">
+<h4>Density does two things, and speed is not one of them</h4>
+<p>Territory 3 is <code>6 x 2</code> and territory 8 is <code>6 x 6</code>. <strong>They grow at
+exactly the same rate</strong> &mdash; both double every turn &mdash; and differ only in where they
+stop: ceiling 12 against 36. Above density 2, extra density buys <strong>ceiling and surplus, never
+speed</strong>. A reader who takes <code>6 x 6</code> as <em>six times faster</em> would be wrong,
+and the release does not say otherwise anywhere.</p>
+</div>
+<div class="callout">
+<h4>Which raises a question about the surplus, and about food stores</h4>
+<p>Territory 8 produces <strong>5n</strong> surplus food and <code>grow</code> can use only
+<strong>n</strong> of it. The other <strong>4n</strong> has nowhere to go. Food is made with
+<code>keeps</code> 1, and the turn runs <em>upkeep, grow, perish, age, spoil</em> &mdash; so food
+made this turn is aged to 0 and spoiled <strong>at the same turn end</strong>, whether it sits in a
+store or in nothing.</p>
+<p><strong>If that reading is right, a food store buys nothing</strong>, because stored and unstored
+food die at the same moment. It may be that storing is meant to reset <code>keeps</code> and nothing
+says so. <strong>Raised rather than filed as a defect</strong> &mdash; and it is a curious postscript
+to dropping the two stores from <code>found-colony</code>, one of which was a food store.</p>
+</div>
+
 <h3>The population ceiling, which no document contains</h3>
 <p>Per citizen per turn: <code>upkeep</code> eats 1 food, <code>create labor</code> yields 1 labor,
 and <code>work</code> turns 1 labor into <em>d</em> food. So with <em>n</em> citizens and <em>c</em>

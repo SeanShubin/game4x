@@ -931,6 +931,11 @@
       "NOT A DECISION - recorded because it explains the numbers",
       "Sean, 2026-09-09, on theme: labor is not free, it is the sun's energy through food and citizens.",
       "It derives a quantity the specification never states - the population ceiling - and that quantity explains all twelve territory notes."
+    ],
+    [
+      "OPEN - what is a food store for?",
+      "Food is made with keeps 1. The turn order is upkeep, grow, perish, age, spoil - so food made this turn is aged to 0 and spoiled at the same turn end, whether it is in a store or in nothing.",
+      "If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect."
     ]
   ],
   "collapse": [
@@ -1373,10 +1378,22 @@
       "Confirmed against sources rather than recalled"
     ],
     [
-      "Why `create labor` is not the bug it looks like",
-      "Check 2 reports it as a loop that makes labor from nothing.",
-      "It does, *inside the model*. Thematically the sun is paying, and the sun is outside. **So the model has exactly one open boundary - solar, entering through food - and everything else should be closed.** That is a better statement of the declaration list than *these kinds may grow*.",
-      "Restates a check result in the theme's terms"
+      "CORRECTED - there are two open boundaries, not one",
+      "Sean, 2026-09-09: the sun applies energy from outside, and the planet is effectively infinite in minable resources due to scale, not literally.",
+      "This report said the model had *exactly one* open boundary. It has two, and they are different kinds. **The sun is a flow** - it delivers a rate, and unspent sunlight cannot be banked. **The crust is a stock** so large that depletion is not modelled. *Effectively, not literally* is the whole of the difference.",
+      "Corrected by Sean"
+    ],
+    [
+      "The model already encodes that difference, correctly",
+      "A `deposit` carries `density` and `total capacity` and **no remaining quantity**.",
+      "So extraction is bounded by **rate** - how many extractors, how richly - and **never by exhaustion**. That is *effectively infinite by scale* written as a data shape rather than as a sentence, and it was there before this conversation.",
+      "Verified in the Traits table"
+    ],
+    [
+      "Reproduction names the growth law",
+      "Sean: growth is reproduction, so a population cannot more than double even with infinite food.",
+      "`grow` produces *the lesser of the surplus food and the citizens here*, which is a **per-capita rate capped at 1** - a parent per child - **limited by food**. So the realised rate is min(d&minus;1, 1), and the doubling cap is not arbitrary.",
+      "Explains a min() that looked like a balance number"
     ],
     [
       "What labor is worth",
@@ -1389,6 +1406,116 @@
       "Sean: this does not need to be in a recipe.",
       "Agreed, and there is a reason in the model: a boundary condition **constrains** the formulas without being **fired** by anything. Writing it as a recipe would give it a trigger it does not have.",
       "Why it stays out of the table"
+    ]
+  ],
+  "growth": [
+    [
+      "1",
+      "3 x 4",
+      "4",
+      "1",
+      "doubles",
+      "12",
+      "2 x n"
+    ],
+    [
+      "2",
+      "2 x 6",
+      "6",
+      "1",
+      "doubles",
+      "12",
+      "4 x n"
+    ],
+    [
+      "3",
+      "6 x 2",
+      "2",
+      "1",
+      "doubles",
+      "12",
+      "none"
+    ],
+    [
+      "4",
+      "1 x 2",
+      "2",
+      "1",
+      "doubles",
+      "2",
+      "none"
+    ],
+    [
+      "5",
+      "3 x 1",
+      "1",
+      "0",
+      "FROZEN - cannot grow at any size",
+      "3",
+      "none"
+    ],
+    [
+      "6",
+      "4 x 4",
+      "4",
+      "1",
+      "doubles",
+      "16",
+      "2 x n"
+    ],
+    [
+      "7",
+      "4 x 4",
+      "4",
+      "1",
+      "doubles",
+      "16",
+      "2 x n"
+    ],
+    [
+      "8",
+      "6 x 6",
+      "6",
+      "1",
+      "doubles",
+      "36",
+      "4 x n"
+    ],
+    [
+      "9",
+      "2 x 3",
+      "3",
+      "1",
+      "doubles",
+      "6",
+      "1 x n"
+    ],
+    [
+      "10",
+      "3 x 3",
+      "3",
+      "1",
+      "doubles",
+      "9",
+      "1 x n"
+    ],
+    [
+      "11",
+      "5 x 6",
+      "6",
+      "1",
+      "doubles",
+      "30",
+      "4 x n"
+    ],
+    [
+      "12",
+      "2 x 2",
+      "2",
+      "1",
+      "doubles",
+      "4",
+      "none"
     ]
   ]
 }

@@ -827,10 +827,22 @@ it helps reason about them &mdash; it derives a quantity the specification never
 <td class="note">Confirmed against sources rather than recalled</td>
 </tr>
 <tr>
-<td class="target">Why `create labor` is not the bug it looks like</td>
-<td class="target">Check 2 reports it as a loop that makes labor from nothing.</td>
-<td>It does, *inside the model*. Thematically the sun is paying, and the sun is outside. **So the model has exactly one open boundary - solar, entering through food - and everything else should be closed.** That is a better statement of the declaration list than *these kinds may grow*.</td>
-<td class="note">Restates a check result in the theme's terms</td>
+<td class="target">CORRECTED - there are two open boundaries, not one</td>
+<td class="target">Sean, 2026-09-09: the sun applies energy from outside, and the planet is effectively infinite in minable resources due to scale, not literally.</td>
+<td>This report said the model had *exactly one* open boundary. It has two, and they are different kinds. **The sun is a flow** - it delivers a rate, and unspent sunlight cannot be banked. **The crust is a stock** so large that depletion is not modelled. *Effectively, not literally* is the whole of the difference.</td>
+<td class="note">Corrected by Sean</td>
+</tr>
+<tr>
+<td class="target">The model already encodes that difference, correctly</td>
+<td class="target">A `deposit` carries `density` and `total capacity` and **no remaining quantity**.</td>
+<td>So extraction is bounded by **rate** - how many extractors, how richly - and **never by exhaustion**. That is *effectively infinite by scale* written as a data shape rather than as a sentence, and it was there before this conversation.</td>
+<td class="note">Verified in the Traits table</td>
+</tr>
+<tr>
+<td class="target">Reproduction names the growth law</td>
+<td class="target">Sean: growth is reproduction, so a population cannot more than double even with infinite food.</td>
+<td>`grow` produces *the lesser of the surplus food and the citizens here*, which is a **per-capita rate capped at 1** - a parent per child - **limited by food**. So the realised rate is min(d&amp;minus;1, 1), and the doubling cap is not arbitrary.</td>
+<td class="note">Explains a min() that looked like a balance number</td>
 </tr>
 <tr>
 <td class="target">What labor is worth</td>
@@ -845,6 +857,150 @@ it helps reason about them &mdash; it derives a quantity the specification never
 <td class="note">Why it stays out of the table</td>
 </tr>
 </tbody></table></div>
+
+<h3>Growth rate, and why density does not buy speed</h3>
+<p>Reproduction caps the per-capita rate at <strong>1</strong> &mdash; a parent per child. Food caps
+it at <strong>d&minus;1</strong>. So the realised rate is <strong>min(d&minus;1, 1)</strong>. Every
+density in the release is an integer, so <strong>the food-limited middle case never occurs</strong>:
+a territory either doubles or is frozen.</p>
+<div class="scroll"><table><thead><tr>
+<th>Territory</th>
+<th>Food</th>
+<th>Density</th>
+<th>Rate</th>
+<th>Behaviour</th>
+<th>Ceiling</th>
+<th>Surplus lost per turn</th>
+</tr></thead><tbody>
+<tr>
+<td class="amt">1</td>
+<td class="amt">3 x 4</td>
+<td class="amt">4</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">12</td>
+<td class="note">2 x n</td>
+</tr>
+<tr>
+<td class="amt">2</td>
+<td class="amt">2 x 6</td>
+<td class="amt">6</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">12</td>
+<td class="note">4 x n</td>
+</tr>
+<tr>
+<td class="amt">3</td>
+<td class="amt">6 x 2</td>
+<td class="amt">2</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">12</td>
+<td class="note">none</td>
+</tr>
+<tr>
+<td class="amt">4</td>
+<td class="amt">1 x 2</td>
+<td class="amt">2</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">2</td>
+<td class="note">none</td>
+</tr>
+<tr>
+<td class="amt">5</td>
+<td class="amt">3 x 1</td>
+<td class="amt">1</td>
+<td class="amt">0</td>
+<td class="attach">FROZEN - cannot grow at any size</td>
+<td class="amt">3</td>
+<td class="note">none</td>
+</tr>
+<tr>
+<td class="amt">6</td>
+<td class="amt">4 x 4</td>
+<td class="amt">4</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">16</td>
+<td class="note">2 x n</td>
+</tr>
+<tr>
+<td class="amt">7</td>
+<td class="amt">4 x 4</td>
+<td class="amt">4</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">16</td>
+<td class="note">2 x n</td>
+</tr>
+<tr>
+<td class="amt">8</td>
+<td class="amt">6 x 6</td>
+<td class="amt">6</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">36</td>
+<td class="note">4 x n</td>
+</tr>
+<tr>
+<td class="amt">9</td>
+<td class="amt">2 x 3</td>
+<td class="amt">3</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">6</td>
+<td class="note">1 x n</td>
+</tr>
+<tr>
+<td class="amt">10</td>
+<td class="amt">3 x 3</td>
+<td class="amt">3</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">9</td>
+<td class="note">1 x n</td>
+</tr>
+<tr>
+<td class="amt">11</td>
+<td class="amt">5 x 6</td>
+<td class="amt">6</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">30</td>
+<td class="note">4 x n</td>
+</tr>
+<tr>
+<td class="amt">12</td>
+<td class="amt">2 x 2</td>
+<td class="amt">2</td>
+<td class="amt">1</td>
+<td class="attach">doubles</td>
+<td class="amt">4</td>
+<td class="note">none</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>Density does two things, and speed is not one of them</h4>
+<p>Territory 3 is <code>6 x 2</code> and territory 8 is <code>6 x 6</code>. <strong>They grow at
+exactly the same rate</strong> &mdash; both double every turn &mdash; and differ only in where they
+stop: ceiling 12 against 36. Above density 2, extra density buys <strong>ceiling and surplus, never
+speed</strong>. A reader who takes <code>6 x 6</code> as <em>six times faster</em> would be wrong,
+and the release does not say otherwise anywhere.</p>
+</div>
+<div class="callout">
+<h4>Which raises a question about the surplus, and about food stores</h4>
+<p>Territory 8 produces <strong>5n</strong> surplus food and <code>grow</code> can use only
+<strong>n</strong> of it. The other <strong>4n</strong> has nowhere to go. Food is made with
+<code>keeps</code> 1, and the turn runs <em>upkeep, grow, perish, age, spoil</em> &mdash; so food
+made this turn is aged to 0 and spoiled <strong>at the same turn end</strong>, whether it sits in a
+store or in nothing.</p>
+<p><strong>If that reading is right, a food store buys nothing</strong>, because stored and unstored
+food die at the same moment. It may be that storing is meant to reset <code>keeps</code> and nothing
+says so. <strong>Raised rather than filed as a defect</strong> &mdash; and it is a curious postscript
+to dropping the two stores from <code>found-colony</code>, one of which was a food store.</p>
+</div>
 
 <h3>The population ceiling, which no document contains</h3>
 <p>Per citizen per turn: <code>upkeep</code> eats 1 food, <code>create labor</code> yields 1 labor,
@@ -1412,6 +1568,11 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <td>NOT A DECISION - recorded because it explains the numbers</td>
 <td>Sean, 2026-09-09, on theme: labor is not free, it is the sun's energy through food and citizens.</td>
 <td class="note">It derives a quantity the specification never states - the population ceiling - and that quantity explains all twelve territory notes.</td>
+</tr>
+<tr>
+<td>OPEN - what is a food store for?</td>
+<td>Food is made with keeps 1. The turn order is upkeep, grow, perish, age, spoil - so food made this turn is aged to 0 and spoiled at the same turn end, whether it is in a store or in nothing.</td>
+<td class="note">If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect.</td>
 </tr>
 </tbody></table></div>
 
