@@ -451,9 +451,9 @@ nature for territory 1 that nothing states, until `d74a1c6`'s successor removed 
 that leaves a stored trait with no source invites the reader to invent one**, and this reader did.
 
 
-### X-20 - a loose resource has nowhere to be that both documents allow
+### X-20 - *declares no capacity* and *declares no limit* are opposites, and the release means the second
 
-**to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *Capacity, in four questions rather than one* · **found by** mapping Sean's capacity taxonomy onto the rules that already exist
+**to** spec · **status** open · **decided** 2026-09-09 by Sean, **unwritten** in `releases/first-release.md` · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *Capacity, in four questions rather than one* · **found by** mapping Sean's capacity taxonomy onto the rules that already exist
 
 **Three statements, and they cannot all hold.**
 
@@ -490,6 +490,31 @@ takes none: a territory declares capacity for a resource after all, and the numb
 a loose resource is held by the territory as an exception the containment rule names; or *in
 nothing* means *in the game*, and the release says what that costs. **The first is the smallest and
 the third is the only one that changes the game.**
+
+**Answered 2026-09-09, by Sean, the same day.** *Everything except the game itself has to be in a
+location.* Extractors and stores are attached to the territory and limited by its capacity; a store
+has a capacity of its own. **A resource, and the labor a citizen makes, are held by the territory
+with no limit** - labor has to be somewhere, since a citizen makes it and an extractor consumes it.
+
+**So the defect is two phrases, and the second is the interesting one.**
+
+- *A territory declares no capacity for a resource* should say it declares **no limit**. Under
+  `spec/logistics.md` those are **opposites**: no capacity means this sort of thing is never held
+  here, and no limit means the maximum is unbounded. The release uses the first to mean the second
+- *A resource that is in nothing* should say **what the territory holds directly**, rather than what
+  a container in it holds. Nothing but the game is in nothing, and the rule needs to name what is
+  lost without contradicting that
+
+**What is lost at a turn's end is what the territory holds directly**, and Sean's reason for it is
+**disorder**. The purpose is that an extractor is useful before anything has been built to store
+what it makes. **Labor is the pure case**: no container ever holds it, so it is always lost, which
+is why one citizen's labor is one turn's labor and never accumulates.
+
+**This lane has changed its own model to match** - `9107583`'s successor. `move` no longer writes a
+`location` trait, because `spec/logistics.md` says a thing is not located by a trait and what holds
+it is what says where it is; moving is now leaving one place and entering another. **Neither check
+can see that difference**, since both aggregate by kind and ignore where a thing is, which is why
+this went unnoticed here for a day.
 
 
 ## Resolved

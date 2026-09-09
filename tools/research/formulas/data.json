@@ -168,10 +168,10 @@
       "lines": [
         [
           "let",
-          "from = unit.location",
+          "from = what holds unit",
           "",
           "",
-          "was row 1"
+          "was row 1; containment says where, so this reads a holder rather than a trait"
         ],
         [
           "require",
@@ -188,11 +188,18 @@
           "row 4"
         ],
         [
-          "set",
-          "unit.location = $to",
+          "change",
+          "unit in from",
+          "-1",
+          "hard",
+          "rows 3 and 5 were one move; leaving is half of it"
+        ],
+        [
+          "change",
+          "unit in $to",
+          "+1",
           "",
-          "",
-          "rows 3 and 5 were one move"
+          "and arriving is the other half"
         ],
         [
           "set",
@@ -1901,31 +1908,31 @@
     ],
     [
       "food",
-      "a store, holding 10",
-      "not refused - it is simply not in the store",
+      "the territory, <strong>no limit</strong>; a store in it holds 10",
+      "not refused - a territory has no limit for it",
       "<strong>ephemeral</strong>",
       "made with <code>keeps</code> 1, so even a stored unit dies at the turn end"
     ],
     [
       "metal",
-      "a store, holding 10",
-      "not refused - it is simply not in the store",
-      "ephemeral unless stored",
-      ""
+      "the territory, <strong>no limit</strong>; a store in it holds 10",
+      "not refused - a territory has no limit for it",
+      "ephemeral unless a container holds it",
+      "what the territory holds directly is lost at the turn's end - stored metal is not"
     ],
     [
       "energy",
-      "a store holding 10, or a unit's tank holding its fuel",
-      "not refused - it is simply not in the store",
-      "ephemeral unless stored",
+      "the territory, <strong>no limit</strong>; a store holds 10 and a unit's tank holds its fuel",
+      "not refused - a territory has no limit for it",
+      "ephemeral unless a container holds it",
       "the only resource with a second sort of container"
     ],
     [
       "labor",
-      "nowhere",
-      "no bound",
-      "<strong>ephemeral</strong>",
-      "one per citizen per turn, and no thing holds it"
+      "the territory, <strong>no limit</strong>",
+      "not refused - a territory has no limit for it",
+      "<strong>ephemeral, always</strong>",
+      "no container ever holds it, so it is always lost at the turn's end - one per citizen per turn"
     ],
     [
       "territory",

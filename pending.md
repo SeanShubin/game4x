@@ -61,7 +61,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-14** - founding is an undeclared metal source; Sean has decided, and the release still says otherwise · `lenses/research/outbox.md`
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
-- **X-20** - a loose resource has nowhere to be that both documents allow · `lenses/research/outbox.md`
+- **X-20** - *declares no capacity* and *declares no limit* are opposites, and the release means the second · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 

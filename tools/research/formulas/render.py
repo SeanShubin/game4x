@@ -52,6 +52,10 @@ CONTAINER_KIND = {
     "t.orbit": "orbit",
     "citizen.location": "territory",
     "thing.location": "territory",
+    # `move` leaves one place and enters another. Both name the family `place` rather than a
+    # kind, because a unit may be in a territory or in an orbit - which the flag below records.
+    "from": "place",
+    "$to": "place",
 }
 
 # What a `kind[...]` bracket says about the thing, as a trait.
@@ -96,11 +100,13 @@ ASSUMPTIONS = {
     "description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is "
     "never part of one</strong>. So <code>grow</code>'s target has no form as a description, and "
     "this is the one assumption here that contradicts a rule rather than filling a gap.",
-    "unnamed-trait": "<code>location</code> and <code>below</code> are <strong>not traits the "
-    "release lists</strong>. In a dump a thing appears inside what holds it and nothing states "
-    "its container, so <em>where a thing is</em> has no name &mdash; yet <code>move</code> sets it "
-    "and four of the six <code>let</code>s read it. The code lane's <code>C-56</code> is the same "
-    "hole from the other side.",
+    "unnamed-trait": "<code>location</code> and <code>below</code> are read as though they were "
+    "traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not "
+    "located by a trait, and what holds it is what says where it is.</strong> So these paths have "
+    "to mean <em>what holds this</em> rather than <em>this thing's location field</em> &mdash; a "
+    "reading the notation has no form for. <code>move</code> no longer sets one; since 2026-09-09 "
+    "it leaves one place and enters another. The code lane's <code>C-56</code> is the same hole "
+    "from the other side.",
     "family-not-kind": "A description names a <strong>family</strong> rather than a kind &mdash; "
     "<code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what "
     "<code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.",
@@ -172,6 +178,8 @@ def _description(target, where):
         container = container.strip()
         held_by = CONTAINER_KIND.get(container)
         assert held_by, f"unknown container {container!r}"
+        if held_by in FAMILIES:
+            _assume("family-not-kind", where)
         if container == "game":
             _assume("root-container", where)
         else:
@@ -770,16 +778,32 @@ four behaviours are the same capacity answer wearing different lifetimes, and on
 a capacity behaviour at all.</p>
 {cap_table}
 <div class="callout">
-<h4>Nothing ever goes over capacity, and that is why the excess can be discarded</h4>
-<p><em>Can go over capacity, excess discarded at the turn's end</em> describes resources, and it is
-not what the rules say happens. <strong>A territory declares no capacity for a resource. It declares
-capacity for the things that hold them</strong> &mdash; a store holds ten of what it was built for.
-A resource beyond that is not an overflowing store; it is a resource <em>no store holds</em>, and
-what the release says of it is <em>use it immediately, store it, or lose it</em>.</p>
-<p>So the store never overflows and never refuses. The bound is real, and exceeding it is not an
-error &mdash; it is the difference between a unit of metal that survives the turn and one that does
-not. <strong>That is a lifetime, not a capacity</strong>, and it is why this behaviour needs no
-attach value: nothing failed.</p>
+<h4>Resolved 2026-09-09, and it turns on one word</h4>
+<p>Sean: <strong>everything except the game itself has to be in a location.</strong> Extractors and
+stores are attached to the territory and limited by its capacity; a store then has a capacity of its
+own. A resource and the labor a citizen makes are <strong>held by the territory with no limit</strong>
+&mdash; labor has to be somewhere, since a citizen makes it and an extractor consumes it.</p>
+<p>The release says <em>a territory declares no capacity for a resource</em>, and
+<code>spec/logistics.md</code> says <strong>a kind that declares no capacity contains nothing, and
+never can</strong>. Those two together forbid what the game does. <strong>What is meant is no
+<em>limit</em>, and no capacity is its opposite</strong> &mdash; one declares an unbounded maximum,
+the other declares that this sort of thing is never held here. That is <code>X-20</code>, and it is
+a phrase rather than a rule.</p>
+</div>
+<div class="callout">
+<h4>Nothing goes over capacity, and the end of a turn is about disorder rather than overflow</h4>
+<p><em>Can go over capacity, with the excess discarded</em> describes resources, and nothing goes
+over anything. A store holds ten and never refuses, because a resource beyond ten is not in the
+store &mdash; it is held by the territory, which has no limit. <strong>What is lost at the turn's
+end is what the territory holds directly rather than what a container holds.</strong></p>
+<p>Sean's reason for it is <strong>disorder</strong>, and the purpose is that
+<strong>an extractor is useful before anything has been built to store what it makes</strong>: work
+it, spend what it made that turn, and no store was needed. <strong>Labor is the pure case</strong> -
+no container ever holds it, so it is always lost, which is why one citizen's labor is one turn's
+labor and never accumulates.</p>
+<p>So this is a lifetime rather than a capacity, and it needs no attach value: nothing failed. The
+release's phrase for it is <em>a resource that is in nothing</em>, and nothing but the game is in
+nothing &mdash; the same one-phrase fix as above.</p>
 </div>
 <div class="callout">
 <h4><em>Cannot be created there at all</em> is already a rule, and it is not capacity zero</h4>
@@ -794,6 +818,17 @@ capacity is stored; used and available capacity are derived</strong>, available 
 the used. <strong>Available capacity is a counter</strong>, and filling a container is subtracting
 from it &mdash; which is the complement construction, in the specification, before this lane
 suggested it.</p>
+</div>
+<div class="callout">
+<h4>What this changed in the model, rather than in the prose</h4>
+<p><code>move</code> no longer writes a <code>location</code>. <code>spec/logistics.md</code> says
+<strong>a thing is not located by a trait, and what holds it is what says where it is</strong>, so
+moving is <strong>leaving one place and entering another</strong> - two changes where there was one
+assignment. It costs a line and deletes a trait the specification does not have.</p>
+<p><strong>Neither check can see the difference</strong>, because both aggregate by kind and ignore
+where a thing is - a loop that moves metal between territories is not a loop that creates metal, so
+ignoring location is right for them and blind here. That is why <code>X-20</code> went unnoticed by
+this lane's own tooling for a day.</p>
 </div>
 
 <h2>The capacities the game declares</h2>

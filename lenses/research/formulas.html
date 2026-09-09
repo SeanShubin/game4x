@@ -220,7 +220,7 @@ is why no <code>set</code> in this report carries an attachment.</p>
 the note &mdash; as a single string in the notation <code>spec/console.md</code> gives for a command
 and for a description of state: <code>{name field:value ...}</code>, where a value is a word, a
 number or another command, a field referring to a thing is named for that thing's kind, and
-<code>#</code> begins a comment. All 56 lines are encoded, none by hand.</p>
+<code>#</code> begins a comment. All 57 lines are encoded, none by hand.</p>
 <p>Nine of them needed something that notation does not define. The encoder records each rather
 than inventing quietly, and they are listed under <em>What the encoding assumed</em>, below the
 data.</p>
@@ -266,7 +266,7 @@ data.</p>
 <tr><td class="op op-let">let</td><td class="target">t = pioneer.location</td><td class="amt"></td><td></td><td class="note"></td><td class="one-string">{let t:pioneer.location}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">pioneer</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{pioneer} amount:-1} <span class="cmt"># row 1</span></td></tr>
 <tr><td class="op op-call">call</td><td class="target">found-colony(t)</td><td class="amt"></td><td></td><td class="note">rows 2-8, identical to deploy ark's</td><td class="one-string">{call recipe:found-colony territory:t} <span class="cmt"># rows 2-8, identical to deploy ark's</span></td></tr>
-</tbody></table></div><h3>move <span class="badge level">5 rows &rarr; 5 lines (=)</span></h3>
+</tbody></table></div><h3>move <span class="badge up">5 rows &rarr; 6 lines (+1)</span></h3>
 <p class="sel">selection: <em>a unit that is ready</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -276,10 +276,11 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-let">let</td><td class="target">from = unit.location</td><td class="amt"></td><td></td><td class="note">was row 1</td><td class="one-string">{let from:unit.location} <span class="cmt"># was row 1</span></td></tr>
+<tr><td class="op op-let">let</td><td class="target">from = what holds unit</td><td class="amt"></td><td></td><td class="note">was row 1; containment says where, so this reads a holder rather than a trait</td><td class="one-string">{let from:what holds unit} <span class="cmt"># was row 1; containment says where, so this reads a holder rather than a trait</span></td></tr>
 <tr><td class="op op-require">require</td><td class="target">adjacency from -&gt; $to the unit crosses</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note">row 2</td><td class="one-string">{require thing:{adjacency from:from to:$to crossed-by:unit} at-least:1 attach:hard} <span class="cmt"># row 2</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">energy in unit</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">row 4</td><td class="one-string">{change thing:{energy unit:unit} amount:-1 attach:hard} <span class="cmt"># row 4</span></td></tr>
-<tr><td class="op op-set">set</td><td class="target">unit.location = $to</td><td class="amt"></td><td></td><td class="note">rows 3 and 5 were one move</td><td class="one-string">{set thing:{unit} location:$to} <span class="cmt"># rows 3 and 5 were one move</span></td></tr>
+<tr><td class="op op-change">change</td><td class="target">unit in from</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">rows 3 and 5 were one move; leaving is half of it</td><td class="one-string">{change thing:{unit place:from} amount:-1 attach:hard} <span class="cmt"># rows 3 and 5 were one move; leaving is half of it</span></td></tr>
+<tr><td class="op op-change">change</td><td class="target">unit in $to</td><td class="amt amt-pos">+1</td><td></td><td class="note">and arriving is the other half</td><td class="one-string">{change thing:{unit place:$to} amount:+1} <span class="cmt"># and arriving is the other half</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">unit.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 5</td><td class="one-string">{set thing:{unit} ready:no} <span class="cmt"># rows 3 and 5</span></td></tr>
 </tbody></table></div><h3>build extractor <span class="badge level">3 rows &rarr; 3 lines (=)</span></h3>
 <p class="sel">selection: <em>a territory you control</em></p>
@@ -678,18 +679,34 @@ discarded at the turn's end, cannot be created in that container at all, and no 
 <p><strong>Mapped onto the rules that exist, the list is shorter than it looks.</strong> Two of the
 four behaviours are the same capacity answer wearing different lifetimes, and one of the four is not
 a capacity behaviour at all.</p>
-<div class="scroll"><table><thead><tr><th>Kind</th><th>Where the bound lives</th><th>At the bound</th><th>Lifetime</th><th></th></tr></thead><tbody><tr><td class="target">garrison</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">a declared number: 1</td></tr><tr><td class="target">yard</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">a declared number: 1</td></tr><tr><td class="target">ark</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">a declared number: 2</td></tr><tr><td class="target">pioneer</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">a declared number: 2</td></tr><tr><td class="target">extractor</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">a number per resource, and <strong>zero is one of its values</strong> - territory 6 has no metal deposit, so no metal extractor can ever be built there</td></tr><tr><td class="target">store</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">as many as the extractors of its resource, so the bound moves as the territory is built</td></tr><tr><td class="target">citizen</td><td>nowhere</td><td>no bound</td><td>persists</td><td class="note">held down by food through upkeep, which is a loop rather than a capacity</td></tr><tr><td class="target">food</td><td>a store, holding 10</td><td>not refused - it is simply not in the store</td><td><strong>ephemeral</strong></td><td class="note">made with <code>keeps</code> 1, so even a stored unit dies at the turn end</td></tr><tr><td class="target">metal</td><td>a store, holding 10</td><td>not refused - it is simply not in the store</td><td>ephemeral unless stored</td><td class="note"></td></tr><tr><td class="target">energy</td><td>a store holding 10, or a unit's tank holding its fuel</td><td>not refused - it is simply not in the store</td><td>ephemeral unless stored</td><td class="note">the only resource with a second sort of container</td></tr><tr><td class="target">labor</td><td>nowhere</td><td>no bound</td><td><strong>ephemeral</strong></td><td class="note">one per citizen per turn, and no thing holds it</td></tr><tr><td class="target">territory</td><td>the game</td><td>no bound</td><td>persists</td><td class="note">twelve, fixed at design time</td></tr><tr><td class="target">orbit</td><td>the game</td><td>no bound</td><td>persists</td><td class="note">one per territory</td></tr><tr><td class="target">deposit</td><td>the territory</td><td>no bound</td><td>persists</td><td class="note">three per territory, fixed at design time</td></tr><tr><td class="target">adjacency</td><td>the game</td><td>no bound</td><td>persists</td><td class="note">one per shared edge</td></tr><tr><td class="target">game</td><td>&mdash;</td><td>no bound</td><td>persists</td><td class="note">the one thing that is in nothing</td></tr></tbody></table></div>
+<div class="scroll"><table><thead><tr><th>Kind</th><th>Where the bound lives</th><th>At the bound</th><th>Lifetime</th><th></th></tr></thead><tbody><tr><td class="target">garrison</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">a declared number: 1</td></tr><tr><td class="target">yard</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">a declared number: 1</td></tr><tr><td class="target">ark</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">a declared number: 2</td></tr><tr><td class="target">pioneer</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">a declared number: 2</td></tr><tr><td class="target">extractor</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">a number per resource, and <strong>zero is one of its values</strong> - territory 6 has no metal deposit, so no metal extractor can ever be built there</td></tr><tr><td class="target">store</td><td>the territory</td><td>refused</td><td>persists</td><td class="note">as many as the extractors of its resource, so the bound moves as the territory is built</td></tr><tr><td class="target">citizen</td><td>nowhere</td><td>no bound</td><td>persists</td><td class="note">held down by food through upkeep, which is a loop rather than a capacity</td></tr><tr><td class="target">food</td><td>the territory, <strong>no limit</strong>; a store in it holds 10</td><td>not refused - a territory has no limit for it</td><td><strong>ephemeral</strong></td><td class="note">made with <code>keeps</code> 1, so even a stored unit dies at the turn end</td></tr><tr><td class="target">metal</td><td>the territory, <strong>no limit</strong>; a store in it holds 10</td><td>not refused - a territory has no limit for it</td><td>ephemeral unless a container holds it</td><td class="note">what the territory holds directly is lost at the turn's end - stored metal is not</td></tr><tr><td class="target">energy</td><td>the territory, <strong>no limit</strong>; a store holds 10 and a unit's tank holds its fuel</td><td>not refused - a territory has no limit for it</td><td>ephemeral unless a container holds it</td><td class="note">the only resource with a second sort of container</td></tr><tr><td class="target">labor</td><td>the territory, <strong>no limit</strong></td><td>not refused - a territory has no limit for it</td><td><strong>ephemeral, always</strong></td><td class="note">no container ever holds it, so it is always lost at the turn's end - one per citizen per turn</td></tr><tr><td class="target">territory</td><td>the game</td><td>no bound</td><td>persists</td><td class="note">twelve, fixed at design time</td></tr><tr><td class="target">orbit</td><td>the game</td><td>no bound</td><td>persists</td><td class="note">one per territory</td></tr><tr><td class="target">deposit</td><td>the territory</td><td>no bound</td><td>persists</td><td class="note">three per territory, fixed at design time</td></tr><tr><td class="target">adjacency</td><td>the game</td><td>no bound</td><td>persists</td><td class="note">one per shared edge</td></tr><tr><td class="target">game</td><td>&mdash;</td><td>no bound</td><td>persists</td><td class="note">the one thing that is in nothing</td></tr></tbody></table></div>
 <div class="callout">
-<h4>Nothing ever goes over capacity, and that is why the excess can be discarded</h4>
-<p><em>Can go over capacity, excess discarded at the turn's end</em> describes resources, and it is
-not what the rules say happens. <strong>A territory declares no capacity for a resource. It declares
-capacity for the things that hold them</strong> &mdash; a store holds ten of what it was built for.
-A resource beyond that is not an overflowing store; it is a resource <em>no store holds</em>, and
-what the release says of it is <em>use it immediately, store it, or lose it</em>.</p>
-<p>So the store never overflows and never refuses. The bound is real, and exceeding it is not an
-error &mdash; it is the difference between a unit of metal that survives the turn and one that does
-not. <strong>That is a lifetime, not a capacity</strong>, and it is why this behaviour needs no
-attach value: nothing failed.</p>
+<h4>Resolved 2026-09-09, and it turns on one word</h4>
+<p>Sean: <strong>everything except the game itself has to be in a location.</strong> Extractors and
+stores are attached to the territory and limited by its capacity; a store then has a capacity of its
+own. A resource and the labor a citizen makes are <strong>held by the territory with no limit</strong>
+&mdash; labor has to be somewhere, since a citizen makes it and an extractor consumes it.</p>
+<p>The release says <em>a territory declares no capacity for a resource</em>, and
+<code>spec/logistics.md</code> says <strong>a kind that declares no capacity contains nothing, and
+never can</strong>. Those two together forbid what the game does. <strong>What is meant is no
+<em>limit</em>, and no capacity is its opposite</strong> &mdash; one declares an unbounded maximum,
+the other declares that this sort of thing is never held here. That is <code>X-20</code>, and it is
+a phrase rather than a rule.</p>
+</div>
+<div class="callout">
+<h4>Nothing goes over capacity, and the end of a turn is about disorder rather than overflow</h4>
+<p><em>Can go over capacity, with the excess discarded</em> describes resources, and nothing goes
+over anything. A store holds ten and never refuses, because a resource beyond ten is not in the
+store &mdash; it is held by the territory, which has no limit. <strong>What is lost at the turn's
+end is what the territory holds directly rather than what a container holds.</strong></p>
+<p>Sean's reason for it is <strong>disorder</strong>, and the purpose is that
+<strong>an extractor is useful before anything has been built to store what it makes</strong>: work
+it, spend what it made that turn, and no store was needed. <strong>Labor is the pure case</strong> -
+no container ever holds it, so it is always lost, which is why one citizen's labor is one turn's
+labor and never accumulates.</p>
+<p>So this is a lifetime rather than a capacity, and it needs no attach value: nothing failed. The
+release's phrase for it is <em>a resource that is in nothing</em>, and nothing but the game is in
+nothing &mdash; the same one-phrase fix as above.</p>
 </div>
 <div class="callout">
 <h4><em>Cannot be created there at all</em> is already a rule, and it is not capacity zero</h4>
@@ -704,6 +721,17 @@ capacity is stored; used and available capacity are derived</strong>, available 
 the used. <strong>Available capacity is a counter</strong>, and filling a container is subtracting
 from it &mdash; which is the complement construction, in the specification, before this lane
 suggested it.</p>
+</div>
+<div class="callout">
+<h4>What this changed in the model, rather than in the prose</h4>
+<p><code>move</code> no longer writes a <code>location</code>. <code>spec/logistics.md</code> says
+<strong>a thing is not located by a trait, and what holds it is what says where it is</strong>, so
+moving is <strong>leaving one place and entering another</strong> - two changes where there was one
+assignment. It costs a line and deletes a trait the specification does not have.</p>
+<p><strong>Neither check can see the difference</strong>, because both aggregate by kind and ignore
+where a thing is - a loop that moves metal between territories is not a loop that creates metal, so
+ignoring location is right for them and blind here. That is why <code>X-20</code> went unnoticed by
+this lane's own tooling for a day.</p>
 </div>
 
 <h2>The capacities the game declares</h2>
@@ -969,7 +997,7 @@ spent; a recipe that is only ever called is not a transition.</p>
 </div>
 
 <h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded, as it should be</span></h3>
-<p>17 transitions after grounding;
+<p>18 transitions after grounding;
 1 skipped (perish).</p>
 <div class="scroll"><table><thead><tr>
 <th>Fire this many times</th>
@@ -980,7 +1008,7 @@ spent; a recipe that is only ever called is not a transition.</p>
 <td class="target">create labor</td>
 </tr>
 <tr>
-<td class="amt">13/27</td>
+<td class="amt">10/27</td>
 <td class="target">found by land</td>
 </tr>
 <tr>
@@ -989,10 +1017,14 @@ spent; a recipe that is only ever called is not a transition.</p>
 </tr>
 <tr>
 <td class="amt">1</td>
-<td class="target">move</td>
+<td class="target">move[ark]</td>
 </tr>
 <tr>
-<td class="amt">13/27</td>
+<td class="amt">1</td>
+<td class="target">move[pioneer]</td>
+</tr>
+<tr>
+<td class="amt">10/27</td>
 <td class="target">produce pioneer</td>
 </tr>
 <tr>
@@ -1004,15 +1036,15 @@ spent; a recipe that is only ever called is not a transition.</p>
 <td class="target">work[food]</td>
 </tr>
 <tr>
-<td class="amt">13/72</td>
+<td class="amt">5/36</td>
 <td class="target">work[metal]</td>
 </tr>
 <tr>
-<td class="amt">35/72</td>
+<td class="amt">19/36</td>
 <td class="target">work[energy]</td>
 </tr>
 </tbody></table></div>
-<p>Metal-equivalent gain <strong>13/9</strong>, and
+<p>Metal-equivalent gain <strong>10/9</strong>, and
 <code>work[metal]</code> is in the witness &mdash; which is the point. <strong>The check can see
 mining now.</strong> Until families were resolved to kinds, <code>work</code> produced
 <code>resource</code>, a family with no metal weight, and the game's only metal source scored
@@ -1027,7 +1059,7 @@ The analysis and the interface want the same machinery, which is a reason to bui
 </div>
 
 <h3>Check 2b &mdash; the same without mining &nbsp;<span class="badge down">clean</span></h3>
-<p>14 transitions with <code>work</code>
+<p>15 transitions with <code>work</code>
 removed. <strong>This is the question worth asking</strong>, and it is the recommendation in
 practice: rather than keeping a baseline of intended loops, remove the declared source and ask
 whether metal can still grow.</p>
@@ -1663,13 +1695,13 @@ and the growth rate are set by different halves of the same column</strong>, and
 <p><strong>Where a line needed something the notation does not define, the encoder records it
 rather than inventing quietly</strong> &mdash; so this list is the report's real output, and it is
 generated from the encoding rather than written beside it.</p>
-<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">13</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">4</td><td><strong><em>For each</em> has no form.</strong> The notation has <code>repeat</code>, which is how many times one command fires. World-building needs twelve calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits in a comment, where nothing can run it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 1</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 3</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 2</td></tr><tr><td class="amt">2</td><td><code>surplus:yes</code> puts a <strong>derived</strong> trait in a description. The release lists <em>surplus</em> as derived, and the notation says a description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is never part of one</strong>. So <code>grow</code>'s target has no form as a description, and this is the one assumption here that contradicts a rule rather than filling a gap.</td><td class="note">grow line 1</td></tr><tr><td class="amt">10</td><td><code>location</code> and <code>below</code> are <strong>not traits the release lists</strong>. In a dump a thing appears inside what holds it and nothing states its container, so <em>where a thing is</em> has no name &mdash; yet <code>move</code> sets it and four of the six <code>let</code>s read it. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">7</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
+<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">12</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">4</td><td><strong><em>For each</em> has no form.</strong> The notation has <code>repeat</code>, which is how many times one command fires. World-building needs twelve calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits in a comment, where nothing can run it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 1</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 3</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 2</td></tr><tr><td class="amt">2</td><td><code>surplus:yes</code> puts a <strong>derived</strong> trait in a description. The release lists <em>surplus</em> as derived, and the notation says a description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is never part of one</strong>. So <code>grow</code>'s target has no form as a description, and this is the one assumption here that contradicts a rule rather than filling a gap.</td><td class="note">grow line 1</td></tr><tr><td class="amt">8</td><td><code>location</code> and <code>below</code> are read as though they were traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not located by a trait, and what holds it is what says where it is.</strong> So these paths have to mean <em>what holds this</em> rather than <em>this thing's location field</em> &mdash; a reading the notation has no form for. <code>move</code> no longer sets one; since 2026-09-09 it leaves one place and enters another. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 1</td></tr><tr><td class="amt">11</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 3</td></tr></tbody></table>
 <p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
 line required a choice the specification has not made.</p>
 
 <h2>What the re-encoding cost and saved</h2>
-<p>Computed from the data rather than asserted. <strong>58 rows became 48 lines &mdash;
-down 10</strong>.</p>
+<p>Computed from the data rather than asserted. <strong>58 rows became 49 lines &mdash;
+down 9</strong>.</p>
 <div class="callout">
 <h4>There used to be three numbers here, and now there is one</h4>
 <p>Before the fusion this section had to carry two counts and explain the gap. <code>consume</code>
@@ -1719,7 +1751,7 @@ which is why it now says 5.</p>
 <tr>
 <td class="target">move</td>
 <td class="amt">5</td>
-<td class="amt">5</td>
+<td class="amt">6</td>
 <td class="note">level: the ready flip and the location move are both explicit, and the two energy rows became one consume</td>
 </tr>
 <tr>

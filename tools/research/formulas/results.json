@@ -18,7 +18,7 @@
     "violations": []
   },
   "unbounded": {
-    "analysed": 17,
+    "analysed": 18,
     "skipped": [
       "perish"
     ],
@@ -29,19 +29,23 @@
       ],
       [
         "found by land",
-        "13/27"
+        "10/27"
       ],
       [
         "grow",
         "1"
       ],
       [
-        "move",
+        "move[ark]",
+        "1"
+      ],
+      [
+        "move[pioneer]",
         "1"
       ],
       [
         "produce pioneer",
-        "13/27"
+        "10/27"
       ],
       [
         "upkeep",
@@ -53,26 +57,26 @@
       ],
       [
         "work[metal]",
-        "13/72"
+        "5/36"
       ],
       [
         "work[energy]",
-        "35/72"
+        "19/36"
       ]
     ],
     "gain": {
       "citizen": "1",
-      "extractor": "26/27",
-      "garrison": "13/27"
+      "extractor": "20/27",
+      "garrison": "10/27"
     },
-    "metal_gain": "13/9",
+    "metal_gain": "10/9",
     "free": [
       "citizen"
     ],
     "undeclared": [],
     "hidden": [],
     "without_sources": {
-      "transitions": 14,
+      "transitions": 15,
       "witness": [
         [
           "create labor",
