@@ -60,6 +60,12 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [Simple, finite, and still decidable: where the cliff edges are](2026-09-08-simple-finite-and-decidable.md)
+  - 2026-09-08. Carries `X-9`, for the recipe structure Sean is replacing. A recipe network is a
+    Petri net and `limit 0` is an inhibitor arc; nesting is HTN and recursion is undecidable;
+    boundedness is the line that saves the first and acyclicity the second. Citations checked in
+    session rather than recalled.
+
 - [One fact, a console that types and an interface that selects](2026-09-08-one-fact-two-interfaces.md)
   - 2026-09-08. Carries `X-8`, answering `C-74`. Grounding is the one question behind all three
     of its puzzles; `create-if-missing` is a conditional effect, noun-verb is the Xerox Star, and

@@ -123,6 +123,58 @@ inside this vocabulary at all. **If any of them becomes a specification question
 yours**, and this lane has deliberately drafted no text: the vocabulary is the route and not the
 destination, which `CLAUDE.md` names as the trap for exactly this kind of finding.
 
+### X-9 - `limit 0` on an unbounded quantity is a zero test, and it ends every analysis
+
+**to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-simple-finite-and-decidable.md), and Sean stating what the recipe structure is being replaced with
+
+**Sean is prototyping a replacement for the recipe structure** - simple and finite, unlimited
+complexity from composition and from nesting, with Master of Orion 1993 as the expressiveness
+target. **This is filed to you because you are building the prototype**, and every item in it is a
+property a check could hold. **Nothing here proposes a structure and no text is drafted.**
+
+**Where.** The garrison rule, `limit 0` **and** `produce 1`, and any rule shaped like it.
+
+**What.** `require`/`consume`/`produce` over counted things **is a Petri net** - the same object as
+Factorio's recipe graph, which is why ratio analysis works there. **`limit 0` is an inhibitor
+arc**: a transition that fires only when a place is empty, which is a zero test. **Petri nets with
+inhibitor arcs are Turing-complete**, and two of them model a two-counter machine. Reachability
+survives one and dies at two.
+
+**Why it costs something.** A plain Petri net gives **decidable reachability** and the structural
+analyses a 4X designer actually wants - **P-invariants** name what is conserved whatever is played,
+and **T-invariants** name recipe cycles that return the world to its start, which is to say **an
+unintended infinite-resource loop is computable rather than something you playtest for.** Crossing to
+Turing-completeness gives all of that away, silently, and nothing in the present structure says the
+line is there.
+
+**The distinction that saves it, and it is not the obvious one.** Moving the zero test from a
+precondition to a guard on an effect - which is what `create-if-missing` does - is right for `X-8`'s
+reason and **does not buy decidability**; a zero-guarded effect can record the test's result
+elsewhere and the branch returns. **This lane's first draft claimed otherwise and was wrong.** The
+real line is **boundedness**: an unbounded place cannot be zero-tested safely, and a **bounded** one
+can, by the standard complementary-place construction, with no inhibitor arc and no loss.
+
+**Which is `C-74`'s split arriving from the other side.** A garrison is a *fact* - capacity one - and
+citizens are a *quantity*. **Zero-testing a capacity-one place is free; zero-testing food is the
+cliff.** So the fix is not to remove `limit 0` but to make the kind of thing it tests **declarable**,
+which is a property a check can enforce over the whole recipe set.
+
+**And nesting has its own edge.** One recipe calling another is **hierarchical task network**
+planning, which is **strictly more expressive than STRIPS** and **undecidable in general**, because
+decomposition can recurse. **Decidable subclasses are syntactically identifiable**, and the cheapest
+is **acyclic decomposition** - no recipe transitively calls itself. That is a graph check over the
+recipe set, it runs in milliseconds, and it costs almost none of the explosion he wants, which comes
+from branching rather than from recursion depth.
+
+**Whether.** **Worth knowing before the prototype's core is fixed, and worth nothing afterwards** -
+that is the whole reason it is filed now rather than noted. Two of the three are checks you could
+wire cheaply and both fail loudly: **a place is declared bounded or a zero test on it is refused**,
+and **the recipe call graph is acyclic**. The third is not a check and is Sean's: Master of Orion
+needs hidden information and randomness, and Distant Worlds 2 needs continuous time - the game
+description language that already solved *any finite deterministic game with full information* needed
+**different languages**, not later versions, for exactly those two things. **Deciding where they live
+before the core is fixed is cheaper than every alternative.**
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated
