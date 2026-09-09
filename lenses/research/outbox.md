@@ -177,6 +177,49 @@ Nothing to build and no decision taken - whether composition is sequential, whet
 stay, and whether a change and a threshold share a line are all left open on purpose. **The naming is
 his**; this is a reading of his four, not a replacement for them.
 
+### X-12 - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting
+
+**to** code · **status** open · **raised** 2026-09-08 · **source** [report](2026-09-08-deploy-worked.md), and Sean asking for a recipe to be worked through
+
+**Counted from `releases/first-release.md:202` rather than recalled.** `deploy ark` is nine rows and
+`found by land` is eight. **Seven of them are identical** - `limit 0 garrison`, `produce 1 garrison`,
+`produce 2 citizen`, `produce 1 extractor food`, `produce 1 extractor metal`, `produce 1 store food`,
+`produce 1 store metal` - differing in nothing. The two recipes differ only in what is spent: an ark
+from the orbit above, or a pioneer.
+
+**Why it costs something.** *What a new colony starts with* is **two edits today, and one of them can
+be forgotten.** Sean intends the recipes to be editable by players inside the game, which makes a
+duplicated block a rule a player will change once and see take effect half the time.
+
+**It is also the population `C-75` correctly said did not exist.** That lane refused to wire the
+acyclicity check because no recipe calls any recipe, so the check would be green over nothing. **A
+`found-colony` sub-recipe is the first call site**, and the check stops being vacuous the moment it
+lands. **Not a request to extract it** - whether to is Sean's, and the item is the duplication.
+
+**Two more things the worked example exposed**, both decisions rather than defects:
+
+- **Deriving the territory from the selected ark deletes row 1 and a `Where`.** `require 1 territory
+  @ $where` is a **parameter declaration** wearing a threshold's clothes, and there is no parameter to
+  declare once the territory is `ark.location.below`; row 2's *orbit above `$where`* goes with it,
+  because two things that cannot disagree need no constraint keeping them agreed. **Nine rows to
+  seven, two `Where` expressions to none.**
+- **A soft garrison threshold silently decides five other rows.** Today `limit 0 garrison` is hard and
+  gates the whole recipe, so nothing fires twice. Make it soft, as `create-if-missing` does, and
+  deploying onto an existing colony succeeds and adds **two more citizens, two more extractors and two
+  more stores**. Each remaining line then needs its own answer and they are not the same answer.
+  **The current table hides that question**; splitting the gate is what shows those rows were never
+  individually considered.
+
+**And his sketch omits both stores**, which the specification produces. Flagged rather than
+reconciled - dropping them is a change to the game.
+
+**Whether.** **The duplication is worth acting on and the rest is worth reading.** Nothing here
+should be built without Sean deciding the two questions above first, and this lane has deliberately
+not decided them. **One thing changes status rather than being new**: once players edit recipes, the
+engine must reject a bad recipe *at edit time with a reason*, which a Turing-complete rule language
+cannot do - so `X-9`'s boundedness and acyclicity stop being elegance and become editor validation,
+and `C-75` already measured that adopting them costs nothing today.
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

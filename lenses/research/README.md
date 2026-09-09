@@ -60,6 +60,11 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [`deploy ark`, worked, and the seven rows that are already duplicated](2026-09-08-deploy-worked.md)
+  - 2026-09-08. Carries `X-12`. `deploy ark` and `found by land` share seven rows verbatim, which
+    is the first real call site for nesting; deriving the territory deletes a row and a `Where`;
+    and a soft garrison threshold silently decides five other rows.
+
 - [Least expressive yet complete, and the test for whether a primitive earns its place](2026-09-08-least-expressive-yet-complete.md)
   - 2026-09-08. Carries `X-11`. A primitive earns its place when removing it moves the explosion
     from the generated space into the authored one; the four roles are two dimensions, a change
