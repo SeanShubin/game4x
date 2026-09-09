@@ -404,12 +404,18 @@ second value of it.</p>
     ["Option", "What it does", "What it costs", "Applies to"],
     DATA["attachment_options"], ["target", "", "note", "note"])}</div>
 <div class="callout">
-<h4>Where the two readings of <em>soft</em> come apart, and why the garrison could not show it</h4>
-<p><code>soft</code> can mean <em>the container is full</em> or <em>one is already there</em>. On a
-capacity-one thing like a garrison <strong>those coincide</strong>, which is why the decision
-looked settled. On a citizen they diverge completely: the first never fires, the second fires
-whenever anyone lives there and turns <code>2</code> from an increment into a target.
-<strong>This line is the first place the language has to say which it means.</strong></p>
+<h4>Withdrawn: <em>what does soft test</em> was a false choice</h4>
+<p>An earlier version of this report asked whether <code>soft</code> means <em>the container is
+full</em> or <em>one is already there</em>. <strong>There is exactly one condition under which a
+create can fail &mdash; the container will not take another &mdash; so there is one meaning and
+not two.</strong> The second reading was this lane's invention with no case behind it, and Sean
+was right not to understand the question.</p>
+<p><strong>The real distinction it was standing in front of is about <code>create</code>, not about
+<code>soft</code>.</strong> <code>create X [soft]</code> means <em>add one if there is room</em>,
+which is not the same as <em>ensure one exists</em>. Those coincide wherever capacity is 1 &mdash;
+every case here except the extractors. Territory 1 has food capacity 3, so deploying twice would
+add a second food extractor. <strong>If that is wrong, the fix is at the call</strong> &mdash;
+do not found a colony that is already founded &mdash; and not a second kind of create.</p>
 </div>
 <div class="callout">
 <h4>But the urgent question marks are the two below it</h4>

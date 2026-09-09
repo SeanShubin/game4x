@@ -140,8 +140,8 @@ depends on a decision about a different column.</strong></p>
 </tr>
 <tr>
 <td class="op">soft</td>
-<td>If the line cannot do what it says, skip this line and carry on. The action still succeeds.</td>
-<td class="note">What create-if-missing needs. Note that the rest of the formula still runs, which is why one soft line does not answer for the lines beside it.</td>
+<td>The container will not take another, so skip this line and carry on. The action still succeeds.</td>
+<td class="note">There is exactly one condition under which a create fails - the container is full - so soft has one meaning and not two. An earlier version of this report offered a second reading and it was a false choice.</td>
 <td class="attach">IN USE - create garrison in t</td>
 </tr>
 <tr>
@@ -175,10 +175,16 @@ is why no <code>set</code> in this report carries an attachment.</p>
 <th>Where it came from</th>
 </tr></thead><tbody>
 <tr>
-<td class="target">What does soft test?</td>
-<td>*The container is full* or *one is already there*.</td>
-<td class="note">They coincide on a capacity-one thing like a garrison, and come apart on a citizen. Recommended: the container is full - it is the reading a container can answer without knowing what the line intended.</td>
-<td class="note">Raised by the citizen line, 2026-09-09</td>
+<td class="target">WITHDRAWN - *what does soft test* was a false choice</td>
+<td>This report asked whether soft means *the container is full* or *one is already there*. There is only one condition under which a create can fail, and it is the first.</td>
+<td class="note">Withdrawn 2026-09-09 after Sean said he did not understand the question. He was right not to: it was not a question. The real distinction is below and it is about create, not about soft.</td>
+<td class="note">Raised and withdrawn by this lane</td>
+</tr>
+<tr>
+<td class="target">OPEN - is *add one if there is room* ever the wrong thing?</td>
+<td>`create X [soft]` adds one when the container has space. That is not the same as *ensure one exists*.</td>
+<td class="note">They coincide wherever capacity is 1, which is every case in the report except the extractors. Territory 1 has food capacity 3, so deploying twice would add a second food extractor. If that is wrong, the fix is at the call - skip founding a colony that is already founded - and not a second kind of create.</td>
+<td class="note">The real question the false one was standing in front of</td>
 </tr>
 <tr>
 <td class="target">Is a failure observable to other formulas?</td>
@@ -1012,12 +1018,18 @@ second value of it.</p>
 </tr>
 </tbody></table></div>
 <div class="callout">
-<h4>Where the two readings of <em>soft</em> come apart, and why the garrison could not show it</h4>
-<p><code>soft</code> can mean <em>the container is full</em> or <em>one is already there</em>. On a
-capacity-one thing like a garrison <strong>those coincide</strong>, which is why the decision
-looked settled. On a citizen they diverge completely: the first never fires, the second fires
-whenever anyone lives there and turns <code>2</code> from an increment into a target.
-<strong>This line is the first place the language has to say which it means.</strong></p>
+<h4>Withdrawn: <em>what does soft test</em> was a false choice</h4>
+<p>An earlier version of this report asked whether <code>soft</code> means <em>the container is
+full</em> or <em>one is already there</em>. <strong>There is exactly one condition under which a
+create can fail &mdash; the container will not take another &mdash; so there is one meaning and
+not two.</strong> The second reading was this lane's invention with no case behind it, and Sean
+was right not to understand the question.</p>
+<p><strong>The real distinction it was standing in front of is about <code>create</code>, not about
+<code>soft</code>.</strong> <code>create X [soft]</code> means <em>add one if there is room</em>,
+which is not the same as <em>ensure one exists</em>. Those coincide wherever capacity is 1 &mdash;
+every case here except the extractors. Territory 1 has food capacity 3, so deploying twice would
+add a second food extractor. <strong>If that is wrong, the fix is at the call</strong> &mdash;
+do not found a colony that is already founded &mdash; and not a second kind of create.</p>
 </div>
 <div class="callout">
 <h4>But the urgent question marks are the two below it</h4>

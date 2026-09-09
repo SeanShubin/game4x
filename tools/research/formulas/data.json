@@ -1226,8 +1226,8 @@
     ],
     [
       "soft",
-      "If the line cannot do what it says, skip this line and carry on. The action still succeeds.",
-      "What create-if-missing needs. Note that the rest of the formula still runs, which is why one soft line does not answer for the lines beside it.",
+      "The container will not take another, so skip this line and carry on. The action still succeeds.",
+      "There is exactly one condition under which a create fails - the container is full - so soft has one meaning and not two. An earlier version of this report offered a second reading and it was a false choice.",
       "IN USE - create garrison in t"
     ],
     [
@@ -1245,10 +1245,16 @@
   ],
   "attach_decisions": [
     [
-      "What does soft test?",
-      "*The container is full* or *one is already there*.",
-      "They coincide on a capacity-one thing like a garrison, and come apart on a citizen. Recommended: the container is full - it is the reading a container can answer without knowing what the line intended.",
-      "Raised by the citizen line, 2026-09-09"
+      "WITHDRAWN - *what does soft test* was a false choice",
+      "This report asked whether soft means *the container is full* or *one is already there*. There is only one condition under which a create can fail, and it is the first.",
+      "Withdrawn 2026-09-09 after Sean said he did not understand the question. He was right not to: it was not a question. The real distinction is below and it is about create, not about soft.",
+      "Raised and withdrawn by this lane"
+    ],
+    [
+      "OPEN - is *add one if there is room* ever the wrong thing?",
+      "`create X [soft]` adds one when the container has space. That is not the same as *ensure one exists*.",
+      "They coincide wherever capacity is 1, which is every case in the report except the extractors. Territory 1 has food capacity 3, so deploying twice would add a second food extractor. If that is wrong, the fix is at the call - skip founding a colony that is already founded - and not a second kind of create.",
+      "The real question the false one was standing in front of"
     ],
     [
       "Is a failure observable to other formulas?",
