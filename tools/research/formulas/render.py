@@ -1052,21 +1052,39 @@ survived for exactly this shape: <code>require 1 {{kind name:ark}}</code>. A rea
 dependency explicit and checkable rather than a matter of writing them in the right order.</p>
 </div>
 <div class="callout">
-<h4>The limiting factor is analysis, not expression &mdash; and the phase rule is what draws the line</h4>
+<h4>The limiting factor is analysis, and it is narrower than this report first said</h4>
 <p>Every check on this page assumes <strong>a fixed set of transitions</strong>. Check 2 builds a
-matrix of them; check 1 weighs each one; check 6 reads them all. A model that can create transitions
-while it runs has no such set.</p>
-<p>The literature is blunt about the cost. <strong>Net rewriting systems are Turing powerful, so the
-basic decidable properties of Petri nets are lost and automatic verification is not possible for
-that class.</strong> But <strong>reconfigurable nets</strong> - where the rewriting rules are fixed
-in advance rather than invented as it goes - are a subclass for which <strong>boundedness can still
-be decided</strong>.</p>
-<p><strong>That is the line, and this game already has it drawn.</strong> Definitions made in the
-<em>design</em> phase, from a fixed set of definition recipes, leave a net that is settled before
-play begins - reconfigurable, and every check still means something. Definitions made during
-<em>play</em> do not. <strong>So the design-time distinction Sean kept for its convenience turns out
-to be what keeps checks 1, 2, 3 and 6 worth running</strong>, which is a better reason than the one
-it was kept for.</p>
+matrix of them; check 1 weighs each one; check 6 reads them all. So the question is not whether
+definitions happen, but whether the set they produce can be known.</p>
+<p><strong>Corrected the same day.</strong> This section first said the design-time distinction was
+what kept the checks meaningful. That is not it. <strong>Manual definition costs nothing at all</strong>
+&mdash; these are edit-time checks over a fixed rule set, so writing a new recipe means re-running
+them, which is what an editor does anyway. A person adding a recipe during play is still a person.
+The line is not the phase, and it is not who is at the keyboard.</p>
+<p><strong>The line is whether the set of recipes that could ever exist is finite and knowable in
+advance.</strong> A recipe that picks a definition from a fixed catalogue is a <em>reconfigurable
+net</em>, and boundedness stays decidable for that class. A recipe that composes an arbitrary new
+recipe out of the state is a <em>net rewriting system</em>, which is Turing powerful, and the
+decidable properties of Petri nets are lost with it. <strong>So automatic definition is allowed
+too</strong>, on that condition &mdash; which is a much weaker restriction than a phase.</p>
+</div>
+<div class="callout">
+<h4>Time flowing one direction buys something real, and it is not what saves you</h4>
+<p>It makes the <strong>per-transition</strong> checks incremental. Checks 1 and 6 are properties of
+a single recipe read on its own: does <em>this</em> recipe conserve metal, does <em>this</em> line
+put its thing somewhere declared. A recipe that passes them passes them forever, and nothing later
+can un-pass it &mdash; so with time going one way you check only what is new.</p>
+<p><strong>Check 2 is not like that, and here is a recipe that proves it.</strong> Adding
+<code>change +1 deposit in t</code> - a deposit out of nothing:</p>
+<pre><code>as it stands                 check1 green (12)   check6 green   check2 undeclared gain: none
+add: a deposit from nothing  check1 green (13)   check6 green   check2 undeclared gain: deposit +1</code></pre>
+<p>It conserves metal, because a deposit has no Binding, and it puts the deposit somewhere a
+territory declares. <strong>Both per-transition checks stay green and the whole-net one goes
+red.</strong> Boundedness is a property of the matrix rather than of any row in it, so one new
+transition can create a loop among transitions that were all fine before.</p>
+<p><strong>So the working rule is cheap and precise: on defining a recipe, check the new one against
+1 and 6, and re-run 2 over everything.</strong> Monotone time is exactly what makes the first half
+incremental, and it does nothing for the second.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>
