@@ -34,6 +34,233 @@ def esc(text):
     )
 
 
+# ---------------------------------------------------------------------------
+# One line as one string, in the console's notation
+#
+# `spec/console.md` gives one notation for a command and for a description of state:
+# `{name field:value ...}`, a value is a word, a number or another command, a field
+# that refers to a thing is named for that thing's kind, and `#` begins a comment.
+# Everything below is that notation applied to a formula line. Where a line needs
+# something the notation does not define, the encoder records an assumption rather
+# than inventing quietly - the assumptions are listed in the report and counted.
+# ---------------------------------------------------------------------------
+
+# What kind of thing each container is, so the field can be named for its kind.
+CONTAINER_KIND = {
+    "t": "territory",
+    "game": "game",
+    "unit": "unit",
+    "t.orbit": "orbit",
+    "citizen.location": "territory",
+    "thing.location": "territory",
+}
+
+# What a `kind[...]` bracket says about the thing, as a trait.
+BRACKET_FIELD = {
+    "extractor": "resource",
+    "store": "resource",
+    "deposit": "resource",
+    "resource": "kind",
+    "food": "surplus",
+}
+
+# The parameters each called formula takes, named as the fields of the call.
+CALL_FIELDS = {
+    "found-colony": ["territory"],
+    "make-territory": ["id", "biome", "nature"],
+    "make-deposit": ["territory", "resource", "capacity", "density"],
+    "make-orbit": ["territory"],
+    "make-adjacency": ["from", "to"],
+}
+
+ASSUMPTIONS = {
+    "path": "A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. "
+    "The notation says a value is a word, a number, or another command, so a path is none of "
+    "the three. Every <code>let</code> needs one.",
+    "arithmetic": "An <strong>arithmetic expression</strong> is used as a value &mdash; "
+    "<code>keeps:(thing.keeps - 1)</code>. Written verbatim in brackets rather than as an invented "
+    "command: the brackets are not the notation's either, and without them the spaces read as "
+    "three fields rather than one value.",
+    "for-each": "<strong><em>For each</em> has no form.</strong> The notation has "
+    "<code>repeat</code>, which is how many times one command fires. World-building needs twelve "
+    "calls with <em>different</em> arguments, which is not that &mdash; so the multiplicity sits "
+    "in a comment, where nothing can run it.",
+    "positional": "<strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other "
+    "argument in the notation is named.",
+    "recipe-as-thing": "<code>recipe:</code> names the formula a <code>call</code> fires, which "
+    "treats a recipe as a thing with a name. The alternative is a second field that names no kind, "
+    "and <code>id</code> is meant to be the only one.",
+    "root-container": "<code>game:game</code> &mdash; the game is the one thing inside nothing, so "
+    "the field naming its kind has no identifier to take and repeats the kind instead.",
+    "crossed-by": "<code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier "
+    "<em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not "
+    "against the adjacency, so the trait this guard reads has no name &mdash; the code lane's "
+    "<code>C-60</code> is the same hole from the other side.",
+    "derived-trait": "<code>surplus:yes</code> puts a <strong>derived</strong> trait in a "
+    "description. The release lists <em>surplus</em> as derived, and the notation says a "
+    "description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is "
+    "never part of one</strong>. So <code>grow</code>'s target has no form as a description, and "
+    "this is the one assumption here that contradicts a rule rather than filling a gap.",
+    "unnamed-trait": "<code>location</code> and <code>below</code> are <strong>not traits the "
+    "release lists</strong>. In a dump a thing appears inside what holds it and nothing states "
+    "its container, so <em>where a thing is</em> has no name &mdash; yet <code>move</code> sets it "
+    "and four of the six <code>let</code>s read it. The code lane's <code>C-56</code> is the same "
+    "hole from the other side.",
+    "family-not-kind": "A description names a <strong>family</strong> rather than a kind &mdash; "
+    "<code>{thing}</code> for the world formulas, <code>{resource kind:...}</code> for what "
+    "<code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.",
+}
+
+# Traits used by the formulas that the release's Traits table does not list.
+UNNAMED_TRAITS = {"location", "below"}
+
+# The families, read from the data rather than restated, so the two cannot disagree.
+FAMILIES = {row[0] for row in DATA["families"]}
+
+_used = {}
+
+
+def _assume(tag, where):
+    assert tag in ASSUMPTIONS, tag
+    _used.setdefault(tag, []).append(where)
+
+
+def _value(text, where):
+    """A value, flagged where the notation does not cover what it is."""
+    text = str(text).strip()
+    if UNNAMED_TRAITS & set(text.replace("[", ".").replace("]", ".").split(".")):
+        _assume("unnamed-trait", where)
+    if " - " in text or " + " in text:
+        _assume("arithmetic", where)
+        return f"({text})"
+    if "." in text and not text.replace(".", "").isdigit():
+        _assume("path", where)
+    return text
+
+
+def _description(target, where):
+    """`kind[arg] in container` as a description: {kind trait:value container:where}."""
+    if " in " in target:
+        head, container = target.split(" in ", 1)
+    else:
+        head, container = target, None
+    head = head.strip()
+    fields = []
+    if "[" in head:
+        kind, arg = head[: head.index("[")], head[head.index("[") + 1 : head.rindex("]")]
+        field = BRACKET_FIELD.get(kind)
+        assert field, f"no bracket field for kind {kind!r}"
+        if field == "surplus":
+            _assume("derived-trait", where)
+            fields.append("surplus:yes")
+        else:
+            fields.append(f"{field}:{_value(arg, where)}")
+        if kind in FAMILIES:
+            _assume("family-not-kind", where)
+    else:
+        kind = head
+        if kind in FAMILIES:
+            _assume("family-not-kind", where)
+    if container is not None:
+        container = container.strip()
+        held_by = CONTAINER_KIND.get(container)
+        assert held_by, f"unknown container {container!r}"
+        if container == "game":
+            _assume("root-container", where)
+        else:
+            _value(container, where)
+        fields.append(f"{held_by}:{container}")
+    return "{" + " ".join([kind] + fields) + "}"
+
+
+def console_line(op, target, amount, attach, note, where):
+    """One row of a formula table, as a single string in the console's notation."""
+    amount, attach = str(amount).strip(), str(attach).strip().lower()
+
+    if op == "let":
+        name, expr = [p.strip() for p in target.split("=", 1)]
+        if expr.startswith("min("):
+            _assume("positional", where)
+            inner = expr[len("min(") : expr.rindex(")")]
+            a, b = [p.strip() for p in inner.split(",")]
+            if a.startswith("surplus "):
+                kind, rest = a[len("surplus ") :].split(" ", 1)
+                a = f"{kind}[surplus] {rest}"
+            body = f"{{min {_description(a, where)} {_description(b, where)}}}"
+        else:
+            body = _value(expr, where)
+        out = f"{{let {name}:{body}}}"
+
+    elif op == "call":
+        name = target.split("(")[0].strip()
+        if name in CALL_FIELDS:
+            args = [a.strip() for a in target[target.index("(") + 1 : target.index(")")].split(",")]
+            fields = CALL_FIELDS[name]
+            assert len(args) == len(fields), f"{name}: {len(args)} args, {len(fields)} fields"
+            _assume("recipe-as-thing", where)
+            pairs = " ".join(f"{f}:{_value(a, where)}" for f, a in zip(fields, args))
+            out = f"{{call recipe:{name} {pairs}}}".replace("  ", " ")
+        else:
+            raise KeyError(name)
+        if "..." in target:
+            out += " ... " + out.replace(
+                "recipe:make-territory id:1 biome:grassland nature:1",
+                "recipe:make-territory id:12 biome:mountain nature:1",
+            )
+        if amount.startswith("x"):
+            _assume("for-each", where)
+            note = f"{amount}, one call per argument" + (f" - {note}" if note else "")
+
+    elif op == "set":
+        lhs, value = [p.strip() for p in target.split("=", 1)]
+        subject, trait = lhs.rsplit(".", 1)
+        if trait in UNNAMED_TRAITS:
+            _assume("unnamed-trait", where)
+        if subject in FAMILIES:
+            _assume("family-not-kind", where)
+        out = f"{{set thing:{{{subject}}} {trait}:{_value(value, where)}}}"
+
+    elif op == "threshold":
+        if target.startswith("adjacency from"):
+            _assume("crossed-by", where)
+            thing = "{adjacency from:from to:$to crossed-by:unit}"
+        else:
+            thing = _description(target, where)
+        assert amount.startswith("at least "), amount
+        out = f"{{threshold thing:{thing} at-least:{_value(amount[len('at least '):], where)}}}"
+
+    elif op in ("create", "destroy"):
+        out = f"{{{op} thing:{_description(target, where)} amount:{_value(amount, where)}}}"
+
+    else:
+        raise KeyError(op)
+
+    if attach:
+        out = out[:-1] + f" attach:{attach}}}"
+    if note:
+        out += f"  # {note}"
+    return out
+
+
+def encode_all():
+    """Encode every line once, so the assumption counts cannot double-count."""
+    encoded = {}
+    for f in DATA["player"] + DATA["world"] + DATA["creation"]:
+        for i, (op, target, amount, attach, note) in enumerate(f["lines"]):
+            where = f'{f["name"]} line {i + 1}'
+            encoded[(f["name"], i)] = console_line(op, target, amount, attach, note, where)
+    total = sum(len(f["lines"]) for f in DATA["player"] + DATA["world"] + DATA["creation"])
+    assert len(encoded) == total, f"{len(encoded)} encoded, {total} lines"
+    undeclared = set(_used) - set(ASSUMPTIONS)
+    assert not undeclared, undeclared
+    unused = set(ASSUMPTIONS) - set(_used)
+    assert not unused, f"declared and never needed: {unused}"
+    return encoded, total
+
+
+ENCODED, N_LINES = encode_all()
+
+
 def formula_table(f):
     out = []
     was = f.get("was")
@@ -51,11 +278,11 @@ def formula_table(f):
         )
     out.append(f'<h3>{esc(f["name"])} {badge}</h3>')
     out.append(f'<p class="sel">selection: <em>{esc(f["selection"])}</em></p>')
-    out.append("<table><thead><tr>")
-    for h in ("Op", "Target", "Amount / Bound", "Attach", "Was"):
+    out.append('<div class="scroll"><table><thead><tr>')
+    for h in ("Op", "Target", "Amount / Bound", "Attach", "Was", "The same row, as one string"):
         out.append(f"<th>{h}</th>")
     out.append("</tr></thead><tbody>")
-    for op, target, amount, attach, was_note in f["lines"]:
+    for i, (op, target, amount, attach, was_note) in enumerate(f["lines"]):
         cls = OP_CLASS.get(op, "")
         attach_cell = f'<span class="attach">{esc(attach)}</span>' if attach else ""
         out.append(
@@ -63,10 +290,35 @@ def formula_table(f):
             f"<td class=\"target\">{esc(target)}</td>"
             f"<td class=\"amt\">{esc(amount)}</td>"
             f"<td>{attach_cell}</td>"
-            f'<td class="note">{esc(was_note)}</td></tr>'
+            f'<td class="note">{esc(was_note)}</td>'
+            f'<td class="one-string">{_one_string_cell(ENCODED[(f["name"], i)])}</td></tr>'
         )
-    out.append("</tbody></table>")
+    out.append("</tbody></table></div>")
     return "\n".join(out)
+
+
+def _one_string_cell(text):
+    """The string as it is, with its comment set back so the command reads first."""
+    if "  # " in text:
+        cmd, comment = text.split("  # ", 1)
+        return f'{esc(cmd)} <span class="cmt"># {esc(comment)}</span>'
+    return esc(text)
+
+
+def assumption_table():
+    """What the encoding assumed, and how many lines needed each - counted, not written."""
+    rows = []
+    for tag, text in ASSUMPTIONS.items():
+        where = _used[tag]
+        rows.append(
+            f'<tr><td class="amt">{len(where)}</td><td>{text}</td>'
+            f'<td class="note">{esc(where[0])}</td></tr>'
+        )
+    assert len(rows) == len(ASSUMPTIONS)
+    return (
+        '<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead>'
+        "<tbody>" + "".join(rows) + "</tbody></table>"
+    )
 
 
 def simple_table(headers, rows, classes=None):
@@ -165,6 +417,9 @@ tbody tr:nth-child(odd) {{ background: var(--shade); }}
 .op-set {{ color: var(--set); }} .op-threshold {{ color: var(--threshold); }}
 .op-call {{ color: var(--call); }} .op-let {{ color: var(--muted); }}
 .target, .amt {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
+.one-string {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
+  min-width: 26em; color: var(--accent); }}
+.one-string .cmt {{ color: var(--muted); font-weight: 400; }}
 .note {{ color: var(--muted); font-size: 12.5px; }}
 .attach {{ font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }}
 .badge {{ font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 600; padding: 2px 7px;
@@ -244,6 +499,22 @@ rather than after.</p>
 <div class="scroll">{simple_table(
     ["Written as", "Means", "Cost of removing it"],
     DATA["sugar"], ["target", "", "note"])}</div>
+
+<h2>Every row as one string</h2>
+<p>The last column of every formula table below restates that row &mdash; op, target, amount,
+attach and the note &mdash; as a single string in the notation <code>spec/console.md</code> gives
+for a command and for a description of state. All {N_LINES} lines are encoded, none by hand.</p>
+<div class="callout">
+<h4>What the encoding assumes, and why it is worth reading</h4>
+<p>The notation says a command is <code>{{name field:value ...}}</code>, that a value is a word, a
+number or another command, that a field referring to a thing is named for that thing's kind, and
+that <code>#</code> begins a comment. <strong>Where a line needed something that notation does not
+define, the encoder records it rather than inventing quietly</strong> &mdash; so this list is the
+report's real output, and it is generated from the encoding rather than written beside it.</p>
+{assumption_table()}
+<p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
+line required a choice the specification has not made.</p>
+</div>
 
 <h2>Player formulas <span class="badge">{n_player}</span></h2>
 {"".join(formula_table(f) for f in DATA["player"])}
