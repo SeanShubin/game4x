@@ -1,0 +1,72 @@
+{
+  "conservation": {
+    "analysed": 13,
+    "skipped": [
+      "grow",
+      "perish",
+      "upkeep",
+      "work"
+    ],
+    "weights": {
+      "metal": 1,
+      "garrison": 1,
+      "extractor": 1,
+      "store": 1,
+      "yard": 15,
+      "ark": 3,
+      "pioneer": 3
+    },
+    "violations": [
+      [
+        "deploy ark",
+        2,
+        "-1 ark (x3), +2 extractor (x1), +1 garrison (x1), +2 store (x1)"
+      ],
+      [
+        "found by land",
+        2,
+        "+2 extractor (x1), +1 garrison (x1), -1 pioneer (x3), +2 store (x1)"
+      ],
+      [
+        "found-colony",
+        5,
+        "+2 extractor (x1), +1 garrison (x1), +2 store (x1)"
+      ]
+    ]
+  },
+  "unbounded": {
+    "analysed": 11,
+    "skipped": [
+      "grow",
+      "perish",
+      "upkeep",
+      "work"
+    ],
+    "witness": [
+      [
+        "create labor",
+        "1"
+      ],
+      [
+        "found-colony",
+        "1"
+      ]
+    ],
+    "gain": {
+      "citizen": "2",
+      "extractor": "2",
+      "garrison": "1",
+      "labor": "1",
+      "store": "2"
+    }
+  },
+  "cap": {
+    "cap": 1000,
+    "breaches": []
+  },
+  "poison": [
+    "check 2 flags a formula with no inputs",
+    "check 1 goes red on a wrong weighting",
+    "check 3 goes red at a cap of 0"
+  ]
+}

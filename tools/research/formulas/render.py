@@ -13,6 +13,7 @@ import sys
 
 HERE = pathlib.Path(__file__).parent
 DATA = json.loads((HERE / "data.json").read_text(encoding="utf-8"))
+RESULTS = json.loads((HERE / "results.json").read_text(encoding="utf-8"))
 
 OP_CLASS = {
     "create": "op-create",
@@ -279,6 +280,56 @@ check will flag it &mdash; correctly. So check 2 cannot ask <em>is anything unbo
 author names the resource that must not grow and food is simply not on the list.</p>
 </div>
 
+<h2>The three checks, as run</h2>
+<p>Not a description of what they would report &mdash; the output of
+<code>tools/research/formulas/check.py</code>, read from <code>results.json</code>, so this page
+and the checker cannot disagree. <strong>All three were poisoned before being believed</strong>:
+{"; ".join(RESULTS["poison"])}.</p>
+
+<h3>Check 1 &mdash; metal conserved &nbsp;<span class="badge up">{len(RESULTS["conservation"]["violations"])} violations</span></h3>
+<p>{RESULTS["conservation"]["analysed"]} formulas analysed;
+{len(RESULTS["conservation"]["skipped"])} skipped for state-dependent amounts
+({", ".join(RESULTS["conservation"]["skipped"])}). Weights are the <em>Binding</em> column,
+copied rather than invented: {", ".join(f"{k} {v}" for k, v in RESULTS["conservation"]["weights"].items())}.</p>
+<div class="scroll">{simple_table(
+    ["Formula", "Net metal-equivalent", "Where it comes from"],
+    [[v[0], f"{v[1]:+d}", v[2]] for v in RESULTS["conservation"]["violations"]],
+    ["target", "amt", "note"])}</div>
+<div class="callout">
+<h4>What this says</h4>
+<p><strong>Founding a colony creates five metal from nothing</strong> &mdash; a garrison, two
+extractors and two stores, each holding one metal of binding, with nothing consumed. Deploying an
+ark spends three and creates five, so each founding nets <strong>+2</strong>. The specification
+says metal is <em>conserved</em>. Either that word is wrong, or founding should cost what it
+builds. <strong>This is a defect in the specification, found by a check on its first run</strong>,
+and it is not this lens's to decide.</p>
+</div>
+
+<h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded</span></h3>
+<p>{RESULTS["unbounded"]["analysed"]} formulas in the matrix;
+{len(RESULTS["unbounded"]["skipped"])} skipped
+({", ".join(RESULTS["unbounded"]["skipped"])}). The witness is a firing ratio &mdash; run these,
+in these proportions, and you end with more than you began.</p>
+<div class="scroll">{simple_table(
+    ["Fire this many times", "Formula"],
+    [[w[1], w[0]] for w in RESULTS["unbounded"]["witness"]],
+    ["amt", "target"])}</div>
+<p>Net gain per turn of the ratio: <strong>{", ".join(f"{k} +{v}" for k, v in RESULTS["unbounded"]["gain"].items())}</strong>.</p>
+<div class="callout">
+<h4>One of these two is the game and the other is the bug</h4>
+<p><code>create labor</code> makes labor from nothing every turn. <strong>That is the intended
+economy</strong> and it is why this check must be a diff against declared intent rather than an
+absolute. <code>found-colony</code> is the one to look at, and check 1 already named it exactly.
+<strong>The checks agreeing from two different directions is the useful part</strong>: check 1 is
+exact and narrow, check 2 is conservative and broad, and the formula they both point at is the
+one worth opening.</p>
+</div>
+
+<h3>Check 3 &mdash; a cap of {RESULTS["cap"]["cap"]} &nbsp;<span class="badge down">{len(RESULTS["cap"]["breaches"])} breaches</span></h3>
+<p>Applying each formula once breaches nothing, which is exactly the point about a cap:
+<strong>it found neither of the two things the other checks found.</strong> It is a backstop
+against bugs in checks 1 and 2, not a way of finding anything.</p>
+
 <h2>What the re-encoding cost and saved</h2>
 <p>Computed from the data rather than asserted. In bare primitives,
 <strong>{was} rows became {now} lines &mdash; up {now - was}</strong>. That is the number predicted
@@ -304,6 +355,18 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <div class="scroll">{simple_table(
     ["Question", "What is at stake", "How it shows up"],
     DATA["decisions"], ["", "", "note"])}</div>
+
+<h2>The source, for review</h2>
+<p>Everything above is generated from two files, and no number on this page is typed by hand.</p>
+<div class="scroll">{simple_table(
+    ["File", "What it is", "Who may write it"],
+    [["tools/research/formulas/data.json", "the formulas, primitives, capacities, invariants and decisions - the only thing to edit", "the research lens"],
+     ["tools/research/formulas/render.py", "this page", "the research lens"],
+     ["tools/research/formulas/check.py", "the three checks, with their poison", "the research lens"],
+     ["tools/research/formulas/results.json", "what check.py last reported, read by this page", "generated"],
+     ["lenses/research/formulas.html", "this page, generated", "generated"],
+     ["releases/first-release.md", "what was copied and modified from, not referenced", "the specification lane"]],
+    ["target", "", "note"])}</div>
 
 <p class="foot">Research lens, 2026-09-08. Copied and modified from
 <code>releases/first-release.md</code> rather than referencing it, per the request &mdash; so

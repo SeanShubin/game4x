@@ -257,6 +257,100 @@ state or the running one; whether a thing has identity or is a count; and whethe
 is a threshold on the recipe or a property of the container, since making it explicit is what
 `build extractor` gained a line for.
 
+### X-14 - the specification says metal is conserved, and founding a colony creates five from nothing
+
+**to** spec · **status** open · **raised** 2026-09-08 · **source** [the report](formulas.html), check 1 · **found by** a check on its first run
+
+**Where.** `releases/first-release.md` -> *Kinds*: **metal** is *what things are built from;
+**conserved***. And *Units and structures* gives each built thing a **Binding** - the metal locked
+inside it: garrison 1, extractor 1, store 1, yard 15, ark 3, pioneer 3.
+
+**What.** Those two statements together are a claim that a weighting exists under which metal never
+changes. **It does not hold.** Founding a colony creates a garrison, two extractors and two stores -
+**five metal of binding, consuming nothing.** So:
+
+- **`found-colony`**: net **+5**
+- **`deploy ark`**: spends an ark worth 3, creates 5 - net **+2** per landing
+- **`found by land`**: spends a pioneer worth 3, creates 5 - net **+2** per founding
+
+**Verified rather than argued.** `tools/research/formulas/check.py` computes it from the Binding
+column, copied from the release and not invented. **13 of 17 formulas were analysed and 4 skipped**
+because their amounts depend on the state - `grow`, `perish`, `upkeep`, `work` - so the population
+is named and is not zero. **The check was poisoned first** and goes red on a wrong weighting.
+
+**Why it costs something.** *Conserved* is the kind of word a later rule leans on, and a second
+check found the same three formulas from the opposite direction - a structural unboundedness test,
+which ignores guards entirely, named `found-colony` too. **Two checks of different character
+agreeing is the part worth acting on.**
+
+**Whether.** **Worth deciding, not worth fixing blind.** Three readings and this lane takes none:
+the word *conserved* is wrong and should be qualified; founding should cost what it builds; or
+founding is a deliberate exception and says so. **The first is free, the second changes the game,
+and the third is a sentence.** It is a defect in the specification rather than in the prototype,
+which is why it is yours.
+
+### X-15 - the inventory, so that nothing said in one conversation is lost on the way to `spec/`
+
+**to** spec · **status** open · **raised** 2026-09-08 · **source** Sean, saying he may want to promote this and asking that nothing be lost
+
+**Not a proposal and not a request to write one.** Sean said that if the formula work goes well he
+will want it in `spec/`, and asked that nothing be lost in the meantime. **This is the inventory of
+what would have to become text, and where each piece already lives**, so that the promotion path is
+a reading list rather than a memory.
+
+| What                                                                                 | Where it is now                                                                                |
+| ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| The six primitives, and which are sugar                                              | [report](formulas.html) -> The primitives, What is sugar; `X-11`                               |
+| The test for whether a primitive earns its place                                     | `X-11` - removing it moves the explosion from the generated space to the authored space        |
+| Capacity belongs to the container, and `limit` is deleted                            | [report](formulas.html) -> Capacities; both uses were restatements                             |
+| World-building is the play language with the guards left out                         | [report](formulas.html) -> Building the world; `X-13`                                          |
+| `set` is a primitive and not sugar                                                   | `X-13` - traits are values, so no arrangement of create and destroy expresses *keeps one less* |
+| The seven duplicated rows, and `found-colony`                                        | `X-12`                                                                                         |
+| A derived subject deletes a parameter declaration and a qualifier                    | `X-12`, `X-8`                                                                                  |
+| Grounding: the menu is the applicable ground actions                                 | `X-8`                                                                                          |
+| Boundedness and acyclicity, and why user editing makes them a product requirement    | `X-9` (closed), `C-75`, `X-12`                                                                 |
+| The three checks, and that a cap is a backstop and never the mechanism               | [report](formulas.html) -> Detecting a glitch, and The three checks as run                     |
+| Conservation declarations already in the *Kinds* table, and that nothing checks them | `X-14`                                                                                         |
+
+**Six decisions are open and none is this lane's**, all listed in the report: the garrison's
+soft/hard cascade over the six lines beside it; attachment on the call versus on each create;
+whether a call rolls back; the missing stores; identity versus count; and now `X-14`'s three
+readings of *conserved*.
+
+**What would still be needed before any of it could be promoted**, and none of it exists: **words**.
+Every item above is a finding or a table, and **not one line of specification text has been
+drafted** - deliberately, because the words are Sean's to approve and yours to write.
+
+**Whether.** **Nothing to do today.** This is a holding record so that a promotion, if it comes,
+starts from a list rather than from this conversation. **It is `open` rather than `noted` for one
+reason**: if the formula work is abandoned, this should be closed as withdrawn rather than left
+implying work.
+
+### X-16 - the formula files are not reachable from the deployment, and `reports/` is not this lane's
+
+**to** code · **status** open · **raised** 2026-09-08 · **source** Sean, asking for the formula files to be browsable from the deployment
+
+**What.** `reports/index.html` is the browsable deployment and is generated by
+`crates/game-console` - **your column, not this lane's**, so this is filed rather than wired.
+Sean asked for `lenses/research/formulas.html` and `tools/research/formulas/data.json` to be
+reachable from it, and *possibly others if useful*.
+
+**What is worth linking**, most useful first: `lenses/research/formulas.html`, the generated
+report; `tools/research/formulas/data.json`, the only file that is edited; and
+`tools/research/formulas/results.json`, what the three checks last reported. The renderer and the
+checker are code and probably not worth a link.
+
+**One thing to weigh rather than a request.** `reports/` is generated **from the game state** by the
+console, and these files are a research lens's, generated from its own data. **A link out of a
+state report into a lens's working file may be the wrong shape** - a *Research* section that is
+plainly not part of the state would say what it is. `R-9` requires every reference to be a link a
+person can follow and no page to need a script, and these pages satisfy both.
+
+**Whether.** Worth doing when convenient and **nothing waits on it** - Sean can already read the
+report as a published artifact, so this buys reachability from one place rather than access.
+**Declining is reasonable** if mixing a lens's output into the state reports muddies what
+`reports/` is for; say so and this lane will keep it out.
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

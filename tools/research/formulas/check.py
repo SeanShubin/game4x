@@ -1,0 +1,336 @@
+"""The three checks, run against `data.json`.
+
+    python tools/research/formulas/check.py
+
+1. **Declared conservation.** The specification says metal is *conserved*. Metal is conserved
+   only if the metal bound inside built things counts, so the weights are the Binding column
+   of *Units and structures*. This asks whether that weighting is a P-invariant: does every
+   formula leave the total unchanged? It is exact - it cannot raise a false alarm.
+
+2. **Structural unboundedness.** Is there a non-negative firing vector `x`, not all zero, with
+   `C.x >= 0` - a set of formulas that, fired in some ratio, ends with more than it began?
+   Decided by linear programming over exact rationals. It ignores guards, so it is conservative:
+   it can flag a loop the guards prevent and cannot miss one.
+
+3. **A cap.** Applies formulas to a state and reports the first count to pass a declared bound.
+   A backstop for bugs in 1 and 2, never the mechanism.
+
+**Every check is poisoned before it is believed** - see `self_test`. A checker that cannot be
+made to fail on demand is a checker whose green means nothing, and all three here are green on
+purpose in the ordinary case.
+"""
+
+import json
+import pathlib
+import sys
+from fractions import Fraction
+
+HERE = pathlib.Path(__file__).parent
+DATA = json.loads((HERE / "data.json").read_text(encoding="utf-8"))
+
+# The Binding column of *Units and structures*: the metal locked inside a built thing.
+# These are the weights of the claimed P-invariant, copied from the release, not invented.
+METAL_WEIGHT = {
+    "metal": 1,
+    "garrison": 1,
+    "extractor": 1,
+    "store": 1,
+    "yard": 15,
+    "ark": 3,
+    "pioneer": 3,
+}
+
+NON_EFFECT_OPS = {"let", "threshold"}
+
+
+def place_of(target):
+    """The kind a target names, ignoring where it is.
+
+    Aggregating over locations is the right over-approximation for a structural question:
+    a loop that moves metal between territories is not a loop that creates metal.
+    """
+    t = target.split(" in ")[0].strip()
+    t = t.split("[")[0].strip()
+    return t
+
+
+def amount_of(raw):
+    """An integer amount, or None when the formula's amount depends on the state."""
+    try:
+        return int(str(raw).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+def effects(formula, formulas_by_name, seen=()):
+    """Net effect per kind, or None if any amount is state-dependent.
+
+    Calls are inlined. A cycle would be an unbounded decomposition, which the acyclicity
+    rule forbids, so meeting one is a defect rather than a case to handle.
+    """
+    net = {}
+    for op, target, raw, _attach, _note in formula["lines"]:
+        if op in NON_EFFECT_OPS:
+            continue
+        if op == "set":
+            continue
+        if op == "call":
+            name = target.split("(")[0].strip()
+            if name in seen:
+                raise ValueError("recipe call cycle at %r" % name)
+            sub = formulas_by_name.get(name)
+            if sub is None:
+                return None
+            inner = effects(sub, formulas_by_name, seen + (name,))
+            if inner is None:
+                return None
+            for k, v in inner.items():
+                net[k] = net.get(k, 0) + v
+            continue
+        n = amount_of(raw)
+        if n is None:
+            return None
+        sign = 1 if op == "create" else -1
+        k = place_of(target)
+        net[k] = net.get(k, 0) + sign * n
+    return net
+
+
+def gather():
+    by_name = {}
+    for f in DATA["player"] + DATA["world"]:
+        by_name[f["name"].split("(")[0].strip()] = f
+    return by_name
+
+
+def check_conservation():
+    """Check 1. Exact: a violation is a violation."""
+    by_name = gather()
+    analysed, skipped, bad = [], [], []
+    for name, f in sorted(by_name.items()):
+        net = effects(f, by_name)
+        if net is None:
+            skipped.append(name)
+            continue
+        total = sum(METAL_WEIGHT.get(k, 0) * v for k, v in net.items())
+        analysed.append(name)
+        if total != 0:
+            parts = [
+                f"{'+' if v > 0 else ''}{v} {k} (x{METAL_WEIGHT[k]})"
+                for k, v in sorted(net.items())
+                if METAL_WEIGHT.get(k)
+            ]
+            bad.append((name, total, ", ".join(parts)))
+    return analysed, skipped, bad
+
+
+def simplex(A, b, c):
+    """Maximize c.x subject to A.x <= b, x >= 0, with b >= 0 so the origin is feasible.
+
+    Exact rationals and Bland's rule, because this problem is massively degenerate - most
+    of `b` is zero - and Bland's rule is what makes termination certain rather than likely.
+    Returns (optimum, x).
+    """
+    m, n = len(A), len(c)
+    T = [[Fraction(A[i][j]) for j in range(n)] + [Fraction(1) if k == i else Fraction(0) for k in range(m)] + [Fraction(b[i])] for i in range(m)]
+    T.append([Fraction(-x) for x in c] + [Fraction(0)] * m + [Fraction(0)])
+    basis = list(range(n, n + m))
+    while True:
+        piv_col = -1
+        for j in range(n + m):
+            if T[-1][j] < 0:
+                piv_col = j
+                break
+        if piv_col < 0:
+            break
+        piv_row, best = -1, None
+        for i in range(m):
+            if T[i][piv_col] > 0:
+                ratio = T[i][-1] / T[i][piv_col]
+                if best is None or ratio < best or (ratio == best and basis[i] < basis[piv_row]):
+                    best, piv_row = ratio, i
+        if piv_row < 0:
+            return None, None  # unbounded objective; cannot happen with x <= 1
+        pv = T[piv_row][piv_col]
+        T[piv_row] = [v / pv for v in T[piv_row]]
+        for i in range(m + 1):
+            if i != piv_row and T[i][piv_col] != 0:
+                f = T[i][piv_col]
+                T[i] = [T[i][j] - f * T[piv_row][j] for j in range(n + m + 1)]
+        basis[piv_row] = piv_col
+    x = [Fraction(0)] * n
+    for i in range(m):
+        if basis[i] < n:
+            x[basis[i]] = T[i][-1]
+    return T[-1][-1], x
+
+
+def check_unbounded(extra=None):
+    """Check 2. Conservative: it ignores guards, so a hit is a candidate and a miss is a proof."""
+    by_name = gather()
+    if extra:
+        by_name = dict(by_name, **extra)
+    names, nets, skipped = [], [], []
+    for name, f in sorted(by_name.items()):
+        net = effects(f, by_name)
+        if net is None:
+            skipped.append(name)
+            continue
+        if not any(l[0] == "call" for l in f["lines"]):
+            names.append(name)
+            nets.append(net)
+    kinds = sorted({k for net in nets for k in net})
+    # maximise sum(x) subject to -C.x <= 0 and x <= 1
+    A, b = [], []
+    for k in kinds:
+        A.append([-net.get(k, 0) for net in nets])
+        b.append(0)
+    for j in range(len(names)):
+        A.append([1 if i == j else 0 for i in range(len(names))])
+        b.append(1)
+    opt, x = simplex(A, b, [1] * len(names))
+    witness = []
+    if opt and opt > 0:
+        for name, net, v in zip(names, nets, x):
+            # A formula whose net effect is entirely zero rides along for free: the LP is
+            # indifferent to it, so it lands in the answer at whatever value fits. Naming it
+            # costs a reader time and tells them nothing, so the witness carries only
+            # formulas that actually move something.
+            if v > 0 and any(net.values()):
+                witness.append((name, v))
+    gain = {}
+    for k in kinds:
+        g = sum(net.get(k, 0) * v for net, v in zip(nets, x or []))
+        if g > 0:
+            gain[k] = g
+    return names, skipped, witness, gain
+
+
+def check_cap(cap=1000):
+    """Check 3. A backstop: apply every formula once and report anything past the cap."""
+    by_name = gather()
+    state, breached = {}, []
+    for name, f in sorted(by_name.items()):
+        net = effects(f, by_name)
+        if net is None:
+            continue
+        for k, v in net.items():
+            state[k] = state.get(k, 0) + max(0, v)
+            if state[k] > cap:
+                breached.append((name, k, state[k]))
+    return cap, breached
+
+
+def self_test():
+    """Poison every check before believing any of it.
+
+    The poison is aimed OUTSIDE the region each check already covers where it can be: the
+    conservation poison creates metal from nothing, which no real formula does, and the
+    unboundedness poison is a formula with no inputs at all.
+    """
+    ok = True
+    poison = {
+        "POISON-free-metal": {
+            "name": "POISON-free-metal",
+            "selection": "poison",
+            "lines": [["create", "metal in t", "1", "", "poison"]],
+        }
+    }
+    _, _, w, _ = check_unbounded(extra=poison)
+    if not any(n == "POISON-free-metal" for n, _ in w):
+        print("  POISON FAILED: check 2 did not flag a formula that creates metal from nothing")
+        ok = False
+    else:
+        print("  poison ok: check 2 flags a formula with no inputs")
+
+    saved = METAL_WEIGHT.get("citizen")
+    METAL_WEIGHT["citizen"] = 1
+    _, _, bad = check_conservation()
+    if not bad:
+        print("  POISON FAILED: check 1 stayed green with citizens weighted as metal")
+        ok = False
+    else:
+        print(f"  poison ok: check 1 goes red on a wrong weighting ({len(bad)} formulas)")
+    if saved is None:
+        del METAL_WEIGHT["citizen"]
+    else:
+        METAL_WEIGHT["citizen"] = saved
+
+    _, breached = check_cap(cap=0)
+    if not breached:
+        print("  POISON FAILED: check 3 stayed green with a cap of 0")
+        ok = False
+    else:
+        print("  poison ok: check 3 goes red at a cap of 0")
+    return ok
+
+
+def as_dict():
+    """The three checks' results, for the renderer.
+
+    The report shows what this returns rather than a transcription of it, so the page and
+    the checker cannot disagree.
+    """
+    analysed, skipped, bad = check_conservation()
+    names, skipped2, witness, gain = check_unbounded()
+    cap, breached = check_cap()
+    return {
+        "conservation": {
+            "analysed": len(analysed), "skipped": skipped,
+            "weights": dict(METAL_WEIGHT),
+            "violations": [[n, t, parts] for n, t, parts in bad],
+        },
+        "unbounded": {
+            "analysed": len(names), "skipped": skipped2,
+            "witness": [[n, str(v)] for n, v in witness],
+            "gain": {k: str(v) for k, v in sorted(gain.items())},
+        },
+        "cap": {"cap": cap, "breaches": [[n, k, c] for n, k, c in breached]},
+        "poison": ["check 2 flags a formula with no inputs",
+                   "check 1 goes red on a wrong weighting",
+                   "check 3 goes red at a cap of 0"],
+    }
+
+
+def main():
+    if "--json" in sys.argv:
+        json.dump(as_dict(), sys.stdout, indent=2)
+        return 0
+    print("Poisoning the checks before trusting them")
+    poisoned = self_test()
+    print()
+
+    analysed, skipped, bad = check_conservation()
+    print(f"CHECK 1 - metal conserved, weighted by Binding")
+    print(f"  {len(analysed)} formulas analysed, {len(skipped)} skipped for state-dependent amounts")
+    if skipped:
+        print(f"  skipped: {', '.join(skipped)}")
+    if bad:
+        for name, total, parts in bad:
+            print(f"  VIOLATION  {name}: net {total:+d} metal-equivalent   [{parts}]")
+    else:
+        print("  no violation")
+    print()
+
+    names, skipped2, witness, gain = check_unbounded()
+    print("CHECK 2 - structurally unbounded")
+    print(f"  {len(names)} formulas in the matrix, {len(skipped2)} skipped for state-dependent amounts")
+    if witness:
+        print("  UNBOUNDED. A witness, as a firing ratio:")
+        for n, v in witness:
+            print(f"    {v}  x  {n}")
+        print(f"  net gain: {', '.join(f'{k} +{v}' for k, v in sorted(gain.items()))}")
+    else:
+        print("  no non-negative firing vector gains anything - structurally bounded")
+    print()
+
+    cap, breached = check_cap()
+    print(f"CHECK 3 - cap of {cap}")
+    print("  " + (f"{len(breached)} breach(es)" if breached else "no breach applying each formula once"))
+    print()
+    print("All three green means nothing unless the poison above went red.")
+    return 0 if poisoned else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

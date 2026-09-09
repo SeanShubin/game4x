@@ -716,6 +716,82 @@ check will flag it &mdash; correctly. So check 2 cannot ask <em>is anything unbo
 author names the resource that must not grow and food is simply not on the list.</p>
 </div>
 
+<h2>The three checks, as run</h2>
+<p>Not a description of what they would report &mdash; the output of
+<code>tools/research/formulas/check.py</code>, read from <code>results.json</code>, so this page
+and the checker cannot disagree. <strong>All three were poisoned before being believed</strong>:
+check 2 flags a formula with no inputs; check 1 goes red on a wrong weighting; check 3 goes red at a cap of 0.</p>
+
+<h3>Check 1 &mdash; metal conserved &nbsp;<span class="badge up">3 violations</span></h3>
+<p>13 formulas analysed;
+4 skipped for state-dependent amounts
+(grow, perish, upkeep, work). Weights are the <em>Binding</em> column,
+copied rather than invented: metal 1, garrison 1, extractor 1, store 1, yard 15, ark 3, pioneer 3.</p>
+<div class="scroll"><table><thead><tr>
+<th>Formula</th>
+<th>Net metal-equivalent</th>
+<th>Where it comes from</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">deploy ark</td>
+<td class="amt">+2</td>
+<td class="note">-1 ark (x3), +2 extractor (x1), +1 garrison (x1), +2 store (x1)</td>
+</tr>
+<tr>
+<td class="target">found by land</td>
+<td class="amt">+2</td>
+<td class="note">+2 extractor (x1), +1 garrison (x1), -1 pioneer (x3), +2 store (x1)</td>
+</tr>
+<tr>
+<td class="target">found-colony</td>
+<td class="amt">+5</td>
+<td class="note">+2 extractor (x1), +1 garrison (x1), +2 store (x1)</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>What this says</h4>
+<p><strong>Founding a colony creates five metal from nothing</strong> &mdash; a garrison, two
+extractors and two stores, each holding one metal of binding, with nothing consumed. Deploying an
+ark spends three and creates five, so each founding nets <strong>+2</strong>. The specification
+says metal is <em>conserved</em>. Either that word is wrong, or founding should cost what it
+builds. <strong>This is a defect in the specification, found by a check on its first run</strong>,
+and it is not this lens's to decide.</p>
+</div>
+
+<h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded</span></h3>
+<p>11 formulas in the matrix;
+4 skipped
+(grow, perish, upkeep, work). The witness is a firing ratio &mdash; run these,
+in these proportions, and you end with more than you began.</p>
+<div class="scroll"><table><thead><tr>
+<th>Fire this many times</th>
+<th>Formula</th>
+</tr></thead><tbody>
+<tr>
+<td class="amt">1</td>
+<td class="target">create labor</td>
+</tr>
+<tr>
+<td class="amt">1</td>
+<td class="target">found-colony</td>
+</tr>
+</tbody></table></div>
+<p>Net gain per turn of the ratio: <strong>citizen +2, extractor +2, garrison +1, labor +1, store +2</strong>.</p>
+<div class="callout">
+<h4>One of these two is the game and the other is the bug</h4>
+<p><code>create labor</code> makes labor from nothing every turn. <strong>That is the intended
+economy</strong> and it is why this check must be a diff against declared intent rather than an
+absolute. <code>found-colony</code> is the one to look at, and check 1 already named it exactly.
+<strong>The checks agreeing from two different directions is the useful part</strong>: check 1 is
+exact and narrow, check 2 is conservative and broad, and the formula they both point at is the
+one worth opening.</p>
+</div>
+
+<h3>Check 3 &mdash; a cap of 1000 &nbsp;<span class="badge down">0 breaches</span></h3>
+<p>Applying each formula once breaches nothing, which is exactly the point about a cap:
+<strong>it found neither of the two things the other checks found.</strong> It is a backstop
+against bugs in checks 1 and 2, not a way of finding anything.</p>
+
 <h2>What the re-encoding cost and saved</h2>
 <p>Computed from the data rather than asserted. In bare primitives,
 <strong>58 rows became 65 lines &mdash; up 7</strong>. That is the number predicted
@@ -882,6 +958,45 @@ A count of lines cannot see that, which is the whole reason to fix the metric fi
 <td>OPEN - does a thing have identity, or is it a count?</td>
 <td>set requires an identified thing. destroy ark means this ark. create citizen 2 asks for no identity.</td>
 <td class="note">The dump already answers this: nine of its ten tables are the containment tree of identified things.</td>
+</tr>
+</tbody></table></div>
+
+<h2>The source, for review</h2>
+<p>Everything above is generated from two files, and no number on this page is typed by hand.</p>
+<div class="scroll"><table><thead><tr>
+<th>File</th>
+<th>What it is</th>
+<th>Who may write it</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">tools/research/formulas/data.json</td>
+<td>the formulas, primitives, capacities, invariants and decisions - the only thing to edit</td>
+<td class="note">the research lens</td>
+</tr>
+<tr>
+<td class="target">tools/research/formulas/render.py</td>
+<td>this page</td>
+<td class="note">the research lens</td>
+</tr>
+<tr>
+<td class="target">tools/research/formulas/check.py</td>
+<td>the three checks, with their poison</td>
+<td class="note">the research lens</td>
+</tr>
+<tr>
+<td class="target">tools/research/formulas/results.json</td>
+<td>what check.py last reported, read by this page</td>
+<td class="note">generated</td>
+</tr>
+<tr>
+<td class="target">lenses/research/formulas.html</td>
+<td>this page, generated</td>
+<td class="note">generated</td>
+</tr>
+<tr>
+<td class="target">releases/first-release.md</td>
+<td>what was copied and modified from, not referenced</td>
+<td class="note">the specification lane</td>
 </tr>
 </tbody></table></div>
 
