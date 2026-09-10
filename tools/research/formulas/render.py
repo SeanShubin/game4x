@@ -46,19 +46,10 @@ def esc(text):
 # than inventing quietly - the assumptions are listed in the report and counted.
 # ---------------------------------------------------------------------------
 
-# What kind of thing each container is, so the field can be named for its kind.
-CONTAINER_KIND = {
-    "t": "territory",
-    "game": "game",
-    "unit": "unit",
-    "t.orbit": "orbit",
-    "citizen.location": "territory",
-    "thing.location": "territory",
-    # `move` leaves one place and enters another. Both name the family `place` rather than a
-    # kind, because a unit may be in a territory or in an orbit - which the flag below records.
-    "from": "place",
-    "$to": "place",
-}
+# What kind of thing each container is, read from the data rather than kept here too.
+# There were two copies of this until 2026-09-09 - one here and one in `check.py` - and
+# renaming a container in one broke the other silently. One copy, in `data.json`.
+CONTAINER_KIND = DATA["container_kind"]
 
 # What a `kind[...]` bracket says about the thing, as a trait.
 BRACKET_FIELD = {
@@ -82,16 +73,6 @@ ASSUMPTIONS = {
     "path": "A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. "
     "The notation says a value is a word, a number, or another command, so a path is none of "
     "the three. Every <code>let</code> needs one.",
-    "for-each": "<strong>How many a quantifier ranges over is not in the line.</strong> "
-    "<code>each</code> now says <em>that</em> a recipe repeats, and the size of the set is still "
-    "written beside it &mdash; <code>x12</code>, <code>x36</code>, <code>xE</code>. That is right "
-    "rather than missing: <code>E</code> depends on the planet, so the number cannot be written "
-    "when the recipe is. It is recorded because a reader will want it.",
-    "set-not-in-state": "<strong>A quantifier ranges over something that is not a description.</strong> "
-    "<code>every row of Territory resources</code> is a data table and the territories do not exist "
-    "yet; <code>every shared edge</code> is the planet's geometry, which is neither the state nor a "
-    "table. The notation has a form for <em>every thing matching this description</em> and none for "
-    "either of these.",
     "expression": "<strong>An expression</strong> &mdash; <code>count {…}</code>, "
     "<code>sum force of {…}</code>, <code>min(a, b)</code>, a path, a number. Sean added these on "
     "2026-09-09 by making <code>require</code> compare two of them, and they are what the four "
@@ -104,10 +85,6 @@ ASSUMPTIONS = {
     "and <code>id</code> is meant to be the only one.",
     "root-container": "<code>game:game</code> &mdash; the game is the one thing inside nothing, so "
     "the field naming its kind has no identifier to take and repeats the kind instead.",
-    "crossed-by": "<code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier "
-    "<em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not "
-    "against the adjacency, so the trait this guard reads has no name &mdash; the code lane's "
-    "<code>C-60</code> is the same hole from the other side.",
     "derived-trait": "A <strong>derived</strong> trait is tested &mdash; <code>surplus</code>, "
     "<code>unpaid</code>, <code>control</code>. A <em>description</em> is a kind and every "
     "<em>stored</em> trait and may not carry one, so <strong>Sean decided on 2026-09-09 that what "
@@ -213,15 +190,8 @@ def console_line(op, target, amount, attach, note, where):
 
     elif op in ("each", "some"):
         name, over = (p.strip() for p in target.split(":", 1))
-        if over.startswith("{"):
-            body = over
-        else:
-            _assume("set-not-in-state", where)
-            body = over
+        body = over
         out = f"{{{op} {name}:{body}}}"
-        if amount.startswith("x"):
-            _assume("for-each", where)
-            note = f"{amount} of them" + (f" - {note}" if note else "")
 
     elif op == "let":
         name, expr = [p.strip() for p in target.split("=", 1)]
@@ -270,11 +240,7 @@ def console_line(op, target, amount, attach, note, where):
         # One expression against another. The old form - a description and `at least n` -
         # is the case where the left side is a count and the right is a number.
         _assume("expression", where)
-        if "adjacency" in target:
-            _assume("crossed-by", where)
-            left = "count {adjacency from:from to:$to crossed-by:unit}"
-        else:
-            left = target
+        left = target
         op_sym, rhs = amount.split(" ", 1) if " " in amount else (amount, "")
         out = f"{{require left:{left} is:{op_sym} right:{_value(rhs, where)}}}"
 
@@ -2000,14 +1966,42 @@ Every token in every line, matched against the sets a menu could offer:</p>
 <div class="scroll"><table><thead><tr><th>What has to be typed</th><th>Where</th><th>Why</th></tr></thead>
 <tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["editor_gaps"])}</tbody></table></div>
 <div class="callout">
-<h4>Two small fixes take it from 8 of 22 to 20 of 22</h4>
-<p><strong>Give containment a name and declare what <code>control</code> can be.</strong> Those two
-account for thirteen of the twenty-two, and neither is a new idea - the first is
-<code>C-56</code> and the second is four values nobody has written down.</p>
-<p><strong>What is left is <code>move</code> and <code>make-world</code></strong>, which are the two
-the assumption list already flags hardest: an adjacency qualifier with no trait behind it, and
-quantifying over a data table and a planet's geometry. <strong>So the game is finite except where
-this report already said it was not.</strong></p>
+<h4>All five closed, and the answer is now yes</h4>
+<p><strong>{c10_ok} of {c10_tok} tokens, and {c10_clean} of {c10_rec} recipes.</strong> None of the
+five needed an idea; each was an enumeration nobody had written down or a form nobody had named.
+<code>control</code>'s two values were in the release's own sentence; <code>border</code> and
+<code>orbit border</code> were sitting in the <em>Crosses</em> column; <code>below</code> is what
+<em>a place above one territory</em> already says; and <code>holder of x</code> is
+<code>spec/logistics.md</code>'s own rule given a shape.</p>
+<p><strong>The fifth was closed by deleting something.</strong> <code>make-world</code> quantified
+over a data table and over the planet's geometry, and it should never have been a recipe:
+<code>create planet &lt;size&gt;</code> makes the territories, and <em>a scenario is a file too</em>.
+Twelve calls with different arguments are a file of commands.</p>
+<p><strong>And the assumption list shrank by three.</strong> <code>for-each</code> and
+<code>set-not-in-state</code> existed only for <code>make-world</code>; <code>crossed-by</code> only
+for <code>move</code>'s unnamed qualifier. <strong>Seven remain where there were ten</strong>, and
+the encoder's own assertion - every declared assumption is used at least once - is what found all
+three the moment they stopped being needed.</p>
+</div>
+<div class="callout">
+<h4>And it found two defects in the tools while closing them</h4>
+<p><strong>There were two copies of the container map</strong>, one in <code>render.py</code> and one
+in <code>check.py</code>, and renaming a container broke the other silently. One copy now, in the
+data.</p>
+<p><strong>Check 6's poison went red for the right reason and the wrong list.</strong> It put a
+garrison in <code>t.orbit</code>, which had stopped existing, so the check reported it as
+<em>homeless</em> rather than <em>undeclared</em> and the poison did not see it. <strong>A poison
+that stops firing when the data moves is a poison that needs the same maintenance as the check</strong>
+- worth knowing, since the whole point of one is that it fails on demand.</p>
+</div>
+<div class="callout">
+<h4>What this does not mean</h4>
+<p><strong>An editor could build every recipe. That is not the same as the game being finite.</strong>
+Seven assumptions remain in the console encoding, and they are about the <em>notation</em> rather
+than the menus - a path as a value, an expression, a description naming a family. A thing can be
+choosable from a list and still have no written form.</p>
+<p>And this measures the recipes as they stand today. <strong>The force rule is still in no recipe
+line</strong>, so what an editor could now build is a game that cannot be conquered.</p>
 </div>
 <div class="callout">
 <h4>The interesting part is that it agrees with the other instrument</h4>

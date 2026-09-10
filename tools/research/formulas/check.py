@@ -553,7 +553,10 @@ def selectable_sets():
         | {r[0] for r in DATA["traits"]}
         | {b.lower() for b, _v in DATA["nature_values"]}
         | {"count", "sum", "max", "min"} | {">", ">=", "<", "<=", "="}
+        # Every value a trait may take, declared once so a menu can offer it.
+        | {v.strip() for r in DATA["value_sets"] for v in r[1].split(",")}
         | {"yes", "no", "any", "design", "play", "food", "metal", "energy"}
+        | {"holder", "border"}  # `holder of x`, and the border a unit crosses
         | SYNTAX
         | {f["name"].split("(")[0].strip()
            for s in ("player", "world", "creation") for f in DATA[s]}
@@ -672,7 +675,8 @@ def self_test():
     fc = dict(DATA["player"][0])
     DATA["player"] = [dict(f) for f in DATA["player"]]
     victim = DATA["player"][0]
-    victim["lines"] = list(victim["lines"]) + [["change", "garrison in t.orbit", "+1", "", "poison"]]
+    victim["lines"] = list(victim["lines"]) + [
+        ["change", "garrison in {orbit below:t}", "+1", "", "poison"]]
     _e, _h, bad6 = check_containment()
     victim["lines"] = victim["lines"][:-1]
     if not any(k == "garrison" and c == "orbit" for _n, _t, c, k in bad6):

@@ -110,7 +110,7 @@
         ],
         [
           "let",
-          "t = ark.location.below",
+          "t = below of (holder of ark)",
           "",
           "",
           "was row 1 and row 2's qualifier"
@@ -181,7 +181,7 @@
         ],
         [
           "let",
-          "t = pioneer.location",
+          "t = holder of pioneer",
           "",
           "",
           ""
@@ -216,17 +216,17 @@
         ],
         [
           "let",
-          "from = what holds unit",
+          "from = holder of unit",
           "",
           "",
           "was row 1; containment says where, so this reads a holder rather than a trait"
         ],
         [
           "require",
-          "count {adjacency from:from to:$to the unit crosses}",
+          "count {adjacency from:from to:$to border:crosses of unit}",
           ">= 1",
           "hard",
-          "was *at least 1* of a description; the count is now one expression against another"
+          "was *an edge the unit crosses*, which named no trait. A pioneer crosses a `border` and an ark an `orbit border`, both from *Units and structures*"
         ],
         [
           "change",
@@ -419,7 +419,7 @@
         ],
         [
           "let",
-          "t = yard.location",
+          "t = holder of yard",
           "",
           "",
           "was require 1 yard"
@@ -447,7 +447,7 @@
         ],
         [
           "change",
-          "ark in t.orbit",
+          "ark in {orbit below:t}",
           "+1",
           "",
           ""
@@ -475,7 +475,7 @@
         ],
         [
           "change",
-          "labor in citizen.location",
+          "labor in holder of citizen",
           "+1",
           "",
           "row 3"
@@ -496,7 +496,7 @@
         ],
         [
           "let",
-          "t = extractor.location",
+          "t = holder of extractor",
           "",
           "",
           "was row 1"
@@ -540,7 +540,7 @@
         ],
         [
           "change",
-          "food in thing.location",
+          "food in holder of thing",
           "-thing.upkeep",
           "hard",
           "row 1 was the selector; row 2"
@@ -596,7 +596,7 @@
         ],
         [
           "change",
-          "metal in thing.location",
+          "metal in holder of thing",
           "+thing.metal-in-it",
           "",
           "the metal is left where the thing stood - and now this answers the force case too, by being the only answer either has"
@@ -728,69 +728,6 @@
           "+1",
           "",
           "was a create and two sets"
-        ]
-      ]
-    },
-    {
-      "name": "make-world()",
-      "was": null,
-      "selection": "the whole environment, from the empty game",
-      "lines": [
-        [
-          "each",
-          "r: every row of Territory resources",
-          "x12",
-          "",
-          "**over a data table, not over the state** - the territories do not exist yet"
-        ],
-        [
-          "call",
-          "make-territory(r.id, r.biome, r.nature)",
-          "",
-          "",
-          "biome and nature are `X-19`"
-        ],
-        [
-          "each",
-          "(t, r): every territory and every resource",
-          "x36",
-          "",
-          "over the state and a data table at once"
-        ],
-        [
-          "call",
-          "make-deposit(t, r, capacity, density)",
-          "",
-          "",
-          "3 x 4 reads capacity 3, density 4"
-        ],
-        [
-          "each",
-          "t: {territory}",
-          "x12",
-          "",
-          "over the state, now that the territories exist"
-        ],
-        [
-          "call",
-          "make-orbit(t)",
-          "",
-          "",
-          ""
-        ],
-        [
-          "each",
-          "(a, b): every shared edge",
-          "xE",
-          "",
-          "**over the planet's geometry** - neither the state nor a data table, and `E` is why this cannot be expanded when it is written"
-        ],
-        [
-          "call",
-          "make-adjacency(a, b)",
-          "",
-          "",
-          "orbital adjacency is derived, not stated"
         ]
       ]
     }
@@ -971,6 +908,11 @@
       "NOTED - disorder and perish were one recipe, and the duplication hid a decision",
       "Sean: <em>something is wrong with the definitions for disorder and perish, I suspect they are the same thing.</em> They were - a thing that cannot be sustained is lost, with food and force as the two things that sustain.",
       "Merged. And the merge <strong>answered</strong> the open metal question rather than leaving it: one recipe cannot both return a thing's metal and not."
+    ],
+    [
+      "NOTED - make-world was a scenario, not a recipe",
+      "Its four lines quantified over <em>every row of Territory resources</em> and <em>every shared edge</em> - a data table and the planet's geometry, neither of which is a description.",
+      "<code>spec/console.md</code> already has the right home: <code>create planet &lt;size&gt;</code> makes the territories, and <em>a scenario is a file too</em>. Twelve calls with different arguments are a file of commands, not a rule."
     ]
   ],
   "collapse": [
@@ -1815,6 +1757,21 @@
       "movable",
       "whatever moves",
       "stored"
+    ],
+    [
+      "border",
+      "an adjacency",
+      "stored"
+    ],
+    [
+      "crosses",
+      "a unit",
+      "stored"
+    ],
+    [
+      "below",
+      "an orbit",
+      "stored"
     ]
   ],
   "thing_shape": [
@@ -1883,7 +1840,8 @@
       "counted",
       [
         "force",
-        "movable"
+        "movable",
+        "crosses"
       ],
       [
         "metal-in-it"
@@ -1896,7 +1854,8 @@
       "counted",
       [
         "force",
-        "movable"
+        "movable",
+        "crosses"
       ],
       [
         "metal-in-it"
@@ -1957,9 +1916,11 @@
       "orbit",
       "game",
       "counted",
+      [
+        "below"
+      ],
       [],
-      [],
-      "which territory it is above has <strong>no named trait</strong> - this report calls it <code>below</code>"
+      "one per territory, and <code>below</code> now names which"
     ],
     [
       "deposit",
@@ -1979,7 +1940,8 @@
       "counted",
       [
         "from",
-        "to"
+        "to",
+        "border"
       ],
       [],
       ""
@@ -2158,11 +2120,11 @@
   "container_kind": {
     "t": "territory",
     "game": "game",
-    "t.orbit": "orbit",
-    "citizen.location": "territory",
-    "thing.location": "territory",
     "from": "place",
-    "$to": "place"
+    "$to": "place",
+    "{orbit below:t}": "orbit",
+    "holder of citizen": "territory",
+    "holder of thing": "territory"
   },
   "containment_declared": [
     [
@@ -2817,6 +2779,16 @@
       "already used by four amounts before this existed"
     ],
     [
+      "<code>holder of x</code>",
+      "<code>holder of citizen</code>",
+      "<strong>where a thing is</strong>, without a <code>location</code> trait - <code>spec/logistics.md</code> says what holds it is what says where it is"
+    ],
+    [
+      "<code>trait of x</code>",
+      "<code>below of (holder of ark)</code>",
+      "one thing's trait, where <code>sum trait of {…}</code> aggregates over many"
+    ],
+    [
       "<code>count {…}</code>",
       "<code>count {adjacency from:from to:$to}</code>",
       "how many things match a description - what <code>require</code> used to do, and now one case of it"
@@ -2992,29 +2964,56 @@
   ],
   "editor_gaps": [
     [
-      "<code>location</code>, <code>below</code>",
-      "9 recipes",
-      "containment has no name. <code>spec/logistics.md</code> says a thing is not located by a trait, so an editor has nothing to offer for <em>where</em> - which is <code>C-56</code>"
-    ],
-    [
       "<code>yours</code>",
       "4 recipes",
-      "<code>control</code>'s values are <em>held by a player, or unclaimed</em> and nothing enumerates them. <strong>The one gap here that is new, and the smallest</strong>"
+      "<strong>Closed.</strong> <code>control</code>'s values are now declared: <em>yours, unclaimed</em>, from the release's own words"
+    ],
+    [
+      "<code>location</code>",
+      "7 recipes",
+      "<strong>Closed.</strong> <code>holder of x</code> is an expression form, so containment has a written shape and needs no trait - which is what <code>spec/logistics.md</code> asked for"
+    ],
+    [
+      "<code>below</code>",
+      "2 recipes",
+      "<strong>Closed.</strong> A trait of an orbit, which the release already describes: <em>a place above one territory</em>"
     ],
     [
       "<code>crosses</code>",
       "<code>move</code>",
-      "the adjacency qualifier with no trait behind it - the <code>crossed-by</code> assumption, and <code>C-60</code>"
+      "<strong>Closed.</strong> A trait of a unit against a <code>border</code> trait of an adjacency, both taking <em>border</em> or <em>orbit border</em> from <em>Units and structures</em>"
     ],
     [
-      "<code>what holds unit</code>",
-      "<code>move</code>",
-      "this lane's prose for <em>the thing that holds it</em>, which is the same hole as the first row"
-    ],
-    [
-      "<code>every row of …</code>, <code>every shared edge</code>",
+      "the prose sets",
       "<code>make-world</code>",
-      "quantifying over a data table and over the planet's geometry - the <code>set-not-in-state</code> assumption, and the foreign-call question"
+      "<strong>Closed by deletion.</strong> Twelve calls with different arguments are a scenario file, not a rule - <code>create planet &lt;size&gt;</code> makes the territories and <em>a scenario is a file too</em>"
+    ]
+  ],
+  "value_sets": [
+    [
+      "control",
+      "yours, unclaimed",
+      "release -> Traits: <em>held by a player, or unclaimed</em>"
+    ],
+    [
+      "border",
+      "border, orbit border",
+      "release -> Units and structures, <em>Crosses</em>: a pioneer crosses a <em>border</em>, an ark an <em>orbit border</em>. `S-73` says both still lack meanings"
+    ],
+    [
+      "biome",
+      "ocean, ice, desert, grassland, jungle, mountain",
+      "release -> Biomes"
+    ],
+    [
+      "resource",
+      "food, metal, energy",
+      "release -> Kinds"
+    ],
+    [
+      "ready, movable, surplus, unsustained",
+      "yes, no",
+      "release -> Traits"
     ]
   ]
 }
