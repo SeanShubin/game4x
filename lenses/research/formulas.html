@@ -1571,7 +1571,7 @@ is why adjacency being a thing was the right call and worth not undoing.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>
-<p>8 of the 18 questions this re-encoding raised are still open. The rest are
+<p>4 of the 18 questions this re-encoding raised are still open. The rest are
 below, under <em>What has already been settled</em>, so that this list is short enough to be a list
 of things to do.</p>
 <div class="scroll"><table><thead><tr>
@@ -1593,26 +1593,6 @@ of things to do.</p>
 <td>OPEN - if a call can fail as a unit, does it roll back?</td>
 <td>found-colony can now half-succeed. If the ark is destroyed before the call, a soft call that skips leaves the ark spent for nothing.</td>
 <td class="note">This is the same question as whether composition sees the starting state or the running one.</td>
-</tr>
-<tr>
-<td>OPEN - do the sketch's missing stores come back?</td>
-<td>The sketch creates a garrison, 2 citizens and 2 extractors. The specification also creates a food store and a metal store.</td>
-<td class="note">Dropping them changes the game.</td>
-</tr>
-<tr>
-<td>OPEN - does a thing have identity, or is it a count?</td>
-<td>set requires an identified thing. destroy ark means this ark. create citizen 2 asks for no identity.</td>
-<td class="note">The dump already answers this: nine of its ten tables are the containment tree of identified things.</td>
-</tr>
-<tr>
-<td>OPEN - what is a food store for?</td>
-<td>Food is made with keeps 1. The turn order is upkeep, grow, perish, age, spoil - so food made this turn is aged to 0 and spoiled at the same turn end, whether it is in a store or in nothing.</td>
-<td class="note">If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect.</td>
-</tr>
-<tr>
-<td>OPEN - a construct for quantification, which is not the same as repetition</td>
-<td>Repetition is covered twice already - the amount column and the console's &lt;code&gt;repeat&lt;/code&gt;. Quantification, one firing per member of a set, is covered nowhere and is used in ten places.</td>
-<td class="note">Six world recipes hide it in a prose &lt;em&gt;selection&lt;/em&gt;; &lt;code&gt;make-world&lt;/code&gt;'s four calls hide it in a comment. See &lt;em&gt;Repetition, or quantification&lt;/em&gt;.</td>
 </tr>
 <tr>
 <td>OPEN - may a recipe define a kind or another recipe, and when</td>
@@ -2669,9 +2649,24 @@ each row names who answered it.</p>
 <td class="note">It does not. Structural boundedness is polynomial by linear programming, at edit time, with a witness - see Detecting a glitch. Boundedness for one starting state is EXPSPACE-complete; boundedness for every starting state is polynomial, and the second is the one an editor needs.</td>
 </tr>
 <tr>
+<td>ANSWERED - do the sketch's missing stores come back?</td>
+<td>The sketch creates a garrison, 2 citizens and 2 extractors. The specification also creates a food store and a metal store.</td>
+<td class="note">Sean dropped the two stores on 2026-09-09 and they have not come back. Dropping them changes the game.</td>
+</tr>
+<tr>
+<td>ANSWERED - does a thing have identity, or is it a count?</td>
+<td>set requires an identified thing. destroy ark means this ark. create citizen 2 asks for no identity.</td>
+<td class="note">Recorded per kind in &lt;em&gt;Every kind&lt;/em&gt;: a territory carries an &lt;code&gt;id&lt;/code&gt; and the other fifteen are counted. The dump already answers this: nine of its ten tables are the containment tree of identified things.</td>
+</tr>
+<tr>
 <td>NOT A DECISION - recorded because it explains the numbers</td>
 <td>Sean, 2026-09-09, on theme: labor is not free, it is the sun's energy through food and citizens.</td>
 <td class="note">It derives a quantity the specification never states - the population ceiling - and that quantity explains all twelve territory notes.</td>
+</tr>
+<tr>
+<td>ANSWERED - what is a food store for?</td>
+<td>Food is made with keeps 1. The turn order is upkeep, grow, perish, age, spoil - so food made this turn is aged to 0 and spoiled at the same turn end, whether it is in a store or in nothing.</td>
+<td class="note">Food stores are out - it is made with &lt;code&gt;keeps&lt;/code&gt; 1 and cannot cross a turn. If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect.</td>
 </tr>
 <tr>
 <td>ANSWERED - food stores are out, and the rule is derived rather than named</td>
@@ -2682,6 +2677,11 @@ each row names who answered it.</p>
 <td>NOTED - found-colony has no stores for two independent reasons</td>
 <td>Both stores were dropped for conservation: garrison + 2 extractors = 3, exactly an ark's Binding.</td>
 <td class="note">The food one also buys nothing, so it would have gone anyway. **The metal store does buy something and still stays out** - a new colony gets the minimum that works and builds its own stores. Two reasons agreeing is not two pieces of evidence.</td>
+</tr>
+<tr>
+<td>ANSWERED - a construct for quantification, which is not the same as repetition</td>
+<td>Repetition is covered twice already - the amount column and the console's &lt;code&gt;repeat&lt;/code&gt;. Quantification, one firing per member of a set, is covered nowhere and is used in ten places.</td>
+<td class="note">Sean added &lt;code&gt;each&lt;/code&gt; and &lt;code&gt;some&lt;/code&gt; on 2026-09-09; twenty quantifiers now. Six world recipes hide it in a prose &lt;em&gt;selection&lt;/em&gt;; &lt;code&gt;make-world&lt;/code&gt;'s four calls hide it in a comment. See &lt;em&gt;Repetition, or quantification&lt;/em&gt;.</td>
 </tr>
 <tr>
 <td>NOTED - an orbit is a place, and looked derivable only because this release is small</td>

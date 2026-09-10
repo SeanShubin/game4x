@@ -918,14 +918,14 @@
       "This is the same question as whether composition sees the starting state or the running one."
     ],
     [
-      "OPEN - do the sketch's missing stores come back?",
+      "ANSWERED - do the sketch's missing stores come back?",
       "The sketch creates a garrison, 2 citizens and 2 extractors. The specification also creates a food store and a metal store.",
-      "Dropping them changes the game."
+      "Sean dropped the two stores on 2026-09-09 and they have not come back. Dropping them changes the game."
     ],
     [
-      "OPEN - does a thing have identity, or is it a count?",
+      "ANSWERED - does a thing have identity, or is it a count?",
       "set requires an identified thing. destroy ark means this ark. create citizen 2 asks for no identity.",
-      "The dump already answers this: nine of its ten tables are the containment tree of identified things."
+      "Recorded per kind in <em>Every kind</em>: a territory carries an <code>id</code> and the other fifteen are counted. The dump already answers this: nine of its ten tables are the containment tree of identified things."
     ],
     [
       "NOT A DECISION - recorded because it explains the numbers",
@@ -933,9 +933,9 @@
       "It derives a quantity the specification never states - the population ceiling - and that quantity explains all twelve territory notes."
     ],
     [
-      "OPEN - what is a food store for?",
+      "ANSWERED - what is a food store for?",
       "Food is made with keeps 1. The turn order is upkeep, grow, perish, age, spoil - so food made this turn is aged to 0 and spoiled at the same turn end, whether it is in a store or in nothing.",
-      "If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect."
+      "Food stores are out - it is made with <code>keeps</code> 1 and cannot cross a turn. If that reading is right a food store buys nothing, because both stored and unstored food die at the same moment. It may be that storing is meant to reset keeps, and nothing says so. Raised rather than filed as a defect."
     ],
     [
       "ANSWERED - food stores are out, and the rule is derived rather than named",
@@ -948,9 +948,9 @@
       "The food one also buys nothing, so it would have gone anyway. **The metal store does buy something and still stays out** - a new colony gets the minimum that works and builds its own stores. Two reasons agreeing is not two pieces of evidence."
     ],
     [
-      "OPEN - a construct for quantification, which is not the same as repetition",
+      "ANSWERED - a construct for quantification, which is not the same as repetition",
       "Repetition is covered twice already - the amount column and the console's <code>repeat</code>. Quantification, one firing per member of a set, is covered nowhere and is used in ten places.",
-      "Six world recipes hide it in a prose <em>selection</em>; <code>make-world</code>'s four calls hide it in a comment. See <em>Repetition, or quantification</em>."
+      "Sean added <code>each</code> and <code>some</code> on 2026-09-09; twenty quantifiers now. Six world recipes hide it in a prose <em>selection</em>; <code>make-world</code>'s four calls hide it in a comment. See <em>Repetition, or quantification</em>."
     ],
     [
       "OPEN - may a recipe define a kind or another recipe, and when",
