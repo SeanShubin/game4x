@@ -300,19 +300,45 @@ Two more belong here that are not divergence rows: **`X-20`**, *no capacity* to 
 force rule is built. Each is a place where **the code has a behaviour and the documents do not
 describe it** - which is one finding rather than three.
 
-### Behaviours the game has that its recipes do not
+### Recipes and behaviours are many-to-many, in both directions
 
-| Divergence                         | Built at                         | What it does                                                |
-| ---------------------------------- | -------------------------------- | ----------------------------------------------------------- |
-| `X-22` - force against nature      | `game.rs:236`, `:626`, `:914`    | greater to enter, equal to maintain, sum when coordinated   |
-| 5 - `unpaid` becomes `unsustained` | `game.rs:914`                    | a unit in a place short of force is already marked unusable |
-| 6 - losing a territory             | `territory.rs`, `lost_to_nature` | already one path, not two                                   |
-| 13 - storing                       | `territory.rs:184`               | cram what fits, discard the rest                            |
+**Computed.** The research lens's check 15 anchors behaviours in `crates/game-model` by a **line of
+code rather than a line number** - a number cries wolf on every edit above it, and an absent anchor
+passes silently - and reads only above `#[cfg(test)]`, because **a behaviour that lived only in a
+test would be a rule nothing runs**. Its first run refused three rows correctly: `game.rs:1618`
+reimplements the end of a turn backwards to prove the settling order cannot matter, so three anchors
+matched twice.
 
-**The release lists sixteen recipes. The game runs at least four more rules every turn**, and one of
-them decides what a player keeps. **`R-7` cannot show any of them**, because it shows recipes and
-these are not recipes. That is the single largest gap between the release and the game, and neither
-lane had it in this shape before tonight.
+**Ten behaviours found. Six are named by no recipe among the release's sixteen:**
+
+| Anchored at        | What it does                                                | Note                                                  |
+| ------------------ | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `territory.rs:192` | metal and energy cut to what the stores hold                | **the rule that decides what a player keeps**         |
+| `game.rs:915`      | equal force to maintain, or nature takes the territory back | the `X-22` half                                       |
+| `game.rs:631`      | greater force to enter, or taking is refused                | the other `X-22` half                                 |
+| `territory.rs:584` | losing a territory clears everything on it                  | garrison, population, stores, yards, extractors       |
+| `game.rs:918`      | a unit on a lost territory survives, unusable               | `X-27`, and against Sean's *we just delete the units* |
+| `game.rs:930`      | the turn number advances                                    | bookkeeping, listed so the count is honest            |
+
+**And it cuts the other way too, which is what this lane had wrong.** A first draft of this note said
+the game runs *more* rules than the release lists, as though the sixteen were a subset. They are not:
+
+- **Three recipes are one function.** `upkeep`, `grow` and `perish` are `population_after` at
+  `territory.rs:600` - `if food < citizens { food } else { citizens + (food - citizens).min(citizens) }`.
+  **Nothing there consumes the food**; it only decides the new count
+- **One recipe is two places.** `refresh` readies a territory's contents in one place and units in
+  another
+- **Half a line has recipes and half has none.** Splitting `end_of_turn_losses` shows food expiring
+  **is** `age` and `spoil` through `keeps` 1 - and **labor is discarded by the same line with no
+  recipe mentioning it**
+
+**So sixteen is not a count of what the game does, in either direction, and neither list contains the
+other.** That is a sharper statement than *the game has rules the release does not list*, and it is
+the one the measurement supports.
+
+**`R-7` still cannot show the six**, because it shows recipes and these are not recipes. It is built
+and waiting on Sean, correct over all sixteen, and **narrower than its wording suggests** - the rule
+deciding what a player keeps between turns is not among the things it can display.
 
 ### The instrument - what the constraint was for
 

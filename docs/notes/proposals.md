@@ -109,6 +109,53 @@ It proposed no words, which was right: `spec/` is this lane's to draft for.
 
 ## Addressed to other perspectives
 
+### S-83 - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe
+
+**to** spec - **status** open - **raised** 2026-09-10 - **source** the research lens's check 15,
+which it could not file because it is at its eight-item limit to this lane
+
+**Filed here because it is the largest gap the overnight work found and it was living in a note.**
+The argument is in
+[the report](2026-09-09-incorporating-the-re-encoding.md); this is the item so that it has a reader.
+
+**Computed, anchored by a line of code rather than a line number**, and read only above
+`#[cfg(test)]` - a behaviour that lived only in a test would be a rule nothing runs. **Ten
+behaviours in `crates/game-model`. Six are named by no recipe among the release's sixteen:**
+
+| Anchored at        | What it does                                                |
+| ------------------ | ----------------------------------------------------------- |
+| `territory.rs:192` | metal and energy cut to what the stores hold                |
+| `game.rs:915`      | equal force to maintain, or nature takes the territory back |
+| `game.rs:631`      | greater force to enter, or taking is refused                |
+| `territory.rs:584` | losing a territory clears everything on it                  |
+| `game.rs:918`      | a unit on a lost territory survives, unusable               |
+| `game.rs:930`      | the turn number advances                                    |
+
+**And it cuts the other way, which is why the headline is not *the game has extra rules*.** `upkeep`,
+`grow` and `perish` are **one function** - `population_after` at `territory.rs:600` - and nothing in
+it consumes the food; it only decides the new count. `refresh` is **one recipe in two places**. And
+`end_of_turn_losses` is **half a line with recipes and half without**: food expiring is `age` and
+`spoil` through `keeps` 1, while **labor is discarded by the same line with no recipe naming it**.
+
+**So sixteen is not a count of what the game does, in either direction, and neither list contains
+the other.**
+
+**Why it costs something, and it is not tidiness.** `R-7` is *each recipe can be confirmed on its
+own*, **built and waiting on Sean to vet**. It shows recipes. **It cannot show any of the six**, so
+the rule deciding what a player keeps between turns is not among the things a reader can confirm.
+`R-7` is not wrong; it is narrower than its wording suggests, and Sean should know that before he
+looks at it.
+
+**Whether.** **Worth deciding what the release's *Recipes* table is for**, before drafting a row.
+Two readings and this lane takes neither: the table lists **what a player may fire**, in which case
+six world rules are correctly absent and the wording should say so; or it lists **what the game
+does**, in which case six rows are missing and `R-7`'s evidence line moves with them. **The first is
+a sentence and the second is six rows plus a capability.**
+
+It goes to Sean as a numbered proposal once both readings are drafted, which is the shape `S-74` and
+`S-82` are in.
+
+
 ### S-82 - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking
 
 **to** spec - **status** open - **raised** 2026-09-09 - **source** the research lens's kind-coverage
