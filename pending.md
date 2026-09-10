@@ -19,6 +19,8 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
+- **X-18** - `e570e94` X-18 and X-27's tidy: a description that cannot go stale, and a line the next line undid · still open in `lenses/research/outbox.md`
+- **X-27** - `e570e94` X-18 and X-27's tidy: a description that cannot go stale, and a line the next line undid · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
@@ -36,7 +38,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
 - **X-27** - losing a territory to nature does not delete the units on it, and one line above it is dead · `lenses/research/outbox.md`
 
-### To spec (33)
+### To spec (31)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -44,6 +46,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-77** - Sean has answered what losing a territory does to a unit, and `spec/control.md` says the other thing · `crates/outbox.md`
 - **C-76** - A new prototype needs two rows in your column before it can join the workspace · `crates/outbox.md`
 - **C-75** - The boundedness rule `X-9` names already holds, so adopting it costs nothing · `crates/outbox.md`
 - **C-68** - `game` holds twelve territories and declares no capacity to hold anything · `crates/outbox.md`
@@ -67,9 +70,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
 - **X-20** - *declares no capacity* and *declares no limit* are opposites, and the release means the second · `lenses/research/outbox.md`
-- **X-23** - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed · `lenses/research/outbox.md`
-- **X-28** - two spec files give a founding garrison different force, and the code settles it by discarding an argument · `lenses/research/outbox.md`
-- **X-25** - `launch ark` puts nothing into orbit, and Sean's loop ends with an ark in orbit · `lenses/research/outbox.md`
 - **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal

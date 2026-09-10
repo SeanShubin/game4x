@@ -183,13 +183,7 @@
       "ark": 3,
       "pioneer": 3
     },
-    "violations": [
-      [
-        "launch ark",
-        -3,
-        "-3 metal (x1)"
-      ]
-    ]
+    "violations": []
   },
   "unbounded": {
     "analysed": 18,
@@ -274,8 +268,8 @@
     "breaches": []
   },
   "editor": {
-    "tokens": 517,
-    "selectable": 517,
+    "tokens": 524,
+    "selectable": 524,
     "recipes": 23,
     "clean": 23,
     "typed": {}
@@ -285,7 +279,7 @@
     "pairs": []
   },
   "containment": {
-    "examined": 20,
+    "examined": 21,
     "declared": 19,
     "homeless": [],
     "undeclared": [],

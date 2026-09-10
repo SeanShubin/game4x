@@ -418,9 +418,13 @@ both fixes did.
 
 **Two open decisions live only in the outbox and were never in the decisions table:**
 
-- **`X-25`** - `launch ark` puts nothing into orbit, and Sean's loop ends with an ark in orbit.
-  `P-342` made the recipe pay an Ark's cost and produce nothing, and the loop as Sean stated it does
-  not close. That is a decision, and it is the one that decides whether the game can be finished
+- **`X-25`** - `launch ark` puts nothing into orbit. **Closed the same day by `P-362`**, which
+  gives it a `require 1 territory` naming `$where` and a `produce 1 ark` in the orbit above it.
+  **What closed it was not a new decision**: `P-342` made it produce nothing because *the
+  destination could not be named*, and `P-334` had since made an orbit carry `below` - the form
+  this lane's data already used. **A reason expired and nothing re-read it.** The loop now closes
+  from ark to ark, and check 1 reports no metal violation for the first time, because the ark
+  produced carries the binding the recipe pays
 - **`X-26`** - `store` has no definition in `spec/`, and the win condition depends on it. Three ways
   out, and they are not equivalent: promote it, stop the win condition referring to storage, or stop
   the release having stores
@@ -433,6 +437,13 @@ lives**, and **whether `load` should exist** given that `spec/units.md` says fue
 more than the number is that **the decisions table was not the whole list**, and nothing said so.
 The outbox and the table were two places for the same kind of thing, and a reader of either would
 have believed they had seen them all.
+
+**Overtaken within hours, and by the right lane.** `c3cccc4` promoted eight, and the specification
+lane has said plainly that `X-25` and `X-26` living only in this lane's outbox was its own job
+undone rather than a defect in the outbox. `X-25` is closed, `X-28` is promoted as `P-360`, and
+`X-23` was answered by a rule neither of this item's two readings had - Sean split the fuel bin by
+layer, so **an Ark needs none at all**. Three of this report's own claims went stale in one commit,
+which is the system working at the speed it is supposed to.
 
 ## What this lane recommends doing with it
 

@@ -305,7 +305,7 @@ def formula_table(f):
             f'({arrow}{abs(delta) if delta else ""})</span>'
         )
     out.append(f'<h3>{esc(f["name"])} {badge}</h3>')
-    out.append(f'<p class="sel">selection: <em>{esc(f["selection"])}</em></p>')
+    out.append(f'<p class="sel">selector: <em>{esc(f["selector"])}</em></p>')
     out.append('<div class="scroll"><table><thead><tr>')
     for h in ("Op", "Target", "Amount / Bound", "Attach", "Was", "The same row, as one string"):
         out.append(f"<th>{h}</th>")
@@ -555,7 +555,7 @@ def storage_table():
 def repetition_counts():
     """Where each sort of repeating shows up, counted rather than recalled.
 
-    This counted prose `selection` fields until 2026-09-09, and went to zero the moment they
+    This counted prose `selector` fields until 2026-09-09, and went to zero the moment they
     became `each` lines - which is the assertion below doing its job rather than a break. A
     count of the input stops meaning anything when the input moves; this now counts the lines.
     """
@@ -577,12 +577,12 @@ def selection_table():
     """What each player recipe selects, and what else the player must pick."""
     rows = "".join(
         f'<tr><td class="target">{esc(n)}</td><td>{esc(s)}</td><td class="target">{p}</td></tr>'
-        for n, s, p in DATA["selections"]
+        for n, s, p in DATA["selectors"]
     )
-    assert len(DATA["selections"]) == len(DATA["player"])
-    multi = [s for _n, s, _p in DATA["selections"] if " and " in s]
+    assert len(DATA["selectors"]) == len(DATA["player"])
+    multi = [s for _n, s, _p in DATA["selectors"] if " and " in s]
     return (
-        len(DATA["selections"]), len(multi),
+        len(DATA["selectors"]), len(multi),
         '<div class="scroll"><table><thead><tr><th>Recipe</th><th>What is selected</th>'
         "<th>What else the player picks</th></tr></thead><tbody>" + rows + "</tbody></table></div>",
     )
@@ -1018,7 +1018,7 @@ fires</em>. A third way would buy nothing.</td></tr>
 <tr><td class="target"><strong>Quantification</strong></td>
 <td>once per member of a set, with something bound differently each time</td>
 <td><strong>{n_quant}</strong> <code>each</code> lines, {n_state} of them over a description</td>
-<td><strong>Yes, since 2026-09-09.</strong> It was in a prose <em>selection</em> field in six
+<td><strong>Yes, since 2026-09-09.</strong> It was in a prose <em>selector</em> field in six
 recipes and in a comment in four lines of <code>make-world</code>; Sean added the construct and both
 became lines.</td></tr>
 </tbody></table></div>
@@ -1136,10 +1136,10 @@ incremental, and it does nothing for the second.</p>
 <h2>Selection, and what an interface needs</h2>
 <p>Sean, 2026-09-09, on the interface: select a thing and be shown the options for it; select several
 things; select a portion of a quantity - all citizens, one, five of ten. And: <em>perhaps recipes
-have an implicit selection parameter, and certain recipes only apply to certain types of
+have an implicit selector parameter, and certain recipes only apply to certain types of
 selections.</em></p>
 <p><strong>They already do, and it is prose.</strong> Every one of the {n_sel} player recipes carries
-a <em>selection</em> field, and it has never been part of the language:</p>
+a <em>selector</em> field, and it has never been part of the language:</p>
 {sel_table}
 <div class="callout">
 <h4>The owner column <em>is</em> the quantifier</h4>
@@ -1160,7 +1160,7 @@ rather than offered or fired, and having no quantifier is how that now reads.</p
 <strong>what a thing contains is a map from a description to a quantity</strong>, and
 <strong>there is never a quantity of a thing with an <code>id</code></strong>. Ten citizens in a
 territory are one entry of ten, and <strong>there is no citizen number three to select</strong>.</p>
-<p>So a selection is <strong>a description and a count</strong> &mdash; which is the same object as a
+<p>So a selector is <strong>a description and a count</strong> &mdash; which is the same object as a
 container's contents, and the same object a recipe line targets. All, one, and five of ten are one
 shape with a different number, and the interface needs no special case for any of them. What it
 cannot offer is picking <em>which</em> five, because that question has no referent.</p>
@@ -1168,15 +1168,15 @@ cannot offer is picking <em>which</em> five, because that question has no refere
 <div class="callout">
 <h4>Nothing needs multi-select, and what looks like it is a parameter</h4>
 <p><strong>Every one of the {n_sel} player recipes selects exactly one thing</strong>, and
-{n_multi} select two. What looks like a second selection is a parameter: <code>move</code> selects a
+{n_multi} select two. What looks like a second selector is a parameter: <code>move</code> selects a
 unit and takes <code>$to</code>; <code>build extractor</code> and <code>build store</code> select a
 territory and take <code>$resource</code>. Two of eleven need one at all.</p>
 <p>That is `X-8`'s distinction doing work: <strong>a parameter is a choice the player makes and a
 derived term is not</strong>, so which parameters exist decides exactly what the interface has to
-ask for after the selection. Here that is a place, twice, and a resource, twice.</p>
+ask for after the selector. Here that is a place, twice, and a resource, twice.</p>
 </div>
 <div class="callout">
-<h4>The gap: a selection tests derived traits, and a description may not carry one</h4>
+<h4>The gap: a selector tests derived traits, and a description may not carry one</h4>
 <p><strong>Six selections test a derived trait</strong> &mdash; <em>a territory you control</em> four
 times, plus <code>surplus</code> in <code>grow</code> and <code>unpaid</code> in
 <code>perish</code>. And <code>spec/console.md</code> says a description is a kind and every
@@ -1185,7 +1185,7 @@ times, plus <code>surplus</code> in <code>grow</code> and <code>unpaid</code> in
 second has a form in the notation. They are close enough to be confused and different in exactly one
 way: a description says what a thing <em>is stored as</em>, and a query says what is <em>true of
 it</em>. An interface needs the second - you select what you control, not what is recorded.</p>
-<p><strong>Decided 2026-09-09: a selection is a query.</strong> A description says what a thing is
+<p><strong>Decided 2026-09-09: a selector is a query.</strong> A description says what a thing is
 stored as, and a query says what is true of it, so a quantifier's set may test a derived trait and a
 container's contents may not. That unblocks all six &mdash; <code>control</code> four times,
 <code>surplus</code> and <code>unpaid</code> once each &mdash; and the assumption list now records
@@ -1193,7 +1193,7 @@ what the notation lacks rather than a rule being broken.</p>
 </div>
 <div class="callout">
 <h4>What the model does not care about</h4>
-<p>A radial dial, a fixed row of buttons that change with the selection, a context menu - the model
+<p>A radial dial, a fixed row of buttons that change with the selector, a context menu - the model
 is indifferent, because all three render the same list. <strong>What is settled is the order</strong>:
 noun then verb, select then operate, which `X-8` traced to the Xerox Star and which is right here for
 a reason stronger than habit - selecting first leaves the system in <strong>no mode</strong>, and
@@ -1470,7 +1470,7 @@ elegant about it either: three pioneers would want a third recipe.</p>
 set. Letting it carry a count - <em>take as many as you like, and let the force follow</em> - is a
 different reading of a quantifier, and it is the one thing here that changes how the data is
 interpreted rather than what it says.</p>
-<p><strong>It is also the one with an answer already sketched.</strong> A selection is a description
+<p><strong>It is also the one with an answer already sketched.</strong> A selector is a description
 and a count, which is what the interface section concluded from fungibility - so
 <code>some 2 {{pioneer …}}</code> is the same idea arriving from the other direction. Two roads to
 one construct is usually a sign it is the right one.</p>
@@ -1562,7 +1562,7 @@ garrison earns its place on exactly one biome.</p>
 nature of 2 and entering needs more. But <code>move</code> selects <em>a unit that is ready</em> and
 moves it. <strong>There is no expedition</strong> - two pioneers moving one at a time each fail the
 test alone.</p>
-<p><strong>The interface work already has the shape for it.</strong> A selection is a description and
+<p><strong>The interface work already has the shape for it.</strong> A selector is a description and
 a count, so an expedition is <code>some 2 {{pioneer …}}</code> rather than a new kind of thing. What
 is missing is that <code>move</code>'s quantifier takes one, and force sums over however many it
 takes.</p>
@@ -1893,7 +1893,7 @@ do not found a colony that is already founded &mdash; and not a second kind of c
 <h3>Parameter domains &mdash; what a recipe may be instantiated over</h3>
 <p>A parameter is not free. Its domain is a <strong>condition on the kind</strong>, not a list, and
 grounding resolves it &mdash; so an instance that does not satisfy the condition never exists, and
-in a selection interface the player never sees it.</p>
+in a selector interface the player never sees it.</p>
 <div class="scroll">{simple_table(
     ["Recipe", "Parameter", "Domain", "Today", "Why"],
     DATA["domains"], ["target", "target", "", "amt", "note"])}</div>
@@ -1942,7 +1942,7 @@ extractor, rather than founding being refused.</p>
 chooses to build a metal extractor on territory 6 is refused. <strong>Identical condition, opposite
 answers, and neither is a mistake</strong> &mdash; because one is a consequence of landing
 somewhere and the other is a thing the player asked for.</p>
-<p>Under a selection interface the second never even arises: grounding the recipe against
+<p>Under a selector interface the second never even arises: grounding the recipe against
 territory 6 produces no <code>build extractor[metal]</code> to select. <strong>The attachment is
 what the console needs and the menu is what the interface needs, from one line.</strong></p>
 </div>

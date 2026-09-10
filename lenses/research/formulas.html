@@ -227,7 +227,7 @@ is why no <code>set</code> in this report carries an attachment.</p>
 <td class="note">both uses were restatements</td>
 </tr>
 <tr>
-<td class="target">a recipe's prose &lt;em&gt;selection&lt;/em&gt;</td>
+<td class="target">a recipe's prose &lt;em&gt;selector&lt;/em&gt;</td>
 <td>each x: {description}</td>
 <td class="note">DELETED as prose - six world recipes quantified in a field the language could not see</td>
 </tr>
@@ -248,14 +248,14 @@ is why no <code>set</code> in this report carries an attachment.</p>
 the note &mdash; as a single string in the notation <code>spec/console.md</code> gives for a command
 and for a description of state: <code>{name field:value ...}</code>, where a value is a word, a
 number or another command, a field referring to a thing is named for that thing's kind, and
-<code>#</code> begins a comment. All 80 lines are encoded, none by hand.</p>
+<code>#</code> begins a comment. All 81 lines are encoded, none by hand.</p>
 <p>Nine of them needed something that notation does not define. The encoder records each rather
 than inventing quietly, and they are listed under <em>What the encoding assumed</em>, below the
 data.</p>
 
 <h2>Player recipes <span class="badge">11</span></h2>
 <h3>deploy ark <span class="badge down">9 rows &rarr; 4 lines (&minus;5)</span></h3>
-<p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -264,12 +264,12 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">some</td><td class="target">ark: {ark}</td><td class="amt"></td><td></td><td class="note">was the selection *an ark*, which was prose outside the language</td><td class="one-string">{some ark:{ark}} <span class="cmt"># was the selection *an ark*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">some</td><td class="target">ark: {ark}</td><td class="amt"></td><td></td><td class="note">was the selector *an ark*, which was prose outside the language</td><td class="one-string">{some ark:{ark}} <span class="cmt"># was the selector *an ark*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-let">let</td><td class="target">t = below of (holder of ark)</td><td class="amt"></td><td></td><td class="note">was row 1 and row 2's qualifier</td><td class="one-string">{let t:below of (holder of ark)} <span class="cmt"># was row 1 and row 2's qualifier</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">ark</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 2</td><td class="one-string">{change thing:{ark} amount:-1} <span class="cmt"># row 2</span></td></tr>
 <tr><td class="op op-call">call</td><td class="target">found-colony(t)</td><td class="amt"></td><td></td><td class="note">rows 3-9</td><td class="one-string">{call recipe:found-colony territory:t} <span class="cmt"># rows 3-9</span></td></tr>
 </tbody></table></div><h3>found-colony(t) <span class="badge new">new</span></h3>
-<p class="sel">selection: <em>called, not selected</em></p>
+<p class="sel">selector: <em>called, not selected</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -283,7 +283,7 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">extractor[food] in t</td><td class="amt amt-pos">+1</td><td><span class="attach">SOFT</span></td><td class="note">Sean: only if there is capacity. No territory lacks food capacity</td><td class="one-string">{change thing:{extractor resource:food territory:t} amount:+1 attach:soft} <span class="cmt"># Sean: only if there is capacity. No territory lacks food capacity</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">extractor[metal] in t</td><td class="amt amt-pos">+1</td><td><span class="attach">SOFT</span></td><td class="note">Sean: only if there is capacity. Territory 6 has no metal, so it skips there</td><td class="one-string">{change thing:{extractor resource:metal territory:t} amount:+1 attach:soft} <span class="cmt"># Sean: only if there is capacity. Territory 6 has no metal, so it skips there</span></td></tr>
 </tbody></table></div><h3>found by land <span class="badge down">8 rows &rarr; 4 lines (&minus;4)</span></h3>
-<p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -292,12 +292,12 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">some</td><td class="target">pioneer: {pioneer}</td><td class="amt"></td><td></td><td class="note">was the selection *a pioneer*, which was prose outside the language</td><td class="one-string">{some pioneer:{pioneer}} <span class="cmt"># was the selection *a pioneer*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">some</td><td class="target">pioneer: {pioneer}</td><td class="amt"></td><td></td><td class="note">was the selector *a pioneer*, which was prose outside the language</td><td class="one-string">{some pioneer:{pioneer}} <span class="cmt"># was the selector *a pioneer*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-let">let</td><td class="target">t = holder of pioneer</td><td class="amt"></td><td></td><td class="note"></td><td class="one-string">{let t:holder of pioneer}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">pioneer</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{pioneer} amount:-1} <span class="cmt"># row 1</span></td></tr>
 <tr><td class="op op-call">call</td><td class="target">found-colony(t)</td><td class="amt"></td><td></td><td class="note">rows 2-8, identical to deploy ark's</td><td class="one-string">{call recipe:found-colony territory:t} <span class="cmt"># rows 2-8, identical to deploy ark's</span></td></tr>
 </tbody></table></div><h3>move <span class="badge up">5 rows &rarr; 7 lines (+2)</span></h3>
-<p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -306,7 +306,7 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">some</td><td class="target">unit: {unit ready:yes}</td><td class="amt"></td><td></td><td class="note">was the selection *a unit that is ready*, which was prose outside the language</td><td class="one-string">{some unit:{unit ready:yes}} <span class="cmt"># was the selection *a unit that is ready*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">some</td><td class="target">unit: {unit ready:yes}</td><td class="amt"></td><td></td><td class="note">was the selector *a unit that is ready*, which was prose outside the language</td><td class="one-string">{some unit:{unit ready:yes}} <span class="cmt"># was the selector *a unit that is ready*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-let">let</td><td class="target">from = holder of unit</td><td class="amt"></td><td></td><td class="note">was row 1; containment says where, so this reads a holder rather than a trait</td><td class="one-string">{let from:holder of unit} <span class="cmt"># was row 1; containment says where, so this reads a holder rather than a trait</span></td></tr>
 <tr><td class="op op-require">require</td><td class="target">count {adjacency from:from to:$to border:crosses of unit}</td><td class="amt">&gt;= 1</td><td><span class="attach">hard</span></td><td class="note">was *an edge the unit crosses*, which named no trait. A pioneer crosses a `border` and an ark an `orbit border`, both from *Units and structures*</td><td class="one-string">{require left:count {adjacency from:from to:$to border:crosses of unit} is:&gt;= right:1 attach:hard} <span class="cmt"># was *an edge the unit crosses*, which named no trait. A pioneer crosses a `border` and an ark an `orbit border`, both from *Units and structures*</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">energy in unit</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">the release's own row - *consume 1 energy, that unit*. **One move per fuel cell**</td><td class="one-string">{change thing:{energy unit:unit} amount:-1 attach:hard} <span class="cmt"># the release's own row - *consume 1 energy, that unit*. **One move per fuel cell**</span></td></tr>
@@ -314,7 +314,7 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">unit in $to</td><td class="amt amt-pos">+1</td><td></td><td class="note">and arriving is the other half</td><td class="one-string">{change thing:{unit place:$to} amount:+1} <span class="cmt"># and arriving is the other half</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">unit.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 5</td><td class="one-string">{set thing:{unit} ready:no} <span class="cmt"># rows 3 and 5</span></td></tr>
 </tbody></table></div><h3>build extractor <span class="badge up">3 rows &rarr; 4 lines (+1)</span></h3>
-<p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -323,12 +323,12 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">some</td><td class="target">t: {territory control:yours}</td><td class="amt"></td><td></td><td class="note">was the selection *a territory you control*, which was prose outside the language</td><td class="one-string">{some t:{territory control:yours}} <span class="cmt"># was the selection *a territory you control*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">some</td><td class="target">t: {territory control:yours}</td><td class="amt"></td><td></td><td class="note">was the selector *a territory you control*, which was prose outside the language</td><td class="one-string">{some t:{territory control:yours}} <span class="cmt"># was the selector *a territory you control*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">labor in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{labor territory:t} amount:-1 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">metal in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{metal territory:t} amount:-1 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">extractor[$resource] in t</td><td class="amt amt-pos">+1</td><td><span class="attach">HARD</span></td><td class="note">capacity is the container's now</td><td class="one-string">{change thing:{extractor resource:$resource territory:t} amount:+1 attach:hard} <span class="cmt"># capacity is the container's now</span></td></tr>
 </tbody></table></div><h3>build store <span class="badge up">3 rows &rarr; 4 lines (+1)</span></h3>
-<p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -337,12 +337,12 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">some</td><td class="target">t: {territory control:yours}</td><td class="amt"></td><td></td><td class="note">was the selection *a territory you control*, which was prose outside the language</td><td class="one-string">{some t:{territory control:yours}} <span class="cmt"># was the selection *a territory you control*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">some</td><td class="target">t: {territory control:yours}</td><td class="amt"></td><td></td><td class="note">was the selector *a territory you control*, which was prose outside the language</td><td class="one-string">{some t:{territory control:yours}} <span class="cmt"># was the selector *a territory you control*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">labor in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{labor territory:t} amount:-1 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">metal in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{metal territory:t} amount:-1 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">store[$resource] in t</td><td class="amt amt-pos">+1</td><td></td><td class="note"></td><td class="one-string">{change thing:{store resource:$resource territory:t} amount:+1}</td></tr>
 </tbody></table></div><h3>build yard <span class="badge up">3 rows &rarr; 4 lines (+1)</span></h3>
-<p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -351,12 +351,12 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">some</td><td class="target">t: {territory control:yours}</td><td class="amt"></td><td></td><td class="note">was the selection *a territory you control*, which was prose outside the language</td><td class="one-string">{some t:{territory control:yours}} <span class="cmt"># was the selection *a territory you control*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">some</td><td class="target">t: {territory control:yours}</td><td class="amt"></td><td></td><td class="note">was the selector *a territory you control*, which was prose outside the language</td><td class="one-string">{some t:{territory control:yours}} <span class="cmt"># was the selector *a territory you control*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">labor in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{labor territory:t} amount:-1 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">metal in t</td><td class="amt amt-neg">-15</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{metal territory:t} amount:-15 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">yard in t</td><td class="amt amt-pos">+1</td><td><span class="attach">HARD</span></td><td class="note">capacity is the container's now</td><td class="one-string">{change thing:{yard territory:t} amount:+1 attach:hard} <span class="cmt"># capacity is the container's now</span></td></tr>
 </tbody></table></div><h3>produce pioneer <span class="badge up">4 rows &rarr; 5 lines (+1)</span></h3>
-<p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -365,13 +365,13 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">some</td><td class="target">t: {territory control:yours}</td><td class="amt"></td><td></td><td class="note">was the selection *a territory you control*, which was prose outside the language</td><td class="one-string">{some t:{territory control:yours}} <span class="cmt"># was the selection *a territory you control*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">some</td><td class="target">t: {territory control:yours}</td><td class="amt"></td><td></td><td class="note">was the selector *a territory you control*, which was prose outside the language</td><td class="one-string">{some t:{territory control:yours}} <span class="cmt"># was the selector *a territory you control*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">metal in t</td><td class="amt amt-neg">-3</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{metal territory:t} amount:-3 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">energy in t</td><td class="amt amt-neg">-6</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{energy territory:t} amount:-6 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">citizen in t</td><td class="amt amt-neg">-2</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{citizen territory:t} amount:-2 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">pioneer in t</td><td class="amt amt-pos">+1</td><td></td><td class="note"></td><td class="one-string">{change thing:{pioneer territory:t} amount:+1}</td></tr>
-</tbody></table></div><h3>launch ark <span class="badge up">4 rows &rarr; 5 lines (+1)</span></h3>
-<p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
+</tbody></table></div><h3>launch ark <span class="badge up">4 rows &rarr; 6 lines (+2)</span></h3>
+<p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -380,13 +380,14 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">some</td><td class="target">yard: {yard}</td><td class="amt"></td><td></td><td class="note">was the selection *a yard*, which was prose outside the language</td><td class="one-string">{some yard:{yard}} <span class="cmt"># was the selection *a yard*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">some</td><td class="target">yard: {yard}</td><td class="amt"></td><td></td><td class="note">was the selector *a yard*, which was prose outside the language</td><td class="one-string">{some yard:{yard}} <span class="cmt"># was the selector *a yard*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-let">let</td><td class="target">t = holder of yard</td><td class="amt"></td><td></td><td class="note">was require 1 yard</td><td class="one-string">{let t:holder of yard} <span class="cmt"># was require 1 yard</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">metal in t</td><td class="amt amt-neg">-3</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{metal territory:t} amount:-3 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">energy in t</td><td class="amt amt-neg">-12</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{energy territory:t} amount:-12 attach:hard}</td></tr>
-<tr><td class="op op-change">change</td><td class="target">citizen in t</td><td class="amt amt-neg">-2</td><td><span class="attach">hard</span></td><td class="note">**this recipe produces nothing** - `P-342`, and `scenario/commands/play.4x:170`: *puts nothing into orbit, so there is no Ark to move*</td><td class="one-string">{change thing:{citizen territory:t} amount:-2 attach:hard} <span class="cmt"># **this recipe produces nothing** - `P-342`, and `scenario/commands/play.4x:170`: *puts nothing into orbit, so there is no Ark to move*</span></td></tr>
+<tr><td class="op op-change">change</td><td class="target">citizen in t</td><td class="amt amt-neg">-2</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{citizen territory:t} amount:-2 attach:hard}</td></tr>
+<tr><td class="op op-change">change</td><td class="target">ark in {orbit below:t}</td><td class="amt amt-pos">+1</td><td></td><td class="note">**`P-362`, promoted 2026-09-10** - *produce 1 ark, the orbit above `$where`*. `P-342` had it produce nothing because the destination could not be named; `P-334` made an orbit carry `below`, and the name was there. **This closes `X-25` and closes the loop.**</td><td class="one-string">{change thing:{ark orbit:{orbit below:t}} amount:+1} <span class="cmt"># **`P-362`, promoted 2026-09-10** - *produce 1 ark, the orbit above `$where`*. `P-342` had it produce nothing because the destination could not be named; `P-334` made an orbit carry `below`, and the name was there. **This closes `X-25` and closes the loop.**</span></td></tr>
 </tbody></table></div><h3>create labor <span class="badge level">3 rows &rarr; 3 lines (=)</span></h3>
-<p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -395,11 +396,11 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">some</td><td class="target">citizen: {citizen ready:yes}</td><td class="amt"></td><td></td><td class="note">was the selection *a citizen that is ready*, which was prose outside the language</td><td class="one-string">{some citizen:{citizen ready:yes}} <span class="cmt"># was the selection *a citizen that is ready*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">some</td><td class="target">citizen: {citizen ready:yes}</td><td class="amt"></td><td></td><td class="note">was the selector *a citizen that is ready*, which was prose outside the language</td><td class="one-string">{some citizen:{citizen ready:yes}} <span class="cmt"># was the selector *a citizen that is ready*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">citizen.ready = no</td><td class="amt"></td><td></td><td class="note">rows 1 and 2 were one flip</td><td class="one-string">{set thing:{citizen} ready:no} <span class="cmt"># rows 1 and 2 were one flip</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">labor in holder of citizen</td><td class="amt amt-pos">+1</td><td></td><td class="note">row 3</td><td class="one-string">{change thing:{labor territory:holder of citizen} amount:+1} <span class="cmt"># row 3</span></td></tr>
 </tbody></table></div><h3>work <span class="badge level">5 rows &rarr; 5 lines (=)</span></h3>
-<p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -408,7 +409,7 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">some</td><td class="target">extractor: {extractor ready:yes}</td><td class="amt"></td><td></td><td class="note">was the selection *an extractor that is ready*, which was prose outside the language</td><td class="one-string">{some extractor:{extractor ready:yes}} <span class="cmt"># was the selection *an extractor that is ready*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">some</td><td class="target">extractor: {extractor ready:yes}</td><td class="amt"></td><td></td><td class="note">was the selector *an extractor that is ready*, which was prose outside the language</td><td class="one-string">{some extractor:{extractor ready:yes}} <span class="cmt"># was the selector *an extractor that is ready*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-let">let</td><td class="target">t = holder of extractor</td><td class="amt"></td><td></td><td class="note">was row 1</td><td class="one-string">{let t:holder of extractor} <span class="cmt"># was row 1</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">labor in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">row 2</td><td class="one-string">{change thing:{labor territory:t} amount:-1 attach:hard} <span class="cmt"># row 2</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">extractor.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 4 were one flip</td><td class="one-string">{set thing:{extractor} ready:no} <span class="cmt"># rows 3 and 4 were one flip</span></td></tr>
@@ -418,7 +419,7 @@ data.</p>
 <h2>World recipes <span class="badge">8</span></h2>
 <p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
 <h3>upkeep <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
-<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -427,10 +428,10 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">each</td><td class="target">thing: {thing upkeep:any}</td><td class="amt"></td><td></td><td class="note">was the selection *each thing with upkeep*, which was prose outside the language</td><td class="one-string">{each thing:{thing upkeep:any}} <span class="cmt"># was the selection *each thing with upkeep*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">each</td><td class="target">thing: {thing upkeep:any}</td><td class="amt"></td><td></td><td class="note">was the selector *each thing with upkeep*, which was prose outside the language</td><td class="one-string">{each thing:{thing upkeep:any}} <span class="cmt"># was the selector *each thing with upkeep*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">food in holder of thing</td><td class="amt amt-neg">-thing.upkeep</td><td><span class="attach">hard</span></td><td class="note">row 1 was the selector; row 2</td><td class="one-string">{change thing:{food territory:holder of thing} amount:-thing.upkeep attach:hard} <span class="cmt"># row 1 was the selector; row 2</span></td></tr>
 </tbody></table></div><h3>grow <span class="badge up">2 rows &rarr; 4 lines (+2)</span></h3>
-<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -439,12 +440,12 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">each</td><td class="target">t: {territory}</td><td class="amt"></td><td></td><td class="note">was the selection *each territory*, which was prose outside the language</td><td class="one-string">{each t:{territory}} <span class="cmt"># was the selection *each territory*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">each</td><td class="target">t: {territory}</td><td class="amt"></td><td></td><td class="note">was the selector *each territory*, which was prose outside the language</td><td class="one-string">{each t:{territory}} <span class="cmt"># was the selector *each territory*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-let">let</td><td class="target">n = min(count {food surplus:yes in t}, count {citizen in t})</td><td class="amt"></td><td></td><td class="note">the same expression, now in a language that has one</td><td class="one-string">{let n:min(count {food surplus:yes in t}, count {citizen in t})} <span class="cmt"># the same expression, now in a language that has one</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">food[surplus] in t</td><td class="amt amt-neg">-n</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{food surplus:yes territory:t} amount:-n} <span class="cmt"># row 1</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">citizen in t</td><td class="amt amt-pos">+n</td><td></td><td class="note">row 2</td><td class="one-string">{change thing:{citizen territory:t} amount:+n} <span class="cmt"># row 2</span></td></tr>
 </tbody></table></div><h3>perish <span class="badge up">2 rows &rarr; 3 lines (+1)</span></h3>
-<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -457,7 +458,7 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">metal in holder of thing</td><td class="amt amt-pos">+thing.metal-in-it</td><td></td><td class="note">the metal is left where the thing stood - and now this answers the force case too, by being the only answer either has</td><td class="one-string">{change thing:{metal territory:holder of thing} amount:+thing.metal-in-it} <span class="cmt"># the metal is left where the thing stood - and now this answers the force case too, by being the only answer either has</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">thing</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{thing} amount:-1} <span class="cmt"># row 1</span></td></tr>
 </tbody></table></div><h3>age <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
-<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -466,10 +467,10 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">each</td><td class="target">thing: {thing keeps:any}</td><td class="amt"></td><td></td><td class="note">was the selection *each thing with keeps*, which was prose outside the language</td><td class="one-string">{each thing:{thing keeps:any}} <span class="cmt"># was the selection *each thing with keeps*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">each</td><td class="target">thing: {thing keeps:any}</td><td class="amt"></td><td></td><td class="note">was the selector *each thing with keeps*, which was prose outside the language</td><td class="one-string">{each thing:{thing keeps:any}} <span class="cmt"># was the selector *each thing with keeps*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">thing.keeps</td><td class="amt amt-neg">-1</td><td><span class="attach">soft</span></td><td class="note">both rows were one decrement; the guard `keeps at least 1` is now the operation</td><td class="one-string">{change thing:{thing} keeps:-1 attach:soft} <span class="cmt"># both rows were one decrement; the guard `keeps at least 1` is now the operation</span></td></tr>
 </tbody></table></div><h3>spoil <span class="badge up">1 rows &rarr; 2 lines (+1)</span></h3>
-<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -478,10 +479,10 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">each</td><td class="target">thing: {thing keeps:0}</td><td class="amt"></td><td></td><td class="note">was the selection *each thing with keeps 0*, which was prose outside the language</td><td class="one-string">{each thing:{thing keeps:0}} <span class="cmt"># was the selection *each thing with keeps 0*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">each</td><td class="target">thing: {thing keeps:0}</td><td class="amt"></td><td></td><td class="note">was the selector *each thing with keeps 0*, which was prose outside the language</td><td class="one-string">{each thing:{thing keeps:0}} <span class="cmt"># was the selector *each thing with keeps 0*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">thing</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{thing} amount:-1} <span class="cmt"># row 1</span></td></tr>
 </tbody></table></div><h3>refresh <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
-<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
+<p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -490,10 +491,10 @@ data.</p>
 <th>Was</th>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
-<tr><td class="op op-each">each</td><td class="target">thing: {thing ready:no}</td><td class="amt"></td><td></td><td class="note">was the selection *each thing that is not ready*, which was prose outside the language</td><td class="one-string">{each thing:{thing ready:no}} <span class="cmt"># was the selection *each thing that is not ready*, which was prose outside the language</span></td></tr>
+<tr><td class="op op-each">each</td><td class="target">thing: {thing ready:no}</td><td class="amt"></td><td></td><td class="note">was the selector *each thing that is not ready*, which was prose outside the language</td><td class="one-string">{each thing:{thing ready:no}} <span class="cmt"># was the selector *each thing that is not ready*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">thing.ready = yes</td><td class="amt"></td><td></td><td class="note">both rows were one flip</td><td class="one-string">{set thing:{thing} ready:yes} <span class="cmt"># both rows were one flip</span></td></tr>
 </tbody></table></div><h3>end-of-turn losses <span class="badge new">new</span></h3>
-<p class="sel">selection: <em>quantified on line 1</em></p>
+<p class="sel">selector: <em>quantified on line 1</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -510,7 +511,7 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">energy in t</td><td class="amt amt-neg">-count {energy in t}</td><td></td><td class="note">take all the energy up</td><td class="one-string">{change thing:{energy territory:t} amount:-count {energy in t}} <span class="cmt"># take all the energy up</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">energy in t</td><td class="amt amt-pos">+min(count {energy in t}, sum capacity of {store resource:energy territory:t})</td><td></td><td class="note">and put back what fits</td><td class="one-string">{change thing:{energy territory:t} amount:+min(count {energy in t}, sum capacity of {store resource:energy territory:t})} <span class="cmt"># and put back what fits</span></td></tr>
 </tbody></table></div><h3>refuel <span class="badge new">new</span></h3>
-<p class="sel">selection: <em>quantified on line 1 - **the world's recipes are not offered**, which is what makes this not a step the player takes</em></p>
+<p class="sel">selector: <em>quantified on line 1 - **the world's recipes are not offered**, which is what makes this not a step the player takes</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -536,7 +537,7 @@ environment and play the game: <strong>world-building is the play language with 
 out.</strong></p>
 </div>
 <h3>make-territory(id, biome, nature) <span class="badge design">design time</span></h3>
-<p class="sel">selection: <em>applied at design time, against the empty game</em></p>
+<p class="sel">selector: <em>applied at design time, against the empty game</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -547,7 +548,7 @@ out.</strong></p>
 </tr></thead><tbody>
 <tr><td class="op op-change">change</td><td class="target">territory[id:id, biome:biome, nature:nature] in game</td><td class="amt amt-pos">+1</td><td></td><td class="note">was a create and three sets; non-sequential composition has no referent for those</td><td class="one-string">{change thing:{territory id:id biome:biome nature:nature game:game} amount:+1} <span class="cmt"># was a create and three sets; non-sequential composition has no referent for those</span></td></tr>
 </tbody></table></div><h3>make-deposit(t, resource, capacity, density) <span class="badge design">design time</span></h3>
-<p class="sel">selection: <em>applied at design time</em></p>
+<p class="sel">selector: <em>applied at design time</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -558,7 +559,7 @@ out.</strong></p>
 </tr></thead><tbody>
 <tr><td class="op op-change">change</td><td class="target">deposit[resource:resource, total-capacity:capacity, density:density] in t</td><td class="amt amt-pos">+1</td><td></td><td class="note">was a create and three sets</td><td class="one-string">{change thing:{deposit resource:resource total-capacity:capacity density:density territory:t} amount:+1} <span class="cmt"># was a create and three sets</span></td></tr>
 </tbody></table></div><h3>make-orbit(t) <span class="badge design">design time</span></h3>
-<p class="sel">selection: <em>applied at design time</em></p>
+<p class="sel">selector: <em>applied at design time</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -569,7 +570,7 @@ out.</strong></p>
 </tr></thead><tbody>
 <tr><td class="op op-change">change</td><td class="target">orbit[below:t] in game</td><td class="amt amt-pos">+1</td><td></td><td class="note">was a create and one set</td><td class="one-string">{change thing:{orbit below:t game:game} amount:+1} <span class="cmt"># was a create and one set</span></td></tr>
 </tbody></table></div><h3>make-adjacency(a, b) <span class="badge design">design time</span></h3>
-<p class="sel">selection: <em>applied at design time</em></p>
+<p class="sel">selector: <em>applied at design time</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
 <th>Target</th>
@@ -927,7 +928,7 @@ fires</em>. A third way would buy nothing.</td></tr>
 <tr><td class="target"><strong>Quantification</strong></td>
 <td>once per member of a set, with something bound differently each time</td>
 <td><strong>18</strong> <code>each</code> lines, 18 of them over a description</td>
-<td><strong>Yes, since 2026-09-09.</strong> It was in a prose <em>selection</em> field in six
+<td><strong>Yes, since 2026-09-09.</strong> It was in a prose <em>selector</em> field in six
 recipes and in a comment in four lines of <code>make-world</code>; Sean added the construct and both
 became lines.</td></tr>
 </tbody></table></div>
@@ -1045,10 +1046,10 @@ incremental, and it does nothing for the second.</p>
 <h2>Selection, and what an interface needs</h2>
 <p>Sean, 2026-09-09, on the interface: select a thing and be shown the options for it; select several
 things; select a portion of a quantity - all citizens, one, five of ten. And: <em>perhaps recipes
-have an implicit selection parameter, and certain recipes only apply to certain types of
+have an implicit selector parameter, and certain recipes only apply to certain types of
 selections.</em></p>
 <p><strong>They already do, and it is prose.</strong> Every one of the 11 player recipes carries
-a <em>selection</em> field, and it has never been part of the language:</p>
+a <em>selector</em> field, and it has never been part of the language:</p>
 <div class="scroll"><table><thead><tr><th>Recipe</th><th>What is selected</th><th>What else the player picks</th></tr></thead><tbody><tr><td class="target">deploy ark</td><td>an ark</td><td class="target">&mdash;</td></tr><tr><td class="target">found-colony(t)</td><td>called, not selected</td><td class="target">&mdash;</td></tr><tr><td class="target">found by land</td><td>a pioneer</td><td class="target">&mdash;</td></tr><tr><td class="target">move</td><td>a unit that is ready</td><td class="target">to</td></tr><tr><td class="target">build extractor</td><td>a territory you control</td><td class="target">resource</td></tr><tr><td class="target">build store</td><td>a territory you control</td><td class="target">resource</td></tr><tr><td class="target">build yard</td><td>a territory you control</td><td class="target">&mdash;</td></tr><tr><td class="target">produce pioneer</td><td>a territory you control</td><td class="target">&mdash;</td></tr><tr><td class="target">launch ark</td><td>a yard</td><td class="target">&mdash;</td></tr><tr><td class="target">create labor</td><td>a citizen that is ready</td><td class="target">&mdash;</td></tr><tr><td class="target">work</td><td>an extractor that is ready</td><td class="target">&mdash;</td></tr></tbody></table></div>
 <div class="callout">
 <h4>The owner column <em>is</em> the quantifier</h4>
@@ -1069,7 +1070,7 @@ rather than offered or fired, and having no quantifier is how that now reads.</p
 <strong>what a thing contains is a map from a description to a quantity</strong>, and
 <strong>there is never a quantity of a thing with an <code>id</code></strong>. Ten citizens in a
 territory are one entry of ten, and <strong>there is no citizen number three to select</strong>.</p>
-<p>So a selection is <strong>a description and a count</strong> &mdash; which is the same object as a
+<p>So a selector is <strong>a description and a count</strong> &mdash; which is the same object as a
 container's contents, and the same object a recipe line targets. All, one, and five of ten are one
 shape with a different number, and the interface needs no special case for any of them. What it
 cannot offer is picking <em>which</em> five, because that question has no referent.</p>
@@ -1077,15 +1078,15 @@ cannot offer is picking <em>which</em> five, because that question has no refere
 <div class="callout">
 <h4>Nothing needs multi-select, and what looks like it is a parameter</h4>
 <p><strong>Every one of the 11 player recipes selects exactly one thing</strong>, and
-0 select two. What looks like a second selection is a parameter: <code>move</code> selects a
+0 select two. What looks like a second selector is a parameter: <code>move</code> selects a
 unit and takes <code>$to</code>; <code>build extractor</code> and <code>build store</code> select a
 territory and take <code>$resource</code>. Two of eleven need one at all.</p>
 <p>That is `X-8`'s distinction doing work: <strong>a parameter is a choice the player makes and a
 derived term is not</strong>, so which parameters exist decides exactly what the interface has to
-ask for after the selection. Here that is a place, twice, and a resource, twice.</p>
+ask for after the selector. Here that is a place, twice, and a resource, twice.</p>
 </div>
 <div class="callout">
-<h4>The gap: a selection tests derived traits, and a description may not carry one</h4>
+<h4>The gap: a selector tests derived traits, and a description may not carry one</h4>
 <p><strong>Six selections test a derived trait</strong> &mdash; <em>a territory you control</em> four
 times, plus <code>surplus</code> in <code>grow</code> and <code>unpaid</code> in
 <code>perish</code>. And <code>spec/console.md</code> says a description is a kind and every
@@ -1094,7 +1095,7 @@ times, plus <code>surplus</code> in <code>grow</code> and <code>unpaid</code> in
 second has a form in the notation. They are close enough to be confused and different in exactly one
 way: a description says what a thing <em>is stored as</em>, and a query says what is <em>true of
 it</em>. An interface needs the second - you select what you control, not what is recorded.</p>
-<p><strong>Decided 2026-09-09: a selection is a query.</strong> A description says what a thing is
+<p><strong>Decided 2026-09-09: a selector is a query.</strong> A description says what a thing is
 stored as, and a query says what is true of it, so a quantifier's set may test a derived trait and a
 container's contents may not. That unblocks all six &mdash; <code>control</code> four times,
 <code>surplus</code> and <code>unpaid</code> once each &mdash; and the assumption list now records
@@ -1102,7 +1103,7 @@ what the notation lacks rather than a rule being broken.</p>
 </div>
 <div class="callout">
 <h4>What the model does not care about</h4>
-<p>A radial dial, a fixed row of buttons that change with the selection, a context menu - the model
+<p>A radial dial, a fixed row of buttons that change with the selector, a context menu - the model
 is indifferent, because all three render the same list. <strong>What is settled is the order</strong>:
 noun then verb, select then operate, which `X-8` traced to the Xerox Star and which is right here for
 a reason stronger than habit - selecting first leaves the system in <strong>no mode</strong>, and
@@ -1375,7 +1376,7 @@ elegant about it either: three pioneers would want a third recipe.</p>
 set. Letting it carry a count - <em>take as many as you like, and let the force follow</em> - is a
 different reading of a quantifier, and it is the one thing here that changes how the data is
 interpreted rather than what it says.</p>
-<p><strong>It is also the one with an answer already sketched.</strong> A selection is a description
+<p><strong>It is also the one with an answer already sketched.</strong> A selector is a description
 and a count, which is what the interface section concluded from fungibility - so
 <code>some 2 {pioneer …}</code> is the same idea arriving from the other direction. Two roads to
 one construct is usually a sign it is the right one.</p>
@@ -1467,7 +1468,7 @@ garrison earns its place on exactly one biome.</p>
 nature of 2 and entering needs more. But <code>move</code> selects <em>a unit that is ready</em> and
 moves it. <strong>There is no expedition</strong> - two pioneers moving one at a time each fail the
 test alone.</p>
-<p><strong>The interface work already has the shape for it.</strong> A selection is a description and
+<p><strong>The interface work already has the shape for it.</strong> A selector is a description and
 a count, so an expedition is <code>some 2 {pioneer …}</code> rather than a new kind of thing. What
 is missing is that <code>move</code>'s quantifier takes one, and force sums over however many it
 takes.</p>
@@ -1499,7 +1500,7 @@ second copy of a territory; it is the other side.</p>
 concepts needed to fully exploit a planet?</em> Thirteen concepts the loop needs, against what
 expresses each:</p>
 <div class="scroll"><table><thead><tr><th>Concept</th><th>What expresses it</th><th></th></tr></thead>
-<tbody><tr><td class="target">A thing, its kind and its traits</td><td>a description - <code>{kind trait:value}</code></td><td><strong>yes</strong></td></tr><tr><td class="target">Where a thing is</td><td>containment; what holds it says where it is</td><td><strong>yes</strong></td></tr><tr><td class="target">How many of a thing</td><td>a quantity per description</td><td><strong>yes</strong></td></tr><tr><td class="target">Making and spending</td><td><code>change</code>, signed</td><td><strong>yes</strong></td></tr><tr><td class="target">A cost that can refuse</td><td><code>change</code> with <code>attach</code></td><td><strong>yes</strong></td></tr><tr><td class="target">A prerequisite that is not spent</td><td><code>require</code></td><td><strong>yes</strong></td></tr><tr><td class="target">One rule, many firings</td><td><code>each</code> and <code>some</code></td><td><strong>yes</strong></td></tr><tr><td class="target">Building a rule from rules</td><td><code>call</code>, acyclic</td><td><strong>yes</strong></td></tr><tr><td class="target">A capacity, including zero and none</td><td>a declaration per (container, kind)</td><td><strong>yes</strong></td></tr><tr><td class="target">A thing that expires</td><td><code>keeps</code>, <code>age</code>, <code>spoil</code></td><td><strong>yes</strong></td></tr><tr><td class="target">An expedition - several units acting as one</td><td>a selection is a description <em>and a count</em></td><td><strong>nearly</strong> - the shape is there and <code>move</code>'s quantifier takes one</td></tr><tr><td class="target"><strong>A value computed from the state</strong></td><td>nothing. The 4 derived traits are each a sentence in a table: <code>metal-in-it</code>, <code>control</code>, <code>surplus</code>, <code>unpaid</code></td><td><strong>NO</strong> - there is no way to <em>define</em> one, so a fifth cannot be added by writing it</td></tr><tr><td class="target"><strong>Comparing two computed values</strong></td><td>nothing. <code>require</code> tests a count against a constant, not one quantity against another</td><td><strong>NO</strong> - <code>force &gt; nature</code> has no form</td></tr></tbody></table></div>
+<tbody><tr><td class="target">A thing, its kind and its traits</td><td>a description - <code>{kind trait:value}</code></td><td><strong>yes</strong></td></tr><tr><td class="target">Where a thing is</td><td>containment; what holds it says where it is</td><td><strong>yes</strong></td></tr><tr><td class="target">How many of a thing</td><td>a quantity per description</td><td><strong>yes</strong></td></tr><tr><td class="target">Making and spending</td><td><code>change</code>, signed</td><td><strong>yes</strong></td></tr><tr><td class="target">A cost that can refuse</td><td><code>change</code> with <code>attach</code></td><td><strong>yes</strong></td></tr><tr><td class="target">A prerequisite that is not spent</td><td><code>require</code></td><td><strong>yes</strong></td></tr><tr><td class="target">One rule, many firings</td><td><code>each</code> and <code>some</code></td><td><strong>yes</strong></td></tr><tr><td class="target">Building a rule from rules</td><td><code>call</code>, acyclic</td><td><strong>yes</strong></td></tr><tr><td class="target">A capacity, including zero and none</td><td>a declaration per (container, kind)</td><td><strong>yes</strong></td></tr><tr><td class="target">A thing that expires</td><td><code>keeps</code>, <code>age</code>, <code>spoil</code></td><td><strong>yes</strong></td></tr><tr><td class="target">An expedition - several units acting as one</td><td>a selector is a description <em>and a count</em></td><td><strong>nearly</strong> - the shape is there and <code>move</code>'s quantifier takes one</td></tr><tr><td class="target"><strong>A value computed from the state</strong></td><td>nothing. The 4 derived traits are each a sentence in a table: <code>metal-in-it</code>, <code>control</code>, <code>surplus</code>, <code>unpaid</code></td><td><strong>NO</strong> - there is no way to <em>define</em> one, so a fifth cannot be added by writing it</td></tr><tr><td class="target"><strong>Comparing two computed values</strong></td><td>nothing. <code>require</code> tests a count against a constant, not one quantity against another</td><td><strong>NO</strong> - <code>force &gt; nature</code> has no form</td></tr></tbody></table></div>
 <div class="callout">
 <h4>The two that failed are now one change, made 2026-09-09</h4>
 <p><strong><code>require</code> compares two expressions</strong> instead of testing a description
@@ -1594,7 +1595,7 @@ is why adjacency being a thing was the right call and worth not undoing.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>
-<p>3 of the 25 questions this re-encoding raised are still open. The rest are
+<p>3 of the 26 questions this re-encoding raised are still open. The rest are
 below, under <em>What has already been settled</em>, so that this list is short enough to be a list
 of things to do.</p>
 <div class="scroll"><table><thead><tr>
@@ -1723,7 +1724,7 @@ traits, and one of them names its kind.</em> That is <code>{kind trait:value ...
 the same object a recipe line targets. So a thing and a recipe line are not two structures to be
 unified; they are one structure appearing in two roles.</p>
 <div class="scroll"><table><thead><tr><th></th><th>Which</th><th>Why</th></tr></thead>
-<tbody><tr><td class="target">the description</td><td><strong>shared</strong></td><td class="note"><code>{kind trait:value ...}</code> &mdash; the spec already says <em>a thing is a set of traits, and one of them names its kind</em></td></tr><tr><td class="target">the number</td><td><strong>shared shape, different constraint</strong></td><td class="note">a thing's is a non-negative count; a recipe's is a signed delta. Same column, and only the constraint differs</td></tr><tr><td class="target"><code>attach</code></td><td>recipe only</td><td class="note">what to do when the result would go below zero. A count that is simply there has no failure to answer for</td></tr><tr><td class="target">the container</td><td><strong>shared</strong></td><td class="note">a field named for the container's kind, in both</td></tr><tr><td class="target">selection</td><td>recipe only</td><td class="note"><em>which</em> thing this acts on. A thing does not select; it is selected</td></tr><tr><td class="target"><code>call</code></td><td>recipe only</td><td class="note">the hierarchy. Nothing in a state refers to another state</td></tr></tbody></table></div>
+<tbody><tr><td class="target">the description</td><td><strong>shared</strong></td><td class="note"><code>{kind trait:value ...}</code> &mdash; the spec already says <em>a thing is a set of traits, and one of them names its kind</em></td></tr><tr><td class="target">the number</td><td><strong>shared shape, different constraint</strong></td><td class="note">a thing's is a non-negative count; a recipe's is a signed delta. Same column, and only the constraint differs</td></tr><tr><td class="target"><code>attach</code></td><td>recipe only</td><td class="note">what to do when the result would go below zero. A count that is simply there has no failure to answer for</td></tr><tr><td class="target">the container</td><td><strong>shared</strong></td><td class="note">a field named for the container's kind, in both</td></tr><tr><td class="target">selector</td><td>recipe only</td><td class="note"><em>which</em> thing this acts on. A thing does not select; it is selected</td></tr><tr><td class="target"><code>call</code></td><td>recipe only</td><td class="note">the hierarchy. Nothing in a state refers to another state</td></tr></tbody></table></div>
 <div class="callout">
 <h4>Then what is a recipe that only creates? Nothing but the thing</h4>
 <p>Since the fold, <strong>every world-building recipe is one line, with
@@ -1744,7 +1745,7 @@ invariant was not the reason for the decision.</p>
 and the checker cannot disagree. <strong>All three were poisoned before being believed</strong>:
 check 2 flags a recipe with no inputs; check 1 goes red on a wrong weighting; check 3 goes red at a cap of 0.</p>
 
-<h3>Check 1 &mdash; metal conserved outside extraction &nbsp;<span class="badge down">1 violations</span></h3>
+<h3>Check 1 &mdash; metal conserved outside extraction &nbsp;<span class="badge down">0 violations</span></h3>
 <p>13 recipes analysed;
 5 skipped for state-dependent amounts
 (end-of-turn losses, grow, perish, refuel, upkeep); <code>work</code> excluded as the declared
@@ -1960,7 +1961,7 @@ do not found a colony that is already founded &mdash; and not a second kind of c
 <h3>Parameter domains &mdash; what a recipe may be instantiated over</h3>
 <p>A parameter is not free. Its domain is a <strong>condition on the kind</strong>, not a list, and
 grounding resolves it &mdash; so an instance that does not satisfy the condition never exists, and
-in a selection interface the player never sees it.</p>
+in a selector interface the player never sees it.</p>
 <div class="scroll"><table><thead><tr>
 <th>Recipe</th>
 <th>Parameter</th>
@@ -1987,7 +1988,7 @@ in a selection interface the player never sees it.</p>
 <td class="target">extractor.resource</td>
 <td>the resource the selected extractor was built for</td>
 <td class="amt">not a choice</td>
-<td class="note">determined by the selection, so it grounds to one instance rather than a domain</td>
+<td class="note">determined by the selector, so it grounds to one instance rather than a domain</td>
 </tr>
 </tbody></table></div>
 <div class="callout">
@@ -2049,14 +2050,14 @@ extractor, rather than founding being refused.</p>
 chooses to build a metal extractor on territory 6 is refused. <strong>Identical condition, opposite
 answers, and neither is a mistake</strong> &mdash; because one is a consequence of landing
 somewhere and the other is a thing the player asked for.</p>
-<p>Under a selection interface the second never even arises: grounding the recipe against
+<p>Under a selector interface the second never even arises: grounding the recipe against
 territory 6 produces no <code>build extractor[metal]</code> to select. <strong>The attachment is
 what the console needs and the menu is what the interface needs, from one line.</strong></p>
 </div>
 
 <h3>Check 6 &mdash; is everything created put somewhere that declares it? &nbsp;<span class="badge down">every one lands somewhere declared</span></h3>
 <p><strong>Every positive change names a container, and that container declares a bound for that
-kind.</strong> 20 positive changes read from the recipes themselves, against
+kind.</strong> 21 positive changes read from the recipes themselves, against
 19 declared pairs. A negative change is not tested: it acts on something that already
 exists, so where it is is a fact about the state rather than a claim the recipe makes.</p>
 <div class="callout">
@@ -2090,13 +2091,13 @@ neither an orbit nor a territory, and it reported two gaps it had invented.</p>
 <p>Sean's test: <em>could we in principle generate the entire current set of recipes from the editor
 only? The name must necessarily be the exception. It is a question about how finite the game is.</em>
 Every token in every line, matched against the sets a menu could offer:</p>
-<p><strong>517 of 517 tokens are selectable (100%), and
+<p><strong>524 of 524 tokens are selectable (100%), and
 23 of 23 recipes could be built with nothing typed but names.</strong></p>
 <div class="scroll"><table><thead><tr><th>What has to be typed</th><th>Where</th><th>Why</th></tr></thead>
 <tbody><tr><td class="target"><code>yours</code></td><td>4 recipes</td><td class="note"><strong>Closed.</strong> <code>control</code>'s values are now declared: <em>yours, unclaimed</em>, from the release's own words</td></tr><tr><td class="target"><code>location</code></td><td>7 recipes</td><td class="note"><strong>Closed.</strong> <code>holder of x</code> is an expression form, so containment has a written shape and needs no trait - which is what <code>spec/logistics.md</code> asked for</td></tr><tr><td class="target"><code>below</code></td><td>2 recipes</td><td class="note"><strong>Closed.</strong> A trait of an orbit, which the release already describes: <em>a place above one territory</em></td></tr><tr><td class="target"><code>crosses</code></td><td><code>move</code></td><td class="note"><strong>Closed.</strong> A trait of a unit against a <code>border</code> trait of an adjacency, both taking <em>border</em> or <em>orbit border</em> from <em>Units and structures</em></td></tr><tr><td class="target">the prose sets</td><td><code>make-world</code></td><td class="note"><strong>Closed by deletion.</strong> Twelve calls with different arguments are a scenario file, not a rule - <code>create planet &lt;size&gt;</code> makes the territories and <em>a scenario is a file too</em></td></tr></tbody></table></div>
 <div class="callout">
 <h4>All five closed, and the answer is now yes</h4>
-<p><strong>517 of 517 tokens, and 23 of 23 recipes.</strong> None of the
+<p><strong>524 of 524 tokens, and 23 of 23 recipes.</strong> None of the
 five needed an idea; each was an enumeration nobody had written down or a form nobody had named.
 <code>control</code>'s two values were in the release's own sentence; <code>border</code> and
 <code>orbit border</code> were sitting in the <em>Crosses</em> column; <code>below</code> is what
@@ -2562,8 +2563,8 @@ generated from the encoding rather than written beside it.</p>
 line required a choice the specification has not made.</p>
 
 <h2>What the re-encoding cost and saved</h2>
-<p>Computed from the data rather than asserted. <strong>58 rows became 64 lines &mdash;
-up 6</strong>.</p>
+<p>Computed from the data rather than asserted. <strong>58 rows became 65 lines &mdash;
+up 7</strong>.</p>
 <div class="callout">
 <h4>There used to be three numbers here, and now there is one</h4>
 <p>Before the fusion this section had to carry two counts and explain the gap. <code>consume</code>
@@ -2643,7 +2644,7 @@ which is why it now says 7.</p>
 <tr>
 <td class="target">launch ark</td>
 <td class="amt">4</td>
-<td class="amt">5</td>
+<td class="amt">6</td>
 <td class="note">up: the yard requirement became a let, and the three costs are three consumes</td>
 </tr>
 <tr>
@@ -2762,7 +2763,7 @@ each row names who answered it.</p>
 <tr>
 <td>ANSWERED - a construct for quantification, which is not the same as repetition</td>
 <td>Repetition is covered twice already - the amount column and the console's &lt;code&gt;repeat&lt;/code&gt;. Quantification, one firing per member of a set, is covered nowhere and is used in ten places.</td>
-<td class="note">Sean added &lt;code&gt;each&lt;/code&gt; and &lt;code&gt;some&lt;/code&gt; on 2026-09-09; twenty quantifiers now. Six world recipes hide it in a prose &lt;em&gt;selection&lt;/em&gt;; &lt;code&gt;make-world&lt;/code&gt;'s four calls hide it in a comment. See &lt;em&gt;Repetition, or quantification&lt;/em&gt;.</td>
+<td class="note">Sean added &lt;code&gt;each&lt;/code&gt; and &lt;code&gt;some&lt;/code&gt; on 2026-09-09; twenty quantifiers now. Six world recipes hide it in a prose &lt;em&gt;selector&lt;/em&gt;; &lt;code&gt;make-world&lt;/code&gt;'s four calls hide it in a comment. See &lt;em&gt;Repetition, or quantification&lt;/em&gt;.</td>
 </tr>
 <tr>
 <td>NOTED - not now, by Sean's own words, and the design is recorded so it is not re-derived</td>
@@ -2813,6 +2814,11 @@ each row names who answered it.</p>
 <td>REFUTED - &lt;code&gt;load&lt;/code&gt;, by &lt;code&gt;spec/units.md&lt;/code&gt;, found by the specification lane</td>
 <td>This lane wrote a player recipe that spends an act moving energy into a tank, and filed *whether it should exist* as an open decision an hour before the sentence turned up.</td>
 <td class="note">&lt;code&gt;spec/units.md&lt;/code&gt;: &lt;em&gt;fuel moves freely between a &lt;strong&gt;controlled&lt;/strong&gt; territory that has it and anything there that can hold it.&lt;/em&gt; Fuelling is not an action, and &lt;code&gt;spec/invariants.md&lt;/code&gt; -&amp;gt; &lt;em&gt;No step that is always taken&lt;/em&gt; forbids making it one. It is now &lt;code&gt;refuel&lt;/code&gt;, a &lt;strong&gt;world&lt;/strong&gt; recipe - the world's are not offered, which is the category a thing that happens by itself belongs in. &lt;strong&gt;And the range rule Sean wanted is one word of that sentence&lt;/strong&gt;: a unit on unclaimed ground cannot fill, so it leaves your ground with a full bin, spends one crossing, and has one left.</td>
+</tr>
+<tr>
+<td>ANSWERED - &lt;code&gt;X-25&lt;/code&gt;, by &lt;code&gt;P-362&lt;/code&gt;, and the reason it was open had already dissolved</td>
+<td>&lt;code&gt;launch ark&lt;/code&gt; paid an Ark's cost and put nothing into orbit, so Sean's loop - which ends &lt;em&gt;launch a new ark into orbit&lt;/em&gt; - could not be completed.</td>
+<td class="note">&lt;strong&gt;The blocker was never the rule.&lt;/strong&gt; &lt;code&gt;P-342&lt;/code&gt; made it produce nothing because &lt;em&gt;the destination could not be named&lt;/em&gt;, and &lt;code&gt;P-334&lt;/code&gt; had since made adjacency a kind and given an orbit a &lt;code&gt;below&lt;/code&gt; - the exact form this lane's data was already using. &lt;strong&gt;A reason expired and nothing re-read it&lt;/strong&gt;, which is the same shape as &lt;code&gt;C-9&lt;/code&gt; and as the two decisions that went stale here on 2026-09-10.</td>
 </tr>
 </tbody></table></div>
 

@@ -567,7 +567,7 @@ this went unnoticed here for a day.
 
 ### X-23 - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed
 
-**to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *Check 8* · **found by** asking which declared containers are ever **filled** rather than merely mentioned
+**to** spec · **status** **answered** 2026-09-10 · `c3cccc4` — and by neither reading in this item. Sean made the tank real and then split it by layer: `spec/units.md:17` gives a unit that moves over the ground a bin, and `:19` gives one that moves in orbit its energy from the sun with no fuel stored. **So an Ark needs none**, and the Ark half of this item dissolved rather than being solved · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *Check 8* · **found by** asking which declared containers are ever **filled** rather than merely mentioned
 
 **Where.** `releases/first-release.md` -> *Where things are*: **a unit's tank** holds energy, up to
 the unit's fuel. And *Recipes*: `move` consumes **1 energy** from the moving unit.
@@ -620,7 +620,7 @@ rewrite of *Recipes* and is not.
 
 ### X-28 - two spec files give a founding garrison different force, and the code settles it by discarding an argument
 
-**to** spec · **status** open · **raised** 2026-09-10 · **source** answering `S-81`'s question 6 by reading every rule in `spec/` · **found by** asking which rules the notation could not state, and finding one it could not state because the specification states it twice
+**to** spec · **status** **acted** 2026-09-10 · `c3cccc4` — `P-360`: `spec/unit-types.md:19` is now *the structure it becomes is operated by citizens*, and `spec/control.md:24` stands alone. Verified in the file, not taken on report · **raised** 2026-09-10 · **source** answering `S-81`'s question 6 by reading every rule in `spec/` · **found by** asking which rules the notation could not state, and finding one it could not state because the specification states it twice
 
 **Where.** `spec/unit-types.md:19` and `spec/control.md` -> *Producing force*.
 
@@ -669,9 +669,9 @@ of the other. **This lane proposes no words** - which clause of that sentence go
 is operated by citizens* stays, is the specification lane's to draft and Sean's to promote. What is
 not open is which of the two the game means.
 
-### X-25 - `launch ark` puts nothing into orbit, and Sean's loop ends with an ark in orbit
+### X-25 - ACTED: `launch ark` put nothing into orbit, and now it does
 
-**to** spec · **status** open · **raised** 2026-09-09 · **source** the specification lane, in `S-81`, checking this lane's data against the release · **found by** `4x spec`, not by this lane
+**to** spec · **status** **acted** 2026-09-10 · `c3cccc4` — `P-362`: `launch ark` requires a territory `$where` and **produces 1 ark in the orbit above it**, `releases/first-release.md:244`. **The loop closes**, and `play.py` now plays ark to ark because it reads the recipe rather than assuming it · **raised** 2026-09-09 · **source** the specification lane, in `S-81`, checking this lane's data against the release · **found by** `4x spec`, not by this lane
 
 **Where.** `releases/first-release.md` -> *Recipes*: **launch ark** has four rows - consume 3 metal,
 consume 12 energy, consume 2 citizen, require 1 yard - **and no produce row**. `P-342`: *`produce
@@ -702,6 +702,18 @@ loop does **not** close.
 states it.** Three readings and this lane takes none: `launch ark` produces an ark into the orbit
 above its yard; the loop's last step is paying the cost rather than having the ark; or Sean's
 statement of the loop is looser than the release needs to be.
+
+
+**What closed it was not a new decision.** `P-342` made the recipe produce nothing because **the
+destination could not be named**, and `P-334` had since made adjacency a kind and given an orbit a
+`below` - which is the exact form this lane's own data was already using. **The reason expired and
+nothing re-read it.** That is `C-9`'s shape for the third time in two days, and the third time it
+was a *premise* that moved rather than a rule.
+
+**And it took a metal violation with it.** Check 1 had reported `launch ark` at **net &minus;3
+metal-equivalent**, because it paid an Ark's binding and produced nothing to carry it. With the ark
+produced, **every recipe now conserves metal** and check 1 reports no violation at all - the first
+time it has.
 
 ### X-26 - one kind in the release has no definition in `spec/`, and the win condition depends on it
 

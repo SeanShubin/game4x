@@ -877,7 +877,7 @@ def self_test():
     poison = {
         "POISON-free-metal": {
             "name": "POISON-free-metal",
-            "selection": "poison",
+            "selector": "poison",
             "lines": [["change", "metal in t", "+1", "", "poison"]],
         }
     }
@@ -1029,7 +1029,10 @@ def self_test():
     # Check 12 poison: put back the ark that launch ark must not produce.
     _la = next(r for r in DATA["player"] if r["name"] == "launch ark")
     _saved12 = [list(l) for l in _la["lines"]]
-    _la["lines"] = _saved12 + [["change", "ark in {orbit below:t}", "+1", "", "poison"]]
+    # A produced **yard**, which nothing makes. This used to add a produced ark, and `P-362`
+    # landed that row on 2026-09-10 - so the poison agreed with the release and stopped
+    # detecting anything. A poison can go blind by being overtaken.
+    _la["lines"] = _saved12 + [["change", "yard in t", "+1", "", "poison"]]
     if not any(w == "ADDED" and n == "launch ark" for n, w, _d in check_recipe_drift()[1]):
         print("  POISON FAILED: check 12 did not notice a produced ark the release does not have")
         ok = False

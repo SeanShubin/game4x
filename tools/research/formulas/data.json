@@ -80,7 +80,7 @@
       "both uses were restatements"
     ],
     [
-      "a recipe's prose <em>selection</em>",
+      "a recipe's prose <em>selector</em>",
       "each x: {description}",
       "DELETED as prose - six world recipes quantified in a field the language could not see"
     ],
@@ -99,14 +99,13 @@
     {
       "name": "deploy ark",
       "was": 9,
-      "selection": "offered on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "some",
           "ark: {ark}",
           "",
           "",
-          "was the selection *an ark*, which was prose outside the language"
+          "was the selector *an ark*, which was prose outside the language"
         ],
         [
           "let",
@@ -129,12 +128,12 @@
           "",
           "rows 3-9"
         ]
-      ]
+      ],
+      "selector": "offered on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "found-colony(t)",
       "was": 0,
-      "selection": "called, not selected",
       "new": true,
       "lines": [
         [
@@ -165,19 +164,19 @@
           "SOFT",
           "Sean: only if there is capacity. Territory 6 has no metal, so it skips there"
         ]
-      ]
+      ],
+      "selector": "called, not selected"
     },
     {
       "name": "found by land",
       "was": 8,
-      "selection": "offered on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "some",
           "pioneer: {pioneer}",
           "",
           "",
-          "was the selection *a pioneer*, which was prose outside the language"
+          "was the selector *a pioneer*, which was prose outside the language"
         ],
         [
           "let",
@@ -200,19 +199,19 @@
           "",
           "rows 2-8, identical to deploy ark's"
         ]
-      ]
+      ],
+      "selector": "offered on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "move",
       "was": 5,
-      "selection": "offered on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "some",
           "unit: {unit ready:yes}",
           "",
           "",
-          "was the selection *a unit that is ready*, which was prose outside the language"
+          "was the selector *a unit that is ready*, which was prose outside the language"
         ],
         [
           "let",
@@ -256,19 +255,19 @@
           "",
           "rows 3 and 5"
         ]
-      ]
+      ],
+      "selector": "offered on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "build extractor",
       "was": 3,
-      "selection": "offered on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "some",
           "t: {territory control:yours}",
           "",
           "",
-          "was the selection *a territory you control*, which was prose outside the language"
+          "was the selector *a territory you control*, which was prose outside the language"
         ],
         [
           "change",
@@ -291,19 +290,19 @@
           "HARD",
           "capacity is the container's now"
         ]
-      ]
+      ],
+      "selector": "offered on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "build store",
       "was": 3,
-      "selection": "offered on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "some",
           "t: {territory control:yours}",
           "",
           "",
-          "was the selection *a territory you control*, which was prose outside the language"
+          "was the selector *a territory you control*, which was prose outside the language"
         ],
         [
           "change",
@@ -326,19 +325,19 @@
           "",
           ""
         ]
-      ]
+      ],
+      "selector": "offered on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "build yard",
       "was": 3,
-      "selection": "offered on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "some",
           "t: {territory control:yours}",
           "",
           "",
-          "was the selection *a territory you control*, which was prose outside the language"
+          "was the selector *a territory you control*, which was prose outside the language"
         ],
         [
           "change",
@@ -361,19 +360,19 @@
           "HARD",
           "capacity is the container's now"
         ]
-      ]
+      ],
+      "selector": "offered on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "produce pioneer",
       "was": 4,
-      "selection": "offered on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "some",
           "t: {territory control:yours}",
           "",
           "",
-          "was the selection *a territory you control*, which was prose outside the language"
+          "was the selector *a territory you control*, which was prose outside the language"
         ],
         [
           "change",
@@ -403,19 +402,19 @@
           "",
           ""
         ]
-      ]
+      ],
+      "selector": "offered on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "launch ark",
       "was": 4,
-      "selection": "offered on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "some",
           "yard: {yard}",
           "",
           "",
-          "was the selection *a yard*, which was prose outside the language"
+          "was the selector *a yard*, which was prose outside the language"
         ],
         [
           "let",
@@ -443,21 +442,28 @@
           "citizen in t",
           "-2",
           "hard",
-          "**this recipe produces nothing** - `P-342`, and `scenario/commands/play.4x:170`: *puts nothing into orbit, so there is no Ark to move*"
+          ""
+        ],
+        [
+          "change",
+          "ark in {orbit below:t}",
+          "+1",
+          "",
+          "**`P-362`, promoted 2026-09-10** - *produce 1 ark, the orbit above `$where`*. `P-342` had it produce nothing because the destination could not be named; `P-334` made an orbit carry `below`, and the name was there. **This closes `X-25` and closes the loop.**"
         ]
-      ]
+      ],
+      "selector": "offered on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "create labor",
       "was": 3,
-      "selection": "offered on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "some",
           "citizen: {citizen ready:yes}",
           "",
           "",
-          "was the selection *a citizen that is ready*, which was prose outside the language"
+          "was the selector *a citizen that is ready*, which was prose outside the language"
         ],
         [
           "set",
@@ -473,19 +479,19 @@
           "",
           "row 3"
         ]
-      ]
+      ],
+      "selector": "offered on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "work",
       "was": 5,
-      "selection": "offered on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "some",
           "extractor: {extractor ready:yes}",
           "",
           "",
-          "was the selection *an extractor that is ready*, which was prose outside the language"
+          "was the selector *an extractor that is ready*, which was prose outside the language"
         ],
         [
           "let",
@@ -515,21 +521,21 @@
           "",
           "row 5"
         ]
-      ]
+      ],
+      "selector": "offered on line 1, rather than in prose beside the recipe"
     }
   ],
   "world": [
     {
       "name": "upkeep",
       "was": 2,
-      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "each",
           "thing: {thing upkeep:any}",
           "",
           "",
-          "was the selection *each thing with upkeep*, which was prose outside the language"
+          "was the selector *each thing with upkeep*, which was prose outside the language"
         ],
         [
           "change",
@@ -538,19 +544,19 @@
           "hard",
           "row 1 was the selector; row 2"
         ]
-      ]
+      ],
+      "selector": "quantified on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "grow",
       "was": 2,
-      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "each",
           "t: {territory}",
           "",
           "",
-          "was the selection *each territory*, which was prose outside the language"
+          "was the selector *each territory*, which was prose outside the language"
         ],
         [
           "let",
@@ -573,12 +579,12 @@
           "",
           "row 2"
         ]
-      ]
+      ],
+      "selector": "quantified on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "perish",
       "was": 2,
-      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "each",
@@ -601,19 +607,19 @@
           "",
           "row 1"
         ]
-      ]
+      ],
+      "selector": "quantified on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "age",
       "was": 2,
-      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "each",
           "thing: {thing keeps:any}",
           "",
           "",
-          "was the selection *each thing with keeps*, which was prose outside the language"
+          "was the selector *each thing with keeps*, which was prose outside the language"
         ],
         [
           "change",
@@ -622,19 +628,19 @@
           "soft",
           "both rows were one decrement; the guard `keeps at least 1` is now the operation"
         ]
-      ]
+      ],
+      "selector": "quantified on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "spoil",
       "was": 1,
-      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "each",
           "thing: {thing keeps:0}",
           "",
           "",
-          "was the selection *each thing with keeps 0*, which was prose outside the language"
+          "was the selector *each thing with keeps 0*, which was prose outside the language"
         ],
         [
           "change",
@@ -643,19 +649,19 @@
           "",
           "row 1"
         ]
-      ]
+      ],
+      "selector": "quantified on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "refresh",
       "was": 2,
-      "selection": "quantified on line 1, rather than in prose beside the recipe",
       "lines": [
         [
           "each",
           "thing: {thing ready:no}",
           "",
           "",
-          "was the selection *each thing that is not ready*, which was prose outside the language"
+          "was the selector *each thing that is not ready*, which was prose outside the language"
         ],
         [
           "set",
@@ -664,11 +670,11 @@
           "",
           "both rows were one flip"
         ]
-      ]
+      ],
+      "selector": "quantified on line 1, rather than in prose beside the recipe"
     },
     {
       "name": "end-of-turn losses",
-      "selection": "quantified on line 1",
       "lines": [
         [
           "each",
@@ -720,12 +726,12 @@
           "and put back what fits"
         ]
       ],
-      "new": true
+      "new": true,
+      "selector": "quantified on line 1"
     },
     {
       "name": "refuel",
       "new": true,
-      "selection": "quantified on line 1 - **the world's recipes are not offered**, which is what makes this not a step the player takes",
       "lines": [
         [
           "each",
@@ -762,14 +768,14 @@
           "",
           "**the bin fills to `fuel` and no further**, because available capacity is the total less the used. Lines are not sequential, so both amounts read the same state and no <code>clamp</code> is needed"
         ]
-      ]
+      ],
+      "selector": "quantified on line 1 - **the world's recipes are not offered**, which is what makes this not a step the player takes"
     }
   ],
   "creation": [
     {
       "name": "make-territory(id, biome, nature)",
       "was": null,
-      "selection": "applied at design time, against the empty game",
       "lines": [
         [
           "change",
@@ -778,12 +784,12 @@
           "",
           "was a create and three sets; non-sequential composition has no referent for those"
         ]
-      ]
+      ],
+      "selector": "applied at design time, against the empty game"
     },
     {
       "name": "make-deposit(t, resource, capacity, density)",
       "was": null,
-      "selection": "applied at design time",
       "lines": [
         [
           "change",
@@ -792,12 +798,12 @@
           "",
           "was a create and three sets"
         ]
-      ]
+      ],
+      "selector": "applied at design time"
     },
     {
       "name": "make-orbit(t)",
       "was": null,
-      "selection": "applied at design time",
       "lines": [
         [
           "change",
@@ -806,12 +812,12 @@
           "",
           "was a create and one set"
         ]
-      ]
+      ],
+      "selector": "applied at design time"
     },
     {
       "name": "make-adjacency(a, b)",
       "was": null,
-      "selection": "applied at design time",
       "lines": [
         [
           "change",
@@ -820,7 +826,8 @@
           "",
           "was a create and two sets"
         ]
-      ]
+      ],
+      "selector": "applied at design time"
     }
   ],
   "territories": [
@@ -978,7 +985,7 @@
     [
       "ANSWERED - a construct for quantification, which is not the same as repetition",
       "Repetition is covered twice already - the amount column and the console's <code>repeat</code>. Quantification, one firing per member of a set, is covered nowhere and is used in ten places.",
-      "Sean added <code>each</code> and <code>some</code> on 2026-09-09; twenty quantifiers now. Six world recipes hide it in a prose <em>selection</em>; <code>make-world</code>'s four calls hide it in a comment. See <em>Repetition, or quantification</em>."
+      "Sean added <code>each</code> and <code>some</code> on 2026-09-09; twenty quantifiers now. Six world recipes hide it in a prose <em>selector</em>; <code>make-world</code>'s four calls hide it in a comment. See <em>Repetition, or quantification</em>."
     ],
     [
       "NOTED - not now, by Sean's own words, and the design is recorded so it is not re-derived",
@@ -1034,6 +1041,11 @@
       "REFUTED - <code>load</code>, by <code>spec/units.md</code>, found by the specification lane",
       "This lane wrote a player recipe that spends an act moving energy into a tank, and filed *whether it should exist* as an open decision an hour before the sentence turned up.",
       "<code>spec/units.md</code>: <em>fuel moves freely between a <strong>controlled</strong> territory that has it and anything there that can hold it.</em> Fuelling is not an action, and <code>spec/invariants.md</code> -&gt; <em>No step that is always taken</em> forbids making it one. It is now <code>refuel</code>, a <strong>world</strong> recipe - the world's are not offered, which is the category a thing that happens by itself belongs in. <strong>And the range rule Sean wanted is one word of that sentence</strong>: a unit on unclaimed ground cannot fill, so it leaves your ground with a full bin, spends one crossing, and has one left."
+    ],
+    [
+      "ANSWERED - <code>X-25</code>, by <code>P-362</code>, and the reason it was open had already dissolved",
+      "<code>launch ark</code> paid an Ark's cost and put nothing into orbit, so Sean's loop - which ends <em>launch a new ark into orbit</em> - could not be completed.",
+      "<strong>The blocker was never the rule.</strong> <code>P-342</code> made it produce nothing because <em>the destination could not be named</em>, and <code>P-334</code> had since made adjacency a kind and given an orbit a <code>below</code> - the exact form this lane's data was already using. <strong>A reason expired and nothing re-read it</strong>, which is the same shape as <code>C-9</code> and as the two decisions that went stale here on 2026-09-10."
     ]
   ],
   "collapse": [
@@ -1636,7 +1648,7 @@
       "extractor.resource",
       "the resource the selected extractor was built for",
       "not a choice",
-      "determined by the selection, so it grounds to one instance rather than a domain"
+      "determined by the selector, so it grounds to one instance rather than a domain"
     ]
   ],
   "thing_traits": [
@@ -1687,7 +1699,7 @@
       "a field named for the container's kind, in both"
     ],
     [
-      "selection",
+      "selector",
       "recipe only",
       "<em>which</em> thing this acts on. A thing does not select; it is selected"
     ],
@@ -2517,63 +2529,6 @@
       []
     ]
   ],
-  "selections": [
-    [
-      "deploy ark",
-      "an ark",
-      "&mdash;"
-    ],
-    [
-      "found-colony(t)",
-      "called, not selected",
-      "&mdash;"
-    ],
-    [
-      "found by land",
-      "a pioneer",
-      "&mdash;"
-    ],
-    [
-      "move",
-      "a unit that is ready",
-      "to"
-    ],
-    [
-      "build extractor",
-      "a territory you control",
-      "resource"
-    ],
-    [
-      "build store",
-      "a territory you control",
-      "resource"
-    ],
-    [
-      "build yard",
-      "a territory you control",
-      "&mdash;"
-    ],
-    [
-      "produce pioneer",
-      "a territory you control",
-      "&mdash;"
-    ],
-    [
-      "launch ark",
-      "a yard",
-      "&mdash;"
-    ],
-    [
-      "create labor",
-      "a citizen that is ready",
-      "&mdash;"
-    ],
-    [
-      "work",
-      "an extractor that is ready",
-      "&mdash;"
-    ]
-  ],
   "bound_values": [
     [
       "refused",
@@ -2878,7 +2833,7 @@
     ],
     [
       "An expedition - several units acting as one",
-      "a selection is a description <em>and a count</em>",
+      "a selector is a description <em>and a count</em>",
       "<strong>nearly</strong> - the shape is there and <code>move</code>'s quantifier takes one"
     ],
     [
@@ -3554,6 +3509,63 @@
       "The turn number advances",
       null,
       "**Bookkeeping rather than a rule**, and listed so the count is honest about what it is counting. Nothing in the game reads it."
+    ]
+  ],
+  "selectors": [
+    [
+      "deploy ark",
+      "an ark",
+      "&mdash;"
+    ],
+    [
+      "found-colony(t)",
+      "called, not selected",
+      "&mdash;"
+    ],
+    [
+      "found by land",
+      "a pioneer",
+      "&mdash;"
+    ],
+    [
+      "move",
+      "a unit that is ready",
+      "to"
+    ],
+    [
+      "build extractor",
+      "a territory you control",
+      "resource"
+    ],
+    [
+      "build store",
+      "a territory you control",
+      "resource"
+    ],
+    [
+      "build yard",
+      "a territory you control",
+      "&mdash;"
+    ],
+    [
+      "produce pioneer",
+      "a territory you control",
+      "&mdash;"
+    ],
+    [
+      "launch ark",
+      "a yard",
+      "&mdash;"
+    ],
+    [
+      "create labor",
+      "a citizen that is ready",
+      "&mdash;"
+    ],
+    [
+      "work",
+      "an extractor that is ready",
+      "&mdash;"
     ]
   ]
 }
