@@ -336,7 +336,65 @@ terms, as `C-60` and `S-73`. The two-traits answer is one solution, not the only
 listed as one of three breakages; the true count is one - the stores - and its blast radius is four
 lines of the expected dump plus the scenario's own reasoning.
 
-## 7. What is still owed, and by whom
+## 7. What the constraint actually produced
+
+Sean set the rule-editor constraint **to detect missing gaps and eliminate non-viable decisions**.
+This is what came back, and the first part was a surprise to both lanes.
+
+### The notation was already specified, and the lens re-derived it without looking
+
+**Verified tonight against `spec/console.md` -> The language.** The research lens designed its
+notation over two days without opening that file, and the file already says:
+
+- **`{extractor territory:1}`** - *a field named for a kind is a reference to one*
+- **a description is a kind and every stored trait** - word for word
+- **a command is named for the recipe it fires**
+- **`repeat` is a count of firings and not an argument of the recipe** - which is Sean's own answer
+  about moving pioneers one at a time, written down before he was asked it
+- **every word in a data file is a kind, a trait, or one of a trait's values**
+
+**That last line is what the lens's check 10 measures**, at 498 of 498 tokens and 23 of 23 recipes.
+**So it is not a property the lens invented - it is the first measurement of a specified invariant**,
+and it passes. Same for `X-8`'s grounding: `spec/console.md:82` already defines `show <subject>` as
+*for each action the rules permit on that subject, whether it is possible now, and when it is not,
+what is missing.* The lens built an implementation of a specified command believing it was open.
+
+**Two independent derivations reaching the same design is evidence the design is right.** It is also
+two days spent re-deriving something readable in ten minutes, and both are true.
+
+### Three regions the encoding never reached
+
+- **Combat is not a gap in the encoding.** `spec/combat.md` is **27 lines and zero normative ones**
+  - Scales, Range, Weapons and Resolution all still carry *scaffolding prompt - delete this line*.
+  There is nothing to encode, and that is this lane's side of the wall
+- **Force has every word and no recipe.** The encoding carries force and nature as traits with the
+  release's numbers, and `max`/`sum` as expression forms - and **over 23 recipes they appear in one
+  line**, `make-territory`, which writes nature at design time. The jungle sequence is computed in
+  Python, outside the notation. **A defect in the prototype, not in the notation**
+- **The world-builder cannot start a game.** Four of `spec/console.md`'s five design commands are
+  there; **nothing places the ark and nothing ends the design phase**. `play.py:72` puts the
+  starting ark in orbit with a line of Python, so **the loop reported as playable begins from a
+  state no recipe produces**
+
+### Seven things the notation cannot say
+
+| What                                | Where it is needed                    | Why it does not fit                                                                         |
+| ----------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------- |
+| competition and its resolver        | `spec/turn.md`                        | no way to name contenders, none to state what settles them                                  |
+| reachability                        | `spec/planet.md`                      | oceans never isolate land - needs recursion                                                 |
+| a quantity shared rather than moved | `spec/units.md`                       | *fuel moves freely* collides with the invariant against a step always taken                 |
+| a rule that is itself a thing       | -                                     | a recipe has no id and no traits, so a turn budget has nowhere to live                      |
+| a derived relation                  | `spec/logistics.md`, `spec/planet.md` | orbital adjacency can only be materialized, so a consequence becomes data that can disagree |
+| a predicate over the whole game     | `spec/control.md`                     | winning and losing                                                                          |
+| taking a conserved thing apart      | -                                     | -                                                                                           |
+
+**The lens recommends two of these stay unsayable**, and this lane has no basis to disagree yet:
+**reachability**, because recursion costs the boundedness that makes *a player's rules always
+finish* checkable; and possibly **the win condition**, because a question asked *about* the game is
+not a transition. The second is uncomfortable - **leaving it in Rust is the option that already
+failed once**, which is section 3 of this note.
+
+## 8. What is still owed, and by whom
 
 - **Research, tonight** - what the encoding never reached (combat, orbit, control, population, the
   interface); where the notation could **not** say what the game needs; the seven remaining
