@@ -170,3 +170,43 @@ target and no `#[cfg(test)]` module inside `src/`; with it, **11 errors** across
 Measured identically at both ends of the burst - **16 at `c3cccc4`, 11 at `7c0501c`** - so this
 burst reduced it and introduced none of it. `Q-82`, and it is a flag plus eleven fixes rather than
 a flag.
+
+## All three closed, 2026-09-10
+
+`Q-78` and `Q-81` in `b0d43b3`, `Q-82` in `8996dc1`. Verified by running, not by reading the report.
+
+### `Q-81`'s fix is better than this report asked for
+
+The report asked for the missing term. **They removed the second predicate instead** -
+`can_build_extractors` is the question now and `maximum_output` calls it. Poisoning the metal term
+back out:
+
+|                  | `the_release_reaches_the_output_the_specification_lane_derived` |
+| ---------------- | --------------------------------------------------------------- |
+| before `b0d43b3` | **4 passed, 0 failed** - fully green                            |
+| after `b0d43b3`  | **FAILED**, 2 passed 2 failed                                   |
+
+**That is the population problem this report diagnosed being fixed rather than worked around.**
+Before, the term was held only by a constructed case; now it is under the check whose expected
+values come from outside the code. Both terms were poisoned separately and both go red.
+
+**What this report did not predict**, and they supplied: unifying the predicates forced the six
+table cases into five plus four, because with three terms a case carrying no metal deposit answers
+false for a reason its own test is not about. A case that fails for the wrong reason tests nothing -
+this lens's rule, arriving from the other direction.
+
+### `Q-82`, and a count this report got narrowly right
+
+Both `hooks/pre-push:28` and `.github/workflows/pipeline.yml:115` carry `--all-targets`. They added
+the pipeline half unprompted: **a hook the pipeline does not mirror is half a gate**, because the
+hook takes `--no-verify` and the pipeline does not. This report named only the hook.
+
+Measured here: strict clippy exits **0**, `fmt --check` exits **0**, workspace suite **574 passed,
+0 failed**.
+
+**This report said eleven errors and they fixed seventeen. Both are right and neither is the
+population.** At `b0d43b3`: **8 visible, 4 crates aborted** in one run. Clippy stops at the first
+failing crate, so a run shows only what compiles ahead of the abort. *Eleven* was what one run
+displayed; *seventeen* is what removing them revealed. **An abort is a denominator that moves** -
+the same failure this report is about, with the sign turned around, and committed by the report
+itself.

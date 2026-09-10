@@ -64,72 +64,6 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
-### Q-81 - The metal term landed in one of two predicates for the same question
-
-**to** code · **status** open · **raised** 2026-09-10 · **source**
-[the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
-
-**Where.** `crates/game-model/src/territory.rs:589`, `can_build_extractors`.
-
-**What.** It answers *whether this territory can ever build an extractor* with
-`food.capacity >= 1 && food.density >= 2`, and never asks whether a metal can be obtained - though
-building costs one. `Q-79` corrected the same question in `maximum_output` and stopped there, so the
-file now holds two predicates for one question that **disagree on 2 of 4 probed cases**, one of them
-release territory 6, whose whole role in the release is *No metal*.
-
-**Why.** Three things, and the third is the checkable one:
-
-- It is public API on `Territory`. Only tests call it today, so nothing is presently wrong in the
-  game - but the name is what a future caller will trust, and the name is the half that is wrong.
-- Its test asserts `can_build_extractors() == (food.capacity >= 1 && food.density >= 2)` -
-  **the function's own body, retyped**. Two derivations sharing one computation agree by
-  construction.
-- Its doc says *Eleven of the twelve can build extractors, and the one that cannot has no food to
-  spare*, and `cannot.len()` is asserted to be 1. **Measured over the release's twelve: the
-  predicate says 11 and the corrected rule says 10.** Two cannot build, for two different reasons -
-  territory 5 has no spare hand, territory 6 can never obtain a metal.
-
-**Whether.** Worth fixing now, while the reasoning is loaded and one line long - not because
-anything is broken today, but because the count in the doc became false when `Q-79` landed and
-nothing goes red on it.
-
-### Q-82 - The workspace gate lints no test code, and eleven clippy errors live there
-
-**to** code · **status** open · **raised** 2026-09-10 · **source**
-[the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
-
-**Where.** `hooks/pre-push:20`.
-
-**What.** The gate runs `cargo clippy --workspace -- -D warnings`. Without `--all-targets` that
-lints no `tests/` target and no `#[cfg(test)]` module inside `src/`. **Line 68 of the same file
-lints the tools with `--all-targets`**, so the asymmetry sits eleven lines apart.
-
-**Measured.** `cargo clippy --workspace -- -D warnings` exits 0. The same command with
-`--all-targets` reports **11 errors**, across eight files:
-
-| File                                            | Errors |
-| ----------------------------------------------- | ------ |
-| `crates/sphere-tessellation/src/icosahedral.rs` | 3      |
-| `crates/planet-raster/src/raster.rs`            | 3      |
-| `crates/game-model/src/territory.rs`            | 3      |
-| `crates/game-console/tests/fully_exploited.rs`  | 2      |
-| `crates/game-console/tests/first_release.rs`    | 2      |
-| `crates/planet-raster/src/font.rs`              | 1      |
-| `crates/game-console/tests/vocabulary.rs`       | 1      |
-| `crates/game-console/src/binding.rs`            | 1      |
-
-**Not a regression, and the direction is worth recording.** Measured identically at `c3cccc4` and at
-`7c0501c`: **16 before the burst, 11 after**. This burst reduced it.
-
-**Why.** `hooks/pre-push:51` already carries this lesson for the other half - a thing *linted and
-format-checked by nothing, and carrying a live clippy warning that no gate could see.* The fix was
-applied to the tools loop and not to the workspace line.
-
-**Whether.** Worth doing, and **not a one-flag change**: adding `--all-targets` turns the gate red
-on eleven pre-existing errors, so it is a flag plus eleven fixes, or a flag plus a recorded
-exception list. Which of those is the code lane's call. Filed because nothing else will notice -
-the gate is green and says nothing about the population it skipped.
-
 ### Q-80 - `spec/control.md` names biome as an input to maximum output, and nothing reads it
 
 **to** spec · **status** open · **raised** 2026-09-10 · **source**
@@ -150,32 +84,6 @@ reading being asked about.
 clause reads as though it belongs to *every territory that can be taken has been taken*, the
 neighbouring clause of the same rule, but that is a decision rather than an observation and it is
 Sean's.
-
-### Q-78 - `token.rs` says the comment rule is unspecified, and the spec has specified it for twelve days
-
-**to** code · **status** open · **raised** 2026-09-10 · **source** describing the notation
-for Sean
-
-**Where.** `crates/command-language/src/token.rs:39`.
-
-**What.** The doc comment on `COMMENT` reads ***Not in `spec/console.md`.*** *... it is an addition to
-the language and wants a decision.* `spec/console.md:28` says *A `#` begins a comment. The rest of
-the line is ignored*, and has said it since `4c6f2dd` on **2026-08-28**. The comment was written
-2026-08-27 in `08891e0`, one day earlier, and nothing connected the two.
-
-**Why.** Two files in one crate now disagree about whether the rule exists. `state.rs:452` quotes
-that same spec line as authoritative, in the test that keeps both readers honest - so the tokenizer
-says the rule is an unsanctioned addition while its sibling test cites it as the spec. *Wants a
-decision* is an invitation to change or delete a rule that was settled before the file was a day
-old.
-
-**Whether.** Worth fixing while you are in the file, and not worth a trip on its own. `P-366` and
-the expression grammar put you in `token.rs` regardless: it splits on whitespace and braces only,
-and `spec/console.md` -> The language now needs `.`, `(`, `)`, `,` and five comparison signs.
-
-**The shape, which is the part worth keeping.** `Q-66` - a false reason sitting next to the
-assertion it explains. The assertion is correct and the tokenizer does the right thing; only the
-sentence saying why is false, so nothing goes red and no test can see it.
 
 ### Q-9 - Small duplication and dead code, six items
 
@@ -325,6 +233,144 @@ lens nor the specification lane should.
 ## Resolved
 
 Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
+### Q-81 - The metal term landed in one of two predicates for the same question
+
+**to** code · **status** **acted** 2026-09-10 · `b0d43b3` · **raised** 2026-09-10 · **source**
+[the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
+
+**Where.** `crates/game-model/src/territory.rs:589`, `can_build_extractors`.
+
+**What.** It answers *whether this territory can ever build an extractor* with
+`food.capacity >= 1 && food.density >= 2`, and never asks whether a metal can be obtained - though
+building costs one. `Q-79` corrected the same question in `maximum_output` and stopped there, so the
+file now holds two predicates for one question that **disagree on 2 of 4 probed cases**, one of them
+release territory 6, whose whole role in the release is *No metal*.
+
+**Why.** Three things, and the third is the checkable one:
+
+- It is public API on `Territory`. Only tests call it today, so nothing is presently wrong in the
+  game - but the name is what a future caller will trust, and the name is the half that is wrong.
+- Its test asserts `can_build_extractors() == (food.capacity >= 1 && food.density >= 2)` -
+  **the function's own body, retyped**. Two derivations sharing one computation agree by
+  construction.
+- Its doc says *Eleven of the twelve can build extractors, and the one that cannot has no food to
+  spare*, and `cannot.len()` is asserted to be 1. **Measured over the release's twelve: the
+  predicate says 11 and the corrected rule says 10.** Two cannot build, for two different reasons -
+  territory 5 has no spare hand, territory 6 can never obtain a metal.
+
+**Whether.** Worth fixing now, while the reasoning is loaded and one line long - not because
+anything is broken today, but because the count in the doc became false when `Q-79` landed and
+nothing goes red on it.
+
+**Acted in `b0d43b3`, and the fix is better than this item asked for.** It asked for the
+missing term; they removed the second predicate instead - `can_build_extractors` *is* the question
+now and `maximum_output` calls it. **Two predicates for one question do not stay agreed**, which
+here took an afternoon to demonstrate.
+
+**Measured, and this is the part worth keeping.** Poisoning the metal term out of the predicate:
+
+|                  | `the_release_reaches_the_output_the_specification_lane_derived` |
+| ---------------- | --------------------------------------------------------------- |
+| before `b0d43b3` | **4 passed, 0 failed** - fully green                            |
+| after `b0d43b3`  | **FAILED**, 2 passed 2 failed                                   |
+
+So the term is under the check whose expected values come from outside the code, where before it
+was held only by a constructed case. **That is the population problem this report diagnosed being
+fixed rather than worked around.** Both terms poisoned separately, both go red.
+
+**One thing this item did not predict, and they supplied it.** Unifying the predicates forced the
+six table cases into five plus four: with three terms, a case carrying no metal deposit answers
+false for a reason its test is not about, so the food cases now all carry a metal that yields and
+the metal cases hold the food fixed. A case that fails for the wrong reason tests nothing, which is
+this lens's own rule arriving from the other direction.
+
+### Q-82 - The workspace gate lints no test code, and eleven clippy errors live there
+
+**to** code · **status** **acted** 2026-09-10 · `8996dc1` · **raised** 2026-09-10 · **source**
+[the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
+
+**Where.** `hooks/pre-push:20`.
+
+**What.** The gate runs `cargo clippy --workspace -- -D warnings`. Without `--all-targets` that
+lints no `tests/` target and no `#[cfg(test)]` module inside `src/`. **Line 68 of the same file
+lints the tools with `--all-targets`**, so the asymmetry sits eleven lines apart.
+
+**Measured.** `cargo clippy --workspace -- -D warnings` exits 0. The same command with
+`--all-targets` reports **11 errors**, across eight files:
+
+| File                                            | Errors |
+| ----------------------------------------------- | ------ |
+| `crates/sphere-tessellation/src/icosahedral.rs` | 3      |
+| `crates/planet-raster/src/raster.rs`            | 3      |
+| `crates/game-model/src/territory.rs`            | 3      |
+| `crates/game-console/tests/fully_exploited.rs`  | 2      |
+| `crates/game-console/tests/first_release.rs`    | 2      |
+| `crates/planet-raster/src/font.rs`              | 1      |
+| `crates/game-console/tests/vocabulary.rs`       | 1      |
+| `crates/game-console/src/binding.rs`            | 1      |
+
+**Not a regression, and the direction is worth recording.** Measured identically at `c3cccc4` and at
+`7c0501c`: **16 before the burst, 11 after**. This burst reduced it.
+
+**Why.** `hooks/pre-push:51` already carries this lesson for the other half - a thing *linted and
+format-checked by nothing, and carrying a live clippy warning that no gate could see.* The fix was
+applied to the tools loop and not to the workspace line.
+
+**Whether.** Worth doing, and **not a one-flag change**: adding `--all-targets` turns the gate red
+on eleven pre-existing errors, so it is a flag plus eleven fixes, or a flag plus a recorded
+exception list. Which of those is the code lane's call. Filed because nothing else will notice -
+the gate is green and says nothing about the population it skipped.
+
+**Acted in `8996dc1`, verified by running it.** Both `hooks/pre-push:28` and
+`.github/workflows/pipeline.yml:115` now carry `--all-targets`, and they added the pipeline half
+unprompted - **a hook the pipeline does not mirror is half a gate**, because the hook takes
+`--no-verify` and the pipeline does not. This item named only the hook.
+
+`cargo clippy --workspace --all-targets -- -D warnings` exits **0**, `cargo fmt --all -- --check`
+exits **0**, and the workspace suite is **574 passed, 0 failed**.
+
+**Two counts, both right, and neither is the population.** This item said eleven and they fixed
+seventeen. Measured at `b0d43b3`: **8 errors visible and 4 crates aborted** in one run - clippy stops
+at the first failing crate, so a single run shows only what compiles before the abort and undercounts
+by however much is behind it. *Eleven* was what one run displayed, *seventeen* what removing them
+revealed. **An abort is a denominator that moves**, which is the same failure this lens keeps
+finding with the sign turned around.
+
+**They chose a flag plus seventeen fixes over an exception list**, and gave the reason: an exception
+list needs a reader to notice an entry has been repaired. Two of the seventeen were worth more than
+the lint - `territory.rs`'s case tuples now carry names.
+
+### Q-78 - `token.rs` says the comment rule is unspecified, and the spec has specified it for twelve days
+
+**to** code · **status** **acted** 2026-09-10 · `b0d43b3` · **raised** 2026-09-10 · **source** describing the notation
+for Sean
+
+**Where.** `crates/command-language/src/token.rs:39`.
+
+**What.** The doc comment on `COMMENT` reads ***Not in `spec/console.md`.*** *... it is an addition to
+the language and wants a decision.* `spec/console.md:28` says *A `#` begins a comment. The rest of
+the line is ignored*, and has said it since `4c6f2dd` on **2026-08-28**. The comment was written
+2026-08-27 in `08891e0`, one day earlier, and nothing connected the two.
+
+**Why.** Two files in one crate now disagree about whether the rule exists. `state.rs:452` quotes
+that same spec line as authoritative, in the test that keeps both readers honest - so the tokenizer
+says the rule is an unsanctioned addition while its sibling test cites it as the spec. *Wants a
+decision* is an invitation to change or delete a rule that was settled before the file was a day
+old.
+
+**Whether.** Worth fixing while you are in the file, and not worth a trip on its own. `P-366` and
+the expression grammar put you in `token.rs` regardless: it splits on whitespace and braces only,
+and `spec/console.md` -> The language now needs `.`, `(`, `)`, `,` and five comparison signs.
+
+**The shape, which is the part worth keeping.** `Q-66` - a false reason sitting next to the
+assertion it explains. The assertion is correct and the tokenizer does the right thing; only the
+sentence saying why is false, so nothing goes red and no test can see it.
+
+**Acted in `b0d43b3`, verified in the file.** The comment now quotes `spec/console.md` and
+records that it said the opposite for twelve days. **Their framing is the one to keep, and it is
+`Q-81`'s**: a false reason beside a right assertion, where nothing can go red because the assertion
+is correct and only the reason is wrong.
 
 ### Q-79 - A metal deposit that yields nothing counts as metal, and the planet becomes unwinnable
 

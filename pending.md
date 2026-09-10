@@ -20,20 +20,15 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
-- **Q-81** - `b0d43b3` Q-81 and Q-78: one question gets one predicate, and a false reason beside a right assertion · still open in `lenses/quality/outbox.md`
-- **Q-78** - `b0d43b3` Q-81 and Q-78: one question gets one predicate, and a false reason beside a right assertion · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (11)
+### To code (8)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-81** - The metal term landed in one of two predicates for the same question · `lenses/quality/outbox.md`
-- **Q-82** - The workspace gate lints no test code, and eleven clippy errors live there · `lenses/quality/outbox.md`
-- **Q-78** - `token.rs` says the comment rule is unspecified, and the spec has specified it for twelve days · `lenses/quality/outbox.md`
 - **X-8** - `C-74` answered: the three puzzles are one, and it is called grounding · `lenses/research/outbox.md`
 - **X-11** - the four roles are two dimensions, and `create-if-missing` is a cell the grid always had · `lenses/research/outbox.md`
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
