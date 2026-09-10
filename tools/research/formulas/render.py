@@ -499,19 +499,44 @@ def decisions_split():
     return op, shut
 
 
-def capacity_table():
-    """Every kind, and how capacity treats it."""
+def enum_table(key, heading):
+    """A small table of values, so the big tables can carry the bare word."""
     rows = "".join(
-        f'<tr><td class="target">{esc(k)}</td><td>{where}</td><td>{at}</td>'
-        f"<td>{life}</td><td class=\"note\">{note}</td></tr>"
-        for k, where, at, life, note in DATA["capacity_shape"]
+        f'<tr><td class="target"><strong>{esc(v)}</strong></td><td>{text}</td></tr>'
+        for v, text in DATA[key]
     )
-    assert len(DATA["capacity_shape"]) == len(DATA["kinds"])
     return (
-        '<div class="scroll"><table><thead><tr><th>Kind</th><th>Where the bound lives</th>'
-        "<th>At the bound</th><th>Lifetime</th><th></th></tr></thead><tbody>"
+        f"<table><thead><tr><th>{heading}</th><th></th></tr></thead><tbody>"
         + rows
-        + "</tbody></table></div>"
+        + "</tbody></table>"
+    )
+
+
+def capacity_table():
+    """Every kind, and how capacity treats it.
+
+    Two columns are enums, defined once above rather than spelled out in every row. Before
+    2026-09-09 this table repeated `persists` twelve times and one 45-character phrase four
+    times; the words did not become clearer for being written out again.
+    """
+    bounds = {r[0] for r in DATA["bound_values"]}
+    lifetimes = {r[0] for r in DATA["lifetime_values"]}
+    rows = ""
+    for k, holder, at, life, note in DATA["capacity_shape"]:
+        assert at in bounds and life in lifetimes, (k, at, life)
+        rows += (
+            f'<tr><td class="target">{esc(k)}</td><td>{holder}</td>'
+            f'<td class="target">{esc(at)}</td><td class="target">{esc(life)}</td>'
+            f'<td class="note">{note}</td></tr>'
+        )
+    assert len(DATA["capacity_shape"]) == len(DATA["kinds"])
+    # Every declared value is used, so the enum cannot keep a row nothing means.
+    assert {r[2] for r in DATA["capacity_shape"]} == bounds
+    assert {r[3] for r in DATA["capacity_shape"]} == lifetimes
+    return (
+        '<div class="scroll"><table><thead><tr><th>Kind</th><th>Held by</th>'
+        "<th>At the bound</th><th>Lifetime</th><th>The number, where there is one</th>"
+        "</tr></thead><tbody>" + rows + "</tbody></table></div>"
     )
 
 
@@ -863,6 +888,10 @@ discarded at the turn's end, cannot be created in that container at all, and no 
 <p><strong>Mapped onto the rules that exist, the list is shorter than it looks.</strong> Two of the
 four behaviours are the same capacity answer wearing different lifetimes, and one of the four is not
 a capacity behaviour at all.</p>
+<p><strong>Two of the columns below are enums</strong>, defined here rather than spelled out in
+every row:</p>
+<div class="scroll">{enum_table("bound_values", "At the bound")}</div>
+<div class="scroll">{enum_table("lifetime_values", "Lifetime")}</div>
 {cap_table}
 <div class="callout">
 <h4>Resolved 2026-09-09, and it turns on one word</h4>

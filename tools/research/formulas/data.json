@@ -1955,105 +1955,105 @@
   "capacity_shape": [
     [
       "garrison",
-      "the territory",
+      "territory",
       "refused",
       "persists",
-      "a declared number: 1"
+      "1"
     ],
     [
       "yard",
-      "the territory",
+      "territory",
       "refused",
       "persists",
-      "a declared number: 1"
+      "1"
     ],
     [
       "ark",
-      "the territory",
+      "territory",
       "refused",
       "persists",
-      "a declared number: 2"
+      "2"
     ],
     [
       "pioneer",
-      "the territory",
+      "territory",
       "refused",
       "persists",
-      "a declared number: 2"
+      "2"
     ],
     [
       "extractor",
-      "the territory",
+      "territory",
       "refused",
       "persists",
-      "a number per resource, and <strong>zero is one of its values</strong> - territory 6 has no metal deposit, so no metal extractor can ever be built there"
+      "its deposit's total capacity for that resource, and <strong>zero is one of its values</strong> - territory 6 can never hold a metal extractor"
     ],
     [
       "store",
-      "the territory",
+      "territory",
       "refused",
       "persists",
       "as many as the extractors of its resource, so the bound moves as the territory is built"
     ],
     [
       "citizen",
-      "nowhere",
+      "territory",
       "no bound",
       "persists",
       "held down by food through upkeep, which is a loop rather than a capacity"
     ],
     [
+      "deposit",
+      "territory",
+      "no bound",
+      "persists",
+      "three per territory, fixed at design time"
+    ],
+    [
       "food",
-      "the territory, <strong>no limit</strong>; a store in it holds 10",
-      "not refused - a territory has no limit for it",
-      "<strong>ephemeral</strong>",
-      "made with <code>keeps</code> 1, so even a stored unit dies at the turn end"
+      "territory, or a store",
+      "no bound",
+      "ephemeral",
+      "a store holds 10; <code>keeps</code> 1 kills even a stored unit"
     ],
     [
       "metal",
-      "the territory, <strong>no limit</strong>; a store in it holds 10",
-      "not refused - a territory has no limit for it",
-      "ephemeral unless a container holds it",
-      "what the territory holds directly is lost at the turn's end - stored metal is not"
+      "territory, or a store",
+      "no bound",
+      "ephemeral unless stored",
+      "a store holds 10"
     ],
     [
       "energy",
-      "the territory, <strong>no limit</strong>; a store holds 10 and a unit's tank holds its fuel",
-      "not refused - a territory has no limit for it",
-      "ephemeral unless a container holds it",
-      "the only resource with a second sort of container"
+      "territory, a store, or a unit's tank",
+      "no bound",
+      "ephemeral unless stored",
+      "a store holds 10, a tank holds the unit's fuel"
     ],
     [
       "labor",
-      "the territory, <strong>no limit</strong>",
-      "not refused - a territory has no limit for it",
-      "<strong>ephemeral, always</strong>",
-      "no container ever holds it, so it is always lost at the turn's end - one per citizen per turn"
+      "territory",
+      "no bound",
+      "ephemeral",
+      "no container ever holds it, so it never survives a turn"
     ],
     [
       "territory",
-      "the game",
+      "game",
       "no bound",
       "persists",
       "twelve, fixed at design time"
     ],
     [
       "orbit",
-      "the game",
+      "game",
       "no bound",
       "persists",
       "one per territory"
     ],
     [
-      "deposit",
-      "the territory",
-      "no bound",
-      "persists",
-      "three per territory, fixed at design time"
-    ],
-    [
       "adjacency",
-      "the game",
+      "game",
       "no bound",
       "persists",
       "one per shared edge"
@@ -2408,6 +2408,30 @@
       "work",
       "an extractor that is ready",
       "&mdash;"
+    ]
+  ],
+  "bound_values": [
+    [
+      "refused",
+      "The container declares a number and will not take another. A positive change fails, and <code>attach</code> says what that costs."
+    ],
+    [
+      "no bound",
+      "The container declares no limit, so nothing can be over one. Not the same as declaring <strong>no capacity</strong>, which means it never holds this kind at all."
+    ]
+  ],
+  "lifetime_values": [
+    [
+      "persists",
+      "Stays until something removes it."
+    ],
+    [
+      "ephemeral",
+      "Gone at the turn's end, always."
+    ],
+    [
+      "ephemeral unless stored",
+      "Gone at the turn's end if the territory holds it directly; kept if a container does."
     ]
   ]
 }
