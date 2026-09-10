@@ -723,8 +723,11 @@ def check_kinds_defined():
     and stockpile - because a bare word search returns a plausible zero and invites no
     question. The terms are in `data.json` so the search can be judged rather than trusted.
     """
-    text = " ".join(p.read_text(encoding="utf-8") for p in sorted(SPEC.glob("*.md"))).lower()
-    assert text, "read no specification, so this check knows nothing"
+    files = sorted(SPEC.glob("*.md"))
+    lines = [(p.name, i + 1, l) for p in files
+             for i, l in enumerate(p.read_text(encoding="utf-8").split(chr(10)))]
+    text = " ".join(l for _f, _i, l in lines).lower()
+    assert text and len(files) > 1, "read no specification, so this check knows nothing"
     kinds = [k for k, _w in DATA["kinds"]]
     named, concept_only, absent = [], [], []
     for kind in kinds:
@@ -732,8 +735,12 @@ def check_kinds_defined():
         if re.search(r"\b" + re.escape(kind) + r"\b", text):
             named.append(kind)
         elif any(term in text for term in terms[1:]):
-            hit = next(term for term in terms[1:] if term in text)
-            concept_only.append((kind, hit))
+            # **Every match, with where it is.** Reporting only the first hides a false
+            # positive behind it, which is what `node` did: `spec/interface.md` uses it for a
+            # tree node in the rule editor, and the real hit is in `spec/logistics.md`.
+            where = [(term, f, i, l.strip()) for term in terms[1:]
+                     for f, i, l in lines if re.search(rf"\b{re.escape(term)}\b", l.lower())]
+            concept_only.append((kind, where))
         else:
             absent.append(kind)
     assert len(named) + len(concept_only) + len(absent) == len(kinds)
@@ -1158,8 +1165,10 @@ def main():
     print()
     print("CHECK 13 - which kinds does the release have that spec/ never defines?")
     print(f"  {len(named13)} of {n_kinds13} kinds are named in spec/ by their own word")
-    for kind, hit in concept13:
-        print(f"  CONCEPT ONLY: {kind} - spec/ has \"{hit}\" but never the kind")
+    for kind, where in concept13:
+        print(f"  CONCEPT ONLY: {kind} - spec/ never names the kind. Every match:")
+        for term, f, i, line in where:
+            print(f"      {f}:{i}  \"{term}\"  {line[:74]}")
     for kind in absent13:
         print(f"  ABSENT: {kind} - no trace of the concept in spec/ at all")
 

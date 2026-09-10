@@ -89,6 +89,38 @@ the one asked.
 - **Every recipe is now buildable from an editor** — 410 of 410 tokens selectable — and that does
   **not** mean the game is finite. Seven assumptions remain about the notation rather than the menus.
 
+## Nobody checks the column they do not write
+
+**Named by the specification lane on the night of 2026-09-09, after three instances in one day
+across three lanes.** It belongs in whatever report Sean reads, and it is not this lane's to write
+up — recorded here so the instances sit together.
+
+| Claim                             | Verified against       | Never opened   | What was there                                  |
+| --------------------------------- | ---------------------- | -------------- | ----------------------------------------------- |
+| `X-19` — no territory has a biome | `spec/`, `releases/`   | **`reports/`** | every biome and nature, generated from the game |
+| `X-23` — nothing fuels a unit     | `releases/`            | **`crates/`**  | `fuel` already built as a decrementing counter  |
+| `S-48` — *node goes*              | `releases/`, `crates/` | **`spec/`**    | `spec/logistics.md:35`, *the node it works*     |
+
+**The shape is the same three times and it is not carelessness.** Each verification named a
+**proper subset** of the columns its claim covered, and each returned **a plausible number rather
+than an error** — `0 occurrences`, `no recipe fuels a unit`, `no territory has a biome`. All three
+were true about what they read.
+
+`CLAUDE.md` already has the words: *the instrument answers a narrower question than the one asked*,
+and *a right number about the wrong thing invites no question*. **What it does not yet say is which
+narrower question keeps getting asked**, and it is always the same one: the columns the author
+happens to write.
+
+**Two of the three are this lane's and one is the specification lane's**, which is the only reason
+it is visible at all. A lens checking a producer would have found the producer's; a producer
+checking a lens would have found the lens's. **It took both directions on one night to see the
+shape**, and neither lane could have named it alone.
+
+**What would catch it.** For a claim of the form *X is gone* or *nothing does Y*, assert over all
+four columns — `spec/`, `releases/`, `crates/`, `reports/` — rather than the ones that were open.
+The specification lane has proposed building that check and this lane agrees it is the right one;
+it is worth more than any single finding either of us made tonight.
+
 ## Reaching this lane
 
 `SendMessage` to `4x research`. A message only arrives if the session is running, so anything that

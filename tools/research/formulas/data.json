@@ -3425,6 +3425,7 @@
     ],
     "deposit": [
       "deposit",
+      "node",
       "total capacity",
       "density"
     ],
