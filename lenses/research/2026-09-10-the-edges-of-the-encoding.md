@@ -149,7 +149,9 @@ before the first move.
 
 ## Question 6: where the notation could not say something the game needs
 
-**Seven, each with the line that needs it. Two are limits this lane recommends keeping.**
+**Seven, each with the line that needs it.** Two are limits this lane recommends keeping, and
+**one was answered overnight by a sentence in `spec/` that neither lane had read** - left in place
+at 3, with what survives it at 3b, because how it was answered is the more useful half.
 
 ### 1. Competition, and the rule that settles it
 
