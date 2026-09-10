@@ -1353,8 +1353,37 @@ offered wherever their inputs are present, to take or to leave; the world's are 
 So <strong><code>some</code> with <code>&gt;</code> is claiming and <code>each</code> with
 <code>&ge;</code> is holding</strong>, and the difference between the two moments is already written
 in the first word of each recipe.</p>
-<p><strong>One thing is still open, and it is the only one.</strong> What a short force costs - nothing,
-a loss, a retreat - is a game design answer and this lane proposes none.</p>
+<p><strong>Answered 2026-09-09.</strong> Sean: <em>being short on force is everything goes into
+disorder, which means losing control of all units there. What losing control means is an interesting
+question, but I think for now we just delete the units.</em> So the world gains a recipe of exactly
+<code>spoil</code>'s shape - two lines:</p>
+<pre><code>disorder  each unit: &#123;unit disorder:yes&#125;    # derived: the force where it is falls short
+          change unit -1</code></pre>
+</div>
+<div class="callout">
+<h4>Adding it found a hole in check 1 that had been there all along</h4>
+<p>Check 1 first reported <strong>no violation</strong>, and it should have reported two. Destroying
+a <code>unit</code> destroys 3 metal-equivalent, and <strong>check 1 was not grounding
+families</strong> - a <code>unit</code> carries no weight where an ark and a pioneer carry 3, so the
+recipe scored zero.</p>
+<p><strong>That is the same failure that made check 2 blind to mining</strong>, which
+<code>X-17</code> fixed in check 2 and nowhere else. Nothing had exposed it in check 1 because no
+recipe destroyed a family until this one: <code>move</code> takes a unit out of one place and puts it
+in another, so its two family lines cancel. <strong>A hole that only opens when the data changes is
+not one a green check will ever show you.</strong> Grounded, it reports both:
+<code>disorder[ark]</code> and <code>disorder[pioneer]</code>, each net &minus;3.</p>
+</div>
+<div class="callout">
+<h4>And that raises the one question left, which is not about force</h4>
+<p><strong><code>disorder</code> is a metal sink.</strong> A unit is deleted and its 3 metal goes with
+it. <code>perish</code> sets the opposite precedent - a thing that perishes <em>returns</em> its metal
+to where it stood - so the two recipes disagree about what happens to the material in a thing that
+stops existing.</p>
+<p>It is excluded from check 1 as a <strong>declared sink</strong>, the same way <code>work</code> is
+excluded as a declared source, so the check keeps meaning something and the sink stays visible rather
+than red. <strong>Which it should be turns on what <em>losing control</em> comes to mean</strong> -
+Sean called that an interesting question and deleting the units a placeholder for it. A unit that
+merely stops being yours still has its metal in it.</p>
 </div>
 
 <h2>Which of the three need the language to change</h2>

@@ -1,6 +1,6 @@
 {
   "conservation": {
-    "analysed": 12,
+    "analysed": 13,
     "skipped": [
       "grow",
       "perish",
@@ -18,7 +18,7 @@
     "violations": []
   },
   "unbounded": {
-    "analysed": 18,
+    "analysed": 20,
     "skipped": [
       "perish"
     ],
@@ -28,7 +28,7 @@
         "1"
       ],
       [
-        "found by land",
+        "disorder[pioneer]",
         "10/27"
       ],
       [
@@ -65,18 +65,16 @@
       ]
     ],
     "gain": {
-      "citizen": "1",
-      "extractor": "20/27",
-      "garrison": "10/27"
+      "citizen": "7/27"
     },
-    "metal_gain": "10/9",
+    "metal_gain": "0",
     "free": [
       "citizen"
     ],
     "undeclared": [],
     "hidden": [],
     "without_sources": {
-      "transitions": 15,
+      "transitions": 17,
       "witness": [
         [
           "create labor",

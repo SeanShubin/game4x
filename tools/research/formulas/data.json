@@ -672,6 +672,27 @@
           "both rows were one flip"
         ]
       ]
+    },
+    {
+      "name": "disorder",
+      "was": null,
+      "selection": "quantified on line 1, rather than in prose beside the recipe",
+      "lines": [
+        [
+          "each",
+          "unit: {unit disorder:yes}",
+          "",
+          "",
+          "derived: the force where it is falls short of that place's nature"
+        ],
+        [
+          "change",
+          "unit",
+          "-1",
+          "",
+          "Sean, 2026-09-09: *everything goes into disorder, which means losing control of all units there* - and for now losing control is deletion"
+        ]
+      ]
     }
   ],
   "creation": [
@@ -968,9 +989,9 @@
       "The model already does this once, in <code>make-world</code>. See <em>Calls into the code</em>."
     ],
     [
-      "OPEN - what a failed resolve costs, which is the only thing left to decide",
-      "Sean's <em>resolve territory</em> makes claiming a player recipe and holding a world one, so greater-to-enter and equal-to-maintain are two recipes rather than one test needing a marker.",
-      "What is not decided is what happens when the force is short - nothing, a loss, a retreat. See <em>Judging force after the move</em>."
+      "OPEN - does a unit lost to disorder leave its metal behind",
+      "<code>disorder</code> deletes a unit and returns nothing, so it is a metal <strong>sink</strong> - net &minus;3 per unit. <code>perish</code> sets the opposite precedent: a thing that perishes returns its metal to where it stood.",
+      "It turns on what <em>losing control</em> means, which Sean called an interesting question and left open. Deleted is a placeholder; a unit that merely stops being yours still has its metal in it."
     ]
   ],
   "collapse": [
@@ -1815,6 +1836,11 @@
       "movable",
       "whatever moves",
       "stored"
+    ],
+    [
+      "disorder",
+      "a unit",
+      "derived"
     ]
   ],
   "thing_shape": [

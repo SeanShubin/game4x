@@ -248,7 +248,7 @@ is why no <code>set</code> in this report carries an attachment.</p>
 the note &mdash; as a single string in the notation <code>spec/console.md</code> gives for a command
 and for a description of state: <code>{name field:value ...}</code>, where a value is a word, a
 number or another command, a field referring to a thing is named for that thing's kind, and
-<code>#</code> begins a comment. All 77 lines are encoded, none by hand.</p>
+<code>#</code> begins a comment. All 79 lines are encoded, none by hand.</p>
 <p>Nine of them needed something that notation does not define. The encoder records each rather
 than inventing quietly, and they are listed under <em>What the encoding assumed</em>, below the
 data.</p>
@@ -416,7 +416,7 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">resource[extractor.resource] in t</td><td class="amt amt-pos">+t.deposit[extractor.resource].density</td><td></td><td class="note">row 5</td><td class="one-string">{change thing:{resource kind:extractor.resource territory:t} amount:+t.deposit[extractor.resource].density} <span class="cmt"># row 5</span></td></tr>
 </tbody></table></div>
 
-<h2>World recipes <span class="badge">6</span></h2>
+<h2>World recipes <span class="badge">7</span></h2>
 <p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
 <h3>upkeep <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
 <p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
@@ -493,6 +493,18 @@ data.</p>
 </tr></thead><tbody>
 <tr><td class="op op-each">each</td><td class="target">thing: {thing ready:no}</td><td class="amt"></td><td></td><td class="note">was the selection *each thing that is not ready*, which was prose outside the language</td><td class="one-string">{each thing:{thing ready:no}} <span class="cmt"># was the selection *each thing that is not ready*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">thing.ready = yes</td><td class="amt"></td><td></td><td class="note">both rows were one flip</td><td class="one-string">{set thing:{thing} ready:yes} <span class="cmt"># both rows were one flip</span></td></tr>
+</tbody></table></div><h3>disorder <span class="badge design">design time</span></h3>
+<p class="sel">selection: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
+<div class="scroll"><table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+<th>The same row, as one string</th>
+</tr></thead><tbody>
+<tr><td class="op op-each">each</td><td class="target">unit: {unit disorder:yes}</td><td class="amt"></td><td></td><td class="note">derived: the force where it is falls short of that place's nature</td><td class="one-string">{each unit:{unit disorder:yes}} <span class="cmt"># derived: the force where it is falls short of that place's nature</span></td></tr>
+<tr><td class="op op-change">change</td><td class="target">unit</td><td class="amt amt-neg">-1</td><td></td><td class="note">Sean, 2026-09-09: *everything goes into disorder, which means losing control of all units there* - and for now losing control is deletion</td><td class="one-string">{change thing:{unit} amount:-1} <span class="cmt"># Sean, 2026-09-09: *everything goes into disorder, which means losing control of all units there* - and for now losing control is deletion</span></td></tr>
 </tbody></table></div>
 
 <h2>Building the world <span class="badge">5</span></h2>
@@ -913,7 +925,7 @@ something bound differently each time.</p>
 fires</em>. A third way would buy nothing.</td></tr>
 <tr><td class="target"><strong>Quantification</strong></td>
 <td>once per member of a set, with something bound differently each time</td>
-<td><strong>20</strong> <code>each</code> lines, 17 of them over a description</td>
+<td><strong>21</strong> <code>each</code> lines, 18 of them over a description</td>
 <td><strong>Yes, since 2026-09-09.</strong> It was in a prose <em>selection</em> field in six
 recipes and in a comment in four lines of <code>make-world</code>; Sean added the construct and both
 became lines.</td></tr>
@@ -927,7 +939,7 @@ four, each scoping the call beneath it.</p>
 <p><strong>It cost ten lines and a sixth primitive</strong>, and bought the thing the constraint
 asks for rather than conciseness: the six world recipes and the four world-building calls now say
 what they do <em>in the language</em>, where before they said it in a field and a comment that
-nothing could run. <strong>20 quantifiers, 17 of them over a description of the
+nothing could run. <strong>21 quantifiers, 18 of them over a description of the
 state</strong> - the rest range over a data table or over the planet's geometry, which the notation
 has no form for and which the assumption list records.</p>
 <p><strong>It changes nothing about the checks, and that is on purpose.</strong> An
@@ -1228,8 +1240,37 @@ offered wherever their inputs are present, to take or to leave; the world's are 
 So <strong><code>some</code> with <code>&gt;</code> is claiming and <code>each</code> with
 <code>&ge;</code> is holding</strong>, and the difference between the two moments is already written
 in the first word of each recipe.</p>
-<p><strong>One thing is still open, and it is the only one.</strong> What a short force costs - nothing,
-a loss, a retreat - is a game design answer and this lane proposes none.</p>
+<p><strong>Answered 2026-09-09.</strong> Sean: <em>being short on force is everything goes into
+disorder, which means losing control of all units there. What losing control means is an interesting
+question, but I think for now we just delete the units.</em> So the world gains a recipe of exactly
+<code>spoil</code>'s shape - two lines:</p>
+<pre><code>disorder  each unit: &#123;unit disorder:yes&#125;    # derived: the force where it is falls short
+          change unit -1</code></pre>
+</div>
+<div class="callout">
+<h4>Adding it found a hole in check 1 that had been there all along</h4>
+<p>Check 1 first reported <strong>no violation</strong>, and it should have reported two. Destroying
+a <code>unit</code> destroys 3 metal-equivalent, and <strong>check 1 was not grounding
+families</strong> - a <code>unit</code> carries no weight where an ark and a pioneer carry 3, so the
+recipe scored zero.</p>
+<p><strong>That is the same failure that made check 2 blind to mining</strong>, which
+<code>X-17</code> fixed in check 2 and nowhere else. Nothing had exposed it in check 1 because no
+recipe destroyed a family until this one: <code>move</code> takes a unit out of one place and puts it
+in another, so its two family lines cancel. <strong>A hole that only opens when the data changes is
+not one a green check will ever show you.</strong> Grounded, it reports both:
+<code>disorder[ark]</code> and <code>disorder[pioneer]</code>, each net &minus;3.</p>
+</div>
+<div class="callout">
+<h4>And that raises the one question left, which is not about force</h4>
+<p><strong><code>disorder</code> is a metal sink.</strong> A unit is deleted and its 3 metal goes with
+it. <code>perish</code> sets the opposite precedent - a thing that perishes <em>returns</em> its metal
+to where it stood - so the two recipes disagree about what happens to the material in a thing that
+stops existing.</p>
+<p>It is excluded from check 1 as a <strong>declared sink</strong>, the same way <code>work</code> is
+excluded as a declared source, so the check keeps meaning something and the sink stays visible rather
+than red. <strong>Which it should be turns on what <em>losing control</em> comes to mean</strong> -
+Sean called that an interesting question and deleting the units a placeholder for it. A unit that
+merely stops being yours still has its metal in it.</p>
 </div>
 
 <h2>Which of the three need the language to change</h2>
@@ -1535,9 +1576,9 @@ of things to do.</p>
 <td class="note">Two kinds and two declarations would allow it. &lt;strong&gt;The phase it is allowed in decides whether any check still means anything&lt;/strong&gt; - see &lt;em&gt;Defining a kind, then using it&lt;/em&gt;.</td>
 </tr>
 <tr>
-<td>OPEN - what a failed resolve costs, which is the only thing left to decide</td>
-<td>Sean's &lt;em&gt;resolve territory&lt;/em&gt; makes claiming a player recipe and holding a world one, so greater-to-enter and equal-to-maintain are two recipes rather than one test needing a marker.</td>
-<td class="note">What is not decided is what happens when the force is short - nothing, a loss, a retreat. See &lt;em&gt;Judging force after the move&lt;/em&gt;.</td>
+<td>OPEN - does a unit lost to disorder leave its metal behind</td>
+<td>&lt;code&gt;disorder&lt;/code&gt; deletes a unit and returns nothing, so it is a metal &lt;strong&gt;sink&lt;/strong&gt; - net &amp;minus;3 per unit. &lt;code&gt;perish&lt;/code&gt; sets the opposite precedent: a thing that perishes returns its metal to where it stood.</td>
+<td class="note">It turns on what &lt;em&gt;losing control&lt;/em&gt; means, which Sean called an interesting question and left open. Deleted is a placeholder; a unit that merely stops being yours still has its metal in it.</td>
 </tr>
 </tbody></table></div>
 
@@ -1667,7 +1708,7 @@ and the checker cannot disagree. <strong>All three were poisoned before being be
 check 2 flags a recipe with no inputs; check 1 goes red on a wrong weighting; check 3 goes red at a cap of 0.</p>
 
 <h3>Check 1 &mdash; metal conserved outside extraction &nbsp;<span class="badge down">0 violations</span></h3>
-<p>12 recipes analysed;
+<p>13 recipes analysed;
 3 skipped for state-dependent amounts
 (grow, perish, upkeep); <code>work</code> excluded as the declared
 source. Weights are the <em>Binding</em> column, copied rather than invented:
@@ -1691,7 +1732,7 @@ spent; a recipe that is only ever called is not a transition.</p>
 </div>
 
 <h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded, as it should be</span></h3>
-<p>18 transitions after grounding;
+<p>20 transitions after grounding;
 1 skipped (perish).</p>
 <div class="scroll"><table><thead><tr>
 <th>Fire this many times</th>
@@ -1703,7 +1744,7 @@ spent; a recipe that is only ever called is not a transition.</p>
 </tr>
 <tr>
 <td class="amt">10/27</td>
-<td class="target">found by land</td>
+<td class="target">disorder[pioneer]</td>
 </tr>
 <tr>
 <td class="amt">1</td>
@@ -1738,7 +1779,7 @@ spent; a recipe that is only ever called is not a transition.</p>
 <td class="target">work[energy]</td>
 </tr>
 </tbody></table></div>
-<p>Metal-equivalent gain <strong>10/9</strong>, and
+<p>Metal-equivalent gain <strong>0</strong>, and
 <code>work[metal]</code> is in the witness &mdash; which is the point. <strong>The check can see
 mining now.</strong> Until families were resolved to kinds, <code>work</code> produced
 <code>resource</code>, a family with no metal weight, and the game's only metal source scored
@@ -1753,7 +1794,7 @@ The analysis and the interface want the same machinery, which is a reason to bui
 </div>
 
 <h3>Check 2b &mdash; the same without mining &nbsp;<span class="badge down">clean</span></h3>
-<p>15 transitions with <code>work</code>
+<p>17 transitions with <code>work</code>
 removed. <strong>This is the question worth asking</strong>, and it is the recommendation in
 practice: rather than keeping a baseline of intended loops, remove the declared source and ask
 whether metal can still grow.</p>
@@ -2421,7 +2462,7 @@ and the growth rate are set by different halves of the same column</strong>, and
 <p><strong>Where a line needed something the notation does not define, the encoder records it
 rather than inventing quietly</strong> &mdash; so this list is the report's real output, and it is
 generated from the encoding rather than written beside it.</p>
-<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">15</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 2</td></tr><tr><td class="amt">4</td><td><strong>How many a quantifier ranges over is not in the line.</strong> <code>each</code> now says <em>that</em> a recipe repeats, and the size of the set is still written beside it &mdash; <code>x12</code>, <code>x36</code>, <code>xE</code>. That is right rather than missing: <code>E</code> depends on the planet, so the number cannot be written when the recipe is. It is recorded because a reader will want it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">3</td><td><strong>A quantifier ranges over something that is not a description.</strong> <code>every row of Territory resources</code> is a data table and the territories do not exist yet; <code>every shared edge</code> is the planet's geometry, which is neither the state nor a table. The notation has a form for <em>every thing matching this description</em> and none for either of these.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">2</td><td><strong>An expression</strong> &mdash; <code>count {…}</code>, <code>sum force of {…}</code>, <code>min(a, b)</code>, a path, a number. Sean added these on 2026-09-09 by making <code>require</code> compare two of them, and they are what the four computed amounts and <code>grow</code>'s <code>min</code> had always been. <strong>The notation has no form for one</strong>: its values are a word, a number or a command, and an expression is none of the three. Its arguments are also positional, where every command's are named.</td><td class="note">move line 3</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 4</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 3</td></tr><tr><td class="amt">1</td><td>A <strong>derived</strong> trait is tested &mdash; <code>surplus</code>, <code>unpaid</code>, <code>control</code>. A <em>description</em> is a kind and every <em>stored</em> trait and may not carry one, so <strong>Sean decided on 2026-09-09 that what a quantifier ranges over is a <em>query</em> rather than a description</strong>: a description says what a thing is stored as, and a query says what is true of it. The notation has a form for the first and none for the second, which is what is recorded here.</td><td class="note">grow line 3</td></tr><tr><td class="amt">8</td><td><code>location</code> and <code>below</code> are read as though they were traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not located by a trait, and what holds it is what says where it is.</strong> So these paths have to mean <em>what holds this</em> rather than <em>this thing's location field</em> &mdash; a reading the notation has no form for. <code>move</code> no longer sets one; since 2026-09-09 it leaves one place and enters another. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 2</td></tr><tr><td class="amt">11</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
+<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">15</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 2</td></tr><tr><td class="amt">4</td><td><strong>How many a quantifier ranges over is not in the line.</strong> <code>each</code> now says <em>that</em> a recipe repeats, and the size of the set is still written beside it &mdash; <code>x12</code>, <code>x36</code>, <code>xE</code>. That is right rather than missing: <code>E</code> depends on the planet, so the number cannot be written when the recipe is. It is recorded because a reader will want it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">3</td><td><strong>A quantifier ranges over something that is not a description.</strong> <code>every row of Territory resources</code> is a data table and the territories do not exist yet; <code>every shared edge</code> is the planet's geometry, which is neither the state nor a table. The notation has a form for <em>every thing matching this description</em> and none for either of these.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">2</td><td><strong>An expression</strong> &mdash; <code>count {…}</code>, <code>sum force of {…}</code>, <code>min(a, b)</code>, a path, a number. Sean added these on 2026-09-09 by making <code>require</code> compare two of them, and they are what the four computed amounts and <code>grow</code>'s <code>min</code> had always been. <strong>The notation has no form for one</strong>: its values are a word, a number or a command, and an expression is none of the three. Its arguments are also positional, where every command's are named.</td><td class="note">move line 3</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 4</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 3</td></tr><tr><td class="amt">1</td><td>A <strong>derived</strong> trait is tested &mdash; <code>surplus</code>, <code>unpaid</code>, <code>control</code>. A <em>description</em> is a kind and every <em>stored</em> trait and may not carry one, so <strong>Sean decided on 2026-09-09 that what a quantifier ranges over is a <em>query</em> rather than a description</strong>: a description says what a thing is stored as, and a query says what is true of it. The notation has a form for the first and none for the second, which is what is recorded here.</td><td class="note">grow line 3</td></tr><tr><td class="amt">8</td><td><code>location</code> and <code>below</code> are read as though they were traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not located by a trait, and what holds it is what says where it is.</strong> So these paths have to mean <em>what holds this</em> rather than <em>this thing's location field</em> &mdash; a reading the notation has no form for. <code>move</code> no longer sets one; since 2026-09-09 it leaves one place and enters another. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 2</td></tr><tr><td class="amt">12</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
 <p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
 line required a choice the specification has not made.</p>
 

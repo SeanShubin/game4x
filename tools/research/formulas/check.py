@@ -65,6 +65,13 @@ DECLARED_FREE = {"energy", "food", "citizen", "labor"}
 # found this; the check was testing a stronger claim than the words can carry.
 DECLARED_SOURCES = {"work"}
 
+# And a declared SINK, by the same argument from the other side. `disorder` deletes a unit and
+# returns nothing, so metal is not conserved across it - net -3 per unit, which check 1 reports
+# correctly. Whether that is right is open: `perish` returns a thing's metal to where it stood,
+# and Sean has said what losing control *means* is still a question. Excluded and named rather
+# than left red, so the check keeps meaning something and the sink stays visible.
+DECLARED_SINKS = {"disorder"}
+
 # A family in a target hides a kind. `resource[extractor.resource]` collapses to the family
 # `resource`, which has no metal weight, so working a metal extractor scored zero. A check
 # that cannot see the game's only metal source is a check aimed at the wrong subject.
@@ -208,26 +215,33 @@ def check_conservation():
     only_called = called_names(DATA)
     analysed, skipped, bad = [], [], []
     for name, f in sorted(by_name.items()):
-        if name in DECLARED_SOURCES:
+        if name in DECLARED_SOURCES or name in DECLARED_SINKS:
             continue
         # The same fix check 2 needed: a recipe that is only ever called is not fired on its
         # own, so weighing it alone reports a source no player can reach. `found-colony`
         # delivers 3 and its callers each spend a unit worth 3; only the pair is a real event.
         if name in only_called:
             continue
-        net = effects(f, by_name)
-        if net is None:
-            skipped.append(name)
-            continue
-        total = sum(METAL_WEIGHT.get(k, 0) * v for k, v in net.items())
-        analysed.append(name)
-        if total != 0:
-            parts = [
-                f"{'+' if v > 0 else ''}{v} {k} (x{METAL_WEIGHT[k]})"
-                for k, v in sorted(net.items())
-                if METAL_WEIGHT.get(k)
-            ]
-            bad.append((name, total, ", ".join(parts)))
+        # **Ground the families first.** Check 2 learned this when `work` produced the family
+        # `resource`, which carries no metal weight, and the game's only metal source scored
+        # zero. Check 1 had the same hole and nothing exposed it until `disorder` destroyed a
+        # `unit`: a unit has no weight, an ark and a pioneer weigh 3, and the recipe scored 0.
+        # A family hiding a kind, the fourth time this repository has recorded it.
+        for gname, binding in ground(name, f):
+            net = effects(f, by_name, binding=binding)
+            if net is None:
+                if gname not in skipped:
+                    skipped.append(gname)
+                continue
+            total = sum(METAL_WEIGHT.get(k, 0) * v for k, v in net.items())
+            analysed.append(gname)
+            if total != 0:
+                parts = [
+                    f"{'+' if v > 0 else ''}{v} {k} (x{METAL_WEIGHT[k]})"
+                    for k, v in sorted(net.items())
+                    if METAL_WEIGHT.get(k)
+                ]
+                bad.append((gname, total, ", ".join(parts)))
     return analysed, skipped, bad
 
 
@@ -742,6 +756,8 @@ def main():
     analysed, skipped, bad = check_conservation()
     print("CHECK 1 - metal conserved OUTSIDE extraction, weighted by Binding")
     print(f"  declared sources, excluded: {', '.join(sorted(DECLARED_SOURCES))}")
+    print(f"  declared sinks, excluded: {', '.join(sorted(DECLARED_SINKS))}"
+          " - it deletes a unit and returns no metal, which perish does not")
     print(f"  {len(analysed)} recipes analysed, {len(skipped)} skipped for state-dependent amounts")
     if skipped:
         print(f"  skipped: {', '.join(skipped)}")
