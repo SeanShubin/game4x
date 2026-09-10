@@ -287,13 +287,13 @@ says only which boundaries exist and who may cross them, and leaves every cost t
 
 ## The sun, and why it changes less than it looks
 
-**One wording choice, reported rather than made quietly.** Sean said *a mobile **ground** unit needs
-a bin for fuel, a mobile **orbital** unit uses energy directly from the sun*. The offered bullets say
-**moves over the ground** and **moves in orbit** instead of naming two kinds of unit, because
-`spec/` and `releases/` have never used either noun - and a value used but never defined is exactly
-what `orbit border` has been since 2026-09-07, which is `S-73`. **Where a unit moves is already
-defined**: a territory and an orbit are both places `spec/` names. **If you would rather have the two
-nouns, say so and they go in with a line defining each.**
+**The wording was put to Sean and he chose it.** He first said *a mobile **ground** unit needs a bin
+for fuel, a mobile **orbital** unit uses energy directly from the sun*; the offered bullets say
+**moves over the ground** and **moves in orbit** instead of naming two kinds of unit, because `spec/`
+and `releases/` have never used either noun - and a term used but never defined is exactly what
+`orbit border` has been since 2026-09-07, which is `S-73`. **Where a unit moves is already defined**:
+a territory and an orbit are both places `spec/` names. **Sean, 2026-09-10: *I liked the phrasing
+moves over the ground and moves in orbit, so lets go with that.*** Nothing is open here.
 
 
 **It answers the question the first draft of this proposal could not.** An Ark carries **Fuel 2**, and
@@ -340,11 +340,15 @@ stops here. Colony, five turns, twelve citizens, two pioneers refuelled, a jungl
 and held at `2 >= 2`, a yard - **and then `launch ark` pays 3 metal, 12 energy and 2 citizens and
 puts nothing anywhere.** Your stated loop ends *launch a new ark into orbit, completing the loop*.
 
-**One consequence, named rather than resolved.** An Ark carries **Fuel 2**, and `spec/units.md` says
-fuel moves freely only from **a controlled territory**. An orbit is not one, so **an Ark in orbit can
-never be refuelled.** That matters only if Arks are meant to move between orbits. If the Ark in orbit
-is where the loop ends, nothing further is needed and an Ark's Fuel 2 is simply unused in this
-release. **This proposal does not decide it**; the research lens recommends the second reading.
+**The consequence this named as open has since been answered.** An Ark carries **Fuel 2**, and
+`spec/units.md` says fuel moves freely only from **a controlled territory** - an orbit is not one, so
+an Ark put in orbit could never be refuelled and could not move. **Sean answered it on 2026-09-10**:
+a mobile unit that moves in orbit takes its energy from the sun and stores no fuel. **The Ark needs
+no fuel, so it never needed refuelling.** `P-365` carries the words. **Nothing is left open here.**
+
+**One release edit follows and is not made by this proposal.** *Units and structures* gives an Ark
+**Fuel 2**, and a unit that stores no fuel should have that cell blank - *a blank is not a zero*,
+which the release already says. It is a separate proposal, and nothing breaks in the meantime.
 
 **Consistent with `P-361`**, checked: winning is *launching an Ark from a fully exploited planet*, and
 whether the launched Ark then exists changes neither the condition nor when it is met.
