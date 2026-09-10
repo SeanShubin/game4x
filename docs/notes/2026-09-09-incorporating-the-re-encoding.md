@@ -1,6 +1,6 @@
 # Incorporating the re-encoding
 
-**Specification lane, 2026-09-09, written overnight.** What a day of the research lens re-encoding
+**Specification lane, 2026-09-09, written overnight into the 10th.** What a day of the research lens re-encoding
 the release's recipes produced, and what of it the first release wants. Sean asked three questions -
 which divergences are corrections the release wants anyway, which are decisions for him, and which
 stay in the prototype - then settled the fuel question and handed the night over.
@@ -64,7 +64,7 @@ One nuance Sean should have: the gate he described was **already mostly in place
 `produce pioneer` costs 6 energy. The tank adds 1 per hop on top. What is genuinely new is the
 **range limit**, which is the gap-leaving mechanic.
 
-## 2. Three things block `R-6`, and fuel is not one of them
+## 2. What blocks `R-6` - and two of the three answers were wrong
 
 `R-6` is *the loop can be played through*, vetted when *a scenario reaches a fully exploited planet
 and launches an Ark*.
@@ -73,20 +73,49 @@ and launches an Ark*.
 six turns, two pioneers, four cells loaded, jungle taken at `4 > 2` and held at `2 >= 2`, yard built
 - and then `launch ark` pays its cost and produces nothing. **The fuel change blocks nothing.**
 
-| #   | What blocks it                                                                                                                                                                            | Filed                       |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| 1   | **`launch ark` produces no ark.** `P-342` dropped its `produce 1 ark` row deliberately, because the destination could not be named. Sean's stated loop ends *launch a new ark into orbit* | `X-25`, to spec             |
-| 2   | **Nothing fills a store**, and `spec/control.md` makes *every storage structure full* part of *fully exploited*                                                                           | `X-21`, and section 3 below |
-| 3   | **Nothing can take a jungle.** `Biome::is_claimable` says it can be; no recipe implements force against nature                                                                            | `crates/outbox.md`, `X-22`  |
+**This table had three entries and two of them were wrong.** Both were refuted by reading `crates/`,
+which is the failure of section 5 committed twice more by the two lanes that wrote them.
 
-Both sides of 1 are deliberate, which makes it a contradiction rather than a defect. One fact has
-moved since: `P-342`'s reason was that the destination could not be named, and the prototype names it
-- `{orbit below:t}`, `below` being a trait an orbit can carry.
+| Claimed blocker                                            | Verdict                                                                                                                                         |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Nothing fills a store** - `X-21`                         | **Refuted.** `territory.rs:184` caps metal and energy at store capacity and carries the remainder. Storing is built                             |
+| **Nothing can take a jungle** - `crates/outbox.md`, `X-22` | **Refuted, and it was fixed months of items ago.** `P-275`: taking uses the **organised force brought**, not the force of the one unit consumed |
+| **`launch ark` produces no ark** - `X-25`                  | **Stands**, and it is a contradiction rather than a defect                                                                                      |
+
+**The force contest is fully built**, which `X-22`'s headline denied. Read tonight: `game.rs:236`
+`force_in` is Sean's rule exactly - a garrison or any unit with force coordinates and contributions
+**sum**, otherwise the largest single one stands. `game.rs:626` `take` rejects on `force <= defending`,
+which is **greater to enter**. `game.rs:914` in `end_turn` loses the territory when
+`force_in(id) < needed`, which is **equal or better to maintain**. Sean's two-test reading, built,
+each citing `spec/control.md` in its own doc comment.
+
+And the jungle was solved by a rule nobody had written down, in `game.rs:585`:
+
+> **`P-275`: taking uses the organised force *brought*, not the force of the one unit consumed.**
+> Before this they were the same number, which is why a jungle at nature two could not be taken by
+> anything - `C-24`, and it was never a defect in the model so much as a rule nobody had written.
+
+### So what does block it
+
+**Nothing conceptual.** `R-6`'s own status line has said *nothing in the code blocks it* since
+2026-09-05 and that is still true. Two things separate it from `vetted`:
+
+- **Scale.** `is_fully_exploited` requires every claimable territory founded. The scenario founds
+  **two of twelve**. `C-20` puts playing it through by hand at **roughly a thousand commands**
+- **`X-25`, which is about what the loop *means* rather than whether it runs.** `R-6` is vetted when
+  a scenario *reaches a fully exploited planet and launches an Ark* - and launching, as the release
+  has it, is a recipe that pays a cost and puts nothing in orbit. **That satisfies `R-6` as written
+  and not Sean's sentence**, which ends *launch a new ark into orbit, completing the loop*
+
+Both sides of `X-25` are deliberate. One fact has moved since `P-342` decided it: its reason was
+that the destination could not be named, and the prototype names it - `{orbit below:t}`, `below`
+being a trait an orbit can carry.
 
 ## 3. The store is in the release and in no specification file
 
-**New tonight. Computed, then independently re-computed by the other lane.** This is the largest
-thing found.
+**New tonight. Computed, then independently re-computed by the other lane.** This is the largest gap
+between the release and the **specification**; section 6 carries the largest gap between the release
+and the **game**, which is a different pair.
 
 `store` is a kind in `releases/first-release.md` - capacity 10, buildable, **seven built by the
 scenario**. Across all 18 files of `spec/`, searched for the concept rather than the word - `store`,
@@ -169,20 +198,35 @@ under it. Its verification, verbatim:
 measurement was *node is gone from two of the three columns*, and it returned a true number about a
 narrower population than the claim covered. `spec/logistics.md:35` has said `node` for three days.
 
-## 5. The failure shape, three times in one day, in three lanes
+## 5. The failure shape, five times in two days, in two lanes
 
-This is the finding worth keeping longest, because it is about how all three lanes check things.
+This is the finding worth keeping longest, because it is about how every lane checks things.
 
-| Who      | The claim                              | What was measured                  | What was missed                            |
-| -------- | -------------------------------------- | ---------------------------------- | ------------------------------------------ |
-| Research | no territory has a biome value         | searched `spec/` and `releases/`   | `reports/`, where all twelve are published |
-| Research | nothing fuels a unit, so nothing moves | read `releases/`                   | `crates/`, where fuel already decrements   |
-| **Spec** | `node` goes                            | verified `releases/` and `crates/` | **`spec/`, where it still lives**          |
+| Who      | The claim                                          | What was measured                  | What was missed                               |
+| -------- | -------------------------------------------------- | ---------------------------------- | --------------------------------------------- |
+| Research | no territory has a biome value                     | searched `spec/` and `releases/`   | `reports/`, where all twelve are published    |
+| Research | nothing fuels a unit, so nothing moves             | read `releases/`                   | `crates/`, where fuel already decrements      |
+| Research | nothing fills a store - `X-21`                     | read the release's *Recipes*       | `crates/`, where `end_of_turn_losses` does it |
+| Research | force is stated and nothing implements it - `X-22` | read the release's *Recipes*       | `crates/`, where all three halves are built   |
+| **Spec** | `node` goes - `S-48`                               | verified `releases/` and `crates/` | **`spec/`, where it still lives**             |
 
 **One shape: the verification named a proper subset of the columns the claim covered, and returned a
 plausible number rather than an error.** `CLAUDE.md` already has the words - *the instrument answers
-a narrower question than the one asked* - and what it does not yet have is **which** subset keeps
-getting dropped. **Nobody checks the column they do not write.**
+a narrower question than the one asked*.
+
+**A first draft of this note said *nobody checks the column they do not write*, and the data does not
+support it.** `spec/` is this lane's own column and is exactly what `S-48` failed to check. The
+honest version is duller and more useful:
+
+> **The claim spans the whole pipeline; the check covers the part its author was thinking in.**
+
+The research lens reasons in documents, so four times it read `releases/` and never opened `crates/`.
+This lane was asking whether a rename had **propagated**, so it looked downstream - `releases/`,
+`crates/` - and never back at the source. **Each search was correct. Each scope was unexamined**, and
+in every case the unexamined part was the end of the pipeline its author was not facing.
+
+Four of the five are the research lens's and one is this lane's. **Two were refuted by the other lane
+inside one night**, which is the only reason the count is five rather than one.
 
 Three more of the same family, all caught before being believed. The research lens's kind-coverage
 check said *0 of 16* for twenty minutes while `garrison` sat in `spec/` five times; its
@@ -245,14 +289,30 @@ before this lane's message reached it.
 Two more belong here that are not divergence rows: **`X-20`**, *no capacity* to *no limit*, and
 **`X-19`**, one sentence saying biomes come from `biomes_of`.
 
-### Decisions for Sean
+### Decisions for Sean - one, not four
 
-| Divergence                            | Whose            | Why it is his                                          |
-| ------------------------------------- | ---------------- | ------------------------------------------------------ |
-| **15** - `launch ark` produces an ark | unattributed     | reverses `P-342`; both sides deliberate - `X-25`       |
-| `X-22` - force against nature         | **Sean**, stated | the whole rule is his and is written nowhere normative |
-| 5 - `unpaid` becomes `unsustained`    | **Sean**         | only means something once force is implemented         |
-| 6 - losing a territory is `perish`    | **Sean spotted** | same dependency                                        |
+| Divergence                            | Whose        | Why it is his                                    |
+| ------------------------------------- | ------------ | ------------------------------------------------ |
+| **15** - `launch ark` produces an ark | unattributed | reverses `P-342`; both sides deliberate - `X-25` |
+
+**Three rows were here in the first draft and all three were wrong in the same way.** `X-22`, the
+`unsustained` rename and the merged `perish` were filed as *waiting on the force rule*, and the
+force rule is built. Each is a place where **the code has a behaviour and the documents do not
+describe it** - which is one finding rather than three.
+
+### Behaviours the game has that its recipes do not
+
+| Divergence                         | Built at                         | What it does                                                |
+| ---------------------------------- | -------------------------------- | ----------------------------------------------------------- |
+| `X-22` - force against nature      | `game.rs:236`, `:626`, `:914`    | greater to enter, equal to maintain, sum when coordinated   |
+| 5 - `unpaid` becomes `unsustained` | `game.rs:914`                    | a unit in a place short of force is already marked unusable |
+| 6 - losing a territory             | `territory.rs`, `lost_to_nature` | already one path, not two                                   |
+| 13 - storing                       | `territory.rs:184`               | cram what fits, discard the rest                            |
+
+**The release lists sixteen recipes. The game runs at least four more rules every turn**, and one of
+them decides what a player keeps. **`R-7` cannot show any of them**, because it shows recipes and
+these are not recipes. That is the single largest gap between the release and the game, and neither
+lane had it in this shape before tonight.
 
 ### The instrument - what the constraint was for
 
