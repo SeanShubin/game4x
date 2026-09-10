@@ -1168,6 +1168,47 @@ citizens all working metal in the same turn. <strong>So closing the loop is poss
 mechanic rather than a designed one.</p>
 </div>
 
+<h2>Which of the three need the language to change</h2>
+<p>Sean, 2026-09-09: <em>which of these can be represented without changing how the data structure is
+interpreted?</em> <strong>Three of four are data. One is not, and it is not the one that looks
+hardest.</strong></p>
+<div class="scroll"><table><thead><tr><th>What</th><th>Written as</th><th></th></tr></thead>
+<tbody><tr><td class="target"><strong>Force in a recipe</strong> (<code>X-22</code>)</td><td class="target"><code>require sum force of {…} &gt; t.nature</code></td><td class="note"><strong>Data only.</strong> <code>require</code> compares expressions and <code>sum trait of {…}</code> is one; <code>t.nature</code> is a path, which four amounts already read. <strong>Every construct exists</strong> - what is missing is lines in recipes</td></tr><tr><td class="target"><strong>Storage</strong> (<code>X-21</code>)</td><td class="target"><code>change +n {metal store:…} [clamp]</code>, then a world recipe destroying what the territory holds directly</td><td class="note"><strong>Data only, and it gives <code>clamp</code> its first call site.</strong> Filling a store is <em>do as much as fits</em>, which is exactly what clamp means and why it was declared. Reaping is <code>each</code> over what the territory holds, which containment already distinguishes from what a store holds</td></tr><tr><td class="target"><strong>An expedition of a fixed size</strong></td><td class="target"><code>require count {pioneer in from} &ge; 2</code>, then <code>change &plusmn;2</code></td><td class="note"><strong>Data only.</strong> A <em>move-two</em> recipe is writable today with a guard and two changes. It is a second recipe rather than a more capable <code>move</code></td></tr><tr><td class="target"><strong>An expedition of any size</strong></td><td class="target"><code>some n pioneers: {…}</code>, with force summed over however many</td><td class="note"><strong>NEEDS A CHANGE.</strong> <code>some</code> binds a name over <em>one</em> member of a set. Carrying a count is a different reading of a quantifier, and nothing today can express <em>take as many as you like and let the force follow</em></td></tr></tbody></table></div>
+<div class="callout">
+<h4>Force is the biggest change to the game and the smallest to the language</h4>
+<p>It is the thing standing between occupying a planet and conquering one, and <strong>it needs no
+new construct at all</strong> - <code>require</code> already compares two expressions, and
+<code>sum trait of {…}</code> is already one of them. What is missing is <em>lines in
+recipes</em>, which is the cheapest kind of missing there is.</p>
+<p>That is a consequence of the change Sean made an hour before asking. <strong>Before
+<code>require</code> compared expressions, force would have needed a new primitive; after it, force
+needs a line.</strong></p>
+</div>
+<div class="callout">
+<h4>Storage is where <code>clamp</code> finally earns its place</h4>
+<p><code>clamp</code> has been a declared attach value with <strong>no call site</strong> since the
+column was written - <em>do as much as the state allows</em>. Filling a store is exactly that: put
+in what fits and no more. <strong>So storage needs no new construct either</strong>, and it resolves
+a candidate that has been waiting for a reason to exist.</p>
+<p>The other half - losing what was not stored - is <code>each</code> over what the <em>territory</em>
+holds directly, which containment already distinguishes from what a <em>store</em> holds. That
+distinction is the one <code>X-20</code> settled, and it is doing work here for the first time.</p>
+</div>
+<div class="callout">
+<h4>The expedition splits in two, and only half of it is free</h4>
+<p><strong>A fixed size is writable today.</strong> A <em>move-two</em> recipe guards on
+<code>count {pioneer in from} &ge; 2</code> and moves two. Nothing new is needed and nothing is
+elegant about it either: three pioneers would want a third recipe.</p>
+<p><strong>Any size is not.</strong> <code>some</code> binds a name over <em>one</em> member of a
+set. Letting it carry a count - <em>take as many as you like, and let the force follow</em> - is a
+different reading of a quantifier, and it is the one thing here that changes how the data is
+interpreted rather than what it says.</p>
+<p><strong>It is also the one with an answer already sketched.</strong> A selection is a description
+and a count, which is what the interface section concluded from fungibility - so
+<code>some 2 {pioneer …}</code> is the same idea arriving from the other direction. Two roads to
+one construct is usually a sign it is the right one.</p>
+</div>
+
 <h2>The loop Sean is building, step by step</h2>
 <p>Sean, 2026-09-09, stating the intent the recipes exist to serve: <em>the minimal set of game
 mechanics that allows me to start with an ark in orbit, deploy the ark to a single territory, expand

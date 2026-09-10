@@ -2942,5 +2942,27 @@
       "64",
       "needs 8 citizens working metal in one turn"
     ]
+  ],
+  "representable": [
+    [
+      "<strong>Force in a recipe</strong> (<code>X-22</code>)",
+      "<code>require sum force of {…} &gt; t.nature</code>",
+      "<strong>Data only.</strong> <code>require</code> compares expressions and <code>sum trait of {…}</code> is one; <code>t.nature</code> is a path, which four amounts already read. <strong>Every construct exists</strong> - what is missing is lines in recipes"
+    ],
+    [
+      "<strong>Storage</strong> (<code>X-21</code>)",
+      "<code>change +n {metal store:…} [clamp]</code>, then a world recipe destroying what the territory holds directly",
+      "<strong>Data only, and it gives <code>clamp</code> its first call site.</strong> Filling a store is <em>do as much as fits</em>, which is exactly what clamp means and why it was declared. Reaping is <code>each</code> over what the territory holds, which containment already distinguishes from what a store holds"
+    ],
+    [
+      "<strong>An expedition of a fixed size</strong>",
+      "<code>require count {pioneer in from} &ge; 2</code>, then <code>change &plusmn;2</code>",
+      "<strong>Data only.</strong> A <em>move-two</em> recipe is writable today with a guard and two changes. It is a second recipe rather than a more capable <code>move</code>"
+    ],
+    [
+      "<strong>An expedition of any size</strong>",
+      "<code>some n pioneers: {…}</code>, with force summed over however many",
+      "<strong>NEEDS A CHANGE.</strong> <code>some</code> binds a name over <em>one</em> member of a set. Carrying a count is a different reading of a quantifier, and nothing today can express <em>take as many as you like and let the force follow</em>"
+    ]
   ]
 }
