@@ -558,7 +558,7 @@ second matches *which store holds which unit is not recorded* and needs no choic
 the first is what *store it* sounds like. **This lane takes neither.**
 
 
-### X-22 - *overcoming nature* is a step of the loop with no mechanic at all
+### X-22 - the force rule is stated and nothing implements it
 
 **to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *The loop Sean is building* · **found by** checking the recipes against Sean's stated intent
 
@@ -613,6 +613,41 @@ twelve.
 
 **Still not proposed by this lane.** What holding costs, whether force is spent or merely tested,
 and what happens when it is short are game design and not gaps to fill by inference.
+
+**Stated 2026-09-09 by Sean, so this stops being a design question.** A citizen produces **1 force
+passively**, exhausted or not. **Unorganized force is `max_of`; organized force is `sum_of`.**
+Citizens are unorganized by default and organized where a barracks is present. **Units that move are
+organized by construction** - moving is organizing force into an expedition. And the contest is at a
+boundary: **greater force to enter, equal force to maintain**, where entering is the cost of
+occupying rather than anything projected from outside.
+
+**Three consequences this lane checked rather than assumed.**
+
+- **Two pioneers enter a jungle and one cannot.** Nature 2, entering needs more than 2, and an
+  organized pair is 4. **It is also the cheap path** - 6 metal and 12 energy, against 21 and 24 for
+  two arks, which need a yard first. That is the tuning Sean asked for, and the numbers are the
+  recipes' own
+- **A barracks earns its place on exactly one biome.** Maintaining needs equal force, and at nature 1
+  a single unorganized citizen is enough since `max` of anything is at least 1. **Only a jungle needs
+  the sum**, which two citizens with a barracks give
+- **`move` moves one unit, and the rule needs an expedition.** Two pioneers must cross together or
+  each fails alone. The selection work already has the shape - a selection is a description and a
+  count, so an expedition is `some 2 {pioneer …}` - but `move`'s quantifier takes one
+
+**A contradiction this lane filed was not one.** It read *the garrison allows the citizens to sum
+their force* against *a settlement that only projects 1* as disagreeing. **Both are true and the
+barracks is the condition**: two citizens with one sum to 2, without one they are `max(1, 1)`.
+
+**One naming question stands.** Sean said *garrison* first and *barracks* second. The release has a
+`garrison` - *what holds a territory; a territory has at most one* - with force **0**, which is the
+exact shape of a thing that organizes rather than fights. **If they are one thing it wants one name;
+if they are two, the second is a kind the game does not have.**
+
+**And this lane had entering wrong.** It reasoned that entering unclaimed ground must be free,
+because `found by land` consumes a pioneer in the territory it founds. Sean: the clash is at the
+boundary and entering is the cost. **That is better than what was proposed** - the contest belongs on
+`move`, which exists, and the ark stops being a special case, since an orbit and the territory below
+are two places with a boundary like any other.
 
 ### X-23 - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed
 

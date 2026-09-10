@@ -63,7 +63,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
 - **X-20** - *declares no capacity* and *declares no limit* are opposites, and the release means the second · `lenses/research/outbox.md`
 - **X-21** - *use it immediately, store it, or lose it* has no recipe that does any of it · `lenses/research/outbox.md`
-- **X-22** - *overcoming nature* is a step of the loop with no mechanic at all · `lenses/research/outbox.md`
+- **X-22** - the force rule is stated and nothing implements it · `lenses/research/outbox.md`
 - **X-23** - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal

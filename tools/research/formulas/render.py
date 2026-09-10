@@ -1287,48 +1287,70 @@ settlement projecting 1 cannot hold one either.</p>
 4 - but it is the only place the numbers do not simply work, so it is worth knowing it is deliberate.</p>
 </div>
 <div class="callout">
-<h4>Four ways to project 3, and they turn on one rule that is not yet stated</h4>
-<p>Sean: <em>we need a way to project 3 force into a jungle. Two pioneers possibly, or another
-unit.</em> Claiming needs <strong>more</strong> than nature, so a jungle at 2 needs 3.</p>
-<div class="scroll"><table><thead><tr><th>Option</th><th>Force</th><th>Cost</th>
-<th>What it needs decided first</th></tr></thead>
-<tbody>{"".join(f'<tr><td class="target"><strong>{r[0]}</strong></td><td class="amt">{r[1]}</td><td>{r[2]}</td><td class="note">{r[3]}</td></tr>' for r in DATA["jungle_options"])}</tbody></table></div>
-<p><strong>Three of the five need the same undecided rule: does force sum across units in a place?</strong>
-The garrison sums <em>citizens</em>, which Sean has said. Nothing says units stack. <strong>If they
-do not, no arrangement of force-2 units ever exceeds 2</strong>, and only the last two rows work.</p>
-<p><strong>One detail is already suggestive.</strong> A territory holds <strong>up to two
-pioneers</strong> and the release states that number without any recipe needing it. If force sums,
-that caps a land stack at 4 - enough for a nature of 2 or 3 and no more - which is the shape of a
-designed ceiling rather than an accident.</p>
+<h4>The rule, stated by Sean 2026-09-09</h4>
+<div class="scroll"><table><thead><tr><th></th><th>When</th><th>What follows</th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["force_rule"])}</tbody></table></div>
+<p><strong>Force needs no recipe, and now it is clear why.</strong> A citizen produces 1 passively,
+so a territory's force is a function of what is in it - which is the <em>derived weighted sum</em>
+shape this report guessed at, with one correction: <strong>the function is <code>max</code> or
+<code>sum</code> depending on whether what is there is organized.</strong></p>
 </div>
 <div class="callout">
-<h4>A second question that answers itself</h4>
-<p>An ark projects from orbit, which is <em>outside</em> the territory. A pioneer would have to be
-<em>in</em> the jungle to project into it - so may a unit enter ground that nature holds?</p>
-<p><strong>It must, or step 3 of the loop is impossible.</strong> <code>found by land</code> consumes
-a pioneer in the territory it founds, so a pioneer already enters unclaimed ground today. Entering is
-therefore free and <strong>claiming is a separate thing that happens after arrival</strong> - which
-also means the ark is the odd one out, projecting from above rather than from where it stands.</p>
-</div>
-
-<div class="callout">
-<h4>Two statements about a settlement's force give different numbers</h4>
-<p>Earlier the same day: <em>minimal territory control is 1 garrison, 1 food extractor, 2 citizens.
-The garrison allows the citizens to <strong>sum their force</strong>.</em> A citizen is force 1, so
-that settlement is worth <strong>2</strong>, which holds a jungle at 2 &ge; 2.</p>
-<p>Then: <em>a settlement that only <strong>projects 1</strong> force.</em> That settlement does not
-hold a jungle.</p>
-<p><strong>Both cannot be the same number.</strong> Either a settlement projects a fixed 1 whatever
-it contains, and summing citizens is something else; or it projects the sum, and 2 citizens project
-2. <strong>This lane takes neither</strong> - it changes which territories are holdable and that is
-a design answer.</p>
+<h4>This dissolves a contradiction this report filed, and it was not one</h4>
+<p>It read two of Sean's statements as disagreeing: <em>the garrison allows the citizens to sum
+their force</em>, giving two citizens 2, against <em>a settlement that only projects 1 force</em>.
+<strong>Both are true and the condition is the barracks.</strong> Two citizens with one sum to 2;
+without one they are <code>max(1, 1)</code>, which is 1. The report was reading a single number
+where the rule has two branches.</p>
+<p><strong>One naming question is left.</strong> Sean said <em>garrison</em> the first time and
+<em>barracks</em> the second. The release has a <code>garrison</code> - <em>what holds a territory;
+a territory has at most one</em> - with force <strong>0</strong>, which is exactly the shape of a
+thing that organizes rather than fights. If they are the same thing it wants one name, and if they
+are two the second is a kind the game does not have.</p>
 </div>
 <div class="callout">
-<h4>And projection is why an orbit is not redundant</h4>
-<p>An ark <em>projects force underneath it</em> - from an orbit into the territory below. That is a
-relation between two places, along the same link that makes an orbit an orbit, and it is a second
-reason the one-to-one is not redundancy: <strong>something has to be above a territory for anything
-to be projected down from it.</strong></p>
+<h4>And the jungle, worked under the real rule</h4>
+<div class="scroll"><table><thead><tr><th>Who</th><th>Force</th><th>Test</th><th></th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td class="amt">{r[1]}</td><td>{r[2]}</td><td class="note">{r[3]}</td></tr>' for r in DATA["jungle_resolved"])}</tbody></table></div>
+<p><strong>Two pioneers is the answer and it is the cheap one</strong>, which is the tuning Sean
+asked for: 6 metal and 12 energy against 21 metal and 24 energy for the two-ark path, since that
+needs a yard first. <strong>Checked rather than asserted</strong> - the numbers come from
+<code>produce pioneer</code>, <code>launch ark</code> and <code>build yard</code>.</p>
+<p><strong>And a jungle needs a barracks to hold, where nothing else does.</strong> At nature 1 a
+single unorganized citizen suffices, because <code>max</code> of anything is at least 1. The
+barracks earns its place on exactly one biome.</p>
+</div>
+<div class="callout">
+<h4>The mechanical gap the rule opens: <code>move</code> moves one unit</h4>
+<p><strong>Two pioneers can only enter a jungle together</strong>, since one is force 2 against a
+nature of 2 and entering needs more. But <code>move</code> selects <em>a unit that is ready</em> and
+moves it. <strong>There is no expedition</strong> - two pioneers moving one at a time each fail the
+test alone.</p>
+<p><strong>The interface work already has the shape for it.</strong> A selection is a description and
+a count, so an expedition is <code>some 2 {{pioneer …}}</code> rather than a new kind of thing. What
+is missing is that <code>move</code>'s quantifier takes one, and force sums over however many it
+takes.</p>
+</div>
+<div class="callout">
+<h4>Corrected: entering is not free, and it is where the whole contest lives</h4>
+<p>This report said a unit may enter unclaimed ground freely, reasoning that <code>found by land</code>
+already consumes a pioneer <em>in</em> the territory it founds. <strong>Sean: not quite - a clash
+happens at the boundary between territories, and the cost is to enter in the first place in order to
+occupy.</strong></p>
+<p>That is better than what this report proposed in two ways. <strong>The contest belongs on
+<code>move</code></strong>, which already exists, rather than in a new recipe. And <strong>the ark
+stops being the odd one out</strong>: an orbit and the territory below it are two places with a
+boundary, so deploying crosses one exactly as moving between territories does. <strong>One geometry,
+not two</strong> - which is what the previous callout on this page got wrong.</p>
+</div>
+<div class="callout">
+<h4>And the boundary is why an orbit is not redundant</h4>
+<p><strong>Corrected.</strong> This said an ark <em>projects</em> force downward, and Sean's rule is
+that a clash happens at a <em>boundary</em>: the cost is entering. So an orbit and the territory
+below it are two places with a boundary between them, and deploying crosses it.</p>
+<p>The conclusion survives the correction and is stronger for it: <strong>a boundary needs two sides,
+so something has to be above a territory for an ark to cross into it.</strong> An orbit is not a
+second copy of a territory; it is the other side.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>

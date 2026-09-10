@@ -2658,5 +2658,69 @@
       "nothing - one number in <em>Units and structures</em>",
       "<strong>nothing new</strong>, but one pioneer then claims <em>every</em> biome, and the jungle stops being harder than anywhere else"
     ]
+  ],
+  "force_rule": [
+    [
+      "A citizen produces 1 force passively",
+      "always, exhausted or not",
+      "so force needs no recipe to generate it - it is a property of what is there"
+    ],
+    [
+      "Unorganized: force is <strong>max_of</strong>",
+      "citizens, by default",
+      "ten citizens with no barracks project <strong>1</strong>, not ten"
+    ],
+    [
+      "Organized: force is <strong>sum_of</strong>",
+      "citizens where a barracks is present",
+      "two citizens with one project <strong>2</strong>"
+    ],
+    [
+      "Units that move are organized",
+      "a pioneer, an ark",
+      "moving <em>is</em> organizing force into an expedition, so units always sum"
+    ],
+    [
+      "<strong>Greater</strong> force to enter",
+      "crossing into a territory",
+      "the cost is entering in order to occupy, not projecting from outside"
+    ],
+    [
+      "<strong>Equal</strong> force to maintain",
+      "staying once there",
+      "so a territory taken can be held by less than it took"
+    ]
+  ],
+  "jungle_resolved": [
+    [
+      "one pioneer",
+      "2 (organized, one unit)",
+      "2 &gt; 2? <strong>no</strong>",
+      "cannot enter"
+    ],
+    [
+      "two pioneers",
+      "2 + 2 = <strong>4</strong> (organized)",
+      "4 &gt; 2? <strong>yes</strong>",
+      "enters - and this is the cheap path"
+    ],
+    [
+      "one ark",
+      "2 (organized)",
+      "2 &gt; 2? <strong>no</strong>",
+      "cannot enter"
+    ],
+    [
+      "two citizens, no barracks",
+      "max(1, 1) = <strong>1</strong>",
+      "1 &ge; 2? <strong>no</strong>",
+      "cannot maintain"
+    ],
+    [
+      "two citizens with a barracks",
+      "1 + 1 = <strong>2</strong>",
+      "2 &ge; 2? <strong>yes</strong>",
+      "maintains"
+    ]
   ]
 }
