@@ -1593,7 +1593,7 @@ is why adjacency being a thing was the right call and worth not undoing.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>
-<p>4 of the 23 questions this re-encoding raised are still open. The rest are
+<p>4 of the 25 questions this re-encoding raised are still open. The rest are
 below, under <em>What has already been settled</em>, so that this list is short enough to be a list
 of things to do.</p>
 <div class="scroll"><table><thead><tr>
@@ -1602,24 +1602,24 @@ of things to do.</p>
 <th>How it shows up</th>
 </tr></thead><tbody>
 <tr>
-<td>OPEN - the six lines beside it</td>
-<td>Soft on the garrison alone still creates 2 citizens, 2 extractors and 2 stores on a territory that already has them, because their capacities are not zero.</td>
-<td class="note">Marked ? in found-colony. Each needs hard, soft, or removing - and they are not the same answer.</td>
-</tr>
-<tr>
-<td>OPEN - or make the call soft instead, and answer all seven at once</td>
+<td>OPEN - or make the call soft instead, and answer every line of it at once</td>
 <td>call found-colony(t) [soft] means deploying onto a founded territory destroys the ark and does nothing else. Soft on each create means deploy tops up a damaged colony.</td>
-<td class="note">Those are different games. The model expresses both; attachment is on the call as readily as on a create.</td>
+<td class="note">Those are different games. The model expresses both; attachment is on the call as readily as on a create. &lt;strong&gt;The count in this row was &lt;em&gt;seven&lt;/em&gt; and &lt;code&gt;found-colony&lt;/code&gt; has 4 lines&lt;/strong&gt; - stale for the same reason the row beside it was, and fixed by not writing a number a recipe can move.</td>
 </tr>
 <tr>
-<td>OPEN - if a call can fail as a unit, does it roll back?</td>
+<td>OPEN - but likely already answered, and the smaller ask is to confirm it</td>
 <td>found-colony can now half-succeed. If the ark is destroyed before the call, a soft call that skips leaves the ark spent for nothing.</td>
-<td class="note">This is the same question as whether composition sees the starting state or the running one.</td>
+<td class="note">Its own answer said &lt;em&gt;this is the same question as whether composition sees the starting state or the running one&lt;/em&gt; - and &lt;strong&gt;Sean answered that one afterwards&lt;/strong&gt;: lines are not sequential and every amount reads the state before any of them ran. &lt;strong&gt;Then there is no &lt;em&gt;before the call&lt;/em&gt;&lt;/strong&gt;, the whole recipe applies or none of it does, and an ark cannot be spent for nothing. &lt;strong&gt;This lane's reading, not Sean's ruling&lt;/strong&gt; - which turns an open design question into a confirmation.</td>
 </tr>
 <tr>
-<td>OPEN - may a recipe define a kind or another recipe, and when</td>
-<td>The specification already says definitions are part of the state and defining is a transition. Nothing can express it: neither &lt;code&gt;kind&lt;/code&gt; nor &lt;code&gt;recipe&lt;/code&gt; is one of the sixteen kinds, so a definition has nowhere to live, and check 6 refuses it.</td>
-<td class="note">Two kinds and two declarations would allow it. &lt;strong&gt;The phase it is allowed in decides whether any check still means anything&lt;/strong&gt; - see &lt;em&gt;Defining a kind, then using it&lt;/em&gt;.</td>
+<td>OPEN - where a win condition lives, and it is the only one of these the notation forces</td>
+<td>&lt;code&gt;spec/control.md&lt;/code&gt; -&gt; &lt;em&gt;Winning&lt;/em&gt; quantifies over the whole planet, and &lt;code&gt;each&lt;/code&gt; generates effects while &lt;code&gt;require&lt;/code&gt; guards one firing. Neither is a predicate that returns a truth value about the game.</td>
+<td class="note">So &lt;em&gt;the planet is fully exploited&lt;/em&gt; cannot be written, which is why &lt;code&gt;is_fully_exploited&lt;/code&gt; is Rust - and why it went stale exactly as its own comment predicted. &lt;strong&gt;The question is not how to say it but whether it belongs here at all&lt;/strong&gt;: a win condition changes nothing, so it may belong with &lt;code&gt;show&lt;/code&gt; and the queries. &lt;strong&gt;This lane takes neither side&lt;/strong&gt; and notes only that leaving it in Rust is the option that has already failed once.</td>
+</tr>
+<tr>
+<td>OPEN - whether &lt;code&gt;load&lt;/code&gt; should exist, given that fuel is specified to move freely</td>
+<td>&lt;code&gt;spec/units.md&lt;/code&gt;: &lt;em&gt;fuel moves freely between a controlled territory that has it and anything there that can hold it.&lt;/em&gt; This lane wrote &lt;code&gt;load&lt;/code&gt;, a player recipe that spends an act.</td>
+<td class="note">That is not what the sentence says, and it collides with &lt;code&gt;spec/invariants.md&lt;/code&gt; -&gt; &lt;em&gt;No step that is always taken&lt;/em&gt;. &lt;strong&gt;A player who must always &lt;code&gt;load&lt;/code&gt; before &lt;code&gt;move&lt;/code&gt; is that step exactly.&lt;/strong&gt; Either &lt;code&gt;load&lt;/code&gt; goes and a bound reads through to what is nearby, or the specification means something narrower than &lt;em&gt;freely&lt;/em&gt;.</td>
 </tr>
 </tbody></table></div>
 
@@ -2735,6 +2735,11 @@ each row names who answered it.</p>
 <td class="note">It does not. Structural boundedness is polynomial by linear programming, at edit time, with a witness - see Detecting a glitch. Boundedness for one starting state is EXPSPACE-complete; boundedness for every starting state is polynomial, and the second is the one an editor needs.</td>
 </tr>
 <tr>
+<td>ANSWERED - every line beside the garrison, and this row outlived its own numbers</td>
+<td>It read &lt;em&gt;soft on the garrison alone still creates 2 citizens, 2 extractors and &lt;strong&gt;2 stores&lt;/strong&gt;&lt;/em&gt; - and the stores were dropped by the row directly above this one, on the same day.</td>
+<td class="note">&lt;code&gt;found-colony&lt;/code&gt; has &lt;strong&gt;four&lt;/strong&gt; lines, not six, and not one of them is marked &lt;code&gt;?&lt;/code&gt;: the garrison is &lt;code&gt;soft&lt;/code&gt;, both extractors are &lt;code&gt;soft&lt;/code&gt;, and the citizens carry no attachment because Sean said &lt;em&gt;2 citizens, unconditionally - a territory never refuses&lt;/em&gt;. &lt;strong&gt;A premise moved when another item closed and nothing edited this one&lt;/strong&gt;, which is exactly &lt;code&gt;C-9&lt;/code&gt;'s pattern in &lt;code&gt;CLAUDE.md&lt;/code&gt; - and it sat one row away from the decision that made it wrong.</td>
+</tr>
+<tr>
 <td>ANSWERED - do the sketch's missing stores come back?</td>
 <td>The sketch creates a garrison, 2 citizens and 2 extractors. The specification also creates a food store and a metal store.</td>
 <td class="note">Sean dropped the two stores on 2026-09-09 and they have not come back. Dropping them changes the game.</td>
@@ -2768,6 +2773,11 @@ each row names who answered it.</p>
 <td>ANSWERED - a construct for quantification, which is not the same as repetition</td>
 <td>Repetition is covered twice already - the amount column and the console's &lt;code&gt;repeat&lt;/code&gt;. Quantification, one firing per member of a set, is covered nowhere and is used in ten places.</td>
 <td class="note">Sean added &lt;code&gt;each&lt;/code&gt; and &lt;code&gt;some&lt;/code&gt; on 2026-09-09; twenty quantifiers now. Six world recipes hide it in a prose &lt;em&gt;selection&lt;/em&gt;; &lt;code&gt;make-world&lt;/code&gt;'s four calls hide it in a comment. See &lt;em&gt;Repetition, or quantification&lt;/em&gt;.</td>
+</tr>
+<tr>
+<td>NOTED - not now, by Sean's own words, and the design is recorded so it is not re-derived</td>
+<td>The specification already says definitions are part of the state and defining is a transition. Nothing can express it: neither &lt;code&gt;kind&lt;/code&gt; nor &lt;code&gt;recipe&lt;/code&gt; is one of the sixteen kinds, so a definition has nowhere to live, and check 6 refuses it.</td>
+<td class="note">Two kinds and two declarations would allow it. &lt;strong&gt;The phase it is allowed in decides whether any check still means anything&lt;/strong&gt; - see &lt;em&gt;Defining a kind, then using it&lt;/em&gt;. &lt;strong&gt;Sean, 2026-09-09&lt;/strong&gt;: &lt;em&gt;perhaps not now, but once I have a well defined, working game, I am going to want to bootstrap the whole thing from a very small set of rules.&lt;/em&gt; &lt;strong&gt;So it is not a decision waiting on him; it is one he has already deferred&lt;/strong&gt;, and listing it as open costs the queue attention it does not owe. The design is in &lt;a href="2026-09-09-bootstrapping-from-a-kernel.md"&gt;the kernel report&lt;/a&gt;.</td>
 </tr>
 <tr>
 <td>NOTED - an orbit is a place, and looked derivable only because this release is small</td>

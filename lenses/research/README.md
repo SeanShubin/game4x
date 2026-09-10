@@ -61,12 +61,14 @@ reader can tell whether a finding was acted on or merely forgotten.
 Newest first.
 
 - [What the encoding never reached, and what the notation cannot say](2026-09-10-the-edges-of-the-encoding.md)
-  - 2026-09-10. **Addressed to `spec`**, answering `S-81`'s questions 3 and 6. Every rule in
+  - 2026-09-10. **Addressed to `spec`**, answering `S-81`'s questions 3, 5 and 6. Every rule in
     `spec/` read and placed: which regions the encoding reached, which it never touched, and seven
     things the notation cannot state at all - competition and its resolver, reachability, a
     quantity that is shared rather than moved, a rule that is itself a thing, a derived relation,
     a win condition, and taking a conserved thing apart. Two of the seven are deliberate limits
     rather than gaps.
+    And the four open decisions re-derived: three should not have been open, and two more were
+    never in the table at all.
 
 - [Handoff to the specification lane](2026-09-09-handoff-to-spec.md)
   - 2026-09-09. **Addressed to `spec`.** What a day's re-encoding produced that is not in the report:

@@ -1,7 +1,7 @@
 # What the encoding never reached, and what the notation cannot say
 
-**2026-09-10. Research lens.** Addressed to the specification lane, answering `S-81`'s questions 3
-and 6. Sean asked the two lanes to work overnight so that the specification lane has what it needs
+**2026-09-10. Research lens.** Addressed to the specification lane, answering `S-81`'s questions 3,
+5 and 6. Sean asked the two lanes to work overnight so that the specification lane has what it needs
 by morning; this is the half of that owed by this lane.
 
 [Research](README.md) · [Outbox](outbox.md) · [The formulas report](formulas.html)
@@ -327,6 +327,46 @@ count of what the game does, in either direction.
 lane, which is the limit, and nothing among them can close honestly tonight. **The finding is here,
 dated and reachable**, and the specification lane - which asked for the check - is the perspective
 that turns it into a numbered proposal anyway.
+
+## Question 5: are the four open decisions all of them, and is any non-viable
+
+**None of the four is non-viable. Three of them should not have been open, and they are not all of
+them.** Checked by re-deriving each against the data as it stands rather than as it stood when the
+row was written.
+
+| The row                                            | What it turned out to be                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| *the six lines beside the garrison*                | **Answered, and stale in its own numbers.** It said *soft on the garrison alone still creates 2 citizens, 2 extractors and **2 stores*** - and the stores were dropped by **the row directly above it in the same table, on the same day.** `found-colony` has four lines, not six, and not one is marked `?`: the garrison and both extractors are `soft`, and the citizens carry no attachment because Sean said *2 citizens, unconditionally - a territory never refuses*           |
+| *soft on the call, or on each create*              | **Live, correctly stated, and the only one of the four that is.** Its heading said *answer all seven at once* and there are four, so the number is gone rather than corrected                                                                                                                                                                                                                                                                                                          |
+| *if a call can fail as a unit, does it roll back?* | **Probably already answered.** Its own answer said *this is the same question as whether composition sees the starting state or the running one* - and **Sean answered that afterwards**: lines are not sequential and every amount reads the state before any ran. Then there is no *before the call*, the recipe applies whole or not at all, and an ark cannot be spent for nothing. **This lane's reading, not Sean's ruling** - which turns a design question into a confirmation |
+| *may a recipe define a kind or another recipe*     | **Deferred by Sean in the same breath as raising it** - *perhaps not now, but once I have a well defined, working game.* Not a decision waiting on him. Marked noted, with the design in [the kernel report](2026-09-09-bootstrapping-from-a-kernel.md) so it is not re-derived                                                                                                                                                                                                        |
+
+**Two of the four went stale the same way, and it is worth naming because it is not the way
+`CLAUDE.md` guards against.** The promotion rule is directional - *does landing this invalidate
+something else?* **Both of these were invalidated by an item that closed**, which is `C-9`'s pattern,
+and one of them sat one row away from the decision that made it wrong. **A number a row derives
+should name the rule it came from**; better still, it should not be a number at all, which is what
+both fixes did.
+
+### They are not all of them
+
+**Two open decisions live only in the outbox and were never in the decisions table:**
+
+- **`X-25`** - `launch ark` puts nothing into orbit, and Sean's loop ends with an ark in orbit.
+  `P-342` made the recipe pay an Ark's cost and produce nothing, and the loop as Sean stated it does
+  not close. That is a decision, and it is the one that decides whether the game can be finished
+- **`X-26`** - `store` has no definition in `spec/`, and the win condition depends on it. Three ways
+  out, and they are not equivalent: promote it, stop the win condition referring to storage, or stop
+  the release having stores
+
+**And tonight added two more, now in the table**, both from question 6: **where a win condition
+lives**, and **whether `load` should exist** given that `spec/units.md` says fuel moves freely and
+`spec/invariants.md` forbids a step that is always taken.
+
+**So the count is four, and it was four before - with three of the old ones replaced.** What matters
+more than the number is that **the decisions table was not the whole list**, and nothing said so.
+The outbox and the table were two places for the same kind of thing, and a reader of either would
+have believed they had seen them all.
 
 ## What this lane recommends doing with it
 

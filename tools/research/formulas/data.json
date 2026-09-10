@@ -924,19 +924,19 @@
       "It does not. Structural boundedness is polynomial by linear programming, at edit time, with a witness - see Detecting a glitch. Boundedness for one starting state is EXPSPACE-complete; boundedness for every starting state is polynomial, and the second is the one an editor needs."
     ],
     [
-      "OPEN - the six lines beside it",
-      "Soft on the garrison alone still creates 2 citizens, 2 extractors and 2 stores on a territory that already has them, because their capacities are not zero.",
-      "Marked ? in found-colony. Each needs hard, soft, or removing - and they are not the same answer."
+      "ANSWERED - every line beside the garrison, and this row outlived its own numbers",
+      "It read <em>soft on the garrison alone still creates 2 citizens, 2 extractors and <strong>2 stores</strong></em> - and the stores were dropped by the row directly above this one, on the same day.",
+      "<code>found-colony</code> has <strong>four</strong> lines, not six, and not one of them is marked <code>?</code>: the garrison is <code>soft</code>, both extractors are <code>soft</code>, and the citizens carry no attachment because Sean said <em>2 citizens, unconditionally - a territory never refuses</em>. <strong>A premise moved when another item closed and nothing edited this one</strong>, which is exactly <code>C-9</code>'s pattern in <code>CLAUDE.md</code> - and it sat one row away from the decision that made it wrong."
     ],
     [
-      "OPEN - or make the call soft instead, and answer all seven at once",
+      "OPEN - or make the call soft instead, and answer every line of it at once",
       "call found-colony(t) [soft] means deploying onto a founded territory destroys the ark and does nothing else. Soft on each create means deploy tops up a damaged colony.",
-      "Those are different games. The model expresses both; attachment is on the call as readily as on a create."
+      "Those are different games. The model expresses both; attachment is on the call as readily as on a create. <strong>The count in this row was <em>seven</em> and <code>found-colony</code> has 4 lines</strong> - stale for the same reason the row beside it was, and fixed by not writing a number a recipe can move."
     ],
     [
-      "OPEN - if a call can fail as a unit, does it roll back?",
+      "OPEN - but likely already answered, and the smaller ask is to confirm it",
       "found-colony can now half-succeed. If the ark is destroyed before the call, a soft call that skips leaves the ark spent for nothing.",
-      "This is the same question as whether composition sees the starting state or the running one."
+      "Its own answer said <em>this is the same question as whether composition sees the starting state or the running one</em> - and <strong>Sean answered that one afterwards</strong>: lines are not sequential and every amount reads the state before any of them ran. <strong>Then there is no <em>before the call</em></strong>, the whole recipe applies or none of it does, and an ark cannot be spent for nothing. <strong>This lane's reading, not Sean's ruling</strong> - which turns an open design question into a confirmation."
     ],
     [
       "ANSWERED - do the sketch's missing stores come back?",
@@ -974,9 +974,9 @@
       "Sean added <code>each</code> and <code>some</code> on 2026-09-09; twenty quantifiers now. Six world recipes hide it in a prose <em>selection</em>; <code>make-world</code>'s four calls hide it in a comment. See <em>Repetition, or quantification</em>."
     ],
     [
-      "OPEN - may a recipe define a kind or another recipe, and when",
+      "NOTED - not now, by Sean's own words, and the design is recorded so it is not re-derived",
       "The specification already says definitions are part of the state and defining is a transition. Nothing can express it: neither <code>kind</code> nor <code>recipe</code> is one of the sixteen kinds, so a definition has nowhere to live, and check 6 refuses it.",
-      "Two kinds and two declarations would allow it. <strong>The phase it is allowed in decides whether any check still means anything</strong> - see <em>Defining a kind, then using it</em>."
+      "Two kinds and two declarations would allow it. <strong>The phase it is allowed in decides whether any check still means anything</strong> - see <em>Defining a kind, then using it</em>. <strong>Sean, 2026-09-09</strong>: <em>perhaps not now, but once I have a well defined, working game, I am going to want to bootstrap the whole thing from a very small set of rules.</em> <strong>So it is not a decision waiting on him; it is one he has already deferred</strong>, and listing it as open costs the queue attention it does not owe. The design is in <a href=\"2026-09-09-bootstrapping-from-a-kernel.md\">the kernel report</a>."
     ],
     [
       "NOTED - an orbit is a place, and looked derivable only because this release is small",
@@ -1017,6 +1017,16 @@
       "CORRECTED - the two force causes named an expression that was not Sean's rule",
       "<code>unsustained_causes</code> gave both of them <code>sum force of {unit in t}</code>: citizens left out of the breach test, and <code>sum</code> whatever is present.",
       "The note in the next column already said <em>without a garrison they are max(1, 1)</em>. **Prose beside a formula that disagrees with it**, which is how the primitive count went wrong on 2026-09-08. Both now read <code>t.force</code>, which is a derived trait, and the aggregator is <code>force_rule</code> in the data - stated once, where the check reads it."
+    ],
+    [
+      "OPEN - where a win condition lives, and it is the only one of these the notation forces",
+      "<code>spec/control.md</code> -> <em>Winning</em> quantifies over the whole planet, and <code>each</code> generates effects while <code>require</code> guards one firing. Neither is a predicate that returns a truth value about the game.",
+      "So <em>the planet is fully exploited</em> cannot be written, which is why <code>is_fully_exploited</code> is Rust - and why it went stale exactly as its own comment predicted. <strong>The question is not how to say it but whether it belongs here at all</strong>: a win condition changes nothing, so it may belong with <code>show</code> and the queries. <strong>This lane takes neither side</strong> and notes only that leaving it in Rust is the option that has already failed once."
+    ],
+    [
+      "OPEN - whether <code>load</code> should exist, given that fuel is specified to move freely",
+      "<code>spec/units.md</code>: <em>fuel moves freely between a controlled territory that has it and anything there that can hold it.</em> This lane wrote <code>load</code>, a player recipe that spends an act.",
+      "That is not what the sentence says, and it collides with <code>spec/invariants.md</code> -> <em>No step that is always taken</em>. <strong>A player who must always <code>load</code> before <code>move</code> is that step exactly.</strong> Either <code>load</code> goes and a bound reads through to what is nearby, or the specification means something narrower than <em>freely</em>."
     ]
   ],
   "collapse": [
