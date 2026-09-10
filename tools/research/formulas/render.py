@@ -17,6 +17,7 @@ RESULTS = json.loads((HERE / "results.json").read_text(encoding="utf-8"))
 
 OP_CLASS = {
     "each": "op-each",
+    "some": "op-each",
     "change": "op-change",
     "set": "op-set",
     "require": "op-require",
@@ -102,11 +103,12 @@ ASSUMPTIONS = {
     "<em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not "
     "against the adjacency, so the trait this guard reads has no name &mdash; the code lane's "
     "<code>C-60</code> is the same hole from the other side.",
-    "derived-trait": "<code>surplus:yes</code> puts a <strong>derived</strong> trait in a "
-    "description. The release lists <em>surplus</em> as derived, and the notation says a "
-    "description is a kind and every <em>stored</em> trait, and that <strong>a derived trait is "
-    "never part of one</strong>. So <code>grow</code>'s target has no form as a description, and "
-    "this is the one assumption here that contradicts a rule rather than filling a gap.",
+    "derived-trait": "A <strong>derived</strong> trait is tested &mdash; <code>surplus</code>, "
+    "<code>unpaid</code>, <code>control</code>. A <em>description</em> is a kind and every "
+    "<em>stored</em> trait and may not carry one, so <strong>Sean decided on 2026-09-09 that what "
+    "a quantifier ranges over is a <em>query</em> rather than a description</strong>: a description "
+    "says what a thing is stored as, and a query says what is true of it. The notation has a form "
+    "for the first and none for the second, which is what is recorded here.",
     "unnamed-trait": "<code>location</code> and <code>below</code> are read as though they were "
     "traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not "
     "located by a trait, and what holds it is what says where it is.</strong> So these paths have "
@@ -199,14 +201,14 @@ def console_line(op, target, amount, attach, note, where):
     """One row of a recipe table, as a single string in the console's notation."""
     amount, attach = str(amount).strip(), str(attach).strip().lower()
 
-    if op == "each":
+    if op in ("each", "some"):
         name, over = (p.strip() for p in target.split(":", 1))
         if over.startswith("{"):
             body = over
         else:
             _assume("set-not-in-state", where)
             body = over
-        out = f"{{each {name}:{body}}}"
+        out = f"{{{op} {name}:{body}}}"
         if amount.startswith("x"):
             _assume("for-each", where)
             note = f"{amount} of them" + (f" - {note}" if note else "")
@@ -572,7 +574,8 @@ def repetition_counts():
     """
     every = DATA["player"] + DATA["world"] + DATA["creation"]
     quantifiers = [
-        (f["name"], t) for f in every for op, t, _a, _at, _n in f["lines"] if op == "each"
+        (f["name"], t) for f in every for op, t, _a, _at, _n in f["lines"]
+        if op in ("each", "some")
     ]
     over_state = [q for q in quantifiers if ": {" in q[1]]
     multiplied = [
@@ -1147,8 +1150,11 @@ thing. That is the same field with a different quantifier &mdash; <strong>a worl
 every member of the set, and a player recipe is offered for one the player picks</strong> &mdash;
 and it is the specification's own distinction: <em>the player's are offered wherever their inputs are
 present, to take or to leave; the world's are not offered.</em></p>
-<p>So <code>owner</code> is not a third thing to carry. It is <em>which quantifier</em>, and the six
-world recipes prove one half of it is already writable.</p>
+<p><strong>Done 2026-09-09.</strong> Ten player recipes now open with
+<code>some x: {{...}}</code> and six world recipes with <code>each x: {{...}}</code>, so
+<strong>twenty quantifiers say in the language what the <code>Owner</code> column said beside
+it</strong>. The eleventh player recipe, <code>found-colony</code>, opens with neither - it is called
+rather than offered or fired, and having no quantifier is how that now reads.</p>
 </div>
 <div class="callout">
 <h4>Fungibility is not a simplification the interface may take advantage of &mdash; it is the state</h4>
@@ -1181,8 +1187,11 @@ times, plus <code>surplus</code> in <code>grow</code> and <code>unpaid</code> in
 second has a form in the notation. They are close enough to be confused and different in exactly one
 way: a description says what a thing <em>is stored as</em>, and a query says what is <em>true of
 it</em>. An interface needs the second - you select what you control, not what is recorded.</p>
-<p>This is the same hole the encoding has flagged all along for <code>food[surplus]</code>, now with
-five more instances and a reason. Filed as an open decision.</p>
+<p><strong>Decided 2026-09-09: a selection is a query.</strong> A description says what a thing is
+stored as, and a query says what is true of it, so a quantifier's set may test a derived trait and a
+container's contents may not. That unblocks all six &mdash; <code>control</code> four times,
+<code>surplus</code> and <code>unpaid</code> once each &mdash; and the assumption list now records
+what the notation lacks rather than a rule being broken.</p>
 </div>
 <div class="callout">
 <h4>What the model does not care about</h4>
@@ -1191,6 +1200,38 @@ is indifferent, because all three render the same list. <strong>What is settled 
 noun then verb, select then operate, which `X-8` traced to the Xerox Star and which is right here for
 a reason stronger than habit - selecting first leaves the system in <strong>no mode</strong>, and
 verb-first does not.</p>
+</div>
+
+<h2>Should an orbit be a thing?</h2>
+<p>This report recommended giving an orbit a number, since it was the one container whose bound was
+prose. Sean's reply: <em>consider that orbits map one to one with territories, does this change your
+recommendation?</em> <strong>It does, twice.</strong></p>
+<div class="callout">
+<h4>First: the bound was not missing, it was derived</h4>
+<p>One orbit per territory <strong>is</strong> a bound &mdash; <code>as many as the territories</code>
+&mdash; and the game already has that exact shape: a territory holds <code>as many stores as the
+extractors of its resource</code>. So the row saying <em>no limit</em> was wrong rather than
+incomplete, and it is now <code>refused</code> with a derived number, like the store.</p>
+</div>
+<div class="callout">
+<h4>Second, and larger: an orbit may not need to be stored at all</h4>
+<p><strong>An orbit carries no stored trait.</strong> It is one of five kinds with none, and unlike
+the other four &mdash; a yard, a unit of metal &mdash; everything about <em>which</em> orbit it is
+comes from the territory beneath it. Twelve orbits are twelve facts already implied by twelve
+territories.</p>
+<p><strong>The release already makes this argument, about the layer directly above.</strong>
+<em>Territory adjacency is stated once, and orbital adjacency is derived from it &mdash; an orbit is
+next to its territory and to the orbits above that territory's neighbours, so stating it would be a
+second copy that can disagree.</em> The reasoning applies to the orbit as readily as to its
+adjacency, and this report had not noticed until the one-to-one was pointed at.</p>
+<p><strong>What stops it being an easy deletion.</strong> An ark in orbit has to be somewhere, and
+<em>what holds it is what says where it is</em> &mdash; so if an orbit is not a thing, a unit above a
+territory has no container. The choices are to keep the orbit as a thing with a derived bound, which
+is what is now recorded and costs nothing; or to give a place <em>parts</em>, so a territory has
+ground and orbit without either being a separate thing. The second is a change to containment and
+much larger than an orbit.</p>
+<p><strong>Filed as a question rather than acted on.</strong> The difference is one derived fact
+against a containment rule, which is Sean's to weigh.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>

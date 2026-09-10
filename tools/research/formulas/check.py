@@ -45,7 +45,12 @@ METAL_WEIGHT = {
 # transitions, not a kind of one* - so the body is what checks 1 and 2 must weigh, and the
 # quantifier is the count of firings rather than part of one. Weighing the whole would make a
 # recipe's net effect depend on the size of the planet, which is not a fixed vector at all.
-NON_EFFECT_OPS = {"let", "require", "each"}
+# `each` and `some` are the same field with different quantifiers - the world's recipes fire
+# for every member of a set, the player's are offered for one. Neither has an effect of its
+# own: they say how many transitions the recipe is a source of, and the lines below them are
+# the transition. So checks 1 and 2 weigh the body, which is `spec/invariants.md`'s own
+# sentence - a rule is a source of transitions, not a kind of one.
+NON_EFFECT_OPS = {"let", "require", "each", "some"}
 
 # What the Kinds table declares. metal is "conserved"; energy is "neither conserved nor
 # expiring"; food "expires"; a citizen grows on surplus. So a loop that gains energy, food,
