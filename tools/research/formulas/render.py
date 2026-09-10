@@ -2201,6 +2201,24 @@ it can say is that a sequence of firings gets from an ark to a new ark. Whether 
 way is the code lane's to show.</p>
 </div>
 
+<h2>What the re-encoding ruled out</h2>
+<p>The specification lane asked for this and Sean named it as the one that matters:
+<em>every construct, shape or rule you tried and abandoned, with the reason.</em> <strong>The
+eliminations are the negative space around this report and nothing carried them.</strong></p>
+<p><strong>Twelve were tried and removed; four were ruled out without being built</strong>, on an
+argument strong enough not to need the experiment.</p>
+<div class="scroll"><table><thead><tr><th>What</th><th></th><th>Why</th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["ruled_out"])}</tbody></table></div>
+<div class="callout">
+<h4>What the shape of that list says</h4>
+<p><strong>Nine of the twelve eliminations deleted something rather than replacing it</strong>, and
+most were found by encoding rather than by review - a distinction the specification could not see
+until every recipe was written in one notation and the duplicates sat next to each other.</p>
+<p><strong>The four ruled out untried are all the same shape</strong>: each would take the model out
+of the class where its checks work. That is worth more than the twelve, because a construct removed
+can be put back and a decidability boundary crossed cannot be uncrossed cheaply.</p>
+</div>
+
 <h2>What this prototype does differently from the release</h2>
 <p><strong>Written for the specification lane.</strong> Sean intends to ask it what it can
 incorporate, and it is testing with scenarios written against the old rules - so this is every

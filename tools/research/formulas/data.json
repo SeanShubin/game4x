@@ -3228,5 +3228,87 @@
       "twelve calls with different arguments are a scenario file; <code>create planet</code> makes the territories",
       "this lane"
     ]
+  ],
+  "ruled_out": [
+    [
+      "<code>limit n k</code> as a role",
+      "<strong>eliminated</strong>",
+      "both uses in the whole specification restated a capacity <em>What bounds a kind</em> already declared. A role that never says anything new is not a role"
+    ],
+    [
+      "A guard as a separate line from its cost",
+      "<strong>eliminated</strong>",
+      "15 of 16 guards were a threshold and a destroy of the <em>identical</em> amount, and 0 differed. The split carried a distinction the game never used"
+    ],
+    [
+      "<code>destroy</code> as a primitive",
+      "<strong>eliminated</strong>",
+      "it was <code>change</code> with the count left implicit - destroying an identified thing is subtracting 1 from a description"
+    ],
+    [
+      "Unsigned amounts",
+      "<strong>eliminated</strong>",
+      "with signed ones, <code>create</code> and <code>consume</code> are one operation. Sean's own correction, and it is what took the primitives from six to five"
+    ],
+    [
+      "Sequential composition",
+      "<strong>eliminated</strong>",
+      "nothing used it - 0 lines read a count another line changes - and <code>check.py</code> already assumed its absence, since checks 1 and 2 need a recipe to be one vector"
+    ],
+    [
+      "<code>create</code> then <code>set</code>",
+      "<strong>eliminated</strong>",
+      "under non-sequential composition a <code>set</code> on a thing this recipe makes has no referent. A <code>change</code> carries its traits and 13 lines became 4"
+    ],
+    [
+      "A <code>location</code> trait",
+      "<strong>eliminated</strong>",
+      "<code>spec/logistics.md</code> forbids it - <em>a thing is not located by a trait</em> - so <code>holder of x</code> is the form and containment is the fact"
+    ],
+    [
+      "A separate expedition construct",
+      "<strong>eliminated</strong>",
+      "it existed only because force was tested <em>before</em> a move. Judge after and units cross one at a time - Sean's reordering, and it deleted a construct rather than adding one"
+    ],
+    [
+      "<code>resolve territory</code> as a recipe",
+      "<strong>eliminated</strong>",
+      "control follows from presence and presence is what failing removes, so nothing has to <em>grant</em> it"
+    ],
+    [
+      "A separate <code>disorder</code> recipe",
+      "<strong>eliminated</strong>",
+      "it was <code>perish</code> with a different trigger. Two recipes doing one thing disagreed about the metal, and the disagreement read as a design question"
+    ],
+    [
+      "<code>make-world</code> as a recipe",
+      "<strong>eliminated</strong>",
+      "twelve calls with different arguments are a scenario file; <code>create planet &lt;size&gt;</code> makes the territories"
+    ],
+    [
+      "A repetition construct",
+      "<strong>eliminated</strong>",
+      "a quantity <em>is</em> a repetition, for anything sharing a description. What was missing was quantification, which is a different thing"
+    ],
+    [
+      "An escape hatch returning an effect",
+      "<strong>ruled out, not tried</strong>",
+      "a transition whose effect is opaque cannot be weighed, put in a matrix, or read. A call returning a set or a number is safe; one returning an effect ends every check"
+    ],
+    [
+      "A zero test on an unbounded quantity",
+      "<strong>ruled out, not tried</strong>",
+      "it is an inhibitor arc, and Petri nets with them are Turing-complete. Fusing the guard into the spend made <code>at most</code> unwritable, which is the prize rather than the line saving"
+    ],
+    [
+      "Recursion in <code>call</code>",
+      "<strong>ruled out, not tried</strong>",
+      "nesting is HTN and recursive HTNs are undecidable. Acyclic is free; recursion in a <em>query</em> over a finite set is a different question with a different answer"
+    ],
+    [
+      "Recipes that create recipes, unbounded",
+      "<strong>ruled out, not tried</strong>",
+      "net rewriting systems are Turing-powerful. Reconfigurable nets - rules fixed in advance - keep boundedness decidable, and that is the line rather than the phase"
+    ]
   ]
 }
