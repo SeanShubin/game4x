@@ -388,6 +388,11 @@ reader can tell whether a finding was fixed or merely forgotten.
 
 Newest first.
 
+- [A reachability question written as two capacity tests](2026-09-10-a-reachability-question-as-two-tests.md)
+  - 2026-09-10. Reviewing the code lane's burst for `c3cccc4`. `can_ever_build` guards metal
+    on capacity where it guards food on capacity and density, so a deposit that yields
+    nothing counts as metal and the planet becomes unwinnable. Their risk order was right;
+    the lever is the check's population, not its circularity.
 - [A denominator is syntactic, so it can be swept](2026-09-08-a-denominator-is-syntactic.md)
   - 2026-09-08. The code lane offered to fix instances if this lens found them. `C-28`
     forecloses the semantic question and not this one, so the instrument exists now -

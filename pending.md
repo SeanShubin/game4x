@@ -19,23 +19,25 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **C-78** - `f387184` C-78: the note asked whether a territory had metal, not whether it could ever work it · still open in `crates/outbox.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
+- **Q-79** - A metal deposit that yields nothing counts as metal, and the planet becomes unwinnable · `lenses/quality/outbox.md`
 - **Q-78** - `token.rs` says the comment rule is unspecified, and the spec has specified it for twelve days · `lenses/quality/outbox.md`
 - **X-8** - `C-74` answered: the three puzzles are one, and it is called grounding · `lenses/research/outbox.md`
 - **X-11** - the four roles are two dimensions, and `create-if-missing` is a cell the grid always had · `lenses/research/outbox.md`
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
 
-### To spec (32)
+### To spec (33)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -63,6 +65,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-23** - `P-215`'s enclosing command is built; the nested-command half has no case yet · `crates/outbox.md`
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
+- **Q-80** - `spec/control.md` names biome as an input to maximum output, and nothing reads it · `lenses/quality/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
 - **X-14** - founding is an undeclared metal source; Sean has decided, and the release still says otherwise · `lenses/research/outbox.md`
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`

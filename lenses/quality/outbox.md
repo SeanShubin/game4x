@@ -64,6 +64,53 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
+### Q-79 - A metal deposit that yields nothing counts as metal, and the planet becomes unwinnable
+
+**to** code · **status** open · **raised** 2026-09-10 · **source**
+[the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
+
+**Where.** `crates/game-model/src/territory.rs:479`, `can_ever_build`.
+
+**What.** The food branch is guarded on capacity and density; the metal branch on capacity alone.
+A metal deposit of capacity 3 and density 0 yields nothing, so the territory can never obtain a
+metal and can never build - but `can_ever_build` says true and the ceiling jumps from `(4, 1, 1)`
+to `(16, 4, 7)`.
+
+**Why.** An unreachable ceiling makes `at_maximum_output` false for ever, the planet never fully
+exploited, and the game unwinnable with nothing red. **That is the failure `P-361` was promoted to
+remove**, reached through density instead of through capacity. Measured against a clone, on a run
+reporting `1 passed; 62 filtered out`.
+
+**Whether.** Worth fixing now - it is the win condition. The term is `metal density >= 1`, and the
+predicate closes at three terms once it is stated as *can this territory ever obtain a metal*
+rather than worked from the release's twelve.
+
+**And the fix cannot borrow the existing check's green.** No release territory has metal capacity
+with zero density, so all twelve answers are unchanged and
+`the_release_reaches_the_output_the_specification_lane_derived` passes either way. Unverified until
+a case exists that fails without the term - `C-38`.
+
+### Q-80 - `spec/control.md` names biome as an input to maximum output, and nothing reads it
+
+**to** spec · **status** open · **raised** 2026-09-10 · **source**
+[the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
+
+**Where.** `spec/control.md:54`.
+
+**What.** *What that greatest output is follows from the territory's own permanent facts: how many
+extractors it has total capacity for, their densities, and its biome.* `Territory::maximum_output`
+reads capacity and density and no biome; probed across Grassland, Ice and Desert on one shape, all
+three give `(16, 4, 7)`. In `game-model`, `biome` reaches only `is_claimable`.
+
+**Why.** A named input that nothing reads is a sentence a later reader will implement. The code
+lane derived this arithmetic from that paragraph and did not use the third fact, which is the
+reading being asked about.
+
+**Whether.** Worth doing eventually. **This lens is not saying which side is wrong** - the biome
+clause reads as though it belongs to *every territory that can be taken has been taken*, the
+neighbouring clause of the same rule, but that is a decision rather than an observation and it is
+Sean's.
+
 ### Q-78 - `token.rs` says the comment rule is unspecified, and the spec has specified it for twelve days
 
 **to** code · **status** open · **raised** 2026-09-10 · **source** describing the notation
