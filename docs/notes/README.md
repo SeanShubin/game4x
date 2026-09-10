@@ -11,6 +11,7 @@ disagree, the spec is right and the note needs a superseded marker.
 
 | Note                                                                         | What it records                                                                                                                                     | Date       |
 | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| [Constant amounts](2026-09-10-constant-amounts.md)                           | Why population growth reads a minimum, what resource X replaces it with, and the one hole that turns out to be two                                  | 2026-09-10 |
 | [Maximum possible output](2026-09-10-maximum-possible-output.md)             | What each of the twelve territories can actually produce, and why the answer does not depend on how the game was played                             | 2026-09-10 |
 | [Incorporating the re-encoding](2026-09-09-incorporating-the-re-encoding.md) | What a day of re-encoding the release recipes found, graded by what is computed and what is asserted                                                | 2026-09-09 |
 | [Do the sets cross-cut?](2026-09-07-do-the-sets-cross-cut.md)                | Whether the release already contains sets a hierarchy cannot hold, measured over its own capability columns                                         | 2026-09-07 |

@@ -62,6 +62,83 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-368 - A rule's amounts are constants, and why that is worth its cost is not yet stated
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md`, a new section before *Open questions*, then `spec/invariants.md` -> Open questions
+
+**Your intent of 2026-09-10**, recorded where it can influence a decision rather than in a note
+nobody has to read: *the intent is to keep the game state representable as a petri net … I think this
+is doable if I start while the game is small, and will be impossible without a complete redesign if I
+put it off for later.*
+
+**Two destinations, so two quotations, in the order the destinations are named.**
+
+**A new section, placed after *The game is data*:**
+
+> ## What a rule may cost
+>
+> - A rule's amounts are constants. **What one firing takes and makes does not depend on how much of
+>   anything is present**
+> - Where a rule would need a quantity that varies, it is written as a smaller rule that fires as
+>   many times as it can. **The quantity is then how often it fired**, rather than a number it read
+> - A rule whose subject is a family of kinds is a rule for each of them. **A family is not a thing a
+>   rule can take one of**
+
+**Into *Open questions*:**
+
+> - **What keeping amounts constant is for has not been written down.** It keeps the rules
+>   analysable: whether a resource is conserved, and whether a loop can run away, are both questions
+>   about a table of constants, and a varying amount takes a rule out of that table. **But
+>   analysability is a means.** The end it serves is understood well enough to recognise when it is
+>   violated and not well enough to state, and until it is stated the rules above are kept because
+>   they have been useful rather than because their purpose is written.
+
+## Why your phrasing is sharpened, and it is not a quibble
+
+**You asked to keep the game state representable as a Petri net. The state already is one.**
+`spec/console.md` says *what a thing contains is a map from a description to a quantity*, which is a
+marking exactly. **What breaks the net is a rule whose amounts depend on the marking** - so the
+constraint belongs on how a rule may be written, and nothing about the state or the dump has to
+change. **That is a smaller thing to hold to than it sounded.**
+
+## What it costs today, measured
+
+`tools/research/formulas/check.py`, run this morning:
+
+- **Check 1** - is there a weighting under which metal never changes - **13 recipes analysed, 5
+  skipped for state-dependent amounts**: `end-of-turn losses`, `grow`, `perish`, `refuel`, `upkeep`
+- **Check 2** - can any loop run away - **18 transitions in the matrix, 3 skipped**
+
+**So five of eighteen recipes are invisible to the conservation check today**, and this rule names
+them as defects rather than leaving them unremarked.
+
+**Every one of the five has a way back, and none needs a new construct.** Four are minima, and a
+minimum is what you get by firing a constant-weight rule until one side runs out - your own resource
+X is the worked case, and it matches `population_after` over all 2400 citizen-and-food pairs with no
+disagreement. The fifth is `perish`, which is skipped because its effect *depends on which thing* -
+**a family in the selector**, which the third bullet covers.
+
+## The third bullet is the finding, and it was not obvious
+
+**Two holes have been tracked separately and they are one hole.** State-dependent amounts is `S-86`;
+a selector naming a family is the research lens's heaviest assumption, 12 of 80 encoded lines, and
+the gap `P-366` did not reach. **Grounding a family to its kinds is what makes a constant column
+exist at all** - so it is not a convenience for a checker, it is the same requirement seen from the
+other side. The working is in
+[the note](2026-09-10-constant-amounts.md).
+
+## What this proposal is careful not to do
+
+**It does not state the end.** You said you can recognise a violation and cannot yet articulate what
+is violated, and **a rule invented to fill that gap would be this lane guessing at your design**. The
+open question says so in your terms instead, so that a later answer replaces something honest rather
+than something wrong.
+
+**It does not make the change.** Resource X, and the four saturating rewrites, are release edits and
+are drafted separately - this is the invariant that would justify them, and it comes first because
+without it each one is a matter of taste.
+
+
 ### P-367 - What nature takes back, and from which units
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Holding
