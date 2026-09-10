@@ -454,7 +454,32 @@ finish* checkable; and possibly **the win condition**, because a question asked 
 not a transition. The second is uncomfortable - **leaving it in Rust is the option that already
 failed once**, which is section 3 of this note.
 
-## 8. Where this stands, and what is still open
+## 8. The seven assumptions, which complete the inquiry
+
+**Question 2 answered, and answering it corrected its own tally.** The `expression` assumption was
+recorded only where `let` and `require` raised it, never where an *amount* did - so three encoded
+lines used a form the notation has no way to state without anything noting it. **It read 3 and it is
+11.** Over 80 encoded lines:
+
+| Assumption          | Lines | What the notation cannot say                                                | Weight                                                                                                                       |
+| ------------------- | ----- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **family-not-kind** | 12    | a description names a family, not a kind - `{thing}`, `{resource kind:...}` | grounding, `X-17`. **The one that produced four wrong answers in a week**                                                    |
+| **expression**      | 11    | `count {…}`, `sum force of {…}`, `min(a, b)`, a path, a number              | **the biggest real hole.** `spec/console.md` says a value is a word, a number or another command                             |
+| **path**            | 4     | a path as a value - `ark.location.below`                                    | same root as `expression`; every `let` needs one                                                                             |
+| **root-container**  | 3     | `game:game` - the game is inside nothing, so the field repeats the kind     | cosmetic                                                                                                                     |
+| **recipe-as-thing** | 2     | `recipe:` names what a `call` fires, treating a recipe as a nameable thing  | the deferred question in miniature                                                                                           |
+| **derived-trait**   | 1     | a derived trait is **tested** - `surplus`, `unsustained`, `control`         | **one line by count, load-bearing by consequence**: `perish` fires on `{thing unsustained:yes}`, where both force rules live |
+| **unnamed-trait**   | 1     | `location` and `below` read as traits, which `spec/logistics.md` forbids    | the other side of `C-56`                                                                                                     |
+
+**How to weigh them.** `expression` and `path` are **one gap wearing two hats**, and it is the
+notation's rather than the prototype's. `family-not-kind` and `derived-trait` are **Sean's own
+decisions arriving faster than the notation could carry them** - a lag, not a flaw. `recipe-as-thing`
+is a question he has already deferred. The other two are cosmetic and known.
+
+**The build asserts every declared assumption is used at least once**, which is why an eighth never
+appeared quietly: when `refuel` wanted arithmetic inside an amount, the encoder refused it by name.
+
+## 9. Where this stands, and what is still open
 
 **Everything asked of the research lens has been answered except two**, and both are answerable by
 this lane if it runs out of night: the **seven remaining assumptions** behind its editor test, and

@@ -20,7 +20,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-81** - `fec51a9` Answer S-81's questions 3 and 6, and file X-28 from what answering them turned up · still open in `docs/notes/proposals.md`
 - **P-356** - `49f0173` Restore the row naming the questions, which is why P-356 never reached him · still open in `docs/notes/decisions.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
 
@@ -39,12 +38,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
 - **X-27** - losing a territory to nature does not delete the units on it, and one line above it is dead · `lenses/research/outbox.md`
 
-### To research (1)
+### To spec (32)
 
-- **S-81** - The overnight inquiry: what the re-encoding ruled out, and what it never reached · `docs/notes/proposals.md`
-
-### To spec (31)
-
+- **S-84** - Building is a third claim on a citizen, and `spec/economy.md` names two · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`

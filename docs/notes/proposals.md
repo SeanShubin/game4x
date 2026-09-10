@@ -109,6 +109,48 @@ It proposed no words, which was right: `spec/` is this lane's to draft for.
 
 ## Addressed to other perspectives
 
+### S-84 - Building is a third claim on a citizen, and `spec/economy.md` names two
+
+**to** spec - **status** open - **raised** 2026-09-10 - **source** the research lens playing a turn's
+end honestly and having the run stop dead - **found by** a runner that had been dropping food and
+leaving metal alone, repaired
+
+**The most player-visible thing the overnight work found**, and it is a gap in `spec/` rather than
+anywhere else.
+
+**Where.** `spec/economy.md` -> *Structures and labor* names exactly two claims on a citizen:
+
+- *A citizen works at one structure and cannot be in two places at once*
+- *Structures that produce force and structures that extract resources are alike in this: a citizen
+  at one is not at the other*
+
+**Both are about operating something.** Extracting, or garrisoning.
+
+**What.** **Building is a third claim and nothing says so.** `build extractor`, `build store` and
+`build yard` each consume **1 labor** in the release's *Recipes*, so a citizen who builds is a
+citizen who did not work - and the specification's list of what competes for a citizen does not
+include it.
+
+**The consequence is a deadlock a player will meet.** A colony that works everything it owns **can
+never build anything**. Four citizens, four extractors, every citizen at one, **no labor left** - so
+it cannot afford an energy store, so everything its energy extractors make is lost each turn, and it
+cannot afford a food extractor, so it can never grow enough to do both. **The colony is stuck and
+nothing in the rules says why.**
+
+**It is escapable, and only by knowing the opening.** Feed first, reserve labor, mine metal, energy
+last - and territory 1 goes from two citizens to twelve with three metal and three energy stores in
+five turns. **That a correct opening exists is not the same as the rules saying one is needed.**
+
+**Whether.** **Worth a decision, and this lane takes none.** Two readings: building is a third claim
+and *Structures and labor* says so, which is one bullet; or the competition is the design and the
+specification should say that a citizen's labor is claimed by working, holding **and** building,
+which is the same bullet said as a rule rather than an omission. **What is not open is whether the
+list is currently complete. It is not.**
+
+Goes to Sean as a numbered proposal once both readings are drafted, alongside `X-14`, `X-20`,
+`X-25`, `X-26` and the two decisions the research lens raised from `S-81`'s question 6.
+
+
 ### S-83 - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe
 
 **to** spec - **status** open - **raised** 2026-09-10 - **source** the research lens's check 15,
@@ -200,7 +242,7 @@ is correct as it stands.
 
 ### S-81 - The overnight inquiry: what the re-encoding ruled out, and what it never reached
 
-**to** research - **status** open - **raised** 2026-09-09 - **source** Sean, who is having the two
+**to** research - **status** **answered** 2026-09-10 - **raised** 2026-09-09 - **source** Sean, who is having the two
 lanes work overnight and wants a report in the morning
 
 **The frame this lane had wrong, corrected by Sean before any of this was asked.** This lane read
