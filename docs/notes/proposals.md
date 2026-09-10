@@ -64,6 +64,66 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-81 - The overnight inquiry: what the re-encoding ruled out, and what it never reached
+
+**to** research - **status** open - **raised** 2026-09-09 - **source** Sean, who is having the two
+lanes work overnight and wants a report in the morning
+
+**The frame this lane had wrong, corrected by Sean before any of this was asked.** This lane read
+*the rule editor is not in this release* as a boundary the prototype had overrun. It is not. Sean
+put the constraint on deliberately: **to make the lane detect missing gaps, and to eliminate
+non-viable decisions as early as possible.** So the primitive set is not scope creep to be triaged
+back - it is the instrument, and **its product is the list of things now ruled out**, which is worth
+having whether or not one line of notation ever moves.
+
+**What is asked for is therefore not in the report.** The report records what was found and what was
+decided. The eliminations are the negative space around it, and the handoff does not carry them.
+
+**Six questions, in the order they are worth answering. Nothing here asks for a proposal or a line
+of specification text.**
+
+1. **What did the re-encoding rule out?** Every construct, shape or rule tried and abandoned, with
+   the reason. `decisions` has twenty entries and four are `OPEN`; none is a *rejected*. This is
+   the one Sean named, and if only one gets answered it should be this
+2. **The seven assumptions.** The handoff closes with *seven assumptions remain about the notation
+   rather than the menus*, and does not list them. List them, and say which are load-bearing
+3. **What the re-encoding never reached.** Sixteen recipes is the release's slice. Combat, orbit,
+   control, population and the interface are specified and were not encoded. A gap found is worth
+   less than a region known to be unprobed
+4. **Which of the fourteen asserted rows could become computed**, and at what cost. The handoff
+   names the divergence table as *the thing you most need and the least computed*. Check 7 covers
+   *Traits* alone. Which rows are mechanisable against the release, and which are judgement that
+   never will be
+5. **The four `OPEN` decisions** - found-colony's six lines, soft-on-the-call, whether a call rolls
+   back, and whether a recipe may define a kind. Are those all of them, and is any of the four
+   non-viable rather than open
+6. **Where the notation could not say something the game needs.** `representable` reports four
+   things sayable. The valuable direction is the other one
+
+**Three reconciliations this lane checked and the report does not carry.** Each is offered as
+something to verify rather than a correction to accept.
+
+- **`launch ark` produces an ark into orbit in the prototype and nothing in the release.**
+  `data.json` carries a sixth line, `change ark in {orbit below:t} +1`. The release dropped
+  `produce 1 ark` under `P-342`, on the decision that *the destination you could not name is no
+  longer needed*. **This is a fifteenth divergence, it is not on the table, and it is the line that
+  lets `play.py` say the loop closed**
+- **`X-23` has the defect in the wrong place.** `reports/recipes.md` shows `produce pioneer`
+  yielding `{pioneer fuel:2 id:1 ready:yes}` and `move` taking it to `fuel:1`. **Fuel is a stored
+  number that decrements, not a tank that holds energy**, so a unit is born fuelled and nothing is
+  blocked - `scenario/commands/play.4x:139` moves one. The real defect is that the release's *Where
+  things are* declares a container the code does not build
+- **`make-world` is in no release file.** It appears in four files, all this lane's own. Deleting it
+  cannot break a scenario written against the old rules, so it is not one of the three breakages
+
+**Measured, on the three claimed breakages.** The expected dump holds **no unit and no `fuel`**, so
+the `move` change touches **zero** of its lines. Dropping the two stores touches **four**, and
+falsifies the scenario's own prose at `scenario/commands/play.4x:14`. `make-world` touches nothing.
+
+**Nothing is being incorporated.** Sean has said so explicitly, and this item exists so that the
+inquiry survives the session that sent it.
+
+
 ### S-80 - Put the reports in the Pages artifact, so Sean can browse them
 
 **to** code - **status** **acted** 2026-09-08 - `f633955` - **raised** 2026-09-08 - **source** Sean asking that the reports be

@@ -36,10 +36,15 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
 - **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
 
-### To spec (28)
+### To research (1)
+
+- **S-81** - The overnight inquiry: what the re-encoding ruled out, and what it never reached · `docs/notes/proposals.md`
+
+### To spec (31)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-76** - A new prototype needs two rows in your column before it can join the workspace · `crates/outbox.md`
 - **C-75** - The boundedness rule `X-9` names already holds, so adopting it costs nothing · `crates/outbox.md`
 - **C-68** - `game` holds twelve territories and declares no capacity to hold anything · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
@@ -66,6 +71,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-22** - the force rule is stated and nothing implements it · `lenses/research/outbox.md`
 - **X-23** - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed · `lenses/research/outbox.md`
 - **X-24** - the handoff: what is computed, what is asserted, and what Sean corrected · `lenses/research/outbox.md`
+- **X-25** - `launch ark` puts nothing into orbit, and Sean's loop ends with an ark in orbit · `lenses/research/outbox.md`
+- **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 
