@@ -421,6 +421,18 @@ impl Territory {
             .collect()
     }
 
+    /// Whether working this resource here produces anything at all.
+    ///
+    /// **Room and yield are set independently, and either alone is not a source** - `Q-79`.
+    /// A deposit carries a capacity and a density, `Deposit` derives `Default`, and
+    /// `set resource` takes the two numbers apart, so capacity three at density zero is a
+    /// reachable state and means three places to put an extractor that will each yield
+    /// nothing.
+    pub fn yields(&self, resource: Resource) -> bool {
+        let deposit = self.deposit(resource);
+        deposit.capacity >= 1 && deposit.density >= 1
+    }
+
     /// The greatest output this territory can ever reach, as the state that produces it.
     ///
     /// `spec/control.md`: *a territory produces the greatest output it can when as many
@@ -474,9 +486,22 @@ impl Territory {
             return (0, 0, 0);
         }
 
-        // Spare labor needs a food extractor to feed more than its own worker; metal to build
-        // with needs metal capacity, because nothing crosses a boundary.
-        let can_ever_build = food_density >= 2 && self.capacity_for(Resource::Metal) >= 1;
+        // **Can this territory ever obtain a metal?** Stated as what it means rather than as
+        // a list of tests, because the list is what kept being one term short: this was
+        // `food_density >= 2 && metal capacity >= 1` and the quality lens found the third
+        // term missing - `Q-79`. Room to put an extractor is not a source if working it
+        // yields nothing, and a deposit's capacity and density are set independently.
+        //
+        // Three terms, each from a sentence rather than from working the release's twelve:
+        //
+        // - it has somewhere to put a metal extractor, and working it yields something -
+        //   [`Territory::yields`];
+        // - something can staff it, which needs a spare hand, which needs a food extractor
+        //   to feed more than the citizen holding it - `spec/economy.md`;
+        // - and nothing else can supply one, because no resource crosses a territory
+        //   boundary - `releases/first-release.md`, *Scope*.
+        let can_obtain_metal = self.yields(Resource::Metal);
+        let can_ever_build = food_density >= 2 && can_obtain_metal;
         let food_extractors = if can_ever_build { food_capacity } else { 1 };
 
         let citizens = food_extractors as u32 * food_density;
@@ -488,9 +513,15 @@ impl Territory {
         // has energy capacity 4 and no metal, and building an energy extractor costs a metal
         // it can never obtain. Spare hands with nothing to build are not output.
         let elsewhere = if can_ever_build {
-            self.capacity_for(Resource::Metal) + self.capacity_for(Resource::Energy)
+            Resource::ALL
+                .iter()
+                .filter(|resource| **resource != Resource::Food && self.yields(**resource))
+                .map(|resource| self.capacity_for(*resource))
+                .sum()
+        } else if can_obtain_metal {
+            1
         } else {
-            self.capacity_for(Resource::Metal).min(1)
+            0
         };
 
         (citizens, food_extractors, spare.min(elsewhere))
@@ -905,6 +936,76 @@ mod tests {
             territory.capacity_for(Resource::Food),
             1,
             "the land itself remains"
+        );
+    }
+
+    /// A deposit can have room and yield nothing, and then it is not a source of anything.
+    ///
+    /// **`Q-79`, from the quality lens, and it is the failure `P-361` was promoted to fix
+    /// arrived at one cell over.** `maximum_output` asked whether a territory can ever build
+    /// by testing food density and metal *capacity*. A metal deposit of capacity three and
+    /// density zero yields nothing when it is worked, so the territory can never obtain a
+    /// metal, so it can never build - which is the same position as having no metal deposit
+    /// at all, and the two answered differently.
+    ///
+    /// The consequence was the one `P-361` exists to prevent: an unreachable ceiling makes
+    /// `at_maximum_output` false for ever, so the planet is never fully exploited, so the
+    /// game cannot be won, **and nothing goes red.**
+    ///
+    /// # Why this case is constructed rather than taken from the release
+    ///
+    /// **No territory in the release has capacity with zero density**, so every one of the
+    /// twelve answers the same either way and
+    /// `the_release_reaches_the_output_the_specification_lane_derived` stays green with the
+    /// bug in place. That check is not weak - its expected values come from outside this code
+    /// and it counts what it compared - **its population is what misses this**, which is the
+    /// lens's point and worth more than the finding.
+    ///
+    /// So the fix is unverified until a case exists that fails without it - `C-38` - and this
+    /// is that case. It fails on the version before this one.
+    #[test]
+    fn a_deposit_with_room_and_no_density_is_not_a_source() {
+        // Territory 6's shape - food four by four, which feeds four - with metal that has
+        // room for three extractors and yields nothing from any of them.
+        let barren = offering(&[
+            (Resource::Food, 4, 4),
+            (Resource::Metal, 3, 0),
+            (Resource::Energy, 4, 5),
+        ]);
+        // The same shape with no metal deposit at all, which is territory 6 as the release
+        // ships it.
+        let none = offering(&[(Resource::Food, 4, 4), (Resource::Energy, 4, 5)]);
+
+        assert_eq!(
+            none.maximum_output(),
+            (4, 1, 0),
+            "territory 6 is frozen at what founding left it"
+        );
+        assert_eq!(
+            barren.maximum_output(),
+            (4, 1, 0),
+            "a metal deposit that yields nothing is no better than no metal deposit, and \
+             this territory is frozen the same way"
+        );
+        assert_eq!(
+            barren.maximum_output(),
+            none.maximum_output(),
+            "room without density is not a source, so these two are the same territory as \
+             far as building goes"
+        );
+
+        // **And the case either side of the boundary**, so this is a rule rather than one
+        // example: give the metal a density of one and the territory can build, so its
+        // ceiling rises to what its food supports.
+        let working = offering(&[
+            (Resource::Food, 4, 4),
+            (Resource::Metal, 3, 1),
+            (Resource::Energy, 4, 5),
+        ]);
+        assert_eq!(
+            working.maximum_output(),
+            (16, 4, 7),
+            "with a metal that yields, the same ground reaches the ceiling its food sets"
         );
     }
 
