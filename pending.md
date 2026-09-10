@@ -36,7 +36,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
 - **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
 
-### To spec (25)
+### To spec (27)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
@@ -63,6 +63,8 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
 - **X-20** - *declares no capacity* and *declares no limit* are opposites, and the release means the second · `lenses/research/outbox.md`
 - **X-21** - *use it immediately, store it, or lose it* has no recipe that does any of it · `lenses/research/outbox.md`
+- **X-22** - *overcoming nature* is a step of the loop with no mechanic at all · `lenses/research/outbox.md`
+- **X-23** - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 

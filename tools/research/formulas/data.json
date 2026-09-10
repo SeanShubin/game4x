@@ -225,10 +225,10 @@
         ],
         [
           "change",
-          "energy in unit",
+          "energy in from",
           "-1",
           "hard",
-          "row 4"
+          "was `energy in unit` - nothing ever filled a tank, so nothing could move"
         ],
         [
           "change",
@@ -1732,11 +1732,6 @@
       "stored"
     ],
     [
-      "fuel",
-      "a unit",
-      "stored"
-    ],
-    [
       "upkeep",
       "a thing with upkeep",
       "stored"
@@ -1873,7 +1868,6 @@
       "counted",
       [
         "force",
-        "fuel",
         "movable"
       ],
       [
@@ -1887,7 +1881,6 @@
       "counted",
       [
         "force",
-        "fuel",
         "movable"
       ],
       [
@@ -2106,10 +2099,10 @@
     ],
     [
       "energy",
-      "territory, a store, or a unit's tank",
+      "territory, or a store",
       "no bound",
       "ephemeral unless stored",
-      "a store holds 10, a tank holds the unit's fuel"
+      "a store holds 10. <strong>A unit no longer carries any</strong> - nothing ever filled a tank"
     ],
     [
       "labor",
@@ -2150,7 +2143,6 @@
   "container_kind": {
     "t": "territory",
     "game": "game",
-    "unit": "unit",
     "t.orbit": "orbit",
     "citizen.location": "territory",
     "thing.location": "territory",
@@ -2235,12 +2227,6 @@
       "resource",
       "10",
       "release -> Where things are"
-    ],
-    [
-      "unit",
-      "energy",
-      "the unit's fuel",
-      "release -> Where things are, a unit's tank"
     ],
     [
       "orbit",
@@ -2361,18 +2347,6 @@
         [
           "store",
           "resource"
-        ]
-      ]
-    ],
-    [
-      "Inside a unit",
-      "a unit's tank, and the unit may be anywhere",
-      "the unit's fuel",
-      "persists",
-      [
-        [
-          "unit",
-          "energy"
         ]
       ]
     ],
@@ -2503,6 +2477,98 @@
     [
       "ephemeral unless stored",
       "Gone at the turn's end if the territory holds it directly; kept if a container does."
+    ]
+  ],
+  "the_loop": [
+    [
+      "1. Start with an ark in orbit",
+      "a unit placed before play",
+      "<code>add &lt;unit&gt; orbit</code>",
+      "<strong>served</strong>, by a design command rather than a recipe"
+    ],
+    [
+      "2. Deploy the ark to a single territory",
+      "spend the ark, make a colony",
+      "<code>deploy ark</code> &rarr; <code>found-colony</code>",
+      "<strong>served</strong>"
+    ],
+    [
+      "3. Expand to all other territories from that one",
+      "make a settler, move it, found with it",
+      "<code>produce pioneer</code>, <code>move</code>, <code>found by land</code>",
+      "<strong>BROKEN in the release, fixed here.</strong> <code>move</code> spent energy from the unit's tank and <strong>no recipe ever filled a tank</strong>, so nothing could move and step 3 was unreachable. This prototype spends the energy where the unit is and drops the tank - see <code>X-23</code>"
+    ],
+    [
+      "4. Overcoming nature in the process",
+      "a territory's <code>nature</code> against a unit's <code>force</code>",
+      "&mdash;",
+      "<strong>NOTHING.</strong> No recipe mentions <code>force</code> at all, and <code>nature</code> only where it is written at design time. See <code>X-22</code>"
+    ],
+    [
+      "5. Fully exploit the planet",
+      "work every extractor there is",
+      "<code>build extractor</code>, <code>work</code>",
+      "<strong>served</strong> as an activity. The <em>test</em> is a win condition rather than a recipe, which is right"
+    ],
+    [
+      "5a. …except territories that cannot sustain control",
+      "control depends on a citizen being there, and a citizen must be fed",
+      "<code>upkeep</code>, <code>perish</code>, and <code>control</code> read by four recipes",
+      "<strong>served</strong>: control is derived from a citizen being present, and upkeep removes the citizen a territory cannot feed"
+    ],
+    [
+      "6. Launch a new ark into orbit, closing the loop",
+      "a yard, then an ark from it",
+      "<code>build yard</code>, <code>launch ark</code>",
+      "<strong>served</strong>"
+    ]
+  ],
+  "force_values": [
+    [
+      "citizen",
+      "1",
+      "the only thing minimal control brings"
+    ],
+    [
+      "garrison",
+      "<strong>0</strong>",
+      "contributes none, and <em>holds a territory</em> - so it aggregates rather than fights"
+    ],
+    [
+      "ark",
+      "2",
+      ""
+    ],
+    [
+      "pioneer",
+      "2",
+      ""
+    ]
+  ],
+  "nature_values": [
+    [
+      "Ice",
+      "1"
+    ],
+    [
+      "Desert",
+      "1"
+    ],
+    [
+      "Grassland",
+      "1"
+    ],
+    [
+      "Jungle",
+      "<strong>2</strong>"
+    ],
+    [
+      "Mountain",
+      "1"
+    ],
+    [
+      "Ocean",
+      "&mdash;"
     ]
   ]
 }

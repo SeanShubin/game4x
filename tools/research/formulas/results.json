@@ -98,7 +98,7 @@
     "breaches": []
   },
   "unreached": {
-    "declared": 20,
+    "declared": 19,
     "pairs": [
       [
         "store",
@@ -109,7 +109,7 @@
   },
   "containment": {
     "examined": 18,
-    "declared": 20,
+    "declared": 19,
     "homeless": [],
     "undeclared": [],
     "x20_lines": 3

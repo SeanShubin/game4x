@@ -463,8 +463,11 @@ def check_unreached():
     names = DATA["container_kind"]
     used = set()
     for f in DATA["player"] + DATA["world"] + DATA["creation"]:
-        for op, target, _amount, _at, _n in f["lines"]:
-            if op != "change":
+        for op, target, amount, _at, _n in f["lines"]:
+            # Only a POSITIVE change reaches a container. Counting a consume as well is how
+            # this check first missed that nothing fills a unit's tank: `move` spends energy
+            # from it, which looked like use, and no recipe ever puts any in.
+            if op != "change" or sign_of(amount) < 0:
                 continue
             where = container_of(target)
             if where is None:
@@ -481,6 +484,7 @@ def check_unreached():
                     used.add((c, k))
     declared = [(c, k, b) for c, k, b, _s in DATA["containment_declared"]]
     assert declared, "no declarations, so this check knows nothing"
+    # "unreached" now means nothing ever puts one there, which is the question worth asking.
     unreached = []
     for c, k, b in declared:
         # A declaration about a family is reached when any of its kinds is.
@@ -489,6 +493,39 @@ def check_unreached():
         if not (pairs & used):
             unreached.append((c, k, b))
     return len(declared), unreached
+
+
+MINIMAL_CONTROL = 2  # two citizens, each eating one food per turn
+
+
+def check_minimal_control():
+    """Check 9. Which territories can feed the two citizens minimal control needs.
+
+    Reads the *Territory resources* row rather than any prose about it: `capacity x density`,
+    and it is the density that decides, because one citizen's labor works one extractor.
+    """
+    can, cannot = [], []
+    for row in DATA["territories"]:
+        tid, food = row[0], row[1].strip()
+        if food == "none":
+            cannot.append((tid, "no food at all"))
+            continue
+        capacity, density = (int(p.strip()) for p in food.split("x"))
+        assert capacity >= 1, (tid, food)
+        if density >= MINIMAL_CONTROL:
+            can.append((tid, density))
+        else:
+            cannot.append((tid, f"food density {density}, and two citizens eat {MINIMAL_CONTROL}"))
+    assert can or cannot, "no territories, so this check knows nothing"
+
+    # The other half: force. A citizen carries 1 and a garrison carries 0, so minimal control
+    # is worth exactly MINIMAL_CONTROL. Nature is per biome, and no territory has a biome
+    # stated - `X-19` - so the only answerable question is against the worst of them.
+    force = {k: v for k, v, _n in DATA["force_values"]}
+    per_citizen = int(force["citizen"])
+    assert int(force["garrison"].strip("<strong>/")) == 0, force["garrison"]
+    worst = max(int(v.strip("<strong>/")) for _b, v in DATA["nature_values"] if v.strip("<strong>/").isdigit())
+    return can, cannot, MINIMAL_CONTROL * per_citizen, worst
 
 
 def check_cap(cap=1000):
@@ -619,6 +656,17 @@ def self_test():
     else:
         print("  poison ok: check 8 names a declaration nothing reaches")
     DATA["containment_declared"] = _saved8
+
+    # Check 9 poison: two citizens eating three would leave more territories behind.
+    _m = MINIMAL_CONTROL
+    globals()["MINIMAL_CONTROL"] = 3
+    _harder = len(check_minimal_control()[1])
+    globals()["MINIMAL_CONTROL"] = _m
+    if _harder <= len(check_minimal_control()[1]):
+        print("  POISON FAILED: check 9 is not reading the density it claims to")
+        ok = False
+    else:
+        print(f"  poison ok: check 9 excludes {_harder} territories when a citizen eats more")
 
     return ok
 
@@ -795,6 +843,19 @@ def main():
         print(f"  UNREACHED: a {c} may hold a {k} (bound {b}) - no recipe puts one there")
     if not unreached:
         print("  every declaration is reachable")
+
+    can, cannot, held, worst = check_minimal_control()
+    print()
+    print("CHECK 9 - which territories can sustain minimal control?")
+    print(f"  minimal control is 1 garrison, 1 food extractor, {MINIMAL_CONTROL} citizens")
+    print(f"  {len(can)} of {len(can) + len(cannot)} territories can feed it from one worked extractor")
+    for tid, why in cannot:
+        print(f"  CANNOT: territory {tid} - {why}")
+    print(f"  force: {MINIMAL_CONTROL} citizens carry {held}; the worst force of nature is {worst}")
+    if held < worst:
+        print(f"  SHORT by {worst - held} against the worst biome")
+    elif held == worst:
+        print("  exactly sufficient, with no margin - and no recipe compares the two")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1

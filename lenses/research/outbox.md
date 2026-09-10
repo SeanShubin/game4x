@@ -558,6 +558,91 @@ second matches *which store holds which unit is not recorded* and needs no choic
 the first is what *store it* sounds like. **This lane takes neither.**
 
 
+### X-22 - *overcoming nature* is a step of the loop with no mechanic at all
+
+**to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *The loop Sean is building* · **found by** checking the recipes against Sean's stated intent
+
+**Where.** Sean, 2026-09-09, stating what the recipes are for: *start with an ark in orbit, deploy
+the ark to a single territory, **expand to all other territories from that territory, overcoming
+nature in the process**, then fully exploit the planet … and finally launch a new ark into orbit.*
+
+**What.** **`force` appears in no recipe line at all**, and a citizen, a garrison, an ark and a
+pioneer each carry one. **`nature` appears in two lines and both write it** - `make-territory` sets
+it and `make-world` passes it - so nothing ever reads it. **The release's own *Recipes* table
+mentions neither word**, over all sixteen rows.
+
+**So six of the seven steps of the loop have recipes and this one has nothing.** It is not a rule
+that needs correcting; it is a rule that was never written.
+
+**It compounds with `X-19`.** That item found that no territory is given a `nature` value in any
+document, because `biomes_of` in the code assigns it. **So even with a mechanic there is nothing for
+it to read**, and the two have to be answered together or neither is enough.
+
+**Whether.** **Worth deciding, and it is the largest thing between the recipes and the loop as
+stated.** This lane proposes nothing: what force does against nature - whether it is spent, tested,
+or accumulated - is a game design question and not a gap to be filled by inference.
+
+**Sharpened 2026-09-09 by Sean, and it is smaller than the item above suggests.** *Minimal territory
+control is 1 garrison, 1 food extractor, 2 citizens. The garrison allows the citizens to sum their
+force; the food extractor allows one citizen to provide labor to provide food to supply both
+citizens.* Then: *if we don't have a recipe to generate force, how are we to hold the territory
+against nature?*
+
+**Force does not need generating - it is carried, and the release's own numbers say so.** *Units and
+structures*: a citizen is force **1**, an ark and a pioneer **2**. **A garrison is force 0**, and
+that zero is the whole design: a thing that *holds a territory* and contributes no force of its own
+is an **aggregator**, which is exactly what Sean described.
+
+**And the numbers are already calibrated.** Two citizens carry force 2; the highest force of nature
+is 2, in jungle, and every other biome is 1. **So minimal control is exactly sufficient against the
+worst biome, with no margin** - which is checkable and is now check 9.
+
+**So what is missing is a comparison, not a producer**, and both halves already have a shape in the
+model:
+
+- **A territory's force is a derived trait**, a weighted sum over what it contains. The model has
+  one of those already - `metal in it`, *its binding plus the metal in its parts*. Same
+  construction, a different weight column
+- **Holding is a guard** on that trait against `nature`, which is what `require` is for
+
+**Two other items have to move with it.** `X-19`: no territory is given a `nature` value in any
+document, so there is nothing for the guard to read. And check 9's food half found that
+**territory 5 cannot sustain minimal control at all** - food density 1 against two citizens eating 2
+- which is step 5a of the loop, the territories that do not count, exercised by exactly one of the
+twelve.
+
+**Still not proposed by this lane.** What holding costs, whether force is spent or merely tested,
+and what happens when it is short are game design and not gaps to fill by inference.
+
+### X-23 - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed
+
+**to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *Check 8* · **found by** asking which declared containers are ever **filled** rather than merely mentioned
+
+**Where.** `releases/first-release.md` -> *Where things are*: **a unit's tank** holds energy, up to
+the unit's fuel. And *Recipes*: `move` consumes **1 energy** from the moving unit.
+
+**What.** **No recipe puts energy into a unit.** Of the release's sixteen, `work` makes energy in a
+territory, `produce pioneer` and `launch ark` spend energy from a territory, and none of them fuels
+anything. So a pioneer is produced with an empty tank, `move` fails on its guard, and **step 3 of
+the loop - expand to all other territories - cannot happen.**
+
+**This is `X-21`'s shape a second time**, and the same question found both: *is every declared
+container ever filled?* A store may hold ten of its resource and nothing puts any in; a tank may
+hold the unit's fuel and nothing puts any in. **Check 8 missed the tank on its first run** because
+it counted a consume as reaching a container - `move` spending energy looked like use.
+
+**Fixed in this prototype, and the fix is a deletion.** Sean has said the prototype may remove
+things and deviate from the release. `move` now spends its energy **where the unit is** rather than
+from a tank, and the `fuel` trait, the unit-as-container and its declaration are gone. That is one
+trait and one container fewer, and it makes the step reachable. **Check 7 reports the divergence** -
+*fuel: only in the release* - so it is visible rather than silent.
+
+**Whether.** **The release still has the defect, and the choice there is not this lane's.** Three
+ways out: fuel a unit when it is produced, add a recipe that fuels one, or spend the energy where
+the unit is as this prototype now does. **The third deletes rather than adds**, and the first two
+keep a tank that would then need a way to be filled and a reason to exist.
+
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

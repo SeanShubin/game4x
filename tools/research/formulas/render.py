@@ -1240,6 +1240,31 @@ much larger than an orbit.</p>
 against a containment rule, which is Sean's to weigh.</p>
 </div>
 
+<h2>The loop Sean is building, step by step</h2>
+<p>Sean, 2026-09-09, stating the intent the recipes exist to serve: <em>the minimal set of game
+mechanics that allows me to start with an ark in orbit, deploy the ark to a single territory, expand
+to all other territories from that territory, overcoming nature in the process, then fully exploit
+the planet, where territories that don't have sufficient resources for me to maintain control there
+don't count towards the complete exploitation test, and finally launch a new ark into orbit,
+completing the loop.</em></p>
+<p><strong>Six of the seven steps have recipes. One has nothing at all.</strong></p>
+<div class="scroll"><table><thead><tr><th>Step</th><th>What it needs</th><th>What serves it</th>
+<th></th></tr></thead><tbody>
+{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td class="target">{r[2]}</td><td class="note">{r[3]}</td></tr>' for r in DATA["the_loop"])}
+</tbody></table></div>
+<div class="callout">
+<h4>Nature is declared, written once, and never read</h4>
+<p><strong><code>force</code> appears in <em>no</em> recipe line</strong>, and a citizen, a garrison,
+an ark and a pioneer all carry one. <strong><code>nature</code> appears in two lines and both write
+it</strong> - <code>make-territory</code> sets it and <code>make-world</code> passes it - so nothing
+ever reads it. The release's own <em>Recipes</em> table mentions neither word.</p>
+<p>So <em>overcoming nature</em> is a step of the intended loop with <strong>no mechanic behind it
+whatever</strong>. That is not a rule that needs fixing; it is a rule that was never written, and it
+is the one thing standing between the recipes and the loop as stated.</p>
+<p>It compounds with <code>X-19</code>, which found that no territory has a <code>nature</code>
+value in any document. <strong>Even given a mechanic, there is nothing for it to read.</strong></p>
+</div>
+
 <h2>Still open, and yours to take</h2>
 <p>{n_open} of the {n_decisions} questions this re-encoding raised are still open. The rest are
 below, under <em>What has already been settled</em>, so that this list is short enough to be a list
