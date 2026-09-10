@@ -638,10 +638,10 @@ occupying rather than anything projected from outside.
 their force* against *a settlement that only projects 1* as disagreeing. **Both are true and the
 barracks is the condition**: two citizens with one sum to 2, without one they are `max(1, 1)`.
 
-**One naming question stands.** Sean said *garrison* first and *barracks* second. The release has a
-`garrison` - *what holds a territory; a territory has at most one* - with force **0**, which is the
-exact shape of a thing that organizes rather than fights. **If they are one thing it wants one name;
-if they are two, the second is a kind the game does not have.**
+**The organizer is the garrison**, which Sean confirmed: *I often get these terms mixed up, I mean
+garrison, as that applies holding on to something.* The release already calls it *what holds a
+territory*, with force **0** - the exact shape of a thing that organizes rather than fights, and the
+reason its zero was worth noticing.
 
 **And this lane had entering wrong.** It reasoned that entering unclaimed ground must be free,
 because `found by land` consumes a pioneer in the territory it founds. Sean: the clash is at the

@@ -1299,14 +1299,14 @@ shape this report guessed at, with one correction: <strong>the function is <code
 <h4>This dissolves a contradiction this report filed, and it was not one</h4>
 <p>It read two of Sean's statements as disagreeing: <em>the garrison allows the citizens to sum
 their force</em>, giving two citizens 2, against <em>a settlement that only projects 1 force</em>.
-<strong>Both are true and the condition is the barracks.</strong> Two citizens with one sum to 2;
+<strong>Both are true and the condition is the garrison.</strong> Two citizens with one sum to 2;
 without one they are <code>max(1, 1)</code>, which is 1. The report was reading a single number
 where the rule has two branches.</p>
-<p><strong>One naming question is left.</strong> Sean said <em>garrison</em> the first time and
-<em>barracks</em> the second. The release has a <code>garrison</code> - <em>what holds a territory;
-a territory has at most one</em> - with force <strong>0</strong>, which is exactly the shape of a
-thing that organizes rather than fights. If they are the same thing it wants one name, and if they
-are two the second is a kind the game does not have.</p>
+<p><strong>The organizer is the garrison.</strong> Sean called it a barracks once and corrected
+it: <em>I often get these terms mixed up, I mean garrison, as that applies holding on to
+something.</em> The release already describes it as <em>what holds a territory</em>, with force
+<strong>0</strong> - which is the exact shape of a thing that organizes rather than fights, and the
+reason its zero was worth noticing.</p>
 </div>
 <div class="callout">
 <h4>And the jungle, worked under the real rule</h4>
@@ -1316,9 +1316,9 @@ are two the second is a kind the game does not have.</p>
 asked for: 6 metal and 12 energy against 21 metal and 24 energy for the two-ark path, since that
 needs a yard first. <strong>Checked rather than asserted</strong> - the numbers come from
 <code>produce pioneer</code>, <code>launch ark</code> and <code>build yard</code>.</p>
-<p><strong>And a jungle needs a barracks to hold, where nothing else does.</strong> At nature 1 a
+<p><strong>And a jungle needs a garrison to hold, where nothing else does.</strong> At nature 1 a
 single unorganized citizen suffices, because <code>max</code> of anything is at least 1. The
-barracks earns its place on exactly one biome.</p>
+garrison earns its place on exactly one biome.</p>
 </div>
 <div class="callout">
 <h4>The mechanical gap the rule opens: <code>move</code> moves one unit</h4>
@@ -1351,6 +1351,53 @@ below it are two places with a boundary between them, and deploying crosses it.<
 <p>The conclusion survives the correction and is stronger for it: <strong>a boundary needs two sides,
 so something has to be above a territory for an ark to cross into it.</strong> An orbit is not a
 second copy of a territory; it is the other side.</p>
+</div>
+
+<h2>Are these structures enough to exploit a planet?</h2>
+<p>Sean, 2026-09-09: <em>are our data structures for this prototype sufficient to represent the
+concepts needed to fully exploit a planet?</em> Thirteen concepts the loop needs, against what
+expresses each:</p>
+<div class="scroll"><table><thead><tr><th>Concept</th><th>What expresses it</th><th></th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>' for r in DATA["sufficiency"])}</tbody></table></div>
+<div class="callout">
+<h4>Eleven of thirteen, and the two that fail are the same failure twice</h4>
+<p><strong>There is no way to compute a value from the state and no way to compare two.</strong>
+Those look like separate gaps and are one: <strong>the model has no expression language.</strong> It
+can state what a thing is, change how many there are, and guard a change against a count. It cannot
+say <em>this quantity, derived that way, against that one</em>.</p>
+<p><strong>It is not a clean absence, which is the tell.</strong> Amounts already carry computed
+values - <code>work</code> takes its yield from <code>t.deposit[…].density</code>,
+<code>upkeep</code> from <code>thing.upkeep</code>, <code>perish</code> from the derived
+<code>thing.metal-in-it</code>. And <code>grow</code> binds
+<code>min(surplus food, citizens)</code>, which this report has flagged since the encoding began as
+the one place the notation has no form for what is written. <strong>The model computes in four
+places and admits it in none.</strong></p>
+</div>
+<div class="callout">
+<h4>What that costs the force rule specifically</h4>
+<p><strong>A derived trait cannot be defined, only described.</strong> The four the game has -
+<code>metal-in-it</code>, <code>control</code>, <code>surplus</code>, <code>unpaid</code> - are each
+a sentence in the <em>Traits</em> table. A territory's force would be a fifth, and it would be the
+first needing a <em>conditional</em> definition: <code>max</code> where the citizens are
+unorganized, <code>sum</code> where a garrison organizes them. <strong>A sentence can say that and
+nothing can run it.</strong></p>
+<p><strong>And <code>require</code> counts things.</strong> It tests <em>at least n of this
+description</em>, where n is a constant. <code>force &gt; nature</code> is two derived numbers
+compared, and neither is a count of anything. So the boundary contest - the rule Sean just stated -
+<strong>has no form in the language today</strong>, and that is the whole of what is missing.</p>
+</div>
+<div class="callout">
+<h4>The smallest thing that closes it, and what it does not cost</h4>
+<p><strong>Let a guard compare two expressions</strong>, rather than a description against a
+constant. That changes one primitive instead of adding one, and it subsumes what
+<code>require</code> does today, since <em>at least n of a description</em> is one expression against
+another.</p>
+<p><strong>It costs the checks nothing</strong>, which is worth knowing before deciding. Check 2
+<em>ignores guards entirely</em> - it is deliberately conservative, flagging loops the guards
+prevent - and check 1 weighs effects rather than guards. <strong>So an arbitrary expression in a
+guard leaves both sound.</strong> Where it does cost something is the interface: a menu is built by
+grounding a recipe against the state, and a guard that computes is harder to ground than one that
+counts.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>

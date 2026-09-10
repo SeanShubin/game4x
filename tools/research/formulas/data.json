@@ -2668,11 +2668,11 @@
     [
       "Unorganized: force is <strong>max_of</strong>",
       "citizens, by default",
-      "ten citizens with no barracks project <strong>1</strong>, not ten"
+      "ten citizens with no garrison project <strong>1</strong>, not ten"
     ],
     [
       "Organized: force is <strong>sum_of</strong>",
-      "citizens where a barracks is present",
+      "citizens where a garrison is present",
       "two citizens with one project <strong>2</strong>"
     ],
     [
@@ -2711,16 +2711,83 @@
       "cannot enter"
     ],
     [
-      "two citizens, no barracks",
+      "two citizens, no garrison",
       "max(1, 1) = <strong>1</strong>",
       "1 &ge; 2? <strong>no</strong>",
       "cannot maintain"
     ],
     [
-      "two citizens with a barracks",
+      "two citizens with a garrison",
       "1 + 1 = <strong>2</strong>",
       "2 &ge; 2? <strong>yes</strong>",
       "maintains"
+    ]
+  ],
+  "sufficiency": [
+    [
+      "A thing, its kind and its traits",
+      "a description - <code>{kind trait:value}</code>",
+      "<strong>yes</strong>"
+    ],
+    [
+      "Where a thing is",
+      "containment; what holds it says where it is",
+      "<strong>yes</strong>"
+    ],
+    [
+      "How many of a thing",
+      "a quantity per description",
+      "<strong>yes</strong>"
+    ],
+    [
+      "Making and spending",
+      "<code>change</code>, signed",
+      "<strong>yes</strong>"
+    ],
+    [
+      "A cost that can refuse",
+      "<code>change</code> with <code>attach</code>",
+      "<strong>yes</strong>"
+    ],
+    [
+      "A prerequisite that is not spent",
+      "<code>require</code>",
+      "<strong>yes</strong>"
+    ],
+    [
+      "One rule, many firings",
+      "<code>each</code> and <code>some</code>",
+      "<strong>yes</strong>"
+    ],
+    [
+      "Building a rule from rules",
+      "<code>call</code>, acyclic",
+      "<strong>yes</strong>"
+    ],
+    [
+      "A capacity, including zero and none",
+      "a declaration per (container, kind)",
+      "<strong>yes</strong>"
+    ],
+    [
+      "A thing that expires",
+      "<code>keeps</code>, <code>age</code>, <code>spoil</code>",
+      "<strong>yes</strong>"
+    ],
+    [
+      "An expedition - several units acting as one",
+      "a selection is a description <em>and a count</em>",
+      "<strong>nearly</strong> - the shape is there and <code>move</code>'s quantifier takes one"
+    ],
+    [
+      "<strong>A value computed from the state</strong>",
+      "nothing. The 4 derived traits are each a sentence in a table: <code>metal-in-it</code>, <code>control</code>, <code>surplus</code>, <code>unpaid</code>",
+      "<strong>NO</strong> - there is no way to <em>define</em> one, so a fifth cannot be added by writing it"
+    ],
+    [
+      "<strong>Comparing two computed values</strong>",
+      "nothing. <code>require</code> tests a count against a constant, not one quantity against another",
+      "<strong>NO</strong> - <code>force &gt; nature</code> has no form"
     ]
   ]
 }
