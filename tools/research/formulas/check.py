@@ -65,12 +65,10 @@ DECLARED_FREE = {"energy", "food", "citizen", "labor"}
 # found this; the check was testing a stronger claim than the words can carry.
 DECLARED_SOURCES = {"work"}
 
-# And a declared SINK, by the same argument from the other side. `disorder` deletes a unit and
-# returns nothing, so metal is not conserved across it - net -3 per unit, which check 1 reports
-# correctly. Whether that is right is open: `perish` returns a thing's metal to where it stood,
-# and Sean has said what losing control *means* is still a question. Excluded and named rather
-# than left red, so the check keeps meaning something and the sink stays visible.
-DECLARED_SINKS = {"disorder"}
+# There is no declared sink. `disorder` was one for an hour, because it deleted a unit and
+# returned nothing where `perish` returns a thing's metal. Merging them removed the exception:
+# one recipe cannot disagree with itself.
+DECLARED_SINKS = set()
 
 # A family in a target hides a kind. `resource[extractor.resource]` collapses to the family
 # `resource`, which has no metal weight, so working a metal extractor scored zero. A check
@@ -756,8 +754,10 @@ def main():
     analysed, skipped, bad = check_conservation()
     print("CHECK 1 - metal conserved OUTSIDE extraction, weighted by Binding")
     print(f"  declared sources, excluded: {', '.join(sorted(DECLARED_SOURCES))}")
-    print(f"  declared sinks, excluded: {', '.join(sorted(DECLARED_SINKS))}"
-          " - it deletes a unit and returns no metal, which perish does not")
+    if DECLARED_SINKS:
+        print(f"  declared sinks, excluded: {', '.join(sorted(DECLARED_SINKS))}")
+    else:
+        print("  no declared sinks - every recipe that destroys a thing leaves its metal behind")
     print(f"  {len(analysed)} recipes analysed, {len(skipped)} skipped for state-dependent amounts")
     if skipped:
         print(f"  skipped: {', '.join(skipped)}")

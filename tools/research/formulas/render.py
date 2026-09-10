@@ -1361,6 +1361,62 @@ question, but I think for now we just delete the units.</em> So the world gains 
           change unit -1</code></pre>
 </div>
 <div class="callout">
+<h4>Then Sean read the two definitions and they were one recipe</h4>
+<p><em>Something is wrong with the definitions you are using for disorder and perish. I suspect they
+are the same thing.</em> <strong>They were.</strong> Side by side:</p>
+<pre><code>perish    each thing: &#123;thing <strong>unpaid</strong>:yes&#125;    change metal +thing.metal-in-it   change thing -1
+disorder  each unit:  &#123;unit  <strong>disorder</strong>:yes&#125;  change unit -1</code></pre>
+<p><strong>The same recipe with a different trigger and, for no reason, a different
+consequence.</strong> A thing that cannot be sustained is lost - and food and force are two things
+that sustain, not two mechanics. So it is one recipe over one condition:</p>
+<pre><code>perish  each thing: &#123;thing <strong>unsustained</strong>:yes&#125;   # its upkeep was not met, or the force where it is falls short
+        change metal in thing.location +thing.metal-in-it
+        change thing -1</code></pre>
+<p>Only <code>citizen</code> has an upkeep, so the old <code>perish</code> reached citizens and
+nothing else; the force half reaches units. <strong>Between them they were always covering one idea
+from two ends.</strong></p>
+</div>
+<div class="callout">
+<h4>The duplication was hiding a decision, and merging answered it</h4>
+<p>An hour earlier this page carried an open question: <em>does a unit lost to disorder leave its
+metal behind?</em> <code>perish</code> returned a thing's metal and <code>disorder</code> did not,
+and there was no reason for the difference - <strong>this lane wrote one and not the other, and then
+filed the inconsistency as though it were a design question.</strong></p>
+<p><strong>One recipe cannot disagree with itself</strong>, so the merge decides it: the metal is left
+where the thing stood, which is what the release's own recipe already did. And
+<code>DECLARED_SINKS</code> is empty again - it existed for one hour, to excuse an exception that
+should not have been made. Check 1 now says <em>no declared sinks: every recipe that destroys a thing
+leaves its metal behind</em>, which is a stronger sentence than the exception it replaces.</p>
+<p><strong>The general shape is worth keeping.</strong> Two recipes that do the same thing will
+disagree somewhere, and the disagreement looks like a question about the game rather than a defect in
+the writing. <code>X-12</code> found the same thing in <code>deploy ark</code> and
+<code>found by land</code> - seven duplicated rows - and this is the second instance.</p>
+</div>
+<div class="callout">
+<h4>What survives from the hour it existed</h4>
+<p>The check-1 hole is real and stays fixed: <strong>check 1 was not grounding families</strong>, so
+destroying a <code>unit</code> scored zero where an ark and a pioneer weigh 3. That is the same
+failure that made check 2 blind to mining, which <code>X-17</code> fixed in check 2 and nowhere else.
+<strong>No recipe had destroyed a family until <code>disorder</code> did</strong>, so nothing had
+exposed it - <code>move</code>'s two family lines cancel. A hole that only opens when the data changes
+is not one a green check will ever show you.</p>
+</div>
+<div class="callout">
+<h4>Why the quantifier carries the distinction for free</h4>
+<p>This is <em>owner is the quantifier</em> paying off. <code>some</code> is the player's and
+<code>each</code> is the world's, which is the specification's own line - <em>the player's are
+offered wherever their inputs are present, to take or to leave; the world's are not offered</em>.
+So <strong><code>some</code> with <code>&gt;</code> is claiming and <code>each</code> with
+<code>&ge;</code> is holding</strong>, and the difference between the two moments is already written
+in the first word of each recipe.</p>
+<p><strong>Answered 2026-09-09.</strong> Sean: <em>being short on force is everything goes into
+disorder, which means losing control of all units there. What losing control means is an interesting
+question, but I think for now we just delete the units.</em> So the world gains a recipe of exactly
+<code>spoil</code>'s shape - two lines:</p>
+<pre><code>disorder  each unit: &#123;unit disorder:yes&#125;    # derived: the force where it is falls short
+          change unit -1</code></pre>
+</div>
+<div class="callout">
 <h4>Adding it found a hole in check 1 that had been there all along</h4>
 <p>Check 1 first reported <strong>no violation</strong>, and it should have reported two. Destroying
 a <code>unit</code> destroys 3 metal-equivalent, and <strong>check 1 was not grounding

@@ -589,17 +589,17 @@
       "lines": [
         [
           "each",
-          "thing: {thing unpaid:yes}",
+          "thing: {thing unsustained:yes}",
           "",
           "",
-          "was the selection *each thing whose upkeep is unpaid*, which was prose outside the language"
+          "was `unpaid:yes`. Two causes, one condition: its upkeep was not met, or the force where it is falls short"
         ],
         [
           "change",
           "metal in thing.location",
           "+thing.metal-in-it",
           "",
-          "row 2"
+          "the metal is left where the thing stood - and now this answers the force case too, by being the only answer either has"
         ],
         [
           "change",
@@ -670,27 +670,6 @@
           "",
           "",
           "both rows were one flip"
-        ]
-      ]
-    },
-    {
-      "name": "disorder",
-      "was": null,
-      "selection": "quantified on line 1, rather than in prose beside the recipe",
-      "lines": [
-        [
-          "each",
-          "unit: {unit disorder:yes}",
-          "",
-          "",
-          "derived: the force where it is falls short of that place's nature"
-        ],
-        [
-          "change",
-          "unit",
-          "-1",
-          "",
-          "Sean, 2026-09-09: *everything goes into disorder, which means losing control of all units there* - and for now losing control is deletion"
         ]
       ]
     }
@@ -989,9 +968,9 @@
       "The model already does this once, in <code>make-world</code>. See <em>Calls into the code</em>."
     ],
     [
-      "OPEN - does a unit lost to disorder leave its metal behind",
-      "<code>disorder</code> deletes a unit and returns nothing, so it is a metal <strong>sink</strong> - net &minus;3 per unit. <code>perish</code> sets the opposite precedent: a thing that perishes returns its metal to where it stood.",
-      "It turns on what <em>losing control</em> means, which Sean called an interesting question and left open. Deleted is a placeholder; a unit that merely stops being yours still has its metal in it."
+      "NOTED - disorder and perish were one recipe, and the duplication hid a decision",
+      "Sean: <em>something is wrong with the definitions for disorder and perish, I suspect they are the same thing.</em> They were - a thing that cannot be sustained is lost, with food and force as the two things that sustain.",
+      "Merged. And the merge <strong>answered</strong> the open metal question rather than leaving it: one recipe cannot both return a thing's metal and not."
     ]
   ],
   "collapse": [
@@ -1823,8 +1802,8 @@
       "derived"
     ],
     [
-      "unpaid",
-      "a thing with upkeep",
+      "unsustained",
+      "a thing that food or force must sustain",
       "derived"
     ],
     [
@@ -1836,11 +1815,6 @@
       "movable",
       "whatever moves",
       "stored"
-    ],
-    [
-      "disorder",
-      "a unit",
-      "derived"
     ]
   ],
   "thing_shape": [

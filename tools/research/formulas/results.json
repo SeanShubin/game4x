@@ -18,7 +18,7 @@
     "violations": []
   },
   "unbounded": {
-    "analysed": 20,
+    "analysed": 18,
     "skipped": [
       "perish"
     ],
@@ -28,7 +28,7 @@
         "1"
       ],
       [
-        "disorder[pioneer]",
+        "found by land",
         "10/27"
       ],
       [
@@ -65,16 +65,18 @@
       ]
     ],
     "gain": {
-      "citizen": "7/27"
+      "citizen": "1",
+      "extractor": "20/27",
+      "garrison": "10/27"
     },
-    "metal_gain": "0",
+    "metal_gain": "10/9",
     "free": [
       "citizen"
     ],
     "undeclared": [],
     "hidden": [],
     "without_sources": {
-      "transitions": 17,
+      "transitions": 15,
       "witness": [
         [
           "create labor",
