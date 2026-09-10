@@ -672,6 +672,34 @@
           "both rows were one flip"
         ]
       ]
+    },
+    {
+      "name": "stow",
+      "was": null,
+      "selection": "quantified on line 1, rather than in prose beside the recipe",
+      "lines": [
+        [
+          "each",
+          "t: {territory}",
+          "",
+          "",
+          "Sean, 2026-09-09: *just automatically cram as much as will fit in storage, the rest goes into disorder*"
+        ],
+        [
+          "change",
+          "resource in t",
+          "-count {resource in t}",
+          "",
+          "take up everything the territory holds directly"
+        ],
+        [
+          "change",
+          "resource in {store in t}",
+          "+count {resource in t}",
+          "clamp",
+          "**clamp puts back what fits and no more** - so the remainder is simply gone, which is the disorder"
+        ]
+      ]
     }
   ],
   "creation": [
@@ -2124,7 +2152,8 @@
     "$to": "place",
     "{orbit below:t}": "orbit",
     "holder of citizen": "territory",
-    "holder of thing": "territory"
+    "holder of thing": "territory",
+    "{store in t}": "store"
   },
   "containment_declared": [
     [
@@ -2203,7 +2232,7 @@
       "store",
       "resource",
       "10",
-      "release -> Where things are"
+      "release -> Where things are; filled by `stow`, which is what `X-21` asked for"
     ],
     [
       "orbit",

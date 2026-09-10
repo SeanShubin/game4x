@@ -450,6 +450,20 @@ the item describes**: its own data said `make-territory(1, grassland, 1)`, asser
 nature for territory 1 that nothing states, until `d74a1c6`'s successor removed it. **A document
 that leaves a stored trait with no source invites the reader to invent one**, and this reader did.
 
+**Checked again 2026-09-09, because Sean said these could be copied from the spec.** They cannot,
+and this is exactly what to look for: `spec/planet.md:54` lists the six biomes and says ocean is not
+claimable; the release's *Biomes* table gives numbers **per biome**; *Territory resources* gives
+numbers **per territory** and has **no biome column**. **Nothing anywhere maps a territory to a
+biome.**
+
+**Nor can it be derived.** A territory's numbers do not match any biome's - territory 1 is
+`3 x 4` for all three resources and no biome is - and the release says why: *the numbers here guide
+and do not bind; a territory's own are in Territory resources.*
+
+**The ask is smaller than twelve biomes.** Only `nature` is read by the force rule, and every biome
+carries **1** except jungle, which carries **2**. So what is needed is **which of the twelve
+territories are jungle** - and every other territory takes 1.
+
 
 ### X-20 - *declares no capacity* and *declares no limit* are opposites, and the release means the second
 
@@ -557,6 +571,23 @@ differ: a player action that stores, or a world recipe at the turn's end that ke
 second matches *which store holds which unit is not recorded* and needs no choice from the player;
 the first is what *store it* sounds like. **This lane takes neither.**
 
+**Answered and built 2026-09-09.** Sean: *just automatically cram as much as will fit in storage, the
+rest goes into disorder.* So it is the world's, not the player's, and it is three lines:
+
+```
+stow  each t: {territory}
+      change resource in t             -count {resource in t}          # take up everything loose
+      change resource in {store in t}  +count {resource in t}  [clamp]  # put back what fits
+```
+
+**`clamp` does the whole of it.** It puts back what fits and no more, so the remainder is simply
+gone - which is the disorder, with no second recipe and no test for how much was over. **This is
+`clamp`'s first call site**, and it was declared as a candidate with no reason to exist since the
+attach column was written.
+
+**Check 8 now reports 19 of 19 declarations reachable.** *A store may hold a resource* was the one
+pair nothing filled, which is how this item was found; it is filled.
+
 
 ### X-22 - the force rule is stated and nothing implements it
 
@@ -648,6 +679,23 @@ because `found by land` consumes a pioneer in the territory it founds. Sean: the
 boundary and entering is the cost. **That is better than what was proposed** - the contest belongs on
 `move`, which exists, and the ark stops being a special case, since an orbit and the territory below
 are two places with a boundary like any other.
+
+**Sean answered the consequence 2026-09-09**: *if you pass the force test you have presence there,
+and therefore control. If you fail the force test you lose all your units.* **The failure half is
+already built** - `unsustained` covers a thing whose upkeep is unmet *or* whose place is short of
+force, and `perish` deletes it. Nothing more is needed for it.
+
+**But one test cannot carry both halves, and the arithmetic says so.** A citizen is force 1, so
+minimal control is 2; a jungle is nature 2.
+
+- **If the single test is `>`** - greater, as for entering - then 2 &gt; 2 is false, so **a jungle
+  colony loses its units the turn it is founded.** No jungle is ever holdable
+- **If it is `&ge;`** - equal, as for maintaining - then a lone pioneer at force 2 passes, so
+  **two pioneers are never needed** and the jungle is no harder than anywhere else
+
+**Both readings break something Sean has asked for**, and the two-test version he described earlier
+breaks neither: `>` when a player fires `resolve`, `&ge;` when the world checks each turn. **That is
+the one thing still to settle**, and it is a choice between one test and two rather than a gap.
 
 ### X-23 - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed
 
