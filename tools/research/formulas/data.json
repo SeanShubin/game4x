@@ -966,6 +966,11 @@
       "NOTED - a call into code is safe when it returns a set or a number, never when it returns an effect",
       "Sean, 2026-09-09, on guard rather than acting: <em>I will end up needing a way to have my data model express calls into the code - computing the territories reachable in 3 spaces, say.</em>",
       "The model already does this once, in <code>make-world</code>. See <em>Calls into the code</em>."
+    ],
+    [
+      "OPEN - what a failed resolve costs, which is the only thing left to decide",
+      "Sean's <em>resolve territory</em> makes claiming a player recipe and holding a world one, so greater-to-enter and equal-to-maintain are two recipes rather than one test needing a marker.",
+      "What is not decided is what happens when the force is short - nothing, a loss, a retreat. See <em>Judging force after the move</em>."
     ]
   ],
   "collapse": [
@@ -2962,7 +2967,27 @@
     [
       "<strong>An expedition of any size</strong>",
       "<code>some n pioneers: {…}</code>, with force summed over however many",
-      "<strong>NEEDS A CHANGE.</strong> <code>some</code> binds a name over <em>one</em> member of a set. Carrying a count is a different reading of a quantifier, and nothing today can express <em>take as many as you like and let the force follow</em>"
+      "<strong>Not needed at all, on Sean's reordering.</strong> If units move one at a time and force is judged afterwards, no expedition has to exist - see <em>Judging force after the move</em>. What was a construct becomes two rows of data"
+    ]
+  ],
+  "resolve_shape": [
+    [
+      "<code>move</code>",
+      "<code>some</code> - the player's",
+      "no force test at all",
+      "moving is free; a unit walks in and may be too weak to do anything with it"
+    ],
+    [
+      "<code>resolve territory</code>",
+      "<code>some</code> - the player's",
+      "<code>require sum force of {unit in t} &gt; t.nature</code>",
+      "<strong>greater</strong> to claim, fired when the player judges the force is there"
+    ],
+    [
+      "holding, each turn",
+      "<code>each</code> - the world's",
+      "<code>require sum force of {unit in t} &ge; t.nature</code>",
+      "<strong>equal</strong> to maintain, and automatic because the world's recipes are not offered"
     ]
   ]
 }

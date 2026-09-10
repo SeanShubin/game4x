@@ -1293,6 +1293,70 @@ citizens all working metal in the same turn. <strong>So closing the loop is poss
 mechanic rather than a designed one.</p>
 </div>
 
+<h2>Judging force after the move</h2>
+<p>Sean, pushing back on the expedition: <em>I suspect the problem is the order in which we are
+computing things. If I move pioneers over one at a time and evaluate force after, there is no
+problem. That still may very well be a change, but a different kind of change.</em></p>
+<p><strong>He is right, and it is a smaller change than the one it replaces.</strong> The expedition
+existed only because force was tested <em>before</em> a move, so two pioneers had to cross as one
+thing. Judge it after and they cross separately, the second arrival makes the force 4, and
+<strong>nothing has to carry a count.</strong></p>
+<div class="callout">
+<h4>And the game already runs this exact pattern, once</h4>
+<pre><code>upkeep   each thing: &#123;thing upkeep:any&#125;      change food -thing.upkeep   [record]
+         unpaid   is a <strong>derived</strong> trait: its upkeep was not met
+perish   each thing: &#123;thing unpaid:yes&#125;      … consequences</code></pre>
+<p>A failure that neither stops the turn nor vanishes is <strong>written into a derived trait and
+read by a later recipe</strong>. That is what <code>record</code> means, and it is the one attach
+value that was in use before it had a name. <strong>Force fits the same three lines</strong>: move
+freely, let a derived trait say a territory's force is short of its nature, and let a world recipe
+read it.</p>
+<p><strong>So it needs no new construct whatever.</strong> <code>perish</code>'s quantifier already
+filters on a derived trait - <code>{{thing unpaid:yes}}</code> - so
+<code>{{territory overwhelmed:yes}}</code> is a shape that runs today. What was going to be a change
+to how a quantifier is read becomes <strong>one derived trait and one world recipe</strong>, which
+is data.</p>
+</div>
+<div class="callout">
+<h4>The different kind of change is where it moves the test</h4>
+<p>From a <strong>precondition</strong> to a <strong>consequence</strong>. A guard refuses an action
+and leaves the state untouched; a consequence lets it happen and deals with the result. That is a
+real difference and mostly in the reordering's favour: <strong>you may march into a jungle and be
+overwhelmed</strong>, rather than being told you cannot go. Attempting and failing is a game;
+being refused is a menu.</p>
+<p>It also removes a condition this report could not state. A guard on <code>move</code> had to know
+whether you were entering <em>contested</em> ground, or your own territory became unenterable.
+<strong>Judged afterwards there is nothing to except</strong> - a territory you hold has your force
+in it already.</p>
+</div>
+<div class="callout">
+<h4>And it does not even have to wait for the turn to end</h4>
+<p>Sean, a minute later: <em>it doesn't even have to be at end of turn, I could move 1, move another,
+and have a resolve territory or something like that.</em> <strong>That is better again, and it
+recovers something the end-of-turn version had lost.</strong></p>
+<p>Judging only at a turn's end, there is one test on whatever is present, so <em>greater to enter</em>
+has no separate moment - either it collapses into <em>equal to maintain</em>, or a territory has to
+know who has just arrived. <strong>A player-fired <code>resolve</code> gives the two tests two
+moments without needing a marker</strong>, because claiming is something a person does and holding is
+something the world checks:</p>
+<div class="scroll"><table><thead><tr><th></th><th>Whose</th><th>The test</th><th></th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td class="target">{r[1]}</td><td class="target">{r[2]}</td><td class="note">{r[3]}</td></tr>' for r in DATA["resolve_shape"])}</tbody></table></div>
+<p><strong>Three recipes, no new construct, and the rule kept whole.</strong> It also removes the
+derived trait the previous shape wanted: with the test inside <code>resolve</code>, nothing needs an
+<code>overwhelmed</code> flag written for a later recipe to read.</p>
+</div>
+<div class="callout">
+<h4>Why the quantifier carries the distinction for free</h4>
+<p>This is <em>owner is the quantifier</em> paying off. <code>some</code> is the player's and
+<code>each</code> is the world's, which is the specification's own line - <em>the player's are
+offered wherever their inputs are present, to take or to leave; the world's are not offered</em>.
+So <strong><code>some</code> with <code>&gt;</code> is claiming and <code>each</code> with
+<code>&ge;</code> is holding</strong>, and the difference between the two moments is already written
+in the first word of each recipe.</p>
+<p><strong>One thing is still open, and it is the only one.</strong> What a short force costs - nothing,
+a loss, a retreat - is a game design answer and this lane proposes none.</p>
+</div>
+
 <h2>Which of the three need the language to change</h2>
 <p>Sean, 2026-09-09: <em>which of these can be represented without changing how the data structure is
 interpreted?</em> <strong>Three of four are data. One is not, and it is not the one that looks
