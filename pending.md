@@ -19,12 +19,10 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
-- **X-18** - `e570e94` X-18 and X-27's tidy: a description that cannot go stale, and a line the next line undid · still open in `lenses/research/outbox.md`
-- **X-27** - `e570e94` X-18 and X-27's tidy: a description that cannot go stale, and a line the next line undid · still open in `lenses/research/outbox.md`
 
 ## What is outstanding
 
-### To code (11)
+### To code (9)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
@@ -35,8 +33,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-11** - the four roles are two dimensions, and `create-if-missing` is a cell the grid always had · `lenses/research/outbox.md`
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
-- **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
-- **X-27** - losing a territory to nature does not delete the units on it, and one line above it is dead · `lenses/research/outbox.md`
 
 ### To spec (31)
 

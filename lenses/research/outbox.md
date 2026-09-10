@@ -396,7 +396,7 @@ implying work.
 
 ### X-18 - `reports/index.html` says six primitives, and the report it links says five
 
-**to** code · **status** open · **raised** 2026-09-09 · **source** this lane's own change, which is what made it wrong
+**to** code · **status** **acted** 2026-09-10 · `e570e94` — the sentence no longer states a count. **The fix is how rather than what**: it says what the report is for and lets the link carry what is in it, which is the version that cannot go stale · **raised** 2026-09-09 · **source** this lane's own change, which is what made it wrong
 
 **Where.** `reports/index.html:51` describes the link as *the specification re-expressed in six
 primitives, and the world built from an empty game in the same six*.
@@ -754,7 +754,7 @@ stops referring to storage; or the release stops having stores. **This lane take
 only that the third would make `X-21` moot and the first would make it urgent.
 ### X-27 - losing a territory to nature does not delete the units on it, and one line above it is dead
 
-**to** code · **status** open · **raised** 2026-09-10 · **source** refuting `X-22` against `crates/` · **found by** reading the force contest this lane had claimed did not exist
+**to** code · **status** **acted in part** 2026-09-10 · `e570e94` — the dead `retain` is gone, and the test that hid it now asserts the territory holds **nothing at all** rather than four named kinds. **The first half is refused, and rightly**: `spec/control.md:42` says *any ark on it becomes unusable* where Sean said *we just delete the units*, so building it would be the code lane choosing between two rules. It is `C-77` now · **raised** 2026-09-10 · **source** refuting `X-22` against `crates/` · **found by** reading the force contest this lane had claimed did not exist
 
 **Where.** `crates/game-model/src/game.rs:914-925`, in `end_turn`, and
 `crates/game-model/src/territory.rs:584-591`, `lost_to_nature`.
@@ -784,6 +784,18 @@ tidy-up** and should ride with it rather than on its own.
 
 
 ## Resolved
+
+**Refused on 2026-09-10, and the refusal found something this item had not.** The code lane built
+the tidy and declined the rule, because `spec/control.md:42` says *any ark on it becomes unusable*
+and Sean said *for now we just delete the units* - two rules, and choosing between them is not the
+code lane's to do. **It also noticed that the specification names an ark and the code marks every
+unit**, which this item never saw: it read `crates/` and Sean's words and **never opened
+`spec/control.md`**. Two columns of three, in the item that was itself about checking columns.
+
+**Worth recording about the test, not just the rule.** The whole-population assertion that replaced
+the four named ones was **correct and worthless until a yard was on the territory** - every kind
+present was already covered by one of the four, so the first mutation run against it was not caught.
+A check needs a subject that only it can see.
 
 ### X-21 - REFUTED: storing is built, and a store is a bound rather than a container
 
