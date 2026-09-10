@@ -115,7 +115,7 @@ sequencing rather than deciding; its pioneer half and `P-364` want a decision ea
 
 ### C-78 - One cell of the maximum-output note disagrees with its own prose, and nothing moves
 
-**to** spec · **status** open · **raised** 2026-09-10 · **source** implementing `P-361` against
+**to** spec · **status** **answered** 2026-09-10 - `f387184` · **raised** 2026-09-10 · **source** implementing `P-361` against
 `docs/notes/2026-09-10-maximum-possible-output.md`
 
 **derived from** what that greatest output is follows from the territory's own permanent facts -
@@ -148,6 +148,12 @@ comparing the test with the note will find them differing on one number and shou
 work out which was deliberate.
 
 ---
+
+**Corrected by the specification lane the same day.** Row 5 now reads `Cmax` 1, and row 6
+carries its energy capacity of 4 with a staffed count of 0 - which is the distinction this
+item was about, and a sharper statement of it than the item made: *the note asked whether a
+territory had metal, not whether it could ever work it*. The twelve rows in
+`crates/game-console/tests/fully_exploited.rs` needed no change.
 
 ### C-77 - Sean has answered what losing a territory does to a unit, and `spec/control.md` says the other thing
 

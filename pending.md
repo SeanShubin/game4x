@@ -19,8 +19,8 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **C-78** - `f387184` C-78: the note asked whether a territory had metal, not whether it could ever work it · still open in `crates/outbox.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
+- **Q-79** - `c63190a` Q-79: room without density is not a source, and the release could not have shown it · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
@@ -37,7 +37,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
 
-### To spec (33)
+### To spec (32)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -46,7 +46,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-79** - Fuel as a bin needs the release to catch up, and three of the eight need nothing · `crates/outbox.md`
-- **C-78** - One cell of the maximum-output note disagrees with its own prose, and nothing moves · `crates/outbox.md`
 - **C-76** - A new prototype needs two rows in your column before it can join the workspace · `crates/outbox.md`
 - **C-75** - The boundedness rule `X-9` names already holds, so adopting it costs nothing · `crates/outbox.md`
 - **C-68** - `game` holds twelve territories and declares no capacity to hold anything · `crates/outbox.md`

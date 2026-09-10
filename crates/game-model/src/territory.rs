@@ -468,15 +468,13 @@ impl Territory {
     /// **Nothing here reads history**, which is what `P-125` rejected an earlier definition
     /// for. Every input is a `(capacity, density)` pair off *Territory resources*.
     ///
-    /// # One cell of the note this is derived from disagrees, and it does not change anything
+    /// # The note this is derived from agreed with it after one correction
     ///
-    /// `docs/notes/2026-09-10-maximum-possible-output.md` gives territory 5 a `Cmax` of 3,
-    /// which is its food capacity times its density. Its own prose says the opposite two
-    /// paragraphs later - *it starves to one citizen and holds there for ever ... its maximum
-    /// possible output is one food* - and the table's own row 6 applies the same reasoning
-    /// this does, giving a `Cmax` of 4 where capacity times density is 16. **The `Spare` and
-    /// `Staffed` columns are unaffected either way**, so the conclusion the note draws stands
-    /// on either reading. Reported as `C-78`.
+    /// `docs/notes/2026-09-10-maximum-possible-output.md` gave territory 5 a `Cmax` of 3 -
+    /// food capacity times density - where its own prose two paragraphs later said *it
+    /// starves to one citizen and holds there for ever*. This lane built the prose reading
+    /// and filed the disagreement as `C-78`; the specification lane corrected the table in
+    /// `f387184`, and the twelve rows and this function now say the same thing.
     pub fn maximum_output(&self) -> (u32, usize, usize) {
         let food_capacity = self.capacity_for(Resource::Food);
         let food_density = self.density_of(Resource::Food);
