@@ -58,6 +58,38 @@ was wrong, and being refuted is the lens working.
 > `docs/notes/proposals.md` and is 16. A number repeated is not a number checked.
 
 
+> **The floor for the review of Sean's 2026-09-10 batch.** `c3cccc4` at 10:45 promoted `P-356`,
+> `P-360`, `P-361`, `P-362`, `P-363`, `P-364`, `P-365` and `P-366` in one commit. The code lane's
+> implementation begins after it, so `c3cccc4..HEAD` is the floor - **taken from the commit that
+> created the work, not from a clock.** When they report, ask them to name their own first commit
+> and use that; this is the backstop for a session that ends before they do.
+
+### Q-78 - `token.rs` says the comment rule is unspecified, and the spec has specified it for twelve days
+
+**to** code · **status** open · **raised** 2026-09-10 · **source** describing the notation
+for Sean
+
+**Where.** `crates/command-language/src/token.rs:39`.
+
+**What.** The doc comment on `COMMENT` reads ***Not in `spec/console.md`.*** *... it is an addition to
+the language and wants a decision.* `spec/console.md:28` says *A `#` begins a comment. The rest of
+the line is ignored*, and has said it since `4c6f2dd` on **2026-08-28**. The comment was written
+2026-08-27 in `08891e0`, one day earlier, and nothing connected the two.
+
+**Why.** Two files in one crate now disagree about whether the rule exists. `state.rs:452` quotes
+that same spec line as authoritative, in the test that keeps both readers honest - so the tokenizer
+says the rule is an unsanctioned addition while its sibling test cites it as the spec. *Wants a
+decision* is an invitation to change or delete a rule that was settled before the file was a day
+old.
+
+**Whether.** Worth fixing while you are in the file, and not worth a trip on its own. `P-366` and
+the expression grammar put you in `token.rs` regardless: it splits on whitespace and braces only,
+and `spec/console.md` -> The language now needs `.`, `(`, `)`, `,` and five comparison signs.
+
+**The shape, which is the part worth keeping.** `Q-66` - a false reason sitting next to the
+assertion it explains. The assertion is correct and the tokenizer does the right thing; only the
+sentence saying why is false, so nothing goes red and no test can see it.
+
 ### Q-9 - Small duplication and dead code, six items
 
 **to** code · **status** noted · **raised** 2026-08-28 · **source**
