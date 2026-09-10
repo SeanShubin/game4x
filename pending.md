@@ -8,13 +8,14 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-356** - A field's value may name a kind rather than a thing · `docs/notes/proposals.md`
+- **P-366** - What a value may be, so that a rule can say what it means · `docs/notes/proposals.md`
 - **P-364** - Building a world is made of the same rules as playing one · `docs/notes/proposals.md`
 - **P-365** - What an orbit boundary is, which lets an Ark move between orbits · `docs/notes/proposals.md`
 - **P-362** - `launch ark` puts an Ark in orbit, and the reason it did not has dissolved · `docs/notes/proposals.md`
 - **P-363** - What a rule may ask the engine, and what it may never ask it to do · `docs/notes/proposals.md`
 - **P-361** - Fully exploited is maximum possible output, not every place a structure would fit · `docs/notes/proposals.md`
 - **P-360** - A garrison has no force, and one sentence still says it has one · `docs/notes/proposals.md`
-- **P-356** - A field may name a kind instead of a thing, and nothing says so · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -25,7 +26,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-356** - `49f0173` Restore the row naming the questions, which is why P-356 never reached him · still open in `docs/notes/decisions.md`
+- **P-356** - `6740b9b` Reflow P-356's asks field, which I wrapped the same way twice · still open in `docs/notes/proposals.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
 
 ## What is outstanding

@@ -62,6 +62,88 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-356 - A field's value may name a kind rather than a thing
+
+**to** sean · **status** open · **raised** 2026-09-08 · **decided** 2026-09-10 by Sean · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Moved here from `docs/notes/decisions.md`**, which holds a question only while it is unanswered.
+Sean, 2026-09-10: *yes, a field may name a kind instead of a thing. This is to get something concrete
+and runnable. I will want to revisit this decision empirically once we have something running.*
+
+**Added after *a thing's own identifier is `id`*:**
+
+> **A field's value may name a kind rather than a thing.** `territory:1` refers to one particular
+> territory; `resource:food` says which resource, and means no particular food. **Which of the two a
+> field takes is a fact about that field**, so reading the key still tells you what its value is.
+
+**What it settles.** `spec/console.md` said how a field referring to a **thing** is written and said
+nothing about one whose value is a **kind**. The release uses both - `territory:1` against
+`resource:food` and `unit:ark` - and the code lane could not tell whether `unit:ark` was legal, took
+the form that preserved behaviour, and filed `C-56`. **Nothing was wrong; the document did not
+answer.**
+
+**The intent to revisit is recorded** in `docs/notes/spec-backlog.md`, so that *concrete and runnable
+first, measured later* survives this landing rather than living in one conversation.
+
+**It does not settle grounding, and `P-366` does not either.** Checked against the research lens's
+encoding: every line there that puts a **family** where a kind belongs is a quantifier's range -
+`each thing: {thing keeps:0}`, `some unit: {unit ready:yes}` - which is a different position in the
+notation from a field's value. **That question is still open and unproposed.**
+
+
+### P-366 - What a value may be, so that a rule can say what it means
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**The biggest hole in the notation as written down.** `spec/console.md` says a value is *a word, a
+number, or another command in the same form*. **`sum force of {…}` is none of the three**, and
+neither is `count {…}`, `min(a, b)` or a path - so the force rules, the storage rule and `grow`'s
+quantity are all rules the specification cannot currently state.
+
+**Added at the end of *The language*:**
+
+> **In a recipe, a quantity and either side of a guard may be an expression.** An expression is one
+> of these and nothing else:
+>
+> - a number
+> - a **path**, which reads a trait of something a name is bound to, as `t.nature`
+> - **`holder of x`**, what holds `x` - which is how a thing's place is read, since a thing is not
+>   located by a trait
+> - **`<trait> of x`**, one thing's trait
+> - **`count {…}`**, how many things match a description
+> - **`sum <trait> of {…}`** and **`max <trait> of {…}`**, that trait aggregated over all of them
+> - **`min(a, b)`**, the lesser of two
+> - **`available <kind> of x`**, a container's total capacity for that kind less what it holds
+>
+> **A guard compares two expressions**, with `=`, `<`, `≤`, `>` or `≥`.
+>
+> **The words an expression is built from are the notation's own.** They are the one thing in a data
+> file that is not a kind, a trait, or one of a trait's values.
+
+**Every form is used, and two were already specified rather than invented.** `available <kind> of x`
+is `spec/logistics.md`'s *available capacity is the total less the used, derived*, given a written
+form. `holder of x` is that file's *a thing is not located by a trait; what holds it is what says
+where it is*. **A path was already used by four quantities in the release before any of this
+existed** - *read from a trait of one of the ingredients*.
+
+**`max` and `sum` are your force rule.** Unorganized force is the largest single contribution and
+organized force is the sum; `game.rs:236` already computes it that way. **Until this lands there is
+no way to write down what the code already does.**
+
+**The last bullet is a consequence, not decoration.** *The language* ends by saying **every word in a
+data file is a kind, a trait, or one of a trait's values** - and `count`, `sum`, `min` and `of` are
+none of those. That sentence is what the research lens's check 10 measures, at 517 of 517 tokens. So
+**the exception has to be stated or the check goes red on the first expression written**, and stating
+it keeps the check meaningful rather than weakening it.
+
+**Scoped to recipes deliberately.** `spec/console.md:64`'s rule about a command's value is untouched:
+a command carries the player's choices, not arithmetic. If a command should also take an expression,
+that is a separate question and this does not ask it.
+
+**Consistent with `P-363`**, checked: an expression returns a **number**, which is exactly the shape
+`P-363` calls safe, and neither `count` nor `sum` reads anything outside the state.
+
+
 ### P-364 - Building a world is made of the same rules as playing one
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> Commands

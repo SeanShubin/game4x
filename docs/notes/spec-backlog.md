@@ -2454,3 +2454,7 @@ rots**, which is what a note from the same morning is about.
 
 **And one that is this lane's to do rather than his to decide.** `README.md`'s directory tree is
 stale and has been since before 2026-08-30, which is the surviving half of `C-5`.
+
+### A field naming a kind is provisional
+
+Sean, 2026-09-10, deciding `P-356`: *yes, a field may name a kind instead of a thing. **This is to get something concrete and runnable. I will want to revisit this decision empirically once we have something running.*** So the rule lands to unblock building, and the measurement that would confirm or overturn it has not been designed. **It is not a question waiting on him** - it is a decision he has flagged as provisional, recorded here so that the flag outlives the conversation.
