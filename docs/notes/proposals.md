@@ -62,6 +62,86 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-364 - Building a world is made of the same rules as playing one
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> Commands
+
+**Your decision of 2026-09-10**, answering `S-85`: *the only reason I didn't decide earlier is
+because I wasn't sure it was possible.*
+
+**Replacing the paragraph at `spec/console.md:73-75`:**
+
+> A command that changes the game names a recipe, and that holds while a world is being designed as
+> much as while it is played. A game state changes only by a transition, which phase a game is in is
+> part of its state, and designing is therefore made of the same rules as playing. The design
+> commands are the player's recipes, offered only while the phase is design. `show`, `help` and
+> `history` are listed here because they change nothing, and so name no recipe.
+
+**What it settles.** `spec/console.md` said the design commands *build a world before there is a game
+to change* and that **neither is a recipe**; `spec/invariants.md` says state changes only by a
+transition and that **this holds for designing the world as much as for playing it**. A game in the
+design phase is a game, so the two could not both stand. This keeps the invariant and rewrites the
+sentence that contradicted it.
+
+**It needs no third owner.** `spec/invariants.md` allows a recipe the player or the world, and
+**these are the player's** - offered, to take or to leave, exactly as the rule says. What makes them
+unavailable later is the phase, which is a trait a guard can read.
+
+**It was checked to be possible before being proposed**, which is what you were waiting for. The
+research lens built its world from four recipes - `make-territory`, `make-deposit`, `make-orbit`,
+`make-adjacency` - and `X-13` answered your question about one format for both with *yes*. **`P-363`
+is what makes the last of it work**: `create planet <size>` computes an icosahedron from geometry,
+which is a rule asking the engine for a **set**, and `P-363` says that is the safe shape. **The two
+proposals hold each other up and neither is enough alone.**
+
+**One consequence, filed rather than resolved.** The paragraph above this one says *the commands are
+not a list this document keeps; they are the recipes whose owner is the player*. If the design
+commands are the player's recipes, then **the list at `spec/console.md:90-96` is a list of recipes**,
+and `spec/invariants.md` says a recipe lives in a data file. Whether that list stays as a convenience
+or moves to the data is a follow-on this does not decide, and a cleanup is filed the moment this
+lands.
+
+
+### P-365 - What an orbit boundary is, which lets an Ark move between orbits
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/orbit.md` -> Crossing between layers
+
+**Your decision of 2026-09-10**: *I have been meaning to add that for a while now.*
+
+**Added after the bullet that is already there:**
+
+> - An **orbit boundary** is one an orbit is on either side of: between an orbit and the territory
+>   below it, or between two orbits. A unit that crosses orbit boundaries may cross any of them, and
+>   one that does not may cross none
+
+**Almost nothing had to be built for this.** `move` already asks for a place *joined to `$from` by an
+edge the unit crosses*; orbital adjacency is already stated, in the bullet above this one; and the
+release's *Units and structures* already gives an Ark **`orbit border`** in its **Crosses** column.
+**The only missing piece was what that value means** - `border` and `orbit border` appear in
+`releases/first-release.md` and nowhere else in the repository, which is `S-73`, open since
+2026-09-07. This closes the Ark half of it.
+
+**Why it is `recovered` rather than new.** `P-345` removed *launching, landing and crossing from one
+orbit to another are moves, and cost what any other move costs* from this file, because **determining
+costs is the domain of individual recipes, not invariants** - and the cost half was the objection.
+This says only which boundaries exist and who may cross them, and leaves every cost to `move`.
+
+**And it exposes one thing that has no answer yet.** An Ark carries **Fuel 2**, and `spec/units.md`
+says fuel moves freely between **a controlled territory** that has it and anything **there**. **An
+orbit is not a territory and is not in one** - it is *next to* the one below it - so an Ark in orbit
+can never be refuelled, and an Ark that `P-362` puts there arrives with an empty bin. **It could
+cross no boundary at all.**
+
+**This proposal does not fix that and must not**, because there are at least three answers and they
+are different games: launching fuels the Ark from the territory that built it; fuel moves freely to
+the orbit above a controlled territory as well as within it; or an Ark carries no fuel and moving one
+costs something else. **It is the one question left that this lane cannot infer**, and it is stated
+here so that landing this does not bury it.
+
+**Nothing in the first release waits on it.** The release's loop ends at launching, and no Ark moves
+between orbits in it. This is a rule about the game rather than about what is being built now.
+
+
 ### P-362 - `launch ark` puts an Ark in orbit, and the reason it did not has dissolved
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes
@@ -253,7 +333,7 @@ It proposed no words, which was right: `spec/` is this lane's to draft for.
 
 ### S-85 - `spec/` says designing both is and is not made of recipes
 
-**to** spec - **status** open - **raised** 2026-09-10 - **source** checking whether *add a start
+**to** spec - **status** **acted** 2026-09-10 - Sean decided it the day it was filed; `P-364` carries the words - **raised** 2026-09-10 - **source** checking whether *add a start
 command* needed a proposal, and finding that it did not - **found by** reading `spec/console.md`
 before drafting rather than after
 
