@@ -2880,5 +2880,67 @@
       "anything with a hidden seed",
       "<strong>breaks the dump.</strong> A state that cannot be written down and read back is not a state"
     ]
+  ],
+  "yard_territories": [
+    [
+      "1",
+      "12",
+      "<strong>cannot reach 15 in a turn</strong>"
+    ],
+    [
+      "2",
+      "8",
+      "<strong>cannot reach 15 in a turn</strong>"
+    ],
+    [
+      "3",
+      "8",
+      "<strong>cannot reach 15 in a turn</strong>"
+    ],
+    [
+      "4",
+      "20",
+      "needs 4 citizens working metal in one turn"
+    ],
+    [
+      "5",
+      "64",
+      "needs 8 citizens working metal in one turn"
+    ],
+    [
+      "6",
+      "&mdash;",
+      "no metal at all"
+    ],
+    [
+      "7",
+      "20",
+      "needs 4 citizens working metal in one turn"
+    ],
+    [
+      "8",
+      "2",
+      "<strong>cannot reach 15 in a turn</strong>"
+    ],
+    [
+      "9",
+      "48",
+      "needs 6 citizens working metal in one turn"
+    ],
+    [
+      "10",
+      "3",
+      "<strong>cannot reach 15 in a turn</strong>"
+    ],
+    [
+      "11",
+      "30",
+      "needs 5 citizens working metal in one turn"
+    ],
+    [
+      "12",
+      "64",
+      "needs 8 citizens working metal in one turn"
+    ]
   ]
 }

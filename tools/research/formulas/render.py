@@ -1253,6 +1253,46 @@ much larger than an orbit.</p>
 against a containment rule, which is Sean's to weigh.</p>
 </div>
 
+<h2>Can we conquer a planet with this?</h2>
+<p>Sean, 2026-09-09: <em>given the data we have now, can we conquer a planet? I am not seeing how
+force works by looking at the data.</em></p>
+<p><strong>You can occupy one. You cannot conquer one, because nothing opposes you.</strong> And the
+reason force cannot be seen in the data is that it is not there.</p>
+<div class="callout">
+<h4>Force appears in <strong>zero</strong> recipe lines</h4>
+<p>Asked of the data rather than the prose: <code>force</code> occurs in eleven tables on this page,
+<strong>every one of them written by this lane to describe the rule</strong>, and in the release's
+<em>Units and structures</em> column. <strong>It occurs in no line of any recipe.</strong> So there
+is nothing to read, nothing to compare, and nothing that could refuse a move. That is
+<code>X-22</code>, and it is why the page can talk about claiming and holding while the model does
+neither.</p>
+</div>
+<div class="callout">
+<h4>The chain itself is unbroken &mdash; every recipe's inputs are producible</h4>
+<p>Checked by grounding the families and asking, of each of the eleven player recipes, whether
+anything produces what it spends. <strong>All eleven are satisfied</strong>, over these kinds:
+adjacency, ark, citizen, deposit, energy, extractor, food, garrison, labor, metal, orbit, pioneer,
+store, territory, yard.</p>
+<p>So ark &rarr; colony &rarr; pioneers &rarr; extractors &rarr; yard &rarr; new ark has no missing
+link. <strong>The loop runs. It is simply uncontested</strong> - expansion is walking into empty
+ground, which is occupation rather than conquest.</p>
+<p><strong>This check was wrong twice before it was right</strong>, both times for the same reason:
+it read <code>work</code> as producing <code>resource</code> and concluded that nothing makes energy,
+so three recipes looked blocked. <strong>A family hiding a kind, for the third time today.</strong>
+The number it produced was plausible and the question it answered was narrower than the one asked.</p>
+</div>
+<div class="callout">
+<h4>One real constraint does bite, and it is <code>X-21</code>'s</h4>
+<p>Nothing stores, so a yard's <strong>15 metal must be mined in a single turn</strong>. Capacity
+times density is the ceiling, and it takes one citizen's labor per extractor worked:</p>
+<div class="scroll"><table><thead><tr><th>Territory</th><th>Metal in one turn</th><th></th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td class="amt">{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["yard_territories"])}</tbody></table></div>
+<p><strong>Six of twelve territories can build a yard at all</strong>, and each needs four to eight
+citizens all working metal in the same turn. <strong>So closing the loop is possible and narrow</strong>
+- which may be the difficulty the game wants, and is worth knowing is currently supplied by a missing
+mechanic rather than a designed one.</p>
+</div>
+
 <h2>The loop Sean is building, step by step</h2>
 <p>Sean, 2026-09-09, stating the intent the recipes exist to serve: <em>the minimal set of game
 mechanics that allows me to start with an ark in orbit, deploy the ark to a single territory, expand
