@@ -517,6 +517,47 @@ can see that difference**, since both aggregate by kind and ignore where a thing
 this went unnoticed here for a day.
 
 
+### X-21 - *use it immediately, store it, or lose it* has no recipe that does any of it
+
+**to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *The kinds of storage* · **found by** asking the reverse of check 6 - is every declaration reachable?
+
+**Where.** `releases/first-release.md` -> *What bounds a kind in a territory*: **A resource that is
+in nothing can be used the turn it is made, and is lost when that turn ends - use it immediately,
+store it, or lose it.** And *Where things are*: a store holds **10** of its resource.
+
+**What.** **None of the release's sixteen recipes stores anything, and none removes an unstored
+resource at a turn's end.**
+
+- **Nothing puts a resource in a store.** `build store` creates the store; `work` creates a resource
+  in the territory; no recipe moves one into the other. So a store can be built, has a capacity, and
+  **nothing can ever be in it**
+- **Nothing takes an unstored resource away.** `age` decrements `keeps` and `spoil` destroys what
+  reaches zero, and **only food is made with `keeps`** - metal and energy carry none, so they are
+  never aged and never spoiled. Unstored metal therefore persists for ever, which is the opposite of
+  what the sentence says
+
+**Counted, against a population that is not zero:** sixteen recipes in the release, 20 declared
+(container, kind) pairs in this lane's model, and **`store` holds `resource` is one of two nothing
+reaches**.
+
+**One reading makes it smaller, and it is worth stating because it is probably the intent.** *Where
+things are* says **which store holds which unit of a resource is not recorded in this release, so a
+territory's amount of a resource is stated against the sum of its stores' capacities.** Read that
+way, storing is not an action at all: a territory simply keeps as much as its stores can hold and
+loses the rest. **That is a world recipe, and it is not among the sixteen either** - so the gap is
+one missing recipe rather than two, and the sentence describes a rule the game does not yet run.
+
+**Why it costs something.** A store costs 1 labor and 1 metal, and is one of six things a player can
+build. **If nothing stores, a store is a building that does nothing**, and the whole
+extract-then-keep loop the release describes is not there. `R-6` is *the loop can be played
+through*.
+
+**Whether.** **Worth deciding what the recipe is, not just that one is missing.** The two readings
+differ: a player action that stores, or a world recipe at the turn's end that keeps what fits. The
+second matches *which store holds which unit is not recorded* and needs no choice from the player;
+the first is what *store it* sounds like. **This lane takes neither.**
+
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

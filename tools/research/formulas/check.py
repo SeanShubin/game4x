@@ -70,6 +70,11 @@ DECLARED_SOURCES = {"work"}
 # that cannot see the game's only metal source is a check aimed at the wrong subject.
 FAMILIES = {"resource": ("food", "metal", "energy"), "unit": ("ark", "pioneer")}
 
+# Every family the data declares, including `place` and `thing`. Kept apart from FAMILIES
+# above, which grounds transitions - expanding `place` there would ground every recipe over
+# territory and orbit, which is a different question from what may hold what.
+ALL_FAMILIES = {row[0]: tuple(k.strip() for k in row[1].split(",")) for row in DATA["families"]}
+
 
 def called_names(data):
     """Recipes that are only ever reached through a call.
@@ -448,6 +453,44 @@ def check_drift():
     return len(theirs), only_ours, only_theirs, differ
 
 
+def check_unreached():
+    """Check 8. Declared (container, kind) pairs that no recipe reaches.
+
+    Families are grounded before comparing, so `move` putting a `unit` in a place counts as
+    reaching both `ark` and `pioneer` rather than neither. Without that this reported a
+    pioneer-in-orbit gap that was an artefact of the check rather than a fact about the game.
+    """
+    names = DATA["container_kind"]
+    used = set()
+    for f in DATA["player"] + DATA["world"] + DATA["creation"]:
+        for op, target, _amount, _at, _n in f["lines"]:
+            if op != "change":
+                continue
+            where = container_of(target)
+            if where is None:
+                continue
+            container = names.get(where)
+            if container is None:
+                continue
+            kind = place_of(target)
+            # Both sides expand, and by the data's own families rather than the grounding map
+            # above - that one has no `place`, so a unit moved into a place reached neither an
+            # orbit nor a territory and the check reported two gaps it had invented.
+            for c in ALL_FAMILIES.get(container, (container,)):
+                for k in ALL_FAMILIES.get(kind, (kind,)):
+                    used.add((c, k))
+    declared = [(c, k, b) for c, k, b, _s in DATA["containment_declared"]]
+    assert declared, "no declarations, so this check knows nothing"
+    unreached = []
+    for c, k, b in declared:
+        # A declaration about a family is reached when any of its kinds is.
+        pairs = {(cc, kk) for cc in ALL_FAMILIES.get(c, (c,))
+                 for kk in ALL_FAMILIES.get(k, (k,))}
+        if not (pairs & used):
+            unreached.append((c, k, b))
+    return len(declared), unreached
+
+
 def check_cap(cap=1000):
     """Check 3. A backstop: apply every recipe once and report anything past the cap."""
     by_name = gather()
@@ -567,6 +610,16 @@ def self_test():
         print("  poison ok: check 7 notices a copy that disagrees with the release")
     _row[2] = _t["ready"]
 
+    # Check 8 poison: declare a pairing nothing could reach, and it must be named.
+    _saved8 = list(DATA["containment_declared"])
+    DATA["containment_declared"] = _saved8 + [["store", "yard", "1", "poison"]]
+    if not any(c == "store" and k == "yard" for c, k, _b in check_unreached()[1]):
+        print("  POISON FAILED: check 8 did not name a declaration nothing reaches")
+        ok = False
+    else:
+        print("  poison ok: check 8 names a declaration nothing reaches")
+    DATA["containment_declared"] = _saved8
+
     return ok
 
 
@@ -614,6 +667,8 @@ def as_dict():
                                 "free": sorted(f2), "undeclared": sorted(u2)},
         },
         "cap": {"cap": cap, "breaches": [[n, k, c] for n, k, c in breached]},
+        "unreached": {"declared": check_unreached()[0],
+                      "pairs": [list(r) for r in check_unreached()[1]]},
         "containment": {"examined": c6_examined,
                         "declared": len(DATA["containment_declared"]),
                         "homeless": [[n, t] for n, t in c6_homeless],
@@ -731,6 +786,15 @@ def main():
     if not (differ or only_ours or only_theirs):
         print("  the copy matches, so nothing here has diverged yet")
     print("  divergence is allowed and is the reason for copying - this reports it, never fails it")
+
+    n_decl, unreached = check_unreached()
+    print()
+    print("CHECK 8 - is every declaration reachable? (the reverse of check 6)")
+    print(f"  {n_decl - len(unreached)} of {n_decl} declared pairs are reached by some recipe")
+    for c, k, b in unreached:
+        print(f"  UNREACHED: a {c} may hold a {k} (bound {b}) - no recipe puts one there")
+    if not unreached:
+        print("  every declaration is reachable")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1

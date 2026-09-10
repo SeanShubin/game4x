@@ -677,6 +677,12 @@ def main():
     c6_examined, c6_x20 = c6["examined"], c6["x20_lines"]
     n_declared = c6["declared"]
     c6_bad = len(c6["homeless"]) + len(c6["undeclared"])
+    u8 = RESULTS["unreached"]
+    n_unreached, n_decl8 = len(u8["pairs"]), u8["declared"]
+    u8_rows = "".join(
+        f'<tr><td class="target">a {c} may hold a {k}</td><td class="amt">{b}</td>'
+        f'<td class="note">no recipe puts one there</td></tr>' for c, k, b in u8["pairs"])
+    v8, v8cls = ((f"{n_unreached} unreached", "up") if n_unreached else ("all reached", "down"))
     v6, v6cls = ("every one lands somewhere declared", "down") if not c6_bad else (
         f"{c6_bad} land nowhere declared", "up")
     n_open, n_decisions = len(open_decisions), len(DATA['decisions'])
@@ -1508,6 +1514,22 @@ limit - and the check goes red on {c6_x20} lines, which is the state the release
 day</strong>, and neither of the other checks could, because both aggregate by kind and ignore where
 a thing is.</p>
 </div>
+
+<h3>Check 8 &mdash; is every declaration reachable? &nbsp;<span class="badge {v8cls}">{v8}</span></h3>
+<p><strong>The reverse of check 6, and nothing had asked it.</strong> Check 6 asks whether every
+create lands somewhere declared; this asks whether every declared place can be reached at all.
+{n_decl8} declared pairs, {n_unreached} that no recipe touches:</p>
+<div class="scroll"><table><thead><tr><th>Declared</th><th>Bound</th><th></th></tr></thead>
+<tbody>{u8_rows}</tbody></table></div>
+<p><strong>That one is <code>X-21</code>.</strong> A store costs 1 labor and 1 metal, holds ten of
+its resource, and <strong>no recipe can put anything in it</strong> - nor does any recipe take an
+unstored resource away, since only food is made with <code>keeps</code> and only what has
+<code>keeps</code> can spoil. So <em>use it immediately, store it, or lose it</em> is a sentence the
+sixteen recipes do not implement in either direction.</p>
+<p>It reports rather than fails, because a declaration may be reached by a design command or by a
+recipe not yet written, and which of those it is belongs to Sean. <strong>It also found a defect in
+itself first</strong>: it grounded families on one side only, so a unit moved into a place reached
+neither an orbit nor a territory, and it reported two gaps it had invented.</p>
 
 <h3>Check 3 &mdash; a cap of {RESULTS["cap"]["cap"]} &nbsp;<span class="badge down">{len(RESULTS["cap"]["breaches"])} breaches</span></h3>
 <p>Applying each recipe once breaches nothing, which is exactly the point about a cap:

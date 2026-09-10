@@ -97,9 +97,19 @@
     "cap": 1000,
     "breaches": []
   },
+  "unreached": {
+    "declared": 20,
+    "pairs": [
+      [
+        "store",
+        "resource",
+        "10"
+      ]
+    ]
+  },
   "containment": {
     "examined": 18,
-    "declared": 21,
+    "declared": 20,
     "homeless": [],
     "undeclared": [],
     "x20_lines": 3

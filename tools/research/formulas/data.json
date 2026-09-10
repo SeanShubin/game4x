@@ -953,9 +953,9 @@
       "Two kinds and two declarations would allow it. <strong>The phase it is allowed in decides whether any check still means anything</strong> - see <em>Defining a kind, then using it</em>."
     ],
     [
-      "OPEN - should an orbit be stored at all",
-      "An orbit carries <strong>no stored trait</strong>. Everything about it is which territory it is above, and they are one to one - so twelve orbits are a second copy of twelve territories.",
-      "The release derives orbital <em>adjacency</em> for exactly this reason: <em>stating it would be a second copy that can disagree</em>. See <em>Should an orbit be a thing?</em>"
+      "NOTED - an orbit is a place, and looked derivable only because this release is small",
+      "This report suggested an orbit might not need storing, since it carries no stored trait and is one to one with a territory. <strong>Sean: it is a separate location</strong> - like land it will hold structures with no limit, but a different set of them, and no resource nodes.",
+      "The one-to-one is an accident of a first release, not the nature of the thing. <em>No traits yet</em> is not <em>no traits ever</em>."
     ]
   ],
   "collapse": [
@@ -2050,10 +2050,10 @@
     ],
     [
       "ark",
-      "territory",
+      "orbit",
       "refused",
       "persists",
-      "2"
+      "<strong>only ever in orbit</strong> - it lands to deploy and stops being an ark. The release declares a territory capacity of 2 arks and no recipe can reach it"
     ],
     [
       "pioneer",
@@ -2130,7 +2130,7 @@
       "game",
       "refused",
       "persists",
-      "as many as the territories - one each, so the bound is derived rather than absent"
+      "as many as the territories - one each. <strong>A place in its own right</strong>, which will hold solar collectors and starbases"
     ],
     [
       "adjacency",
@@ -2168,12 +2168,6 @@
       "territory",
       "yard",
       "1",
-      "release -> What bounds a kind in a territory"
-    ],
-    [
-      "territory",
-      "ark",
-      "2",
       "release -> What bounds a kind in a territory"
     ],
     [
@@ -2299,10 +2293,6 @@
         [
           "territory",
           "yard"
-        ],
-        [
-          "territory",
-          "ark"
         ],
         [
           "territory",
