@@ -239,45 +239,64 @@ or moves to the data is a follow-on this does not decide, and a cleanup is filed
 lands.
 
 
-### P-365 - What an orbit boundary is, which lets an Ark move between orbits
+### P-365 - What an orbit boundary is, and that an Ark is powered by the sun
 
-**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/orbit.md` -> Crossing between layers
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/orbit.md` -> Crossing between layers, then `spec/units.md` -> Every unit
 
-**Your decision of 2026-09-10**: *I have been meaning to add that for a while now.*
+**Two of your decisions of 2026-09-10**: *I have been meaning to add that for a while now*, and *an
+ark in orbit does not need fuel to move - thematically this is because an ark gets its energy from
+the sun via solar panels, unlike a pioneer that gets its energy from the ground.*
 
-**Added after the bullet that is already there:**
+**Two destinations, so two quotations, in the order the destinations are named.**
+
+**Into `spec/orbit.md` -> Crossing between layers, after the bullet already there:**
 
 > - An **orbit boundary** is one an orbit is on either side of: between an orbit and the territory
 >   below it, or between two orbits. A unit that crosses orbit boundaries may cross any of them, and
 >   one that does not may cross none
 
-**Almost nothing had to be built for this.** `move` already asks for a place *joined to `$from` by an
-edge the unit crosses*; orbital adjacency is already stated, in the bullet above this one; and the
-release's *Units and structures* already gives an Ark **`orbit border`** in its **Crosses** column.
-**The only missing piece was what that value means** - `border` and `orbit border` appear in
+**Into `spec/units.md` -> Every unit, replacing the bullet that begins *a mobile unit has a bin*:**
+
+> - A mobile unit **may** have a bin for fuel. Where it has one, moving burns a unit of it and a unit
+>   with an empty bin cannot move. **A unit with no bin carries its own power and moves without
+>   spending anything** - an Ark draws on the sun, where a Pioneer draws on the ground beneath it
+
+## The orbit boundary
+
+**Almost nothing had to be built.** `move` already asks for a place *joined to `$from` by an edge the
+unit crosses*; orbital adjacency is already stated in the bullet above this one; and the release's
+*Units and structures* already gives an Ark **`orbit border`** in its **Crosses** column. **The only
+missing piece was what that value means** - `border` and `orbit border` appear in
 `releases/first-release.md` and nowhere else in the repository, which is `S-73`, open since
 2026-09-07. This closes the Ark half of it.
 
-**Why it is `recovered` rather than new.** `P-345` removed *launching, landing and crossing from one
-orbit to another are moves, and cost what any other move costs* from this file, because **determining
-costs is the domain of individual recipes, not invariants** - and the cost half was the objection.
-This says only which boundaries exist and who may cross them, and leaves every cost to `move`.
+**Why `recovered` rather than new.** `P-345` removed *launching, landing and crossing from one orbit
+to another are moves, and cost what any other move costs* from this file, because **determining costs
+is the domain of individual recipes, not invariants** - and the cost half was the objection. This
+says only which boundaries exist and who may cross them, and leaves every cost to `move`.
 
-**And it exposes one thing that has no answer yet.** An Ark carries **Fuel 2**, and `spec/units.md`
-says fuel moves freely between **a controlled territory** that has it and anything **there**. **An
-orbit is not a territory and is not in one** - it is *next to* the one below it - so an Ark in orbit
-can never be refuelled, and an Ark that `P-362` puts there arrives with an empty bin. **It could
-cross no boundary at all.**
+## The sun, and why it changes less than it looks
 
-**This proposal does not fix that and must not**, because there are at least three answers and they
-are different games: launching fuels the Ark from the territory that built it; fuel moves freely to
-the orbit above a controlled territory as well as within it; or an Ark carries no fuel and moving one
-costs something else. **It is the one question left that this lane cannot infer**, and it is stated
-here so that landing this does not bury it.
+**It answers the question the first draft of this proposal could not.** An Ark carries **Fuel 2**, and
+`spec/units.md` says fuel moves freely only from **a controlled territory**; an orbit is not one, so
+an Ark in orbit could never be refuelled and would arrive from `P-362` unable to move at all. **Your
+answer removes the problem rather than solving it**: an Ark needs no fuel, so it never needed
+refuelling.
 
-**Nothing in the first release waits on it.** The release's loop ends at launching, and no Ark moves
-between orbits in it. This is a rule about the game rather than about what is being built now.
+**One ambiguity dissolved on inspection rather than needing you.** *Needs no fuel* might have meant
+unlimited moves in a turn. It does not matter: **`move` consumes a unit that is `ready` and produces
+one that is not**, and only `refresh` readies things at a turn's end, so **a unit moves once per turn
+whatever its fuel**. The two readings are observationally the same.
 
+**So fuel is about range away from resupply, and nothing else.** A Pioneer that has left ground you
+control has two moves before it strands. An Ark never strands. **That is the whole of the
+difference**, and it is what the sun buys.
+
+**One consequence for the release, flagged rather than folded in.** *Units and structures* gives an
+Ark **Fuel 2**, and under this the Ark has no bin, so that cell should be blank - *a blank is not a
+zero*, which the release already says. **That is a release edit rather than a specification one**, so
+it is a separate proposal and this does not make it. Nothing breaks in the meantime: no Ark moves
+between orbits in the first release.
 
 ### P-362 - `launch ark` puts an Ark in orbit, and the reason it did not has dissolved
 
