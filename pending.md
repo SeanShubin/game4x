@@ -40,7 +40,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ### To spec (32)
 
-- **S-84** - Building is a third claim on a citizen, and `spec/economy.md` names two · `docs/notes/proposals.md`
+- **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`

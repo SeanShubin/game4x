@@ -109,46 +109,61 @@ It proposed no words, which was right: `spec/` is this lane's to draft for.
 
 ## Addressed to other perspectives
 
-### S-84 - Building is a third claim on a citizen, and `spec/economy.md` names two
+### S-84 - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable
 
-**to** spec - **status** open - **raised** 2026-09-10 - **source** the research lens playing a turn's
-end honestly and having the run stop dead - **found by** a runner that had been dropping food and
-leaving metal alone, repaired
+**to** spec - **status** open - **raised** 2026-09-10 - **rewritten** 2026-09-10, because the first
+version stated a general deadlock that does not exist - **source** the research lens, corrected by
+Sean, then computed here
 
-**The most player-visible thing the overnight work found**, and it is a gap in `spec/` rather than
-anywhere else.
+**Sean refused the first version and was right.** It claimed a colony that works everything it owns
+can never build anything, which is true and vacuous - it is a description of spending all your
+labor, not a trap. He said that as long as food density is not tuned too low a planet should always
+be exploitable. **That is correct, and the threshold is exactly density 1.**
 
-**Where.** `spec/economy.md` -> *Structures and labor* names exactly two claims on a citizen:
+**Computed.** A citizen yields 1 labor a turn; working a food extractor costs 1 labor and yields
+`density` food; upkeep is 1 food per citizen; food cannot be banked. To feed itself **and** have
+labor left, a territory needs `w x d >= C` and `C - w >= 1`.
 
-- *A citizen works at one structure and cannot be in two places at once*
-- *Structures that produce force and structures that extract resources are alike in this: a citizen
-  at one is not at the other*
+| Food density | First point it can feed itself and still build |
+| ------------ | ---------------------------------------------- |
+| **1**        | **never**                                      |
+| 2            | 2 citizens - one on food, one spare            |
+| 3 to 6       | 2 citizens - one on food, one spare            |
 
-**Both are about operating something.** Extracting, or garrisoning.
+**Density 1 fails algebraically, not marginally**: it needs `w >= C` and `w <= C - 1` at once. Every
+other density works from the second citizen, so **Sean's intuition holds for five of the six**.
 
-**What.** **Building is a third claim and nothing says so.** `build extractor`, `build store` and
-`build yard` each consume **1 labor** in the release's *Recipes*, so a citizen who builds is a
-citizen who did not work - and the specification's list of what competes for a citizen does not
-include it.
+**Territory 5 is the one below the line, and it is there on purpose** - *Territory resources* calls it
+**Food density 1**. Founding gives 2 citizens and 1 food extractor:
 
-**The consequence is a deadlock a player will meet.** A colony that works everything it owns **can
-never build anything**. Four citizens, four extractors, every citizen at one, **no labor left** - so
-it cannot afford an energy store, so everything its energy extractors make is lost each turn, and it
-cannot afford a food extractor, so it can never grow enough to do both. **The colony is stuck and
-nothing in the rules says why.**
+- **Turn 1** - 1 food against 2 upkeep, so the colony starves to **1 citizen**
+- **Every turn after** - 1 citizen, 1 labor, 1 food, 1 upkeep. Stable, and **zero spare labor for
+  ever**
 
-**It is escapable, and only by knowing the opening.** Feed first, reserve labor, mine metal, energy
-last - and territory 1 goes from two citizens to twelve with three metal and three energy stores in
-five turns. **That a correct opening exists is not the same as the rules saying one is needed.**
+**So territory 5 freezes at 1 citizen and 2 extractors, and needs 19** - 3 food, 8 metal, 8 energy -
+before `is_fully_exploited` will call it done. It can never build the third.
 
-**Whether.** **Worth a decision, and this lane takes none.** Two readings: building is a third claim
-and *Structures and labor* says so, which is one bullet; or the competition is the design and the
-specification should say that a citizen's labor is claimed by working, holding **and** building,
-which is the same bullet said as a rule rather than an omission. **What is not open is whether the
-list is currently complete. It is not.**
+**Why it costs something, and it is the whole game.** `Game::is_fully_exploited` requires every
+claimable territory to hold every extractor it has capacity for. Territory 5 never will. **So the
+planet can never be fully exploited, so an Ark can never be launched from one, so the game as
+specified cannot be won** - `spec/control.md`, *a player wins by launching an Ark from a fully
+exploited planet*. **This is a fourth blocker on `R-6`** and the only one that is arithmetic rather
+than a missing rule.
 
-Goes to Sean as a numbered proposal once both readings are drafted, alongside `X-14`, `X-20`,
-`X-25`, `X-26` and the two decisions the research lens raised from `S-81`'s question 6.
+**Whether.** **Worth deciding what density 1 is for**, and this lane takes no reading. Three:
+
+- **It is tuning.** Territory 5's food goes to density 2 and everything works. **Smallest, and it
+  costs the release the case it built territory 5 to exercise**
+- **A frozen territory is the point**, and *fully exploited* must stop requiring what a territory
+  cannot afford - which is `C-9`'s shape a second time, that predicate having already been narrowed
+  once for exactly this reason
+- **Founding such a territory is a mistake a player is allowed to make**, and the win condition
+  excludes territories that cannot sustain themselves
+
+**And one small gap stands whichever way it goes.** `spec/economy.md` -> *Structures and labor* names
+two claims on a citizen, **working** and **garrisoning**. **Building is a third** - `build extractor`,
+`build store` and `build yard` each consume 1 labor - and it is not in the list. That is a sentence,
+and it is what makes the arithmetic above readable from the specification rather than from the code.
 
 
 ### S-83 - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe
