@@ -129,6 +129,12 @@ def _value(text, where):
     if " - " in text or " + " in text:
         _assume("arithmetic", where)
         return f"({text})"
+    # **An amount is an expression too.** This used to be raised only by `let` and `require`,
+    # so every computed amount - a count, a `min`, an aggregate - was encoded without recording
+    # that the notation has no form for it, and the tally under-reported the one assumption
+    # doing the most work.
+    if any(w in text for w in ("count {", "min(", "sum ", "max ", "available ")):
+        _assume("expression", where)
     if "." in text and not text.replace(".", "").isdigit():
         _assume("path", where)
     return text
