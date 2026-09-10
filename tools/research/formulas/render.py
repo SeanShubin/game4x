@@ -2166,13 +2166,79 @@ each row names who answered it.</p>
     ["Question", "What is at stake", "How it shows up"],
     shut_decisions, ["", "", "note"])}</div>
 
+<h2>The loop, played</h2>
+<p><strong>Every other check on this page reasons about the recipes. This one fires them.</strong>
+<code>tools/research/formulas/play.py</code> is a small evaluator over this lane's own data - counts
+per container, the six primitives, no interface - and it answers <code>R-6</code>, <em>the loop can
+be played through</em>, by playing it:</p>
+<pre><code>start: one ark in orbit above territory 1
+deploy ark onto territory 1: garrison, 2 citizens, a food and a metal extractor
+six turns on territory 1: 24 metal, 24 energy
+produced 2 pioneers on territory 1
+moved 2 pioneers into territory 6 (jungle, nature 2): force 4 &gt; 2 is True
+found by land on 6: garrison, 2 citizens, extractors for what it has
+the other pioneer leaves: force 2 &gt;= 2 is True
+built a yard on territory 1
+launched a new ark into orbit - the loop is closed</code></pre>
+<div class="callout">
+<h4>It failed on its first run, and the failure was the useful part</h4>
+<p>It produced <strong>one</strong> pioneer and stopped. Producing one costs two citizens and a
+colony starts with exactly two, so the first pioneer emptied the colony - and with no citizens there
+is no labor, so no extractor could be worked and nothing else could ever happen.</p>
+<p><strong>The runner was missing <code>grow</code>.</strong> The population has to grow before
+anything can be spent, which is the loop, and the evaluator was not playing it. That is the kind of
+thing only running finds: every static check on this page was green while the sequence was dead.</p>
+</div>
+<div class="callout">
+<h4>A green run proves nothing unless it could have failed</h4>
+<p>So the counterfactuals are part of it, and each is asserted rather than printed: <strong>one
+pioneer alone must <em>not</em> breach</strong> (2 is not greater than 2), <strong>two must</strong>
+(4 is), and <strong>two citizens with no garrison must not hold</strong> (unorganized force is
+<code>max(1, 1)</code>). If any of those flipped, the run would fail even though the ark still
+reached orbit.</p>
+<p><strong>It is not the game.</strong> It is this lane's evaluator over this lane's data, and what
+it can say is that a sequence of firings gets from an ark to a new ark. Whether the game plays that
+way is the code lane's to show.</p>
+</div>
+
+<h2>What this prototype does differently from the release</h2>
+<p><strong>Written for the specification lane.</strong> Sean intends to ask it what it can
+incorporate, and it is testing with scenarios written against the old rules - so this is every
+divergence in one place, with whose decision each was.</p>
+<div class="scroll"><table><thead><tr><th>What</th><th>The release</th><th>Here</th><th>Why</th>
+<th>Whose</th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td class="note">{r[1]}</td><td class="target">{r[2]}</td><td class="note">{r[3]}</td><td>{r[4]}</td></tr>' for r in DATA["divergence"])}</tbody></table></div>
+<div class="callout">
+<h4>Three of these will break a scenario written against the old rules</h4>
+<p><strong><code>move</code> spends energy where the unit is</strong>, not from a tank, so any
+scenario that fuels a unit is running a recipe that no longer exists - and one that <em>relies</em>
+on a fuelled unit was relying on something the release never provided. <strong><code>found-colony</code>
+makes no stores</strong>, so a scenario counting stores after founding will be two short. And
+<strong><code>make-world</code> is gone</strong>, its work belonging to <code>create planet</code>
+and a scenario file.</p>
+<p>The rest add rather than replace: new traits, a comparison where there was a count, and one
+recipe where there were two.</p>
+</div>
+<div class="callout">
+<h4>Where the two can be compared mechanically</h4>
+<p><strong>Check 7 already reads the release's <em>Traits</em> table and reports every difference
+from this lane's copy</strong>, without failing on any - divergence being the reason for copying.
+It currently names four traits only here (<code>below</code>, <code>border</code>,
+<code>crosses</code>, <code>unsustained</code>) and two only in the release (<code>fuel</code>,
+<code>unpaid</code>).</p>
+<p>That is the one place the comparison is automatic. <strong>Everything else in the table above is
+this lane asserting a difference rather than computing one</strong>, and the specification lane
+should treat it as a claim to check rather than a report to trust.</p>
+</div>
+
 <h2>The source, for review</h2>
 <p>Everything above is generated from two files, and no number on this page is typed by hand.</p>
 <div class="scroll">{simple_table(
     ["File", "What it is", "Who may write it"],
     [["tools/research/formulas/data.json", "the recipes, primitives, capacities, invariants and decisions - the only thing to edit", "the research lens"],
      ["tools/research/formulas/render.py", "this page", "the research lens"],
-     ["tools/research/formulas/check.py", "the three checks, with their poison", "the research lens"],
+     ["tools/research/formulas/check.py", "the checks, with their poison", "the research lens"],
+     ["tools/research/formulas/play.py", "the runner - fires the recipes and plays the loop", "the research lens"],
      ["tools/research/formulas/results.json", "what check.py last reported, read by this page", "generated"],
      ["lenses/research/formulas.html", "this page, generated", "generated"],
      ["releases/first-release.md", "what was copied and modified from, not referenced", "the specification lane"]],

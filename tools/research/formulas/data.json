@@ -941,6 +941,11 @@
       "NOTED - make-world was a scenario, not a recipe",
       "Its four lines quantified over <em>every row of Territory resources</em> and <em>every shared edge</em> - a data table and the planet's geometry, neither of which is a description.",
       "<code>spec/console.md</code> already has the right home: <code>create planet &lt;size&gt;</code> makes the territories, and <em>a scenario is a file too</em>. Twelve calls with different arguments are a file of commands, not a rule."
+    ],
+    [
+      "NOTED - resolve territory did not need to be a recipe",
+      "Sean: <em>if you pass the force test you have presence there, and therefore control; if you fail you lose all your units.</em> Control follows from presence and presence is what failing removes, so nothing has to <em>grant</em> it.",
+      "The two comparisons are two branches of one condition - greater where you have no control yet, equal where you do - and <code>perish</code> already reads it. No new recipe."
     ]
   ],
   "collapse": [
@@ -3105,6 +3110,123 @@
       "12",
       "ice",
       "1"
+    ]
+  ],
+  "unsustained_causes": [
+    [
+      "its upkeep was not met",
+      "<code>count {food in holder of thing} &lt; thing.upkeep</code>",
+      "only a citizen has an upkeep, so this reaches citizens"
+    ],
+    [
+      "breaching: no control there, and force not <strong>greater</strong>",
+      "<code>sum force of {unit in t} &le; t.nature</code>",
+      "two pioneers at 4 beat a jungle's 2; one at 2 does not"
+    ],
+    [
+      "staying: control there, and force not <strong>equal</strong>",
+      "<code>sum force of {unit in t} &lt; t.nature</code>",
+      "two citizens organized by a garrison hold at 2; without one they are max(1,1) and do not"
+    ]
+  ],
+  "divergence": [
+    [
+      "The four roles",
+      "require, consume, produce, limit",
+      "<code>change</code> (signed), <code>require</code>, <code>set</code>, <code>each</code>, <code>some</code>, <code>call</code>, plus <code>attach</code>",
+      "guard and spend are one line; owner is the quantifier; a capacity belongs to its container",
+      "Sean, 2026-09-09"
+    ],
+    [
+      "<code>limit n k</code>",
+      "a role",
+      "deleted",
+      "both uses restated a capacity that <em>What bounds a kind</em> already declared",
+      "Sean"
+    ],
+    [
+      "<code>require</code>",
+      "at least n of a description",
+      "one expression against another",
+      "<code>force &gt; nature</code> has no form otherwise, and counting is one case of comparing",
+      "Sean"
+    ],
+    [
+      "<code>fuel</code>, a unit's tank",
+      "a trait, and <code>move</code> spends from it",
+      "deleted; <code>move</code> spends energy where the unit is",
+      "<strong>no recipe ever filled a tank</strong>, so nothing could move and the loop stopped at step 3 - <code>X-23</code>",
+      "this lane, on Sean's leave to remove"
+    ],
+    [
+      "<code>unpaid</code>",
+      "derived: its upkeep was not met",
+      "<code>unsustained</code>: upkeep unmet, <em>or</em> force short",
+      "a thing that cannot be sustained is lost; food and force are two things that sustain",
+      "Sean"
+    ],
+    [
+      "Losing a territory",
+      "not stated",
+      "the same <code>perish</code>, on the same trait",
+      "<code>disorder</code> and <code>perish</code> were one recipe written twice",
+      "Sean spotted it"
+    ],
+    [
+      "<code>border</code>, <code>crosses</code>",
+      "a <em>Crosses</em> column reading <em>border</em> / <em>orbit border</em>",
+      "two traits over those two values",
+      "<code>move</code>'s guard said <em>an edge the unit crosses</em> and named no trait - <code>C-60</code>, `S-73`",
+      "this lane"
+    ],
+    [
+      "<code>below</code>",
+      "<em>a place above one territory</em>, in prose",
+      "a trait of an orbit",
+      "an editor cannot offer what is not declared",
+      "this lane"
+    ],
+    [
+      "<code>location</code>",
+      "no such trait, and a rule forbidding one",
+      "<code>holder of x</code>, an expression",
+      "<code>spec/logistics.md</code>: a thing is not located by a trait",
+      "this lane"
+    ],
+    [
+      "<code>control</code>'s values",
+      "<em>held by a player, or unclaimed</em>",
+      "<code>yours</code>, <code>unclaimed</code>",
+      "an enumeration nobody had written down",
+      "this lane"
+    ],
+    [
+      "The two stores in <code>found-colony</code>",
+      "produced by both founding recipes",
+      "dropped",
+      "founding delivered 5 metal-equivalent against an ark's 3 - <code>X-14</code>",
+      "Sean"
+    ],
+    [
+      "A territory's capacity for arks",
+      "a capacity of 2",
+      "removed",
+      "an ark is only ever in orbit; no recipe could reach it",
+      "Sean"
+    ],
+    [
+      "Storing",
+      "<em>use it immediately, store it, or lose it</em>, with no recipe",
+      "<code>stow</code>: take up what is loose, put back what fits with <code>clamp</code>",
+      "nothing filled a store and nothing reaped what was loose - <code>X-21</code>",
+      "Sean"
+    ],
+    [
+      "<code>make-world</code>",
+      "&mdash;",
+      "deleted",
+      "twelve calls with different arguments are a scenario file; <code>create planet</code> makes the territories",
+      "this lane"
     ]
   ]
 }

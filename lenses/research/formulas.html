@@ -1566,7 +1566,7 @@ is why adjacency being a thing was the right call and worth not undoing.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>
-<p>4 of the 19 questions this re-encoding raised are still open. The rest are
+<p>4 of the 20 questions this re-encoding raised are still open. The rest are
 below, under <em>What has already been settled</em>, so that this list is short enough to be a list
 of things to do.</p>
 <div class="scroll"><table><thead><tr>
@@ -2762,7 +2762,77 @@ each row names who answered it.</p>
 <td>Its four lines quantified over &lt;em&gt;every row of Territory resources&lt;/em&gt; and &lt;em&gt;every shared edge&lt;/em&gt; - a data table and the planet's geometry, neither of which is a description.</td>
 <td class="note">&lt;code&gt;spec/console.md&lt;/code&gt; already has the right home: &lt;code&gt;create planet &amp;lt;size&amp;gt;&lt;/code&gt; makes the territories, and &lt;em&gt;a scenario is a file too&lt;/em&gt;. Twelve calls with different arguments are a file of commands, not a rule.</td>
 </tr>
+<tr>
+<td>NOTED - resolve territory did not need to be a recipe</td>
+<td>Sean: &lt;em&gt;if you pass the force test you have presence there, and therefore control; if you fail you lose all your units.&lt;/em&gt; Control follows from presence and presence is what failing removes, so nothing has to &lt;em&gt;grant&lt;/em&gt; it.</td>
+<td class="note">The two comparisons are two branches of one condition - greater where you have no control yet, equal where you do - and &lt;code&gt;perish&lt;/code&gt; already reads it. No new recipe.</td>
+</tr>
 </tbody></table></div>
+
+<h2>The loop, played</h2>
+<p><strong>Every other check on this page reasons about the recipes. This one fires them.</strong>
+<code>tools/research/formulas/play.py</code> is a small evaluator over this lane's own data - counts
+per container, the six primitives, no interface - and it answers <code>R-6</code>, <em>the loop can
+be played through</em>, by playing it:</p>
+<pre><code>start: one ark in orbit above territory 1
+deploy ark onto territory 1: garrison, 2 citizens, a food and a metal extractor
+six turns on territory 1: 24 metal, 24 energy
+produced 2 pioneers on territory 1
+moved 2 pioneers into territory 6 (jungle, nature 2): force 4 &gt; 2 is True
+found by land on 6: garrison, 2 citizens, extractors for what it has
+the other pioneer leaves: force 2 &gt;= 2 is True
+built a yard on territory 1
+launched a new ark into orbit - the loop is closed</code></pre>
+<div class="callout">
+<h4>It failed on its first run, and the failure was the useful part</h4>
+<p>It produced <strong>one</strong> pioneer and stopped. Producing one costs two citizens and a
+colony starts with exactly two, so the first pioneer emptied the colony - and with no citizens there
+is no labor, so no extractor could be worked and nothing else could ever happen.</p>
+<p><strong>The runner was missing <code>grow</code>.</strong> The population has to grow before
+anything can be spent, which is the loop, and the evaluator was not playing it. That is the kind of
+thing only running finds: every static check on this page was green while the sequence was dead.</p>
+</div>
+<div class="callout">
+<h4>A green run proves nothing unless it could have failed</h4>
+<p>So the counterfactuals are part of it, and each is asserted rather than printed: <strong>one
+pioneer alone must <em>not</em> breach</strong> (2 is not greater than 2), <strong>two must</strong>
+(4 is), and <strong>two citizens with no garrison must not hold</strong> (unorganized force is
+<code>max(1, 1)</code>). If any of those flipped, the run would fail even though the ark still
+reached orbit.</p>
+<p><strong>It is not the game.</strong> It is this lane's evaluator over this lane's data, and what
+it can say is that a sequence of firings gets from an ark to a new ark. Whether the game plays that
+way is the code lane's to show.</p>
+</div>
+
+<h2>What this prototype does differently from the release</h2>
+<p><strong>Written for the specification lane.</strong> Sean intends to ask it what it can
+incorporate, and it is testing with scenarios written against the old rules - so this is every
+divergence in one place, with whose decision each was.</p>
+<div class="scroll"><table><thead><tr><th>What</th><th>The release</th><th>Here</th><th>Why</th>
+<th>Whose</th></tr></thead>
+<tbody><tr><td class="target">The four roles</td><td class="note">require, consume, produce, limit</td><td class="target"><code>change</code> (signed), <code>require</code>, <code>set</code>, <code>each</code>, <code>some</code>, <code>call</code>, plus <code>attach</code></td><td class="note">guard and spend are one line; owner is the quantifier; a capacity belongs to its container</td><td>Sean, 2026-09-09</td></tr><tr><td class="target"><code>limit n k</code></td><td class="note">a role</td><td class="target">deleted</td><td class="note">both uses restated a capacity that <em>What bounds a kind</em> already declared</td><td>Sean</td></tr><tr><td class="target"><code>require</code></td><td class="note">at least n of a description</td><td class="target">one expression against another</td><td class="note"><code>force &gt; nature</code> has no form otherwise, and counting is one case of comparing</td><td>Sean</td></tr><tr><td class="target"><code>fuel</code>, a unit's tank</td><td class="note">a trait, and <code>move</code> spends from it</td><td class="target">deleted; <code>move</code> spends energy where the unit is</td><td class="note"><strong>no recipe ever filled a tank</strong>, so nothing could move and the loop stopped at step 3 - <code>X-23</code></td><td>this lane, on Sean's leave to remove</td></tr><tr><td class="target"><code>unpaid</code></td><td class="note">derived: its upkeep was not met</td><td class="target"><code>unsustained</code>: upkeep unmet, <em>or</em> force short</td><td class="note">a thing that cannot be sustained is lost; food and force are two things that sustain</td><td>Sean</td></tr><tr><td class="target">Losing a territory</td><td class="note">not stated</td><td class="target">the same <code>perish</code>, on the same trait</td><td class="note"><code>disorder</code> and <code>perish</code> were one recipe written twice</td><td>Sean spotted it</td></tr><tr><td class="target"><code>border</code>, <code>crosses</code></td><td class="note">a <em>Crosses</em> column reading <em>border</em> / <em>orbit border</em></td><td class="target">two traits over those two values</td><td class="note"><code>move</code>'s guard said <em>an edge the unit crosses</em> and named no trait - <code>C-60</code>, `S-73`</td><td>this lane</td></tr><tr><td class="target"><code>below</code></td><td class="note"><em>a place above one territory</em>, in prose</td><td class="target">a trait of an orbit</td><td class="note">an editor cannot offer what is not declared</td><td>this lane</td></tr><tr><td class="target"><code>location</code></td><td class="note">no such trait, and a rule forbidding one</td><td class="target"><code>holder of x</code>, an expression</td><td class="note"><code>spec/logistics.md</code>: a thing is not located by a trait</td><td>this lane</td></tr><tr><td class="target"><code>control</code>'s values</td><td class="note"><em>held by a player, or unclaimed</em></td><td class="target"><code>yours</code>, <code>unclaimed</code></td><td class="note">an enumeration nobody had written down</td><td>this lane</td></tr><tr><td class="target">The two stores in <code>found-colony</code></td><td class="note">produced by both founding recipes</td><td class="target">dropped</td><td class="note">founding delivered 5 metal-equivalent against an ark's 3 - <code>X-14</code></td><td>Sean</td></tr><tr><td class="target">A territory's capacity for arks</td><td class="note">a capacity of 2</td><td class="target">removed</td><td class="note">an ark is only ever in orbit; no recipe could reach it</td><td>Sean</td></tr><tr><td class="target">Storing</td><td class="note"><em>use it immediately, store it, or lose it</em>, with no recipe</td><td class="target"><code>stow</code>: take up what is loose, put back what fits with <code>clamp</code></td><td class="note">nothing filled a store and nothing reaped what was loose - <code>X-21</code></td><td>Sean</td></tr><tr><td class="target"><code>make-world</code></td><td class="note">&mdash;</td><td class="target">deleted</td><td class="note">twelve calls with different arguments are a scenario file; <code>create planet</code> makes the territories</td><td>this lane</td></tr></tbody></table></div>
+<div class="callout">
+<h4>Three of these will break a scenario written against the old rules</h4>
+<p><strong><code>move</code> spends energy where the unit is</strong>, not from a tank, so any
+scenario that fuels a unit is running a recipe that no longer exists - and one that <em>relies</em>
+on a fuelled unit was relying on something the release never provided. <strong><code>found-colony</code>
+makes no stores</strong>, so a scenario counting stores after founding will be two short. And
+<strong><code>make-world</code> is gone</strong>, its work belonging to <code>create planet</code>
+and a scenario file.</p>
+<p>The rest add rather than replace: new traits, a comparison where there was a count, and one
+recipe where there were two.</p>
+</div>
+<div class="callout">
+<h4>Where the two can be compared mechanically</h4>
+<p><strong>Check 7 already reads the release's <em>Traits</em> table and reports every difference
+from this lane's copy</strong>, without failing on any - divergence being the reason for copying.
+It currently names four traits only here (<code>below</code>, <code>border</code>,
+<code>crosses</code>, <code>unsustained</code>) and two only in the release (<code>fuel</code>,
+<code>unpaid</code>).</p>
+<p>That is the one place the comparison is automatic. <strong>Everything else in the table above is
+this lane asserting a difference rather than computing one</strong>, and the specification lane
+should treat it as a claim to check rather than a report to trust.</p>
+</div>
 
 <h2>The source, for review</h2>
 <p>Everything above is generated from two files, and no number on this page is typed by hand.</p>
@@ -2783,7 +2853,12 @@ each row names who answered it.</p>
 </tr>
 <tr>
 <td class="target">tools/research/formulas/check.py</td>
-<td>the three checks, with their poison</td>
+<td>the checks, with their poison</td>
+<td class="note">the research lens</td>
+</tr>
+<tr>
+<td class="target">tools/research/formulas/play.py</td>
+<td>the runner - fires the recipes and plays the loop</td>
 <td class="note">the research lens</td>
 </tr>
 <tr>
