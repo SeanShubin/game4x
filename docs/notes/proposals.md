@@ -177,6 +177,28 @@ expression is a separate question and this does not ask it.
 **Consistent with `P-363`**, checked: an expression returns a **number**, which is exactly the shape
 `P-363` calls safe, and neither `count` nor `sum` reads anything outside the state.
 
+## What landing both of these does not close
+
+**`P-356` and this proposal go into the same section**, so it was re-read whole, as the rule for a
+section taking a second proposal requires. They hold together, and **one hole neither of them closes
+was found by doing it.**
+
+**A recipe cannot say that the kind it produces comes from an ingredient.** `work`'s production row
+in `releases/first-release.md` reads **Kind `resource`** - the family - with the quantity written in
+prose as *`$where`'s density for **that resource***. Which resource is meant is carried by the words
+*that resource* and by nothing in the notation.
+
+- **`P-356` does not reach it**: it says a field's **value** may name a kind, and here the kind is
+  not a field's value
+- **This proposal does not reach it either**: it says a **quantity** or a **guard's side** may be an
+  expression, and here it is the **kind** that needs one
+
+The research lens writes it `resource[extractor.resource]` - a family narrowed by a path - and that
+form is in neither proposal. **It is a pre-existing gap rather than one either of these creates**;
+the release has carried it in prose since `work` was written. **Nothing is blocked by landing these
+two without it**, and it is the next thing this lane would draft on the notation.
+
+
 ### P-364 - Building a world is made of the same rules as playing one
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> Commands
