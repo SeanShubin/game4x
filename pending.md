@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-361** - Fully exploited is maximum possible output, not every place a structure would fit · `docs/notes/proposals.md`
 - **P-360** - A garrison has no force, and one sentence still says it has one · `docs/notes/proposals.md`
 - **P-356** - A field may name a kind instead of a thing, and nothing says so · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`

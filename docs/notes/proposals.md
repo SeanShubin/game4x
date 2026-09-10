@@ -62,6 +62,79 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-361 - Fully exploited is maximum possible output, not every place a structure would fit
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning
+
+**Your definition, from 2026-09-10**, offered as the whole of *Winning* so that the three bullets can
+be read together:
+
+> - A planet is fully exploited when every territory that can be taken has been taken, every
+>   territory is producing the greatest output it can, and every storage structure on it is full.
+> - Exploiting a territory is putting labor to work at its extractors. A territory produces the
+>   greatest output it can when as many citizens as it can feed are working, as many of them at its
+>   food extractors as those will take - which is what sets the population - and every remaining
+>   citizen at a metal or an energy extractor, the player choosing how they divide.
+> - What that greatest output is follows from the territory's own permanent facts: how many
+>   extractors it has total capacity for, their densities, and its biome. Not whether the player can
+>   afford it this turn, and not whether any particular game happened to reach it.
+> - A territory that cannot feed a citizen has no output to reach, and never holds the condition
+>   open.
+> - A player wins by launching an Ark from a fully exploited planet.
+
+**What changes.** The second bullet of the three is replaced by three, and one clause of the first
+moves: *every structure has been built everywhere it can be built* becomes *every territory is
+producing the greatest output it can*. **The first and last bullets are otherwise unchanged and are
+quoted so the section reads as one thing.**
+
+**Why it is `recovered` rather than `entailed`.** `P-125` weighed three readings of *can be built* on
+2026-08-26 and chose *some play from the start makes it exist* - **which is your definition** - then
+wrote it down as a count of what the ground has room for, which is a different rule. It said the two
+coincide. **They do not**, and it named the counterexample in its own basis two paragraphs earlier:
+*territory 5 tops out at one extractor of nineteen … it holds one citizen for ever.* So this is not a
+new idea; it is the one `P-125` chose, stated.
+
+**It unblocks the game, and that is measured rather than argued.**
+[The note](2026-09-10-maximum-possible-output.md) carries the twelve territories. **Seven staff every
+extractor they have. Four have exactly the choice you described.** Two can do neither and are why the
+release cannot currently be won:
+
+- **Territory 5** - food density 1. To feed itself and still spare labor it needs `w x d >= C` and
+  `C - w >= 1`; at `d = 1` that is `w >= C` and `w <= C - 1` at once. **It fails algebraically.** It
+  starves to one citizen on turn 1 and holds there. Its greatest output is one food, eaten by the
+  citizen making it - **reached immediately**
+- **Territory 6** - no metal at all, and building costs metal that cannot cross a boundary. It can
+  never build a second anything. Four citizens, one farm, three idle - **reached on arrival**
+
+Under the old wording those two need 19 and 8 extractors they can never have. **Under yours they are
+already finished**, so neither holds the win open.
+
+**It does not reward foreclosing, which is what `P-125` rejected the third reading for.** Every number
+in that note comes from `(capacity, density)` pairs read off *Territory resources* - **no play history
+is an input**. Labor renews every turn, so a one-time build cost is always eventually affordable
+where any labor is spare; and nothing lowers a ceiling irreversibly, since no recipe demolishes an
+extractor and a starved population regrows to the same equilibrium. **A player who wastes capacity
+has not finished; the bar does not come down to meet them.**
+
+**One cost, stated because it is real.** The sentence being replaced could be checked by looking. This
+one is derived - capacity times density gives the population, less the food workers gives the
+staffing budget, and territory 6 needs the prior step of noticing that no metal means nothing is ever
+built. **Small, decidable, and doable by hand**, which is what `docs/process.md` asks - but arithmetic
+rather than a glance.
+
+**Two things this deliberately does not touch**, so that neither is settled by silence:
+
+- **`every storage structure on it is full`** is carried through unchanged. It is separately in
+  question, because `store` is a kind the release has and `spec/` never defines - `S-83`
+- **`every territory that can be taken has been taken`** is carried through unchanged. Under a rule
+  about output, a territory that contributes nothing does not change the total either way, so whether
+  taking it is still required is a question this proposal does not ask
+
+**Landing this makes `S-84` stale** - its smallest reading was *retune territory 5's density*, and
+that is the wrong fix if the definition changes instead. A cleanup follows immediately, per the rule
+about a promotion that makes something else stale.
+
+
 ### P-360 - A garrison has no force, and one sentence still says it has one
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/unit-types.md` -> Every unit
