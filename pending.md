@@ -8,14 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-356** - A field's value may name a kind rather than a thing · `docs/notes/proposals.md`
-- **P-366** - A selector is not a description, and what a value may be · `docs/notes/proposals.md`
-- **P-364** - Building a world is made of the same rules as playing one · `docs/notes/proposals.md`
-- **P-365** - What an orbit boundary is, and that an Ark is powered by the sun · `docs/notes/proposals.md`
-- **P-362** - `launch ark` puts an Ark in orbit, and the reason it did not has dissolved · `docs/notes/proposals.md`
-- **P-363** - What a rule may ask the engine, and what it may never ask it to do · `docs/notes/proposals.md`
-- **P-361** - Fully exploited is maximum possible output, not every place a structure would fit · `docs/notes/proposals.md`
-- **P-360** - A garrison has no force, and one sentence still says it has one · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -26,7 +18,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-356** - `6740b9b` Reflow P-356's asks field, which I wrapped the same way twice · still open in `docs/notes/proposals.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
 
 ## What is outstanding
@@ -85,16 +76,16 @@ Not a defect list. Several proposals in one section is what working on one topic
 like; what this cannot tell you is whether they all still hold together, which is the question
 it exists to ask.
 
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
+- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346
+- `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335
-- `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217
-- `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313
@@ -103,13 +94,14 @@ it exists to ask.
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358
+- `spec/control.md` -> Winning - P-77, P-81, P-125, P-361
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
-- `spec/control.md` -> Winning - P-77, P-81, P-125
+- `spec/invariants.md` -> The game is one function - P-75, P-115, P-363
 - `spec/resources.md` -> The list - P-49, P-65, P-338
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> Quality instance - P-244, P-294
@@ -127,7 +119,6 @@ it exists to ask.
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
-- `spec/invariants.md` -> The game is one function - P-75, P-115
 - `spec/narrative.md` -> Violence and order - P-39, P-278
 - `spec/planet.md` - P-272, P-280
 - `spec/planet.md` -> Distance - P-24, P-349

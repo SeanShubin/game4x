@@ -16,7 +16,7 @@ One section per unit type. What is true of *every* unit belongs in
 - An Ark is taken apart when it deploys, having chosen its landing zone from orbit. A Pioneer is
   taken apart when it founds; moving is not founding, and it may cross ground its player already
   holds
-- The structure it becomes has one less force than the unit, and is operated by citizens
+- The structure it becomes is operated by citizens
 
 ## Ark
 

@@ -236,10 +236,12 @@ rows below are in that order.
 |                     |        | consume | 6                                                    | energy    |                                               |                          |
 |                     |        | consume | 2                                                    | citizen   |                                               |                          |
 |                     |        | produce | 1                                                    | pioneer   |                                               |                          |
-| **launch ark**      | player | consume | 3                                                    | metal     |                                               |                          |
+| **launch ark**      | player | require | 1                                                    | territory |                                               | `$where`                 |
+|                     |        | consume | 3                                                    | metal     |                                               |                          |
 |                     |        | consume | 12                                                   | energy    |                                               |                          |
 |                     |        | consume | 2                                                    | citizen   |                                               |                          |
 |                     |        | require | 1                                                    | yard      |                                               |                          |
+|                     |        | produce | 1                                                    | ark       |                                               | the orbit above `$where` |
 | **create labor**    | player | consume | 1                                                    | citizen   | ready                                         |                          |
 |                     |        | produce | 1                                                    | citizen   | not ready                                     |                          |
 |                     |        | produce | 1                                                    | labor     |                                               |                          |

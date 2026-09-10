@@ -38,6 +38,10 @@ itself.
 from the key beside it. `where:1` does not say what kind of thing `1` is and `territory:1` does.
 A thing's own identifier is `id`, which is the one field that names no kind.
 
+**A field's value may name a kind rather than a thing.** `territory:1` refers to one particular
+territory; `resource:food` says which resource, and means no particular food. **Which of the two a
+field takes is a fact about that field**, so reading the key still tells you what its value is.
+
 **A command is named for the recipe it fires**, and there is one command for each recipe the
 player may fire.
 
@@ -55,6 +59,30 @@ descriptions sort in**, so the same state is always the same bytes.
 **Every word in a data file is a kind, a trait, or one of a trait's values.** A file that uses any
 other word is wrong about the game rather than describing it.
 
+**In a recipe the same form is a selector, not a description.** A selector may name a **family**
+rather than a kind, and it may **leave stored traits out** - `{extractor ready:yes}` selects every
+ready extractor, whatever it extracts. **A description may do neither**: it names one kind and
+carries every stored trait that thing has. **Where the form stands is what says which it is** - a
+selector in a recipe, a description in a state.
+
+**In a recipe, a quantity and either side of a guard may be an expression.** An expression is one
+of these and nothing else:
+
+- a number
+- a **path**, which reads a trait of something a name is bound to, as `t.nature`
+- **`holder of x`**, what holds `x` - which is how a thing's place is read, since a thing is not
+  located by a trait
+- **`<trait> of x`**, one thing's trait
+- **`count {…}`**, how many things match a description
+- **`sum <trait> of {…}`** and **`max <trait> of {…}`**, that trait aggregated over all of them
+- **`min(a, b)`**, the lesser of two
+- **`available <kind> of x`**, a container's total capacity for that kind less what it holds
+
+**A guard compares two expressions**, with `=`, `<`, `≤`, `>` or `≥`.
+
+**The words an expression is built from are the notation's own.** They are the one thing in a data
+file that is not a kind, a trait, or one of a trait's values.
+
 ## Commands
 
 - Commands to query the game state are available
@@ -71,9 +99,11 @@ ending a turn fires the world's.
 The commands are therefore not a list this document keeps. They are the recipes whose owner is the
 player, and adding a recipe adds a command.
 
-A command that changes the game names a recipe. `show`, `help` and `history` change nothing, and
-the design commands build a world before there is a game to change; both are listed here because
-neither is a recipe.
+A command that changes the game names a recipe, and that holds while a world is being designed as
+much as while it is played. A game state changes only by a transition, which phase a game is in is
+part of its state, and designing is therefore made of the same rules as playing. The design
+commands are the player's recipes, offered only while the phase is design. `show`, `help` and
+`history` are listed here because they change nothing, and so name no recipe.
 
 - `run <file>` - run the commands in a file, as though they had been typed in its place
 

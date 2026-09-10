@@ -68,6 +68,14 @@ specific rule.
 - A game state is exactly the result of applying every transition in order to the starting state
 - A rule is a source of transitions, not a kind of one. The history records what a rule did,
   exactly as if the player had done it by hand
+- A rule may ask the engine for a value. **What comes back decides whether it is safe**: a set,
+  which says which things the rule applies to, or a number, which a guard or a quantity reads.
+  **Never an effect.** A transition whose effect is opaque cannot be weighed or read for what it
+  creates, and every check over the rules stops meaning anything.
+- Such a question reads only the state, and answers the same way for the same state. One that
+  reads anything else breaks the rule that a game state is exactly the result of applying every
+  transition in order to the starting state. One that answers differently twice breaks the dump,
+  and a state that cannot be written down and read back is not a state.
 
 ## The game is data
 

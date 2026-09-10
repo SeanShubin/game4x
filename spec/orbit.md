@@ -20,6 +20,9 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
 
 - An orbit is next to the territory below it, and next to the orbits above that territory's
   neighbours
+- An **orbit boundary** is one an orbit is on either side of: between an orbit and the territory
+  below it, or between two orbits. A unit that crosses orbit boundaries may cross any of them, and
+  one that does not may cross none
 
 ## Open questions
 
