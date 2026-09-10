@@ -8,9 +8,9 @@
     ],
     [
       "require",
-      "A read: at least n, and not consumed",
-      "require 1 adjacency from -> $to",
-      "the one guard that is not a cost - a read arc, used once"
+      "A guard: one expression against another",
+      "require count {adjacency …} >= 1",
+      "compares rather than counts, so `force > nature` has a form. Counting is one case of it"
     ],
     [
       "set",
@@ -88,6 +88,11 @@
       "the <code>Owner</code> column",
       "each (the world's) or some (the player's)",
       "DELETED - the distinction is which quantifier, and the specification already says so: the player's are offered, the world's are not"
+    ],
+    [
+      "require n <em>k</em>",
+      "require count {<em>k</em>} &ge; n",
+      "the old form, and still the commonest - a count against a constant is two expressions"
     ]
   ],
   "player": [
@@ -218,10 +223,10 @@
         ],
         [
           "require",
-          "adjacency from -> $to the unit crosses",
-          "at least 1",
+          "count {adjacency from:from to:$to the unit crosses}",
+          ">= 1",
           "hard",
-          "row 2"
+          "was *at least 1* of a description; the count is now one expression against another"
         ],
         [
           "change",
@@ -556,10 +561,10 @@
         ],
         [
           "let",
-          "n = min(surplus food in t, citizen in t)",
+          "n = min(count {food surplus:yes in t}, count {citizen in t})",
           "",
           "",
-          ""
+          "the same expression, now in a language that has one"
         ],
         [
           "change",
@@ -2788,6 +2793,60 @@
       "<strong>Comparing two computed values</strong>",
       "nothing. <code>require</code> tests a count against a constant, not one quantity against another",
       "<strong>NO</strong> - <code>force &gt; nature</code> has no form"
+    ]
+  ],
+  "expressions": [
+    [
+      "a number",
+      "<code>1</code>, <code>15</code>",
+      "as before"
+    ],
+    [
+      "a path",
+      "<code>t.nature</code>, <code>thing.upkeep</code>",
+      "already used by four amounts before this existed"
+    ],
+    [
+      "<code>count {…}</code>",
+      "<code>count {adjacency from:from to:$to}</code>",
+      "how many things match a description - what <code>require</code> used to do, and now one case of it"
+    ],
+    [
+      "<code>sum trait of {…}</code>",
+      "<code>sum force of {citizen territory:t}</code>",
+      "<strong>organized</strong> force. Also what <code>metal-in-it</code> is, written rather than described"
+    ],
+    [
+      "<code>max trait of {…}</code>",
+      "<code>max force of {citizen territory:t}</code>",
+      "<strong>unorganized</strong> force - Sean's rule, in the language"
+    ],
+    [
+      "<code>min(a, b)</code>",
+      "<code>min(count {food surplus:yes …}, count {citizen …})</code>",
+      "<code>grow</code> has needed this since the first encoding, with no form for it"
+    ]
+  ],
+  "comparisons": [
+    [
+      "&gt;",
+      "<strong>greater</strong> force to enter"
+    ],
+    [
+      "&ge;",
+      "<strong>equal</strong> force to maintain"
+    ],
+    [
+      "&lt;",
+      "&nbsp;"
+    ],
+    [
+      "&le;",
+      "&nbsp;"
+    ],
+    [
+      "=",
+      "&nbsp;"
     ]
   ]
 }

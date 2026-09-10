@@ -92,8 +92,13 @@ ASSUMPTIONS = {
     "yet; <code>every shared edge</code> is the planet's geometry, which is neither the state nor a "
     "table. The notation has a form for <em>every thing matching this description</em> and none for "
     "either of these.",
-    "positional": "<strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other "
-    "argument in the notation is named.",
+    "expression": "<strong>An expression</strong> &mdash; <code>count {…}</code>, "
+    "<code>sum force of {…}</code>, <code>min(a, b)</code>, a path, a number. Sean added these on "
+    "2026-09-09 by making <code>require</code> compare two of them, and they are what the four "
+    "computed amounts and <code>grow</code>'s <code>min</code> had always been. <strong>The "
+    "notation has no form for one</strong>: its values are a word, a number or a command, and an "
+    "expression is none of the three. Its arguments are also positional, where every command's are "
+    "named.",
     "recipe-as-thing": "<code>recipe:</code> names the recipe a <code>call</code> fires, which "
     "treats a recipe as a thing with a name. The alternative is a second field that names no kind, "
     "and <code>id</code> is meant to be the only one.",
@@ -201,7 +206,12 @@ def console_line(op, target, amount, attach, note, where):
     """One row of a recipe table, as a single string in the console's notation."""
     amount, attach = str(amount).strip(), str(attach).strip().lower()
 
-    if op in ("each", "some"):
+    if op == "let" and "min(" in target:
+        name, expr = (p.strip() for p in target.split("=", 1))
+        _assume("expression", where)
+        out = f"{{let {name}:{expr}}}"
+
+    elif op in ("each", "some"):
         name, over = (p.strip() for p in target.split(":", 1))
         if over.startswith("{"):
             body = over
@@ -257,13 +267,16 @@ def console_line(op, target, amount, attach, note, where):
         out = f"{{set thing:{{{subject}}} {trait}:{_value(value, where)}}}"
 
     elif op == "require":
-        if target.startswith("adjacency from"):
+        # One expression against another. The old form - a description and `at least n` -
+        # is the case where the left side is a count and the right is a number.
+        _assume("expression", where)
+        if "adjacency" in target:
             _assume("crossed-by", where)
-            thing = "{adjacency from:from to:$to crossed-by:unit}"
+            left = "count {adjacency from:from to:$to crossed-by:unit}"
         else:
-            thing = _description(target, where)
-        assert amount.startswith("at least "), amount
-        out = f"{{require thing:{thing} at-least:{_value(amount[len('at least '):], where)}}}"
+            left = target
+        op_sym, rhs = amount.split(" ", 1) if " " in amount else (amount, "")
+        out = f"{{require left:{left} is:{op_sym} right:{_value(rhs, where)}}}"
 
     elif op == "change" and "." in target and " in " not in target:
         # A numeric trait is a counter too, so `age` changes one.
@@ -1360,44 +1373,50 @@ expresses each:</p>
 <div class="scroll"><table><thead><tr><th>Concept</th><th>What expresses it</th><th></th></tr></thead>
 <tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td></tr>' for r in DATA["sufficiency"])}</tbody></table></div>
 <div class="callout">
-<h4>Eleven of thirteen, and the two that fail are the same failure twice</h4>
-<p><strong>There is no way to compute a value from the state and no way to compare two.</strong>
-Those look like separate gaps and are one: <strong>the model has no expression language.</strong> It
-can state what a thing is, change how many there are, and guard a change against a count. It cannot
-say <em>this quantity, derived that way, against that one</em>.</p>
-<p><strong>It is not a clean absence, which is the tell.</strong> Amounts already carry computed
-values - <code>work</code> takes its yield from <code>t.deposit[…].density</code>,
-<code>upkeep</code> from <code>thing.upkeep</code>, <code>perish</code> from the derived
-<code>thing.metal-in-it</code>. And <code>grow</code> binds
-<code>min(surplus food, citizens)</code>, which this report has flagged since the encoding began as
-the one place the notation has no form for what is written. <strong>The model computes in four
-places and admits it in none.</strong></p>
+<h4>The two that failed are now one change, made 2026-09-09</h4>
+<p><strong><code>require</code> compares two expressions</strong> instead of testing a description
+against a constant. Counting is one case of it: <em>at least n of k</em> is
+<code>count {{k}} &ge; n</code>.</p>
+<div class="scroll"><table><thead><tr><th>An expression is</th><th>For example</th><th></th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td class="target">{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["expressions"])}</tbody></table></div>
+<p><strong>Four aggregates and nothing else</strong>, which is the least that expresses the rule. And
+the comparisons are the five you would expect, of which Sean's rule uses two:
+{" ".join("<code>" + r[0] + "</code>" for r in DATA["comparisons"])}.</p>
 </div>
 <div class="callout">
-<h4>What that costs the force rule specifically</h4>
-<p><strong>A derived trait cannot be defined, only described.</strong> The four the game has -
-<code>metal-in-it</code>, <code>control</code>, <code>surplus</code>, <code>unpaid</code> - are each
-a sentence in the <em>Traits</em> table. A territory's force would be a fifth, and it would be the
-first needing a <em>conditional</em> definition: <code>max</code> where the citizens are
-unorganized, <code>sum</code> where a garrison organizes them. <strong>A sentence can say that and
-nothing can run it.</strong></p>
-<p><strong>And <code>require</code> counts things.</strong> It tests <em>at least n of this
-description</em>, where n is a constant. <code>force &gt; nature</code> is two derived numbers
-compared, and neither is a count of anything. So the boundary contest - the rule Sean just stated -
-<strong>has no form in the language today</strong>, and that is the whole of what is missing.</p>
+<h4>It closed both halves, not one, and that was not the plan</h4>
+<p>This report said the model could not <em>define</em> a derived trait and could not
+<em>compare</em> two values, and proposed fixing the second. <strong>Fixing the second removed the
+first.</strong> A computation written where it is used needs no definition elsewhere: a territory's
+force is <code>sum force of {{citizen …}}</code> at the point it is tested, so <strong>nothing has to
+be added to the <em>Traits</em> table at all</strong>.</p>
+<p>The same applies to what is already there. <code>metal-in-it</code> is <em>its binding plus the
+metal in its parts</em>, which is a <code>sum</code>; <code>surplus</code> and <code>control</code>
+are conditions. <strong>Four sentences in a table are four expressions nobody could write until
+now</strong> - and this report is not proposing they move, only noting that they could.</p>
 </div>
 <div class="callout">
-<h4>The smallest thing that closes it, and what it does not cost</h4>
-<p><strong>Let a guard compare two expressions</strong>, rather than a description against a
-constant. That changes one primitive instead of adding one, and it subsumes what
-<code>require</code> does today, since <em>at least n of a description</em> is one expression against
-another.</p>
-<p><strong>It costs the checks nothing</strong>, which is worth knowing before deciding. Check 2
-<em>ignores guards entirely</em> - it is deliberately conservative, flagging loops the guards
-prevent - and check 1 weighs effects rather than guards. <strong>So an arbitrary expression in a
-guard leaves both sound.</strong> Where it does cost something is the interface: a menu is built by
-grounding a recipe against the state, and a guard that computes is harder to ground than one that
-counts.</p>
+<h4>Sean's rule, written in it</h4>
+<pre><code>require max force of &#123;citizen in t&#125; &gt;= t.nature      # unorganized: maintaining
+require sum force of &#123;citizen in t&#125; &gt;= t.nature      # organized, where a garrison is present
+require sum force of &#123;unit in expedition&#125; &gt; t.nature  # entering, which needs greater</code></pre>
+<p><strong>Two lines that differ by one word</strong> are what <code>max_of</code> against
+<code>sum_of</code> comes to, and the third differs from the second only in <code>&gt;</code> against
+<code>&ge;</code> - which is <em>greater to enter, equal to maintain</em> exactly.</p>
+<p><strong>Not added to <code>move</code>, and the reason is not caution.</strong> Entering is
+guarded against <em>whoever holds the territory</em>, and a unit moving between two territories you
+already hold is not entering anything contested. That condition has not been stated, and a guard
+without it would make your own ground unenterable. <strong>The language now has the form; which
+moves it applies to is a rule Sean has not given.</strong></p>
+</div>
+<div class="callout">
+<h4>What it cost, counted</h4>
+<p><strong>No new primitive</strong> - the count is still {n_primitives}, because
+<code>require</code> changed rather than something being added. <strong>No line was added</strong>
+either: <code>move</code>'s guard and <code>grow</code>'s <code>let</code> were rewritten in place,
+and both were already doing this without a form for it. And <strong>one assumption became truer
+rather than going away</strong>: what the encoding used to flag as <em>positional arguments in
+<code>min(a, b)</code></em> is now flagged as <em>an expression</em>, which is what it always was.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>

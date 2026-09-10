@@ -93,9 +93,9 @@ positive <code>change</code> carries its traits.</p>
 </tr>
 <tr>
 <td class="op">require</td>
-<td>A read: at least n, and not consumed</td>
-<td class="target">require 1 adjacency from -&gt; $to</td>
-<td class="note">the one guard that is not a cost - a read arc, used once</td>
+<td>A guard: one expression against another</td>
+<td class="target">require count {adjacency …} &gt;= 1</td>
+<td class="note">compares rather than counts, so `force &gt; nature` has a form. Counting is one case of it</td>
 </tr>
 <tr>
 <td class="op">set</td>
@@ -236,6 +236,11 @@ is why no <code>set</code> in this report carries an attachment.</p>
 <td>each (the world's) or some (the player's)</td>
 <td class="note">DELETED - the distinction is which quantifier, and the specification already says so: the player's are offered, the world's are not</td>
 </tr>
+<tr>
+<td class="target">require n &lt;em&gt;k&lt;/em&gt;</td>
+<td>require count {&lt;em&gt;k&lt;/em&gt;} &amp;ge; n</td>
+<td class="note">the old form, and still the commonest - a count against a constant is two expressions</td>
+</tr>
 </tbody></table></div>
 
 <h2>The last column: every row as one string</h2>
@@ -303,7 +308,7 @@ data.</p>
 </tr></thead><tbody>
 <tr><td class="op op-each">some</td><td class="target">unit: {unit ready:yes}</td><td class="amt"></td><td></td><td class="note">was the selection *a unit that is ready*, which was prose outside the language</td><td class="one-string">{some unit:{unit ready:yes}} <span class="cmt"># was the selection *a unit that is ready*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-let">let</td><td class="target">from = what holds unit</td><td class="amt"></td><td></td><td class="note">was row 1; containment says where, so this reads a holder rather than a trait</td><td class="one-string">{let from:what holds unit} <span class="cmt"># was row 1; containment says where, so this reads a holder rather than a trait</span></td></tr>
-<tr><td class="op op-require">require</td><td class="target">adjacency from -&gt; $to the unit crosses</td><td class="amt">at least 1</td><td><span class="attach">hard</span></td><td class="note">row 2</td><td class="one-string">{require thing:{adjacency from:from to:$to crossed-by:unit} at-least:1 attach:hard} <span class="cmt"># row 2</span></td></tr>
+<tr><td class="op op-require">require</td><td class="target">count {adjacency from:from to:$to the unit crosses}</td><td class="amt">&gt;= 1</td><td><span class="attach">hard</span></td><td class="note">was *at least 1* of a description; the count is now one expression against another</td><td class="one-string">{require left:count {adjacency from:from to:$to crossed-by:unit} is:&gt;= right:1 attach:hard} <span class="cmt"># was *at least 1* of a description; the count is now one expression against another</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">energy in from</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">was `energy in unit` - nothing ever filled a tank, so nothing could move</td><td class="one-string">{change thing:{energy place:from} amount:-1 attach:hard} <span class="cmt"># was `energy in unit` - nothing ever filled a tank, so nothing could move</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">unit in from</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">rows 3 and 5 were one move; leaving is half of it</td><td class="one-string">{change thing:{unit place:from} amount:-1 attach:hard} <span class="cmt"># rows 3 and 5 were one move; leaving is half of it</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">unit in $to</td><td class="amt amt-pos">+1</td><td></td><td class="note">and arriving is the other half</td><td class="one-string">{change thing:{unit place:$to} amount:+1} <span class="cmt"># and arriving is the other half</span></td></tr>
@@ -436,7 +441,7 @@ data.</p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-each">each</td><td class="target">t: {territory}</td><td class="amt"></td><td></td><td class="note">was the selection *each territory*, which was prose outside the language</td><td class="one-string">{each t:{territory}} <span class="cmt"># was the selection *each territory*, which was prose outside the language</span></td></tr>
-<tr><td class="op op-let">let</td><td class="target">n = min(surplus food in t, citizen in t)</td><td class="amt"></td><td></td><td class="note"></td><td class="one-string">{let n:{min {food surplus:yes territory:t} {citizen territory:t}}}</td></tr>
+<tr><td class="op op-let">let</td><td class="target">n = min(count {food surplus:yes in t}, count {citizen in t})</td><td class="amt"></td><td></td><td class="note">the same expression, now in a language that has one</td><td class="one-string">{let n:min(count {food surplus:yes in t}, count {citizen in t})} <span class="cmt"># the same expression, now in a language that has one</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">food[surplus] in t</td><td class="amt amt-neg">-n</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{food surplus:yes territory:t} amount:-n} <span class="cmt"># row 1</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">citizen in t</td><td class="amt amt-pos">+n</td><td></td><td class="note">row 2</td><td class="one-string">{change thing:{citizen territory:t} amount:+n} <span class="cmt"># row 2</span></td></tr>
 </tbody></table></div><h3>perish <span class="badge up">2 rows &rarr; 3 lines (+1)</span></h3>
@@ -1243,44 +1248,50 @@ expresses each:</p>
 <div class="scroll"><table><thead><tr><th>Concept</th><th>What expresses it</th><th></th></tr></thead>
 <tbody><tr><td class="target">A thing, its kind and its traits</td><td>a description - <code>{kind trait:value}</code></td><td><strong>yes</strong></td></tr><tr><td class="target">Where a thing is</td><td>containment; what holds it says where it is</td><td><strong>yes</strong></td></tr><tr><td class="target">How many of a thing</td><td>a quantity per description</td><td><strong>yes</strong></td></tr><tr><td class="target">Making and spending</td><td><code>change</code>, signed</td><td><strong>yes</strong></td></tr><tr><td class="target">A cost that can refuse</td><td><code>change</code> with <code>attach</code></td><td><strong>yes</strong></td></tr><tr><td class="target">A prerequisite that is not spent</td><td><code>require</code></td><td><strong>yes</strong></td></tr><tr><td class="target">One rule, many firings</td><td><code>each</code> and <code>some</code></td><td><strong>yes</strong></td></tr><tr><td class="target">Building a rule from rules</td><td><code>call</code>, acyclic</td><td><strong>yes</strong></td></tr><tr><td class="target">A capacity, including zero and none</td><td>a declaration per (container, kind)</td><td><strong>yes</strong></td></tr><tr><td class="target">A thing that expires</td><td><code>keeps</code>, <code>age</code>, <code>spoil</code></td><td><strong>yes</strong></td></tr><tr><td class="target">An expedition - several units acting as one</td><td>a selection is a description <em>and a count</em></td><td><strong>nearly</strong> - the shape is there and <code>move</code>'s quantifier takes one</td></tr><tr><td class="target"><strong>A value computed from the state</strong></td><td>nothing. The 4 derived traits are each a sentence in a table: <code>metal-in-it</code>, <code>control</code>, <code>surplus</code>, <code>unpaid</code></td><td><strong>NO</strong> - there is no way to <em>define</em> one, so a fifth cannot be added by writing it</td></tr><tr><td class="target"><strong>Comparing two computed values</strong></td><td>nothing. <code>require</code> tests a count against a constant, not one quantity against another</td><td><strong>NO</strong> - <code>force &gt; nature</code> has no form</td></tr></tbody></table></div>
 <div class="callout">
-<h4>Eleven of thirteen, and the two that fail are the same failure twice</h4>
-<p><strong>There is no way to compute a value from the state and no way to compare two.</strong>
-Those look like separate gaps and are one: <strong>the model has no expression language.</strong> It
-can state what a thing is, change how many there are, and guard a change against a count. It cannot
-say <em>this quantity, derived that way, against that one</em>.</p>
-<p><strong>It is not a clean absence, which is the tell.</strong> Amounts already carry computed
-values - <code>work</code> takes its yield from <code>t.deposit[…].density</code>,
-<code>upkeep</code> from <code>thing.upkeep</code>, <code>perish</code> from the derived
-<code>thing.metal-in-it</code>. And <code>grow</code> binds
-<code>min(surplus food, citizens)</code>, which this report has flagged since the encoding began as
-the one place the notation has no form for what is written. <strong>The model computes in four
-places and admits it in none.</strong></p>
+<h4>The two that failed are now one change, made 2026-09-09</h4>
+<p><strong><code>require</code> compares two expressions</strong> instead of testing a description
+against a constant. Counting is one case of it: <em>at least n of k</em> is
+<code>count {k} &ge; n</code>.</p>
+<div class="scroll"><table><thead><tr><th>An expression is</th><th>For example</th><th></th></tr></thead>
+<tbody><tr><td class="target">a number</td><td class="target"><code>1</code>, <code>15</code></td><td class="note">as before</td></tr><tr><td class="target">a path</td><td class="target"><code>t.nature</code>, <code>thing.upkeep</code></td><td class="note">already used by four amounts before this existed</td></tr><tr><td class="target"><code>count {…}</code></td><td class="target"><code>count {adjacency from:from to:$to}</code></td><td class="note">how many things match a description - what <code>require</code> used to do, and now one case of it</td></tr><tr><td class="target"><code>sum trait of {…}</code></td><td class="target"><code>sum force of {citizen territory:t}</code></td><td class="note"><strong>organized</strong> force. Also what <code>metal-in-it</code> is, written rather than described</td></tr><tr><td class="target"><code>max trait of {…}</code></td><td class="target"><code>max force of {citizen territory:t}</code></td><td class="note"><strong>unorganized</strong> force - Sean's rule, in the language</td></tr><tr><td class="target"><code>min(a, b)</code></td><td class="target"><code>min(count {food surplus:yes …}, count {citizen …})</code></td><td class="note"><code>grow</code> has needed this since the first encoding, with no form for it</td></tr></tbody></table></div>
+<p><strong>Four aggregates and nothing else</strong>, which is the least that expresses the rule. And
+the comparisons are the five you would expect, of which Sean's rule uses two:
+<code>&gt;</code> <code>&ge;</code> <code>&lt;</code> <code>&le;</code> <code>=</code>.</p>
 </div>
 <div class="callout">
-<h4>What that costs the force rule specifically</h4>
-<p><strong>A derived trait cannot be defined, only described.</strong> The four the game has -
-<code>metal-in-it</code>, <code>control</code>, <code>surplus</code>, <code>unpaid</code> - are each
-a sentence in the <em>Traits</em> table. A territory's force would be a fifth, and it would be the
-first needing a <em>conditional</em> definition: <code>max</code> where the citizens are
-unorganized, <code>sum</code> where a garrison organizes them. <strong>A sentence can say that and
-nothing can run it.</strong></p>
-<p><strong>And <code>require</code> counts things.</strong> It tests <em>at least n of this
-description</em>, where n is a constant. <code>force &gt; nature</code> is two derived numbers
-compared, and neither is a count of anything. So the boundary contest - the rule Sean just stated -
-<strong>has no form in the language today</strong>, and that is the whole of what is missing.</p>
+<h4>It closed both halves, not one, and that was not the plan</h4>
+<p>This report said the model could not <em>define</em> a derived trait and could not
+<em>compare</em> two values, and proposed fixing the second. <strong>Fixing the second removed the
+first.</strong> A computation written where it is used needs no definition elsewhere: a territory's
+force is <code>sum force of {citizen …}</code> at the point it is tested, so <strong>nothing has to
+be added to the <em>Traits</em> table at all</strong>.</p>
+<p>The same applies to what is already there. <code>metal-in-it</code> is <em>its binding plus the
+metal in its parts</em>, which is a <code>sum</code>; <code>surplus</code> and <code>control</code>
+are conditions. <strong>Four sentences in a table are four expressions nobody could write until
+now</strong> - and this report is not proposing they move, only noting that they could.</p>
 </div>
 <div class="callout">
-<h4>The smallest thing that closes it, and what it does not cost</h4>
-<p><strong>Let a guard compare two expressions</strong>, rather than a description against a
-constant. That changes one primitive instead of adding one, and it subsumes what
-<code>require</code> does today, since <em>at least n of a description</em> is one expression against
-another.</p>
-<p><strong>It costs the checks nothing</strong>, which is worth knowing before deciding. Check 2
-<em>ignores guards entirely</em> - it is deliberately conservative, flagging loops the guards
-prevent - and check 1 weighs effects rather than guards. <strong>So an arbitrary expression in a
-guard leaves both sound.</strong> Where it does cost something is the interface: a menu is built by
-grounding a recipe against the state, and a guard that computes is harder to ground than one that
-counts.</p>
+<h4>Sean's rule, written in it</h4>
+<pre><code>require max force of &#123;citizen in t&#125; &gt;= t.nature      # unorganized: maintaining
+require sum force of &#123;citizen in t&#125; &gt;= t.nature      # organized, where a garrison is present
+require sum force of &#123;unit in expedition&#125; &gt; t.nature  # entering, which needs greater</code></pre>
+<p><strong>Two lines that differ by one word</strong> are what <code>max_of</code> against
+<code>sum_of</code> comes to, and the third differs from the second only in <code>&gt;</code> against
+<code>&ge;</code> - which is <em>greater to enter, equal to maintain</em> exactly.</p>
+<p><strong>Not added to <code>move</code>, and the reason is not caution.</strong> Entering is
+guarded against <em>whoever holds the territory</em>, and a unit moving between two territories you
+already hold is not entering anything contested. That condition has not been stated, and a guard
+without it would make your own ground unenterable. <strong>The language now has the form; which
+moves it applies to is a rule Sean has not given.</strong></p>
+</div>
+<div class="callout">
+<h4>What it cost, counted</h4>
+<p><strong>No new primitive</strong> - the count is still 7, because
+<code>require</code> changed rather than something being added. <strong>No line was added</strong>
+either: <code>move</code>'s guard and <code>grow</code>'s <code>let</code> were rewritten in place,
+and both were already doing this without a form for it. And <strong>one assumption became truer
+rather than going away</strong>: what the encoding used to flag as <em>positional arguments in
+<code>min(a, b)</code></em> is now flagged as <em>an expression</em>, which is what it always was.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>
@@ -2214,7 +2225,7 @@ and the growth rate are set by different halves of the same column</strong>, and
 <p><strong>Where a line needed something the notation does not define, the encoder records it
 rather than inventing quietly</strong> &mdash; so this list is the report's real output, and it is
 generated from the encoding rather than written beside it.</p>
-<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">15</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 2</td></tr><tr><td class="amt">4</td><td><strong>How many a quantifier ranges over is not in the line.</strong> <code>each</code> now says <em>that</em> a recipe repeats, and the size of the set is still written beside it &mdash; <code>x12</code>, <code>x36</code>, <code>xE</code>. That is right rather than missing: <code>E</code> depends on the planet, so the number cannot be written when the recipe is. It is recorded because a reader will want it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">3</td><td><strong>A quantifier ranges over something that is not a description.</strong> <code>every row of Territory resources</code> is a data table and the territories do not exist yet; <code>every shared edge</code> is the planet's geometry, which is neither the state nor a table. The notation has a form for <em>every thing matching this description</em> and none for either of these.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">1</td><td><strong>Positional arguments</strong>, in <code>min(a, b)</code>. Every other argument in the notation is named.</td><td class="note">grow line 2</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 4</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 3</td></tr><tr><td class="amt">2</td><td>A <strong>derived</strong> trait is tested &mdash; <code>surplus</code>, <code>unpaid</code>, <code>control</code>. A <em>description</em> is a kind and every <em>stored</em> trait and may not carry one, so <strong>Sean decided on 2026-09-09 that what a quantifier ranges over is a <em>query</em> rather than a description</strong>: a description says what a thing is stored as, and a query says what is true of it. The notation has a form for the first and none for the second, which is what is recorded here.</td><td class="note">grow line 2</td></tr><tr><td class="amt">8</td><td><code>location</code> and <code>below</code> are read as though they were traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not located by a trait, and what holds it is what says where it is.</strong> So these paths have to mean <em>what holds this</em> rather than <em>this thing's location field</em> &mdash; a reading the notation has no form for. <code>move</code> no longer sets one; since 2026-09-09 it leaves one place and enters another. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 2</td></tr><tr><td class="amt">11</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
+<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">15</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">deploy ark line 2</td></tr><tr><td class="amt">4</td><td><strong>How many a quantifier ranges over is not in the line.</strong> <code>each</code> now says <em>that</em> a recipe repeats, and the size of the set is still written beside it &mdash; <code>x12</code>, <code>x36</code>, <code>xE</code>. That is right rather than missing: <code>E</code> depends on the planet, so the number cannot be written when the recipe is. It is recorded because a reader will want it.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">3</td><td><strong>A quantifier ranges over something that is not a description.</strong> <code>every row of Territory resources</code> is a data table and the territories do not exist yet; <code>every shared edge</code> is the planet's geometry, which is neither the state nor a table. The notation has a form for <em>every thing matching this description</em> and none for either of these.</td><td class="note">make-world() line 1</td></tr><tr><td class="amt">2</td><td><strong>An expression</strong> &mdash; <code>count {…}</code>, <code>sum force of {…}</code>, <code>min(a, b)</code>, a path, a number. Sean added these on 2026-09-09 by making <code>require</code> compare two of them, and they are what the four computed amounts and <code>grow</code>'s <code>min</code> had always been. <strong>The notation has no form for one</strong>: its values are a word, a number or a command, and an expression is none of the three. Its arguments are also positional, where every command's are named.</td><td class="note">move line 3</td></tr><tr><td class="amt">6</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 4</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td><code>crossed-by:</code> on an adjacency, for <code>move</code>'s qualifier <em>the edge the unit crosses</em>. The release states <em>Crosses</em> against the unit, not against the adjacency, so the trait this guard reads has no name &mdash; the code lane's <code>C-60</code> is the same hole from the other side.</td><td class="note">move line 3</td></tr><tr><td class="amt">1</td><td>A <strong>derived</strong> trait is tested &mdash; <code>surplus</code>, <code>unpaid</code>, <code>control</code>. A <em>description</em> is a kind and every <em>stored</em> trait and may not carry one, so <strong>Sean decided on 2026-09-09 that what a quantifier ranges over is a <em>query</em> rather than a description</strong>: a description says what a thing is stored as, and a query says what is true of it. The notation has a form for the first and none for the second, which is what is recorded here.</td><td class="note">grow line 3</td></tr><tr><td class="amt">8</td><td><code>location</code> and <code>below</code> are read as though they were traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not located by a trait, and what holds it is what says where it is.</strong> So these paths have to mean <em>what holds this</em> rather than <em>this thing's location field</em> &mdash; a reading the notation has no form for. <code>move</code> no longer sets one; since 2026-09-09 it leaves one place and enters another. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">deploy ark line 2</td></tr><tr><td class="amt">11</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
 <p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
 line required a choice the specification has not made.</p>
 
