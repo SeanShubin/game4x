@@ -961,6 +961,11 @@
       "NOTED - an orbit is a place, and looked derivable only because this release is small",
       "This report suggested an orbit might not need storing, since it carries no stored trait and is one to one with a territory. <strong>Sean: it is a separate location</strong> - like land it will hold structures with no limit, but a different set of them, and no resource nodes.",
       "The one-to-one is an accident of a first release, not the nature of the thing. <em>No traits yet</em> is not <em>no traits ever</em>."
+    ],
+    [
+      "NOTED - a call into code is safe when it returns a set or a number, never when it returns an effect",
+      "Sean, 2026-09-09, on guard rather than acting: <em>I will end up needing a way to have my data model express calls into the code - computing the territories reachable in 3 spaces, say.</em>",
+      "The model already does this once, in <code>make-world</code>. See <em>Calls into the code</em>."
     ]
   ],
   "collapse": [
@@ -2847,6 +2852,33 @@
     [
       "=",
       "&nbsp;"
+    ]
+  ],
+  "foreign_calls": [
+    [
+      "Returns a <strong>set</strong>",
+      "<code>each t: reachable(here, 3)</code>",
+      "<strong>safe.</strong> It decides which instances a rule grounds to, and every effect below is still declared"
+    ],
+    [
+      "Returns a <strong>number</strong>",
+      "<code>require distance(a, b) &lt;= 3</code>",
+      "<strong>safe.</strong> Check 2 ignores guards by design and check 1 weighs effects, so neither can be misled by one"
+    ],
+    [
+      "Returns an <strong>effect</strong>",
+      "<code>call resolve-combat(a, b)</code>",
+      "<strong>fatal to every check on this page.</strong> A transition whose effect is opaque cannot be weighed, put in a matrix, or read for what it creates"
+    ],
+    [
+      "Reads anything not in the state",
+      "geometry held only in the engine",
+      "<strong>breaks an invariant</strong>: <em>a game state is exactly the result of applying every transition in order to the starting state</em>"
+    ],
+    [
+      "Answers differently for the same state",
+      "anything with a hidden seed",
+      "<strong>breaks the dump.</strong> A state that cannot be written down and read back is not a state"
     ]
   ]
 }

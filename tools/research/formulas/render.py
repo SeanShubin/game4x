@@ -1419,6 +1419,52 @@ rather than going away</strong>: what the encoding used to flag as <em>positiona
 <code>min(a, b)</code></em> is now flagged as <em>an expression</em>, which is what it always was.</p>
 </div>
 
+<h2>Calls into the code</h2>
+<p>Sean, 2026-09-09, wanting to be on guard rather than to act: <em>it is possible I will end up
+needing a way to have my data model express calls into the code. An example might be computing the
+territories reachable in 3 spaces on a goldberg polyhedron.</em></p>
+<p><strong>There is a line, and it is sharp.</strong> What a call returns decides whether every check
+on this page survives it:</p>
+<div class="scroll"><table><thead><tr><th>A call that</th><th>Looks like</th><th></th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td class="target">{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["foreign_calls"])}</tbody></table></div>
+<div class="callout">
+<h4>The model already makes one, and the assumption list already says so</h4>
+<p><code>make-world</code>'s last quantifier is <code>each (a, b): every shared edge</code>, and a
+shared edge comes from the planet's geometry - neither the state nor a data file. It is flagged
+today as <em>a quantifier ranges over something that is not a description</em>. <strong>So this is
+not a future problem; it is one place the model already reaches outside itself</strong>, and it is
+the safe shape: it returns a set, and the <code>call</code> beneath it declares its own effects.</p>
+</div>
+<div class="callout">
+<h4>But the example given does not need a call into code at all</h4>
+<p><strong>Adjacency is a thing.</strong> The release made it a kind so the geometry would be data -
+<em>territory adjacency is stated once, and orbital adjacency is derived from it</em> - so the graph
+is in the state already. <em>Reachable in 3</em> is a query over things that exist, not a question
+for the engine.</p>
+<p>And it is the most studied query there is: <strong>transitive closure is the canonical recursive
+query</strong>, computed as a least fixed point and <strong>guaranteed to terminate over a finite
+relation</strong>. Twelve territories are finite. What that needs is not a foreign function but
+<strong>recursion in the query language</strong> - which the expression vocabulary does not have and
+which is a much smaller thing to add than an escape hatch.</p>
+<p><strong>And the recursion caveat is the opposite of the one already on this page.</strong>
+<code>X-9</code> says recursion in <code>call</code> is undecidable, so recipes must be acyclic.
+Recursion in a <em>query</em> over a finite set terminates. <strong>Two different recursions with
+two different answers</strong>, and they would be easy to conflate into one prohibition that costs
+more than it should.</p>
+</div>
+<div class="callout">
+<h4>What to watch, if one is ever added</h4>
+<p><strong>Keep it on the left of a guard or inside a quantifier, never inside an effect.</strong>
+That is the whole rule. Check 2 ignores guards deliberately - it is conservative, flagging loops the
+guards prevent - and check 1 weighs what a line creates and destroys. So an opaque <em>set</em> or
+<em>number</em> leaves both sound, and an opaque <em>effect</em> leaves neither with anything to
+read.</p>
+<p>Two smaller things travel with it. It must answer the same way for the same state, or the dump
+stops being derivable. And it must read only what is in the state, or <em>a game state is exactly
+the result of applying every transition in order to the starting state</em> stops being true - which
+is why adjacency being a thing was the right call and worth not undoing.</p>
+</div>
+
 <h2>Still open, and yours to take</h2>
 <p>{n_open} of the {n_decisions} questions this re-encoding raised are still open. The rest are
 below, under <em>What has already been settled</em>, so that this list is short enough to be a list
