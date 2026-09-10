@@ -162,14 +162,20 @@ That is a smaller defect than either lane had it, and a sharper one:
 - **The research lens filed it as *nothing fills a store, so a store is a building that does
   nothing*.** Also wrong: metal and energy stores are what make metal and energy carry at all, and
   the twelve loose energy in the dump are there because two stores hold twenty between them
-- **What is true is that a behaviour of the game is not among its recipes.** The release lists
-  sixteen; the game has a seventeenth, and it is the one nobody wrote down
+- **What is true is that a behaviour of the game is not among its recipes.** That was the first
+  statement of it; **section 6 has the measured version**, which is six such behaviours and a
+  relation that runs both ways
 
-**And that has a consequence for `R-8`'s neighbour.** `R-7` is *each recipe can be confirmed on its
-own*, vetted when `reports/recipes.md` shows a before, a command and an after for each. **A
-behaviour that is not a recipe cannot appear there** - so `R-7` can be complete over all sixteen and
-still not show the rule that decides what a player keeps. It is built and waiting on Sean, and this
-does not make it wrong; it makes it narrower than it reads.
+### The refutation moved a number, and the new one is better
+
+**Computed, and poisoned by taking the stores away.** While *nothing stores* stood, a Yard's 15 metal
+had to be mined in a single turn, and **six of twelve territories could ever build one**. Metal
+carries up to the stores' capacity, and a territory may have one store per extractor of that
+resource - so the question is **what it can be standing on, not what it mines in one turn**.
+
+**Nine of twelve can build a Yard**, six of them in one turn. **The old six was not overturned**; it
+was one column of a table, and territories 1, 2 and 3 join at two turns. Taking the stores away drops
+it back to six, which is what makes the check honest.
 
 ## 4. `deposit` is a different phenomenon, and the distinction is the useful half
 
@@ -252,13 +258,25 @@ half of anything.
 That is an argument about how the perspectives are arranged rather than about any of the three
 findings, and it is the one thing here that no single lane's work could have produced.
 
-### The check both lanes want built
+### The check both lanes wanted, and what came of it
 
 For a claim of the form *X is gone* or *nothing does Y*: **assert over `spec/`, `releases/`,
 `crates/` and `reports/`, and fail if the assertion names fewer than four.** Not *search all four*
-but **declare which four you searched** - because in all three instances the search was correct and
-the **scope was never examined**. The sharpening is the research lens's and it is the better half of
-the idea.
+but **declare which four you searched** - because in every instance the search was correct and the
+**scope was never examined**. The sharpening is the research lens's and it is the better half of the
+idea.
+
+**It has not been built as stated, and something better was built instead.** Check 15 - section 6 -
+takes the same problem from the other end: rather than making a claim declare its scope, it
+**enumerates the behaviours from the code and asks which the documents name.** That answers the
+population question directly, and it is what found the six. **The declare-your-scope check is still
+worth having** - it would catch a claim about `spec/` that never opened `spec/`, which check 15
+cannot - and neither lane has built it.
+
+**One check that could not have failed, found while building these.** The old check 11 poison set a
+garrison's force to 5, called the check, and **discarded the answer** - in the file whose entire
+premise is that a green means nothing without a poison that can turn it red. Reported by the
+research lens against itself.
 
 ## 6. The fifteen divergences, triaged
 
@@ -420,14 +438,31 @@ finish* checkable; and possibly **the win condition**, because a question asked 
 not a transition. The second is uncomfortable - **leaving it in Rust is the option that already
 failed once**, which is section 3 of this note.
 
-## 8. What is still owed, and by whom
+## 8. Where this stands, and what is still open
 
-- **Research, tonight** - what the encoding never reached (combat, orbit, control, population, the
-  interface); where the notation could **not** say what the game needs; the seven remaining
-  assumptions; whether the four `OPEN` decisions are all of them
-- **This lane** - the triage table of all fifteen divergences, once the above lands
+**Everything asked of the research lens has been answered except two**, and both are answerable by
+this lane if it runs out of night: the **seven remaining assumptions** behind its editor test, and
+whether the four `OPEN` decisions in its data are all of them.
 
-**Question 1 of the inquiry is answered and is on the report page** as *What the re-encoding ruled
-out* - twelve constructs tried and removed, four ruled out without being built. The four untried are
-one shape: each would take the model out of the class where its checks work. **That set is the
-elimination half of what Sean asked the constraint to produce.**
+**Filed, and therefore not lost if either session ends:**
+
+| Item    | Where                       | What it is                                                              |
+| ------- | --------------------------- | ----------------------------------------------------------------------- |
+| `P-360` | the open queue, **to sean** | a garrison has no force, and `spec/unit-types.md` still says it has one |
+| `S-81`  | to research                 | the overnight inquiry itself                                            |
+| `S-82`  | to spec                     | `spec/logistics.md` still names `node`, which `P-290` deleted           |
+| `S-83`  | to spec                     | recipes and behaviours are many-to-many; six rules have no recipe       |
+
+**Nothing has been incorporated into `spec/` or `releases/`.** `P-360` is a proposal in the queue,
+which is where a decision is offered rather than taken.
+
+### The elimination half, which is what the constraint was for
+
+**Question 1 is answered and is on the report page** as *What the re-encoding ruled out*: twelve
+constructs tried and removed, and **four ruled out without being built**. The four are one shape -
+an effect behind an opaque call, a zero test on an unbounded quantity, recursion in `call`, and
+recipes creating recipes unbounded. **Each would take the model out of the class where its checks
+work.**
+
+The lens rates that set above the twelve, and this lane agrees: **a construct removed can be put
+back; a decidability boundary cannot be uncrossed cheaply.**
