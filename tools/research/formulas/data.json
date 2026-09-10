@@ -230,10 +230,10 @@
         ],
         [
           "change",
-          "unit.fuel",
+          "energy in unit",
           "-1",
           "hard",
-          "was `energy in unit`, then `energy in from`. **Both were wrong**: `fuel` is a stored number a unit is born with, from its kind's *Fuel* column, and `move` decrements it - `reports/recipes.md` shows `pioneer fuel:2` becoming `fuel:1`"
+          "the release's own row - *consume 1 energy, that unit*. **One move per fuel cell**"
         ],
         [
           "change",
@@ -514,6 +514,41 @@
           "+t.deposit[extractor.resource].density",
           "",
           "row 5"
+        ]
+      ]
+    },
+    {
+      "name": "load",
+      "was": null,
+      "selection": "offered on line 1",
+      "lines": [
+        [
+          "some",
+          "unit: {unit}",
+          "",
+          "",
+          "Sean, 2026-09-09: *a tank they can load energy to*"
+        ],
+        [
+          "let",
+          "t = holder of unit",
+          "",
+          "",
+          ""
+        ],
+        [
+          "change",
+          "energy in t",
+          "-count {energy in t}",
+          "",
+          "take up what the territory has"
+        ],
+        [
+          "change",
+          "energy in unit",
+          "+count {energy in t}",
+          "clamp",
+          "**clamp fills to the tank's capacity and no further** - `fuel` is 2, so two moves"
         ]
       ]
     }
@@ -939,6 +974,11 @@
       "NOTED - resolve territory did not need to be a recipe",
       "Sean: <em>if you pass the force test you have presence there, and therefore control; if you fail you lose all your units.</em> Control follows from presence and presence is what failing removes, so nothing has to <em>grant</em> it.",
       "The two comparisons are two branches of one condition - greater where you have no control yet, equal where you do - and <code>perish</code> already reads it. No new recipe."
+    ],
+    [
+      "NOTED - the tank is real, and expansion gates on energy",
+      "Sean: <em>the pioneer will have a tank they can load energy to, and that energy comes from a region, so you can't really start expanding until you start exploiting energy in a region. One move per fuel cell, and two fuel cells per pioneer, so a pioneer can leave gaps when it founds.</em>",
+      "<code>found-colony</code> makes a food and a metal extractor and <strong>no energy one</strong>, so a colony must <code>build extractor</code> for energy and work it before anything can move. That is the gate, and it was invisible while <code>move</code> spent from the territory."
     ]
   ],
   "collapse": [
@@ -2158,7 +2198,8 @@
     "{orbit below:t}": "orbit",
     "holder of citizen": "territory",
     "holder of thing": "territory",
-    "{store in t}": "store"
+    "{store in t}": "store",
+    "unit": "unit"
   },
   "containment_declared": [
     [
@@ -2274,6 +2315,12 @@
       "unit",
       "no limit",
       "`move` enters a place, which is a territory or an orbit"
+    ],
+    [
+      "unit",
+      "energy",
+      "the unit's fuel, which is 2",
+      "release -> Where things are, and *Units and structures* Fuel. Filled by `load`"
     ]
   ],
   "storage_kinds": [
@@ -2358,6 +2405,18 @@
         [
           "store",
           "resource"
+        ]
+      ]
+    ],
+    [
+      "Inside a unit",
+      "a unit's tank, and the unit may be anywhere",
+      "the unit's <code>fuel</code>, which is 2",
+      "persists",
+      [
+        [
+          "unit",
+          "energy"
         ]
       ]
     ],
@@ -2463,6 +2522,11 @@
     [
       "work",
       "an extractor that is ready",
+      "&mdash;"
+    ],
+    [
+      "load",
+      "a unit, to fill its tank from the territory it stands in",
       "&mdash;"
     ]
   ],

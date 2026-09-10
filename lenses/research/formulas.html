@@ -248,12 +248,12 @@ is why no <code>set</code> in this report carries an attachment.</p>
 the note &mdash; as a single string in the notation <code>spec/console.md</code> gives for a command
 and for a description of state: <code>{name field:value ...}</code>, where a value is a word, a
 number or another command, a field referring to a thing is named for that thing's kind, and
-<code>#</code> begins a comment. All 71 lines are encoded, none by hand.</p>
+<code>#</code> begins a comment. All 75 lines are encoded, none by hand.</p>
 <p>Nine of them needed something that notation does not define. The encoder records each rather
 than inventing quietly, and they are listed under <em>What the encoding assumed</em>, below the
 data.</p>
 
-<h2>Player recipes <span class="badge">11</span></h2>
+<h2>Player recipes <span class="badge">12</span></h2>
 <h3>deploy ark <span class="badge down">9 rows &rarr; 4 lines (&minus;5)</span></h3>
 <p class="sel">selection: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
@@ -309,7 +309,7 @@ data.</p>
 <tr><td class="op op-each">some</td><td class="target">unit: {unit ready:yes}</td><td class="amt"></td><td></td><td class="note">was the selection *a unit that is ready*, which was prose outside the language</td><td class="one-string">{some unit:{unit ready:yes}} <span class="cmt"># was the selection *a unit that is ready*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-let">let</td><td class="target">from = holder of unit</td><td class="amt"></td><td></td><td class="note">was row 1; containment says where, so this reads a holder rather than a trait</td><td class="one-string">{let from:holder of unit} <span class="cmt"># was row 1; containment says where, so this reads a holder rather than a trait</span></td></tr>
 <tr><td class="op op-require">require</td><td class="target">count {adjacency from:from to:$to border:crosses of unit}</td><td class="amt">&gt;= 1</td><td><span class="attach">hard</span></td><td class="note">was *an edge the unit crosses*, which named no trait. A pioneer crosses a `border` and an ark an `orbit border`, both from *Units and structures*</td><td class="one-string">{require left:count {adjacency from:from to:$to border:crosses of unit} is:&gt;= right:1 attach:hard} <span class="cmt"># was *an edge the unit crosses*, which named no trait. A pioneer crosses a `border` and an ark an `orbit border`, both from *Units and structures*</span></td></tr>
-<tr><td class="op op-change">change</td><td class="target">unit.fuel</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">was `energy in unit`, then `energy in from`. **Both were wrong**: `fuel` is a stored number a unit is born with, from its kind's *Fuel* column, and `move` decrements it - `reports/recipes.md` shows `pioneer fuel:2` becoming `fuel:1`</td><td class="one-string">{change thing:{unit} fuel:-1 attach:hard} <span class="cmt"># was `energy in unit`, then `energy in from`. **Both were wrong**: `fuel` is a stored number a unit is born with, from its kind's *Fuel* column, and `move` decrements it - `reports/recipes.md` shows `pioneer fuel:2` becoming `fuel:1`</span></td></tr>
+<tr><td class="op op-change">change</td><td class="target">energy in unit</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">the release's own row - *consume 1 energy, that unit*. **One move per fuel cell**</td><td class="one-string">{change thing:{energy unit:unit} amount:-1 attach:hard} <span class="cmt"># the release's own row - *consume 1 energy, that unit*. **One move per fuel cell**</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">unit in from</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">rows 3 and 5 were one move; leaving is half of it</td><td class="one-string">{change thing:{unit place:from} amount:-1 attach:hard} <span class="cmt"># rows 3 and 5 were one move; leaving is half of it</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">unit in $to</td><td class="amt amt-pos">+1</td><td></td><td class="note">and arriving is the other half</td><td class="one-string">{change thing:{unit place:$to} amount:+1} <span class="cmt"># and arriving is the other half</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">unit.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 5</td><td class="one-string">{set thing:{unit} ready:no} <span class="cmt"># rows 3 and 5</span></td></tr>
@@ -413,6 +413,20 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">labor in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">row 2</td><td class="one-string">{change thing:{labor territory:t} amount:-1 attach:hard} <span class="cmt"># row 2</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">extractor.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 4 were one flip</td><td class="one-string">{set thing:{extractor} ready:no} <span class="cmt"># rows 3 and 4 were one flip</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">resource[extractor.resource] in t</td><td class="amt amt-pos">+t.deposit[extractor.resource].density</td><td></td><td class="note">row 5</td><td class="one-string">{change thing:{resource kind:extractor.resource territory:t} amount:+t.deposit[extractor.resource].density} <span class="cmt"># row 5</span></td></tr>
+</tbody></table></div><h3>load <span class="badge design">design time</span></h3>
+<p class="sel">selection: <em>offered on line 1</em></p>
+<div class="scroll"><table><thead><tr>
+<th>Op</th>
+<th>Target</th>
+<th>Amount / Bound</th>
+<th>Attach</th>
+<th>Was</th>
+<th>The same row, as one string</th>
+</tr></thead><tbody>
+<tr><td class="op op-each">some</td><td class="target">unit: {unit}</td><td class="amt"></td><td></td><td class="note">Sean, 2026-09-09: *a tank they can load energy to*</td><td class="one-string">{some unit:{unit}} <span class="cmt"># Sean, 2026-09-09: *a tank they can load energy to*</span></td></tr>
+<tr><td class="op op-let">let</td><td class="target">t = holder of unit</td><td class="amt"></td><td></td><td class="note"></td><td class="one-string">{let t:holder of unit}</td></tr>
+<tr><td class="op op-change">change</td><td class="target">energy in t</td><td class="amt amt-neg">-count {energy in t}</td><td></td><td class="note">take up what the territory has</td><td class="one-string">{change thing:{energy territory:t} amount:-count {energy in t}} <span class="cmt"># take up what the territory has</span></td></tr>
+<tr><td class="op op-change">change</td><td class="target">energy in unit</td><td class="amt amt-pos">+count {energy in t}</td><td><span class="attach">clamp</span></td><td class="note">**clamp fills to the tank's capacity and no further** - `fuel` is 2, so two moves</td><td class="one-string">{change thing:{energy unit:unit} amount:+count {energy in t} attach:clamp} <span class="cmt"># **clamp fills to the tank's capacity and no further** - `fuel` is 2, so two moves</span></td></tr>
 </tbody></table></div>
 
 <h2>World recipes <span class="badge">7</span></h2>
@@ -781,10 +795,10 @@ this lane's own tooling for a day.</p>
 </div>
 
 <h2>The kinds of storage, and what is stored each way</h2>
-<p><strong>7 of them</strong>, and every one of the
-19 (container, kind) pairs the game allows belongs to exactly one &mdash; asserted, so a
+<p><strong>8 of them</strong>, and every one of the
+20 (container, kind) pairs the game allows belongs to exactly one &mdash; asserted, so a
 pair that fitted none, or two, would fail rather than render.</p>
-<div class="scroll"><table><thead><tr><th>Storage</th><th>Where it is</th><th>What bounds it</th><th>Lifetime</th><th>What is stored that way</th></tr></thead><tbody><tr><td class="target"><strong>Attached to the territory, a declared number</strong></td><td>the territory holds it directly</td><td>a number, and <strong>zero is one of its values</strong></td><td>persists</td><td class="target">garrison, yard, pioneer, extractor, store</td></tr><tr><td class="target"><strong>Attached to the territory, no limit</strong></td><td>the territory holds it directly</td><td>nothing - a loop holds it down instead</td><td>persists</td><td class="target">citizen, deposit</td></tr><tr><td class="target"><strong>Loose in the territory</strong></td><td>the territory holds it directly</td><td>nothing</td><td><strong>lost at the turn's end, to disorder</strong></td><td class="target">food, metal, energy, labor, resource</td></tr><tr><td class="target"><strong>Inside a container in the territory</strong></td><td>a store, which is itself bounded by the territory</td><td>10 of the one resource it was built for</td><td>persists</td><td class="target">resource in a store</td></tr><tr><td class="target"><strong>In a place, by moving</strong></td><td>a territory or an orbit</td><td>no number is stated for an orbit</td><td>persists</td><td class="target">ark in a orbit, pioneer in a orbit, unit in a place</td></tr><tr><td class="target"><strong>In the game</strong></td><td>the game holds it directly</td><td>nothing - all are fixed at design time</td><td>persists</td><td class="target">territory in a game, orbit in a game, adjacency in a game</td></tr><tr><td class="target"><strong>Held by nothing, and holding nothing</strong></td><td>the game is in nothing; an extractor declares no capacity so holds nothing</td><td>not applicable</td><td>persists</td><td class="target">&amp;mdash;</td></tr></tbody></table></div>
+<div class="scroll"><table><thead><tr><th>Storage</th><th>Where it is</th><th>What bounds it</th><th>Lifetime</th><th>What is stored that way</th></tr></thead><tbody><tr><td class="target"><strong>Attached to the territory, a declared number</strong></td><td>the territory holds it directly</td><td>a number, and <strong>zero is one of its values</strong></td><td>persists</td><td class="target">garrison, yard, pioneer, extractor, store</td></tr><tr><td class="target"><strong>Attached to the territory, no limit</strong></td><td>the territory holds it directly</td><td>nothing - a loop holds it down instead</td><td>persists</td><td class="target">citizen, deposit</td></tr><tr><td class="target"><strong>Loose in the territory</strong></td><td>the territory holds it directly</td><td>nothing</td><td><strong>lost at the turn's end, to disorder</strong></td><td class="target">food, metal, energy, labor, resource</td></tr><tr><td class="target"><strong>Inside a container in the territory</strong></td><td>a store, which is itself bounded by the territory</td><td>10 of the one resource it was built for</td><td>persists</td><td class="target">resource in a store</td></tr><tr><td class="target"><strong>Inside a unit</strong></td><td>a unit's tank, and the unit may be anywhere</td><td>the unit's <code>fuel</code>, which is 2</td><td>persists</td><td class="target">energy in a unit</td></tr><tr><td class="target"><strong>In a place, by moving</strong></td><td>a territory or an orbit</td><td>no number is stated for an orbit</td><td>persists</td><td class="target">ark in a orbit, pioneer in a orbit, unit in a place</td></tr><tr><td class="target"><strong>In the game</strong></td><td>the game holds it directly</td><td>nothing - all are fixed at design time</td><td>persists</td><td class="target">territory in a game, orbit in a game, adjacency in a game</td></tr><tr><td class="target"><strong>Held by nothing, and holding nothing</strong></td><td>the game is in nothing; an extractor declares no capacity so holds nothing</td><td>not applicable</td><td>persists</td><td class="target">&amp;mdash;</td></tr></tbody></table></div>
 <div class="callout">
 <h4>The three that are easy to confuse</h4>
 <p><strong>Loose in the territory</strong> and <strong>attached to the territory with no limit</strong>
@@ -907,7 +921,7 @@ something bound differently each time.</p>
 fires</em>. A third way would buy nothing.</td></tr>
 <tr><td class="target"><strong>Quantification</strong></td>
 <td>once per member of a set, with something bound differently each time</td>
-<td><strong>17</strong> <code>each</code> lines, 17 of them over a description</td>
+<td><strong>18</strong> <code>each</code> lines, 18 of them over a description</td>
 <td><strong>Yes, since 2026-09-09.</strong> It was in a prose <em>selection</em> field in six
 recipes and in a comment in four lines of <code>make-world</code>; Sean added the construct and both
 became lines.</td></tr>
@@ -921,7 +935,7 @@ four, each scoping the call beneath it.</p>
 <p><strong>It cost ten lines and a sixth primitive</strong>, and bought the thing the constraint
 asks for rather than conciseness: the six world recipes and the four world-building calls now say
 what they do <em>in the language</em>, where before they said it in a field and a comment that
-nothing could run. <strong>17 quantifiers, 17 of them over a description of the
+nothing could run. <strong>18 quantifiers, 18 of them over a description of the
 state</strong> - the rest range over a data table or over the planet's geometry, which the notation
 has no form for and which the assumption list records.</p>
 <p><strong>It changes nothing about the checks, and that is on purpose.</strong> An
@@ -1028,9 +1042,9 @@ incremental, and it does nothing for the second.</p>
 things; select a portion of a quantity - all citizens, one, five of ten. And: <em>perhaps recipes
 have an implicit selection parameter, and certain recipes only apply to certain types of
 selections.</em></p>
-<p><strong>They already do, and it is prose.</strong> Every one of the 11 player recipes carries
+<p><strong>They already do, and it is prose.</strong> Every one of the 12 player recipes carries
 a <em>selection</em> field, and it has never been part of the language:</p>
-<div class="scroll"><table><thead><tr><th>Recipe</th><th>What is selected</th><th>What else the player picks</th></tr></thead><tbody><tr><td class="target">deploy ark</td><td>an ark</td><td class="target">&mdash;</td></tr><tr><td class="target">found-colony(t)</td><td>called, not selected</td><td class="target">&mdash;</td></tr><tr><td class="target">found by land</td><td>a pioneer</td><td class="target">&mdash;</td></tr><tr><td class="target">move</td><td>a unit that is ready</td><td class="target">to</td></tr><tr><td class="target">build extractor</td><td>a territory you control</td><td class="target">resource</td></tr><tr><td class="target">build store</td><td>a territory you control</td><td class="target">resource</td></tr><tr><td class="target">build yard</td><td>a territory you control</td><td class="target">&mdash;</td></tr><tr><td class="target">produce pioneer</td><td>a territory you control</td><td class="target">&mdash;</td></tr><tr><td class="target">launch ark</td><td>a yard</td><td class="target">&mdash;</td></tr><tr><td class="target">create labor</td><td>a citizen that is ready</td><td class="target">&mdash;</td></tr><tr><td class="target">work</td><td>an extractor that is ready</td><td class="target">&mdash;</td></tr></tbody></table></div>
+<div class="scroll"><table><thead><tr><th>Recipe</th><th>What is selected</th><th>What else the player picks</th></tr></thead><tbody><tr><td class="target">deploy ark</td><td>an ark</td><td class="target">&mdash;</td></tr><tr><td class="target">found-colony(t)</td><td>called, not selected</td><td class="target">&mdash;</td></tr><tr><td class="target">found by land</td><td>a pioneer</td><td class="target">&mdash;</td></tr><tr><td class="target">move</td><td>a unit that is ready</td><td class="target">to</td></tr><tr><td class="target">build extractor</td><td>a territory you control</td><td class="target">resource</td></tr><tr><td class="target">build store</td><td>a territory you control</td><td class="target">resource</td></tr><tr><td class="target">build yard</td><td>a territory you control</td><td class="target">&mdash;</td></tr><tr><td class="target">produce pioneer</td><td>a territory you control</td><td class="target">&mdash;</td></tr><tr><td class="target">launch ark</td><td>a yard</td><td class="target">&mdash;</td></tr><tr><td class="target">create labor</td><td>a citizen that is ready</td><td class="target">&mdash;</td></tr><tr><td class="target">work</td><td>an extractor that is ready</td><td class="target">&mdash;</td></tr><tr><td class="target">load</td><td>a unit, to fill its tank from the territory it stands in</td><td class="target">&mdash;</td></tr></tbody></table></div>
 <div class="callout">
 <h4>The owner column <em>is</em> the quantifier</h4>
 <p>The world's recipes now say <code>each x: {...}</code> on their first line. The player's name one
@@ -1057,7 +1071,7 @@ cannot offer is picking <em>which</em> five, because that question has no refere
 </div>
 <div class="callout">
 <h4>Nothing needs multi-select, and what looks like it is a parameter</h4>
-<p><strong>Every one of the 11 player recipes selects exactly one thing</strong>, and
+<p><strong>Every one of the 12 player recipes selects exactly one thing</strong>, and
 0 select two. What looks like a second selection is a parameter: <code>move</code> selects a
 unit and takes <code>$to</code>; <code>build extractor</code> and <code>build store</code> select a
 territory and take <code>$resource</code>. Two of eleven need one at all.</p>
@@ -1565,7 +1579,7 @@ is why adjacency being a thing was the right call and worth not undoing.</p>
 </div>
 
 <h2>Still open, and yours to take</h2>
-<p>4 of the 20 questions this re-encoding raised are still open. The rest are
+<p>4 of the 21 questions this re-encoding raised are still open. The rest are
 below, under <em>What has already been settled</em>, so that this list is short enough to be a list
 of things to do.</p>
 <div class="scroll"><table><thead><tr>
@@ -1722,8 +1736,8 @@ check 2 flags a recipe with no inputs; check 1 goes red on a wrong weighting; ch
 
 <h3>Check 1 &mdash; metal conserved outside extraction &nbsp;<span class="badge down">1 violations</span></h3>
 <p>13 recipes analysed;
-6 skipped for state-dependent amounts
-(grow, perish, stow[food], stow[metal], stow[energy], upkeep); <code>work</code> excluded as the declared
+7 skipped for state-dependent amounts
+(grow, load, perish, stow[food], stow[metal], stow[energy], upkeep); <code>work</code> excluded as the declared
 source. Weights are the <em>Binding</em> column, copied rather than invented:
 metal 1, garrison 1, extractor 1, store 1, yard 15, ark 3, pioneer 3.</p>
 <div class="callout">
@@ -1746,7 +1760,7 @@ spent; a recipe that is only ever called is not a transition.</p>
 
 <h3>Check 2 &mdash; structurally unbounded &nbsp;<span class="badge up">unbounded, as it should be</span></h3>
 <p>18 transitions after grounding;
-2 skipped (perish, stow).</p>
+3 skipped (load, perish, stow).</p>
 <div class="scroll"><table><thead><tr>
 <th>Fire this many times</th>
 <th>Recipe</th>
@@ -1756,7 +1770,7 @@ spent; a recipe that is only ever called is not a transition.</p>
 <td class="target">create labor</td>
 </tr>
 <tr>
-<td class="amt">16/27</td>
+<td class="amt">10/27</td>
 <td class="target">found by land</td>
 </tr>
 <tr>
@@ -1764,7 +1778,15 @@ spent; a recipe that is only ever called is not a transition.</p>
 <td class="target">grow</td>
 </tr>
 <tr>
-<td class="amt">16/27</td>
+<td class="amt">1</td>
+<td class="target">move[ark]</td>
+</tr>
+<tr>
+<td class="amt">1</td>
+<td class="target">move[pioneer]</td>
+</tr>
+<tr>
+<td class="amt">10/27</td>
 <td class="target">produce pioneer</td>
 </tr>
 <tr>
@@ -1776,15 +1798,15 @@ spent; a recipe that is only ever called is not a transition.</p>
 <td class="target">work[food]</td>
 </tr>
 <tr>
-<td class="amt">2/9</td>
+<td class="amt">5/36</td>
 <td class="target">work[metal]</td>
 </tr>
 <tr>
-<td class="amt">4/9</td>
+<td class="amt">19/36</td>
 <td class="target">work[energy]</td>
 </tr>
 </tbody></table></div>
-<p>Metal-equivalent gain <strong>16/9</strong>, and
+<p>Metal-equivalent gain <strong>10/9</strong>, and
 <code>work[metal]</code> is in the witness &mdash; which is the point. <strong>The check can see
 mining now.</strong> Until families were resolved to kinds, <code>work</code> produced
 <code>resource</code>, a family with no metal weight, and the game's only metal source scored
@@ -1857,6 +1879,12 @@ identically and always will. <strong>Naming a question does not make it one.</st
 <td class="target">yard in t</td>
 <td class="attach">HARD</td>
 <td class="note">1</td>
+</tr>
+<tr>
+<td class="target">load</td>
+<td class="target">energy in unit</td>
+<td class="attach">clamp</td>
+<td class="note">the unit's fuel</td>
 </tr>
 </tbody></table></div>
 <p>And the one where it does not:</p>
@@ -2030,8 +2058,8 @@ what the console needs and the menu is what the interface needs, from one line.<
 
 <h3>Check 6 &mdash; is everything created put somewhere that declares it? &nbsp;<span class="badge down">every one lands somewhere declared</span></h3>
 <p><strong>Every positive change names a container, and that container declares a bound for that
-kind.</strong> 18 positive changes read from the recipes themselves, against
-19 declared pairs. A negative change is not tested: it acts on something that already
+kind.</strong> 19 positive changes read from the recipes themselves, against
+20 declared pairs. A negative change is not tested: it acts on something that already
 exists, so where it is is a fact about the state rather than a claim the recipe makes.</p>
 <div class="callout">
 <h4>Its green would mean nothing, so it is poisoned twice</h4>
@@ -2047,7 +2075,7 @@ a thing is.</p>
 <h3>Check 8 &mdash; is every declaration reachable? &nbsp;<span class="badge down">all reached</span></h3>
 <p><strong>The reverse of check 6, and nothing had asked it.</strong> Check 6 asks whether every
 create lands somewhere declared; this asks whether every declared place can be reached at all.
-19 declared pairs, 0 that no recipe touches:</p>
+20 declared pairs, 0 that no recipe touches:</p>
 <div class="scroll"><table><thead><tr><th>Declared</th><th>Bound</th><th></th></tr></thead>
 <tbody></tbody></table></div>
 <p><strong>That one is <code>X-21</code>.</strong> A store costs 1 labor and 1 metal, holds ten of
@@ -2060,17 +2088,17 @@ recipe not yet written, and which of those it is belongs to Sean. <strong>It als
 itself first</strong>: it grounded families on one side only, so a unit moved into a place reached
 neither an orbit nor a territory, and it reported two gaps it had invented.</p>
 
-<h3>Check 10 &mdash; could an editor build these? &nbsp;<span class="badge down">22 of 22 recipes</span></h3>
+<h3>Check 10 &mdash; could an editor build these? &nbsp;<span class="badge down">23 of 23 recipes</span></h3>
 <p>Sean's test: <em>could we in principle generate the entire current set of recipes from the editor
 only? The name must necessarily be the exception. It is a question about how finite the game is.</em>
 Every token in every line, matched against the sets a menu could offer:</p>
-<p><strong>424 of 424 tokens are selectable (100%), and
-22 of 22 recipes could be built with nothing typed but names.</strong></p>
+<p><strong>451 of 451 tokens are selectable (100%), and
+23 of 23 recipes could be built with nothing typed but names.</strong></p>
 <div class="scroll"><table><thead><tr><th>What has to be typed</th><th>Where</th><th>Why</th></tr></thead>
 <tbody><tr><td class="target"><code>yours</code></td><td>4 recipes</td><td class="note"><strong>Closed.</strong> <code>control</code>'s values are now declared: <em>yours, unclaimed</em>, from the release's own words</td></tr><tr><td class="target"><code>location</code></td><td>7 recipes</td><td class="note"><strong>Closed.</strong> <code>holder of x</code> is an expression form, so containment has a written shape and needs no trait - which is what <code>spec/logistics.md</code> asked for</td></tr><tr><td class="target"><code>below</code></td><td>2 recipes</td><td class="note"><strong>Closed.</strong> A trait of an orbit, which the release already describes: <em>a place above one territory</em></td></tr><tr><td class="target"><code>crosses</code></td><td><code>move</code></td><td class="note"><strong>Closed.</strong> A trait of a unit against a <code>border</code> trait of an adjacency, both taking <em>border</em> or <em>orbit border</em> from <em>Units and structures</em></td></tr><tr><td class="target">the prose sets</td><td><code>make-world</code></td><td class="note"><strong>Closed by deletion.</strong> Twelve calls with different arguments are a scenario file, not a rule - <code>create planet &lt;size&gt;</code> makes the territories and <em>a scenario is a file too</em></td></tr></tbody></table></div>
 <div class="callout">
 <h4>All five closed, and the answer is now yes</h4>
-<p><strong>424 of 424 tokens, and 22 of 22 recipes.</strong> None of the
+<p><strong>451 of 451 tokens, and 23 of 23 recipes.</strong> None of the
 five needed an idea; each was an enumeration nobody had written down or a form nobody had named.
 <code>control</code>'s two values were in the release's own sentence; <code>border</code> and
 <code>orbit border</code> were sitting in the <em>Crosses</em> column; <code>below</code> is what
@@ -2531,7 +2559,7 @@ and the growth rate are set by different halves of the same column</strong>, and
 <p><strong>Where a line needed something the notation does not define, the encoder records it
 rather than inventing quietly</strong> &mdash; so this list is the report's real output, and it is
 generated from the encoding rather than written beside it.</p>
-<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">4</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">work line 5</td></tr><tr><td class="amt">2</td><td><strong>An expression</strong> &mdash; <code>count {…}</code>, <code>sum force of {…}</code>, <code>min(a, b)</code>, a path, a number. Sean added these on 2026-09-09 by making <code>require</code> compare two of them, and they are what the four computed amounts and <code>grow</code>'s <code>min</code> had always been. <strong>The notation has no form for one</strong>: its values are a word, a number or a command, and an expression is none of the three. Its arguments are also positional, where every command's are named.</td><td class="note">move line 3</td></tr><tr><td class="amt">2</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 4</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td>A <strong>derived</strong> trait is tested &mdash; <code>surplus</code>, <code>unpaid</code>, <code>control</code>. A <em>description</em> is a kind and every <em>stored</em> trait and may not carry one, so <strong>Sean decided on 2026-09-09 that what a quantifier ranges over is a <em>query</em> rather than a description</strong>: a description says what a thing is stored as, and a query says what is true of it. The notation has a form for the first and none for the second, which is what is recorded here.</td><td class="note">grow line 3</td></tr><tr><td class="amt">1</td><td><code>location</code> and <code>below</code> are read as though they were traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not located by a trait, and what holds it is what says where it is.</strong> So these paths have to mean <em>what holds this</em> rather than <em>this thing's location field</em> &mdash; a reading the notation has no form for. <code>move</code> no longer sets one; since 2026-09-09 it leaves one place and enters another. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">make-orbit(t) line 1</td></tr><tr><td class="amt">13</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
+<table><thead><tr><th>Lines</th><th>What it assumed</th><th>First at</th></tr></thead><tbody><tr><td class="amt">4</td><td>A <strong>path</strong> is used as a value &mdash; <code>ark.location.below</code>. The notation says a value is a word, a number, or another command, so a path is none of the three. Every <code>let</code> needs one.</td><td class="note">work line 5</td></tr><tr><td class="amt">2</td><td><strong>An expression</strong> &mdash; <code>count {…}</code>, <code>sum force of {…}</code>, <code>min(a, b)</code>, a path, a number. Sean added these on 2026-09-09 by making <code>require</code> compare two of them, and they are what the four computed amounts and <code>grow</code>'s <code>min</code> had always been. <strong>The notation has no form for one</strong>: its values are a word, a number or a command, and an expression is none of the three. Its arguments are also positional, where every command's are named.</td><td class="note">move line 3</td></tr><tr><td class="amt">2</td><td><code>recipe:</code> names the recipe a <code>call</code> fires, which treats a recipe as a thing with a name. The alternative is a second field that names no kind, and <code>id</code> is meant to be the only one.</td><td class="note">deploy ark line 4</td></tr><tr><td class="amt">3</td><td><code>game:game</code> &mdash; the game is the one thing inside nothing, so the field naming its kind has no identifier to take and repeats the kind instead.</td><td class="note">make-territory(id, biome, nature) line 1</td></tr><tr><td class="amt">1</td><td>A <strong>derived</strong> trait is tested &mdash; <code>surplus</code>, <code>unpaid</code>, <code>control</code>. A <em>description</em> is a kind and every <em>stored</em> trait and may not carry one, so <strong>Sean decided on 2026-09-09 that what a quantifier ranges over is a <em>query</em> rather than a description</strong>: a description says what a thing is stored as, and a query says what is true of it. The notation has a form for the first and none for the second, which is what is recorded here.</td><td class="note">grow line 3</td></tr><tr><td class="amt">1</td><td><code>location</code> and <code>below</code> are read as though they were traits, and <code>spec/logistics.md</code> says they may not be: <strong>a thing is not located by a trait, and what holds it is what says where it is.</strong> So these paths have to mean <em>what holds this</em> rather than <em>this thing's location field</em> &mdash; a reading the notation has no form for. <code>move</code> no longer sets one; since 2026-09-09 it leaves one place and enters another. The code lane's <code>C-56</code> is the same hole from the other side.</td><td class="note">make-orbit(t) line 1</td></tr><tr><td class="amt">14</td><td>A description names a <strong>family</strong> rather than a kind &mdash; <code>{thing}</code> for the world recipes, <code>{resource kind:...}</code> for what <code>work</code> makes. Resolving one to the other is grounding, which is <code>X-17</code>.</td><td class="note">move line 4</td></tr></tbody></table>
 <p><strong>Nothing here is a proposal.</strong> Each is a place where writing the row down in one
 line required a choice the specification has not made.</p>
 
@@ -2757,6 +2785,11 @@ each row names who answered it.</p>
 <td>NOTED - resolve territory did not need to be a recipe</td>
 <td>Sean: &lt;em&gt;if you pass the force test you have presence there, and therefore control; if you fail you lose all your units.&lt;/em&gt; Control follows from presence and presence is what failing removes, so nothing has to &lt;em&gt;grant&lt;/em&gt; it.</td>
 <td class="note">The two comparisons are two branches of one condition - greater where you have no control yet, equal where you do - and &lt;code&gt;perish&lt;/code&gt; already reads it. No new recipe.</td>
+</tr>
+<tr>
+<td>NOTED - the tank is real, and expansion gates on energy</td>
+<td>Sean: &lt;em&gt;the pioneer will have a tank they can load energy to, and that energy comes from a region, so you can't really start expanding until you start exploiting energy in a region. One move per fuel cell, and two fuel cells per pioneer, so a pioneer can leave gaps when it founds.&lt;/em&gt;</td>
+<td class="note">&lt;code&gt;found-colony&lt;/code&gt; makes a food and a metal extractor and &lt;strong&gt;no energy one&lt;/strong&gt;, so a colony must &lt;code&gt;build extractor&lt;/code&gt; for energy and work it before anything can move. That is the gate, and it was invisible while &lt;code&gt;move&lt;/code&gt; spent from the territory.</td>
 </tr>
 </tbody></table></div>
 

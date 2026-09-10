@@ -3,6 +3,7 @@
     "analysed": 13,
     "skipped": [
       "grow",
+      "load",
       "perish",
       "stow[food]",
       "stow[metal]",
@@ -29,6 +30,7 @@
   "unbounded": {
     "analysed": 18,
     "skipped": [
+      "load",
       "perish",
       "stow"
     ],
@@ -39,15 +41,23 @@
       ],
       [
         "found by land",
-        "16/27"
+        "10/27"
       ],
       [
         "grow",
         "1"
       ],
       [
+        "move[ark]",
+        "1"
+      ],
+      [
+        "move[pioneer]",
+        "1"
+      ],
+      [
         "produce pioneer",
-        "16/27"
+        "10/27"
       ],
       [
         "upkeep",
@@ -59,19 +69,19 @@
       ],
       [
         "work[metal]",
-        "2/9"
+        "5/36"
       ],
       [
         "work[energy]",
-        "4/9"
+        "19/36"
       ]
     ],
     "gain": {
       "citizen": "1",
-      "extractor": "32/27",
-      "garrison": "16/27"
+      "extractor": "20/27",
+      "garrison": "10/27"
     },
-    "metal_gain": "16/9",
+    "metal_gain": "10/9",
     "free": [
       "citizen"
     ],
@@ -100,19 +110,19 @@
     "breaches": []
   },
   "editor": {
-    "tokens": 424,
-    "selectable": 424,
-    "recipes": 22,
-    "clean": 22,
+    "tokens": 451,
+    "selectable": 451,
+    "recipes": 23,
+    "clean": 23,
     "typed": {}
   },
   "unreached": {
-    "declared": 19,
+    "declared": 20,
     "pairs": []
   },
   "containment": {
-    "examined": 18,
-    "declared": 19,
+    "examined": 19,
+    "declared": 20,
     "homeless": [],
     "undeclared": [],
     "x20_lines": 3
@@ -164,6 +174,12 @@
         "yard in t",
         "HARD",
         "1"
+      ],
+      [
+        "load",
+        "energy in unit",
+        "clamp",
+        "the unit's fuel"
       ]
     ],
     "unobservable": [

@@ -110,8 +110,18 @@ def play(verbose=True):
         return grown
 
     # 2. Build up territory 1 until it can afford a pioneer: 3 metal, 6 energy, 2 citizens.
-    w.add("1", "extractor", 1, "energy") if RESOURCES[("1", "energy")][0] else None
-    for _ in range(6):
+    # `build extractor` costs 1 labor and 1 metal, and `found-colony` builds no energy one -
+    # so the colony must mine metal first, then buy its way into energy. This step used to be
+    # free, which meant the runner was not testing the gate Sean named: *you can't really start
+    # expanding until you start exploiting energy in a region.*
+    for _ in range(3):
+        turn("1")
+    if RESOURCES[("1", "energy")][0] and w.n("1", "metal") >= 1 and w.n("1", "citizen") >= 1:
+        w.add("1", "metal", -1)
+        w.add("1", "extractor", 1, "energy")
+        w.say(f"built an energy extractor on territory 1 for 1 labor and 1 metal - "
+              f"the gate: nothing can move until a region is exploited for energy")
+    for _ in range(3):
         turn("1")
     w.say(f"six turns on territory 1: {w.n('1','metal')} metal, {w.n('1','energy')} energy")
 
@@ -127,11 +137,28 @@ def play(verbose=True):
             turn("1")
     w.say(f"produced {made} pioneers on territory 1")
 
-    # 4. Breach the jungle. Both must cross, or neither is enough.
+    # 4. Load the tanks, then breach. Sean, 2026-09-09: a tank is loaded from a region, one
+    #    move per fuel cell, two cells per pioneer - so expansion gates on having exploited
+    #    energy somewhere first. `found-colony` builds a food and a metal extractor and no
+    #    energy one, so the gate is real and was invisible while `move` spent from the ground.
     target = next(t for t, b, _n in DATA["territory_biomes"] if b == "jungle")
+    FUEL = 2
+    cells = 0
+    for _ in range(made):
+        take = min(FUEL, w.n("1", "energy"))
+        w.add("1", "energy", -take)
+        cells += take
+    w.say(f"loaded {cells} fuel cells into {made} pioneers "
+          f"({FUEL} each is the tank's capacity; energy left in territory 1: {w.n('1','energy')})")
+    hops = 1  # territory 6 is one hop from territory 1
+    if cells < made * hops:
+        w.say(f"NOT ENOUGH FUEL: {made} pioneers need {made * hops} cells to make {hops} hop(s)")
+        return w
+    cells -= made * hops
     moved = min(made, w.n("1", "pioneer"))
     w.add("1", "pioneer", -moved)
     w.add(target, "pioneer", moved)
+    w.say(f"each pioneer spent 1 cell to cross; {cells} cells left between them")
     breach = w.force(target) > NATURE[target]
     w.say(f"moved {moved} pioneers into territory {target} (jungle, nature {NATURE[target]}): "
           f"force {w.force(target)} > {NATURE[target]} is {breach}")
