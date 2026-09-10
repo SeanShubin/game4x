@@ -22,6 +22,7 @@ purpose in the ordinary case.
 
 import json
 import pathlib
+import re
 import sys
 from fractions import Fraction
 
@@ -636,6 +637,78 @@ def check_capture():
     return jungles, hardest, steps
 
 
+def release_recipes():
+    """The release's *Recipes* table: {recipe: {(role, kind): qty}}."""
+    out, current, inside = {}, None, False
+    for line in RELEASE.read_text(encoding="utf-8").splitlines():
+        if line.startswith("| Recipe "):
+            inside = True
+            continue
+        if not inside:
+            continue
+        if not line.startswith("|"):
+            break
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        # A continuation row has an EMPTY first cell and carries the recipe above it. The
+        # first version of this test read an empty cell as a separator, so it kept only each
+        # recipe's first row and reported every other one as added - a check that cried wolf
+        # about eighteen rows, of which one was real.
+        if len(cells) < 6:
+            continue
+        if cells[0] and set(cells[0]) <= set("-"):
+            continue
+        name = cells[0].strip("*").strip()
+        if name:
+            current = name
+            out.setdefault(current, {})
+        if current is None:
+            continue
+        role, qty, kind = cells[2], cells[3], cells[4].strip("`")
+        if role in ("require", "consume", "produce", "limit") and kind:
+            out[current][(role, kind)] = qty
+    return out
+
+
+def ours_by_effect():
+    """This lane's recipes as {recipe: {(role, kind): qty}}, in the release's vocabulary."""
+    out = {}
+    for f in DATA["player"] + DATA["world"]:
+        name = f["name"].split("(")[0].strip()
+        rows = {}
+        for op, target, amount, _at, _n in f["lines"]:
+            kind = place_of(target)
+            if op == "change":
+                role = "consume" if sign_of(amount) < 0 else "produce"
+                rows[(role, kind)] = str(amount).lstrip("+-")
+            elif op == "require":
+                inner = re.search(r"\{(\w[\w-]*)", str(target))
+                if inner:
+                    rows[("require", inner.group(1))] = str(amount)
+        out[name] = rows
+    return out
+
+
+def check_recipe_drift():
+    """Check 12. Where this lane's recipes and the release's disagree, by (role, kind)."""
+    theirs, ours = release_recipes(), ours_by_effect()
+    assert theirs, "parsed no recipes from the release, so this check knows nothing"
+    rows = []
+    for name in sorted(set(theirs) | set(ours)):
+        a, b = theirs.get(name), ours.get(name)
+        if a is None:
+            rows.append((name, "ONLY HERE", ""))
+            continue
+        if b is None:
+            rows.append((name, "ONLY IN THE RELEASE", ""))
+            continue
+        for key in sorted(set(a) | set(b)):
+            if key not in b:
+                rows.append((name, "dropped", f"{key[0]} {a[key]} {key[1]}"))
+            elif key not in a:
+                rows.append((name, "ADDED", f"{key[0]} {b[key]} {key[1]}"))
+    return len(theirs), rows
+
+
 def check_cap(cap=1000):
     """Check 3. A backstop: apply every recipe once and report anything past the cap."""
     by_name = gather()
@@ -805,6 +878,17 @@ def self_test():
     else:
         print("  poison ok: check 11 fails to hold when a citizen carries no force")
     _c[1] = _cw
+
+    # Check 12 poison: put back the ark that launch ark must not produce.
+    _la = next(r for r in DATA["player"] if r["name"] == "launch ark")
+    _saved12 = [list(l) for l in _la["lines"]]
+    _la["lines"] = _saved12 + [["change", "ark in {orbit below:t}", "+1", "", "poison"]]
+    if not any(w == "ADDED" and n == "launch ark" for n, w, _d in check_recipe_drift()[1]):
+        print("  POISON FAILED: check 12 did not notice a produced ark the release does not have")
+        ok = False
+    else:
+        print("  poison ok: check 12 notices a row the release does not have")
+    _la["lines"] = _saved12
 
     return ok
 
@@ -1016,6 +1100,16 @@ def main():
     print(f"  jungles are territories {', '.join(jungles)}, force of nature {hardest}")
     for what, have, op, need, ok in steps:
         print(f"  {'yes' if ok else 'NO ':<4} {what:<44} {have} {op} {need}")
+
+    n_rel_r, drift = check_recipe_drift()
+    print()
+    print("CHECK 12 - where this lane's recipes differ from the release's, row by row")
+    print(f"  {n_rel_r} recipes parsed from releases/first-release.md")
+    for name, what, detail in drift:
+        print(f"  {what:<20} {name:<18} {detail}")
+    if not drift:
+        print("  no recipe differs from the release")
+    print("  divergence is allowed - this reports it, never fails it")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1

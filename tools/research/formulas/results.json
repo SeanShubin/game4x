@@ -18,7 +18,13 @@
       "ark": 3,
       "pioneer": 3
     },
-    "violations": []
+    "violations": [
+      [
+        "launch ark",
+        -3,
+        "-3 metal (x1)"
+      ]
+    ]
   },
   "unbounded": {
     "analysed": 18,
@@ -33,23 +39,15 @@
       ],
       [
         "found by land",
-        "10/27"
+        "16/27"
       ],
       [
         "grow",
         "1"
       ],
       [
-        "move[ark]",
-        "1"
-      ],
-      [
-        "move[pioneer]",
-        "1"
-      ],
-      [
         "produce pioneer",
-        "10/27"
+        "16/27"
       ],
       [
         "upkeep",
@@ -61,19 +59,19 @@
       ],
       [
         "work[metal]",
-        "5/36"
+        "2/9"
       ],
       [
         "work[energy]",
-        "19/36"
+        "4/9"
       ]
     ],
     "gain": {
       "citizen": "1",
-      "extractor": "20/27",
-      "garrison": "10/27"
+      "extractor": "32/27",
+      "garrison": "16/27"
     },
-    "metal_gain": "10/9",
+    "metal_gain": "16/9",
     "free": [
       "citizen"
     ],
@@ -102,8 +100,8 @@
     "breaches": []
   },
   "editor": {
-    "tokens": 432,
-    "selectable": 432,
+    "tokens": 424,
+    "selectable": 424,
     "recipes": 22,
     "clean": 22,
     "typed": {}
@@ -113,7 +111,7 @@
     "pairs": []
   },
   "containment": {
-    "examined": 19,
+    "examined": 18,
     "declared": 19,
     "homeless": [],
     "undeclared": [],

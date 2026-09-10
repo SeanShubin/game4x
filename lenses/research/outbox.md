@@ -798,6 +798,40 @@ organized; `disorder` and `perish` were one recipe; and every territory's biome 
 load-bearing: `X-21` and `X-23` are defects on any reading and safe to take; the primitive set is a
 rewrite of *Recipes* and is not.
 
+### X-25 - `launch ark` puts nothing into orbit, and Sean's loop ends with an ark in orbit
+
+**to** spec · **status** open · **raised** 2026-09-09 · **source** the specification lane, in `S-81`, checking this lane's data against the release · **found by** `4x spec`, not by this lane
+
+**Where.** `releases/first-release.md` -> *Recipes*: **launch ark** has four rows - consume 3 metal,
+consume 12 energy, consume 2 citizen, require 1 yard - **and no produce row**. `P-342`: *`produce
+ark` becomes `launch ark`, and stops producing anything*, on the decision that *the destination you
+could not name is no longer needed*. `scenario/commands/play.4x:170` states it plainly: **puts
+nothing into orbit, so there is no Ark to move.**
+
+**What.** Sean, 2026-09-09, stating the intent the recipes exist to serve: *…and finally **launch a
+new ark into orbit, completing the loop**.* **The recipe named for that step does not do it.**
+Everything before it works - `play.py` reaches a colony, two pioneers, a jungle taken and held, and
+a yard - and the last step pays an Ark's cost and produces nothing.
+
+**Both sides are deliberate**, which is why this is a contradiction rather than a defect. `P-342`
+landed for a stated reason: there was no way to name the destination. Sean's loop is what the game
+is for. **They cannot both hold**, and the resolution is not this lane's.
+
+**And a destination now has a name.** The reason `P-342` gave has moved: this prototype writes
+`{orbit below:t}` - *the orbit above this territory* - and `below` is a trait an orbit can carry.
+Whether that is worth reopening the decision is Sean's, and this lane is not proposing it.
+
+**Found by `4x spec` rather than here, and it caught a defect in this lane's own work.** This lane's
+data gave `launch ark` a sixth line producing an ark, **since the first encoding on 2026-09-08** and
+marked `was: 4` against a row count that never included it. **It is what `play.py`'s *loop closed*
+rested on.** Removed; the runner now reads the recipe rather than assuming it, and reports that the
+loop does **not** close.
+
+**Whether.** **Worth deciding, and it is the largest thing between the release and the loop as Sean
+states it.** Three readings and this lane takes none: `launch ark` produces an ark into the orbit
+above its yard; the loop's last step is paying the cost rather than having the ark; or Sean's
+statement of the loop is looser than the release needs to be.
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

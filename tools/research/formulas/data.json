@@ -230,10 +230,10 @@
         ],
         [
           "change",
-          "energy in from",
+          "unit.fuel",
           "-1",
           "hard",
-          "was `energy in unit` - nothing ever filled a tank, so nothing could move"
+          "was `energy in unit`, then `energy in from`. **Both were wrong**: `fuel` is a stored number a unit is born with, from its kind's *Fuel* column, and `move` decrements it - `reports/recipes.md` shows `pioneer fuel:2` becoming `fuel:1`"
         ],
         [
           "change",
@@ -443,14 +443,7 @@
           "citizen in t",
           "-2",
           "hard",
-          ""
-        ],
-        [
-          "change",
-          "ark in {orbit below:t}",
-          "+1",
-          "",
-          ""
+          "**this recipe produces nothing** - `P-342`, and `scenario/commands/play.4x:170`: *puts nothing into orbit, so there is no Ark to move*"
         ]
       ]
     },
@@ -1805,6 +1798,11 @@
       "below",
       "an orbit",
       "stored"
+    ],
+    [
+      "fuel",
+      "a unit",
+      "stored"
     ]
   ],
   "thing_shape": [
@@ -1872,9 +1870,10 @@
       "orbit or territory",
       "counted",
       [
+        "crosses",
         "force",
-        "movable",
-        "crosses"
+        "fuel",
+        "movable"
       ],
       [
         "metal-in-it"
@@ -1886,9 +1885,10 @@
       "territory",
       "counted",
       [
+        "crosses",
         "force",
-        "movable",
-        "crosses"
+        "fuel",
+        "movable"
       ],
       [
         "metal-in-it"
@@ -2112,7 +2112,7 @@
       "territory, or a store",
       "no bound",
       "ephemeral unless stored",
-      "a store holds 10. <strong>A unit no longer carries any</strong> - nothing ever filled a tank"
+      "a store holds 10. <strong>A unit carries <code>fuel</code>, which is a number rather than a tank of energy</strong>"
     ],
     [
       "labor",

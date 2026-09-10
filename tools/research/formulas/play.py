@@ -162,8 +162,21 @@ def play(verbose=True):
             w.add("1", "metal", -3)
             w.add("1", "energy", -12)
             w.add("1", "citizen", -2)
-            w.add(("orbit", "1"), "ark", 1)
-            w.say("launched a new ark into orbit - the loop is closed")
+            # **Read the recipe rather than assume it.** This step used to put an ark in orbit
+            # because the runner said so, and the runner could not disagree with the data - it
+            # re-implemented the recipes instead of reading them. The specification lane caught
+            # it: `P-342` made `launch ark` pay an Ark's cost and produce nothing, and
+            # `scenario/commands/play.4x:170` says *puts nothing into orbit, so there is no Ark
+            # to move*.
+            launch = next(r for r in DATA["player"] if r["name"] == "launch ark")
+            makes_ark = any(op == "change" and not str(a).startswith("-") and "ark" in tgt
+                            for op, tgt, a, _at, _n in launch["lines"])
+            if makes_ark:
+                w.add(("orbit", "1"), "ark", 1)
+                w.say("launched a new ark into orbit - the loop is closed")
+            else:
+                w.say("launch ark: paid 3 metal, 12 energy and 2 citizens, and produced NOTHING")
+                w.say("  P-342 - the recipe puts nothing into orbit, so no ark comes back")
             break
 
     if verbose:
@@ -179,7 +192,10 @@ def assert_it_played(w):
     part of it: one pioneer must not be able to breach.
     """
     jungle = next(t for t, b, _n in DATA["territory_biomes"] if b == "jungle")
-    assert w.n(("orbit", "1"), "ark") >= 1, "no ark in orbit, so the loop did not close"
+    launch = next(r for r in DATA["player"] if r["name"] == "launch ark")
+    makes_ark = any(op == "change" and not str(a).startswith("-") and "ark" in tgt
+                    for op, tgt, a, _at, _n in launch["lines"])
+    assert w.n(("orbit", "1"), "ark") >= 1 or not makes_ark,         "launch ark produces an ark and none reached orbit"
     assert w.n(jungle, "garrison") == 1, "the jungle was never founded"
     assert w.n(jungle, "citizen") >= 2, "the jungle colony has no citizens"
     assert w.force(jungle) >= NATURE[jungle], "the jungle is held by too little force"
@@ -202,5 +218,12 @@ if __name__ == "__main__":
     w = play()
     jungle = assert_it_played(w)
     print()
-    print(f"  loop closed: an ark is back in orbit, territory {jungle} is held, "
-          f"and one pioneer alone could not have taken it")
+    arks = w.n(("orbit", "1"), "ark")
+    print(f"  territory {jungle} is held, and one pioneer alone could not have taken it")
+    if arks:
+        print("  the loop closed: an ark is back in orbit")
+    else:
+        print("  THE LOOP DOES NOT CLOSE. Everything up to the last step works - a colony, two")
+        print("  pioneers, a jungle taken and held, a yard - and then `launch ark` pays an Ark's")
+        print("  cost and puts nothing into orbit. `P-342` decided that deliberately, and Sean's")
+        print("  stated loop ends *launch a new ark into orbit, completing the loop*.")
