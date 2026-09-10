@@ -20,17 +20,17 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
-- **Q-79** - `c63190a` Q-79: room without density is not a source, and the release could not have shown it · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
-- **Q-79** - A metal deposit that yields nothing counts as metal, and the planet becomes unwinnable · `lenses/quality/outbox.md`
+- **Q-81** - The metal term landed in one of two predicates for the same question · `lenses/quality/outbox.md`
+- **Q-82** - The workspace gate lints no test code, and eleven clippy errors live there · `lenses/quality/outbox.md`
 - **Q-78** - `token.rs` says the comment rule is unspecified, and the spec has specified it for twelve days · `lenses/quality/outbox.md`
 - **X-8** - `C-74` answered: the three puzzles are one, and it is called grounding · `lenses/research/outbox.md`
 - **X-11** - the four roles are two dimensions, and `create-if-missing` is a cell the grid always had · `lenses/research/outbox.md`

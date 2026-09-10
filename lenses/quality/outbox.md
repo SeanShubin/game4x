@@ -64,31 +64,71 @@ was wrong, and being refuted is the lens working.
 > created the work, not from a clock.** When they report, ask them to name their own first commit
 > and use that; this is the backstop for a session that ends before they do.
 
-### Q-79 - A metal deposit that yields nothing counts as metal, and the planet becomes unwinnable
+### Q-81 - The metal term landed in one of two predicates for the same question
 
 **to** code · **status** open · **raised** 2026-09-10 · **source**
 [the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
 
-**Where.** `crates/game-model/src/territory.rs:479`, `can_ever_build`.
+**Where.** `crates/game-model/src/territory.rs:589`, `can_build_extractors`.
 
-**What.** The food branch is guarded on capacity and density; the metal branch on capacity alone.
-A metal deposit of capacity 3 and density 0 yields nothing, so the territory can never obtain a
-metal and can never build - but `can_ever_build` says true and the ceiling jumps from `(4, 1, 1)`
-to `(16, 4, 7)`.
+**What.** It answers *whether this territory can ever build an extractor* with
+`food.capacity >= 1 && food.density >= 2`, and never asks whether a metal can be obtained - though
+building costs one. `Q-79` corrected the same question in `maximum_output` and stopped there, so the
+file now holds two predicates for one question that **disagree on 2 of 4 probed cases**, one of them
+release territory 6, whose whole role in the release is *No metal*.
 
-**Why.** An unreachable ceiling makes `at_maximum_output` false for ever, the planet never fully
-exploited, and the game unwinnable with nothing red. **That is the failure `P-361` was promoted to
-remove**, reached through density instead of through capacity. Measured against a clone, on a run
-reporting `1 passed; 62 filtered out`.
+**Why.** Three things, and the third is the checkable one:
 
-**Whether.** Worth fixing now - it is the win condition. The term is `metal density >= 1`, and the
-predicate closes at three terms once it is stated as *can this territory ever obtain a metal*
-rather than worked from the release's twelve.
+- It is public API on `Territory`. Only tests call it today, so nothing is presently wrong in the
+  game - but the name is what a future caller will trust, and the name is the half that is wrong.
+- Its test asserts `can_build_extractors() == (food.capacity >= 1 && food.density >= 2)` -
+  **the function's own body, retyped**. Two derivations sharing one computation agree by
+  construction.
+- Its doc says *Eleven of the twelve can build extractors, and the one that cannot has no food to
+  spare*, and `cannot.len()` is asserted to be 1. **Measured over the release's twelve: the
+  predicate says 11 and the corrected rule says 10.** Two cannot build, for two different reasons -
+  territory 5 has no spare hand, territory 6 can never obtain a metal.
 
-**And the fix cannot borrow the existing check's green.** No release territory has metal capacity
-with zero density, so all twelve answers are unchanged and
-`the_release_reaches_the_output_the_specification_lane_derived` passes either way. Unverified until
-a case exists that fails without the term - `C-38`.
+**Whether.** Worth fixing now, while the reasoning is loaded and one line long - not because
+anything is broken today, but because the count in the doc became false when `Q-79` landed and
+nothing goes red on it.
+
+### Q-82 - The workspace gate lints no test code, and eleven clippy errors live there
+
+**to** code · **status** open · **raised** 2026-09-10 · **source**
+[the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
+
+**Where.** `hooks/pre-push:20`.
+
+**What.** The gate runs `cargo clippy --workspace -- -D warnings`. Without `--all-targets` that
+lints no `tests/` target and no `#[cfg(test)]` module inside `src/`. **Line 68 of the same file
+lints the tools with `--all-targets`**, so the asymmetry sits eleven lines apart.
+
+**Measured.** `cargo clippy --workspace -- -D warnings` exits 0. The same command with
+`--all-targets` reports **11 errors**, across eight files:
+
+| File                                            | Errors |
+| ----------------------------------------------- | ------ |
+| `crates/sphere-tessellation/src/icosahedral.rs` | 3      |
+| `crates/planet-raster/src/raster.rs`            | 3      |
+| `crates/game-model/src/territory.rs`            | 3      |
+| `crates/game-console/tests/fully_exploited.rs`  | 2      |
+| `crates/game-console/tests/first_release.rs`    | 2      |
+| `crates/planet-raster/src/font.rs`              | 1      |
+| `crates/game-console/tests/vocabulary.rs`       | 1      |
+| `crates/game-console/src/binding.rs`            | 1      |
+
+**Not a regression, and the direction is worth recording.** Measured identically at `c3cccc4` and at
+`7c0501c`: **16 before the burst, 11 after**. This burst reduced it.
+
+**Why.** `hooks/pre-push:51` already carries this lesson for the other half - a thing *linted and
+format-checked by nothing, and carrying a live clippy warning that no gate could see.* The fix was
+applied to the tools loop and not to the workspace line.
+
+**Whether.** Worth doing, and **not a one-flag change**: adding `--all-targets` turns the gate red
+on eleven pre-existing errors, so it is a flag plus eleven fixes, or a flag plus a recorded
+exception list. Which of those is the code lane's call. Filed because nothing else will notice -
+the gate is green and says nothing about the population it skipped.
 
 ### Q-80 - `spec/control.md` names biome as an input to maximum output, and nothing reads it
 
@@ -285,6 +325,49 @@ lens nor the specification lane should.
 ## Resolved
 
 Kept rather than deleted, so a later report can tell whether a finding was fixed or forgotten.
+
+### Q-79 - A metal deposit that yields nothing counts as metal, and the planet becomes unwinnable
+
+**to** code · **status** **acted** 2026-09-10 · `c63190a` · **raised** 2026-09-10 · **source**
+[the reachability report](2026-09-10-a-reachability-question-as-two-tests.md)
+
+**Where.** `crates/game-model/src/territory.rs:479`, `can_ever_build`.
+
+**What.** The food branch is guarded on capacity and density; the metal branch on capacity alone.
+A metal deposit of capacity 3 and density 0 yields nothing, so the territory can never obtain a
+metal and can never build - but `can_ever_build` says true and the ceiling jumps from `(4, 1, 1)`
+to `(16, 4, 7)`.
+
+**Why.** An unreachable ceiling makes `at_maximum_output` false for ever, the planet never fully
+exploited, and the game unwinnable with nothing red. **That is the failure `P-361` was promoted to
+remove**, reached through density instead of through capacity. Measured against a clone, on a run
+reporting `1 passed; 62 filtered out`.
+
+**Whether.** Worth fixing now - it is the win condition. The term is `metal density >= 1`, and the
+predicate closes at three terms once it is stated as *can this territory ever obtain a metal*
+rather than worked from the release's twelve.
+
+**And the fix cannot borrow the existing check's green.** No release territory has metal capacity
+with zero density, so all twelve answers are unchanged and
+`the_release_reaches_the_output_the_specification_lane_derived` passes either way. Unverified until
+a case exists that fails without the term - `C-38`.
+
+**Acted in `c63190a`, and verified from the files rather than from their report.** `yields` poisoned
+back to `capacity >= 1` in a clone: `a_deposit_with_room_and_no_density_is_not_a_source` fails with
+`left: (16, 4, 7)`, `right: (4, 1, 0)`, on a run of **62 passed, 1 failed, 0 filtered**. Under the
+same poison
+`the_release_reaches_the_output_the_specification_lane_derived` is **4 passed, 0 failed, 0
+filtered** - so the population claim this item rested on is measured now rather than argued: the
+release's twelve cannot express the case, and only the constructed one holds it.
+
+**One number in this item was wrong and their fix corrects it.** It gave the true ceiling as
+`(4, 1, 1)`, counting the metal extractor founding attaches to a deposit that yields nothing. By
+this finding's own principle that is not somewhere a citizen produces anything, so it is `(4, 1, 0)`
+- which is what they wrote. **The extension they made past what was filed is right**, and applies
+the same principle to the other branch: a zero-density energy deposit was being counted as somewhere
+to put a citizen.
+
+**What the fix did not reach is `Q-81`.**
 
 ### Q-71 - `S-76`'s claim holds and the reason recorded for it is false
 

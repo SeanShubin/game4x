@@ -120,3 +120,53 @@ which is why it is addressed there.
 
 `quotations.rs` finding italicised quotations and missing plain prose, and `C-79`'s table held twice
 in two columns. Both already recorded by them. The prototype was not reviewed.
+
+## Verified after the fix, 2026-09-10
+
+**`Q-79` acted in `c63190a`, checked from the files rather than from the code lane's report.**
+
+**The poison goes red on the right test.** `yields` reverted to `capacity >= 1` in a clone:
+`a_deposit_with_room_and_no_density_is_not_a_source` fails with `left: (16, 4, 7)`,
+`right: (4, 1, 0)` - the probe's own numbers. Run: **62 passed, 1 failed, 0 filtered**.
+
+**And the release check does not.** Under the same poison,
+`the_release_reaches_the_output_the_specification_lane_derived` is **4 passed, 0 failed, 0
+filtered**. So the claim this report rested on - *the population is what misses this, not the
+circularity* - is measured rather than argued.
+
+### A number in this report was wrong
+
+It gave the true ceiling as `(4, 1, 1)`, counting the metal extractor founding attaches to a
+deposit that yields nothing. **By this report's own principle that is not somewhere a citizen
+produces anything**, so it is `(4, 1, 0)`, which is what the code lane wrote. Their extension past
+what was filed - filtering `yields` in the other branch too, so a zero-density *energy* deposit is
+not counted as somewhere to put a citizen - is the same principle applied where this report did not
+look.
+
+### The fix reached one of two predicates
+
+`can_build_extractors` at `territory.rs:589` answers the same question -
+*whether this territory can ever build an extractor* - as
+`food.capacity >= 1 && food.density >= 2`, and never asks whether a metal can be obtained.
+
+| Case                          | `can_build_extractors` | `can_ever_build` |
+| ----------------------------- | ---------------------- | ---------------- |
+| t6: food 4x4, no metal        | true                   | false            |
+| food 4x4, metal 3 x density 0 | true                   | false            |
+| food 4x4, metal 3 x density 4 | true                   | true             |
+| t5: food 3x1, metal 8x8       | false                  | false            |
+
+Two disagreements in four. Over the release's twelve, **the predicate says eleven can build and the
+corrected rule says ten** - the difference is territory 6, whose row in the release reads *No
+metal*. Its test asserts the predicate against its own retyped body, and its doc's *eleven of the
+twelve* became false when `Q-79` landed. `Q-81`.
+
+### The gate's clippy skips every test target
+
+`hooks/pre-push:20` runs `cargo clippy --workspace -- -D warnings`, which exits 0. **Line 68 of the
+same file lints the tools with `--all-targets`.** The workspace line without it lints no `tests/`
+target and no `#[cfg(test)]` module inside `src/`; with it, **11 errors** across eight files.
+
+Measured identically at both ends of the burst - **16 at `c3cccc4`, 11 at `7c0501c`** - so this
+burst reduced it and introduced none of it. `Q-82`, and it is a flag plus eleven fixes rather than
+a flag.
