@@ -91,17 +91,21 @@ encoding: every line there that puts a **family** where a kind belongs is a quan
 notation from a field's value. **That question is still open and unproposed.**
 
 
-### P-366 - What a value may be, so that a rule can say what it means
+### P-366 - What a description matches, and what a value may be
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
-**The biggest hole in the notation as written down.** `spec/console.md` says a value is *a word, a
-number, or another command in the same form*. **`sum force of {…}` is none of the three**, and
-neither is `count {…}`, `min(a, b)` or a path - so the force rules, the storage rule and `grow`'s
-quantity are all rules the specification cannot currently state.
+**Two holes in the notation as written down, in one section.** Sean approved the first in principle
+on 2026-09-10; these are the words for it. The second is the one the research lens calls the biggest
+real hole.
 
 **Added at the end of *The language*:**
 
+> **In a recipe, a description is a pattern.** It may name a **family** rather than a kind, and it
+> may **leave stored traits out** - `{extractor ready:yes}` matches every ready extractor, whatever
+> it extracts. **A description of state may do neither**: it names one kind and carries every stored
+> trait that thing has. **Where a description appears is what says which it is.**
+>
 > **In a recipe, a quantity and either side of a guard may be an expression.** An expression is one
 > of these and nothing else:
 >
@@ -120,29 +124,58 @@ quantity are all rules the specification cannot currently state.
 > **The words an expression is built from are the notation's own.** They are the one thing in a data
 > file that is not a kind, a trait, or one of a trait's values.
 
-**Every form is used, and two were already specified rather than invented.** `available <kind> of x`
-is `spec/logistics.md`'s *available capacity is the total less the used, derived*, given a written
-form. `holder of x` is that file's *a thing is not located by a trait; what holds it is what says
-where it is*. **A path was already used by four quantities in the release before any of this
-existed** - *read from a trait of one of the ingredients*.
+## The first half: a pattern is not a state description
+
+**The specification's only rule about descriptions is false of every recipe in the release.**
+`spec/console.md:47-50` says a description is a kind and **every stored trait that thing has**, that
+**no trait may be left out**, and that `{citizen} -> 14` is never written.
+
+**Every recipe row does exactly what that forbids.** `work` consumes *1 extractor, ready* - an
+extractor also carries a stored `resource` trait, and the row omits it on purpose, because the rule
+means any ready extractor. `{thing keeps:0}` omits everything but `keeps`.
+
+**Under *there is one notation*, the two look identical and mean opposite things about omission.**
+That is what needs saying, and naming a family is one consequence of it rather than the whole.
+
+**The family half is already yours and already written**, in `releases/first-release.md` ->
+*Recipes*: **Kind is the kind or the family alone.** This is the specification catching up to a rule
+the release has had all along.
+
+**The choice, named rather than resolved quietly.** *Where it appears* is what distinguishes a
+pattern from a state description - a recipe against a dump. The alternative would be to mark one in
+the syntax, and **nothing proposes that**: neither the release nor the research lens's encoding does
+it, and both read correctly by position. **If you would rather it were marked, this becomes a
+decision and I will redraft.**
+
+## The second half: what a value may be
+
+`spec/console.md` says a value is *a word, a number, or another command in the same form*. **`sum
+force of {…}` is none of the three**, and neither is `count {…}`, `min(a, b)` or a path - so the
+force rules, the storage rule and `grow`'s quantity are all rules the specification cannot currently
+state.
+
+**Every form is used, and two were specified rather than invented.** `available <kind> of x` is
+`spec/logistics.md`'s *available capacity is the total less the used, derived*, given a written form.
+`holder of x` is that file's *a thing is not located by a trait; what holds it is what says where it
+is*. **A path was already used by four quantities in the release before any of this existed** - *read
+from a trait of one of the ingredients*.
 
 **`max` and `sum` are your force rule.** Unorganized force is the largest single contribution and
-organized force is the sum; `game.rs:236` already computes it that way. **Until this lands there is
-no way to write down what the code already does.**
+organized force is the sum; `crates/game-model/src/game.rs:236` already computes it that way.
+**Until this lands there is no way to write down what the code already does.**
 
 **The last bullet is a consequence, not decoration.** *The language* ends by saying **every word in a
 data file is a kind, a trait, or one of a trait's values** - and `count`, `sum`, `min` and `of` are
-none of those. That sentence is what the research lens's check 10 measures, at 517 of 517 tokens. So
-**the exception has to be stated or the check goes red on the first expression written**, and stating
-it keeps the check meaningful rather than weakening it.
+none of those. That sentence is what the research lens's check 10 measures, at 517 of 517 tokens, so
+**the exception has to be stated or the check goes red on the first expression written.** Stating it
+keeps the check meaningful rather than weakening it.
 
 **Scoped to recipes deliberately.** `spec/console.md:64`'s rule about a command's value is untouched:
-a command carries the player's choices, not arithmetic. If a command should also take an expression,
-that is a separate question and this does not ask it.
+a command carries the player's choices, not arithmetic. Whether a command should also take an
+expression is a separate question and this does not ask it.
 
 **Consistent with `P-363`**, checked: an expression returns a **number**, which is exactly the shape
 `P-363` calls safe, and neither `count` nor `sum` reads anything outside the state.
-
 
 ### P-364 - Building a world is made of the same rules as playing one
 
