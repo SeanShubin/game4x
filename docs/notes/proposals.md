@@ -62,6 +62,51 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-360 - A garrison has no force, and one sentence still says it has one
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/unit-types.md` -> Every unit
+
+**Two normative lines in `spec/` disagree, and everything built follows one of them.**
+
+`spec/unit-types.md:19` says **the structure it becomes has one less force than the unit, and is
+operated by citizens**. `spec/control.md:24` says **a garrison has no force of its own.** An Ark and
+a Pioneer each carry force 2, so the first makes the garrison **1** and the second makes it **0**.
+
+**The decision was already taken and one sentence was missed.** `P-48` landed the *one less* rule on
+2026-08-26. `P-276` landed *no force of its own* on 2026-09-05, and `P-277` set the release's
+*Units and structures* row to **0** in the same breath. **The cleanup was never filed**, which is
+the rule in `CLAUDE.md` about a promotion that makes something else stale.
+
+**Everything downstream is already `P-276`'s reading**, checked rather than assumed:
+
+- `releases/first-release.md`, *Units and structures*: garrison **Force 0**
+- `crates/game-model/src/territory.rs:82`: `from_founding_unit(_unit_force) -> Self { force: 0 }` -
+  **a constructor that discards its only argument**, and the underscore is the whole history
+- `crates/game-model/src/territory.rs:736`: a test named
+  `a_founding_unit_becomes_a_garrison_with_no_force_of_its_own`, asserting the discard
+
+**So `spec/unit-types.md:19` is the only surviving trace of the other rule**, and this is a cleanup
+rather than a choice. **It is a choice only if you want the other reading** - restoring *one less
+force* would mean changing `spec/control.md`, the release row, the constructor and the test. If that
+is what you want, say so and this becomes a decision rather than an approval.
+
+**The offered sentence, replacing the whole of line 19:**
+
+> The structure it becomes is operated by citizens
+
+**The force clause goes and nothing else moves.** *Operated by citizens* is independent of it, is
+not in dispute, and is the reason the sentence is rewritten rather than deleted.
+
+**One more line reasons from the dead rule, and it is not in `spec/`.**
+`docs/notes/spec-backlog.md:1493` argues that deferring a biome is safe because *`P-48`'s one less
+force still lands exactly* under a rescale - which, under `P-276`, lands at **zero** whatever the
+numbers are. That is this lane's own note, is not binding, and is corrected in the same commit as
+this proposal rather than needing your approval.
+
+**Found by the research lens as `X-28`**, answering a question about what its encoding never reached.
+It proposed no words, which was right: `spec/` is this lane's to draft for.
+
+
 ## Addressed to other perspectives
 
 ### S-82 - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking

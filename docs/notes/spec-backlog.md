@@ -1493,6 +1493,23 @@ grassland with less food, so the first release has **six biomes and four distinc
 dangerous ground at 3 - and P-48's *the structure a founding unit becomes has one less force* still
 lands exactly. It is release tuning, not a spec change, which is what makes it safe to defer.
 
+**Superseded 2026-09-10, in both halves, and neither was edited when it stopped being true.**
+`P-275` landed *taking uses the organised force **brought**, not the force of the one unit consumed*
+- so the **Forced** bullet above is dead: two pioneers present force 4, and a territory at force 2 is
+takeable by something that exists. The cap came off with it. **Jungle carries force of nature 2 in
+the release today**, in the *Biomes* table and on territories 6 and 7, so it is the good-and-dangerous
+biome this section describes as deferred. The deferral is over and this passage still reads as
+though it were pending.
+
+**And `P-48`'s clause, which the paragraph above leans on, no longer holds at any scale.** `P-276`
+made a garrison have no force of its own and `P-277` set the release row to **0**, so *one less
+force* lands at zero however the numbers are rescaled. Filed as `P-360`; found by the research lens
+as `X-28`.
+
+**Left standing rather than rewritten**, because what is above is a record of reasoning at a moment
+and the conclusion it reached may still be right for reasons that have nothing to do with its two
+dead premises.
+
 **And the note to re-read is [biomes](biomes.md)**, which sets out the six roles and the test they
 were chosen against: does knowing the biome change what a player *does* with a territory, or only
 how pleased they are to have it.
