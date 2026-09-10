@@ -466,7 +466,7 @@ mod tests {
         // forbidden, and water that cannot pool costs every coastline and every sea.
         let land: Vec<usize> = (0..12).filter(|at| biomes[*at].is_claimable()).collect();
         assert!(!land.is_empty(), "a planet with no land on it");
-        let mut reached = vec![false; 12];
+        let mut reached = [false; 12];
         let mut queue = vec![land[0]];
         reached[land[0]] = true;
         while let Some(at) = queue.pop() {

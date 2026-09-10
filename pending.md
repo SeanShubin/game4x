@@ -20,6 +20,8 @@ no signal. These are still marked `open`, and a commit that touched no part of t
 outbox cites them - which usually means they were settled and nobody went back.
 
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
+- **Q-81** - `b0d43b3` Q-81 and Q-78: one question gets one predicate, and a false reason beside a right assertion · still open in `lenses/quality/outbox.md`
+- **Q-78** - `b0d43b3` Q-81 and Q-78: one question gets one predicate, and a false reason beside a right assertion · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 

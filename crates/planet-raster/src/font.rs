@@ -248,7 +248,7 @@ mod tests {
         let (width, height) = (60, 10);
         let mut buffer = vec![0u32; width * height];
         draw_text(&mut buffer, width, height, 1, 1, "A1", 0xFFFFFF, 1);
-        assert!(buffer.iter().any(|&pixel| pixel == 0xFFFFFF));
+        assert!(buffer.contains(&0xFFFFFF));
     }
 
     #[test]

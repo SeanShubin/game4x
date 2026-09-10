@@ -150,7 +150,7 @@ fn released_cost(thing: &str) -> Vec<(u32, String)> {
             continue;
         }
         let cells: Vec<&str> = line.trim_matches('|').split('|').map(str::trim).collect();
-        if costs_at.is_none() && cells.iter().any(|cell| *cell == "Thing") {
+        if costs_at.is_none() && cells.contains(&"Thing") {
             costs_at = cells.iter().position(|cell| *cell == "Costs to produce");
             assert!(
                 costs_at.is_some(),
@@ -207,9 +207,7 @@ fn run(session: &mut Session, line: &str) -> Outcome {
 /// because every one of them is asking *what* went wrong. `refused_at` is for the one test
 /// that asks *where*.
 fn refuse(session: &mut Session, line: &str) -> Problem {
-    match refused_at(session, line) {
-        (_, what) => what,
-    }
+    refused_at(session, line).1
 }
 
 /// What went wrong and where, for the test that is about the second half.

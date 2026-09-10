@@ -16,8 +16,16 @@ set -e
 echo "pre-push: cargo fmt --all -- --check"
 cargo fmt --all -- --check
 
-echo "pre-push: cargo clippy (everything)"
-cargo clippy --workspace -- -D warnings
+# **`--all-targets`, so that "everything" means it** - `Q-82`. Without it clippy lints no
+# `tests/` target and no `#[cfg(test)]` module inside `src/`, which is most of the assertions
+# in this repository. Seventeen findings were living there when the quality lens measured it,
+# across eight files, and the gate was green the whole time.
+#
+# The lesson had already been learned forty lines down, for the tools, and applied only
+# there: something *linted and format-checked by nothing, and carrying a live clippy warning
+# that no gate could see*. Same sentence, same file, the other half of the tree.
+echo "pre-push: cargo clippy (everything, tests included)"
+cargo clippy --workspace --all-targets -- -D warnings
 
 # Selected by exclusion, deliberately. A list of crates to *include* goes stale silently
 # every time a crate is added or split: planet-terrain was missing from it when it landed,

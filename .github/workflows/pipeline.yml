@@ -108,8 +108,11 @@ jobs:
       - name: Check formatting
         run: cargo fmt --all -- --check
 
-      - name: Clippy (everything)
-        run: cargo clippy --workspace -- -D warnings
+      # `--all-targets` or this lints no test code at all - `Q-82`, and `hooks/pre-push`
+      # carries the argument. A hook the pipeline does not mirror is half a gate: the hook
+      # can be skipped with `--no-verify` and this cannot.
+      - name: Clippy (everything, tests included)
+        run: cargo clippy --workspace --all-targets -- -D warnings
 
       # The rules and the geometry are where correctness lives: the whole first-release
       # command script runs here, and the geometry tests run with it.

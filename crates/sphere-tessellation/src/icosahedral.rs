@@ -669,9 +669,9 @@ mod tests {
     #[test]
     fn no_two_pentagons_are_adjacent() {
         let neighbours = adjacency(&truncated_icosahedron_seeds());
-        for pentagon in 0..PENTAGON_COUNT {
-            assert_eq!(neighbours[pentagon].len(), 5);
-            for &neighbour in &neighbours[pentagon] {
+        for (pentagon, around) in neighbours.iter().enumerate().take(PENTAGON_COUNT) {
+            assert_eq!(around.len(), 5);
+            for &neighbour in around {
                 assert!(
                     neighbour as usize >= PENTAGON_COUNT,
                     "pentagon {pentagon} touches pentagon {neighbour}"
@@ -684,8 +684,8 @@ mod tests {
     #[test]
     fn each_hexagon_touches_three_pentagons() {
         let neighbours = adjacency(&truncated_icosahedron_seeds());
-        for hexagon in PENTAGON_COUNT..32 {
-            let pentagons = neighbours[hexagon]
+        for (hexagon, around) in neighbours.iter().enumerate().take(32).skip(PENTAGON_COUNT) {
+            let pentagons = around
                 .iter()
                 .filter(|&&neighbour| (neighbour as usize) < PENTAGON_COUNT)
                 .count();
@@ -794,8 +794,8 @@ mod tests {
 
         let mut pentagon_hexagon = Vec::new();
         let mut hexagon_hexagon = Vec::new();
-        for first in 0..seeds.len() {
-            for &second in &neighbours[first] {
+        for (first, around) in neighbours.iter().enumerate() {
+            for &second in around {
                 let second = second as usize;
                 if second < first {
                     continue;

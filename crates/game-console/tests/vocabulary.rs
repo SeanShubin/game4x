@@ -375,7 +375,7 @@ fn the_check_can_fail_and_each_way_of_being_wrong_is_told_apart() {
         "a kind the release does not declare"
     );
     assert!(
-        traits.get("manned").is_none(),
+        !traits.contains_key("manned"),
         "a trait the release does not declare"
     );
     match traits.get("ready") {

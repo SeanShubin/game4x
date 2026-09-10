@@ -766,6 +766,16 @@ mod tests {
     /// densities. `P-290` makes that unwriteable: a territory has one answer per resource.
     /// Three cases below were stated in the old shape and are re-stated here rather than
     /// translated, because there is nothing to translate them to.
+    /// A case in the tables below: the ground, what is expected, and why.
+    ///
+    /// **Named because the tuple was long enough for clippy to say so** - `Q-82`, and the
+    /// gate could not see it until `--all-targets` reached test code. The name is the
+    /// improvement; the lint only pointed at it.
+    type Case<T> = (&'static [(Resource, u32, u32)], T, &'static str);
+
+    /// The same, for a table that also says which resource and how much of it.
+    type Yield = (&'static [(Resource, u32, u32)], Resource, u32, &'static str);
+
     fn offering(deposits: &[(Resource, u32, u32)]) -> Territory {
         let mut territory = Territory::empty(TerritoryId(1), Biome::Grassland);
         for (resource, capacity, density) in deposits {
@@ -1047,7 +1057,7 @@ mod tests {
     fn a_spare_hand_exists_exactly_when_a_food_extractor_yields_two() {
         // Enough metal to build with, in every case, so that only the food terms move.
         const METAL: (Resource, u32, u32) = (Resource::Metal, 4, 4);
-        let cases: [(&[(Resource, u32, u32)], bool, &str); 5] = [
+        let cases: [Case<bool>; 5] = [
             (
                 &[METAL],
                 false,
@@ -1096,7 +1106,7 @@ mod tests {
     fn building_needs_a_metal_that_can_actually_be_obtained() {
         // Food that feeds four and works one, so there is always a spare hand.
         const FOOD: (Resource, u32, u32) = (Resource::Food, 4, 4);
-        let cases: [(&[(Resource, u32, u32)], bool, &str); 4] = [
+        let cases: [Case<bool>; 4] = [
             (
                 &[FOOD],
                 false,
@@ -1146,7 +1156,7 @@ mod tests {
     /// it demonstrates the formula now rather than the search.
     #[test]
     fn the_most_in_one_turn_is_the_spare_hands_against_the_capacity() {
-        let cases: [(&[(Resource, u32, u32)], Resource, u32, &str); 6] = [
+        let cases: [Yield; 6] = [
             (
                 &[(Resource::Food, 1, 4)],
                 Resource::Metal,
@@ -1239,7 +1249,7 @@ mod tests {
     /// never afford a Yard, which the previous rule could not express.
     #[test]
     fn a_yard_needs_metal_to_be_reachable_rather_than_reachable_at_once() {
-        let cases: [(&[(Resource, u32, u32)], bool, &str); 5] = [
+        let cases: [Case<bool>; 5] = [
             (
                 &[(Resource::Food, 1, 4)],
                 false,

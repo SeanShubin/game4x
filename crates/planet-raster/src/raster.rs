@@ -391,7 +391,7 @@ mod tests {
         render(&mut buffer, &view, &scene(&fixture), None);
         assert!(buffer.iter().all(|&pixel| pixel != 0xDEAD_BEEF));
         assert!(
-            !buffer.iter().any(|&pixel| pixel == palette::BACKGROUND),
+            !buffer.contains(&palette::BACKGROUND),
             "the repeats fill the plane, so nothing should show through"
         );
     }
@@ -517,13 +517,13 @@ mod tests {
         let view = GlobeView::new(300, 300);
         let mut with = vec![0u32; 300 * 300];
         render(&mut with, &view, &scene(&fixture), None);
-        assert!(with.iter().any(|&pixel| pixel == palette::BORDER));
+        assert!(with.contains(&palette::BORDER));
 
         let mut without_scene = scene(&fixture);
         without_scene.show_borders = false;
         let mut without = vec![0u32; 300 * 300];
         render(&mut without, &view, &without_scene, None);
-        assert!(!without.iter().any(|&pixel| pixel == palette::BORDER));
+        assert!(!without.contains(&palette::BORDER));
     }
 
     /// Borders are found from the resolved buffer, so they stay an even width however
