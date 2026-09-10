@@ -2570,5 +2570,61 @@
       "Ocean",
       "&mdash;"
     ]
+  ],
+  "claim_hold": [
+    [
+      "Ice",
+      "1",
+      "yes",
+      "yes",
+      ""
+    ],
+    [
+      "Desert",
+      "1",
+      "yes",
+      "yes",
+      ""
+    ],
+    [
+      "Grassland",
+      "1",
+      "yes",
+      "yes",
+      ""
+    ],
+    [
+      "Jungle",
+      "2",
+      "<strong>no</strong>",
+      "<strong>no</strong>",
+      "<strong>an ark alone cannot claim it</strong> - claiming needs more than 2, and an ark projects 2"
+    ],
+    [
+      "Mountain",
+      "1",
+      "yes",
+      "yes",
+      ""
+    ],
+    [
+      "Ocean",
+      "&mdash;",
+      "not claimable",
+      "&mdash;",
+      "ocean carries nothing"
+    ]
+  ],
+  "claim_hold_rule": [
+    [
+      "claim",
+      "force &gt; nature",
+      "an ark projects 2 below it, which clears any nature of 1"
+    ],
+    [
+      "hold",
+      "force &ge; nature",
+      "a settlement projects 1, which holds any nature of 1"
+    ]
   ]
 }
