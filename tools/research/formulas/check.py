@@ -599,6 +599,43 @@ def check_editor():
     return tokens, ok, n, per
 
 
+def check_capture():
+    """Check 11. The sequence Sean described, arithmetic checked at every step.
+
+    *Once two pioneers breach the region, one of them can deploy and make a garrison with two
+    citizens, at which point the other pioneer can leave.* Force is `sum` for units, which are
+    organized by moving, and `sum` for citizens where a garrison organizes them - `max`
+    otherwise. Breaching needs greater than nature; staying needs equal.
+    """
+    force = {k: int(v.replace("<strong>", "").replace("</strong>", ""))
+             for k, v, _n in DATA["force_values"]}
+    hardest = max(int(n) for _t, _b, n in DATA["territory_biomes"])
+    jungles = [t for t, b, _n in DATA["territory_biomes"] if b == "jungle"]
+    steps = []
+
+    two = 2 * force["pioneer"]
+    steps.append(("two pioneers breach", two, ">", hardest, two > hardest))
+
+    one = force["pioneer"]
+    steps.append(("one pioneer alone breaches", one, ">", hardest, one > hardest))
+
+    # After deploying: the spent pioneer becomes a garrison and two citizens.
+    after = force["pioneer"] + force["garrison"] + 2 * force["citizen"]
+    steps.append(("after one deploys, with the other still there", after, ">=", hardest,
+                  after >= hardest))
+
+    held = force["garrison"] + 2 * force["citizen"]
+    steps.append(("the other pioneer leaves; garrison organizes", held, ">=", hardest,
+                  held >= hardest))
+
+    unorganized = force["citizen"]  # max_of, not sum_of
+    steps.append(("the same two citizens with no garrison", unorganized, ">=", hardest,
+                  unorganized >= hardest))
+
+    assert steps, "no steps, so this check knows nothing"
+    return jungles, hardest, steps
+
+
 def check_cap(cap=1000):
     """Check 3. A backstop: apply every recipe once and report anything past the cap."""
     by_name = gather()
@@ -751,6 +788,23 @@ def self_test():
     else:
         print("  poison ok: check 10 notices a word no menu could offer")
     _v["lines"] = _saved10
+
+    # Check 11 poison: a garrison that contributed force would hide the organizing rule.
+    _g = next(r for r in DATA["force_values"] if r[0] == "garrison")
+    _was = _g[1]
+    _g[1] = "5"
+    if check_capture()[2][4][4]:
+        pass
+    _g[1] = _was
+    _c = next(r for r in DATA["force_values"] if r[0] == "citizen")
+    _cw = _c[1]
+    _c[1] = "0"
+    if check_capture()[2][3][4]:
+        print("  POISON FAILED: check 11 holds a jungle with citizens worth nothing")
+        ok = False
+    else:
+        print("  poison ok: check 11 fails to hold when a citizen carries no force")
+    _c[1] = _cw
 
     return ok
 
@@ -955,6 +1009,13 @@ def main():
     print(f"  {n_rec - len(per)} of {n_rec} recipes could be built with nothing typed but names")
     for name in sorted(per):
         print(f"  TYPED: {name} - {', '.join(sorted(per[name]))}")
+
+    jungles, hardest, steps = check_capture()
+    print()
+    print("CHECK 11 - does the jungle capture sequence work?")
+    print(f"  jungles are territories {', '.join(jungles)}, force of nature {hardest}")
+    for what, have, op, need, ok in steps:
+        print(f"  {'yes' if ok else 'NO ':<4} {what:<44} {have} {op} {need}")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1

@@ -464,6 +464,33 @@ and do not bind; a territory's own are in Territory resources.*
 carries **1** except jungle, which carries **2**. So what is needed is **which of the twelve
 territories are jungle** - and every other territory takes 1.
 
+**Corrected 2026-09-09, and Sean was right.** He asked: *if every territory has a biome, and every
+biome has a value for nature, where is the blocker?* There is none. **The values exist and are
+published** - `reports/territory-1.md` through `-12.md` each carry `id | biome | nature`, generated
+from the game itself:
+
+|                      |                            |
+| -------------------- | -------------------------- |
+| grassland, nature 1  | territories 1, 2, 3, 8, 11 |
+| mountain, nature 1   | 4, 5, 9                    |
+| desert, nature 1     | 10                         |
+| ice, nature 1        | 12                         |
+| **jungle, nature 2** | **6 and 7**                |
+
+**What this item found is narrower than what it said**, and the narrow version stands: a reader of
+`spec/` and `releases/` alone cannot learn any territory's biome, because *Territory resources* has
+no such column and the *Biomes* table is per biome. `R-4` is vetted on `biomes_of` assigning them, so
+**the value lives in the code and is published in a report** - which is a fact about where it lives
+rather than a gap. This lane had read that as *no value exists* and it was wrong.
+
+**Imported into the prototype from the reports**, so the force rule has something to read.
+
+**One observation, offered without a claim.** The two jungles are territories **6 and 7**, which are
+exactly the two territories missing a resource - 6 has no metal and 7 has no energy. `biomes_of`
+computes from geometry and *Territory resources* is authored by hand, so the two assignments are
+independent; landing the hardest biome on the two most constrained territories is either deliberate
+or a one-in-sixty-six coincidence, and this lane cannot tell which.
+
 
 ### X-20 - *declares no capacity* and *declares no limit* are opposites, and the release means the second
 
@@ -696,6 +723,29 @@ minimal control is 2; a jungle is nature 2.
 **Both readings break something Sean has asked for**, and the two-test version he described earlier
 breaks neither: `>` when a player fires `resolve`, `&ge;` when the world checks each turn. **That is
 the one thing still to settle**, and it is a choice between one test and two rather than a gap.
+
+**Corrected 2026-09-09.** This item argued that a single force test breaks either way, using
+minimal control's force of 2 against a jungle's nature of 2. **Sean: *why are you looking at
+citizens' force? We don't move citizens, we move pioneers.*** The colony never breaches - the
+pioneers do - so testing a founded colony with `>` was testing the wrong thing.
+
+**His sequence, now check 11, and every step is arithmetic on the release's own numbers:**
+
+```
+yes  two pioneers breach                           4 > 2
+NO   one pioneer alone breaches                    2 > 2
+yes  after one deploys, with the other still there 4 >= 2
+yes  the other pioneer leaves; garrison organizes  2 >= 2
+NO   the same two citizens with no garrison        1 >= 2
+```
+
+**The two failures are the design working.** One pioneer cannot take a jungle, which is why two are
+wanted; and two citizens cannot hold one without a garrison, because unorganized force is `max` and
+`max(1, 1)` is 1. **The garrison earns its place on exactly the two territories that are jungle.**
+
+**So the two-test reading is confirmed rather than merely preferred**: `>` when the pioneers breach,
+`>=` for what stays. What remains is to write `resolve` and the maintaining check as recipes -
+neither needs anything the language lacks.
 
 ### X-23 - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed
 
