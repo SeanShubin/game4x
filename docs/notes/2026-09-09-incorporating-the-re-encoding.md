@@ -113,6 +113,35 @@ release's own Kinds table rather than typed; word-boundary, case-insensitive, ov
 files; poisoned on `garrison` and `territory`, either of which failing to appear means the search is
 broken. **14 of 16 are named in `spec/` by their own word. Two are not.**
 
+### `stow` is already implemented, unnamed, and that changes what `X-21` is
+
+**Read tonight, in `crates/game-model/src/territory.rs:184`.** `end_of_turn_losses` does this:
+
+- **food and labor are discarded entirely**, every turn, whatever stores exist
+- **metal and energy are capped** at the territory's store capacity, the excess removed, and **the
+  remainder carries**
+
+Sean's answer to `X-21` was *just automatically cram as much as will fit in storage, the rest goes
+into disorder.* **That is exactly what those nine lines do**, for metal and energy. So storing is
+not missing from the game. **It is missing from the Recipes table**, and from nowhere else.
+
+That is a smaller defect than either lane had it, and a sharper one:
+
+- **This lane told Sean the scenario was written against a rule that does not exist.** Wrong. The
+  scenario's *energy has nowhere to go until it has a store* at `play.4x:50` is **correct against
+  the code** - capacity zero means everything made is over the bound and is removed
+- **The research lens filed it as *nothing fills a store, so a store is a building that does
+  nothing*.** Also wrong: metal and energy stores are what make metal and energy carry at all, and
+  the twelve loose energy in the dump are there because two stores hold twenty between them
+- **What is true is that a behaviour of the game is not among its recipes.** The release lists
+  sixteen; the game has a seventeenth, and it is the one nobody wrote down
+
+**And that has a consequence for `R-8`'s neighbour.** `R-7` is *each recipe can be confirmed on its
+own*, vetted when `reports/recipes.md` shows a before, a command and an after for each. **A
+behaviour that is not a recipe cannot appear there** - so `R-7` can be complete over all sixteen and
+still not show the rule that decides what a player keeps. It is built and waiting on Sean, and this
+does not make it wrong; it makes it narrower than it reads.
+
 ## 4. `deposit` is a different phenomenon, and the distinction is the useful half
 
 The second of the two is `deposit`, and it is **not** a gap. It is absent by word and present by
