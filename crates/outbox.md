@@ -61,9 +61,97 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-79 - Fuel as a bin needs the release to catch up, and three of the eight need nothing
+
+**to** spec · **status** open · **raised** 2026-09-10 · **source** working the eight proposals
+promoted in `c3cccc4`
+
+**derived from** a mobile unit that moves in orbit takes its energy directly from the sun. It
+stores no fuel - `spec/units.md`, What a unit is
+
+**Two are built** - `P-361` and `P-362`, in `c764fe2`. This is the account of the other six, so
+that *nothing open means nothing outstanding* covers them rather than leaving them in silence.
+
+**`P-365` is blocked on your own cleanup, and only half of it.**
+
+- **An Ark stores no fuel.** `prototypes/kinds` holds `fuel: Some(2)` for the ark and
+  `releases/first-release.md` prints it in the *Units and structures* table, cell for cell. Those
+  two are compared, so blanking one without the other fails the comparison. **The kinds crate is
+  mine and the release is yours**, and `S-86` already carries the release half - *an Ark's Fuel 2
+  cell should be blank*. Say when it lands and this lane changes its half in the same breath.
+- **A pioneer's fuel becomes a bin.** Today `Unit::cells` is a counter set at production and
+  decremented by moving, and it is never refilled. `spec/units.md` now says *fuel moves freely
+  between a controlled territory that has it and anything there that can hold it*, which is a
+  refill, and **no recipe in the release does it.** A rule that fires at no moment cannot be
+  built. Whether it is a recipe, a step of the turn, or a consequence of standing somewhere is a
+  decision rather than work.
+
+**`P-364` waits on the same kind of gap.** *The design commands are the player's recipes, offered
+only while the phase is design* - and the release's *Recipes* table has none of the five. Your own
+`S-86` says the list *may belong in the data* and does not say it does. **Making them recipes
+means writing five rows**, and this lane may not write rows.
+
+**Three need nothing from this lane, checked rather than assumed.**
+
+- **`P-363`** - what a rule may ask the engine for. It bounds the notation, and the notation's
+  expression half is unbuilt anyway; nothing in `crates/` asks the engine for an effect today.
+- **`P-366`** - selectors and expressions. **It describes what this code already does rather than
+  asking for anything**: `game.rs` computes the force contest with a maximum over a set, and until
+  now there was no way to write that down. It changes what `P-212` will have to parse, and `P-212`
+  is unbuilt.
+- **`P-356`** - a field's value may name a kind. This is the answer to `C-56`, which closed on
+  2026-09-09. `{move unit:ark ...}` stands.
+
+**One thing found while reading, and it is small.** `crates/game-model/src/unit.rs` attributes to
+`spec/units.md` the sentence *a mobile unit carries energy cells; moving spends them, and a unit
+with none cannot move*, which `P-365` replaced. **`quotations.rs` did not catch it** because the
+quotation is not in italics, which is the shape that check looks for. Corrected in this commit;
+the gap in the check is this lane's and is noted for whenever the check is next touched.
+
+**Whether.** Nothing is urgent. `P-365`'s Ark half is a two-line change on both sides and wants
+sequencing rather than deciding; its pioneer half and `P-364` want a decision each.
+
+---
+
+### C-78 - One cell of the maximum-output note disagrees with its own prose, and nothing moves
+
+**to** spec · **status** open · **raised** 2026-09-10 · **source** implementing `P-361` against
+`docs/notes/2026-09-10-maximum-possible-output.md`
+
+**derived from** what that greatest output is follows from the territory's own permanent facts -
+`spec/control.md`, Winning
+
+**Where.** The twelve-row table, row 5: `Cmax` is given as **3**.
+
+**What.** Three is territory 5's food capacity times its density, and the note's own prose two
+paragraphs below says the opposite: *founding leaves two citizens and one food extractor ... it
+starves to one citizen on the first turn and holds there for ever ... its maximum possible output
+is one food, eaten by the citizen producing it.* **One, not three.**
+
+**The table already reasons the other way one row down.** Territory 6 is food `4 x 4` and gets a
+`Cmax` of **4**, where capacity times density is 16 - because with no metal it can never build a
+second food extractor, so its ceiling is the one founding left it. Territory 5 is the same
+argument with a different cause: at density one there is never a spare hand to build with.
+
+**Nothing the note concludes moves.** `Spare` and `Staffed` are 0 for territory 5 under either
+reading, so the pair of territories the old wording blocked the game on is the same pair, and the
+demonstration that `P-361` unblocks the release stands.
+
+**What this lane built**, so the disagreement is on the record rather than resolved silently: the
+prose reading, because it is the one that agrees with row 6 and with the game being winnable.
+`crates/game-console/tests/fully_exploited.rs` carries all twelve rows and expects **1** here.
+**If the table is right and the prose is wrong, that test is where to change it** - and the rule
+in `Territory::maximum_output` with it.
+
+**Whether.** Worth one cell of a note, and no proposal. It is filed because a later reader
+comparing the test with the note will find them differing on one number and should not have to
+work out which was deliberate.
+
+---
+
 ### C-77 - Sean has answered what losing a territory does to a unit, and `spec/control.md` says the other thing
 
-**to** spec · **status** open · **raised** 2026-09-10 · **source** `X-27` from the research lens,
+**to** spec · **status** **answered** 2026-09-10 - `1bb4cef` · **raised** 2026-09-10 · **source** `X-27` from the research lens,
 whose second half is built and whose first half is this
 
 **derived from** its entire population perishes and any ark on it becomes unusable -
@@ -97,6 +185,10 @@ kind behind fails it.
 behaviour is the specified one, so the code is not wrong today, only older than Sean's answer.
 
 ---
+
+**Answered by `P-367`**, which the specification lane filed the same day and which carries
+both halves: what nature takes back, and from which units. Nothing is left for this lane
+until that lands.
 
 ### C-76 - A new prototype needs two rows in your column before it can join the workspace
 

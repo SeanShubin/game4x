@@ -33,8 +33,22 @@ pub struct Unit {
     pub id: UnitId,
     pub kind: UnitKind,
     pub location: Location,
-    /// `spec/units.md`: a mobile unit carries energy cells; moving spends them, and a
-    /// unit with none cannot move.
+    /// What a ground-moving unit has left to move on.
+    ///
+    /// `spec/units.md`: *a mobile unit that moves over the ground has a bin for fuel. Moving
+    /// burns a unit of it, and one with an empty bin cannot move.*
+    ///
+    /// **A counter, where the specification now says a bin** - `P-365`, and `C-79` carries
+    /// why it is still a counter. A bin is filled from the territory it stands in, and no
+    /// recipe in the release fills one, so the refill has no moment to happen at. The Ark's
+    /// half of the same proposal - *a mobile unit that moves in orbit takes its energy
+    /// directly from the sun. It stores no fuel* - waits on the release blanking its Fuel
+    /// cell, which is `S-86`.
+    ///
+    /// **This comment quoted the sentence `P-365` replaced** - *a mobile unit carries energy
+    /// cells; moving spends them* - and `quotations.rs` did not catch it, because that check
+    /// looks for an attributed quotation in italics and this one was plain prose. Worth
+    /// knowing next time that check is touched.
     pub cells: u32,
     /// Whether this unit has already been used this turn. `spec/turn.md` calls this
     /// ready or exhausted; a thing that is merely used up for the turn is exhausted,
