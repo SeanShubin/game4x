@@ -596,7 +596,7 @@ keep a tank that would then need a way to be filled and a reason to exist.
 
 ### X-24 - the handoff: what is computed, what is asserted, and what Sean corrected
 
-**to** spec · **status** open · **raised** 2026-09-09 · **source** [the handoff](2026-09-09-handoff-to-spec.md) · **for** the specification lane, which Sean has asked to incorporate what it can
+**to** spec · **status** **answered** 2026-09-10 — `S-81` is the specification lane reading it, and it questioned three of the claims rather than taking them · **raised** 2026-09-09 · **source** [the handoff](2026-09-09-handoff-to-spec.md) · **for** the specification lane, which Sean has asked to incorporate what it can
 
 **What.** A day of re-encoding produced more than the report holds. This item points at the one
 document that carries the rest: **which claims a check computes, which `play.py` executed, and which
@@ -615,6 +615,59 @@ organized; `disorder` and `perish` were one recipe; and every territory's biome 
 **Whether.** **Read before acting on the report, not after.** Two of its recommendations are
 load-bearing: `X-21` and `X-23` are defects on any reading and safe to take; the primitive set is a
 rewrite of *Recipes* and is not.
+
+**And that line is now wrong, which is why this closed rather than aged.** `X-21` was refuted on 2026-09-10 and so was `X-22`; both rules are built and neither is a recipe. **A finding recommended as safe to take is the worst kind of item to leave open after it stops being true**, so the correction sits here rather than only in the two items.
+
+### X-28 - two spec files give a founding garrison different force, and the code settles it by discarding an argument
+
+**to** spec · **status** open · **raised** 2026-09-10 · **source** answering `S-81`'s question 6 by reading every rule in `spec/` · **found by** asking which rules the notation could not state, and finding one it could not state because the specification states it twice
+
+**Where.** `spec/unit-types.md:19` and `spec/control.md` -> *Producing force*.
+
+> The structure it becomes has one less force than the unit, and is operated by citizens
+
+> A garrison has no force of its own. It does one thing: it lets the citizens of that territory sum
+> their force instead of presenting only the highest among them.
+
+**What.** **Both are normative, both are in `spec/`, and they cannot both hold.** An Ark and a
+Pioneer each have force 2, and a founding leaves a garrison. One rule makes that garrison force
+**1**; the other makes it force **0**. Nothing in either file scopes the other.
+
+**How it got there, and it is a promotion that was not finished.** `P-48` landed *one less force* on
+2026-08-26. `P-276` landed *a garrison has no force of its own* on 2026-09-05, and `P-277` set the
+release's garrison row to 0 in the same breath. **`P-276` made `P-48` stale and nothing said so** -
+which is `CLAUDE.md` -> *Promotion*, the rule that a promotion invalidating a line elsewhere is not
+finished until the cleanup is filed.
+
+**The code already resolved it, and preserved the fossil.**
+`crates/game-model/src/territory.rs:82` is
+
+    pub fn from_founding_unit(_unit_force: u32) -> Self { Self { force: 0 } }
+
+**a constructor that takes the unit's force and discards it**, with a test at `:736` asserting
+`from_founding_unit(2).force == 0`. The underscore is the whole history: the signature is `P-48`
+and the body is `P-276`.
+
+**And a third document still reasons from the dead rule.** `docs/notes/spec-backlog.md:1493`, on
+recovering Jungle's danger: *rescale the force numbers together - founding units at 4, dangerous
+ground at 3 - and `P-48`'s "the structure a founding unit becomes has one less force" still lands
+exactly.* Under `P-276` it lands at zero whatever the rescale, so **the argument that made deferring
+Jungle safe no longer holds the way it is written.**
+
+**Why it costs something.** The two readings differ by exactly the margin the first release is tuned
+to. Holding takes force **equal** to the force of nature, the worst biome is nature 2, and a
+founding leaves two citizens. At garrison force 0 that is 0 + 1 + 1 = **2**, which holds with nothing
+to spare - and this lane's check 11 reproduces it. At garrison force 1 it is **3**, and the jungle
+stops being the one biome that is *good and dangerous at once*, which is the whole reason
+[biomes](../../docs/notes/biomes.md) says it was chosen. **`C-24`'s holding half was this same
+arithmetic**, and the code lane could not tell which document to believe: `crates/outbox.md:2440`
+computes force 1 from `spec/unit-types.md` and reports the model saying otherwise.
+
+**Whether.** **Worth doing now, and it is a deletion rather than a decision.** Everything built,
+tuned and tested is `P-276`'s reading; the sentence at `spec/unit-types.md:19` is the only survivor
+of the other. **This lane proposes no words** - which clause of that sentence goes, and whether *and
+is operated by citizens* stays, is the specification lane's to draft and Sean's to promote. What is
+not open is which of the two the game means.
 
 ### X-25 - `launch ark` puts nothing into orbit, and Sean's loop ends with an ark in orbit
 

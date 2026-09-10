@@ -70,7 +70,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
 - **X-20** - *declares no capacity* and *declares no limit* are opposites, and the release means the second · `lenses/research/outbox.md`
 - **X-23** - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed · `lenses/research/outbox.md`
-- **X-24** - the handoff: what is computed, what is asserted, and what Sean corrected · `lenses/research/outbox.md`
+- **X-28** - two spec files give a founding garrison different force, and the code settles it by discarding an argument · `lenses/research/outbox.md`
 - **X-25** - `launch ark` puts nothing into orbit, and Sean's loop ends with an ark in orbit · `lenses/research/outbox.md`
 - **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`
 
