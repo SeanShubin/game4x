@@ -255,11 +255,13 @@ the sun via solar panels, unlike a pioneer that gets its energy from the ground.
 >   below it, or between two orbits. A unit that crosses orbit boundaries may cross any of them, and
 >   one that does not may cross none
 
-**Into `spec/units.md` -> Every unit, replacing the bullet that begins *a mobile unit has a bin*:**
+**Into `spec/units.md` -> What a unit is, replacing the bullet that begins *a mobile unit has a
+bin*, which becomes two:**
 
-> - A mobile unit **may** have a bin for fuel. Where it has one, moving burns a unit of it and a unit
->   with an empty bin cannot move. **A unit with no bin carries its own power and moves without
->   spending anything** - an Ark draws on the sun, where a Pioneer draws on the ground beneath it
+> - A mobile unit that moves over the ground has a bin for fuel. Moving burns a unit of it, and one
+>   with an empty bin cannot move
+> - A mobile unit that moves in orbit takes its energy directly from the sun. It stores no fuel, and
+>   moving costs it nothing
 
 ## The orbit boundary
 
@@ -276,6 +278,15 @@ is the domain of individual recipes, not invariants** - and the cost half was th
 says only which boundaries exist and who may cross them, and leaves every cost to `move`.
 
 ## The sun, and why it changes less than it looks
+
+**One wording choice, reported rather than made quietly.** Sean said *a mobile **ground** unit needs
+a bin for fuel, a mobile **orbital** unit uses energy directly from the sun*. The offered bullets say
+**moves over the ground** and **moves in orbit** instead of naming two kinds of unit, because
+`spec/` and `releases/` have never used either noun - and a value used but never defined is exactly
+what `orbit border` has been since 2026-09-07, which is `S-73`. **Where a unit moves is already
+defined**: a territory and an orbit are both places `spec/` names. **If you would rather have the two
+nouns, say so and they go in with a line defining each.**
+
 
 **It answers the question the first draft of this proposal could not.** An Ark carries **Fuel 2**, and
 `spec/units.md` says fuel moves freely only from **a controlled territory**; an orbit is not one, so
