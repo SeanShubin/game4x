@@ -64,6 +64,48 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-82 - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking
+
+**to** spec - **status** open - **raised** 2026-09-09 - **source** the research lens's kind-coverage
+check, followed to the one hit it did not surface
+
+**Filed the moment it was found, because it is a contradiction and a note is not an outbox.**
+
+**Where.** `spec/logistics.md:35`, under *Containment*: **Containing is not referring. A thing may
+name another without holding it - an extractor names the node it works, and the node is not inside
+it.**
+
+**What.** `node` does not exist. `P-290` replaced it - capacity may be per kind carrying a
+particular value of a trait, so a territory bounds *metal extractors* directly and **`node` has
+nothing left to do**. The release calls the reified thing `deposit`, and `deposit` appears nowhere
+in `spec/`.
+
+**It is the example that is stale, not the rule.** *Containing is not referring* stands. What has
+gone is the thing the example points at, and an extractor now names **a resource** - `spec/`'s own
+*Traits* row - rather than a node or a deposit. **So this is not a word swap**, which is why it is
+filed rather than tidied.
+
+**And this lane closed `S-48` on a measurement narrower than its claim.** Verbatim, from the closed
+item: *Closed by this lane, verified against the tree. `node` has 0 occurrences in
+`releases/first-release.md`, and the four left in `crates/game-model/src/territory.rs` are comments
+recording what `P-290` removed.* **It checked `releases/` and `crates/` and never checked `spec/`**,
+where two occurrences sit today - `logistics.md:35`, which is this one, and `interface.md:27`, which
+is a tree node in the rule editor and not this at all.
+
+**Counted, against a population that is not zero:** 18 files in `spec/`, 2 occurrences of `node`, 1
+of them about a resource. **16 kinds in the release, 14 named in `spec/` by their own word**, and
+the two that are not are `store` and `deposit` - which are different phenomena and are
+[written up](2026-09-09-incorporating-the-re-encoding.md).
+
+**Whether.** **Worth a decision and not worth guessing.** Two readings and this lane takes neither
+until it has drafted both: the example is repointed at whatever an extractor does name now, or the
+example goes and the rule keeps its first sentence. It goes to Sean as a numbered proposal once both
+are written, which is the same shape as `S-74`.
+
+**Nothing is blocked on it.** No lane is building against that sentence, and the rule it illustrates
+is correct as it stands.
+
+
 ### S-81 - The overnight inquiry: what the re-encoding ruled out, and what it never reached
 
 **to** research - **status** open - **raised** 2026-09-09 - **source** Sean, who is having the two

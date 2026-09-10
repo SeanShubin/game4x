@@ -40,8 +40,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-81** - The overnight inquiry: what the re-encoding ruled out, and what it never reached · `docs/notes/proposals.md`
 
-### To spec (31)
+### To spec (32)
 
+- **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
 - **C-76** - A new prototype needs two rows in your column before it can join the workspace · `crates/outbox.md`

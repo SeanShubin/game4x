@@ -187,7 +187,67 @@ but **declare which four you searched** - because in all three instances the sea
 the **scope was never examined**. The sharpening is the research lens's and it is the better half of
 the idea.
 
-## 6. What is still owed, and by whom
+## 6. The fifteen divergences, triaged
+
+Fourteen are on the report's own table, with whose decision each was; the fifteenth this lane found
+and is now `X-25`. **The attribution is read from `tools/research/formulas/data.json` rather than
+from the rendered page.**
+
+**The frame matters and this lane had it wrong at first.** Sean, 2026-09-09: the rule editor being
+out of the first release is true, but *I had to put some constraint on the research instance to
+make sure it detected any missing gaps. I wanted to eliminate non-viable decisions as early as
+possible.* **So the language work is the instrument, not cargo to be triaged back.** Its product is
+the list of things now ruled out, and that is worth having whether or not a line of notation moves.
+
+### Corrections the release wants - content, no new notation
+
+| #   | Divergence                       | Whose                | Cost                                                 |
+| --- | -------------------------------- | -------------------- | ---------------------------------------------------- |
+| 11  | the two stores in `found-colony` | **Sean**             | four cells, and the scenario's prose in three places |
+| 13  | storing - `stow`                 | **Sean**             | one recipe, writable in the release's four roles     |
+| 12  | a territory's capacity for arks  | **Sean**             | one cell; an ark is only ever in orbit               |
+| 4   | `fuel` and the tank              | **reversed tonight** | see below                                            |
+
+Row 4 was *delete the tank, spend energy where the unit stands*, taken under Sean's leave to remove.
+**His decision tonight reverses it**: the tank is real, the release's words were right, and what
+changes is the code plus one `load` recipe. The research lens had already reversed its own half
+before this lane's message reached it.
+
+Two more belong here that are not divergence rows: **`X-20`**, *no capacity* to *no limit*, and
+**`X-19`**, one sentence saying biomes come from `biomes_of`.
+
+### Decisions for Sean
+
+| Divergence                            | Whose            | Why it is his                                          |
+| ------------------------------------- | ---------------- | ------------------------------------------------------ |
+| **15** - `launch ark` produces an ark | unattributed     | reverses `P-342`; both sides deliberate - `X-25`       |
+| `X-22` - force against nature         | **Sean**, stated | the whole rule is his and is written nowhere normative |
+| 5 - `unpaid` becomes `unsustained`    | **Sean**         | only means something once force is implemented         |
+| 6 - losing a territory is `perish`    | **Sean spotted** | same dependency                                        |
+
+### The instrument - what the constraint was for
+
+| #   | Divergence                                      | Whose     |
+| --- | ----------------------------------------------- | --------- |
+| 1   | the four roles become six primitives + `attach` | **Sean**  |
+| 2   | `limit` deleted                                 | **Sean**  |
+| 3   | `require` compares expressions                  | **Sean**  |
+| 7   | `border` / `crosses` as two traits              | this lane |
+| 8   | `below` as a trait of an orbit                  | this lane |
+| 9   | `location` becomes `holder of`                  | this lane |
+| 10  | `control`'s values enumerated                   | this lane |
+
+**Row 7 is the exception worth naming**: the *problem* is already open against the release in its own
+terms, as `C-60` and `S-73`. The two-traits answer is one solution, not the only one.
+
+### Not a divergence
+
+**14, `make-world`.** It appears in four files, all the research lens's own, and in no `spec/` or
+`releases/` file. **Deleting it cannot break a scenario written against the old rules.** It was
+listed as one of three breakages; the true count is one - the stores - and its blast radius is four
+lines of the expected dump plus the scenario's own reasoning.
+
+## 7. What is still owed, and by whom
 
 - **Research, tonight** - what the encoding never reached (combat, orbit, control, population, the
   interface); where the notation could **not** say what the game needs; the seven remaining
