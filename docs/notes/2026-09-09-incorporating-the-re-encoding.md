@@ -22,32 +22,48 @@ ones were where the errors were.
 | **Read**     | Quoted from a file, checked against that file tonight |
 | **Asserted** | Someone wrote it down after reading                   |
 
-## 1. Fuel is settled, and it costs the release one recipe
+## 1. Fuel is settled, and it costs the release nothing at all
 
 Sean, 2026-09-09: *the pioneer will have a tank they can load energy to, and that energy comes from
 a region, so you can't really start expanding until you start exploiting fuel in a region. I was
 thinking one move per fuel cell, and two fuel cells per pioneer, so a pioneer can leave gaps when it
 founds.*
 
-**The release already says this.** Read, tonight, against the file:
+**`spec/units.md` already says the whole of it, in two bullets**, and this lane did not find them
+until the morning:
 
-| Already written          | Reads correctly under Sean's decision                                                        |
-| ------------------------ | -------------------------------------------------------------------------------------------- |
-| *Where things are* `:89` | `a unit's tank / energy / the unit's fuel` - a container holding energy, capacity being Fuel |
-| *Recipes*, `move` `:216` | `consume 1 energy` in *that unit* - spent from the tank                                      |
-| *Units and structures*   | ark Fuel **2**, pioneer Fuel **2**                                                           |
+> - A mobile unit has a **bin** for fuel. Moving burns a unit of it, and a unit with none cannot move
+> - **Fuel moves freely between a controlled territory that has it and anything there that can hold it**
 
-So **the release needs one new recipe and no edit to anything already in it**: a `load` that requires
-the unit here, consumes 1 energy in the territory and produces 1 energy in that unit. It needs no
-limit row - *Where things are* declares the tank's capacity and `spec/logistics.md` containment
-refuses the overfill.
+**So there is no `load` recipe, and there must not be one.** This note said last night that the
+release needed one new recipe. **That was wrong twice over.** `spec/units.md` makes fuelling
+automatic rather than an action, and `spec/invariants.md:59` forbids adding one outright:
 
-**What diverged is the code.** `reports/recipes.md` shows `produce pioneer` yielding
-`{pioneer fuel:2 id:1 ready:yes}` and `move` taking it to `fuel:1`. Fuel is built as a **counter that
-decrements**; under Sean's decision it is the tank's **capacity** and the contents are energy.
+> No action has an intermediate step that is always taken. Where one would, the action is defined to
+> reach the outcome directly
 
-**Cost to the scenario, computed:** the pioneer makes one crossing, so it needs one cell. **One extra
-command, and territory 1's `{energy} -> 12` becomes `11`.** One line.
+**A player who intends to move always loads first**, so a `load` command is exactly the step that
+invariant names. Found by the research lens while answering *where the notation could not say what
+the game needs* - it proposed `load` too, and the invariant refuses both our answers.
+
+### What is already correct, and what is not
+
+| Where                               | Says                                                                            | Verdict                              |
+| ----------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------ |
+| `spec/units.md:17-18`               | a bin for fuel, burned by moving; fuel moves freely from a controlled territory | **already Sean's decision, in full** |
+| *Where things are* `:89`            | `a unit's tank / energy / the unit's fuel`                                      | **correct**                          |
+| *Recipes*, `move` `:216`            | `consume 1 energy` in *that unit*                                               | **correct**                          |
+| *Units and structures*              | ark Fuel **2**, pioneer Fuel **2**                                              | **correct**                          |
+| `crates/`, per `reports/recipes.md` | `fuel` is a counter that decrements, no energy involved                         | **the only thing that diverged**     |
+
+**The release needs no new rule and no edited cell.** What it lacks is a pointer to the two bullets
+in `spec/units.md`, and what the code lacks is a bin.
+
+**And the constraint Sean wanted falls out of the word *controlled*.** Fuel moves freely from a
+**controlled** territory that has it - so a unit standing on unclaimed ground cannot refuel. It
+leaves your territory with two cells, spends one to enter unclaimed ground, and has one left. **That
+is the gap-leaving range, and it is a consequence of a sentence already written** rather than
+anything that had to be designed.
 
 ### Two is the right number, and for a reason worth preserving
 
