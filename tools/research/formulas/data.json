@@ -3374,5 +3374,68 @@
       "<strong>ruled out, not tried</strong>",
       "net rewriting systems are Turing-powerful. Reconfigurable nets - rules fixed in advance - keep boundedness decidable, and that is the line rather than the phase"
     ]
-  ]
+  ],
+  "spec_concepts": {
+    "citizen": [
+      "citizen",
+      "population"
+    ],
+    "garrison": [
+      "garrison"
+    ],
+    "extractor": [
+      "extractor"
+    ],
+    "yard": [
+      "yard"
+    ],
+    "store": [
+      "store",
+      "storage",
+      "silo",
+      "warehouse",
+      "granary",
+      "stockpile"
+    ],
+    "ark": [
+      "ark"
+    ],
+    "pioneer": [
+      "pioneer",
+      "settler"
+    ],
+    "food": [
+      "food"
+    ],
+    "metal": [
+      "metal"
+    ],
+    "energy": [
+      "energy"
+    ],
+    "labor": [
+      "labor",
+      "labour"
+    ],
+    "territory": [
+      "territory"
+    ],
+    "orbit": [
+      "orbit"
+    ],
+    "deposit": [
+      "deposit",
+      "total capacity",
+      "density"
+    ],
+    "adjacency": [
+      "adjacency",
+      "adjacent",
+      "next to",
+      "shares an edge"
+    ],
+    "game": [
+      "game"
+    ]
+  }
 }

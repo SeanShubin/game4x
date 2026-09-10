@@ -832,6 +832,44 @@ states it.** Three readings and this lane takes none: `launch ark` produces an a
 above its yard; the loop's last step is paying the cost rather than having the ark; or Sean's
 statement of the loop is looser than the release needs to be.
 
+### X-26 - one kind in the release has no definition in `spec/`, and the win condition depends on it
+
+**to** spec · **status** open · **raised** 2026-09-09 · **source** the specification lane, in `S-81`, giving the example · **found by** `4x spec`; measured here as check 13
+
+**The example is theirs and the denominator is this lane's.** They found `store`; the question was
+whether it is one of sixteen or four of sixteen, because *a count over nothing proves nothing* and a
+report changes shape on the answer.
+
+**Measured: 14 of the 16 kinds are named in `spec/` by their own word. Two are not, and they are
+different things.**
+
+- **`store` is a genuine gap.** Its only trace in all of `spec/` is
+  `spec/control.md:49` - *every **storage structure** on it is full* - **inside the win condition**.
+  So the specification's definition of a fully exploited planet depends on a kind the specification
+  never defines. `CLAUDE.md` is explicit that a release may not invent a rule the spec lacks
+- **`deposit` is not a gap, it is a reification.** The concept *is* specified -
+  `spec/economy.md:14`, *the territory's density for a resource is what each extractor pulls from it
+  each turn*, and `spec/console.md:91` gives a territory *its total capacity and its density for one
+  resource*. The release turned those properties into a **thing**, which is `X-13`'s own finding
+  from the other side: the specification has been quietly making relations into things
+
+**Searched by concept rather than by word**, and the terms are declared in `data.json` so the search
+can be judged rather than trusted - `store` also looked for storage, silo, warehouse, granary and
+stockpile. **This lane's own memory records a case-sensitive search returning a plausible zero and
+letting a contradiction land**, which is why the check reads the concept and reports what it matched.
+
+**The code already wrote down its own expiry condition and it has expired.** The specification lane
+found `crates/game-model/src/game.rs:425` dropping the storage clause from `is_fully_exploited` with
+the comment that it *holds because there are none… if one is ever added, this stops being vacuous and
+this function will not notice on its own.* One was added, to `releases/` rather than to
+`spec/structures.md`, and it did not notice. **That is `C-9`'s pattern**, and the item is theirs
+rather than this lane's - recorded here so the count and the instance sit together.
+
+**Whether.** **Worth deciding, and it is one kind rather than a class.** Either `store` is promoted
+into `spec/structures.md`, which has three structures and would have four; or the win condition
+stops referring to storage; or the release stops having stores. **This lane takes none** - and notes
+only that the third would make `X-21` moot and the first would make it urgent.
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

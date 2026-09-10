@@ -709,6 +709,37 @@ def check_recipe_drift():
     return len(theirs), rows
 
 
+SPEC = RELEASE.parent.parent / "spec"
+
+
+def check_kinds_defined():
+    """Check 13. Which kinds the release has that `spec/` never defines.
+
+    `CLAUDE.md`: *a release spec never invents a rule; if a release needs one the spec lacks,
+    propose it into the spec first.* A kind is a rule of that sort.
+
+    **Searched by concept rather than by word.** Each kind declares the terms that would show
+    the idea is in `spec/` at all - `store` also looks for storage, silo, warehouse, granary
+    and stockpile - because a bare word search returns a plausible zero and invites no
+    question. The terms are in `data.json` so the search can be judged rather than trusted.
+    """
+    text = " ".join(p.read_text(encoding="utf-8") for p in sorted(SPEC.glob("*.md"))).lower()
+    assert text, "read no specification, so this check knows nothing"
+    kinds = [k for k, _w in DATA["kinds"]]
+    named, concept_only, absent = [], [], []
+    for kind in kinds:
+        terms = DATA["spec_concepts"][kind]
+        if re.search(r"\b" + re.escape(kind) + r"\b", text):
+            named.append(kind)
+        elif any(term in text for term in terms[1:]):
+            hit = next(term for term in terms[1:] if term in text)
+            concept_only.append((kind, hit))
+        else:
+            absent.append(kind)
+    assert len(named) + len(concept_only) + len(absent) == len(kinds)
+    return len(kinds), named, concept_only, absent
+
+
 def check_cap(cap=1000):
     """Check 3. A backstop: apply every recipe once and report anything past the cap."""
     by_name = gather()
@@ -889,6 +920,18 @@ def self_test():
     else:
         print("  poison ok: check 12 notices a row the release does not have")
     _la["lines"] = _saved12
+
+    # Check 13 poison: a kind spec/ has never heard of must come back absent.
+    _k = DATA["kinds"]
+    DATA["kinds"] = _k + [["flibbertigibbet", "poison"]]
+    DATA["spec_concepts"]["flibbertigibbet"] = ["flibbertigibbet"]
+    if "flibbertigibbet" not in check_kinds_defined()[3]:
+        print("  POISON FAILED: check 13 found a kind spec/ has never heard of")
+        ok = False
+    else:
+        print("  poison ok: check 13 reports a kind spec/ does not define")
+    DATA["kinds"] = _k
+    del DATA["spec_concepts"]["flibbertigibbet"]
 
     return ok
 
@@ -1110,6 +1153,15 @@ def main():
     if not drift:
         print("  no recipe differs from the release")
     print("  divergence is allowed - this reports it, never fails it")
+
+    n_kinds13, named13, concept13, absent13 = check_kinds_defined()
+    print()
+    print("CHECK 13 - which kinds does the release have that spec/ never defines?")
+    print(f"  {len(named13)} of {n_kinds13} kinds are named in spec/ by their own word")
+    for kind, hit in concept13:
+        print(f"  CONCEPT ONLY: {kind} - spec/ has \"{hit}\" but never the kind")
+    for kind in absent13:
+        print(f"  ABSENT: {kind} - no trace of the concept in spec/ at all")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1
