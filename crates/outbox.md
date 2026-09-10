@@ -61,6 +61,43 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-76 - A new prototype needs two rows in your column before it can join the workspace
+
+**to** spec · **status** open · **raised** 2026-09-09 · **source** Sean asking this lane for a
+prototype of movement across the world
+
+**derived from** every workspace member has a row in `docs/architecture.md` -
+`tools/outbox/tests/architecture.rs`, `S-2`
+
+**What.** `prototypes/gap-view` exists and is not a workspace member. Two files it needs are
+yours: a row in `docs/architecture.md`, and a row in the table in `docs/prototypes/README.md`.
+This lane wrote the crate, its README and its run scripts, which are its own column, and stopped
+at the boundary.
+
+**Why it is not a member already, which is the part worth reading.** Adding the member line is
+this lane's to do and would **redden the gate for everybody** until your row lands -
+`every_crate_has_a_row_and_every_row_has_a_crate` fails on a member with no row, and the gate is
+what a deploy waits on. Sean had a deploy blocked by an unrelated failure the same day. So the
+crate declares its own `[workspace]` and stays out, which the root manifest already recommends
+as the way to stay out, and **the sequencing costs nothing**: the member line goes in the moment
+the row does.
+
+**What the rows should say**, offered rather than written, because the other three columns of
+that table are judgements and they are yours:
+
+- `docs/architecture.md` - `prototypes/gap-view`, a prototype, depending on `sphere-tessellation`
+  alone, holding *the world laid flat with every territory at its own shape, and the curvature
+  paid as gaps between them*.
+- `docs/prototypes/README.md` - the question is **can a player set a destination anywhere on the
+  world with one mouse gesture, without rotating anything?**, and the status is built rather than
+  answered: the layout is settled and whether it feels better than the globe is not.
+
+**Whether.** Nothing waits on it - the prototype runs from its own manifest and
+`scripts/gap-view.ps1` knows that. What waits is the crate being built by CI like every other,
+which is worth having before anyone relies on it.
+
+---
+
 ### C-75 - The boundedness rule `X-9` names already holds, so adopting it costs nothing
 
 **to** spec · **status** open · **raised** 2026-09-08 · **source** `X-9` from the research lens,

@@ -1,0 +1,21 @@
+# **Its own workspace, deliberately, and temporarily.**
+#
+# A prototype belongs in the root workspace with the others, and this one is not there yet
+# for a sequencing reason rather than a design one: `tools/outbox/tests/architecture.rs`
+# requires every workspace member to have a row in `docs/architecture.md`, and `docs/` is the
+# specification lane's column. Adding the member before the row exists reddens the gate for
+# everyone, including a deploy, and this lane cannot write the row.
+#
+# So the member line waits on that row - filed as `C-76`. The self-contained form is the one
+# the root manifest recommends for staying out, for a reason that applies here too: it needs
+# no edit to a file another lane may be editing.
+[package]
+name = "gap-view"
+version = "0.1.0"
+edition = "2024"
+description = "Prototype: can a destination anywhere on the world be chosen without rotating, by keeping territory shapes and paying the curvature as gaps between them?"
+
+[workspace]
+
+[dependencies]
+sphere-tessellation = { path = "../../crates/sphere-tessellation" }
