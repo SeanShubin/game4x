@@ -35,7 +35,7 @@
 <p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build store produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>perish consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
 <h3 id="s-6-ark"><code>s-6</code> - ark</h3>
 <p><strong>Traits</strong> <code>force</code>, <code>fuel</code>, <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark consume</code>, <code>move consume</code>, <code>move produce</code>, <code>perish consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark consume</code>, <code>launch ark produce</code>, <code>move consume</code>, <code>move produce</code>, <code>perish consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
 <h3 id="s-7-pioneer"><code>s-7</code> - pioneer</h3>
 <p><strong>Traits</strong> <code>force</code>, <code>fuel</code>, <code>keeps</code>, <code>kind</code></p>
 <p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>found by land consume</code>, <code>move consume</code>, <code>move produce</code>, <code>perish consume</code>, <code>produce pioneer produce</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
@@ -53,10 +53,10 @@
 <p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build extractor consume</code>, <code>build store consume</code>, <code>build yard consume</code>, <code>create labor produce</code>, <code>perish consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep require</code>, <code>work consume</code></p>
 <h3 id="s-12-territory"><code>s-12</code> - territory</h3>
 <p><strong>Traits</strong> <code>biome</code>, <code>control</code>, <code>keeps</code>, <code>kind</code>, <code>nature</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark require</code>, <code>move require</code>, <code>perish consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep require</code>, <code>work require</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark require</code>, <code>launch ark require</code>, <code>move require</code>, <code>perish consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep require</code>, <code>work require</code></p>
 <h3 id="s-13-orbit"><code>s-13</code> - orbit</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark consume</code>, <code>move require</code>, <code>perish consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark consume</code>, <code>launch ark produce</code>, <code>move require</code>, <code>perish consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
 <h3 id="s-14-deposit"><code>s-14</code> - deposit</h3>
 <p><strong>Traits</strong> <code>density</code>, <code>keeps</code>, <code>kind</code>, <code>total capacity</code></p>
 <p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>perish consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
@@ -190,6 +190,7 @@
 <li><code>deploy ark</code> consumes 1, in the orbit above <code>$where</code></li>
 <li><code>move</code> consumes 1 (as a unit), ready, in <code>$from</code></li>
 <li><code>move</code> produces 1 (as a unit), not ready, in <code>$to</code></li>
+<li><code>launch ark</code> produces 1, in the orbit above <code>$where</code></li>
 <li><code>upkeep</code> requires 1 (as a thing), with upkeep</li>
 <li><code>perish</code> consumes 1 (as a thing), whose upkeep is unpaid</li>
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
@@ -314,6 +315,7 @@
 <li><code>deploy ark</code> requires 1, in <code>$where</code></li>
 <li><code>move</code> requires 1 (as a place), in <code>$from</code></li>
 <li><code>move</code> requires 1 (as a place), joined to <code>$from</code> by an edge the unit crosses, in <code>$to</code></li>
+<li><code>launch ark</code> requires 1, in <code>$where</code></li>
 <li><code>work</code> requires 1, in <code>$where</code></li>
 <li><code>upkeep</code> requires 1 (as a thing), with upkeep</li>
 <li><code>perish</code> consumes 1 (as a thing), whose upkeep is unpaid</li>
@@ -333,6 +335,7 @@
 <li><code>deploy ark</code> consumes 1 (as the place holding ark), in the orbit above <code>$where</code></li>
 <li><code>move</code> requires 1 (as a place), in <code>$from</code></li>
 <li><code>move</code> requires 1 (as a place), joined to <code>$from</code> by an edge the unit crosses, in <code>$to</code></li>
+<li><code>launch ark</code> produces 1 (as the place holding ark), in the orbit above <code>$where</code></li>
 <li><code>upkeep</code> requires 1 (as a thing), with upkeep</li>
 <li><code>perish</code> consumes 1 (as a thing), whose upkeep is unpaid</li>
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>

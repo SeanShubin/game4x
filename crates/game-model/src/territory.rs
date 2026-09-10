@@ -421,6 +421,99 @@ impl Territory {
             .collect()
     }
 
+    /// The greatest output this territory can ever reach, as the state that produces it.
+    ///
+    /// `spec/control.md`: *a territory produces the greatest output it can when as many
+    /// citizens as it can feed are working, as many of them at its food extractors as those
+    /// will take - which is what sets the population - and every remaining citizen at a metal
+    /// or an energy extractor, the player choosing how they divide.*
+    ///
+    /// Returned as `(citizens, food extractors, other extractors)`, because the condition is
+    /// about a state rather than a number: the output itself is not stored anywhere, and what
+    /// can be looked at is whether the territory has the people and the structures that
+    /// produce it.
+    ///
+    /// # Why it is not simply capacity times density
+    ///
+    /// `spec/control.md` says the answer follows from *how many extractors it has total
+    /// capacity for, their densities, and its biome* - and two of the release's twelve
+    /// territories reach a ceiling below that, for reasons that are themselves permanent
+    /// facts rather than history.
+    ///
+    /// **Building an extractor costs a metal and a labor.** A territory has spare labor only
+    /// when a food extractor feeds more than the citizen working it, which is density two or
+    /// more; and it has metal only if it has metal capacity, since no resource crosses a
+    /// territory boundary. **A territory with neither can never build anything**, so its
+    /// ceiling is what founding left it: one food extractor.
+    ///
+    /// Territory 5 is the first case - three food deposits, every one of density one, so
+    /// each farmer eats exactly what they gather and there is never a spare hand. Territory 6
+    /// is the second - food four by four, and no metal deposit at all, so the fourth citizen
+    /// has nothing to build with. Both reach their ceiling on the turn they are founded, and
+    /// under the wording `P-361` replaced neither could ever finish, which is why the release
+    /// could not be won.
+    ///
+    /// **Nothing here reads history**, which is what `P-125` rejected an earlier definition
+    /// for. Every input is a `(capacity, density)` pair off *Territory resources*.
+    ///
+    /// # One cell of the note this is derived from disagrees, and it does not change anything
+    ///
+    /// `docs/notes/2026-09-10-maximum-possible-output.md` gives territory 5 a `Cmax` of 3,
+    /// which is its food capacity times its density. Its own prose says the opposite two
+    /// paragraphs later - *it starves to one citizen and holds there for ever ... its maximum
+    /// possible output is one food* - and the table's own row 6 applies the same reasoning
+    /// this does, giving a `Cmax` of 4 where capacity times density is 16. **The `Spare` and
+    /// `Staffed` columns are unaffected either way**, so the conclusion the note draws stands
+    /// on either reading. Reported as `C-78`.
+    pub fn maximum_output(&self) -> (u32, usize, usize) {
+        let food_capacity = self.capacity_for(Resource::Food);
+        let food_density = self.density_of(Resource::Food);
+        if food_capacity == 0 || food_density == 0 {
+            // *A territory that cannot feed a citizen has no output to reach, and never holds
+            // the condition open* - `spec/control.md`.
+            return (0, 0, 0);
+        }
+
+        // Spare labor needs a food extractor to feed more than its own worker; metal to build
+        // with needs metal capacity, because nothing crosses a boundary.
+        let can_ever_build = food_density >= 2 && self.capacity_for(Resource::Metal) >= 1;
+        let food_extractors = if can_ever_build { food_capacity } else { 1 };
+
+        let citizens = food_extractors as u32 * food_density;
+        let spare = citizens.saturating_sub(food_extractors as u32) as usize;
+
+        // **A territory that can never build has only what founding left it**, which is one
+        // food extractor and - where there is a deposit to attach it to - one metal
+        // extractor. Counting its whole capacity here was wrong by three on territory 6: it
+        // has energy capacity 4 and no metal, and building an energy extractor costs a metal
+        // it can never obtain. Spare hands with nothing to build are not output.
+        let elsewhere = if can_ever_build {
+            self.capacity_for(Resource::Metal) + self.capacity_for(Resource::Energy)
+        } else {
+            self.capacity_for(Resource::Metal).min(1)
+        };
+
+        (citizens, food_extractors, spare.min(elsewhere))
+    }
+
+    /// Whether this territory is producing the greatest output it can - `spec/control.md`.
+    ///
+    /// **At least, rather than exactly.** An extractor nobody staffs adds no output and takes
+    /// none away, so a territory that has built more than it can work has not failed the
+    /// condition; what the condition asks is that nothing more is being produced than is.
+    pub fn at_maximum_output(&self) -> bool {
+        let (citizens, food_extractors, elsewhere) = self.maximum_output();
+        let others = Resource::ALL
+            .iter()
+            .filter(|resource| **resource != Resource::Food)
+            .map(|resource| self.extractors_for(*resource).len())
+            .sum::<usize>();
+
+        self.citizens() >= citizens
+            && self.extractors_for(Resource::Food).len() >= food_extractors
+            && others >= elsewhere
+    }
+
     /// Every extractor this territory has total capacity for, across every resource.
     ///
     /// What *fully exploited* is measured against: it used to be `nodes.len()`, and the
@@ -443,10 +536,16 @@ impl Territory {
 
     /// Whether this territory can ever build an extractor, from its nodes alone.
     ///
-    /// `spec/control.md`: *a structure can be built where the territory's own permanent
-    /// facts allow it: how many it has total capacity for, their densities, its biome. Not
-    /// whether the player can afford it this turn, and not whether any particular game
-    /// happened to reach it.*
+    /// `spec/control.md`: *what that greatest output is follows from the territory's own
+    /// permanent facts: how many extractors it has total capacity for, their densities, and
+    /// its biome. Not whether the player can afford it this turn, and not whether any
+    /// particular game happened to reach it.*
+    ///
+    /// **`P-361` rewrote that sentence and left this rule alone.** It used to say a
+    /// *structure* can be built where those facts allow it; it now says the greatest
+    /// *output* follows from them. The qualifier - permanent facts, never affordability and
+    /// never history - is word for word what it was, and this function only ever used the
+    /// qualifier.
     ///
     /// So the question is answered from what the ground offers and nothing else - not from
     /// what is standing there, and not from how the game went.
@@ -458,7 +557,7 @@ impl Territory {
     /// exactly when a food extractor yields two or more**, and there is capacity for one.
     ///
     /// Territory 5 has capacity for three food extractors at density one, which is why it
-    /// holds the one it was founded with and can never build a fourth.
+    /// holds the one it was founded with and can never build a second.
     pub fn can_build_extractors(&self) -> bool {
         let food = self.deposit(Resource::Food);
         food.capacity >= 1 && food.density >= 2

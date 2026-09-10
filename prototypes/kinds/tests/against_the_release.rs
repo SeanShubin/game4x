@@ -376,7 +376,11 @@ fn a_named_ingredient_is_bound_before_it_is_referred_to() {
         }
     }
 
-    // Three recipes name something, and they are the three that act somewhere in particular.
+    // **Four recipes name something, and they are the four that act somewhere in
+    // particular.** It was three until `P-362` put `produce 1 ark` back into `launch ark`:
+    // the Ark goes to the orbit above `$where`, so the territory has to be named, and naming
+    // it is what the `require 1 territory` row is for. The count is what caught that rather
+    // than a reviewer.
     let naming: Vec<(&str, Vec<&str>)> = kinds::RECIPES
         .iter()
         .filter(|recipe| !recipe.binds().is_empty())
@@ -387,6 +391,7 @@ fn a_named_ingredient_is_bound_before_it_is_referred_to() {
         [
             ("deploy ark", vec!["`$where`"]),
             ("move", vec!["`$from`", "`$to`"]),
+            ("launch ark", vec!["`$where`"]),
             ("work", vec!["`$where`"]),
         ]
     );

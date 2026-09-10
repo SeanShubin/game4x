@@ -388,36 +388,32 @@ impl Game {
         Ok(())
     }
 
-    /// `spec/control.md`: *a planet is fully exploited when every territory that can be
-    /// taken has been taken, every structure has been built everywhere it can be built, and
-    /// every storage structure on it is full.*
+    /// `spec/control.md`: *a planet is fully exploited when every territory that can be taken
+    /// has been taken, every territory is producing the greatest output it can, and every
+    /// storage structure on it is full.*
     ///
-    /// **`can be built` is the qualifier, and it is not `has been reached`.**
+    /// **The middle clause changed under `P-361` and it is the whole of this function.** It
+    /// used to require every structure to have been built everywhere it could be, which counts
+    /// what the ground has room for and never asks whether anybody could staff it. Under that
+    /// wording the first release **could not be won**: territory 5's nineteen deposits are
+    /// every one of them density one, so it never has a spare hand to build a twentieth
+    /// extractor with, and territory 6 has no metal at all, so it can never build anything.
+    /// Both were permanently short of the bar, so the predicate was false for ever and `R-6`
+    /// could not be vetted by playing the game.
     ///
-    /// `spec/control.md`: *a structure can be built where the territory's own permanent
-    /// facts allow it: how many it has total capacity for, their densities, its biome. Not
-    /// whether the player can afford it this turn, and not whether any particular game
-    /// happened to reach it.*
+    /// Sean, 2026-09-10: *a fully exploited planet does not mean every territory is fully
+    /// exploited, it means that the planet is producing maximum possible resource output.*
+    ///
+    /// The arithmetic is [`Territory::maximum_output`], which is where the permanent facts
+    /// are; the working for all twelve territories is in
+    /// `docs/notes/2026-09-10-maximum-possible-output.md`.
     ///
     /// The file is named next to the words rather than back at the top of this comment,
-    /// because `crates/game-console/tests/quotations.rs` checks a quotation only where it
-    /// can see which document it belongs to. Attributed to *the same section* it reads as
-    /// prose, and this comment misquoted the sentence for a whole session under exactly
-    /// that cover - `its nodes` where the specification says `how many it has total
-    /// capacity for`. `C-11` recorded the limitation; this is what it looks like when it
-    /// bites.
-    ///
-    /// This asked for a Yard and a full set of extractors in **every** claimable territory
-    /// until `C-9`, which is a condition the release's planet cannot satisfy - one of its
-    /// territories has no metal node at all, and territory 5's nineteen nodes are every one
-    /// of them density one, so it can never build a twentieth extractor or pay for a Yard.
-    /// The predicate was therefore false forever, and `R-6` - *a person reaches a fully
-    /// exploited planet and launches an Ark* - could not be vetted by playing the game.
-    ///
-    /// Both halves are decided from the territory's nodes alone, by
-    /// [`Territory::can_build_extractors`] and [`Territory::can_hold_yard`], so a territory
-    /// that can build nothing is fully exploited the moment it is founded, and one that can
-    /// build both is not until both are there.
+    /// because `crates/game-console/tests/quotations.rs` checks a quotation only where it can
+    /// see which document it belongs to. Attributed to *the same section* it reads as prose,
+    /// and this comment misquoted the sentence for a whole session under exactly that cover -
+    /// `its nodes` where the specification says `how many it has total capacity for`. `C-11`
+    /// recorded the limitation; this is what it looks like when it bites.
     ///
     /// *Every storage structure is full* holds because there are none. No structure in
     /// `spec/structures.md` stores anything. If one is ever added, this stops being vacuous
@@ -426,12 +422,7 @@ impl Game {
         self.territories
             .iter()
             .filter(|place| place.biome.is_claimable())
-            .all(|place| {
-                place.founded()
-                    && (!place.can_hold_yard() || place.yards() > 0)
-                    && (!place.can_build_extractors()
-                        || place.extractors().len() == place.total_extractor_capacity())
-            })
+            .all(|place| place.founded() && place.at_maximum_output())
     }
 
     fn move_unit(&mut self, kind: UnitKind, territory: TerritoryId) -> Result<(), Rejection> {
@@ -1002,19 +993,7 @@ mod tests {
             // A citizen is what holds it, since `S-19` made control derived. Setting a flag
             // beside an empty territory used to do this, which is the disagreement that
             // rule removes.
-            place.put(Kind::Citizen, 1);
-            place.set_count(Kind::Yard, 1);
-            // **Replaced, not appended.** This was an assignment to `extractors` and became
-            // a loop that adds - so a territory the landing had already given two kept them
-            // and ended with eleven of nine nodes. An assignment says *these are the
-            // extractors now* and a push says *one more*, and only one of those is what
-            // finishing a planet by hand means.
-            place.held.retain(|thing| thing.kind != Kind::Extractor);
-            for resource in Resource::ALL {
-                for _ in 0..place.capacity_for(resource) {
-                    place.add_extractor(resource);
-                }
-            }
+            finish(place);
         }
         assert!(game.is_fully_exploited());
         assert!(!game.has_won(), "nobody has launched anything yet");
@@ -1026,7 +1005,13 @@ mod tests {
         {
             let place = &mut game.territories[0];
             place.set_count(Kind::Yard, 1);
-            place.set_count(Kind::Citizen, 2);
+            // **Never fewer than it already has** - `P-361`. This was `set_count(.., 2)`, and
+            // now that a finished territory is one with the population its food supports,
+            // setting two on a territory that had twelve un-finished the planet a line before
+            // it was asked whether the planet was finished. Paying a cost is what `Launch`
+            // does; this only has to make it affordable.
+            let enough = place.citizens().max(cost::ARK_CITIZENS);
+            place.set_count(Kind::Citizen, enough);
             place.add(Resource::Metal, cost::ARK_METAL);
             place.add(Resource::Energy, cost::ARK_ENERGY);
         }
@@ -1048,7 +1033,13 @@ mod tests {
         {
             let place = &mut game.territories[0];
             place.set_count(Kind::Yard, 1);
-            place.set_count(Kind::Citizen, 2);
+            // **Never fewer than it already has** - `P-361`. This was `set_count(.., 2)`, and
+            // now that a finished territory is one with the population its food supports,
+            // setting two on a territory that had twelve un-finished the planet a line before
+            // it was asked whether the planet was finished. Paying a cost is what `Launch`
+            // does; this only has to make it affordable.
+            let enough = place.citizens().max(cost::ARK_CITIZENS);
+            place.set_count(Kind::Citizen, enough);
             place.add(Resource::Metal, cost::ARK_METAL);
             place.add(Resource::Energy, cost::ARK_ENERGY);
         }
@@ -1070,19 +1061,7 @@ mod tests {
             // A citizen is what holds it, since `S-19` made control derived. Setting a flag
             // beside an empty territory used to do this, which is the disagreement that
             // rule removes.
-            place.put(Kind::Citizen, 1);
-            place.set_count(Kind::Yard, 1);
-            // **Replaced, not appended.** This was an assignment to `extractors` and became
-            // a loop that adds - so a territory the landing had already given two kept them
-            // and ended with eleven of nine nodes. An assignment says *these are the
-            // extractors now* and a push says *one more*, and only one of those is what
-            // finishing a planet by hand means.
-            place.held.retain(|thing| thing.kind != Kind::Extractor);
-            for resource in Resource::ALL {
-                for _ in 0..place.capacity_for(resource) {
-                    place.add_extractor(resource);
-                }
-            }
+            finish(place);
         }
         // A finished planet nobody has launched from is not a win.
         assert!(game.is_fully_exploited());
@@ -1097,7 +1076,13 @@ mod tests {
         {
             let place = &mut game.territories[0];
             place.set_count(Kind::Yard, 1);
-            place.set_count(Kind::Citizen, 2);
+            // **Never fewer than it already has** - `P-361`. This was `set_count(.., 2)`, and
+            // now that a finished territory is one with the population its food supports,
+            // setting two on a territory that had twelve un-finished the planet a line before
+            // it was asked whether the planet was finished. Paying a cost is what `Launch`
+            // does; this only has to make it affordable.
+            let enough = place.citizens().max(cost::ARK_CITIZENS);
+            place.set_count(Kind::Citizen, enough);
             place.add(Resource::Metal, cost::ARK_METAL);
             place.add(Resource::Energy, cost::ARK_ENERGY);
         }
@@ -1128,19 +1113,7 @@ mod tests {
             // A citizen is what holds it, since `S-19` made control derived. Setting a flag
             // beside an empty territory used to do this, which is the disagreement that
             // rule removes.
-            place.put(Kind::Citizen, 1);
-            place.set_count(Kind::Yard, 1);
-            // **Replaced, not appended.** This was an assignment to `extractors` and became
-            // a loop that adds - so a territory the landing had already given two kept them
-            // and ended with eleven of nine nodes. An assignment says *these are the
-            // extractors now* and a push says *one more*, and only one of those is what
-            // finishing a planet by hand means.
-            place.held.retain(|thing| thing.kind != Kind::Extractor);
-            for resource in Resource::ALL {
-                for _ in 0..place.capacity_for(resource) {
-                    place.add_extractor(resource);
-                }
-            }
+            finish(place);
         }
         // Make one of them water and take everything off it.
         game.territories[1].biome = Biome::Ocean;
@@ -1152,6 +1125,40 @@ mod tests {
             game.is_fully_exploited(),
             "an unclaimable territory is not an unfinished one"
         );
+    }
+
+    /// Put a territory at the greatest output it can reach, without playing it there.
+    ///
+    /// **A citizen apiece stopped being enough at `P-361`.** These tests used to give each
+    /// territory one citizen and every extractor its ground has room for, which satisfied
+    /// *every structure has been built everywhere it can be built*. The condition is now
+    /// about output, and output needs people: a territory whose food supports twelve is not
+    /// at its ceiling with one.
+    ///
+    /// **The population comes from [`Territory::maximum_output`], and that is worth being
+    /// uneasy about**, because the assertion these tests then make is
+    /// [`Territory::at_maximum_output`] - the same arithmetic on both sides. It is the right
+    /// trade here and only because the arithmetic is checked elsewhere against a source that
+    /// is not this code: `the_release_reaches_the_output_the_specification_lane_derived`
+    /// compares all twelve territories with the table in
+    /// `docs/notes/2026-09-10-maximum-possible-output.md`, which was worked out by hand. What
+    /// these three tests are for is *launching from a finished planet wins*, and a fixture
+    /// that had to restate the ceiling would be a second copy of it going stale.
+    fn finish(place: &mut Territory) {
+        let (citizens, _, _) = place.maximum_output();
+        place.set_count(Kind::Citizen, citizens.max(1));
+        place.set_count(Kind::Yard, 1);
+        // **Replaced, not appended.** This was an assignment to `extractors` and became a
+        // loop that adds - so a territory the landing had already given two kept them and
+        // ended with eleven of nine nodes. An assignment says *these are the extractors now*
+        // and a push says *one more*, and only one of those is what finishing a planet by
+        // hand means.
+        place.held.retain(|thing| thing.kind != Kind::Extractor);
+        for resource in Resource::ALL {
+            for _ in 0..place.capacity_for(resource) {
+                place.add_extractor(resource);
+            }
+        }
     }
 
     /// A designed world: three territories with food and metal, one ark in orbit.

@@ -59,7 +59,7 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Traits** `force`, `fuel`, `keeps`, `kind`
 
-**Named by** `age consume`, `age produce`, `deploy ark consume`, `move consume`, `move produce`, `perish consume`, `refresh consume`, `refresh produce`, `spoil consume`, `upkeep require`
+**Named by** `age consume`, `age produce`, `deploy ark consume`, `launch ark produce`, `move consume`, `move produce`, `perish consume`, `refresh consume`, `refresh produce`, `spoil consume`, `upkeep require`
 
 ### `s-7` - pioneer
 
@@ -95,13 +95,13 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Traits** `biome`, `control`, `keeps`, `kind`, `nature`
 
-**Named by** `age consume`, `age produce`, `deploy ark require`, `move require`, `perish consume`, `refresh consume`, `refresh produce`, `spoil consume`, `upkeep require`, `work require`
+**Named by** `age consume`, `age produce`, `deploy ark require`, `launch ark require`, `move require`, `perish consume`, `refresh consume`, `refresh produce`, `spoil consume`, `upkeep require`, `work require`
 
 ### `s-13` - orbit
 
 **Traits** `keeps`, `kind`
 
-**Named by** `age consume`, `age produce`, `deploy ark consume`, `move require`, `perish consume`, `refresh consume`, `refresh produce`, `spoil consume`, `upkeep require`
+**Named by** `age consume`, `age produce`, `deploy ark consume`, `launch ark produce`, `move require`, `perish consume`, `refresh consume`, `refresh produce`, `spoil consume`, `upkeep require`
 
 ### `s-14` - deposit
 
@@ -289,6 +289,7 @@ carries a landing, and can invade from orbit.
 - `deploy ark` consumes 1, in the orbit above `$where`
 - `move` consumes 1 (as a unit), ready, in `$from`
 - `move` produces 1 (as a unit), not ready, in `$to`
+- `launch ark` produces 1, in the orbit above `$where`
 - `upkeep` requires 1 (as a thing), with upkeep
 - `perish` consumes 1 (as a thing), whose upkeep is unpaid
 - `age` consumes 1 (as a thing), keeps at least 1
@@ -451,6 +452,7 @@ a place things are in, which has a biome, a force of nature, and a density and a
 - `deploy ark` requires 1, in `$where`
 - `move` requires 1 (as a place), in `$from`
 - `move` requires 1 (as a place), joined to `$from` by an edge the unit crosses, in `$to`
+- `launch ark` requires 1, in `$where`
 - `work` requires 1, in `$where`
 - `upkeep` requires 1 (as a thing), with upkeep
 - `perish` consumes 1 (as a thing), whose upkeep is unpaid
@@ -475,6 +477,7 @@ a place above one territory, which holds units and nothing else.
 - `deploy ark` consumes 1 (as the place holding ark), in the orbit above `$where`
 - `move` requires 1 (as a place), in `$from`
 - `move` requires 1 (as a place), joined to `$from` by an edge the unit crosses, in `$to`
+- `launch ark` produces 1 (as the place holding ark), in the orbit above `$where`
 - `upkeep` requires 1 (as a thing), with upkeep
 - `perish` consumes 1 (as a thing), whose upkeep is unpaid
 - `age` consumes 1 (as a thing), keeps at least 1

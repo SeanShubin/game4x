@@ -828,11 +828,17 @@ pub const RECIPES: &[Recipe] = &[
         // not a move - the cost is paid at a Yard and nothing comes back.
         name: "launch ark",
         owner: Player,
+        // **`P-362` put the Ark back.** `P-342` had dropped `produce 1 ark` because there was
+        // no way to name where it went; `P-334` made adjacency a kind, so an orbit carries
+        // `below` and the destination can be written. The territory row comes with it, since
+        // the orbit is named relative to `$where`.
         lines: &[
+            placed(Require, 1, TERRITORY, &[], "`$where`"),
             just(Consume, 3, Noun::Of(Metal)),
             just(Consume, 12, Noun::Of(Energy)),
             just(Consume, 2, Noun::Of(Citizen)),
             just(Require, 1, Noun::Of(Yard)),
+            placed(Produce, 1, Noun::Of(Ark), &[], "the orbit above `$where`"),
         ],
     },
     Recipe {
