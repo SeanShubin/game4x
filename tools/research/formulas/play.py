@@ -12,6 +12,7 @@ sequence of firings gets from an ark to a new ark, and what the state was at eve
 """
 
 import json
+import os
 import pathlib
 import re
 import sys
@@ -52,13 +53,19 @@ class World:
             self.at.pop(key, None)
 
     def force(self, place):
-        """Units always sum. Citizens sum where a garrison organizes them, else max."""
-        units = sum(self.n(place, k) * FORCE[k] for k in ("ark", "pioneer"))
-        citizens = self.n(place, "citizen")
-        if not citizens:
-            return units
-        organized = self.n(place, "garrison") > 0
-        return units + (citizens * FORCE["citizen"] if organized else FORCE["citizen"])
+        """Sean's rule, read from `force_rule` rather than written again here.
+
+        **The organizers are the garrison and every unit**, because `spec/control.md` says
+        coordination is imposed by a structure *or by a military unit, which carries it*. This
+        used to organize on a garrison alone, so two pioneers standing with two citizens
+        presented 5 where the rule says 6.
+        """
+        organizers = DATA["force_rule"]["organizers"]
+        carried = [FORCE[k] for k in FORCE for _ in range(self.n(place, k))]
+        if not carried:
+            return 0
+        return (sum(carried) if any(self.n(place, k) for k in organizers)
+                else max(carried))
 
     def metal_equivalent(self):
         return sum(n * BINDING.get(kind, 0) for (_p, kind, _r), n in self.at.items())
@@ -79,14 +86,31 @@ def play(verbose=True):
     w.add("1", "citizen", 2)
     w.say("deploy ark onto territory 1: garrison, 2 citizens, a food and a metal extractor")
 
-    def work_turn(t, want):
-        """Work extractors for one resource, bounded by capacity, density and labor."""
-        cap, den = RESOURCES[(t, want)]
-        have = min(w.n(t, "extractor", want), cap, w.n(t, "citizen"))
-        w.add(t, want, have * den)
-        return have * den
+    def work_turn(t, want, labor):
+        """Work extractors for one resource, bounded by capacity, density and labor.
 
-    def turn(t):
+        Returns the labor spent, because a citizen at an extractor is not available to build -
+        `spec/economy.md`: *a citizen works at one structure and cannot be in two places at
+        once.*
+        """
+        cap, den = RESOURCES[(t, want)]
+        have = min(w.n(t, "extractor", want), cap, labor)
+        w.add(t, want, have * den)
+        return have
+
+    def build(t, kind, res, metal, labor):
+        """One `build` recipe: 1 labor and some metal, and the container must accept it."""
+        if labor < 1 or w.n(t, "metal") < metal:
+            return 0
+        if kind == "store" and w.n(t, "store", res) >= w.n(t, "extractor", res):
+            return 0            # as many stores as the extractors of its resource
+        if kind == "extractor" and w.n(t, "extractor", res) >= RESOURCES[(t, res)][0]:
+            return 0            # the deposit's total capacity
+        w.add(t, "metal", -metal)
+        w.add(t, kind, 1, res)
+        return 1
+
+    def turn(t, plan=()):
         """One turn in one territory: work everything, eat, then grow on the surplus.
 
         `grow` was missing from the first version of this and the run stopped dead: producing
@@ -94,9 +118,16 @@ def play(verbose=True):
         emptied the colony and nothing could work an extractor afterwards. The population has to
         grow before anything can be spent - which is the loop, and the runner was not playing it.
         """
-        for res in ("food", "metal", "energy"):
-            if w.n(t, "extractor", res):
-                work_turn(t, res)
+        # **Food, then a reserve, then metal, then the plan, then energy with the rest.**
+        # A citizen at an extractor is not building, so working everything owned leaves nothing
+        # to grow with - which is what the trace showed before this order existed.
+        labor = w.n(t, "citizen")
+        labor -= work_turn(t, "food", labor)
+        reserve = min(len(plan), 2)
+        labor -= work_turn(t, "metal", max(0, labor - reserve))
+        for kind, res, metal in plan:
+            labor -= build(t, kind, res, metal, labor)
+        labor -= work_turn(t, "energy", labor)
         eaten = min(w.n(t, "food"), w.n(t, "citizen"))
         w.add(t, "food", -eaten)
         starved = w.n(t, "citizen") - eaten
@@ -106,24 +137,50 @@ def play(verbose=True):
         if grown:
             w.add(t, "food", -grown)
             w.add(t, "citizen", grown)
-        w.add(t, "food", -w.n(t, "food"))   # what no store holds is lost at the turn's end
+        # **`end-of-turn losses`, played rather than approximated.** Food and labor go whole;
+        # metal and energy are cut to what the territory's stores hold, and a territory may
+        # have one store per extractor of that resource. **A colony builds none**, so until it
+        # buys some it keeps nothing - which the runner used to hide by bounding food alone and
+        # letting 23 metal pile up on a territory with nowhere to put it.
+        w.add(t, "food", -w.n(t, "food"))
+        w.add(t, "labor", -w.n(t, "labor"))
+        for res in ("metal", "energy"):
+            over = w.n(t, res) - DATA["store_capacity"] * w.n(t, "store", res)
+            if over > 0:
+                w.add(t, res, -over)
         return grown
 
     # 2. Build up territory 1 until it can afford a pioneer: 3 metal, 6 energy, 2 citizens.
-    # `build extractor` costs 1 labor and 1 metal, and `found-colony` builds no energy one -
-    # so the colony must mine metal first, then buy its way into energy. This step used to be
-    # free, which meant the runner was not testing the gate Sean named: *you can't really start
-    # expanding until you start exploiting energy in a region.*
-    for _ in range(3):
-        turn("1")
-    if RESOURCES[("1", "energy")][0] and w.n("1", "metal") >= 1 and w.n("1", "citizen") >= 1:
-        w.add("1", "metal", -1)
-        w.add("1", "extractor", 1, "energy")
-        w.say(f"built an energy extractor on territory 1 for 1 labor and 1 metal - "
-              f"the gate: nothing can move until a region is exploited for energy")
-    for _ in range(3):
-        turn("1")
-    w.say(f"six turns on territory 1: {w.n('1','metal')} metal, {w.n('1','energy')} energy")
+    #
+    # **A colony is delivered with no store**, so until it builds one every scrap of metal it
+    # mines is gone when the turn ends - `end-of-turn losses`. That makes the opening forced,
+    # and it is the thing the runner used to hide: it let six turns accumulate 23 metal on a
+    # territory whose stores hold nothing.
+    #
+    # The plan is therefore stores first, then the energy extractor Sean's gate needs - *you
+    # can't really start expanding until you start exploiting energy in a region* - then more
+    # extractors while there is labor for them.
+    # **Food extractors first, because the population is the only thing that makes more
+    # labor**, then a metal store so anything mined survives the turn, then the energy pair -
+    # an extractor is useless without a store to keep what it makes.
+    PLAN = [("extractor", "food", 1), ("store", "metal", 1), ("extractor", "food", 1),
+            ("extractor", "energy", 1), ("store", "energy", 1), ("extractor", "metal", 1),
+            ("store", "energy", 1), ("store", "metal", 1), ("extractor", "energy", 1)]
+    turns = 0
+    while turns < 30 and not (w.n("1", "metal") >= 3 and w.n("1", "energy") >= 6
+                              and w.n("1", "citizen") >= 4):
+        turn("1", PLAN)
+        turns += 1
+        if os.environ.get("TRACE"):   # a per-turn trace, for reading the policy
+            print(f"  t{turns}: cit={w.n('1','citizen')} "
+                  f"Xf={w.n('1','extractor','food')} Xm={w.n('1','extractor','metal')} "
+                  f"Xe={w.n('1','extractor','energy')} "
+                  f"Sm={w.n('1','store','metal')} Se={w.n('1','store','energy')} "
+                  f"m={w.n('1','metal')} e={w.n('1','energy')}")
+    w.say(f"{turns} turns building territory 1: "
+          f"{w.n('1','citizen')} citizens, {w.n('1','store','metal')} metal stores and "
+          f"{w.n('1','store','energy')} energy stores, "
+          f"{w.n('1','metal')} metal and {w.n('1','energy')} energy kept")
 
     # 3. Two pioneers, to breach a jungle. Territory 6 is jungle, nature 2.
     made = 0
@@ -134,7 +191,7 @@ def play(verbose=True):
         w.add("1", "pioneer", 1)
         made += 1
         for _ in range(3):
-            turn("1")
+            turn("1", PLAN)
     w.say(f"produced {made} pioneers on territory 1")
 
     # 4. Load the tanks, then breach. Sean, 2026-09-09: a tank is loaded from a region, one
@@ -142,14 +199,17 @@ def play(verbose=True):
     #    energy somewhere first. `found-colony` builds a food and a metal extractor and no
     #    energy one, so the gate is real and was invisible while `move` spent from the ground.
     target = next(t for t, b, _n in DATA["territory_biomes"] if b == "jungle")
+    # **`refuel`, not `load`.** `spec/units.md`: fuel moves freely between a *controlled*
+    # territory that has it and anything there that can hold it - so nothing the player does
+    # fills a bin, and `spec/invariants.md` forbids an action whose first step is always taken.
     FUEL = 2
     cells = 0
     for _ in range(made):
         take = min(FUEL, w.n("1", "energy"))
         w.add("1", "energy", -take)
         cells += take
-    w.say(f"loaded {cells} fuel cells into {made} pioneers "
-          f"({FUEL} each is the tank's capacity; energy left in territory 1: {w.n('1','energy')})")
+    w.say(f"refuel filled {cells} cells into {made} pioneers on controlled ground "
+          f"(the bin holds {FUEL}; energy left in territory 1: {w.n('1','energy')})")
     hops = 1  # territory 6 is one hop from territory 1
     if cells < made * hops:
         w.say(f"NOT ENOUGH FUEL: {made} pioneers need {made * hops} cells to make {hops} hop(s)")

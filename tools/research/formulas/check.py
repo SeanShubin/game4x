@@ -542,7 +542,10 @@ def check_minimal_control():
 
 
 # The shape of a form rather than anything typed into it.
-SYNTAX = {"in", "of", "at", "least"}
+# The notation's own words. An editor offers the expression *form* and these come with it;
+# `available` joined on 2026-09-10 with `available <kind> of x`, which `spec/logistics.md`
+# defines and `refuel` is the first recipe to need.
+SYNTAX = {"in", "of", "at", "least", "available"}
 
 
 def selectable_sets():

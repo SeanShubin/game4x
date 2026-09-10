@@ -516,41 +516,6 @@
           "row 5"
         ]
       ]
-    },
-    {
-      "name": "load",
-      "was": null,
-      "selection": "offered on line 1",
-      "lines": [
-        [
-          "some",
-          "unit: {unit}",
-          "",
-          "",
-          "Sean, 2026-09-09: *a tank they can load energy to*"
-        ],
-        [
-          "let",
-          "t = holder of unit",
-          "",
-          "",
-          ""
-        ],
-        [
-          "change",
-          "energy in t",
-          "-count {energy in t}",
-          "",
-          "take up what the territory has"
-        ],
-        [
-          "change",
-          "energy in unit",
-          "+count {energy in t}",
-          "clamp",
-          "**clamp fills to the tank's capacity and no further** - `fuel` is 2, so two moves"
-        ]
-      ]
     }
   ],
   "world": [
@@ -756,6 +721,48 @@
         ]
       ],
       "new": true
+    },
+    {
+      "name": "refuel",
+      "new": true,
+      "selection": "quantified on line 1 - **the world's recipes are not offered**, which is what makes this not a step the player takes",
+      "lines": [
+        [
+          "each",
+          "unit: {unit}",
+          "",
+          "",
+          "`spec/units.md`: **fuel moves freely** between a controlled territory that has it and anything there that can hold it"
+        ],
+        [
+          "let",
+          "t = holder of unit",
+          "",
+          "",
+          "containment says where a unit is"
+        ],
+        [
+          "require",
+          "count {territory id:t control:yours}",
+          ">= 1",
+          "soft",
+          "**controlled**, and that one word is the whole range rule - a unit on unclaimed ground has nothing to draw from. `soft`, because a unit standing on unclaimed ground is not an error; it simply does not fill"
+        ],
+        [
+          "change",
+          "energy in t",
+          "-min(available energy of unit, count {energy in t})",
+          "",
+          "what the territory gives up is what the bin can take"
+        ],
+        [
+          "change",
+          "energy in unit",
+          "+min(available energy of unit, count {energy in t})",
+          "",
+          "**the bin fills to `fuel` and no further**, because available capacity is the total less the used. Lines are not sequential, so both amounts read the same state and no <code>clamp</code> is needed"
+        ]
+      ]
     }
   ],
   "creation": [
@@ -1024,9 +1031,9 @@
       "So <em>the planet is fully exploited</em> cannot be written, which is why <code>is_fully_exploited</code> is Rust - and why it went stale exactly as its own comment predicted. <strong>The question is not how to say it but whether it belongs here at all</strong>: a win condition changes nothing, so it may belong with <code>show</code> and the queries. <strong>This lane takes neither side</strong> and notes only that leaving it in Rust is the option that has already failed once."
     ],
     [
-      "OPEN - whether <code>load</code> should exist, given that fuel is specified to move freely",
-      "<code>spec/units.md</code>: <em>fuel moves freely between a controlled territory that has it and anything there that can hold it.</em> This lane wrote <code>load</code>, a player recipe that spends an act.",
-      "That is not what the sentence says, and it collides with <code>spec/invariants.md</code> -> <em>No step that is always taken</em>. <strong>A player who must always <code>load</code> before <code>move</code> is that step exactly.</strong> Either <code>load</code> goes and a bound reads through to what is nearby, or the specification means something narrower than <em>freely</em>."
+      "REFUTED - <code>load</code>, by <code>spec/units.md</code>, found by the specification lane",
+      "This lane wrote a player recipe that spends an act moving energy into a tank, and filed *whether it should exist* as an open decision an hour before the sentence turned up.",
+      "<code>spec/units.md</code>: <em>fuel moves freely between a <strong>controlled</strong> territory that has it and anything there that can hold it.</em> Fuelling is not an action, and <code>spec/invariants.md</code> -&gt; <em>No step that is always taken</em> forbids making it one. It is now <code>refuel</code>, a <strong>world</strong> recipe - the world's are not offered, which is the category a thing that happens by itself belongs in. <strong>And the range rule Sean wanted is one word of that sentence</strong>: a unit on unclaimed ground cannot fill, so it leaves your ground with a full bin, spends one crossing, and has one left."
     ]
   ],
   "collapse": [
@@ -2565,11 +2572,6 @@
       "work",
       "an extractor that is ready",
       "&mdash;"
-    ],
-    [
-      "load",
-      "a unit, to fill its tank from the territory it stands in",
-      "&mdash;"
     ]
   ],
   "bound_values": [
@@ -2930,6 +2932,11 @@
       "<code>min(a, b)</code>",
       "<code>min(count {food surplus:yes …}, count {citizen …})</code>",
       "<code>grow</code> has needed this since the first encoding, with no form for it"
+    ],
+    [
+      "<code>available <em>kind</em> of x</code>",
+      "<code>available energy of unit</code>",
+      "<strong>Specified rather than invented.</strong> <code>spec/logistics.md</code>: <em>used capacity is how many of that kind it holds, and available capacity is the total less the used; both are derived, so neither can disagree with what is there.</em> <code>refuel</code> is the first recipe to need it, and the alternative was <strong>arithmetic inside an amount</strong> - a much wider door for one recipe"
     ]
   ],
   "comparisons": [

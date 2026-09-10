@@ -185,7 +185,31 @@ stops being decidable, and boundedness is what makes a player-authored rule safe
 generated world**, checked once by the generator, not a rule the game runs. It belongs to the same
 category as the Goldberg sizes, and **neither should be sayable in the notation.**
 
-### 3. A quantity that is shared rather than moved
+### 3. A quantity that is shared rather than moved - **answered while this was being written**
+
+**The specification lane found the sentence, and it refutes this lane's `load` and their own
+report's headline at once.** `spec/units.md`: *a mobile unit has a **bin** for fuel* and *fuel moves
+freely between a **controlled** territory that has it and anything there that can hold it.*
+
+**So fuelling is not an action, and `spec/invariants.md` -> *No step that is always taken* forbids
+making it one.** A player who intends to move always loads first, so `load` **is** that step. It is
+gone, replaced by `refuel`, a **world** recipe - and the world's are not offered, which is the right
+category for something that happens by itself.
+
+**And the range rule Sean asked for is one word of that sentence.** *Controlled*: a unit on
+unclaimed ground has nothing to draw from, so it leaves your ground with a full bin, spends one
+crossing, and has one left. **A consequence of a sentence already written rather than anything
+either lane had to design.**
+
+**What survives as a limit on the notation is smaller and still real.** Writing `refuel` wanted a
+subtraction inside an amount - *the bin's capacity less what is in it* - and the encoder refused it,
+because **no recipe had ever needed arithmetic in an expression** and letting one in opens a door far
+wider than one recipe. It did not need one: `spec/logistics.md` already defines **available
+capacity** as *the total less the used, derived*. So the notation gained a ninth expression form,
+`available <kind> of x`, which is **a specified idea rather than an invented one**. Check 10 went to
+515 of 517 for one turn and back to 517 once `available` was declared a word of the notation.
+
+### 3b. What the original gap was, and it is still open
 
 > `spec/units.md`: Fuel moves freely between a controlled territory that has it and anything there
 > that can hold it.
@@ -197,10 +221,14 @@ taken* - *no action has an intermediate step that is always taken; where one wou
 defined to reach the outcome directly.* **A player who must always `load` before `move` is that step
 exactly.**
 
-**What is missing is a way to say a bound reads through to what is nearby**, rather than a way to
-move a quantity across a boundary. That is the same shape as what the turn's end turned out to be: a
-store is a **bound**, not a container, and this lane spent a day believing otherwise. **The notation
-can say *how much fits here* and cannot say *what counts as here*.**
+**`refuel` moves the energy, and *moves freely* may mean it never moves at all.** The world recipe
+transfers a quantity from the territory into the bin every turn, which is a faithful reading and
+possibly not the only one: a bin that simply *reads through* to the controlled territory it stands
+in would need no transfer, and **the notation has no way to say that.** That is the same shape as
+what the turn's end turned out to be - a store is a **bound**, not a container, and this lane spent a
+day believing otherwise. **The notation can say *how much fits here* and cannot say *what counts as
+here*.** Which of the two Sean means is a question, not a defect, and `refuel` behaves identically
+under both until something can be in two places' reach at once.
 
 ### 4. A rule that is itself a thing
 
@@ -284,6 +312,42 @@ place.
 **`X-14` carries the related half** - that the release's conservation declarations sit in the *Kinds*
 table and nothing checks them, which check 1 now does. **The gap named here is different**: not that
 conservation is unchecked, but that **the sentence promises an action the game does not have.**
+
+## What playing it honestly did to the runner
+
+**`X-21`'s refutation broke the loop, and the break is a finding rather than a bug.** The runner
+dropped food at a turn's end and left metal and energy alone, so territory 1 accumulated *23 metal
+and 12 energy over six turns* on a colony that **has no stores at all**. `end-of-turn losses` cuts
+both to what the stores hold, and `found-colony` builds none. Under the rule it claimed to be
+playing, the colony keeps **nothing**.
+
+With the rule applied, the run stopped at once: *the jungle was never founded*. And what fixed it is
+worth writing down, because Sean will meet it as a player.
+
+**Building is a third claim on a citizen, and nothing in the release says so.** The first repair -
+a build plan the colony works through - still stalled: four citizens, four extractors, every citizen
+at one, and **no labor left to build with** for twenty-seven turns. It could not afford the energy
+store, so everything its two energy extractors made was lost at each turn's end; it could not afford
+a food extractor, so the population could never grow enough to do both. **A colony that works
+everything it owns can never build anything.**
+
+`spec/economy.md` says exactly this and only about the first two: *a citizen works at one structure
+and cannot be in two places at once*, and *structures that produce force and structures that extract
+resources are alike in this: a citizen at one is not at the other.* **Building is the third, and it
+is the one that decides whether a colony ever escapes its opening.**
+
+**So the opening is forced, which it was not before.** The runner now feeds first, **reserves labor
+for the plan**, mines metal to spend, and puts what is left on energy - and territory 1 goes from two
+citizens to twelve, three metal stores and three energy stores, in **five turns**. The rest of the
+loop then runs exactly as it did: two pioneers, a jungle breached at force 4 against nature 2, one
+deploying, the other leaving with the ground still held at 2, a yard, and `launch ark` producing
+nothing. **`X-25` is still where the loop ends.**
+
+**The runner also carried its own copy of the force rule** - organized only where a garrison is -
+so two pioneers standing with two citizens presented 5 where `force_rule` says 6. It reads the
+declared rule now. **Both divergences ran in the direction that made the loop look easier than it
+is**, which is the direction a runner written by the same lane that wrote the recipes will always
+drift.
 
 ## The generalisation, made mechanical: check 15
 

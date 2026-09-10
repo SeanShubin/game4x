@@ -170,8 +170,8 @@
     "skipped": [
       "end-of-turn losses",
       "grow",
-      "load",
       "perish",
+      "refuel",
       "upkeep"
     ],
     "weights": {
@@ -195,8 +195,8 @@
     "analysed": 18,
     "skipped": [
       "end-of-turn losses",
-      "load",
-      "perish"
+      "perish",
+      "refuel"
     ],
     "witness": [
       [
@@ -274,8 +274,8 @@
     "breaches": []
   },
   "editor": {
-    "tokens": 498,
-    "selectable": 498,
+    "tokens": 517,
+    "selectable": 517,
     "recipes": 23,
     "clean": 23,
     "typed": {}
@@ -338,12 +338,6 @@
         "yard in t",
         "HARD",
         "1"
-      ],
-      [
-        "load",
-        "energy in unit",
-        "clamp",
-        "the unit's fuel"
       ]
     ],
     "unobservable": []
