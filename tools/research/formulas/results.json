@@ -1,8 +1,160 @@
 {
+  "arcs": {
+    "kinds": {
+      "ordinary": 35,
+      "trait": 3,
+      "marking": 10
+    },
+    "marking": [
+      [
+        "world",
+        "grow",
+        3
+      ],
+      [
+        "world",
+        "grow",
+        4
+      ],
+      [
+        "world",
+        "end-of-turn losses",
+        2
+      ],
+      [
+        "world",
+        "end-of-turn losses",
+        3
+      ],
+      [
+        "world",
+        "end-of-turn losses",
+        4
+      ],
+      [
+        "world",
+        "end-of-turn losses",
+        5
+      ],
+      [
+        "world",
+        "end-of-turn losses",
+        6
+      ],
+      [
+        "world",
+        "end-of-turn losses",
+        7
+      ],
+      [
+        "world",
+        "refuel",
+        4
+      ],
+      [
+        "world",
+        "refuel",
+        5
+      ]
+    ],
+    "unfold": [
+      [
+        "found-colony(t)",
+        [],
+        1,
+        3,
+        8
+      ],
+      [
+        "move",
+        [
+          "unit"
+        ],
+        2,
+        0,
+        2
+      ],
+      [
+        "work",
+        [
+          "resource"
+        ],
+        3,
+        0,
+        3
+      ],
+      [
+        "age",
+        [],
+        1,
+        1,
+        2
+      ],
+      [
+        "refuel",
+        [],
+        1,
+        1,
+        2
+      ]
+    ],
+    "by_colour": 22,
+    "by_both": 31,
+    "per_line": {
+      "deploy ark|2": "ordinary",
+      "found-colony(t)|0": "ordinary",
+      "found-colony(t)|1": "ordinary",
+      "found-colony(t)|2": "ordinary",
+      "found-colony(t)|3": "ordinary",
+      "found by land|2": "ordinary",
+      "move|3": "ordinary",
+      "move|4": "ordinary",
+      "move|5": "ordinary",
+      "build extractor|1": "ordinary",
+      "build extractor|2": "ordinary",
+      "build extractor|3": "ordinary",
+      "build store|1": "ordinary",
+      "build store|2": "ordinary",
+      "build store|3": "ordinary",
+      "build yard|1": "ordinary",
+      "build yard|2": "ordinary",
+      "build yard|3": "ordinary",
+      "produce pioneer|1": "ordinary",
+      "produce pioneer|2": "ordinary",
+      "produce pioneer|3": "ordinary",
+      "produce pioneer|4": "ordinary",
+      "launch ark|2": "ordinary",
+      "launch ark|3": "ordinary",
+      "launch ark|4": "ordinary",
+      "launch ark|5": "ordinary",
+      "create labor|2": "ordinary",
+      "work|2": "ordinary",
+      "work|4": "trait",
+      "upkeep|1": "trait",
+      "grow|2": "marking",
+      "grow|3": "marking",
+      "perish|1": "trait",
+      "perish|2": "ordinary",
+      "age|1": "ordinary",
+      "spoil|1": "ordinary",
+      "end-of-turn losses|1": "marking",
+      "end-of-turn losses|2": "marking",
+      "end-of-turn losses|3": "marking",
+      "end-of-turn losses|4": "marking",
+      "end-of-turn losses|5": "marking",
+      "end-of-turn losses|6": "marking",
+      "refuel|3": "marking",
+      "refuel|4": "marking",
+      "make-territory(id, biome, nature)|0": "ordinary",
+      "make-deposit(t, resource, capacity, density)|0": "ordinary",
+      "make-orbit(t)|0": "ordinary",
+      "make-adjacency(a, b)|0": "ordinary"
+    }
+  },
   "behaviours": {
     "rows": [
       [
-        "game.rs:948",
+        "game.rs:939",
         "A population eats, starves and grows, in one step",
         [
           "upkeep",
@@ -27,7 +179,7 @@
         "<code>X-21</code>'s survivor, and the sharpest case here. **This is the rule that decides what a player keeps between turns**, it is what a store is <em>for</em>, and it appears in none of the sixteen. <code>R-7</code> can be complete over all of them and never show it."
       ],
       [
-        "game.rs:954",
+        "game.rs:945",
         "Everything in a territory becomes ready again",
         [
           "refresh"
@@ -35,7 +187,7 @@
         ""
       ],
       [
-        "game.rs:928",
+        "game.rs:919",
         "Every unit becomes ready again, wherever it is",
         [
           "refresh"
@@ -43,31 +195,31 @@
         "A second readiness reset, over a different population - <code>refresh</code> is one row and this is two places."
       ],
       [
-        "game.rs:915",
+        "game.rs:906",
         "A territory whose force has fallen below its nature is taken back by nature",
         null,
         "<strong>Equal force to maintain</strong>, and no recipe says so. The prototype has it as a cause of <code>unsustained</code>, which is a derived trait rather than a row."
       ],
       [
-        "game.rs:631",
+        "game.rs:622",
         "Taking a territory is refused unless the force brought is strictly greater",
         null,
         "<strong>Greater force to enter</strong>, and no recipe says so either. It is a guard inside <code>land</code> and <code>found_by_land</code> rather than a line of them."
       ],
       [
-        "territory.rs:584",
+        "territory.rs:731",
         "Losing a territory clears its garrison, population, stores, yards and extractors",
         null,
         "What <em>everything goes into disorder</em> comes to. <code>X-27</code>: it does not clear the <em>units</em>, which are marked unusable and left standing."
       ],
       [
-        "game.rs:918",
+        "game.rs:909",
         "A unit on a lost territory survives, unusable",
         null,
         "<code>X-27</code>, and Sean asked for the opposite: <em>for now we just delete the units.</em>"
       ],
       [
-        "game.rs:930",
+        "game.rs:921",
         "The turn number advances",
         null,
         "**Bookkeeping rather than a rule**, and listed so the count is honest about what it is counting. Nothing in the game reads it."

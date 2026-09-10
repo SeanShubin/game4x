@@ -783,6 +783,50 @@ stated answer rather than this lane's inference, so nothing needs deciding. **Th
 tidy-up** and should ride with it rather than on its own.
 
 
+### X-29 - the player's recipes are an ordinary Petri net and the world's are not, and nothing says so
+
+**to** spec · **status** open · **raised** 2026-09-10 · **source** [the report](formulas.html) -> *The recipes as a coloured Petri net* · **found by** classifying every arc after Sean asked to see the recipes drawn as one
+
+**Where.** `spec/invariants.md` -> *Control without tedium*: **a player's rules always finish**, and
+**nothing that can be built in the rule editor runs forever**. And `spec/console.md` -> *Commands*:
+*there is one command for each recipe the player may fire*, so what a player may author and what the
+world may run are already two sets.
+
+**What.** Every recipe is a transition of a coloured Petri net - places are the declared
+`(container, kind)` pairs, colours are the families, and grounding is unfolding. **48 arcs, and 38
+of them are ordinary.** The other **10 read a marking**, which makes them **reset** or **transfer**
+arcs, and an ordinary net has none of those.
+
+**All ten are in world recipes.** `grow` 2, `end-of-turn losses` 6, `refuel` 2. None is in a player
+recipe and none is in a world-building one. Measured as check 16, poisoned two ways: make a
+marking-reading weight constant and the count must fall; make an arc `soft` and the unfolded net
+must grow.
+
+**So the invariant already holds, by accident.** The sublanguage a player writes in is an ordinary
+coloured net, where boundedness is decidable - which is exactly what *a player's rules always
+finish* needs. **The world's recipes are strictly stronger, and they are the ones no player
+authors.**
+
+**Why it costs something.** Nothing states the rule and nothing checks it, so **the first
+player-authored recipe that empties a place silently moves the whole rule editor into a class where
+the invariant is no longer decidable.** `X-9` is the same hazard from the other end: it kept
+`limit 0` out because a zero test on an unbounded quantity is an inhibitor arc. This is that
+argument continued - the arcs that survived the `limit 0` deletion are reset arcs, and they were
+never scoped to the world on purpose.
+
+**One thing this lane is uncertain of and will not assert.** Reachability in a reset net is
+undecidable, and that much is settled. **Boundedness is the cell that matters here and this lane
+does not know it** - Dufourd, Finkel and Schnoebelen, *Reset nets between decidability and
+undecidability* (1998) is the source, and it should be read before anyone leans on the paragraph
+above. Recorded as uncertain rather than rounded to confident.
+
+**Whether.** **Worth deciding, and it is one sentence rather than a mechanism.** Something of the
+shape *a recipe a player may author uses no weight that reads a count* would make the invariant
+checkable instead of accidental - and this lane takes no position on the wording, on whether the
+restriction belongs to the editor or to the notation, or on whether Sean would rather have the
+expressive power and drop the invariant. **What is not open is that the two sets differ today and
+no document notices.**
+
 ## Resolved
 
 **Refused on 2026-09-10, and the refusal found something this item had not.** The code lane built

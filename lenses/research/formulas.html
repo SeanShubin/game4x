@@ -253,6 +253,206 @@ number or another command, a field referring to a thing is named for that thing'
 than inventing quietly, and they are listed under <em>What the encoding assumed</em>, below the
 data.</p>
 
+<h2>The recipes as a coloured Petri net</h2>
+<p>Sean asked what the theory behind the recipes was called, and it is a <strong>Petri net</strong>.
+<strong>Naming it is not a metaphor and it is not new work</strong> &mdash; every part of the
+correspondence below is something already in this data under a different word.</p>
+<div class="scroll"><table><thead><tr>
+<th>In a Petri net</th>
+<th>Here</th>
+<th>Where it already is</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">place</td>
+<td>a declared <code>(container, kind)</code> pair</td>
+<td class="note"><code>containment_declared</code>, 19 of them</td>
+</tr>
+<tr>
+<td class="target">transition</td>
+<td>a recipe</td>
+<td class="note">23 of them</td>
+</tr>
+<tr>
+<td class="target">colour set</td>
+<td>a <strong>family</strong></td>
+<td class="note"><code>families</code>: resource, unit, place, thing</td>
+</tr>
+<tr>
+<td class="target">unfolding</td>
+<td><strong>grounding</strong></td>
+<td class="note"><code>ground()</code> in <code>check.py</code>, which check 2 already runs</td>
+</tr>
+<tr>
+<td class="target">input / output arc</td>
+<td>a negative / positive <code>change</code></td>
+<td class="note">the Amount column, and its sign</td>
+</tr>
+<tr>
+<td class="target">test arc, which reads and consumes nothing</td>
+<td>a <code>require</code></td>
+<td class="note">every guard</td>
+</tr>
+<tr>
+<td class="target">arc weight</td>
+<td>the amount, which may be an expression</td>
+<td class="note">the <code>expression</code> assumption</td>
+</tr>
+<tr>
+<td class="target">a well-formed net</td>
+<td>no arc to an undeclared place, and no place nothing reaches</td>
+<td class="note"><strong>check 6 and check 8</strong>, in the two directions</td>
+</tr>
+</tbody></table></div>
+<p><strong>So three checks written for their own reasons turn out to be standard properties of a
+net.</strong> The last row is the one worth pausing on: check 6 asks whether everything created
+lands somewhere declared, check 8 asks whether every declaration is reached, and together they are
+exactly the statement that the net has no dangling arcs and no isolated places.</p>
+
+<h3>How to read the drawings</h3>
+<p>Every recipe above carries one, folded away under <em>as a coloured Petri net</em>. A
+<strong>circle</strong> is a place, the <strong>bar</strong> is the transition, an arrow&rsquo;s
+label is its weight, and the <em>italic</em> line under a place is its <strong>colour</strong>. Two
+arc styles carry findings rather than decoration.</p>
+<div class="scroll"><table><thead><tr>
+<th>Style</th>
+<th>Means</th>
+<th>Why it is drawn differently</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">a <strong>thick</strong> arc</td>
+<td>the weight reads a marking</td>
+<td class="note">a <strong>reset</strong> or <strong>transfer</strong> arc, which an ordinary net has none of</td>
+</tr>
+<tr>
+<td class="target">a <strong>dashed</strong> arc</td>
+<td>the attachment is <code>soft</code></td>
+<td class="note">it is skipped rather than failing, so the transition has more than one effect</td>
+</tr>
+<tr>
+<td class="target">one circle, two arcs</td>
+<td>the transition drains a place and refills it</td>
+<td class="note"><code>end-of-turn losses</code> does this to metal and to energy, and drawing it twice would say it touched two places</td>
+</tr>
+</tbody></table></div>
+<p><strong>A place drained and refilled is one place.</strong> That is the whole shape of what a
+store does &mdash; and this lane spent a day believing a store was a container things moved into.</p>
+
+<h3>The arcs, counted</h3>
+<div class="scroll"><table><thead><tr>
+<th>Arc</th>
+<th>How many</th>
+<th>In a net</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">ordinary</td>
+<td class="amt">35</td>
+<td class="note">an ordinary arc</td>
+</tr>
+<tr>
+<td class="target">marking</td>
+<td class="amt">10</td>
+<td class="note"><strong>not an ordinary arc.</strong> The weight is read from the marking</td>
+</tr>
+<tr>
+<td class="target">trait</td>
+<td class="amt">3</td>
+<td class="note">an ordinary arc once the colour is bound &mdash; a trait is part of the token</td>
+</tr>
+</tbody></table></div>
+<div class="callout">
+<h4>Every arc that reads a marking is in a <strong>world</strong> recipe</h4>
+<p>All 10 of them, over 3
+recipes: <code>end-of-turn losses</code>, <code>grow</code>, <code>refuel</code>.
+<strong>None is in a player recipe and none is in a world-building one.</strong></p>
+<p>That is the most useful thing the naming buys, because it lines up with an invariant.
+<code>spec/invariants.md</code> requires that <em>a player&rsquo;s rules always finish</em> and that
+<em>nothing that can be built in the rule editor runs forever</em> &mdash; and the sublanguage a
+player writes in is, today, <strong>an ordinary coloured net</strong>, where boundedness is
+decidable. The world&rsquo;s rules are stronger, and they are the ones no player authors.</p>
+<p><strong>So the guard-rail is a rule about who may write which arc</strong> rather than a rule
+about what the notation contains. It is not stated anywhere yet, and nothing checks it.</p>
+</div>
+<div class="callout">
+<h4>What a reset arc costs, and the one cell to check before leaning on it</h4>
+<p><code>&minus;count &#123;food in t&#125;</code> empties a place, which is a <strong>reset
+arc</strong>. <code>refuel</code> moves <code>min(available, count)</code> from one place to
+another, which is a <strong>transfer arc</strong>. Both are strictly stronger than the ordinary
+net: <strong>reachability becomes undecidable</strong>, where in an ordinary net it is decidable.</p>
+<p><strong>What this lane is not certain of is boundedness</strong> &mdash; the cell this project
+actually cares about, since <code>X-9</code> kept <code>limit 0</code> out precisely to keep it
+decidable. Dufourd, Finkel and Schnoebelen&rsquo;s <em>Reset nets between decidability and
+undecidability</em> (1998) is the source that settles it, and <strong>it should be read before
+anyone builds on this paragraph.</strong> Recorded as uncertain rather than asserted.</p>
+</div>
+<div class="callout">
+<h4><code>soft</code> is a second unfolding, and nothing had counted it</h4>
+<p>Colour is the unfolding everyone means: <strong>22</strong> transitions, which is
+what <code>ground()</code> produces and check 2 analyses. <strong>But a <code>soft</code> arc does
+not fire or not</strong> &mdash; it is skipped when the container will not hold another, so a recipe
+carrying three of them is <strong>eight</strong> transitions, one per subset that fires.</p>
+<div class="scroll"><table><thead><tr>
+<th>Recipe</th>
+<th>Families named</th>
+<th>By colour</th>
+<th>Soft arcs</th>
+<th>Transitions</th>
+</tr></thead><tbody>
+<tr>
+<td class="target">found-colony(t)</td>
+<td class="note">&mdash;</td>
+<td class="amt">1</td>
+<td class="amt">3</td>
+<td class="amt"><strong>8</strong></td>
+</tr>
+<tr>
+<td class="target">move</td>
+<td class="note">unit</td>
+<td class="amt">2</td>
+<td class="amt">0</td>
+<td class="amt"><strong>2</strong></td>
+</tr>
+<tr>
+<td class="target">work</td>
+<td class="note">resource</td>
+<td class="amt">3</td>
+<td class="amt">0</td>
+<td class="amt"><strong>3</strong></td>
+</tr>
+<tr>
+<td class="target">age</td>
+<td class="note">&mdash;</td>
+<td class="amt">1</td>
+<td class="amt">1</td>
+<td class="amt"><strong>2</strong></td>
+</tr>
+<tr>
+<td class="target">refuel</td>
+<td class="note">&mdash;</td>
+<td class="amt">1</td>
+<td class="amt">1</td>
+<td class="amt"><strong>2</strong></td>
+</tr>
+</tbody></table></div>
+<p><strong>22 by colour, and 31 by both.</strong> Check 2 ignores guards
+by design &mdash; which is what makes it conservative and safe &mdash; so its matrix has never seen
+the soft ones. <strong>That is not a defect in check 2</strong>; it is a second net nobody has
+analysed.</p>
+</div>
+<div class="callout">
+<h4>And it says exactly when <code>soft</code> would be dangerous</h4>
+<p>Skipping a line when a container is full is a <strong>zero test on the room left</strong>, and a
+zero test is an <strong>inhibitor arc</strong> &mdash; which is what <code>X-9</code> found makes a
+net Turing-complete, and what deleting <code>limit 0</code> removed.</p>
+<p><strong>It is safe here for a reason that can be stated and checked.</strong> A zero test on a
+place with a <em>declared finite bound</em> is harmless, because a bounded place folds into finite
+control and the net stays a net. Every <code>soft</code> create today is into a bounded container
+&mdash; a garrison at capacity 1, an extractor at its deposit&rsquo;s total capacity.
+<strong>A <code>soft</code> create into a container declaring <em>no bound</em> would be the
+inhibitor arc coming back</strong>, and there is no such line today and nothing that would notice
+one.</p>
+</div>
+
+
 <h2>Player recipes <span class="badge">11</span></h2>
 <h3>deploy ark <span class="badge down">9 rows &rarr; 4 lines (&minus;5)</span></h3>
 <p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
@@ -268,7 +468,8 @@ data.</p>
 <tr><td class="op op-let">let</td><td class="target">t = below of (holder of ark)</td><td class="amt"></td><td></td><td class="note">was row 1 and row 2's qualifier</td><td class="one-string">{let t:below of (holder of ark)} <span class="cmt"># was row 1 and row 2's qualifier</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">ark</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 2</td><td class="one-string">{change thing:{ark} amount:-1} <span class="cmt"># row 2</span></td></tr>
 <tr><td class="op op-call">call</td><td class="target">found-colony(t)</td><td class="amt"></td><td></td><td class="note">rows 3-9</td><td class="one-string">{call recipe:found-colony territory:t} <span class="cmt"># rows 3-9</span></td></tr>
-</tbody></table></div><h3>found-colony(t) <span class="badge new">new</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 430.0 68" width="100%" style="max-width:430.0px;height:auto" role="img" aria-label="deploy ark as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">deploy ark</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">ark</text><line x1="210.0" y1="30" x2="256.0" y2="30.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>found-colony(t) <span class="badge new">new</span></h3>
 <p class="sel">selector: <em>called, not selected</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -282,7 +483,8 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">citizen in t</td><td class="amt amt-pos">+2</td><td></td><td class="note">Sean: 2 citizens, unconditionally. A territory never refuses one</td><td class="one-string">{change thing:{citizen territory:t} amount:+2} <span class="cmt"># Sean: 2 citizens, unconditionally. A territory never refuses one</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">extractor[food] in t</td><td class="amt amt-pos">+1</td><td><span class="attach">SOFT</span></td><td class="note">Sean: only if there is capacity. No territory lacks food capacity</td><td class="one-string">{change thing:{extractor resource:food territory:t} amount:+1 attach:soft} <span class="cmt"># Sean: only if there is capacity. No territory lacks food capacity</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">extractor[metal] in t</td><td class="amt amt-pos">+1</td><td><span class="attach">SOFT</span></td><td class="note">Sean: only if there is capacity. Territory 6 has no metal, so it skips there</td><td class="one-string">{change thing:{extractor resource:metal territory:t} amount:+1 attach:soft} <span class="cmt"># Sean: only if there is capacity. Territory 6 has no metal, so it skips there</span></td></tr>
-</tbody></table></div><h3>found by land <span class="badge down">8 rows &rarr; 4 lines (&minus;4)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 514.0 176" width="100%" style="max-width:514.0px;height:auto" role="img" aria-label="found-colony(t) as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="126" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">found-colony</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">garrison in t</text><line x1="274.0" y1="84.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 3" marker-end="url(#ah)"/><text x="326.5" y="51.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="390.0" cy="66" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="65" text-anchor="start" font-size="12">citizen in t</text><line x1="274.0" y1="84.0" x2="379.0" y2="66" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="69.0" text-anchor="middle" font-size="10" opacity="0.85">2</text><circle cx="390.0" cy="102" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="101" text-anchor="start" font-size="12">extractor in t</text><text x="407.0" y="113" text-anchor="start" font-size="10" opacity="0.7" font-style="italic">food</text><line x1="274.0" y1="84.0" x2="379.0" y2="102" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 3" marker-end="url(#ah)"/><text x="326.5" y="87.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="390.0" cy="138" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="137" text-anchor="start" font-size="12">extractor in t</text><text x="407.0" y="149" text-anchor="start" font-size="10" opacity="0.7" font-style="italic">metal</text><line x1="274.0" y1="84.0" x2="379.0" y2="138" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 3" marker-end="url(#ah)"/><text x="326.5" y="105.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>found by land <span class="badge down">8 rows &rarr; 4 lines (&minus;4)</span></h3>
 <p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -296,7 +498,8 @@ data.</p>
 <tr><td class="op op-let">let</td><td class="target">t = holder of pioneer</td><td class="amt"></td><td></td><td class="note"></td><td class="one-string">{let t:holder of pioneer}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">pioneer</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{pioneer} amount:-1} <span class="cmt"># row 1</span></td></tr>
 <tr><td class="op op-call">call</td><td class="target">found-colony(t)</td><td class="amt"></td><td></td><td class="note">rows 2-8, identical to deploy ark's</td><td class="one-string">{call recipe:found-colony territory:t} <span class="cmt"># rows 2-8, identical to deploy ark's</span></td></tr>
-</tbody></table></div><h3>move <span class="badge up">5 rows &rarr; 7 lines (+2)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 430.0 68" width="100%" style="max-width:430.0px;height:auto" role="img" aria-label="found by land as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">found by land</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">pioneer</text><line x1="210.0" y1="30" x2="256.0" y2="30.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>move <span class="badge up">5 rows &rarr; 7 lines (+2)</span></h3>
 <p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -313,7 +516,8 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">unit in from</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note">rows 3 and 5 were one move; leaving is half of it</td><td class="one-string">{change thing:{unit place:from} amount:-1 attach:hard} <span class="cmt"># rows 3 and 5 were one move; leaving is half of it</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">unit in $to</td><td class="amt amt-pos">+1</td><td></td><td class="note">and arriving is the other half</td><td class="one-string">{change thing:{unit place:$to} amount:+1} <span class="cmt"># and arriving is the other half</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">unit.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 5</td><td class="one-string">{set thing:{unit} ready:no} <span class="cmt"># rows 3 and 5</span></td></tr>
-</tbody></table></div><h3>build extractor <span class="badge up">3 rows &rarr; 4 lines (+1)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 496.0 130" width="100%" style="max-width:496.0px;height:auto" role="img" aria-label="move as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="54" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">move</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">energy in unit</text><line x1="210.0" y1="30" x2="256.0" y2="48.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="33.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="200.0" cy="66" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="65" text-anchor="end" font-size="12">unit in from</text><line x1="210.0" y1="66" x2="256.0" y2="48.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="51.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">unit in $to</text><line x1="274.0" y1="48.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="33.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><text x="265.0" y="121" text-anchor="middle" font-size="10" opacity="0.85">guard: count {adjacency from:from to:$to border:crosses of unit} &gt;= 1; sets unit.ready = no</text></svg></div></details><h3>build extractor <span class="badge up">3 rows &rarr; 4 lines (+1)</span></h3>
 <p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -327,7 +531,8 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">labor in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{labor territory:t} amount:-1 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">metal in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{metal territory:t} amount:-1 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">extractor[$resource] in t</td><td class="amt amt-pos">+1</td><td><span class="attach">HARD</span></td><td class="note">capacity is the container's now</td><td class="one-string">{change thing:{extractor resource:$resource territory:t} amount:+1 attach:hard} <span class="cmt"># capacity is the container's now</span></td></tr>
-</tbody></table></div><h3>build store <span class="badge up">3 rows &rarr; 4 lines (+1)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 514.0 104" width="100%" style="max-width:514.0px;height:auto" role="img" aria-label="build extractor as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="54" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">build extractor</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">labor in t</text><line x1="210.0" y1="30" x2="256.0" y2="48.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="33.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="200.0" cy="66" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="65" text-anchor="end" font-size="12">metal in t</text><line x1="210.0" y1="66" x2="256.0" y2="48.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="51.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">extractor in t</text><text x="407.0" y="41" text-anchor="start" font-size="10" opacity="0.7" font-style="italic">$resource</text><line x1="274.0" y1="48.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="33.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>build store <span class="badge up">3 rows &rarr; 4 lines (+1)</span></h3>
 <p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -341,7 +546,8 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">labor in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{labor territory:t} amount:-1 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">metal in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{metal territory:t} amount:-1 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">store[$resource] in t</td><td class="amt amt-pos">+1</td><td></td><td class="note"></td><td class="one-string">{change thing:{store resource:$resource territory:t} amount:+1}</td></tr>
-</tbody></table></div><h3>build yard <span class="badge up">3 rows &rarr; 4 lines (+1)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 490.0 104" width="100%" style="max-width:490.0px;height:auto" role="img" aria-label="build store as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="54" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">build store</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">labor in t</text><line x1="210.0" y1="30" x2="256.0" y2="48.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="33.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="200.0" cy="66" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="65" text-anchor="end" font-size="12">metal in t</text><line x1="210.0" y1="66" x2="256.0" y2="48.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="51.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">store in t</text><text x="407.0" y="41" text-anchor="start" font-size="10" opacity="0.7" font-style="italic">$resource</text><line x1="274.0" y1="48.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="33.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>build yard <span class="badge up">3 rows &rarr; 4 lines (+1)</span></h3>
 <p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -355,7 +561,8 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">labor in t</td><td class="amt amt-neg">-1</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{labor territory:t} amount:-1 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">metal in t</td><td class="amt amt-neg">-15</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{metal territory:t} amount:-15 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">yard in t</td><td class="amt amt-pos">+1</td><td><span class="attach">HARD</span></td><td class="note">capacity is the container's now</td><td class="one-string">{change thing:{yard territory:t} amount:+1 attach:hard} <span class="cmt"># capacity is the container's now</span></td></tr>
-</tbody></table></div><h3>produce pioneer <span class="badge up">4 rows &rarr; 5 lines (+1)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 484.0 104" width="100%" style="max-width:484.0px;height:auto" role="img" aria-label="build yard as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="54" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">build yard</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">labor in t</text><line x1="210.0" y1="30" x2="256.0" y2="48.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="33.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="200.0" cy="66" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="65" text-anchor="end" font-size="12">metal in t</text><line x1="210.0" y1="66" x2="256.0" y2="48.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="51.0" text-anchor="middle" font-size="10" opacity="0.85">15</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">yard in t</text><line x1="274.0" y1="48.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="33.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>produce pioneer <span class="badge up">4 rows &rarr; 5 lines (+1)</span></h3>
 <p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -370,7 +577,8 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">energy in t</td><td class="amt amt-neg">-6</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{energy territory:t} amount:-6 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">citizen in t</td><td class="amt amt-neg">-2</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{citizen territory:t} amount:-2 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">pioneer in t</td><td class="amt amt-pos">+1</td><td></td><td class="note"></td><td class="one-string">{change thing:{pioneer territory:t} amount:+1}</td></tr>
-</tbody></table></div><h3>launch ark <span class="badge up">4 rows &rarr; 6 lines (+2)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 502.0 140" width="100%" style="max-width:502.0px;height:auto" role="img" aria-label="produce pioneer as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="90" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">produce pioneer</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">metal in t</text><line x1="210.0" y1="30" x2="256.0" y2="66.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="42.0" text-anchor="middle" font-size="10" opacity="0.85">3</text><circle cx="200.0" cy="66" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="65" text-anchor="end" font-size="12">energy in t</text><line x1="210.0" y1="66" x2="256.0" y2="66.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="60.0" text-anchor="middle" font-size="10" opacity="0.85">6</text><circle cx="200.0" cy="102" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="101" text-anchor="end" font-size="12">citizen in t</text><line x1="210.0" y1="102" x2="256.0" y2="66.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="78.0" text-anchor="middle" font-size="10" opacity="0.85">2</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">pioneer in t</text><line x1="274.0" y1="66.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="42.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>launch ark <span class="badge up">4 rows &rarr; 6 lines (+2)</span></h3>
 <p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -386,7 +594,8 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">energy in t</td><td class="amt amt-neg">-12</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{energy territory:t} amount:-12 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">citizen in t</td><td class="amt amt-neg">-2</td><td><span class="attach">hard</span></td><td class="note"></td><td class="one-string">{change thing:{citizen territory:t} amount:-2 attach:hard}</td></tr>
 <tr><td class="op op-change">change</td><td class="target">ark in {orbit below:t}</td><td class="amt amt-pos">+1</td><td></td><td class="note">**`P-362`, promoted 2026-09-10** - *produce 1 ark, the orbit above `$where`*. `P-342` had it produce nothing because the destination could not be named; `P-334` made an orbit carry `below`, and the name was there. **This closes `X-25` and closes the loop.**</td><td class="one-string">{change thing:{ark orbit:{orbit below:t}} amount:+1} <span class="cmt"># **`P-362`, promoted 2026-09-10** - *produce 1 ark, the orbit above `$where`*. `P-342` had it produce nothing because the destination could not be named; `P-334` made an orbit carry `below`, and the name was there. **This closes `X-25` and closes the loop.**</span></td></tr>
-</tbody></table></div><h3>create labor <span class="badge level">3 rows &rarr; 3 lines (=)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 502.0 140" width="100%" style="max-width:502.0px;height:auto" role="img" aria-label="launch ark as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="90" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">launch ark</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">metal in t</text><line x1="210.0" y1="30" x2="256.0" y2="66.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="42.0" text-anchor="middle" font-size="10" opacity="0.85">3</text><circle cx="200.0" cy="66" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="65" text-anchor="end" font-size="12">energy in t</text><line x1="210.0" y1="66" x2="256.0" y2="66.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="60.0" text-anchor="middle" font-size="10" opacity="0.85">12</text><circle cx="200.0" cy="102" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="101" text-anchor="end" font-size="12">citizen in t</text><line x1="210.0" y1="102" x2="256.0" y2="66.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="78.0" text-anchor="middle" font-size="10" opacity="0.85">2</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">ark in orbit</text><line x1="274.0" y1="66.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="42.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>create labor <span class="badge level">3 rows &rarr; 3 lines (=)</span></h3>
 <p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -399,7 +608,8 @@ data.</p>
 <tr><td class="op op-each">some</td><td class="target">citizen: {citizen ready:yes}</td><td class="amt"></td><td></td><td class="note">was the selector *a citizen that is ready*, which was prose outside the language</td><td class="one-string">{some citizen:{citizen ready:yes}} <span class="cmt"># was the selector *a citizen that is ready*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">citizen.ready = no</td><td class="amt"></td><td></td><td class="note">rows 1 and 2 were one flip</td><td class="one-string">{set thing:{citizen} ready:no} <span class="cmt"># rows 1 and 2 were one flip</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">labor in holder of citizen</td><td class="amt amt-pos">+1</td><td></td><td class="note">row 3</td><td class="one-string">{change thing:{labor territory:holder of citizen} amount:+1} <span class="cmt"># row 3</span></td></tr>
-</tbody></table></div><h3>work <span class="badge level">5 rows &rarr; 5 lines (=)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 586.0 94" width="100%" style="max-width:586.0px;height:auto" role="img" aria-label="create labor as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">create labor</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">labor in holder of citizen</text><line x1="274.0" y1="30.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><text x="265.0" y="85" text-anchor="middle" font-size="10" opacity="0.85">guard: sets citizen.ready = no</text></svg></div></details><h3>work <span class="badge level">5 rows &rarr; 5 lines (=)</span></h3>
 <p class="sel">selector: <em>offered on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -415,6 +625,7 @@ data.</p>
 <tr><td class="op op-set">set</td><td class="target">extractor.ready = no</td><td class="amt"></td><td></td><td class="note">rows 3 and 4 were one flip</td><td class="one-string">{set thing:{extractor} ready:no} <span class="cmt"># rows 3 and 4 were one flip</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">resource[extractor.resource] in t</td><td class="amt amt-pos">+t.deposit[extractor.resource].density</td><td></td><td class="note">row 5</td><td class="one-string">{change thing:{resource kind:extractor.resource territory:t} amount:+t.deposit[extractor.resource].density} <span class="cmt"># row 5</span></td></tr>
 </tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 520.0 94" width="100%" style="max-width:520.0px;height:auto" role="img" aria-label="work as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">work</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">labor in t</text><line x1="210.0" y1="30" x2="256.0" y2="30.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">resource in t</text><text x="407.0" y="41" text-anchor="start" font-size="10" opacity="0.7" font-style="italic">extractor.resource</text><line x1="274.0" y1="30.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">t.deposit[extractor.resource].density</text><text x="265.0" y="85" text-anchor="middle" font-size="10" opacity="0.85">guard: sets extractor.ready = no</text></svg></div></details>
 
 <h2>World recipes <span class="badge">8</span></h2>
 <p>These fire when the turn ends, in order: upkeep, grow and perish, age, spoil, refresh.</p>
@@ -430,7 +641,8 @@ data.</p>
 </tr></thead><tbody>
 <tr><td class="op op-each">each</td><td class="target">thing: {thing upkeep:any}</td><td class="amt"></td><td></td><td class="note">was the selector *each thing with upkeep*, which was prose outside the language</td><td class="one-string">{each thing:{thing upkeep:any}} <span class="cmt"># was the selector *each thing with upkeep*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">food in holder of thing</td><td class="amt amt-neg">-thing.upkeep</td><td><span class="attach">hard</span></td><td class="note">row 1 was the selector; row 2</td><td class="one-string">{change thing:{food territory:holder of thing} amount:-thing.upkeep attach:hard} <span class="cmt"># row 1 was the selector; row 2</span></td></tr>
-</tbody></table></div><h3>grow <span class="badge up">2 rows &rarr; 4 lines (+2)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 430.0 68" width="100%" style="max-width:430.0px;height:auto" role="img" aria-label="upkeep as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">upkeep</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">food in holder of thing</text><line x1="210.0" y1="30" x2="256.0" y2="30.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">thing.upkeep</text></svg></div></details><h3>grow <span class="badge up">2 rows &rarr; 4 lines (+2)</span></h3>
 <p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -444,7 +656,8 @@ data.</p>
 <tr><td class="op op-let">let</td><td class="target">n = min(count {food surplus:yes in t}, count {citizen in t})</td><td class="amt"></td><td></td><td class="note">the same expression, now in a language that has one</td><td class="one-string">{let n:min(count {food surplus:yes in t}, count {citizen in t})} <span class="cmt"># the same expression, now in a language that has one</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">food[surplus] in t</td><td class="amt amt-neg">-n</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{food surplus:yes territory:t} amount:-n} <span class="cmt"># row 1</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">citizen in t</td><td class="amt amt-pos">+n</td><td></td><td class="note">row 2</td><td class="one-string">{change thing:{citizen territory:t} amount:+n} <span class="cmt"># row 2</span></td></tr>
-</tbody></table></div><h3>perish <span class="badge up">2 rows &rarr; 3 lines (+1)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 502.0 68" width="100%" style="max-width:502.0px;height:auto" role="img" aria-label="grow as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">grow</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">food in t</text><text x="183.0" y="41" text-anchor="end" font-size="10" opacity="0.7" font-style="italic">surplus</text><line x1="210.0" y1="30" x2="256.0" y2="30.0" stroke="currentColor" stroke-width="3" marker-end="url(#ah)"/><text x="233.0" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">n</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">citizen in t</text><line x1="274.0" y1="30.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="3" marker-end="url(#ah)"/><text x="326.5" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">n</text></svg></div></details><h3>perish <span class="badge up">2 rows &rarr; 3 lines (+1)</span></h3>
 <p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -457,7 +670,8 @@ data.</p>
 <tr><td class="op op-each">each</td><td class="target">thing: {thing unsustained:yes}</td><td class="amt"></td><td></td><td class="note">was `unpaid:yes`. Two causes, one condition: its upkeep was not met, or the force where it is falls short</td><td class="one-string">{each thing:{thing unsustained:yes}} <span class="cmt"># was `unpaid:yes`. Two causes, one condition: its upkeep was not met, or the force where it is falls short</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">metal in holder of thing</td><td class="amt amt-pos">+thing.metal-in-it</td><td></td><td class="note">the metal is left where the thing stood - and now this answers the force case too, by being the only answer either has</td><td class="one-string">{change thing:{metal territory:holder of thing} amount:+thing.metal-in-it} <span class="cmt"># the metal is left where the thing stood - and now this answers the force case too, by being the only answer either has</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">thing</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{thing} amount:-1} <span class="cmt"># row 1</span></td></tr>
-</tbody></table></div><h3>age <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 574.0 68" width="100%" style="max-width:574.0px;height:auto" role="img" aria-label="perish as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">perish</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">thing</text><line x1="210.0" y1="30" x2="256.0" y2="30.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">metal in holder of thing</text><line x1="274.0" y1="30.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">thing.metal-in-it</text></svg></div></details><h3>age <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
 <p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -469,7 +683,8 @@ data.</p>
 </tr></thead><tbody>
 <tr><td class="op op-each">each</td><td class="target">thing: {thing keeps:any}</td><td class="amt"></td><td></td><td class="note">was the selector *each thing with keeps*, which was prose outside the language</td><td class="one-string">{each thing:{thing keeps:any}} <span class="cmt"># was the selector *each thing with keeps*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">thing.keeps</td><td class="amt amt-neg">-1</td><td><span class="attach">soft</span></td><td class="note">both rows were one decrement; the guard `keeps at least 1` is now the operation</td><td class="one-string">{change thing:{thing} keeps:-1 attach:soft} <span class="cmt"># both rows were one decrement; the guard `keeps at least 1` is now the operation</span></td></tr>
-</tbody></table></div><h3>spoil <span class="badge up">1 rows &rarr; 2 lines (+1)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 430.0 68" width="100%" style="max-width:430.0px;height:auto" role="img" aria-label="age as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">age</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">thing.keeps</text><line x1="210.0" y1="30" x2="256.0" y2="30.0" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 3" marker-end="url(#ah)"/><text x="233.0" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>spoil <span class="badge up">1 rows &rarr; 2 lines (+1)</span></h3>
 <p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -481,7 +696,8 @@ data.</p>
 </tr></thead><tbody>
 <tr><td class="op op-each">each</td><td class="target">thing: {thing keeps:0}</td><td class="amt"></td><td></td><td class="note">was the selector *each thing with keeps 0*, which was prose outside the language</td><td class="one-string">{each thing:{thing keeps:0}} <span class="cmt"># was the selector *each thing with keeps 0*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">thing</td><td class="amt amt-neg">-1</td><td></td><td class="note">row 1</td><td class="one-string">{change thing:{thing} amount:-1} <span class="cmt"># row 1</span></td></tr>
-</tbody></table></div><h3>refresh <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 430.0 68" width="100%" style="max-width:430.0px;height:auto" role="img" aria-label="spoil as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">spoil</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">thing</text><line x1="210.0" y1="30" x2="256.0" y2="30.0" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="233.0" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>refresh <span class="badge level">2 rows &rarr; 2 lines (=)</span></h3>
 <p class="sel">selector: <em>quantified on line 1, rather than in prose beside the recipe</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -493,7 +709,8 @@ data.</p>
 </tr></thead><tbody>
 <tr><td class="op op-each">each</td><td class="target">thing: {thing ready:no}</td><td class="amt"></td><td></td><td class="note">was the selector *each thing that is not ready*, which was prose outside the language</td><td class="one-string">{each thing:{thing ready:no}} <span class="cmt"># was the selector *each thing that is not ready*, which was prose outside the language</span></td></tr>
 <tr><td class="op op-set">set</td><td class="target">thing.ready = yes</td><td class="amt"></td><td></td><td class="note">both rows were one flip</td><td class="one-string">{set thing:{thing} ready:yes} <span class="cmt"># both rows were one flip</span></td></tr>
-</tbody></table></div><h3>end-of-turn losses <span class="badge new">new</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 430.0 94" width="100%" style="max-width:430.0px;height:auto" role="img" aria-label="refresh as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">refresh</text><text x="265.0" y="85" text-anchor="middle" font-size="10" opacity="0.85">guard: sets thing.ready = yes</text></svg></div></details><h3>end-of-turn losses <span class="badge new">new</span></h3>
 <p class="sel">selector: <em>quantified on line 1</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -510,7 +727,8 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">metal in t</td><td class="amt amt-pos">+min(count {metal in t}, sum capacity of {store resource:metal territory:t})</td><td></td><td class="note">**put back what the stores hold.** Lines are not sequential, so both amounts read the state before the line above ran - the net effect is *keep what fits*</td><td class="one-string">{change thing:{metal territory:t} amount:+min(count {metal in t}, sum capacity of {store resource:metal territory:t})} <span class="cmt"># **put back what the stores hold.** Lines are not sequential, so both amounts read the state before the line above ran - the net effect is *keep what fits*</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">energy in t</td><td class="amt amt-neg">-count {energy in t}</td><td></td><td class="note">take all the energy up</td><td class="one-string">{change thing:{energy territory:t} amount:-count {energy in t}} <span class="cmt"># take all the energy up</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">energy in t</td><td class="amt amt-pos">+min(count {energy in t}, sum capacity of {store resource:energy territory:t})</td><td></td><td class="note">and put back what fits</td><td class="one-string">{change thing:{energy territory:t} amount:+min(count {energy in t}, sum capacity of {store resource:energy territory:t})} <span class="cmt"># and put back what fits</span></td></tr>
-</tbody></table></div><h3>refuel <span class="badge new">new</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 430.0 176" width="100%" style="max-width:430.0px;height:auto" role="img" aria-label="end-of-turn losses as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="126" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">end-of-turn losses</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">metal in t</text><line x1="210.0" y1="30" x2="256.0" y2="84.0" stroke="currentColor" stroke-width="3" marker-end="url(#ah)"/><text x="233.0" y="51.0" text-anchor="middle" font-size="10" opacity="0.85">count {metal in t}</text><line x1="256.0" y1="85.0" x2="211.0" y2="31" stroke="currentColor" stroke-width="3" marker-end="url(#ah)"/><text x="233.5" y="71.0" text-anchor="middle" font-size="10" opacity="0.85">min(count {metal in t}, sum capacity of {store resource:metal territory:t})</text><circle cx="200.0" cy="66" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="65" text-anchor="end" font-size="12">energy in t</text><line x1="210.0" y1="66" x2="256.0" y2="84.0" stroke="currentColor" stroke-width="3" marker-end="url(#ah)"/><text x="233.0" y="69.0" text-anchor="middle" font-size="10" opacity="0.85">count {energy in t}</text><line x1="256.0" y1="85.0" x2="211.0" y2="67" stroke="currentColor" stroke-width="3" marker-end="url(#ah)"/><text x="233.5" y="89.0" text-anchor="middle" font-size="10" opacity="0.85">min(count {energy in t}, sum capacity of {store resource:energy territory:t})</text><circle cx="200.0" cy="102" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="101" text-anchor="end" font-size="12">food in t</text><line x1="210.0" y1="102" x2="256.0" y2="84.0" stroke="currentColor" stroke-width="3" marker-end="url(#ah)"/><text x="233.0" y="87.0" text-anchor="middle" font-size="10" opacity="0.85">count {food in t}</text><circle cx="200.0" cy="138" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="137" text-anchor="end" font-size="12">labor in t</text><line x1="210.0" y1="138" x2="256.0" y2="84.0" stroke="currentColor" stroke-width="3" marker-end="url(#ah)"/><text x="233.0" y="105.0" text-anchor="middle" font-size="10" opacity="0.85">count {labor in t}</text></svg></div></details><h3>refuel <span class="badge new">new</span></h3>
 <p class="sel">selector: <em>quantified on line 1 - **the world's recipes are not offered**, which is what makes this not a step the player takes</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -526,6 +744,7 @@ data.</p>
 <tr><td class="op op-change">change</td><td class="target">energy in t</td><td class="amt amt-neg">-min(available energy of unit, count {energy in t})</td><td></td><td class="note">what the territory gives up is what the bin can take</td><td class="one-string">{change thing:{energy territory:t} amount:-min(available energy of unit, count {energy in t})} <span class="cmt"># what the territory gives up is what the bin can take</span></td></tr>
 <tr><td class="op op-change">change</td><td class="target">energy in unit</td><td class="amt amt-pos">+min(available energy of unit, count {energy in t})</td><td></td><td class="note">**the bin fills to `fuel` and no further**, because available capacity is the total less the used. Lines are not sequential, so both amounts read the same state and no &lt;code&gt;clamp&lt;/code&gt; is needed</td><td class="one-string">{change thing:{energy unit:unit} amount:+min(available energy of unit, count {energy in t})} <span class="cmt"># **the bin fills to `fuel` and no further**, because available capacity is the total less the used. Lines are not sequential, so both amounts read the same state and no &lt;code&gt;clamp&lt;/code&gt; is needed</span></td></tr>
 </tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 514.0 94" width="100%" style="max-width:514.0px;height:auto" role="img" aria-label="refuel as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">refuel</text><circle cx="200.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="183.0" y="29" text-anchor="end" font-size="12">energy in t</text><line x1="210.0" y1="30" x2="256.0" y2="30.0" stroke="currentColor" stroke-width="3" marker-end="url(#ah)"/><text x="233.0" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">min(available energy of unit, count {energy in t})</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">energy in unit</text><line x1="274.0" y1="30.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="3" marker-end="url(#ah)"/><text x="326.5" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">min(available energy of unit, count {energy in t})</text><text x="265.0" y="85" text-anchor="middle" font-size="10" opacity="0.85">guard: count {territory id:t control:yours} &gt;= 1</text></svg></div></details>
 
 <h2>Building the world <span class="badge">4</span></h2>
 <div class="callout">
@@ -547,7 +766,8 @@ out.</strong></p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-change">change</td><td class="target">territory[id:id, biome:biome, nature:nature] in game</td><td class="amt amt-pos">+1</td><td></td><td class="note">was a create and three sets; non-sequential composition has no referent for those</td><td class="one-string">{change thing:{territory id:id biome:biome nature:nature game:game} amount:+1} <span class="cmt"># was a create and three sets; non-sequential composition has no referent for those</span></td></tr>
-</tbody></table></div><h3>make-deposit(t, resource, capacity, density) <span class="badge design">design time</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 595.0 68" width="100%" style="max-width:595.0px;height:auto" role="img" aria-label="make-territory(id, biome, nature) as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">make-territory</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">territory in game</text><text x="407.0" y="41" text-anchor="start" font-size="10" opacity="0.7" font-style="italic">id:id, biome:biome, nature:nature</text><line x1="274.0" y1="30.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>make-deposit(t, resource, capacity, density) <span class="badge design">design time</span></h3>
 <p class="sel">selector: <em>applied at design time</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -558,7 +778,8 @@ out.</strong></p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-change">change</td><td class="target">deposit[resource:resource, total-capacity:capacity, density:density] in t</td><td class="amt amt-pos">+1</td><td></td><td class="note">was a create and three sets</td><td class="one-string">{change thing:{deposit resource:resource total-capacity:capacity density:density territory:t} amount:+1} <span class="cmt"># was a create and three sets</span></td></tr>
-</tbody></table></div><h3>make-orbit(t) <span class="badge design">design time</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 725.0 68" width="100%" style="max-width:725.0px;height:auto" role="img" aria-label="make-deposit(t, resource, capacity, density) as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">make-deposit</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">deposit in t</text><text x="407.0" y="41" text-anchor="start" font-size="10" opacity="0.7" font-style="italic">resource:resource, total-capacity:capacity, density:density</text><line x1="274.0" y1="30.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>make-orbit(t) <span class="badge design">design time</span></h3>
 <p class="sel">selector: <em>applied at design time</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -569,7 +790,8 @@ out.</strong></p>
 <th>The same row, as one string</th>
 </tr></thead><tbody>
 <tr><td class="op op-change">change</td><td class="target">orbit[below:t] in game</td><td class="amt amt-pos">+1</td><td></td><td class="note">was a create and one set</td><td class="one-string">{change thing:{orbit below:t game:game} amount:+1} <span class="cmt"># was a create and one set</span></td></tr>
-</tbody></table></div><h3>make-adjacency(a, b) <span class="badge design">design time</span></h3>
+</tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 508.0 68" width="100%" style="max-width:508.0px;height:auto" role="img" aria-label="make-orbit(t) as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">make-orbit</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">orbit in game</text><text x="407.0" y="41" text-anchor="start" font-size="10" opacity="0.7" font-style="italic">below:t</text><line x1="274.0" y1="30.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details><h3>make-adjacency(a, b) <span class="badge design">design time</span></h3>
 <p class="sel">selector: <em>applied at design time</em></p>
 <div class="scroll"><table><thead><tr>
 <th>Op</th>
@@ -581,6 +803,7 @@ out.</strong></p>
 </tr></thead><tbody>
 <tr><td class="op op-change">change</td><td class="target">adjacency[from:a, to:b] in game</td><td class="amt amt-pos">+1</td><td></td><td class="note">was a create and two sets</td><td class="one-string">{change thing:{adjacency from:a to:b game:game} amount:+1} <span class="cmt"># was a create and two sets</span></td></tr>
 </tbody></table></div>
+<details class="net"><summary>as a coloured Petri net</summary><div class="scroll"><svg viewBox="0 0 532.0 68" width="100%" style="max-width:532.0px;height:auto" role="img" aria-label="make-adjacency(a, b) as a coloured Petri net"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs><rect x="258.0" y="21" width="14" height="24" fill="currentColor"/><text x="265.0" y="14" text-anchor="middle" font-size="12" font-weight="600">make-adjacency</text><circle cx="390.0" cy="30" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="407.0" y="29" text-anchor="start" font-size="12">adjacency in game</text><text x="407.0" y="41" text-anchor="start" font-size="10" opacity="0.7" font-style="italic">from:a, to:b</text><line x1="274.0" y1="30.0" x2="379.0" y2="30" stroke="currentColor" stroke-width="1.3" marker-end="url(#ah)"/><text x="326.5" y="24.0" text-anchor="middle" font-size="10" opacity="0.85">1</text></svg></div></details>
 
 <h3>The data those calls consume</h3>
 <p>Copied for review. <code>3 x 4</code> is capacity 3, density 4 &mdash; so
@@ -2890,7 +3113,7 @@ test would be a rule nothing runs.</strong></p>
 classification is <code>code_behaviours</code> in the data, where it can be argued with; this only
 refuses to keep agreeing about code that has changed under it.</p>
 <div class="scroll"><table><thead><tr><th>Where</th><th>Recipes that name it</th><th>What it
-does</th><th></th></tr></thead><tbody><tr><td class="target">game.rs:948</td><td class="target">upkeep, perish, grow</td><td>A population eats, starves and grows, in one step</td><td class="note">**Three recipes, one function.** The release makes eating, dying and breeding three rows; the code fuses them into <code>population_after</code>, where nothing consumes the food - it only decides the new count. The two shapes agree only if the arithmetic does.</td></tr><tr><td class="target">territory.rs:188</td><td class="target">age, spoil</td><td>Food and labor are discarded whole at a turn's end</td><td class="note">**Half of this line has recipes and half has none.** Food expiring is <code>age</code> and <code>spoil</code> working through <code>keeps</code> 1, exactly as the release says. **Labor is discarded by the same line and no recipe mentions it** - a citizen's unspent labor simply is not there next turn.</td></tr><tr><td class="target">territory.rs:192</td><td class="amt"><strong>none</strong></td><td>Metal and energy are cut to what the territory's stores hold, and the rest is gone</td><td class="note"><code>X-21</code>'s survivor, and the sharpest case here. **This is the rule that decides what a player keeps between turns**, it is what a store is <em>for</em>, and it appears in none of the sixteen. <code>R-7</code> can be complete over all of them and never show it.</td></tr><tr><td class="target">game.rs:954</td><td class="target">refresh</td><td>Everything in a territory becomes ready again</td><td class="note"></td></tr><tr><td class="target">game.rs:928</td><td class="target">refresh</td><td>Every unit becomes ready again, wherever it is</td><td class="note">A second readiness reset, over a different population - <code>refresh</code> is one row and this is two places.</td></tr><tr><td class="target">game.rs:915</td><td class="amt"><strong>none</strong></td><td>A territory whose force has fallen below its nature is taken back by nature</td><td class="note"><strong>Equal force to maintain</strong>, and no recipe says so. The prototype has it as a cause of <code>unsustained</code>, which is a derived trait rather than a row.</td></tr><tr><td class="target">game.rs:631</td><td class="amt"><strong>none</strong></td><td>Taking a territory is refused unless the force brought is strictly greater</td><td class="note"><strong>Greater force to enter</strong>, and no recipe says so either. It is a guard inside <code>land</code> and <code>found_by_land</code> rather than a line of them.</td></tr><tr><td class="target">territory.rs:584</td><td class="amt"><strong>none</strong></td><td>Losing a territory clears its garrison, population, stores, yards and extractors</td><td class="note">What <em>everything goes into disorder</em> comes to. <code>X-27</code>: it does not clear the <em>units</em>, which are marked unusable and left standing.</td></tr><tr><td class="target">game.rs:918</td><td class="amt"><strong>none</strong></td><td>A unit on a lost territory survives, unusable</td><td class="note"><code>X-27</code>, and Sean asked for the opposite: <em>for now we just delete the units.</em></td></tr><tr><td class="target">game.rs:930</td><td class="amt"><strong>none</strong></td><td>The turn number advances</td><td class="note">**Bookkeeping rather than a rule**, and listed so the count is honest about what it is counting. Nothing in the game reads it.</td></tr></tbody></table></div>
+does</th><th></th></tr></thead><tbody><tr><td class="target">game.rs:939</td><td class="target">upkeep, perish, grow</td><td>A population eats, starves and grows, in one step</td><td class="note">**Three recipes, one function.** The release makes eating, dying and breeding three rows; the code fuses them into <code>population_after</code>, where nothing consumes the food - it only decides the new count. The two shapes agree only if the arithmetic does.</td></tr><tr><td class="target">territory.rs:188</td><td class="target">age, spoil</td><td>Food and labor are discarded whole at a turn's end</td><td class="note">**Half of this line has recipes and half has none.** Food expiring is <code>age</code> and <code>spoil</code> working through <code>keeps</code> 1, exactly as the release says. **Labor is discarded by the same line and no recipe mentions it** - a citizen's unspent labor simply is not there next turn.</td></tr><tr><td class="target">territory.rs:192</td><td class="amt"><strong>none</strong></td><td>Metal and energy are cut to what the territory's stores hold, and the rest is gone</td><td class="note"><code>X-21</code>'s survivor, and the sharpest case here. **This is the rule that decides what a player keeps between turns**, it is what a store is <em>for</em>, and it appears in none of the sixteen. <code>R-7</code> can be complete over all of them and never show it.</td></tr><tr><td class="target">game.rs:945</td><td class="target">refresh</td><td>Everything in a territory becomes ready again</td><td class="note"></td></tr><tr><td class="target">game.rs:919</td><td class="target">refresh</td><td>Every unit becomes ready again, wherever it is</td><td class="note">A second readiness reset, over a different population - <code>refresh</code> is one row and this is two places.</td></tr><tr><td class="target">game.rs:906</td><td class="amt"><strong>none</strong></td><td>A territory whose force has fallen below its nature is taken back by nature</td><td class="note"><strong>Equal force to maintain</strong>, and no recipe says so. The prototype has it as a cause of <code>unsustained</code>, which is a derived trait rather than a row.</td></tr><tr><td class="target">game.rs:622</td><td class="amt"><strong>none</strong></td><td>Taking a territory is refused unless the force brought is strictly greater</td><td class="note"><strong>Greater force to enter</strong>, and no recipe says so either. It is a guard inside <code>land</code> and <code>found_by_land</code> rather than a line of them.</td></tr><tr><td class="target">territory.rs:731</td><td class="amt"><strong>none</strong></td><td>Losing a territory clears its garrison, population, stores, yards and extractors</td><td class="note">What <em>everything goes into disorder</em> comes to. <code>X-27</code>: it does not clear the <em>units</em>, which are marked unusable and left standing.</td></tr><tr><td class="target">game.rs:909</td><td class="amt"><strong>none</strong></td><td>A unit on a lost territory survives, unusable</td><td class="note"><code>X-27</code>, and Sean asked for the opposite: <em>for now we just delete the units.</em></td></tr><tr><td class="target">game.rs:921</td><td class="amt"><strong>none</strong></td><td>The turn number advances</td><td class="note">**Bookkeeping rather than a rule**, and listed so the count is honest about what it is counting. Nothing in the game reads it.</td></tr></tbody></table></div>
 <p><strong>6 of
 10 are named by no recipe at all.</strong> One of them is
 bookkeeping and the rest are rules. <strong><code>R-7</code> is <em>each recipe can be confirmed on

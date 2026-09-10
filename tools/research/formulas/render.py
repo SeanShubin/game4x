@@ -8,6 +8,7 @@ rather than by trusting the prose.
 """
 
 import json
+import re
 import pathlib
 import sys
 
@@ -289,6 +290,132 @@ def encode_all():
 ENCODED, N_LINES = encode_all()
 
 
+ARCS = RESULTS["arcs"]
+
+
+def arc_kind(name, index):
+    """The Petri-net kind of one arc, as `check_arcs()` classified it.
+
+    **Read, not re-derived.** The renderer had its own classifier and it disagreed with the
+    checker's - which is the failure `play.py` made twice: a second implementation cannot
+    contradict itself out loud.
+    """
+    return ARCS["per_line"].get(f"{name}|{index}", "ordinary")
+
+
+def fold(place):
+    """A place expression, folded to the place it names - the colour becomes an annotation.
+
+    `extractor[food] in t`, `extractor[metal] in t` and `extractor[$resource] in t` are one
+    place with three colours, which is the whole reason a coloured net is smaller than the net
+    it unfolds to. Returns (label, colour).
+    """
+    s = str(place).strip()
+    colour = ""
+    m = re.match(r"([a-z-]+)\[([^\]]*)\]\s*(.*)", s)
+    if m:
+        kind, inner, rest = m.groups()
+        colour = inner
+        s = f"{kind} {rest}".strip()
+    s = re.sub(r"\s+in\s+\{([a-z-]+)[^}]*\}", r" in \1", s)
+    return s, colour
+
+
+def petri_svg(f):
+    """One recipe as a coloured Petri net. Inputs left, the transition centre, outputs right.
+
+    **A place on both sides is drawn once.** `end-of-turn losses` drains `metal in t` and refills
+    it, which is one place with an arc each way - a reset arc and a bounded refill - and drawing
+    it twice would say the recipe touched two places.
+    """
+    guards, ins, outs = [], [], []
+    for i, (op, tgt, amt, attach, _n) in enumerate(f["lines"]):
+        if op == "require":
+            guards.append((str(tgt).strip(), str(amt).strip()))
+        elif op == "set":
+            guards.append(("sets " + str(tgt).strip(), ""))
+        elif op == "change":
+            a = str(amt).strip()
+            row = (fold(tgt), a, arc_kind(f["name"], i),
+                   str(attach).strip().lower() == "soft")
+            (ins if a.startswith("-") else outs).append(row)
+
+    both = {r[0] for r in ins} & {r[0] for r in outs}
+    left = [r for r in ins if r[0] in both] + [r for r in ins if r[0] not in both]
+    right = [r for r in outs if r[0] not in both]
+    back = {r[0]: r for r in outs if r[0] in both}
+
+    # **The box is measured, not fixed.** `make-deposit`'s colour is the whole of what it
+    # creates - `resource:resource, total-capacity:capacity, density:density` - and it ran off
+    # the right edge at a fixed width. Truncating would hide what the recipe does.
+    def span(rows, small):
+        """A rough advance width for the widest label in a column."""
+        wide = 0.0
+        for (label, colour), *_rest in rows:
+            wide = max(wide, len(label) * 6.0, len(colour) * 5.0 if small else 0.0)
+        return wide
+
+    ROW, PAD = 36, 14
+    PW = max(200.0, span(left, True) + 26)
+    TX = PW + 58
+    W = TX + 146 + span(right, True) + 26
+    rows = max(len(left), len(right), 1)
+    height = PAD * 2 + rows * ROW + (30 if guards else 4)
+    p = [f'<svg viewBox="0 0 {W} {height}" width="100%" '
+         f'style="max-width:{W}px;height:auto" role="img" '
+         f'aria-label="{esc(f["name"])} as a coloured Petri net">',
+         '<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" '
+         'markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>'
+         '</marker></defs>']
+
+    def node(x, y, label, colour, anchor):
+        tx = x + (17 if anchor == "start" else -17)
+        out = (f'<circle cx="{x}" cy="{y}" r="9" fill="none" stroke="currentColor" '
+               f'stroke-width="1.5"/>'
+               f'<text x="{tx}" y="{y - 1}" text-anchor="{anchor}" font-size="12">'
+               f'{esc(label)}</text>')
+        if colour:
+            out += (f'<text x="{tx}" y="{y + 11}" text-anchor="{anchor}" font-size="10" '
+                    f'opacity="0.7" font-style="italic">{esc(colour)}</text>')
+        return out
+
+    def arc(x1, y1, x2, y2, label, kind, soft, above=True):
+        w = 3 if kind == "marking" else 1.3
+        dash = ' stroke-dasharray="5 3"' if soft else ""
+        dy = -6 if above else 13
+        return (f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="currentColor" '
+                f'stroke-width="{w}"{dash} marker-end="url(#ah)"/>'
+                f'<text x="{(x1 + x2) / 2}" y="{(y1 + y2) / 2 + dy}" text-anchor="middle" '
+                f'font-size="10" opacity="0.85">{esc(label)}</text>')
+
+    top = PAD + 16
+    ty0 = top - 9
+    ty1 = top + max(rows - 1, 0) * ROW + 9
+    mid = (ty0 + ty1) / 2
+    p.append(f'<rect x="{TX}" y="{ty0}" width="14" height="{max(ty1 - ty0, 24)}" '
+             f'fill="currentColor"/>')
+    p.append(f'<text x="{TX + 7}" y="{ty0 - 7}" text-anchor="middle" font-size="12" '
+             f'font-weight="600">{esc(f["name"].split("(")[0].strip())}</text>')
+
+    for i, ((label, colour), amt, kind, soft) in enumerate(left):
+        y = top + i * ROW
+        p.append(node(PW, y, label, colour, "end"))
+        p.append(arc(PW + 10, y, TX - 2, mid, amt.lstrip("-"), kind, soft))
+        if (label, colour) in back:
+            _pl, bamt, bkind, bsoft = back[(label, colour)]
+            p.append(arc(TX - 2, mid + 1, PW + 11, y + 1, bamt.lstrip("+"), bkind, bsoft, False))
+    for i, ((label, colour), amt, kind, soft) in enumerate(right):
+        y = top + i * ROW
+        p.append(node(TX + 132, y, label, colour, "start"))
+        p.append(arc(TX + 16, mid, TX + 121, y, amt.lstrip("+"), kind, soft))
+    if guards:
+        g = "; ".join(f"{a} {b}".strip() for a, b in guards)
+        p.append(f'<text x="{TX + 7}" y="{height - 9}" text-anchor="middle" font-size="10" '
+                 f'opacity="0.85">guard: {esc(g)}</text>')
+    p.append("</svg>")
+    return "".join(p)
+
+
 def formula_table(f):
     out = []
     was = f.get("was")
@@ -326,6 +453,11 @@ def formula_table(f):
             f'<td class="one-string">{_one_string_cell(ENCODED[(f["name"], i)])}</td></tr>'
         )
     out.append("</tbody></table></div>")
+    # **The same rows, as a net.** Folded rather than unfolded: one place per
+    # `(container, kind)` pair, with the colour beside it - which is why this is smaller than
+    # the net `ground()` expands it into. Collapsed by default so the table stays first.
+    out.append('<details class="net"><summary>as a coloured Petri net</summary>'
+               '<div class="scroll">' + petri_svg(f) + '</div></details>')
     return "\n".join(out)
 
 
@@ -604,6 +736,20 @@ def assumption_table():
     )
 
 
+class Raw(str):
+    """A cell that already is markup, so `simple_table` must not escape it.
+
+    **Escaping stays the default.** A second table function that escaped nothing would put the
+    choice in the caller and make it silent to get wrong; this puts it on the cell, where the
+    markup is visible beside the decision.
+    """
+
+
+def markup(rows):
+    """Mark every cell of a table as markup, for a table whose cells are authored here."""
+    return [[Raw(c) for c in row] for row in rows]
+
+
 def simple_table(headers, rows, classes=None):
     out = ["<table><thead><tr>"]
     for h in headers:
@@ -613,7 +759,8 @@ def simple_table(headers, rows, classes=None):
         out.append("<tr>")
         for i, cell in enumerate(row):
             cls = f' class="{classes[i]}"' if classes and classes[i] else ""
-            out.append(f"<td{cls}>{esc(cell)}</td>")
+            body = cell if isinstance(cell, Raw) else esc(cell)
+            out.append(f"<td{cls}>{body}</td>")
         out.append("</tr>")
     out.append("</tbody></table>")
     return "\n".join(out)
@@ -803,6 +950,114 @@ number or another command, a field referring to a thing is named for that thing'
 <p>Nine of them needed something that notation does not define. The encoder records each rather
 than inventing quietly, and they are listed under <em>What the encoding assumed</em>, below the
 data.</p>
+
+<h2>The recipes as a coloured Petri net</h2>
+<p>Sean asked what the theory behind the recipes was called, and it is a <strong>Petri net</strong>.
+<strong>Naming it is not a metaphor and it is not new work</strong> &mdash; every part of the
+correspondence below is something already in this data under a different word.</p>
+<div class="scroll">{simple_table(
+    ["In a Petri net", "Here", "Where it already is"],
+    markup([["place", "a declared <code>(container, kind)</code> pair",
+      f"<code>containment_declared</code>, {len(DATA['containment_declared'])} of them"],
+     ["transition", "a recipe",
+      f"{sum(len(DATA[g]) for g in ('player', 'world', 'creation'))} of them"],
+     ["colour set", "a <strong>family</strong>",
+      f"<code>families</code>: {', '.join(r[0] for r in DATA['families'])}"],
+     ["unfolding", "<strong>grounding</strong>",
+      "<code>ground()</code> in <code>check.py</code>, which check 2 already runs"],
+     ["input / output arc", "a negative / positive <code>change</code>",
+      "the Amount column, and its sign"],
+     ["test arc, which reads and consumes nothing", "a <code>require</code>", "every guard"],
+     ["arc weight", "the amount, which may be an expression",
+      "the <code>expression</code> assumption"],
+     ["a well-formed net", "no arc to an undeclared place, and no place nothing reaches",
+      "<strong>check 6 and check 8</strong>, in the two directions"]]),
+    ["target", "", "note"])}</div>
+<p><strong>So three checks written for their own reasons turn out to be standard properties of a
+net.</strong> The last row is the one worth pausing on: check 6 asks whether everything created
+lands somewhere declared, check 8 asks whether every declaration is reached, and together they are
+exactly the statement that the net has no dangling arcs and no isolated places.</p>
+
+<h3>How to read the drawings</h3>
+<p>Every recipe above carries one, folded away under <em>as a coloured Petri net</em>. A
+<strong>circle</strong> is a place, the <strong>bar</strong> is the transition, an arrow&rsquo;s
+label is its weight, and the <em>italic</em> line under a place is its <strong>colour</strong>. Two
+arc styles carry findings rather than decoration.</p>
+<div class="scroll">{simple_table(
+    ["Style", "Means", "Why it is drawn differently"],
+    markup([["a <strong>thick</strong> arc", "the weight reads a marking",
+      "a <strong>reset</strong> or <strong>transfer</strong> arc, which an ordinary net has none of"],
+     ["a <strong>dashed</strong> arc", "the attachment is <code>soft</code>",
+      "it is skipped rather than failing, so the transition has more than one effect"],
+     ["one circle, two arcs", "the transition drains a place and refills it",
+      "<code>end-of-turn losses</code> does this to metal and to energy, and drawing it twice would say it touched two places"]]),
+    ["target", "", "note"])}</div>
+<p><strong>A place drained and refilled is one place.</strong> That is the whole shape of what a
+store does &mdash; and this lane spent a day believing a store was a container things moved into.</p>
+
+<h3>The arcs, counted</h3>
+<div class="scroll">{simple_table(
+    ["Arc", "How many", "In a net"],
+    markup([[k, str(v), {"ordinary": "an ordinary arc",
+                  "trait": "an ordinary arc once the colour is bound &mdash; a trait is part of the token",
+                  "marking": "<strong>not an ordinary arc.</strong> The weight is read from the marking"}[k]]
+     for k, v in sorted(ARCS["kinds"].items(), key=lambda kv: -kv[1])]),
+    ["target", "amt", "note"])}</div>
+<div class="callout">
+<h4>Every arc that reads a marking is in a <strong>world</strong> recipe</h4>
+<p>All {ARCS["kinds"].get("marking", 0)} of them, over {len({r[1] for r in ARCS["marking"]})}
+recipes: {", ".join("<code>" + n + "</code>" for n in sorted({r[1] for r in ARCS["marking"]}))}.
+<strong>None is in a player recipe and none is in a world-building one.</strong></p>
+<p>That is the most useful thing the naming buys, because it lines up with an invariant.
+<code>spec/invariants.md</code> requires that <em>a player&rsquo;s rules always finish</em> and that
+<em>nothing that can be built in the rule editor runs forever</em> &mdash; and the sublanguage a
+player writes in is, today, <strong>an ordinary coloured net</strong>, where boundedness is
+decidable. The world&rsquo;s rules are stronger, and they are the ones no player authors.</p>
+<p><strong>So the guard-rail is a rule about who may write which arc</strong> rather than a rule
+about what the notation contains. It is not stated anywhere yet, and nothing checks it.</p>
+</div>
+<div class="callout">
+<h4>What a reset arc costs, and the one cell to check before leaning on it</h4>
+<p><code>&minus;count &#123;food in t&#125;</code> empties a place, which is a <strong>reset
+arc</strong>. <code>refuel</code> moves <code>min(available, count)</code> from one place to
+another, which is a <strong>transfer arc</strong>. Both are strictly stronger than the ordinary
+net: <strong>reachability becomes undecidable</strong>, where in an ordinary net it is decidable.</p>
+<p><strong>What this lane is not certain of is boundedness</strong> &mdash; the cell this project
+actually cares about, since <code>X-9</code> kept <code>limit 0</code> out precisely to keep it
+decidable. Dufourd, Finkel and Schnoebelen&rsquo;s <em>Reset nets between decidability and
+undecidability</em> (1998) is the source that settles it, and <strong>it should be read before
+anyone builds on this paragraph.</strong> Recorded as uncertain rather than asserted.</p>
+</div>
+<div class="callout">
+<h4><code>soft</code> is a second unfolding, and nothing had counted it</h4>
+<p>Colour is the unfolding everyone means: <strong>{ARCS["by_colour"]}</strong> transitions, which is
+what <code>ground()</code> produces and check 2 analyses. <strong>But a <code>soft</code> arc does
+not fire or not</strong> &mdash; it is skipped when the container will not hold another, so a recipe
+carrying three of them is <strong>eight</strong> transitions, one per subset that fires.</p>
+<div class="scroll">{simple_table(
+    ["Recipe", "Families named", "By colour", "Soft arcs", "Transitions"],
+    markup([[r[0], ", ".join(r[1]) or "&mdash;", str(r[2]), str(r[3]), f"<strong>{r[4]}</strong>"]
+     for r in ARCS["unfold"]]),
+    ["target", "note", "amt", "amt", "amt"])}</div>
+<p><strong>{ARCS["by_colour"]} by colour, and {ARCS["by_both"]} by both.</strong> Check 2 ignores guards
+by design &mdash; which is what makes it conservative and safe &mdash; so its matrix has never seen
+the soft ones. <strong>That is not a defect in check 2</strong>; it is a second net nobody has
+analysed.</p>
+</div>
+<div class="callout">
+<h4>And it says exactly when <code>soft</code> would be dangerous</h4>
+<p>Skipping a line when a container is full is a <strong>zero test on the room left</strong>, and a
+zero test is an <strong>inhibitor arc</strong> &mdash; which is what <code>X-9</code> found makes a
+net Turing-complete, and what deleting <code>limit 0</code> removed.</p>
+<p><strong>It is safe here for a reason that can be stated and checked.</strong> A zero test on a
+place with a <em>declared finite bound</em> is harmless, because a bounded place folds into finite
+control and the net stays a net. Every <code>soft</code> create today is into a bounded container
+&mdash; a garrison at capacity 1, an extractor at its deposit&rsquo;s total capacity.
+<strong>A <code>soft</code> create into a container declaring <em>no bound</em> would be the
+inhibitor arc coming back</strong>, and there is no such line today and nothing that would notice
+one.</p>
+</div>
+
 
 <h2>Player recipes <span class="badge">{n_player}</span></h2>
 {"".join(formula_table(f) for f in DATA["player"])}

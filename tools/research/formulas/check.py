@@ -741,6 +741,82 @@ def check_behaviours():
     return rows, missing
 
 
+READS_A_MARKING = ("count {", "sum ", "max ", "available ")
+
+
+def lets_of(recipe):
+    """Every `let` binding in a recipe, so an arc's weight can be resolved through it."""
+    out = {}
+    for op, tgt, _a, _at, _n in recipe["lines"]:
+        if op == "let" and "=" in str(tgt):
+            name, expr = (p.strip() for p in str(tgt).split("=", 1))
+            out[name] = expr
+    return out
+
+
+def arc_kind(amount, lets):
+    """`ordinary`, `trait` or `marking` - the Petri-net arc kind of one weight.
+
+    **Resolving through the `let` matters.** `grow`'s weights are `-n` and `+n`, and its `let` is
+    `min(count {food surplus:yes in t}, count {citizen in t})`, so they read two markings. A
+    classifier that stopped at the weight scored them ordinary, which is the whole reason this
+    reads the bindings.
+    """
+    a = str(amount).strip()
+    for name, expr in lets.items():
+        if re.search(r"[+-]?" + chr(92) + "b" + re.escape(name) + chr(92) + "b", a):
+            a = a.replace(name, expr)
+    if any(w in a for w in READS_A_MARKING):
+        return "marking"
+    if re.fullmatch(r"[+-]?[0-9]+", a):
+        return "ordinary"
+    return "trait"
+
+
+def check_arcs():
+    """Check 16. Every arc by its Petri-net kind, and the two unfoldings of the coloured net.
+
+    **Places are the declared `(container, kind)` pairs, transitions are recipes, colours are
+    families, and grounding is unfolding** - so this check is the arc half of a correspondence
+    the rest of the report names. Two things it asserts that nothing else does:
+
+    - **Every arc whose weight reads a marking is a reset or transfer arc**, which an ordinary
+      net has none of. All of them are in **world** recipes today, so the sublanguage a player
+      writes in is an ordinary coloured net - which is what `spec/invariants.md` needs when it
+      says a player's rules always finish.
+    - **`soft` is a second unfolding.** A soft arc is skipped rather than failing, so a recipe
+      carrying three of them is eight transitions. `ground()` never sees them, because check 2
+      ignores guards by design.
+    """
+    per, kinds, by_group = {}, {}, {}
+    by_colour = by_both = 0
+    unfold = []
+    for grp in ("player", "world", "creation"):
+        for f in DATA[grp]:
+            lets = lets_of(f)
+            for i, (op, _tgt, amt, attach, _n) in enumerate(f["lines"]):
+                if op != "change":
+                    continue
+                k = arc_kind(amt, lets)
+                per[f"{f['name']}|{i}"] = k
+                kinds[k] = kinds.get(k, 0) + 1
+                if k == "marking":
+                    by_group.setdefault(k, []).append((grp, f["name"], i + 1))
+            if grp == "creation":
+                continue
+            colours = len(ground(f["name"].split("(")[0].strip(), f))
+            soft = sum(1 for _o, _t, _a, at, _n in f["lines"]
+                       if str(at).strip().lower() == "soft")
+            by_colour += colours
+            by_both += colours * 2 ** soft
+            if colours > 1 or soft:
+                unfold.append((f["name"], sorted(families_in(f)), colours, soft,
+                               colours * 2 ** soft))
+    assert kinds, "no arcs read, so this check knows nothing"
+    assert by_both >= by_colour, "softness cannot shrink the net"
+    return kinds, by_group.get("marking", []), unfold, by_colour, by_both, per
+
+
 def release_recipes():
     """The release's *Recipes* table: {recipe: {(role, kind): qty}}."""
     out, current, inside = {}, None, False
@@ -1076,6 +1152,33 @@ def self_test():
         print("  poison ok: check 15 reports an anchor that is no longer in the code")
     DATA["code_behaviours"] = _saved15
 
+    # Check 16 poison, one per claim. Make a marking-reading weight constant and the count of
+    # reset arcs must fall; add a soft arc and the second unfolding must grow.
+    _eot = next(f for f in DATA["world"] if f["name"] == "end-of-turn losses")
+    _was16 = [list(l) for l in _eot["lines"]]
+    _before = check_arcs()[0].get("marking", 0)
+    for _l in _eot["lines"]:
+        if "count {" in str(_l[2]):
+            _l[2] = "-1"
+    if check_arcs()[0].get("marking", 0) >= _before:
+        print("  POISON FAILED: check 16 counts a reset arc that is now a constant")
+        ok = False
+    else:
+        print("  poison ok: check 16 stops counting a reset arc when the weight is a constant")
+    _eot["lines"] = _was16
+
+    _wk = next(f for f in DATA["player"] if f["name"] == "work")
+    _wasw = [list(l) for l in _wk["lines"]]
+    _b4 = check_arcs()[4]
+    _wk["lines"] = [list(l) for l in _wk["lines"]]
+    _wk["lines"][-1][3] = "soft"
+    if check_arcs()[4] <= _b4:
+        print("  POISON FAILED: check 16 did not notice a soft arc doubling the transitions")
+        ok = False
+    else:
+        print("  poison ok: check 16 grows the unfolded net when an arc becomes soft")
+    _wk["lines"] = _wasw
+
     return ok
 
 
@@ -1102,7 +1205,10 @@ def as_dict():
     DATA["containment_declared"] = _saved
     cost14, cap14, rows14 = check_yard()
     rows15, missing15 = check_behaviours()
+    kinds16, marking16, unfold16, colour16, both16, per16 = check_arcs()
     return {
+        "arcs": {"kinds": kinds16, "marking": marking16, "unfold": unfold16,
+                 "by_colour": colour16, "by_both": both16, "per_line": per16},
         "behaviours": {"rows": [[a, b, c, d] for a, b, c, d in rows15],
                        "missing": [[a, b, c] for a, b, c in missing15]},
         "yard": {"cost": cost14, "store": cap14,
@@ -1338,6 +1444,20 @@ def main():
     unnamed = [r for r in rows15 if not r[2]]
     print(f"  {len(rows15)} behaviours anchored in the code; "
           f"**{len(unnamed)} are named by no recipe in the release's sixteen**")
+
+    kinds16, marking16, unfold16, colour16, both16, _per16 = check_arcs()
+    print()
+    print("CHECK 16 - every arc by its Petri-net kind, and the two unfoldings")
+    for k, v in sorted(kinds16.items(), key=lambda kv: -kv[1]):
+        print(f"  {v:4}  {k}")
+    for grp, name, i in marking16:
+        print(f"    reads a marking: {grp}/{name} line {i}")
+    groups = sorted({g for g, _n, _i in marking16})
+    print(f"  every marking-reading arc is in: {', '.join(groups)}")
+    for name, fams, colours, soft, total in unfold16:
+        print(f"    {name:<22} colours {colours:<3} soft {soft:<3} -> {total:<4} "
+              f"({', '.join(fams) or 'no family'})")
+    print(f"  {colour16} transitions by colour, {both16} by colour and softness together")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1

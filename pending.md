@@ -34,7 +34,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
 
-### To spec (32)
+### To spec (33)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -68,6 +68,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
 - **X-20** - *declares no capacity* and *declares no limit* are opposites, and the release means the second · `lenses/research/outbox.md`
 - **X-26** - one kind in the release has no definition in `spec/`, and the win condition depends on it · `lenses/research/outbox.md`
+- **X-29** - the player's recipes are an ordinary Petri net and the world's are not, and nothing says so · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 
