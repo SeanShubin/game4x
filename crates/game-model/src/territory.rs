@@ -499,7 +499,10 @@ impl Territory {
         // - and nothing else can supply one, because no resource crosses a territory
         //   boundary - `releases/first-release.md`, *Scope*.
         let can_obtain_metal = self.yields(Resource::Metal);
-        let can_ever_build = food_density >= 2 && can_obtain_metal;
+        // **[`Territory::can_build_extractors`] is this question and now answers it** -
+        // `Q-81`. It used to be spelled out here as well, and the two copies disagreed on
+        // territory 6 from the moment `Q-79` corrected one of them.
+        let can_ever_build = self.can_build_extractors();
         let food_extractors = if can_ever_build { food_capacity } else { 1 };
 
         let citizens = food_extractors as u32 * food_density;
@@ -587,9 +590,25 @@ impl Territory {
     ///
     /// Territory 5 has capacity for three food extractors at density one, which is why it
     /// holds the one it was founded with and can never build a second.
+    ///
+    /// # The other half, and why it was missing - `Q-81`
+    ///
+    /// **Building costs a metal**, and this asked only about food. `Q-79` added the metal
+    /// term to the copy of this question inside [`Territory::maximum_output`] and stopped
+    /// there, leaving one file holding two predicates for one question that disagreed on
+    /// territory 6 - whose whole role in the release is *No metal*.
+    ///
+    /// **So there is one of them now** and `maximum_output` calls it. Two predicates for one
+    /// question do not stay agreed; they diverge the next time one of them is corrected,
+    /// which is what happened here within a single afternoon.
+    ///
+    /// **Ten of the twelve can build, and the two that cannot fail differently**: territory 5
+    /// has no spare hand, territory 6 can never obtain a metal. It read *eleven* until this
+    /// landed, which was true of the predicate before `Q-79` and false of the release from
+    /// the moment `Q-79` did - a count in prose that nothing could go red on.
     pub fn can_build_extractors(&self) -> bool {
         let food = self.deposit(Resource::Food);
-        food.capacity >= 1 && food.density >= 2
+        food.capacity >= 1 && food.density >= 2 && self.yields(Resource::Metal)
     }
 
     /// The most of one resource this territory could produce in a single turn.
@@ -1019,42 +1038,98 @@ mod tests {
     /// about density, because a node was both the capacity and the density and a list of
     /// zero nodes answered the capacity question implicitly. Splitting them makes *dense
     /// ground with no capacity* a state that can be written, so it is a case.
+    ///
+    /// **Every case carries a metal that yields** - `Q-81`. The predicate has a third term
+    /// now, and a case with no metal deposit answers `false` for a reason this test is not
+    /// about. Holding the other terms where they do not decide the answer is what keeps a
+    /// case about the term it is named for; the metal term has its own test below.
     #[test]
     fn a_spare_hand_exists_exactly_when_a_food_extractor_yields_two() {
-        let cases: [(&[(Resource, u32, u32)], bool, &str); 6] = [
-            (&[], false, "no food at all is no population and no labor"),
+        // Enough metal to build with, in every case, so that only the food terms move.
+        const METAL: (Resource, u32, u32) = (Resource::Metal, 4, 4);
+        let cases: [(&[(Resource, u32, u32)], bool, &str); 5] = [
             (
-                &[(Resource::Food, 1, 1)],
+                &[METAL],
+                false,
+                "no food at all is no population and no labor",
+            ),
+            (
+                &[METAL, (Resource::Food, 1, 1)],
                 false,
                 "one citizen, working the one extractor that feeds it",
             ),
             (
-                &[(Resource::Food, 3, 1)],
+                &[METAL, (Resource::Food, 3, 1)],
                 false,
                 "three of them, and each still eats what it gathers - territory 5",
             ),
             (
-                &[(Resource::Food, 1, 2)],
+                &[METAL, (Resource::Food, 1, 2)],
                 true,
                 "two fed, one extractor worked, one hand spare",
             ),
             (
-                &[(Resource::Food, 0, 6)],
+                &[METAL, (Resource::Food, 0, 6)],
                 false,
                 "the second boundary: dense ground with no capacity feeds nobody, and it \
                  could not be written before capacity was a number of its own",
-            ),
-            (
-                &[(Resource::Metal, 1, 9), (Resource::Food, 1, 1)],
-                false,
-                "metal it cannot reach does not feed anyone",
             ),
         ];
         for (deposits, expected, why) in cases {
             let territory = offering(deposits);
             assert_eq!(territory.can_build_extractors(), expected, "{why}");
         }
-        assert_eq!(cases.len(), 6, "six cases, and two boundaries between them");
+        assert_eq!(
+            cases.len(),
+            5,
+            "five cases, and two boundaries between them"
+        );
+    }
+
+    /// Building costs a metal, so a territory that can never obtain one can never build.
+    ///
+    /// **`Q-81`, and it is the term `Q-79` added to one predicate and not to the other.**
+    /// Every case here has food that leaves a hand spare, so the food terms are held where
+    /// they do not decide the answer and only the metal moves - the same discipline as the
+    /// test above, in the other direction.
+    #[test]
+    fn building_needs_a_metal_that_can_actually_be_obtained() {
+        // Food that feeds four and works one, so there is always a spare hand.
+        const FOOD: (Resource, u32, u32) = (Resource::Food, 4, 4);
+        let cases: [(&[(Resource, u32, u32)], bool, &str); 4] = [
+            (
+                &[FOOD],
+                false,
+                "no metal deposit at all - territory 6, whose row in the release reads \
+                 `none`",
+            ),
+            (
+                &[FOOD, (Resource::Metal, 3, 0)],
+                false,
+                "room for three and every one of them yields nothing, which is the same \
+                 position as having none",
+            ),
+            (
+                &[FOOD, (Resource::Metal, 0, 8)],
+                false,
+                "the other boundary: rich ground with nowhere to put an extractor",
+            ),
+            (
+                &[FOOD, (Resource::Metal, 1, 1)],
+                true,
+                "one place to put one, yielding one, is enough - building costs a single \
+                 metal",
+            ),
+        ];
+        for (deposits, expected, why) in cases {
+            let territory = offering(deposits);
+            assert_eq!(territory.can_build_extractors(), expected, "{why}");
+        }
+        assert_eq!(
+            cases.len(),
+            4,
+            "four cases, and two boundaries between them"
+        );
     }
 
     /// The most of a resource one turn can yield.

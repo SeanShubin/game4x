@@ -37,9 +37,18 @@ pub const BRACES: [char; 2] = ['{', '}'];
 
 /// The character that begins a comment, to the end of the line.
 ///
-/// **Not in `spec/console.md`.** A command file that sets up twelve territories is
-/// unreadable without a way to say what each one is for, so this is here to make the
-/// setup file legible - but it is an addition to the language and wants a decision.
+/// `spec/console.md`: *a `#` begins a comment. The rest of the line is ignored.*
+///
+/// **This said the opposite for twelve days** - *not in `spec/console.md` ... an addition to
+/// the language and wants a decision* - and was written on 2026-08-27, one day before
+/// `4c6f2dd` specified the rule. Nothing connected the two, so the tokenizer called the rule
+/// an unsanctioned addition while `state.rs` cited the same line as authoritative, in the
+/// test that keeps both readers honest. `Q-78`.
+///
+/// **The shape is worth more than the correction**: the assertion was right and the sentence
+/// explaining it was false, so nothing could go red on it. A reason is not checkable the way
+/// a rule is, and *wants a decision* is an invitation to change something that was settled
+/// before this file was a day old.
 pub const COMMENT: char = '#';
 
 /// Splits one line into words, discarding whitespace and any trailing comment.
