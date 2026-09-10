@@ -91,7 +91,7 @@ encoding: every line there that puts a **family** where a kind belongs is a quan
 notation from a field's value. **That question is still open and unproposed.**
 
 
-### P-366 - What a description matches, and what a value may be
+### P-366 - A selector is not a description, and what a value may be
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
 
@@ -101,10 +101,11 @@ real hole.
 
 **Added at the end of *The language*:**
 
-> **In a recipe, a description is a pattern.** It may name a **family** rather than a kind, and it
-> may **leave stored traits out** - `{extractor ready:yes}` matches every ready extractor, whatever
-> it extracts. **A description of state may do neither**: it names one kind and carries every stored
-> trait that thing has. **Where a description appears is what says which it is.**
+> **In a recipe the same form is a selector, not a description.** A selector may name a **family**
+> rather than a kind, and it may **leave stored traits out** - `{extractor ready:yes}` selects every
+> ready extractor, whatever it extracts. **A description may do neither**: it names one kind and
+> carries every stored trait that thing has. **Where the form stands is what says which it is** - a
+> selector in a recipe, a description in a state.
 >
 > **In a recipe, a quantity and either side of a guard may be an expression.** An expression is one
 > of these and nothing else:
@@ -124,7 +125,7 @@ real hole.
 > **The words an expression is built from are the notation's own.** They are the one thing in a data
 > file that is not a kind, a trait, or one of a trait's values.
 
-## The first half: a pattern is not a state description
+## The first half: a selector is not a description
 
 **The specification's only rule about descriptions is false of every recipe in the release.**
 `spec/console.md:47-50` says a description is a kind and **every stored trait that thing has**, that
@@ -137,15 +138,22 @@ means any ready extractor. `{thing keeps:0}` omits everything but `keeps`.
 **Under *there is one notation*, the two look identical and mean opposite things about omission.**
 That is what needs saying, and naming a family is one consequence of it rather than the whole.
 
+**Two senses had one name, which is why this needed a second.** Sean read *description* as flavor
+text when it was put to him - the ordinary English sense, and not this one at all. **A term that
+misleads the person who owns the specification will mislead a player reading the console.**
+`selector` is his choice of the four offered, it is free - the only *selection* in `spec/` is
+*natural selection*, in the narrative - and the research lens's encoding already calls this thing a
+selection in forty-four places.
+
 **The family half is already yours and already written**, in `releases/first-release.md` ->
 *Recipes*: **Kind is the kind or the family alone.** This is the specification catching up to a rule
 the release has had all along.
 
-**The choice, named rather than resolved quietly.** *Where it appears* is what distinguishes a
-pattern from a state description - a recipe against a dump. The alternative would be to mark one in
-the syntax, and **nothing proposes that**: neither the release nor the research lens's encoding does
-it, and both read correctly by position. **If you would rather it were marked, this becomes a
-decision and I will redraft.**
+**The choice, named rather than resolved quietly.** *Where it stands* is what distinguishes a
+selector from a description - a recipe against a dump. The alternative would be to mark one in the
+syntax, and **nothing proposes that**: neither the release nor the research lens's encoding does it,
+and both read correctly by position. **If you would rather it were marked, this becomes a decision
+and I will redraft.**
 
 ## The second half: what a value may be
 

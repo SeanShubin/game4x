@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-356** - A field's value may name a kind rather than a thing · `docs/notes/proposals.md`
-- **P-366** - What a description matches, and what a value may be · `docs/notes/proposals.md`
+- **P-366** - A selector is not a description, and what a value may be · `docs/notes/proposals.md`
 - **P-364** - Building a world is made of the same rules as playing one · `docs/notes/proposals.md`
 - **P-365** - What an orbit boundary is, and that an Ark is powered by the sun · `docs/notes/proposals.md`
 - **P-362** - `launch ark` puts an Ark in orbit, and the reason it did not has dissolved · `docs/notes/proposals.md`
