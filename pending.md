@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-362** - `launch ark` puts an Ark in orbit, and the reason it did not has dissolved · `docs/notes/proposals.md`
+- **P-363** - What a rule may ask the engine, and what it may never ask it to do · `docs/notes/proposals.md`
 - **P-361** - Fully exploited is maximum possible output, not every place a structure would fit · `docs/notes/proposals.md`
 - **P-360** - A garrison has no force, and one sentence still says it has one · `docs/notes/proposals.md`
 - **P-356** - A field may name a kind instead of a thing, and nothing says so · `docs/notes/decisions.md`
@@ -39,8 +41,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
 - **X-27** - losing a territory to nature does not delete the units on it, and one line above it is dead · `lenses/research/outbox.md`
 
-### To spec (32)
+### To spec (33)
 
+- **S-85** - `spec/` says designing both is and is not made of recipes · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`

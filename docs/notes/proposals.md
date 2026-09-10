@@ -62,6 +62,75 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-362 - `launch ark` puts an Ark in orbit, and the reason it did not has dissolved
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes
+
+**Two rows added to `launch ark`, in the order they go into the table:**
+
+> | **launch ark** | player | require | 1 | territory |  | `$where` |
+> |  |  | produce | 1 | ark |  | the orbit above `$where` |
+
+**The `require` row is there to name the place**, which is how `deploy ark` and `work` both name
+theirs. A territory is always present, so it takes nothing and changes no behaviour; without it the
+`produce` row has no `$where` to refer to.
+
+**Why `recovered`.** `P-342` removed `produce 1 ark` on 2026-09-07 for a stated reason: **the
+destination could not be named.** That reason has gone. `P-334` made `adjacency` a kind and an orbit
+can carry `below`, so *the orbit above `$where`* is the phrasing `deploy ark` already uses in the
+same table, read the other way.
+
+**What it fixes, executed rather than argued.** `tools/research/formulas/play.py` runs the loop and
+stops here. Colony, five turns, twelve citizens, two pioneers refuelled, a jungle taken at `4 > 2`
+and held at `2 >= 2`, a yard - **and then `launch ark` pays 3 metal, 12 energy and 2 citizens and
+puts nothing anywhere.** Your stated loop ends *launch a new ark into orbit, completing the loop*.
+
+**One consequence, named rather than resolved.** An Ark carries **Fuel 2**, and `spec/units.md` says
+fuel moves freely only from **a controlled territory**. An orbit is not one, so **an Ark in orbit can
+never be refuelled.** That matters only if Arks are meant to move between orbits. If the Ark in orbit
+is where the loop ends, nothing further is needed and an Ark's Fuel 2 is simply unused in this
+release. **This proposal does not decide it**; the research lens recommends the second reading.
+
+**Consistent with `P-361`**, checked: winning is *launching an Ark from a fully exploited planet*, and
+whether the launched Ark then exists changes neither the condition nor when it is met.
+
+
+### P-363 - What a rule may ask the engine, and what it may never ask it to do
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md` -> The game is one function
+
+**Two bullets, added after *a rule is a source of transitions*:**
+
+> - A rule may ask the engine for a value. **What comes back decides whether it is safe**: a set,
+>   which says which things the rule applies to, or a number, which a guard or a quantity reads.
+>   **Never an effect.** A transition whose effect is opaque cannot be weighed or read for what it
+>   creates, and every check over the rules stops meaning anything.
+> - Such a question reads only the state, and answers the same way for the same state. One that
+>   reads anything else breaks the rule that a game state is exactly the result of applying every
+>   transition in order to the starting state. One that answers differently twice breaks the dump,
+>   and a state that cannot be written down and read back is not a state.
+
+**This is your own question answered.** You raised it on 2026-09-09 wanting to be on guard rather
+than to act: *it is possible I will end up needing a way to have my data model express calls into the
+code. An example might be computing the territories reachable in 3 spaces on a goldberg polyhedron.*
+The research lens worked the line out; these two bullets are its table said as rules.
+
+**The model already makes one, and it is the safe shape.** `make-world`'s last quantifier ranges over
+every shared edge, which comes from the planet's geometry rather than from the state. It is flagged
+in the lens's own assumption list today, so this is not a future problem - it is one place the model
+already reaches outside itself, and what it reaches for is a **set**.
+
+**And your example turns out not to need it.** `P-334` made `adjacency` a kind, so the graph is in
+the state: territory adjacency is stated once and orbital adjacency is derived from it. **Reachable
+in 3 is a query over things that already exist**, not a question for the engine. Worth knowing before
+the mechanism is built, because the case that motivated it is already data.
+
+**Checked against the section it lands in**, which has taken two proposals before this one. All four
+existing bullets hold alongside these: a value-returning question is not a second way for state to
+change, and *a rule is a source of transitions* is untouched. **Checked against *The game is data*
+too** - what stays in code is a function that answers a question, never a kind, a recipe or a cost.
+
+
 ### P-361 - Fully exploited is maximum possible output, not every place a structure would fit
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Winning
@@ -181,6 +250,46 @@ It proposed no words, which was right: `spec/` is this lane's to draft for.
 
 
 ## Addressed to other perspectives
+
+### S-85 - `spec/` says designing both is and is not made of recipes
+
+**to** spec - **status** open - **raised** 2026-09-10 - **source** checking whether *add a start
+command* needed a proposal, and finding that it did not - **found by** reading `spec/console.md`
+before drafting rather than after
+
+**Filed the moment it was found, because it is a contradiction between two normative files.**
+
+- `spec/console.md:73-75` - *a command that changes the game names a recipe. `show`, `help` and
+  `history` change nothing, and **the design commands build a world before there is a game to
+  change**; both are listed here because **neither is a recipe***
+- `spec/invariants.md` -> The game is one function - *a game state and a transition yield a new game
+  state. **There is no other way for state to change.** **This holds for designing the world as much
+  as for playing it.** Which phase a game is in is part of its state*
+
+**They cannot both hold.** If designing changes state, and state changes only by transitions, then a
+design command is a transition. `spec/invariants.md` -> The game is data allows a recipe exactly two
+owners, **the player or the world**, and there is no third - so a design command is either a recipe
+with no owner it may have, or a transition with no rule behind it. And *before there is a game to
+change* is refused by *which phase a game is in is part of its state*: a game in the design phase is
+a game.
+
+**Neither side is obviously the survivor**, which is why this is not a cleanup.
+
+- `spec/console.md`'s reading has a real basis: `create planet <size>` computes an icosahedron from
+  geometry, which is code doing what code should do
+- `spec/invariants.md`'s reading is what the research lens built. Its world-builder is four recipes -
+  `make-territory`, `make-deposit`, `make-orbit`, `make-adjacency` - and `X-13` answered **Sean's own
+  question** about whether one format can build the world and play it with *yes*
+
+**Nothing was blocked by it, and one thing was clarified.** `add <unit> orbit` and `start` are already
+specified at `spec/console.md:95-96`, so the missing start of a game **needed no proposal** - the gap
+is in the research lens's prototype, which has four of the six design commands, and that is its own
+column to close.
+
+**Whether.** **Worth deciding, and it is Sean's.** The question is one sentence: *is building a world
+made of the same rules as playing one?* It goes to him as a numbered proposal once both readings are
+drafted, and it was put to him as an open question in the turn this was filed.
+
 
 ### S-84 - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable
 
