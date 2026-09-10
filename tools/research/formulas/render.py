@@ -2235,6 +2235,41 @@ of the class where its checks work. That is worth more than the twelve, because 
 can be put back and a decidability boundary crossed cannot be uncrossed cheaply.</p>
 </div>
 
+<h2>Behaviours the running game has, and which recipe names each</h2>
+<p><strong>The specification lane&rsquo;s generalisation of <code>X-21</code>.</strong> Four rules
+were found by hand in one day that the game runs and the <em>Recipes</em> table does not list &mdash;
+storing, greater force to enter, equal force to maintain, and what losing a territory does. Four is
+enough to suspect more, so this asks the question mechanically.</p>
+<p><strong>Each row is anchored by a line of the code that occurs exactly once above
+<code>#[cfg(test)]</code></strong>, so the check goes red when a behaviour is rewritten or removed
+and stays quiet when something above it moves. <strong>Its first run refused three rows</strong> and
+was right to: <code>game.rs:1618</code> reimplements the end of a turn backwards to prove the
+settling order cannot matter, so the anchors matched twice. <strong>A behaviour that lived only in a
+test would be a rule nothing runs.</strong></p>
+<p><strong>What a check cannot do is decide whether a rule ought to be a recipe.</strong> The
+classification is <code>code_behaviours</code> in the data, where it can be argued with; this only
+refuses to keep agreeing about code that has changed under it.</p>
+<div class="scroll"><table><thead><tr><th>Where</th><th>Recipes that name it</th><th>What it
+does</th><th></th></tr></thead><tbody>{"".join(
+    f'<tr><td class="target">{esc(where)}</td>'
+    f'<td class="{"target" if recipes else "amt"}">'
+    f'{", ".join(recipes) if recipes else "<strong>none</strong>"}</td>'
+    f'<td>{what}</td><td class="note">{note}</td></tr>'
+    for where, what, recipes, note in RESULTS["behaviours"]["rows"])}</tbody></table></div>
+<p><strong>{sum(1 for r in RESULTS["behaviours"]["rows"] if not r[2])} of
+{len(RESULTS["behaviours"]["rows"])} are named by no recipe at all.</strong> One of them is
+bookkeeping and the rest are rules. <strong><code>R-7</code> is <em>each recipe can be confirmed on
+its own</em></strong> &mdash; and it can be complete over all sixteen while never showing the rule
+that decides what a player keeps between turns, the rule that decides whether a territory can be
+entered, or the rule that decides whether it is still held.</p>
+<p><strong>Two rows are worth reading against each other.</strong> A population eating, starving and
+breeding is <strong>three recipes and one function</strong>: the release makes them
+<code>upkeep</code>, <code>perish</code> and <code>grow</code>, and the code fuses them into
+<code>population_after</code>, where <strong>nothing consumes the food</strong> &mdash; it only
+decides the new count. And <code>refresh</code> is <strong>one recipe and two places</strong>, since
+a territory&rsquo;s things and the units standing on it are made ready by different lines. <strong>A
+recipe and a behaviour are not the same thing, and neither list is a subset of the other.</strong></p>
+
 <h2>What this prototype does differently from the release</h2>
 <p><strong>Written for the specification lane.</strong> Sean intends to ask it what it can
 incorporate, and it is testing with scenarios written against the old rules - so this is every

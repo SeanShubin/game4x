@@ -694,6 +694,50 @@ def check_yard():
     return cost, cap, rows
 
 
+CRATE = RELEASE.parent.parent / "crates" / "game-model" / "src"
+
+
+def check_behaviours():
+    """Check 15. Behaviours the running game has, and which recipe names each one.
+
+    **The specification lane's generalisation of `X-21`.** Four were found by hand in one day -
+    storing, greater force to enter, equal force to maintain, and what losing a territory does -
+    and four is enough to suspect more.
+
+    **The anchor is a line of the code, not a line number.** Each row names text that must occur
+    **exactly once** in its file; the check goes red when a behaviour is rewritten or removed,
+    and stays quiet when something above it moves. A line number would cry wolf on every edit
+    and an absent anchor would pass silently, which is `CLAUDE.md`'s own warning about a check
+    that outlives its example.
+
+    **What this check cannot do is decide whether a rule ought to be a recipe.** The
+    classification is data - `code_behaviours` in `data.json` - and this only refuses to keep
+    agreeing about code that has changed under it.
+    """
+    known = set(release_recipes())
+    assert known, "read no recipes from the release, so this check knows nothing"
+
+    rows, missing = [], []
+    for src, anchor, what, recipes, note in DATA["code_behaviours"]:
+        text = (CRATE / src).read_text(encoding="utf-8")
+        # **The game, not its tests.** `game.rs:1618` reimplements the end of a turn backwards
+        # to prove the settling order cannot matter, so three anchors occur twice - and a
+        # behaviour that lived only in a test would be a rule nothing runs.
+        body = text.split("#[cfg(test)]")[0]
+        assert len(body) < len(text) or "#[cfg(test)]" not in text
+        hits = [i for i, line in enumerate(body.splitlines(), 1) if anchor in line]
+        if len(hits) != 1:
+            missing.append((src, anchor, len(hits)))
+            continue
+        if recipes:
+            for r in recipes:
+                assert r in known, f"{r} is not one of the release's recipes"
+        rows.append((f"{src}:{hits[0]}", what, recipes, note))
+
+    assert rows, "no behaviour anchored, so this check knows nothing"
+    return rows, missing
+
+
 def release_recipes():
     """The release's *Recipes* table: {recipe: {(role, kind): qty}}."""
     out, current, inside = {}, None, False
@@ -1015,6 +1059,17 @@ def self_test():
     else:
         print(f"  poison ok: check 14 falls from {_now} territories to {_fell} with no stores")
 
+    # Check 15 poison: an anchor that is not in the code must be reported, not passed over.
+    _saved15 = [list(r) for r in DATA["code_behaviours"]]
+    DATA["code_behaviours"] = _saved15 + [
+        ["game.rs", "fn nothing_of_the_sort(", "poison", None, ""]]
+    if not check_behaviours()[1]:
+        print("  POISON FAILED: check 15 anchored a behaviour the code does not have")
+        ok = False
+    else:
+        print("  poison ok: check 15 reports an anchor that is no longer in the code")
+    DATA["code_behaviours"] = _saved15
+
     return ok
 
 
@@ -1040,7 +1095,10 @@ def as_dict():
     x20_lines = len(check_containment()[2])
     DATA["containment_declared"] = _saved
     cost14, cap14, rows14 = check_yard()
+    rows15, missing15 = check_behaviours()
     return {
+        "behaviours": {"rows": [[a, b, c, d] for a, b, c, d in rows15],
+                       "missing": [[a, b, c] for a, b, c in missing15]},
         "yard": {"cost": cost14, "store": cap14,
                  "rows": [[a, b, c, d, e] for a, b, c, d, e in rows14]},
         "conservation": {
@@ -1262,6 +1320,18 @@ def main():
     one = [t for t, _p, _s, _r, n in rows14 if n == 1]
     print(f"  {len(can)} of {len(rows14)} territories can build a yard; "
           f"{len(one)} of them in a single turn, which was the whole answer while X-21 stood")
+
+    rows15, missing15 = check_behaviours()
+    print()
+    print("CHECK 15 - behaviours the running game has, and which recipe names each")
+    for where, what, recipes, _note in rows15:
+        named = ", ".join(recipes) if recipes else "** NO RECIPE **"
+        print(f"  {where:<22} {named:<24} {what}")
+    for src, anchor, n in missing15:
+        print(f"  ANCHOR GONE: {src} has {n} occurrences of {anchor!r} - reclassify it")
+    unnamed = [r for r in rows15 if not r[2]]
+    print(f"  {len(rows15)} behaviours anchored in the code; "
+          f"**{len(unnamed)} are named by no recipe in the release's sixteen**")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1

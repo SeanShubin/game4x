@@ -285,6 +285,49 @@ place.
 table and nothing checks them, which check 1 now does. **The gap named here is different**: not that
 conservation is unchecked, but that **the sentence promises an action the game does not have.**
 
+## The generalisation, made mechanical: check 15
+
+**The specification lane asked for this and it is the most useful thing here.** Four rules were found
+by hand in one day that the game runs and the release's *Recipes* table does not list. Four is enough
+to suspect more, so the question is now asked of the code rather than remembered.
+
+**Ten behaviours are anchored, and six of them are named by no recipe.**
+
+| Where              | Recipes that name it       | What it does                                                                                |
+| ------------------ | -------------------------- | ------------------------------------------------------------------------------------------- |
+| `game.rs:948`      | `upkeep`, `perish`, `grow` | A population eats, starves and grows - **three recipes, one function**                      |
+| `territory.rs:188` | `age`, `spoil`             | Food **and labor** discarded whole; only food's half has recipes                            |
+| `territory.rs:192` | **none**                   | **Metal and energy cut to what the stores hold.** The rule that decides what a player keeps |
+| `game.rs:954`      | `refresh`                  | A territory's things become ready                                                           |
+| `game.rs:928`      | `refresh`                  | Units become ready - **one recipe, two places**                                             |
+| `game.rs:915`      | **none**                   | **Equal force to maintain**, or nature takes the territory back                             |
+| `game.rs:631`      | **none**                   | **Greater force to enter**, or taking is refused                                            |
+| `territory.rs:584` | **none**                   | Losing a territory clears its garrison, population, stores, yards and extractors            |
+| `game.rs:918`      | **none**                   | A unit on a lost territory survives, unusable - `X-27`                                      |
+| `game.rs:930`      | **none**                   | The turn number advances - **bookkeeping**, listed so the count is honest                   |
+
+**How it is anchored, because that is the part that can go wrong.** Each row names a line of the
+code that must occur **exactly once above `#[cfg(test)]`**. A line *number* would cry wolf on every
+edit above it; an anchor that is simply absent would pass silently, which is `CLAUDE.md`'s own
+warning about a check outliving its example. **Its first run refused three rows and was right to** -
+`game.rs:1618` reimplements the end of a turn backwards to prove the settling order cannot matter,
+so three anchors matched twice. **A behaviour that lived only in a test would be a rule nothing
+runs.**
+
+**What the check cannot do is decide whether a rule ought to be a recipe.** The classification is
+data, where it can be argued with. What the check contributes is that it **refuses to keep agreeing
+about code that has changed under it** - the failure that produced all four of the hand-found ones.
+
+**Two rows read against each other say the real thing.** A recipe and a behaviour are not the same
+object, and **neither list is a subset of the other**: eating, starving and breeding are three
+recipes and one function, and `refresh` is one recipe and two places. So *sixteen recipes* is not a
+count of what the game does, in either direction.
+
+**Not filed as an outbox item, and deliberately.** This lane has eight open to the specification
+lane, which is the limit, and nothing among them can close honestly tonight. **The finding is here,
+dated and reachable**, and the specification lane - which asked for the check - is the perspective
+that turns it into a numbered proposal anyway.
+
 ## What this lane recommends doing with it
 
 **Nothing here is a proposal, and none of it is filed to `spec` as a new item** - the budget is eight

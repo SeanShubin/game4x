@@ -1,4 +1,80 @@
 {
+  "behaviours": {
+    "rows": [
+      [
+        "game.rs:948",
+        "A population eats, starves and grows, in one step",
+        [
+          "upkeep",
+          "perish",
+          "grow"
+        ],
+        "**Three recipes, one function.** The release makes eating, dying and breeding three rows; the code fuses them into <code>population_after</code>, where nothing consumes the food - it only decides the new count. The two shapes agree only if the arithmetic does."
+      ],
+      [
+        "territory.rs:188",
+        "Food and labor are discarded whole at a turn's end",
+        [
+          "age",
+          "spoil"
+        ],
+        "**Half of this line has recipes and half has none.** Food expiring is <code>age</code> and <code>spoil</code> working through <code>keeps</code> 1, exactly as the release says. **Labor is discarded by the same line and no recipe mentions it** - a citizen's unspent labor simply is not there next turn."
+      ],
+      [
+        "territory.rs:192",
+        "Metal and energy are cut to what the territory's stores hold, and the rest is gone",
+        null,
+        "<code>X-21</code>'s survivor, and the sharpest case here. **This is the rule that decides what a player keeps between turns**, it is what a store is <em>for</em>, and it appears in none of the sixteen. <code>R-7</code> can be complete over all of them and never show it."
+      ],
+      [
+        "game.rs:954",
+        "Everything in a territory becomes ready again",
+        [
+          "refresh"
+        ],
+        ""
+      ],
+      [
+        "game.rs:928",
+        "Every unit becomes ready again, wherever it is",
+        [
+          "refresh"
+        ],
+        "A second readiness reset, over a different population - <code>refresh</code> is one row and this is two places."
+      ],
+      [
+        "game.rs:915",
+        "A territory whose force has fallen below its nature is taken back by nature",
+        null,
+        "<strong>Equal force to maintain</strong>, and no recipe says so. The prototype has it as a cause of <code>unsustained</code>, which is a derived trait rather than a row."
+      ],
+      [
+        "game.rs:631",
+        "Taking a territory is refused unless the force brought is strictly greater",
+        null,
+        "<strong>Greater force to enter</strong>, and no recipe says so either. It is a guard inside <code>land</code> and <code>found_by_land</code> rather than a line of them."
+      ],
+      [
+        "territory.rs:584",
+        "Losing a territory clears its garrison, population, stores, yards and extractors",
+        null,
+        "What <em>everything goes into disorder</em> comes to. <code>X-27</code>: it does not clear the <em>units</em>, which are marked unusable and left standing."
+      ],
+      [
+        "game.rs:918",
+        "A unit on a lost territory survives, unusable",
+        null,
+        "<code>X-27</code>, and Sean asked for the opposite: <em>for now we just delete the units.</em>"
+      ],
+      [
+        "game.rs:930",
+        "The turn number advances",
+        null,
+        "**Bookkeeping rather than a rule**, and listed so the count is honest about what it is counting. Nothing in the game reads it."
+      ]
+    ],
+    "missing": []
+  },
   "yard": {
     "cost": 15,
     "store": 10,

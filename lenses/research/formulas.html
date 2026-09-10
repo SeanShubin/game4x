@@ -1147,7 +1147,7 @@ force works by looking at the data.</em></p>
 reason force cannot be seen in the data is that it is not there.</p>
 <div class="callout">
 <h4>Force appears in <strong>zero</strong> recipe lines</h4>
-<p>Asked of the data rather than the prose: <code>force</code> occurs in 18 of this page&rsquo;s tables,
+<p>Asked of the data rather than the prose: <code>force</code> occurs in 19 of this page&rsquo;s tables,
 <strong>every one of them written by this lane to describe the rule</strong>, and in the release's
 <em>Units and structures</em> column. <strong>It occurs in no line of any recipe.</strong> So there
 is nothing to read, nothing to compare, and nothing that could refuse a move. That is
@@ -2863,6 +2863,36 @@ until every recipe was written in one notation and the duplicates sat next to ea
 of the class where its checks work. That is worth more than the twelve, because a construct removed
 can be put back and a decidability boundary crossed cannot be uncrossed cheaply.</p>
 </div>
+
+<h2>Behaviours the running game has, and which recipe names each</h2>
+<p><strong>The specification lane&rsquo;s generalisation of <code>X-21</code>.</strong> Four rules
+were found by hand in one day that the game runs and the <em>Recipes</em> table does not list &mdash;
+storing, greater force to enter, equal force to maintain, and what losing a territory does. Four is
+enough to suspect more, so this asks the question mechanically.</p>
+<p><strong>Each row is anchored by a line of the code that occurs exactly once above
+<code>#[cfg(test)]</code></strong>, so the check goes red when a behaviour is rewritten or removed
+and stays quiet when something above it moves. <strong>Its first run refused three rows</strong> and
+was right to: <code>game.rs:1618</code> reimplements the end of a turn backwards to prove the
+settling order cannot matter, so the anchors matched twice. <strong>A behaviour that lived only in a
+test would be a rule nothing runs.</strong></p>
+<p><strong>What a check cannot do is decide whether a rule ought to be a recipe.</strong> The
+classification is <code>code_behaviours</code> in the data, where it can be argued with; this only
+refuses to keep agreeing about code that has changed under it.</p>
+<div class="scroll"><table><thead><tr><th>Where</th><th>Recipes that name it</th><th>What it
+does</th><th></th></tr></thead><tbody><tr><td class="target">game.rs:948</td><td class="target">upkeep, perish, grow</td><td>A population eats, starves and grows, in one step</td><td class="note">**Three recipes, one function.** The release makes eating, dying and breeding three rows; the code fuses them into <code>population_after</code>, where nothing consumes the food - it only decides the new count. The two shapes agree only if the arithmetic does.</td></tr><tr><td class="target">territory.rs:188</td><td class="target">age, spoil</td><td>Food and labor are discarded whole at a turn's end</td><td class="note">**Half of this line has recipes and half has none.** Food expiring is <code>age</code> and <code>spoil</code> working through <code>keeps</code> 1, exactly as the release says. **Labor is discarded by the same line and no recipe mentions it** - a citizen's unspent labor simply is not there next turn.</td></tr><tr><td class="target">territory.rs:192</td><td class="amt"><strong>none</strong></td><td>Metal and energy are cut to what the territory's stores hold, and the rest is gone</td><td class="note"><code>X-21</code>'s survivor, and the sharpest case here. **This is the rule that decides what a player keeps between turns**, it is what a store is <em>for</em>, and it appears in none of the sixteen. <code>R-7</code> can be complete over all of them and never show it.</td></tr><tr><td class="target">game.rs:954</td><td class="target">refresh</td><td>Everything in a territory becomes ready again</td><td class="note"></td></tr><tr><td class="target">game.rs:928</td><td class="target">refresh</td><td>Every unit becomes ready again, wherever it is</td><td class="note">A second readiness reset, over a different population - <code>refresh</code> is one row and this is two places.</td></tr><tr><td class="target">game.rs:915</td><td class="amt"><strong>none</strong></td><td>A territory whose force has fallen below its nature is taken back by nature</td><td class="note"><strong>Equal force to maintain</strong>, and no recipe says so. The prototype has it as a cause of <code>unsustained</code>, which is a derived trait rather than a row.</td></tr><tr><td class="target">game.rs:631</td><td class="amt"><strong>none</strong></td><td>Taking a territory is refused unless the force brought is strictly greater</td><td class="note"><strong>Greater force to enter</strong>, and no recipe says so either. It is a guard inside <code>land</code> and <code>found_by_land</code> rather than a line of them.</td></tr><tr><td class="target">territory.rs:584</td><td class="amt"><strong>none</strong></td><td>Losing a territory clears its garrison, population, stores, yards and extractors</td><td class="note">What <em>everything goes into disorder</em> comes to. <code>X-27</code>: it does not clear the <em>units</em>, which are marked unusable and left standing.</td></tr><tr><td class="target">game.rs:918</td><td class="amt"><strong>none</strong></td><td>A unit on a lost territory survives, unusable</td><td class="note"><code>X-27</code>, and Sean asked for the opposite: <em>for now we just delete the units.</em></td></tr><tr><td class="target">game.rs:930</td><td class="amt"><strong>none</strong></td><td>The turn number advances</td><td class="note">**Bookkeeping rather than a rule**, and listed so the count is honest about what it is counting. Nothing in the game reads it.</td></tr></tbody></table></div>
+<p><strong>6 of
+10 are named by no recipe at all.</strong> One of them is
+bookkeeping and the rest are rules. <strong><code>R-7</code> is <em>each recipe can be confirmed on
+its own</em></strong> &mdash; and it can be complete over all sixteen while never showing the rule
+that decides what a player keeps between turns, the rule that decides whether a territory can be
+entered, or the rule that decides whether it is still held.</p>
+<p><strong>Two rows are worth reading against each other.</strong> A population eating, starving and
+breeding is <strong>three recipes and one function</strong>: the release makes them
+<code>upkeep</code>, <code>perish</code> and <code>grow</code>, and the code fuses them into
+<code>population_after</code>, where <strong>nothing consumes the food</strong> &mdash; it only
+decides the new count. And <code>refresh</code> is <strong>one recipe and two places</strong>, since
+a territory&rsquo;s things and the units standing on it are made ready by different lines. <strong>A
+recipe and a behaviour are not the same thing, and neither list is a subset of the other.</strong></p>
 
 <h2>What this prototype does differently from the release</h2>
 <p><strong>Written for the specification lane.</strong> Sean intends to ask it what it can

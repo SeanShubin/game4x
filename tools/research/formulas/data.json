@@ -3455,5 +3455,88 @@
     ]
   },
   "store_capacity": 10,
-  "store_capacity_source": "release -> <em>Where things are</em>: a store holds 10 of its resource. The number is here so nothing states it by hand."
+  "store_capacity_source": "release -> <em>Where things are</em>: a store holds 10 of its resource. The number is here so nothing states it by hand.",
+  "code_behaviours": [
+    [
+      "game.rs",
+      "population_after(citizens, food)",
+      "A population eats, starves and grows, in one step",
+      [
+        "upkeep",
+        "perish",
+        "grow"
+      ],
+      "**Three recipes, one function.** The release makes eating, dying and breeding three rows; the code fuses them into <code>population_after</code>, where nothing consumes the food - it only decides the new count. The two shapes agree only if the arithmetic does."
+    ],
+    [
+      "territory.rs",
+      "thing.kind != Kind::Food && thing.kind != Kind::Labor",
+      "Food and labor are discarded whole at a turn's end",
+      [
+        "age",
+        "spoil"
+      ],
+      "**Half of this line has recipes and half has none.** Food expiring is <code>age</code> and <code>spoil</code> working through <code>keeps</code> 1, exactly as the release says. **Labor is discarded by the same line and no recipe mentions it** - a citizen's unspent labor simply is not there next turn."
+    ],
+    [
+      "territory.rs",
+      ".saturating_sub(self.capacity(resource))",
+      "Metal and energy are cut to what the territory's stores hold, and the rest is gone",
+      null,
+      "<code>X-21</code>'s survivor, and the sharpest case here. **This is the rule that decides what a player keeps between turns**, it is what a store is <em>for</em>, and it appears in none of the sixteen. <code>R-7</code> can be complete over all of them and never show it."
+    ],
+    [
+      "game.rs",
+      "self.territories[id.index()].make_ready();",
+      "Everything in a territory becomes ready again",
+      [
+        "refresh"
+      ],
+      ""
+    ],
+    [
+      "game.rs",
+      "unit.exhausted = false;",
+      "Every unit becomes ready again, wherever it is",
+      [
+        "refresh"
+      ],
+      "A second readiness reset, over a different population - <code>refresh</code> is one row and this is two places."
+    ],
+    [
+      "game.rs",
+      "if self.force_in(id) < needed {",
+      "A territory whose force has fallen below its nature is taken back by nature",
+      null,
+      "<strong>Equal force to maintain</strong>, and no recipe says so. The prototype has it as a cause of <code>unsustained</code>, which is a derived trait rather than a row."
+    ],
+    [
+      "game.rs",
+      "if force <= defending {",
+      "Taking a territory is refused unless the force brought is strictly greater",
+      null,
+      "<strong>Greater force to enter</strong>, and no recipe says so either. It is a guard inside <code>land</code> and <code>found_by_land</code> rather than a line of them."
+    ],
+    [
+      "territory.rs",
+      "pub fn lost_to_nature",
+      "Losing a territory clears its garrison, population, stores, yards and extractors",
+      null,
+      "What <em>everything goes into disorder</em> comes to. <code>X-27</code>: it does not clear the <em>units</em>, which are marked unusable and left standing."
+    ],
+    [
+      "game.rs",
+      "unit.usable = false;",
+      "A unit on a lost territory survives, unusable",
+      null,
+      "<code>X-27</code>, and Sean asked for the opposite: <em>for now we just delete the units.</em>"
+    ],
+    [
+      "game.rs",
+      "self.turn += 1;",
+      "The turn number advances",
+      null,
+      "**Bookkeeping rather than a rule**, and listed so the count is honest about what it is counting. Nothing in the game reads it."
+    ]
+  ]
 }
