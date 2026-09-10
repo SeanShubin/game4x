@@ -62,6 +62,45 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-367 - What nature takes back, and from which units
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Holding
+
+**Two things disagree in two lines, and you have answered one of them.** From `C-77`, filed by the
+code lane rather than built, because building it would have put `crates/` in contradiction with a
+normative sentence.
+
+**Replacing the third bullet of *Holding*:**
+
+> - Should the force in a territory fall below its force of nature, nature takes it back. Its entire
+>   population perishes, and every unit on it is destroyed
+
+**The first disagreement is answered.** `spec/control.md` says an ark on a lost territory **becomes
+unusable**; you said, 2026-09-09, *what losing control means is an interesting question, but I think
+for now we just delete the units.* **Deleting and marking unusable are different rules and the
+written one is the other one**, so the code lane declined to build it and filed instead. That was
+right.
+
+**The second is a choice, and it is the reason this is worth reading rather than just approving.**
+The specification names **an ark**. `crates/game-model/src/game.rs:915-919` marks **every unit** on
+the territory, so a pioneer is caught by a sentence that does not mention it. Your *we just delete
+the units* is plural and unqualified, and the offered line follows it - **but if `ark` was
+deliberate, a pioneer survives its colony being taken and this is wrong.** Say so and it becomes a
+decision.
+
+**One thing changed under this sentence yesterday, and it was this lane's doing.** `P-365` defines an
+orbit boundary as one an orbit is on either side of - *between an orbit and the territory below it*,
+or between two orbits - and says a unit that crosses them may cross any. **So an Ark may now move
+down onto a territory without deploying**, which makes *an ark on it* a reachable state rather than a
+dead phrase.
+
+**That cuts against something you told the research lens** - *an ark is only ever in orbit; it lands
+to deploy and stops being an ark* - which is not in `spec/` and so is not normative, while
+`spec/control.md`'s *any ark on it* has always assumed the opposite. **`P-365` did not create the
+tension and this lane did not flag it, which it should have.** If an Ark should not be able to sit on
+the ground, that is a third question and a separate proposal; nothing here decides it.
+
+
 ## Addressed to other perspectives
 
 ### S-86 - Three cleanups the eight promotions leave behind
