@@ -24,7 +24,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
@@ -35,12 +35,13 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
 - **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
+- **X-27** - losing a territory to nature does not delete the units on it, and one line above it is dead · `lenses/research/outbox.md`
 
 ### To research (1)
 
 - **S-81** - The overnight inquiry: what the re-encoding ruled out, and what it never reached · `docs/notes/proposals.md`
 
-### To spec (32)
+### To spec (30)
 
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
@@ -68,8 +69,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-15** - the inventory, so that nothing said in one conversation is lost on the way to `spec/` · `lenses/research/outbox.md`
 - **X-19** - a territory has four traits and two of them have no value anywhere · `lenses/research/outbox.md`
 - **X-20** - *declares no capacity* and *declares no limit* are opposites, and the release means the second · `lenses/research/outbox.md`
-- **X-21** - *use it immediately, store it, or lose it* has no recipe that does any of it · `lenses/research/outbox.md`
-- **X-22** - the force rule is stated and nothing implements it · `lenses/research/outbox.md`
 - **X-23** - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed · `lenses/research/outbox.md`
 - **X-24** - the handoff: what is computed, what is asserted, and what Sean corrected · `lenses/research/outbox.md`
 - **X-25** - `launch ark` puts nothing into orbit, and Sean's loop ends with an ark in orbit · `lenses/research/outbox.md`

@@ -702,32 +702,60 @@
       ]
     },
     {
-      "name": "stow",
-      "was": null,
-      "selection": "quantified on line 1, rather than in prose beside the recipe",
+      "name": "end-of-turn losses",
+      "selection": "quantified on line 1",
       "lines": [
         [
           "each",
           "t: {territory}",
           "",
           "",
-          "Sean, 2026-09-09: *just automatically cram as much as will fit in storage, the rest goes into disorder*"
+          "**no release row.** The game does this at `crates/game-model/src/territory.rs:184`, and the release's sixteen recipes do not list it"
         ],
         [
           "change",
-          "resource in t",
-          "-count {resource in t}",
+          "food in t",
+          "-count {food in t}",
           "",
-          "take up everything the territory holds directly"
+          "food is made with `keeps` 1, so what is here at a turn's end was made this turn"
         ],
         [
           "change",
-          "resource in {store in t}",
-          "+count {resource in t}",
-          "clamp",
-          "**clamp puts back what fits and no more** - so the remainder is simply gone, which is the disorder"
+          "labor in t",
+          "-count {labor in t}",
+          "",
+          "labor left over was made by a citizen about to be refreshed, and would be counted twice"
+        ],
+        [
+          "change",
+          "metal in t",
+          "-count {metal in t}",
+          "",
+          "take all the metal up"
+        ],
+        [
+          "change",
+          "metal in t",
+          "+min(count {metal in t}, sum capacity of {store resource:metal territory:t})",
+          "",
+          "**put back what the stores hold.** Lines are not sequential, so both amounts read the state before the line above ran - the net effect is *keep what fits*"
+        ],
+        [
+          "change",
+          "energy in t",
+          "-count {energy in t}",
+          "",
+          "take all the energy up"
+        ],
+        [
+          "change",
+          "energy in t",
+          "+min(count {energy in t}, sum capacity of {store resource:energy territory:t})",
+          "",
+          "and put back what fits"
         ]
-      ]
+      ],
+      "new": true
     }
   ],
   "creation": [
@@ -979,6 +1007,11 @@
       "NOTED - the tank is real, and expansion gates on energy",
       "Sean: <em>the pioneer will have a tank they can load energy to, and that energy comes from a region, so you can't really start expanding until you start exploiting energy in a region. One move per fuel cell, and two fuel cells per pioneer, so a pioneer can leave gaps when it founds.</em>",
       "<code>found-colony</code> makes a food and a metal extractor and <strong>no energy one</strong>, so a colony must <code>build extractor</code> for energy and work it before anything can move. That is the gate, and it was invisible while <code>move</code> spent from the territory."
+    ],
+    [
+      "REFUTED - `X-21`, by the specification lane, and this lane confirmed it against the code",
+      "Storing is implemented at <code>crates/game-model/src/territory.rs:184</code> and is not a recipe. A store's whole job is making metal and energy carry across a turn, and it does it.",
+      "This lane called a store a building that does nothing. It is doing exactly what it was built for, in a shape this lane did not look for: <strong>a store is a bound at a turn's end, not a container things move into</strong>. What survives is smaller and still true - <strong>a behaviour of the game is not among its recipes</strong>, so <code>R-7</code> can be complete over all sixteen and never show the rule deciding what a player keeps between turns."
     ]
   ],
   "collapse": [
@@ -1843,6 +1876,11 @@
       "fuel",
       "a unit",
       "stored"
+    ],
+    [
+      "capacity",
+      "a store",
+      "stored"
     ]
   ],
   "thing_shape": [
@@ -1898,12 +1936,13 @@
       "territory",
       "counted",
       [
-        "resource"
+        "resource",
+        "capacity"
       ],
       [
         "metal-in-it"
       ],
-      "holds 10 of its resource; which store holds which unit is not recorded"
+      "holds <code>capacity</code> 10 of its <code>resource</code>; which store holds which unit is not recorded, so the bound is the sum"
     ],
     [
       "ark",
@@ -1937,7 +1976,7 @@
     ],
     [
       "food",
-      "territory, or a store",
+      "territory",
       "counted",
       [
         "keeps"
@@ -1949,7 +1988,7 @@
     ],
     [
       "metal",
-      "territory, or a store",
+      "territory",
       "counted",
       [],
       [],
@@ -1957,7 +1996,7 @@
     ],
     [
       "energy",
-      "territory, a store, or a unit's tank",
+      "territory, or a unit's tank",
       "counted",
       [],
       [],
@@ -2135,31 +2174,31 @@
     ],
     [
       "food",
-      "territory, or a store",
+      "territory",
       "no bound",
       "ephemeral",
-      "a store holds 10; <code>keeps</code> 1 kills even a stored unit"
+      "the bound at the turn's end is zero, which is what <code>ephemeral</code> says"
     ],
     [
       "metal",
-      "territory, or a store",
-      "no bound",
+      "territory",
+      "bound at the turn's end",
       "ephemeral unless stored",
-      "a store holds 10"
+      "the bound is the sum of the territory's stores' capacities, 10 each"
     ],
     [
       "energy",
-      "territory, or a store",
-      "no bound",
+      "territory",
+      "bound at the turn's end",
       "ephemeral unless stored",
-      "a store holds 10. <strong>A unit carries <code>fuel</code>, which is a number rather than a tank of energy</strong>"
+      "the bound is the sum of the territory's stores' capacities, 10 each"
     ],
     [
       "labor",
       "territory",
       "no bound",
       "ephemeral",
-      "no container ever holds it, so it never survives a turn"
+      "the bound at the turn's end is zero, which is what <code>ephemeral</code> says"
     ],
     [
       "territory",
@@ -2242,25 +2281,25 @@
       "territory",
       "food",
       "no limit",
-      "Sean, 2026-09-09 - `X-20`"
+      "`crates/game-model/src/territory.rs:184`"
     ],
     [
       "territory",
       "metal",
-      "no limit",
-      "Sean, 2026-09-09 - `X-20`"
+      "no limit within a turn; the stores' capacities at its end",
+      "`crates/game-model/src/territory.rs:184`"
     ],
     [
       "territory",
       "energy",
-      "no limit",
-      "Sean, 2026-09-09 - `X-20`"
+      "no limit within a turn; the stores' capacities at its end",
+      "`crates/game-model/src/territory.rs:184`"
     ],
     [
       "territory",
       "labor",
       "no limit",
-      "Sean, 2026-09-09 - `X-20`"
+      "`crates/game-model/src/territory.rs:184`"
     ],
     [
       "territory",
@@ -2273,12 +2312,6 @@
       "resource",
       "no limit",
       "the family, for what `work` makes before it grounds"
-    ],
-    [
-      "store",
-      "resource",
-      "10",
-      "release -> Where things are; filled by `stow`, which is what `X-21` asked for"
     ],
     [
       "orbit",
@@ -2370,9 +2403,9 @@
     ],
     [
       "Loose in the territory",
-      "the territory holds it directly",
-      "nothing",
-      "<strong>lost at the turn's end, to disorder</strong>",
+      "the territory itself, all turn",
+      "no bound while the turn runs; at its end, the sum of the stores' capacities",
+      "ephemeral unless stored",
       [
         [
           "territory",
@@ -2392,18 +2425,6 @@
         ],
         [
           "territory",
-          "resource"
-        ]
-      ]
-    ],
-    [
-      "Inside a container in the territory",
-      "a store, which is itself bounded by the territory",
-      "10 of the one resource it was built for",
-      "persists",
-      [
-        [
-          "store",
           "resource"
         ]
       ]
@@ -2538,6 +2559,10 @@
     [
       "no bound",
       "The container declares no limit, so nothing can be over one. Not the same as declaring <strong>no capacity</strong>, which means it never holds this kind at all."
+    ],
+    [
+      "bound at the turn's end",
+      "Nothing bounds it while the turn runs, so a recipe may make as much as it likes. At the turn's end the bound applies and everything over it is gone. **This is the whole job of a store**, and the reason metal and energy carry across a turn at all - `crates/game-model/src/territory.rs:184`."
     ]
   ],
   "lifetime_values": [
@@ -2551,7 +2576,7 @@
     ],
     [
       "ephemeral unless stored",
-      "Gone at the turn's end if the territory holds it directly; kept if a container does."
+      "Gone at the turn's end beyond what the territory's stores can hold. Which store holds which unit is not recorded - the capacity is a sum."
     ]
   ],
   "the_loop": [

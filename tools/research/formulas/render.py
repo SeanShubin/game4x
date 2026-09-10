@@ -472,7 +472,9 @@ def kind_collisions():
 
 def decisions_split():
     """Open questions, and ones already answered. Partitioned by the row's own prefix."""
-    settled = ("ANSWERED", "CORRECTED", "WITHDRAWN", "NOTED", "NOT A DECISION")
+    # `REFUTED` is a producer saying no to a lens, which `CLAUDE.md` calls the lens working
+    # rather than failing - so it is settled, and sits with the answers.
+    settled = ("ANSWERED", "CORRECTED", "WITHDRAWN", "NOTED", "NOT A DECISION", "REFUTED")
     op = [r for r in DATA["decisions"] if not r[0].startswith(settled)]
     shut = [r for r in DATA["decisions"] if r[0].startswith(settled)]
     assert len(op) + len(shut) == len(DATA["decisions"])

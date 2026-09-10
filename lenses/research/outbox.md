@@ -359,21 +359,28 @@ will want it in `spec/`, and asked that nothing be lost in the meantime. **This 
 what would have to become text, and where each piece already lives**, so that the promotion path is
 a reading list rather than a memory.
 
-| What                                                                                 | Where it is now                                                                                |
-| ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| The primitives, and which are sugar                                                  | [report](formulas.html) -> The primitives, What is sugar; `X-11`                               |
-| The test for whether a primitive earns its place                                     | `X-11` - removing it moves the explosion from the generated space to the authored space        |
-| Capacity belongs to the container, and `limit` is deleted                            | [report](formulas.html) -> Capacities; both uses were restatements                             |
-| World-building is the play language with the guards left out                         | [report](formulas.html) -> Building the world; `X-13`                                          |
-| `set` is a primitive and not sugar                                                   | `X-13` - traits are values, so no arrangement of create and destroy expresses *keeps one less* |
-| The seven duplicated rows, and `found-colony`                                        | `X-12`                                                                                         |
-| A derived subject deletes a parameter declaration and a qualifier                    | `X-12`, `X-8`                                                                                  |
-| Grounding: the menu is the applicable ground actions                                 | `X-8`                                                                                          |
-| Boundedness and acyclicity, and why user editing makes them a product requirement    | `X-9` (closed), `C-75`, `X-12`                                                                 |
-| The three checks, and that a cap is a backstop and never the mechanism               | [report](formulas.html) -> Detecting a glitch, and The three checks as run                     |
-| Conservation declarations already in the *Kinds* table, and that nothing checks them | `X-14`                                                                                         |
+| What                                                                                                                                                                | Where it is now                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| The primitives, and which are sugar                                                                                                                                 | [report](formulas.html) -> The primitives, What is sugar; `X-11`                                                                 |
+| The test for whether a primitive earns its place                                                                                                                    | `X-11` - removing it moves the explosion from the generated space to the authored space                                          |
+| Capacity belongs to the container, and `limit` is deleted                                                                                                           | [report](formulas.html) -> Capacities; both uses were restatements                                                               |
+| World-building is the play language with the guards left out                                                                                                        | [report](formulas.html) -> Building the world; `X-13`                                                                            |
+| `set` is a primitive and not sugar                                                                                                                                  | `X-13` - traits are values, so no arrangement of create and destroy expresses *keeps one less*                                   |
+| The seven duplicated rows, and `found-colony`                                                                                                                       | `X-12`                                                                                                                           |
+| A derived subject deletes a parameter declaration and a qualifier                                                                                                   | `X-12`, `X-8`                                                                                                                    |
+| Grounding: the menu is the applicable ground actions                                                                                                                | `X-8`                                                                                                                            |
+| Boundedness and acyclicity, and why user editing makes them a product requirement                                                                                   | `X-9` (closed), `C-75`, `X-12`                                                                                                   |
+| The three checks, and that a cap is a backstop and never the mechanism                                                                                              | [report](formulas.html) -> Detecting a glitch, and The three checks as run                                                       |
+| Conservation declarations already in the *Kinds* table, and that nothing checks them                                                                                | `X-14`                                                                                                                           |
+| The fusion: guard and spend are one op, and a negative result is the error                                                                                          | [report](formulas.html) -> The primitives; `X-11`                                                                                |
+| Signed amounts, and that lines are not sequential                                                                                                                   | [report](formulas.html) -> Why the lines are not sequential                                                                      |
+| The capacity taxonomy: what has a bound, what has none, and what has no capacity at all                                                                             | [report](formulas.html) -> Capacity, in four questions rather than one; `X-20`                                                   |
+| Quantification, and that a selection is a description and a count                                                                                                   | [report](formulas.html) -> Selection; check 10                                                                                   |
+| **The force rules** - 1 passive per citizen, `max_of` unorganized against `sum_of` organized, the garrison as the organizer, greater to enter and equal to maintain | [report](formulas.html) -> Force, and check 11. **Also built**: `crates/game-model/src/game.rs:236`, `:626`, `:914` - see `X-22` |
+| Disorder and perish are one thing, and being short on force deletes what is there                                                                                   | [report](formulas.html) -> the world recipes; `X-22`, `X-27`                                                                     |
+| What a turn's end keeps: nothing loose, and metal and energy up to the stores' capacity                                                                             | [report](formulas.html) -> `end-of-turn losses`. **Built** at `crates/game-model/src/territory.rs:184` - see `X-21`              |
 
-**Six decisions are open and none is this lane's**, all listed in the report: the garrison's
+**The open decisions are none of them this lane's**, and the report counts them rather than this line, which was written when there were six: the garrison's
 soft/hard cascade over the six lines beside it; attachment on the call versus on each create;
 whether a call rolls back; the missing stores; identity versus count; and now `X-14`'s three
 readings of *conserved*.
@@ -558,195 +565,6 @@ can see that difference**, since both aggregate by kind and ignore where a thing
 this went unnoticed here for a day.
 
 
-### X-21 - *use it immediately, store it, or lose it* has no recipe that does any of it
-
-**to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *The kinds of storage* · **found by** asking the reverse of check 6 - is every declaration reachable?
-
-**Where.** `releases/first-release.md` -> *What bounds a kind in a territory*: **A resource that is
-in nothing can be used the turn it is made, and is lost when that turn ends - use it immediately,
-store it, or lose it.** And *Where things are*: a store holds **10** of its resource.
-
-**What.** **None of the release's sixteen recipes stores anything, and none removes an unstored
-resource at a turn's end.**
-
-- **Nothing puts a resource in a store.** `build store` creates the store; `work` creates a resource
-  in the territory; no recipe moves one into the other. So a store can be built, has a capacity, and
-  **nothing can ever be in it**
-- **Nothing takes an unstored resource away.** `age` decrements `keeps` and `spoil` destroys what
-  reaches zero, and **only food is made with `keeps`** - metal and energy carry none, so they are
-  never aged and never spoiled. Unstored metal therefore persists for ever, which is the opposite of
-  what the sentence says
-
-**Counted, against a population that is not zero:** sixteen recipes in the release, 20 declared
-(container, kind) pairs in this lane's model, and **`store` holds `resource` is one of two nothing
-reaches**.
-
-**One reading makes it smaller, and it is worth stating because it is probably the intent.** *Where
-things are* says **which store holds which unit of a resource is not recorded in this release, so a
-territory's amount of a resource is stated against the sum of its stores' capacities.** Read that
-way, storing is not an action at all: a territory simply keeps as much as its stores can hold and
-loses the rest. **That is a world recipe, and it is not among the sixteen either** - so the gap is
-one missing recipe rather than two, and the sentence describes a rule the game does not yet run.
-
-**Why it costs something.** A store costs 1 labor and 1 metal, and is one of six things a player can
-build. **If nothing stores, a store is a building that does nothing**, and the whole
-extract-then-keep loop the release describes is not there. `R-6` is *the loop can be played
-through*.
-
-**Whether.** **Worth deciding what the recipe is, not just that one is missing.** The two readings
-differ: a player action that stores, or a world recipe at the turn's end that keeps what fits. The
-second matches *which store holds which unit is not recorded* and needs no choice from the player;
-the first is what *store it* sounds like. **This lane takes neither.**
-
-**Answered and built 2026-09-09.** Sean: *just automatically cram as much as will fit in storage, the
-rest goes into disorder.* So it is the world's, not the player's, and it is three lines:
-
-```
-stow  each t: {territory}
-      change resource in t             -count {resource in t}          # take up everything loose
-      change resource in {store in t}  +count {resource in t}  [clamp]  # put back what fits
-```
-
-**`clamp` does the whole of it.** It puts back what fits and no more, so the remainder is simply
-gone - which is the disorder, with no second recipe and no test for how much was over. **This is
-`clamp`'s first call site**, and it was declared as a candidate with no reason to exist since the
-attach column was written.
-
-**Check 8 now reports 19 of 19 declarations reachable.** *A store may hold a resource* was the one
-pair nothing filled, which is how this item was found; it is filled.
-
-
-### X-22 - the force rule is stated and nothing implements it
-
-**to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *The loop Sean is building* · **found by** checking the recipes against Sean's stated intent
-
-**Where.** Sean, 2026-09-09, stating what the recipes are for: *start with an ark in orbit, deploy
-the ark to a single territory, **expand to all other territories from that territory, overcoming
-nature in the process**, then fully exploit the planet … and finally launch a new ark into orbit.*
-
-**What.** **`force` appears in no recipe line at all**, and a citizen, a garrison, an ark and a
-pioneer each carry one. **`nature` appears in two lines and both write it** - `make-territory` sets
-it and `make-world` passes it - so nothing ever reads it. **The release's own *Recipes* table
-mentions neither word**, over all sixteen rows.
-
-**So six of the seven steps of the loop have recipes and this one has nothing.** It is not a rule
-that needs correcting; it is a rule that was never written.
-
-**It compounds with `X-19`.** That item found that no territory is given a `nature` value in any
-document, because `biomes_of` in the code assigns it. **So even with a mechanic there is nothing for
-it to read**, and the two have to be answered together or neither is enough.
-
-**Whether.** **Worth deciding, and it is the largest thing between the recipes and the loop as
-stated.** This lane proposes nothing: what force does against nature - whether it is spent, tested,
-or accumulated - is a game design question and not a gap to be filled by inference.
-
-**Sharpened 2026-09-09 by Sean, and it is smaller than the item above suggests.** *Minimal territory
-control is 1 garrison, 1 food extractor, 2 citizens. The garrison allows the citizens to sum their
-force; the food extractor allows one citizen to provide labor to provide food to supply both
-citizens.* Then: *if we don't have a recipe to generate force, how are we to hold the territory
-against nature?*
-
-**Force does not need generating - it is carried, and the release's own numbers say so.** *Units and
-structures*: a citizen is force **1**, an ark and a pioneer **2**. **A garrison is force 0**, and
-that zero is the whole design: a thing that *holds a territory* and contributes no force of its own
-is an **aggregator**, which is exactly what Sean described.
-
-**And the numbers are already calibrated.** Two citizens carry force 2; the highest force of nature
-is 2, in jungle, and every other biome is 1. **So minimal control is exactly sufficient against the
-worst biome, with no margin** - which is checkable and is now check 9.
-
-**So what is missing is a comparison, not a producer**, and both halves already have a shape in the
-model:
-
-- **A territory's force is a derived trait**, a weighted sum over what it contains. The model has
-  one of those already - `metal in it`, *its binding plus the metal in its parts*. Same
-  construction, a different weight column
-- **Holding is a guard** on that trait against `nature`, which is what `require` is for
-
-**Two other items have to move with it.** `X-19`: no territory is given a `nature` value in any
-document, so there is nothing for the guard to read. And check 9's food half found that
-**territory 5 cannot sustain minimal control at all** - food density 1 against two citizens eating 2
-- which is step 5a of the loop, the territories that do not count, exercised by exactly one of the
-twelve.
-
-**Still not proposed by this lane.** What holding costs, whether force is spent or merely tested,
-and what happens when it is short are game design and not gaps to fill by inference.
-
-**Stated 2026-09-09 by Sean, so this stops being a design question.** A citizen produces **1 force
-passively**, exhausted or not. **Unorganized force is `max_of`; organized force is `sum_of`.**
-Citizens are unorganized by default and organized where a barracks is present. **Units that move are
-organized by construction** - moving is organizing force into an expedition. And the contest is at a
-boundary: **greater force to enter, equal force to maintain**, where entering is the cost of
-occupying rather than anything projected from outside.
-
-**Three consequences this lane checked rather than assumed.**
-
-- **Two pioneers enter a jungle and one cannot.** Nature 2, entering needs more than 2, and an
-  organized pair is 4. **It is also the cheap path** - 6 metal and 12 energy, against 21 and 24 for
-  two arks, which need a yard first. That is the tuning Sean asked for, and the numbers are the
-  recipes' own
-- **A barracks earns its place on exactly one biome.** Maintaining needs equal force, and at nature 1
-  a single unorganized citizen is enough since `max` of anything is at least 1. **Only a jungle needs
-  the sum**, which two citizens with a barracks give
-- **`move` moves one unit, and the rule needs an expedition.** Two pioneers must cross together or
-  each fails alone. The selection work already has the shape - a selection is a description and a
-  count, so an expedition is `some 2 {pioneer …}` - but `move`'s quantifier takes one
-
-**A contradiction this lane filed was not one.** It read *the garrison allows the citizens to sum
-their force* against *a settlement that only projects 1* as disagreeing. **Both are true and the
-barracks is the condition**: two citizens with one sum to 2, without one they are `max(1, 1)`.
-
-**The organizer is the garrison**, which Sean confirmed: *I often get these terms mixed up, I mean
-garrison, as that applies holding on to something.* The release already calls it *what holds a
-territory*, with force **0** - the exact shape of a thing that organizes rather than fights, and the
-reason its zero was worth noticing.
-
-**And this lane had entering wrong.** It reasoned that entering unclaimed ground must be free,
-because `found by land` consumes a pioneer in the territory it founds. Sean: the clash is at the
-boundary and entering is the cost. **That is better than what was proposed** - the contest belongs on
-`move`, which exists, and the ark stops being a special case, since an orbit and the territory below
-are two places with a boundary like any other.
-
-**Sean answered the consequence 2026-09-09**: *if you pass the force test you have presence there,
-and therefore control. If you fail the force test you lose all your units.* **The failure half is
-already built** - `unsustained` covers a thing whose upkeep is unmet *or* whose place is short of
-force, and `perish` deletes it. Nothing more is needed for it.
-
-**But one test cannot carry both halves, and the arithmetic says so.** A citizen is force 1, so
-minimal control is 2; a jungle is nature 2.
-
-- **If the single test is `>`** - greater, as for entering - then 2 &gt; 2 is false, so **a jungle
-  colony loses its units the turn it is founded.** No jungle is ever holdable
-- **If it is `&ge;`** - equal, as for maintaining - then a lone pioneer at force 2 passes, so
-  **two pioneers are never needed** and the jungle is no harder than anywhere else
-
-**Both readings break something Sean has asked for**, and the two-test version he described earlier
-breaks neither: `>` when a player fires `resolve`, `&ge;` when the world checks each turn. **That is
-the one thing still to settle**, and it is a choice between one test and two rather than a gap.
-
-**Corrected 2026-09-09.** This item argued that a single force test breaks either way, using
-minimal control's force of 2 against a jungle's nature of 2. **Sean: *why are you looking at
-citizens' force? We don't move citizens, we move pioneers.*** The colony never breaches - the
-pioneers do - so testing a founded colony with `>` was testing the wrong thing.
-
-**His sequence, now check 11, and every step is arithmetic on the release's own numbers:**
-
-```
-yes  two pioneers breach                           4 > 2
-NO   one pioneer alone breaches                    2 > 2
-yes  after one deploys, with the other still there 4 >= 2
-yes  the other pioneer leaves; garrison organizes  2 >= 2
-NO   the same two citizens with no garrison        1 >= 2
-```
-
-**The two failures are the design working.** One pioneer cannot take a jungle, which is why two are
-wanted; and two citizens cannot hold one without a garrison, because unorganized force is `max` and
-`max(1, 1)` is 1. **The garrison earns its place on exactly the two territories that are jungle.**
-
-**So the two-test reading is confirmed rather than merely preferred**: `>` when the pioneers breach,
-`>=` for what stays. What remains is to write `resolve` and the maintaining check as recipes -
-neither needs anything the language lacks.
-
 ### X-23 - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed
 
 **to** spec · **status** open · **raised** 2026-09-09 · **source** [the report](formulas.html) -> *Check 8* · **found by** asking which declared containers are ever **filled** rather than merely mentioned
@@ -869,8 +687,132 @@ rather than this lane's - recorded here so the count and the instance sit togeth
 into `spec/structures.md`, which has three structures and would have four; or the win condition
 stops referring to storage; or the release stops having stores. **This lane takes none** - and notes
 only that the third would make `X-21` moot and the first would make it urgent.
+### X-27 - losing a territory to nature does not delete the units on it, and one line above it is dead
+
+**to** code · **status** open · **raised** 2026-09-10 · **source** refuting `X-22` against `crates/` · **found by** reading the force contest this lane had claimed did not exist
+
+**Where.** `crates/game-model/src/game.rs:914-925`, in `end_turn`, and
+`crates/game-model/src/territory.rs:584-591`, `lost_to_nature`.
+
+**What.** Two things, and only the first is about the rule.
+
+- **A unit survives a territory being lost.** When `force_in(id) < needed`, every unit on the
+  territory gets `unit.usable = false` and `lost_to_nature()` clears what the territory *holds* -
+  citizens, stores, yards, extractors, garrison. **An ark and a pioneer are not held**; they live in
+  `self.units`, so each is left in place as an unusable unit. Sean, 2026-09-09, asked directly what
+  losing control should mean: *what losing control means is an interesting question, but I think for
+  now we just delete the units.*
+- **`territory.rs:586` cannot do anything.** `self.held.retain(|thing| thing.kind != Kind::Extractor)`
+  is followed on the next line by `self.held.clear()`. The comment on line 587 explains why clearing
+  everything is right - *naming the kinds one by one would be a list to keep in step with the kinds*
+  - which is exactly the argument against the line above it.
+
+**Why it costs something.** The first leaves a state the release cannot describe: a unit that is
+somewhere, owned, and can never act, on ground the player no longer controls. It reads in a hand
+derivation exactly like a unit that is merely exhausted, which is the same confusion `P-339` removed
+for `unpaid`. The second costs nothing at runtime and costs a reader the question *why is an
+extractor special here* - it is not.
+
+**Whether.** **The first is worth doing now** and is one line in the same loop; it is also Sean's
+stated answer rather than this lane's inference, so nothing needs deciding. **The second is a
+tidy-up** and should ride with it rather than on its own.
+
 
 ## Resolved
+
+### X-21 - REFUTED: storing is built, and a store is a bound rather than a container
+
+**to** spec · **status** rejected · **raised** 2026-09-09 · **refuted** 2026-09-10 by `4x spec`, and confirmed here against the code · **replaced by** the narrower finding below
+
+**The claim was that none of the sixteen recipes stores anything and nothing removes an unstored
+resource at a turn's end.** The second half is wrong, and it was the load-bearing half.
+
+**Where it actually is.** `crates/game-model/src/territory.rs:184`, `end_of_turn_losses` - food and
+labor are dropped entirely; metal and energy are cut to the territory's store capacity with
+`count_of(kind).saturating_sub(capacity(resource))`, and **the remainder carries**. That is exactly
+*cram as much as will fit in storage, the rest goes into disorder*, which is what Sean said on
+2026-09-09, already built before he said it.
+
+**So a store does the one thing it exists for.** It is the reason metal and energy survive a turn at
+all. This lane wrote *if nothing stores, a store is a building that does nothing* - and it is doing
+everything it was built for, in a shape this lane did not look for.
+
+**This item contained its own refutation and this lane did not follow it.** The paragraph beginning
+*one reading makes it smaller, and it is worth stating because it is probably the intent* described
+the turn-end rule correctly, called it probably the intent, and then **filed the header claiming no
+recipe does any of it, and built `stow` as a move into a container anyway**. Reading the release
+right was not enough; nothing checked it against `crates/`.
+
+**Which is the pattern named in
+[the handoff](2026-09-09-handoff-to-spec.md) -> *Nobody checks the column they do not write*, for the
+third time in this lane and the fourth across three lanes in two days.** The check that would have
+caught all four is the one both lanes now want: for a claim of the form *nothing does X*, assert
+over `spec/`, `releases/`, `crates/` and `reports/`, rather than over the columns that happened to be
+open.
+
+**What survives, and it is worth keeping.** **A behaviour of the game is not among its recipes.** The
+release lists sixteen; the game runs a seventeenth, every turn, and it decides what a player keeps.
+`R-7` is *each recipe can be confirmed on its own* - and it can be complete over all sixteen while
+never once showing the rule that decides what survives a turn.
+
+**What changed here.** The prototype's `stow` is gone and `end-of-turn losses` replaces it, written
+from the code rather than from the sentence. It needed **no new construct**: a store's 10 became a
+`capacity` trait, so `sum capacity of {store resource:metal territory:t}` is the existing
+`sum trait of` form, and `min` was already there for `grow`.
+
+    change  metal in t  -count {metal in t}
+    change  metal in t  +min(count {metal in t}, sum capacity of {store resource:metal territory:t})
+
+Lines are not sequential, so both amounts read the state before either ran, and the net effect is
+*keep what fits*. **The taxonomy moved with it**: *inside a container in the territory* now has no
+occupants and is gone, and a third bound joins the enum - **bound at the turn's end**, which nothing
+in the notation could say before.
+
+### X-22 - REFUTED: the force contest is specified, built and tested; only the recipes lack it
+
+**to** spec · **status** rejected · **raised** 2026-09-09 · **refuted** 2026-09-10 by this lane, against `crates/` · **replaced by** `X-27`, and by the narrower finding `X-21` now carries
+
+**The claim was *the force rule is stated and nothing implements it*.** The evidence given was
+entirely about the release's *Recipes* table - *`force` appears in no recipe line at all*, *`nature`
+appears in two lines and both write it* - and every word of that is still true. **The headline is
+not.** Nothing in the item ever opened `crates/`.
+
+**Where it actually is**, and each of these cites `spec/control.md` in its own doc comment:
+
+| `crates/game-model/src/game.rs` | What it does                                                                                                                                                                                 |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `force_in`, line 236            | **Sean's summation rule exactly.** A garrison or any unit with force coordinates the territory and the contributions **sum**; with neither, the total is the **largest single** contribution |
+| `take`, line 626                | **greater force to enter** - `if force <= defending` is a rejection                                                                                                                          |
+| `end_turn`, line 914            | **equal force to maintain** - `if self.force_in(id) < needed`, nature reclaims, where `needed` is the territory's `force_of_nature`                                                          |
+| `force_brought_to`, line 548    | several units brought to one place sum, per `P-275`                                                                                                                                          |
+
+So *six of the seven steps of the loop have recipes and this one has nothing* is wrong about the
+game and right about the table. **The rule was never missing; it was never a recipe.**
+
+**Everything Sean said into this item still stands and is now confirmed rather than proposed.** The
+passive 1 force per citizen, `max_of` unorganized against `sum_of` organized, the garrison as the
+organizer that carries force 0 itself, greater to enter and equal to maintain - the code does all of
+it, and check 11 here reproduces the jungle sequence from the recipes' own numbers.
+
+**Two things this lane found while checking, and only one of them is about force.**
+
+- **On losing a territory, the code does not delete the units.** `end_turn` sets `unit.usable =
+  false` for every unit on the territory and calls `lost_to_nature`, which clears everything the
+  territory *holds* - population, stores, yards, extractors. But an ark or a pioneer lives in
+  `self.units`, not in `held`, so it survives as an unusable unit. Sean, 2026-09-09: *what losing
+  control means is an interesting question, but I think for now we just delete the units.*
+- **`territory.rs:586` is dead.** `self.held.retain(|thing| thing.kind != Kind::Extractor)` is
+  followed on the next line by `self.held.clear()`, which subsumes it entirely.
+
+**Both are filed as `X-27`, addressed to the code lane**, because neither is a question for `spec/`
+and this item is closed.
+
+**The fourth instance of one pattern in two days**, and the third in this lane -
+[the handoff](2026-09-09-handoff-to-spec.md) -> *Nobody checks the column they do not write*. `X-19`
+never opened `reports/`; `X-23` never opened `crates/`; `X-21` and now `X-22` never opened `crates/`
+either. **Every one of them returned a plausible number about a proper subset of the columns its
+claim covered.**
+
 
 ### X-1 - what makes the game checkable by hand is never stated
 

@@ -2,12 +2,10 @@
   "conservation": {
     "analysed": 13,
     "skipped": [
+      "end-of-turn losses",
       "grow",
       "load",
       "perish",
-      "stow[food]",
-      "stow[metal]",
-      "stow[energy]",
       "upkeep"
     ],
     "weights": {
@@ -30,9 +28,9 @@
   "unbounded": {
     "analysed": 18,
     "skipped": [
+      "end-of-turn losses",
       "load",
-      "perish",
-      "stow"
+      "perish"
     ],
     "witness": [
       [
@@ -110,22 +108,22 @@
     "breaches": []
   },
   "editor": {
-    "tokens": 451,
-    "selectable": 451,
+    "tokens": 498,
+    "selectable": 498,
     "recipes": 23,
     "clean": 23,
     "typed": {}
   },
   "unreached": {
-    "declared": 20,
+    "declared": 19,
     "pairs": []
   },
   "containment": {
-    "examined": 19,
-    "declared": 20,
+    "examined": 20,
+    "declared": 19,
     "homeless": [],
     "undeclared": [],
-    "x20_lines": 3
+    "x20_lines": 5
   },
   "placement": [
     [
@@ -182,14 +180,7 @@
         "the unit's fuel"
       ]
     ],
-    "unobservable": [
-      [
-        "stow",
-        "resource in {store in t}",
-        "clamp",
-        "no capacity declared"
-      ]
-    ]
+    "unobservable": []
   },
   "poison": [
     "check 2 flags a recipe with no inputs",
