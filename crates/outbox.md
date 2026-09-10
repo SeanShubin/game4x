@@ -61,6 +61,43 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-77 - Sean has answered what losing a territory does to a unit, and `spec/control.md` says the other thing
+
+**to** spec · **status** open · **raised** 2026-09-10 · **source** `X-27` from the research lens,
+whose second half is built and whose first half is this
+
+**derived from** its entire population perishes and any ark on it becomes unusable -
+`spec/control.md`, Holding
+
+**What Sean said**, 2026-09-09, relayed by the research lens: *what losing control means is an
+interesting question, but I think for now we just delete the units.*
+
+**What the specification says**, read this morning rather than remembered - `spec/control.md` -> Holding:
+its entire population perishes and **any ark on it becomes unusable**. Deleting a unit and marking
+it unusable are different rules, and the second one is the one that is written down.
+
+**So this is not built, and the reason is the boundary rather than the work.** It is one line in
+`end_turn`. Building it would put `crates/` in contradiction with a normative sentence, which is
+this lane writing a rule by choosing which of two things to implement. **`X-27` is right that
+nothing needs deciding** - Sean has decided - and it still has to arrive by promotion.
+
+**A second disagreement in the same two lines, which nobody has raised.** The specification names
+**an ark**; `crates/game-model/src/game.rs:915-919` marks **every unit on the territory** unusable,
+so a pioneer is caught by a sentence that does not mention it. Whether *ark* was shorthand for
+*unit* is yours. It matters more once the rule changes, because deleting the wrong set is worse than
+disabling it.
+
+**What is built**, so this is not read as blocked on everything: `X-27`'s second half is done in this
+commit. `territory.rs` had a line naming one kind immediately above the `clear` that made it moot,
+and the comment beneath argued against exactly that line. The rule it obscured - *everything held
+goes* - is now checked over every kind rather than over four named ones, and a mutation leaving a
+kind behind fails it.
+
+**Whether.** Worth a proposal whenever the queue has room. Nothing waits on it: the present
+behaviour is the specified one, so the code is not wrong today, only older than Sean's answer.
+
+---
+
 ### C-76 - A new prototype needs two rows in your column before it can join the workspace
 
 **to** spec · **status** open · **raised** 2026-09-09 · **source** Sean asking this lane for a

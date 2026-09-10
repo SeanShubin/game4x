@@ -687,9 +687,24 @@ pub const RENDERED_ELSEWHERE: [&str; 1] = ["catalog.md"];
 /// not go through the specification lane, so the shape was this lane's.
 pub const RESEARCH: [(&str, &str); 3] = [
     (
+        // **No number in this sentence, deliberately - `X-18`.** It said *six* and the report
+        // said five, and nothing had been edited to make that so: the description was true
+        // when it was written at 10:24 and the report had been re-rendered at 10:07. By the
+        // next morning the report said seven. **A description of somebody else's file that
+        // states a fact they can change is stale the moment they change it**, and this lane
+        // would never see it happen.
+        //
+        // The research lens offered to hold its primitive set still instead. That would fix
+        // this sentence by freezing their work, which is the wrong way round. Generating the
+        // count from `data.json` was the other option and is worse: it would put a lens's
+        // working file inside this crate's currency check, so their edit would redden this
+        // lane's gate.
+        //
+        // **So the sentence says what the report is for and not what is in it.** What is in
+        // it is one link away, and the link is the thing that cannot go stale.
         "lenses/research/formulas.html",
-        "the specification re-expressed in six primitives, and the world built from an empty \
-         game in the same six",
+        "the specification re-expressed in a small set of primitives, and the world built \
+         from an empty game in the same ones",
     ),
     (
         "tools/research/formulas/data.json",

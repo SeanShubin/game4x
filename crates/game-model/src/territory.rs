@@ -583,11 +583,15 @@ impl Territory {
     /// where units are.
     pub fn lost_to_nature(&mut self) {
         self.set_garrison(None);
-        self.held.retain(|thing| thing.kind != Kind::Extractor);
         // Everything held goes, which is the one place `clear` is the right verb: nature
         // takes the population, the stores and the yards together. Naming the kinds one by
         // one would be a list to keep in step with the kinds, which is the thing this shape
         // exists to stop.
+        //
+        // **A line naming one kind stood here until `X-27`** - `retain(kind != Extractor)`,
+        // immediately above the `clear` that made it moot. It did exactly what the comment
+        // below it argues against, and cost a reader the question *why is an extractor
+        // special here*. It is not.
         self.held.clear();
     }
 }
@@ -763,8 +767,36 @@ mod tests {
         territory.set_garrison(Some(Garrison::from_founding_unit(2)));
         territory.add_extractor(Resource::Food);
         territory.add(Resource::Metal, 10);
+        // **A yard, which none of the named assertions below looks at** - `X-27`. Without a
+        // kind that only the whole-population check covers, that check catches nothing the
+        // four named ones do not, and a mutation leaving a kind behind passes. Verified by
+        // running one rather than by reasoning about it.
+        territory.set_count(Kind::Yard, 1);
+
+        // **What it held, over every kind rather than four named ones** - `X-27`. The four
+        // assertions below used to be the whole of this, and they are a list to keep in step
+        // with the kinds, which is what `lost_to_nature` is written the way it is to avoid. A
+        // kind added tomorrow and left behind by nature would pass all four.
+        let before = territory.held.len();
+        let kinds_before: std::collections::BTreeSet<Kind> =
+            territory.held.iter().map(|thing| thing.kind).collect();
+        assert!(
+            kinds_before.len() >= 3,
+            "only {} kinds were on it, too few for `nothing remains` to be a claim",
+            kinds_before.len()
+        );
 
         territory.lost_to_nature();
+
+        assert_eq!(
+            territory.held.len(),
+            0,
+            "{before} things of {} kinds were on it and nature left {} - it takes all of \
+             them, whatever kinds exist",
+            kinds_before.len(),
+            territory.held.len()
+        );
+
         assert!(!territory.founded());
         assert_eq!(territory.citizens(), 0, "its entire population perishes");
         assert!(territory.garrison().is_none());
