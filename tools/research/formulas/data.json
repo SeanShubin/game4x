@@ -2626,5 +2626,37 @@
       "force &ge; nature",
       "a settlement projects 1, which holds any nature of 1"
     ]
+  ],
+  "jungle_options": [
+    [
+      "Two pioneers",
+      "2 + 2 = <strong>4</strong>",
+      "6 metal, 12 energy, 4 citizens",
+      "that force <strong>sums</strong> across units in a place. <strong>A territory already holds up to 2 pioneers</strong> - the room for exactly this was there before the question was asked"
+    ],
+    [
+      "An ark and a pioneer",
+      "2 + 2 = <strong>4</strong>",
+      "a yard at 15 metal, then 6 metal, 18 energy, 4 citizens",
+      "that force sums, <em>and</em> that projection from orbit and from the ground add together"
+    ],
+    [
+      "Two arks in orbit",
+      "2 + 2 = <strong>4</strong>",
+      "a yard at 15 metal, then 6 metal, 24 energy, 4 citizens",
+      "that force sums. An orbit has no unit limit, so this has no ceiling - and it is the dearest"
+    ],
+    [
+      "A new unit at force 3",
+      "<strong>3</strong>",
+      "a new kind, and whatever it costs",
+      "<strong>nothing new</strong> - it is the only option that works if force does not sum"
+    ],
+    [
+      "Raise the pioneer to force 3",
+      "<strong>3</strong>",
+      "nothing - one number in <em>Units and structures</em>",
+      "<strong>nothing new</strong>, but one pioneer then claims <em>every</em> biome, and the jungle stops being harder than anywhere else"
+    ]
   ]
 }
