@@ -62,18 +62,30 @@ release's own numbers; `nature` is a trait of a territory; `max force of {...}` 
 Sean's rule written in the language.
 
 **And not one recipe reads either word.** Over 23 recipes, `force` and `nature` appear in exactly
-**one** line - `make-territory`, which *writes* nature at design time. **Nothing guards on force,
-nothing compares it to nature, nothing loses a territory for being short.** Check 11 computes the
-jungle capture sequence correctly, in Python, outside the notation - which is the same shape as
+**one** line - `make-territory`, which *writes* nature at design time. Check 11 computes the jungle
+capture sequence correctly, in Python, outside the notation - which is the same shape as
 `is_fully_exploited` being in Rust.
 
-**So the encoding reached the nouns and stopped before the verbs**, and the gap is invisible from
-inside because every piece looks present. `spec/control.md` -> *Gaining and holding ground* is four
-rules, and the encoding has none of them.
+**Corrected the same night, before this was sent.** *Nothing guards on force* would have been too
+strong, and it is the mistake this report exists to stop making. The guard is there, one level down:
+`unsustained` is a **derived trait**, `perish` fires on `{thing unsustained:yes}`, and the causes
+table declares three of them - upkeep unmet, **breaching without greater force**, and **staying
+without equal force**. So the rules are in the model as the definition of a derived trait rather
+than as a recipe line. **The encoding reached the nouns, and the verbs are in a table rather than in
+a recipe.**
 
-**This is a defect in the prototype rather than in the notation**, and it is the one thing here that
-can be fixed rather than decided: `require` takes an expression and a comparison, and *taking a
-territory takes force greater than the existing force* is one guard line. It is being fixed tonight.
+**What was actually wrong was worse than what this lane first claimed.** Both force causes were
+written `sum force of {unit in t}` - which leaves citizens out of the breach test entirely and sums
+whatever is present - while the note in the very next column said *two citizens organized by a
+garrison hold at 2; without one they are `max(1, 1)`.* **Prose beside a formula that disagrees with
+it**, which is exactly how the primitive count went wrong on 2026-09-08.
+
+**Fixed tonight, and the fix is the one this lane keeps having to make: state it once.** The
+aggregator is now `force_rule` in the data - the organizers are the garrison and every unit, from
+`spec/control.md` -> *Coordination* - a territory has a derived `force` trait, both causes read
+`t.force`, and check 11 asks one function five times instead of computing the rule five times. **A
+poison that empties the organizers now turns the check red**, replacing one that discarded its own
+result and could never have failed.
 
 ### The regions never touched, and two of them are correctly untouched
 
@@ -285,8 +297,15 @@ and it is full. It is a reading list, in the order this lane would take it.
 2. **Report check 10 as `spec/console.md`'s own rule holding**, rather than as a property this lane
    invented
 3. **Combat is not a gap in the encoding**, and saying so saves a reader from looking for one
-4. **Force is a gap in the prototype and not in the notation**, and is being closed tonight
-5. **Competition (6.1) and the rule-as-a-thing (6.4) are the two that need Sean**, and he has said
+4. **Force was a gap in the prototype and not in the notation**, and it is closed: the aggregator
+   is data, both causes read a derived `force` trait, and a poison moves the check
+5. **`X-21`'s refutation changed a number Sean will care about.** This page said a yard's 15 metal
+   had to be mined in one turn, so **six of twelve** territories could ever build one. Metal
+   carries, so the question is what a territory can be *standing on*: **nine of twelve can build a
+   yard, six of them in a single turn.** The old six was not overturned - it was one column of a
+   table, and three more territories reach it in two turns. Check 14, poisoned by taking the stores
+   away, which drops it back to six
+6. **Competition (6.1) and the rule-as-a-thing (6.4) are the two that need Sean**, and he has said
    something bearing on each already
 
 **And two of the seven should be left unsayable on purpose** - reachability, because recursion costs

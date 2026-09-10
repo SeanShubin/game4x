@@ -1012,6 +1012,11 @@
       "REFUTED - `X-21`, by the specification lane, and this lane confirmed it against the code",
       "Storing is implemented at <code>crates/game-model/src/territory.rs:184</code> and is not a recipe. A store's whole job is making metal and energy carry across a turn, and it does it.",
       "This lane called a store a building that does nothing. It is doing exactly what it was built for, in a shape this lane did not look for: <strong>a store is a bound at a turn's end, not a container things move into</strong>. What survives is smaller and still true - <strong>a behaviour of the game is not among its recipes</strong>, so <code>R-7</code> can be complete over all sixteen and never show the rule deciding what a player keeps between turns."
+    ],
+    [
+      "CORRECTED - the two force causes named an expression that was not Sean's rule",
+      "<code>unsustained_causes</code> gave both of them <code>sum force of {unit in t}</code>: citizens left out of the breach test, and <code>sum</code> whatever is present.",
+      "The note in the next column already said <em>without a garrison they are max(1, 1)</em>. **Prose beside a formula that disagrees with it**, which is how the primitive count went wrong on 2026-09-08. Both now read <code>t.force</code>, which is a derived trait, and the aggregator is <code>force_rule</code> in the data - stated once, where the check reads it."
     ]
   ],
   "collapse": [
@@ -1881,6 +1886,11 @@
       "capacity",
       "a store",
       "stored"
+    ],
+    [
+      "force",
+      "a territory",
+      "derived"
     ]
   ],
   "thing_shape": [
@@ -2020,7 +2030,8 @@
         "nature"
       ],
       [
-        "control"
+        "control",
+        "force"
       ],
       "<code>biome</code> and <code>nature</code> have no value in any document - <code>X-19</code>"
     ],
@@ -2759,38 +2770,17 @@
       "<strong>nothing new</strong>, but one pioneer then claims <em>every</em> biome, and the jungle stops being harder than anywhere else"
     ]
   ],
-  "force_rule": [
-    [
-      "A citizen produces 1 force passively",
-      "always, exhausted or not",
-      "so force needs no recipe to generate it - it is a property of what is there"
+  "force_rule": {
+    "organizers": [
+      "garrison",
+      "ark",
+      "pioneer"
     ],
-    [
-      "Unorganized: force is <strong>max_of</strong>",
-      "citizens, by default",
-      "ten citizens with no garrison project <strong>1</strong>, not ten"
-    ],
-    [
-      "Organized: force is <strong>sum_of</strong>",
-      "citizens where a garrison is present",
-      "two citizens with one project <strong>2</strong>"
-    ],
-    [
-      "Units that move are organized",
-      "a pioneer, an ark",
-      "moving <em>is</em> organizing force into an expedition, so units always sum"
-    ],
-    [
-      "<strong>Greater</strong> force to enter",
-      "crossing into a territory",
-      "the cost is entering in order to occupy, not projecting from outside"
-    ],
-    [
-      "<strong>Equal</strong> force to maintain",
-      "staying once there",
-      "so a territory taken can be held by less than it took"
-    ]
-  ],
+    "organized": "sum force of {thing territory:t}",
+    "unorganized": "max force of {thing territory:t}",
+    "why": "<code>spec/control.md</code> -> <em>Coordination</em>: <em>coordination is imposed on citizens by a structure, such as a garrison, or by a military unit, which carries coordination with it rather than needing a place.</em> So the organizers are the garrison and every unit, and a citizen organizes nothing.",
+    "source": "Sean, 2026-09-09, and `spec/control.md` -> Coordination"
+  },
   "jungle_resolved": [
     [
       "one pioneer",
@@ -3209,13 +3199,13 @@
     ],
     [
       "breaching: no control there, and force not <strong>greater</strong>",
-      "<code>sum force of {unit in t} &le; t.nature</code>",
+      "<code>t.control = no</code> and <code>t.force &le; t.nature</code>",
       "two pioneers at 4 beat a jungle's 2; one at 2 does not"
     ],
     [
       "staying: control there, and force not <strong>equal</strong>",
-      "<code>sum force of {unit in t} &lt; t.nature</code>",
-      "two citizens organized by a garrison hold at 2; without one they are max(1,1) and do not"
+      "<code>t.control = yes</code> and <code>t.force &lt; t.nature</code>",
+      "two citizens organized by a garrison hold at 2; without one they are <code>max(1, 1)</code> and do not"
     ]
   ],
   "divergence": [
@@ -3463,5 +3453,7 @@
     "game": [
       "game"
     ]
-  }
+  },
+  "store_capacity": 10,
+  "store_capacity_source": "release -> <em>Where things are</em>: a store holds 10 of its resource. The number is here so nothing states it by hand."
 }

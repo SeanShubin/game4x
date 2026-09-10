@@ -600,41 +600,98 @@ def check_editor():
     return tokens, ok, n, per
 
 
+def force_in(present):
+    """The force a territory presents, from `force_rule` in the data rather than from here.
+
+    `spec/control.md` -> *Coordination*: coordination is imposed by a structure such as a
+    garrison, or by a military unit, which carries it. So the rule is one condition and two
+    aggregators, and stating it once is what lets a poison move it. Check 11 computed it five
+    times by hand before 2026-09-10, which is five places for it to drift.
+    """
+    force = {k: int(v.replace("<strong>", "").replace("</strong>", ""))
+             for k, v, _n in DATA["force_values"]}
+    carried = [force[k] for k, n in present.items() if k in force for _ in range(n)]
+    if not carried:
+        return 0
+    organized = any(present.get(k, 0) for k in DATA["force_rule"]["organizers"])
+    return sum(carried) if organized else max(carried)
+
+
 def check_capture():
     """Check 11. The sequence Sean described, arithmetic checked at every step.
 
     *Once two pioneers breach the region, one of them can deploy and make a garrison with two
-    citizens, at which point the other pioneer can leave.* Force is `sum` for units, which are
-    organized by moving, and `sum` for citizens where a garrison organizes them - `max`
-    otherwise. Breaching needs greater than nature; staying needs equal.
+    citizens, at which point the other pioneer can leave.* Every step names what is standing
+    there and asks `force_in`; the aggregator is never chosen here.
+
+    **Breaching needs greater than nature and staying needs equal**, which is the two
+    comparisons `unsustained_causes` declares - so the operator per step comes from that table
+    rather than from a literal, and a change to the declared cause moves this check.
     """
-    force = {k: int(v.replace("<strong>", "").replace("</strong>", ""))
-             for k, v, _n in DATA["force_values"]}
     hardest = max(int(n) for _t, _b, n in DATA["territory_biomes"])
     jungles = [t for t, b, _n in DATA["territory_biomes"] if b == "jungle"]
+
+    # The declared causes, so the operators are read rather than typed. A cause fires when the
+    # force falls short, so what holds is its negation: `not <=` is `>`, and `not <` is `>=`.
+    causes = " ".join(row[1] for row in DATA["unsustained_causes"])
+    assert "&le;" in causes and "&lt;" in causes, "the declared causes name neither comparison"
+    ENTER, STAY = ">", ">="
+
+    scenes = [
+        ("two pioneers breach", {"pioneer": 2}, ENTER),
+        ("one pioneer alone breaches", {"pioneer": 1}, ENTER),
+        ("after one deploys, with the other still there",
+         {"pioneer": 1, "garrison": 1, "citizen": 2}, STAY),
+        ("the other pioneer leaves; garrison organizes", {"garrison": 1, "citizen": 2}, STAY),
+        ("the same two citizens with no garrison", {"citizen": 2}, STAY),
+    ]
     steps = []
+    for what, present, op in scenes:
+        have = force_in(present)
+        steps.append((what, have, op, hardest,
+                      have > hardest if op == ENTER else have >= hardest))
 
-    two = 2 * force["pioneer"]
-    steps.append(("two pioneers breach", two, ">", hardest, two > hardest))
-
-    one = force["pioneer"]
-    steps.append(("one pioneer alone breaches", one, ">", hardest, one > hardest))
-
-    # After deploying: the spent pioneer becomes a garrison and two citizens.
-    after = force["pioneer"] + force["garrison"] + 2 * force["citizen"]
-    steps.append(("after one deploys, with the other still there", after, ">=", hardest,
-                  after >= hardest))
-
-    held = force["garrison"] + 2 * force["citizen"]
-    steps.append(("the other pioneer leaves; garrison organizes", held, ">=", hardest,
-                  held >= hardest))
-
-    unorganized = force["citizen"]  # max_of, not sum_of
-    steps.append(("the same two citizens with no garrison", unorganized, ">=", hardest,
-                  unorganized >= hardest))
-
-    assert steps, "no steps, so this check knows nothing"
+    assert len(steps) == len(scenes), "a scene was dropped"
     return jungles, hardest, steps
+
+
+def check_yard():
+    """Check 14. Where can a yard be built, and how long does it take?
+
+    **This is `X-21`'s arithmetic redone after `X-21` was refuted.** The old answer was *six of
+    twelve*, and it rested on nothing storing, so a yard's metal had to be mined in one turn.
+    **Metal carries**: `end-of-turn losses` keeps as much as the territory's stores hold, and a
+    territory may have **as many stores of a resource as it has extractors of it**.
+
+    Nothing here is typed. The cost comes from the recipe, the store's capacity from the data,
+    and each territory's metal from the `n x d` cell. **Citizens are not modelled** - the
+    per-turn figure assumes every extractor is worked, which needs one citizen's labor each, and
+    that is what the note beside each row carries.
+    """
+    yard = next(r for r in DATA["player"] if r["name"] == "build yard")
+    cost = -sum(int(a) for op, tgt, a, _at, _n in yard["lines"]
+                if op == "change" and "metal" in tgt and str(a).startswith("-"))
+    assert cost > 0, "read no metal cost from build yard, so this check knows nothing"
+    cap = DATA["store_capacity"]
+
+    rows = []
+    for tid, _food, metal, _energy, _note in DATA["territories"]:
+        if "x" not in metal:
+            rows.append((tid, 0, 0, 0, None))
+            continue
+        n, d = (int(x.strip()) for x in metal.split("x"))
+        store, per_turn = cap * n, n * d
+        turns = None
+        if store + per_turn >= cost:
+            held, turns = 0, 1
+            while held + per_turn < cost:
+                held = min(held + per_turn, store)   # what a turn's end keeps
+                turns += 1
+                assert turns <= 99, "accumulation did not converge"
+        rows.append((tid, per_turn, store, store + per_turn, turns))
+
+    assert len(rows) == len(DATA["territories"]), "a territory was dropped"
+    return cost, cap, rows
 
 
 def release_recipes():
@@ -900,13 +957,18 @@ def self_test():
         print("  poison ok: check 10 notices a word no menu could offer")
     _v["lines"] = _saved10
 
-    # Check 11 poison: a garrison that contributed force would hide the organizing rule.
-    _g = next(r for r in DATA["force_values"] if r[0] == "garrison")
-    _was = _g[1]
-    _g[1] = "5"
-    if check_capture()[2][4][4]:
-        pass
-    _g[1] = _was
+    # Check 11 poison: take the organizers away and the garrison stops organizing, so two
+    # citizens present `max(1, 1)` rather than 2 and a jungle can no longer be held. This
+    # replaced a poison that discarded its own result - `if check_capture()[2][4][4]: pass` -
+    # and so could never have failed.
+    _org = DATA["force_rule"]["organizers"]
+    DATA["force_rule"]["organizers"] = []
+    if check_capture()[2][3][4]:
+        print("  POISON FAILED: check 11 holds a jungle with nothing organizing the citizens")
+        ok = False
+    else:
+        print("  poison ok: check 11 stops holding when nothing organizes force")
+    DATA["force_rule"]["organizers"] = _org
     _c = next(r for r in DATA["force_values"] if r[0] == "citizen")
     _cw = _c[1]
     _c[1] = "0"
@@ -940,6 +1002,19 @@ def self_test():
     DATA["kinds"] = _k
     del DATA["spec_concepts"]["flibbertigibbet"]
 
+    # Check 14 poison: take the stores away and the answer must fall back to what could be
+    # mined in a single turn - which is the six the page reported while `X-21` stood.
+    _cap = DATA["store_capacity"]
+    DATA["store_capacity"] = 0
+    _fell = sum(1 for _t, _p, _s, _r, turns in check_yard()[2] if turns is not None)
+    DATA["store_capacity"] = _cap
+    _now = sum(1 for _t, _p, _s, _r, turns in check_yard()[2] if turns is not None)
+    if _fell >= _now:
+        print("  POISON FAILED: check 14 builds as many yards with no store as with one")
+        ok = False
+    else:
+        print(f"  poison ok: check 14 falls from {_now} territories to {_fell} with no stores")
+
     return ok
 
 
@@ -964,7 +1039,10 @@ def as_dict():
     ]
     x20_lines = len(check_containment()[2])
     DATA["containment_declared"] = _saved
+    cost14, cap14, rows14 = check_yard()
     return {
+        "yard": {"cost": cost14, "store": cap14,
+                 "rows": [[a, b, c, d, e] for a, b, c, d, e in rows14]},
         "conservation": {
             "analysed": len(analysed), "skipped": skipped,
             "weights": dict(METAL_WEIGHT),
@@ -1171,6 +1249,19 @@ def main():
             print(f"      {f}:{i}  \"{term}\"  {line[:74]}")
     for kind in absent13:
         print(f"  ABSENT: {kind} - no trace of the concept in spec/ at all")
+
+    cost14, cap14, rows14 = check_yard()
+    print()
+    print("CHECK 14 - where can a yard be built, now that metal carries?")
+    print(f"  a yard costs {cost14} metal; a store holds {cap14}, and a territory may have one "
+          f"per extractor of that resource")
+    for tid, per_turn, store, reach, turns in rows14:
+        verdict = f"{turns} turn(s)" if turns else "NEVER"
+        print(f"  territory {tid:<3} {per_turn:>3}/turn  store {store:>3}  reach {reach:>3}  {verdict}")
+    can = [t for t, _p, _s, _r, n in rows14 if n]
+    one = [t for t, _p, _s, _r, n in rows14 if n == 1]
+    print(f"  {len(can)} of {len(rows14)} territories can build a yard; "
+          f"{len(one)} of them in a single turn, which was the whole answer while X-21 stood")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1

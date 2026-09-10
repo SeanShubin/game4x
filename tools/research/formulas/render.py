@@ -1233,7 +1233,7 @@ force works by looking at the data.</em></p>
 reason force cannot be seen in the data is that it is not there.</p>
 <div class="callout">
 <h4>Force appears in <strong>zero</strong> recipe lines</h4>
-<p>Asked of the data rather than the prose: <code>force</code> occurs in eleven tables on this page,
+<p>Asked of the data rather than the prose: <code>force</code> occurs in {sum(1 for v in DATA.values() if "force" in json.dumps(v, ensure_ascii=False))} of this page&rsquo;s tables,
 <strong>every one of them written by this lane to describe the rule</strong>, and in the release's
 <em>Units and structures</em> column. <strong>It occurs in no line of any recipe.</strong> So there
 is nothing to read, nothing to compare, and nothing that could refuse a move. That is
@@ -1242,8 +1242,8 @@ neither.</p>
 </div>
 <div class="callout">
 <h4>The chain itself is unbroken &mdash; every recipe's inputs are producible</h4>
-<p>Checked by grounding the families and asking, of each of the eleven player recipes, whether
-anything produces what it spends. <strong>All eleven are satisfied</strong>, over these kinds:
+<p>Checked by grounding the families and asking, of each of the {len(DATA["player"])} player recipes, whether
+anything produces what it spends. <strong>All {len(DATA["player"])} are satisfied</strong>, over these kinds:
 adjacency, ark, citizen, deposit, energy, extractor, food, garrison, labor, metal, orbit, pioneer,
 store, territory, yard.</p>
 <p>So ark &rarr; colony &rarr; pioneers &rarr; extractors &rarr; yard &rarr; new ark has no missing
@@ -1255,15 +1255,29 @@ so three recipes looked blocked. <strong>A family hiding a kind, for the third t
 The number it produced was plausible and the question it answered was narrower than the one asked.</p>
 </div>
 <div class="callout">
-<h4>One real constraint does bite, and it is <code>X-21</code>'s</h4>
-<p>Nothing stores, so a yard's <strong>15 metal must be mined in a single turn</strong>. Capacity
-times density is the ceiling, and it takes one citizen's labor per extractor worked:</p>
-<div class="scroll"><table><thead><tr><th>Territory</th><th>Metal in one turn</th><th></th></tr></thead>
-<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td class="amt">{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["yard_territories"])}</tbody></table></div>
-<p><strong>Six of twelve territories can build a yard at all</strong>, and each needs four to eight
-citizens all working metal in the same turn. <strong>So closing the loop is possible and narrow</strong>
-- which may be the difficulty the game wants, and is worth knowing is currently supplied by a missing
-mechanic rather than a designed one.</p>
+<h4>How long a yard takes, now that <code>X-21</code> is refuted</h4>
+<p><strong>This callout said <em>nothing stores, so a yard's 15 metal must be mined in a single
+turn</em>, and it was wrong.</strong> Metal carries: <code>end-of-turn losses</code> keeps as much
+as the territory's stores hold, and a territory may have <strong>as many stores of a resource as it
+has extractors of it</strong>. So the question is not what a territory mines in a turn but what it
+can be standing on when it builds.</p>
+<div class="scroll"><table><thead><tr><th>Territory</th><th>Metal / turn</th><th>Stores hold</th>
+<th>Most it can stand on</th><th>Turns to {RESULTS["yard"]["cost"]} metal</th></tr></thead>
+<tbody>{"".join(
+    f'<tr><td class="target">{r[0]}</td><td class="amt">{r[1]}</td><td class="amt">{r[2]}</td>'
+    f'<td class="amt">{r[3]}</td>'
+    f'<td class="{"amt" if r[4] else "note"}">{r[4] if r[4] else "<strong>never</strong>"}</td></tr>'
+    for r in RESULTS["yard"]["rows"])}</tbody></table></div>
+<p><strong>{sum(1 for r in RESULTS["yard"]["rows"] if r[4])} of
+{len(RESULTS["yard"]["rows"])} territories can build a yard</strong>, and
+<strong>{sum(1 for r in RESULTS["yard"]["rows"] if r[4] == 1)} of them in one turn</strong> - which
+is exactly the number this page reported as the whole answer while <code>X-21</code> stood. <strong>The
+refutation did not overturn that six; it revealed it was one column of a table.</strong> The three
+that gain - the ones needing two turns - are the ones with steady metal and small deposits, and the
+three that can never do it are the ones whose stores plus one turn's mining still fall short.</p>
+<p><strong>Citizens are not in this table.</strong> The per-turn figure assumes every extractor is
+worked, which costs one citizen's labor each - so territory 5's 64 needs eight citizens with nothing
+else to do. Check 9 is the half that asks whether they can be fed.</p>
 </div>
 
 <h2>Judging force after the move</h2>
