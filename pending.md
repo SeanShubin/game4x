@@ -36,8 +36,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
 - **X-27** - losing a territory to nature does not delete the units on it, and one line above it is dead · `lenses/research/outbox.md`
 
-### To spec (32)
+### To spec (33)
 
+- **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
 - **S-83** - Recipes and behaviours are many-to-many, and six of the game's rules have no recipe · `docs/notes/proposals.md`
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`

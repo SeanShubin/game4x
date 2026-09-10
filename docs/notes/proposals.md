@@ -64,6 +64,40 @@ Two limits Claude holds itself to:
 
 ## Addressed to other perspectives
 
+### S-86 - Three cleanups the eight promotions leave behind
+
+**to** spec - **status** open - **raised** 2026-09-10 - **source** promoting `P-356` and `P-360`
+through `P-366`; each was named in the proposal that causes it
+
+**Filed in the same turn as the promotions**, which is the rule for a promotion that makes something
+else stale.
+
+**1. `spec/console.md`'s design-command list is now a list of recipes.** `P-364` makes the design
+commands the player's recipes. The paragraph above them says *the commands are not a list this
+document keeps; they are the recipes whose owner is the player* - and `spec/invariants.md` says a
+recipe lives in a data file. **So the six entries either stay as a convenience or move to the data.**
+`P-364` named this and did not decide it.
+
+**2. An Ark's `Fuel` cell should be blank.** `P-365` says a unit that moves in orbit stores no fuel,
+and `releases/first-release.md` -> *Units and structures* gives an Ark **Fuel 2**. **A blank is not a
+zero**, which that file already says, so blanking it is the faithful edit. **A release change, so a
+proposal rather than an edit**, and nothing breaks meanwhile because no Ark moves between orbits in
+the first release.
+
+**3. A recipe still cannot say that the kind it produces comes from an ingredient.** `work` produces
+**Kind `resource`** with its quantity written in prose as *`$where`'s density for **that
+resource***. `P-356` reaches a field's **value** and `P-366` reaches a **quantity** or a **guard's
+side**; neither reaches the **kind**. **Pre-existing, named in `P-366` before it landed**, and the
+next thing this lane would draft on the notation.
+
+**And one number elsewhere is now wrong without anyone editing it.** `C-20` puts a hand playthrough
+of `R-6` at *roughly a thousand commands*, derived under the rule that every territory needs every
+structure its ground has room for. **`P-361` changed that rule**, and territories 5 and 6 no longer
+need 19 and 8 extractors they can never build. **The figure is the code lane's to re-derive**, and it
+has been told.
+
+**Whether.** **1 and 2 are small and this lane will draft both.** 3 is the notation, and waits.
+
 ### S-85 - `spec/` says designing both is and is not made of recipes
 
 **to** spec - **status** **acted** 2026-09-10 - Sean decided it the day it was filed; `P-364` carries the words - **raised** 2026-09-10 - **source** checking whether *add a start
@@ -109,6 +143,12 @@ drafted, and it was put to him as an open question in the turn this was filed.
 **to** spec - **status** open - **raised** 2026-09-10 - **rewritten** 2026-09-10, because the first
 version stated a general deadlock that does not exist - **source** the research lens, corrected by
 Sean, then computed here
+
+**Overtaken by `P-361`, promoted 2026-09-10.** This item's smallest reading was *retune territory 5's food to density 2*. **That is now the wrong fix**: `spec/control.md` no longer
+asks a territory for every structure its ground has room for, but for **the greatest output it
+can reach** - and territory 5 reaches its own the turn it is founded. **The arithmetic below
+still holds and its conclusion no longer does.** What survives is its last paragraph:
+`spec/economy.md` names working and garrisoning as the claims on a citizen, and not building.
 
 **Sean refused the first version and was right.** It claimed a colony that works everything it owns
 can never build anything, which is true and vacuous - it is a description of spending all your
@@ -569,7 +609,7 @@ deciding**, so this goes to Sean as a proposal once I have drafted both readings
 
 ### S-73 - `border` and `orbit border` have a definition to echo now, and still no meanings
 
-**to** spec - **status** open - **raised** 2026-09-07 - **source** `P-349`, promoted in this turn
+**to** spec - **status** open, **half closed** 2026-09-10 - `P-365` gives `orbit border` its meaning; `border` still has none - **raised** 2026-09-07 - **source** `P-349`, promoted in this turn
 
 **Also mine.** `P-349` defines crossing - *to cross is to pass through a shared boundary, and which
 ones a unit crosses is a fact about that unit* - which is what the release's *Crosses* column was
