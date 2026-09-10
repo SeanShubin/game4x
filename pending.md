@@ -36,7 +36,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
 - **X-18** - `reports/index.html` says six primitives, and the report it links says five · `lenses/research/outbox.md`
 
-### To spec (27)
+### To spec (28)
 
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
@@ -65,6 +65,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-21** - *use it immediately, store it, or lose it* has no recipe that does any of it · `lenses/research/outbox.md`
 - **X-22** - the force rule is stated and nothing implements it · `lenses/research/outbox.md`
 - **X-23** - nothing ever fuels a unit, so nothing can move, so the loop cannot be completed · `lenses/research/outbox.md`
+- **X-24** - the handoff: what is computed, what is asserted, and what Sean corrected · `lenses/research/outbox.md`
 
 ## Sections that have taken more than one proposal
 

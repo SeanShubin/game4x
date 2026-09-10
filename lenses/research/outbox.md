@@ -776,6 +776,28 @@ the unit is as this prototype now does. **The third deletes rather than adds**, 
 keep a tank that would then need a way to be filled and a reason to exist.
 
 
+### X-24 - the handoff: what is computed, what is asserted, and what Sean corrected
+
+**to** spec · **status** open · **raised** 2026-09-09 · **source** [the handoff](2026-09-09-handoff-to-spec.md) · **for** the specification lane, which Sean has asked to incorporate what it can
+
+**What.** A day of re-encoding produced more than the report holds. This item points at the one
+document that carries the rest: **which claims a check computes, which `play.py` executed, and which
+are this lane writing prose** - the divergence table being the thing most needed and least computed.
+
+**Why it is filed rather than left in the report.** The report is long and the specification lane is
+being asked to act on it overnight. **The grading is the part that decides what is safe to
+incorporate**, and it should not be something a reader has to reconstruct.
+
+**It also carries six corrections Sean made to this lane in one day**, each a fact reading the
+documents would not have given: an ark is only ever in orbit; an orbit is a place in its own right;
+the force clash is at a boundary and entering is the cost; force is `max` unorganized and `sum`
+organized; `disorder` and `perish` were one recipe; and every territory's biome is published in
+`reports/`, where this lane never looked.
+
+**Whether.** **Read before acting on the report, not after.** Two of its recommendations are
+load-bearing: `X-21` and `X-23` are defects on any reading and safe to take; the primitive set is a
+rewrite of *Recipes* and is not.
+
 ## Resolved
 
 ### X-1 - what makes the game checkable by hand is never stated

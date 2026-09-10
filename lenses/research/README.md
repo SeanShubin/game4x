@@ -60,6 +60,12 @@ reader can tell whether a finding was acted on or merely forgotten.
 
 Newest first.
 
+- [Handoff to the specification lane](2026-09-09-handoff-to-spec.md)
+  - 2026-09-09. **Addressed to `spec`.** What a day's re-encoding produced that is not in the report:
+    which claims are computed, which executed and which merely asserted; six things Sean corrected
+    that reading the documents would not have prevented; the family-hides-a-kind failure that
+    recurred four times in one day; and what to incorporate first.
+
 - [Bootstrapping the game from a small kernel](2026-09-09-bootstrapping-from-a-kernel.md)
   - 2026-09-09. **Addressed to nobody** - Sean intends it once the game works, and not now. What
     today's decisions already buy it: a primitive set minimal by a test rather than by taste, `call`
