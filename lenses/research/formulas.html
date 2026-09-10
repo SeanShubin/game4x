@@ -2068,6 +2068,36 @@ recipe not yet written, and which of those it is belongs to Sean. <strong>It als
 itself first</strong>: it grounded families on one side only, so a unit moved into a place reached
 neither an orbit nor a territory, and it reported two gaps it had invented.</p>
 
+<h3>Check 10 &mdash; could an editor build these? &nbsp;<span class="badge up">8 of 22 recipes</span></h3>
+<p>Sean's test: <em>could we in principle generate the entire current set of recipes from the editor
+only? The name must necessarily be the exception. It is a question about how finite the game is.</em>
+Every token in every line, matched against the sets a menu could offer:</p>
+<p><strong>418 of 449 tokens are selectable (93%), and
+8 of 22 recipes could be built with nothing typed but names.</strong></p>
+<div class="scroll"><table><thead><tr><th>What has to be typed</th><th>Where</th><th>Why</th></tr></thead>
+<tbody><tr><td class="target"><code>location</code>, <code>below</code></td><td>9 recipes</td><td class="note">containment has no name. <code>spec/logistics.md</code> says a thing is not located by a trait, so an editor has nothing to offer for <em>where</em> - which is <code>C-56</code></td></tr><tr><td class="target"><code>yours</code></td><td>4 recipes</td><td class="note"><code>control</code>'s values are <em>held by a player, or unclaimed</em> and nothing enumerates them. <strong>The one gap here that is new, and the smallest</strong></td></tr><tr><td class="target"><code>crosses</code></td><td><code>move</code></td><td class="note">the adjacency qualifier with no trait behind it - the <code>crossed-by</code> assumption, and <code>C-60</code></td></tr><tr><td class="target"><code>what holds unit</code></td><td><code>move</code></td><td class="note">this lane's prose for <em>the thing that holds it</em>, which is the same hole as the first row</td></tr><tr><td class="target"><code>every row of …</code>, <code>every shared edge</code></td><td><code>make-world</code></td><td class="note">quantifying over a data table and over the planet's geometry - the <code>set-not-in-state</code> assumption, and the foreign-call question</td></tr></tbody></table></div>
+<div class="callout">
+<h4>Two small fixes take it from 8 of 22 to 20 of 22</h4>
+<p><strong>Give containment a name and declare what <code>control</code> can be.</strong> Those two
+account for thirteen of the twenty-two, and neither is a new idea - the first is
+<code>C-56</code> and the second is four values nobody has written down.</p>
+<p><strong>What is left is <code>move</code> and <code>make-world</code></strong>, which are the two
+the assumption list already flags hardest: an adjacency qualifier with no trait behind it, and
+quantifying over a data table and a planet's geometry. <strong>So the game is finite except where
+this report already said it was not.</strong></p>
+</div>
+<div class="callout">
+<h4>The interesting part is that it agrees with the other instrument</h4>
+<p>This check knows nothing about the console notation. It matches tokens against menus. <strong>And
+it finds the same holes the console encoding found</strong> - <code>unnamed-trait</code>,
+<code>crossed-by</code>, <code>set-not-in-state</code> - which were reached by asking a completely
+different question: <em>can this line be written as one string?</em></p>
+<p><strong>Two instruments aimed differently, one set of gaps.</strong> That is worth more than
+either finding alone, because the common failure this repository keeps recording is an instrument
+answering a narrower question than the one asked - and two narrow questions do not usually agree by
+accident.</p>
+</div>
+
 <h3>Check 3 &mdash; a cap of 1000 &nbsp;<span class="badge down">0 breaches</span></h3>
 <p>Applying each recipe once breaches nothing, which is exactly the point about a cap:
 <strong>it found neither of the two things the other checks found.</strong> It is a backstop

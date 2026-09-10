@@ -97,6 +97,69 @@
     "cap": 1000,
     "breaches": []
   },
+  "editor": {
+    "tokens": 449,
+    "selectable": 418,
+    "recipes": 22,
+    "clean": 8,
+    "typed": {
+      "deploy ark": [
+        "below",
+        "location"
+      ],
+      "found by land": [
+        "location"
+      ],
+      "move": [
+        "crosses",
+        "holds",
+        "the",
+        "what"
+      ],
+      "build extractor": [
+        "yours"
+      ],
+      "build store": [
+        "yours"
+      ],
+      "build yard": [
+        "yours"
+      ],
+      "produce pioneer": [
+        "yours"
+      ],
+      "launch ark": [
+        "location"
+      ],
+      "create labor": [
+        "location"
+      ],
+      "work": [
+        "location"
+      ],
+      "upkeep": [
+        "location"
+      ],
+      "perish": [
+        "location"
+      ],
+      "make-orbit(t)": [
+        "below"
+      ],
+      "make-world()": [
+        "and",
+        "capacity",
+        "edge",
+        "every",
+        "resources",
+        "row",
+        "shared",
+        "x12",
+        "x36",
+        "xE"
+      ]
+    }
+  },
   "unreached": {
     "declared": 19,
     "pairs": [

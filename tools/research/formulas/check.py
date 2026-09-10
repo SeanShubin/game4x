@@ -540,6 +540,62 @@ def check_minimal_control():
     return can, cannot, MINIMAL_CONTROL * per_citizen, worst
 
 
+# The shape of a form rather than anything typed into it.
+SYNTAX = {"in", "of", "at", "least"}
+
+
+def selectable_sets():
+    """Every finite set an editor could offer as a menu."""
+    return (
+        {r[0] for r in DATA["primitives"]} | {"let"}
+        | {r[0] for r in DATA["attach_values"] if r[0] != "(blank)"}
+        | {r[0] for r in DATA["kinds"]} | {r[0] for r in DATA["families"]}
+        | {r[0] for r in DATA["traits"]}
+        | {b.lower() for b, _v in DATA["nature_values"]}
+        | {"count", "sum", "max", "min"} | {">", ">=", "<", "<=", "="}
+        | {"yes", "no", "any", "design", "play", "food", "metal", "energy"}
+        | SYNTAX
+        | {f["name"].split("(")[0].strip()
+           for s in ("player", "world", "creation") for f in DATA[s]}
+    )
+
+
+def check_editor():
+    """Check 10. Could an editor build every recipe, with names the only thing typed?
+
+    Sean's test, and it is a question about how finite the game is. Every token in every line
+    is matched against the sets an editor would offer; a name a recipe binds counts, because a
+    name is the one thing he conceded has to be typed. What is left over is what could not be
+    chosen from any menu.
+    """
+    import re
+
+    offered = selectable_sets()
+    per, tokens, ok = {}, 0, 0
+    for sec in ("player", "world", "creation"):
+        for f in DATA[sec]:
+            names = (set(re.findall(r"[a-z]\w*", f["name"].split("(")[1].rstrip(")")))
+                     if "(" in f["name"] else set())
+            for op, target, *_ in f["lines"]:
+                if op in ("each", "some") and ":" in str(target):
+                    names |= set(re.findall(r"[a-z]\w*", str(target).split(":")[0]))
+                if op == "let" and "=" in str(target):
+                    names |= set(re.findall(r"[a-z]\w*", str(target).split("=")[0]))
+            names |= {"t", "unit", "thing", "citizen", "extractor", "ark", "pioneer", "yard"}
+            for op, target, amount, attach, _n in f["lines"]:
+                for field in (op, str(target), str(amount), str(attach)):
+                    for tok in re.findall(r"[A-Za-z][\w-]*|\d+|[<>=]+", field):
+                        tokens += 1
+                        if (tok in offered or tok.lower() in offered
+                                or tok in names or tok.isdigit()):
+                            ok += 1
+                        else:
+                            per.setdefault(f["name"], set()).add(tok)
+    n = sum(len(DATA[s]) for s in ("player", "world", "creation"))
+    assert tokens, "no tokens, so this check knows nothing"
+    return tokens, ok, n, per
+
+
 def check_cap(cap=1000):
     """Check 3. A backstop: apply every recipe once and report anything past the cap."""
     by_name = gather()
@@ -680,6 +736,18 @@ def self_test():
     else:
         print(f"  poison ok: check 9 excludes {_harder} territories when a citizen eats more")
 
+    # Check 10 poison: an unknown word in a target must show up as something typed.
+    _v = DATA["player"][0]
+    _saved10 = [list(l) for l in _v["lines"]]
+    _v["lines"] = _saved10 + [["change", "flibbertigibbet in t", "+1", "", "poison"]]
+    if "flibbertigibbet" not in "".join(
+            ",".join(s) for s in check_editor()[3].values()):
+        print("  POISON FAILED: check 10 did not notice a word no menu could offer")
+        ok = False
+    else:
+        print("  poison ok: check 10 notices a word no menu could offer")
+    _v["lines"] = _saved10
+
     return ok
 
 
@@ -727,6 +795,9 @@ def as_dict():
                                 "free": sorted(f2), "undeclared": sorted(u2)},
         },
         "cap": {"cap": cap, "breaches": [[n, k, c] for n, k, c in breached]},
+        "editor": {"tokens": check_editor()[0], "selectable": check_editor()[1],
+                   "recipes": check_editor()[2], "clean": check_editor()[2] - len(check_editor()[3]),
+                   "typed": {k: sorted(v) for k, v in check_editor()[3].items()}},
         "unreached": {"declared": check_unreached()[0],
                       "pairs": [list(r) for r in check_unreached()[1]]},
         "containment": {"examined": c6_examined,
@@ -872,6 +943,14 @@ def main():
         print(f"  SHORT by {worst - held} against the worst biome")
     elif held == worst:
         print("  exactly sufficient, with no margin - and no recipe compares the two")
+
+    tok, ok, n_rec, per = check_editor()
+    print()
+    print("CHECK 10 - could an editor build these by choosing, with only names typed?")
+    print(f"  {ok} of {tok} tokens are selectable from a finite set ({100*ok//tok}%)")
+    print(f"  {n_rec - len(per)} of {n_rec} recipes could be built with nothing typed but names")
+    for name in sorted(per):
+        print(f"  TYPED: {name} - {', '.join(sorted(per[name]))}")
 
     print("Every green above means nothing unless the poison at the top went red.")
     return 0 if poisoned else 1

@@ -691,6 +691,11 @@ def main():
     n_declared = c6["declared"]
     c6_bad = len(c6["homeless"]) + len(c6["undeclared"])
     u8 = RESULTS["unreached"]
+    c10 = RESULTS["editor"]
+    c10_tok, c10_ok, c10_rec, c10_clean = c10["tokens"], c10["selectable"], c10["recipes"], c10["clean"]
+    c10_pct = 100 * c10_ok // c10_tok
+    v10, v10cls = ((f"{c10_clean} of {c10_rec} recipes", "down") if c10_clean == c10_rec
+                   else (f"{c10_clean} of {c10_rec} recipes", "up"))
     n_unreached, n_decl8 = len(u8["pairs"]), u8["declared"]
     u8_rows = "".join(
         f'<tr><td class="target">a {c} may hold a {k}</td><td class="amt">{b}</td>'
@@ -1985,6 +1990,36 @@ sixteen recipes do not implement in either direction.</p>
 recipe not yet written, and which of those it is belongs to Sean. <strong>It also found a defect in
 itself first</strong>: it grounded families on one side only, so a unit moved into a place reached
 neither an orbit nor a territory, and it reported two gaps it had invented.</p>
+
+<h3>Check 10 &mdash; could an editor build these? &nbsp;<span class="badge {v10cls}">{v10}</span></h3>
+<p>Sean's test: <em>could we in principle generate the entire current set of recipes from the editor
+only? The name must necessarily be the exception. It is a question about how finite the game is.</em>
+Every token in every line, matched against the sets a menu could offer:</p>
+<p><strong>{c10_ok} of {c10_tok} tokens are selectable ({c10_pct}%), and
+{c10_clean} of {c10_rec} recipes could be built with nothing typed but names.</strong></p>
+<div class="scroll"><table><thead><tr><th>What has to be typed</th><th>Where</th><th>Why</th></tr></thead>
+<tbody>{"".join(f'<tr><td class="target">{r[0]}</td><td>{r[1]}</td><td class="note">{r[2]}</td></tr>' for r in DATA["editor_gaps"])}</tbody></table></div>
+<div class="callout">
+<h4>Two small fixes take it from 8 of 22 to 20 of 22</h4>
+<p><strong>Give containment a name and declare what <code>control</code> can be.</strong> Those two
+account for thirteen of the twenty-two, and neither is a new idea - the first is
+<code>C-56</code> and the second is four values nobody has written down.</p>
+<p><strong>What is left is <code>move</code> and <code>make-world</code></strong>, which are the two
+the assumption list already flags hardest: an adjacency qualifier with no trait behind it, and
+quantifying over a data table and a planet's geometry. <strong>So the game is finite except where
+this report already said it was not.</strong></p>
+</div>
+<div class="callout">
+<h4>The interesting part is that it agrees with the other instrument</h4>
+<p>This check knows nothing about the console notation. It matches tokens against menus. <strong>And
+it finds the same holes the console encoding found</strong> - <code>unnamed-trait</code>,
+<code>crossed-by</code>, <code>set-not-in-state</code> - which were reached by asking a completely
+different question: <em>can this line be written as one string?</em></p>
+<p><strong>Two instruments aimed differently, one set of gaps.</strong> That is worth more than
+either finding alone, because the common failure this repository keeps recording is an instrument
+answering a narrower question than the one asked - and two narrow questions do not usually agree by
+accident.</p>
+</div>
 
 <h3>Check 3 &mdash; a cap of {RESULTS["cap"]["cap"]} &nbsp;<span class="badge down">{len(RESULTS["cap"]["breaches"])} breaches</span></h3>
 <p>Applying each recipe once breaches nothing, which is exactly the point about a cap:

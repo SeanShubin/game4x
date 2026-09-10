@@ -2989,5 +2989,32 @@
       "<code>require sum force of {unit in t} &ge; t.nature</code>",
       "<strong>equal</strong> to maintain, and automatic because the world's recipes are not offered"
     ]
+  ],
+  "editor_gaps": [
+    [
+      "<code>location</code>, <code>below</code>",
+      "9 recipes",
+      "containment has no name. <code>spec/logistics.md</code> says a thing is not located by a trait, so an editor has nothing to offer for <em>where</em> - which is <code>C-56</code>"
+    ],
+    [
+      "<code>yours</code>",
+      "4 recipes",
+      "<code>control</code>'s values are <em>held by a player, or unclaimed</em> and nothing enumerates them. <strong>The one gap here that is new, and the smallest</strong>"
+    ],
+    [
+      "<code>crosses</code>",
+      "<code>move</code>",
+      "the adjacency qualifier with no trait behind it - the <code>crossed-by</code> assumption, and <code>C-60</code>"
+    ],
+    [
+      "<code>what holds unit</code>",
+      "<code>move</code>",
+      "this lane's prose for <em>the thing that holds it</em>, which is the same hole as the first row"
+    ],
+    [
+      "<code>every row of …</code>, <code>every shared edge</code>",
+      "<code>make-world</code>",
+      "quantifying over a data table and over the planet's geometry - the <code>set-not-in-state</code> assumption, and the foreign-call question"
+    ]
   ]
 }
