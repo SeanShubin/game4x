@@ -60,7 +60,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-29** - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it · `crates/outbox.md`
 - **C-23** - `P-215`'s enclosing command is built; the nested-command half has no case yet · `crates/outbox.md`
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
-- **C-20** - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands · `crates/outbox.md`
+- **C-20** - `R-6` is unblocked, and playing it through by hand is several hundred commands · `crates/outbox.md`
 - **Q-80** - `spec/control.md` names biome as an input to maximum output, and nothing reads it · `lenses/quality/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
 - **X-14** - founding is an undeclared metal source; Sean has decided, and the release still says otherwise · `lenses/research/outbox.md`

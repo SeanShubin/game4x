@@ -3006,7 +3006,7 @@ founded, and the exception goes.
 recipe and binds what it leaves open, `move` and `found by land` are two commands, the ambiguity is
 gone, and `fired.rs`'s disambiguation becomes dead code that should be deleted rather than kept.
 
-### C-20 - `R-6` is unblocked, and playing it through by hand is roughly a thousand commands
+### C-20 - `R-6` is unblocked, and playing it through by hand is several hundred commands
 
 **to** spec · **status** open · **raised** 2026-09-05 · **source** `C-9` landing
 **derived from** each building costs one labor, and labor is a command - `releases/first-release.md` -> *Recipes*
@@ -3025,14 +3025,27 @@ designed territories, a person playing entirely by hand reaches a fully exploite
 launches an Ark.* Now that *fully exploited* is decidable, that state can be counted:
 
 - Twelve territories founded, so eleven pioneers produced, moved and landed
-- 110 extractors built - 129 nodes across the twelve, less territory 5's nineteen, which it can
-  never work
-- Ten yards, one in each territory that can hold one
+- **57 extractors built**, and one Yard - because launching needs a Yard and the condition itself
+  needs none
 
-Each of those 120 buildings costs one labor, and labor is a command, so **the buildings alone are
-about 240 commands** - before a single command that gathers the 260 metal they cost, or the food
-that sustains the population that provides the labor, or an `end turn`. A realistic play-through is
-several hundred commands more than that. The committed scenario is 73.
+Each building costs one labor, and labor is a command, so **the buildings are 114 commands** -
+before a single command that gathers the metal they cost, or the food that sustains the population
+that provides the labor, or an `end turn`. A realistic play-through is several hundred commands
+more than that. The committed scenario is 73.
+
+**Re-derived 2026-09-10, and the first figure was stale in two ways.** It said 240, from 110
+extractors and ten Yards. `P-361` made *fully exploited* a question about output, so territory 5's
+nineteen deposits and territory 6's four energy ones are no longer needed - neither territory can
+ever build them - and **a Yard is not required anywhere**, since the condition says nothing about
+structures that produce nothing. Separately, `S-44` had already taken `can_hold_yard` from ten
+territories to eight, which `C-29` recorded and nothing carried back here.
+
+**So a figure a person worked out went wrong twice, under two different rules, and read exactly
+the same both times.** That is this item's own lesson arriving late, and the fix is a mechanism
+rather than more care: `what_a_finished_planet_costs_to_build` in
+`crates/game-console/tests/fully_exploited.rs` computes every number above from the release and
+goes red when the rule beneath it moves. The 133 citizens this lane first wrote by hand were 144
+when the model was asked, which is the third instance in one item.
 
 This lane is not asking for the rule to change: *a player wins by launching an Ark from a fully
 exploited planet* is `spec/control.md` and is the game. The question is whether **`R-6`'s evidence
