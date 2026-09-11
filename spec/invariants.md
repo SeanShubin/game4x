@@ -139,6 +139,11 @@ These are what make the rule above checkable rather than merely believed.
   many times as it can. **The quantity is then how often it fired**, rather than a number it read
 - A rule whose subject is a family of kinds is a rule for each of them. **A family is not a thing a
   rule can take one of**
+- **What a rule takes is hard and what it makes is soft.** A rule that cannot take all of what it
+  takes does not fire. A rule that cannot make all of what it makes fires anyway and makes what it
+  can, because what it could not make was never a cost. **Where nothing bounds what a line makes
+  it can never be short**, so no such line is soft, and every line that is soft still names
+  something with a finite capacity
 - **A line may be soft**: where it cannot do all of what it says, it does what it can and the rule
   goes on regardless. **Soft means what holds it will not take another** - never *there is one
   already*. Those differ wherever a capacity is more than one, and agree only by accident where it

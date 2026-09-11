@@ -199,6 +199,11 @@ new check fail on demand is the first half; the second is choosing what to make 
 poison inside the region the predicate already sees goes red for the right reason and says nothing
 about the region it does not - and it reads exactly like evidence.
 
+**And a change that leaves every test green has measured the tests.** That is the poison rule with
+its sign flipped: *every test stays green* names the test suite and says nothing about the
+program. **A finding called small on that evidence has been sized by the coverage rather than by
+the code** - so a green run, like a count of zero, names the population it was made over.
+
 **Two counts that share a computation are one count.** A check that asserts its population and
 finds the number its own specification supplied has corroborated nothing. That is the check
 written by the hand that wrote the work, arriving by a different route.
@@ -245,6 +250,8 @@ when the session ends, and nobody can see who is waiting on what.
   it is done. **It closes the item the commit cites**, or records the hash to say it looked and it
   is still open. That is the same forcing function a cap gives - close something before filing
   something - attached to the cost that is actually there
+- A commit hash is a pointer for a reader and not evidence. A commit can carry work it does not
+  mention, so where a citation and a file could differ, the claim rests on the file
 - An item whose cited file has taken a promotion since it was raised is re-read before it is
   relied on. The ground moving under an item is what makes it wrong without anybody touching it
 - Eight items open to any one instance stays, as a backstop rather than as the rule. An outbox
@@ -432,6 +439,9 @@ lens has to answer before it is worth starting lives. The four above are the one
 - The git index is shared, so staging is publishing: a file one instance stages is committed by
   whichever instance commits next, under a message about something else. Stage by name, never
   everything
+- A probe uses a file the lane already owns, or a clone. Verifying a fix sometimes needs a commit,
+  and making one by creating a scratch file at the root of a tree three instances are committing
+  to is a crossing made in order to test a fix for a crossing
 - An instance that sees a problem outside its own directories writes it down where its owner will
   find it, and stops. It never fixes it, even when the fix is obvious
 - A promotion either files what it creates as an item addressed to the lane that must do it, or

@@ -208,7 +208,6 @@ then `stow` and `discard`, then `refresh`. The rows below are in that order.
 | ------------------- | ------ | ------- | ------------------------------------ | --------- | --------------------------------------------- | ------------------------ |
 | **deploy ark**      | player | require | 1                                    | territory |                                               | `$where`                 |
 |                     |        | consume | 1                                    | ark       |                                               | the orbit above `$where` |
-|                     |        | limit   | 0                                    | garrison  |                                               |                          |
 |                     |        | produce | 1                                    | garrison  |                                               |                          |
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
 |                     |        | produce | 1                                    | extractor | food                                          |                          |
@@ -221,7 +220,6 @@ then `stow` and `discard`, then `refresh`. The rows below are in that order.
 |                     |        | consume | 1                                    | energy    |                                               | that unit                |
 |                     |        | produce | 1                                    | unit      | not ready                                     | `$to`                    |
 | **found by land**   | player | consume | 1                                    | pioneer   |                                               |                          |
-|                     |        | limit   | 0                                    | garrison  |                                               |                          |
 |                     |        | produce | 1                                    | garrison  |                                               |                          |
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
 |                     |        | produce | 1                                    | extractor | food                                          |                          |

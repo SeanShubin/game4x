@@ -62,196 +62,72 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-386 - What a rule takes is hard and what it makes is soft
+### P-387 - A line that makes may be soft, and a line that takes may not
 
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, because its first draft contradicted `P-373` · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost
 
-**Sean, 2026-09-11**: *Costs are hard. Effects are soft.* **This is not in `spec/`**, which is why
-`P-385` asked it as though it were open. What is there is `P-373`'s *a line may be soft* and what
-soft means, and `P-378`'s `[soft]` notation - **both say what soft does and neither says which lines
-are soft.**
+**Promised by `P-386` and filed the moment it landed.** `P-386` says what a rule takes is hard and
+what it makes is soft. **The bullet under it still says *a line may be soft***, which describes an
+option where there is now none: a bounded make is soft whether or not anybody marks it.
 
-**The bullet, to go before *A line may be soft*:**
+**The same edit closes the hole the invariant argument found.** A soft **take** would consume less
+than it says, which is a gain - and one such line would put *nothing comes back round with more*
+beyond the argument that makes softness safe. `P-386`'s reasoning states it; **no rule forbids it.**
 
-> - **What a rule takes is hard and what it makes is soft.** A rule that cannot take all of what it
->   takes does not fire. A rule that cannot make all of what it makes fires anyway and makes what it
->   can, because what it could not make was never a cost. **Where nothing bounds what a line makes it
->   can never be short**, so no such line is soft, and every line that is soft still names something
->   with a finite capacity
+**Replacing the bullet that begins *A line may be soft*:**
 
-**The last sentence is why this was rewritten, and it is the half worth your eye.** The first draft
-said only that what a rule makes is soft. **That contradicted `P-373` within one section.** *A soft
-line names something with a finite capacity* - and `produce 2 citizen` names citizens, which *What
-bounds a kind in a territory* bounds by *the food produced here, through upkeep*, **which is not a
-capacity**. `produce 1 labor` and the resources `work` makes are the same: a territory declares no
-limit for a resource, so what it holds loose is bounded by nothing.
+> - **A line that makes may be soft, and a line that takes may not**: where a soft line cannot do
+>   all of what it says, it does what it can and the rule goes on regardless. **Soft means what
+>   holds it will not take another** - never *there is one already*. Those differ wherever a
+>   capacity is more than one, and agree only by accident where it is one
 
-**Read together as first drafted, the two bullets forbade `produce 2 citizen`**, which cannot be
-what either says. **The reconciliation costs nothing because the behaviour was never in question**: a
-line making something unbounded can always make all of it, so softness never arises for it. Saying so
-is what keeps `P-373` true of every line that is soft - **which is the protection you named**, and
-the reason the soft-line check does not need a population of zero to prove anything.
+**Everything after the colon is the existing bullet unchanged**, so what is new is the eleven words
+before it.
 
-**Takes and makes rather than cost and effect**, because the section's first bullet is already
-written in those words - *what one firing takes and makes does not depend on how much of anything is
-present*. **Say the word if you would rather the spec said cost and effect**, and the bullet changes
-here rather than on the way in.
-
-## Why this rule is what makes softness safe for your invariant
-
-**Added 2026-09-11, when Sean said the Petri net is for enforcing *nothing comes back round with
-more*.** The quotation above is unchanged; this is the reason to approve it rather than a change to
-it.
-
-**That invariant is a place invariant of the net** - a weighting `w` over places with
-`w · (made - taken) <= 0` at every transition - which is `spec/invariants.md` in as many words:
-*there is a weighting of the kinds, and under it no sequence of rules ends holding more than it
-began with*, and *whether this holds is decided mechanically, from the rules alone*.
-
-**A soft line is a conditional effect, and conditional effects are not free.** `X-11` carries the
-result: Gazen and Knoblock's compilation removes them by expanding one operator per combination of
-which conditions hold, exponential and shown not improvable. So making every bounded make soft costs
-something real - `deploy ark` has five of them, which is thirty-two ordinary transitions.
-
-**It costs nothing for this invariant, and the reason is the direction softness runs.** A soft line
-does **less** than it says, never more. So if `w` is non-increasing for the firing where everything
-is made, it is non-increasing for every partial firing, because producing less can only reduce the
-gain. **The full-production case bounds all thirty-two**, and the matrix stays the one that is
-already there.
-
-**That holds only because softness is on what a rule makes.** A soft **take** would consume less
-than it says, which is a gain, and one such line would put the invariant out of reach of the same
-argument. **So this bullet is not merely compatible with what you want from the net - it is the
-condition under which softness and the invariant can coexist**, and it gives `P-378`'s `[soft]`
-attachment its job: it may never mark a take.
-
-**Stated as reasoning rather than measured.** What is measured is the release: 73 recipe rows, 72 of
-them with a constant quantity.
-
-**One line already there still wants one word, and it is filed on landing rather than now.** *A line
-may be soft* describes an option where, for a bounded make, there is none. **`P-378`'s `[soft]`
-attachment also needs a job**: if softness follows from the role, it is either redundant or it is how
-a **take** is marked exceptionally soft. `C-82` records the release has zero soft lines today, so
-nothing is built on either reading.
-
-**The garrison case, in your words, is what the rule buys.** *If a garrison is not there one is
-built; if a garrison is there it fails to build because of the limit, but doesn't fail the command,
-because the garrison wasn't a cost - it was an effect.* `P-385` is what it leaves open.
-
-### P-385 - The two `limit 0 garrison` rows go, and repeated deployment is the player's
-
-**to** sean · **status** open · **cited** `985adaa` · **raised** 2026-09-11 · **rewritten** 2026-09-11, twice - it asked hard-or-soft, which `P-386` answers generally, then asked whether repeated deployment is intended, which you had decided · **kind** entailed, from `X-12` and `C-87` · **shape** instruction · **asks** approval · **into** `releases/first-release.md` -> Recipes
-
-**Sean, 2026-09-11**: *repeated deployments are player choice, safe because they are not capable of
-causing an infinite resource glitch.*
-
-**The instruction: delete both `limit 0 garrison` rows**, one from `deploy ark` and one from `found
-by land`. Nothing replaces them.
-
-**Why deleting rather than softening.** Under `P-386` the garrison is something the recipe *makes*,
-so it is soft already, and the garrison's **capacity of 1** is what stops a second one. The row is a
-hard gate standing in front of a line that a capacity already bounds - and the two are not the same
-test. `spec/invariants.md`: *soft means what holds it will not take another - never there is one
-already. Those differ wherever a capacity is more than one, and agree only by accident where it is
-one.* **A garrison's capacity is one, so this is that accident.**
-
-**What a second deployment then does.** Six of the seven things a deployment makes are bounded and
-stay soft on their own - the garrison not at all, the two extractors and two stores only where there
-is room. **`produce 2 citizen` is bounded by nothing**, so two citizens arrive every time. The Ark is
-spent either way, which is the part that makes it a choice rather than a free action.
-
-**The check the promoting commit runs**: `grep -c '| limit ' releases/first-release.md` returns
-**0**. Both rows are the only two uses of the `limit` role in the release, counted rather than
-recalled.
-
-## One thing this exposes, which is not a reason to wait
-
-**Your reason is a rule `spec/invariants.md` already states, and that rule says it is checkable
-rather than believed.** *There is a weighting of the kinds, and under it no sequence of rules ends
-holding more than it began with*, and *whether this holds is decided mechanically, from the rules
-alone*.
-
-**No weighting is declared anywhere.** Grepped across `spec/`, `releases/` and `crates/`: the only
-other matches are Petri arc weights, which are the quantity on a row and a different thing. **So
-nothing computes the property your decision rests on** - which does not make the decision wrong, and
-the arithmetic is in your favour on the case that worried the lens: an Ark costs 3 metal, 12 energy
-and 2 citizens, and a repeat deployment returns 2 citizens plus at most five built things worth one
-metal each.
-
-**Saying it because the rule asks to be mechanical and is not yet.** Whether that check is worth
-building is a separate question and this lane has not filed one.
-
-**The second question from `X-12` still stands on its own**: your sketch of the founding recipe
-**omits both stores**, which the release produces.
-
-**And deleting these leaves `Role::Limit` with no instance in the release**, so anything checking
-limits becomes a count over nothing. `crates/game-console/src/petri.rs` already tests
-`role == Limit && weight == 0`. **Told to the code lane when this lands**, not before.
-
-### P-383 - Two more consequences of the shared index, and they belong in different sections
-
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, because the second bullet was addressed to the wrong section · **kind** entailed · **shape** text · **asks** approval · **into** `docs/process.md` -> Who writes what, then All lanes · from `Q-59`
-
-*Who writes what* already says the index is shared, so **staging is publishing**. **Two further
-rules follow from that same fact and are in neither file**, and each was learned by breaking it.
-
-**Into *Who writes what*, after the bullet about staging:**
-
-> - A probe uses a file the lane already owns, or a clone. Verifying a fix sometimes needs a commit,
->   and making one by creating a scratch file at the root of a tree three instances are committing
->   to is a crossing made in order to test a fix for a crossing
-
-**Into *All lanes*, among the bullets about an item and the hash that cites it:**
-
-> - A commit hash is a pointer for a reader and not evidence. A commit can carry work it does not
->   mention, so where a citation and a file could differ, the claim rests on the file
-
-**Both happened.** `2804f83` reverts a `scratch-probe.txt` made at the repository root to verify a
-fix. `93d839d` is titled *finding: Q-8 acted* and carries twenty-six lines of `hooks/pre-commit`
-belonging to another lane, staged when that lane's commit lost the race for the index lock - and
-neither party did anything wrong, which is why care does not close it.
-
-**Why two sections rather than one, which is what this rewrite is.** The probe rule is about where a
-lane may write and belongs beside the staging bullet. **The citation rule is about what closes an
-item**, and *All lanes* already carries its neighbours: *it closes the item the commit cites, or
-records the hash to say it looked*, and *an item whose cited file has taken a promotion since it was
-raised is re-read before it is relied on*. Filed under *Who writes what*, it would read as a rule
-about writing.
-
-**It does not contradict *Coding instance*, and the pair is worth reading together.** That section
-says *every commit cites the id of the item it acts on, which is what makes the path checkable*.
-**That is the commit naming the item; this is a closure naming the commit** - opposite directions,
-and only the second can be wrong while looking right.
-
-**Entailed rather than new**: the staging bullet already says a file one instance stages is
-committed by whichever instance commits next. **A probe file is a file staged, and a citation is a
-claim about what a commit carried.** Neither adds a fact; both say what the existing one costs.
-
-### P-384 - A green suite under a change measures the tests, not the code
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** measured · **shape** text · **asks** approval · **into** `docs/process.md` -> What makes a check worth having · from `Q-59`
-
-That section already says a poison aimed where a check already looks confirms only what works.
-**The same reading with its sign flipped is not there**, and it has cost once.
-
-> **And a change that leaves every test green has measured the tests.** That is the poison rule with
-> its sign flipped: *every test stays green* names the test suite and says nothing about the
-> program. **A finding called small on that evidence has been sized by the coverage rather than by
-> the code** - so a green run, like a count of zero, names the population it was made over.
-
-**The measurement, which is `Q-58` on 2026-09-06.** The quality lens found a `saturating_sub` whose
-comment gave density zero as its reason, observed that no case in the tree has one, wrote *changing
-it to `density - 1` leaves every test green*, and called the finding **small** on the strength of
-it. **Every word of that was true.** The code lane then ran the program rather than the suite:
-`Territory::empty` carries no deposits, `create planet` makes twelve before `set resource` fills
-any, and the reachable path panics with *attempt to subtract with overflow*. **The branch was load
-bearing and the silence was the tests'.**
-
-**The finding survived and its `whether` did not**, which is the part worth having a rule about. A
-wrong sizing is not a wrong finding, and it is what decides whether anybody acts.
+**This also gives `P-378`'s `[soft]` attachment its job without touching `spec/console.md`.** The
+notation says a line is soft; **what a line may be soft about is a question about rules rather than
+about writing them**, so the constraint belongs here and the notation inherits it. `C-82` records
+that the release has zero soft lines today, so nothing is built on either reading.
 
 
 ## Addressed to other perspectives
+
+### S-92 - Four promotions landed, and two of them are work: the release lost the `limit` role entirely
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-386`, `P-385`, `P-383` and `P-384`
+
+**`P-385` deleted both `limit 0 garrison` rows**, one from `deploy ark` and one from `found by land`.
+Sean, 2026-09-11: *repeated deployments are player choice, safe because they are not capable of
+causing an infinite resource glitch.* The check the promotion ran: no row in the release carries the
+`limit` role, counted after padding.
+
+**`crates/game-console/src/petri.rs` disagrees with that decision and has to move.** Its header says
+the inhibitor arcs are gone because *`P-374` turned each into a requirement on room - there is no
+garrison and there is room for a garrison are the same statement where one is the most a territory
+can hold.* **Read that way a second deployment is refused for want of room**, which is the opposite
+of what Sean has decided. The rows are gone, so the reinterpretation has nothing left to interpret.
+
+**And `Role::Limit` now has no instance in the release**, which is the hazard rather than the fix.
+`petri.rs` tests `role == Role::Limit && weight == 0`; whatever that guards is now a count over
+nothing, and `docs/process.md` gained the sign-flipped version of that rule in the same batch. **The
+role stays defined** - the column description lists it among the four and nothing promoted removes
+it - so this is a population that went to zero, not a concept that went away.
+
+**`P-386` is the one with teeth.** `spec/invariants.md` now says **what a rule takes is hard and what
+it makes is soft**, with the qualifier that a line making something nothing bounds can never be short
+and so is not soft. **Two of the four roles now behave differently from each other by rule rather
+than by row**, and the release marks none of it, because there is no soft line in it yet - `C-82`.
+
+**`P-383` and `P-384` are `docs/process.md` and bind you.** A probe uses a file the lane already owns
+or a clone; a commit hash is a pointer for a reader and not evidence; and a change that leaves every
+test green has measured the tests. `CLAUDE.md` -> Perspectives says this lane tells every lane a
+document binds when it changes, and points rather than restates.
+
+**The gate this lane did not run, deliberately.** Two rows left a table several tests count, so
+something is likely red. **This lane did not measure it, because `P-383` landed in the same batch and
+says a probe uses a file the lane owns or a clone** - and the last time it ran your suite in your
+tree it got `extern location for game_console does not exist` from your build, and reported a red
+gate that was its own collision. Yours to measure in a tree you control.
 
 ### S-91 - The audit you asked for: seven of your twenty-three are answered, and one cites an item that no longer exists
 
@@ -3560,6 +3436,10 @@ work the release exists to order.
 | P-381, a raw material has three states, a transient is always in disorder, and what is constructed is in neither             | `releases/first-release.md` -> What bounds a kind in a territory                                                                                                                                         | 2026-09-11 |
 | P-380, `discard` sweeps the two transients, and `fertility` gains the bound it never had                                     | `releases/first-release.md` -> Recipes, What bounds a kind in a territory                                                                                                                                | 2026-09-11 |
 | P-382, the food line that a later firing order made false is deleted                                                         | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
+| P-386, what a rule takes is hard and what it makes is soft                                                                   | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
+| P-385, the two `limit 0 garrison` rows go, and repeated deployment is the player's                                           | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
+| P-383, a probe uses a file the lane owns, and a commit hash is not evidence                                                  | `docs/process.md` -> Who writes what, All lanes                                                                                                                                                          | 2026-09-11 |
+| P-384, a change that leaves every test green has measured the tests                                                          | `docs/process.md` -> What makes a check worth having                                                                                                                                                     | 2026-09-11 |
 
 ## Rejected
 
