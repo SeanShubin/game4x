@@ -15,14 +15,26 @@
 //! | `consume n`  | input arc of weight n     | taken |
 //! | `produce n`  | output arc of weight n    | made |
 //! | `require n`  | read arc - present, not taken | 7 of them |
-//! | `limit 0`    | **inhibitor arc** - a zero test | 2 rows, and no arc |
+//! | `limit 0`    | **inhibitor arc** - a zero test | declared, and no row has it |
 //!
-//! **The inhibitor arcs were the interesting ones and there are none left.** Reachability in a
-//! plain Petri net is decidable; with inhibitor arcs the net is Turing-complete. Both of this
-//! release's were `limit 0 garrison`, and `P-374` turned each into a requirement on room -
-//! *there is no garrison* and *there is room for a garrison* are the same statement where one
-//! is the most a territory can hold. **So the picture shows where the game sits on that line**,
-//! which is the thing a table of the same rows does not.
+//! **There are no inhibitor arcs, and the reason changed under this file.** Reachability in a
+//! plain Petri net is decidable; with inhibitor arcs the net is Turing-complete. This release
+//! had two, both `limit 0 garrison`, and **`P-385` deleted both rows**. Sean, 2026-09-11:
+//! *repeated deployments are player choice, safe because they are not capable of causing an
+//! infinite resource glitch.* **So the picture shows where the game sits on that line**, which
+//! is the thing a table of the same rows does not.
+//!
+//! **This file said something else until `S-92` and it was worth more than a stale sentence.**
+//! It said the arcs were gone because `P-374` turned each into a requirement on room - *there
+//! is no garrison* and *there is room for a garrison* being one statement where one is the most
+//! a territory holds. **Read that way a second deployment is refused for want of room**, which
+//! is the opposite of what Sean decided. The reinterpretation was defensible when the rows
+//! existed and it now has nothing left to interpret.
+//!
+//! **The `limit` role stays defined and has no instance**, which is a population that went to
+//! zero rather than a concept that went away: the release's column description still lists it
+//! among the four. Everything here that asks about it therefore asks about nothing today, and
+//! `tests/petri.rs` says so by name rather than by quietly counting zero.
 //!
 //! # A block is a transition, and a name is not
 //!
@@ -457,28 +469,29 @@ pub fn net(document: &str) -> Net {
                 }
             };
 
-            // **A zero test becomes a claim on room** - `P-374`, and it is exact only at a
-            // capacity of one. *There is no garrison* and *there is room for a garrison* are
-            // the same statement when one is the most it can hold, and different statements
-            // at two. So the translation is made only where the release states a capacity of
-            // one, and refused loudly otherwise rather than quietly approximated.
-            if role == Role::Limit && weight == 0 && bounded(&container, &kind) {
-                assert_eq!(
-                    stated_capacity(&kind),
-                    Some(1),
-                    "`limit 0 {kind}` is being read as a requirement on room, which says the \
-                     same thing only where the capacity is one - and {kind}'s is not"
-                );
-                let at = find(&mut places, true);
-                arcs.push(Arc {
-                    transition,
-                    place: at,
-                    role: Role::Require,
-                    weight: 1,
-                    traits,
-                });
-                continue;
-            }
+            // **A `limit` row is refused rather than translated, and the translation that
+            // stood here is deleted rather than left unreachable.**
+            //
+            // It read a zero test as a claim on room - `P-374` - on the ground that *there is
+            // no garrison* and *there is room for a garrison* say the same thing where one is
+            // the most a territory holds. **That reading refuses a second deployment**, and
+            // `P-385` deleted both rows precisely because Sean decided a second deployment is
+            // allowed: *repeated deployments are player choice, safe because they are not
+            // capable of causing an infinite resource glitch.*
+            //
+            // **Keeping it against a future row would be the dangerous version.** The next
+            // `limit` row to arrive would be silently reinterpreted into the rule Sean
+            // rejected, and the diagram would show a game nobody specified. So a `limit` row
+            // stops the build instead: the role is declared and nothing has decided what it
+            // means in a net, which is a question for `spec/` rather than for this file.
+            assert!(
+                role != Role::Limit,
+                "`limit {weight} {kind}` is in the release, and nothing has decided what a \
+                 limit means as an arc. `P-385` deleted the only two rows that had this role \
+                 and the reading this file used to apply - a limit as a requirement on room - \
+                 refuses the repetition Sean has since allowed. File it rather than reviving \
+                 that reading."
+            );
 
             let at = find(&mut places, false);
             arcs.push(Arc {

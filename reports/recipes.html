@@ -14,13 +14,12 @@
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p game-console --bin dump-state</code>, or <code>scripts/dump-state.sh</code>.</p>
 <p>Every recipe the release declares, with its own lines gathered under it. The release states these across seven columns, one row per line and the name written only on the first - which is the right shape for a table and the wrong one for answering <em>what does this recipe do</em>.</p>
 <p><strong>Beside each rule is a worked example</strong> - a state, the command that fires the recipe, and the state after - in the notation <code>scenario/expected/play.4x</code> uses, holding only what that recipe touched. Every one is a real command run against a real state: <code>R-7</code>.</p>
-<p>24 recipes, 73 lines between them, 12 worked examples.</p>
+<p>24 recipes, 71 lines between them, 12 worked examples.</p>
 <h2 id="deploy-ark">deploy ark</h2>
 <p>Run by the <strong>player</strong>.</p>
 <ul class="bullets">
 <li><strong>require</strong> 1 territory, in <code>$where</code></li>
 <li><strong>consume</strong> 1 ark, in the orbit above <code>$where</code></li>
-<li><strong>limit</strong> 0 garrison</li>
 <li><strong>produce</strong> 1 garrison</li>
 <li><strong>produce</strong> 2 citizen</li>
 <li><strong>produce</strong> 1 extractor, food</li>
@@ -91,7 +90,6 @@
 <p>Run by the <strong>player</strong>.</p>
 <ul class="bullets">
 <li><strong>consume</strong> 1 pioneer</li>
-<li><strong>limit</strong> 0 garrison</li>
 <li><strong>produce</strong> 1 garrison</li>
 <li><strong>produce</strong> 2 citizen</li>
 <li><strong>produce</strong> 1 extractor, food</li>

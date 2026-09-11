@@ -10,7 +10,7 @@ is the right shape for a table and the wrong one for answering *what does this r
 the state after - in the notation `scenario/expected/play.4x` uses, holding only what that
 recipe touched. Every one is a real command run against a real state: `R-7`.
 
-24 recipes, 73 lines between them, 12 worked examples.
+24 recipes, 71 lines between them, 12 worked examples.
 
 ## deploy ark
 
@@ -18,7 +18,6 @@ Run by the **player**.
 
 - **require** 1 territory, in `$where`
 - **consume** 1 ark, in the orbit above `$where`
-- **limit** 0 garrison
 - **produce** 1 garrison
 - **produce** 2 citizen
 - **produce** 1 extractor, food
@@ -104,7 +103,6 @@ After:
 Run by the **player**.
 
 - **consume** 1 pioneer
-- **limit** 0 garrison
 - **produce** 1 garrison
 - **produce** 2 citizen
 - **produce** 1 extractor, food

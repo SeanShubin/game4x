@@ -225,58 +225,80 @@ fn what_the_exclusions_cost_is_visible_rather_than_implied() {
     }
 }
 
-/// The two zero tests are gone, and room is what replaced them.
+/// The `limit` role is declared, no row carries it, and the net has no zero test.
 ///
-/// **`P-374` removed the only reason this net was Turing-complete.** Reachability in a plain
-/// Petri net is decidable and an inhibitor arc destroys that; the release had two, both
-/// `limit 0 garrison`. Capacity is stored as room left now, so *there is no garrison here*
-/// became *the garrison's room is untouched* - an ordinary requirement on an ordinary place.
+/// **This test was about a translation that no longer exists, and the translation was a rule
+/// Sean has since decided against.** It read the release's two `limit 0 garrison` rows as
+/// requirements on a garrison's room - `P-374` - on the ground that *there is no garrison* and
+/// *there is room for a garrison* say the same thing where one is the most a territory holds.
+/// **Read that way a second deployment is refused for want of room.** `P-385` deleted both
+/// rows because Sean decided the opposite: *repeated deployments are player choice, safe
+/// because they are not capable of causing an infinite resource glitch.* `S-92`.
 ///
-/// **The release still says `limit 0` twice**, which is why this checks both ends: the rows
-/// are still there, and no arc is an inhibitor. A version that lost the rows instead would
-/// pass a check that only counted inhibitors.
+/// **So what is checked is the emptiness, by name.** A role that is declared and unused is a
+/// population that went to zero, and `docs/process.md` says a zero means something only
+/// against a population that is not also zero - so this asserts the population it counted
+/// against, and that the deleted reading cannot return without the build stopping.
 #[test]
-fn the_zero_tests_became_claims_on_room() {
+fn the_limit_role_is_declared_and_no_row_carries_it() {
     let document = release();
     let net = net(&document);
 
+    // **Counted over the table, not over the whole document**, so the column description -
+    // which still lists `limit` among the four roles - is not mistaken for a row.
     let rows = document
         .lines()
-        .filter(|line| line.contains("| limit ") && line.contains("| 0 "))
+        .filter(|line| line.trim_start().starts_with('|'))
+        .filter(|line| line.contains("| limit "))
         .count();
     assert_eq!(
-        rows, 2,
-        "the release states `limit 0` twice and this found {rows} - if it is now zero the \
-         translation below is checking nothing"
+        rows, 0,
+        "the release carries {rows} `limit` row(s); `P-385` deleted the only two, and this \
+         file refuses to draw one rather than reviving the reading that refused a repeat"
     );
+
+    // **The population that zero is counted against.** Without this the assertion above is
+    // satisfied by a release whose Recipes table stopped parsing, or by one with no rows at
+    // all - the sign-flipped failure `CLAUDE.md` names.
+    let all: usize = document
+        .lines()
+        .filter(|line| line.trim_start().starts_with('|'))
+        .filter(|line| {
+            ["| require ", "| consume ", "| produce "]
+                .iter()
+                .any(|role| line.contains(role))
+        })
+        .count();
+    assert!(
+        all > 60,
+        "only {all} rows carry any role at all, so *no limit rows* is a statement about an \
+         empty table rather than about the release"
+    );
+
+    // The role is still a role, which is what makes the emptiness a fact about the release
+    // rather than about this crate.
+    assert_eq!(Role::Limit.name(), "limit");
 
     assert!(
         net.inhibitors().is_empty(),
-        "{} arcs are still zero tests, so the net is still Turing-complete and the page's \
-         historical note is wrong",
+        "{} arcs are zero tests, so the net is Turing-complete and the page's account of why \
+         it is not is wrong",
         net.inhibitors().len()
     );
 
-    // What they became: a requirement on the room for a garrison, which is the same claim
-    // only because a garrison's capacity is one.
-    let on_room: Vec<&game_console::petri::Arc> = net
+    // **Nothing is drawn as a requirement on a garrison's room any more**, which is the
+    // deleted reading's visible trace. A version that kept the translation would put these
+    // back and every other assertion here would still pass.
+    let on_room = net
         .arcs
         .iter()
         .filter(|arc| net.places[arc.place].room && net.places[arc.place].kind == "garrison")
         .filter(|arc| arc.role == Role::Require)
-        .collect();
+        .count();
     assert_eq!(
-        on_room.len(),
-        2,
-        "two `limit 0 garrison` rows should have become two requirements on a garrison's \
-         room, and {} did",
-        on_room.len()
-    );
-    assert_eq!(
-        game_console::petri::stated_capacity("garrison"),
-        Some(1),
-        "the translation is exact only at a capacity of one, and this is what says the \
-         release still declares one"
+        on_room, 0,
+        "{on_room} arc(s) still require a garrison's room, which is the reading `P-385` \
+         removed - a second deployment would be refused for want of room"
     );
 
     let drawing = game_console::petri_draw::svg(&net);

@@ -35,7 +35,7 @@ has accepted that as the answer: he expects a small number of distinct things.
 
 **Traits** `force`, `keeps`, `kind`
 
-**Named by** `age consume`, `age produce`, `deploy ark limit`, `deploy ark produce`, `found by land limit`, `found by land produce`, `refresh consume`, `refresh produce`, `spoil consume`
+**Named by** `age consume`, `age produce`, `deploy ark produce`, `found by land produce`, `refresh consume`, `refresh produce`, `spoil consume`
 
 ### `s-3` - extractor
 
@@ -178,9 +178,7 @@ what holds a territory; a territory has at most one.
 
 **In recipes**
 
-- `deploy ark` limits 0
 - `deploy ark` produces 1
-- `found by land` limits 0
 - `found by land` produces 1
 - `age` consumes 1 (as a thing), keeps at least 1
 - `age` produces 1 (as a thing), keeps one less

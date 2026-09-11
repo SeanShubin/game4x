@@ -730,7 +730,7 @@ const fn measured(role: Role, quantity: Quantity, noun: Noun) -> Line {
 use Kind::*;
 use Owner::{Player, World};
 use Quantity::OfATrait;
-use Role::{Consume, Limit, Produce, Require};
+use Role::{Consume, Produce, Require};
 
 // **`P-334` turned `adjacency` from a trait into a kind, and this is what it left behind.**
 // The phrase distinguishes a place by there being an adjacency whose `from` is `$from` and
@@ -767,7 +767,6 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[
             placed(Require, 1, TERRITORY, &[], "`$where`"),
             placed(Consume, 1, Noun::Of(Ark), &[], "the orbit above `$where`"),
-            just(Limit, 0, Noun::Of(Garrison)),
             just(Produce, 1, Noun::Of(Garrison)),
             just(Produce, 2, Noun::Of(Citizen)),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),
@@ -792,7 +791,6 @@ pub const RECIPES: &[Recipe] = &[
         owner: Player,
         lines: &[
             just(Consume, 1, Noun::Of(Pioneer)),
-            just(Limit, 0, Noun::Of(Garrison)),
             just(Produce, 1, Noun::Of(Garrison)),
             just(Produce, 2, Noun::Of(Citizen)),
             traited(Produce, 1, Noun::Of(Extractor), &FOR_FOOD),

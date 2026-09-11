@@ -304,6 +304,14 @@ fn a_recipe_naming_a_family_matches_every_kind_in_it() {
 ///
 /// So this checks the thing the column made checkable: that every role is exercised, and
 /// that the recipes keeping something are the ones that should.
+///
+/// **`limit` is defined and has no instance, which is a population that went to zero rather
+/// than a concept that went away.** `P-385` deleted both `limit 0 garrison` rows - Sean,
+/// 2026-09-11: *repeated deployments are player choice, safe because they are not capable of
+/// causing an infinite resource glitch.* The release's column description still lists the role
+/// among the four, so the type keeps it and this asserts the emptiness **by name** rather than
+/// by shrinking the expected list and saying nothing. A zero that is not said out loud is the
+/// same bytes as a check that stopped looking.
 #[test]
 fn a_role_says_what_becomes_of_what_a_recipe_names() {
     use kinds::Role;
@@ -315,14 +323,23 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
         }
     }
     assert_eq!(
-        seen.into_iter().collect::<Vec<_>>(),
-        ["consume", "limit", "produce", "require"],
-        "all four roles are used, and nothing else is"
+        seen.iter().copied().collect::<Vec<_>>(),
+        ["consume", "produce", "require"],
+        "three of the four roles are used, and nothing else is"
     );
+    assert!(
+        !seen.contains("limit"),
+        "`limit` has an instance again - the release declared no row with it since `P-385`, \
+         so either a row came back or this crate has invented one"
+    );
+    // **The role is still a role**, which is what makes the emptiness above a fact about the
+    // release rather than about this crate's types. A version that deleted the variant would
+    // pass everything above and would be disagreeing with the release's own column
+    // description, which still lists four.
+    assert_eq!(Role::Limit.written(), "limit");
 
-    // A territory is never consumed by acting in it, unheld ground is a limit rather than an
-    // ingredient, a yard survives producing an ark, and upkeep and grow both need something
-    // they do not eat.
+    // A territory is never consumed by acting in it, a yard survives producing an ark, and
+    // `upkeep` needs something it does not eat.
     let keeps: Vec<&str> = kinds::RECIPES
         .iter()
         .filter(|recipe| {
@@ -338,9 +355,18 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
         [
             // `grow` left this list when `P-310` deleted its `require 1 thing, houses` row.
             // It consumes and produces now and requires nothing.
+            //
+            // **`found by land` left it when `P-385` deleted its `limit 0 garrison` row**,
+            // and that row was the only ingredient it did not eat. It now consumes a pioneer
+            // and produces seven things, requiring nothing - so it keeps nothing, which is
+            // the same shape `grow` reached by a different deletion.
+            //
+            // **`deploy ark` stays for a different reason and that is the point of the
+            // list.** It also lost a `limit 0 garrison` row, and it still keeps something:
+            // `require 1 territory` in `$where`. Two recipes lost the same row and only one
+            // left, which is what this assertion is for.
             "deploy ark",
             "move",
-            "found by land",
             "launch ark",
             "work",
             "upkeep"

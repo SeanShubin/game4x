@@ -14,7 +14,7 @@ The release states **24 blocks of recipe rows** under **20 names**. **23 are dra
 
 **4 kinds the release declares appear nowhere in the drawn net**: `orbit`, `deposit`, `adjacency`, `game`. **This is not the exclusion's doing** - no recipe names any of them, so they would be missing from a drawing with nothing left out. They are where things are and how places relate, rather than things a recipe moves.
 
-**23 places and 84 arcs** between them: 46 `consume`, 30 `produce`, 8 `require`.
+**23 places and 82 arcs** between them: 46 `consume`, 30 `produce`, 6 `require`.
 
 **6 of those places are room rather than a count** - `P-374`. What a container stores is the room left, not the total: used capacity is what is there, total capacity is the two added, and nothing records the total so nothing can disagree with it. Making a thing takes one of the room and destroying it gives one back. Room is stored, so room is state, so it is drawn - a diagram showing the count and hiding the room would be leaving out half of what containment is.
 
@@ -40,8 +40,8 @@ The drawing is on the page beside this file; what follows is the same net in the
 | -------------------------------- | ------------- | --------- |
 | territory in the game            | the game      | territory |
 | ark in an orbit                  | an orbit      | ark       |
-| room for garrison                | a territory   | garrison  |
 | garrison                         | a territory   | garrison  |
+| room for garrison                | a territory   | garrison  |
 | citizen                          | a territory   | citizen   |
 | extractor                        | a territory   | extractor |
 | room for extractor               | a territory   | extractor |
@@ -70,8 +70,8 @@ Places down, transitions across. `-n` is taken, `+n` is made, `rn` is required a
 | -------------------------------- | ---------- | ------ | ------------- | --------------- | ----------- | ---------- | --------------- | ---------- | ------------ | ------ | ------ | ----- | ------ | ------ | ------ | ----- | ------------ | ------------- | --------------- | ---------------- | --------------- | ------------------- | ------- |
 | territory in the game            | r1         |        |               |                 |             |            |                 | r1         |              |        |        |       |        |        |        |       |              |               |                 |                  |                 |                     |         |
 | ark in an orbit                  | -1         |        |               |                 |             |            |                 | +1         |              |        |        |       |        |        |        |       |              |               |                 |                  |                 |                     |         |
-| room for garrison                | r1, -1     |        | r1, -1        |                 |             |            |                 |            |              |        |        |       |        |        |        |       |              |               |                 |                  |                 |                     |         |
 | garrison                         | +1         |        | +1            |                 |             |            |                 |            |              |        |        |       |        |        |        |       |              |               |                 |                  |                 |                     |         |
+| room for garrison                | -1         |        | -1            |                 |             |            |                 |            |              |        |        |       |        |        |        |       |              |               |                 |                  |                 |                     |         |
 | citizen                          | +2         |        | +2            |                 |             |            | -2              | -2         | -1, +1       | r1     | -1, +1 | +1    | -1, +1 | -1     |        |       |              |               |                 |                  |                 |                     |         |
 | extractor                        | +1, +1     |        | +1, +1        | +1              |             |            |                 |            |              |        |        |       |        |        |        |       |              |               |                 |                  |                 |                     |         |
 | room for extractor               | -1, -1     |        | -1, -1        | -1              |             |            |                 |            |              |        |        |       |        |        |        |       |              |               |                 |                  |                 |                     |         |
