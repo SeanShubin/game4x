@@ -62,35 +62,89 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-369 - Matter cycles: the ground, then disorder, then the ground again
+### P-370 - The fiction is richer than the rules, and that is not a gap
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/narrative.md`, a new section before *Open questions*
+
+**Your words, 2026-09-10:** *just because it has a thematic representation doesn't mean it needs a
+recipe.*
+
+**A new section:**
+
+> ## What the fiction owes the rules
+>
+> - **The fiction is richer than the rules, and that is not a gap.** What is told here needs a rule
+>   of its own only where the rule would change what a player does
+> - **Food is soil and sunlight. A source is where matter waits. A loaf going stale is its container
+>   dissolving and what it held scattering.** None of those is a recipe, and none of them needs to be
+
+**It is the converse of what this document already says.** The opening states that
+`spec/invariants.md` requires **everything in the game to have a cause inside the model**, and that
+this is where those causes are told. **That is one direction.** Nothing said the other: that a story
+may be told here without a rule owing anything back.
+
+**Without it, richness reads as debt.** This lane spent two turns treating *food expires* and *energy
+comes from a star* as gaps in `P-369` needing three readings and a decision - **and they were neither
+gaps nor decisions**. They were the same mechanism under two fictions, which is what you said when
+you corrected it.
+
+**It cuts the other way too, and that is the part worth keeping.** A rule that a player *does* feel
+must still have its cause told here. **This gives the fiction permission to be larger than the
+mechanism and none to be smaller**, which is the asymmetry `spec/invariants.md` -> *Everything is
+modelled* already relies on.
+
+**Where it changes something today.** `P-369`'s spoiling case stops needing an answer: food expiring
+is a container dissolving, told and not built. **And `X` in your growth sketch is safer for it** - an
+arbitrary resource with no fiction yet is a thing to name, not a thing to justify.
+
+
+### P-369 - Matter cycles: a source, then disorder, then its source again
 
 **to** sean · **status** open · **raised** 2026-09-10 · **rewritten** on 2026-09-10 as Sean sharpened
-it three times · **kind** recovered · **shape** text · **asks** approval · **into** `spec/resources.md`, replacing the *not kept in order* bullet
+it four times · **kind** recovered · **shape** text · **asks** approval · **into** `spec/resources.md`, replacing the *not kept in order* bullet
 
 **Your words, 2026-09-10**, in the order they arrived: *resources start in the ground, extractors
 bring them into disorder, disorder means available to spend, anything still in disorder goes back
 into the ground at end of turn* · *resources in the ground not available to spend, resources in
-disorder and order available to spend* · *order means they are in a container.*
+disorder and order available to spend* · *order means they are in a container* · *"ground" is the
+wrong term, perhaps we need something like "source" instead.*
 
 **Replacing the bullet that begins *a thing not kept in order*:**
 
-> - **A planet's matter begins in the ground, and there is no end of it.** An extractor, and the
->   labor to work it, bring some of it out - into **disorder**
-> - **Matter that is out of the ground may be spent, whether it is in disorder or in order.**
->   **Order is being in a container**; disorder is lying loose where it was made. **Matter still in
->   the ground may not be spent at all**
+> - **Every kind of matter has a source, and there is no end of what a source holds.** A source is
+>   where matter waits, and **what is in a source cannot be spent**
+> - **An extractor, and the labor to work it, bring matter out of its source - into disorder**
+> - **Matter that is out of its source may be spent, whether it is in disorder or in order.**
+>   **Order is being in a container**; disorder is lying loose where it was made
 > - **When a thing is destroyed its matter falls into disorder** where it stood. What a thing was
 >   made of survives it; only the arrangement is lost
-> - **What is still in disorder when a turn ends goes back into the ground.** What a container holds
->   stays. **Nothing is destroyed** - what nothing is holding returns to where it came from
+> - **What is still in disorder when a turn ends returns to its source.** What a container holds
+>   stays. **Nothing is destroyed** - what nothing is holding goes back where it came from
+
+## Why *source* and not *ground*
+
+**Because it was only ever true of one resource in three.** A territory offers food, metal **and
+energy**, each with a capacity and a density - `releases/first-release.md`, *Territory resources*,
+all twelve rows. **Energy is extracted from a place exactly as metal is**, and calling where it
+comes from *the ground* fitted the fiction of one and not the other.
+
+**The three are mechanically identical and thematically different**, which is your phrasing and is
+the whole reason one word covers them. Where each comes from - a planet's crust, a star, soil and
+sunlight together - is fiction, and `P-370` puts it where fiction goes.
+
+**One word this deliberately avoids.** The release calls a territory's source for a resource a
+**`deposit`**, and **`spec/` does not define that word** - it is one of two kinds in the release with
+no definition in the specification, which is `S-86`, and `spec/logistics.md` still calls the thing a
+`node`, which is `S-82`. **So these lines say *a source* and leave the two to be joined up when those
+land**, rather than leaning on a term nothing here defines.
 
 ## Three places, and only one of them is about spending
 
-| Where                                 | May be spent | Survives the turn                                   |
-| ------------------------------------- | ------------ | --------------------------------------------------- |
-| **In the ground**                     | **no**       | - endless, and reached only by an extractor working |
-| **In disorder**                       | **yes**      | **no** - it goes back to the ground                 |
-| **In order**, which is in a container | **yes**      | **yes**                                             |
+| Where                                 | May be spent | Survives the turn                                 |
+| ------------------------------------- | ------------ | ------------------------------------------------- |
+| **In its source**                     | **no**       | endless, and reached only by an extractor working |
+| **In disorder**                       | **yes**      | **no** - it returns to its source                 |
+| **In order**, which is in a container | **yes**      | **yes**                                           |
 
 **So order buys one thing and one thing only: another turn.** It is not what makes matter usable -
 disorder is already usable - which is why a colony can work an extractor and spend what it makes on
@@ -101,39 +155,41 @@ stated.**
 
 `P-368` says a named source is not a gain because the gathering is bounded - **an endless well behind
 a bounded pump.** Your model says something simpler: **there is no well and no pump. There is a
-cycle.** Matter leaves the ground, is spent or held or returns, and **the total never changes.**
+cycle.** Matter leaves its source, is spent or held or returns, and **the total never changes.**
 
 So `spec/resources.md`'s **matter is conserved and its arrangement is not** stops needing an
 exception. It was the one sentence both checks had to work around - *declared sources, excluded:
-work* - and under this **`work` is not a source.** It moves matter between two places that both
+work* - and under this **`work` is not a source**. It moves matter between two places that both
 already exist.
 
 ## Three cases stop being three
 
-| What happens                       | Today                                                           | Under this                                                                                              |
-| ---------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| A thing with unmet upkeep perishes | `perish` produces the thing's metal                             | unchanged, and now it is clear the metal is **in disorder**                                             |
-| Nature takes a territory           | `territory.rs:731` is `self.held.clear()` - **matter vanishes** | its matter falls into disorder; nothing survives to hold it, so the turn's end returns it to the ground |
-| A unit is destroyed with it        | `game.rs:909` marks it `usable = false` and leaves it standing  | its matter falls into disorder like anything else                                                       |
+| What happens                       | Today                                                           | Under this                                                                                |
+| ---------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| A thing with unmet upkeep perishes | `perish` produces the thing's metal                             | unchanged, and now it is clear the metal is **in disorder**                               |
+| Nature takes a territory           | `territory.rs:731` is `self.held.clear()` - **matter vanishes** | its matter falls into disorder; nothing survives to hold it, so the turn's end returns it |
+| A unit is destroyed with it        | `game.rs:909` marks it `usable = false` and leaves it standing  | its matter falls into disorder like anything else                                         |
 
 **And `usable` dies with them.** It is **not declared in the release**, so the dump cannot show it -
 the code says so twice, *a mark no artifact could show*, and a wrecked pioneer prints exactly like a
 working one. With `P-367` destroying units and this taking their matter, its last use is `has_lost`,
 where *no usable unit* becomes *no unit*.
 
-## Two things the offered lines do not settle, and both are yours
+## What this leaves and does not reach
 
-**Food and energy do not obviously return to the ground.** The lines say matter does, and food
-**expires** while energy comes from **a star** rather than from the planet. Three readings and this
-lane takes none: matter means all three and food rotting into the ground is the fiction; matter means
-metal and the other two have their own endings; or energy dissipates and food rots, which is two more
-sentences. **Nothing breaks while it is unsaid** - under the weighting only metal is counted today.
+**Spoiling needs no rule of its own under this.** Food expiring is a container dissolving and what it
+held scattering into disorder, which the third and fourth lines already cover. **That is fiction
+rather than a mechanism** - `P-370`.
 
-**There is no salvage.** Containment is the only way to keep something past a turn; nothing lets a
-player spend labor to catch what is loose. Your sentence said *unless a container is present that has
-space for it* and nothing about a second chance, so the offered text follows it.
+**Salvage is not missing from this. It is what this already does.** Your example: a firefight with
+many vehicles present, and the survivors picking up what they can hold once the shooting stops.
+**Under these lines that needs no rule at all** - the destroyed matter falls into disorder where it
+stood, anything still standing there with room catches what it can, and the rest returns to its
+source when the turn ends. **Nobody writes a salvage rule. Salvage is what the rule does.**
 
-## What this does not reach
+That is `P-368`'s fourth line doing its job rather than being asserted - *the game is meant to become
+complicated by simple things interacting*. **A battlefield that strips itself is four bullets and no
+mechanic.**
 
 **The sweep is still a quantity that varies** - how much fits is the room less what is in it - so
 `end-of-turn losses` stays one of the five recipes `P-368` names as defects. **This makes the rule

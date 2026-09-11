@@ -8,7 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-369** - Matter cycles: the ground, then disorder, then the ground again · `docs/notes/proposals.md`
+- **P-370** - The fiction is richer than the rules, and that is not a gap · `docs/notes/proposals.md`
+- **P-369** - Matter cycles: a source, then disorder, then its source again · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
