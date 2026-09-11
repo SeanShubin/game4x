@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-378** - How a line is marked soft, which `P-373` governs and nothing can write · `docs/notes/proposals.md`
 - **P-375** - The sweep, and two recipes that only needed grounding · `docs/notes/proposals.md`
 - **P-376** - `work` grounded by density, which is seven rows rather than one · `docs/notes/proposals.md`
 - **P-377** - Growth by a resource, which removes the last minimum · `docs/notes/proposals.md`

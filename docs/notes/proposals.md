@@ -62,6 +62,67 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-378 - How a line is marked soft, which `P-373` governs and nothing can write
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** text · **asks** a decision · **into** `spec/console.md` -> The language · from `C-82`
+
+**`P-373` landed a rule about soft lines and there is no way to write one.** Checked: `soft` appears
+in `spec/` **only in `P-373`'s own two bullets**, and in `releases/first-release.md` **not at all**.
+The rule says what soft *means*; nothing says how a line is *marked* as one.
+
+**So the code lane cannot build the check `P-373` makes possible** - `C-82` - because a checker would
+have to invent the syntax it parses. The predicate already exists in their `petri::bounded`; what is
+missing is something to run it over.
+
+## A correction this lane owes you first
+
+**When you approved `P-373` I told you it cost nothing today, and gave the wrong reason.** I said the
+release had two soft lines, `age` and `refuel`, and that neither was on an unbounded place.
+
+**Both are from the research lens's re-encoding, not from the release.** `refuel` is not a release
+recipe at all. The release has **zero** soft lines. **The conclusion held and the evidence did not** -
+it costs nothing because there is nothing to check, not because what exists is safe.
+
+**That is the second time this lane has quoted the lens's model as a measurement of the release**, the
+first being `S-87`'s five undrawable recipes where the release has four. **Both were caught by the
+code lane deriving from the release instead**, which is the two-derivations case doing its job twice.
+
+## Why this is not merely tidying
+
+**Your own decision needs it.** You said firing `deploy ark` and `found by land` on ground you already
+hold is intentional - *I like giving the player more options, and am a fan of emergent gameplay.*
+**Today both are refused**, by `limit 0 garrison`, and the way to make them fire and waste the
+garrison is exactly a soft line.
+
+So the chain is: **you want the option; the option needs the garrison line to be soft; soft needs a
+marker; the marker does not exist.** Landing this is what lets `limit 0 garrison` go, and with it the
+release's last two zero tests.
+
+## The decision, which is what a marker looks like
+
+**This lane recommends none of these and states what each costs.**
+
+- **A column.** The Recipes table grows an eighth, holding `soft` or nothing. Uniform with how
+  everything else in that table is said, and widens a table already seven across
+- **A word in the Traits cell.** No new column; `soft` sits beside the constraints. Cheapest to write
+  and mixes two kinds of thing in one cell - what must be true of the ingredient, and what to do when
+  the line cannot run
+- **A bracket after the amount**, as the research lens writes it - `-1 [soft]`. Reads as an
+  annotation on the operation rather than on the ingredient, which is what it is. Introduces a
+  bracket the notation has nowhere else
+
+**What it must not be is a fourth role.** `require`, `limit`, `consume` and `produce` say *what the
+line does*; soft says *what happens when it cannot*. **Those are different questions and a role that
+answered both would make every existing role ambiguous about the second.**
+
+## One thing that comes with it whichever way you go
+
+**`hard` is the other half and has no marker either.** The lens's encoding marks most lines `hard`
+explicitly. If soft is the exception, unmarked means hard and nothing more is needed; if both are
+written, every line in the table gains a cell. **The first is smaller and this lane would take it, but
+it is part of the same decision.**
+
+
 ### P-375 - The sweep, and two recipes that only needed grounding
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes
