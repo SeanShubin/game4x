@@ -61,6 +61,58 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-83 - Nothing removes leftover fertility, so a territory with no citizens can repopulate
+
+**to** spec · **status** open · **raised** 2026-09-10 · **source** implementing the saturating
+rewrite against `population_after`, which it replaces
+
+**derived from** `bear` produces 1 fertility and `breed` consumes 1 - `releases/first-release.md`,
+Recipes
+
+**The decomposition is exact everywhere except here.** `grow` consumed *the lesser of the surplus
+food and the citizens here*, and `upkeep`, `bear`, `breed`, `renew` and `perish` reproduce it
+line for line - worked against `population_after`, the function they replace:
+
+- **short of food**: `upkeep` fires once per food, `perish` takes the citizens whose upkeep went
+  unpaid, and the survivors are `min(citizens, food)`
+- **with food to spare**: `bear` makes one fertility per fertile citizen, `breed` turns each into
+  a citizen while the food lasts, and the increase is `min(citizens, food - citizens)`
+
+**Both are exactly what `population_after` computes.** That is the rewrite doing what `P-373` says
+it should.
+
+**What is not accounted for is a fertility that is made and not used.** `bear` produces one per
+fertile citizen whether or not there is food to breed with; `breed` is the only thing that
+consumes one; `discard` names metal and energy and not fertility; and only food is stated to be
+made with `keeps`, so `age` and `spoil` never reach it. **It persists into the next turn.**
+
+**The case, worked rather than imagined.** A territory with two citizens and no food:
+
+- `upkeep` fires nothing, so both citizens are unpaid
+- `bear` turns both fertile citizens spent and leaves **two fertility**
+- `breed` cannot fire - there is no food
+- `renew` makes them fertile again, and then `perish` takes both, because their upkeep was unpaid
+- **The territory ends the turn with no citizens and two fertility**
+
+Next turn, with food: `breed` consumes a fertility and a food and produces a citizen, twice.
+**A territory with nobody in it repopulates from stock.** `population_after` forbade exactly this,
+and `game-model` has a test named for it - *a population of none never grows however much food
+there is*.
+
+**Three ways it could go and none of them is this lane's.** Fertility could be discarded at a
+turn's end, as metal and energy now are; it could be made with `keeps 1`, so `age` and `spoil`
+take it the way they take food; or **the accumulation could be intended** - a territory that
+starves banking its capacity to recover - in which case the rule that a dead population stays
+dead has gone, and that is a change worth stating rather than arriving at.
+
+**What is built and what is not.** `fired::ENDING_A_TURN` is the ten recipes in `P-379`'s stated
+order, and `tests/fired.rs` holds it against the release. **The model still runs the old rolled-up
+functions**, which give the same answers in every case except the one above, so nothing is
+presently wrong in a way a player could see. The worked examples `R-7` needs cannot be generated
+until the model fires the new recipes by name, and that waits on this.
+
+---
+
 ### C-82 - `P-373`'s soft-line check is one line, and the notation cannot write a soft line
 
 **to** spec · **status** open · **raised** 2026-09-10 · **source** `P-373`, assessed rather

@@ -38,13 +38,27 @@ use game_model::{StructureKind, Transition, UnitKind};
 /// asterisks in it - so quoting it here would fail the guard for a difference in markup
 /// rather than in words. Worth knowing before trusting the guard to have read everything.
 ///
-/// **The names are the release's and the order is that sentence.** `tests/fired.rs` holds
-/// the set against the release's own *Recipes* table, read at test time, so a world recipe
-/// added or renamed fails here rather than quietly dropping out of the artifact. The order
-/// is a reading of the sentence above and is not checked by anything, which is worth knowing
-/// when trusting it: the sentence names four moments and there are six recipes, so `perish`
-/// is placed with `grow` and `age` with `spoil`.
-pub const ENDING_A_TURN: [&str; 6] = ["upkeep", "grow", "perish", "spoil", "age", "refresh"];
+/// **The names are the release's and the order is now stated rather than read** - `P-379`:
+/// *`upkeep`, then `bear`, `breed` and `renew`, then `perish`, then `age`, then `spoil`, then
+/// `stow` and `discard`, then `refresh`.*
+///
+/// **This used to be six names in an order nothing checked.** The sentence in `spec/turn.md`
+/// named four moments against six recipes, so two of them were placed by a reading - `perish`
+/// with `grow`, `age` with `spoil` - and a wrong placement would have gone unnoticed. The
+/// release states the whole order now, so the order is quoted rather than inferred.
+///
+/// **Ten, because the saturating rewrite split the three that varied.** `grow` is gone: it
+/// consumed *the lesser of the surplus food and the citizens here*, which is a quantity read
+/// from the state, and `P-373` says such a rule is written as a smaller one that fires as many
+/// times as it can. `bear`, `breed` and `renew` are that rule, and `stow` and `discard` are
+/// the same treatment of what used to be one capacity clamp.
+///
+/// `tests/fired.rs` holds the set against the release's own *Recipes* table, read at test
+/// time, so a world recipe added or renamed fails here rather than quietly dropping out of
+/// the artifact.
+pub const ENDING_A_TURN: [&str; 10] = [
+    "upkeep", "bear", "breed", "renew", "perish", "age", "spoil", "stow", "discard", "refresh",
+];
 
 /// What one command fired, if it fired anything.
 pub struct Fired {

@@ -66,13 +66,16 @@ fn declared() -> Vec<(String, String)> {
     out
 }
 
-/// The six recipes an `end turn` runs are the six the release calls the world's.
+/// The recipes an `end turn` runs are the ones the release calls the world's.
 ///
-/// **The set is checked and the order is not**, and the difference is worth stating rather
-/// than leaving for a reader to assume. `spec/turn.md` names four moments - upkeep, then
-/// growing or starving, then what expires, then everything becoming ready - and there are
-/// six recipes, so two of them are placed by reading rather than by being told. A world
-/// recipe added or renamed fails here; one put in the wrong place does not.
+/// **The set is checked and so is the order now** - `P-379` states it, where `spec/turn.md`
+/// named four moments against what were then six recipes and left two to be placed by
+/// reading. A world recipe added, renamed or moved fails here.
+///
+/// **A name deduplicated, and it is not a shortcut.** The release states `stow` twice and
+/// `discard` twice - once for metal and once for energy - because `P-373` makes a rule whose
+/// subject is a family a rule for each of them. They are one recipe applied to two kinds, and
+/// what fires at a turn's end is the recipe, so the set is over distinct names.
 #[test]
 fn ending_a_turn_runs_exactly_the_recipes_the_release_calls_the_worlds() {
     let mut worlds: Vec<String> = declared()
@@ -81,6 +84,13 @@ fn ending_a_turn_runs_exactly_the_recipes_the_release_calls_the_worlds() {
         .map(|(name, _)| name)
         .collect();
     worlds.sort();
+    let repeated = worlds.len();
+    worlds.dedup();
+    assert!(
+        repeated > worlds.len(),
+        "no world recipe is stated twice, so the deduplication above is doing nothing and \
+         should go"
+    );
 
     let mut ours: Vec<String> = fired::ENDING_A_TURN.iter().map(|s| s.to_string()).collect();
     ours.sort();
@@ -91,8 +101,8 @@ fn ending_a_turn_runs_exactly_the_recipes_the_release_calls_the_worlds() {
     );
     assert_eq!(
         worlds.len(),
-        6,
-        "six world recipes; the release has {}",
+        10,
+        "ten world recipes; the release has {}",
         worlds.len()
     );
 }
