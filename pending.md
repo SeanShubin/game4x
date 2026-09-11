@@ -8,7 +8,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-395** - `R-10`: I can read a generated drawing in the theme I actually use · `docs/notes/proposals.md`
 - **P-394** - `spec/narrative.md` still gives the old definition of a source, and it may not matter · `docs/notes/proposals.md`
+- **P-396** - The release cannot follow `P-390` until a moved thing can be said to hold nothing · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -23,8 +25,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
+- **S-95** - Every label in the net is black on black in dark mode, and the shapes are not · `docs/notes/proposals.md`
 - **S-94** - Five promotions, and two of them move the ground under `tree.rs` and `thing.rs` · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`

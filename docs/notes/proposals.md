@@ -62,6 +62,42 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-395 - `R-10`: I can read a generated drawing in the theme I actually use
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Capabilities
+
+**Sean, 2026-09-11**: *while the coding instance owns implementation, my ability to interpret its
+artifact belongs to spec.* **This is that boundary written down**, prompted by the whole net, whose
+62 labels are all present in the file and all painted black on a dark background.
+
+**The capability, to follow `R-9`:**
+
+> ### R-10 - I can read a generated drawing in the theme I use
+>
+> - **In** - `docs/process.md`, *I reject AI responses that do not read clearly and unambiguously to
+>   a human*, applied to a drawing rather than to prose
+> - **Vetted when** - every generated drawing is legible in **both** a light and a dark reader,
+>   because nothing in it declares a colour the theme does not supply. **Every node carries its own
+>   name**, and I can say what a node is without looking anything up. Where a drawing is too large
+>   to satisfy that whole, it is shown in parts that do, and it says what each part leaves out
+
+**Why a capability rather than a defect report.** The defect is one attribute and the code lane has
+it - `S-95`. **What it cannot have is the standing requirement**, because a fix closes an item and a
+capability keeps asking. `R-9` is the precedent: *no page needs JavaScript to be read* outlives the
+page that prompted it.
+
+**The second sentence is doing separate work from the first.** Colour is why you cannot read this
+drawing today. **Naming is why you would not be able to read the next one** - a drawing whose nodes
+are numbered with a key elsewhere satisfies the colour half and fails you anyway. **This lane checked
+the first before asserting it and did not check the second**: the whole net's nodes are all named
+today, so that clause guards a future rather than describing a fault.
+
+**The third sentence is the one to argue with.** *Shown in parts* is this lane's inference from your
+complaint, not your words - you said you could not interpret the big graph, and a 900 by 1406
+drawing of 62 nodes and 195 arcs may not be interpretable at any colour. **If the whole net is
+supposed to stay whole and legible, strike that clause** and the requirement gets harder rather than
+weaker.
+
 ### P-394 - `spec/narrative.md` still gives the old definition of a source, and it may not matter
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/narrative.md` -> Violence and order · from `P-389`
@@ -89,6 +125,38 @@ words, reject this** - `P-370` already licenses it, and this lane would not rais
 
 
 ## Addressed to other perspectives
+
+### S-95 - Every label in the net is black on black in dark mode, and the shapes are not
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** Sean: *"The whole net", I don't see labels*
+
+**Counted in `reports/petri.html` rather than rendered**, because this lane cannot open the file in a
+browser and guessed twice before measuring:
+
+| In the whole-net drawing | Declares `currentColor`             |
+| ------------------------ | ----------------------------------- |
+| 23 circles               | 23                                  |
+| 39 rects                 | 39                                  |
+| 195 arcs                 | 195                                 |
+| **62 `<text>` elements** | **0** - none declares a fill at all |
+
+**SVG's initial `fill` is `black`, not `currentColor`.** `report.css` sets `color-scheme: light dark`,
+so in dark mode the background is dark, every shape follows `currentColor` and stays visible, and
+**every label is painted black on it.** The drawing Sean has been looking at has no readable names in
+it, and the labels are all present in the file - which is why reading the source said they were fine.
+
+**Every node is labelled**, so nothing is missing and nothing needs generating: 23 place labels and
+39 transition labels, one per node, counted. **It is one attribute.**
+
+**The other reports are not affected** - they have no `<svg>` at all, so this is the only artifact
+with the defect. **A check that would have caught it** is whatever you would write for *no generated
+drawing declares a colour the theme cannot supply*; this lane is naming the property rather than the
+mechanism, since `docs/process.md` makes the implementation yours.
+
+**And Sean has made the general point rather than only reporting the bug** - *while the coding
+instance owns implementation, my ability to interpret its artifact belongs to spec*. **That is a
+capability and it is `P-395`**, filed to him in the same turn as this. Expect it to arrive as a
+release item with a *vetted when* line rather than as an instruction.
 
 ### S-94 - Five promotions, and two of them move the ground under `tree.rs` and `thing.rs`
 
