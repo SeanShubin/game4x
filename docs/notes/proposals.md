@@ -62,127 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-368 - Nothing comes back round with more, and what a rule may cost
-
-**to** sean · **status** open · **raised** 2026-09-10 · **rewritten** 2026-09-10, because Sean
-articulated the end the first version left open · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md`, two new sections after *The game is data*
-
-**Your words of 2026-09-10**, which turned this from a means with no stated purpose into a purpose
-with a means under it: *I essentially want to be able to guarantee an analog to the second law of
-thermodynamics in this fictional physics … I can never cycle through a list of recipes and end up
-with more than what I started with, although I can end up with less.*
-
-**Two sections, in the order they go in.**
-
-> ## Nothing comes back round with more
->
-> - **There is a weighting of the kinds, and under it no sequence of rules ends holding more than it
->   began with.** It may end with less - that is disorder, and disorder is meant. What it may never
->   do is come round to where it started with a gain
-> - **The weighting is where it is said what counts.** A kind weighed at nothing may be made freely;
->   a kind that is weighed may not be made from nothing
-> - **A source is named, and a named source is not a gain.** A star's energy and a planet's material
->   are endless. What is finite is the gathering - bounded by the finite things that do it, in a
->   finite number of turns - so an endless well behind a bounded pump takes nothing away from the
->   rule above. **Outside what is named this way, nothing increases**
-> - **Whether this holds is decided mechanically, from the rules alone**, and stays so however many
->   rules there are. **The game is meant to become complicated by simple things interacting**, and an
->   invariant only a careful reader could confirm would not survive that
-
-> ## What a rule may cost
->
-> These are what make the rule above checkable rather than merely believed.
->
-> - A rule's amounts are constants. **What one firing takes and makes does not depend on how much of
->   anything is present**
-> - Where a rule would need a quantity that varies, it is written as a smaller rule that fires as
->   many times as it can. **The quantity is then how often it fired**, rather than a number it read
-> - A rule whose subject is a family of kinds is a rule for each of them. **A family is not a thing a
->   rule can take one of**
-
-## Why the first section is exactly what you described
-
-**Your second law has a precise form, and it is one this repository already computes.** A weighting
-under which every rule is non-increasing is what makes *no cycle gains* true of every sequence at
-once - because a sequence's effect is the sum of its rules' effects, and a sum of non-positive
-numbers is non-positive. **So the property holds for all sequences without anyone enumerating
-them**, which is the whole of why it can be checked quickly.
-
-**The research lens's two checks are the two halves of it.** Check 1 looks for the weighting; check 2
-looks for a cycle that gains, and reports the firing ratio as a witness when it finds one. **They are
-already run and already poisoned**, so this section is not a new instrument - it is the statement of
-what the instruments have been for.
-
-**Your allowance for endless sources is the third bullet and it is already implemented.** Check 1
-reads *declared sources, excluded: work*; check 2b re-runs the same question with the sources removed,
-which is the version that would catch a second well nobody declared.
-
-## Two things this deliberately says and one it does not
-
-**It says a weighted total rather than a count**, because citizens increase and that is the point of
-the game. The weighting is where *what must not be created* is written down, and today a citizen is
-weighed at nothing while metal is weighed by its Binding. **Without that sentence the rule would
-forbid population growth**, which is not what you said.
-
-**It says *in a finite number of turns*** rather than leaving the gathering merely bounded, which is
-your phrasing and is the part that makes an endless star safe.
-
-**It does not say what a glitch costs or what happens when one is found.** That is a process
-question, and `docs/process.md` is where it would live.
-
-## What it makes true of the release today, measured
-
-`tools/research/formulas/check.py`: **check 1 analyses 13 recipes and skips 5**, and **check 2 has 18
-transitions and skips 3** - every one for a state-dependent amount. So the second section names five
-existing recipes as defects rather than leaving them unremarked, and **all five have a way back with
-no new construct**: four are minima, which is what a constant-weight rule fired to saturation
-produces, and the fifth is `perish`, which is a family in a selector.
-
-**Your resource X is the worked case.** Two constant-weight rules - each citizen makes one X, and a
-birth costs one X and one food - reproduce `population_after` over all 2400 citizen-and-food pairs
-with no disagreement, and the doubling cap stops being a clause because only `C` of X ever exist. The
-working is in [the note](2026-09-10-constant-amounts.md). **It is a release edit and is drafted
-separately**, because this is the invariant that justifies it.
-
-### P-367 - What nature takes back, and from which units
-
-**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/control.md` -> Holding
-
-**Two things disagree in two lines, and you have answered one of them.** From `C-77`, filed by the
-code lane rather than built, because building it would have put `crates/` in contradiction with a
-normative sentence.
-
-**Replacing the third bullet of *Holding*:**
-
-> - Should the force in a territory fall below its force of nature, nature takes it back. Its entire
->   population perishes, and every unit on it is destroyed
-
-**The first disagreement is answered.** `spec/control.md` says an ark on a lost territory **becomes
-unusable**; you said, 2026-09-09, *what losing control means is an interesting question, but I think
-for now we just delete the units.* **Deleting and marking unusable are different rules and the
-written one is the other one**, so the code lane declined to build it and filed instead. That was
-right.
-
-**The second is a choice, and it is the reason this is worth reading rather than just approving.**
-The specification names **an ark**. `crates/game-model/src/game.rs:915-919` marks **every unit** on
-the territory, so a pioneer is caught by a sentence that does not mention it. Your *we just delete
-the units* is plural and unqualified, and the offered line follows it - **but if `ark` was
-deliberate, a pioneer survives its colony being taken and this is wrong.** Say so and it becomes a
-decision.
-
-**One thing changed under this sentence yesterday, and it was this lane's doing.** `P-365` defines an
-orbit boundary as one an orbit is on either side of - *between an orbit and the territory below it*,
-or between two orbits - and says a unit that crosses them may cross any. **So an Ark may now move
-down onto a territory without deploying**, which makes *an ark on it* a reachable state rather than a
-dead phrase.
-
-**That cuts against something you told the research lens** - *an ark is only ever in orbit; it lands
-to deploy and stops being an ark* - which is not in `spec/` and so is not normative, while
-`spec/control.md`'s *any ark on it* has always assumed the opposite. **`P-365` did not create the
-tension and this lane did not flag it, which it should have.** If an Ark should not be able to sit on
-the ground, that is a third question and a separate proposal; nothing here decides it.
-
-
 ## Addressed to other perspectives
 
 ### S-86 - Three cleanups the eight promotions leave behind
@@ -3242,6 +3121,8 @@ work the release exists to order.
 | P-364, designing a world is made of the same rules as playing one                                                            | `spec/console.md` -> Commands                                                                                                                                                                            | 2026-09-10 |
 | P-365, what an orbit boundary is, and that a unit moving in orbit takes its energy from the sun                              | `spec/orbit.md` -> Crossing between layers, `spec/units.md` -> What a unit is                                                                                                                            | 2026-09-10 |
 | P-366, a selector is not a description, and what a value may be                                                              | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-10 |
+| P-367, nature takes back a lost territory, and every unit on it is destroyed                                                 | `spec/control.md` -> Holding                                                                                                                                                                             | 2026-09-10 |
+| P-368, nothing comes back round with more, and what a rule may cost                                                          | `spec/invariants.md`, two new sections                                                                                                                                                                   | 2026-09-10 |
 
 ## Rejected
 

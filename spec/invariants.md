@@ -109,4 +109,30 @@ specific rule.
 - A trait may be derived rather than stored, computed from what is there. Nothing can leave a
   derived trait wrong, because nothing writes one
 
+## Nothing comes back round with more
+
+- **There is a weighting of the kinds, and under it no sequence of rules ends holding more than it
+  began with.** It may end with less - that is disorder, and disorder is meant. What it may never
+  do is come round to where it started with a gain
+- **The weighting is where it is said what counts.** A kind weighed at nothing may be made freely;
+  a kind that is weighed may not be made from nothing
+- **A source is named, and a named source is not a gain.** A star's energy and a planet's material
+  are endless. What is finite is the gathering - bounded by the finite things that do it, in a
+  finite number of turns - so an endless well behind a bounded pump takes nothing away from the
+  rule above. **Outside what is named this way, nothing increases**
+- **Whether this holds is decided mechanically, from the rules alone**, and stays so however many
+  rules there are. **The game is meant to become complicated by simple things interacting**, and an
+  invariant only a careful reader could confirm would not survive that
+
+## What a rule may cost
+
+These are what make the rule above checkable rather than merely believed.
+
+- A rule's amounts are constants. **What one firing takes and makes does not depend on how much of
+  anything is present**
+- Where a rule would need a quantity that varies, it is written as a smaller rule that fires as
+  many times as it can. **The quantity is then how often it fired**, rather than a number it read
+- A rule whose subject is a family of kinds is a rule for each of them. **A family is not a thing a
+  rule can take one of**
+
 ## Open questions
