@@ -62,6 +62,110 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-373 - What soft means, and where it may not be used
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost
+
+**Your decision of 2026-09-10**, on the two readings of soft coinciding only by accident: *yes lets do
+this.*
+
+**Added to the end of *What a rule may cost*:**
+
+> - **A line may be soft**: where it cannot do all of what it says, it does what it can and the rule
+>   goes on regardless. **Soft means what holds it will not take another** - never *there is one
+>   already*. Those differ wherever a capacity is more than one, and agree only by accident where it
+>   is one
+> - **A soft line names something with a finite capacity.** Where nothing bounds it there is no room
+>   to be short of, so such a line either does nothing at all or asks whether a place is empty - and a
+>   rule able to ask that of an unbounded place puts every check above it out of reach
+
+## Why the two readings have to be told apart
+
+**The research lens lists them as separate options and calls them observably different.** *Soft,
+reading soft as the container is full* skips the line when nothing more will fit. *Soft, reading soft
+as one is already there* skips it whenever any is present. **For a garrison, capped at 1, those are
+the same rule** - which is why nobody has had to choose, and why the choice would be made by whoever
+first wrote a soft line against a capacity of two.
+
+**The first reading is a question about room; the second is a question about emptiness**, and only the
+first can be asked without new power.
+
+## Why the second bullet is the one that matters
+
+**A test for emptiness is the one question an ordinary rule cannot ask.** A rule can require that
+things are present - that is what consuming them is - and nothing lets it require that they are
+absent. **That asymmetry is why the rules can be checked at all.**
+
+Where a capacity is finite the asymmetry survives, because *there is none here* can be asked as
+*the room is untouched*, which is a question about presence. **Where nothing bounds a place there is
+no such room**, the question cannot be turned round, and a formalism that can ask it directly is
+equivalent to a general computer: **the checks stop being slow and start being impossible.**
+
+**It costs nothing today, checked.** The release has two soft lines - `age` on a thing's remaining
+turns, and `refuel` on a guard - and **neither is on an unbounded place.**
+
+**And it is mechanically checkable**, which is what `What a rule may cost` is for: for each soft line,
+is what holds it declared with a finite capacity? That is answerable from the declarations alone,
+with nothing run.
+
+
+### P-374 - Store the room, derive the total
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
+
+**Your idea of 2026-09-10**: *isn't this simply a matter of making total capacity derived from used
+and available instead?* - and, on destruction giving room back, *yes, we must enforce this.*
+
+**Replacing the bullet that begins *what a thing may contain is a maximum*:**
+
+> - What a thing may contain is a maximum **per kind, per family of kinds, or per kind carrying a
+>   particular value of a trait**. **What is stored is the room left**: how many more of that kind it
+>   could take. **Used capacity** is how many it holds, which is simply what is there, and **total
+>   capacity** is the two added. **Nothing records the total**, so nothing can disagree with it. A
+>   total capacity of four extractors is a maximum of four, so nothing a player builds ever crowds
+>   out something of another kind
+> - **Room is spent and given back.** Making a thing takes one of the room in whatever will hold it;
+>   **destroying it returns one**. The two never come apart, because the total is only ever their sum
+
+## What changes, and what is kept
+
+**One number per capacity is stored either way. Which one moves.**
+
+|            | Stored       | Derived                                                               |
+| ---------- | ------------ | --------------------------------------------------------------------- |
+| Today      | the total    | used, which is the count; available, which is the total less the used |
+| Under this | **the room** | **the total**, which is room and used added                           |
+
+**The guarantee survives by a different route.** Today *neither can disagree with what is there*
+because available is computed. Under this it holds because **the total is never written down at
+all** - it is a sum, and the sum cannot drift from its parts.
+
+**And world-building is unchanged.** `set resource <territory> <resource> <extractors> <density>`
+declares the capacity, which is now the room a territory starts with. Nothing about the command
+moves.
+
+## Why it is worth doing
+
+**Every arc becomes a constant.** Making a thing is *take one room, make one thing*; destroying it is
+*take one thing, give one room*. **No rule has to ask how full anything is** - it either has a room
+token or it does not, which is the only question the rules above permit.
+
+**It is what makes `P-373`'s first reading expressible.** *What holds it will not take another* is
+*there is no room token*, a question about presence. Without stored room there is nothing to be
+present, and the same question can only be asked about emptiness.
+
+## One thing this does not say, deliberately
+
+**Room is not conserved and this does not claim it is.** The bullet below the replaced one says *a
+thing that contains things takes up capacity in whatever contains it, so capacity is not conserved* -
+and that stays true. **Building a store spends one of a territory's room and creates ten of the
+store's own.**
+
+So room is conserved **within one container for one kind**, which is what makes the total derivable,
+and **not across the game**, which is why room does not join the weighting `P-368` describes. **Those
+two are easy to confuse and only the first is claimed here.**
+
+
 ### P-372 - The release learns the words `P-369` gave the specification
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> What bounds a kind in a territory · answers `C-80` and `X-20`

@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-373** - What soft means, and where it may not be used · `docs/notes/proposals.md`
+- **P-374** - Store the room, derive the total · `docs/notes/proposals.md`
 - **P-372** - The release learns the words `P-369` gave the specification · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
