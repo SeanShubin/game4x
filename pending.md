@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-387** - A line that makes may be soft, and a line that takes may not · `docs/notes/proposals.md`
-- **P-388** - Is the weighting declared or solved for, and what names a source · `docs/notes/decisions.md`
+- **P-388** - Two choices between you and a checked no-gain invariant · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`

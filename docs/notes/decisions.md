@@ -21,53 +21,64 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-388 - Is the weighting declared or solved for, and what names a source
+### P-388 - Two choices between you and a checked no-gain invariant
 
-**to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed - **asks** a decision - **into** `releases/first-release.md` -> Kinds, and a check for the code lane
+**to** sean - **status** open - **raised** 2026-09-11 - **rewritten** 2026-09-11, because its first version named the wrong source - **kind** entailed - **asks** a decision - **into** `releases/first-release.md` -> Kinds, and a check for the code lane
 
-**You asked for what it takes to enforce *nothing comes back round with more* in production.** Three
-of the four pieces exist. **This is the one that does not, and it is a choice rather than work.**
+**The invariant is a place invariant of the recipe net**: a weighting `w` over the kinds where, at
+every recipe, `w · (made - taken) <= 0`. Whether one exists is a linear feasibility question over 73
+rows and sixteen kinds. **That is what *decided mechanically, from the rules alone* can be.** Three
+of the four pieces exist - see the end. **Two choices are yours.**
 
-**What the invariant is, mechanically.** `spec/invariants.md` describes a **place invariant** of the
-recipe net: a weighting `w` over the kinds where, at every recipe, `w · (made - taken) <= 0`. Whether
-such a `w` exists is a linear feasibility question over a matrix with one row per recipe and one
-column per kind - **73 rows and sixteen kinds today.** That is what *decided mechanically, from the
-rules alone* can be.
+## What this lane got wrong, corrected before you choose
 
-**The two sentences that describe the weighting do not agree about who writes it.**
+**`P-388` first said a deposit is the source and that `work` draws metal from it. Nothing in the
+release touches a deposit** - counted over every recipe row. A deposit supplies the *number* `work`
+produces, through a trait, and is never taken. **`work` makes resources out of labor and readiness**,
+which is where the gain actually is.
 
-| The sentence                                    | What it implies                                                                           |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| *The weighting is where it is said what counts* | **you declare it** - a number per kind, carrying which kinds the game treats as wealth    |
-| *decided mechanically, from the rules alone*    | **the check derives it** - it solves for any `w` that works, and reports that none exists |
+**The unpaid input in this game is readiness, and only one recipe makes it.** `refresh` is the sole
+recipe that produces a thing marked `ready`, and it is a **world** recipe that fires at the turn's
+end. Three player recipes take one: `move`, `create labor`, `work`. **So the turn is the well and the
+ready things are the pump**, which is `spec/invariants.md` in its own words - *what is finite is the
+gathering, bounded by the finite things that do it, in a finite number of turns.*
 
-**They are not opposites and the order matters.** Solving first is strictly more informative: **if
-no weighting exists, no declaration can rescue it**, and the solver names the cycle that gains.
-Declaring first says what you meant, and a solver that finds *some* `w` may find one that weighs
-labor at nothing and calls the game safe for a reason you would not accept.
+## Choice A - who writes the weighting
 
-- **Declared.** A **Weight** column on *Kinds*. The check verifies one inequality per recipe and
-  names the recipe that fails. Simplest to build, and the numbers are yours to invent
-- **Derived.** No new data. The check solves for `w` and fails when the rules admit none, reporting
-  the recipes that force it. Nothing to invent, and it cannot tell you the answer is one you dislike
-- **Both, in that order.** Derive to prove one exists, declare to say which one is the game's, and
-  check the declared one. Two mechanisms and one question answered twice
+`spec/invariants.md` says both *the weighting is where it is said what counts* and *decided
+mechanically, from the rules alone*, which do not agree about the author.
 
-**A second thing has to be named whichever you choose**, because the rule exempts it: *a source is
-named, and a named source is not a gain.* **Nothing in the release names one.** `deposit` is *what a
-territory's ground offers of one resource*, and `work` produces from it - so a deposit is the obvious
-candidate and the release never says so. **Without the exemption every weighting fails at `work`**,
-which makes metal out of a deposit and would read as a gain.
+|       | Option                    | What you do                                                                                                           | What it cannot tell you                                                                                 |
+| ----- | ------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **1** | **Declared**              | put a **Weight** column on *Kinds*; the check verifies one inequality per recipe and names the one that fails         | nothing - but the numbers are yours to invent, and a wrong guess reads as a broken game                 |
+| **2** | **Derived**               | nothing; the check solves for any `w` that works and fails when none does, naming the recipes that force it           | whether the `w` it found is one you would accept - it may weigh labor at nothing and call the game safe |
+| **3** | **Derived and published** | nothing; as 2, and the weighting it found is printed in a report you can read                                         | same, but you would see it - a disagreement becomes visible rather than silent                          |
+| **4** | **Partly declared**       | give weights only for the kinds you have an opinion about; the solver completes the rest or says no completion exists | nothing this lane can see. **It is 1 and 2 doing the halves each is good at**                           |
+| **5** | **Both in full**          | derive to prove one exists, then declare the one the game means, and check the declared one                           | nothing - it answers the question twice and costs two mechanisms                                        |
 
-**What does not need you.** The three remaining pieces are done or are the code lane's:
+## Choice B - what the rule exempts as a source
 
-- **Constant arc weights.** 72 of the 73 rows carry one. The exception is `work`'s *`$where`'s
-  density for that resource*, and `P-376` already permits and resolves it - *one rule with a number
-  per case ... which whatever reads it may spell out.* Unfolding it is reading, not a new rule
-- **No zero tests.** `P-385` deleted the only two `limit` rows, so nothing in the release asks
-  whether a place is empty. That matters more than it looks: with such a test the net is
-  Turing-complete and nothing about it is decidable
-- **Soft lines.** `P-386` keeps softness on what a rule makes, and a soft line only ever makes
-  **less** - so a weighting that holds where everything is made holds for every partial firing. The
-  matrix is unchanged by softness, which is why that bullet was worth landing first
+*A source is named, and a named source is not a gain.* **Nothing in the release names one**, and
+without an exemption no weighting can exist, because `refresh` makes readiness from nothing.
 
+|       | Option         | What is named                                                                                  | Consequence                                                                                                                                                                      |
+| ----- | -------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** | **The recipe** | `refresh` is declared to draw on a named source; every other recipe must satisfy the weighting | one row of data, and any future world recipe that re-arms must be named too or the check goes quiet about it                                                                     |
+| **2** | **The phase**  | the invariant is required of the **player's ten recipes** and not of the world's ten           | no new data at all. Readiness is not restored during a player's phase, so the player's net is already acyclic in it                                                              |
+| **3** | **The trait**  | readiness is weighed at nothing, so `refresh` gains nothing by construction                    | **this one does not work**, and is listed so it is not tried: if readiness weighs nothing then `create labor` makes labor out of nothing, and `work` makes resources out of that |
+
+**Option 2 is the one this lane would take if it were choosing, and it is not.** It needs nothing
+written, it matches what `X-29` found independently - *the player's recipes are an ordinary Petri net
+and the world's are not* - and it is the sublanguage a player will author rules in, which is where an
+unenforced invariant would actually hurt. **Option 1 is stronger**: it asks the question of the whole
+game rather than half of it, and would catch a world recipe that gains.
+
+## What needs nothing from you
+
+- **Constant arc weights.** 72 of 73 rows carry one. `work`'s *`$where`'s density for that resource*
+  is the exception, and `P-376` already resolves it - *one rule with a number per case ... which
+  whatever reads it may spell out*
+- **No zero tests.** `P-385` deleted the only two `limit` rows. With one, the net is Turing-complete
+  and nothing about it is decidable
+- **Soft lines.** `P-386` keeps softness on what a rule makes, and a soft line only ever makes less,
+  so a weighting that holds where everything is made holds for every partial firing
