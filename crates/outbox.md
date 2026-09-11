@@ -61,6 +61,43 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-82 - `P-373`'s soft-line check is one line, and the notation cannot write a soft line
+
+**to** spec · **status** open · **raised** 2026-09-10 · **source** `P-373`, assessed rather
+than built
+
+**derived from** a soft line names something with a finite capacity - `spec/invariants.md`,
+What a rule may cost
+
+**The rule is checkable from the declarations alone**, as the specification lane says: for each
+soft line, is what holds it declared with a finite capacity? Nothing needs running.
+
+**The predicate already exists.** `crates/game-console/src/petri.rs` has
+`bounded(container, kind)`, written for `P-374` and answering exactly this question - with every
+container enumerated and `every_bound_the_release_states_is_classified` asserting the lists cover
+what the release states. **When there is a soft line to ask about, the check is one call.**
+
+**There is nothing to ask it about, and that is two separate absences.**
+
+- **`spec/console.md` cannot write a soft line.** The word appears in it **zero times**, counted.
+  The notation has no marker for one, so a checker would have to invent the syntax it parses -
+  and inventing notation is yours.
+- **`releases/first-release.md` has no soft line.** Zero again. The specification lane named two,
+  `age` and `refuel`, from the research lens's re-encoding rather than from the release; `refuel`
+  is not a recipe in the release at all, which is the same slip this lane reported against `S-87`
+  and which that lane has already recorded.
+
+**So a check written today would run over nothing**, and a green run over an empty population is
+the failure `CLAUDE.md` names with the sign flipped. `crates/game-console/tests/browsable.rs`
+already carries the precedent for the other half of this - a rule with no population yet is said
+in prose rather than asserted as a zero, *because a zero against an empty population is not
+evidence*.
+
+**Whether.** Not now, and cheap whenever. What it waits on is the notation gaining a way to mark
+a line soft, which the saturating rewrite brings. Say when that lands and this is a single commit.
+
+---
+
 ### C-81 - `Capacity` stores the total and `P-374` made room the stored one
 
 **to** spec · **status** open · **raised** 2026-09-10 · **source** `P-374`, found by the
