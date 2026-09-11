@@ -97,6 +97,37 @@ written in those words - *what one firing takes and makes does not depend on how
 present*. **Say the word if you would rather the spec said cost and effect**, and the bullet changes
 here rather than on the way in.
 
+## Why this rule is what makes softness safe for your invariant
+
+**Added 2026-09-11, when Sean said the Petri net is for enforcing *nothing comes back round with
+more*.** The quotation above is unchanged; this is the reason to approve it rather than a change to
+it.
+
+**That invariant is a place invariant of the net** - a weighting `w` over places with
+`w · (made - taken) <= 0` at every transition - which is `spec/invariants.md` in as many words:
+*there is a weighting of the kinds, and under it no sequence of rules ends holding more than it
+began with*, and *whether this holds is decided mechanically, from the rules alone*.
+
+**A soft line is a conditional effect, and conditional effects are not free.** `X-11` carries the
+result: Gazen and Knoblock's compilation removes them by expanding one operator per combination of
+which conditions hold, exponential and shown not improvable. So making every bounded make soft costs
+something real - `deploy ark` has five of them, which is thirty-two ordinary transitions.
+
+**It costs nothing for this invariant, and the reason is the direction softness runs.** A soft line
+does **less** than it says, never more. So if `w` is non-increasing for the firing where everything
+is made, it is non-increasing for every partial firing, because producing less can only reduce the
+gain. **The full-production case bounds all thirty-two**, and the matrix stays the one that is
+already there.
+
+**That holds only because softness is on what a rule makes.** A soft **take** would consume less
+than it says, which is a gain, and one such line would put the invariant out of reach of the same
+argument. **So this bullet is not merely compatible with what you want from the net - it is the
+condition under which softness and the invariant can coexist**, and it gives `P-378`'s `[soft]`
+attachment its job: it may never mark a take.
+
+**Stated as reasoning rather than measured.** What is measured is the release: 73 recipe rows, 72 of
+them with a constant quantity.
+
 **One line already there still wants one word, and it is filed on landing rather than now.** *A line
 may be soft* describes an option where, for a bounded make, there is none. **`P-378`'s `[soft]`
 attachment also needs a job**: if softness follows from the role, it is either redundant or it is how
