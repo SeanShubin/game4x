@@ -107,6 +107,56 @@ nothing is built on either reading.
 built; if a garrison is there it fails to build because of the limit, but doesn't fail the command,
 because the garrison wasn't a cost - it was an effect.* `P-385` is what it leaves open.
 
+### P-385 - The two `limit 0 garrison` rows go, and repeated deployment is the player's
+
+**to** sean · **status** open · **cited** `985adaa` · **raised** 2026-09-11 · **rewritten** 2026-09-11, twice - it asked hard-or-soft, which `P-386` answers generally, then asked whether repeated deployment is intended, which you had decided · **kind** entailed, from `X-12` and `C-87` · **shape** instruction · **asks** approval · **into** `releases/first-release.md` -> Recipes
+
+**Sean, 2026-09-11**: *repeated deployments are player choice, safe because they are not capable of
+causing an infinite resource glitch.*
+
+**The instruction: delete both `limit 0 garrison` rows**, one from `deploy ark` and one from `found
+by land`. Nothing replaces them.
+
+**Why deleting rather than softening.** Under `P-386` the garrison is something the recipe *makes*,
+so it is soft already, and the garrison's **capacity of 1** is what stops a second one. The row is a
+hard gate standing in front of a line that a capacity already bounds - and the two are not the same
+test. `spec/invariants.md`: *soft means what holds it will not take another - never there is one
+already. Those differ wherever a capacity is more than one, and agree only by accident where it is
+one.* **A garrison's capacity is one, so this is that accident.**
+
+**What a second deployment then does.** Six of the seven things a deployment makes are bounded and
+stay soft on their own - the garrison not at all, the two extractors and two stores only where there
+is room. **`produce 2 citizen` is bounded by nothing**, so two citizens arrive every time. The Ark is
+spent either way, which is the part that makes it a choice rather than a free action.
+
+**The check the promoting commit runs**: `grep -c '| limit ' releases/first-release.md` returns
+**0**. Both rows are the only two uses of the `limit` role in the release, counted rather than
+recalled.
+
+## One thing this exposes, which is not a reason to wait
+
+**Your reason is a rule `spec/invariants.md` already states, and that rule says it is checkable
+rather than believed.** *There is a weighting of the kinds, and under it no sequence of rules ends
+holding more than it began with*, and *whether this holds is decided mechanically, from the rules
+alone*.
+
+**No weighting is declared anywhere.** Grepped across `spec/`, `releases/` and `crates/`: the only
+other matches are Petri arc weights, which are the quantity on a row and a different thing. **So
+nothing computes the property your decision rests on** - which does not make the decision wrong, and
+the arithmetic is in your favour on the case that worried the lens: an Ark costs 3 metal, 12 energy
+and 2 citizens, and a repeat deployment returns 2 citizens plus at most five built things worth one
+metal each.
+
+**Saying it because the rule asks to be mechanical and is not yet.** Whether that check is worth
+building is a separate question and this lane has not filed one.
+
+**The second question from `X-12` still stands on its own**: your sketch of the founding recipe
+**omits both stores**, which the release produces.
+
+**And deleting these leaves `Role::Limit` with no instance in the release**, so anything checking
+limits becomes a count over nothing. `crates/game-console/src/petri.rs` already tests
+`role == Limit && weight == 0`. **Told to the code lane when this lands**, not before.
+
 ### P-383 - Two more consequences of the shared index, and they belong in different sections
 
 **to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, because the second bullet was addressed to the wrong section · **kind** entailed · **shape** text · **asks** approval · **into** `docs/process.md` -> Who writes what, then All lanes · from `Q-59`

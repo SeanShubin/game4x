@@ -9,9 +9,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-386** - What a rule takes is hard and what it makes is soft · `docs/notes/proposals.md`
+- **P-385** - The two `limit 0 garrison` rows go, and repeated deployment is the player's · `docs/notes/proposals.md`
 - **P-383** - Two more consequences of the shared index, and they belong in different sections · `docs/notes/proposals.md`
 - **P-384** - A green suite under a change measures the tests, not the code · `docs/notes/proposals.md`
-- **P-385** - Does deploying onto a colony you already hold give it two more citizens · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
