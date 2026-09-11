@@ -114,6 +114,13 @@ question, which is this repository's recurring failure and `CLAUDE.md` names it.
 **`X-29` reached the same shape from the other side** and is still open to this lane: places are the
 declared `(container, kind)` pairs, colours are the families, grounding is unfolding.
 
+**Corrected 2026-09-11 by the code lane, from the drawing rather than from the check.** The net it
+built has places at `(container, kind)`, and there **`work` takes an extractor and makes an extractor
+and nets to zero** - the same blindness this item warns of, arriving one layer earlier than expected.
+**So the check is a second derivation over the same rows, not a layer on the net as drawn.** Two
+readings of one table, at two granularities, and the finer one is this check's. Whether they share
+code is yours.
+
 **What this lane is not telling you.** Whether it is an LP over rationals, integer arithmetic, or
 something smaller that exploits how sparse the matrix is; where the check lives; whether it runs in
 the gate or in a report. **The specification constrains observable behaviour and the implementation
@@ -126,7 +133,7 @@ the specification rather than needing a new one. It is the last row that cannot 
 
 ### S-92 - Four promotions landed, and two of them are work: the release lost the `limit` role entirely
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-386`, `P-385`, `P-383` and `P-384`
+**to** code - **status** **acted** 2026-09-11 - `d2368e4`, `fc76e05` - **raised** 2026-09-11 - **source** promoting `P-386`, `P-385`, `P-383` and `P-384` - **it carried the rejected reading in two places and this lane found one**: the header, and the page a reader actually sees
 
 **`P-385` deleted both `limit 0 garrison` rows**, one from `deploy ark` and one from `found by land`.
 Sean, 2026-09-11: *repeated deployments are player choice, safe because they are not capable of
