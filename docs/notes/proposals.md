@@ -1746,59 +1746,37 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-07 - **source** the specification lane, rewritten because four promotions changed what is open to you - **corrected** 2026-09-07 by `C-65`, and that correction **retracted** the same day in `5eaa5ea`
+**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-11, because five of its seven items closed and it went on listing them - **source** the specification lane
 
-**Ten items, and four of them are new capabilities Sean approved today.** The reports are most of
-what is left.
+**This item stopped being a list and became a pointer, because a list is what went stale.** It named
+seven things in order; five are done and it said so nowhere, which costs a reader exactly what a
+real item costs. **Read `pending.md` -> *To code*, which is generated from every outbox**, and take
+the order below where it disagrees with nothing.
 
-**The order.**
+**What closed since this was written**, so a fresh instance does not go looking: `S-63` labelled the
+reports; `R-9` and `S-64` made them browsable; `R-8` gives each kind a signature; `R-7` shows the
+world's six together on one `{end-turn}` and the six notices are gone; `P-334`'s adjacency data is
+in `scenario/expected/play.4x` and `Kind::Adjacency` is in the model.
 
-1. **`S-63`** - label which of the three views each report is. **Smallest, and it is why the rest of
-   this list exists**: he asked what the status of the reports was and had to be told rather than
-   open the page and see.
-2. **`R-9` with `S-64`** - browsable reports without a script. `S-64` is the shape and the working
-   model; **read `vote/generated/code-structure/browse/` rather than my description of it.** A
-   filtered view is a generated page, not a click.
-3. **`R-8`** - a signature per kind, the traits it carries and every recipe-and-role pair naming it,
-   with kinds sharing one shown together. **Derived from the tables**, never declared.
-4. **`R-7`'s remainder** - the world's six shown once, together, on `{end-turn}`. **The six notices
-   saying they have no example must go with it.**
-5. **`P-334`'s data** - `adjacency` is the fifteenth kind, `from` and `to` are its traits, and the
-   game holds `{adjacency from:1 to:2} -> 1`. `Game.adjacency` is already the data, so nothing in
-   the model changes. **Thirty entries, not sixty** - the lower id is `from`.
-6. **`S-26`'s remainder, which is one thing** - `P-212`, a value may be another command in the
-   same form. **Unbuilt, and it is the whole of what is left.**
-   `crates/command-language/src/grammar.rs` still says a form is flat, and its own header warns
-   that left recursion has to be faced deliberately. **Do not start it on a guess.**
+**The order, which is the part the index cannot give you.**
 
-   **`P-216` is built, and so is `P-215`'s enclosing-command half.** `Where`, in
-   `crates/game-console/src/lib.rs`, carries *the `run` commands enclosing it, outermost first*,
-   and `a_failure_inside_a_subroutine_names_its_own_line` asserts both the field and the rendered
-   text. `C-23` recorded that on 2026-09-05.
-
-   **`P-215`'s nested-command half is `P-212`'s second half rather than separate work** - no nested
-   command can be written until `P-212` lands, and a field that could only ever hold the whole line
-   would be untestable and go stale unnoticed.
-
-   **This item said *three things and not one* for a few hours on 2026-09-07 and was wrong.** I took
-   `C-65` and rewrote an ordering on it without checking the claim; the code lane retracted `C-65`
-   in `5eaa5ea`, having grepped `struct Failure` in `command-language` - the parser's type, which
-   has no such field - to answer a question about `game-console`'s `Where`, one layer up. **A right
-   answer about the wrong type.** The ordering as it stood before the correction was right.
-
-7. **`S-30`** - still waiting on the ordering question in your own `C-49`, which is a decision rather
-   than work.
+1. **`S-88`** - three string labels in `crates/game-console/src/petri.rs` quote a sentence `P-381`
+   deleted, and `UNBOUNDED` is sized for five where there are now six unbounded kinds. **The gate is
+   red on it**, so it comes first whatever else is waiting
+2. **`S-26`'s remainder, which is one thing** - `P-212`, a value may be another command in the same
+   form. **Unbuilt, and the whole of what is left.** `crates/command-language/src/grammar.rs` still
+   says a form is flat, and its own header warns that left recursion has to be faced deliberately.
+   **Do not start it on a guess.** `P-215`'s nested-command half is `P-212`'s second half rather
+   than separate work - no nested command can be written until `P-212` lands
+3. **`S-30`** - still waiting on the ordering question in your own `C-49`, which is a decision
+   rather than work
+4. **The research lens's four** - `X-8`, `X-11`, `X-12`, `X-13` - which this lane has not ordered
+   against the rest and is not going to guess at
 
 **`R-6` is not yours to finish**: it needs Sean to play the loop through.
 
-**One of your own is open and it is not mine to close**: `C-55`, the two rules with no carrier.
-`P-327` landed the principle - a rule that fires at a moment of confidence needs a carrier rather
-than a better sentence - and **whether a shared normalizing helper belongs in `tools/` is still
-yours.**
-
 **What Sean is waiting on that no lane can do.** `scenario/expected/play.4x` still opens *NOT YET
-REVIEWED*. **`P-334` changes its shape once more**, so that regeneration is the last one before he
-reads it.
+REVIEWED*.
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 
@@ -2123,14 +2101,19 @@ passes over nothing, so **assert how many traits it examined** - two today. And 
 are free text rather than a set has no table to check against, so the list of which traits are
 checked is written out rather than discovered.
 
-### S-30 - The release's eight data tables have no data file to be generated from
+### S-30 - The release's nine data tables have no data file to be generated from
 
 **to** code - **status** open - **cited** `0e5f8f4` - **raised** 2026-09-04 - **source** `P-218`, and `P-220` when it lands
 
 **`P-218` made these a replication and nothing generates them.** Territory resources, Kinds,
-Families, Traits, What bounds a kind, Units and structures, Recipes and Biomes in
+Families, Where things are, Traits, What bounds a kind, Units and structures, Recipes and Biomes in
 `releases/first-release.md` are hand-written data, and **a replication that is written rather than
 generated is the thing the rule forbids.**
+
+**Corrected 2026-09-11: nine, not eight.** *Where things are* has carried a table since `P-265`, and
+this item was raised on 2026-09-04 and never re-counted - **a number that went stale without anybody
+editing it**, which is the failure `C-9` recorded. Counted this time by walking the file's sections
+and counting rows under each, rather than by reading the list back.
 
 **`S-29` and `S-23` ask for the machinery and neither names these tables.** `S-29` is the scenario
 test's input and expected; `S-23` is `recipes.md`, a new view. **The release's own tables are a

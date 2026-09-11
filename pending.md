@@ -22,6 +22,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-83** - `985adaa` P-380 from C-83: two kinds nothing sweeps, and one kind nothing bounds · still open in `crates/outbox.md`
 - **C-82** - `6f04c44` P-378 from C-82: how a line is marked soft, which P-373 governs and nothing can write · still open in `crates/outbox.md`
+- **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
@@ -29,7 +30,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-88** - `P-381`, `P-380` and `P-382` landed: transients are swept, and three labels quote a deleted sentence · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
-- **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
+- **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
 - **X-8** - `C-74` answered: the three puzzles are one, and it is called grounding · `lenses/research/outbox.md`
