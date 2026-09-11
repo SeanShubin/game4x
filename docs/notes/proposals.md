@@ -62,6 +62,60 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-369 - Everything destroyed goes into disorder, and disorder is swept unless something holds it
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/resources.md`, replacing the *not kept in order* bullet
+
+**Your decision of 2026-09-10**: *make all of these situations disorder. Any material in disorder is
+swept at end of turn unless a container is present that has space for it.*
+
+**Replacing the bullet that begins *a thing not kept in order*:**
+
+> - **When a thing is destroyed its matter is left where it stood, in disorder.** Nothing is
+>   destroyed twice: what a thing was made of survives it, and only the arrangement is lost
+> - **Material in disorder is swept when the turn ends, unless something there can hold it and has
+>   room.** What is held is kept; what is not is gone
+
+**Most of this is already written and the code disagrees with it.** `spec/resources.md` says **matter
+is conserved and its arrangement is not**, and that **order is lost for nothing and restored only by
+work**. So a destroyed thing already owes its matter back, unarranged. What was missing is the
+sentence saying where it goes and what decides whether it survives.
+
+**Three cases stop being three.**
+
+| What happens                       | Today                                                                                              | Under this                                                                                                                                     |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| A thing with unmet upkeep perishes | `perish` produces the thing's metal - already right                                                | unchanged                                                                                                                                      |
+| Nature takes a territory           | `territory.rs:731` is `self.held.clear()` - **the matter vanishes**, against *matter is conserved* | the matter goes to disorder; no container survives, so the sweep takes it. **Same outcome, reached by the rule rather than by a special case** |
+| A unit is destroyed with it        | `game.rs:909` marks it `usable = false` and leaves it standing                                     | its matter goes to disorder like anything else                                                                                                 |
+
+**And it kills a trait that should never have existed.** `usable` is **not declared in the release**,
+so the dump cannot show it - the code says so twice in its own comments, *a mark no artifact could
+show*. A wrecked pioneer and a working one **print identically**, which breaks `spec/console.md`'s
+*no trait may be left out* and the release's *the dump reads back into the state it came from*.
+**With `P-367` destroying units and this rule taking their matter, `usable`'s last use is
+`has_lost`**, where *no usable unit* becomes *no unit*. The trait goes.
+
+## One thing this drops, and it is a change rather than a tidy
+
+The bullet being replaced says **keeping a thing in order costs labor, unless it is caught where it
+was made.** Your rule says a container with room is enough and says nothing about labor. **So the
+labor cost goes.**
+
+**It was never built** - a store holds what it holds and costs nothing to keep - so dropping it
+brings the specification to what the game does rather than the other way round. **But it was a real
+idea**: it made a store that catches an extractor's output cheaper than one you carry things to, and
+nothing replaces that. **If you want it kept, say so and this becomes a decision**; the offered text
+assumes you meant to drop it.
+
+## What it does not reach
+
+**The sweep is still a quantity that varies** - how much fits is the container's room less what is
+in it - so `end-of-turn losses` stays one of the five recipes `P-368` names as defects. **This
+proposal makes the rule uniform; it does not make it constant-weight.** That is the saturating
+rewrite, and it is separate.
+
+
 ## Addressed to other perspectives
 
 ### S-86 - Three cleanups the eight promotions leave behind
