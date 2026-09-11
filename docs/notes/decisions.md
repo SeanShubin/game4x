@@ -21,4 +21,68 @@ here without first becoming a proposal.
 
 ## Open
 
-*Nothing is open. A question only Sean can answer lives here while it is unanswered.*
+### P-405 - Where a token lives, now that the map form cannot tell two citizens apart
+
+**to** sean - **status** open - **raised** 2026-09-11 - **kind** entailed, from the code lane's `C-90` - **asks** a decision - **into** `spec/console.md` -> The language, and `spec/turn.md` -> Order of operations
+
+**The code lane found this while building `P-399` and filed it before committing the work that
+found it.** This lane checked it, and it is worse in two ways it did not report.
+
+## What it found
+
+**`P-399` moved readiness out of a thing's description and into its contents.** A citizen that has
+spent its labor token and one that has not are both `{citizen}`, differing only in what they hold.
+**`spec/console.md` keys the map on the description**, so *fourteen citizens, six of which have
+spent a token* has no written form. The state is reachable by playing - one `create labor` in a
+territory of two citizens makes it, and it lasts until the turn ends. **`containment::tree` refuses
+rather than writing a file that is wrong about six of fourteen.**
+
+## The first thing it did not report: the rule's own example is now stale
+
+**`spec/console.md` says**: *a description is a kind and **every stored trait that thing has***; a
+derived trait is never part of one, and **no trait may be left out** - `{citizen ready:yes} -> 8`
+and `{citizen ready:no} -> 6`, never `{citizen} -> 14`.
+
+**`ready` is the trait `P-399` deleted.** So the sentence that exists to forbid `{citizen} -> 14`
+now illustrates itself with a trait the game does not have - **and `{citizen} -> 14` is exactly what
+the form must now write.** The rule did not merely lose a case; it lost the case it was written
+from.
+
+## The second: what the dump writes today is ambiguous, and it is in a file you read
+
+`scenario/expected/play.4x`, territory 1:
+
+> `{citizen} -> 8`
+> `{readiness for:bearing} -> 1`
+> `{readiness for:labor} -> 1`
+
+**Is that one token each, or one token between eight?** `spec/console.md` says *where a thing is, is
+where it appears* and nothing about how a quantity nested under a grouped entry is read. **It must
+mean one each, because one between eight would make the eight non-identical** - which the form
+cannot say. **So the file is correct only under a convention nobody has written**, and a reader
+deriving the dump by hand has no way to know it.
+
+## Four ways, and the fourth is this lane's
+
+|       |                                                                                                                                                      | Costs                                                                                                                  |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **1** | **A citizen carries an `id`** - `spec/console.md` already says a thing with one has a description no other shares                                    | twelve territories of individually named citizens, and a dump that grows with the population                           |
+| **2** | **The map keys on a description *and its contents***                                                                                                 | a change to the notation, and every nested entry becomes part of a key                                                 |
+| **3** | **Readiness goes back to being a stored trait**                                                                                                      | undoes `P-399`'s shape, and the trait model could not express *two labor a turn*, which was your reason for leaving it |
+| **4** | **A token is held by the place, not by the interchangeable thing** - `{readiness for:labor} -> 8` beside `{citizen} -> 8`, and *six spent* is `-> 2` | `P-390` says a **kind** declares how many a **thing** holds; the bound becomes one per thing that can take that action |
+
+**Why this lane offers a fourth.** The first three are all about the **writing** - name the things,
+change the key, or move the fact back into the key. **The fourth asks where the fact belongs**, and
+answers that a citizen with no `id` is not a thing you can say anything about individually. Your own
+rule is the argument: *there is never a quantity of a thing with an `id` - it is one thing.* **The
+contrapositive is that a quantity of fourteen is fourteen interchangeable things, and which of them
+spent a token is not a fact about the game.**
+
+**It is also the only one of the four that writes the state `C-90` says has no form**, without an
+id and without touching the notation. **A unit is unaffected either way**, because a unit carries an
+`id` and can hold its own.
+
+**This lane is not recommending**, because three of the four change what you decided this morning
+and the fourth changes where `P-390` puts a token. **Whichever you take, `spec/console.md`'s example
+needs a trait that exists**, and that is a promotion rather than a decision - it follows this.
+

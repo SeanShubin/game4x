@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-405** - Where a token lives, now that the map form cannot tell two citizens apart · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
