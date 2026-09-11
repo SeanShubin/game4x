@@ -62,7 +62,87 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-399 - The release follows `P-390` and `P-396`: readiness becomes a kind, and `move` stops destroying a unit
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Kinds, Traits, Where things are, then Recipes
+
+**All six blocks move together**, because `refresh` refills what the other five spend and cannot be
+in two models at once. **The six are twenty rows and become seventeen**, `renew` stops existing, and
+two traits become one. **The twelve rows carrying `ready`, `not ready`, `fertile` or `spent` become
+five that consume a readiness**, and three `require` rows arrive to name the thing spending it -
+counted from the table rather than estimated, after this lane first wrote *twelve become nine* and
+checked it.
+
+**One thing here is a choice this lane made and could not avoid: the fifth role is called `put`.**
+`P-396` says a rule may name one thing and say what changes about it, and the table needs a word for
+that row. **`put` names the thing and the `Where` cell says where it now is** - which is
+`spec/logistics.md`'s *what holds it is what says where it is*, written as a row. **Change the word
+and nothing else in this proposal moves.**
+
+**Into *Kinds*, after `fertility`:**
+
+> | **readiness** | what a thing spends to act, drawn from time and refilled each turn |
+
+**Into *Traits*, replacing the `ready` row and the `spent` row with one:**
+
+> | **for** | a readiness | `move`, `labor`, `work` or `bearing` | stored |
+
+**Into *Where things are*, after the unit's tank:**
+
+> | a thing, per action | readiness for that action | 1 |
+
+**Into *Recipes*, replacing the six blocks named, in the table's existing order:**
+
+> | **move** | player | require | 1 | place | | `$from` |
+> | | | require | 1 | place | joined to `$from` by an edge the unit crosses | `$to` |
+> | | | put | | unit | in `$from` | `$to` |
+> | | | consume | 1 | readiness | for `move` | that unit |
+> | | | consume | 1 | energy | | that unit |
+> | **create labor** | player | require | 1 | citizen | | |
+> | | | consume | 1 | readiness | for `labor` | that citizen |
+> | | | produce | 1 | labor | | |
+> | **work** | player | require | 1 | territory | | `$where` |
+> | | | require | 1 | extractor | | |
+> | | | consume | 1 | readiness | for `work` | that extractor |
+> | | | consume | 1 | labor | | |
+> | | | produce | `$where`'s density for that resource | resource | | |
+> | **bear** | world | require | 1 | citizen | | |
+> | | | consume | 1 | readiness | for `bearing` | that citizen |
+> | | | produce | 1 | fertility | | |
+> | **refresh** | world | produce | 1 | readiness | for each action, in whatever declares room | |
+
+## What each change is for
+
+**`move` stops destroying a unit.** The `put` row replaces the `consume 1 unit` and `produce 1 unit`
+pair, so the unit's `id`, its tank and its spent readiness all survive - and the rule that a created
+thing arrives holding its tokens never fires for it, because nothing is created. **`that unit` still
+refers back**, as it did to the consume row it replaces.
+
+**The three player rules name the thing whose readiness they spend.** That was implicit before, in
+`consume 1 citizen [ready]`; a `require` row says it and takes nothing, which is what `P-386` makes a
+`require` mean.
+
+**`renew` is gone** because it was `refresh` for fecundity and nothing else, and fecundity is now a
+readiness `for bearing`. **`refresh` is one rule** because `P-373` makes a rule over a family a rule
+for each member, and the `for` trait's four values are what it grounds over.
+
+**`refresh` needs no `soft` marking.** `P-386` makes what a rule makes soft, so a thing already
+holding its readiness gets nothing and a thing with room is topped up. **That is the whole of the
+refill.**
+
+## Three things this does not do
+
+**It does not settle `X-12`.** `deploy ark`'s `require 1 territory @ $where` is still a parameter
+declaration wearing a threshold's clothes, and `found by land` still has no such row. **`put` is not
+what those two want** - they want a way to name a thing they are about, not to move one.
+
+**It does not touch the no-gain check's arithmetic.** Readiness was already a place in it, drawn from
+time; this gives that place a name in the release. **`work` still draws on the planet.**
+
+**It does not declare which kinds hold which actions.** *Where things are* says a thing holds one
+readiness per action it can take; **what says a citizen can bear and an extractor cannot is the
+recipe naming it**, which is where it already was. If you would rather that be a table of its own, it
+is a second proposal and this lane has not assumed it.
 
 
 ## Addressed to other perspectives
