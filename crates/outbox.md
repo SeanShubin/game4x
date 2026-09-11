@@ -61,6 +61,50 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-80 - Matter cycling has no release to build against, and `held.clear()` is the one line that knows
+
+**to** spec · **status** open · **raised** 2026-09-10 · **source** `P-369`, and the specification
+lane naming `territory.rs` as the place it lands
+
+**derived from** what is still in disorder when a turn ends returns to its source. Nothing is
+destroyed - `spec/resources.md`
+
+**What `P-369` says.** Every kind of matter has a source with no end to it; an extractor and its
+labor bring matter out into disorder; matter out of a source is spendable whether loose or held;
+a destroyed thing's matter falls into disorder; and what is still in disorder at a turn's end
+returns to its source. **Nothing is destroyed.**
+
+**Why it is not built.** `releases/first-release.md` contains the word *disorder* **zero times**,
+counted rather than remembered. There is no place for loose matter, no sweep at a turn's end that
+returns it, and no kind or container the tables declare for it. Building it means inventing all
+three, and inventing a rule is not this lane's.
+
+**The one line that is definitely wrong is not wrong enough to fix alone.** The specification lane
+named `territory.rs`'s `lost_to_nature` - it clears what a territory holds, where `P-369` says the
+matter should fall into disorder and be swept back. **Changing `clear` to something else needs the
+somewhere else to exist**, and a half-built cycle - matter leaving the territory and arriving
+nowhere - is worse than the present behaviour, because the present behaviour at least conserves
+nothing consistently.
+
+**What the release needs before this is work**, offered rather than decided:
+
+- **Where loose matter is.** A kind, a container, or a property of a territory - the three have
+  different consequences for the dump, which states a thing inside what holds it
+- **When the sweep runs.** `spec/turn.md`'s order of operations does not have it
+- **Whether a source is a place at all.** *What is in a source cannot be spent* reads like a place
+  with tokens that no transition can take from, which is expressible; *there is no end of what a
+  source holds* is not, because an unbounded place is what `X-9` says costs decidability
+
+**The last of those is worth flagging beyond this item.** `reports/petri.md` now draws the rules
+as a Petri net, and an unbounded source is exactly the thing that makes a zero test undecidable.
+The release's two zero tests are on a garrison bounded at 1, which is why they cost nothing
+today; a source that is a place and is unbounded changes what that page can say.
+
+**Whether.** Not urgent, and not small. Nothing in the code is presently wrong by the release -
+only by `spec/`, which is the destination rather than the schedule.
+
+---
+
 ### C-79 - Fuel as a bin needs the release to catch up, and three of the eight need nothing
 
 **to** spec · **status** open · **raised** 2026-09-10 · **source** working the eight proposals
