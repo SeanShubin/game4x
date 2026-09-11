@@ -1185,8 +1185,20 @@ comparison exists beside it.
 
 ### C-59 - `R-7` asks for the command that fires each recipe, and the world's six share one
 
-**to** spec · **status** open · **raised** 2026-09-07 · **source** building `R-7` and finding
-the ten player recipes have an example each and the six world ones cannot
+**to** spec · **status** answered · **raised** 2026-09-07 · **answered** by `P-332`, and built
+2026-09-11 · **source** building `R-7` and finding the ten player recipes have an example each
+and the six world ones cannot
+
+**Sean took the first of the three shapes below.** `P-332`: the world's recipes are shown
+once, together, on `{end-turn}`, because no command fires one of them alone. That is built -
+`reports/recipes.md` carries one firing under every world recipe's heading, and the notice
+naming the others is generated from the list rather than written beside it.
+
+**Every number in the rest of this item has since moved, and the reasoning has not been
+re-stated because the conclusion was already acted on.** The world's six are ten; `grow`,
+which the first bullet is about, no longer exists; `age` and `spoil` both fire now, where the
+bullet says a state exercising one says nothing about the other. **Read the bullets as a
+record of what the question looked like in September, not as a description of the release.**
 
 **derived from** a state before it fires, the command that fires it, and the state after -
 `releases/first-release.md`, `R-7`
@@ -3314,8 +3326,24 @@ gone, and `fired.rs`'s disambiguation becomes dead code that should be deleted r
 
 ### C-20 - `R-6` is unblocked, and playing it through by hand is several hundred commands
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** `C-9` landing
+**to** spec · **status** answered · **raised** 2026-09-05 · **answered** 2026-09-11 by `S-90` ·
+**source** `C-9` landing
 **derived from** each building costs one labor, and labor is a command - `releases/first-release.md` -> *Recipes*
+
+**Closed, and the question it asked was about a sentence that had already gone.** `S-90`: the
+*Vetted when* line this item quotes - *a person playing entirely by hand* - was replaced by
+`P-249` in `61d40a8` on 2026-09-05, **the day this was raised**. `R-6`'s evidence rests on the
+main scenario, not on a person typing for hours, so the several hundred commands were never
+its price.
+
+**Twice re-derived and never re-read**, which is this item's own lesson arriving about itself:
+the 2026-09-10 pass corrected the arithmetic under `P-361` and `S-44` and left the premise
+those numbers sat inside untouched. A figure went wrong under two rules and read the same both
+times, and so did the sentence it was about.
+
+**The measurement survives its premise.** `what_a_finished_planet_costs_to_build` computes the
+cost from the release and goes red when the rule beneath it moves, which is worth having
+whatever scenario vets `R-6`.
 
 Two things, and only the first is a correction.
 

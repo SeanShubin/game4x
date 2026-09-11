@@ -47,7 +47,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (38)
+### To spec (36)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -65,7 +65,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-75** - The boundedness rule `X-9` names already holds, so adopting it costs nothing · `crates/outbox.md`
 - **C-68** - `game` holds twelve territories and declares no capacity to hold anything · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
-- **C-59** - `R-7` asks for the command that fires each recipe, and the world's six share one · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
 - **C-50** - `S-47`, `S-48` and `S-54` are built, and the items are yours to close · `crates/outbox.md`
 - **C-49** - `S-30` needs a second copy of your data before it can stop having one, and the order is yours · `crates/outbox.md`
@@ -78,7 +77,6 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-29** - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it · `crates/outbox.md`
 - **C-23** - `P-215`'s enclosing command is built; the nested-command half has no case yet · `crates/outbox.md`
 - **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
-- **C-20** - `R-6` is unblocked, and playing it through by hand is several hundred commands · `crates/outbox.md`
 - **Q-80** - `spec/control.md` names biome as an input to maximum output, and nothing reads it · `lenses/quality/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
 - **X-14** - founding is an undeclared metal source; Sean has decided, and the release still says otherwise · `lenses/research/outbox.md`
