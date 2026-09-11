@@ -24,7 +24,12 @@ two habits**, and nothing says which.
 capacity*, *a capacity of 1*, *room* - and using it for a per-turn allowance would make one word mean
 two unrelated things in one release.
 
-`P-390` carries the choice. This row stays until it lands.
+**Settled 2026-09-11**: *my intention has always been once per kind of action, I have just been
+puzzling out how to properly model that.* **So a thing does each kind of action once a turn, not one
+thing a turn** - which no file says, and which the release has never had to distinguish because no
+two recipes draw on the same thing's readiness.
+
+`P-390` carries what remains, which is what the action parameter ranges over.
 
 ## Said 2026-09-08, the path from `temporary-notes/` into the project
 
