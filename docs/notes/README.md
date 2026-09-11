@@ -57,3 +57,4 @@ disagree, the spec is right and the note needs a superseded marker.
 - [A gate claim scoped to where I looked](2026-09-07-a-gate-claim-scoped-to-where-i-looked.md) - I named a directory when the gate covers a workspace
 - [How this lane fails](how-this-lane-fails.md) - the defects of 2026-09-01, by cause
 - [tools/spec, designed](tools-spec-design.md) - the editing tool as named operations rather than a script
+- [Three exemptions and a source](2026-09-11-three-exemptions-and-a-source.md) - why every option I enumerated was the same move, and Sean saw it at once
