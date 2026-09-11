@@ -412,4 +412,16 @@ only one who can move them.
   every generated view has a **diffable sibling** beside it, as `graph.html` has `graph.txt`; and
   **no page needs JavaScript to be read** - a view that filters is a page that was generated, so
   the filter is a URL rather than a click
+
+### R-10 - I can read a generated drawing in the theme I use
+
+**to** code - **status** open - **raised** 2026-09-11 - **cited** `7b4761f` - **two of its three clauses already hold**: every label in `reports/petri.html` declares a fill as of `7b4761f`, counted at 295 of 295, and every node in the net carries its own name. **What is open is the third** - the whole net is one drawing of 62 nodes and 195 arcs, and nothing yet shows it in parts that can be read whole
+
+- **In** - `docs/process.md`, *I reject AI responses that do not read clearly and unambiguously to
+  a human*, applied to a drawing rather than to prose
+- **Vetted when** - every generated drawing is legible in **both** a light and a dark reader,
+  because nothing in it declares a colour the theme does not supply. **Every node carries its own
+  name**, and I can say what a node is without looking anything up. Where a drawing is too large
+  to satisfy that whole, it is shown in parts that do, and it says what each part leaves out
+
 ## Open questions

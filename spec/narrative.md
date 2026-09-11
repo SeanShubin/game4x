@@ -43,7 +43,7 @@ The AI designs machines and buildings. The population operates them.
 
 - **The fiction is richer than the rules, and that is not a gap.** What is told here needs a rule
   of its own only where the rule would change what a player does
-- **Food is soil and sunlight. A source is where matter waits. A loaf going stale is its container
-  dissolving and what it held scattering.** None of those is a recipe, and none of them needs to be
+- **Food is soil and sunlight. A source is where what it holds waits. A loaf going stale is its
+  container dissolving and what it held scattering.**
 
 ## Open questions

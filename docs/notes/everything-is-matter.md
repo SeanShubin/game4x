@@ -296,7 +296,7 @@ location is just a trait that differs between the two sides.
 ### The one that does not fit, and it is honest to say so
 
 **`end turn` is not a recipe of things in a place.** Everything eats, a population grows or
-starves, food expires, and everything becomes ready again - across every territory at once. Inputs
+starves, food expires, and everything becomes ready again - across every territory at once. **`P-390` replaced that last phrase on 2026-09-11**: time refills every thing's tokens to the number its kind declares. The point this sentence is making is unaffected. Inputs
 and outputs describe a *local* exchange, and this is a global sweep.
 
 Two ways to take that. Either **the turn is a different kind of thing** and the language does not

@@ -21,12 +21,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-95** - `7b4761f` S-95: every label in the drawing declares a colour, so it is legible in a dark reader · still open in `docs/notes/proposals.md`
 - **S-94** - `6a12500` S-94: three quotations follow P-391, and one that looked stale is not · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
 - **S-95** - Every label in the net is black on black in dark mode, and the shapes are not · `docs/notes/proposals.md`
 - **S-94** - Five promotions, and two of them move the ground under `tree.rs` and `thing.rs` · `docs/notes/proposals.md`
@@ -34,6 +35,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
 - **R-6** - The loop can be played through · `releases/first-release.md`
+- **R-10** - I can read a generated drawing in the theme I use · `releases/first-release.md`
 - **X-8** - `C-74` answered: the three puzzles are one, and it is called grounding · `lenses/research/outbox.md`
 - **X-11** - the four roles are two dimensions, and `create-if-missing` is a cell the grid always had · `lenses/research/outbox.md`
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
