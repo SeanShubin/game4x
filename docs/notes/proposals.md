@@ -64,7 +64,7 @@ Two limits Claude holds itself to:
 
 ### P-386 - What a rule takes is hard and what it makes is soft
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, because its first draft contradicted `P-373` · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost
 
 **Sean, 2026-09-11**: *Costs are hard. Effects are soft.* **This is not in `spec/`**, which is why
 `P-385` asked it as though it were open. What is there is `P-373`'s *a line may be soft* and what
@@ -75,26 +75,37 @@ are soft.**
 
 > - **What a rule takes is hard and what it makes is soft.** A rule that cannot take all of what it
 >   takes does not fire. A rule that cannot make all of what it makes fires anyway and makes what it
->   can, because what it could not make was never a cost
+>   can, because what it could not make was never a cost. **Where nothing bounds what a line makes it
+>   can never be short**, so no such line is soft and the rule below still holds of every line that
+>   is
+
+**The last sentence is why this was rewritten, and it is the half worth your eye.** The first draft
+said only that what a rule makes is soft. **That contradicted `P-373` within one section.** *A soft
+line names something with a finite capacity* - and `produce 2 citizen` names citizens, which *What
+bounds a kind in a territory* bounds by *the food produced here, through upkeep*, **which is not a
+capacity**. `produce 1 labor` and the resources `work` makes are the same: a territory declares no
+limit for a resource, so what it holds loose is bounded by nothing.
+
+**Read together as first drafted, the two bullets forbade `produce 2 citizen`**, which cannot be
+what either says. **The reconciliation costs nothing because the behaviour was never in question**: a
+line making something unbounded can always make all of it, so softness never arises for it. Saying so
+is what keeps `P-373` true of every line that is soft - **which is the protection you named**, and
+the reason the soft-line check does not need a population of zero to prove anything.
 
 **Takes and makes rather than cost and effect**, because the section's first bullet is already
 written in those words - *what one firing takes and makes does not depend on how much of anything is
 present*. **Say the word if you would rather the spec said cost and effect**, and the bullet changes
 here rather than on the way in.
 
-**What this does to two lines already there, neither of which is a contradiction.**
-
-- ***A line may be soft*** wants one word. Under this rule a line that makes is soft without being
-  marked, so *may* is describing an option where there is none. **The cleanup is filed the moment
-  this lands**, not before, because its wording depends on this one
-- **`P-378`'s `[soft]` attachment needs a job.** If softness follows from the role, the notation is
-  either redundant or it is how a **take** is marked exceptionally soft. `C-82` records that the
-  release has zero soft lines today, so nothing is built on either reading and nothing is urgent
+**One line already there still wants one word, and it is filed on landing rather than now.** *A line
+may be soft* describes an option where, for a bounded make, there is none. **`P-378`'s `[soft]`
+attachment also needs a job**: if softness follows from the role, it is either redundant or it is how
+a **take** is marked exceptionally soft. `C-82` records the release has zero soft lines today, so
+nothing is built on either reading.
 
 **The garrison case, in your words, is what the rule buys.** *If a garrison is not there one is
 built; if a garrison is there it fails to build because of the limit, but doesn't fail the command,
-because the garrison wasn't a cost - it was an effect.* That is the bullet applied, and `P-385` is
-what it leaves open.
+because the garrison wasn't a cost - it was an effect.* `P-385` is what it leaves open.
 
 ### P-383 - Two more consequences of the shared index, both learned by crossing it
 
