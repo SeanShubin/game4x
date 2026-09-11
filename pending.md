@@ -9,7 +9,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 ## What must be decided
 
 - **P-389** - `spec/resources.md` says a source holds matter, and one of the three holds turns · `docs/notes/proposals.md`
-- **P-390** - An allowance, and whether it is a trait pair or a kind time supplies · `docs/notes/decisions.md`
+- **P-390** - A per-turn limit on a recipe, and whether readiness is what it compiles to · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
