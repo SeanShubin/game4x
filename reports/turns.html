@@ -23,15 +23,20 @@
 {end-turn}
 </pre>
 <h2 id="what-changed">what changed</h2>
-<p><strong>gone</strong> (1)</p>
+<p><strong>gone</strong> (2)</p>
 <ul class="bullets">
-<li>{orbit id:1} {ark fuel:2 id:1 ready:yes} -&gt; 1</li>
+<li>{orbit id:1} {ark fuel:2 id:1} -&gt; 1</li>
+<li>{orbit id:1} {ark fuel:2 id:1} {readiness for:move} -&gt; 1</li>
 </ul>
-<p><strong>new</strong> (7)</p>
+<p><strong>new</strong> (11)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} -&gt; 4</li>
-<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} -&gt; 1</li>
-<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen} -&gt; 4</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen} {readiness for:bearing} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen} {readiness for:labor} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:food} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:food} {readiness for:work} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:metal} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:metal} {readiness for:work} -&gt; 1</li>
 <li>{territory biome:grassland id:1 nature:1} {garrison force:0} -&gt; 1</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} -&gt; 4</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:food} -&gt; 1</li>
@@ -315,9 +320,10 @@
 <tr><td>orbit</td><td>12</td></tr>
 <tr><td>deposit</td><td>34</td></tr>
 <tr><td>fertility</td><td>0</td></tr>
+<tr><td>readiness</td><td>4</td></tr>
 </tbody>
 </table>
-<p>15 row(s)</p>
+<p>16 row(s)</p>
 <h1>Turn 2</h1>
 <h2 id="commands">commands</h2>
 <pre>
@@ -334,7 +340,7 @@
 <h2 id="what-changed">what changed</h2>
 <p><strong>changed</strong> (3)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} · 1 → 2</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:food} · 1 → 2</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 4 → 6</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:food} · 1 → 2</li>
 </ul>
@@ -617,9 +623,10 @@
 <tr><td>orbit</td><td>12</td></tr>
 <tr><td>deposit</td><td>34</td></tr>
 <tr><td>fertility</td><td>0</td></tr>
+<tr><td>readiness</td><td>4</td></tr>
 </tbody>
 </table>
-<p>15 row(s)</p>
+<p>16 row(s)</p>
 <h1>Turn 3</h1>
 <h2 id="commands">commands</h2>
 <pre>
@@ -636,7 +643,7 @@
 <h2 id="what-changed">what changed</h2>
 <p><strong>changed</strong> (3)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 4 → 8</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen} · 4 → 8</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 6 → 9</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:metal} · 1 → 2</li>
 </ul>
@@ -919,9 +926,10 @@
 <tr><td>orbit</td><td>12</td></tr>
 <tr><td>deposit</td><td>34</td></tr>
 <tr><td>fertility</td><td>0</td></tr>
+<tr><td>readiness</td><td>4</td></tr>
 </tbody>
 </table>
-<p>15 row(s)</p>
+<p>16 row(s)</p>
 <h1>Turn 4</h1>
 <h2 id="commands">commands</h2>
 <pre>
@@ -942,15 +950,16 @@
 {end-turn}
 </pre>
 <h2 id="what-changed">what changed</h2>
-<p><strong>new</strong> (2)</p>
+<p><strong>new</strong> (3)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:energy} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:energy} {readiness for:work} -&gt; 1</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:energy} -&gt; 1</li>
 </ul>
 <p><strong>changed</strong> (2)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:food} · 2 → 3</li>
-<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} · 1 → 2</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:food} · 2 → 3</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:metal} · 1 → 2</li>
 </ul>
 <h2 id="what-is-there-now">what is there now</h2>
 <h3 id="game">game</h3>
@@ -1234,9 +1243,10 @@
 <tr><td>orbit</td><td>12</td></tr>
 <tr><td>deposit</td><td>34</td></tr>
 <tr><td>fertility</td><td>0</td></tr>
+<tr><td>readiness</td><td>5</td></tr>
 </tbody>
 </table>
-<p>15 row(s)</p>
+<p>16 row(s)</p>
 <h1>Turn 5</h1>
 <h2 id="commands">commands</h2>
 <pre>
@@ -1265,9 +1275,9 @@
 </ul>
 <p><strong>changed</strong> (4)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 8 → 12</li>
-<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} · 1 → 2</li>
-<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:metal} · 2 → 3</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen} · 8 → 12</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:energy} · 1 → 2</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:metal} · 2 → 3</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 9 → 15</li>
 </ul>
 <h2 id="what-is-there-now">what is there now</h2>
@@ -1554,9 +1564,10 @@
 <tr><td>orbit</td><td>12</td></tr>
 <tr><td>deposit</td><td>34</td></tr>
 <tr><td>fertility</td><td>0</td></tr>
+<tr><td>readiness</td><td>5</td></tr>
 </tbody>
 </table>
-<p>15 row(s)</p>
+<p>16 row(s)</p>
 <h1>Turn 6</h1>
 <h2 id="commands">commands</h2>
 <pre>
@@ -1586,7 +1597,7 @@
 <p><strong>changed</strong> (4)</p>
 <ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {energy} · 4 → 12</li>
-<li>{territory biome:grassland id:1 nature:1} {extractor ready:yes resource:energy} · 2 → 3</li>
+<li>{territory biome:grassland id:1 nature:1} {extractor resource:energy} · 2 → 3</li>
 <li>{territory biome:grassland id:1 nature:1} {metal} · 15 → 20</li>
 <li>{territory biome:grassland id:1 nature:1} {store resource:energy} · 1 → 2</li>
 </ul>
@@ -1875,9 +1886,10 @@
 <tr><td>orbit</td><td>12</td></tr>
 <tr><td>deposit</td><td>34</td></tr>
 <tr><td>fertility</td><td>0</td></tr>
+<tr><td>readiness</td><td>5</td></tr>
 </tbody>
 </table>
-<p>15 row(s)</p>
+<p>16 row(s)</p>
 <h1>Turn 7</h1>
 <h2 id="commands">commands</h2>
 <pre>
@@ -1906,9 +1918,10 @@
 {end-turn}
 </pre>
 <h2 id="what-changed">what changed</h2>
-<p><strong>new</strong> (1)</p>
+<p><strong>new</strong> (2)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1 ready:yes} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1} {readiness for:move} -&gt; 1</li>
 </ul>
 <p><strong>changed</strong> (3)</p>
 <ul class="bullets">
@@ -2202,9 +2215,10 @@
 <tr><td>orbit</td><td>12</td></tr>
 <tr><td>deposit</td><td>34</td></tr>
 <tr><td>fertility</td><td>0</td></tr>
+<tr><td>readiness</td><td>6</td></tr>
 </tbody>
 </table>
-<p>15 row(s)</p>
+<p>16 row(s)</p>
 <h1>Turn 8</h1>
 <h2 id="commands">commands</h2>
 <pre>
@@ -2222,14 +2236,16 @@
 {end-turn}
 </pre>
 <h2 id="what-changed">what changed</h2>
-<p><strong>gone</strong> (1)</p>
+<p><strong>gone</strong> (2)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1 ready:yes} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1} -&gt; 1</li>
+<li>{territory biome:grassland id:1 nature:1} {pioneer fuel:2 id:1} {readiness for:move} -&gt; 1</li>
 </ul>
-<p><strong>new</strong> (2)</p>
+<p><strong>new</strong> (3)</p>
 <ul class="bullets">
 <li>{territory biome:grassland id:1 nature:1} {yard} -&gt; 1</li>
-<li>{territory biome:grassland id:2 nature:1} {pioneer fuel:1 id:1 ready:yes} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {pioneer fuel:1 id:1} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {pioneer fuel:1 id:1} {readiness for:move} -&gt; 1</li>
 </ul>
 <p><strong>changed</strong> (2)</p>
 <ul class="bullets">
@@ -2522,9 +2538,10 @@
 <tr><td>orbit</td><td>12</td></tr>
 <tr><td>deposit</td><td>34</td></tr>
 <tr><td>fertility</td><td>0</td></tr>
+<tr><td>readiness</td><td>6</td></tr>
 </tbody>
 </table>
-<p>15 row(s)</p>
+<p>16 row(s)</p>
 <h1>Turn 9</h1>
 <h2 id="commands">commands</h2>
 <pre>
@@ -2544,15 +2561,20 @@
 {end-turn}
 </pre>
 <h2 id="what-changed">what changed</h2>
-<p><strong>gone</strong> (1)</p>
+<p><strong>gone</strong> (2)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:2 nature:1} {pioneer fuel:1 id:1 ready:yes} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {pioneer fuel:1 id:1} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {pioneer fuel:1 id:1} {readiness for:move} -&gt; 1</li>
 </ul>
-<p><strong>new</strong> (6)</p>
+<p><strong>new</strong> (10)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:2 nature:1} {citizen ready:yes} -&gt; 4</li>
-<li>{territory biome:grassland id:2 nature:1} {extractor ready:yes resource:food} -&gt; 1</li>
-<li>{territory biome:grassland id:2 nature:1} {extractor ready:yes resource:metal} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {citizen} -&gt; 4</li>
+<li>{territory biome:grassland id:2 nature:1} {citizen} {readiness for:bearing} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {citizen} {readiness for:labor} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {extractor resource:food} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {extractor resource:food} {readiness for:work} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {extractor resource:metal} -&gt; 1</li>
+<li>{territory biome:grassland id:2 nature:1} {extractor resource:metal} {readiness for:work} -&gt; 1</li>
 <li>{territory biome:grassland id:2 nature:1} {garrison force:0} -&gt; 1</li>
 <li>{territory biome:grassland id:2 nature:1} {store resource:food} -&gt; 1</li>
 <li>{territory biome:grassland id:2 nature:1} {store resource:metal} -&gt; 1</li>
@@ -2850,9 +2872,10 @@
 <tr><td>orbit</td><td>12</td></tr>
 <tr><td>deposit</td><td>34</td></tr>
 <tr><td>fertility</td><td>0</td></tr>
+<tr><td>readiness</td><td>9</td></tr>
 </tbody>
 </table>
-<p>15 row(s)</p>
+<p>16 row(s)</p>
 <h1>Turn 10</h1>
 <h2 id="commands">commands</h2>
 <pre>
@@ -2867,8 +2890,8 @@
 <h2 id="what-changed">what changed</h2>
 <p><strong>changed</strong> (2)</p>
 <ul class="bullets">
-<li>{territory biome:grassland id:1 nature:1} {citizen ready:yes} · 12 → 8</li>
-<li>{territory biome:grassland id:2 nature:1} {citizen ready:yes} · 4 → 6</li>
+<li>{territory biome:grassland id:1 nature:1} {citizen} · 12 → 8</li>
+<li>{territory biome:grassland id:2 nature:1} {citizen} · 4 → 6</li>
 </ul>
 <h2 id="what-is-there-now">what is there now</h2>
 <h3 id="game">game</h3>
@@ -3158,8 +3181,9 @@
 <tr><td>orbit</td><td>12</td></tr>
 <tr><td>deposit</td><td>34</td></tr>
 <tr><td>fertility</td><td>0</td></tr>
+<tr><td>readiness</td><td>9</td></tr>
 </tbody>
 </table>
-<p>15 row(s)</p>
+<p>16 row(s)</p>
 </body>
 </html>

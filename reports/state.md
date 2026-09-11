@@ -268,6 +268,7 @@ is in it, because the names are what this is for.
 | orbit     | 12      |
 | deposit   | 34      |
 | fertility | 0       |
+| readiness | 9       |
 
-15 row(s)
+16 row(s)
 

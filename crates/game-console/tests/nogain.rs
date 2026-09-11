@@ -140,7 +140,7 @@ fn readiness_is_spent_by_acting_and_the_actions_do_not_pool() {
         .expect("`work` is spelled out per density");
     assert_eq!(work.delta.get(&token("work")), Some(&-1));
     assert!(
-        work.delta.get(&token("move")).is_none(),
+        !work.delta.contains_key(&token("move")),
         "`work` spends a readiness for moving, so the actions have been pooled"
     );
 

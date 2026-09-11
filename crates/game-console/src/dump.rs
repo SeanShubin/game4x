@@ -75,6 +75,20 @@ fn ready(exhausted: bool) -> String {
 /// wants it in a data file rather than in code; `C-16` is that gap and is parked behind
 /// `P-134`, so for now the enumerations come from the model's own `ALL` arrays wherever it
 /// has one - which is what keeps a resource with nothing in it from vanishing.
+/// How many readiness tokens are anywhere in a tree - `P-399`.
+///
+/// **Walked rather than counted off a field**, because a readiness is held by a thing and the
+/// model's things are a flat list per territory. The tree is the one place that has already
+/// put each token under its holder.
+fn readiness_in(entry: &game_model::containment::Entry) -> u32 {
+    let mine = if entry.description.kind == "readiness" {
+        entry.quantity
+    } else {
+        0
+    };
+    mine + entry.contents.iter().map(readiness_in).sum::<u32>()
+}
+
 pub fn tables(game: &Game) -> Vec<Table> {
     // **`turn` is gone from here** - `P-288` and `S-48`. `phase` is a declared trait and
     // `turn` is not, so it was the one word in the summary that named nothing the release
@@ -339,6 +353,17 @@ pub fn tables(game: &Game) -> Vec<Table> {
     kinds.push(vec![
         "fertility".into(),
         total(&|t| t.count_of(game_model::thing::Kind::Fertility)).to_string(),
+    ]);
+    // **`readiness`, counted from the tree rather than from `held`** - `P-399` made it a kind
+    // a *thing* holds, so there is no `held` entry to count. The tree is where a thing's
+    // tokens are, and counting them anywhere else would report zero for a kind the game is
+    // full of.
+    //
+    // **A kind's presence is not a fact about one run**, which `orbit` above records having
+    // learnt the expensive way.
+    kinds.push(vec![
+        "readiness".into(),
+        readiness_in(&game_model::containment::tree(game)).to_string(),
     ]);
 
     vec![

@@ -14,7 +14,7 @@
 <p><strong>Generated. Do not edit.</strong> Read out of the release's <em>Recipes</em> table by <code>crates/game-console/src/nogain.rs</code>.</p>
 <p><code>spec/invariants.md</code> says there is a weighting of the kinds under which no sequence of rules ends holding more than it began with, and that <strong>whether this holds is decided mechanically, from the rules alone</strong>. This is that decision. <code>S-93</code>.</p>
 <p><strong>Nothing here is declared.</strong> The weighting below is solved for, not read from anywhere: the only inputs are the release's rules. So a number that looks wrong is a fact about the rules rather than about somebody's judgement of them - and one that is sound but says something you would reject is visible for that reason.</p>
-<p><strong>43 rules</strong>, ground from <strong>24</strong> blocks of recipe rows: a family becomes its members, a density becomes its cases. <strong>21 of them draw on a source</strong> - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.</p>
+<p><strong>41 rules</strong>, ground from <strong>23</strong> blocks of recipe rows: a family becomes its members, a density becomes its cases. <strong>20 of them draw on a source</strong> - the planet, the star or time - and a source is a place they take from rather than an exemption from the arithmetic. That is what keeps them in the check instead of out of it.</p>
 <h2 id="a-weighting-exists-so-nothing-comes-back-round-with-more">A weighting exists, so nothing comes back round with more</h2>
 <p>Every rule is non-increasing under the weighting below, so any sequence of them is too - a cycle included. <strong>It may end with less</strong>, which is disorder and is meant.</p>
 <table>
@@ -22,30 +22,29 @@
 <tr><th>Place</th><th>Weight</th><th>What it is</th></tr>
 </thead>
 <tbody>
-<tr><td>ark</td><td>20</td><td>a thing</td></tr>
-<tr><td>pioneer</td><td>20</td><td>a thing</td></tr>
-<tr><td>the planet</td><td>20</td><td>an endless well</td></tr>
-<tr><td>the star</td><td>12</td><td>an endless well</td></tr>
+<tr><td>ark</td><td>21</td><td>a thing</td></tr>
+<tr><td>pioneer</td><td>21</td><td>a thing</td></tr>
+<tr><td>the planet</td><td>18</td><td>an endless well</td></tr>
+<tr><td>the star</td><td>18</td><td>an endless well</td></tr>
 <tr><td>food</td><td>4</td><td>a thing</td></tr>
+<tr><td>citizen</td><td>3</td><td>a thing</td></tr>
+<tr><td>citizen, whose upkeep is unpaid</td><td>3</td><td>a state a thing is in</td></tr>
+<tr><td>energy</td><td>3</td><td>a thing</td></tr>
+<tr><td>extractor</td><td>3</td><td>a thing</td></tr>
+<tr><td>fertility</td><td>3</td><td>a thing</td></tr>
+<tr><td>food, keeps 0</td><td>3</td><td>a state a thing is in</td></tr>
+<tr><td>food, keeps at least 1</td><td>3</td><td>a state a thing is in</td></tr>
+<tr><td>food, keeps one less</td><td>3</td><td>a state a thing is in</td></tr>
+<tr><td>garrison</td><td>3</td><td>a thing</td></tr>
+<tr><td>labor</td><td>3</td><td>a thing</td></tr>
 <tr><td>metal</td><td>3</td><td>a thing</td></tr>
-<tr><td>ark, ready</td><td>2</td><td>a capacity, spent by acting</td></tr>
-<tr><td>citizen</td><td>2</td><td>a thing</td></tr>
-<tr><td>citizen, fertile</td><td>2</td><td>a capacity, spent by acting</td></tr>
-<tr><td>citizen, ready</td><td>2</td><td>a capacity, spent by acting</td></tr>
-<tr><td>citizen, whose upkeep is unpaid</td><td>2</td><td>a state a thing is in</td></tr>
-<tr><td>energy</td><td>2</td><td>a thing</td></tr>
-<tr><td>extractor</td><td>2</td><td>a thing</td></tr>
-<tr><td>extractor, ready</td><td>2</td><td>a capacity, spent by acting</td></tr>
-<tr><td>fertility</td><td>2</td><td>a thing</td></tr>
-<tr><td>food, keeps 0</td><td>2</td><td>a state a thing is in</td></tr>
-<tr><td>food, keeps at least 1</td><td>2</td><td>a state a thing is in</td></tr>
-<tr><td>food, keeps one less</td><td>2</td><td>a state a thing is in</td></tr>
-<tr><td>garrison</td><td>2</td><td>a thing</td></tr>
-<tr><td>labor</td><td>2</td><td>a thing</td></tr>
-<tr><td>pioneer, ready</td><td>2</td><td>a capacity, spent by acting</td></tr>
-<tr><td>store</td><td>2</td><td>a thing</td></tr>
-<tr><td>time</td><td>2</td><td>an endless well</td></tr>
-<tr><td>yard</td><td>2</td><td>a thing</td></tr>
+<tr><td>readiness, for <code>bearing</code></td><td>3</td><td>a state a thing is in</td></tr>
+<tr><td>readiness, for <code>labor</code></td><td>3</td><td>a state a thing is in</td></tr>
+<tr><td>readiness, for <code>move</code></td><td>3</td><td>a state a thing is in</td></tr>
+<tr><td>readiness, for <code>work</code></td><td>3</td><td>a state a thing is in</td></tr>
+<tr><td>store</td><td>3</td><td>a thing</td></tr>
+<tr><td>time</td><td>3</td><td>an endless well</td></tr>
+<tr><td>yard</td><td>3</td><td>a thing</td></tr>
 </tbody>
 </table>
 <h2 id="every-rule-and-what-it-nets">Every rule, and what it nets</h2>
@@ -55,49 +54,47 @@
 <tr><th>Rule</th><th>Nets</th><th>Worth</th></tr>
 </thead>
 <tbody>
-<tr><td>deploy ark</td><td>+1 garrison · +2 citizen · +2 citizen, fertile · +2 citizen, ready · +2 extractor · +2 store · -1 ark · -1 ark, ready</td><td>0</td></tr>
-<tr><td>move (ark)</td><td>-1 ark, ready · -1 energy</td><td>-4</td></tr>
-<tr><td>move (pioneer)</td><td>-1 energy · -1 pioneer, ready</td><td>-4</td></tr>
-<tr><td>found by land</td><td>+1 garrison · +2 citizen · +2 citizen, fertile · +2 citizen, ready · +2 extractor · +2 store · -1 pioneer · -1 pioneer, ready</td><td>0</td></tr>
+<tr><td>deploy ark</td><td>+1 garrison · +2 citizen · +2 extractor · +2 store · -1 ark</td><td>0</td></tr>
+<tr><td>move</td><td>-1 energy · -1 readiness, for <code>move</code></td><td>-6</td></tr>
+<tr><td>found by land</td><td>+1 garrison · +2 citizen · +2 extractor · +2 store · -1 pioneer</td><td>0</td></tr>
 <tr><td>build extractor</td><td>+1 extractor · -1 labor · -1 metal</td><td>-3</td></tr>
 <tr><td>build store</td><td>+1 store · -1 labor · -1 metal</td><td>-3</td></tr>
 <tr><td>build yard</td><td>+1 yard · -1 labor · -15 metal</td><td>-45</td></tr>
-<tr><td>produce pioneer</td><td>+1 pioneer · +1 pioneer, ready · -2 citizen · -2 citizen, fertile · -2 citizen, ready · -3 metal · -6 energy</td><td>-11</td></tr>
-<tr><td>launch ark</td><td>+1 ark · +1 ark, ready · -12 energy · -2 citizen · -2 citizen, fertile · -2 citizen, ready · -3 metal</td><td>-23</td></tr>
-<tr><td>create labor</td><td>+1 labor · -1 citizen, ready</td><td>0</td></tr>
-<tr><td>work (energy x2)</td><td>+2 energy · -1 extractor, ready · -1 labor · -1 the star</td><td>-12</td></tr>
-<tr><td>work (energy x4)</td><td>+4 energy · -1 extractor, ready · -1 labor · -1 the star</td><td>-8</td></tr>
-<tr><td>work (energy x5)</td><td>+5 energy · -1 extractor, ready · -1 labor · -1 the star</td><td>-6</td></tr>
-<tr><td>work (energy x6)</td><td>+6 energy · -1 extractor, ready · -1 labor · -1 the star</td><td>-4</td></tr>
-<tr><td>work (energy x8)</td><td>+8 energy · -1 extractor, ready · -1 labor · -1 the star</td><td>0</td></tr>
-<tr><td>work (food x1)</td><td>+1 food · -1 extractor, ready · -1 labor · -1 the planet</td><td>-20</td></tr>
-<tr><td>work (food x2)</td><td>+2 food · -1 extractor, ready · -1 labor · -1 the planet</td><td>-16</td></tr>
-<tr><td>work (food x3)</td><td>+3 food · -1 extractor, ready · -1 labor · -1 the planet</td><td>-12</td></tr>
-<tr><td>work (food x4)</td><td>+4 food · -1 extractor, ready · -1 labor · -1 the planet</td><td>-8</td></tr>
-<tr><td>work (food x6)</td><td>+6 food · -1 extractor, ready · -1 labor · -1 the planet</td><td>0</td></tr>
-<tr><td>work (metal x2)</td><td>+2 metal · -1 extractor, ready · -1 labor · -1 the planet</td><td>-18</td></tr>
-<tr><td>work (metal x3)</td><td>+3 metal · -1 extractor, ready · -1 labor · -1 the planet</td><td>-15</td></tr>
-<tr><td>work (metal x4)</td><td>+4 metal · -1 extractor, ready · -1 labor · -1 the planet</td><td>-12</td></tr>
-<tr><td>work (metal x5)</td><td>+5 metal · -1 extractor, ready · -1 labor · -1 the planet</td><td>-9</td></tr>
-<tr><td>work (metal x6)</td><td>+6 metal · -1 extractor, ready · -1 labor · -1 the planet</td><td>-6</td></tr>
-<tr><td>work (metal x8)</td><td>+8 metal · -1 extractor, ready · -1 labor · -1 the planet</td><td>0</td></tr>
+<tr><td>produce pioneer</td><td>+1 pioneer · -2 citizen · -3 metal · -6 energy</td><td>-12</td></tr>
+<tr><td>launch ark</td><td>+1 ark · -12 energy · -2 citizen · -3 metal</td><td>-30</td></tr>
+<tr><td>create labor</td><td>+1 labor · -1 readiness, for <code>labor</code></td><td>0</td></tr>
+<tr><td>work (energy x2)</td><td>+2 energy · -1 labor · -1 readiness, for <code>work</code> · -1 the star</td><td>-18</td></tr>
+<tr><td>work (energy x4)</td><td>+4 energy · -1 labor · -1 readiness, for <code>work</code> · -1 the star</td><td>-12</td></tr>
+<tr><td>work (energy x5)</td><td>+5 energy · -1 labor · -1 readiness, for <code>work</code> · -1 the star</td><td>-9</td></tr>
+<tr><td>work (energy x6)</td><td>+6 energy · -1 labor · -1 readiness, for <code>work</code> · -1 the star</td><td>-6</td></tr>
+<tr><td>work (energy x8)</td><td>+8 energy · -1 labor · -1 readiness, for <code>work</code> · -1 the star</td><td>0</td></tr>
+<tr><td>work (food x1)</td><td>+1 food · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>-20</td></tr>
+<tr><td>work (food x2)</td><td>+2 food · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>-16</td></tr>
+<tr><td>work (food x3)</td><td>+3 food · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>-12</td></tr>
+<tr><td>work (food x4)</td><td>+4 food · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>-8</td></tr>
+<tr><td>work (food x6)</td><td>+6 food · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>0</td></tr>
+<tr><td>work (metal x2)</td><td>+2 metal · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>-18</td></tr>
+<tr><td>work (metal x3)</td><td>+3 metal · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>-15</td></tr>
+<tr><td>work (metal x4)</td><td>+4 metal · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>-12</td></tr>
+<tr><td>work (metal x5)</td><td>+5 metal · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>-9</td></tr>
+<tr><td>work (metal x6)</td><td>+6 metal · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>-6</td></tr>
+<tr><td>work (metal x8)</td><td>+8 metal · -1 labor · -1 readiness, for <code>work</code> · -1 the planet</td><td>0</td></tr>
 <tr><td>upkeep</td><td>-1 food</td><td>-4</td></tr>
-<tr><td>bear</td><td>+1 fertility · -1 citizen, fertile</td><td>0</td></tr>
-<tr><td>breed</td><td>+1 citizen · +1 citizen, fertile · +1 citizen, ready · -1 fertility · -1 food</td><td>0</td></tr>
-<tr><td>renew</td><td>+1 citizen, fertile · -1 time</td><td>0</td></tr>
-<tr><td>perish</td><td>-1 citizen · -1 citizen, fertile · -1 citizen, ready · -1 citizen, whose upkeep is unpaid</td><td>-8</td></tr>
+<tr><td>bear</td><td>+1 fertility · -1 readiness, for <code>bearing</code></td><td>0</td></tr>
+<tr><td>breed</td><td>+1 citizen · -1 fertility · -1 food</td><td>-4</td></tr>
+<tr><td>perish</td><td>-1 citizen · -1 citizen, whose upkeep is unpaid</td><td>-6</td></tr>
 <tr><td>age (food)</td><td>+1 food, keeps one less · -1 food, keeps at least 1</td><td>0</td></tr>
-<tr><td>spoil (food)</td><td>-1 food · -1 food, keeps 0</td><td>-6</td></tr>
+<tr><td>spoil (food)</td><td>-1 food · -1 food, keeps 0</td><td>-7</td></tr>
 <tr><td>stow</td><td>nothing</td><td>0</td></tr>
 <tr><td>stow</td><td>nothing</td><td>0</td></tr>
 <tr><td>discard</td><td>-1 metal</td><td>-3</td></tr>
-<tr><td>discard</td><td>-1 energy</td><td>-2</td></tr>
-<tr><td>discard</td><td>-1 labor</td><td>-2</td></tr>
-<tr><td>discard</td><td>-1 fertility</td><td>-2</td></tr>
-<tr><td>refresh (citizen)</td><td>+1 citizen, ready · -1 time</td><td>0</td></tr>
-<tr><td>refresh (extractor)</td><td>+1 extractor, ready · -1 time</td><td>0</td></tr>
-<tr><td>refresh (ark)</td><td>+1 ark, ready · -1 time</td><td>0</td></tr>
-<tr><td>refresh (pioneer)</td><td>+1 pioneer, ready · -1 time</td><td>0</td></tr>
+<tr><td>discard</td><td>-1 energy</td><td>-3</td></tr>
+<tr><td>discard</td><td>-1 labor</td><td>-3</td></tr>
+<tr><td>discard</td><td>-1 fertility</td><td>-3</td></tr>
+<tr><td>refresh (move)</td><td>+1 readiness, for <code>move</code> · -1 time</td><td>0</td></tr>
+<tr><td>refresh (labor)</td><td>+1 readiness, for <code>labor</code> · -1 time</td><td>0</td></tr>
+<tr><td>refresh (work)</td><td>+1 readiness, for <code>work</code> · -1 time</td><td>0</td></tr>
+<tr><td>refresh (bearing)</td><td>+1 readiness, for <code>bearing</code> · -1 time</td><td>0</td></tr>
 </tbody>
 </table>
 <p><strong>A rule that nets nothing is kept rather than dropped.</strong> <code>stow</code> moves a resource into a store, and a store is a container rather than a state - so at this granularity it does nothing, and a reader looking for it should find it saying so rather than find it missing.</p>

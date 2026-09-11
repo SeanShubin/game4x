@@ -102,6 +102,18 @@ pub enum Kind {
     /// that starved to nobody banked fertility and repopulated from stock the moment food
     /// arrived, which is `C-83`.
     Fertility,
+    /// **`P-399`: what a thing spends to act, drawn from time and refilled each turn.**
+    ///
+    /// **A kind, where it was a yes-or-no trait.** *Where things are* bounds it at one per
+    /// thing per action, and that is the token model's whole limit: two recipes naming the
+    /// same action draw on the same tokens, so one token is what makes a thing choose.
+    ///
+    /// **Stored as [`Trait::Ready`] and [`Trait::Spent`] on the thing that holds it, and
+    /// written into a data file as a thing it contains.** Those two traits are already a count
+    /// per action - `Ready` is the one a citizen spends on labor and an extractor on work,
+    /// `Spent` the one a citizen spends on bearing - so the release's four actions map onto
+    /// what the model already holds, and only the writing changed.
+    Readiness,
 }
 
 impl Kind {
@@ -124,11 +136,12 @@ impl Kind {
             Kind::Adjacency => "adjacency",
             Kind::Game => "game",
             Kind::Fertility => "fertility",
+            Kind::Readiness => "readiness",
         }
     }
 
     /// Every kind, so that a reader can name one that is nowhere.
-    pub const ALL: [Kind; 17] = [
+    pub const ALL: [Kind; 18] = [
         Kind::Citizen,
         Kind::Garrison,
         Kind::Extractor,
@@ -146,6 +159,7 @@ impl Kind {
         Kind::Adjacency,
         Kind::Game,
         Kind::Fertility,
+        Kind::Readiness,
     ];
 
     /// The kind a unit of this resource is.
@@ -262,6 +276,11 @@ pub enum Trait {
     /// `bear` takes a fertile citizen and leaves a spent one, so a citizen cannot bear twice
     /// in one ending; `renew` clears it, once per turn, which is the release's *everything
     /// becomes ready again* applied to bearing rather than to acting.
+    ///
+    /// **`P-399` made this a readiness `for bearing`**, which is what it always was: a
+    /// citizen holds one token for bearing and one for labor, and `bear` spends the first
+    /// where `create labor` spends the second. The storage is unchanged; what a data file
+    /// calls it is not.
     ///
     /// **That phrase is the release's and no longer the specification's.** `P-390` replaced it
     /// in `spec/turn.md` with time refilling each thing's tokens, and the release has not

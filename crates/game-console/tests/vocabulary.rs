@@ -164,13 +164,31 @@ fn declared_traits(document: &str) -> BTreeMap<String, Admits> {
                 other => panic!("`{name}` says `one of the {other}` and nothing lists them"),
             }
         } else {
-            let alternatives: Vec<&str> = values.split(" or ").map(str::trim).collect();
-            if alternatives.len() > 1
-                && alternatives
-                    .iter()
-                    .all(|word| !word.is_empty() && !word.contains(' '))
-            {
-                Admits::OneOf(alternatives.iter().map(|w| w.to_string()).collect())
+            // **Backticks are stripped before the words are judged** - `P-399` writes the
+            // `for` trait's values as `` `move`, `labor`, `work` or `bearing` ``, and a rule
+            // that admits an `or` list only of bare words read that as naming no set at all.
+            // The release does declare one; the parser could not see through the markup, and
+            // the data file's `for:labor` was then a word nothing admitted.
+            //
+            // **Stripping markup is not widening the rule.** `C-37` records this check being
+            // widened wrongly once - splitting every Values cell into words, which admitted
+            // `turn` because `upkeep` reads *food per turn*. A backtick is not a word.
+            // **Split on the separators an alternative list uses, not on every space.** A
+            // first attempt split on spaces too, and `control` - *held by a player, or
+            // unclaimed* - became five single words and read as naming a closed set. That is
+            // `C-37`'s failure exactly, reintroduced while fixing something else, and the
+            // guard that catches it is the one below: an alternative that is a phrase means
+            // the cell describes rather than lists.
+            let alternatives: Vec<String> = values
+                .replace(" or ", ",")
+                .split(',')
+                .map(|word| word.trim().trim_matches('`').trim().to_string())
+                .filter(|word| !word.is_empty())
+                .collect();
+            let listed =
+                alternatives.len() > 1 && alternatives.iter().all(|word| !word.contains(' '));
+            if listed {
+                Admits::OneOf(alternatives.into_iter().collect())
             } else {
                 Admits::ANumber
             }
@@ -254,9 +272,12 @@ fn every_word_in_the_data_file_is_one_the_release_declares() {
     // it is read as admitting a number, which is wrong about `for` and is the parser's reach
     // rather than the release's: reported rather than widened, which is what `C-37` records
     // this check getting wrong in the other direction.
+    // **Eight: the seven above and `for`**, whose values `P-399` writes backticked. It named
+    // a closed set all along and the parser could not see through the markup - which made the
+    // data file's own `for:labor` a word nothing admitted.
     assert_eq!(
-        closed, 7,
-        "seven traits name a closed set - `kind`, `resource`, `biome`, `surplus`, `unpaid`, `phase` and `movable`; {closed} do"
+        closed, 8,
+        "eight traits name a closed set - `kind`, `resource`, `biome`, `surplus`, `unpaid`, `phase`, `movable` and `for`; {closed} do"
     );
 
     let session = played();

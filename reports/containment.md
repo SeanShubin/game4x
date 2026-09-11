@@ -51,14 +51,19 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {deposit density:3 resource:metal total-capacity:1}
     - {deposit density:8 resource:energy total-capacity:6}
   - {territory biome:grassland id:1 nature:1} - garrison&nbsp;1/1 yard&nbsp;1/1 extractor&nbsp;resource:food&nbsp;3/3 store&nbsp;resource:food&nbsp;2/3 food&nbsp;0/20 extractor&nbsp;resource:metal&nbsp;3/3 store&nbsp;resource:metal&nbsp;3/3 metal&nbsp;10/30 extractor&nbsp;resource:energy&nbsp;3/3 store&nbsp;resource:energy&nbsp;2/3 energy&nbsp;12/20
-    - {citizen ready:yes} x 8
+    - {citizen} x 8
+      - {readiness for:bearing}
+      - {readiness for:labor}
     - {deposit density:4 resource:energy total-capacity:3}
     - {deposit density:4 resource:food total-capacity:3}
     - {deposit density:4 resource:metal total-capacity:3}
     - {energy} x 12
-    - {extractor ready:yes resource:energy} x 3
-    - {extractor ready:yes resource:food} x 3
-    - {extractor ready:yes resource:metal} x 3
+    - {extractor resource:energy} x 3
+      - {readiness for:work}
+    - {extractor resource:food} x 3
+      - {readiness for:work}
+    - {extractor resource:metal} x 3
+      - {readiness for:work}
     - {garrison force:0}
     - {metal} x 10
     - {store resource:energy} x 2
@@ -70,12 +75,16 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {deposit density:6 resource:food total-capacity:5}
     - {deposit density:6 resource:metal total-capacity:5}
   - {territory biome:grassland id:2 nature:1} - garrison&nbsp;1/1 yard&nbsp;0/1 extractor&nbsp;resource:food&nbsp;1/2 store&nbsp;resource:food&nbsp;1/2 food&nbsp;0/10 extractor&nbsp;resource:metal&nbsp;1/2 store&nbsp;resource:metal&nbsp;1/2 metal&nbsp;0/10 extractor&nbsp;resource:energy&nbsp;0/2 store&nbsp;resource:energy&nbsp;0/2
-    - {citizen ready:yes} x 6
+    - {citizen} x 6
+      - {readiness for:bearing}
+      - {readiness for:labor}
     - {deposit density:4 resource:energy total-capacity:2}
     - {deposit density:4 resource:metal total-capacity:2}
     - {deposit density:6 resource:food total-capacity:2}
-    - {extractor ready:yes resource:food}
-    - {extractor ready:yes resource:metal}
+    - {extractor resource:food}
+      - {readiness for:work}
+    - {extractor resource:metal}
+      - {readiness for:work}
     - {garrison force:0}
     - {store resource:food}
     - {store resource:metal}
@@ -110,4 +119,4 @@ this is the same tree with nothing collapsed, so that a change to it is one line
     - {deposit density:3 resource:food total-capacity:2}
     - {deposit density:8 resource:metal total-capacity:6}
 
-106 things, counting every container and everything in one.
+115 things, counting every container and everything in one.

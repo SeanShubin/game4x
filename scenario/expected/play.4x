@@ -57,14 +57,19 @@
     {deposit density:3 resource:metal total-capacity:1} -> 1
     {deposit density:8 resource:energy total-capacity:6} -> 1
   {territory biome:grassland id:1 nature:1} -> 1
-    {citizen ready:yes} -> 8
+    {citizen} -> 8
+      {readiness for:bearing} -> 1
+      {readiness for:labor} -> 1
     {deposit density:4 resource:energy total-capacity:3} -> 1
     {deposit density:4 resource:food total-capacity:3} -> 1
     {deposit density:4 resource:metal total-capacity:3} -> 1
     {energy} -> 12
-    {extractor ready:yes resource:energy} -> 3
-    {extractor ready:yes resource:food} -> 3
-    {extractor ready:yes resource:metal} -> 3
+    {extractor resource:energy} -> 3
+      {readiness for:work} -> 1
+    {extractor resource:food} -> 3
+      {readiness for:work} -> 1
+    {extractor resource:metal} -> 3
+      {readiness for:work} -> 1
     {garrison force:0} -> 1
     {metal} -> 10
     {store resource:energy} -> 2
@@ -76,12 +81,16 @@
     {deposit density:6 resource:food total-capacity:5} -> 1
     {deposit density:6 resource:metal total-capacity:5} -> 1
   {territory biome:grassland id:2 nature:1} -> 1
-    {citizen ready:yes} -> 6
+    {citizen} -> 6
+      {readiness for:bearing} -> 1
+      {readiness for:labor} -> 1
     {deposit density:4 resource:energy total-capacity:2} -> 1
     {deposit density:4 resource:metal total-capacity:2} -> 1
     {deposit density:6 resource:food total-capacity:2} -> 1
-    {extractor ready:yes resource:food} -> 1
-    {extractor ready:yes resource:metal} -> 1
+    {extractor resource:food} -> 1
+      {readiness for:work} -> 1
+    {extractor resource:metal} -> 1
+      {readiness for:work} -> 1
     {garrison force:0} -> 1
     {store resource:food} -> 1
     {store resource:metal} -> 1

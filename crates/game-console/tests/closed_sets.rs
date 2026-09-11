@@ -140,10 +140,11 @@ fn every_value_a_trait_admits_is_a_row_in_the_table_that_lists_them() {
     // **This count is what catches a kind arriving**: the release declares it, the model does
     // not have it, and the gate is red for every lane until the model follows. It has done
     // that four times, the fourth being `game` in `P-351`.
-    // The fifth was `fertility`, in the saturating rewrite.
+    // The fifth was `fertility`, in the saturating rewrite; the sixth is `readiness`, which
+    // `P-399` turned from a yes-or-no trait into a kind.
     assert_eq!(
-        compared, 23,
-        "seventeen kinds and six biomes were compared when this was written; {compared} were"
+        compared, 24,
+        "eighteen kinds and six biomes were compared when this was written; {compared} were"
     );
 }
 

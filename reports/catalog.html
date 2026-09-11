@@ -13,89 +13,89 @@
 <h1>Catalog</h1>
 <p><strong>Generated. Do not edit.</strong> <code>cargo run -p kinds -- catalog</code>, or <code>scripts/kinds.sh catalog</code>.</p>
 <p>Every kind the release declares, with everything it says about that kind gathered in one place. <code>spec/invariants.md</code> has the release's tables be the data, and every other form of them derived and generated rather than written; this is one such form. It is a view and not a copy - each section is a join across six tables that the document does not perform anywhere.</p>
-<p>17 kinds, 4 families, 21 traits, 24 recipes.</p>
+<p>18 kinds, 4 families, 20 traits, 23 recipes.</p>
 <h2 id="signatures">Signatures</h2>
 <p><strong>A kind's signature is the traits it carries and every <em>(recipe, role)</em> pair that names it.</strong> Computed from the tables above rather than written by anyone, so two kinds share one exactly when the release says the same things about them. Quantities are not part of it: two kinds that are produced in different numbers by the same recipe still behave alike. <strong>Being named through a family counts</strong>, because a family is how the release addresses several kinds at once.</p>
-<p><strong>No two of the 17 kinds behave alike</strong>, over all 136 pairs of them.</p>
-<p><strong>Every group below holds one kind</strong>, which is what that sentence means when you reach them. <strong>The traits alone do collide</strong> - 10 of the kinds carry exactly the traits another one carries - and every such pair is then separated by the recipes that name it. So the release has no two kinds it says <em>the same things</em> about, and Sean has accepted that as the answer: he expects a small number of distinct things.</p>
+<p><strong>No two of the 18 kinds behave alike</strong>, over all 153 pairs of them.</p>
+<p><strong>Every group below holds one kind</strong>, which is what that sentence means when you reach them. <strong>The traits alone do collide</strong> - 12 of the kinds carry exactly the traits another one carries - and every such pair is then separated by the recipes that name it. So the release has no two kinds it says <em>the same things</em> about, and Sean has accepted that as the answer: he expects a small number of distinct things.</p>
 <h3 id="s-1-citizen"><code>s-1</code> - citizen</h3>
-<p><strong>Traits</strong> <code>force</code>, <code>keeps</code>, <code>kind</code>, <code>spent</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>bear consume</code>, <code>bear produce</code>, <code>breed produce</code>, <code>create labor consume</code>, <code>create labor produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>launch ark consume</code>, <code>perish consume</code>, <code>produce pioneer consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>renew consume</code>, <code>renew produce</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
+<p><strong>Traits</strong> <code>force</code>, <code>keeps</code>, <code>kind</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>bear consume</code>, <code>bear require</code>, <code>breed produce</code>, <code>create labor consume</code>, <code>create labor require</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>launch ark consume</code>, <code>perish consume</code>, <code>produce pioneer consume</code>, <code>spoil consume</code>, <code>upkeep require</code></p>
 <h3 id="s-2-garrison"><code>s-2</code> - garrison</h3>
 <p><strong>Traits</strong> <code>force</code>, <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>spoil consume</code></p>
 <h3 id="s-3-extractor"><code>s-3</code> - extractor</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code>, <code>resource</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build extractor produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>work consume</code>, <code>work produce</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build extractor produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>spoil consume</code>, <code>work consume</code>, <code>work require</code></p>
 <h3 id="s-4-yard"><code>s-4</code> - yard</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build yard produce</code>, <code>launch ark require</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build yard produce</code>, <code>launch ark require</code>, <code>spoil consume</code></p>
 <h3 id="s-5-store"><code>s-5</code> - store</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code>, <code>resource</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build store produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>stow produce</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build store produce</code>, <code>deploy ark produce</code>, <code>found by land produce</code>, <code>spoil consume</code>, <code>stow produce</code></p>
 <h3 id="s-6-ark"><code>s-6</code> - ark</h3>
 <p><strong>Traits</strong> <code>force</code>, <code>fuel</code>, <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark consume</code>, <code>launch ark produce</code>, <code>move consume</code>, <code>move produce</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark consume</code>, <code>launch ark produce</code>, <code>move put</code>, <code>spoil consume</code></p>
 <h3 id="s-7-pioneer"><code>s-7</code> - pioneer</h3>
 <p><strong>Traits</strong> <code>force</code>, <code>fuel</code>, <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>found by land consume</code>, <code>move consume</code>, <code>move produce</code>, <code>produce pioneer produce</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>found by land consume</code>, <code>move put</code>, <code>produce pioneer produce</code>, <code>spoil consume</code></p>
 <h3 id="s-8-food"><code>s-8</code> - food</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code>, <code>surplus</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>breed consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>upkeep consume</code>, <code>work produce</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>breed consume</code>, <code>spoil consume</code>, <code>upkeep consume</code>, <code>work produce</code></p>
 <h3 id="s-9-metal"><code>s-9</code> - metal</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build extractor consume</code>, <code>build store consume</code>, <code>build yard consume</code>, <code>discard consume</code>, <code>launch ark consume</code>, <code>produce pioneer consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>stow consume</code>, <code>stow produce</code>, <code>work produce</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build extractor consume</code>, <code>build store consume</code>, <code>build yard consume</code>, <code>discard consume</code>, <code>launch ark consume</code>, <code>produce pioneer consume</code>, <code>spoil consume</code>, <code>stow consume</code>, <code>stow produce</code>, <code>work produce</code></p>
 <h3 id="s-10-energy"><code>s-10</code> - energy</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>discard consume</code>, <code>launch ark consume</code>, <code>move consume</code>, <code>produce pioneer consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>stow consume</code>, <code>stow produce</code>, <code>work produce</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>discard consume</code>, <code>launch ark consume</code>, <code>move consume</code>, <code>produce pioneer consume</code>, <code>spoil consume</code>, <code>stow consume</code>, <code>stow produce</code>, <code>work produce</code></p>
 <h3 id="s-11-labor"><code>s-11</code> - labor</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build extractor consume</code>, <code>build store consume</code>, <code>build yard consume</code>, <code>create labor produce</code>, <code>discard consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>work consume</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>build extractor consume</code>, <code>build store consume</code>, <code>build yard consume</code>, <code>create labor produce</code>, <code>discard consume</code>, <code>spoil consume</code>, <code>work consume</code></p>
 <h3 id="s-12-territory"><code>s-12</code> - territory</h3>
 <p><strong>Traits</strong> <code>biome</code>, <code>control</code>, <code>keeps</code>, <code>kind</code>, <code>nature</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark require</code>, <code>launch ark require</code>, <code>move require</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>work require</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark require</code>, <code>launch ark require</code>, <code>move require</code>, <code>spoil consume</code>, <code>work require</code></p>
 <h3 id="s-13-orbit"><code>s-13</code> - orbit</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark consume</code>, <code>launch ark produce</code>, <code>move require</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>deploy ark consume</code>, <code>launch ark produce</code>, <code>move require</code>, <code>spoil consume</code></p>
 <h3 id="s-14-deposit"><code>s-14</code> - deposit</h3>
 <p><strong>Traits</strong> <code>density</code>, <code>keeps</code>, <code>kind</code>, <code>total capacity</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>spoil consume</code></p>
 <h3 id="s-15-adjacency"><code>s-15</code> - adjacency</h3>
 <p><strong>Traits</strong> <code>from</code>, <code>keeps</code>, <code>kind</code>, <code>to</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>spoil consume</code></p>
 <h3 id="s-16-game"><code>s-16</code> - game</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code>, <code>phase</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>spoil consume</code></p>
 <h3 id="s-17-fertility"><code>s-17</code> - fertility</h3>
 <p><strong>Traits</strong> <code>keeps</code>, <code>kind</code></p>
-<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>bear produce</code>, <code>breed consume</code>, <code>discard consume</code>, <code>refresh consume</code>, <code>refresh produce</code>, <code>spoil consume</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>bear produce</code>, <code>breed consume</code>, <code>discard consume</code>, <code>spoil consume</code></p>
+<h3 id="s-18-readiness"><code>s-18</code> - readiness</h3>
+<p><strong>Traits</strong> <code>for</code>, <code>keeps</code>, <code>kind</code></p>
+<p><strong>Named by</strong> <code>age consume</code>, <code>age produce</code>, <code>bear consume</code>, <code>create labor consume</code>, <code>move consume</code>, <code>refresh produce</code>, <code>spoil consume</code>, <code>work consume</code></p>
 <h2 id="citizen">citizen</h2>
 <p>a person: provides labor, eats, and grows on surplus.</p>
 <p><strong>In families</strong> thing</p>
-<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number), <code>keeps</code> (the number of turns it will last), <code>spent</code> (yes or no)</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>force</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-1</code></p>
 <p><strong>Bounded by</strong> the food produced here, through upkeep</p>
 <p><strong>As a thing</strong> Force: 1 · Upkeep: 1 food per turn · Readies: yes</p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>deploy ark</code> produces 2</li>
 <li><code>found by land</code> produces 2</li>
 <li><code>produce pioneer</code> consumes 2</li>
 <li><code>launch ark</code> consumes 2</li>
-<li><code>create labor</code> consumes 1, ready</li>
-<li><code>create labor</code> produces 1, not ready</li>
+<li><code>create labor</code> requires 1</li>
+<li><code>create labor</code> consumes 1 (as the place holding readiness), for <code>labor</code>, in that citizen</li>
 <li><code>upkeep</code> requires 1</li>
-<li><code>bear</code> consumes 1, fertile</li>
-<li><code>bear</code> produces 1, spent</li>
+<li><code>bear</code> requires 1</li>
+<li><code>bear</code> consumes 1 (as the place holding readiness), for <code>bearing</code>, in that citizen</li>
 <li><code>breed</code> produces 1</li>
-<li><code>renew</code> consumes 1, spent</li>
-<li><code>renew</code> produces 1, fertile</li>
 <li><code>perish</code> consumes 1, whose upkeep is unpaid</li>
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="garrison">garrison</h2>
 <p>what holds a territory; a territory has at most one.</p>
@@ -104,6 +104,7 @@
 <p><strong>Signature</strong> <code>s-2</code></p>
 <p><strong>Bounded by</strong> a capacity of 1</p>
 <p><strong>As a thing</strong> Force: 0 · Costs to produce: 1 labor, 1 metal · Binding: 1</p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>deploy ark</code> produces 1</li>
@@ -111,8 +112,6 @@
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="extractor">extractor</h2>
 <p>built for one resource, and worked to produce it.</p>
@@ -121,6 +120,7 @@
 <p><strong>Signature</strong> <code>s-3</code></p>
 <p><strong>Bounded by</strong> a capacity, from <em>Territory resources</em></p>
 <p><strong>As a thing</strong> Costs to produce: 1 labor, 1 metal · Binding: 1 · Readies: yes</p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>deploy ark</code> produces 1, food</li>
@@ -128,13 +128,11 @@
 <li><code>found by land</code> produces 1, food</li>
 <li><code>found by land</code> produces 1, metal</li>
 <li><code>build extractor</code> produces 1, <code>$resource</code></li>
-<li><code>work</code> consumes 1, ready</li>
-<li><code>work</code> produces 1, not ready</li>
+<li><code>work</code> requires 1</li>
+<li><code>work</code> consumes 1 (as the place holding readiness), for <code>work</code>, in that extractor</li>
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="yard">yard</h2>
 <p>where an Ark is produced.</p>
@@ -143,6 +141,7 @@
 <p><strong>Signature</strong> <code>s-4</code></p>
 <p><strong>Bounded by</strong> a capacity of 1</p>
 <p><strong>As a thing</strong> Costs to produce: 1 labor, 15 metal · Binding: 15</p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>build yard</code> produces 1</li>
@@ -150,8 +149,6 @@
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="store">store</h2>
 <p>built to hold one resource, and holds nothing else.</p>
@@ -161,6 +158,7 @@
 <p><strong>Bounded by</strong> as many as the extractors of its resource</p>
 <p><strong>As a thing</strong> Costs to produce: 1 labor, 1 metal · Binding: 1</p>
 <p><strong>Holds</strong> the resource it was built for, up to 10 - <em>a fact about the kind, so every one of them holds that many</em></p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>deploy ark</code> produces 1, food</li>
@@ -173,8 +171,6 @@
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
 <li><code>stow</code> produces 1 (as the place holding metal), in a store for metal</li>
 <li><code>stow</code> produces 1 (as the place holding energy), in a store for energy</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="ark">ark</h2>
 <p>carries a landing, and can invade from orbit.</p>
@@ -184,17 +180,15 @@
 <p><strong>Bounded by</strong> a capacity of 2</p>
 <p><strong>As a thing</strong> Force: 2 · Fuel: 2 · Costs to produce: 3 metal, 12 energy, 2 citizens · Binding: 3 · Crosses: orbit border · Requires: a Yard · Readies: yes · Movable: yes</p>
 <p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>deploy ark</code> consumes 1, in the orbit above <code>$where</code></li>
-<li><code>move</code> consumes 1 (as a unit), ready, in <code>$from</code></li>
-<li><code>move</code> produces 1 (as a unit), not ready, in <code>$to</code></li>
+<li><code>move</code> puts  (as a unit), in <code>$from</code>, in <code>$to</code></li>
 <li><code>launch ark</code> produces 1, in the orbit above <code>$where</code></li>
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="pioneer">pioneer</h2>
 <p>founds a territory.</p>
@@ -204,17 +198,15 @@
 <p><strong>Bounded by</strong> a capacity of 2</p>
 <p><strong>As a thing</strong> Force: 2 · Fuel: 2 · Costs to produce: 3 metal, 6 energy, 2 citizens · Binding: 3 · Crosses: border · Readies: yes · Movable: yes</p>
 <p><strong>Holds</strong> energy, up to the unit's fuel - <em>a fact about each one rather than about the kind</em></p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
-<li><code>move</code> consumes 1 (as a unit), ready, in <code>$from</code></li>
-<li><code>move</code> produces 1 (as a unit), not ready, in <code>$to</code></li>
+<li><code>move</code> puts  (as a unit), in <code>$from</code>, in <code>$to</code></li>
 <li><code>found by land</code> consumes 1</li>
 <li><code>produce pioneer</code> produces 1</li>
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="food">food</h2>
 <p>eaten by citizens; expires.</p>
@@ -222,6 +214,7 @@
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>keeps</code> (the number of turns it will last), <code>surplus</code> (yes or no)</p>
 <p><strong>Signature</strong> <code>s-8</code></p>
 <p><strong>Bounded by</strong> the things in it that hold it, and it keeps for one turn</p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>work</code> produces <code>$where</code>'s density for that resource (as a resource)</li>
@@ -230,8 +223,6 @@
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="metal">metal</h2>
 <p>what things are built from; conserved.</p>
@@ -239,6 +230,7 @@
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-9</code></p>
 <p><strong>Bounded by</strong> the things in it that hold it</p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>build extractor</code> consumes 1</li>
@@ -253,8 +245,6 @@
 <li><code>stow</code> consumes 1</li>
 <li><code>stow</code> produces 1, in a store for metal</li>
 <li><code>discard</code> consumes 1</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="energy">energy</h2>
 <p>what moves things; neither conserved nor expiring.</p>
@@ -262,6 +252,7 @@
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-10</code></p>
 <p><strong>Bounded by</strong> the things in it that hold it</p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>move</code> consumes 1, in that unit</li>
@@ -274,8 +265,6 @@
 <li><code>stow</code> consumes 1</li>
 <li><code>stow</code> produces 1, in a store for energy</li>
 <li><code>discard</code> consumes 1</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="labor">labor</h2>
 <p>what working a machine takes; a citizen provides it each turn.</p>
@@ -283,6 +272,7 @@
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-11</code></p>
 <p><strong>Bounded by</strong> the citizens that make it, one each per turn</p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>build extractor</code> consumes 1</li>
@@ -294,8 +284,6 @@
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
 <li><code>discard</code> consumes 1</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="territory">territory</h2>
 <p>a place things are in, which has a biome, a force of nature, and a density and a total capacity per resource.</p>
@@ -303,6 +291,7 @@
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>control</code> (held by a player, or unclaimed), <code>biome</code> (one of the biomes), <code>nature</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-12</code></p>
 <p><strong>Holds</strong> that kind, up to its total capacity for that kind - <em>a fact about each one rather than about the kind</em></p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>deploy ark</code> requires 1, in <code>$where</code></li>
@@ -313,14 +302,13 @@
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="orbit">orbit</h2>
 <p>a place above one territory, which holds units and nothing else.</p>
 <p><strong>In families</strong> thing, place</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-13</code></p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>deploy ark</code> consumes 1 (as the place holding ark), in the orbit above <code>$where</code></li>
@@ -330,47 +318,42 @@
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="deposit">deposit</h2>
 <p>what a territory's ground offers of one resource, and how richly.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>density</code> (a number), <code>total capacity</code> (a number), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-14</code></p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="adjacency">adjacency</h2>
 <p>two places that share an edge, held by the thing that holds them.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>from</code> (a place), <code>to</code> (a place), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-15</code></p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="game">game</h2>
 <p>every thing is in it, and it is the one thing that is in nothing.</p>
 <p><strong>In families</strong> thing</p>
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>keeps</code> (the number of turns it will last), <code>phase</code> (design or play)</p>
 <p><strong>Signature</strong> <code>s-16</code></p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
 </ul>
 <h2 id="fertility">fertility</h2>
 <p>a citizen's capacity to raise one more, spent by raising one and renewed each turn.</p>
@@ -378,6 +361,7 @@
 <p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>keeps</code> (the number of turns it will last)</p>
 <p><strong>Signature</strong> <code>s-17</code></p>
 <p><strong>Bounded by</strong> the citizens that make it, one each per turn</p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
 <p><strong>In recipes</strong></p>
 <ul class="bullets">
 <li><code>bear</code> produces 1</li>
@@ -386,8 +370,23 @@
 <li><code>age</code> produces 1 (as a thing), keeps one less</li>
 <li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
 <li><code>discard</code> consumes 1</li>
-<li><code>refresh</code> consumes 1 (as a thing), not ready</li>
-<li><code>refresh</code> produces 1 (as a thing), ready</li>
+</ul>
+<h2 id="readiness">readiness</h2>
+<p>what a thing spends to act, drawn from time and refilled each turn.</p>
+<p><strong>In families</strong> thing</p>
+<p><strong>Traits of it</strong> <code>kind</code> (one of the kinds), <code>for</code> (<code>move</code>, <code>labor</code>, <code>work</code> or <code>bearing</code>), <code>keeps</code> (the number of turns it will last)</p>
+<p><strong>Signature</strong> <code>s-18</code></p>
+<p><strong>Holds</strong> readiness for that action, up to 1 - <em>a fact about the kind, so every one of them holds that many</em></p>
+<p><strong>In recipes</strong></p>
+<ul class="bullets">
+<li><code>move</code> consumes 1, for <code>move</code>, in that unit</li>
+<li><code>create labor</code> consumes 1, for <code>labor</code>, in that citizen</li>
+<li><code>work</code> consumes 1, for <code>work</code>, in that extractor</li>
+<li><code>bear</code> consumes 1, for <code>bearing</code>, in that citizen</li>
+<li><code>age</code> consumes 1 (as a thing), keeps at least 1</li>
+<li><code>age</code> produces 1 (as a thing), keeps one less</li>
+<li><code>spoil</code> consumes 1 (as a thing), keeps 0</li>
+<li><code>refresh</code> produces 1, for each action, in whatever declares room</li>
 </ul>
 </body>
 </html>

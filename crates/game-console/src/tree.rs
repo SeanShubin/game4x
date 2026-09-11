@@ -442,13 +442,13 @@ mod tests {
             .into_iter()
             .filter(|kind| !may_contain(*kind))
             .collect();
-        // Thirteen since `fertility` arrived, which holds nothing: it is transient, always
-        // in disorder, and a kind declaring no capacity holds nothing of that sort and never
-        // can - `P-391`'s first of three cases.
+        // Fourteen since `P-399` made `readiness` a kind. It holds nothing: it is what a
+        // thing spends to act, and a kind declaring no capacity holds nothing of that sort and
+        // never can - `P-391`'s first of three cases.
         assert_eq!(
             cannot.len(),
-            13,
-            "four of the seventeen kinds may contain; {} may not",
+            14,
+            "four of the eighteen kinds may contain; {} may not",
             cannot.len()
         );
 
