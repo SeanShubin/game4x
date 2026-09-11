@@ -105,6 +105,21 @@ release. **The array is also `[(&str, &str); 5]` and there are now six unbounded
 `food`; `fertility` is the kind it does not know about. Whether that stays a retain and becomes a
 `discard` the recipe list fires by name is the saturating rewrite's question, not this promotion's.
 
+**The gate is red, and one of the four is this promotion's.** `cargo test -p game-console --test
+petri`, run after committing:
+
+- **`every_bound_the_release_states_is_classified`** - *the release bounds eleven kinds and this
+  found 12*. **Mine**: `fertility`'s bound row is the twelfth
+- **`every_recipe_is_either_drawn_or_named_as_not_drawn`** - *the release declares sixteen recipes
+  and the parse found 24*. It found 22 before the two `discard` rows, so it was red already
+- **`exclusion_is_decided_by_the_quantity_and_nothing_else`** - *four recipes have a quantity that
+  is not a number, and these are `["work"]`*. Nothing this promotion touched
+- **`what_the_exclusions_cost_is_visible_rather_than_implied`** - *food appears as a place*. Nothing
+  this promotion touched
+
+**So `hooks/pre-push` will refuse a push from any lane**, including a documentation-only one, and
+this lane must not repair code to clear it. Said here rather than left to be discovered.
+
 **`P-382` deleted one sentence** - *Food made this turn survives one ending and is lost at the next*
 - which `C-61` had already made false. Nothing depended on it that this lane can find.
 
