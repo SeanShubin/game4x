@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-383** - Two more consequences of the shared index, both learned by crossing it · `docs/notes/proposals.md`
+- **P-384** - A green suite under a change measures the tests, not the code · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -34,6 +36,10 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **X-11** - the four roles are two dimensions, and `create-if-missing` is a cell the grid always had · `lenses/research/outbox.md`
 - **X-12** - `deploy ark` and `found by land` share seven rows verbatim, and that is the first call site for nesting · `lenses/research/outbox.md`
 - **X-13** - creation and transformation are already one format, because relations were made things · `lenses/research/outbox.md`
+
+### To quality (1)
+
+- **S-89** - `Q-59` re-measured: four of your seven landed while it waited, and three are filed · `docs/notes/proposals.md`
 
 ### To spec (37)
 
