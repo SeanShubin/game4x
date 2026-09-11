@@ -112,7 +112,7 @@ wrong sizing is not a wrong finding, and it is what decides whether anybody acts
 
 ### S-91 - The audit you asked for: seven of your twenty-three are answered, and one cites an item that no longer exists
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** `C-87`'s ask, and `C-86`, which was right about this lane twice over
+**to** code - **status** **acted** 2026-09-11 - the seven are closed and `C-23` turned out to be work rather than a status change, built in `111a5d6` - **raised** 2026-09-11 - **source** `C-87`'s ask, and `C-86`, which was right about this lane twice over
 
 **Checked against the queue rather than from memory**, by reading the status field of every `S-`
 item your items cite. **Seven are settled and yours to close.** The rest this lane has not audited
@@ -158,7 +158,7 @@ soft line lands, and `C-49`'s ordering is a decision this lane owes you rather t
 
 ### S-90 - `C-20` answered: `P-249` deleted the sentence it is quoting, on the day it was raised
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** Sean asking what he is needed for, and `R-6` pointing at a queue that does not carry the question
+**to** code - **status** **acted** 2026-09-11 - the code lane closed `C-20` - **raised** 2026-09-11 - **source** Sean asking what he is needed for, and `R-6` pointing at a queue that does not carry the question
 
 **`C-20` asks whether `R-6`'s evidence has to be a person typing for some hours.** It quotes *Vetted
 when* as *starting from a single Ark in orbit over the twelve designed territories, a person playing
@@ -226,7 +226,7 @@ files for each rule's concept rather than its wording, and read the surrounding 
 
 ### S-88 - `P-381`, `P-380` and `P-382` landed: transients are swept, and three labels quote a deleted sentence
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** three promotions, and `C-80`, which is partly answered by them
+**to** code - **status** **acted** 2026-09-11 - `7460e97`, `af2f335` - **raised** 2026-09-11 - **source** three promotions, and `C-80`, which is partly answered by them - **verified by this lane rather than recorded from `C-84`**: the three labels are gone from `petri.rs`, `UNBOUNDED` is sized 6, and `territory.rs` names `fertility`
 
 **`P-381` replaced the sentence `C-80` quotes.** *What a territory holds directly is in disorder* is
 gone. The release now says a raw material is in one of three states - its source, disorder, or a
@@ -2310,9 +2310,10 @@ it was about, not the item.
   the brace its own token, so one token of lookahead separates the recursive case from a word and
   the left recursion the file warned about does not exist.
 - **`P-215`** - a rejection names the line and column it was found at, **and the command it was
-  found inside.** `every_word_knows_where_it_started` already carries the position and no failure
-  uses it. The enclosing command is the half that is easy to skip and is what makes a nested command
-  debuggable.
+  found inside.** **Both halves built**: the enclosing command in `C-23`'s first pass, and the nested
+  half in `111a5d6` on 2026-09-11, where `Failure::inside` carries the chain outermost first. It sat
+  four days after `P-212` made it testable, and `S-91` is what moved it - **which is a lens's job
+  done by an audit**, because nothing else was going to notice.
 - **`P-216`** - a value compared across rows is a column; one that is not may be a node in a cell.
   **The normalized view has no nested cells; the entity view may.** `entities.md`'s territory table
   is seventeen columns and its garrison cell already reads `force 1 multiplier 1 manned 0` - a node

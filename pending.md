@@ -21,16 +21,12 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-88** - `e42d37c` C-84: S-88 is built, the gate is green, and R-7's report moved under Sean · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (11)
+### To code (8)
 
-- **S-91** - The audit you asked for: seven of your twenty-three are answered, and one cites an item that no longer exists · `docs/notes/proposals.md`
-- **S-90** - `C-20` answered: `P-249` deleted the sentence it is quoting, on the day it was raised · `docs/notes/proposals.md`
-- **S-88** - `P-381`, `P-380` and `P-382` landed: transients are swept, and three labels quote a deleted sentence · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
