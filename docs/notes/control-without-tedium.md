@@ -3,7 +3,9 @@
 **Derived.** Written by Claude from conversation, 2026-08-28. Not binding - see
 [the specification](../../spec/README.md) for what was actually decided.
 
-[Notes index](README.md) · [Intermediate steps](intermediate-steps.md) · [Documentation map](../README.md)
+[Notes index](README.md)
+
+**Wording updated 2026-09-11, and the argument is unchanged.** This note rests on *nothing becomes ready again until the turn ends*. `P-390` replaced that sentence: **time refills every thing's tokens to the number its kind declares**, at the turn's end and nowhere else. **The termination argument survives because the premise it needs is the same one** - every action spends a token, and nothing puts one back inside a turn. Quoted here rather than edited through the note, so what was written on the day it was written stays readable. · [Intermediate steps](intermediate-steps.md) · [Documentation map](../README.md)
 
 Sean stated a principle he wants the specification never to work against: **complete control over
 every little detail, and zero tedium.** He named the resolution - specify the rules for what you

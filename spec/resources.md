@@ -29,7 +29,7 @@ Every resource has two properties, and they are independent of each other:
 - Matter is conserved and its arrangement is not. Order is lost for nothing and restored only by
   work
 - **Every kind of matter has a source, and there is no end of what a source holds.** A source is
-  where matter waits, and **what is in a source cannot be spent**
+  where what it holds waits, and **what is in a source cannot be spent**
 - **An extractor, and the labor to work it, bring matter out of its source - into disorder**
 - **Matter that is out of its source may be spent, whether it is in disorder or in order.**
   **Order is being in a container**; disorder is lying loose where it was made

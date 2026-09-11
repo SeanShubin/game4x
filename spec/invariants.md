@@ -31,8 +31,8 @@ specific rule.
 - A player has complete control over every detail, and is never required to exercise it by hand
   more than once. Anything they can do by hand, they can instead specify a rule that does it
 - Rules are specified through the interface. Playing the game never requires writing a program
-- Every rule a player can use is composed of rules they can also use, down to single actions.
-  Nothing is provided only as a whole
+- Every rule a player can use is composed of rules they can also use, down to single commands.
+  **There is nothing a player can use and cannot take apart**
 - A small change in what a rule does is a small change in how it is written
 - Nothing plays itself. Every behaviour that acts on a player's behalf is a rule some person
   wrote, including any the game ships with

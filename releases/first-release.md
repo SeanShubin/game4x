@@ -154,11 +154,12 @@ Food is made with `keeps` 1. The force nature holds a territory with.
 
 A territory declares **no limit** for a resource. It declares capacity for the things that hold
 them - a store holds what it was built to hold, and an extractor holds nothing. **A raw material
-is in one of three states: its source, disorder, or a container**, and a resource is a raw
-material. **`labor` and `fertility` are transient**: neither has a source and nothing holds
-either, so both are always in disorder. **What is constructed is never in disorder** - a unit, a
-structure or a container, whatever is holding it. **What is in disorder may be spent the turn it
-is made and does not survive that turn's end**, and a raw material returns to its source.
+is in one of three states: its source, disorder, or held by something that declares a limit for
+it**, and a resource is a raw material. **`labor` and `fertility` are transient**: neither has a
+source and nothing declares a limit for either, so both are always in disorder. **What is
+constructed is never in disorder** - a unit, a structure or a container, whatever is holding it.
+**What is in disorder may be spent the turn it is made and does not survive that turn's end**, and
+a raw material returns to its source.
 
 ## Units and structures
 

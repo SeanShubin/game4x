@@ -2422,7 +2422,7 @@ with data, giving me much more direct control.*
 **Three of the four things this implies are already promoted, which is worth knowing before anything
 is proposed.** `spec/invariants.md` -> Control without tedium says: *rules are specified through the
 interface; playing the game never requires writing a program*; *every rule a player can use is
-composed of rules they can also use, down to single actions*; and - the strongest one - **nothing
+composed of rules they can also use, down to single commands*; and - the strongest one - **nothing
 plays itself: every behaviour that acts on a player's behalf is a rule some person wrote, including
 any the game ships with.**
 

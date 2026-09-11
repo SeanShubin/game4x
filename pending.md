@@ -8,11 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-390** - What a thing can do is something it holds, and an action is named · `docs/notes/proposals.md`
-- **P-389** - `spec/resources.md` says a source holds matter, and one of the three holds turns · `docs/notes/proposals.md`
-- **P-391** - Three things a kind may declare about what it holds, and one inference to drop · `docs/notes/proposals.md`
-- **P-392** - The no-black-box bullet, in a section this lane named wrongly, saying its second half plainly · `docs/notes/proposals.md`
-- **P-393** - Two phrases in the paragraph promoted today, one of which contradicts your `X-20` answer · `docs/notes/proposals.md`
+- **P-394** - `spec/narrative.md` still gives the old definition of a source, and it may not matter · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -23,13 +19,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-390** - `d577657` P-390: ready_to[work] is a kind with a trait, and the release already does that · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
+- **S-94** - Five promotions, and two of them move the ground under `tree.rs` and `thing.rs` · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
@@ -89,31 +85,31 @@ it exists to ask.
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
+- `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172, P-392
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364
-- `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
 - `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335
+- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359
-- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374
+- `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313
-- `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
+- `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372, P-381, P-393
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358
 - `spec/control.md` -> Winning - P-77, P-81, P-125, P-361
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
 - `spec/invariants.md` -> What a rule may cost - P-373, P-376, P-386, P-387
+- `spec/resources.md` -> The list - P-49, P-65, P-338, P-389
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `docs/process.md` -> What makes a check worth having - P-304, P-327, P-384
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
-- `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372, P-381
 - `spec/invariants.md` -> The game is one function - P-75, P-115, P-363
-- `spec/resources.md` -> The list - P-49, P-65, P-338
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Specification Instance - P-292, P-329

@@ -62,235 +62,69 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-390 - What a thing can do is something it holds, and an action is named
+### P-394 - `spec/narrative.md` still gives the old definition of a source, and it may not matter
 
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, four times, the last when Sean chose a named action · **kind** recovered · **shape** text · **asks** approval · **into** `spec/turn.md` -> Order of operations
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/narrative.md` -> Violence and order · from `P-389`
 
-**Sean, 2026-09-11**, choosing the named action over the recipe's own name: *for now, a citizen has 1
-ready token and 1 fertile token, but in the future I can imagine having more than one token, and can
-imagine intending to declare fungibility by using the same name in two recipes.* **Declared
-fungibility is what the name buys**, and it is in the words below.
+**`P-389` changed what a source is** - *where **what it holds** waits*, because time holds turns
+rather than matter. **`spec/narrative.md` still says the old words**: *Food is soil and sunlight. **A
+source is where matter waits.** A loaf going stale is its container dissolving and what it held
+scattering.*
 
-**Two bullets, in the order they appear in that section.**
+**It may be nothing, and that is the decision.** The sentence is about food, food is matter, and the
+claim is true of it. **`spec/narrative.md` says of itself that the fiction is richer than the rules
+and that this is not a gap** - `P-370`, your words.
 
-**Replacing the bullet beginning *Producing happens in any order*:**
+**What makes it worth one line of your attention** is that two files in `spec/` now define a source
+differently, and a reader meeting the narrative one first has no way to know it is the fiction
+speaking rather than the rule.
 
-> - Producing happens in any order. **What a thing can do is something it holds**: an **action** is
->   named, and each kind declares how many tokens of readiness a thing of it holds for each action it
->   can take. A recipe names the action it spends, and firing it spends one. **Two recipes naming the same action draw on the
->   same tokens**, which is how it is said that a thing must choose between them; two recipes naming
->   different actions never compete. A thing created during a turn begins holding its tokens and may
->   act at once. **When nothing holds a token there is nothing left to do**
+**If you want them to agree, this is the sentence:**
 
-**Replacing the bullet beginning *Ending a turn*:**
+> - **Food is soil and sunlight. A source is where what it holds waits. A loaf going stale is its
+>   container dissolving and what it held scattering.**
 
-> - Ending a turn: everything with upkeep pays it; then a population grows on surplus food or
->   starves for want of it; **what expires expires, and what was not kept in order is lost**; and
->   **time refills every thing's tokens to the number its kind declares**
-
-**The second changes five words at the end and nothing else** - *everything becomes ready again*
-becomes the refill, because *ready* stops being a state a thing is in.
-
-## Two things this was checked against, and it moved for both
-
-**`P-388` says *readiness*, so this says it too.** That bullet landed today - *it draws one readiness
-out of time and is spent doing it* - and a token with any other name would leave `readiness` with no
-referent. **A token is the readiness `P-388` names, held for one action.** Nothing goes stale.
-
-**`spec/logistics.md` says the number is the kind's, not the thing's** - *what a kind may contain is
-a fact about the kind and not about any one of them.* The draft said *a thing holds a declared
-number*, which reads as a per-thing declaration. **Now the kind declares and the thing holds**, which
-is also `P-391`'s middle case: a limit.
-
-## Why this needs no machinery
-
-**A token named for an action is a kind carrying a trait**, which is `extractor` carrying `resource`
-a second time. **The per-action maximum is containment**, which `spec/logistics.md` already allows
-*per kind carrying a particular value of a trait*. **And the refill is drawing on time**, which is
-`P-388`. Nothing here is invented; the three pieces already exist and this says they are one thing.
-
-## One word already means something near this
-
-**`action` is in `spec/` three times and means *a thing taken*** - `spec/interface.md`, *an action
-that would waste part of what it costs says so before it is taken*; `spec/invariants.md`, *no action
-has an intermediate step that is always taken*. **Here it names a category of such things**, which is
-the ordinary type-and-instance use of one English word and is how you said it - *once per kind of
-action*.
-
-**If you want them separated, the phrase is *kind of action* and it changes here rather than on the
-way in.** This lane judged the overload tolerable and is saying so rather than deciding it quietly,
-because `capacity` is the case where the same judgement went the other way.
-
-## What this makes stale, filed the moment it lands
-
-**The release states the old model in fourteen places** - twelve recipe rows carrying `ready`,
-`not ready`, `fertile` or `spent`, and two rows in *Traits*. **`renew` stops existing** and `refresh`
-becomes one rule. **That is a release proposal and it follows this one**, because a release never
-invents a rule and this is the rule it would need.
-
-**The gate goes red when the release follows, not when this lands.** `spec/turn.md` is prose no check
-reads; the *Recipes* table is what the code generates from.
-
-### P-389 - `spec/resources.md` says a source holds matter, and one of the three holds turns
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/resources.md` -> The list · from `P-388`
-
-**Promised by `P-388` and filed the moment it landed.** `spec/invariants.md` now names three sources
-and one of them is time, which holds turns rather than matter. **`spec/resources.md` says a source is
-*where matter waits*** - true of the planet and the star, and not of the third.
-
-**The rule around it is unaffected**: *every kind of matter has a source* stays true and becomes the
-matter case. **Two words change.**
-
-> - **Every kind of matter has a source, and there is no end of what a source holds.** A source is
->   where what it holds waits, and **what is in a source cannot be spent**
-
-**Nothing else in that file needs it.** *An extractor, and the labor to work it, bring matter out of
-its source* is about matter on purpose and stays as it is - **and it is now one case of a shape the
-game uses twice**, since a thing that exhausts draws readiness out of time the same way. Saying so is
-not this proposal; `spec/invariants.md` already does.
-
-### P-391 - Three things a kind may declare about what it holds, and one inference to drop
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
-
-**You are right about both lines, and the second is `X-20`** - which you decided on 2026-09-09 and
-which was never written on the `spec/` side. The release half landed; this is the half that did not.
-
-**Replacing the bullet beginning *A kind that declares no capacity*:**
-
-> - **A kind declares one of three things about what it may hold.** It may declare **no capacity**,
->   and then it holds nothing of that sort and never can. It may declare a **limit**, and then it
->   holds up to that many and may happen to be empty - so a thing holding nothing today is not
->   thereby a thing that never could. Or it may declare **no limit**, and then it holds any number,
->   and there is no room to record because nothing can be short of it
-
-**Replacing the bullet beginning *A thing that contains things*:**
-
-> - A thing that contains things takes up capacity in whatever contains it
-
-## Why the second is a deletion rather than a rewording
-
-**`conserved` already means something else in `spec/`.** `spec/resources.md`: *a conserved resource
-is not destroyed by being used; it changes form, and what it was made into can be taken apart to get
-it back.* **By that definition capacity is conserved** - `P-374` says *room is spent and given back*,
-and *destroying it returns one*. **So the clause asserts the opposite of what the sibling document
-defines**, which is the `capacity` problem in miniature: one word doing two jobs.
-
-**What the clause was reaching for is true and is about something else.** Building a store spends one
-of a territory's room and creates ten of food's - so the **total** across the world is not fixed.
-**That is worth saying only if you want it said**, and in those words rather than as *not conserved*.
-This lane is not offering it, because you said it may be adding something you do not mean.
-
-## The third thing, which neither of us named and the same bullet fixes
-
-**The room rule cannot express *no limit*.** *What a thing may contain is a **maximum***, and *what
-is stored is the room left*. **A territory holding metal with no limit has no maximum and no room
-number to store** - so a rule promoted on 2026-09-10 and a release paragraph promoted on 2026-09-11
-cannot both be applied to the same container. **The replacement above says the third case has no room
-to record**, which is why it is one bullet rather than two.
-
-## What the section says once these land, read whole
-
-`spec/logistics.md` -> *Containment* has taken six proposals, so it was re-read entire rather than at
-the point of change. **The other ten bullets hold**: nothing else mentions *conserved*, and nothing
-else assumes a maximum exists - *room is spent and given back* is about a thing that has room, and
-is silent where there is none.
-
-### P-392 - The no-black-box bullet, in a section this lane named wrongly, saying its second half plainly
-
-**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, because the destination was wrong and the replacement read worse than what it replaced · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> Control without tedium · from `P-390`
-
-**Two faults in the first draft, and you found the second by reading it.** It named *Everything is
-expressible*; **the bullet is in *Control without tedium***, four bullets up from *nothing plays
-itself*. And it offered *down to single rules* after *composed of rules*, which says rules are
-composed of rules down to rules.
-
-## What the bullet is for, which is the context you asked for
-
-**It landed on 2026-08-28 in `e71b5e5`, *the middle layer, and the proportionality test*.** Its
-neighbours are what give it its job:
-
-- *Nothing plays itself. Every behaviour that acts on a player's behalf is a rule some person wrote,
-  **including any the game ships with***
-- *Any rule can be read and changed by the player using it, **whatever its origin***
-- *A player has complete control over every detail*
-
-**So the section is one argument: there are no black boxes.** A convenience the game ships - a rule
-that manages a colony, say - **must be built out of the same pieces a player builds with**, and the
-player must be able to open it. *Nothing is provided only as a whole* is the sentence that forbids
-the other thing: shipping such a rule as a **single opaque unit**, usable but not openable, with
-nothing inside it the player could have written.
-
-**It is `spec/invariants.md`'s recurring shape, a third time** - *no action has an intermediate step
-that is always taken*, and *every rule has a text form, and the text is the rule*. **Each one closes
-a way for the engine to keep something to itself.**
-
-## The replacement
-
-> - Every rule a player can use is composed of rules they can also use, down to single commands.
->   **There is nothing a player can use and cannot take apart**
-
-**Two changes, and the second is the one you asked for.**
-
-- ***single actions* becomes *single commands***, which is what `P-390` needs: an action there is a
-  name a recipe spends, so a decomposition cannot bottom out in one. **A command is the floor and
-  the specification already says so** - `spec/console.md`, *there is one command for each recipe the
-  player may fire*
-- ***Nothing is provided only as a whole* becomes *there is nothing a player can use and cannot take
-  apart***. Same claim, said as what it forbids rather than as what is not done
-
-**If the second sentence is saying something this lane has not understood, that is the one to reject**
-- the first change stands on its own and `P-390` needs only that.
-
-### P-393 - Two phrases in the paragraph promoted today, one of which contradicts your `X-20` answer
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> What bounds a kind in a territory · from checking the queue against itself
-
-**Found by reading the four open proposals against what landed, which is what you asked for.** Both
-phrases are this lane's wording of your principle rather than your words, and both are from today.
-
-**`container` collides with the release's own table.** *Where things are* lists **a territory's total
-capacity for a kind** as a Container. So loose metal in a territory **is in a container** by that
-table and **is in disorder** by this paragraph, which offers the two as alternatives.
-
-**`nothing holds either` contradicts what you decided on 2026-09-09.** `X-20` records it: *a
-resource, and the labor a citizen makes, are held by the territory with no limit - labor has to be
-somewhere, since a citizen makes it and an extractor consumes it.* The paragraph says nothing holds
-labor.
-
-**Replacing the last paragraph of that section:**
-
-> A territory declares **no limit** for a resource. It declares capacity for the things that hold
-> them - a store holds what it was built to hold, and an extractor holds nothing. **A raw material
-> is in one of three states: its source, disorder, or held by something that declares a limit for
-> it**, and a resource is a raw material. **`labor` and `fertility` are transient**: neither has a
-> source and nothing declares a limit for either, so both are always in disorder. **What is
-> constructed is never in disorder** - a unit, a structure or a container, whatever is holding it.
-> **What is in disorder may be spent the turn it is made and does not survive that turn's end**, and
-> a raw material returns to its source.
-
-**Two phrases change and nothing else.** *A container* becomes *something that declares a limit for
-it*; *nothing holds either* becomes *nothing declares a limit for either*. **The list of what is
-constructed keeps your word `container`**, because there it is naming a kind of thing rather than a
-place something sits.
-
-**It ties to `P-391` rather than repeating it.** That proposal gives a kind three things it may
-declare - no capacity, a limit, or no limit - and this paragraph says what the third looks like from
-the other side. **The territory holds the metal; what it does not do is declare a limit for it**,
-which is why the metal does not survive the turn.
-
-**A source declares no limit too and is not disorder**, which is why the offered text keeps three
-states rather than deriving disorder from *no limit* alone. This lane wrote that derivation first and
-it was wrong.
-
-**Why this is not the whole definition, said so it is not mistaken for one.** A citizen sits in a
-territory that declares no limit for citizens, and a citizen is never in disorder - because *what is
-constructed is never in disorder* is a separate sentence doing separate work. **Disorder needs both
-halves**, and this paragraph is the only place either is written.
+**Five words change and the imagery does not.** **If you would rather the fiction keep its own
+words, reject this** - `P-370` already licenses it, and this lane would not raise it again.
 
 
 ## Addressed to other perspectives
+
+### S-94 - Five promotions, and two of them move the ground under `tree.rs` and `thing.rs`
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-390`, `P-391`, `P-392`, `P-393` and `P-389`
+
+**Two quotations in your files are no longer in the specification**, found by grepping the removed
+phrases across the tree rather than by remembering what cited them:
+
+- **`crates/game-console/src/tree.rs`**, three places - *a kind that declares no capacity contains
+  nothing, and never can*. **`P-391` replaced that bullet with three cases**: no capacity, a limit,
+  or **no limit**, which is the one the release needed for a territory holding a resource. **The
+  claim your code makes is still true**; the sentence it quotes is gone
+- **`crates/game-model/src/thing.rs:264`** - *becomes ready again*. **`P-390` replaced it**: time
+  refills every thing's tokens to the number its kind declares
+
+**`P-390` is the one that changes the model, and not yet.** `spec/turn.md` now says what a thing can
+do is something it **holds**: an **action** is named, a kind declares how many tokens of readiness a
+thing holds for each action, and **two recipes naming the same action draw on the same tokens** -
+which is how Sean says a thing must choose between them. Two naming different actions never compete.
+
+**The release has not followed and that is this lane's next proposal.** It states the old model in
+fourteen places - twelve recipe rows carrying `ready`, `not ready`, `fertile` or `spent`, and two
+rows in *Traits*. **`renew` stops existing** and `refresh` becomes one rule. **Nothing in the release
+has changed yet, so nothing of yours is red for this reason.**
+
+**`P-393` did change the release**, and it is the paragraph your no-gain report reasons about. *A
+container* became *held by something that declares a limit for it*, and *nothing holds either* became
+*nothing declares a limit for either* - the second because it contradicted what Sean decided in
+`X-20` on 2026-09-09: **a resource, and the labor a citizen makes, are held by the territory with no
+limit.**
+
+**`P-392` and `P-389` bind nothing of yours** - one frees the word *action* in
+`spec/invariants.md`, the other widens what a source holds.
+
+**`CLAUDE.md` -> Perspectives says this lane points rather than restates**, so the above is where to
+look and not a substitute for reading it.
 
 ### S-93 - The no-gain check, specified: derived and published, three sources, and places that are `(kind, trait)`
 
@@ -3688,6 +3522,11 @@ work the release exists to order.
 | P-383, a probe uses a file the lane owns, and a commit hash is not evidence                                                  | `docs/process.md` -> Who writes what, All lanes                                                                                                                                                          | 2026-09-11 |
 | P-384, a change that leaves every test green has measured the tests                                                          | `docs/process.md` -> What makes a check worth having                                                                                                                                                     | 2026-09-11 |
 | P-388, three sources - the planet, the star, and time, and a thing that exhausts extracts readiness                          | `spec/invariants.md` -> Nothing comes back round with more                                                                                                                                               | 2026-09-11 |
+| P-390, what a thing can do is a token it holds, and an action is named                                                       | `spec/turn.md` -> Order of operations                                                                                                                                                                    | 2026-09-11 |
+| P-391, three things a kind may declare about what it holds, and capacity is not unconserved                                  | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-11 |
+| P-392, down to single commands, and nothing a player can use and cannot take apart                                           | `spec/invariants.md` -> Control without tedium                                                                                                                                                           | 2026-09-11 |
+| P-393, disorder is being held by something that declares no limit, and the territory does hold labor                         | `releases/first-release.md` -> What bounds a kind in a territory                                                                                                                                         | 2026-09-11 |
+| P-389, a source is where what it holds waits, since one of the three holds turns                                             | `spec/resources.md` -> The list                                                                                                                                                                          | 2026-09-11 |
 | P-387, a line that makes may be soft, and a line that takes may not                                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
 
 ## Rejected

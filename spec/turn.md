@@ -12,12 +12,16 @@ The order in which a turn resolves. Every other document assumes this order.
 
 - A turn has three parts: **producing**, which is the player acting, then **consuming** and
   **transforming**, which are what ending it does
-- Producing happens in any order. Anything that can be used is ready or exhausted; using it
-  exhausts it, and a thing created during a turn begins ready and may be used at once. **When
-  everything is exhausted there is nothing left to do**
+- Producing happens in any order. **What a thing can do is something it holds**: an **action** is
+  named, and each kind declares how many tokens of readiness a thing of it holds for each action
+  it can take. A recipe names the action it spends, and firing it spends one. **Two recipes naming
+  the same action draw on the same tokens**, which is how it is said that a thing must choose
+  between them; two recipes naming different actions never compete. A thing created during a turn
+  begins holding its tokens and may act at once. **When nothing holds a token there is nothing
+  left to do**
 - Ending a turn: everything with upkeep pays it; then a population grows on surplus food or
   starves for want of it; **what expires expires, and what was not kept in order is lost**; and
-  everything becomes ready again.
+  **time refills every thing's tokens to the number its kind declares**
 - What a territory can keep is bounded. Anything above the bound is lost when the turn ends.
 - Where two effects cannot both happen, they compete. Competing effects are gathered and resolved
   together, so nothing gains an advantage by being considered first

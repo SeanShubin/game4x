@@ -22,15 +22,17 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   out something of another kind
 - **Room is spent and given back.** Making a thing takes one of the room in whatever will hold it;
   **destroying it returns one**. The two never come apart, because the total is only ever their sum
-- A thing that contains things takes up capacity in whatever contains it, so capacity is not conserved
+- A thing that contains things takes up capacity in whatever contains it
 - A thing says which of the things in it are next to which. That is a fact about the container
   rather than about its contents
 - Nothing contains itself, directly or through anything else
 - Every thing is in the game, directly or through what contains it. **The game is the one thing that
   is in nothing**, so containment is a tree rather than a scattering
-- **A kind that declares no capacity contains nothing, and never can.** A kind that declares capacity
-  may contain, and may happen to be empty - so a thing holding nothing today is not thereby a thing
-  that never could
+- **A kind declares one of three things about what it may hold.** It may declare **no capacity**,
+  and then it holds nothing of that sort and never can. It may declare a **limit**, and then it
+  holds up to that many and may happen to be empty - so a thing holding nothing today is not
+  thereby a thing that never could. Or it may declare **no limit**, and then it holds any number,
+  and there is no room to record because nothing can be short of it
 - **What a kind may contain is a fact about the kind and not about any one of them.** Nothing becomes
   a different sort of thing by picking something up
 - **Containing is not referring.** A thing may name another without holding it - an adjacency names
