@@ -58,6 +58,12 @@ resolve them at all on one read, which is why they get written and never noticed
 whether resolving the reference needs counting or remembering an order.** A pronoun for the thing
 just named needs neither and is fine; anything that does gets the thing's name instead.
 
+**And a word I have to look up is a reference I cannot resolve either.** Where a sentence turns on
+a term that means something particular here, it says what the term means in the same breath,
+**even where the term is already defined elsewhere** - because a reader who has to go and check
+has been stopped just as surely as one counting back through a list. **Jargon is allowed and
+unexplained jargon is not.**
+
 - I maintain executive control via the specification lane
 - I reject AI responses that do not read clearly and unambiguously to a human
 - I insist that the AI make its work verifiable to a human

@@ -8,9 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-410** - A word I have to look up is a reference I cannot resolve · `docs/notes/proposals.md`
 - **P-409** - Uniformity is an instrument, not a preference · `docs/notes/proposals.md`
-- **P-408** - What a thing can do is something it carries, not something it holds · `docs/notes/proposals.md`
 - **P-406** - The third version of this sentence today, and the first one written from the purpose rather than the case · `docs/notes/proposals.md`
 - **P-407** - Is a trait that never varies stored, and does it belong in a description · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
@@ -23,7 +21,6 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **P-408** - `4020734` P-405 is answered and leaves decisions.md; P-408 carries it · still open in `docs/notes/proposals.md`
 - **S-99** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **S-98** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **C-92** - `e2a9cfb` P-407 from C-92: is a trait that never varies stored · still open in `crates/outbox.md`
@@ -109,9 +106,9 @@ it exists to ask.
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
+- `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390, P-408
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359
-- `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185, P-390
-- `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313
+- `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313, P-410
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
 - `releases/first-release.md` -> Scope - P-59, P-52, P-86, P-179
