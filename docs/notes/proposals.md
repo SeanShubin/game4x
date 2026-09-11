@@ -62,32 +62,6 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-379 - The world's firing order names a recipe that no longer exists
-
-**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes
-
-**Filed in the same turn as the promotion that caused it**, which is the rule for a promotion that
-makes something else stale.
-
-**`P-375` and `P-377` added five world recipes and removed one.** The sentence above the table still
-reads *`upkeep`, then `grow` and `perish`, then `age`, then `spoil`, then `refresh`* - and **`grow`
-is gone**, while `bear`, `breed`, `renew`, `stow` and `discard` are not named.
-
-**Replacing that sentence:**
-
-> The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
-> that order: `upkeep`, then `bear`, `breed` and `renew`, then `perish`, then `age`, then `spoil`,
-> then `stow` and `discard`, then `refresh`. The rows below are in that order.
-
-**The order is read from the rows rather than chosen here.** `P-375` said where its two go - *after
-what expires and before everything becomes ready* - and `P-377`'s three take `grow`'s place. **This
-sentence is the table saying what it already is**, which is why it is `entailed`.
-
-**One placement was this lane's and is worth your eye.** `renew` resets a citizen from `spent` to
-`fertile`, and it went where `P-377` listed it, beside `bear` and `breed`. **Nothing between there and
-the turn's end reads `spent`**, so it makes no difference today - but if it should sit with `refresh`,
-where it belongs by kind rather than by subject, say so and it moves.
-
 ## Addressed to other perspectives
 
 ### S-87 - A Petri net view of the rules, in the reports
@@ -3236,6 +3210,7 @@ work the release exists to order.
 | P-376, an amount read from a trait is not an amount that depends on what is present                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-10 |
 | P-377, growth by a resource, which removes the last minimum                                                                  | `releases/first-release.md` -> Recipes, Kinds, Traits                                                                                                                                                    | 2026-09-10 |
 | P-378, a line may carry an attachment in brackets after its amount                                                           | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-10 |
+| P-379, the world's firing order, with the five that arrived and without the one that went                                    | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-10 |
 
 ## Rejected
 

@@ -199,8 +199,8 @@ on surplus food or starves for want of it; what expires expires, and what was no
 is lost; and everything becomes ready again*.
 
 The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
-that order: `upkeep`, then `grow` and `perish`, then `age`, then `spoil`, then `refresh`. The
-rows below are in that order.
+that order: `upkeep`, then `bear`, `breed` and `renew`, then `perish`, then `age`, then `spoil`,
+then `stow` and `discard`, then `refresh`. The rows below are in that order.
 
 | Recipe              | Owner  | Role    | Qty                                  | Kind      | Traits                                        | Where                    |
 | ------------------- | ------ | ------- | ------------------------------------ | --------- | --------------------------------------------- | ------------------------ |
