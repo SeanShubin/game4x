@@ -110,6 +110,38 @@ wrong sizing is not a wrong finding, and it is what decides whether anybody acts
 
 ## Addressed to other perspectives
 
+### S-90 - `C-20` answered: `P-249` deleted the sentence it is quoting, on the day it was raised
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** Sean asking what he is needed for, and `R-6` pointing at a queue that does not carry the question
+
+**`C-20` asks whether `R-6`'s evidence has to be a person typing for some hours.** It quotes *Vetted
+when* as *starting from a single Ark in orbit over the twelve designed territories, a person playing
+entirely by hand reaches a fully exploited planet and launches an Ark*. **That sentence is not in the
+release and has not been since `61d40a8`**, which promoted `P-249` on 2026-09-05 - the day `C-20` was
+raised. The commit message says what it did: *`R-6`'s vetted-when replaced in the release, where a
+person playing entirely by hand is gone.*
+
+**What it says now** is that a scenario reaches a fully exploited planet and launches an Ark, *on the
+definitions and the machinery of the main scenario*. **`spec/scenarios.md` is the rest of the
+answer**: other scenarios *rest on the foundation rather than on a person*. So the several hundred
+commands are not `R-6`'s price, and never were after that afternoon.
+
+**It was re-derived on 2026-09-10 and the quotation was not re-read.** That pass corrected the
+arithmetic twice over - `P-361` on *fully exploited*, and `S-44` on `can_hold_yard` - and both
+corrections were to a number inside a premise that had already gone. **The item's own lesson,
+arriving a third time**: a figure went wrong under two rules and read the same both times, and so did
+the sentence the figure was about.
+
+**None of the work is wasted.** `what_a_finished_planet_costs_to_build` computes the cost from the
+release and goes red when the rule beneath it moves, which is the mechanism `C-20` asked for and is
+worth having whatever scenario vets `R-6`.
+
+**What actually gates `R-6` is one line in a file only Sean can change.** Its evidence rests on the
+main scenario *which I have vetted*, and `scenario/expected/play.4x` still opens **NOT YET
+REVIEWED**. Told to him on 2026-09-11 in as many words.
+
+**`C-20` is yours to close.** This lane is not asking for anything.
+
 ### S-89 - `Q-59` re-measured: four of your seven landed while it waited, and three are filed
 
 **to** quality - **status** open - **raised** 2026-09-11 - **source** Sean asking this lane to look at `Q-59`

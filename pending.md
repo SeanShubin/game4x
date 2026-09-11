@@ -26,8 +26,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (9)
+### To code (10)
 
+- **S-90** - `C-20` answered: `P-249` deleted the sentence it is quoting, on the day it was raised · `docs/notes/proposals.md`
 - **S-88** - `P-381`, `P-380` and `P-382` landed: transients are swept, and three labels quote a deleted sentence · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
