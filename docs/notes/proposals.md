@@ -62,12 +62,81 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-372 - The release learns the words `P-369` gave the specification
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> What bounds a kind in a territory · answers `C-80` and `X-20`
+
+**`P-369` landed in `spec/` and the release does not know about it.** The code lane filed `C-80`:
+`releases/first-release.md` contains the word **disorder** zero times - **verified, it is zero** - so
+there is no place for loose matter, no sweep, and no declared container. **A promotion into `spec/`
+is not a work order; the release is.**
+
+**And it carries your decision of 2026-09-09**, which has been sitting unwritten since: *a territory
+declares no **limit** for a resource, not no capacity* - and *a resource in nothing should say what
+the territory holds directly*. That is `X-20`, and it is the same paragraph.
+
+**Replacing the paragraph that begins *a territory declares no capacity*:**
+
+> A territory declares **no limit** for a resource. It declares capacity for the things that hold
+> them - a store holds what it was built to hold, and an extractor holds nothing. **What a territory
+> holds directly is in disorder**: it may be spent the turn it is made, and what nothing is holding
+> when the turn ends returns to its source.
+
+**Three sentences, three fixes.** *No capacity* becomes *no limit*, because under `spec/logistics.md`
+those are opposites - no capacity means the kind is never held there, and a territory plainly holds
+resources. *In nothing* becomes *what the territory holds directly*, because `spec/logistics.md` says
+**the game is the one thing that is in nothing** and a loose resource would be a second. And *is
+lost* becomes *returns to its source*, which is `P-369`.
+
+## What this does not do, and why
+
+**It does not add the sweep as a recipe.** `C-80` names three gaps and this closes two: a place for
+loose matter, and what holds it. **The third needs the saturating rewrite**, and that is the work you
+said you wanted to look at next.
+
+The reason is worth stating rather than deferring silently. A sweep that fires once and removes *the
+amount above what the containers hold* is a **state-dependent quantity**, which is precisely what
+`P-368` forbids. A sweep that removes **one** unit and fires until the rest fits is constant-weight -
+but the guard that stops it compares two quantities, and the release's four roles are `require`,
+`limit`, `consume` and `produce`. **Whether `limit` can carry that comparison is the first question
+of the saturation work**, and answering it here would be deciding it in passing.
+
+## One consequence the code lane found, which is worth more than this proposal
+
+**`P-369` says a source has no end, and an unbounded place is what makes a zero test undecidable.**
+That is `X-9`. `reports/petri.md` can currently say the release's two zero tests cost nothing **only
+because both are on a garrison, bounded at 1**.
+
+**So if a source is ever modelled as a place, that conclusion changes.** It need not be - a source can
+stay outside the accounting, with extraction as a transition that makes matter rather than moves it,
+which is what the checks do today. **But the choice is now load-bearing and nobody has made it.**
+Filed here rather than as its own item because it is `P-369`'s consequence and this is `P-369`
+reaching the release.
+
+
 ## Addressed to other perspectives
 
 ### S-87 - A Petri net view of the rules, in the reports
 
-**to** code - **status** open - **raised** 2026-09-10 - **source** Sean, asking for a full Petri net
+**to** code - **status** **acted** 2026-09-10 - `ab21cd9`; the code lane built it and corrected two of this item's numbers - **raised** 2026-09-10 - **source** Sean, asking for a full Petri net
 diagram in the reports, browsable from GitHub after a deploy
+
+**Both corrections were this lane quoting a measurement of the research lens's model as a
+measurement of the release.** This item said **five** recipes cannot be drawn and named
+`end-of-turn losses`, `grow`, `perish`, `refuel` and `upkeep`. **`refuel` and `end-of-turn losses`
+do not exist in `releases/first-release.md`** - zero occurrences, checked. The release has **16
+recipes and four undrawable ones**: `work`, `upkeep`, `grow` and `perish`, and `work` is in the
+list because its Qty is an expression. It also said 19 places and 18 transitions, where the
+release yields **15 places and 49 arcs**.
+
+**The code lane did not chase agreement, and was right not to.** Two derivations of one thing
+that disagree is the case this item itself named; forcing the release's parse to match a
+re-encoding would hide exactly what the second derivation is for.
+
+**And the requirement this item did get right paid for itself.** Every recipe that moves food is
+one of the four excluded, so **food appears nowhere in the drawn net** - a reader would conclude
+the game has none. The page says so before it draws anything, and a test asserts food's absence
+so the sentence explaining it cannot outlive the fact.
 
 **What he asked for**, 2026-09-10: *lets get a full petri net diagram into the reports, so that I can
 browse it from github after a deploy.*
