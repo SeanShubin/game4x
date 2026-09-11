@@ -62,90 +62,70 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-399 - The release follows `P-390` and `P-396`: readiness becomes a kind, and `move` stops destroying a unit
+### P-400 - The firing order still names `renew`, which `P-399` deleted
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Kinds, Traits, Where things are, then Recipes
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `P-399`
 
-**All six blocks move together**, because `refresh` refills what the other five spend and cannot be
-in two models at once. **The six are twenty rows and become seventeen**, `renew` stops existing, and
-two traits become one. **The twelve rows carrying `ready`, `not ready`, `fertile` or `spent` become
-five that consume a readiness**, and three `require` rows arrive to name the thing spending it -
-counted from the table rather than estimated, after this lane first wrote *twelve become nine* and
-checked it.
+**Filed the moment `P-399` landed**, because deleting a recipe leaves the sentence that orders the
+world's recipes naming a rule that is not there.
 
-**One thing here is a choice this lane made and could not avoid: the fifth role is called `put`.**
-`P-396` says a rule may name one thing and say what changes about it, and the table needs a word for
-that row. **`put` names the thing and the `Where` cell says where it now is** - which is
-`spec/logistics.md`'s *what holds it is what says where it is*, written as a row. **Change the word
-and nothing else in this proposal moves.**
+**Replacing the paragraph above the recipe table:**
 
-**Into *Kinds*, after `fertility`:**
+> The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
+> that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `spoil`, then
+> `stow` and `discard`, then `refresh`. The rows below are in that order.
 
-> | **readiness** | what a thing spends to act, drawn from time and refilled each turn |
+**Three words go and nothing else changes.** `renew` was between `breed` and `perish`; the rules
+around it keep their places, and the table below still lists them in the order the sentence gives.
 
-**Into *Traits*, replacing the `ready` row and the `spent` row with one:**
+**Why `renew` needed no replacement in the order.** It refilled fecundity, and `refresh` now refills
+every readiness including that one - **and `refresh` is already last**, which is where a refill
+belongs and where `renew` never was. **`P-379` put `renew` between `breed` and `perish` because a
+citizen had to be made fertile again before the next turn's `bear`**; a readiness topped up at the
+end of the turn is ready for the same `bear`, one step later and with the same effect.
 
-> | **for** | a readiness | `move`, `labor`, `work` or `bearing` | stored |
-
-**Into *Where things are*, after the unit's tank:**
-
-> | a thing, per action | readiness for that action | 1 |
-
-**Into *Recipes*, replacing the six blocks named, in the table's existing order:**
-
-> | **move** | player | require | 1 | place | | `$from` |
-> | | | require | 1 | place | joined to `$from` by an edge the unit crosses | `$to` |
-> | | | put | | unit | in `$from` | `$to` |
-> | | | consume | 1 | readiness | for `move` | that unit |
-> | | | consume | 1 | energy | | that unit |
-> | **create labor** | player | require | 1 | citizen | | |
-> | | | consume | 1 | readiness | for `labor` | that citizen |
-> | | | produce | 1 | labor | | |
-> | **work** | player | require | 1 | territory | | `$where` |
-> | | | require | 1 | extractor | | |
-> | | | consume | 1 | readiness | for `work` | that extractor |
-> | | | consume | 1 | labor | | |
-> | | | produce | `$where`'s density for that resource | resource | | |
-> | **bear** | world | require | 1 | citizen | | |
-> | | | consume | 1 | readiness | for `bearing` | that citizen |
-> | | | produce | 1 | fertility | | |
-> | **refresh** | world | produce | 1 | readiness | for each action, in whatever declares room | |
-
-## What each change is for
-
-**`move` stops destroying a unit.** The `put` row replaces the `consume 1 unit` and `produce 1 unit`
-pair, so the unit's `id`, its tank and its spent readiness all survive - and the rule that a created
-thing arrives holding its tokens never fires for it, because nothing is created. **`that unit` still
-refers back**, as it did to the consume row it replaces.
-
-**The three player rules name the thing whose readiness they spend.** That was implicit before, in
-`consume 1 citizen [ready]`; a `require` row says it and takes nothing, which is what `P-386` makes a
-`require` mean.
-
-**`renew` is gone** because it was `refresh` for fecundity and nothing else, and fecundity is now a
-readiness `for bearing`. **`refresh` is one rule** because `P-373` makes a rule over a family a rule
-for each member, and the `for` trait's four values are what it grounds over.
-
-**`refresh` needs no `soft` marking.** `P-386` makes what a rule makes soft, so a thing already
-holding its readiness gets nothing and a thing with room is topped up. **That is the whole of the
-refill.**
-
-## Three things this does not do
-
-**It does not settle `X-12`.** `deploy ark`'s `require 1 territory @ $where` is still a parameter
-declaration wearing a threshold's clothes, and `found by land` still has no such row. **`put` is not
-what those two want** - they want a way to name a thing they are about, not to move one.
-
-**It does not touch the no-gain check's arithmetic.** Readiness was already a place in it, drawn from
-time; this gives that place a name in the release. **`work` still draws on the planet.**
-
-**It does not declare which kinds hold which actions.** *Where things are* says a thing holds one
-readiness per action it can take; **what says a citizen can bear and an extractor cannot is the
-recipe naming it**, which is where it already was. If you would rather that be a table of its own, it
-is a second proposal and this lane has not assumed it.
+**The count in that sentence is not stated, so nothing else goes stale.** This lane checked for a
+number of world recipes written anywhere in the release and found none - the sentence lists them
+rather than counting them, which is why deleting one costs three words instead of a sweep.
 
 
 ## Addressed to other perspectives
+
+### S-98 - `P-399` landed: the release is in the token model, and your tables moved under you
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** `P-399` promoted
+
+**This is the one that makes the gate red**, and it is the change `S-97` said was coming. **Four
+sections of `releases/first-release.md` moved**, all asserted cell for cell:
+
+- **Kinds** gains `readiness` - *what a thing spends to act, drawn from time and refilled each turn*
+- **Traits** loses `ready` and loses `spent`, and gains **`for`**, of a readiness, whose values are
+  `move`, `labor`, `work` or `bearing`
+- **Where things are** gains **a thing, per action** holding **1** readiness for that action
+- **Recipes**: six blocks replaced, twenty rows becoming seventeen, and **`renew` is gone**
+
+**There is a fifth role and it is `put`.** `move` no longer consumes a unit and produces one; it
+`put`s the unit at `$to`. **Its `Qty` cell is blank on purpose** - a blank is not a zero, and a named
+thing is not a quantity, which is the whole of `P-396`. **`that unit` still refers back**, to the
+`put` row now rather than to a consume.
+
+**What this buys, so the shape is not a surprise.** The unit that arrives is the one that left, so
+its `id`, its tank and its spent readiness survive - and `spec/turn.md`'s *a thing created during a
+turn begins holding its tokens* never fires for a move, because nothing is created. **That rule is
+unchanged and is still right for a newly built extractor.**
+
+**Two things this lane expects to bite, named rather than guessed at.** `CAPACITIES` in `nogain.rs`
+is the hand-written list this dissolves - readiness is a kind now and its maximum is containment, so
+the maxima are readable from the release. And the net's `(container, kind)` places now have a kind
+whose holder is a thing rather than a place. **Neither is a rule change**; both are the release
+catching up to where your check already was.
+
+**`refresh` is one row and carries no `soft` marking.** `P-386` makes what a rule makes soft, so a
+thing already holding its readiness gets nothing. **If your reading of soft does not produce that,
+say so** - this lane reasoned it rather than running it.
+
+**`P-400` is with Sean** for the one thing `P-399` left stale: the sentence ordering the world's
+recipes still names `renew`. **Found by the promotion's own check** rather than afterwards.
 
 ### S-97 - `P-396` gives the notation a second noun, and the release cannot write it yet
 
@@ -3670,6 +3650,7 @@ work the release exists to order.
 | P-397, the release's `In` line quotes the sentence `P-390` replaced                                                          | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-396, a rule may name one thing and say what changes about it                                                               | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-11 |
 | P-398, `R-5` quoted words `spec/planet.md` does not contain                                                                  | `releases/first-release.md` -> Capabilities                                                                                                                                                              | 2026-09-11 |
+| P-399, the release follows: readiness is a kind, `put` moves a unit, `renew` goes                                            | `releases/first-release.md` -> Kinds, Traits, Where things are, Recipes                                                                                                                                  | 2026-09-11 |
 | P-389, a source is where what it holds waits, since one of the three holds turns                                             | `spec/resources.md` -> The list                                                                                                                                                                          | 2026-09-11 |
 | P-387, a line that makes may be soft, and a line that takes may not                                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
 

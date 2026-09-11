@@ -69,6 +69,7 @@ Every territory has total capacity for at least one food extractor.
 | **adjacency** | two places that share an edge, held by the thing that holds them                                             |
 | **game**      | every thing is in it, and it is the one thing that is in nothing                                             |
 | **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn                           |
+| **readiness** | what a thing spends to act, drawn from time and refilled each turn                                           |
 
 ## Families
 
@@ -88,6 +89,7 @@ Every thing but the game is in another thing, and this release has three sorts o
 | a territory's total capacity for a kind | that kind                     | its total capacity for that kind |
 | a store                                 | the resource it was built for | 10                               |
 | a unit's tank                           | energy                        | the unit's fuel                  |
+| a thing, per action                     | readiness for that action     | 1                                |
 
 There are twelve territories and twelve orbits. An orbit holds units and nothing else.
 
@@ -113,7 +115,7 @@ are listed.
 | ------------------ | --------------------------------------- | ----------------------------------------- | ------------------------------------------------ |
 | **kind**           | every thing                             | one of the kinds                          | stored                                           |
 | **id**             | a thing that must be named individually | a number, unique among things of its kind | stored                                           |
-| **ready**          | whatever readies                        | yes or no                                 | stored                                           |
+| **for**            | a readiness                             | `move`, `labor`, `work` or `bearing`      | stored                                           |
 | **resource**       | an extractor or a store                 | one of the resources                      | stored                                           |
 | **force**          | citizen, garrison, ark, pioneer         | a number                                  | stored                                           |
 | **fuel**           | a unit                                  | how much energy its tank holds            | stored                                           |
@@ -131,7 +133,6 @@ are listed.
 | **unpaid**         | a thing with upkeep                     | yes or no                                 | derived: its upkeep was not met                  |
 | **phase**          | the game                                | design or play                            | stored                                           |
 | **movable**        | whatever moves                          | yes or no                                 | stored                                           |
-| **spent**          | a citizen                               | yes or no                                 | stored                                           |
 
 Food is made with `keeps` 1. The force nature holds a territory with.
 
@@ -217,9 +218,9 @@ then `stow` and `discard`, then `refresh`. The rows below are in that order.
 |                     |        | produce | 1                                    | store     | metal                                         |                          |
 | **move**            | player | require | 1                                    | place     |                                               | `$from`                  |
 |                     |        | require | 1                                    | place     | joined to `$from` by an edge the unit crosses | `$to`                    |
-|                     |        | consume | 1                                    | unit      | ready                                         | `$from`                  |
+|                     |        | put     |                                      | unit      | in `$from`                                    | `$to`                    |
+|                     |        | consume | 1                                    | readiness | for `move`                                    | that unit                |
 |                     |        | consume | 1                                    | energy    |                                               | that unit                |
-|                     |        | produce | 1                                    | unit      | not ready                                     | `$to`                    |
 | **found by land**   | player | consume | 1                                    | pioneer   |                                               |                          |
 |                     |        | produce | 1                                    | garrison  |                                               |                          |
 |                     |        | produce | 2                                    | citizen   |                                               |                          |
@@ -246,24 +247,22 @@ then `stow` and `discard`, then `refresh`. The rows below are in that order.
 |                     |        | consume | 2                                    | citizen   |                                               |                          |
 |                     |        | require | 1                                    | yard      |                                               |                          |
 |                     |        | produce | 1                                    | ark       |                                               | the orbit above `$where` |
-| **create labor**    | player | consume | 1                                    | citizen   | ready                                         |                          |
-|                     |        | produce | 1                                    | citizen   | not ready                                     |                          |
+| **create labor**    | player | require | 1                                    | citizen   |                                               |                          |
+|                     |        | consume | 1                                    | readiness | for `labor`                                   | that citizen             |
 |                     |        | produce | 1                                    | labor     |                                               |                          |
 | **work**            | player | require | 1                                    | territory |                                               | `$where`                 |
+|                     |        | require | 1                                    | extractor |                                               |                          |
+|                     |        | consume | 1                                    | readiness | for `work`                                    | that extractor           |
 |                     |        | consume | 1                                    | labor     |                                               |                          |
-|                     |        | consume | 1                                    | extractor | ready                                         |                          |
-|                     |        | produce | 1                                    | extractor | not ready                                     |                          |
 |                     |        | produce | `$where`'s density for that resource | resource  |                                               |                          |
 | **upkeep**          | world  | require | 1                                    | citizen   |                                               |                          |
 |                     |        | consume | 1                                    | food      |                                               |                          |
-| **bear**            | world  | consume | 1                                    | citizen   | fertile                                       |                          |
-|                     |        | produce | 1                                    | citizen   | spent                                         |                          |
+| **bear**            | world  | require | 1                                    | citizen   |                                               |                          |
+|                     |        | consume | 1                                    | readiness | for `bearing`                                 | that citizen             |
 |                     |        | produce | 1                                    | fertility |                                               |                          |
 | **breed**           | world  | consume | 1                                    | fertility |                                               |                          |
 |                     |        | consume | 1                                    | food      |                                               |                          |
 |                     |        | produce | 1                                    | citizen   |                                               |                          |
-| **renew**           | world  | consume | 1                                    | citizen   | spent                                         |                          |
-|                     |        | produce | 1                                    | citizen   | fertile                                       |                          |
 | **perish**          | world  | consume | 1                                    | citizen   | whose upkeep is unpaid                        |                          |
 | **age**             | world  | consume | 1                                    | thing     | keeps at least 1                              |                          |
 |                     |        | produce | 1                                    | thing     | keeps one less                                |                          |
@@ -276,8 +275,7 @@ then `stow` and `discard`, then `refresh`. The rows below are in that order.
 | **discard**         | world  | consume | 1                                    | energy    |                                               |                          |
 | **discard**         | world  | consume | 1                                    | labor     |                                               |                          |
 | **discard**         | world  | consume | 1                                    | fertility |                                               |                          |
-| **refresh**         | world  | consume | 1                                    | thing     | not ready                                     |                          |
-|                     |        | produce | 1                                    | thing     | ready                                         |                          |
+| **refresh**         | world  | produce | 1                                    | readiness | for each action, in whatever declares room    |                          |
 
 ## Biomes
 
