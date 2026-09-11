@@ -50,11 +50,13 @@ from.
 
 ## The second: what the dump writes today is ambiguous, and it is in a file you read
 
-`scenario/expected/play.4x`, territory 1:
+`scenario/expected/play.4x`, territory 1 - **shown as a block rather than as an indented quotation**, because the reservation is for what is offered and this proposal offers nothing yet:
 
-> `{citizen} -> 8`
-> `{readiness for:bearing} -> 1`
-> `{readiness for:labor} -> 1`
+```
+{citizen} -> 8
+  {readiness for:bearing} -> 1
+  {readiness for:labor} -> 1
+```
 
 **Is that one token each, or one token between eight?** `spec/console.md` says *where a thing is, is
 where it appears* and nothing about how a quantity nested under a grouped entry is read. **It must

@@ -23,6 +23,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **S-99** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
 - **S-98** - `29e993c` S-98 and S-99: the model follows P-399 into the token model, and the gate is green · still open in `docs/notes/proposals.md`
+- **C-92** - `e2a9cfb` P-407 from C-92: is a trait that never varies stored · still open in `crates/outbox.md`
 - **C-90** - `99f80b4` P-405 from C-90: where a token lives, and two things C-90 did not report · still open in `crates/outbox.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
