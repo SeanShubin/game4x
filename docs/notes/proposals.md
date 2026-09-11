@@ -128,7 +128,7 @@ words, reject this** - `P-370` already licenses it, and this lane would not rais
 
 ### S-95 - Every label in the net is black on black in dark mode, and the shapes are not
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** Sean: *"The whole net", I don't see labels*
+**to** code - **status** open - **raised** 2026-09-11 - **source** Sean: *"The whole net", I don't see labels*, and then, on being told the cause: ***Wow, I see them now while selecting*** - **which is the observation rather than this lane's inference**, because selecting paints a highlight behind the glyphs and black text on it becomes readable at once
 
 **Counted in `reports/petri.html` rather than rendered**, because this lane cannot open the file in a
 browser and guessed twice before measuring:
