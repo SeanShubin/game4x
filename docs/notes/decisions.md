@@ -21,49 +21,55 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-396 - `move` destroys a unit and builds another, and that loses more than a token
+### P-396 - `move` treats one unit as a quantity and as a thing in the same recipe
 
-**to** sean - **status** open - **raised** 2026-09-11 - **rewritten** 2026-09-11, because Sean asked what the second option solves and the answer is less than this item implied - **kind** entailed, from `P-390` promoted - **asks** a decision - **into** `releases/first-release.md` -> Recipes
+**to** sean - **status** open - **raised** 2026-09-11 - **rewritten** 2026-09-11, twice - the second time when Sean asked why the engine touches readiness at all, which is the right question and has an answer that predates `P-390` - **kind** entailed - **asks** a decision - **into** `releases/first-release.md` -> Recipes, and `spec/console.md` -> The language
 
-**Five of the six blocks go straight through.** `create labor`, `work` and `bear` lose their
-*produce ... not ready* row and consume a readiness; `renew` stops existing; `refresh` becomes one
-rule. **`move` does not**, and your question is the right one to ask about it.
+**Your diagnosis is right and nothing in the engine is doing extra work.** Readiness is not refreshed
+by moving. **It is refreshed by a rule**, `spec/turn.md`: *a thing created during a turn begins
+holding its tokens and may act at once*. **That rule is correct and wanted** - it is why a newly
+built extractor can be worked the turn it is built, which is *No penalty for building infrastructure*
+doing its job. **`move` drags it in by claiming to create something.**
 
-## What the second option was solving, and it is one symptom of three
+## The cause is older than `P-390`, and it is visible inside `move` itself
 
-**`move` is written as consume-and-produce**: it takes the unit at `$from` and makes one at `$to`.
-**So the unit that arrives is a different thing from the one that left**, and the release has to
-undo that thing by thing.
+**Two of `move`'s five rows disagree about what a unit is.**
 
-| What the departing unit had                                                     | What the arriving one has                                                      | Undone today by                                                                       |
-| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| a spent readiness                                                               | **a fresh one**, since `P-390` says a created thing arrives holding its tokens | the `not ready` trait, which tokens do not have - **this is what option two patches** |
-| an **`id`**, and `spec/logistics.md` says a thing carrying one **is one thing** | no id, because the produce row states none                                     | **nothing**                                                                           |
-| **energy in its tank**, which `move` spends from                                | no tank contents, because the tank went with the unit                          | **nothing**                                                                           |
+| Row                              | What it says                                         |
+| -------------------------------- | ---------------------------------------------------- |
+| `consume 1 unit [ready] @ $from` | **a quantity of a kind** - one unit, any unit        |
+| `consume 1 energy @ that unit`   | **one particular thing**, referred to by `that unit` |
 
-**So option two answers the first row and leaves the other two.** That is the honest answer to your
-question: **it solves no problem option one does not**, and it stops at the one this lane happened to
-notice because `P-390` had just made it visible.
+**`spec/logistics.md` already forbids the first where the second is possible**: *there is never a
+quantity of a thing with an `id` - it is one thing, and anything that holds it holds exactly it.*
+**So either a unit carries an `id`, and `consume 1 unit` is not something the release may write; or
+it does not, and `that unit` refers to nothing.** The recipe needs both and the notation offers one.
 
-**The second and third are not urgent, which is why nobody has hit them.** No unit exists in the
-scenario yet, so no id has been lost and no tank has been emptied by arriving somewhere.
+## The answer to your question, of the two you offered
 
-## So the choice is narrower than this item first said
+**It is the first - recipes being concrete - and more precisely than that.** **The notation has one
+noun: a quantity of a kind.** Everything a recipe says is *how many of what, where*. That is exactly
+right for food, metal and labor, which are interchangeable and have no identity. **It has no way to
+say *this* thing**, so a rule about one identified thing has to be written as destroy-one-and-make-one,
+and `move` is the first rule that is about an identified thing.
 
-- **A moved thing is not a created thing.** `move` says a thing changes where it is. `spec/logistics.md`
-  already carries the idea - *a thing is not located by a trait; **what holds it is what says where it
-  is***, and *a thing carrying an `id` is one thing, and anything that holds it holds exactly it*.
-  **All three rows above stop existing**, because nothing is destroyed
-- **Keep consume-and-produce and patch it.** One patch per row: the produce names the tokens it
-  arrives without, then the id it keeps, then what its tank still holds
+**Templating is not the limitation.** `P-390`'s parameterised action shows the templating carries
+weight fine - a kind plus a trait, and containment supplies the per-value maximum. **What is missing
+is a second kind of noun, not a better way to parameterise the one there is.**
 
-**The thing that looked like an argument for the second is not one.** A Petri net has no move
-primitive - a token moving is an input arc and an output arc, which is exactly consume-and-produce -
-so keeping that shape looked like keeping the drawing honest. **But the release already states rules
-in one form and grounds them into another**: a family becomes its members, a density becomes its
-cases, and `P-390`'s actions ground into tokens. **A move in the notation can ground into two arcs in
-the net**, and the net loses nothing.
+## So the decision is narrower than a patch to `move`
 
-**This lane is still not recommending, because the first changes the notation and notation is yours.**
-What it will now say plainly is that the second is three patches rather than one, and that it was
-offered as one because only one of the three had been noticed.
+- **The notation gains a way to name one thing and say what changes about it.** `move` says a unit is
+  somewhere else. Its `id`, its tank and its spent token all survive because nothing is destroyed,
+  and `spec/logistics.md` stops being contradicted. **`deploy ark` and `found by land` want it too** -
+  `X-12` records the same pressure, a `require` row that is a parameter declaration wearing a
+  threshold's clothes
+- **Keep one noun and patch each loss.** Three patches, one per thing that does not survive being
+  destroyed: the tokens it arrives without, the `id` it keeps, what its tank still holds. **And
+  `spec/logistics.md` stays contradicted**, because `consume 1 unit` is still a quantity of a thing
+  with an `id`
+
+**This lane is not recommending, because adding a noun to the notation is a design decision and
+those are yours.** What it will say is that the contradiction is there today, with or without
+`P-390`, and that this item found it by being asked *why would the engine do that* rather than by
+looking for it.
