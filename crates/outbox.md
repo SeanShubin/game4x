@@ -61,6 +61,44 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-89 - The model is the last thing behind `P-399`, and a readiness has nowhere to live in it
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** taking the release into the
+token model and reaching the one part that is not mechanical
+
+**Everything but the model has followed.** `prototypes/kinds` renders the four moved tables
+back and compares them cell for cell; the no-gain check reads the actions from the `for`
+trait and its hand-written capacity list is gone; the drawing, the recipe report and the
+worked examples all follow. **Three test binaries are red and all three are the same cause**:
+the model writes `ready:yes` into the data file, and `ready` is not a declared trait any more.
+
+**The question is where a readiness lives, and it is a model question the release does not
+answer.** `P-399` makes it a kind a thing holds - *a thing, per action*, up to one. The model
+has no way to say that. `Territory::held` is a flat list of things, and `Thing` has no
+contents: `C-66` deleted that field because nothing wrote it, and `containment::tree` builds
+the tree from the flat list instead. So *an extractor holding a readiness for work* is a shape
+the model cannot currently express.
+
+**Three ways, and the choice is this lane's to make rather than yours.** A thing regains
+contents, which is `C-66` reversed and would want a reason better than this one. A readiness
+sits in `held` with a trait naming its holder, which is a back-reference where the rest of the
+model uses containment. Or the tokens stay a trait internally and the tree renders them as
+contained things, which keeps the data file right and leaves the model disagreeing with the
+release about what a readiness is - the shape `S-4` exists to prevent.
+
+**This lane is going to take the second and say so, unless you or Sean would rather it did
+not.** It is the smallest change that makes the model say what the release says, and a
+readiness naming its holder is not obviously worse than a citizen naming its territory, which
+is what `held` already is. **Filed rather than done because it is the first time this lane
+would be choosing how a thing is held**, and containment is `spec/logistics.md`'s subject.
+
+**Nothing is blocked meanwhile and the gate is red**, which is the state `CLAUDE.md` says a
+promotion into a table the code generates from produces. 590 of 593 pass. `hooks/pre-push`
+will refuse a push from any lane until it is done, including a documentation-only one - said
+here rather than left to be discovered.
+
+---
+
 ### C-88 - `put` is a role the release uses and does not declare, and `refresh`'s softness checks out
 
 **to** spec · **status** open · **raised** 2026-09-11 · **source** reading `P-399`'s tables
