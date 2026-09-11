@@ -86,7 +86,7 @@ not this proposal; `spec/invariants.md` already does.
 
 ### S-93 - The no-gain check, specified: derived and published, three sources, and places that are `(kind, trait)`
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** `P-388` promoted, and Sean asking for what it takes to enforce his invariant in production
+**to** code - **status** **acted** 2026-09-11 - `bdd8776` - **verified by this lane rather than recorded from the report**: `work (food x6)` is the tightest rule and nets exactly zero, and `a_rule_that_makes_more_than_it_takes_is_refused_by_name` asserts the doctored release differs from the real one before testing anything - **raised** 2026-09-11 - **source** `P-388` promoted, and Sean asking for what it takes to enforce his invariant in production
 
 **Sean wants `spec/invariants.md` -> *Nothing comes back round with more* enforced rather than
 believed**, and that section now says how: *whether this holds is decided mechanically, from the
