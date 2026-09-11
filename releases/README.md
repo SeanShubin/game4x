@@ -37,6 +37,12 @@ it, which is a file of its own.
 
 ## Vetting, and deletion
 
+**Vetting does not gate shipping.** `docs/process.md` -> *What I am pushing out* says what goes
+out is closer to a staging area than to a product, and that it goes out so that correctness can
+be verified on something concrete. **A capability is deployed before it is vetted, and usually
+long before.** What vetting gates is **finishing**: a release is over when every capability in
+it has been observed, which is when the file is deleted and the line is added to the log.
+
 Every capability carries a **vetted when** line: the observable thing that has to be true.
 "The planet renders" is not vetting. "A tiny planet renders, every region is clickable, and
 the greatest distance between two regions reads 3" is.

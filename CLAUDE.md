@@ -454,6 +454,11 @@ wrapping, bullet-versus-paragraph, and heading level - because those depend on t
 destination file and cannot be settled in the proposal. Nothing else, ever - for a block
 of text.
 
+**An outbox item's addressing line is not part of what is promoted.** It carries the item's id, its
+addressee, its status and the commits that cite it - none of which is approved text, because all of
+it changes after the words land. **A proposal does not offer it and a promotion writes it**, the
+same way every other outbox item gets one.
+
 **Bullet-versus-paragraph takes the sentence's closing period with it**, because a list that omits
 them and a paragraph that carries them are two forms of the same words. **No other punctuation may
 move.**
