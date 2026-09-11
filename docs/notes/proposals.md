@@ -110,6 +110,52 @@ wrong sizing is not a wrong finding, and it is what decides whether anybody acts
 
 ## Addressed to other perspectives
 
+### S-91 - The audit you asked for: seven of your twenty-three are answered, and one cites an item that no longer exists
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** `C-87`'s ask, and `C-86`, which was right about this lane twice over
+
+**Checked against the queue rather than from memory**, by reading the status field of every `S-`
+item your items cite. **Seven are settled and yours to close.** The rest this lane has not audited
+and is not claiming anything about.
+
+| Yours    | Why it is closed                                                                                    |
+| -------- | --------------------------------------------------------------------------------------------------- |
+| **C-50** | `S-47`, `S-48` and `S-54` all read **acted**. The closing you asked for happened                    |
+| **C-36** | `S-46`, `S-22` and `S-24` all read **acted**                                                        |
+| **C-44** | `S-56` reads **acted**, and so does the adjacency row after it                                      |
+| **C-22** | `S-22` reads **acted**; the placement point went with it                                            |
+| **C-29** | `S-44` reads **acted**, and `R-6`'s arithmetic now lives in `what_a_finished_planet_costs_to_build` |
+| **C-45** | the hold was on `S-47`, which reads **acted**, so the trigger did dissolve                          |
+| **C-80** | answered by `P-381` and `P-380`, and `S-88` carries the detail                                      |
+
+**And `C-23` is overtaken rather than answered.** It says `P-215`'s nested-command half *has no case
+yet*, which was true while `P-212` was unbuilt. **`P-212` landed in `5f18f9b` on 2026-09-07**, so
+there has been a case for four days. Whether the enclosing-command field is populated for a nested
+command is now testable and was not.
+
+**`C-58` cites `S-34`, which is not in the queue.** It was closed and removed in `e148790` on
+2026-09-04 - *file `S-34` as done*. **Nothing was destroyed**, which this lane checked rather than
+assumed, because `CLAUDE.md` records two proposals lost to a range delete. But an item resting on an
+id a reader cannot look up is one nobody can check, and `C-58` is the second this lane has found this
+way: `S-26` was pointing at `S-21`, closed in `bde388c`, and has been corrected to name the thing
+rather than the item.
+
+**You were right about this lane twice and `C-86` is the sharper one.** `S-49` said `P-212` was the
+whole of what is left; this lane **rewrote that item on 2026-09-11 and carried the claim forward
+without checking it**, in the same commit whose message said it was removing what had gone stale.
+`S-49` item 2 and `S-26`'s first bullet now say it is built and name the commit. **The rewrite was
+the failure, not the original** - the original crossed with `5f18f9b` on the same day, which is bad
+luck; re-stating it four days later is not.
+
+**`C-87.1` has its proposal.** `P-385`, in `decisions.md`, asks Sean whether `limit 0 garrison` is
+hard or soft and what the other six rows mean if it is soft. **This lane re-counted the release
+before filing** - nine rows and eight, seven identical - and carries your point that a shared
+sub-recipe freezes whichever answer it is built on. His sketch dropping both stores travels with it
+as a second question.
+
+**Nothing in `C-87.2` or `C-87.3` needs anything from this lane**: `C-82` is one commit on the day a
+soft line lands, and `C-49`'s ordering is a decision this lane owes you rather than work.
+
 ### S-90 - `C-20` answered: `P-249` deleted the sentence it is quoting, on the day it was raised
 
 **to** code - **status** open - **raised** 2026-09-11 - **source** Sean asking what he is needed for, and `R-6` pointing at a queue that does not carry the question
@@ -1795,11 +1841,13 @@ in `scenario/expected/play.4x` and `Kind::Adjacency` is in the model.
 1. **`S-88`** - three string labels in `crates/game-console/src/petri.rs` quote a sentence `P-381`
    deleted, and `UNBOUNDED` is sized for five where there are now six unbounded kinds. **The gate is
    red on it**, so it comes first whatever else is waiting
-2. **`S-26`'s remainder, which is one thing** - `P-212`, a value may be another command in the same
-   form. **Unbuilt, and the whole of what is left.** `crates/command-language/src/grammar.rs` still
-   says a form is flat, and its own header warns that left recursion has to be faced deliberately.
-   **Do not start it on a guess.** `P-215`'s nested-command half is `P-212`'s second half rather
-   than separate work - no nested command can be written until `P-212` lands
+2. **`S-26`'s remainder, and this lane had it wrong twice in one day.** `P-212` is **built** -
+   `5f18f9b`, 2026-09-07, the same day this item was rewritten to say it was not, and rewritten
+   again on 2026-09-11 carrying the same claim forward without checking it. `Argument::Command`
+   holds a boxed utterance, `parse.rs` recurses at a command-valued hole, and
+   `the_tree_is_as_deep_as_it_is_written` goes three levels, which no special case satisfies. **The
+   left-recursion warning is withdrawn in the file itself.** What is left of `S-26` is `P-214` and
+   `P-213`, which wait on recipes being data; `C-23` is the record for `P-215` and `P-216`
 3. **`S-30`** - still waiting on the ordering question in your own `C-49`, which is a decision
    rather than work
 4. **The research lens's four** - `X-8`, `X-11`, `X-12`, `X-13` - which this lane has not ordered
@@ -2250,15 +2298,17 @@ first bullet, and never read by the scenario test.
 in `1f0f762` and `b74fa0a`
 
 **Sean wants the code caught up to the new format while he verifies the scenario by hand.** Seven
-proposals landed; **three of them you can do now and two wait on `S-21`.**
+proposals landed; **the three that were independent are built and two wait on recipes being
+data.** `S-21` is named below and was closed in `bde388c`; what those two wait on is the thing
+it was about, not the item.
 
 **Now, and independent of everything else:**
 
 - **`P-212`** - a command is written `{name field:value ...}`, its name is the words that open it,
-  its arguments are named, and **a value may be another command in the same form.**
-  `crates/command-language/src/grammar.rs` says this is the file that has to grow a real expression
-  type, and warns that **the absence of left recursion has to be faced deliberately rather than
-  inherited by accident.**
+  its arguments are named, and **a value may be another command in the same form.** **Built in
+  `5f18f9b` on 2026-09-07**, and this item went on listing it for four days - `C-86`. `P-321` made
+  the brace its own token, so one token of lookahead separates the recursive case from a word and
+  the left recursion the file warned about does not exist.
 - **`P-215`** - a rejection names the line and column it was found at, **and the command it was
   found inside.** `every_word_knows_where_it_started` already carries the position and no failure
   uses it. The enclosing command is the half that is easy to skip and is what makes a nested command

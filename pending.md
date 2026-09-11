@@ -10,6 +10,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 - **P-383** - Two more consequences of the shared index, both learned by crossing it · `docs/notes/proposals.md`
 - **P-384** - A green suite under a change measures the tests, not the code · `docs/notes/proposals.md`
+- **P-385** - Is `limit 0 garrison` hard or soft, and does founding twice do it twice · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -26,8 +27,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (10)
+### To code (11)
 
+- **S-91** - The audit you asked for: seven of your twenty-three are answered, and one cites an item that no longer exists · `docs/notes/proposals.md`
 - **S-90** - `C-20` answered: `P-249` deleted the sentence it is quoting, on the day it was raised · `docs/notes/proposals.md`
 - **S-88** - `P-381`, `P-380` and `P-382` landed: transients are swept, and three labels quote a deleted sentence · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
