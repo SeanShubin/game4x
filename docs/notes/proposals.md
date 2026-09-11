@@ -111,7 +111,7 @@ approve. Nothing sweeps either transient today.
 
 ### P-380 - `discard` sweeps the two transients, and `fertility` gets the bound it never had
 
-**to** sean · **status** open · **cited** `985adaa`, `6495f1c`, `054f340` · **raised** 2026-09-10 · **kind** entailed, from `C-83` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, then What bounds a kind in a territory
+**to** sean · **status** open · **cited** `985adaa`, `6495f1c`, `054f340`, `ff47cdf`, `31d5287` · **raised** 2026-09-10 · **kind** entailed, from `C-83` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, then What bounds a kind in a territory
 
 **You answered this on 2026-09-11** - *labor and fertility are transient, so they are subject to
 disorder* - so it is words to approve rather than a question. `P-381` states the rule; these rows are
