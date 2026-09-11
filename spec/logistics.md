@@ -31,8 +31,8 @@ or pastes it from a [proposal](../docs/notes/proposals.md).
   that never could
 - **What a kind may contain is a fact about the kind and not about any one of them.** Nothing becomes
   a different sort of thing by picking something up
-- **Containing is not referring.** A thing may name another without holding it - an extractor names
-  the node it works, and the node is not inside it
+- **Containing is not referring.** A thing may name another without holding it - an adjacency names
+  the two places it joins, and neither of them is inside it
 - A thing is not located by a trait. **What holds it is what says where it is**, and nothing else
   does
 - A thing may carry an **`id`**, and one that does is unique. **There is never a quantity of a

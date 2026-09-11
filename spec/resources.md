@@ -28,8 +28,15 @@ Every resource has two properties, and they are independent of each other:
 
 - Matter is conserved and its arrangement is not. Order is lost for nothing and restored only by
   work
-- A thing not kept in order is lost when the turn ends. Keeping it in order costs labor, unless it
-  is caught where it was made
+- **Every kind of matter has a source, and there is no end of what a source holds.** A source is
+  where matter waits, and **what is in a source cannot be spent**
+- **An extractor, and the labor to work it, bring matter out of its source - into disorder**
+- **Matter that is out of its source may be spent, whether it is in disorder or in order.**
+  **Order is being in a container**; disorder is lying loose where it was made
+- **When a thing is destroyed its matter falls into disorder** where it stood. What a thing was
+  made of survives it; only the arrangement is lost
+- **What is still in disorder when a turn ends returns to its source.** What a container holds
+  stays. **Nothing is destroyed** - what nothing is holding goes back where it came from
 - A part is one metal, arranged. The metal in a thing is what binds it together plus the metal in
   each of its parts
 - What binds a thing is at least one metal, so a thing made of nothing still costs something

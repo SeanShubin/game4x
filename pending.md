@@ -8,9 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-371** - `spec/logistics.md` names a thing that was deleted, and its example has a live replacement · `docs/notes/proposals.md`
-- **P-370** - The fiction is richer than the rules, and that is not a gap · `docs/notes/proposals.md`
-- **P-369** - Matter cycles: a source, then disorder, then its source again · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -92,6 +89,7 @@ it exists to ask.
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359
 - `docs/process.md` -> What I read, and what I do - P-238, P-297, P-301, P-306, P-313
+- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371
 - `spec/turn.md` -> Order of operations - P-41, P-54, P-135, P-136, P-185
 - `docs/process.md` -> How I know the game is right - P-219, P-225, P-228, P-269
 - `docs/process.md` -> Outboxes and the index - P-242, P-299, P-305, P-325
@@ -99,7 +97,6 @@ it exists to ask.
 - `releases/first-release.md` -> Where things are - P-265, P-311, P-320, P-358
 - `spec/control.md` -> Winning - P-77, P-81, P-125, P-361
 - `spec/interface.md` -> Surfaces - P-73, P-116, P-200, P-216
-- `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290
 - `docs/process.md` -> All lanes - P-247, P-248, P-324
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
