@@ -21,76 +21,78 @@ here without first becoming a proposal.
 
 ## Open
 
-### P-390 - What to call a thing time refills, given there will be a third
+### P-390 - An allowance, and whether it is a trait pair or a kind time supplies
 
-**to** sean - **status** open - **raised** 2026-09-11 - **rewritten** 2026-09-11, when Sean said more than one resource will come from time - **kind** entailed, from `S-93` built - **asks** a decision - **into** `releases/first-release.md` -> Traits, and `spec/invariants.md` -> Nothing comes back round with more
+**to** sean - **status** open - **raised** 2026-09-11 - **rewritten** 2026-09-11, twice - Sean took *allowance*, asked for examples, and asked whether a count makes things fungible - **kind** entailed, from `S-93` built - **asks** a decision - **into** `releases/first-release.md` -> Kinds, Traits, Recipes
 
-**Your invariant is decided mechanically now** - `reports/nogain.md`, 43 rules, a weighting solved for
-rather than declared, nothing gaining. **The arithmetic was verified here rather than relayed**: the
-tightest rule is `work (food x6)`, netting +6 food at 4 against a draw on the planet at 20 and a labor
-and a readiness at 2 each. Exactly zero.
+***Allowance* is taken** and is used throughout below.
 
-**It rests on a list written in Rust.** `nogain.rs` declares two trait pairs - `ready`/`not ready`
-and `fertile`/`spent` - and **that list decides which rules draw on time**, and so whether a weighting
-exists at all. A third one is a code edit today.
+## What the release already has, which nothing states
 
-## The two that exist are named two different ways
+**The allowance and the thing it yields are two different objects, and the release already models
+them separately.** `fertility` is a **kind** - a token `bear` makes and `breed` spends. `spent` is a
+**trait** of a citizen. They are not two names for one idea.
 
-| Trait   | Named for           | Its other value | In the *Traits* table                               |
-| ------- | ------------------- | --------------- | --------------------------------------------------- |
-| `ready` | the **full** state  | `not ready`     | yes or no                                           |
-| `spent` | the **empty** state | `fertile`       | yes or no - **and `fertile` appears nowhere in it** |
+| The thing         | Its allowance, today a trait pair | Spending it yields            |
+| ----------------- | --------------------------------- | ----------------------------- |
+| a citizen         | `fertile` / `spent`               | one `fertility`               |
+| a citizen         | `ready` / `not ready`             | one `labor`                   |
+| an extractor      | `ready` / `not ready`             | nothing - it lets `work` fire |
+| an ark, a pioneer | `ready` / `not ready`             | nothing - it lets `move` fire |
 
-**A third has to copy one habit or the other and nothing says which.** That is the cost being paid
-now, before any third exists.
+**So `create labor` and `bear` are the same rule twice** - spend an allowance, get a token - and
+`refresh` and `renew` are the same rule twice, refilling one from time. **Four allowances, two
+habits of naming, and no statement anywhere that they are one thing.**
 
-## One word is not available
+## Naming the resource, which is what you asked for an example of
 
-**`capacity` is containment's.** *Total capacity*, *used capacity*, *a capacity of 1*, *room* - nine
-uses in two files. Using it for a per-turn allowance would give one word two unrelated meanings in one
-release. **The check already collides with this**, calling these places *a capacity, spent by acting*
-in a report that also prints containment capacities.
+**The allowance stops being a trait and becomes a kind the thing holds**, drawn from time the way
+metal is drawn from the planet. `ready` and `spent` disappear; what replaces them is containment,
+which the specification already has: *what a thing may contain is a maximum per kind.*
 
-## Three ways, and they disagree about what changes
+| Today                                                                                         | Naming the resource                                          |
+| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `create labor`: consume 1 citizen `[ready]`, produce 1 citizen `[not ready]`, produce 1 labor | consume **1 readiness** in the citizen, produce 1 labor      |
+| `bear`: consume 1 citizen `[fertile]`, produce 1 citizen `[spent]`, produce 1 fertility       | consume **1 fecundity** in the citizen, produce 1 fertility  |
+| `work`: consume 1 extractor `[ready]`, produce 1 extractor `[not ready]`, ...                 | consume **1 readiness** in the extractor, ...                |
+| `refresh`: consume 1 thing `[not ready]`, produce 1 thing `[ready]`                           | produce **1 readiness** into whatever can hold one, **soft** |
+| `renew`: consume 1 citizen `[spent]`, produce 1 citizen `[fertile]`                           | produce **1 fecundity** into a citizen, **soft**             |
 
-- **Name the pair.** A template declares, per allowance, the word for full and the word for empty;
-  `ready`/`not ready` and `fertile`/`spent` become two rows of it. **Vocabulary changes, the model
-  does not.** A third is a row
-- **Name the resource.** Time offers resources the way the planet does, and a thing holding one is
-  holding that resource. The states stop being named at all - full is *holding one*, empty is
-  *holding none*. **The model changes and the vocabulary shrinks**
-- **Make it a count.** A thing holds *n* of an allowance and acting spends one, so `ready` is `n = 1`
-  and `not ready` is `n = 0`. **A unit that acts twice in a turn becomes expressible with no new
-  rule** - and `refresh` becomes a soft line refilling up to the allowance, which `P-386` and `P-387`
-  just made a shape the game has
+**A citizen's capacity for readiness is 1**, the way a store's capacity for food is 10 - the same
+sentence in `spec/logistics.md`, not a new one. **Refilling is a soft produce into a bounded
+container**, which is the shape `P-386` and `P-387` just gave the game. **Nothing here is a new
+mechanism.** Two rows leave *Traits*, two kinds join *Kinds*, and `refresh` and `renew` become one
+rule shape.
 
-**The first is smallest and the third is the one that buys something.** They are not exclusive: a
-count needs a name, and the template is where an allowance would be declared either way.
+**And it explains a bug the check hit.** `nogain.rs` found that counting *not ready* made
+`create labor` read as pure gain. Under this reading `not ready` is **room**, not contents - `P-374`
+says *what is stored is the room left* - so it was counting the wrong half of a containment.
 
-## If it is a template, this is the shape
+## Your fungibility question, which is about a design I did not mean
 
-> | Allowance   | Full      | Empty       | Of                | Refilled |
-> | ----------- | --------- | ----------- | ----------------- | -------- |
-> | `readiness` | `ready`   | `not ready` | whatever readies  | 1 a turn |
-> | `fertility` | `fertile` | `spent`     | a citizen         | 1 a turn |
+**You are right that it would be untenable.** A citizen with *two actions* to spend on labor or
+fertility or one of each is a **shared pool**, and it makes two unrelated abilities interchangeable
+by accident.
 
-**Offered as a shape rather than as words to approve**, because the column heading is the question
-below and the table cannot be final until it is answered.
+**What I meant is a count per allowance and they never mix.** A citizen holds one readiness and one
+fecundity; they are different kinds, and no rule turns one into the other. **Saying a citizen's
+capacity for readiness is 2 makes it work twice a turn and changes nothing about its fecundity.**
 
-## The word itself
+**So *make it a count* is not a third option.** It is what naming the resource gives you for free,
+because containment is already *a maximum per kind*. **Two options, not three** - and the one you
+called a last resort is the one that cannot express a count at all, since a trait pair is yes or no.
 
-**Candidates, and what each costs.** None of them collides with anything in the repository - checked
-rather than assumed.
+## The two that remain
 
-| Word          | For it                                                                                 | Against it                                                                                     |
-| ------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| **allowance** | says *per turn* without being told; a plain English word a player would read correctly | faintly bureaucratic                                                                           |
-| **faculty**   | precise - a power to act, held and spent; reads well as *a thing's faculties*          | formal, and unfamiliar as a game term                                                          |
-| **charge**    | short, and *charged*/`discharged` is a ready-made pair                                 | reads as energy, which is a resource this game already has                                     |
-| **vigor**     | fictional flavour, no technical baggage                                                | says nothing about where it comes from or that it is per-turn                                  |
-| **readiness** | already `P-388`'s word, so nothing new is introduced                                   | it is also the name of **one** of them, so the general and the particular become the same word |
+- **Name the pair.** A template declares full and empty per allowance. **Smallest change, and it
+  keeps four allowances as four vocabularies.** A count stays inexpressible
+- **Name the resource.** One mechanism, no new words beyond the kinds themselves, and a count comes
+  with it. **The larger change, and it is the unification you said you prefer**
 
-**This lane would take *allowance*, and that is a preference rather than a finding.** It is the only
-candidate whose everyday meaning already carries *one per turn*, which is the half a reader has to be
-told otherwise. **`readiness` is the one to avoid** for the reason `capacity` is: it would name both
-the family and a member.
+## What this lane cannot tell you, and would check before you commit
+
+**Whether a held allowance takes up room in the territory.** `spec/logistics.md` says *a thing that
+contains things takes up capacity in whatever contains it, so capacity is not conserved*. A readiness
+inside a citizen inside a territory may therefore need the territory to declare room for it, which
+would be a real cost and is not obviously intended. **One sentence decides it and this lane has not
+found the sentence.** Say the word and it is the next thing checked.
