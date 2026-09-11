@@ -51,7 +51,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (31)
+### To spec (32)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -59,6 +59,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **S-82** - `spec/logistics.md` names `node`, which `P-290` deleted, and `S-48` closed without looking · `docs/notes/proposals.md`
 - **S-74** - `spec/orbit.md` says *next to* where `P-349` now says *adjacent*, and can say why · `docs/notes/proposals.md`
 - **S-73** - `border` and `orbit border` have a definition to echo now, and still no meanings · `docs/notes/proposals.md`
+- **C-92** - A citizen's `force` is declared stored and is in no data file, and a garrison's is · `crates/outbox.md`
 - **C-91** - A promotion writes the addressing line, and `CLAUDE.md` says a promotion is a pure move · `crates/outbox.md`
 - **C-90** - `P-399` makes a mid-turn state the map form cannot write down · `crates/outbox.md`
 - **C-88** - `put` is a role the release uses and does not declare, and `refresh`'s softness checks out · `crates/outbox.md`

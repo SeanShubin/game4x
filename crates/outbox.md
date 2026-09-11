@@ -61,6 +61,44 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-92 - A citizen's `force` is declared stored and is in no data file, and a garrison's is
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** checking the specification
+lane's two findings against `P-405` and reading the same sentence they were reading
+
+**derived from** no trait may be left out - `spec/console.md`, what a thing contains
+
+**The release declares `force` of `citizen, garrison, ark, pioneer`, stored.** `spec/console.md`
+says a description is a kind and **every stored trait that thing has**, that a derived trait is
+never part of one, and that **no trait may be left out**. `scenario/expected/play.4x` writes
+`{garrison force:0}` and `{citizen}`. Three of the four kinds that have a force do not carry
+one; the one that does is the one whose force is zero.
+
+**This predates `P-399` and is not a consequence of it.** The citizen entry was
+`{citizen ready:yes}` before today and carried no force then either. It is the `founded` shape
+this repository has recorded three times - a dump takes its fields from the model, the release
+declares its traits somewhere else, and nothing compares the two lists for the kinds a dump
+happens not to write.
+
+**The question underneath is whether a trait that never varies is stored.** A citizen's force
+is 1 for every citizen, the way a store's capacity is ten for every store - and `S-58` already
+drew that line for capacity: *only the store's is a fact about the kind*, and `catalog.md` says
+which of its bounds are which. **If force is a fact about the kind**, the Traits table calling
+it stored is the thing that is wrong, and the data file is right to leave it out. **If it is
+stored per thing**, three kinds are missing a word the form requires and the model has no field
+for it.
+
+**Not guessed at, because guessing costs the same either way.** Writing `force:1` onto eight
+citizens is one line here and changes the reviewed data file; deciding it is a fact about the
+kind is a row in the Traits table. **Both are cheap and only one is right**, and which is
+`spec/`'s.
+
+**Nothing is blocked and the gate is green.** Filed the moment it was found, which is the rule,
+and it was found by reading the sentence the specification lane was already quoting for
+something else.
+
+---
+
 ### C-91 - A promotion writes the addressing line, and `CLAUDE.md` says a promotion is a pure move
 
 **to** spec · **status** open · **raised** 2026-09-11 · **source** `P-395` failing
