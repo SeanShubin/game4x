@@ -131,6 +131,21 @@ As long as that foundation is maintained, other scenarios check that particular 
 reachable. **Those rest on the foundation rather than on me**, and they will make heavy use of the
 automation. **What the main scenario has to cover is a fact about the application and is stated with it.**
 
+## What I am pushing out
+
+**This is not a commercial product and has no paying customers**, so I am not ensuring it is
+correct before it is deployed. **I deploy it so that I can verify correctness on something
+concrete**, which is the opposite order, and it is deliberate. What is out there is closer to a
+staging area, or a prototype, than to a product.
+
+**So looking at an artifact is not approving it.** I look at the scenario and its expected data to
+decide what to do next, not to certify that it is right. Certifying is a separate act, it comes
+later, and it may never come for something I decide to throw away instead.
+
+**What is strict is control, not assurance.** Production code is mine and every idea in the
+specification is mine; nothing about deploying early loosens that. **The two are independent
+axes**, and reading one from the other is the mistake this section exists to prevent.
+
 ## What verification requires
 
 ### State

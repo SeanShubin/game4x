@@ -203,8 +203,8 @@ on surplus food or starves for want of it; what expires expires, and what was no
 lost; and time refills every thing's tokens to the number its kind declares*.
 
 The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
-that order: `upkeep`, then `bear`, `breed` and `renew`, then `perish`, then `age`, then `spoil`,
-then `stow` and `discard`, then `refresh`. The rows below are in that order.
+that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `spoil`, then
+`stow` and `discard`, then `refresh`. The rows below are in that order.
 
 | Recipe              | Owner  | Role    | Qty                                  | Kind      | Traits                                        | Where                    |
 | ------------------- | ------ | ------- | ------------------------------------ | --------- | --------------------------------------------- | ------------------------ |

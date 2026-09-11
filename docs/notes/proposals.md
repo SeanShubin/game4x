@@ -62,91 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-401 - What I am pushing out, and why looking at it is not approving it
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `docs/process.md`, a new section after *How I know the application is right*
-
-**Sean, 2026-09-11**: *I am looking at but not approving the artifacts such as `play.4x`, so I
-wouldn't call it a "review". I am using it to move towards an actual release because I don't want to
-formally review something without a concrete implementation. This is not a project with paying
-customers so I am not ensuring the product is correct before it is deployed, I am deploying it so
-that I can verify correctness on something concrete.*
-
-**The documents say the opposite in three places**, which is why this is worth a section rather than
-a word. `docs/process.md`: *the input and the expected are what I **review by hand for
-correctness***, and *there is a main scenario ... **that is what I vet***. `spec/scenarios.md`: *it
-is the foundation, and it is **vetted by hand***. And `scenario/expected/play.4x` asks you to write
-**`REVIEWED by Sean`** and says *that edit is the review, and it is the only record of one*.
-
-**Into `docs/process.md`, as a section of its own:**
-
-> ## What I am pushing out
->
-> **This is not a commercial product and has no paying customers**, so I am not ensuring it is
-> correct before it is deployed. **I deploy it so that I can verify correctness on something
-> concrete**, which is the opposite order, and it is deliberate. What is out there is closer to a
-> staging area, or a prototype, than to a product.
->
-> **So looking at an artifact is not approving it.** I look at the scenario and its expected data to
-> decide what to do next, not to certify that it is right. Certifying is a separate act, it comes
-> later, and it may never come for something I decide to throw away instead.
->
-> **What is strict is control, not assurance.** Production code is mine and every idea in the
-> specification is mine; nothing about deploying early loosens that. **The two are independent
-> axes**, and reading one from the other is the mistake this section exists to prevent.
-
-## What follows, and it is not in this proposal
-
-**Three lines will be wrong the moment this lands**, and each is a separate small proposal rather
-than something bundled here, because you may want different words in each:
-
-| Where                       | What it says now                                                       |
-| --------------------------- | ---------------------------------------------------------------------- |
-| `docs/process.md`           | *the input and the expected are what I review by hand for correctness* |
-| `spec/scenarios.md`         | *the foundation, and it is vetted by hand*                             |
-| `scenario/expected/play.4x` | *`REVIEWED by Sean` ... that edit is the review*                       |
-
-**One of the three may need no change at all.** `docs/process.md` already carries the weaker idea in
-your own words - **absent expected data means I accept what it does now** - which is exactly
-*looking rather than certifying*, and the sentence three lines above it is what disagrees with it.
-**So this may be one document contradicting itself rather than a concept it lacks.**
-
-## The one thing this leaves open, and it is yours
-
-**Whether `vetted` still means what `releases/README.md` says it means.** That file gates the whole
-release on it: *when every capability in a release is vetted*, the file is deleted. **If deployment
-now comes first, `vetted` is no longer a gate on shipping** - it is a certification that happens on
-something already out there.
-
-**This lane has not touched that**, because changing what `vetted` gates would change what a release
-*is*, and it is a bigger question than the one you asked. **Say the word and it becomes the next
-proposal.**
-
-### P-400 - The firing order still names `renew`, which `P-399` deleted
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `P-399`
-
-**Filed the moment `P-399` landed**, because deleting a recipe leaves the sentence that orders the
-world's recipes naming a rule that is not there.
-
-**Replacing the paragraph above the recipe table:**
-
-> The player's recipes fire when the player chooses them. The world's fire when the turn ends, in
-> that order: `upkeep`, then `bear` and `breed`, then `perish`, then `age`, then `spoil`, then
-> `stow` and `discard`, then `refresh`. The rows below are in that order.
-
-**Three words go and nothing else changes.** `renew` was between `breed` and `perish`; the rules
-around it keep their places, and the table below still lists them in the order the sentence gives.
-
-**Why `renew` needed no replacement in the order.** It refilled fecundity, and `refresh` now refills
-every readiness including that one - **and `refresh` is already last**, which is where a refill
-belongs and where `renew` never was. **`P-379` put `renew` between `breed` and `perish` because a
-citizen had to be made fertile again before the next turn's `bear`**; a readiness topped up at the
-end of the turn is ready for the same `bear`, one step later and with the same effect.
-
-**The count in that sentence is not stated, so nothing else goes stale.** This lane checked for a
-number of world recipes written anywhere in the release and found none - the sentence lists them
-rather than counting them, which is why deleting one costs three words instead of a sweep.
+*Nothing is open. Everything filed has been decided.*
 
 
 ## Addressed to other perspectives
@@ -3736,8 +3652,26 @@ work the release exists to order.
 | P-396, a rule may name one thing and say what changes about it                                                               | `spec/console.md` -> The language                                                                                                                                                                        | 2026-09-11 |
 | P-398, `R-5` quoted words `spec/planet.md` does not contain                                                                  | `releases/first-release.md` -> Capabilities                                                                                                                                                              | 2026-09-11 |
 | P-399, the release follows: readiness is a kind, `put` moves a unit, `renew` goes                                            | `releases/first-release.md` -> Kinds, Traits, Where things are, Recipes                                                                                                                                  | 2026-09-11 |
+| P-401, I deploy in order to verify, and looking is not approving                                                             | `docs/process.md`, a new section                                                                                                                                                                         | 2026-09-11 |
+| P-400, the firing order stops naming `renew`, which `P-399` deleted                                                          | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-389, a source is where what it holds waits, since one of the three holds turns                                             | `spec/resources.md` -> The list                                                                                                                                                                          | 2026-09-11 |
 | P-387, a line that makes may be soft, and a line that takes may not                                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
+
+## Forecast cleanups that were checked and not filed
+
+A promotion that makes something else stale must file the cleanup. **A promotion that only looks as
+though it will must say so**, or the forecast is left standing as an open claim nobody retracts.
+
+| Forecast by | About                                                                                     | Checked 2026-09-11                                                                                 |
+| ----------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `P-401`     | `docs/process.md`, *the input and the expected are what I review by hand for correctness* | **not needed** - it describes the certifying act, which `P-401` says still happens and comes later |
+| `P-401`     | `docs/process.md`, *that is what I vet, and it is the foundation*                         | **not needed** - same reason; `vet` is the later act, not the looking                              |
+| `P-401`     | `spec/scenarios.md`, *the foundation, and it is vetted by hand*                           | **not needed** - same reason                                                                       |
+
+**What `P-401` actually changed was the order, not the vocabulary.** Deployment stops waiting for
+the certification; the certification keeps its name and its meaning. **This lane wrote *three lines
+will be wrong the moment this lands* before checking**, and two minutes of reading says none of them
+is.
 
 ## Rejected
 
