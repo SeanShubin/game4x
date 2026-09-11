@@ -111,59 +111,6 @@ a line carrying **both** `**to**` and `**status**` from both sides, with a test 
 in the prose beside it still fails. **If you take this, that narrowing is right; if you reject it,
 they delete it.**
 
-### P-404 - One quotation per file was the rule, and this lane has been writing one per destination
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Promotion · from the code lane reporting six proposals its check could not read
-
-**This is filed separately from `P-403` on purpose**, because both land in *Promotion* and the rule
-as written allows one quotation per **file**. **Bundling them would have broken the rule this
-proposal is about**, in the proposal about it.
-
-## What the code lane found, and what it means is worse than it reported
-
-**It reported six proposals its promotion check could not read** - `P-399`, `P-390`, `P-391`,
-`P-383`, `P-380`, `P-365` - and said it had not looked at why. **This lane looked.**
-
-`CLAUDE.md`: *a proposal asking for approval carries **exactly one quotation*** ... **A proposal that
-lands in more than one file carries one quotation for each.**
-
-| Proposal | Landed in                                  | Quotations | Permitted?          |
-| -------- | ------------------------------------------ | ---------- | ------------------- |
-| `P-365`  | `spec/orbit.md`, `spec/units.md`           | 2          | **yes** - two files |
-| `P-380`  | `releases/first-release.md`, two sections  | 2          | **no**              |
-| `P-383`  | `docs/process.md`, two sections            | 2          | **no**              |
-| `P-390`  | `spec/turn.md`, two bullets                | 2          | **no**              |
-| `P-391`  | `spec/logistics.md`, two bullets           | 2          | **no**              |
-| `P-399`  | `releases/first-release.md`, four sections | 4          | **no**              |
-
-**Five of the six were this lane widening a rule and not saying so.** Not once, and not with a
-reason given each time - five times, over two weeks, until a check nobody had pointed at them said
-it could not read them. **You approved all five and had no way to know the shape was irregular.**
-
-## The choice, and this lane has a preference
-
-**The rule could stay and this lane could split.** `P-399` would have been four proposals about one
-change, landing in four sections of one file. **That is worse for the one person who reads them**,
-which is the whole test the queue exists to pass.
-
-**Or the rule widens to the destination rather than the file.** That is what the practice already
-is, and what makes `P-399` one thing to read rather than four.
-
-**Replacing the sentence beginning *A proposal that lands in more than one file*:**
-
-> **A proposal that lands in more than one place carries one quotation for each**, in the order the
-> destinations are named - whether those places are two files or two sections of one. Everything else
-> it quotes is shown some other way, as before.
-
-**Why this lane prefers it, marked as a preference.** The reason the sentence said *file* is
-probably that nothing had yet landed in two sections of one - `P-365` was the case in hand and it
-spanned two files. **The rule was written from its example**, which is the failure this repository
-has a note about.
-
-**And it is the smaller change of the two.** Widening it makes six proposals legal that you already
-approved; keeping it makes five of them retroactively irregular and changes nothing about what
-landed, since every one of them was asserted into place cell by cell or word for word.
-
 ### P-402 - Vetting gates finishing a release, not shipping one
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/README.md` -> Vetting, and deletion · from `P-401`
@@ -3807,6 +3754,7 @@ work the release exists to order.
 | P-398, `R-5` quoted words `spec/planet.md` does not contain                                                                  | `releases/first-release.md` -> Capabilities                                                                                                                                                              | 2026-09-11 |
 | P-399, the release follows: readiness is a kind, `put` moves a unit, `renew` goes                                            | `releases/first-release.md` -> Kinds, Traits, Where things are, Recipes                                                                                                                                  | 2026-09-11 |
 | P-401, I deploy in order to verify, and looking is not approving                                                             | `docs/process.md`, a new section                                                                                                                                                                         | 2026-09-11 |
+| P-404, a quotation for each destination, not for each file                                                                   | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
 | P-400, the firing order stops naming `renew`, which `P-399` deleted                                                          | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-389, a source is where what it holds waits, since one of the three holds turns                                             | `spec/resources.md` -> The list                                                                                                                                                                          | 2026-09-11 |
 | P-387, a line that makes may be soft, and a line that takes may not                                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
