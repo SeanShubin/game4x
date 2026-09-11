@@ -139,6 +139,81 @@ its source* is about matter on purpose and stays as it is - **and it is now one 
 game uses twice**, since a thing that exhausts draws readiness out of time the same way. Saying so is
 not this proposal; `spec/invariants.md` already does.
 
+### P-391 - Three things a kind may declare about what it holds, and one inference to drop
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment
+
+**You are right about both lines, and the second is `X-20`** - which you decided on 2026-09-09 and
+which was never written on the `spec/` side. The release half landed; this is the half that did not.
+
+**Replacing the bullet beginning *A kind that declares no capacity*:**
+
+> - **A kind declares one of three things about what it may hold.** It may declare **no capacity**,
+>   and then it holds nothing of that sort and never can. It may declare a **limit**, and then it
+>   holds up to that many and may happen to be empty - so a thing holding nothing today is not
+>   thereby a thing that never could. Or it may declare **no limit**, and then it holds any number,
+>   and there is no room to record because nothing can be short of it
+
+**Replacing the bullet beginning *A thing that contains things*:**
+
+> - A thing that contains things takes up capacity in whatever contains it
+
+## Why the second is a deletion rather than a rewording
+
+**`conserved` already means something else in `spec/`.** `spec/resources.md`: *a conserved resource
+is not destroyed by being used; it changes form, and what it was made into can be taken apart to get
+it back.* **By that definition capacity is conserved** - `P-374` says *room is spent and given back*,
+and *destroying it returns one*. **So the clause asserts the opposite of what the sibling document
+defines**, which is the `capacity` problem in miniature: one word doing two jobs.
+
+**What the clause was reaching for is true and is about something else.** Building a store spends one
+of a territory's room and creates ten of food's - so the **total** across the world is not fixed.
+**That is worth saying only if you want it said**, and in those words rather than as *not conserved*.
+This lane is not offering it, because you said it may be adding something you do not mean.
+
+## The third thing, which neither of us named and the same bullet fixes
+
+**The room rule cannot express *no limit*.** *What a thing may contain is a **maximum***, and *what
+is stored is the room left*. **A territory holding metal with no limit has no maximum and no room
+number to store** - so a rule promoted on 2026-09-10 and a release paragraph promoted on 2026-09-11
+cannot both be applied to the same container. **The replacement above says the third case has no room
+to record**, which is why it is one bullet rather than two.
+
+## What the section says once these land, read whole
+
+`spec/logistics.md` -> *Containment* has taken six proposals, so it was re-read entire rather than at
+the point of change. **The other ten bullets hold**: nothing else mentions *conserved*, and nothing
+else assumes a maximum exists - *room is spent and given back* is about a thing that has room, and
+is silent where there is none.
+
+### P-392 - `action` has four meanings in `spec/` and `P-390` needs a fifth, so one of them moves
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> Everything is expressible · from `P-390`
+
+**`P-390` names an action and makes a recipe spend one.** Counted rather than recalled, `spec/` uses
+the word four times, and **three of them survive that unchanged**:
+
+| Where                                                | What it says                                                                  | Compatible?                                                                          |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `spec/interface.md`                                  | *an action that would waste part of what it costs says so before it is taken* | **yes** - a taking, of which a named action is the sort                              |
+| `spec/invariants.md` -> No step that is always taken | *no action has an intermediate step that is always taken*                     | **yes** - same sense                                                                 |
+| `spec/console.md`                                    | *for each action the* subject affords                                         | **yes** - same sense                                                                 |
+| `spec/invariants.md` -> Everything is expressible    | *composed of rules they can also use, **down to single actions***             | **no** - here an action is a **rule**, which is the one thing `P-390` says it is not |
+
+**Replacing that bullet:**
+
+> - Every rule a player can use is composed of rules they can also use, down to single rules.
+>   Nothing is provided only as a whole
+
+**Two words change and the bullet's claim does not.** It is about rules being composed of usable
+rules all the way down; *single actions* was naming the floor of that descent, and the floor is a
+rule.
+
+**This is the choice you asked to resolve, and it is the cheaper of the two.** The other was to write
+*kind of action* everywhere in `P-390` - four occurrences, in a table cell and twice in one sentence.
+**One edit here frees the word instead**, and the remaining three uses read correctly beside
+`P-390`'s definition because a firing is an instance of a named action.
+
 
 ## Addressed to other perspectives
 

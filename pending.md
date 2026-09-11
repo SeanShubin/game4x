@@ -10,6 +10,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 - **P-390** - What a thing can do is something it holds, and an action is named · `docs/notes/proposals.md`
 - **P-389** - `spec/resources.md` says a source holds matter, and one of the three holds turns · `docs/notes/proposals.md`
+- **P-391** - Three things a kind may declare about what it holds, and one inference to drop · `docs/notes/proposals.md`
+- **P-392** - `action` has four meanings in `spec/` and `P-390` needs a fifth, so one of them moves · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
