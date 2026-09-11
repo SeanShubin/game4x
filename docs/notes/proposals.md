@@ -62,91 +62,7 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-403 - An addressing line is the outbox envelope, and no envelope is ever approved
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Promotion · from the code lane's `C-91`
-
-**This file's approval comes from you directly** - your own standing policy, because a reader cannot
-tell a relayed approval from an invented one. **So this is offered, not relayed**, and the code lane
-has been told the edit needs you rather than it.
-
-## The collision, which is real
-
-**`CLAUDE.md` -> Promotion**: *the only things Claude may change while promoting are line wrapping,
-bullet-versus-paragraph, and heading level ... **Nothing else, ever** - for a block of text.*
-
-**`CLAUDE.md` -> Outboxes**: a file in `releases/` is an outbox, each capability is an item, and an
-item *carries the four fields so that `tools/outbox` can see it. Without the `**to**` line the item
-is invisible to the index.*
-
-**`P-395` offered a capability, this lane promoted it, and then had to write an addressing line the
-proposal never contained.** The check caught exactly that and was right about the bytes.
-
-## The code lane offered two ways and there is a third
-
-**It offered: permit the change, or put the line in the proposal.** Both treat the line as content
-to be governed. **It is not content. It is the envelope every outbox item has**, and nothing
-anywhere approves an envelope - **this proposal carries one, and you will not be approving it.**
-
-**Its second option cannot work, and the reason is worth keeping.** Approved text is byte-identical
-to shipped text **for as long as it ships**. **An addressing line changes by design** - `open` to
-`built` to `vetted`, hashes accumulating as commits cite it. `R-10`'s carries **`cited 7b4761f`**, a
-commit that did not exist when the proposal was written. **A line you approve once and that is wrong
-the next day is not approved text.**
-
-**Counted rather than assumed: all ten capabilities carry one**, `R-1` through `R-10`. This is the
-shape from the beginning, not a slip.
-
-**Into *Promotion*, after the paragraph ending *Nothing else, ever - for a block of text*:**
-
-> **An outbox item's addressing line is not part of what is promoted.** It carries the item's id, its
-> addressee, its status and the commits that cite it - none of which is approved text, because all of
-> it changes after the words land. **A proposal does not offer it and a promotion writes it**, the
-> same way every other outbox item gets one.
-
-**What this does not loosen.** The line holds an addressee, a status and hashes, and `tools/outbox`
-parses and reports every one. **It is not a place approved prose can hide**, which is what makes it
-safe to put outside the comparison. The code lane has already narrowed its check to match, dropping
-a line carrying **both** `**to**` and `**status**` from both sides, with a test that a word changed
-in the prose beside it still fails. **If you take this, that narrowing is right; if you reject it,
-they delete it.**
-
-### P-402 - Vetting gates finishing a release, not shipping one
-
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/README.md` -> Vetting, and deletion · from `P-401`
-
-**`P-401` moved deployment off the far side of vetting and `releases/README.md` has not caught up.**
-That file still reads as though nothing goes out until a capability is vetted: *release specs are
-temporary; when a release's capability has been vetted, its file is deleted*, and then a three-step
-ritual beginning *when every capability in a release is vetted*.
-
-**Nothing in it is wrong about what vetting is.** What is missing is what it is now **for**.
-
-**Into *Vetting, and deletion*, as its opening paragraph, before *Every capability carries a vetted
-when line*:**
-
-> **Vetting does not gate shipping.** `docs/process.md` -> *What I am pushing out* says what goes out
-> is closer to a staging area than to a product, and that it goes out so that correctness can be
-> verified on something concrete. **A capability is deployed before it is vetted, and usually long
-> before.** What vetting gates is **finishing**: a release is over when every capability in it has
-> been observed, which is when the file is deleted and the line is added to the log.
-
-**Why this is worth saying rather than leaving implied.** The three states - `open`, `built`,
-`vetted` - read as a pipeline toward release, and `built` reads as *waiting*. **Under `P-401` a
-`built` capability is not waiting to go out; it is already out.** A reader who takes `built` as
-*not yet shipped* will hold work back for no reason, which is the opposite of what you are doing.
-
-**And the pipeline has always agreed with you rather than with the file.**
-`.github/workflows/pipeline.yml` is `gate -> deploy -> verify`, and says in its own comment that the
-fuller verification *reds the run but never undoes an already-published deploy*. **So the document
-was behind the machinery, not the other way round.**
-
-## One word this lane noticed and did not fix
-
-***When a release's capability has been vetted, its file is deleted*** says one capability where the
-list below says every one. **Almost certainly a possessive that lost its plural**, and it is your
-file, so it is named here rather than corrected quietly. **If you want it to read *capabilities*,
-say so and it goes in with this** - otherwise it stays exactly as it is.
+*Nothing is open. Everything filed has been decided.*
 
 
 ## Addressed to other perspectives
@@ -3755,6 +3671,8 @@ work the release exists to order.
 | P-399, the release follows: readiness is a kind, `put` moves a unit, `renew` goes                                            | `releases/first-release.md` -> Kinds, Traits, Where things are, Recipes                                                                                                                                  | 2026-09-11 |
 | P-401, I deploy in order to verify, and looking is not approving                                                             | `docs/process.md`, a new section                                                                                                                                                                         | 2026-09-11 |
 | P-404, a quotation for each destination, not for each file                                                                   | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
+| P-403, an outbox item's addressing line is not part of what is promoted                                                      | `CLAUDE.md` -> Promotion                                                                                                                                                                                 | 2026-09-11 |
+| P-402, vetting gates finishing a release, not shipping one                                                                   | `releases/README.md` -> Vetting, and deletion                                                                                                                                                            | 2026-09-11 |
 | P-400, the firing order stops naming `renew`, which `P-399` deleted                                                          | `releases/first-release.md` -> Recipes                                                                                                                                                                   | 2026-09-11 |
 | P-389, a source is where what it holds waits, since one of the three holds turns                                             | `spec/resources.md` -> The list                                                                                                                                                                          | 2026-09-11 |
 | P-387, a line that makes may be soft, and a line that takes may not                                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
