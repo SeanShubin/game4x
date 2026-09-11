@@ -62,61 +62,74 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-369 - Everything destroyed goes into disorder, and disorder is swept unless something holds it
+### P-369 - The ground is disorder, work is what orders it, and what is not held goes back
 
-**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/resources.md`, replacing the *not kept in order* bullet
+**to** sean · **status** open · **raised** 2026-09-10 · **rewritten** 2026-09-10, because the first
+version read the labor clause wrongly · **kind** recovered · **shape** text · **asks** approval · **into** `spec/resources.md`, replacing the *not kept in order* bullet
 
 **Your decision of 2026-09-10**: *make all of these situations disorder. Any material in disorder is
-swept at end of turn unless a container is present that has space for it.*
+swept at end of turn unless a container is present that has space for it.* And, correcting this
+lane's reading of it: *pulling resources out of the ground requires extractors and extractors cost
+labor to operate. In a sense extractors are bringing resources in the ground from disorder to order.*
 
 **Replacing the bullet that begins *a thing not kept in order*:**
 
-> - **When a thing is destroyed its matter is left where it stood, in disorder.** Nothing is
->   destroyed twice: what a thing was made of survives it, and only the arrangement is lost
+> - **What a planet holds is matter in disorder, and there is no end of it.** An extractor and the
+>   labor to work it are what bring some of it into order. **That is the only way order is made**
+> - **When a thing is destroyed its matter is left where it stood, in disorder.** What a thing was
+>   made of survives it; only the arrangement is lost
 > - **Material in disorder is swept when the turn ends, unless something there can hold it and has
 >   room.** What is held is kept; what is not is gone
 
-**Most of this is already written and the code disagrees with it.** `spec/resources.md` says **matter
-is conserved and its arrangement is not**, and that **order is lost for nothing and restored only by
-work**. So a destroyed thing already owes its matter back, unarranged. What was missing is the
-sentence saying where it goes and what decides whether it survives.
+## Your correction is what makes the physics close
 
-**Three cases stop being three.**
+**This lane read the replaced bullet as saying that keeping a thing in order has an ongoing cost, and
+said the cost was being dropped. That was wrong.** The labor is the extractor's, it is spent at the
+moment order is made, and `work` already spends it - *consume 1 labor, produce the territory's
+density*. **Nothing is lost by replacing the bullet**, because the only cost it named lives in a
+recipe.
 
-| What happens                       | Today                                                                                              | Under this                                                                                                                                     |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| A thing with unmet upkeep perishes | `perish` produces the thing's metal - already right                                                | unchanged                                                                                                                                      |
-| Nature takes a territory           | `territory.rs:731` is `self.held.clear()` - **the matter vanishes**, against *matter is conserved* | the matter goes to disorder; no container survives, so the sweep takes it. **Same outcome, reached by the rule rather than by a special case** |
-| A unit is destroyed with it        | `game.rs:909` marks it `usable = false` and leaves it standing                                     | its matter goes to disorder like anything else                                                                                                 |
+**And the first offered line is the part that closes the loop.** `spec/resources.md` already says
+**matter is conserved and its arrangement is not**, and **order is lost for nothing and restored only
+by work**. What it never said is **where the disordered matter is** - and the answer is the ground,
+in unlimited quantity.
+
+**So extraction stops being an exception to conservation.** `P-368` says a named source is not a gain
+because the gathering is bounded. **Under this it is not a source at all**: nothing is created by
+`work`, the arrangement changes, and the bound on extractors is a bound on how fast order can be
+made rather than on how much matter exists. **The second law and the endless planet stop being two
+rules that have to be reconciled**, which is what `P-368` was doing with its bounded-pump sentence.
+
+## Three cases stop being three
+
+| What happens                       | Today                                                                                              | Under this                                                                                                                                  |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| A thing with unmet upkeep perishes | `perish` produces the thing's metal - already right                                                | unchanged                                                                                                                                   |
+| Nature takes a territory           | `territory.rs:731` is `self.held.clear()` - **the matter vanishes**, against *matter is conserved* | its matter goes to disorder; no container survives, so the sweep takes it. **Same outcome, reached by the rule rather than a special case** |
+| A unit is destroyed with it        | `game.rs:909` marks it `usable = false` and leaves it standing                                     | its matter goes to disorder like anything else                                                                                              |
 
 **And it kills a trait that should never have existed.** `usable` is **not declared in the release**,
 so the dump cannot show it - the code says so twice in its own comments, *a mark no artifact could
 show*. A wrecked pioneer and a working one **print identically**, which breaks `spec/console.md`'s
-*no trait may be left out* and the release's *the dump reads back into the state it came from*.
-**With `P-367` destroying units and this rule taking their matter, `usable`'s last use is
-`has_lost`**, where *no usable unit* becomes *no unit*. The trait goes.
+*no trait may be left out*. **With `P-367` destroying units and this taking their matter, `usable`'s
+last use is `has_lost`**, where *no usable unit* becomes *no unit*. The trait goes.
 
-## One thing this drops, and it is a change rather than a tidy
+## One thing the replaced bullet said that these do not
 
-The bullet being replaced says **keeping a thing in order costs labor, unless it is caught where it
-was made.** Your rule says a container with room is enough and says nothing about labor. **So the
-labor cost goes.**
+*Unless it is caught where it was made.* Read your way, that is an extractor's output going straight
+into a store - already ordered, no second cost. **The offered lines cover it**: what a container holds
+is kept, and nothing says holding costs anything.
 
-**It was never built** - a store holds what it holds and costs nothing to keep - so dropping it
-brings the specification to what the game does rather than the other way round. **But it was a real
-idea**: it made a store that catches an extractor's output cheaper than one you carry things to, and
-nothing replaces that. **If you want it kept, say so and this becomes a decision**; the offered text
-assumes you meant to drop it.
+**But it leaves one question unasked, deliberately.** Under these lines, containment is the **only**
+way to keep material - **there is no spending labor to salvage what is loose.** Your sentence says
+*unless a container is present that has space for it* and nothing about a second chance, so the
+offered text follows it. **If salvage should exist, say so and it becomes a decision.**
 
-## What it does not reach
+## What this does not reach
 
-**The sweep is still a quantity that varies** - how much fits is the container's room less what is
-in it - so `end-of-turn losses` stays one of the five recipes `P-368` names as defects. **This
-proposal makes the rule uniform; it does not make it constant-weight.** That is the saturating
-rewrite, and it is separate.
-
-
-## Addressed to other perspectives
+**The sweep is still a quantity that varies** - how much fits is the room less what is in it - so
+`end-of-turn losses` stays one of the five recipes `P-368` names as defects. **This makes the rule
+uniform; it does not make it constant-weight.** That is the saturating rewrite, and it is separate.
 
 ### S-86 - Three cleanups the eight promotions leave behind
 
