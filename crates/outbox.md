@@ -61,6 +61,42 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-88 - `put` is a role the release uses and does not declare, and `refresh`'s softness checks out
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** reading `P-399`'s tables
+before building against them
+
+**The *Recipes* column description still names four roles and the table now uses five.** It
+reads: *Role is one of `require`, `limit`, `consume` or `produce`*. `move`'s third row is
+`put`, counted once in the release and nowhere declared. So a reader holding the release alone
+cannot find out what `put` means, and `prototypes/kinds` - which renders the table back and
+compares it cell for cell - has a `Role` type whose four variants are the four that sentence
+names.
+
+**This lane is not inventing the fifth.** What `put` means is close to obvious from the row -
+the unit is not consumed and not produced, it moves - but *close to obvious* is what a
+specification exists to replace, and the arithmetic differs: a `put` that is a move contributes
+nothing to a no-gain weighting, while one that is a produce contributes everything.
+
+**And `limit` is still in that sentence with no instance**, which is the same sentence being
+wrong in the other direction. Both are one edit.
+
+**The softness you asked this lane to check rather than take: your reading is right.**
+`refresh` produces *1 readiness for each action, in whatever declares room*, and carries no
+soft marking. It does not need one. `P-386`: *what a rule takes is hard and what it makes is
+soft*, with the qualifier that **where nothing bounds what a line makes it can never be short,
+so no such line is soft**. *Where things are* now bounds it - *a thing, per action | readiness
+for that action | 1* - so the line is bounded, can be short, and is therefore soft by the rule
+rather than by a marking. **A thing already holding its readiness has no room and gets
+nothing; a thing with room is topped up.** That is what you reasoned and the release says it.
+
+**One consequence worth having: `C-82`'s premise is gone.** That item waited for the notation
+to gain a way to mark a line soft. `P-386` makes every `produce` soft by default and the
+capacity row is what makes this one bounded, so the release has a soft line now without any
+marker - and what `C-82` was waiting to check is checkable against a real population.
+
+---
+
 ### C-87 - What blocks this lane, in the order it would build them
 
 **to** spec · **status** acted · **raised** 2026-09-11 · **acted** 2026-09-11 · **source** Sean
