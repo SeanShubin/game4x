@@ -62,6 +62,50 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-396 - A rule may name one thing and say what changes about it
+
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, three times - the last when Sean chose the noun over the patches · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language
+
+**Sean, 2026-09-11**, choosing it over patching `move`: *that reads natural enough that even if it is
+not the perfect answer, I am certain it is better than the alternative.*
+
+**Into *The language*, after the paragraph beginning *A field's value may name a kind rather than a
+thing*:**
+
+> **A rule may name one thing and say what changes about it**, rather than taking a quantity of its
+> kind. What is named keeps its `id`, what it holds, and what it has already spent; **only what the
+> rule changes changes**. A quantity is for what is interchangeable, and **a thing carrying an `id`
+> is never a quantity**.
+
+**It sits there because that is where the notation already separates the two.** *`territory:1` refers
+to one particular territory; `resource:food` says which resource, and means no particular food.*
+**The language could already point at one thing and a rule could not be about one**, which is the
+gap.
+
+## What it settles, and it was broken before `P-390`
+
+**`move`'s third row consumes `1 unit`** - a quantity - **and its fourth takes energy from *that
+unit***, one particular thing. `spec/logistics.md`: *there is never a quantity of a thing with an
+`id`*. **One of those two rows has always been unwritable**, and nobody could say which until the
+notation had the other noun.
+
+**Three things stop being lost**, none of which needed a patch of its own: the unit's `id`, whatever
+its tank still holds, and the readiness it has already spent. **Nothing is destroyed, so the rule
+that refreshes a created thing never fires** - and that rule stays exactly as it is, because it is
+right for the extractor it was written for.
+
+## What this does not do, and it is the next proposal
+
+**The release still has to be able to write it.** Its recipe table has four roles - `require`,
+`limit`, `consume`, `produce` - and **none of them names a thing and changes it**. What that row
+looks like is a question about the release's table rather than about the language, and **this lane
+has not invented a word for it**, because a fifth role is the sort of thing that is easier to add
+than to remove.
+
+**`X-12` is waiting on the same thing** from the other direction: `deploy ark`'s *`require 1
+territory @ $where`* is a parameter declaration wearing a threshold's clothes, and `found by land`
+needs no such row at all. **All three rules want the same noun.**
+
 ### P-398 - `R-5` quotes words `spec/planet.md` does not contain, and it is vetted
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Capabilities · from `P-397`
