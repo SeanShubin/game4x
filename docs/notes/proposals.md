@@ -2079,39 +2079,56 @@ all. Read `docs/process.md` -> *All lanes* and *What I read, and what I do* rath
 
 ### S-49 - Everything a fresh instance of you needs, in order
 
-**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-11, because five of its seven items closed and it went on listing them - **source** the specification lane
+**to** code - **status** open - **cited** `1716f6d` - **raised** 2026-09-06 - **rewritten** 2026-09-11, when Sean asked for one prompt that misses nothing - **source** the specification lane
 
-**This item stopped being a list and became a pointer, because a list is what went stale.** It named
-seven things in order; five are done and it said so nowhere, which costs a reader exactly what a
-real item costs. **Read `pending.md` -> *To code*, which is generated from every outbox**, and take
-the order below where it disagrees with nothing.
+**The goal right now is one thing: a green gate, so Sean can push.** The repository is **123 commits
+ahead of `origin/master`** and the last thing deployed is from 2026-09-10, so **nothing from today is
+out there** - not the token model, not the no-gain check, not the label fix. `hooks/pre-push` runs
+`fmt`, `clippy --workspace --all-targets -D warnings` and the suite, so the gate is what stands
+between a day's work and the pipeline. **He intends to push himself once you are done.**
 
-**What closed since this was written**, so a fresh instance does not go looking: `S-63` labelled the
-reports; `R-9` and `S-64` made them browsable; `R-8` gives each kind a signature; `R-7` shows the
-world's six together on one `{end-turn}` and the six notices are gone; `P-334`'s adjacency data is
-in `scenario/expected/play.4x` and `Kind::Adjacency` is in the model.
+**Read `pending.md` -> *To code* for the list. This is the order, which the index cannot give.**
 
-**The order, which is the part the index cannot give you.**
+## One thing blocks the push
 
-1. **`S-88`** - three string labels in `crates/game-console/src/petri.rs` quote a sentence `P-381`
-   deleted, and `UNBOUNDED` is sized for five where there are now six unbounded kinds. **The gate is
-   red on it**, so it comes first whatever else is waiting
-2. **`S-26`'s remainder, and this lane had it wrong twice in one day.** `P-212` is **built** -
-   `5f18f9b`, 2026-09-07, the same day this item was rewritten to say it was not, and rewritten
-   again on 2026-09-11 carrying the same claim forward without checking it. `Argument::Command`
-   holds a boxed utterance, `parse.rs` recurses at a command-valued hole, and
-   `the_tree_is_as_deep_as_it_is_written` goes three levels, which no special case satisfies. **The
-   left-recursion warning is withdrawn in the file itself.** What is left of `S-26` is `P-214` and
-   `P-213`, which wait on recipes being data; `C-23` is the record for `P-215` and `P-216`
-3. **`S-30`** - still waiting on the ordering question in your own `C-49`, which is a decision
-   rather than work
-4. **The research lens's four** - `X-8`, `X-11`, `X-12`, `X-13` - which this lane has not ordered
-   against the rest and is not going to guess at
+1. **`S-98`** - `P-399` moved four sections of `releases/first-release.md` an hour ago and the model
+   has not followed. **Kinds gains `readiness`; `ready` and `spent` become one trait `for`; *Where
+   things are* gains a thing's one readiness per action; six recipe blocks became seventeen rows and
+   `renew` is gone; and there is a fifth role, `put`.** This lane has not measured your gate and
+   expects it red. **Nothing else on this list blocks a push.**
 
-**`R-6` is not yours to finish**: it needs Sean to play the loop through.
+## Then, in the order this lane would take them
 
-**What Sean is waiting on that no lane can do.** `scenario/expected/play.4x` still opens *NOT YET
-REVIEWED*.
+2. **`S-99`** - two stale quotations, both in what Sean reads or what backs it: `play.4x`'s header
+   says *declares no capacity* where the release says **no limit**, and `fully_exploited.rs:16`
+   quotes `R-6`'s old *vetted when*, whose word *a person* `P-249` removed. **Same area as 1, so
+   cheapest taken with it**
+3. **`R-10`** - two of its three clauses hold; what is open is that the whole net is one drawing of
+   62 nodes and 195 arcs and nothing shows it in parts. **The one capability you can finish alone**
+4. **`S-96`** - the standing check that every `In` line quotes its source. Two were wrong; both are
+   fixed; **the check is what stops a third**. `S-99` notes it would want `crates/` as well as
+   `releases/`
+5. **`R-6`** - its evidence is a scenario reaching a fully exploited planet and launching an Ark.
+   **`play.4x` launches one and is 133 commands; whether it reaches a fully exploited planet is
+   yours to say**, and if it does, `R-6` is `built` and waiting on Sean rather than on you
+6. **`X-8`, `X-11`, `X-12`, `X-13`** - the research lens's four. Reading and design input; **`X-12`
+   is the only one with work in it**, and it wants the noun `P-396` just gave the notation
+
+## Held, and not by you
+
+- **`S-26`** - `P-214` and `P-213` wait on recipes being data. `P-212` is built; this lane said
+  otherwise for four days and `C-86` corrected it
+- **`S-30`** - waits on the ordering question in your own `C-49`, which is a decision rather than
+  work
+- **`S-97`** - informational: the notation has a second noun and the release can now write it, which
+  `P-399` did
+
+## What Sean is waiting on that no lane can do
+
+**Nothing, for a deploy.** `scenario/expected/play.4x` still opens `NOT YET REVIEWED`, and under
+`docs/process.md` -> *What I am pushing out*, **that no longer gates anything** - he deploys in order
+to verify rather than verifying in order to deploy. `R-7`, `R-8` and `R-9` sit at `built` for the
+same reason.
 
 ### S-48 - `node` goes, and the game's row loses `turn`
 
