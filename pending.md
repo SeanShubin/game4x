@@ -8,6 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-371** - `spec/logistics.md` names a thing that was deleted, and its example has a live replacement · `docs/notes/proposals.md`
 - **P-370** - The fiction is richer than the rules, and that is not a gap · `docs/notes/proposals.md`
 - **P-369** - Matter cycles: a source, then disorder, then its source again · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`

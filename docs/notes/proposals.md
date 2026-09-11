@@ -62,6 +62,48 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-371 - `spec/logistics.md` names a thing that was deleted, and its example has a live replacement
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/logistics.md` -> Containment · from `S-82`
+
+**Replacing the bullet that begins *containing is not referring*:**
+
+> - **Containing is not referring.** A thing may name another without holding it - an adjacency names
+>   the two places it joins, and neither of them is inside it
+
+**The rule is right and its example is dead.** The bullet reads *an extractor names the **node** it
+works, and the node is not inside it*. **`P-290` deleted the node**: capacity may be declared per kind
+carrying a particular value of a trait, so a territory bounds *metal extractors* directly and nothing
+models the thing an extractor sits on. `S-48` closed that work on 2026-09-06 having **verified
+`releases/` and `crates/` and never `spec/`**, where the word has sat since.
+
+**And it is stale twice, which is why the word is not simply swapped.** There is no node - and an
+extractor does not name a thing at all any more. `releases/first-release.md` -> *Traits* gives it
+**`resource`**, one of the resources, which is a kind rather than a thing. **So the old example
+cannot be repaired by renaming it.**
+
+**The replacement is a rule already in the release and needs nothing defined.** *Kinds*:
+**adjacency** is *two places that share an edge, held by the thing that holds them*, and *Traits*
+gives it **`from`** and **`to`**, each a place. **It names two things and contains neither**, which is
+exactly what the bullet is for.
+
+## Why this does not use the word `deposit`
+
+**Because that would settle something this does not ask.** The release has a **`deposit`** kind - *what
+a territory's ground offers of one resource, and how richly* - and **`spec/` defines no such thing**.
+It is one of the two kinds in the release with no definition in the specification, and the research
+lens's reading is that it is a **reification**: `spec/economy.md` has density as a property of the
+territory, and the release made it a thing.
+
+**Whether the release was entitled to do that is a real question and it is `S-86`'s.** Writing
+`deposit` into `spec/` here would answer it silently. **The adjacency example needs no new word**, so
+this closes `S-82` without touching it.
+
+**If `P-369` lands, `source` is the word `spec/` will have** for where matter waits - and a
+territory's deposit is its source for one resource. **Joining those two up is worth doing and is not
+this.**
+
+
 ### P-370 - The fiction is richer than the rules, and that is not a gap
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** text · **asks** approval · **into** `spec/narrative.md`, a new section before *Open questions*
