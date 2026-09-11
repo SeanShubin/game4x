@@ -62,30 +62,43 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-381 - A raw material has three states and what is constructed has none of them
+### P-381 - Three kinds of thing, and only one of them is never in disorder
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> What bounds a kind in a territory
 
-**Sean, 2026-09-11**: *raw materials have the source -> disorder -> in-container states, stuff that
-is constructed does not.*
+**Sean, 2026-09-11**, in two parts: *raw materials have the source -> disorder -> in-container
+states, stuff that is constructed does not*, and *labor and fertility are not resources but not
+constructed either, they are transient, so they are subject to disorder, unlike things constructed
+like a garrison, pioneer, ark, extractor, container.*
 
 `P-372` landed the sentence **What a territory holds directly is in disorder**, and a territory holds
 a garrison, an extractor and a citizen directly. **So the release says a garrison is swept when the
-turn ends** - which is not what the game does and not what anyone intended. `P-380` called that
-sentence too loose to check; it is not loose, it is wrong.
+turn ends** - which is not what the game does and not what anyone intended.
 
-**The replacement states the principle rather than listing what is exempt**, so a kind added later
-is answered by it instead of needing a new clause.
+**The replacement states the three categories rather than listing what is exempt**, so a kind added
+later is answered by it instead of needing a new clause.
 
 > A territory declares **no limit** for a resource. It declares capacity for the things that hold
-> them - a store holds what it was built to hold, and an extractor holds nothing. **A resource is a
-> raw material, and a raw material is in one of three states: its source, disorder, or a
-> container.** It is in disorder when no container holds it, it may be spent the turn it is made,
-> and when the turn ends it returns to its source. **What is constructed has none of those three
-> states** - a unit, a structure or a container is never in disorder, whatever holds it.
+> them - a store holds what it was built to hold, and an extractor holds nothing. **A raw material
+> is in one of three states: its source, disorder, or a container**, and a resource is a raw
+> material. **`labor` and `fertility` are transient**: neither has a source and nothing holds
+> either, so both are always in disorder. **What is constructed is never in disorder** - a unit, a
+> structure or a container, whatever is holding it. **What is in disorder may be spent the turn it
+> is made and does not survive that turn's end**, and a raw material returns to its source.
 
 It replaces the last paragraph of that section, which begins *A territory declares* and ends
 *returns to its source.*
+
+**Two things in the quotation are inferences rather than transcription**, and they are the two worth
+your eye:
+
+- **always in disorder**, where you said *subject to disorder*. Disorder is being in no container,
+  and nothing in the release can contain labor or fertility, so *subject to* and *always* come to
+  the same thing. **If you meant a transient can be put in order somehow, this is the word to
+  change**
+- **does not survive that turn's end**, rather than *returns to its source*, which is what the
+  sentence said before. A transient has no source to return to. **The release needs to say only
+  that it is gone**; where it goes is the fiction's question and is not answered here
 
 **The three states are already in the release under other names**, which is why this states a
 principle and adds no machinery. A `deposit` is what a territory's ground offers of one resource,
@@ -93,10 +106,55 @@ which is the source; a `store` and a unit's tank are the containers; what a terr
 the disorder. **You said *buildings* and the quotation says *structures***, which is the release's
 own heading for the table holding the garrison, the extractor, the yard and the store.
 
-**What it leaves unsaid is whether `labor` and `fertility` are raw materials.** Nothing extracts
-either from a source and no deposit offers either, so on these words neither has the three states
-and neither is constructed. **That is `P-380`**, which your correction turned from words to approve
-into a question only you can answer, so it has moved to [`decisions.md`](decisions.md).
+**`P-380` is the mechanism this rule needs**, and your answer turned it from a question into words to
+approve. Nothing sweeps either transient today.
+
+### P-380 - `discard` sweeps the two transients, and `fertility` gets the bound it never had
+
+**to** sean · **status** open · **cited** `985adaa`, `6495f1c`, `054f340` · **raised** 2026-09-10 · **kind** entailed, from `C-83` · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, then What bounds a kind in a territory
+
+**You answered this on 2026-09-11** - *labor and fertility are transient, so they are subject to
+disorder* - so it is words to approve rather than a question. `P-381` states the rule; these rows are
+what carries it out.
+
+**The bug, worked by the code lane rather than imagined.** A territory with two citizens and no food:
+`upkeep` fires nothing so both are unpaid, `bear` turns both spent and leaves two `fertility`,
+`breed` cannot fire for want of food, `renew` makes them fertile, and `perish` takes both. **The
+territory ends the turn with no citizens and two fertility**, and next turn `breed` fires twice and
+two citizens appear from nobody. `game-model` has a test named for the rule that forbids it - *a
+population of none never grows however much food there is*. **`labor` has the same hole** and nobody
+had raised it.
+
+**`discard` is where they go, and the firing order is already right for both.** The world fires
+`bear`, `breed` and `renew` before `discard`, so a fertility can still be spent on the turn it is
+made and only the remainder is swept; `create labor` is a player recipe, so the same holds for
+labor.
+
+**Into *Recipes*, after the two `discard` rows already there:**
+
+> | **discard** | world  | consume | 1 | labor     |                        |                     |
+> | **discard** | world  | consume | 1 | fertility |                        |                     |
+
+**Into *What bounds a kind in a territory*:**
+
+> | **fertility** | the citizens that make it, one each per turn |
+
+**That bound row is `labor`'s, word for word**, and one citizen makes one of each per turn. **It also
+makes `labor`'s own row true**, which it is not today: the release already says labor is bounded by
+*the citizens that make it, one each per turn*, and nothing removes what is left when the turn ends.
+
+**Two readings are closed rather than passed over.** Neither comes back in a later session:
+
+- **`keeps` 1**, so `age` and `spoil` take them as they take food. It would have worked - `C-61`
+  settled that `age` fires before `spoil` in one ending - but it says they **expire**, and your
+  answer says they are in **disorder**. Two mechanisms for one rule is the thing to avoid
+- **The accumulation is intended**, a starving territory banking its recovery, which the code lane
+  offered as a third reading. **Then a dead population no longer stays dead**, and `spec/control.md`
+  stops saying when a player has lost - it says *no citizens and nothing that converts into a
+  citizen*, and leftover fertility is something that converts into a citizen
+
+**What lands with these rows closes `C-83`**, which has been open since 2026-09-10 and is what the
+code lane needs before the model can fire the world's recipes by name.
 
 ### P-382 - Food does not survive an ending, and the release says it does
 

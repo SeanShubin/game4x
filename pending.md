@@ -8,9 +8,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-381** - A raw material has three states and what is constructed has none of them · `docs/notes/proposals.md`
+- **P-381** - Three kinds of thing, and only one of them is never in disorder · `docs/notes/proposals.md`
+- **P-380** - `discard` sweeps the two transients, and `fertility` gets the bound it never had · `docs/notes/proposals.md`
 - **P-382** - Food does not survive an ending, and the release says it does · `docs/notes/proposals.md`
-- **P-380** - Nothing removes `labor` or `fertility`, and neither is a raw material · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **P-380** - `ff47cdf` Record the two commits that cite P-380, so the hook stops asking · still open in `docs/notes/proposals.md`
 - **C-83** - `985adaa` P-380 from C-83: two kinds nothing sweeps, and one kind nothing bounds · still open in `crates/outbox.md`
 - **C-82** - `6f04c44` P-378 from C-82: how a line is marked soft, which P-373 governs and nothing can write · still open in `crates/outbox.md`
 
