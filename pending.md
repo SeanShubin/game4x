@@ -8,9 +8,6 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-381** - Three kinds of thing, and only one of them is never in disorder · `docs/notes/proposals.md`
-- **P-380** - `discard` sweeps the two transients, and `fertility` gets the bound it never had · `docs/notes/proposals.md`
-- **P-382** - Food does not survive an ending, and the release says it does · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`
@@ -26,8 +23,9 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 ## What is outstanding
 
-### To code (8)
+### To code (9)
 
+- **S-88** - `P-381`, `P-380` and `P-382` landed: transients are swept, and three labels quote a deleted sentence · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's eight data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
@@ -83,7 +81,7 @@ Not a defect list. Several proposals in one section is what working on one topic
 like; what this cannot tell you is whether they all still hold together, which is the question
 it exists to ask.
 
-- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379
+- `releases/first-release.md` -> Recipes - P-140, P-142, P-145, P-151, P-155, P-159, P-161, P-169, P-167, P-166, P-171, P-173, P-177, P-181, P-187, P-184, P-190, P-310, P-342, P-362, P-375, P-379, P-382
 - `releases/first-release.md` -> Traits - P-152, P-178, P-180, P-209, P-210, P-286, P-288, P-308, P-312, P-314, P-331
 - `CLAUDE.md` -> Promotion - P-194, P-195, P-197, P-229, P-230, P-250, P-251, P-263, P-266, P-283
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378
@@ -108,6 +106,7 @@ it exists to ask.
 - `releases/first-release.md` -> Biomes - P-103, P-274, P-281
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
+- `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372, P-381
 - `spec/invariants.md` -> The game is one function - P-75, P-115, P-363
 - `spec/resources.md` -> The list - P-49, P-65, P-338
 - `docs/process.md` - P-289, P-291
@@ -121,7 +120,6 @@ it exists to ask.
 - `releases/first-release.md` -> Recipes, Traits - P-158, P-175
 - `releases/first-release.md` -> Recipes, Units and structures - P-174, P-186
 - `releases/first-release.md` -> What bounds a kind - P-258, P-270
-- `releases/first-release.md` -> What bounds a kind in a territory - P-207, P-372
 - `spec/console.md` - P-69, P-82
 - `spec/console.md` -> Phases - P-74, P-309
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275

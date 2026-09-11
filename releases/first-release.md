@@ -147,14 +147,18 @@ Food is made with `keeps` 1. The force nature holds a territory with.
 | **ark**       | a capacity of 2                                          |
 | **pioneer**   | a capacity of 2                                          |
 | **labor**     | the citizens that make it, one each per turn             |
+| **fertility** | the citizens that make it, one each per turn             |
 | **food**      | the things in it that hold it, and it keeps for one turn |
 | **metal**     | the things in it that hold it                            |
 | **energy**    | the things in it that hold it                            |
 
 A territory declares **no limit** for a resource. It declares capacity for the things that hold
-them - a store holds what it was built to hold, and an extractor holds nothing. **What a territory
-holds directly is in disorder**: it may be spent the turn it is made, and what nothing is holding
-when the turn ends returns to its source.
+them - a store holds what it was built to hold, and an extractor holds nothing. **A raw material
+is in one of three states: its source, disorder, or a container**, and a resource is a raw
+material. **`labor` and `fertility` are transient**: neither has a source and nothing holds
+either, so both are always in disorder. **What is constructed is never in disorder** - a unit, a
+structure or a container, whatever is holding it. **What is in disorder may be spent the turn it
+is made and does not survive that turn's end**, and a raw material returns to its source.
 
 ## Units and structures
 
@@ -191,8 +195,6 @@ two candidates.
 
 A blank is not a zero. It says the row has no such number, and a quantity read from one produces
 nothing.
-
-Food made this turn survives one ending and is lost at the next.
 
 **In** - `spec/turn.md`, *ending a turn: everything with upkeep pays it; then a population grows
 on surplus food or starves for want of it; what expires expires, and what was not kept in order
@@ -273,6 +275,8 @@ then `stow` and `discard`, then `refresh`. The rows below are in that order.
 |                     |        | produce | 1                                    | energy    |                                               | a store for energy       |
 | **discard**         | world  | consume | 1                                    | metal     |                                               |                          |
 | **discard**         | world  | consume | 1                                    | energy    |                                               |                          |
+| **discard**         | world  | consume | 1                                    | labor     |                                               |                          |
+| **discard**         | world  | consume | 1                                    | fertility |                                               |                          |
 | **refresh**         | world  | consume | 1                                    | thing     | not ready                                     |                          |
 |                     |        | produce | 1                                    | thing     | ready                                         |                          |
 
