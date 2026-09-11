@@ -62,7 +62,42 @@ Two limits Claude holds itself to:
 
 ## Open
 
-*Nothing is open. Everything filed has been decided.*
+### P-402 - Vetting gates finishing a release, not shipping one
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/README.md` -> Vetting, and deletion · from `P-401`
+
+**`P-401` moved deployment off the far side of vetting and `releases/README.md` has not caught up.**
+That file still reads as though nothing goes out until a capability is vetted: *release specs are
+temporary; when a release's capability has been vetted, its file is deleted*, and then a three-step
+ritual beginning *when every capability in a release is vetted*.
+
+**Nothing in it is wrong about what vetting is.** What is missing is what it is now **for**.
+
+**Into *Vetting, and deletion*, as its opening paragraph, before *Every capability carries a vetted
+when line*:**
+
+> **Vetting does not gate shipping.** `docs/process.md` -> *What I am pushing out* says what goes out
+> is closer to a staging area than to a product, and that it goes out so that correctness can be
+> verified on something concrete. **A capability is deployed before it is vetted, and usually long
+> before.** What vetting gates is **finishing**: a release is over when every capability in it has
+> been observed, which is when the file is deleted and the line is added to the log.
+
+**Why this is worth saying rather than leaving implied.** The three states - `open`, `built`,
+`vetted` - read as a pipeline toward release, and `built` reads as *waiting*. **Under `P-401` a
+`built` capability is not waiting to go out; it is already out.** A reader who takes `built` as
+*not yet shipped* will hold work back for no reason, which is the opposite of what you are doing.
+
+**And the pipeline has always agreed with you rather than with the file.**
+`.github/workflows/pipeline.yml` is `gate -> deploy -> verify`, and says in its own comment that the
+fuller verification *reds the run but never undoes an already-published deploy*. **So the document
+was behind the machinery, not the other way round.**
+
+## One word this lane noticed and did not fix
+
+***When a release's capability has been vetted, its file is deleted*** says one capability where the
+list below says every one. **Almost certainly a possessive that lost its plural**, and it is your
+file, so it is named here rather than corrected quietly. **If you want it to read *capabilities*,
+say so and it goes in with this** - otherwise it stays exactly as it is.
 
 
 ## Addressed to other perspectives
