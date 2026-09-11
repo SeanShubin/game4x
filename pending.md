@@ -21,6 +21,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **S-94** - `6a12500` S-94: three quotations follow P-391, and one that looked stale is not · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding

@@ -554,6 +554,62 @@ fn every_bound_the_release_states_is_classified() {
     );
 }
 
+/// Every label declares a colour, so the drawing is legible in a dark reader as well as a light one.
+///
+/// **Sean could not read the labels and said so twice before anyone measured the right thing.**
+/// The shapes declare `currentColor` and follow the theme; **SVG's initial `fill` is black, not
+/// `currentColor`**, so a `<text>` with no fill is painted black whatever the theme - and
+/// `report.css` sets `color-scheme: light dark`. In a dark reader every label was black on a
+/// dark ground. Selecting the text paints a highlight behind the glyphs, which is how he
+/// confirmed it: drag across the drawing and the labels appear.
+///
+/// **The instrument is what was wrong twice, and it is the usual failure with the sign
+/// flipped.** Counting `<text>` elements found one per node and concluded the labels were
+/// fine - a correct count answering a narrower question than the one asked, *do labels exist*
+/// rather than *do labels render*. **So this counts the fills and not the elements**, which is
+/// the question a reader is actually asking.
+#[test]
+fn every_label_declares_a_colour_the_theme_can_supply() {
+    let net = net(&release());
+    let drawing = game_console::petri_draw::svg(&net);
+
+    let labels = drawing.matches("<text").count();
+    let coloured = drawing.matches("<text").count()
+        - drawing
+            .split("<text")
+            .skip(1)
+            .filter(|element| {
+                let opening = element.split('>').next().unwrap_or_default();
+                !opening.contains("fill=")
+            })
+            .count();
+    assert_eq!(
+        coloured,
+        labels,
+        "{} of {labels} label(s) declare no fill, so a dark reader paints them black on a dark \
+         ground - SVG's initial fill is black rather than `currentColor`",
+        labels - coloured
+    );
+
+    // **The population, because every count here has been wrong once.** A drawing with no
+    // labels at all would satisfy the equality above.
+    assert!(
+        labels >= net.places.len() + net.transitions.len(),
+        "{labels} label(s) for {} places and {} transitions - a node with no name is one a \
+         reader cannot ask about",
+        net.places.len(),
+        net.transitions.len()
+    );
+
+    // **And the shapes still follow the theme**, which is the half that was already right and
+    // would be easy to break while fixing the other.
+    assert!(
+        drawing.matches("currentColor").count() > labels,
+        "the shapes no longer declare `currentColor`, so the drawing has stopped following the \
+         reader's theme in the direction that was working"
+    );
+}
+
 /// The drawing needs no script, which `R-9` requires and every diagram library would break.
 ///
 /// **Asserted here as well as in `browsable.rs`** because the two are about different things:

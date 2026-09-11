@@ -154,7 +154,7 @@ pub fn svg(net: &Net) -> String {
         out.push_str(&format!(
             "<circle cx=\"{LEFT}\" cy=\"{y}\" r=\"7\" fill=\"none\" stroke=\"currentColor\" \
              stroke-width=\"1.5\"/>\n<text x=\"{}\" y=\"{}\" text-anchor=\"end\" \
-             font-family=\"system-ui, sans-serif\" font-size=\"13\">{}</text>\n",
+             fill=\"currentColor\" font-family=\"system-ui, sans-serif\" font-size=\"13\">{}</text>\n",
             LEFT - 14,
             y + 4,
             escape(&place.label())
@@ -165,7 +165,7 @@ pub fn svg(net: &Net) -> String {
         let y = TOP + transitions[at].row * ROW;
         out.push_str(&format!(
             "<rect x=\"{}\" y=\"{}\" width=\"6\" height=\"20\" fill=\"currentColor\"/>\n\
-             <text x=\"{}\" y=\"{}\" font-family=\"system-ui, sans-serif\" font-size=\"13\">{}</text>\n",
+             <text x=\"{}\" y=\"{}\" fill=\"currentColor\" font-family=\"system-ui, sans-serif\" font-size=\"13\">{}</text>\n",
             RIGHT - 3,
             y - 10,
             RIGHT + 14,
@@ -198,7 +198,7 @@ pub fn recipe_svg(net: &Net, transition: usize) -> String {
     let middle = height / 2;
     out.push_str(&format!(
         "<rect x=\"{}\" y=\"{}\" width=\"7\" height=\"26\" fill=\"currentColor\"/>\n\
-         <text x=\"{bar}\" y=\"{}\" text-anchor=\"middle\" font-family=\"system-ui, sans-serif\" \
+         <text x=\"{bar}\" y=\"{}\" text-anchor=\"middle\" fill=\"currentColor\" font-family=\"system-ui, sans-serif\" \
          font-size=\"13\">{}</text>\n",
         bar - 3,
         middle - 13,
@@ -228,7 +228,7 @@ pub fn recipe_svg(net: &Net, transition: usize) -> String {
              <circle cx=\"{node}\" cy=\"{y}\" r=\"7\" fill=\"none\" stroke=\"currentColor\" \
              stroke-width=\"1.5\"/>\n\
              <text x=\"{label_x}\" y=\"{}\" text-anchor=\"{anchor}\" \
-             font-family=\"system-ui, sans-serif\" font-size=\"12\">{} {}</text>\n",
+             fill=\"currentColor\" font-family=\"system-ui, sans-serif\" font-size=\"12\">{} {}</text>\n",
             (x1 + x2) / 2,
             (x1 + x2) / 2,
             y + 4,
