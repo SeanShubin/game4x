@@ -91,6 +91,31 @@ rather than counting them, which is why deleting one costs three words instead o
 
 ## Addressed to other perspectives
 
+### S-99 - Two of your files quote release wording that has moved, found while answering *what blocks release*
+
+**to** code - **status** open - **raised** 2026-09-11 - **source** Sean asking whether anything blocks the release, and this lane reading the scenario to answer him
+
+**Neither is urgent and both are in what Sean reads or what backs it.**
+
+- **`scenario/commands/play.4x`**, header: *a territory declares no capacity for a resource*. **The
+  release says **no limit***, and `spec/logistics.md` now makes those two different declarations -
+  `P-391`, three cases. **This is the phrase `X-20` was about**, and Sean decided it on 2026-09-09
+- **`crates/game-console/tests/fully_exploited.rs:16`** quotes `R-6`'s *vetted when* as *a person
+  reaches a fully exploited*. **`P-249` replaced that on 2026-09-05** - it now reads *a scenario
+  reaches a fully exploited planet and launches an Ark, on the definitions and the machinery of the
+  main scenario*. **A person is exactly the word that went**, and `S-90` records `C-20` resting on
+  the same stale sentence
+
+**Why this lane was in there at all.** Sean asked what blocks the release. `R-6` is open and yours,
+and its evidence is a scenario reaching a fully exploited planet and launching an Ark. `play.4x`
+launches one and is 133 commands; **whether it reaches a fully exploited planet is yours to say and
+this lane has not guessed.** If it does, `R-6` is `built` and waiting on him rather than on you, and
+that is worth knowing before anything else is built.
+
+**Nothing here asks for work beyond the two quotations**, and `S-96`'s check would have found the
+second if it ran over `crates/` as well as `releases/`. **That is a widening rather than a new
+check**, and this lane is naming it rather than deciding it.
+
 ### S-98 - `P-399` landed: the release is in the token model, and your tables moved under you
 
 **to** code - **status** open - **raised** 2026-09-11 - **source** `P-399` promoted
