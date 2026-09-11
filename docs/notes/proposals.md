@@ -62,6 +62,165 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-375 - The sweep, and two recipes that only needed grounding
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes
+
+**Three of the four undrawable recipes, and none of them needed a new construct.** `P-372` gave the
+release the words for disorder and deliberately not the rules; these are the rules.
+
+**Rows, in the order they go into the table. `stow` and `discard` are new and join the world's
+recipes; `upkeep` and `perish` replace the rows they have now.**
+
+> | **stow**    | world  | consume | 1 | metal   |                        |                     |
+> |             |        | produce | 1 | metal   |                        | a store for metal   |
+> | **stow**    | world  | consume | 1 | energy  |                        |                     |
+> |             |        | produce | 1 | energy  |                        | a store for energy  |
+> | **discard** | world  | consume | 1 | metal   |                        |                     |
+> | **discard** | world  | consume | 1 | energy  |                        |                     |
+> | **upkeep**  | world  | require | 1 | citizen |                        |                     |
+> |             |        | consume | 1 | food    |                        |                     |
+> | **perish**  | world  | consume | 1 | citizen | whose upkeep is unpaid |                     |
+
+## Why no guard is needed, which is the thing that changed
+
+**`P-374` is what unblocked this.** A sweep that removes *the amount above what fits* is a quantity
+read from the state, which `P-368` forbids. With room stored, **`stow` needs no such quantity**: it
+takes one loose unit and puts it where there is room, and **it stops because there is no more room or
+no more loose matter**, not because anything measured either. `discard` then takes what is left.
+
+**Both are ordinary.** Every amount is 1. Nothing asks how full anything is.
+
+**The order is already written.** `spec/turn.md` fixes when the world's recipes fire, and these go in
+as *stow, then discard*, after what expires and before everything becomes ready.
+
+## Why `upkeep` and `perish` were never saturation problems
+
+**Both were grounding, which `P-368` already requires** - *a rule whose subject is a family of kinds
+is a rule for each of them*.
+
+- **`upkeep`** reads *the thing's upkeep* over the family `thing`. **A citizen is the only thing in
+  the release with upkeep**, and it is 1, so grounded the amount is a literal
+- **`perish`** consumes a thing whose upkeep is unpaid and produces *the thing's metal*. Grounded the
+  same way it is **only ever a citizen**, and a citizen has no metal, so the produce row goes
+
+**That is two of the four gone for a rule you have already approved**, and it is why this proposal is
+`entailed` rather than `invented`.
+
+## Two things this does not touch
+
+**Food is not stowed.** Food is made with `keeps` 1 and `spoil` removes it at the turn's end whatever
+holds it, so a food store would be a building that does nothing. **That is the condition rather than
+an exception**, and it is why `stow` and `discard` name metal and energy only.
+
+**The number 10 stays where it is.** `releases/first-release.md` -> *Where things are* says a store
+holds **10**, and **`spec/` contains no such number anywhere** - checked. These rows say *a store for
+metal*, never how much it holds, so the figure remains tunable exactly as a biome's force of nature
+is. `S-30` is the item that will move both into a data file.
+
+
+### P-376 - `work` grounded by density, which is seven rows rather than one
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** rows · **asks** a decision · **into** `releases/first-release.md` -> Recipes
+
+**The fourth undrawable recipe, and the only one whose fix costs something.** `work` produces
+*`$where`'s density for that resource*, which is a number read from the state - forbidden by `P-368`.
+
+**Asks a decision rather than approval**, because there are two ways to ground it and they give
+different tables. **This lane recommends the first and does not take it.**
+
+**By density value - seven recipes, one per distinct density.** The release uses **1, 2, 3, 4, 5, 6
+and 8**, and nothing else:
+
+```
+| **work 4** | player | require | 1 | territory |                                   | $where |
+|            |        | consume | 1 | labor     |                                   |        |
+|            |        | consume | 1 | extractor | ready, where $where's density is 4 |        |
+|            |        | produce | 1 | extractor | not ready                         |        |
+|            |        | produce | 4 | resource  |                                   |        |
+```
+
+**By territory and resource - thirty-six recipes**, one per territory per resource, each with its own
+literal. Exhaustive, needs no qualifier, and makes the table unreadable.
+
+## What each costs
+
+**Seven rows keeps the table readable and adds a qualifier the release has not used before** - *where
+`$where`'s density is 4*, a constraint on the territory rather than on the extractor. The Traits
+column holds constraints already, and this is a new kind of one.
+
+**Thirty-six rows needs no new qualifier at all** and is thirty-five rows of the same shape. It also
+**welds the recipes to this release's twelve territories**, so a thirteenth territory would need a
+thirty-seventh recipe - which is the thing `spec/invariants.md` -> *The game is data* exists to
+prevent.
+
+**So the choice is a qualifier against a table that cannot outlive its own planet**, and that is why
+this lane recommends seven and why it is still yours.
+
+## One thing worth knowing before choosing
+
+**Seven is a fact about the release, not about the game.** Add a density of 7 to a territory and it
+becomes eight recipes. **Under the second reading the count tracks territories instead**, which grows
+faster and for a worse reason. Either way the rows are generated from the data rather than written,
+which is `S-30`.
+
+
+### P-377 - Growth by a resource, which removes the last minimum
+
+**to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, Kinds and Traits
+
+**Your sketch of 2026-09-10**, and the only one of the four that is a real change to the game rather
+than a rewriting: *create an arbitrary resource, call it resource X, then each citizen can only
+produce one of resource x a turn, so they have a separate exhaustion trait for that. Then the formula
+for a new citizen is 1 of resource X and 1 food.*
+
+**Rows, into the three tables they belong in.**
+
+> | **fertility** | a citizen's capacity to raise one more, spent by raising one and renewed each turn |
+>
+> | **spent**     | a citizen | yes or no | stored |
+>
+> | **bear**   | world | consume | 1 | citizen   | fertile   |          |
+> |            |       | produce | 1 | citizen   | spent     |          |
+> |            |       | produce | 1 | fertility |           |          |
+> | **breed**  | world | consume | 1 | fertility |           |          |
+> |            |       | consume | 1 | food      |           |          |
+> |            |       | produce | 1 | citizen   |           |          |
+> | **renew**  | world | consume | 1 | citizen   | spent     |          |
+> |            |       | produce | 1 | citizen   | fertile   |          |
+
+**`grow` goes**, and so does its `min`.
+
+## It is the same game, checked rather than argued
+
+**Over all 2400 pairs of citizens 0-39 and food 0-59, firing `upkeep`, `bear` and `breed` to
+saturation in turn order gives exactly what `population_after` computes today. Zero disagreements.**
+
+**And the doubling cap stops being a clause.** Today it is written `.min(citizens)`. Here there are
+only ever as many `fertility` as there are citizens, one apiece, **so at most that many births can
+happen.** The cap is arithmetic on how much exists rather than a rule anyone states.
+
+## What it costs
+
+**One kind, one trait, three recipes where there was one.** `fertility` is the kind; `spent` is the
+trait; `bear`, `breed` and `renew` replace `grow`.
+
+- **`fertility` is discarded at a turn's end like labor**, or a territory banks it and then explodes.
+  `P-372`'s disorder rule already does this to anything nothing holds
+- **It is a second labor.** A citizen has one of each per turn, independently, **so it may work and
+  bear in the same turn** - which preserves today's rule, where every citizen counts toward growth
+  whether or not it worked. Merging them would change the numbers
+- **`renew` is `refresh` for a different trait.** If `refresh` is ever written over every stored
+  flag rather than over `ready` alone, `renew` folds into it
+
+## The name
+
+**You called it resource X and said it was arbitrary.** `fertility` is this lane's word, offered
+because `P-370` says the fiction may be richer than the rules and an unnamed resource is a modelling
+artifact showing through. **The mechanism does not depend on it** - change the word and nothing else
+moves.
+
+
 ## Addressed to other perspectives
 
 ### S-87 - A Petri net view of the rules, in the reports
