@@ -8,7 +8,11 @@ stay in the prototype - then settled the fuel question and handed the night over
 [Notes index](README.md) · [The recipe report](../../lenses/research/formulas.html) ·
 [Research outbox](../../lenses/research/outbox.md) · [The inquiry, `S-81`](proposals.md)
 
-**Nothing here has been incorporated.** Sean said so explicitly and it holds until he says otherwise.
+**Superseded in one respect, 2026-09-10.** This note was finished at 00:38 and records a state in
+which nothing had been promoted. **Twenty-one proposals landed later the same day** - `P-356`
+through `P-379` - so every sentence below saying nothing has been incorporated was true when
+written and is not now. **The findings and their grades stand**; only the claim about what has
+been promoted has moved.
 
 ## How to read this
 
@@ -487,14 +491,14 @@ whether the four `OPEN` decisions in its data are all of them.
 
 **Filed, and therefore not lost if either session ends:**
 
-| Item    | Where                       | What it is                                                              |
-| ------- | --------------------------- | ----------------------------------------------------------------------- |
-| `P-360` | the open queue, **to sean** | a garrison has no force, and `spec/unit-types.md` still says it has one |
-| `S-81`  | to research                 | the overnight inquiry itself                                            |
-| `S-82`  | to spec                     | `spec/logistics.md` still names `node`, which `P-290` deleted           |
-| `S-83`  | to spec                     | recipes and behaviours are many-to-many; six rules have no recipe       |
+| Item    | Where                   | What it is                                                        |
+| ------- | ----------------------- | ----------------------------------------------------------------- |
+| `P-360` | **promoted** 2026-09-10 | a garrison has no force; landed in `spec/unit-types.md`           |
+| `S-81`  | **answered** 2026-09-10 | the overnight inquiry itself                                      |
+| `S-82`  | to spec                 | `spec/logistics.md` still names `node`, which `P-290` deleted     |
+| `S-83`  | to spec                 | recipes and behaviours are many-to-many; six rules have no recipe |
 
-**Nothing has been incorporated into `spec/` or `releases/`.** `P-360` is a proposal in the queue,
+**Nothing had been incorporated into `spec/` or `releases/` when this was written.** `P-360` was then a proposal in the queue,
 which is where a decision is offered rather than taken.
 
 ### The elimination half, which is what the constraint was for
