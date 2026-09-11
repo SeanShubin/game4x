@@ -98,6 +98,50 @@ pub fn destination_files(into: &str) -> Vec<String> {
     out
 }
 
+/// Every **place** an `into` field names, as the file each one is in.
+///
+/// **`P-404`, promoted in `ba2a373`**: *a proposal that lands in more than one place carries
+/// one quotation for each, in the order the destinations are named - whether those places are
+/// two files or two sections of one.* So the unit is the destination and not the file, and a
+/// proposal landing in four sections of one file carries four quotations against one path.
+///
+/// **The rule moved because five proposals had already outgrown the old one.** `P-399` names
+/// four sections of `releases/first-release.md` and carries four quotations; splitting it into
+/// four proposals about one change would be worse for the one person who reads them. `P-404`
+/// is that, and this is the check following it.
+///
+/// **A file carries forward and a section does not.** `A -> S1, S2, then S3` is three places
+/// in one file; `A -> S1, then B -> S2` is two places in two. Both are one rule: a backticked
+/// path sets the file, and every comma-or-`then` separated piece after it is a place.
+///
+/// **What is deliberately not read is which section.** The check asks whether the quoted words
+/// are in the file, not whether they are under the right heading - so a quotation landing in
+/// the wrong section of the right file passes. Named rather than hidden: checking the section
+/// needs the heading structure of five different documents, and the words landing at all is
+/// the half that has caught every failure so far.
+pub fn destinations(into: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    let mut current: Option<String> = None;
+    // **The first line only.** `field` reads to the next `**`, which for an `into` that is the
+    // last field on its line runs on into the prose below - and the prose is full of backticked
+    // paths. `P-383` came back with more destinations than it has places for exactly that
+    // reason. An `into` field is one line, so this says so.
+    let into = into.lines().next().unwrap_or_default();
+    for piece in into.replace(" then ", ",").split(',') {
+        let piece = piece.trim();
+        if piece.is_empty() {
+            continue;
+        }
+        if let Some(file) = destination_files(piece).into_iter().next() {
+            current = Some(file);
+        }
+        if let Some(file) = &current {
+            out.push(file.clone());
+        }
+    }
+    out
+}
+
 /// Every blockquote in an item, each with its `> ` markers off and its lines kept.
 ///
 /// **The lines are kept because `sentences` reads them.** Joining them with a space was
@@ -625,7 +669,7 @@ fn a_promotion_lands_what_was_approved() {
                 continue;
             };
             let files = field(&item.body, "into")
-                .map(|i| destination_files(&i))
+                .map(|i| destinations(&i))
                 .unwrap_or_default();
             let Some(into) = files.first().cloned() else {
                 wrong.push(format!("{}: no readable **into** field", item.id));
@@ -1132,17 +1176,36 @@ fn an_addressing_line_is_not_prose_and_everything_around_it_still_is() {
 fn a_proposal_landing_in_two_files_is_checked_against_both() {
     let into = "`spec/orbit.md` -> Crossing between layers, then `spec/units.md` -> Every unit";
     assert_eq!(
-        destination_files(into),
+        destinations(into),
         ["spec/orbit.md", "spec/units.md"],
-        "both files, in the order they are named"
+        "both places, in the order they are named"
+    );
+
+    // **`P-404`: two sections of one file are two places.** The file carries forward and the
+    // section does not, so four sections of the release are four destinations against one path
+    // - which is what `P-399` is and what made it unreadable under the old rule.
+    assert_eq!(
+        destinations(
+            "`releases/first-release.md` -> Kinds, Traits, Where things are, then Recipes"
+        ),
+        ["releases/first-release.md"; 4],
+        "four sections of one file are four places"
     );
 
     // A section named after `->` is not a file, and nothing backticked there should be read
     // as one.
     assert_eq!(
-        destination_files("`CLAUDE.md` -> Promotion"),
+        destinations("`CLAUDE.md` -> Promotion"),
         ["CLAUDE.md"],
-        "one file and one section"
+        "one file and one section is one place"
+    );
+
+    // **A backticked thing that is not a path is not a place.** `P-383`'s `into` ends
+    // `· from `Q-59``, and reading that as a destination would ask for a third quotation.
+    assert_eq!(
+        destinations("`docs/process.md` -> Who writes what, then All lanes · from `Q-59`"),
+        ["docs/process.md"; 2],
+        "an item id in the field is not a file"
     );
 
     let first = "- An orbit boundary is one an orbit is on either side of\n";
@@ -1170,7 +1233,7 @@ fn a_proposal_landing_in_two_files_is_checked_against_both() {
     // **And a count that matches neither one nor the destinations stays unreadable**, rather
     // than being paired off against whatever happens to be there.
     assert_eq!(
-        destination_files("`spec/orbit.md` -> Crossing").len(),
+        destinations("`spec/orbit.md` -> Crossing").len(),
         1,
         "one destination, so two blocks against it is not a pairing"
     );
