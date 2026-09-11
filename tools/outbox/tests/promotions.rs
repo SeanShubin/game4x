@@ -200,6 +200,29 @@ pub enum Verdict {
 /// - a heading is structure: it bounds the prose around it, and its own words are a
 ///   sentence - which is also how a promotion changing the heading level lands
 /// - a numbered item is a bullet, or its `1. ` reads as a sentence ending in the number 1
+/// - **an outbox addressing line is bookkeeping rather than approved prose**, and is dropped
+///
+/// # Why the addressing line is not a change to the words
+///
+/// **The fifth case cost a green gate and is the only one found by a promotion rather than by
+/// this file.** `P-395` offered `R-10` as a release capability and landed it verbatim, and this
+/// reported it missing: `CLAUDE.md` requires every capability in `releases/` to carry
+/// `**to** ... **status** ...` so that `tools/outbox` can see it, and that line is written *by
+/// the promotion*, between the heading the proposal offered and the bullets it offered. Every
+/// capability from `R-1` on has one, so the shape is the established one rather than a slip.
+///
+/// **Dropped from both sides rather than allowed on one**, which is this repository's standing
+/// answer to a comparison that breaks on structure: normalize, do not loosen. A proposal's
+/// quotation carries no such line today, and comparing the two after the same removal is what
+/// keeps that from mattering.
+///
+/// **What this cannot see, said rather than left to be found.** Words smuggled into an
+/// addressing line are now invisible here. The exposure is bounded: that line holds an id, an
+/// addressee, a status and hashes, all of which `tools/outbox`'s own parser reads and reports,
+/// and none of which is where a proposal's approved prose goes. **`C-91` carries the question
+/// to the specification lane** - whether adding this line is a promotion's business at all is
+/// `CLAUDE.md`'s subject, and this lane has made the check match what visibly already happens
+/// rather than decided it.
 pub fn sentences(text: &str) -> Vec<String> {
     let mut out = Vec::new();
     let mut block = String::new();
@@ -210,6 +233,13 @@ pub fn sentences(text: &str) -> Vec<String> {
             rest = inner.trim_start();
         }
         if rest.is_empty() {
+            drain(&mut block, &mut out);
+            continue;
+        }
+        // An outbox addressing line: `**to** ... **status** ...`, which a promotion writes and
+        // a proposal does not offer. Matched on both markers so that ordinary prose opening
+        // with a bold word is not swallowed.
+        if rest.starts_with("**to**") && rest.contains("**status**") {
             drain(&mut block, &mut out);
             continue;
         }
@@ -982,4 +1012,47 @@ fn the_structure_a_promotion_may_change_is_parsed_rather_than_stripped() {
     for (text, want) in cases {
         assert_eq!(sentences(text), want, "parsing {text:?}");
     }
+}
+
+/// An addressing line is dropped, and a word smuggled beside one is still caught.
+///
+/// **The narrowing has to be narrow, and this is what says so.** Dropping a line by shape is
+/// exactly the move that turns a check into a formality, so the case that must still fail is
+/// checked beside the case that must now pass.
+#[test]
+fn an_addressing_line_is_not_prose_and_everything_around_it_still_is() {
+    let offered = "### R-10 - I can read a generated drawing\n\n\
+                   - **In** - `docs/process.md`, applied to a drawing\n\
+                   - **Vetted when** - every drawing is legible in both\n";
+
+    // As a promotion writes it: the required addressing line between the two.
+    let landed = "### R-10 - I can read a generated drawing\n\n\
+                  **to** code - **status** open - **raised** 2026-09-11 - **cited** `7b4761f`\n\n\
+                  - **In** - `docs/process.md`, applied to a drawing\n\
+                  - **Vetted when** - every drawing is legible in both\n";
+    assert_eq!(
+        check("text", offered, landed),
+        Verdict::Landed,
+        "the approved words are all there and the addressing line is the format `CLAUDE.md` \
+         requires of a capability"
+    );
+
+    // **A word changed in the approved prose is still a change**, addressing line or not.
+    let altered = landed.replace("legible in both", "legible in one");
+    assert!(
+        matches!(check("text", offered, &altered), Verdict::Missing { .. }),
+        "a word was changed beside an addressing line and the check no longer sees it"
+    );
+
+    // **And a line that merely opens bold is not an addressing line.** Matching on `**to**`
+    // alone would swallow ordinary prose, which is how a narrow rule becomes a wide one.
+    let prose = landed.replace(
+        "**to** code - **status** open - **raised** 2026-09-11 - **cited** `7b4761f`",
+        "**to** the reader this matters because the drawing is the artifact",
+    );
+    assert!(
+        matches!(check("text", offered, &prose), Verdict::Missing { .. }),
+        "a sentence opening `**to**` was dropped as bookkeeping; it carries no `**status**` \
+         and is prose"
+    );
 }

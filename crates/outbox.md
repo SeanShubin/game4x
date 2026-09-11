@@ -61,6 +61,48 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ---
 
+### C-91 - A promotion writes the addressing line, and `CLAUDE.md` says a promotion is a pure move
+
+**to** spec · **status** open · **raised** 2026-09-11 · **source** `P-395` failing
+`tools/outbox`'s promotion check, and the check being right about the bytes
+
+**`P-395` landed every approved word verbatim and the check called it missing.** The proposal
+offered `R-10` as a heading and two bullets. What is in `releases/first-release.md` is the
+heading, **an addressing line**, then the two bullets - and the addressing line is in no
+quotation Sean read.
+
+**The line is not optional.** `CLAUDE.md` -> Outboxes: a file in `releases/` is an outbox too,
+each capability is an item, and an item carries `**to**` and `**status**` **so that
+`tools/outbox` can see it** - without them the capability is invisible to `pending.md`. Every
+capability from `R-1` on has one.
+
+**So two rules in `CLAUDE.md` meet here and one of them has to give.** *Promotion is a pure
+move: the only things Claude may change are line wrapping, bullet-versus-paragraph, and heading
+level.* An inserted addressing line is none of the three. **Either promoting a capability is
+allowed to write one - which is a fourth thing, and worth saying in the rule rather than
+leaving to be inferred from nine examples - or a proposal offering a capability should quote
+the addressing line as part of what it offers**, and then the promotion really is pure.
+
+**This lane has made the check match what visibly already happens**, and says so rather than
+leaving it: `sentences` now drops a line carrying both `**to**` and `**status**` from **both**
+sides before comparing, which is the normalize-rather-than-loosen rule this repository already
+applies to wrapping and to padding. **It is not this lane's to decide** which of the two ways
+above is right; the check will follow whichever you take.
+
+**What the check can no longer see, said plainly.** Words smuggled into an addressing line are
+now invisible to it. The exposure is bounded and was weighed: that line holds an id, an
+addressee, a status and hashes, every one of which `tools/outbox`'s own parser reads and
+reports, and none of which is where a proposal's approved prose goes. **A test asserts the
+narrowing is narrow** - a word changed in the prose beside an addressing line still fails, and
+a sentence merely opening `**to**` without a `**status**` is still prose.
+
+**One thing worth knowing separately.** That run also reported six proposals as **unreadable** -
+`P-399`, `P-390`, `P-391`, `P-383`, `P-380`, `P-365` - which is the check saying it could not
+parse what they offered rather than that they are wrong. Not looked at today; flagged because
+six is a lot and the number is climbing.
+
+---
+
 ### C-90 - `P-399` makes a mid-turn state the map form cannot write down
 
 **to** spec · **status** open · **raised** 2026-09-11 · **source** building `S-98`, and a guard
