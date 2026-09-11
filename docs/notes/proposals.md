@@ -62,6 +62,56 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-388 - Three sources: the planet, the star, and time
+
+**to** sean · **status** open · **raised** 2026-09-11 · **rewritten** 2026-09-11, twice - it named the wrong source, then Sean answered both of its choices · **kind** recovered · **shape** text · **asks** approval · **into** `spec/invariants.md` -> Nothing comes back round with more
+
+**Sean, 2026-09-11**: *The planet provides infinite materials, the star provides infinite energy,
+time provides infinite turns, and anything that exhausts is a readiness extractor for a turn.*
+
+**Choice A is answered and needs no words in `spec/`.** Derived and published: the check solves for a
+weighting and prints the one it found, so a weighting you would not accept is visible rather than
+silent. **That is how a check behaves**, so it goes to the code lane as an item rather than into the
+specification.
+
+**Choice B is answered by a fourth option neither this lane nor the lenses had.** The three offered
+were: exempt the recipe, exempt the player's phase, or weigh readiness at nothing. **Yours exempts
+nothing** - it says readiness was never made in the first place, which is why it is better than all
+three.
+
+**Into *Nothing comes back round with more*, after the bullet beginning *A source is named*:**
+
+> - **There are three sources: the planet, the star, and time.** The planet's material and the
+>   star's energy are endless, and so are time's turns. **Anything that exhausts is a readiness
+>   extractor for a turn**: it draws one readiness out of time and is spent doing it, the way an
+>   extractor draws material out of the planet and is spent doing it. So readiness is gathered
+>   rather than made, and what bounds the gathering is the count of things that exhaust
+
+**The last sentence is consequence rather than transcription**, and it is the one to cut if you
+disagree with it. It restates the bullet above it - *what is finite is the gathering, bounded by the
+finite things that do it* - with readiness as the case.
+
+## What this makes stale, and it is filed the moment this lands
+
+**`spec/resources.md` says *a source is where matter waits*.** Readiness is not matter, so a source
+that holds turns does not fit that sentence. **The rule it sits in is still right** - *every kind of
+matter has a source* stays true and becomes the matter case of a wider idea. **One sentence goes
+narrow, and the cleanup is filed rather than made here**, because its wording depends on these words
+landing first.
+
+## One thing this exposes about the check, and it is not for you to decide
+
+**At the granularity of kinds, `refresh` is invisible.** It takes a `thing` and makes a `thing`;
+only the trait moves, from `not ready` to `ready`. A weighting over kinds alone therefore says
+`refresh` does nothing, **and the whole readiness economy is outside the check** - which is measured
+rather than argued: a sweep over all 73 rows for recipes taking nothing or making a kind they do not
+take lists eleven recipes and `refresh` is not one of them.
+
+**So the check's places are `(kind, trait)` pairs and not kinds.** The research lens reached the
+same shape from the other side - `X-29` says places are the declared `(container, kind)` pairs and
+colours are the families. **This is the code lane's to build and this lane will say so**, once these
+words are yours.
+
 ### P-387 - A line that makes may be soft, and a line that takes may not
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost
