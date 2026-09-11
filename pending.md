@@ -8,8 +8,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-381** - `P-372` says a garrison is in disorder, and only a resource ever is · `docs/notes/proposals.md`
-- **P-380** - Nothing removes `labor` or `fertility`, and neither is a resource · `docs/notes/decisions.md`
+- **P-381** - A raw material has three states and what is constructed has none of them · `docs/notes/proposals.md`
+- **P-382** - Food does not survive an ending, and the release says it does · `docs/notes/proposals.md`
+- **P-380** - Nothing removes `labor` or `fertility`, and neither is a raw material · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
 - **R-9** - I can browse the reports without a script running · `releases/first-release.md`

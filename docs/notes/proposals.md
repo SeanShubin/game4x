@@ -62,41 +62,67 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-381 - `P-372` says a garrison is in disorder, and only a resource ever is
+### P-381 - A raw material has three states and what is constructed has none of them
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> What bounds a kind in a territory
 
-**Sean, 2026-09-11**: *only resources not in a container are in disorder, units, buildings,
-containers, are not in disorder.*
+**Sean, 2026-09-11**: *raw materials have the source -> disorder -> in-container states, stuff that
+is constructed does not.*
 
 `P-372` landed the sentence **What a territory holds directly is in disorder**, and a territory holds
 a garrison, an extractor and a citizen directly. **So the release says a garrison is swept when the
 turn ends** - which is not what the game does and not what anyone intended. `P-380` called that
 sentence too loose to check; it is not loose, it is wrong.
 
-**The replacement corrects one clause and adds the sentence that rules the rest out.** Everything
-before the corrected clause is untouched.
+**The replacement states the principle rather than listing what is exempt**, so a kind added later
+is answered by it instead of needing a new clause.
 
 > A territory declares **no limit** for a resource. It declares capacity for the things that hold
-> them - a store holds what it was built to hold, and an extractor holds nothing. **A resource that
-> is not in a container is in disorder**: it may be spent the turn it is made, and when the turn
-> ends it returns to its source. **A unit, a structure or a container is never in disorder**,
-> whatever is holding it.
+> them - a store holds what it was built to hold, and an extractor holds nothing. **A resource is a
+> raw material, and a raw material is in one of three states: its source, disorder, or a
+> container.** It is in disorder when no container holds it, it may be spent the turn it is made,
+> and when the turn ends it returns to its source. **What is constructed has none of those three
+> states** - a unit, a structure or a container is never in disorder, whatever holds it.
 
 It replaces the last paragraph of that section, which begins *A territory declares* and ends
 *returns to its source.*
 
-**One word of yours is not in the quotation.** You said *buildings*; the release has no such family,
-and its own heading for the table that holds a garrison, an extractor, a yard and a store is *Units
-and structures*. **If structures is not what you meant, say so and the word changes here rather than
-on the way in.**
+**The three states are already in the release under other names**, which is why this states a
+principle and adds no machinery. A `deposit` is what a territory's ground offers of one resource,
+which is the source; a `store` and a unit's tank are the containers; what a territory holds loose is
+the disorder. **You said *buildings* and the quotation says *structures***, which is the release's
+own heading for the table holding the garrison, the extractor, the yard and the store.
 
-**What this deliberately leaves unsaid is whether `labor`, `fertility` and `deposit` are in
-disorder.** None of the three is in the `resource` family, which is food, metal and energy, and none
-is a unit or a structure - so these words reach none of them, exactly as the release did before
-`P-372`. **For the first two that is a live bug and it is `P-380`**, which your correction turned
-from words to approve into a question only you can answer, so it has moved to
-[`decisions.md`](decisions.md).
+**What it leaves unsaid is whether `labor` and `fertility` are raw materials.** Nothing extracts
+either from a source and no deposit offers either, so on these words neither has the three states
+and neither is constructed. **That is `P-380`**, which your correction turned from words to approve
+into a question only you can answer, so it has moved to [`decisions.md`](decisions.md).
+
+### P-382 - Food does not survive an ending, and the release says it does
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** instruction · **asks** approval · **into** `releases/first-release.md` -> Recipes
+
+The preamble above the recipe table says *Food made this turn survives one ending and is lost at the
+next*. **It is false on the release's own recipes.** Food is made with `keeps` 1; the world fires
+`age` then `spoil`; `age` turns a thing that keeps at least 1 into one that keeps one less, and
+`spoil` takes a thing that keeps 0. **So food made this turn ages to 0 and spoils in the same
+ending**, and is never there at the next.
+
+**This was settled and the sentence was not updated.** `C-61` records it - *a food made with `keeps`
+1 ages to 0 and spoils in the same ending, which is one turn's life and is what the model always
+did* - and the release's firing order was changed to match by `P-338` through `P-343`. **The
+sentence predates that**, having landed with `P-184`, so it is a line that stopped being true when a
+later promotion moved the rule underneath it. Nothing edited it, and it still reads exactly as it
+did.
+
+**The instruction: delete that sentence, and put nothing in its place.**
+
+**Why deleting rather than correcting.** The lifetime is already stated by `keeps` 1 in *Traits*, by
+the `age` and `spoil` rows, and by the firing order between them. **A prose copy of a derived fact
+can drift from what it copies**, which is what this one did, and `CLAUDE.md` says a consequence
+belongs only where another rule leans on it. Nothing leans on this one.
+
+**The check the promoting commit runs**: `grep -n survives releases/first-release.md` finds nothing.
 
 
 ## Addressed to other perspectives
