@@ -62,6 +62,108 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-403 - An addressing line is the outbox envelope, and no envelope is ever approved
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Promotion · from the code lane's `C-91`
+
+**This file's approval comes from you directly** - your own standing policy, because a reader cannot
+tell a relayed approval from an invented one. **So this is offered, not relayed**, and the code lane
+has been told the edit needs you rather than it.
+
+## The collision, which is real
+
+**`CLAUDE.md` -> Promotion**: *the only things Claude may change while promoting are line wrapping,
+bullet-versus-paragraph, and heading level ... **Nothing else, ever** - for a block of text.*
+
+**`CLAUDE.md` -> Outboxes**: a file in `releases/` is an outbox, each capability is an item, and an
+item *carries the four fields so that `tools/outbox` can see it. Without the `**to**` line the item
+is invisible to the index.*
+
+**`P-395` offered a capability, this lane promoted it, and then had to write an addressing line the
+proposal never contained.** The check caught exactly that and was right about the bytes.
+
+## The code lane offered two ways and there is a third
+
+**It offered: permit the change, or put the line in the proposal.** Both treat the line as content
+to be governed. **It is not content. It is the envelope every outbox item has**, and nothing
+anywhere approves an envelope - **this proposal carries one, and you will not be approving it.**
+
+**Its second option cannot work, and the reason is worth keeping.** Approved text is byte-identical
+to shipped text **for as long as it ships**. **An addressing line changes by design** - `open` to
+`built` to `vetted`, hashes accumulating as commits cite it. `R-10`'s carries **`cited 7b4761f`**, a
+commit that did not exist when the proposal was written. **A line you approve once and that is wrong
+the next day is not approved text.**
+
+**Counted rather than assumed: all ten capabilities carry one**, `R-1` through `R-10`. This is the
+shape from the beginning, not a slip.
+
+**Into *Promotion*, after the paragraph ending *Nothing else, ever - for a block of text*:**
+
+> **An outbox item's addressing line is not part of what is promoted.** It carries the item's id, its
+> addressee, its status and the commits that cite it - none of which is approved text, because all of
+> it changes after the words land. **A proposal does not offer it and a promotion writes it**, the
+> same way every other outbox item gets one.
+
+**What this does not loosen.** The line holds an addressee, a status and hashes, and `tools/outbox`
+parses and reports every one. **It is not a place approved prose can hide**, which is what makes it
+safe to put outside the comparison. The code lane has already narrowed its check to match, dropping
+a line carrying **both** `**to**` and `**status**` from both sides, with a test that a word changed
+in the prose beside it still fails. **If you take this, that narrowing is right; if you reject it,
+they delete it.**
+
+### P-404 - One quotation per file was the rule, and this lane has been writing one per destination
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Promotion · from the code lane reporting six proposals its check could not read
+
+**This is filed separately from `P-403` on purpose**, because both land in *Promotion* and the rule
+as written allows one quotation per **file**. **Bundling them would have broken the rule this
+proposal is about**, in the proposal about it.
+
+## What the code lane found, and what it means is worse than it reported
+
+**It reported six proposals its promotion check could not read** - `P-399`, `P-390`, `P-391`,
+`P-383`, `P-380`, `P-365` - and said it had not looked at why. **This lane looked.**
+
+`CLAUDE.md`: *a proposal asking for approval carries **exactly one quotation*** ... **A proposal that
+lands in more than one file carries one quotation for each.**
+
+| Proposal | Landed in                                  | Quotations | Permitted?          |
+| -------- | ------------------------------------------ | ---------- | ------------------- |
+| `P-365`  | `spec/orbit.md`, `spec/units.md`           | 2          | **yes** - two files |
+| `P-380`  | `releases/first-release.md`, two sections  | 2          | **no**              |
+| `P-383`  | `docs/process.md`, two sections            | 2          | **no**              |
+| `P-390`  | `spec/turn.md`, two bullets                | 2          | **no**              |
+| `P-391`  | `spec/logistics.md`, two bullets           | 2          | **no**              |
+| `P-399`  | `releases/first-release.md`, four sections | 4          | **no**              |
+
+**Five of the six were this lane widening a rule and not saying so.** Not once, and not with a
+reason given each time - five times, over two weeks, until a check nobody had pointed at them said
+it could not read them. **You approved all five and had no way to know the shape was irregular.**
+
+## The choice, and this lane has a preference
+
+**The rule could stay and this lane could split.** `P-399` would have been four proposals about one
+change, landing in four sections of one file. **That is worse for the one person who reads them**,
+which is the whole test the queue exists to pass.
+
+**Or the rule widens to the destination rather than the file.** That is what the practice already
+is, and what makes `P-399` one thing to read rather than four.
+
+**Replacing the sentence beginning *A proposal that lands in more than one file*:**
+
+> **A proposal that lands in more than one place carries one quotation for each**, in the order the
+> destinations are named - whether those places are two files or two sections of one. Everything else
+> it quotes is shown some other way, as before.
+
+**Why this lane prefers it, marked as a preference.** The reason the sentence said *file* is
+probably that nothing had yet landed in two sections of one - `P-365` was the case in hand and it
+spanned two files. **The rule was written from its example**, which is the failure this repository
+has a note about.
+
+**And it is the smaller change of the two.** Widening it makes six proposals legal that you already
+approved; keeping it makes five of them retroactively irregular and changes nothing about what
+landed, since every one of them was asserted into place cell by cell or word for word.
+
 ### P-402 - Vetting gates finishing a release, not shipping one
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/README.md` -> Vetting, and deletion · from `P-401`
