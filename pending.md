@@ -8,9 +8,9 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-378** - How a line is marked soft, which `P-373` governs and nothing can write · `docs/notes/proposals.md`
+- **P-378** - How a line is marked soft · `docs/notes/proposals.md`
 - **P-375** - The sweep, and two recipes that only needed grounding · `docs/notes/proposals.md`
-- **P-376** - `work` grounded by density, which is seven rows rather than one · `docs/notes/proposals.md`
+- **P-376** - A parameterised amount is not a state-dependent one · `docs/notes/proposals.md`
 - **P-377** - Growth by a resource, which removes the last minimum · `docs/notes/proposals.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -22,6 +22,7 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
+- **C-82** - `6f04c44` P-378 from C-82: how a line is marked soft, which P-373 governs and nothing can write · still open in `crates/outbox.md`
 - **R-8** - `dd93bd1` C-71 acted: S-78 said R-8 was not built until it was, and it was right · still open in `releases/first-release.md`
 
 ## What is outstanding

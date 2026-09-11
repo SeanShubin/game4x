@@ -62,66 +62,61 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-378 - How a line is marked soft, which `P-373` governs and nothing can write
+### P-378 - How a line is marked soft
 
-**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** text · **asks** a decision · **into** `spec/console.md` -> The language · from `C-82`
+**to** sean · **status** open · **raised** 2026-09-10 · **rewritten** 2026-09-10 as an approval,
+because one of the three candidates has been exercised and the others have not · **kind** recovered · **shape** text · **asks** approval · **into** `spec/console.md` -> The language · from `C-82`
 
 **`P-373` landed a rule about soft lines and there is no way to write one.** Checked: `soft` appears
 in `spec/` **only in `P-373`'s own two bullets**, and in `releases/first-release.md` **not at all**.
-The rule says what soft *means*; nothing says how a line is *marked* as one.
+The rule says what soft means; nothing says how a line is marked as one, so the code lane cannot build
+the check it makes possible - `C-82`.
 
-**So the code lane cannot build the check `P-373` makes possible** - `C-82` - because a checker would
-have to invent the syntax it parses. The predicate already exists in their `petri::bounded`; what is
-missing is something to run it over.
+**Added after the rule about what a value may be:**
 
-## A correction this lane owes you first
+> **A line may carry an attachment, written in brackets after its amount** - `-1 [soft]`. It says what
+> to do when the line cannot do all of what it says, and it is a fact about the operation rather than
+> about the thing operated on. **A line with no attachment does all of what it says, or the rule does
+> nothing.**
 
-**When you approved `P-373` I told you it cost nothing today, and gave the wrong reason.** I said the
-release had two soft lines, `age` and `refuel`, and that neither was on an unbounded place.
+## Why the bracket rather than a column or a word beside the constraints
 
-**Both are from the research lens's re-encoding, not from the release.** `refuel` is not a release
-recipe at all. The release has **zero** soft lines. **The conclusion held and the evidence did not** -
-it costs nothing because there is nothing to check, not because what exists is safe.
+**Because it is the only one of the three that has been used.** The research lens's encoding carries
+an attachment on every line of 23 recipes and renders it exactly this way. **Choosing it adopts
+something exercised; the other two would be designed here and tried afterwards.**
 
-**That is the second time this lane has quoted the lens's model as a measurement of the release**, the
-first being `S-87`'s five undrawable recipes where the release has four. **Both were caught by the
-code lane deriving from the release instead**, which is the two-derivations case doing its job twice.
+And it puts the mark in the right place. **Soft is not a constraint on the ingredient** - it does not
+say which thing the line is about - so a word in the Traits cell would put two questions in one cell.
+**Nor is it a fifth role**: the four roles say what a line does, and soft says what happens when it
+cannot.
 
-## Why this is not merely tidying
+**If you would rather have a column, say so and this becomes a decision again.** The bracket is
+recommended, not assumed.
 
-**Your own decision needs it.** You said firing `deploy ark` and `found by land` on ground you already
-hold is intentional - *I like giving the player more options, and am a fan of emergent gameplay.*
-**Today both are refused**, by `limit 0 garrison`, and the way to make them fire and waste the
-garrison is exactly a soft line.
+## The second half, which comes with it
 
-So the chain is: **you want the option; the option needs the garrison line to be soft; soft needs a
-marker; the marker does not exist.** Landing this is what lets `limit 0 garrison` go, and with it the
-release's last two zero tests.
+**Unmarked means hard**, which the offered text says in its last sentence. The alternative is marking
+every line, and the release has 58 of them. **The lens marks `hard` explicitly and this does not** -
+the one place this departs from what it adopts, because an exception is worth writing and a default
+is not.
 
-## The decision, which is what a marker looks like
+## What is waiting behind it
 
-**This lane recommends none of these and states what each costs.**
+**Your own decision.** You said firing `deploy ark` and `found by land` on ground you already hold is
+intentional - *I like giving the player more options*. **Today both are refused**, by
+`limit 0 garrison`, and the way to make them fire and waste the garrison is a soft line. Landing this
+is what lets those two rows go, **and with them the release's last two zero tests.**
 
-- **A column.** The Recipes table grows an eighth, holding `soft` or nothing. Uniform with how
-  everything else in that table is said, and widens a table already seven across
-- **A word in the Traits cell.** No new column; `soft` sits beside the constraints. Cheapest to write
-  and mixes two kinds of thing in one cell - what must be true of the ingredient, and what to do when
-  the line cannot run
-- **A bracket after the amount**, as the research lens writes it - `-1 [soft]`. Reads as an
-  annotation on the operation rather than on the ingredient, which is what it is. Introduces a
-  bracket the notation has nowhere else
+## A correction this lane owes you
 
-**What it must not be is a fourth role.** `require`, `limit`, `consume` and `produce` say *what the
-line does*; soft says *what happens when it cannot*. **Those are different questions and a role that
-answered both would make every existing role ambiguous about the second.**
+**When you approved `P-373` I said it cost nothing today because the release had two soft lines,
+`age` and `refuel`, neither on an unbounded place.** Both are from the research lens's re-encoding;
+`refuel` is not a release recipe. **The release has zero.** The conclusion held and the evidence did
+not - it costs nothing because there is nothing to check.
 
-## One thing that comes with it whichever way you go
-
-**`hard` is the other half and has no marker either.** The lens's encoding marks most lines `hard`
-explicitly. If soft is the exception, unmarked means hard and nothing more is needed; if both are
-written, every line in the table gains a cell. **The first is smaller and this lane would take it, but
-it is part of the same decision.**
-
+**That is the second time this lane quoted the lens's model as a measurement of the release**, after
+`S-87`'s five undrawable recipes where the release has four. Both were caught by the code lane
+deriving from the release instead.
 
 ### P-375 - The sweep, and two recipes that only needed grounding
 
@@ -157,8 +152,10 @@ as *stow, then discard*, after what expires and before everything becomes ready.
 
 ## Why `upkeep` and `perish` were never saturation problems
 
-**Both were grounding, which `P-368` already requires** - *a rule whose subject is a family of kinds
-is a rule for each of them*.
+**Both are required by `P-368`'s third bullet** - *a rule whose subject is a family of kinds is a
+rule for each of them* - and **not by anything about their amounts.** `P-376` settles that a trait
+read is not a measurement, so neither was ever forbidden for what it produces. **What makes them one
+rule each is that their subject is `thing`, which is a family.**
 
 - **`upkeep`** reads *the thing's upkeep* over the family `thing`. **A citizen is the only thing in
   the release with upkeep**, and it is 1, so grounded the amount is a literal
@@ -180,58 +177,61 @@ metal*, never how much it holds, so the figure remains tunable exactly as a biom
 is. `S-30` is the item that will move both into a data file.
 
 
-### P-376 - `work` grounded by density, which is seven rows rather than one
+### P-376 - A parameterised amount is not a state-dependent one
 
-**to** sean · **status** open · **raised** 2026-09-10 · **kind** entailed · **shape** rows · **asks** a decision · **into** `releases/first-release.md` -> Recipes
+**to** sean · **status** open · **raised** 2026-09-10 · **rewritten** 2026-09-10, from a decision about
+`work`'s rows into an approval that leaves them alone · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> What a rule may cost
 
-**The fourth undrawable recipe, and the only one whose fix costs something.** `work` produces
-*`$where`'s density for that resource*, which is a number read from the state - forbidden by `P-368`.
+**Sean, 2026-09-10, asking why `work` was a problem**: *territory has a constant density per resource,
+so extractor pulls out a constant amount based on territories density. How is this not grounded?*
+**It is, and the first draft of this proposal was wrong to ask him to change anything.**
 
-**Asks a decision rather than approval**, because there are two ways to ground it and they give
-different tables. **This lane recommends the first and does not take it.**
+**Added to *What a rule may cost*, after the constant-amounts bullet:**
 
-**By density value - seven recipes, one per distinct density.** The release uses **1, 2, 3, 4, 5, 6
-and 8**, and nothing else:
+> - **An amount read from a trait is not an amount that depends on what is present.** A rule that
+>   takes a thing's upkeep, or makes a territory's density, is one rule with a number per case; a
+>   rule that takes *the lesser of the food and the citizens* is one rule that measures. **Only the
+>   second is forbidden above.** The first is written once and stands for as many rules as it has
+>   cases, which whatever reads it may spell out
 
-```
-| **work 4** | player | require | 1 | territory |                                   | $where |
-|            |        | consume | 1 | labor     |                                   |        |
-|            |        | consume | 1 | extractor | ready, where $where's density is 4 |        |
-|            |        | produce | 1 | extractor | not ready                         |        |
-|            |        | produce | 4 | resource  |                                   |        |
-```
+## What this settles
 
-**By territory and resource - thirty-six recipes**, one per territory per resource, each with its own
-literal. Exhaustive, needs no qualifier, and makes the table unreadable.
+**Three of the four recipes the Petri net page excludes are not breaking the rule.** `P-368` forbids
+an amount that depends on **how much of anything is present**. A density, a thing's upkeep and a
+thing's metal are **traits**, not counts:
 
-## What each costs
+| Recipe   | Its Qty reads                                   | Is that how much is present?  |
+| -------- | ----------------------------------------------- | ----------------------------- |
+| `work`   | the territory's density                         | **no** - a trait of a deposit |
+| `upkeep` | the thing's upkeep                              | **no** - a trait              |
+| `perish` | the thing's metal                               | **no** - a derived trait      |
+| `grow`   | the lesser of the surplus food and the citizens | **yes** - two counts          |
 
-**Seven rows keeps the table readable and adds a qualifier the release has not used before** - *where
-`$where`'s density is 4*, a constraint on the territory rather than on the extractor. The Traits
-column holds constraints already, and this is a new kind of one.
+**Only `grow` breaks it**, and `P-377` is what fixes that one.
 
-**Thirty-six rows needs no new qualifier at all** and is thirty-five rows of the same shape. It also
-**welds the recipes to this release's twelve territories**, so a thirteenth territory would need a
-thirty-seventh recipe - which is the thing `spec/invariants.md` -> *The game is data* exists to
-prevent.
+## Why the page excludes four, and why it is still right to
 
-**So the choice is a qualifier against a table that cannot outlive its own planet**, and that is why
-this lane recommends seven and why it is still yours.
+`crates/game-console/src/petri.rs` excludes a recipe when **a Qty is not a whole number** - a
+syntactic test, and a **conservative proxy** for the rule. It over-excludes, which is the right
+direction for a generator to err in. **What is wrong is only the impression the page leaves**: it
+reads as though four recipes break an invariant when one does.
 
-## One thing worth knowing before choosing
+**So this asks nothing of the release and one sentence of the page.** `work` keeps its single row, and
+whatever builds a matrix spells it out - seven cases, one per density the release uses.
 
-**Seven is a fact about the release, not about the game.** Add a density of 7 to a territory and it
-becomes eight recipes. **Under the second reading the count tracks territories instead**, which grows
-faster and for a worse reason. Either way the rows are generated from the data rather than written,
-which is `S-30`.
-
+**That is what the first draft got wrong.** It offered seven rows in the release, or thirty-six, and
+either would have written into the release a fact about this planet that the release should not carry.
 
 ### P-377 - Growth by a resource, which removes the last minimum
 
 **to** sean · **status** open · **raised** 2026-09-10 · **kind** recovered · **shape** rows · **asks** approval · **into** `releases/first-release.md` -> Recipes, Kinds and Traits
 
-**Your sketch of 2026-09-10**, and the only one of the four that is a real change to the game rather
-than a rewriting: *create an arbitrary resource, call it resource X, then each citizen can only
+**The only recipe in the release that breaks `P-368`.** `P-376` settles that a density, a thing's
+upkeep and a thing's metal are traits rather than counts; **`grow` alone measures what is present** -
+*the lesser of the surplus food and the citizens here* - and so is the only one that has to change
+rather than be spelled out.
+
+**Your sketch of 2026-09-10**: *create an arbitrary resource, call it resource X, then each citizen can only
 produce one of resource x a turn, so they have a separate exhaustion trait for that. Then the formula
 for a new citizen is 1 of resource X and 1 food.*
 
