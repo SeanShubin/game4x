@@ -281,6 +281,60 @@ fn main() {
             show_same_section(&all);
             0
         }
+        // **The carrier for a question both lanes were answering with a regex.**
+        //
+        // On 2026-09-11 this lane checked seven items' statuses by grepping the outboxes,
+        // and the pattern missed that a status is written `**status** **acted**` - bolded.
+        // It reported all eight as absent, which is a wrong answer to the right question
+        // that **happened to be loud**. The same pattern returning seven of eight would have
+        // read as a real finding and nobody would have looked.
+        //
+        // **The parser was already here and correct** - `field` trims the asterisks, and has
+        // since long before that grep. What was missing was a way to *ask* it, so a lane
+        // wanting one item's status wrote its own reader instead of calling this one. That
+        // is `P-327`'s rule about a rule that fires at a moment of confidence: the answer is
+        // a carrier, not a better habit.
+        //
+        // **It exits 1 when the id is nowhere**, so a caller cannot read *absent* as a
+        // status. That is the half the regex got wrong.
+        Some("--item") => {
+            let wanted = arguments.get(1).cloned().unwrap_or_default();
+            match all.items.iter().find(|item| item.id == wanted) {
+                _ if wanted.is_empty() => {
+                    eprintln!("--item needs an id, as in `outbox --item S-47`");
+                    2
+                }
+                Some(item) => {
+                    println!("{} - {}", item.id, item.title);
+                    println!("  to       {}", item.to);
+                    println!("  status   {}", item.status);
+                    println!("  outbox   {}", item.outbox);
+                    println!(
+                        "  standing {}",
+                        if item.is_outstanding() {
+                            "outstanding - somebody still has to act"
+                        } else {
+                            "settled"
+                        }
+                    );
+                    if let Some(rule) = &item.derived_from {
+                        println!("  derived  {rule}");
+                    }
+                    0
+                }
+                None => {
+                    // **Said as a failure rather than printed as an answer.** An id that is
+                    // nowhere and an id that is closed are different facts, and a caller
+                    // that cannot tell them apart is the grep this replaces.
+                    eprintln!(
+                        "no item anywhere has the id {wanted} - it may have been closed and \
+                         removed, or the id may be wrong. {} outbox(es) were read.",
+                        all.files.len()
+                    );
+                    1
+                }
+            }
+        }
         Some("--help" | "-h") => {
             println!("{}", usage());
             0
@@ -306,6 +360,7 @@ outbox - what is open, and addressed to whom
     outbox --waiting        holds whose reason is over
     outbox --count          the aggregate, against the limit
     outbox --sections       sections that have taken more than one proposal
+    outbox --item ID        one item's fields, exit 1 if the id is nowhere
     outbox --write [PATH]   write the pending document, default pending.md
     outbox --help           this"
 }

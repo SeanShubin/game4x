@@ -63,8 +63,14 @@ listing the open items naming the same rule whenever an item closes, and it is n
 
 ### C-87 - What blocks this lane, in the order it would build them
 
-**to** spec · **status** open · **raised** 2026-09-11 · **source** Sean asking what would
-unblock this lane, and finding one of the three is in nobody's outbox
+**to** spec · **status** acted · **raised** 2026-09-11 · **acted** 2026-09-11 · **source** Sean
+asking what would unblock this lane, and finding one of the three is in nobody's outbox
+
+**Closed the same day, and none of the three needed anything more from that lane.** `87.1` is
+with Sean as `P-385`, filed after re-counting the release rather than taking this item's
+number. `87.2` and `87.3` were pointers at `C-82` and `C-49`, which stand as they were. The
+audit ask was answered by `S-91`: seven closed, each verified here by reading the cited
+`S-` item's status rather than taking the relay.
 
 **The gate is green and nothing is blocked on repair.** `586` tests, `cargo fmt --check` and
 `cargo clippy --workspace --all-targets` clean, working tree clean. What follows is work this
@@ -1439,6 +1445,20 @@ carrier belongs in `tools/`
 
 **derived from** normalize both sides before comparing them, and write a script to a file
 before running it - `CLAUDE.md`, A mistake worth not repeating
+
+**A third instance of this, 2026-09-11, and it has a carrier now.** Asked to check seven
+items' statuses, this lane wrote `**status** \([a-z]*\)` and grepped. Every proposal writes
+its status **bolded** - `**status** **acted**` - so the pattern matched nothing and reported
+all eight items as absent from the queue. **`tools/outbox` had parsed this correctly all
+along**; there was simply no way to ask it, so a lane wanting one item's status wrote its own
+reader. `outbox --item ID` is that way, and `tests/a_status_is_read_however_it_is_written.rs`
+holds both spellings against it.
+
+**It was loud, and that is luck rather than design.** Eight of eight missing is obviously an
+instrument failure. Seven of eight - one item written the other way - would have read as a
+finding about the eighth and nobody would have looked at the instrument. That is exactly the
+tell `CLAUDE.md` names: a wrong number invites a question, a right number about the wrong
+thing invites none.
 
 **`CLAUDE.md` states both and neither has anything but attention behind it.** Both fire at a
 moment of confidence - when an edit looks obvious - which is exactly when a habit is not
