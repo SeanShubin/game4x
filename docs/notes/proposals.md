@@ -76,8 +76,8 @@ fungibility is what the name buys**, and it is in the words below.
 **Replacing the bullet beginning *Producing happens in any order*:**
 
 > - Producing happens in any order. **What a thing can do is something it holds**: an **action** is
->   named, and a thing holds a declared number of tokens for each action it can take. A recipe names
->   the action it spends, and firing it spends one. **Two recipes naming the same action draw on the
+>   named, and each kind declares how many tokens of readiness a thing of it holds for each action it
+>   can take. A recipe names the action it spends, and firing it spends one. **Two recipes naming the same action draw on the
 >   same tokens**, which is how it is said that a thing must choose between them; two recipes naming
 >   different actions never compete. A thing created during a turn begins holding its tokens and may
 >   act at once. **When nothing holds a token there is nothing left to do**
@@ -86,10 +86,21 @@ fungibility is what the name buys**, and it is in the words below.
 
 > - Ending a turn: everything with upkeep pays it; then a population grows on surplus food or
 >   starves for want of it; **what expires expires, and what was not kept in order is lost**; and
->   **time refills every thing's tokens to the number it declares**
+>   **time refills every thing's tokens to the number its kind declares**
 
 **The second changes five words at the end and nothing else** - *everything becomes ready again*
 becomes the refill, because *ready* stops being a state a thing is in.
+
+## Two things this was checked against, and it moved for both
+
+**`P-388` says *readiness*, so this says it too.** That bullet landed today - *it draws one readiness
+out of time and is spent doing it* - and a token with any other name would leave `readiness` with no
+referent. **A token is the readiness `P-388` names, held for one action.** Nothing goes stale.
+
+**`spec/logistics.md` says the number is the kind's, not the thing's** - *what a kind may contain is
+a fact about the kind and not about any one of them.* The draft said *a thing holds a declared
+number*, which reads as a per-thing declaration. **Now the kind declares and the thing holds**, which
+is also `P-391`'s middle case: a limit.
 
 ## Why this needs no machinery
 
@@ -213,6 +224,52 @@ rule.
 *kind of action* everywhere in `P-390` - four occurrences, in a table cell and twice in one sentence.
 **One edit here frees the word instead**, and the remaining three uses read correctly beside
 `P-390`'s definition because a firing is an instance of a named action.
+
+### P-393 - Two phrases in the paragraph promoted today, one of which contradicts your `X-20` answer
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> What bounds a kind in a territory · from checking the queue against itself
+
+**Found by reading the four open proposals against what landed, which is what you asked for.** Both
+phrases are this lane's wording of your principle rather than your words, and both are from today.
+
+**`container` collides with the release's own table.** *Where things are* lists **a territory's total
+capacity for a kind** as a Container. So loose metal in a territory **is in a container** by that
+table and **is in disorder** by this paragraph, which offers the two as alternatives.
+
+**`nothing holds either` contradicts what you decided on 2026-09-09.** `X-20` records it: *a
+resource, and the labor a citizen makes, are held by the territory with no limit - labor has to be
+somewhere, since a citizen makes it and an extractor consumes it.* The paragraph says nothing holds
+labor.
+
+**Replacing the last paragraph of that section:**
+
+> A territory declares **no limit** for a resource. It declares capacity for the things that hold
+> them - a store holds what it was built to hold, and an extractor holds nothing. **A raw material
+> is in one of three states: its source, disorder, or held by something that declares a limit for
+> it**, and a resource is a raw material. **`labor` and `fertility` are transient**: neither has a
+> source and nothing declares a limit for either, so both are always in disorder. **What is
+> constructed is never in disorder** - a unit, a structure or a container, whatever is holding it.
+> **What is in disorder may be spent the turn it is made and does not survive that turn's end**, and
+> a raw material returns to its source.
+
+**Two phrases change and nothing else.** *A container* becomes *something that declares a limit for
+it*; *nothing holds either* becomes *nothing declares a limit for either*. **The list of what is
+constructed keeps your word `container`**, because there it is naming a kind of thing rather than a
+place something sits.
+
+**It ties to `P-391` rather than repeating it.** That proposal gives a kind three things it may
+declare - no capacity, a limit, or no limit - and this paragraph says what the third looks like from
+the other side. **The territory holds the metal; what it does not do is declare a limit for it**,
+which is why the metal does not survive the turn.
+
+**A source declares no limit too and is not disorder**, which is why the offered text keeps three
+states rather than deriving disorder from *no limit* alone. This lane wrote that derivation first and
+it was wrong.
+
+**Why this is not the whole definition, said so it is not mistaken for one.** A citizen sits in a
+territory that declares no limit for citizens, and a citizen is never in disorder - because *what is
+constructed is never in disorder* is a separate sentence doing separate work. **Disorder needs both
+halves**, and this paragraph is the only place either is written.
 
 
 ## Addressed to other perspectives
