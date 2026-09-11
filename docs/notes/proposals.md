@@ -62,73 +62,45 @@ Two limits Claude holds itself to:
 
 ## Open
 
-### P-395 - `R-10`: I can read a generated drawing in the theme I actually use
+### P-397 - The release quotes the sentence `P-390` replaced, and this lane's sweep capped itself at four
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** recovered · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Capabilities
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `P-390`
 
-**Sean, 2026-09-11**: *while the coding instance owns implementation, my ability to interpret its
-artifact belongs to spec.* **This is that boundary written down**, prompted by the whole net, whose
-62 labels are all present in the file and all painted black on a dark background.
+**The *Recipes* preamble quotes `spec/turn.md`, and `P-390` changed the sentence it quotes.** The
+release says the turn ends with *everything becomes ready again*; the specification now says time
+refills tokens.
 
-**The capability, to follow `R-9`:**
+**Replacing the *In* line above the recipe table:**
 
-> ### R-10 - I can read a generated drawing in the theme I use
->
-> - **In** - `docs/process.md`, *I reject AI responses that do not read clearly and unambiguously to
->   a human*, applied to a drawing rather than to prose
-> - **Vetted when** - every generated drawing is legible in **both** a light and a dark reader,
->   because nothing in it declares a colour the theme does not supply. **Every node carries its own
->   name**, and I can say what a node is without looking anything up. Where a drawing is too large
->   to satisfy that whole, it is shown in parts that do, and it says what each part leaves out
+> **In** - `spec/turn.md`, *ending a turn: everything with upkeep pays it; then a population grows
+> on surplus food or starves for want of it; what expires expires, and what was not kept in order
+> is lost; and time refills every thing's tokens to the number its kind declares*.
 
-**Why a capability rather than a defect report.** The defect is one attribute and the code lane has
-it - `S-95`. **What it cannot have is the standing requirement**, because a fix closes an item and a
-capability keeps asking. `R-9` is the precedent: *no page needs JavaScript to be read* outlives the
-page that prompted it.
+**Only the last clause changes**, and it is a quotation being brought back into agreement with what
+it quotes rather than a new claim. **The release is otherwise still in the old model and stays
+there** - `P-396` is the decision that unblocks the rest, and this one line is wrong whichever way
+that goes.
 
-**The second sentence is doing separate work from the first.** Colour is why you cannot read this
-drawing today. **Naming is why you would not be able to read the next one** - a drawing whose nodes
-are numbered with a key elsewhere satisfies the colour half and fails you anyway. **This lane checked
-the first before asserting it and did not check the second**: the whole net's nodes are all named
-today, so that clause guards a future rather than describing a fault.
+## How this was missed, which is worth more than the line
 
-**The third sentence is the one to argue with.** *Shown in parts* is this lane's inference from your
-complaint, not your words - you said you could not interpret the big graph, and a 900 by 1406
-drawing of 62 nodes and 195 arcs may not be interpretable at any colour. **If the whole net is
-supposed to stay whole and legible, strike that clause** and the requirement gets harder rather than
-weaker.
+**The staleness sweep after those five promotions found it and threw it away.** It grepped the
+removed phrases across the tree and piped each through `head -4`. *becomes ready again* has **seven**
+hits; four were a note of this lane's own, so **the release and a second note fell off the bottom**.
 
-### P-394 - `spec/narrative.md` still gives the old definition of a source, and it may not matter
+**The output looked complete because nothing says how many were dropped.** This is the shape
+`CLAUDE.md` names - *an instrument answering a narrower question than the one asked, and returning a
+plausible number rather than an error* - and it is the third time today, in three different
+instruments: counting recipe rows, counting `<text>` elements without their fills, and now a truncated
+grep.
 
-**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/narrative.md` -> Violence and order · from `P-389`
-
-**`P-389` changed what a source is** - *where **what it holds** waits*, because time holds turns
-rather than matter. **`spec/narrative.md` still says the old words**: *Food is soil and sunlight. **A
-source is where matter waits.** A loaf going stale is its container dissolving and what it held
-scattering.*
-
-**It may be nothing, and that is the decision.** The sentence is about food, food is matter, and the
-claim is true of it. **`spec/narrative.md` says of itself that the fiction is richer than the rules
-and that this is not a gap** - `P-370`, your words.
-
-**What makes it worth one line of your attention** is that two files in `spec/` now define a source
-differently, and a reader meeting the narrative one first has no way to know it is the fiction
-speaking rather than the rule.
-
-**If you want them to agree, this is the sentence:**
-
-> - **Food is soil and sunlight. A source is where what it holds waits. A loaf going stale is its
->   container dissolving and what it held scattering.**
-
-**Five words change and the imagery does not.** **If you would rather the fiction keep its own
-words, reject this** - `P-370` already licenses it, and this lane would not raise it again.
+**The code lane found this one**, by checking a claim of this lane's rather than accepting it.
 
 
 ## Addressed to other perspectives
 
 ### S-95 - Every label in the net is black on black in dark mode, and the shapes are not
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** Sean: *"The whole net", I don't see labels*, and then, on being told the cause: ***Wow, I see them now while selecting*** - **which is the observation rather than this lane's inference**, because selecting paints a highlight behind the glyphs and black text on it becomes readable at once
+**to** code - **status** **acted** 2026-09-11 - `7b4761f` - **verified here**: 295 of 295 text elements on the page declare a fill, and 684 of 685 shapes still declare `currentColor` - **the fix was broader than this item measured**, which scoped its count to the whole net while the page carries forty drawings - **raised** 2026-09-11 - **source** Sean: *"The whole net", I don't see labels*, and then, on being told the cause: ***Wow, I see them now while selecting*** - **which is the observation rather than this lane's inference**, because selecting paints a highlight behind the glyphs and black text on it becomes readable at once
 
 **Counted in `reports/petri.html` rather than rendered**, because this lane cannot open the file in a
 browser and guessed twice before measuring:
@@ -160,7 +132,7 @@ release item with a *vetted when* line rather than as an instruction.
 
 ### S-94 - Five promotions, and two of them move the ground under `tree.rs` and `thing.rs`
 
-**to** code - **status** open - **raised** 2026-09-11 - **source** promoting `P-390`, `P-391`, `P-392`, `P-393` and `P-389`
+**to** code - **status** **acted** 2026-09-11 - `6a12500` - **and it corrected this item twice**: two tests *were* red where this said nothing of theirs was, and `thing.rs` was not stale, because it cites the release - which still said it, until `P-397` - **raised** 2026-09-11 - **source** promoting `P-390`, `P-391`, `P-392`, `P-393` and `P-389`
 
 **Two quotations in your files are no longer in the specification**, found by grepping the removed
 phrases across the tree rather than by remembering what cited them:
@@ -3594,6 +3566,8 @@ work the release exists to order.
 | P-391, three things a kind may declare about what it holds, and capacity is not unconserved                                  | `spec/logistics.md` -> Containment                                                                                                                                                                       | 2026-09-11 |
 | P-392, down to single commands, and nothing a player can use and cannot take apart                                           | `spec/invariants.md` -> Control without tedium                                                                                                                                                           | 2026-09-11 |
 | P-393, disorder is being held by something that declares no limit, and the territory does hold labor                         | `releases/first-release.md` -> What bounds a kind in a territory                                                                                                                                         | 2026-09-11 |
+| P-394, the fiction and the rule agree about what a source holds                                                              | `spec/narrative.md` -> Violence and order                                                                                                                                                                | 2026-09-11 |
+| P-395, `R-10`: a generated drawing is legible in the reader's theme                                                          | `releases/first-release.md` -> Capabilities                                                                                                                                                              | 2026-09-11 |
 | P-389, a source is where what it holds waits, since one of the three holds turns                                             | `spec/resources.md` -> The list                                                                                                                                                                          | 2026-09-11 |
 | P-387, a line that makes may be soft, and a line that takes may not                                                          | `spec/invariants.md` -> What a rule may cost                                                                                                                                                             | 2026-09-11 |
 

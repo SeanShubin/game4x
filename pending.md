@@ -8,8 +8,7 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
-- **P-395** - `R-10`: I can read a generated drawing in the theme I actually use · `docs/notes/proposals.md`
-- **P-394** - `spec/narrative.md` still gives the old definition of a source, and it may not matter · `docs/notes/proposals.md`
+- **P-397** - The release quotes the sentence `P-390` replaced, and this lane's sweep capped itself at four · `docs/notes/proposals.md`
 - **P-396** - The release cannot follow `P-390` until a moved thing can be said to hold nothing · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`
 - **R-8** - I can see which kinds behave alike · `releases/first-release.md`
@@ -21,16 +20,13 @@ An item is closed by whoever filed it and answered by somebody else, so the file
 no signal. These are still marked `open`, and a commit that touched no part of their own
 outbox cites them - which usually means they were settled and nobody went back.
 
-- **S-95** - `7b4761f` S-95: every label in the drawing declares a colour, so it is legible in a dark reader · still open in `docs/notes/proposals.md`
-- **S-94** - `6a12500` S-94: three quotations follow P-391, and one that looked stale is not · still open in `docs/notes/proposals.md`
+- **P-397** - `04ddfa1` Promote P-394 and P-395, and P-397 for what the sweep dropped · still open in `docs/notes/proposals.md`
 - **Q-59** - `b1b4a2d` Q-59: three rules filed as P-383 and P-384, and the count re-measured for quality · still open in `lenses/quality/outbox.md`
 
 ## What is outstanding
 
-### To code (11)
+### To code (9)
 
-- **S-95** - Every label in the net is black on black in dark mode, and the shapes are not · `docs/notes/proposals.md`
-- **S-94** - Five promotions, and two of them move the ground under `tree.rs` and `thing.rs` · `docs/notes/proposals.md`
 - **S-49** - Everything a fresh instance of you needs, in order · `docs/notes/proposals.md`
 - **S-30** - The release's nine data tables have no data file to be generated from · `docs/notes/proposals.md`
 - **S-26** - The command language has to follow seven promotions, and they do not all land at once · `docs/notes/proposals.md`
@@ -92,10 +88,10 @@ it exists to ask.
 - `spec/console.md` -> The language - P-254, P-287, P-284, P-321, P-353, P-323, P-328, P-356, P-366, P-378
 - `spec/planet.md` -> Presentation - P-10, P-11, P-53, P-88, P-96, P-97, P-98, P-107, P-104, P-105
 - `spec/invariants.md` -> Control without tedium - P-111, P-112, P-113, P-114, P-117, P-120, P-119, P-172, P-392
+- `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335, P-395
 - `releases/first-release.md` -> Units and structures - P-70, P-80, P-131, P-133, P-146, P-208, P-277, P-346
 - `spec/console.md` -> Commands - P-76, P-110, P-121, P-127, P-212, P-214, P-217, P-364
 - `spec/invariants.md` -> The game is data - P-130, P-134, P-147, P-193, P-199, P-213, P-218, P-222
-- `releases/first-release.md` -> Capabilities - P-101, P-108, P-106, P-122, P-330, P-333, P-335
 - `spec/logistics.md` -> Containment - P-188, P-257, P-285, P-290, P-371, P-374, P-391
 - `spec/planet.md` -> What a territory carries - P-8, P-19, P-99, P-100, P-102, P-109, P-123
 - `CLAUDE.md` -> Perspectives - P-182, P-198, P-203, P-223, P-352, P-359
@@ -116,6 +112,7 @@ it exists to ask.
 - `releases/first-release.md` -> Kinds, Traits - P-192, P-322, P-334
 - `releases/first-release.md` -> Traits, Recipes - P-154, P-189, P-233
 - `spec/invariants.md` -> The game is one function - P-75, P-115, P-363
+- `spec/narrative.md` -> Violence and order - P-39, P-278, P-394
 - `docs/process.md` - P-289, P-291
 - `docs/process.md` -> Quality instance - P-244, P-294
 - `docs/process.md` -> Specification Instance - P-292, P-329
@@ -131,7 +128,6 @@ it exists to ask.
 - `spec/control.md` -> Gaining and holding ground - P-62, P-275
 - `spec/interface.md` -> Availability and presentation - P-89, P-92
 - `spec/invariants.md` -> Everything is expressible - P-12, P-128
-- `spec/narrative.md` -> Violence and order - P-39, P-278
 - `spec/planet.md` - P-272, P-280
 - `spec/planet.md` -> Distance - P-24, P-349
 - `spec/planet.md` -> Shape - P-1, P-6
