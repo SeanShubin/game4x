@@ -8,6 +8,8 @@ Read from: `docs/notes/proposals.md`, `docs/notes/decisions.md`, `crates/outbox.
 
 ## What must be decided
 
+- **P-412** - The release's `In` line quotes the sentence `P-408` replaced, for the second time today · `docs/notes/proposals.md`
+- **P-413** - `readiness` now names nothing, and `spec/invariants.md` uses it three times · `docs/notes/proposals.md`
 - **P-406** - The third version of this sentence today, and the first one written from the purpose rather than the case · `docs/notes/proposals.md`
 - **P-407** - Is a trait that never varies stored, and does it belong in a description · `docs/notes/decisions.md`
 - **R-7** - Each recipe can be confirmed on its own · `releases/first-release.md`

@@ -62,6 +62,53 @@ Two limits Claude holds itself to:
 
 ## Open
 
+### P-412 - The release's `In` line quotes the sentence `P-408` replaced, for the second time today
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `releases/first-release.md` -> Recipes · from `P-408`
+
+**`P-397` fixed this line four hours ago and `P-408` has broken it again.** The *Recipes* preamble
+quotes `spec/turn.md`; the sentence it quotes changed; the quotation did not.
+
+**Replacing the *In* line above the recipe table:**
+
+> **In** - `spec/turn.md`, *ending a turn: everything with upkeep pays it; then a population grows
+> on surplus food or starves for want of it; what expires expires, and what was not kept in order
+> is lost; and time restores every count to the number that thing's kind declares*.
+
+**Only the last clause changes**, as last time. **Twice in one day is the argument for `S-96`**, the
+check this lane asked the code lane for: every `In` line's quotation present in the file it cites,
+compared with emphasis and case normalized. **It would have caught both**, and both were found by a
+sweep that happened to be run rather than by anything that runs every time.
+
+### P-413 - `readiness` now names nothing, and `spec/invariants.md` uses it three times
+
+**to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `spec/invariants.md` -> The game is one function, and Nothing comes back round with more · from `P-408`
+
+**`P-411` took `readiness` out of the release**, where it had been a kind. **It survives in
+`spec/invariants.md` three times, naming something that no longer exists**, and `P-410` - promoted an
+hour ago - says a term that means something particular here says what it means in the same breath.
+
+**Into *The game is one function*, replacing the bullet beginning *Every cycle among recipes*:**
+
+> - Every cycle among recipes must spend, somewhere along it, a count that only the turn's end
+>   restores
+
+**Into *Nothing comes back round with more*, replacing the sentence beginning *Anything that
+exhausts*:**
+
+> **Anything that exhausts is a time extractor for a turn**: it spends a count it carries, and only
+> the turn's end restores it, the way an extractor draws material out of the planet and is spent
+> doing it.
+
+**The idea is unchanged in both.** A cycle still has to spend something that only time gives back,
+and a thing that exhausts still draws on time. **What goes is the word for a thing that is no longer
+a thing**, and what replaces it says what it is - *a count that only the turn's end restores*.
+
+**`readiness` may be worth keeping as the name of the whole family of counts**, the way *resource*
+names three kinds. **This lane is not proposing that**, because a word that names a family needs the
+family declared and nothing declares it; if you want it, it is a row in *Traits* rather than a
+sentence here.
+
 ### P-406 - The third version of this sentence today, and the first one written from the purpose rather than the case
 
 **to** sean · **status** open · **raised** 2026-09-11 · **kind** entailed · **shape** text · **asks** approval · **into** `CLAUDE.md` -> Promotion · from the code lane counting what `P-404` actually fixed
