@@ -71,6 +71,26 @@ pub struct Failure {
     pub found: Option<String>,
     /// Which source it came from, when there is more than one in play.
     pub source: Option<String>,
+    /// The commands this one was written inside, outermost first.
+    ///
+    /// **`P-215`'s other half**: *a rejection names the line and column it was found at, **and
+    /// the command it was found inside***, and its argument is that this is what makes a
+    /// nested command debuggable. A column alone says where in the line, which stops being
+    /// enough the moment a line holds a tree - `{repeat times:3 what:{deploy-ark
+    /// territory:x}}` fails at column 44, and the useful half of the answer is *inside
+    /// `repeat`*.
+    ///
+    /// **Empty for a command that is not nested**, which is every command the console can
+    /// write today. This was `C-23`'s reason for leaving the half unbuilt and it has moved:
+    /// while `P-212` was unbuilt a field here could only ever have held the whole line, which
+    /// is untestable and would have gone stale unnoticed. `P-212` landed in `5f18f9b` and
+    /// the grammar recurses now, so the field holds something real and a test says what.
+    ///
+    /// **A chain and not a name**, so three levels report three. Outermost first, matching
+    /// `game_console::Where`'s *the `run` commands enclosing it, outermost first* - the two
+    /// are the same idea at two layers, and a reader meeting both should not have to hold two
+    /// orderings.
+    pub inside: Vec<String>,
 }
 
 impl Failure {
@@ -80,11 +100,21 @@ impl Failure {
             expected: dedup_keeping_order(expected),
             found: None,
             source: None,
+            inside: Vec::new(),
         }
     }
 
     pub fn found(mut self, what: impl Into<String>) -> Self {
         self.found = Some(what.into());
+        self
+    }
+
+    /// Records that this failure happened inside a command of that name.
+    ///
+    /// **Called as the recursion unwinds**, so each level adds itself and the outermost ends
+    /// up first without anyone reversing a list.
+    pub fn inside(mut self, form: impl Into<String>) -> Self {
+        self.inside.insert(0, form.into());
         self
     }
 
@@ -105,11 +135,22 @@ impl Failure {
             std::cmp::Ordering::Equal => {
                 let mut expected = self.expected;
                 expected.extend(other.expected);
+                // **The deeper chain wins, rather than whichever was tried first.** `found`
+                // and `source` above take the first that has one, because either answer is
+                // as good; a nesting chain is not like that - the longer one says everything
+                // the shorter one does and more, so preferring it is a total rule rather
+                // than a tie broken by grammar order.
+                let inside = if other.inside.len() > self.inside.len() {
+                    other.inside
+                } else {
+                    self.inside
+                };
                 Self {
                     position: self.position,
                     expected: dedup_keeping_order(expected),
                     found: self.found.or(other.found),
                     source: self.source.or(other.source),
+                    inside,
                 }
             }
         }
@@ -141,9 +182,18 @@ impl fmt::Display for Failure {
             }
         }
         match &self.found {
-            Some(found) => write!(out, ", found `{found}`"),
-            None => write!(out, ", found end of line"),
+            Some(found) => write!(out, ", found `{found}`")?,
+            None => write!(out, ", found end of line")?,
         }
+        // **Innermost last, which is the opposite of the field's order and is deliberate.**
+        // The sentence has just said where the failure is; what a reader wants next is the
+        // command immediately around it, then its parent. The field is stored outermost first
+        // because that is how a path reads when it is not being spoken.
+        if !self.inside.is_empty() {
+            let path: Vec<&str> = self.inside.iter().rev().map(String::as_str).collect();
+            write!(out, ", inside `{}`", path.join("`, inside `"))?;
+        }
+        Ok(())
     }
 }
 

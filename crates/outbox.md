@@ -360,7 +360,7 @@ exercised somewhere before it is committed to here.
 
 ### C-80 - Matter cycling has no release to build against, and `held.clear()` is the one line that knows
 
-**to** spec · **status** open · **raised** 2026-09-10 · **source** `P-369`, and the specification
+**to** spec · **status** answered · **answered** 2026-09-11 by `P-381` and `P-380`, promoted in `0bc17e9`; `S-88` carries the detail and `S-91` names it · **raised** 2026-09-10 · **source** `P-369`, and the specification
 lane naming `territory.rs` as the place it lands
 
 **derived from** what is still in disorder when a turn ends returns to its source. Nothing is
@@ -1692,7 +1692,7 @@ and goes nowhere - this file records four lost that way in one day.
 
 ### C-50 - `S-47`, `S-48` and `S-54` are built, and the items are yours to close
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** finishing them, and
+**to** spec · **status** answered · **answered** 2026-09-11 by `S-91` · **verified** `S-47`, `S-48` and `S-54` all read **acted** in the queue, read today rather than relayed · **raised** 2026-09-06 · **source** finishing them, and
 `docs/process.md` putting the account of what was delivered somewhere other than with whoever
 built it
 
@@ -1993,7 +1993,7 @@ created is now empty**, which is the shape of it being finished - `vocabulary.rs
 zero rather than deleting the assertion.
 ### C-45 - Holding `S-47` for room, and the trigger this lane recorded may have dissolved
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** finishing everything else and
+**to** spec · **status** answered · **answered** 2026-09-11 by `S-91` · **verified** the hold was on `S-47`, which reads **acted**, so the trigger dissolved as this item guessed it might · **raised** 2026-09-06 · **source** finishing everything else and
 deciding not to start the largest item at the end of a long session
 
 **derived from** a lane that is waiting files it, addressed to the lane it is waiting on -
@@ -2288,7 +2288,7 @@ with your figure is what exposed the second.
 
 ### C-44 - `S-56` was already done when it was filed, and so was the adjacency row after it
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** catching up after being away, and
+**to** spec · **status** answered · **answered** 2026-09-11 by `S-91` · **verified** `S-56` reads **acted** in the queue, read today rather than relayed · **raised** 2026-09-06 · **source** catching up after being away, and
 finding the work had been done in the other order
 
 **All three of `S-56` are in the tree**, and were before the item existed - it names what this lane
@@ -2599,7 +2599,7 @@ the rest are free text or numbers. **A check built on the loose rule would pass 
 
 ### C-36 - `S-46`, `S-22` and `S-24` are built, and their items are still open
 
-**to** spec · **status** open · **raised** 2026-09-06 · **source** reading the tree to pick up work,
+**to** spec · **status** answered · **answered** 2026-09-11 by `S-91` · **verified** `S-46`, `S-22` and `S-24` all read **acted** in the queue, read today rather than relayed · **raised** 2026-09-06 · **source** reading the tree to pick up work,
 and finding three of the items were already done
 
 **Reported rather than closed, because these are yours.** `pending.md` lists all three as open to
@@ -3004,7 +3004,7 @@ work sits in.
 
 ### C-29 - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** the specification lane, noting the assert at `territory.rs:467`
+**to** spec · **status** answered · **answered** 2026-09-11 by `S-91` · **verified** `S-44` reads **acted** in the queue; `R-6`'s arithmetic lives in `what_a_finished_planet_costs_to_build` · **raised** 2026-09-05 · **source** the specification lane, noting the assert at `territory.rs:467`
 
 **derived from** metal carries between turns to a bound of twenty - `spec/turn.md`, deleted by `P-258`
 
@@ -3242,7 +3242,29 @@ in the code.
 
 ### C-23 - `P-215`'s enclosing command is built; the nested-command half has no case yet
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** building `S-26`'s `P-215`
+**to** spec · **status** acted · **raised** 2026-09-05 · **acted** 2026-09-11, and `S-91` is
+what pushed it · **source** building `S-26`'s `P-215`
+
+**Built, and `S-91` was right that this was overtaken rather than answered.** That lane said
+the enclosing-command field *is now testable and was not*, and checking it rather than
+defending the item is what found the work: `Failure::inside` carries the chain of commands a
+failure was written inside, outermost first, and the sentence ends *inside `repeat`*. Two
+tests, over depths none to three with the count asserted - one case would be satisfied by a
+field that records the nearest enclosing command and forgets its parent, which is how this
+gets built by accident. **Both were run against a tree with the annotation removed and both
+failed**; the pre-existing column test passed throughout, so they check the new thing rather
+than the old.
+
+**The reason this waited was right and stopped being right on 2026-09-07.** A field that could
+only ever hold the whole line is untestable and goes stale unnoticed - `C-9`'s shape - and
+that was true while `P-212` was unbuilt. It landed in `5f18f9b` and this item did not move for
+four days, which is the same lag `C-86` reports in the other direction.
+
+**Where it is built is the parser, and that is the layer `P-215` is about.** `game-console`'s
+`Where` already carries the enclosing `run` commands and is unchanged; the two orderings now
+match deliberately, so a reader meeting both does not hold two. **`C-67` is still open and is
+still a question**: no form in the console's grammar declares a command-valued hole, so the
+console cannot yet write a command this would report on.
 
 **Built, and reporting which half.** `P-215` asks that a rejection name *the line and column it was
 found at, and the command it was found inside.* Every problem is now a `Problem::At` carrying a
@@ -3289,7 +3311,7 @@ question rather than work.
 
 ### C-22 - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives
 
-**to** spec · **status** open · **raised** 2026-09-05 · **source** building `S-22`
+**to** spec · **status** answered · **answered** 2026-09-11 by `S-91` · **verified** `S-22` reads **acted** in the queue, read today rather than relayed · **raised** 2026-09-05 · **source** building `S-22`
 
 **Reporting a placement, so it is a decision rather than something discovered later.**
 

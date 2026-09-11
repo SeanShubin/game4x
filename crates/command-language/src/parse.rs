@@ -160,7 +160,11 @@ fn match_form(
             if !value.is_empty() {
                 return Err(Failure::new(value_at.from, ["{".to_string()]).found(value.to_string()));
             }
-            let (inner, after) = match_any(grammar, tokens, at + 1, line_number, line)?;
+            // **`P-215`'s other half, and this is the only place that knows both ends of
+            // it**: the inner failure, and the form it was written inside. Recorded as the
+            // recursion unwinds, so three levels report three and the outermost is first.
+            let (inner, after) = match_any(grammar, tokens, at + 1, line_number, line)
+                .map_err(|failure| failure.inside(form.name))?;
             let span = inner.span;
             (Argument::Command(Box::new(inner), span), after)
         } else {
@@ -539,6 +543,64 @@ mod tests {
         assert!(
             failure.expected.iter().any(|what| what == "a number"),
             "{failure}"
+        );
+    }
+
+    /// A failure names the command it was found inside - `P-215`'s other half.
+    ///
+    /// **Unbuilt until `P-212` landed, and `C-23` is the record of why.** A column says where
+    /// in the line, which stops being enough the moment a line holds a tree. While no command
+    /// could nest, a field here could only ever have held the whole line - untestable, and
+    /// the kind of thing that goes stale without anything noticing.
+    #[test]
+    fn a_failure_names_the_command_it_was_found_inside() {
+        let failure = nested("{repeat times:3 what:{deploy-ark territory:x}}").unwrap_err();
+        assert_eq!(failure.inside, ["repeat"], "{failure}");
+        assert!(
+            failure.to_string().ends_with("inside `repeat`"),
+            "the sentence has to carry it, not just the field: {failure}"
+        );
+    }
+
+    /// The chain is as deep as the nesting, outermost first.
+    ///
+    /// **Checked at every depth from none to three, and the count is asserted.** One case
+    /// would be satisfied by a field that records the nearest enclosing command and forgets
+    /// its parent, which is the shape this is most likely to be built as by accident.
+    #[test]
+    fn the_enclosing_chain_is_as_deep_as_the_nesting() {
+        let cases: [(&str, &[&str]); 4] = [
+            ("{deploy-ark territory:x}", &[]),
+            (
+                "{repeat times:1 what:{deploy-ark territory:x}}",
+                &["repeat"],
+            ),
+            (
+                "{repeat times:1 what:{repeat times:2 what:{deploy-ark territory:x}}}",
+                &["repeat", "repeat"],
+            ),
+            (
+                "{repeat times:1 what:{repeat times:2 what:{repeat times:3 what:{deploy-ark territory:x}}}}",
+                &["repeat", "repeat", "repeat"],
+            ),
+        ];
+        let mut checked = 0;
+        for (line, expected) in cases {
+            let failure = nested(line).unwrap_err();
+            assert_eq!(failure.inside, *expected, "`{line}` gave {failure}");
+            checked += 1;
+        }
+        assert_eq!(checked, 4, "every depth from none to three, and no fewer");
+
+        // **A depth of none is in the list on purpose.** Every command the console can write
+        // today is one, so a version that named an enclosing command where there is none
+        // would be wrong about the only case that is currently reachable.
+        assert!(
+            nested("{deploy-ark territory:x}")
+                .unwrap_err()
+                .inside
+                .is_empty(),
+            "an un-nested command is inside nothing"
         );
     }
 

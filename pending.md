@@ -48,7 +48,7 @@ outbox cites them - which usually means they were settled and nobody went back.
 
 - **C-85** - `X-8`, `X-11`, `X-12` and `X-13` are read, and three of them are yours to close · `crates/outbox.md`
 
-### To spec (37)
+### To spec (29)
 
 - **S-86** - Three cleanups the eight promotions leave behind · `docs/notes/proposals.md`
 - **S-84** - Food density 1 freezes a territory, and territory 5 makes the planet unwinnable · `docs/notes/proposals.md`
@@ -61,24 +61,16 @@ outbox cites them - which usually means they were settled and nobody went back.
 - **C-84** - `S-88` is built and the gate is green, and `R-7`'s report changed under Sean · `crates/outbox.md`
 - **C-82** - `P-373`'s soft-line check is one line, and the notation cannot write a soft line · `crates/outbox.md`
 - **C-81** - `Capacity` stores the total and `P-374` made room the stored one · `crates/outbox.md`
-- **C-80** - Matter cycling has no release to build against, and `held.clear()` is the one line that knows · `crates/outbox.md`
 - **C-79** - Fuel as a bin needs the release to catch up, and three of the eight need nothing · `crates/outbox.md`
 - **C-76** - A new prototype needs two rows in your column before it can join the workspace · `crates/outbox.md`
 - **C-75** - The boundedness rule `X-9` names already holds, so adopting it costs nothing · `crates/outbox.md`
 - **C-68** - `game` holds twelve territories and declares no capacity to hold anything · `crates/outbox.md`
 - **C-60** - `move`'s qualifier named the `adjacency` trait, and `P-334` made adjacency a kind · `crates/outbox.md`
 - **C-58** - `S-34`'s rule has no mechanism, and I built one and threw it away · `crates/outbox.md`
-- **C-50** - `S-47`, `S-48` and `S-54` are built, and the items are yours to close · `crates/outbox.md`
 - **C-49** - `S-30` needs a second copy of your data before it can stop having one, and the order is yours · `crates/outbox.md`
 - **C-48** - `spec/console.md` says a command is written two different ways, in two sections, and uses the older one throughout · `crates/outbox.md`
 - **C-47** - The two relations subsume nine of the dump's ten tables, and the tenth needs one number · `crates/outbox.md`
-- **C-45** - Holding `S-47` for room, and the trigger this lane recorded may have dissolved · `crates/outbox.md`
 - **C-42** - A rule that is written down, true, and not run over the work that states it · `crates/outbox.md`
-- **C-44** - `S-56` was already done when it was filed, and so was the adjacency row after it · `crates/outbox.md`
-- **C-36** - `S-46`, `S-22` and `S-24` are built, and their items are still open · `crates/outbox.md`
-- **C-29** - `S-44` takes `can_hold_yard` from ten territories to eight, and `R-6` moves with it · `crates/outbox.md`
-- **C-23** - `P-215`'s enclosing command is built; the nested-command half has no case yet · `crates/outbox.md`
-- **C-22** - `S-22`'s membership half is built, and it is not where the rest of `S-22` lives · `crates/outbox.md`
 - **Q-80** - `spec/control.md` names biome as an input to maximum output, and nothing reads it · `lenses/quality/outbox.md`
 - **Q-59** - `P-302` binds this lens's own README, and this lens cannot act on it · `lenses/quality/outbox.md`
 - **X-14** - founding is an undeclared metal source; Sean has decided, and the release still says otherwise · `lenses/research/outbox.md`
