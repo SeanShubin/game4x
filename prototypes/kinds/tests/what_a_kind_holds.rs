@@ -39,10 +39,13 @@ fn release() -> String {
 fn every_container_the_release_declares_is_gathered_under_a_kind() {
     let document = release();
     let rows = body_under(&document, "## Where things are");
+    // **Four since `P-399`**, which gave readiness a bound: *a thing, per action*, holding
+    // one. That is the token model's whole limit - two recipes naming the same action draw on
+    // the same token, so one token is what makes a thing choose.
     assert_eq!(
         rows.len(),
-        3,
-        "three sorts of capacity in this release; *Where things are* has {} ({rows:?})",
+        4,
+        "four sorts of capacity in this release; *Where things are* has {} ({rows:?})",
         rows.len()
     );
 
@@ -52,11 +55,15 @@ fn every_container_the_release_declares_is_gathered_under_a_kind() {
         .filter(|line| line.starts_with("**Holds**"))
         .collect();
     // Four, because *a unit's tank* is carried to both members of the `unit` family.
+    //
+    // **Twenty-two since `P-399`, and eighteen of those are one row.** Readiness is declared
+    // of *a thing, per action*, and every kind is a thing - so that row reaches all eighteen
+    // sections rather than one. The row doing what it says, rather than a defect.
     assert_eq!(
         held.len(),
-        4,
-        "three rows reach four sections - a store, a territory, and both units; {} lines were \
-         written ({held:?})",
+        22,
+        "four rows reach twenty-two sections - a store, a territory, both units, and one \
+         readiness bound per kind; {} lines were written ({held:?})",
         held.len()
     );
 
@@ -116,10 +123,18 @@ fn a_bound_that_is_not_a_number_is_not_called_a_fact_about_the_kind() {
             panic!("a Holds line says neither which it is: {line}");
         }
     }
+    // **Nineteen constants where there was one, and every one of the eighteen new ones is
+    // the same row.** `P-399`'s capacity is declared of *a thing, per action* - and every kind
+    // is a thing, so the row is gathered under all eighteen. They are constants because the
+    // bound is the literal 1 rather than something read off the thing.
+    //
+    // **That includes a readiness holding a readiness**, which follows from the release's own
+    // words rather than from a reading of them, and is reported to the specification lane as a
+    // question rather than worked around here.
     assert_eq!(
         (constant, per_thing),
-        (1, 3),
-        "one constant - the store's ten - and three that depend on the thing"
+        (19, 3),
+        "the store's ten and one readiness bound per kind, against three that depend on the          thing"
     );
 }
 

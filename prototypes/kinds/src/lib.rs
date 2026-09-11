@@ -59,6 +59,12 @@ pub enum Kind {
     Adjacency,
     Game,
     Fertility,
+    /// **`P-399`: what a thing spends to act, drawn from time and refilled each turn.**
+    ///
+    /// The token model. Readiness was a yes-or-no trait of whatever readies; it is a thing a
+    /// thing holds, one per action, and `refresh` puts them back. Two recipes naming the same
+    /// action draw on the same tokens, which is how the release says a thing must choose.
+    Readiness,
 }
 
 impl Kind {
@@ -81,6 +87,7 @@ impl Kind {
             Kind::Adjacency => "adjacency",
             Kind::Game => "game",
             Kind::Fertility => "fertility",
+            Kind::Readiness => "readiness",
         }
     }
 
@@ -109,6 +116,7 @@ impl Kind {
                 "a citizen's capacity to raise one more, spent by raising one ",
                 "and renewed each turn"
             ),
+            Kind::Readiness => "what a thing spends to act, drawn from time and refilled each turn",
         }
     }
 
@@ -152,7 +160,16 @@ impl Kind {
             // **`P-351`: `game` is in nothing**, so *what bounds a kind in a territory* cannot
             // be about it at all - it is not in a territory, it holds them. That is a stronger
             // reason than the four above have, and it lands in the same arm.
-            Kind::Territory | Kind::Orbit | Kind::Deposit | Kind::Adjacency | Kind::Game => {
+            // **`readiness` is bounded and not by a territory**, which is why it is here
+            // rather than in the list above. *Where things are* gives it *a thing, per
+            // action*, holding 1 - so what bounds it is the thing that holds it, and *What
+            // bounds a kind in a territory* is not the table that says so.
+            Kind::Territory
+            | Kind::Orbit
+            | Kind::Deposit
+            | Kind::Adjacency
+            | Kind::Game
+            | Kind::Readiness => {
                 return None;
             }
         })
@@ -160,7 +177,7 @@ impl Kind {
 }
 
 /// In the order the Kinds table lists them.
-pub const KINDS: [Kind; 17] = [
+pub const KINDS: [Kind; 18] = [
     Kind::Citizen,
     Kind::Garrison,
     Kind::Extractor,
@@ -178,6 +195,7 @@ pub const KINDS: [Kind; 17] = [
     Kind::Adjacency,
     Kind::Game,
     Kind::Fertility,
+    Kind::Readiness,
 ];
 
 /// In the order the bounds table lists them, which is not the Kinds order.
@@ -267,7 +285,7 @@ pub struct Capacity {
     pub up_to: &'static str,
 }
 
-pub const CAPACITIES: [Capacity; 3] = [
+pub const CAPACITIES: [Capacity; 4] = [
     Capacity {
         what: "a territory's total capacity for a kind",
         holds: "that kind",
@@ -287,6 +305,15 @@ pub const CAPACITIES: [Capacity; 3] = [
         what: "a unit's tank",
         holds: "energy",
         up_to: "the unit's fuel",
+    },
+    // **`P-399`: a thing holds one readiness per action.** The token model's whole bound -
+    // *two recipes naming the same action draw on the same tokens*, and one token is what
+    // makes a thing choose. Readiness is a kind now, so what limits it is containment like
+    // everything else rather than a yes-or-no trait.
+    Capacity {
+        what: "a thing, per action",
+        holds: "readiness for that action",
+        up_to: "1",
     },
 ];
 
@@ -320,7 +347,7 @@ pub struct TraitRow {
     pub held: Held,
 }
 
-pub const TRAITS: [TraitRow; 21] = [
+pub const TRAITS: [TraitRow; 20] = [
     TraitRow {
         name: "kind",
         of: "every thing",
@@ -338,10 +365,14 @@ pub const TRAITS: [TraitRow; 21] = [
         values: "a number, unique among things of its kind",
         held: Held::Stored,
     },
+    // **`P-399` replaced `ready` with this.** Readiness was a yes-or-no trait of whatever
+    // readies; it is a kind now, and what a reader needs of one is which action it is for.
+    // Two recipes naming the same action draw on the same tokens, which is Sean declaring
+    // fungibility deliberately rather than a consequence of anything.
     TraitRow {
-        name: "ready",
-        of: "whatever readies",
-        values: "yes or no",
+        name: "for",
+        of: "a readiness",
+        values: "`move`, `labor`, `work` or `bearing`",
         held: Held::Stored,
     },
     TraitRow {
@@ -460,16 +491,6 @@ pub const TRAITS: [TraitRow; 21] = [
         values: "yes or no",
         held: Held::Stored,
     },
-    // **The saturating rewrite's own trait.** `bear` turns a fertile citizen spent and leaves
-    // a fertility behind; `renew` turns a spent citizen fertile again, once per turn. It is
-    // what stops a citizen bearing twice in one ending, which `grow`'s expression used to do
-    // by bounding the whole increase at the number of citizens.
-    TraitRow {
-        name: "spent",
-        of: "a citizen",
-        values: "yes or no",
-        held: Held::Stored,
-    },
 ];
 
 // ---------------------------------------------------------------------------------------
@@ -513,6 +534,16 @@ pub enum Role {
     Consume,
     /// What the recipe makes.
     Produce,
+    /// **`P-399`: the thing moves, and is neither taken nor made.**
+    ///
+    /// `move` used to consume a unit in one place and produce one in another, which said the
+    /// unit that arrived was a different unit. It is put instead - the same thing, somewhere
+    /// else - and `P-396` is why that mattered: under the token model a created thing arrives
+    /// holding its tokens, so a produced unit would arrive able to move again.
+    ///
+    /// **Its quantity cell is blank and that is not a zero.** The release: *a blank is not a
+    /// zero. It says the row has no such number* - and a named thing is not a quantity.
+    Put,
 }
 
 impl Role {
@@ -522,6 +553,7 @@ impl Role {
             Role::Limit => "limit",
             Role::Consume => "consume",
             Role::Produce => "produce",
+            Role::Put => "put",
         }
     }
 
@@ -602,6 +634,12 @@ pub enum Quantity {
     Exactly(u32),
     /// Read from a trait of something the recipe names.
     OfATrait(&'static str),
+    /// No number at all, which `put` is the only role to write.
+    ///
+    /// **A blank is not a zero**, which the release states directly: *it says the row has no
+    /// such number, and a quantity read from one produces nothing.* Writing `Exactly(0)` here
+    /// would render as `0` and say the recipe moves no units.
+    None,
 }
 
 impl Quantity {
@@ -609,6 +647,7 @@ impl Quantity {
         match self {
             Quantity::Exactly(count) => count.to_string(),
             Quantity::OfATrait(how) => how.to_string(),
+            Quantity::None => String::new(),
         }
     }
 }
@@ -741,12 +780,20 @@ const JOINED_TO_FROM: [Qualifier; 1] = [by("joined to `$from` by an edge the uni
 const FOR_FOOD: [Qualifier; 1] = [by("food", "resource")];
 const FOR_METAL: [Qualifier; 1] = [by("metal", "resource")];
 const OF_RESOURCE: [Qualifier; 1] = [by("`$resource`", "resource")];
-const READY: [Qualifier; 1] = [by("ready", "ready")];
-const NOT_READY: [Qualifier; 1] = [by("not ready", "ready")];
+// **`P-399`: a readiness names the action it is for.** These replace `ready`, `not ready`,
+// `fertile` and `spent`, which were four qualifiers over two yes-or-no traits; there is one
+// trait now and its value is the action.
+const FOR_MOVE: [Qualifier; 1] = [by("for `move`", "for")];
+const FOR_LABOR: [Qualifier; 1] = [by("for `labor`", "for")];
+const FOR_WORK: [Qualifier; 1] = [by("for `work`", "for")];
+const FOR_BEARING: [Qualifier; 1] = [by("for `bearing`", "for")];
+// `refresh` names every action at once rather than one, which is one row where it was two.
+const FOR_EACH: [Qualifier; 1] = [by("for each action, in whatever declares room", "for")];
+// `put` says which thing moves by where it is, not by a state it is in.
+const IN_FROM: [Qualifier; 1] = [by("in `$from`", "for")];
 // **`fertile` and `spent` are one trait read both ways** - `spent`, yes or no. `bear` takes a
 // citizen that is not spent and leaves one that is; `renew` does the reverse, once per turn.
-const FERTILE: [Qualifier; 1] = [by("fertile", "spent")];
-const SPENT: [Qualifier; 1] = [by("spent", "spent")];
+
 const UPKEEP_UNPAID: [Qualifier; 1] = [by("whose upkeep is unpaid", "unpaid")];
 const KEEPS_NONE: [Qualifier; 1] = [by("keeps 0", "keeps")];
 const KEEPS_SOME: [Qualifier; 1] = [by("keeps at least 1", "keeps")];
@@ -781,9 +828,18 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[
             placed(Require, 1, PLACE, &[], "`$from`"),
             placed(Require, 1, PLACE, &JOINED_TO_FROM, "`$to`"),
-            placed(Consume, 1, UNIT, &READY, "`$from`"),
+            // **Put, not consumed and produced** - `P-399`, and `P-396` is the reason: a
+            // created thing arrives holding its tokens, so a produced unit would arrive able
+            // to move again.
+            Line {
+                role: Role::Put,
+                quantity: Quantity::None,
+                noun: UNIT,
+                traits: &IN_FROM,
+                place: Some("`$to`"),
+            },
+            placed(Consume, 1, Noun::Of(Readiness), &FOR_MOVE, "that unit"),
             placed(Consume, 1, Noun::Of(Energy), &[], "that unit"),
-            placed(Produce, 1, UNIT, &NOT_READY, "`$to`"),
         ],
     },
     Recipe {
@@ -860,8 +916,8 @@ pub const RECIPES: &[Recipe] = &[
         name: "create labor",
         owner: Player,
         lines: &[
-            traited(Consume, 1, Noun::Of(Citizen), &READY),
-            traited(Produce, 1, Noun::Of(Citizen), &NOT_READY),
+            just(Require, 1, Noun::Of(Citizen)),
+            placed(Consume, 1, Noun::Of(Readiness), &FOR_LABOR, "that citizen"),
             just(Produce, 1, Noun::Of(Labor)),
         ],
     },
@@ -870,9 +926,9 @@ pub const RECIPES: &[Recipe] = &[
         owner: Player,
         lines: &[
             placed(Require, 1, TERRITORY, &[], "`$where`"),
+            just(Require, 1, EXTRACTOR),
+            placed(Consume, 1, Noun::Of(Readiness), &FOR_WORK, "that extractor"),
             just(Consume, 1, Noun::Of(Labor)),
-            traited(Consume, 1, EXTRACTOR, &READY),
-            traited(Produce, 1, EXTRACTOR, &NOT_READY),
             measured(
                 Produce,
                 OfATrait("`$where`'s density for that resource"),
@@ -907,8 +963,14 @@ pub const RECIPES: &[Recipe] = &[
         name: "bear",
         owner: World,
         lines: &[
-            traited(Consume, 1, Noun::Of(Citizen), &FERTILE),
-            traited(Produce, 1, Noun::Of(Citizen), &SPENT),
+            just(Require, 1, Noun::Of(Citizen)),
+            placed(
+                Consume,
+                1,
+                Noun::Of(Readiness),
+                &FOR_BEARING,
+                "that citizen",
+            ),
             just(Produce, 1, Noun::Of(Fertility)),
         ],
     },
@@ -919,14 +981,6 @@ pub const RECIPES: &[Recipe] = &[
             just(Consume, 1, Noun::Of(Fertility)),
             just(Consume, 1, Noun::Of(Food)),
             just(Produce, 1, Noun::Of(Citizen)),
-        ],
-    },
-    Recipe {
-        name: "renew",
-        owner: World,
-        lines: &[
-            traited(Consume, 1, Noun::Of(Citizen), &SPENT),
-            traited(Produce, 1, Noun::Of(Citizen), &FERTILE),
         ],
     },
     Recipe {
@@ -1003,12 +1057,14 @@ pub const RECIPES: &[Recipe] = &[
         lines: &[just(Consume, 1, Noun::Of(Fertility))],
     },
     Recipe {
+        // **One row, and it was two.** `refresh` no longer moves a thing between two states;
+        // it makes readiness, which is a kind. **And it carries no soft marking because it
+        // needs none** - `P-386` makes what a rule makes soft, and *Where things are* bounds a
+        // thing at one readiness per action, so the line can be short and therefore is soft. A
+        // thing already holding its readiness gets nothing; a thing with room is topped up.
         name: "refresh",
         owner: World,
-        lines: &[
-            traited(Consume, 1, THING, &NOT_READY),
-            traited(Produce, 1, THING, &READY),
-        ],
+        lines: &[traited(Produce, 1, Noun::Of(Readiness), &FOR_EACH)],
     },
 ];
 

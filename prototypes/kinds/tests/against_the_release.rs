@@ -95,20 +95,25 @@ fn the_release_tables_are_the_ones_in_this_crate() {
 /// once per kind because `P-373` makes a rule whose subject is a family a rule for each of
 /// them. `P-380` added two more `discard` rows for `labor` and `fertility`.
 ///
+/// **Twenty-three since `P-399` deleted `renew`.** The token model took the whole
+/// fertile-and-spent pair out: a citizen holds a readiness `for bearing`, `bear` spends it and
+/// `refresh` puts it back, so the rule that turned a spent citizen fertile again has nothing
+/// left to do.
+///
 /// **Both numbers, because the difference is the whole of what deduplication means here.**
 /// `RECIPES` holds blocks, and a check on blocks alone would pass a version that had
 /// forgotten `stow` was one recipe stated twice.
 #[test]
-fn there_are_twenty_four_recipe_blocks_under_twenty_names() {
-    assert_eq!(kinds::RECIPES.len(), 24);
+fn there_are_twenty_three_recipe_blocks_under_nineteen_names() {
+    assert_eq!(kinds::RECIPES.len(), 23);
 
     let mut names: Vec<&str> = kinds::RECIPES.iter().map(|recipe| recipe.name).collect();
     names.sort_unstable();
     names.dedup();
     assert_eq!(
         names.len(),
-        20,
-        "twenty distinct names, and these are {names:?}"
+        19,
+        "nineteen distinct names, and these are {names:?}"
     );
 
     assert!(
@@ -145,8 +150,8 @@ fn every_kind_a_recipe_names_is_declared() {
     // from the failure that named them.
     assert_eq!(
         used.len(),
-        17,
-        "seventeen distinct names across the recipes' Kind column, and these are {used:?}"
+        18,
+        "eighteen distinct names across the recipes' Kind column, and these are {used:?}"
     );
 }
 
@@ -322,10 +327,12 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             seen.insert(line.role.written());
         }
     }
+    // **Four of five since `P-399` added `put`**, which `move` uses once: the unit is neither
+    // taken nor made, it goes somewhere else.
     assert_eq!(
         seen.iter().copied().collect::<Vec<_>>(),
-        ["consume", "produce", "require"],
-        "three of the four roles are used, and nothing else is"
+        ["consume", "produce", "put", "require"],
+        "four of the five roles are used, and nothing else is"
     );
     assert!(
         !seen.contains("limit"),
@@ -365,11 +372,20 @@ fn a_role_says_what_becomes_of_what_a_recipe_names() {
             // list.** It also lost a `limit 0 garrison` row, and it still keeps something:
             // `require 1 territory` in `$where`. Two recipes lost the same row and only one
             // left, which is what this assertion is for.
+            //
+            // **Three arrived with `P-399`, and for one reason.** The token model turns what
+            // was consume-and-produce into require-and-spend-a-readiness: `create labor`,
+            // `work` and `bear` each now need a thing they do not eat - the citizen or the
+            // extractor whose readiness is spent. That is the list growing because the
+            // release got more honest about what survives a rule, not because anything here
+            // changed.
             "deploy ark",
             "move",
             "launch ark",
+            "create labor",
             "work",
-            "upkeep"
+            "upkeep",
+            "bear"
         ]
     );
 

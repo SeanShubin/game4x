@@ -29,8 +29,8 @@ fn the_groups_partition_the_kinds() {
     let kinds = every_kind(&document);
     assert_eq!(
         kinds.len(),
-        17,
-        "the release declares seventeen kinds; every count below is against that population"
+        18,
+        "the release declares eighteen kinds; every count below is against that population"
     );
 
     let mut grouped: Vec<String> = signatures(&document)
@@ -96,8 +96,8 @@ fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     }
     assert_eq!(
         pairs,
-        17 * 16 / 2,
-        "every pair of the seventeen kinds is compared, and there are 136 of them"
+        18 * 17 / 2,
+        "every pair of the eighteen kinds is compared, and there are 153 of them"
     );
 
     // **The population this check ran against, said out loud.** Every assertion above is
@@ -106,7 +106,7 @@ fn a_pair_shares_a_group_exactly_when_it_shares_a_signature() {
     // not a pass**, it is the check reporting what it could not test, which is `C-64`.
     assert_eq!(
         agreeing, 0,
-        "no two of the seventeen kinds share a signature, so nothing above tested two kinds \
+        "no two of the eighteen kinds share a signature, so nothing above tested two kinds \
          grouping together. If this fails, two kinds now collide - which is `C-64` answered, \
          and the catalog's paragraph about there being nothing to scan goes with it"
     );
@@ -331,6 +331,10 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
     // The world recipes that name `thing` reach every kind - and they reached none until
     // `C-71`, for the same reason `keeps` did not. `pair up` is the one this case adds.
     //
+    // **Two more left it when `P-399` landed, and again nothing here changed.** `refresh`
+    // named `thing` on both its rows; it makes a `readiness` now, which is a kind, so it
+    // reaches no other kind through the family. Two recipes name `thing`: `age` and `spoil`.
+    //
     // **Two pairs left this list without anything here changing, and that is the saturating
     // rewrite.** `upkeep require` and `perish consume` both named `thing` - *a thing with
     // upkeep*, *a thing whose upkeep is unpaid* - and both name `citizen` now, because a
@@ -348,8 +352,6 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
             String::from("age consume"),
             String::from("age produce"),
             String::from("pair up produce"),
-            String::from("refresh consume"),
-            String::from("refresh produce"),
             String::from("spoil consume"),
         ]
     );
@@ -402,7 +404,7 @@ fn two_kinds_the_release_says_the_same_things_about_share_a_signature() {
     assert_eq!(
         distinct.len(),
         real.len(),
-        "the seventeen real kinds are still in seventeen groups, so the pair grouping is the \
+        "the eighteen real kinds are still in eighteen groups, so the pair grouping is the \
          signature agreeing rather than the signature collapsing"
     );
 }
